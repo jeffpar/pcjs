@@ -17,7 +17,7 @@ Examples of non-device components include visual components like [panel.js](modu
 [debugger.js](modules/v2/debugger.js), and sub-components like [x86ops.js](modules/v2/x86ops.js) and [x86func.js](modules/v2/x86func.js),
 which separate the CPU functionality of [x86.js](modules/v2/x86.js) into more manageable pieces.
 
-These components should always be loaded or compiled in the order listed by the *pcx86.scripts* property in
+These components should always be loaded or compiled in the order listed by the *pcx86.modules* property in
 [machines.json](https://github.com/jeffpar/pcjs/blob/master/machines/machines.json), which includes all the necessary
 [shared components](../modules/v2/) as well.
 

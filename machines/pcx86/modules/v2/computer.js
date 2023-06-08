@@ -16,7 +16,7 @@ import Str from "../../../modules/v2/strlib.js";
 import UserAPI from "../../../modules/v2/userapi.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, PREFETCH, TYPEDARRAYS, globals } from "./defines.js";
+import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, MAXDEBUG, PREFETCH, TYPEDARRAYS, globals } from "./defines.js";
 
 /**
  * @class Computer
@@ -151,7 +151,7 @@ export default class Computer extends Component {
         this.bus = new BusX86({'id': this.idMachine + '.bus', 'busWidth': this.nBusWidth}, this.cpu, this.dbg);
 
         /*
-         * Iterate through all the components and override their notice() and println() methods
+         * Iterate through all the components and override their notice() and print() methods
          * so that their output can be rerouted to a Diagnostic Display or Control Panel, if any.
          */
         let iComponent, component;
@@ -160,27 +160,16 @@ export default class Computer extends Component {
         this.panel = /** @type {Panel} */ (Component.getComponentByType("Panel", this.id));
         this.controlPanel = this.panel && this.panel.bindings['print'];
 
-        this.noticeComputer = this.notice;
         this.printComputer = this.print;
-        this.printlnComputer = this.println;
         if (this.controlPanel) {
-            this.noticeComputer = this.panel.notice;
             this.printComputer = this.panel.print;
-            this.printlnComputer = this.panel.println;
         }
 
         for (iComponent = 0; iComponent < aComponents.length; iComponent++) {
             component = aComponents[iComponent];
-            component.notice = function noticeComputer(s, fPrintOnly, id) {
-                cmp.outputDiagnostics(s);
-                return cmp.noticeComputer.call(this, s, fPrintOnly, id);
-            }.bind(component);
-            component.print = function printComputer(s) {
-                return cmp.printComputer.call(this, s);
-            }.bind(component);
-            component.println = function printlnComputer(s, type, id) {
-                cmp.outputDiagnostics(s, type);
-                return cmp.printlnComputer.call(this, s, type, id);
+            component.print = function printComputer(s, bitsMessage) {
+                cmp.outputDiagnostics(s, bitsMessage);
+                return cmp.printComputer.call(this, s, bitsMessage);
             }.bind(component);
         }
 
@@ -189,9 +178,9 @@ export default class Computer extends Component {
             this.enableDiagnostics();
         }
 
-        this.println(APPNAME + " v" + APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.printf(Messages.DEFAULT, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        if (DEBUG) this.printf("PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
+        if (MAXDEBUG) this.printf(Messages.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -276,7 +265,7 @@ export default class Computer extends Component {
             Web.getResource(this.sStateURL, null, true, function(sURL, sResource, nErrorCode) {
                 cmp.doneLoad(sURL, sResource, nErrorCode);
             }, function(nState) {
-                cmp.println(sProgress, Component.PRINT.PROGRESS);
+                cmp.printf(Messages.PROGRESS, "%s\n", sProgress);
             });
         }
 
@@ -379,7 +368,7 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {Array} aParms (array of parameters to pass to donePowerOn)
-     * @return {boolean} (true if diagnostics have been turned off, false if they remain enabled)
+     * @returns {boolean} (true if diagnostics have been turned off, false if they remain enabled)
      */
     doneDiagnostics(aParms)
     {
@@ -396,11 +385,11 @@ export default class Computer extends Component {
                         cmp.notifyKbdEvent();
                     };
                 }(this), 2000);
-                this.println("Initialization complete");
+                this.printf(Messages.DEFAULT, "Initialization complete\n");
             }
             if (this.nDiagnostics == 2) {
                 this.nDiagnostics += 2;
-                this.println("Initialization complete, press a key to continue...");
+                this.printf(Messages.DEFAULT, "Initialization complete, press a key to continue...\n");
             }
             if (this.nDiagnostics == 3 || this.nDiagnostics == 4) {
                 /*
@@ -416,13 +405,13 @@ export default class Computer extends Component {
     }
 
     /**
-     * outputDiagnostics(sMessage, sType)
+     * outputDiagnostics(sMessage, bitsMessage)
      *
      * @this {Computer}
      * @param {string} sMessage
-     * @param {string} [sType]
+     * @param {number} [bitsMessage]
      */
-    outputDiagnostics(sMessage, sType)
+    outputDiagnostics(sMessage, bitsMessage = 0)
     {
         if (this.cDiagnosticScreens) {
             for (let i = 0; i < this.aVideo.length; i++) {
@@ -430,10 +419,10 @@ export default class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        if (sType != Component.PRINT.PROGRESS || sMessage.slice(-3) != "...") {
-                            Component.appendControl(control, sMessage + '\n');
+                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
+                            Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
-                            Component.replaceControl(control, sMessage, sMessage + '.');
+                            Component.appendControl(control, sMessage);
                         }
                     }
                 }
@@ -451,14 +440,14 @@ export default class Computer extends Component {
      * @this {Computer}
      * @param {Object} [event]
      * @param {boolean} [fDown] is true for a keyDown event, false for a keyUp event
-     * @return {boolean} (true if diagnostics disabled, false if enabled -- at the time of the call)
+     * @returns {boolean} (true if diagnostics disabled, false if enabled -- at the time of the call)
      */
     notifyKbdEvent(event, fDown)
     {
         let nDiagnostics = this.nDiagnostics;
         if (event && event.keyCode == 16 && this.nDiagnostics == 3) {
             this.nDiagnostics++;        // if we're waiting for a timeout and a shift key was pressed, wait for another key
-            this.println("Machine paused, press another key to continue...");
+            this.printf(Messages.DEFAULT, "Machine paused, press another key to continue...\n");
             event = null;
         }
         if (!event && this.nDiagnostics == 3 || event && fDown && this.nDiagnostics == 4) {
@@ -472,7 +461,7 @@ export default class Computer extends Component {
      * getMachineID()
      *
      * @this {Computer}
-     * @return {string}
+     * @returns {string}
      */
     getMachineID()
     {
@@ -510,7 +499,7 @@ export default class Computer extends Component {
      * @this {Computer}
      * @param {string} sParm
      * @param {boolean} fDefault
-     * @return {boolean}
+     * @returns {boolean}
      */
     getMachineBoolean(sParm, fDefault)
     {
@@ -540,7 +529,7 @@ export default class Computer extends Component {
      * @this {Computer}
      * @param {string} sParm
      * @param {Object} [parmsComponent] (eg, this.parms)
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     getMachineParm(sParm, parmsComponent)
     {
@@ -611,7 +600,7 @@ export default class Computer extends Component {
      * saveMachineParms()
      *
      * @this {Computer}
-     * @return {string|null}
+     * @returns {string|null}
      */
     saveMachineParms()
     {
@@ -622,7 +611,7 @@ export default class Computer extends Component {
      * getUserID()
      *
      * @this {Computer}
-     * @return {string}
+     * @returns {string}
      */
     getUserID()
     {
@@ -647,7 +636,7 @@ export default class Computer extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.notice('Unable to load machine state from server (error ' + nErrorCode + (sStateData? ': ' + Str.trim(sStateData) : '') + ')');
+            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -694,7 +683,7 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {State|null} [stateComputer]
-     * @return {boolean} true if state passes validation, false if not
+     * @returns {boolean} true if state passes validation, false if not
      */
     validateState(stateComputer)
     {
@@ -704,7 +693,7 @@ export default class Computer extends Component {
             let sTimestampValidate = stateValidate.get(Computer.STATE_TIMESTAMP);
             let sTimestampComputer = stateComputer ? stateComputer.get(Computer.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.notice("Machine state may be out-of-date\n(" + sTimestampValidate + " vs. " + sTimestampComputer + ")\nCheck your browser's local storage limits");
+                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
@@ -784,10 +773,10 @@ export default class Computer extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.notice("Error: " + sData);
+                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
-                                    this.println(sCode + ": " + sData);
+                                    this.printf(Messages.DEBUG, "%s: %s\n", sCode, sData);
                                 }
                                 /*
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the
@@ -865,7 +854,7 @@ export default class Computer extends Component {
      * @param {State} stateComputer
      * @param {boolean} fRepower
      * @param {boolean} fRestore
-     * @return {boolean} true if restore should continue, false if not
+     * @returns {boolean} true if restore should continue, false if not
      */
     powerRestore(component, stateComputer, fRepower, fRestore)
     {
@@ -912,7 +901,8 @@ export default class Computer extends Component {
                  */
                 if (!component.powerUp(data, fRepower) && data) {
 
-                    if (component.notice("Unable to restore hardware state")) {
+                    if (!this.flags.unloading) {
+                        this.printf(Messages.NOTICE, "Unable to restore hardware state\n");
                         /*
                          * If this is a resume error for a machine that also has a predefined state
                          * AND we're not restoring from that state, then throw away the current state,
@@ -956,7 +946,7 @@ export default class Computer extends Component {
             if (!fRepower && component.comment) {
                 let asComments = component.comment.split("|");
                 for (let i = 0; i < asComments.length; i++) {
-                    component.status(asComments[i]);
+                    component.printf(Messages.STATUS, "%s\n", asComments[i]);
                 }
             }
         }
@@ -1024,7 +1014,7 @@ export default class Computer extends Component {
      * checkPower()
      *
      * @this {Computer}
-     * @return {boolean} true if the computer is fully powered, false otherwise
+     * @returns {boolean} true if the computer is fully powered, false otherwise
      */
     checkPower()
     {
@@ -1065,8 +1055,8 @@ export default class Computer extends Component {
             }
         }
         if (iComponent == aComponents.length) component = this;
-        let s = "The " + component.type + " component (" + component.id + ") is not " + (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet") + ".";
-        Component.alertUser(s);
+        let status = (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet")
+        Component.printf(Messages.NOTICE, "The %s component (%s) is not %s\n", component.type, component.id, status);
         return false;
     }
 
@@ -1087,7 +1077,7 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {State} stateComputer
-     * @return {boolean}
+     * @returns {boolean}
      */
     powerReport(stateComputer)
     {
@@ -1135,7 +1125,7 @@ export default class Computer extends Component {
      * @this {Computer}
      * @param {boolean} [fSave] is true to request a saved state
      * @param {boolean} [fShutdown] is true if the machine is being shut down
-     * @return {string|null} string representing the saved state (or null if error)
+     * @returns {string|null} string representing the saved state (or null if error)
      */
     powerOff(fSave, fShutdown)
     {
@@ -1327,7 +1317,7 @@ export default class Computer extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -1361,7 +1351,7 @@ export default class Computer extends Component {
              * particular host.
              */
             if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.log("Remote user API not available");
+                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -1388,7 +1378,7 @@ export default class Computer extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.notice("Resume disabled, machine state not saved");
+                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -1429,7 +1419,7 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {boolean} [fPrompt]
-     * @return {string|null|undefined}
+     * @returns {string|null|undefined}
      */
     queryUserID(fPrompt)
     {
@@ -1446,11 +1436,11 @@ export default class Computer extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.notice("The user ID is invalid.");
+                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.notice("Browser local storage is not available");
+                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -1461,7 +1451,7 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {string} sUserID
-     * @return {string} validated user ID, or null if error
+     * @returns {string} validated user ID, or null if error
      */
     verifyUserID(sUserID)
     {
@@ -1494,7 +1484,7 @@ export default class Computer extends Component {
      * getServerStatePath()
      *
      * @this {Computer}
-     * @return {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
+     * @returns {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
      */
     getServerStatePath()
     {
@@ -1527,7 +1517,7 @@ export default class Computer extends Component {
             if (DEBUG) this.printf("size of server state: %d bytes\n", sState.length);
             let response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.notice("Machine state saved to server");
+                this.printf(Messages.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 let sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -1535,7 +1525,7 @@ export default class Computer extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.notice(sError);
+                this.printf(Messages.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {
@@ -1550,7 +1540,7 @@ export default class Computer extends Component {
      * @param {string} sUserID
      * @param {string} sState
      * @param {boolean} [fSync] is true if we're powering down and should perform a synchronous request (default is async)
-     * @return {*} server response if fSync is true and a response was received; otherwise null
+     * @returns {*} server response if fSync is true and a response was received; otherwise null
      */
     storeServerState(sUserID, sState, fSync)
     {
@@ -1578,7 +1568,7 @@ export default class Computer extends Component {
                 }
                 sResponse = '{"' + UserAPI.RES.CODE + '":' + response[1] + ',"' + UserAPI.RES.DATA + '":"' + sResponse + '"}';
             }
-            if (DEBUG) this.printMessage(sResponse);
+            if (DEBUG) this.printf("%s\n", sResponse);
             return JSON.parse(sResponse);
         }
         return null;
@@ -1670,10 +1660,10 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {string} sType
-     * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
+     * @returns {Component|null}
      */
-    getMachineComponent(sType, componentPrev)
+    getMachineComponent(sType, componentPrev = null)
     {
         let componentLast = componentPrev;
         let aComponents = Component.getComponents(this.id);
@@ -1685,8 +1675,8 @@ export default class Computer extends Component {
             }
             if (component.type == sType) return component;
         }
-        if (!componentLast && sType != "FPU") {
-            Component.log("Machine component type '" + sType + "' not found", "warning");
+        if (!componentLast && DEBUG && componentPrev !== false) {
+            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
         }
         return null;
     }

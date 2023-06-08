@@ -7,115 +7,86 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import CommonMessages from "../../../modules/v2/messages.js";
+
+const Messages = { ...CommonMessages };
+Messages.Categories = { ...CommonMessages.Categories };
+
 /*
- * Machine message flags.
+ * PCx86 machine message flags.
  *
  * NOTE: Because this machine defines more than 32 message categories, some of these message flags
  * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
  */
-const Messages = {
-    NONE:       0x000000000000,
-    DEFAULT:    0x000000000000,
-    ADDRESS:    0x000000000001,
-    CPU:        0x000000000002,
-    SEG:        0x000000000004,
-    DESC:       0x000000000008,
-    TSS:        0x000000000010,
-    PORT:       0x000000000020,
-    IOPM:       0x000000000040,
-    NMI:        0x000000000080,
-    TRAP:       0x000000000100,
-    FAULT:      0x000000000200,
-    INT:        0x000000000400,
-    IRQ:        0x000000000800,
-    BUS:        0x000000001000,
-    MEM:        0x000000002000,
-    DMA:        0x000000004000,
-    FDC:        0x000000008000,
-    HDC:        0x000000010000,
-    DISK:       0x000000020000,
-    PIC:        0x000000040000,
-    TIMER:      0x000000080000,
-    CMOS:       0x000000100000,
-    RTC:        0x000000200000,
-    C8042:      0x000000400000,
-    KBD:        0x000000800000,
-    PARALLEL:   0x000001000000,
-    SERIAL:     0x000002000000,
-    MOUSE:      0x000004000000,
-    SPEAKER:    0x000008000000,
-    CHIPSET:    0x000010000000,
-    VIDEO:      0x000020000000,
-    COMPUTER:   0x000040000000,
-    DATA:       0x000080000000,
-    DOS:        0x000100000000,
-    EVENT:      0x000200000000,
-    KEY:        0x000400000000,
-    WARN:       0x100000000000,
-    HALT:       0x200000000000,
-    BUFFER:     0x400000000000,
-    ALL:        0xffffffffffff
-};
+Messages.CPU         = 0x000000000002;
+Messages.SEG         = 0x000000000004;
+Messages.DESC        = 0x000000000008;
+Messages.TSS         = 0x000000000010;
+Messages.PORT        = 0x000000000020;
+Messages.IOPM        = 0x000000000040;
+Messages.NMI         = 0x000000000080;
+Messages.TRAP        = 0x000000000100;
+Messages.FAULT       = 0x000000000200;
+Messages.INT         = 0x000000000400;
+Messages.IRQ         = 0x000000000800;
+Messages.BUS         = 0x000000001000;
+Messages.MEM         = 0x000000002000;
+Messages.DMA         = 0x000000004000;
+Messages.FDC         = 0x000000008000;
+Messages.HDC         = 0x000000010000;
+Messages.DISK        = 0x000000020000;
+Messages.PIC         = 0x000000040000;
+Messages.TIMER       = 0x000000080000;
+Messages.CMOS        = 0x000000100000;
+Messages.RTC         = 0x000000200000;
+Messages.C8042       = 0x000000400000;
+Messages.KBD         = 0x000000800000;
+Messages.PARALLEL    = 0x000001000000;
+Messages.SERIAL      = 0x000002000000;
+Messages.MOUSE       = 0x000004000000;
+Messages.SPEAKER     = 0x000008000000;
+Messages.CHIPSET     = 0x000010000000;
+Messages.VIDEO       = 0x000020000000;
+Messages.COMPUTER    = 0x000040000000;
+Messages.DATA        = 0x000080000000;
+Messages.DOS         = 0x000100000000;
+Messages.EVENT       = 0x000200000000;
+Messages.KEY         = 0x000400000000;
+Messages.RESERVED    = 0xfff000000000;
 
-/*
- * Message categories supported by the messageEnabled() function and other assorted message
- * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
- * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
- * like so:
- *
- *      m port on
- *      m port off
- *      ...
- *
- * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
- * aware that changing the bit values could break saved Debugger states (not a huge concern, just
- * something to be aware of).
- */
-Messages.CATEGORIES = {
-    "cpu":      Messages.CPU,
-    "seg":      Messages.SEG,
-    "desc":     Messages.DESC,
-    "port":     Messages.PORT,
-    "tss":      Messages.TSS,
-    "iopm":     Messages.IOPM,
-    "int":      Messages.INT,
-    "nmi":      Messages.NMI,
-    "fault":    Messages.FAULT,
-    "trap":     Messages.TRAP,
-    "bus":      Messages.BUS,
-    "irq":      Messages.IRQ,
-    "mem":      Messages.MEM,
-    "dma":      Messages.DMA,
-    "fdc":      Messages.FDC,
-    "hdc":      Messages.HDC,
-    "disk":     Messages.DISK,
-    "pic":      Messages.PIC,
-    "timer":    Messages.TIMER,
-    "cmos":     Messages.CMOS,
-    "rtc":      Messages.RTC,
-    "8042":     Messages.C8042,
-    "kbd":      Messages.KBD,
-    "parallel": Messages.PARALLEL,
-    "serial":   Messages.SERIAL,
-    "mouse":    Messages.MOUSE,
-    "speaker":  Messages.SPEAKER,
-    "chipset":  Messages.CHIPSET,
-    "video":    Messages.VIDEO,
-    "computer": Messages.COMPUTER,
-    "dos":      Messages.DOS,
-    "data":     Messages.DATA,
-    "event":    Messages.EVENT,
-    "key":      Messages.KEY,
-    "warn":     Messages.WARN,
-    /*
-     * Now we turn to message actions rather than message types; for example, setting "halt"
-     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
-     *
-     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
-     * until "m buffer off" is issued.
-     */
-    "halt":     Messages.HALT,
-    "buffer":   Messages.BUFFER
-};
+Messages.Categories['cpu']       = Messages.CPU;
+Messages.Categories['seg']       = Messages.SEG;
+Messages.Categories['desc']      = Messages.DESC;
+Messages.Categories['port']      = Messages.PORT;
+Messages.Categories['tss']       = Messages.TSS;
+Messages.Categories['iopm']      = Messages.IOPM;
+Messages.Categories['int']       = Messages.INT;
+Messages.Categories['nmi']       = Messages.NMI;
+Messages.Categories['fault']     = Messages.FAULT;
+Messages.Categories['trap']      = Messages.TRAP;
+Messages.Categories['bus']       = Messages.BUS;
+Messages.Categories['irq']       = Messages.IRQ;
+Messages.Categories['mem']       = Messages.MEM;
+Messages.Categories['dma']       = Messages.DMA;
+Messages.Categories['fdc']       = Messages.FDC;
+Messages.Categories['hdc']       = Messages.HDC;
+Messages.Categories['disk']      = Messages.DISK;
+Messages.Categories['pic']       = Messages.PIC;
+Messages.Categories['timer']     = Messages.TIMER;
+Messages.Categories['cmos']      = Messages.CMOS;
+Messages.Categories['rtc']       = Messages.RTC;
+Messages.Categories['8042']      = Messages.C8042;
+Messages.Categories['kbd']       = Messages.KBD;
+Messages.Categories['parallel']  = Messages.PARALLEL;
+Messages.Categories['serial']    = Messages.SERIAL;
+Messages.Categories['mouse']     = Messages.MOUSE;
+Messages.Categories['speaker']   = Messages.SPEAKER;
+Messages.Categories['chipset']   = Messages.CHIPSET;
+Messages.Categories['video']     = Messages.VIDEO;
+Messages.Categories['computer']  = Messages.COMPUTER;
+Messages.Categories['dos']       = Messages.DOS;
+Messages.Categories['data']      = Messages.DATA;
+Messages.Categories['event']     = Messages.EVENT;
+Messages.Categories['key']       = Messages.KEY;
 
 export default Messages;

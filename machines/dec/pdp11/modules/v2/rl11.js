@@ -11,7 +11,7 @@
  */
 
 import DriveController from "./drive.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import { DEBUG, PDP11 } from "./defines.js";
 
@@ -36,7 +36,7 @@ export default class RL11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RL11", parms, MessagesPDP11.RL11, PDP11.RL11, PDP11.RL11.RL02K, RL11.UNIBUS_IOTABLE);
+        super("RL11", parms, Messages.RL11, PDP11.RL11, PDP11.RL11.RL02K, RL11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -49,7 +49,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -79,7 +79,7 @@ export default class RL11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RL11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -171,7 +171,7 @@ export default class RL11 extends DriveController {
             nWords = (0x10000 - this.regRLMP) & 0xffff;
             addr = (((this.regRLBE & RL11.RLBE.MASK)) << 16) | this.regRLBA;   // 22 bit mode
 
-            if (this.messageEnabled()) this.printMessage(this.type + ": " + sFunc + "(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+            this.printf(Messages.ADDRESS, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
             fInterrupt = fnReadWrite.call(this, drive, iCylinder, iHead, iSector, nWords, addr, 2, false, this.doneReadWrite.bind(this));
             break;
@@ -199,7 +199,7 @@ export default class RL11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -234,7 +234,7 @@ export default class RL11 extends DriveController {
              * code, so let's review the documentation on this.
              */
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data = b0 | (b1 << 8));
-            if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+            if (DEBUG && this.messageEnabled(Messages.READ)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -264,7 +264,7 @@ export default class RL11 extends DriveController {
             }
         }
 
-        if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+        if (DEBUG && this.messageEnabled(Messages.READ)) {
             console.log("checksum: " + (checksum|0));
         }
 
@@ -284,7 +284,7 @@ export default class RL11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -310,7 +310,7 @@ export default class RL11 extends DriveController {
                 nError = RL11.ERRC.NXM;
                 break;
             }
-            if (DEBUG && this.messageEnabled(MessagesPDP11.WRITE)) {
+            if (DEBUG && this.messageEnabled(Messages.WRITE)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -348,7 +348,7 @@ export default class RL11 extends DriveController {
             }
         }
 
-        if (DEBUG && this.messageEnabled(MessagesPDP11.WRITE)) {
+        if (DEBUG && this.messageEnabled(Messages.WRITE)) {
             console.log("checksum: " + (checksum|0));
         }
 
@@ -365,7 +365,7 @@ export default class RL11 extends DriveController {
      * @param {number} iSector
      * @param {number} nWords
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     doneReadWrite(nError, iCylinder, iHead, iSector, nWords, addr)
     {
@@ -386,7 +386,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLCS or 174400)
-     * @return {number}
+     * @returns {number}
      */
     readRLCS(addr)
     {
@@ -412,7 +412,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLBA or 174402)
-     * @return {number}
+     * @returns {number}
      */
     readRLBA(addr)
     {
@@ -436,7 +436,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLDA or 174404)
-     * @return {number}
+     * @returns {number}
      */
     readRLDA(addr)
     {
@@ -460,7 +460,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLMP or 174406)
-     * @return {number}
+     * @returns {number}
      */
     readRLMP(addr)
     {
@@ -484,7 +484,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLBE or 174410)
-     * @return {number}
+     * @returns {number}
      */
     readRLBE(addr)
     {

@@ -976,7 +976,7 @@ export default class StreamZip extends events.EventEmitter {
      * canVerifyCRC()
      *
      * @this {StreamZip}
-     * @return {boolean}
+     * @returns {boolean}
      */
     canVerifyCRC(entry)
     {

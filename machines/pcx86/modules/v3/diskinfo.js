@@ -1332,7 +1332,7 @@ export default class DiskInfo {
      * @param {boolean} [fLabel]
      * @param {number} [uniqueID]
      * @param {string} [encoding] (eg, "utf8", "cp437", "ascii")
-     * @return {string} containing a corresponding filename in FAT "8.3" format
+     * @returns {string} containing a corresponding filename in FAT "8.3" format
      */
     buildShortName(sFile, fLabel=false, uniqueID=0, encoding="utf8")
     {
@@ -3207,7 +3207,7 @@ export default class DiskInfo {
      * @this {DiskInfo}
      * @param {string} name
      * @param {string} [text]
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     findFile(name)
     {

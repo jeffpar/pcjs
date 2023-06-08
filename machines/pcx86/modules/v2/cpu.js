@@ -182,7 +182,7 @@ export default class CPULib extends Component {
         }
 
         this.fpuActive = null;
-        this.fpu = cmp.getMachineComponent("FPU");
+        this.fpu = cmp.getMachineComponent("FPU", false);
 
         /*
          * Attach the ChipSet component to the CPU so that it can obtain the IDT vector number
@@ -225,7 +225,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {boolean} [fRunning]
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save(fRunning)
     {
@@ -239,7 +239,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -252,7 +252,7 @@ export default class CPULib extends Component {
      * @this {CPULib}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -270,7 +270,7 @@ export default class CPULib extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init();
             } else {
-                this.println("No debugger detected");
+                this.printf(Messages.DEFAULT, "No debugger detected\n");
             }
         }
         /*
@@ -289,7 +289,7 @@ export default class CPULib extends Component {
      * @this {CPULib}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -308,7 +308,7 @@ export default class CPULib extends Component {
      * autoStart()
      *
      * @this {CPULib}
-     * @return {boolean} true if started, false if not
+     * @returns {boolean} true if started, false if not
      */
     autoStart()
     {
@@ -328,12 +328,12 @@ export default class CPULib extends Component {
      * isPowered()
      *
      * @this {CPULib}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isPowered()
     {
         if (!this.flags.powered) {
-            this.println(this.toString() + " not powered");
+            this.printf(Messages.DEFAULT, "%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -343,7 +343,7 @@ export default class CPULib extends Component {
      * isRunning()
      *
      * @this {CPULib}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -356,7 +356,7 @@ export default class CPULib extends Component {
      * This will be implemented by the CPUx86 component.
      *
      * @this {CPULib}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -371,7 +371,7 @@ export default class CPULib extends Component {
      * the CPU is reset or restored.
      *
      * @this {CPULib}
-     * @return {boolean} true if checksum generation enabled, false if not
+     * @returns {boolean} true if checksum generation enabled, false if not
      */
     resetChecksum()
     {
@@ -438,7 +438,7 @@ export default class CPULib extends Component {
      */
     displayChecksum()
     {
-        this.println(this.getCycles() + " cycles: " + "checksum=" + Str.toHex(this.nChecksum));
+        this.printf("%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
     }
 
     /**
@@ -483,7 +483,7 @@ export default class CPULib extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -550,7 +550,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {number} nCycles (the target number of cycles to drop the current burst)
-     * @return {boolean}
+     * @returns {boolean}
      */
     setBurstCycles(nCycles)
     {
@@ -592,7 +592,7 @@ export default class CPULib extends Component {
      * Calculate the maximum number of cycles we should attempt to process before the next yield.
      *
      * @this {CPULib}
-     * @return {boolean} (true if there was a change to the multiplier, false if not)
+     * @returns {boolean} (true if there was a change to the multiplier, false if not)
      */
     calcCycles()
     {
@@ -625,7 +625,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {boolean} [fScaled] is true if the caller wants a cycle count relative to a multiplier of 1
-     * @return {number}
+     * @returns {number}
      */
     getCycles(fScaled)
     {
@@ -660,7 +660,7 @@ export default class CPULib extends Component {
      * This returns the CPU's base speed (ie, the original cycles per second defined for the machine)
      *
      * @this {CPULib}
-     * @return {number}
+     * @returns {number}
      */
     getBaseCyclesPerSecond()
     {
@@ -673,7 +673,7 @@ export default class CPULib extends Component {
      * This returns the CPU's current speed (ie, the actual cycles per second, according the current multiplier)
      *
      * @this {CPULib}
-     * @return {number}
+     * @returns {number}
      */
     getCurrentCyclesPerSecond()
     {
@@ -700,7 +700,7 @@ export default class CPULib extends Component {
      * getSpeed()
      *
      * @this {CPULib}
-     * @return {number} the current speed multiplier
+     * @returns {number} the current speed multiplier
      */
     getSpeed()
     {
@@ -711,7 +711,7 @@ export default class CPULib extends Component {
      * getSpeedCurrent()
      *
      * @this {CPULib}
-     * @return {string} the current speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the current speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedCurrent()
     {
@@ -722,7 +722,7 @@ export default class CPULib extends Component {
      * getSpeedTarget()
      *
      * @this {CPULib}
-     * @return {string} the target speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the target speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedTarget()
     {
@@ -735,7 +735,7 @@ export default class CPULib extends Component {
      * @this {CPULib}
      * @param {number} [nMultiplier] is the new proposed multiplier (reverts to default if target was too high)
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      *
      * @desc Whenever the speed is changed, the running cycle count and corresponding start time must be reset,
      * so that the next effective speed calculation obtains sensible results.  In fact, when runCPU() initially calls
@@ -760,7 +760,7 @@ export default class CPULib extends Component {
                 let sSpeed = this.getSpeedTarget();
                 let controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.println("target speed: " + sSpeed);
+                this.printf(Messages.DEFAULT, "target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.updateFocus();
         }
@@ -854,7 +854,7 @@ export default class CPULib extends Component {
      * calcRemainingTime()
      *
      * @this {CPULib}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -891,7 +891,7 @@ export default class CPULib extends Component {
         let msElapsed = this.msEndThisRun - this.msStartRun;
 
         if (MAXDEBUG && msRemainsThisRun < 0 && this.nTargetMultiplier > 1) {
-            this.println("warning: updates @" + msElapsedThisRun + "ms (prefer " + Math.round(msYield) + "ms)");
+            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);
@@ -916,12 +916,12 @@ export default class CPULib extends Component {
             msRemainsThisRun = 0;
         }
 
-        if (DEBUG && this.messageEnabled(Messages.CPU)) {
+        if (DEBUG) {
             /*
              * Every time the browser gives us another chance to run, we want to display our targets for that run
              * here, followed by what we accomplished in that run.
              */
-            this.printMessage(Str.sprintf("%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
+            this.printf(Messages.CPU, "%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
                 msElapsedThisRun,
                 msRemainsThisRun,
                 this.nCyclesThisRun,
@@ -929,7 +929,7 @@ export default class CPULib extends Component {
                 msElapsed,
                 nCycles,
                 this.mhzCurrent
-            ));
+            );
         }
 
         this.msEndThisRun += msRemainsThisRun;
@@ -961,7 +961,7 @@ export default class CPULib extends Component {
      * @param {string} id
      * @param {function()} callBack
      * @param {number} [ms] (setTimer value: milliseconds if positive, cycles if negative, zero if not used)
-     * @return {number} timer index
+     * @returns {number} timer index
      */
     addTimer(id, callBack, ms = 0)
     {
@@ -978,7 +978,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {number} iTimer
-     * @return {boolean}
+     * @returns {boolean}
      */
     clearTimer(iTimer)
     {
@@ -994,7 +994,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {string} id
-     * @return {Array|null}
+     * @returns {Array|null}
      */
     findTimer(id)
     {
@@ -1010,7 +1010,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {number} iTimer
-     * @return {boolean}
+     * @returns {boolean}
      */
     isTimerSet(iTimer)
     {
@@ -1064,7 +1064,7 @@ export default class CPULib extends Component {
      * saveTimers()
      *
      * @this {CPULib}
-     * @return {Array}
+     * @returns {Array}
      */
     saveTimers()
     {
@@ -1100,7 +1100,7 @@ export default class CPULib extends Component {
      * @param {number} iTimer
      * @param {number} ms (number of milliseconds if positive, cycles otherwise)
      * @param {boolean} [fReset] (true if the timer should be reset even if already armed)
-     * @return {number} (number of cycles used to arm timer, or -1 if error)
+     * @returns {number} (number of cycles used to arm timer, or -1 if error)
      */
     setTimer(iTimer, ms, fReset)
     {
@@ -1142,15 +1142,15 @@ export default class CPULib extends Component {
             if (timer[1] < 0) continue;
             timer[1] -= nCycles;
             if (timer[1] <= 0) {
-                if (DEBUG && this.messageEnabled(Messages.CPU + Messages.TIMER)) {      // CPU TIMER message (as opposed to CHIPSET TIMER message)
-                    this.printMessage("updateTimer(" + nCycles + "): firing " + timer[0] + " with only " + (timer[1] + nCycles) + " cycles left");
+                if (DEBUG) {
+                    this.printf(Messages.CPU + Messages.TIMER, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
                 }
                 timer[1] = -1;      // zero is technically an "active" value, so ensure the timer is dormant now
                 timer[3]();         // safe to invoke the callback function now
                 if (timer[2]) {
                     this.setTimer(iTimer, timer[2]);
-                    if (DEBUG && this.messageEnabled(Messages.CPU + Messages.TIMER)) {  // CPU TIMER message (as opposed to CHIPSET TIMER message)
-                        this.printMessage("updateTimer(" + nCycles + "): rearming " + timer[0] + " for " + timer[2] + "ms (" + timer[1] + " cycles)");
+                    if (DEBUG) {
+                        this.printf(Messages.CPU + Messages.TIMER, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
                     }
                 }
             }
@@ -1162,7 +1162,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {number} ms
-     * @return {number} number of corresponding cycles
+     * @returns {number} number of corresponding cycles
      */
     getMSCycles(ms)
     {
@@ -1174,7 +1174,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {number} nCycles (maximum number of cycles to execute)
-     * @return {number}
+     * @returns {number}
      */
     getBurstCycles(nCycles)
     {
@@ -1193,7 +1193,7 @@ export default class CPULib extends Component {
      * endBurst()
      *
      * @this {CPULib}
-     * @return {number} (number of cycles executed in the most recent burst)
+     * @returns {number} (number of cycles executed in the most recent burst)
      */
     endBurst()
     {
@@ -1245,7 +1245,7 @@ export default class CPULib extends Component {
                 }
                 catch(exception) {
                     if (typeof exception != "number") throw exception;
-                    if (MAXDEBUG) this.println("CPU exception " + Str.toHexByte(exception));
+                    if (MAXDEBUG) this.printf("CPU exception %#04x\n", exception);
                     /*
                      * TODO: If we ever get into a situation where every single instruction is generating a fault
                      * (eg, if an 8088 executes opcode 0xFF 0xFF, which is incorrectly routed to helpFault() instead
@@ -1297,7 +1297,7 @@ export default class CPULib extends Component {
      *
      * @param {boolean} [fUpdateFocus]
      * @param {boolean} [fQuiet]
-     * @return {boolean}
+     * @returns {boolean}
      */
     startCPU(fUpdateFocus, fQuiet)
     {
@@ -1305,7 +1305,7 @@ export default class CPULib extends Component {
             return false;
         }
         if (this.flags.running) {
-            if (!fQuiet) this.println(this.toString() + " busy");
+            if (!fQuiet) this.printf(Messages.DEFAULT, "%s busy\n", this.toString());
             return false;
         }
         if (this.idRunTimeout) {
@@ -1340,7 +1340,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates that the last instruction was not executed
+     * @returns {number} of cycles executed; 0 indicates that the last instruction was not executed
      */
     stepCPU(nMinCycles)
     {
@@ -1354,7 +1354,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {boolean} [fComplete]
-     * @return {boolean} true if the CPU was stopped, false if it was already stopped
+     * @returns {boolean} true if the CPU was stopped, false if it was already stopped
      */
     stopCPU(fComplete)
     {
@@ -1375,7 +1375,7 @@ export default class CPULib extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
                 this.cmp.updateStatus(true);
             }
-            if (!this.dbg) this.status("Stopped");
+            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
             fStopped = true;
         }
         this.flags.complete = fComplete;
@@ -1390,7 +1390,7 @@ export default class CPULib extends Component {
      *
      * @this {CPULib}
      * @param {function()} fn (should return true only if the function actually performed any work)
-     * @return {boolean}
+     * @returns {boolean}
      */
     nonCPU(fn)
     {

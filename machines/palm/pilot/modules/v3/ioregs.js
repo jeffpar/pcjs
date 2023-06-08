@@ -17,7 +17,7 @@ import Memory from "../../../../modules/v3/memory.js";
  */
 
 /**
- * @class {PilotIO}
+ * @class PilotIO
  * @unrestricted
  * @property {PilotIOConfig} config
  */

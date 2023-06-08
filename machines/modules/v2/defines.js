@@ -10,7 +10,14 @@
 /**
  * @define {string}
  */
-const APPVERSION = "2.00";              // this @define is overridden by the Closure Compiler with the version in machines.json
+const APPVERSION = "2.20";              // this @define is overridden by the Closure Compiler with the version in machines.json
+
+/**
+ * COMPILED is false by default; overridden with true in the Closure Compiler release.
+ *
+ * @define {boolean}
+ */
+const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
 
 /**
  * @define {string}
@@ -20,24 +27,7 @@ const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
 /**
  * @define {string}
  */
-const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
-
-/**
- * @define {string}
- */
 const CSSCLASS = "pcjs";
-
-/**
- * @define {string}
- */
-const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
-
-/**
- * COMPILED is false by default; overridden with true in the Closure Compiler release.
- *
- * @define {boolean}
- */
-const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
 
 /**
  * DEBUG is true by default, enabling assertions and other runtime checks; overridden with false
@@ -63,6 +53,11 @@ const DEBUG = true;                     // this @define is overridden by the Clo
  * @define {boolean}
  */
 var DEBUGGER = true;                    // this @define is overridden by the Closure Compiler to remove Debugger-related support
+
+/**
+ * @define {string}
+ */
+const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -122,6 +117,21 @@ const RS232 = {
     }
 };
 
+/**
+ * @define {string}
+ */
+const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
+
+/**
+ * LOCALDISKS is intended to reflect the webserver's operating mode.  Normally, we assume that all web
+ * resources should be accessed remotely, but if the webserver is running in "developer" mode, then the
+ * webserver should indicate that fact by setting the global variable 'LOCALDISKS' to true on any pages
+ * with embedded machines.
+ *
+ * @define {boolean}
+ */
+var LOCALDISKS = false;
+
 /*
  * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
  */
@@ -139,4 +149,6 @@ if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
 if (!globals.pcjs['components']) globals.pcjs['components'] = [];
 if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
-export { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL, globals }
+globals.window['LOCALDISKS'] = LOCALDISKS;
+
+export { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, LOCALDISKS, MAXDEBUG, PRIVATE, RS232, SITEURL, globals }

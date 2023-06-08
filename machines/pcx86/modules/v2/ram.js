@@ -8,8 +8,9 @@
  */
 
 import ChipSet from "./chipset.js";
-import Controller from "./bus.js";
+import { Controller } from "./bus.js";
 import MemoryX86 from "./memory.js";
+import Messages from "./messages.js";
 import ROMx86 from "./rom.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
@@ -59,7 +60,7 @@ export default class RAMx86 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "size")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -98,7 +99,7 @@ export default class RAMx86 extends Component {
      * getRAMSetting()
      *
      * @this {RAMx86}
-     * @return {number} (user-selected RAM setting, 0 for default, or -1 if none)
+     * @returns {number} (user-selected RAM setting, 0 for default, or -1 if none)
      */
     getRAMSetting()
     {
@@ -140,7 +141,7 @@ export default class RAMx86 extends Component {
      * @this {RAMx86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -167,7 +168,7 @@ export default class RAMx86 extends Component {
      * @this {RAMx86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -228,12 +229,14 @@ export default class RAMx86 extends Component {
                 this.fAllocated = true;
 
                 /*
-                 * NOTE: I'm specifying MAXDEBUG for status() messages because I'm not yet sure I want these
+                 * NOTE: I'm specifying MAXDEBUG for STATUS messages because I'm not yet sure I want these
                  * messages buried in the app, since they're seen only when a Control Panel is active.  Another
                  * and perhaps better alternative is to add "comment" attributes to the XML configuration file
                  * for these components, which the Computer component will display as it "powers up" components.
                  */
-                if (MAXDEBUG && !this.addrRAM && this.fInstalled) this.status("specified size overrides SW1");
+                if (MAXDEBUG && !this.addrRAM && this.fInstalled) {
+                    this.printf(Messages.STATUS, "specified size overrides SW1\n");
+                }
 
                 /*
                  * Memory with an ID of "ramCPQ" is reserved for built-in memory located just below the 16Mb
@@ -267,7 +270,9 @@ export default class RAMx86 extends Component {
                  * HACK: Set the word at 40:72 in the ROM BIOS Data Area (RBDA) to 0x1234 to bypass the ROM BIOS
                  * memory storage tests. See rom.js for more RBDA definitions.
                  */
-                if (MAXDEBUG) this.status("ROM BIOS memory test has been disabled");
+                if (MAXDEBUG) {
+                    this.printf(Messages.STATUS, "ROM BIOS memory test has been disabled\n");
+                }
                 this.bus.setShortDirect(ROMx86.BIOS.RESET_FLAG.ADDR, ROMx86.BIOS.RESET_FLAG.WARMBOOT);
             }
             /*
@@ -288,7 +293,7 @@ export default class RAMx86 extends Component {
      * This implements save support for the RAM component.
      *
      * @this {RAMx86}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -304,7 +309,7 @@ export default class RAMx86 extends Component {
      *
      * @this {RAMx86}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -390,7 +395,7 @@ class CompaqController extends Controller {
      * This implements save support for the CompaqController component.
      *
      * @this {CompaqController}
-     * @return {Array}
+     * @returns {Array}
      */
     save()
     {
@@ -404,7 +409,7 @@ class CompaqController extends Controller {
      *
      * @this {CompaqController}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -418,7 +423,7 @@ class CompaqController extends Controller {
      *
      * @this {CompaqController}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     getByte(off)
     {
@@ -486,7 +491,7 @@ class CompaqController extends Controller {
      * getMemoryAccess()
      *
      * @this {CompaqController}
-     * @return {Array.<function()>}
+     * @returns {Array.<function()>}
      */
     getMemoryAccess()
     {
@@ -498,7 +503,7 @@ class CompaqController extends Controller {
      *
      * @this {CompaqController}
      * @param {number} addr
-     * @return {Array} containing the buffer (and an offset within that buffer)
+     * @returns {Array} containing the buffer (and an offset within that buffer)
      */
     getMemoryBuffer(addr)
     {
@@ -517,13 +522,13 @@ class CompaqController extends Controller {
      * @this {MemoryX86}
      * @param {number} off (relative to 0x80C00000)
      * @param {number} [addr]
-     * @return {number}
+     * @returns {number}
      */
     static readByte(off, addr)
     {
         let b = this.controller.getByte(off);
         if (DEBUG) {
-            this.controller.ram.printMessage("CompaqController.readByte(" + Str.toHexWord(off) + ") returned " + Str.toHexByte(b), 0, true);
+            this.controller.ram.printf(Messages.MEM + Messages.ADDRESS, "CompaqController.readByte(%#06x) returned %#04x\n", off, b);
         }
         return b;
     }
@@ -549,7 +554,7 @@ class CompaqController extends Controller {
          * All bits in 0x80C00001 and 0x80C00003 are reserved, so we can simply ignore those writes.
          */
         if (DEBUG) {
-            this.controller.ram.printMessage("CompaqController.writeByte(" + Str.toHexWord(off) + "," + Str.toHexByte(b) + ")", 0, true);
+            this.controller.ram.printf(Messages.MEM + Messages.ADDRESS, "CompaqController.writeByte(%#06x,%#04x)\n", off, b);
         }
     }
 }

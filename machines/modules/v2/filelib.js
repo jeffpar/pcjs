@@ -9,19 +9,15 @@
 
 import fs from "fs";
 import path from "path";
-import Proc from "./proclib.js";
 import { globals } from "./defines.js";
-import DataBuffer from "../v3/databuffer.js";
+import DataBuffer from "./databuffer.js";
 
-let args = Proc.getArgs();
-let argv = args.argv;
-let moduleDir = path.dirname(argv[0]);
-let rootDir = path.join(moduleDir, "../../..");
+let rootDir = "";
 
 /**
- * @class File
+ * @class FileLib
  */
-export default class File {
+export default class FileLib {
     /**
      * getServerPath(sFile)
      *
@@ -31,12 +27,12 @@ export default class File {
     static getServerPath(sFile)
     {
         /*
-         * In addition to disk server paths, we had to add /machines (for diskette config files) and /software
-         * (for Markdown files containing supplementary copy-protection disk data).
+         * In addition to disk server paths, we had to add /machines (for diskette config files), /software
+         * (for Markdown files containing supplementary copy-protection disk data), and /tools (for everything else).
          */
-        let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
+        let match = sFile.match(/^\/(disks\/|)(machines|software|tools|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
         if (match) {
-            sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software"? "" : "disks"), match[2], match[3]);
+            sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software" || match[2] == "tools"? "" : "disks"), match[2], match[3]);
         }
         return sFile;
     }
@@ -51,14 +47,23 @@ export default class File {
     static readFileSync(sFile, encoding = "utf8")
     {
         let data;
-        if (sFile) {
-            sFile = File.getServerPath(sFile);
+        if (sFile && sFile.indexOf("http") != 0) {
+            sFile = FileLib.getServerPath(sFile);
             data = fs.readFileSync(sFile, encoding);
             if (!encoding) data = new DataBuffer(data);
         }
         return data;
     }
+
+    /**
+     * setRootDir(sDir)
+     *
+     * @param {string} sDir
+     */
+    static setRootDir(sDir)
+    {
+        rootDir = sDir;
+    }
 }
 
-globals.node.rootDir = rootDir;
-globals.node.readFileSync = File.readFileSync;
+globals.node.readFileSync = FileLib.readFileSync;

@@ -17,7 +17,7 @@ import fs from "fs";
  *
  * @param {number} n
  * @param {number} [cch] (default is 4 characters)
- * @return {string}
+ * @returns {string}
  */
 function toHex(n, cch = 4)
 {

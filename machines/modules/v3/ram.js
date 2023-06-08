@@ -17,7 +17,7 @@ import Memory from "./memory.js";
  */
 
 /**
- * @class {RAM}
+ * @class RAM
  * @unrestricted
  * @property {RAMConfig} config
  * @property {number} addr

@@ -10,11 +10,12 @@
 import CPU    from "../../../modules/v3/cpu.js";
 import Device from "../../../modules/v3/device.js";
 import LED    from "../../../modules/v3/led.js";
+import Format from "../../../modules/v2/format.js";
 
 /**
  * 64-bit Register
  *
- * @class {Reg64}
+ * @class Reg64
  * @unrestricted
  * @property {CPU1500} cpu
  * @property {Array.<number>} digits
@@ -247,9 +248,9 @@ class Reg64 extends Device {
         if (fSpaces && s.length < 3) s += ' ';
         for (let i = this.digits.length - 1; i >= 0; i--) {
             if (fSpaces) {
-                s += Device.HexUpperCase[this.digits[i]];
+                s += Format.HexUpperCase[this.digits[i]];
             } else {
-                s += Device.HexLowerCase[this.digits[i]] + ((i % 4)? '' : ' ');
+                s += Format.HexLowerCase[this.digits[i]] + ((i % 4)? '' : ' ');
             }
         }
         return s;
@@ -311,7 +312,7 @@ class Reg64 extends Device {
  * the Machine class guarantees that the CPU class is initialized after the ROM class, we can look it up in
  * the constructor.
  *
- * @class {CPU1500}
+ * @class CPU1500
  * @unrestricted
  * @property {Array.<Reg64>} regsO (operational registers A-D)
  * @property {Reg64} regA (alias for regsO[0])
@@ -562,7 +563,7 @@ export default class CPU1500 extends CPU {
     {
         if (this.breakConditions[c]) {
             this.breakConditions[c] = false;
-            this.println("break on " + CPU1500.BREAK[c]);
+            this.printf("break on %s\n", CPU1500.BREAK[c]);
             this.time.stop();
             return true;
         }
@@ -613,7 +614,7 @@ export default class CPU1500 extends CPU {
         while (this.nCyclesRemain > 0) {
             if (this.addrStop == this.regPC) {
                 this.addrStop = -1;
-                this.println("break");
+                this.printf("break\n");
                 this.time.stop();
                 break;
             }
@@ -622,7 +623,7 @@ export default class CPU1500 extends CPU {
             this.regPC = (addr + 1) & this.bus.addrLimit;
             if (opcode == undefined || !this.decode(opcode, addr)) {
                 this.regPC = this.regPCLast;
-                this.println("unimplemented opcode");
+                this.printf("unimplemented opcode\n");
                 this.time.stop();
                 break;
             }
@@ -876,7 +877,7 @@ export default class CPU1500 extends CPU {
     {
         let stateCPU = state['stateCPU'] || state[0];
         if (!stateCPU || !stateCPU.length) {
-            this.println("invalid saved state");
+            this.printf("invalid saved state\n");
             return false;
         }
         let version = stateCPU.shift();
@@ -898,7 +899,7 @@ export default class CPU1500 extends CPU {
             this.stack = stateCPU.shift();
             this.regKey = stateCPU.shift();
         } catch(err) {
-            this.println("CPU state error: " + err.message);
+            this.printf("CPU state error: %s\n", err.message);
             return false;
         }
         let stateROM = state['stateROM'] || state[1];
@@ -1081,7 +1082,7 @@ export default class CPU1500 extends CPU {
      */
     onReset()
     {
-        this.println("reset");
+        this.printf("reset\n");
         this.regPC = 0;
         this.clearDisplays();
         if (!this.time.isRunning()) this.print(this.toString());
@@ -1124,7 +1125,7 @@ export default class CPU1500 extends CPU {
                 if (digit < 0) {
                     sValue = reg.toString();
                 } else {
-                    sValue = Device.HexUpperCase[reg.digits[digit]];
+                    sValue = Format.HexUpperCase[reg.digits[digit]];
                 }
                 this.setBindingText(binding, sValue);
             }
@@ -1201,7 +1202,7 @@ export default class CPU1500 extends CPU {
                     ch = '-';
                 }
                 else {
-                    ch = Device.HexUpperCase[this.regA.digits[iDigit]];
+                    ch = Format.HexUpperCase[this.regA.digits[iDigit]];
                 }
                 if (this.led.setLEDState(col, 0, ch, (this.regB.digits[iDigit] & 0x2)? LED.FLAGS.PERIOD : 0)) {
                     this.checkBreakCondition('om');
@@ -1315,7 +1316,7 @@ export default class CPU1500 extends CPU {
                 this.regPC = value;
                 return true;
             default:
-                this.println("unrecognized register: " + name);
+                this.printf("unrecognized register: %s\n", name);
                 break;
             }
         }

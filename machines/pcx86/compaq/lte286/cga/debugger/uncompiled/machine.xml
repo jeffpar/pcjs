@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
+<machine id="compaq-lte286-640k" type="pcx86" border="1" pos="center" uncompiled="true" background="default">
+	<name pos="center">COMPAQ LTE/286, 640Kb RAM</name>
+	<computer id="compaq-lte286-640k" name="COMPAQ LTE/286" buswidth="24"/>
+	<cpu id="cpu286" model="80286" cycles="12000000"/>
+	<ram id="ramLow" addr="0x00000" size="0xa0000"/>
+	<rom id="romBIOS" addr="0xf0000" size="0x10000" alias="0xff0000" file="/machines/pcx86/compaq/lte286/rom/1989-09-07/1989-09-07.json5"/>
+	<video ref="/machines/pcx86/ibm/video/cga/ibm-cga.xml"/>
+	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A: {name: "SystemPro EISA Configuration 1.15"}}'/>
+	<!-- TODO: <hdc ref="/machines/pcx86/ibm/hdc/20mb/unformatted-at2.xml"/> -->
+	<keyboard ref="/machines/pcx86/ibm/keyboard/us84-softkeys.xml"/>
+	<debugger id="debugger" messages="" commands=""/>
+	<panel ref="/machines/pcx86/panel/wide286.xml"/>
+	<chipset id="chipset" model="deskpro386" floppies="[1440]" monitor="cga"/>
+	<parallel id="lpt1" adapter="2"/>
+	<serial id="com1" adapter="1"/>
+	<mouse serial="com1"/>
+</machine>

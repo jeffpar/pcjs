@@ -5,7 +5,14 @@
 /**
  * @define {string}
  */
-const APPVERSION = "2.00";              // this @define is overridden by the Closure Compiler with the version in machines.json
+const APPVERSION = "2.20";              // this @define is overridden by the Closure Compiler with the version in machines.json
+
+/**
+ * COMPILED is false by default; overridden with true in the Closure Compiler release.
+ *
+ * @define {boolean}
+ */
+const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
 
 /**
  * @define {string}
@@ -15,24 +22,7 @@ const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
 /**
  * @define {string}
  */
-const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
-
-/**
- * @define {string}
- */
 const CSSCLASS = "pcjs";
-
-/**
- * @define {string}
- */
-const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
-
-/**
- * COMPILED is false by default; overridden with true in the Closure Compiler release.
- *
- * @define {boolean}
- */
-const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
 
 /**
  * DEBUG is true by default, enabling assertions and other runtime checks; overridden with false
@@ -58,6 +48,11 @@ const DEBUG = true;                     // this @define is overridden by the Clo
  * @define {boolean}
  */
 var DEBUGGER = true;                    // this @define is overridden by the Closure Compiler to remove Debugger-related support
+
+/**
+ * @define {string}
+ */
+const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -117,6 +112,21 @@ const RS232 = {
     }
 };
 
+/**
+ * @define {string}
+ */
+const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
+
+/**
+ * LOCALDISKS is intended to reflect the webserver's operating mode.  Normally, we assume that all web
+ * resources should be accessed remotely, but if the webserver is running in "developer" mode, then the
+ * webserver should indicate that fact by setting the global variable 'LOCALDISKS' to true on any pages
+ * with embedded machines.
+ *
+ * @define {boolean}
+ */
+var LOCALDISKS = false;
+
 /*
  * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
  */
@@ -134,7 +144,624 @@ if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
 if (!globals.pcjs['components']) globals.pcjs['components'] = [];
 if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
+globals.window['LOCALDISKS'] = LOCALDISKS;
 
+
+
+/**
+ * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ */
+
+/*
+ * Standard machine message flags.
+ *
+ * NOTE: Because this machine defines more than 32 message categories, some of these message flags
+ * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
+ */
+const Messages = {
+    NONE:       0x000000000000,
+    DEFAULT:    0x000000000000,
+    ADDRESS:    0x000000000001,
+    LOG:        0x001000000000,
+    STATUS:     0x002000000000,
+    NOTICE:     0x004000000000,
+    WARNING:    0x008000000000,
+    ERROR:      0x010000000000,
+    DEBUG:      0x020000000000,
+    PROGRESS:   0x040000000000,
+    SCRIPT:     0x080000000000,
+    TYPES:      0x0ff000000000,
+    HALT:       0x400000000000,
+    BUFFER:     0x800000000000,
+    ALL:        0x000ffffffffe
+};
+
+/*
+ * Message categories supported by the messageEnabled() function and other assorted message
+ * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
+ * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
+ * like so:
+ *
+ *      m port on
+ *      m port off
+ *      ...
+ *
+ * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
+ * aware that changing the bit values could break saved Debugger states (not a huge concern, just
+ * something to be aware of).
+ */
+Messages.Categories = {
+    "warn":     Messages.WARNING,
+    /*
+     * Now we turn to message actions rather than message types; for example, setting "halt"
+     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
+     *
+     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
+     * until "m buffer off" is issued.
+     */
+    "halt":     Messages.HALT,
+    "buffer":   Messages.BUFFER
+};
+
+
+/**
+ * @copyright https://www.pcjs.org/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ */
+
+/** @typedef {Function} */
+let Formatter;
+
+/**
+ * @class Format
+ * @property {Object.<string,(Formatter|null)>}>} formatters
+ */
+class Format {
+
+    /**
+     * constructor()
+     *
+     * @this {Format}
+     */
+    constructor()
+    {
+        /**
+         * We populate the sprintf() formatters table with null functions for all the predefined (built-in) types,
+         * so that type validation has only one look-up to perform.
+         *
+         * For reference purposes, the standard ANSI C set of format types is "dioxXucsfeEgGpn%", not all of which
+         * are supported.  Some built-in types have been added, including Date types (see the upper-case types),
+         * a boolean type ('b'), and a JSON type ('j'); external format types include the Debugger Address type ('a'),
+         * and a default number type ('n') that selects the appropriate base type ('d', 'o', or 'x'), um, based on
+         * current Debugger preferences.
+         */
+        this.formatters = {};
+        let predefinedTypes = "ACDFGHMNSTWYBbdfjcsoXx%";
+        for (let i = 0; i < predefinedTypes.length; i++) {
+            this.formatters[predefinedTypes[i]] = null;
+        }
+    }
+
+    /**
+     * addFormatType(type, func)
+     *
+     * Whenever the specified type character is encountered in a sprintf() call, the specified
+     * function will be called with all the associated formatting parameters; the function must
+     * return a stringified copy of the arg.
+     *
+     * @this {Format}
+     * @param {string} type (the sprintf standard requires this be a single character)
+     * @param {Formatter} func
+     * @returns {boolean} (true if successful, false if type character has already been defined)
+     */
+    addFormatType(type, func)
+    {
+        // assert(!this.formatters[type]);
+        if (!this.formatters[type]) {
+            this.formatters[type] = func;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * isDate(date)
+     *
+     * @param {Date} date
+     * @returns {boolean}
+     */
+    static isDate(date)
+    {
+        return !isNaN(date.getTime());
+    }
+
+    /**
+     * parseDate(date)
+     * parseDate(date, time)
+     * parseDate(year, month, day, hour, minute, second)
+     * parseDate(timestamp, fLocal)
+     *
+     * Produces a UTC date when ONLY a date (no time) is provided; otherwise, it combines the date and
+     * and time, producing a date that is either local or UTC, depending on the presence (or lack) of time
+     * zone information.  Finally, if numeric inputs are provided, then Date.UTC() is called to generate
+     * a UTC time (since there is no provision for a time zone in that case either).
+     *
+     * In general, you should use this instead of new Date(), because the Date constructor implicitly calls
+     * Date.parse(s), which behaves inconsistently.  For example, ISO date-only strings (e.g. "1970-01-01")
+     * generate a UTC time, but non-ISO date-only strings (eg, "10/1/1945" or "October 1, 1945") generate a
+     * local time.
+     *
+     * @param {...} args
+     * @returns {Date} (UTC unless a time string with a timezone is explicitly provided)
+     */
+    static parseDate(...args)
+    {
+        let date;
+        if (args[0] === undefined) {
+            date = new Date(Date.now());
+        }
+        else if (typeof args[0] === "string") {
+            let s = args[0];
+            if (s.indexOf(':') < 0) {
+                s += ' ' + (args[1] || "00:00:00 UTC");
+            } else if (s.match(/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/)) {
+                /**
+                 * I don't care to support all the possible time zone specifiers just to determine whether or not
+                 * a time zone was provided, so for now, I simply look for common date+time patterns I use, such as
+                 * the "timestamp" pattern above.  TODO: Make this general-purpose someday.
+                 *
+                 * Also, when a timestamp is provided, then a second (optional) fLocal parameter can be specified;
+                 * requesting a (local) non-UTC date can be helpful, for example, when the date is going to be used
+                 * as a local file modification time.
+                 */
+                if (!args[1]) s += " UTC";
+            }
+            date = new Date(s);
+        }
+        else if (args[1] === undefined) {
+            date = new Date(args[0]);
+        } else {
+            // assert(args[1] < 12 && args[2] <= 31 && args[3] < 24 && args[4] < 60 && args[5] < 60);
+            date = new Date(Date.UTC(...args));
+        }
+        return date;
+    }
+
+    /**
+     * sprintf(format, ...args)
+     *
+     * This C-like version of sprintf() supports only a subset of the standard C formatting specifiers, plus a few
+     * non-standard ones (eg, to display booleans, dates, times, etc).
+     *
+     * This version also supports custom format specifiers; see addFormatType() for details.
+     *
+     * TODO: The %c and %s specifiers support a negative width for left-justified output, but the numeric specifiers
+     * (eg, %d and %x) do not; they support only positive widths and right-justified output.  That's one of the more
+     * glaring omissions at the moment.
+     *
+     * @this {Format}
+     * @param {string} format
+     * @param {...} [args]
+     * @returns {string}
+     */
+    sprintf(format, ...args)
+    {
+        /**
+         * This isn't just a nice optimization; it's also important if the caller is simply trying
+         * to printf() a string that may also contain '%' and doesn't want or expect any formatting.
+         */
+        if (!args || !args.length) {
+            return format;
+        }
+
+        let buffer = "";
+        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([bwhlL]?)([A-Za-z%])/);
+
+        let iArg = 0, iPart;
+        for (iPart = 0; iPart < aParts.length - 6; iPart += 6) {
+
+            buffer += aParts[iPart];
+            let arg, type = aParts[iPart+5];
+
+            /**
+             * Check for unrecognized types immediately, so we don't inadvertently pop any arguments.
+             */
+            if (this.formatters[type] === undefined) {
+                buffer += '%' + aParts[iPart+1] + aParts[iPart+2] + aParts[iPart+3] + aParts[iPart+4] + type;
+                continue;
+            }
+
+            if (iArg < args.length) {
+                arg = args[iArg];
+                if (type != '%') iArg++;
+            } else {
+                arg = args[args.length-1];
+            }
+            let flags = aParts[iPart+1];
+            let hash = flags.indexOf('#') >= 0;
+            let zeroPad = flags.indexOf('0') >= 0;
+            let width = aParts[iPart+2];
+            if (width == '*') {
+                width = arg;
+                if (iArg < args.length) {
+                    arg = args[iArg++];
+                } else {
+                    arg = args[args.length-1];
+                }
+            } else {
+                width = +width || 0;
+            }
+            let precision = aParts[iPart+3];
+            precision = precision? +precision.substr(1) : -1;
+            let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
+            let ach = null, s, radix = 0, prefix = "";
+
+            /**
+             * The following non-standard sprintf() format types provide handy alternatives to the
+             * PHP date() format types that we previously used with the old datelib.formatDate() function:
+             *
+             *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A (%.1A for a or p)
+             *      F:  month ("January", "February", ..., "December")                      %F (%.3F for 3-letter month)
+             *      g:  hour in 12-hour format                                              %G (%02G for leading zero)
+             *      h:  hour in 24-hour format                                              %H (%02H for leading zero)
+             *      i:  minutes (0, 1, ..., 59)                                             %N (%02N for leading zero)
+             *      j:  day of the month (1, 2, ..., 31)                                    %D (%02D for leading zero)
+             *      l:  day of the week ("Sunday", "Monday", ..., "Saturday")               %W (%.3W for 3-letter day)
+             *      n:  month (1, 2, ..., 12)                                               %M (%02M for leading zero)
+             *      s:  seconds (0, 1, ..., 59)                                             %S (%02S for leading zero)
+             *      Y:  4-digit year (eg, 2014)                                             %Y (%0.2Y for 2-digit year)
+             *
+             * We also support a few custom format types:
+             *
+             *      %C:  calendar output (equivalent to: %W, %F %D, %Y)
+             *      %T:  timestamp output (equivalent to: %Y-%02M-%02D %02H:%02N:%02S)
+             *
+             * Use the optional '#' flag with any of the above '%' format types to produce UTC results
+             * (eg, '%#G' instead of '%G').
+             *
+             * The %A, %F, and %W types act as strings (which support the '-' left justification flag, as well as
+             * the width and precision options), and the rest act as integers (which support the '0' padding flag
+             * and the width option).  Also, while %Y does act as an integer, it also supports truncation using the
+             * precision option (normally, integers do not); this enables a variable number of digits for the year.
+             *
+             * So old code like this:
+             *
+             *      printf("%s\n", formatDate("l, F j, Y", date));
+             *
+             * can now be written like this:
+             *
+             *      printf("%W, %F %D, %Y\n", date, date, date, date);
+             *
+             * or even more succinctly, as:
+             *
+             *      printf("%C\n", date);
+             *
+             * In fact, even the previous example can be written more succinctly as:
+             *
+             *      printf("%W, %F %D, %Y\n", date);
+             *
+             * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
+             */
+            let date = /** @type {Date} */ ("ACDFGHMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? Format.parseDate(arg) : arg);
+
+            switch(type) {
+            case 'C':
+                buffer += (Format.isDate(date)? this.sprintf("%#W, %#F %#D, %#Y".replaceAll('#', hash? '#' : ''), date) : undefined);
+                continue;
+
+            case 'D':
+                arg = hash? date.getUTCDate() : date.getDate();
+                type = 'd';
+                break;
+
+            case 'A':
+            case 'G':
+            case 'H':
+                arg = hash? date.getUTCHours() : date.getHours();
+                if (type == 'A') {
+                    arg = (arg < 12 ? "am" : "pm");
+                    type = 's';
+                }
+                else {
+                    if (type == 'G') {
+                        arg = (!arg? 12 : (arg > 12 ? arg - 12 : arg));
+                    }
+                    type = 'd';
+                }
+                break;
+
+            case 'F':
+            case 'M':
+                arg = hash? date.getUTCMonth() : date.getMonth();
+                if (type == 'F') {
+                    arg = Format.NamesOfMonths[arg];
+                    type = 's';
+                } else {
+                    arg++;
+                    type = 'd';
+                }
+                break;
+
+            case 'N':
+                arg = hash? date.getUTCMinutes() : date.getMinutes();
+                type = 'd';
+                break;
+
+            case 'S':
+                arg = hash? date.getUTCSeconds() : date.getSeconds();
+                type = 'd'
+                break;
+
+            case 'T':
+                buffer += (Format.isDate(date)? this.sprintf("%#Y-%#02M-%#02D %#02H:%#02N:%#02S".replaceAll('#', hash? '#' : ''), date) : undefined);
+                continue;
+
+            case 'W':
+                arg = Format.NamesOfDays[hash? date.getUTCDay() : date.getDay()];
+                type = 's';
+                break;
+
+            case 'Y':
+                arg = hash? date.getUTCFullYear() : date.getFullYear();
+                if (precision > 0) {
+                    arg = arg % (Math.pow(10, precision));
+                    precision = -1;
+                }
+                type = 'd';
+                break;
+            }
+
+            switch(type) {
+            /**
+             * "%b" is for boolean-like values.
+             */
+            case 'b':
+                buffer += (arg? "true" : "false");
+                break;
+
+            /**
+             * "%d" is for signed decimal numbers.
+             */
+            case 'd':
+                /**
+                 * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
+                 * so I use Math.trunc() instead.  Bit-wise operators also mask a lot of evils, by converting
+                 * complete nonsense into zero, so while I'm ordinarily a fan, that's not desirable here.
+                 *
+                 * Other (hidden) advantages of Math.trunc(): it automatically converts strings, it honors
+                 * numeric prefixes (the traditional "0x" for hex and the newer "0o" for octal), and it returns
+                 * NaN if the ENTIRE string cannot be converted.
+                 *
+                 * parseInt(), which would seem to be the more logical choice here, doesn't understand "0o",
+                 * doesn't return NaN if non-digits are embedded in the string, and doesn't behave consistently
+                 * across all browsers when parsing older octal values with a leading "0"; Math.trunc() doesn't
+                 * recognize those octal values either, but I'm OK with that, as long as it CONSISTENTLY doesn't
+                 * recognize them.
+                 *
+                 * That last problem is why some recommend you ALWAYS pass a radix to parseInt(), but that
+                 * forces you to parse the string first and determine the proper radix; otherwise, you end up
+                 * with NEW inconsistencies.  For example, if radix is 10 and the string is "0x10", the result
+                 * is zero, since parseInt() happily stops parsing when it reaches the first non-radix 10 digit.
+                 */
+                arg = Math.trunc(arg);
+                /**
+                 * Before falling into the decimal floating-point code, we take this opportunity to convert
+                 * the precision value, if any, to the minimum number of digits to print.  Which basically means
+                 * setting zeroPad to true, width to precision, and then unsetting precision.
+                 *
+                 * TODO: This isn't quite accurate.  For example, printf("%6.3d", 3) should print "   003", not
+                 * "000003".  But once again, this isn't a common enough case to worry about.
+                 */
+                if (precision >= 0) {
+                    zeroPad = true;
+                    if (width < precision) width = precision;
+                    precision = -1;
+                }
+                /* falls through */
+
+            /**
+             * "%f" is for floating-point numbers.
+             */
+            case 'f':
+                arg = +arg;             // convert to a number, if it isn't already
+                s = arg + "";
+                if (precision >= 0) {
+                    s = arg.toFixed(precision);
+                }
+                if (s.length < width) {
+                    if (zeroPad) {
+                        if (arg < 0) {
+                            width--;
+                            s = s.substr(1);
+                        }
+                        s = ("0".repeat(width) + s).slice(-width);
+                        if (arg < 0) s = '-' + s;
+                    } else {
+                        s = (" ".repeat(width) + s).slice(-width);
+                    }
+                }
+                buffer += s;
+                break;
+
+            /**
+             * "%j" is for objects (displayed as JSON, with configurable indentation).
+             */
+            case 'j':
+                /**
+                 * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
+                 * the caller is providing an Object that should be rendered as JSON.  If a width is included
+                 * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
+                 */
+                buffer += JSON.stringify(arg, null, width || undefined);
+                break;
+
+            /**
+             * "%c" is for characters (which can be either single-character strings or ASCII codes).
+             */
+            case 'c':
+                arg = typeof arg == "string"? arg[0] : String.fromCharCode(arg);
+                /* falls through */
+
+            /**
+             * "%s" is for strings.
+             */
+            case 's':
+                /**
+                 * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
+                 * we know undefined and null values don't have a toString() method, but hopefully everything
+                 * else does.
+                 */
+                if (arg != undefined) {
+                    if (typeof arg != "string") {
+                        arg = arg.toString();
+                    }
+                    if (precision >= 0) {
+                        arg = arg.substr(0, precision);
+                    }
+                    while (arg.length < width) {
+                        if (flags.indexOf('-') >= 0) {
+                            arg += ' ';
+                        } else {
+                            arg = ' ' + arg;
+                        }
+                    }
+                }
+                buffer += arg;
+                break;
+
+            /**
+             * "%B" is for binary integers.
+             */
+            case 'B':
+                radix = 2;
+                if (hash) prefix = "0b";
+                /* falls through */
+
+            /**
+             * "%o" is for octal integers.
+             */
+            case 'o':
+                if (!radix) radix = 8;
+                if (!prefix && hash) prefix = "0o";
+                /* falls through */
+
+            /**
+             * "%X" is for hexadecimal integers (using upper-case letters).
+             */
+            case 'X':
+                ach = Format.HexUpperCase;
+                // if (!prefix && hash) prefix = "0X";  // I don't like that %#X uppercases BOTH the prefix and the value
+                /* falls through */
+
+            /**
+             * "%x" is for hexadecimal integers (using lower-case letters).
+             */
+            case 'x':
+                s = "";
+                if (!radix) radix = 16;
+                if (!prefix && hash) prefix = "0x";
+                if (!ach) ach = Format.HexLowerCase;
+                /**
+                 * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
+                 * and we honor precision, if any, as the minimum number of digits to print.
+                 */
+                arg = Math.trunc(arg);
+                if (precision >= 0) {
+                    zeroPad = true;
+                    if (width < precision) width = precision;
+                    precision = -1;
+                }
+                if (zeroPad && !width) {
+                    /**
+                     * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
+                     */
+                    if (length == 'b') {
+                        width = 2;      // if an 8-bit length was specified (eg, "%0bx"), then default to 2
+                    } else if (length == 'h' || length == 'w') {
+                        width = 4;      // if a 16-bit length was specified (eg, "%0wx"), then default to 4
+                    } else if (length == 'l') {
+                        width = 8;      // if a 32-bit length was specified (eg, "%0lx"), then default to 8
+                    } else {
+                        let v = Math.abs(arg);
+                        if (v <= 0xff) {
+                            width = 2;
+                        } else if (v <= 0xffff) {
+                            width = 4;
+                        } else if (v <= 0xffffffff) {
+                            width = 8;
+                        } else {
+                            width = 9;
+                        }
+                    }
+                    width += prefix.length;
+                }
+                width -= prefix.length;
+                do {
+                    let d = 16;         // digit index corresponding to '?'
+                    /*
+                     * We default to '?' if isNaN(); since we always call Math.trunc() for integer args, if the original
+                     * arg was undefined, or a string containing a non-number, or anything else that couldn't be converted
+                     * to a number, the resulting arg should be NaN.
+                     */
+                    if (!Number.isNaN(arg)) {
+                        d = arg & (radix - 1);
+                        /*
+                         * We divide by the base (8 or 16) and truncate, instead of the more traditional bit-wise shift,
+                         * because, like the decimal integer case, this allows us to support values > 32 bits (up to 53 bits).
+                         */
+                        arg = Math.trunc(arg / radix);
+                        // arg >>>= (radix == 16? 4 : 3);
+                    }
+                    if (zeroPad || !s || d || arg) {
+                        s = ach[d] + s;
+                    } else {
+                        if (prefix) {
+                            s = prefix + s;
+                            prefix = "";
+                        }
+                        if (width > 0) s = ' ' + s;
+                    }
+                } while (--width > 0 || arg);
+                buffer += prefix + s;
+                break;
+
+            /**
+             * "%%" is for the percent symbol.
+             */
+            case '%':
+                buffer += '%';
+                break;
+
+            default:
+                // assert(this.formatters[type]);
+                if (this.formatters[type]) {
+                    buffer += this.formatters[type](type, flags, width, precision, arg);
+                    break;
+                }
+                buffer += "(unimplemented sprintf type: %" + type + ")";
+                break;
+            }
+        }
+
+        buffer += aParts[iPart];
+        return buffer;
+    }
+}
+
+//
+// TODO: Put these definitions inside the class once we have a Closure Compiler that doesn't complain about them:
+//
+//      This language feature is only supported for UNSTABLE mode or better: Public class fields
+//
+// static HexLowerCase = "0123456789abcdef?";
+// static HexUpperCase = "0123456789ABCDEF?";
+// static NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+// static NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+//
+
+Format.HexLowerCase = "0123456789abcdef?";
+Format.HexUpperCase = "0123456789ABCDEF?";
+Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
@@ -235,7 +862,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); only 2, 8, 10 and 16 are supported
-     * @return {boolean} true if valid, false if invalid (or the specified base isn't supported)
+     * @returns {boolean} true if valid, false if invalid (or the specified base isn't supported)
      */
     static isValidInt(s, base)
     {
@@ -268,7 +895,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); can be overridden by prefixes/suffixes
-     * @return {number|undefined} corresponding value, or undefined if invalid
+     * @returns {number|undefined} corresponding value, or undefined if invalid
      */
     static parseInt(s, base)
     {
@@ -385,7 +1012,7 @@ class Str {
      * @param {number} cch (the desired number of digits)
      * @param {string} [sPrefix] (default is none)
      * @param {number} [nGrouping]
-     * @return {string}
+     * @returns {string}
      */
     static toBase(n, radix, cch, sPrefix = "", nGrouping = 0)
     {
@@ -446,7 +1073,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of binary digits (0 or undefined for default of either 8, 18, or 36)
      * @param {number} [nGrouping]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBin(n, cch, nGrouping)
     {
@@ -472,7 +1099,7 @@ class Str {
      * @param {number|null|undefined} n (interpreted as a 32-bit value)
      * @param {number} [cb] is the desired number of binary bytes (4 is both the default and the maximum)
      * @param {boolean} [fPrefix]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBinBytes(n, cb, fPrefix)
     {
@@ -498,7 +1125,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of octal digits (0 or undefined for default of either 6, 8, or 12)
      * @param {boolean} [fPrefix]
-     * @return {string} the octal representation of n
+     * @returns {string} the octal representation of n
      */
     static toOct(n, cch, fPrefix)
     {
@@ -527,7 +1154,7 @@ class Str {
      *
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of decimal digits (0 or undefined for default of either 5 or 11)
-     * @return {string} the decimal representation of n
+     * @returns {string} the decimal representation of n
      */
     static toDec(n, cch)
     {
@@ -563,7 +1190,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of hex digits (0 or undefined for default of either 4, 8, or 9)
      * @param {boolean} [fPrefix]
-     * @return {string} the hex representation of n
+     * @returns {string} the hex representation of n
      */
     static toHex(n, cch, fPrefix)
     {
@@ -587,7 +1214,7 @@ class Str {
      * Alias for Str.toHex(b, 2, true)
      *
      * @param {number|null|undefined} b is a byte value
-     * @return {string} the hex representation of b
+     * @returns {string} the hex representation of b
      */
     static toHexByte(b)
     {
@@ -600,7 +1227,7 @@ class Str {
      * Alias for Str.toHex(w, 4, true)
      *
      * @param {number|null|undefined} w is a word (16-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexWord(w)
     {
@@ -613,7 +1240,7 @@ class Str {
      * Alias for Str.toHex(l, 8, true)
      *
      * @param {number|null|undefined} l is a dword (32-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexLong(l)
     {
@@ -630,7 +1257,7 @@ class Str {
      *
      * @param {string} sFileName
      * @param {boolean} [fStripExt]
-     * @return {string}
+     * @returns {string}
      */
     static getBaseName(sFileName, fStripExt)
     {
@@ -662,7 +1289,7 @@ class Str {
      * Note that we EXCLUDE the period from the returned extension, whereas path.extname() includes it.
      *
      * @param {string} sFileName
-     * @return {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
+     * @returns {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
      */
     static getExtension(sFileName)
     {
@@ -680,7 +1307,7 @@ class Str {
      *
      * @param {string} s
      * @param {string} sSuffix
-     * @return {boolean} true if s ends with sSuffix, false if not
+     * @returns {boolean} true if s ends with sSuffix, false if not
      */
     static endsWith(s, sSuffix)
     {
@@ -691,7 +1318,7 @@ class Str {
      * escapeHTML(sHTML)
      *
      * @param {string} sHTML
-     * @return {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
+     * @returns {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
      */
     static escapeHTML(sHTML)
     {
@@ -729,7 +1356,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replace(sSearch, sReplace, s)
     {
@@ -746,7 +1373,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceAll(sSearch, sReplace, s)
     {
@@ -760,7 +1387,7 @@ class Str {
      *
      * @param {Object} a
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceArray(a, s)
     {
@@ -792,7 +1419,7 @@ class Str {
      * @param {string} s is a string
      * @param {number} cch is desired length
      * @param {boolean} [fPadLeft] (default is padding on the right)
-     * @return {string} the original string (s) with spaces padding it to the specified length
+     * @returns {string} the original string (s) with spaces padding it to the specified length
      */
     static pad(s, cch, fPadLeft)
     {
@@ -816,7 +1443,7 @@ class Str {
      * local time.
      *
      * @param {...} args
-     * @return {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
+     * @returns {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
      */
     static parseDate(...args)
     {
@@ -839,7 +1466,7 @@ class Str {
      * isValidDate(date)
      *
      * @param {Date} date
-     * @return {boolean}
+     * @returns {boolean}
      */
     static isValidDate(date)
     {
@@ -847,393 +1474,11 @@ class Str {
     }
 
     /**
-     * sprintf(format, ...args)
-     *
-     * Copied from the CCjs project (https://github.com/jeffpar/ccjs/blob/master/lib/stdio.js) and extended.
-     * Far from complete, let alone sprintf-compatible, but it's adequate for the handful of sprintf-style format
-     * specifiers that I use.
-     *
-     * TODO: The %c and %s specifiers support a negative width for left-justified output, but the numeric specifiers
-     * (eg, %d and %x) do not; they support only positive widths and right-justified output.  That's one of the more
-     * glaring omissions at the moment.
-     *
-     * @param {string} format
-     * @param {...} args
-     * @return {string}
-     */
-    static sprintf(format, ...args)
-    {
-        /*
-         * This isn't just a nice optimization; it's also important if the caller is simply trying
-         * to printf() a string that may also contain '%' and doesn't want or expect any formatting.
-         */
-        if (!args || !args.length) {
-            return format;
-        }
-
-        let buffer = "";
-        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([hlL]?)([A-Za-z%])/);
-
-        let iArg = 0, iPart;
-        for (iPart = 0; iPart < aParts.length - 6; iPart += 6) {
-
-            buffer += aParts[iPart];
-            let arg, type = aParts[iPart+5];
-
-            /*
-             * Check for unrecognized types immediately, so we don't inadvertently pop any arguments;
-             * the first 12 ("ACDFHIMNSTWY") are for our non-standard Date extensions (see below).
-             *
-             * For reference purposes, the standard ANSI C set of format types is: "dioxXucsfeEgGpn%".
-             */
-            let iType = "ACDFHIMNSTWYbdfjcsoXx%".indexOf(type);
-            if (iType < 0) {
-                buffer += '%' + aParts[iPart+1] + aParts[iPart+2] + aParts[iPart+3] + aParts[iPart+4] + type;
-                continue;
-            }
-
-            if (iArg < args.length) {
-                arg = args[iArg];
-                if (type != '%') iArg++;
-            } else {
-                arg = args[args.length-1];
-            }
-            let flags = aParts[iPart+1];
-            let hash = flags.indexOf('#') >= 0;
-            let zeroPad = flags.indexOf('0') >= 0;
-            let width = aParts[iPart+2];
-            if (width == '*') {
-                width = arg;
-                if (iArg < args.length) {
-                    arg = args[iArg++];
-                } else {
-                    arg = args[args.length-1];
-                }
-            } else {
-                width = +width || 0;
-            }
-            let precision = aParts[iPart+3];
-            precision = precision? +precision.substr(1) : -1;
-            // let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L' (all currently ignored)
-            let ach = null, s, radix = 0, prefix = "";
-
-            /*
-             * The following non-standard sprintf() format codes provide handy alternatives to the
-             * PHP date() format codes that we used to use with the old datelib.formatDate() function:
-             *
-             *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A
-             *      d:  day of the month, 2 digits with leading zeros (01, 02, ..., 31)     %02D
-             *      D:  3-letter day of the week ("Sun", "Mon", ..., "Sat")                 %.3W
-             *      F:  month ("January", "February", ..., "December")                      %F
-             *      g:  hour in 12-hour format, without leading zeros (1, 2, ..., 12)       %G
-             *      h:  hour in 24-hour format, without leading zeros (0, 1, ..., 23)       %H
-             *      H:  hour in 24-hour format, with leading zeros (00, 01, ..., 23)        %02H
-             *      i:  minutes, with leading zeros (00, 01, ..., 59)                       %02N
-             *      j:  day of the month, without leading zeros (1, 2, ..., 31)             %D
-             *      l:  day of the week ("Sunday", "Monday", ..., "Saturday")               %W
-             *      m:  month, with leading zeros (01, 02, ..., 12)                         %02M
-             *      M:  3-letter month ("Jan", "Feb", ..., "Dec")                           %.3F
-             *      n:  month, without leading zeros (1, 2, ..., 12)                        %M
-             *      s:  seconds, with leading zeros (00, 01, ..., 59)                       %02S
-             *      y:  2-digit year (eg, 14)                                               %0.2Y
-             *      Y:  4-digit year (eg, 2014)                                             %Y
-             *
-             * We also support a few custom format codes:
-             *
-             *      %C:  calendar output (equivalent to: %W, %F %D, %Y)
-             *      %T:  timestamp output (equivalent to: %Y-%02M-%02D %02H:%02N:%02S)
-             *
-             * Use the optional '#' flag with any of the above '%' format codes to produce UTC results
-             * (eg, '%#G' instead of '%G').
-             *
-             * The %A, %F, and %W types act as strings (which support the '-' left justification flag, as well as
-             * the width and precision options), and the rest act as integers (which support the '0' padding flag
-             * and the width option).  Also, while %Y does act as an integer, it also supports truncation using the
-             * precision option (normally, integers do not); this enables a variable number of digits for the year.
-             *
-             * So old code like this:
-             *
-             *      printf("%s\n", formatDate("l, F j, Y", date));
-             *
-             * can now be written like this:
-             *
-             *      printf("%W, %F %D, %Y\n", date, date, date, date);
-             *
-             * or even more succinctly, as:
-             *
-             *      printf("%C\n", date);
-             *
-             * In fact, even the previous example can be written more succinctly as:
-             *
-             *      printf("%W, %F %D, %Y\n", date);
-             *
-             * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
-             */
-            let ch, date = /** @type {Date} */ (iType < 12 && typeof arg != "object"? Str.parseDate(arg) : arg), dateUndefined;
-
-            switch(type) {
-            case 'C':
-                ch = hash? '#' : '';
-                buffer += (Str.isValidDate(date)? Str.sprintf(Str.sprintf("%%%sW, %%%sF %%%sD, %%%sY", ch), date) : dateUndefined);
-                continue;
-
-            case 'D':
-                arg = hash? date.getUTCDate() : date.getDate();
-                type = 'd';
-                break;
-
-            case 'A':
-            case 'G':
-            case 'H':
-                arg = hash? date.getUTCHours() : date.getHours();
-                if (type == 'A') {
-                    arg = (arg < 12 ? "am" : "pm");
-                    type = 's';
-                }
-                else {
-                    if (type == 'G') {
-                        arg = (!arg? 12 : (arg > 12 ? arg - 12 : arg));
-                    }
-                    type = 'd';
-                }
-                break;
-
-            case 'F':
-            case 'M':
-                arg = hash? date.getUTCMonth() : date.getMonth();
-                if (type == 'F') {
-                    arg = Str.NamesOfMonths[arg];
-                    type = 's';
-                } else {
-                    arg++;
-                    type = 'd';
-                }
-                break;
-
-            case 'N':
-                arg = hash? date.getUTCMinutes() : date.getMinutes();
-                type = 'd';
-                break;
-
-            case 'S':
-                arg = hash? date.getUTCSeconds() : date.getSeconds();
-                type = 'd'
-                break;
-
-            case 'T':
-                ch = hash? '#' : '';
-                buffer += (Str.isValidDate(date)? Str.sprintf(Str.sprintf("%%%sY-%%%s02M-%%%s02D %%%s02H:%%%s02N:%%%s02S", ch), date) : dateUndefined);
-                continue;
-
-            case 'W':
-                arg = Str.NamesOfDays[hash? date.getUTCDay() : date.getDay()];
-                type = 's';
-                break;
-
-            case 'Y':
-                arg = hash? date.getUTCFullYear() : date.getFullYear();
-                if (precision > 0) {
-                    arg = arg % (Math.pow(10, precision));
-                    precision = -1;
-                }
-                type = 'd';
-                break;
-            }
-
-            switch(type) {
-            case 'b':
-                /*
-                 * This non-standard "boolean" format specifier seems handy.
-                 */
-                buffer += (arg? "true" : "false");
-                break;
-
-            case 'd':
-                /*
-                 * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
-                 * so I use Math.trunc() instead.  Bit-wise operators also mask a lot of evils, by converting
-                 * complete nonsense into zero, so while I'm ordinarily a fan, that's not desirable here.
-                 *
-                 * Other (hidden) advantages of Math.trunc(): it automatically converts strings, it honors
-                 * numeric prefixes (the traditional "0x" for hex and the newer "0o" for octal), and it returns
-                 * NaN if the ENTIRE string cannot be converted.
-                 *
-                 * parseInt(), which would seem to be the more logical choice here, doesn't understand "0o",
-                 * doesn't return NaN if non-digits are embedded in the string, and doesn't behave consistently
-                 * across all browsers when parsing older octal values with a leading "0"; Math.trunc() doesn't
-                 * recognize those octal values either, but I'm OK with that, as long as it CONSISTENTLY doesn't
-                 * recognize them.
-                 *
-                 * That last problem is why some recommend you ALWAYS pass a radix to parseInt(), but that
-                 * forces you to parse the string first and determine the proper radix; otherwise, you end up
-                 * with NEW inconsistencies.  For example, if radix is 10 and the string is "0x10", the result
-                 * is zero, since parseInt() happily stops parsing when it reaches the first non-radix 10 digit.
-                 */
-                arg = Math.trunc(arg);
-                /*
-                 * Before falling into the decimal floating-point code, we take this opportunity to convert
-                 * the precision value, if any, to the minimum number of digits to print.  Which basically means
-                 * setting zeroPad to true and width to precision, and then unsetting precision.
-                 *
-                 * TODO: This isn't quite accurate.  For example, printf("%6.3d", 3) should print "   003", not
-                 * "000003".  But once again, this isn't a common enough case to worry about.
-                 */
-                if (precision >= 0) {
-                    zeroPad = true;
-                    if (width < precision) width = precision;
-                    precision = -1;
-                }
-                /* falls through */
-
-            case 'f':
-                s = arg + "";
-                if (precision >= 0) {
-                    s = arg.toFixed(precision);
-                }
-                if (s.length < width) {
-                    if (zeroPad) {
-                        if (arg < 0) {
-                            width--;
-                            s = s.substr(1);
-                        }
-                        s = ("0000000000" + s).slice(-width);
-                        if (arg < 0) s = '-' + s;
-                    } else {
-                        s = ("          " + s).slice(-width);
-                    }
-                }
-                buffer += s;
-                break;
-
-            case 'j':
-                /*
-                 * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
-                 * the caller is providing an Object that should be rendered as JSON.  If a width is included
-                 * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
-                 */
-                buffer += JSON.stringify(arg, null, width || undefined);
-                break;
-
-            case 'c':
-                arg = typeof arg == "string"? arg[0] : String.fromCharCode(arg);
-                /* falls through */
-
-            case 's':
-                /*
-                 * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
-                 * we know undefined and null values don't have a toString() method, but hopefully everything
-                 * else does.
-                 */
-                if (arg != undefined) {
-                    if (typeof arg != "string") {
-                        arg = arg.toString();
-                    }
-                    if (precision >= 0) {
-                        arg = arg.substr(0, precision);
-                    }
-                    while (arg.length < width) {
-                        if (flags.indexOf('-') >= 0) {
-                            arg += ' ';
-                        } else {
-                            arg = ' ' + arg;
-                        }
-                    }
-                }
-                buffer += arg;
-                break;
-
-            case 'o':
-                radix = 8;
-                if (hash) prefix = "0";
-                /* falls through */
-
-            case 'X':
-                ach = Str.HexUpperCase;
-                // if (hash) prefix = "0X";     // I don't like that %#X uppercases both the prefix and the value
-                /* falls through */
-
-            case 'x':
-                s = "";
-                if (!radix) radix = 16;
-                if (!prefix && hash) prefix = "0x";
-                if (!ach) ach = Str.HexLowerCase;
-                /*
-                 * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
-                 * and we honor precision, if any, as the minimum number of digits to print.
-                 */
-                arg = Math.trunc(arg);
-                if (precision >= 0) {
-                    zeroPad = true;
-                    if (width < precision) width = precision;
-                    precision = -1;
-                }
-                if (zeroPad && !width) {
-                    /*
-                     * Here we replicate a bit of logic from toHex(), which selects a width based on the value, and
-                     * is triggered by the format specification "%0x", where zero-padding is requested without a width.
-                     */
-                    let v = Math.abs(arg);
-                    if (v <= 0xff) {
-                        width = 2;
-                    } else if (v <= 0xffff) {
-                        width = 4;
-                    } else if (v <= 0xffffffff) {
-                        width = 8;
-                    } else {
-                        width = 9;
-                    }
-                    width += prefix.length;
-                }
-                width -= prefix.length;
-                do {
-                    let d = 16;         // digit index corresponding to '?'
-                    /*
-                     * We default to '?' if isNaN(); since we always call Math.trunc() for integer args, if the original
-                     * arg was undefined, or a string containing a non-number, or anything else that couldn't be converted
-                     * to a number, the resulting arg should be NaN.
-                     */
-                    if (!Number.isNaN(arg)) {
-                        d = arg & (radix - 1);
-                        /*
-                         * We divide by the base (8 or 16) and truncate, instead of the more traditional bit-wise shift,
-                         * because, like the decimal integer case, this allows us to support values > 32 bits (up to 53 bits).
-                         */
-                        arg = Math.trunc(arg / radix);
-                        // arg >>>= (radix == 16? 4 : 3);
-                    }
-                    if (zeroPad || !s || d || arg) {
-                        s = ach[d] + s;
-                    } else {
-                        if (prefix) {
-                            s = prefix + s;
-                            prefix = "";
-                        }
-                        if (width > 0) s = ' ' + s;
-                    }
-                } while (--width > 0 || arg);
-                buffer += prefix + s;
-                break;
-
-            case '%':
-                buffer += '%';
-                break;
-
-            default:
-                buffer += "(unimplemented printf type %" + type + ")";
-                break;
-            }
-        }
-
-        buffer += aParts[iPart];
-        return buffer;
-    }
-
-    /**
      * stripLeadingZeros(s, fPad)
      *
      * @param {string} s
      * @param {boolean} [fPad]
-     * @return {string}
+     * @returns {string}
      */
     static stripLeadingZeros(s, fPad)
     {
@@ -1247,7 +1492,7 @@ class Str {
      * trim(s)
      *
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static trim(s)
     {
@@ -1261,7 +1506,7 @@ class Str {
      * toASCIICode(b)
      *
      * @param {number} b
-     * @return {string}
+     * @returns {string}
      */
     static toASCIICode(b)
     {
@@ -1330,44 +1575,6 @@ Str.ASCIICodeMap = {
 };
 
 /*
- * Refer to: https://en.wikipedia.org/wiki/Code_page_437
- */
-Str.CP437ToUnicode = [
-    '\u0000', '\u263A', '\u263B', '\u2665', '\u2666', '\u2663', '\u2660', '\u2022',
-    '\u25D8', '\u25CB', '\u25D9', '\u2642', '\u2640', '\u266A', '\u266B', '\u263C',
-    '\u25BA', '\u25C4', '\u2195', '\u203C', '\u00B6', '\u00A7', '\u25AC', '\u21A8',
-    '\u2191', '\u2193', '\u2192', '\u2190', '\u221F', '\u2194', '\u25B2', '\u25BC',
-    '\u0020', '\u0021', '\u0022', '\u0023', '\u0024', '\u0025', '\u0026', '\u0027',
-    '\u0028', '\u0029', '\u002A', '\u002B', '\u002C', '\u002D', '\u002E', '\u002F',
-    '\u0030', '\u0031', '\u0032', '\u0033', '\u0034', '\u0035', '\u0036', '\u0037',
-    '\u0038', '\u0039', '\u003A', '\u003B', '\u003C', '\u003D', '\u003E', '\u003F',
-    '\u0040', '\u0041', '\u0042', '\u0043', '\u0044', '\u0045', '\u0046', '\u0047',
-    '\u0048', '\u0049', '\u004A', '\u004B', '\u004C', '\u004D', '\u004E', '\u004F',
-    '\u0050', '\u0051', '\u0052', '\u0053', '\u0054', '\u0055', '\u0056', '\u0057',
-    '\u0058', '\u0059', '\u005A', '\u005B', '\u005C', '\u005D', '\u005E', '\u005F',
-    '\u0060', '\u0061', '\u0062', '\u0063', '\u0064', '\u0065', '\u0066', '\u0067',
-    '\u0068', '\u0069', '\u006A', '\u006B', '\u006C', '\u006D', '\u006E', '\u006F',
-    '\u0070', '\u0071', '\u0072', '\u0073', '\u0074', '\u0075', '\u0076', '\u0077',
-    '\u0078', '\u0079', '\u007A', '\u007B', '\u007C', '\u007D', '\u007E', '\u2302',
-    '\u00C7', '\u00FC', '\u00E9', '\u00E2', '\u00E4', '\u00E0', '\u00E5', '\u00E7',
-    '\u00EA', '\u00EB', '\u00E8', '\u00EF', '\u00EE', '\u00EC', '\u00C4', '\u00C5',
-    '\u00C9', '\u00E6', '\u00C6', '\u00F4', '\u00F6', '\u00F2', '\u00FB', '\u00F9',
-    '\u00FF', '\u00D6', '\u00DC', '\u00A2', '\u00A3', '\u00A5', '\u20A7', '\u0192',
-    '\u00E1', '\u00ED', '\u00F3', '\u00FA', '\u00F1', '\u00D1', '\u00AA', '\u00BA',
-    '\u00BF', '\u2310', '\u00AC', '\u00BD', '\u00BC', '\u00A1', '\u00AB', '\u00BB',
-    '\u2591', '\u2592', '\u2593', '\u2502', '\u2524', '\u2561', '\u2562', '\u2556',
-    '\u2555', '\u2563', '\u2551', '\u2557', '\u255D', '\u255C', '\u255B', '\u2510',
-    '\u2514', '\u2534', '\u252C', '\u251C', '\u2500', '\u253C', '\u255E', '\u255F',
-    '\u255A', '\u2554', '\u2569', '\u2566', '\u2560', '\u2550', '\u256C', '\u2567',
-    '\u2568', '\u2564', '\u2565', '\u2559', '\u2558', '\u2552', '\u2553', '\u256B',
-    '\u256A', '\u2518', '\u250C', '\u2588', '\u2584', '\u258C', '\u2590', '\u2580',
-    '\u03B1', '\u00DF', '\u0393', '\u03C0', '\u03A3', '\u03C3', '\u00B5', '\u03C4',
-    '\u03A6', '\u0398', '\u03A9', '\u03B4', '\u221E', '\u03C6', '\u03B5', '\u2229',
-    '\u2261', '\u00B1', '\u2265', '\u2264', '\u2320', '\u2321', '\u00F7', '\u2248',
-    '\u00B0', '\u2219', '\u00B7', '\u221A', '\u207F', '\u00B2', '\u25A0', '\u00A0'
-];
-
-/*
  * TODO: Future home of a complete ASCII table.
  */
 Str.ASCII = {
@@ -1387,10 +1594,8 @@ Str.TYPES = {
     ARRAY:      8
 };
 
-Str.HexLowerCase = "0123456789abcdef?";
-Str.HexUpperCase = "0123456789ABCDEF?";
-Str.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+Str.format = new Format();
+Str.sprintf = Str.format.sprintf.bind(Str.format);
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
@@ -1409,7 +1614,7 @@ class Usr {
      * @param {Array} a is an array
      * @param {number|string|Array|Object} v
      * @param {function((number|string|Array|Object), (number|string|Array|Object))} [fnCompare]
-     * @return {number} the index of matching entry if non-negative, otherwise the index of the insertion point
+     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
      */
     static binarySearch(a, v, fnCompare)
     {
@@ -1457,7 +1662,7 @@ class Usr {
     /**
      * getTimestamp()
      *
-     * @return {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
+     * @returns {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
      */
     static getTimestamp()
     {
@@ -1480,7 +1685,7 @@ class Usr {
      *
      * @param {number} nMonth (1-12)
      * @param {number} nYear (normally a 4-digit year, but it may also be mod 100)
-     * @return {number} the maximum (1-based) day allowed for the specified month and year
+     * @returns {number} the maximum (1-based) day allowed for the specified month and year
      */
     static getMonthDays(nMonth, nYear)
     {
@@ -1517,7 +1722,7 @@ class Usr {
      *
      * @param {Date} date
      * @param {number} days (+/-)
-     * @return {Date}
+     * @returns {Date}
      */
     static adjustDays(date, days)
     {
@@ -1529,7 +1734,7 @@ class Usr {
      *
      * @param {Date|string} date1
      * @param {Date|string} date2
-     * @return {number} (date1 - date2, returned as a signed integer number of days)
+     * @returns {number} (date1 - date2, returned as a signed integer number of days)
      */
     static subtractDays(date1, date2)
     {
@@ -1552,7 +1757,7 @@ class Usr {
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
      * @param {Object} bfs
-     * @return {BitFields}
+     * @returns {BitFields}
      */
     static defineBitFields(bfs)
     {
@@ -1571,7 +1776,7 @@ class Usr {
      *
      * @param {BitFields} bfs
      * @param {...number} var_args
-     * @return {number} a value containing all supplied bit fields
+     * @returns {number} a value containing all supplied bit fields
      */
     static initBitFields(bfs, var_args)
     {
@@ -1588,7 +1793,7 @@ class Usr {
      *
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
-     * @return {number} the value of the bit field in v defined by bf
+     * @returns {number} the value of the bit field in v defined by bf
      */
     static getBitField(bf, v)
     {
@@ -1601,7 +1806,7 @@ class Usr {
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
      * @param {number} n is a value to store in v in the bit field defined by bf
-     * @return {number} updated v
+     * @returns {number} updated v
      */
     static setBitField(bf, v, n)
     {
@@ -1725,48 +1930,6 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 class Web {
     /**
-     * log(s, type)
-     *
-     * For diagnostic output only.  DEBUG must be true (or "--debug" specified via the command-line)
-     * for Component.log() to display anything.
-     *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    static log(s, type)
-    {
-        Component.log(s, type);
-    }
-
-    /**
-     * notice(s, fPrintOnly, id)
-     *
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     */
-    static notice(s, fPrintOnly, id)
-    {
-        Component.notice(s, fPrintOnly, id);
-    }
-
-    /**
-     * alertUser(sMessage)
-     *
-     * NOTE: Legacy function for older modules (eg, DiskDump); see Component.alertUser().
-     *
-     * @param {string} sMessage
-     */
-    static alertUser(sMessage)
-    {
-        if (globals.window) {
-            globals.window.alert(sMessage);
-        } else {
-            Web.log(sMessage);
-        }
-    }
-
-    /**
      * getResource(sURL, type, fAsync, done, progress)
      *
      * Request the specified resource (sURL), and once the request is complete, notify done().
@@ -1805,19 +1968,52 @@ class Web {
             return response;
         }
 
-        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
-        } else {
+        /*
+         * While it would be nice to simply import LOCALDISKS from defines.js, that merely defines the *default*
+         * value of the global variable 'LOCALDISKS'; since imported values are immutable, we must look at the global
+         * variable, since that's the only one that *might* have been changed at runtime.
+         */
+        if (globals.window['LOCALDISKS'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
+        } else {
+            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
         if (globals.node.readFileSync) {
             resource = globals.node.readFileSync(sURL);
-            if (done) done(sURL, resource, nErrorCode);
+            if (resource !== undefined) {
+                if (done) done(sURL, resource, nErrorCode);
+                return [resource, nErrorCode];
+            }
+        }
+
+        let request;
+        if (globals.window.XMLHttpRequest) {
+            request = new globals.window.XMLHttpRequest();
+        } else if (globals.window.ActiveXObject) {
+            request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
+        } else if (globals.window.fetch) {
+            fetch(sURL)
+            .then(response => {
+                switch(type) {
+                case "json":
+                case "text":
+                    return response.text();
+                case "arraybuffer":
+                    return response.arrayBuffer();
+                default:
+                    throw new Error("unsupported response type: " + type);
+                }
+            })
+            .then(resource => {
+                if (done) done(sURL, resource, nErrorCode);
+            })
+            .catch(error => {
+                if (done) done(sURL, resource, nErrorCode);
+            });
             return response;
         }
 
-        let request = (globals.window.XMLHttpRequest? new globals.window.XMLHttpRequest() : new globals.window.ActiveXObject("Microsoft.XMLHTTP"));
         let fArrayBuffer = false, fXHR2 = (typeof request.responseType === 'string');
 
         let callback = function() {
@@ -1851,18 +2047,18 @@ class Web {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURL + ") exception: " + err.message);
+                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURL + "): returned " + resource.length + " bytes");
+                if (MAXDEBUG) Component.printf(Messages.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Web.log("xmlHTTPRequest(" + sURL + "): error code " + nErrorCode);
+                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
                 if (!request.status && !Web.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
@@ -1890,12 +2086,12 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            if (MAXDEBUG) Web.log("Web.getResource(POST " + sURL + "): " + sPost.length + " bytes");
+            if (MAXDEBUG) Component.printf("Web.getResource(POST %s): %d bytes\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            if (MAXDEBUG) Web.log("Web.getResource(GET " + sURL + ")");
+            if (MAXDEBUG) Component.printf("Web.getResource(GET %s)\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -2207,7 +2403,7 @@ class Web {
                     f = (globals.window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
                     globals.window.localStorage.removeItem(Web.sLocalStorageTest);
                 } catch (e) {
-                    Web.logLocalStorageError(e);
+                    Web.printLocalStorageError(e);
                     f = false;
                 }
             }
@@ -2217,13 +2413,13 @@ class Web {
     }
 
     /**
-     * logLocalStorageError(e)
+     * printLocalStorageError(e)
      *
      * @param {Error} e is an exception
      */
-    static logLocalStorageError(e)
+    static printLocalStorageError(e)
     {
-        Web.log(e.message, "localStorage error");
+        Component.printf(Messages.ERROR, "Local storage error: %s\n", e.message);
     }
 
     /**
@@ -2241,7 +2437,7 @@ class Web {
             try {
                 sValue = globals.window.localStorage.getItem(sKey);
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return sValue;
@@ -2261,7 +2457,7 @@ class Web {
                 globals.window.localStorage.setItem(sKey, sValue);
                 return true;
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return false;
@@ -2278,7 +2474,7 @@ class Web {
             try {
                 globals.window.localStorage.removeItem(sKey);
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
     }
@@ -2297,7 +2493,7 @@ class Web {
                     a.push(globals.window.localStorage.key(i));
                 }
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return a;
@@ -2350,7 +2546,7 @@ class Web {
              * Here's one case where we have to be careful with Component, because when isUserAgent() is called by
              * the init code below, component.js hasn't been loaded yet.  The simple solution for now is to remove the call.
              *
-             *      Web.log("agent: " + userAgent);
+             *      Component.printf("agent: %s\n", userAgent);
              *
              * And yes, it would be pointless to use the conditional (?) operator below, if not for the Google Closure
              * Compiler (v20130823) failing to detect the entire expression as a boolean.
@@ -2574,7 +2770,7 @@ class Web {
         };
         e.onmousedown = function()
         {
-            // Web.log("onMouseDown()");
+            // Component.printf(Messages.DEBUG, "onMouseDown()\n");
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -2584,7 +2780,7 @@ class Web {
         };
         e.ontouchstart = function()
         {
-            // Web.log("onTouchStart()");
+            // Component.printf(Messages.DEBUG, "onTouchStart()\n");
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -2592,7 +2788,7 @@ class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            // Web.log("onMouseUp()/onMouseOut()");
+            // Component.printf(Messages.DEBUG, "onMouseUp()/onMouseOut()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -2600,7 +2796,7 @@ class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            // Web.log("onTouchEnd()/onTouchCancel()");
+            // Component.printf(Messages.DEBUG, "onTouchEnd()/onTouchCancel()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -2683,7 +2879,7 @@ class Web {
      */
     static onError(sMessage)
     {
-        Web.notice(sMessage + "\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.");
+        Component.printf(Messages.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
     }
 
     /**
@@ -2791,7 +2987,7 @@ Web.addPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera"
  *
  * TODO: Consider yet another embedXXX() parameter that would also allow DEBUG to be turned off on a page-by-page basis;
  * it's low priority, because it would only affect machines that explicitly request un-COMPILED code, and there are very
- * few such machines (eg, /_posts/2015-01-17-pcjs-uncompiled.md).
+ * few such machines (eg, /blog/_posts/2015/2015-01-17-pcjs-uncompiled.md).
  *
  * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */
@@ -2952,7 +3148,7 @@ class Component {
         /*
          * This just generates a lot of useless noise, handy in the early days, not so much these days....
          *
-         *      if (DEBUG) Component.log("Component.add(" + component.type + "," + component.id + ")");
+         *      if (DEBUG) Component.printf("Component.add(%s,%s)\n", component.type, component.id);
          */
         globals.pcjs['components'].push(component);
     }
@@ -3020,26 +3216,36 @@ class Component {
     }
 
     /**
-     * Component.log(s, type)
+     * Component.printf(format, ...args)
      *
-     * For diagnostic output only.
+     * If format is a number, it's used as a message number, and the format string is the first arg.
      *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
+     * @param {string|number} format
+     * @param {...} args
      */
-    static log(s, type)
+    static printf(format, ...args)
     {
-        if (!COMPILED && (type != Component.PRINT.DEBUG || MAXDEBUG)) {
-            if (s) {
-                let sElapsed = "", sMsg = (type? (type + ": ") : "") + s;
-                if (typeof Usr != "undefined") {
-                    if (Component.msStart === undefined) {
-                        Component.msStart = Component.getTime();
-                    }
-                    sElapsed = (Component.getTime() - Component.msStart) + "ms: ";
+        if (DEBUG || format >= Messages.LOG && format <= Messages.ERROR) {
+            let alert = false;
+            let bitsMessage = 0;
+            if (typeof format == "number") {
+                bitsMessage = format;
+                format = args.shift();
+                if (bitsMessage == Messages.ERROR) {
+                    alert = true;
+                    format = "Error: " + format;
+                } else if (bitsMessage == Messages.WARNING) {
+                    alert = true;
+                    format = "Warning: " + format;
+                } else if (bitsMessage == Messages.NOTICE) {
+                    alert = true;
                 }
-                sMsg = sMsg.replace(/\r/g, '\\r').replace(/\n/g, ' ');
-                console.log(sElapsed + sMsg);
+            }
+            let sMessage = Str.sprintf(format, ...args).trim();
+            if (!alert) {
+                console.log(sMessage);
+            } else {
+                Component.alertUser(sMessage);
             }
         }
     }
@@ -3060,71 +3266,28 @@ class Component {
         if (DEBUG) {
             if (!f) {
                 if (!s) s = "assertion failure";
-                Component.log(s);
-                throw new Error(s);
+                /*
+                 * Why do we throw an Error only to immediately catch and ignore it?  Simply to give
+                 * any IDE the opportunity to inspect the application's state.  Even when the IDE has
+                 * control, you should still be able to invoke Debugger commands from the IDE's REPL,
+                 * using the global function that the Debugger constructor defines; eg:
+                 *
+                 *      pcx86('r')
+                 *      pcx86('dw 0:0')
+                 *      pcx86('h')
+                 *      ...
+                 *
+                 * If you have no desire to stop on assertions, consider this a no-op.  However, another
+                 * potential benefit of creating an Error object is that, for browsers like Chrome, we get
+                 * a stack trace, too.
+                 */
+                try {
+                    throw new Error(s);
+                } catch(e) {
+                    Component.printf(Messages.ERROR, "%s\n", e.stack || e.message);
+                }
             }
         }
-    }
-
-    /**
-     * Component.print(s)
-     *
-     * Components that inherit from this class should use this.print(), rather than Component.print(), because
-     * if a Control Panel is loaded, it will override only the instance method, not the class method (overriding the
-     * class method would improperly affect any other machines loaded on the same page).
-     *
-     * @this {Component}
-     * @param {string} s
-     */
-    static print(s)
-    {
-        if (!COMPILED) {
-            let i = s.lastIndexOf('\n');
-            if (i >= 0) {
-                Component.println(s.substr(0, i));
-                s = s.substr(i + 1);
-            }
-            Component.printBuffer += s;
-        }
-    }
-
-    /**
-     * Component.println(s, type, id)
-     *
-     * Components that inherit from this class should use this.println(), rather than Component.println(), because
-     * if a Control Panel is loaded, it will override only the instance method, not the class method (overriding the
-     * class method would improperly affect any other machines loaded on the same page).
-     *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     * @param {string} [id] is the caller's ID, if any
-     */
-    static println(s, type, id)
-    {
-        if (!COMPILED) {
-            s = Component.printBuffer + (s || "");
-            Component.log((id? (id + ": ") : "") + (s? ("\"" + s + "\"") : ""), type);
-            Component.printBuffer = "";
-        }
-    }
-
-    /**
-     * Component.notice(s, fPrintOnly, id)
-     *
-     * notice() is like println() but implies a need for user notification, so we alert() as well.
-     *
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     * @returns {boolean}
-     */
-    static notice(s, fPrintOnly, id)
-    {
-        if (!COMPILED) {
-            Component.println(s, Component.PRINT.NOTICE, id);
-        }
-        if (!fPrintOnly) Component.alertUser((id? (id + ": ") : "") + s);
-        return true;
     }
 
     /**
@@ -3134,10 +3297,7 @@ class Component {
      */
     static warning(s)
     {
-        if (!COMPILED) {
-            Component.println(s, Component.PRINT.WARNING);
-        }
-        Component.alertUser(s);
+        Component.printf(Messages.WARNING, s);
     }
 
     /**
@@ -3147,24 +3307,21 @@ class Component {
      */
     static error(s)
     {
-        if (!COMPILED) {
-            Component.println(s, Component.PRINT.ERROR);
-        }
-        Component.alertUser(s);
+        Component.printf(Messages.ERROR, s);
     }
 
     /**
-     * Component.alertUser(sMessage)
+     * Component.alertUser(sMessage, fPrinted)
      *
      * @param {string} sMessage
+     * @param {boolean} [fPrinted] (true if the message has already been printed)
      */
-    static alertUser(sMessage)
+    static alertUser(sMessage, fPrinted)
     {
-        if (window) {
-            window.alert(sMessage);
-        } else {
-            Component.log(sMessage);
+        if (globals.window.alert) {
+            globals.window.alert(sMessage);
         }
+        if (!fPrinted) console.log(sMessage);
     }
 
     /**
@@ -3176,8 +3333,8 @@ class Component {
     static confirmUser(sPrompt)
     {
         let fResponse = false;
-        if (window) {
-            fResponse = window.confirm(sPrompt);
+        if (globals.window.confirm) {
+            fResponse = globals.window.confirm(sPrompt);
         }
         return fResponse;
     }
@@ -3192,8 +3349,8 @@ class Component {
     static promptUser(sPrompt, sDefault)
     {
         let sResponse = null;
-        if (window) {
-            sResponse = window.prompt(sPrompt, sDefault === undefined? "" : sDefault);
+        if (globals.window.prompt) {
+            sResponse = globals.window.prompt(sPrompt, sDefault === undefined? "" : sDefault);
         }
         return sResponse;
     }
@@ -3293,12 +3450,12 @@ class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.log("Component '" + component.toString() + "' missing binding" + (parms? " for " + parms['type'] : ""), Component.PRINT.WARNING);
+                                Component.printf(Messages.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.log("Component.bindComponentControls(" + component.toString() + "): unrecognized control class \"" + sClass + "\"", Component.PRINT.WARNING);
+                            // if (DEBUG) Component.printf(Messages.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
                             break;
                     }
                 }
@@ -3349,10 +3506,10 @@ class Component {
      * this linear lookup into a property lookup, but some components may have no ID.
      *
      * @param {string} id of the desired component
-     * @param {string} [idRelated] of related component
+     * @param {string|boolean|null} [idRelated] of related component
      * @returns {Component|null}
      */
-    static getComponentByID(id, idRelated)
+    static getComponentByID(id, idRelated = null)
     {
         if (id !== undefined) {
             let i;
@@ -3370,8 +3527,8 @@ class Component {
                     return components[i];
                 }
             }
-            if (components.length) {
-                Component.log("Component ID '" + id + "' not found", Component.PRINT.WARNING);
+            if (components.length && idRelated !== false) {
+                Component.printf(Messages.WARNING, "Component ID \"%s\" not found\n", id);
             }
         }
         return null;
@@ -3382,10 +3539,10 @@ class Component {
      *
      * @param {string} sType of the desired component
      * @param {string} [idRelated] of related component
-     * @param {Component|null} [componentPrev] of previously returned component, if any
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
      * @returns {Component|null}
      */
-    static getComponentByType(sType, idRelated, componentPrev)
+    static getComponentByType(sType, idRelated, componentPrev = null)
     {
         if (sType !== undefined) {
             let i;
@@ -3411,7 +3568,9 @@ class Component {
                     return components[i];
                 }
             }
-            Component.log("Component type '" + sType + "' not found", Component.PRINT.DEBUG);
+            if (MAXDEBUG && componentPrev !== false) {
+                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+            }
         }
         return null;
     }
@@ -3511,7 +3670,7 @@ class Component {
             }
         }
         if (!ae.length) {
-            Component.log('No elements of class "' + sClass + '" found', Component.PRINT.DEBUG);
+            if (MAXDEBUG) Component.printf(Messages.WARNING, "No elements of class \"%s\" found\n", sClass);
         }
         return ae;
     }
@@ -3636,11 +3795,11 @@ class Component {
             let sCommand = aTokens[0];
 
             /*
-             * It's possible to route this output to the Debugger window with dbg.println()
+             * It's possible to route this output to the Debugger window with dbg.printf()
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.println(aTokens.join(' '), Component.PRINT.SCRIPT);
+            Component.printf(Messages.SCRIPT, aTokens.join(' '));
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -3810,36 +3969,19 @@ class Component {
             if (!this.bindings[sBinding]) {
                 let controlTextArea = /** @type {HTMLTextAreaElement} */(control);
                 this.bindings[sBinding] = controlTextArea;
-                /**
-                 * Override this.notice() with a replacement function that eliminates the Component.alertUser() call.
-                 *
-                 * @this {Component}
-                 * @param {string} s
-                 * @returns {boolean}
-                 */
-                this.notice = function noticeControl(s /*, fPrintOnly, id*/) {
-                    this.println(s, this.type);
-                    return true;
-                };
                 /*
                  * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
                  */
                 controlTextArea.value = "";
-                this.print = function(control) {
-                    return function printControl(s) {
-                        Component.appendControl(control, s);
-                    };
-                }(controlTextArea);
-                this.println = function(component, control) {
-                    return function printlnControl(s, type, id) {
-                        if (!s) s = "";
-                        if (type != Component.PRINT.PROGRESS || s.slice(-3) != "...") {
-                            if (type) s = type + ": " + s;
-                            Component.appendControl(control, s + '\n');
+                this.print = function(component, control) {
+                    return function printControl(sMessage, bitsMessage = 0) {
+                        if (!sMessage) sMessage = "";
+                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
+                            Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
-                            Component.replaceControl(control, s, s + '.');
+                            Component.appendControl(control, sMessage);
                         }
-                        if (!COMPILED) Component.println(s, type, id);
+                        if (!COMPILED) Component.printf(sMessage);
                     };
                 }(this, controlTextArea);
             }
@@ -3847,26 +3989,6 @@ class Component {
 
         default:
             return false;
-        }
-    }
-
-    /**
-     * log(s, type)
-     *
-     * For diagnostic output only.
-     *
-     * WARNING: Even though this function's body is completely wrapped in DEBUG, that won't prevent the Closure Compiler
-     * from including it, so all calls must still be prefixed with "if (DEBUG) ....".  For this reason, the class method,
-     * Component.log(), is preferred, because the compiler IS smart enough to remove those calls.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    log(s, type)
-    {
-        if (!COMPILED) {
-            Component.log(s, type || this.id || this.type);
         }
     }
 
@@ -3892,106 +4014,25 @@ class Component {
                 s = "assertion failure in " + (this.id || this.type) + (s? ": " + s : "");
                 if (DEBUGGER && this.dbg) {
                     this.dbg.stopCPU();
-                    /*
-                     * Why do we throw an Error only to immediately catch and ignore it?  Simply to give
-                     * any IDE the opportunity to inspect the application's state.  Even when the IDE has
-                     * control, you should still be able to invoke Debugger commands from the IDE's REPL,
-                     * using the global function that the Debugger constructor defines; eg:
-                     *
-                     *      pcx86('r')
-                     *      pcx86('dw 0:0')
-                     *      pcx86('h')
-                     *      ...
-                     *
-                     * If you have no desire to stop on assertions, consider this a no-op.  However, another
-                     * potential benefit of creating an Error object is that, for browsers like Chrome, we get
-                     * a stack trace, too.
-                     */
-                    try {
-                        throw new Error(s);
-                    } catch(e) {
-                        this.println(e.stack || e.message);
-                    }
-                    return;
                 }
-                this.log(s);
-                throw new Error(s);
+
             }
         }
     }
 
     /**
-     * print(s)
+     * print(s, bitsMessage)
      *
-     * Components using this.print() should wait until after their constructor has run to display any messages, because
+     * Components using print() should wait until after their constructor has run to display any messages;
      * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
      *
      * @this {Component}
      * @param {string} s
+     * @param {number} [bitsMessage] (optional; this method doesn't use it, but some overrides do)
      */
-    print(s)
+    print(s, bitsMessage = 0)
     {
-        Component.print(s);
-    }
-
-    /**
-     * println(s, type, id)
-     *
-     * Components using this.println() should wait until after their constructor has run to display any messages, because
-     * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     * @param {string} [id] is the caller's ID, if any
-     */
-    println(s, type, id)
-    {
-        Component.println(s, type, id || this.id);
-    }
-
-    /**
-     * status(format, ...args)
-     *
-     * status() is like println() but it also includes information about the component (ie, the component type),
-     * which is why there is no corresponding Component.status() function.
-     *
-     * @this {Component}
-     * @param {string} format
-     * @param {...} args
-     */
-    status(format, ...args)
-    {
-        this.println(this.type + ": " + Str.sprintf(format, ...args));
-    }
-
-    /**
-     * notice(s, fPrintOnly, id)
-     *
-     * notice() is like println() but implies a need for user notification, so we alert() as well; however, if this.println()
-     * is overridden, this.notice will be replaced with a similar override, on the assumption that the override is taking care
-     * of alerting the user.
-     *
-     * @this {Component}
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     * @returns {boolean}
-     */
-    notice(s, fPrintOnly, id)
-    {
-        if (!fPrintOnly) {
-            /*
-             * See if the associated computer, if any, is "unloading"....
-             */
-            let computer = Component.getComponentByType("Computer", this.id);
-            if (computer && computer.flags.unloading) {
-                console.log("ignoring notice during unload: " + s);
-                return false;
-            }
-        }
-        Component.notice(s, fPrintOnly, id || this.type);
-        return true;
+        Component.printf(bitsMessage, s);
     }
 
     /**
@@ -3999,13 +4040,15 @@ class Component {
      *
      * Set a fatal error condition
      *
+     * TODO: Any cases where we should still prefix the string with "Fatal error: "?
+     *
      * @this {Component}
      * @param {string} s describes a fatal error condition
      */
     setError(s)
     {
         this.flags.error = true;
-        this.notice(s);         // TODO: Any cases where we should still prefix this string with "Fatal error: "?
+        this.printf(Messages.NOTICE, "%s\n", s);
     }
 
     /**
@@ -4030,7 +4073,7 @@ class Component {
     isError()
     {
         if (this.flags.error) {
-            this.println(this.toString() + " error");
+            this.print(this.toString() + " error\n");
             return true;
         }
         return false;
@@ -4055,7 +4098,7 @@ class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.log("NOT ready");
+                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -4075,7 +4118,7 @@ class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.log("ready");
+                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -4098,7 +4141,7 @@ class Component {
             if (fCancel) {
                 this.flags.busyCancel = true;
             } else if (fCancel === undefined) {
-                this.println(this.toString() + " busy");
+                this.print(this.toString() + " busy\n");
             }
         }
         return this.flags.busy;
@@ -4121,7 +4164,7 @@ class Component {
             return false;
         }
         if (this.flags.error) {
-            this.println(this.toString() + " error");
+            this.print(this.toString() + " error\n");
             return false;
         }
         this.flags.busy = fBusy;
@@ -4174,6 +4217,23 @@ class Component {
     }
 
     /**
+     * maskBits(num, bits)
+     *
+     * Helper function for returning bits in numbers with more than 32 bits.
+     *
+     * @param {number} num
+     * @param {number} bits
+     * @returns {number}
+     */
+    maskBits(num, bits)
+    {
+        let shift = Math.pow(2, 32);
+        let numHi = (num / shift)|0;
+        let bitsHi = (bits / shift)|0;
+        return (num & bits) + (numHi & bitsHi) * shift
+    }
+
+    /**
      * setBits(num, bits)
      *
      * Helper function for setting bits in numbers with more than 32 bits.
@@ -4210,21 +4270,22 @@ class Component {
     /**
      * messageEnabled(bitsMessage)
      *
-     * If bitsMessage is Messages.DEFAULT (0), then the component's Messages category is used,
-     * and if it's Messages.ALL (-1), then the message is always displayed, regardless what's enabled.
+     * If bitsMessage is Messages.DEFAULT (0), then the component's Messages category is used.
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
-     * @returns {boolean} true if all specified message enabled, false if not
+     * @returns {boolean} true if the specified message(s) are enabled, false if not
      */
     messageEnabled(bitsMessage = 0)
     {
-        if (DEBUGGER && this.dbg) {
-            if (bitsMessage % 2) bitsMessage--;
-            bitsMessage = bitsMessage || this.bitsMessage;
-            if ((bitsMessage|1) == -1 || this.testBits(this.dbg.bitsMessage, bitsMessage)) {
-                return true;
-            }
+        /*
+         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.DEFAULT, because
+         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         */
+        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        bitsMessage = bitsMessage || this.bitsMessage;
+        if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+            return true;
         }
         return false;
     }
@@ -4232,8 +4293,13 @@ class Component {
     /**
      * printf(format, ...args)
      *
-     * If format is a number, then it's treated as one or more Messages flags, and the real format
-     * string is the first arg.
+     * If format is a number, it's used as a message number, and the format string is the first arg; the call
+     * will be suppressed unless the corresponding message category has been enabled by the debugger.
+     *
+     * Most components provide a default message number to their constructor, so any printf() without an explicit
+     * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
+     * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
+     * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
      * @param {string|number} format
@@ -4241,51 +4307,29 @@ class Component {
      */
     printf(format, ...args)
     {
-        if (DEBUGGER && this.dbg) {
-            let bitsMessage = 0;
-            if (typeof format == "number") {
-                bitsMessage = format;
-                format = args.shift();
+        let bitsMessage = 0;
+        if (typeof format == "number") {
+            bitsMessage = format || Messages.PROGRESS;
+            format = args.shift();
+            if (bitsMessage == Messages.LOG) {
+                format = (this.id || this.type || "log") + ": " + format;
             }
-            if (this.messageEnabled(bitsMessage)) {
-                let s = Str.sprintf(format, ...args);
-                /*
-                 * Since dbg.message() calls println(), we strip any ending linefeed.
-                 *
-                 * We could bypass the Debugger and go straight to this.print(), but we would lose
-                 * the benefits of debugger messages (eg, automatic buffering, halting, yielding, etc).
-                 */
-                if (s.slice(-1) == '\n') s = s.slice(0, -1);
-                this.dbg.message(s, !!(bitsMessage % 2));   // pass true for fAddress if Messages.ADDRESS is set
+            else if (bitsMessage == Messages.STATUS) {
+                format = this.type + ": " + format;
+            }
+        }
+        if (this.messageEnabled(bitsMessage)) {
+            let sMessage = Str.sprintf(format, ...args);
+            if (this.dbg && this.dbg.message) {
+                this.dbg.message(sMessage, bitsMessage);
+            } else {
+                this.print(sMessage, bitsMessage);
             }
         }
     }
 
     /**
-     * printMessage(sMessage, bitsMessage, fAddress)
-     *
-     * If bitsMessage is not specified, the component's Messages category is used, and if bitsMessage is true,
-     * the message is displayed regardless.
-     *
-     * @this {Component}
-     * @param {string} sMessage is any caller-defined message string
-     * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
-     * @param {boolean} [fAddress] is true to display the current address
-     */
-    printMessage(sMessage, bitsMessage, fAddress)
-    {
-        if (DEBUGGER && this.dbg) {
-            if (typeof bitsMessage == "boolean") {
-                bitsMessage = bitsMessage? -1 : 0;
-            }
-            if (this.messageEnabled(bitsMessage)) {
-                this.dbg.message(sMessage, fAddress);
-            }
-        }
-    }
-
-    /**
-     * printMessageIO(port, bOut, addrFrom, name, bIn, bitsMessage)
+     * printIO(port, bOut, addrFrom, name, bIn, bitsMessage)
      *
      * If bitsMessage is not specified, the component's Messages category is used,
      * and if bitsMessage is true, the message is displayed if Messages.PORT is enabled also.
@@ -4298,13 +4342,11 @@ class Component {
      * @param {number} [bIn] is the input value, if known, on an input operation
      * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
      */
-    printMessageIO(port, bOut, addrFrom, name, bIn, bitsMessage)
+    printIO(port, bOut, addrFrom, name, bIn, bitsMessage = this.bitsMessage)
     {
         if (DEBUGGER && this.dbg) {
             if (bitsMessage === true) {
                 bitsMessage = 0;
-            } else if (bitsMessage == undefined) {
-                bitsMessage = this.bitsMessage;
             }
             this.dbg.messageIO(this, port, bOut, addrFrom, name, bIn, bitsMessage);
         }
@@ -4318,20 +4360,6 @@ Component.TYPE = {
     NUMBER:     "number",
     OBJECT:     "object",
     STRING:     "string"
-};
-
-/*
- * These are the standard PRINT values you can pass as an optional argument to println(); in reality,
- * you can pass anything you want, because they are simply prepended to the message, although PROGRESS
- * messages may also be merged with earlier similar messages to keep the output buffer under control.
- */
-Component.PRINT = {
-    DEBUG:      "debug",
-    ERROR:      "error",
-    NOTICE:     "notice",
-    PROGRESS:   "progress",
-    SCRIPT:     "script",
-    WARNING:    "warning"
 };
 
 /*
@@ -4353,7 +4381,6 @@ Component.globalCommands = {
 Component.componentCommands = {
     'select':   Component.scriptSelect
 };
-Component.printBuffer = "";
 
 /*
  * The following polyfills provide ES5 functionality that's missing in older browsers (eg, IE8),
@@ -4462,7 +4489,7 @@ class C1PPanel extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -4514,7 +4541,7 @@ class C1PPanel extends Component {
         for (var iPanel=0; iPanel < aePanels.length; iPanel++) {
             var ePanel = aePanels[iPanel];
             var parmsPanel = Component.getComponentParms(ePanel);
-            var panel = Component.getComponentByID(parmsPanel['id']);
+            var panel = Component.getComponentByID(parmsPanel['id'], false);
             if (!panel) {
                 fReady = true;
                 panel = new C1PPanel(parmsPanel);
@@ -5023,7 +5050,7 @@ class C1PCPU extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -5148,7 +5175,9 @@ class C1PCPU extends Component {
             if (this.addrReadUpper < end)
                 this.addrReadUpper = end;
             this.aReadNotify.push([start, end, component, fn]);
-            if (DEBUG) this.log("addReadNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new read range: " + Str.toHexWord(this.addrReadLower) + "-" + Str.toHexWord(this.addrReadUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+            }
         }
     }
 
@@ -5176,7 +5205,7 @@ class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {boolean} true if remove was successful, false if the handler was not found
+     * @returns {boolean} true if remove was successful, false if the handler was not found
      */
     removeReadNotify(start, end, component, fn)
     {
@@ -5184,7 +5213,9 @@ class C1PCPU extends Component {
         if (aBounds.length == 4) {
             this.addrReadLower = aBounds[2];
             this.addrReadUpper = aBounds[3];
-            if (DEBUG) this.log("removeReadNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new read range: " + Str.toHexWord(this.addrReadLower) + "-" + Str.toHexWord(this.addrReadUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "removeReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+            }
             return true;
         }
         return false;
@@ -5207,7 +5238,9 @@ class C1PCPU extends Component {
             if (this.addrWriteUpper < end)
                 this.addrWriteUpper = end;
             this.aWriteNotify.push([start, end, component, fn]);
-            if (DEBUG) this.log("addWriteNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new write range: " + Str.toHexWord(this.addrWriteLower) + "-" + Str.toHexWord(this.addrWriteUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+            }
         }
     }
 
@@ -5235,7 +5268,7 @@ class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {boolean} true if remove was successful, false if the handler was not found
+     * @returns {boolean} true if remove was successful, false if the handler was not found
      */
     removeWriteNotify(start, end, component, fn)
     {
@@ -5243,7 +5276,9 @@ class C1PCPU extends Component {
         if (aBounds.length == 4) {
             this.addrWriteLower = aBounds[2];
             this.addrWriteUpper = aBounds[3];
-            if (DEBUG) this.log("removeWriteNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new write range: " + Str.toHexWord(this.addrWriteLower) + "-" + Str.toHexWord(this.addrWriteUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "removeWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+            }
             return true;
         }
         return false;
@@ -5258,7 +5293,7 @@ class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {number} index of the matching handler, or -1 if not found
+     * @returns {number} index of the matching handler, or -1 if not found
      */
     findNotify(aNotify, start, end, component, fn)
     {
@@ -5279,7 +5314,7 @@ class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {Array} bounds of previous handler ([0] and [1]) and new lower and upper address bounds ([2] and [3])
+     * @returns {Array} bounds of previous handler ([0] and [1]) and new lower and upper address bounds ([2] and [3])
      */
     removeNotify(aNotify, start, end, component, fn)
     {
@@ -5316,7 +5351,7 @@ class C1PCPU extends Component {
             this.speed = speed;
             if (this.bindings["setSpeed"])
                 this.bindings["setSpeed"].innerHTML = this.aSpeeds[speed >= 2? 0 : speed+1];
-            this.println("running at " + this.aSpeeds[speed].toLowerCase() + " speed " + this.aSpeedDescs[speed]);
+            this.printf("running at %s speed %s\n", this.aSpeeds[speed].toLowerCase(), this.aSpeedDescs[speed]);
             if (fOnClick) this.setFocus();
         }
         this.nRunCycles = 0;
@@ -5394,7 +5429,7 @@ class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -5471,7 +5506,7 @@ class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -5486,7 +5521,7 @@ class C1PCPU extends Component {
              * and so applying that percentage to msPerYield should give us a better estimate of work vs. time.
              */
             msYield = Math.round(msYield * this.nCyclesThisRun / this.nCyclesPerYield);
-            // if (msYield < this.msPerYield) this.println("scaling msPerYield (" + this.msPerYield + ") to msYield (" + msYield + ")");
+            // if (msYield < this.msPerYield) this.printf("scaling msPerYield (%d) to msYield (%d)\n", this.msPerYield, msYield);
         }
 
         var msElapsedThisRun = msCurrent - this.msStartThisRun;
@@ -5511,7 +5546,7 @@ class C1PCPU extends Component {
         var msElapsed = msCurrent - this.msRunStart;
 
         if (DEBUG && msRemainsThisRun < 0 && this.speed == this.SPEED_FAST) {
-            this.println("warning: updates @" + msElapsedThisRun + "ms (prefer " + Math.round(msYield) + "ms)");
+            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);
@@ -5640,7 +5675,7 @@ class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {boolean|undefined} undefined indicates that the last instruction was not executed (eg,
+     * @returns {boolean|undefined} undefined indicates that the last instruction was not executed (eg,
      * we hit an execution breakpoint), false implies a post-execution condition was triggered (eg, a write
      * breakpoint), and true indicates successful completion of all requested cycles.
      */
@@ -5817,7 +5852,7 @@ class C1PCPU extends Component {
      * updateMemory() function).
      *
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     getCycles()
     {
@@ -5827,7 +5862,7 @@ class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      *
      * Unlike the Debugger versions of these functions, these presume that addr is always valid,
      * since it's internally generated, not user-supplied. Of course, we could still have internal
@@ -5849,7 +5884,7 @@ class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getWord(addr)
     {
@@ -5873,7 +5908,7 @@ class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     getRegP()
     {
@@ -6030,7 +6065,7 @@ class C1PCPU extends Component {
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
-     * @return {number}
+     * @returns {number}
      *
      * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
      * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
@@ -6095,7 +6130,7 @@ class C1PCPU extends Component {
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
-     * @return {number}
+     * @returns {number}
      *
      * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
      * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
@@ -8290,7 +8325,7 @@ class C1PCPU extends Component {
         switch(bSimOp) {
 
             case this.SIMOP_HLT:
-                this.println("HALT");
+                this.printf("HALT\n");
                 this.halt();
                 break;
 
@@ -8310,7 +8345,7 @@ class C1PCPU extends Component {
                  *      eg: %A for this.regA, %X for this.regX, etc
                  */
                 s = s.replace(/%A/g, Str.toHex(this.regA, 2)).replace(/%X/g, Str.toHex(this.regX, 2)).replace(/%Y/g, Str.toHex(this.regY, 2));
-                this.println(s);
+                this.printf("%s\n", s);
                 /*
                  * To make printing "smoother", let's force a yield
                  */
@@ -8319,7 +8354,7 @@ class C1PCPU extends Component {
 
             default:
                 this.regPC -= 2;
-                this.println("undefined opSim: " + Str.toHexByte(bSimOp) + " at " + Str.toHexWord(this.regPC));
+                this.printf("undefined opSim: %#04x at %#06x\n", bSimOp, this.regPC);
                 this.halt();
         }
     }
@@ -8330,7 +8365,7 @@ class C1PCPU extends Component {
     opUndefined()
     {
         var b = this.abMem[--this.regPC];
-        this.println("undefined opcode: " + Str.toHexByte(b) + " at " + Str.toHexWord(this.regPC));
+        this.printf("undefined opcode: %#04x at %#06x\n", b, this.regPC);
         this.halt();
     }
 
@@ -8534,7 +8569,7 @@ class C1PROM extends Component {
     convertImage(sImageName, sImageData, nErrorCode)
     {
         if (nErrorCode) {
-            this.println("Error loading ROM \"" + sImageName + "\" (" + nErrorCode + ")");
+            this.printf("Error loading ROM \"%s\" (%d)\n", sImageName, nErrorCode);
             return;
         }
         if (sImageData.charAt(0) == "[" || sImageData.charAt(0) == "{") {
@@ -8550,7 +8585,7 @@ class C1PROM extends Component {
                     this.abImage = rom;
                 }
             } catch (e) {
-                this.println("Error processing ROM \"" + sImageName + "\": " + e.message);
+                this.printf("Error processing ROM \"%s\": %s\n", sImageName, e.message);
                 return;
             }
         }
@@ -8590,7 +8625,7 @@ class C1PROM extends Component {
                     this.setError("ROM image size (" + Str.toHexWord(cbImage) + ") does not match component-specified size (" + Str.toHexWord(this.cbROM) + ")");
                     return;
                 }
-                if (DEBUG) this.log("copyImage(): copying ROM to " + Str.toHexWord(this.offROM) + " (" + Str.toHexWord(cbImage) + " bytes)");
+                if (DEBUG) this.printf(Messages.LOG, "copyImage(%#06x): %#06x bytes\n", this.offROM, cbImage);
                 for (var i=0; i < cbImage; i++) {
                     this.abMem[this.offROM + i] = this.abImage[i];
                 }
@@ -9067,7 +9102,7 @@ class C1PKeyboard extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc", "ctrl-c")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -9114,7 +9149,7 @@ class C1PKeyboard extends Component {
                 this.bindings[sBinding] = control;
                 control.onclick = function(kbd) {
                     return function(event) {
-                        if (DEBUG) kbd.println("keyPressSimulate(break)");
+                        if (DEBUG) kbd.printf("keyPressSimulate(break)\n");
                         if (kbd.cmp) kbd.cmp.reset(true);
                     };
                 }(this);
@@ -9124,7 +9159,7 @@ class C1PKeyboard extends Component {
                     this.bindings[sBinding] = control;
                     control.onclick = function(kbd, sButton, charCode) {
                         return function(event) {
-                            if (DEBUG) kbd.println("keyPressSimulate(" + sButton + ")");
+                            if (DEBUG) kbd.printf("keyPressSimulate(%s)\n", sButton);
                             if (kbd.cpu) kbd.cpu.setFocus();
                             return !kbd.keyPressSimulate(charCode);
                         };
@@ -9175,7 +9210,7 @@ class C1PKeyboard extends Component {
              * No inversion for model 542
              */
             this.bInvert = 0x00;
-            this.println("updated keyboard model: " + this.nModel);
+            this.printf("updated keyboard model: %d\n", this.nModel);
         }
     }
 
@@ -9207,7 +9242,7 @@ class C1PKeyboard extends Component {
         this.iOS = Web.isUserAgent("iOS");
         this.fMobile = (this.iOS || Web.isUserAgent("Android"));
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("mobile keyboard support: " + (this.fMobile? "true" : "false") + " (" + window.navigator.userAgent + ")");
+            this.dbg.printf("mobile keyboard support: %b (%s)\n", this.fMobile, window.navigator.userAgent);
         }
         super.setReady();
     }
@@ -9224,7 +9259,7 @@ class C1PKeyboard extends Component {
      *
      * @this {C1PKeyboard}
      * @param {boolean} fRepeat is true if a timeout had already been active for the current key
-     * @return {number}
+     * @returns {number}
      */
     calcReleaseDelay(fRepeat)
     {
@@ -9253,7 +9288,7 @@ class C1PKeyboard extends Component {
     {
         if (this.prevCharDown && (notCharCode === undefined || notCharCode != this.prevCharDown)) {
             if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-                this.dbg.message("autoClear(" + Str.toHexByte(this.prevCharDown) + ")");
+                this.dbg.printf("autoClear(%#04x)\n", this.prevCharDown);
             }
 
             clearTimeout(this.aKeyTimers[this.prevCharDown]);
@@ -9269,7 +9304,7 @@ class C1PKeyboard extends Component {
     injectKeys(sKeyCodes, msDelay)
     {
         this.sInjectBuffer = sKeyCodes;
-        if (DEBUG) this.log("injectKeys(" + this.sInjectBuffer.split("\n").join("\\n") + ")");
+        if (DEBUG) this.printf(Messages.LOG, "injectKeys(%s)\n", this.sInjectBuffer.split("\n").join("\\n"));
         this.injectKeysFromBuffer(msDelay || this.msInjectDelay);
     }
 
@@ -9309,7 +9344,7 @@ class C1PKeyboard extends Component {
      * @this {C1PKeyboard}
      * @param {Object} event
      * @param {boolean} fDown is true if called for a keyDown event, false if called for a keyUp event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     keyEvent(event, fDown)
     {
@@ -9436,7 +9471,7 @@ class C1PKeyboard extends Component {
         }
 
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message(/*(fDown?"\n":"") +*/ "key" + (fDown?"Down":"Up") + "(" + Str.toHexByte(keyCode) + "): " + (fPass? "pass" : "consume"));
+            this.dbg.printf("key%s(%#04x): %s\n", fDown? "Down" : "Up", keyCode, fPass? "pass" : "consume");
         }
         return fPass;
     }
@@ -9444,7 +9479,7 @@ class C1PKeyboard extends Component {
     /**
      * @this {C1PKeyboard}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      *
      * We've stopped relying on keyPress for keyboard emulation purposes, but it's still handy to hook and monitor
      * when debugging.
@@ -9469,7 +9504,7 @@ class C1PKeyboard extends Component {
             fPass = !this.keyPressSimulate(charCode);
 
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("keyPress(" + Str.toHexByte(charCode) + "): " + (fPass? "pass" : "consume"));
+            this.dbg.printf("keyPress(%#04x): %s\n", charCode, fPass? "pass" : "consume");
         }
         return fPass;
     }
@@ -9477,7 +9512,7 @@ class C1PKeyboard extends Component {
     /**
      * @this {C1PKeyboard}
      * @param {number} charCode
-     * @return {boolean} true if successfully simulated, false if unrecognized/unsupported key
+     * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
      */
     keyPressSimulate(charCode)
     {
@@ -9543,14 +9578,14 @@ class C1PKeyboard extends Component {
                     var msDelay = this.calcReleaseDelay(fRepeat);
                     this.aKeyTimers[this.prevCharDown = charCode] = setTimeout(function(kbd) { return function() {kbd.keyEventSimulate(charCode, false, kbd.SIMCODE_KEYTIMEOUT);}; }(this), msDelay);
                     if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-                        this.dbg.message("keyPressSimulate(" + Str.toHexByte(charCode) + "): setTimeout()");
+                        this.dbg.printf("keyPressSimulate(%#04x): setTimeout()\n", charCode);
                     }
                 }
                 fSimulated = true;
             }
         }
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("keyPressSimulate(" + Str.toHexByte(charCode) + "): " + (fSimulated? "true" : "false"));
+            this.dbg.printf("keyPressSimulate(%#04x): %b\n", charCode, fSimulated);
         }
         return fSimulated;
     }
@@ -9560,7 +9595,7 @@ class C1PKeyboard extends Component {
      * @param {number} charCode
      * @param {boolean} fDown
      * @param {number} simCode indicates the origin of the event
-     * @return {boolean} true if successfully simulated, false if unrecognized/unsupported key
+     * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
      */
     keyEventSimulate(charCode, fDown, simCode)
     {
@@ -9745,7 +9780,7 @@ class C1PKeyboard extends Component {
      *
      * @this {C1PKeyboard}
      * @param {number} charCode
-     * @return {boolean}
+     * @returns {boolean}
      *
      isShift(charCode)
      {
@@ -9970,7 +10005,7 @@ class C1PVideo extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "refresh")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -9979,7 +10014,7 @@ class C1PVideo extends Component {
             this.bindings[sBinding] = control;
             control.onclick = function(video) {
                 return function() {
-                    if (DEBUG) video.println("refreshScreen()");
+                    if (DEBUG) video.printf("refreshScreen()\n");
                     video.initScreen();
                     video.updateScreen();
                 };
@@ -10083,7 +10118,7 @@ class C1PVideo extends Component {
             }
         }
         else {
-            this.println("updated video model: " + this.nModel);
+            this.printf("updated video model: %d\n", this.nModel);
             this.setDimensions(64, 32);
         }
         this.initScreen();
@@ -10227,7 +10262,7 @@ class C1PVideo extends Component {
      * updateScreen() updates the screen buffer from the video buffer and updates the window with any changes.
      *
      * @this {C1PVideo}
-     * @return {boolean}
+     * @returns {boolean}
      *
      * For every byte in the video buffer, this renders it if it differs from the byte stored in the screen buffer,
      * and then updates the screen buffer to match.  Since initScreen() sets every byte in the screen buffer
@@ -10256,7 +10291,7 @@ class C1PVideo extends Component {
      * @this {C1PVideo}
      * @param {number} offset
      * @param {number} b
-     * @return {boolean}
+     * @returns {boolean}
      */
     writeByte(offset, b)
     {
@@ -10274,7 +10309,7 @@ class C1PVideo extends Component {
      * @param {number} col
      * @param {number} row
      * @param {number} b
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      *
      * I originally used (screenWidth,screenHeight) == (512,448) and (cols,rows) == (32,32) and (cxChar,cyChar) == (16,16),
      * and I simply copied the source cells 1-to-1 to the destination (16,16), knowing that we would never try to display
@@ -10299,7 +10334,7 @@ class C1PVideo extends Component {
                 var xSrc = xChar % this.imgChars.width;
                 var xDst = col * this.cxCharDst;
                 var yDst = row * this.cyCharDst;
-                // if (DEBUG) this.log("updateWindow(" + col + "," + row + "," + b +"): drawing from " + xSrc + "," + ySrc + " to " + xDst + "," + yDst);
+                // if (DEBUG) this.printf(Messages.LOG, "updateWindow(%d,%d,%#04x): drawing from %d,%d to %d,%d\n", col, row, b, xSrc, ySrc, xDst, yDst);
                 this.contextScreen.drawImage(this.imgChars, xSrc, ySrc, this.cxChar, this.cyChar, xDst, yDst, this.cxCharDst, this.cyCharDst);
             }
         }
@@ -10381,7 +10416,7 @@ class C1PVideo extends Component {
             var sCharSet = parmsVideo['fontROM'] || parmsVideo['charSet'];
             imgCharSet.onload = function(video, sCharSet) {
                 return function() {
-                    if (DEBUG) video.log("onload(): finished loading " + sCharSet);
+                    if (DEBUG) video.printf(Messages.LOG, "onload(): finished loading %s\n", sCharSet);
                     video.setReady();
                 };
             }(video, sCharSet);
@@ -10475,7 +10510,7 @@ class C1PSerialPort extends Component {
     loadFile(sFileName, sFileData, nResponse)
     {
         if (!sFileData) {
-            this.println("Error loading file \"" + sFileName + "\" (" + nResponse + ")");
+            this.printf("Error loading file \"%s\" (%d)\n", sFileName, nResponse);
             return;
         }
 
@@ -10507,17 +10542,17 @@ class C1PSerialPort extends Component {
                 this.sInput = s;
                 this.fConvertLF = false;
             } catch (e) {
-                this.println("Error processing file \"" + sFileName + "\": " + e.message);
+                this.printf("Error processing file \"%s\": %s\n", sFileName, e.message);
                 return;
             }
         }
 
         if (this.cmp && this.kbd && this.cpu.isRunning()) {
-            this.println("auto-loading " + sFileName);
+            this.printf("auto-loading %s\n", sFileName);
             if (!this.fDemo) this.startLoad(true);
         }
         else {
-            this.println(sFileName + " ready to load");
+            this.printf("%s ready to load\n", sFileName);
         }
     }
 
@@ -10570,7 +10605,7 @@ class C1PSerialPort extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listSerial")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -10587,7 +10622,7 @@ class C1PSerialPort extends Component {
             control.onclick = function onClickLoadSerial(event) {
                 if (serial.bindings["listSerial"]) {
                     var sFile = serial.bindings["listSerial"].value;
-                    // serial.println("loading " + sFile + "...");
+                    // serial.printf("loading %s...\n", sFile);
                     Web.getResource(sFile, null, true, function(sURL, sResponse, nErrorCode) {
                         serial.loadFile(sURL, sResponse, nErrorCode);
                     });
@@ -10616,7 +10651,7 @@ class C1PSerialPort extends Component {
 
                     var reader = new FileReader();
                     reader.onload = function() {
-                        // serial.println("mounting " + file.name + "...");
+                        // serial.printf("mounting %s...\n", file.name);
                         serial.loadFile(file.name, reader.result.toString(), 0);
                     };
                     reader.readAsText(file);
@@ -10628,7 +10663,7 @@ class C1PSerialPort extends Component {
                 };
             }
             else {
-                if (DEBUG) this.log("Local file support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local file support not available\n");
                 controlInput.parentNode.removeChild(/** @type {Node} */ (controlInput));
             }
             return true;
@@ -10787,12 +10822,12 @@ class C1PSerialPort extends Component {
                     if (b == 0x0a) b = 0x0d;
                 }
                 this.bInput = b;
-                // if (DEBUG) this.log("advanceInput(" + Str.toHexByte(b) + ")");
+                // if (DEBUG) this.printf(Messages.LOG, "advanceInput(%#04x)\n", b);
             }
             else {
                 this.sInput = "";
                 this.iInput = 0;
-                if (DEBUG) this.log("advanceInput(): out of data");
+                if (DEBUG) this.printf(Messages.LOG, "advanceInput(): out of data\n");
                 if (this.autoLoad == C1PSerialPort.AUTOLOAD_BASIC && this.kbd) {
                     this.kbd.injectKeys(" \nRUN\n");
                 }
@@ -10800,7 +10835,7 @@ class C1PSerialPort extends Component {
             }
             this.updateMemory();
         }
-        // else if (DEBUG) this.log("advanceInput(): no input");
+        // else if (DEBUG) this.printf(Messages.LOG, "advanceInput(): no input\n");
     }
 
     /**
@@ -11502,7 +11537,7 @@ class C1PDiskController extends Component {
     * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listDisk")
     * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
     * @param {string} [sValue] optional data value
-    * @return {boolean} true if binding was successful, false if unrecognized binding request
+    * @returns {boolean} true if binding was successful, false if unrecognized binding request
     */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -11535,7 +11570,7 @@ class C1PDiskController extends Component {
                              */
                             sFileURL = "http://" + window.location.host + "/api/v1/dump?disk=" + sFilePath;
                         }
-                        controller.println("loading  " + Str.getBaseName(sFilePath) + "...");
+                        controller.printf("loading  %s...\n", Str.getBaseName(sFilePath));
                         Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                             controller.loadDisk(sURL, sResponse, nErrorCode);
                         });
@@ -11602,11 +11637,11 @@ class C1PDiskController extends Component {
     loadDisk(sDiskName, sDiskData, nErrorCode)
     {
         if (nErrorCode) {
-            this.println("disk load error (" + nErrorCode + ")");
+            this.printf("disk load error (%d)\n", nErrorCode);
             return;
         }
         var aHeads = [];
-        this.println("mounting " + sDiskName + "...");
+        this.printf("mounting %s...\n", sDiskName);
         try {
             /*
              * The most likely source of any exception will be right here, where we're parsing
@@ -11614,16 +11649,16 @@ class C1PDiskController extends Component {
              */
             aHeads = eval("(" + sDiskData + ")");
             if (!aHeads.length) {
-                this.println("no data: " + sDiskName);
+                this.printf("no data: %s\n", sDiskName);
                 return;
             }
             if (!aHeads[0].length) {
-                this.println("no tracks: " + sDiskName);
+                this.printf("no tracks: %s\n", sDiskName);
                 return;
             }
             var aTracks = aHeads[0];
             if (aTracks[0]['trackNum'] === undefined) {
-                this.println("data error: " + aTracks[0]);
+                this.printf("data error: %d\n", aTracks[0]);
                 return;
             }
             /*
@@ -11631,7 +11666,7 @@ class C1PDiskController extends Component {
              * in the first place. Can we guarantee that and eliminate this test?
              */
             if (!this.aDrives[0]) {
-                this.println("no available drives");
+                this.printf("no available drives\n");
                 return;
             }
             /*
@@ -11693,13 +11728,13 @@ class C1PDiskController extends Component {
                  */
                 aTracks[iTrackNum].trackData = trackData;
                 if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_DISK)) {
-                    this.dbg.message("track " + iTrackNum + ": " + trackData.length + " bytes");
+                    this.dbg.printf("track %d: %d bytes\n", iTrackNum, trackData.length);
                 }
             }
             this.aDrives[0].aTracks = aTracks;
-            this.println("mount of " + sDiskName + " complete");
+            this.printf("mount of %s complete\n", sDiskName);
         } catch (e) {
-            this.println("disk data error: " + e.message);
+            this.printf("disk data error: %s\n", e.message);
         }
     }
 
@@ -11759,7 +11794,7 @@ class C1PDiskController extends Component {
     * @this {C1PDiskController}
     * @param {number} port address (0x0000-0x00FF) relative to addrController (0xC000)
     * @param {boolean} fWrite is true if port write, false if port read
-    * @return {Object} reg will always be a valid register object, but it may be the "unknown" register if we don't recognize the port.
+    * @returns {Object} reg will always be a valid register object, but it may be the "unknown" register if we don't recognize the port.
     */
     getReg(port, fWrite)
     {
@@ -11841,7 +11876,7 @@ class C1PDiskController extends Component {
                     var bChanged = reg.bits ^ b;
                     while (bChanged && bTest) {
                         if (bChanged & bTest) {
-                            this.dbg.message("  changed " + reg.sName + "." + reg.aBitIDs[bTest] + " to " + ((b & bTest)? "1" : "0"));
+                            this.dbg.printf("  changed %s.%s to %s\n", reg.sName, reg.aBitIDs[bTest], (b & bTest)? "1" : "0");
                         }
                         bTest >>= 1;
                     }
@@ -11897,7 +11932,7 @@ class C1PDiskController extends Component {
 
     /**
      * @this {C1PDiskController}
-     * @return {number} current byte of data from the currently selected drive, or null if no (more) data available
+     * @returns {number} current byte of data from the currently selected drive, or null if no (more) data available
      */
     advanceDriveData()
     {
@@ -11928,7 +11963,7 @@ class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bPDA
-     * @return {number} updated bits for PDA
+     * @returns {number} updated bits for PDA
      */
     updatePDA(bPDA)
     {
@@ -11987,7 +12022,7 @@ class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bPDB
-     * @return {number} updated bits for PDB
+     * @returns {number} updated bits for PDB
      */
     updatePDB(bPDB)
     {
@@ -12014,7 +12049,7 @@ class C1PDiskController extends Component {
                         drive.iTrackSelect++;
 
                     if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_DISK)) {
-                        this.dbg.message("stepping " + ((bPDB & this.PDB_STI)? "down" : "up") + " to track " + drive.iTrackSelect);
+                        this.dbg.printf("stepping %s to track %d\n", (bPDB & this.PDB_STI)? "down" : "up", drive.iTrackSelect);
                     }
 
                     if (drive.iTrackSelect >= drive.nTracks)
@@ -12031,7 +12066,7 @@ class C1PDiskController extends Component {
             }
         }
         else if (DEBUG && this.iDriveSelect >= 0) {
-            this.println("updatePDB(" + Str.toHexByte(bPDB) + "): invalid drive: " + this.iDriveSelect);
+            this.printf("updatePDB(%#04x): invalid drive: %d\n", bPDB, this.iDriveSelect);
         }
         return bPDB;
     }
@@ -12041,7 +12076,7 @@ class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bSTAT
-     * @return {number} updated bits for STAT
+     * @returns {number} updated bits for STAT
      */
     updateSTAT(bSTAT)
     {
@@ -12066,7 +12101,7 @@ class C1PDiskController extends Component {
     /**
      * @this {C1PDiskController}
      * @param {boolean} fLoaded is true if the selected drive must be loaded, false if don't care
-     * @return {Object} drive reference to the selected drive, or null if no drive is selected or it doesn't meet the fLoaded requirement
+     * @returns {Object} drive reference to the selected drive, or null if no drive is selected or it doesn't meet the fLoaded requirement
      *
      getSelectedDrive(fLoaded)
      {
@@ -12571,7 +12606,7 @@ class C1PDebugger extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -12612,7 +12647,7 @@ class C1PDebugger extends Component {
                         C1PDebugger.input(dbg, sBinding);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -12818,6 +12853,16 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
+     * @param {string} sMessage is any caller-defined message string
+     */
+    message(sMessage)
+    {
+        this.print(sMessage);
+        this.cpu.yieldCPU();    // these print() calls are at risk of being called with high frequency, so we need to yieldCPU() more
+    }
+
+    /**
+     * @this {C1PDebugger}
      * @param {Component} component
      * @param {number} addr
      * @param {number|undefined} addrFrom
@@ -12829,18 +12874,8 @@ class C1PDebugger extends Component {
     {
         if ((this.bitsMessage & bitsMessage) == bitsMessage) {
             var b = this.cpu.getByte(addr);
-            this.message(component.id + "." + (fWrite? "setByte":"getByte") + "(" + Str.toHexWord(addr) + ")" + (addrFrom !== undefined? (" @" + Str.toHexWord(addrFrom)) : "") + ": " + (name? (name + "=") : "") + Str.toHexByte(b));
+            this.printf("%s.%s(%#06x) @%#06x %s=%#04x\n", component.id, fWrite? "setByte" : "getByte", addr, addrFrom, name || "unknown", b);
         }
-    }
-
-    /**
-     * @this {C1PDebugger}
-     * @param {string} sMessage is any caller-defined message string
-     */
-    message(sMessage)
-    {
-        this.println(sMessage);
-        this.cpu.yieldCPU();    // these print() calls are at risk of being called with high frequency, so we need to yieldCPU() more
     }
 
     /**
@@ -12849,12 +12884,12 @@ class C1PDebugger extends Component {
     init()
     {
         // this.doHelp();
-        this.println("Type ? for list of debugger commands\n");
+        this.printf("Type ? for list of debugger commands\n\n");
     }
 
     /**
      * @this {C1PDebugger}
-     * @return {boolean}
+     * @returns {boolean}
      */
     run()
     {
@@ -12866,7 +12901,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} n (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {boolean}
+     * @returns {boolean}
      */
     step(n)
     {
@@ -12904,7 +12939,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {boolean}
+     * @returns {boolean}
      *
      * Make sure the CPU is ready (finished initializing), not busy (already running), and not in an error state.
      */
@@ -12947,7 +12982,7 @@ class C1PDebugger extends Component {
      */
     start()
     {
-        if (!this.fStepOver) this.println("running");
+        if (!this.fStepOver) this.printf("running\n");
     }
 
     /**
@@ -12960,21 +12995,21 @@ class C1PDebugger extends Component {
     stop(msStart, nCycles)
     {
         if (!this.fStepOver) {
-            this.println("stopped");
+            this.printf("stopped\n");
             if (nCycles) {
                 var msTotal = Component.getTime();
                 msTotal -= msStart;
-                this.println(msTotal + "ms (" + nCycles + " cycles)");
-                if (DEBUG && msTotal > 0) {
+                this.printf("%dms (%d cycles)\n", msTotal, nCycles);
+                if (MAXDEBUG && msTotal > 0) {
                     nCycles = nCycles * 1000 / msTotal;
-                    this.println("total cycles/second: " + Math.round(nCycles));
+                    this.printf("total cycles/second: %d\n", Math.round(nCycles));
                     var percent = Math.round((this.cIns? this.cReads / this.cIns : 0) * 1000) / 10;
-                    this.println("total reads: " + this.cReads + " (" + percent + "%)");
+                    this.printf("total reads: %d (%d%)\n", this.cReads, percent);
                     percent = Math.round((this.cIns? this.cWrites / this.cIns : 0) * 1000) / 10;
-                    this.println("total writes: " + this.cWrites + " (" + percent + "%)");
+                    this.printf("total writes: %d (%d%)\n", this.cWrites, percent);
                     percent = Math.round((this.cIns? this.cWritesZP / this.cIns : 0) * 1000) / 10;
-                    this.println("total zero-page writes: " + this.cWritesZP + " (" + percent + "%)");
-                    this.println("total instructions: " + this.cIns);
+                    this.printf("total zero-page writes: %d (%d%)\n", this.cWritesZP, percent);
+                    this.printf("total instructions: %d\n", this.cIns);
                 }
             }
         }
@@ -13001,7 +13036,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} bOpCode
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us about the next instruction to be executed, giving
      * us an opportunity to look for "exec" breakpoints and update opcode frequencies and instruction history.
@@ -13024,7 +13059,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us that a memory read occurred, giving us an
      * opportunity to track the read if we want, and look for a matching "read" breakpoint, if any.
@@ -13042,7 +13077,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} value written
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us that a memory write occurred, giving us an
      * opportunity to track the write if we want, and look for a matching "write" breakpoint, if any.
@@ -13060,7 +13095,7 @@ class C1PDebugger extends Component {
         if (!(addr & 0xff00))
             this.cWritesZP++;
         if ((value & 0xff) != value) {
-            this.println("invalid value at " + Str.toHexWord(addr) + ": " + value);
+            this.printf("invalid value at %#06x: %s\n", addr, value);
             fBreak = true;
         }
         if (this.checkBreakpoint(addr, this.aWriteBreak, "write"))
@@ -13072,7 +13107,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     addSignedByte(addr, b)
     {
@@ -13086,7 +13121,7 @@ class C1PDebugger extends Component {
      *
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getByte(addr)
     {
@@ -13117,7 +13152,7 @@ class C1PDebugger extends Component {
     setByte(addr, b)
     {
         if (addr < this.offMem || addr >= this.offLimit) {
-            this.println("invalid address: " + Str.toHexWord(addr));
+            this.printf("invalid address: %#06x\n", addr);
             return;
         }
         this.abMem[this.offMem + addr] = (b & 0xff);
@@ -13138,7 +13173,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addExecBreakpoint(addr)
     {
@@ -13151,7 +13186,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addReadBreakpoint(addr)
     {
@@ -13164,7 +13199,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addWriteBreakpoint(addr)
     {
@@ -13176,7 +13211,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getExecBreakpoints()
     {
@@ -13185,7 +13220,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getReadBreakpoints()
     {
@@ -13194,7 +13229,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getWriteBreakpoints()
     {
@@ -13206,7 +13241,7 @@ class C1PDebugger extends Component {
      * @param {Array} aBreak
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findBreakpoint(aBreak, addr, fRemove)
     {
@@ -13227,7 +13262,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findExecBreakpoint(addr, fRemove)
     {
@@ -13238,7 +13273,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findReadBreakpoint(addr, fRemove)
     {
@@ -13249,7 +13284,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findWriteBreakpoint(addr, fRemove)
     {
@@ -13293,7 +13328,7 @@ class C1PDebugger extends Component {
      * @param {number} addr
      * @param {Array} aBreakpoints
      * @param {string} sType (ie, "exec" or "write")
-     * @return {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} true if breakpoint has been hit, false if not
      */
     checkBreakpoint(addr, aBreakpoints, sType)
     {
@@ -13305,7 +13340,7 @@ class C1PDebugger extends Component {
         for (var i=0; i < aBreakpoints.length; i++) {
             if (aBreakpoints[i] == addr) {
                 if (addr != this.addrTempBP)
-                    this.println("breakpoint hit: " + Str.toHexWord(addr) + " (" + sType + ")");
+                    this.printf("breakpoint hit: %#06x (%s)\n", addr, sType);
                 fBreak = true;
                 break;
             }
@@ -13317,7 +13352,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} [nIns] is an associated instruction number, or 0 (or undefined) if none
-     * @return {string}
+     * @returns {string}
      */
     getInstruction(addr, nIns)
     {
@@ -13427,7 +13462,7 @@ class C1PDebugger extends Component {
      * @param {string} sCode
      * @param {string|undefined} sOperand
      * @param {number} addr of memory where this instruction is being assembled
-     * @return {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
      */
     parseInstruction(sCode, sOperand, addr)
     {
@@ -13448,7 +13483,7 @@ class C1PDebugger extends Component {
                 }
             }
             if (iCode == this.aOpCodes.length) {
-                this.println("unknown operation: " + sCode);
+                this.printf("unknown operation: %s\n", sCode);
                 iCode = -1;
             }
             var sMode = "", aModeMatch, i;
@@ -13458,8 +13493,8 @@ class C1PDebugger extends Component {
                     var cModes = 0;
                     for (i = 0; i < this.aaOperations.length; i++) {
                         if (this.aaOperations[i][0] === iCode) {
-                            if (!cModes) this.println("supported opcodes:");
-                            this.println("     " + Str.toHex(i, 2) + ": " + sCode + (this.aaOperations[i][2] !== undefined? (" " + this.aOpModes[this.aaOperations[i][2]]) : ""));
+                            if (!cModes) this.printf("supported opcodes:\n");
+                            this.printf("     %02x: %s%s\n", i, sCode, (this.aaOperations[i][2] !== undefined? (" " + this.aOpModes[this.aaOperations[i][2]]) : ""));
                             cModes++;
                         }
                     }
@@ -13485,7 +13520,7 @@ class C1PDebugger extends Component {
                                      * This is really an internal consistency error; regardless what the user types, this should not occur.
                                      */
                                     //noinspection JSUnusedAssignment
-                                    this.println("too many operand matches (both " + this.aOpModes[iMode] + " and " + this.aOpModes[i-1] + ")");
+                                    this.printf("too many operand matches (both %s and %s)\n", this.aOpModes[iMode], this.aOpModes[i-1]);
                                     iCode = -1;
                                     break;
                                 }
@@ -13510,7 +13545,7 @@ class C1PDebugger extends Component {
                         }
                     }
                     else {
-                        this.println("unknown operand: " + sMode);
+                        this.printf("unknown operand: %s\n", sMode);
                         iCode = -1;
                     }
                 }
@@ -13528,7 +13563,7 @@ class C1PDebugger extends Component {
                             /*
                              * This is really an internal consistency error; regardless what the user types, this should not occur.
                              */
-                            this.println("too many instruction matches (both " + Str.toHexByte(bOpCode) + " and " + Str.toHexByte(i) + ")");
+                            this.printf("too many instruction matches (both %#04x and %#04x)\n", bOpCode, i);
                             bOpCode = -2;
                             break;
                         }
@@ -13544,7 +13579,7 @@ class C1PDebugger extends Component {
                             if (cb == 1 && iMode == this.MODE_DISP) {
                                 nHex -= (addr + 2);
                                 if (nHex < -128 || nHex > 127) {
-                                    this.println("branch out of range (" + nHex + ")");
+                                    this.printf("branch out of range (%d)\n", nHex);
                                     aOpBytes = [];
                                     cb = 0;
                                 }
@@ -13558,12 +13593,12 @@ class C1PDebugger extends Component {
                             /*
                              * This is really an internal consistency error; regardless what the user types, this should not occur.
                              */
-                            this.println("instruction missing " + cb + " bytes");
+                            this.printf("instruction missing %d bytes\n", cb);
                         }
                     }
                 }
                 else {
-                    this.println("unknown instruction: " + sCode + " " + sMode + (DEBUG? (" (" + iMode + ")") : ""));
+                    this.printf("unknown instruction: %s %s%s\n", sCode, sMode, (DEBUG? (" (" + iMode + ")") : ""));
                 }
             }
         }
@@ -13572,7 +13607,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {string}
+     * @returns {string}
      */
     getRegs()
     {
@@ -13587,7 +13622,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {string|undefined} [sAddr]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getUserAddr(sAddr)
     {
@@ -13606,12 +13641,12 @@ class C1PDebugger extends Component {
             }
             addr = parseInt(sAddr, nBase);
             if (isNaN(addr)) {
-                this.println("invalid base-" + nBase + " address: " + sAddr);
+                this.printf("invalid base-%d address: %s\n", nBase, sAddr);
                 addr = undefined;
             }
         }
         if (addr !== undefined && (addr < this.offMem || addr >= this.offLimit)) {
-            this.println("address out of range: " + Str.toHex(addr));
+            this.printf("address out of range: %x\n", addr);
             addr = undefined;
         }
         return addr;
@@ -13622,8 +13657,8 @@ class C1PDebugger extends Component {
      */
     doHelp()
     {
-        this.println("\ncommands:\n?\thelp\na [#]\tassemble\nb [#]\tbreakpoint\nd [#]\tdump memory\ne [#]\tedit memory\nf\tdump frequencies\ng [#]\trun to [#]\nh\thalt\no\toptions\np [#]\tdump history\nr\tdump/edit registers\ns\tstep over instruction\nt [#]\tstep instruction(s)\nu [#]\tunassemble");
-        this.println("note: frequency and history commands operate only when breakpoints are set");
+        this.printf("\ncommands:\n?\thelp\na [#]\tassemble\nb [#]\tbreakpoint\nd [#]\tdump memory\ne [#]\tedit memory\nf\tdump frequencies\ng [#]\trun to [#]\nh\thalt\no\toptions\np [#]\tdump history\nr\tdump/edit registers\ns\tstep over instruction\nt [#]\tstep instruction(s)\nu [#]\tunassemble\n");
+        this.printf("note: frequency and history commands operate only when breakpoints are set\n");
     }
 
     /**
@@ -13661,7 +13696,7 @@ class C1PDebugger extends Component {
             return;
         this.addrAssembleNext = addr;
         if (asArgs[2] === undefined) {
-            this.println("begin assemble @" + Str.toHexWord(this.addrAssembleNext));
+            this.printf("begin assemble @%#06x\n", this.addrAssembleNext);
             this.fAssemble = true;
             this.cpu.update();
             return;
@@ -13669,10 +13704,10 @@ class C1PDebugger extends Component {
         var aOpBytes = this.parseInstruction(asArgs[2], asArgs[3], this.addrAssembleNext);
         if (aOpBytes.length) {
             for (var i=0; i < aOpBytes.length; i++) {
-                // this.println(Str.toHexWord(this.addrAssembleNext) + ": " + Str.toHexByte(aOpBytes[i]));
+                // this.printf("%#06x: %#04x\n", this.addrAssembleNext, aOpBytes[i]);
                 this.setByte(this.addrAssembleNext+i, aOpBytes[i]);
             }
-            this.println(this.getInstruction(this.addrAssembleNext));
+            this.printf("%s\n", this.getInstruction(this.addrAssembleNext));
             this.addrAssembleNext += aOpBytes.length;
         }
     }
@@ -13685,12 +13720,12 @@ class C1PDebugger extends Component {
     doBreak(sParm, sAddr)
     {
         if (sParm === undefined || sParm == "?") {
-            this.println("\nbreakpoint commands:");
-            this.println("bp [a]\tset exec breakpoint at [a]");
-            this.println("br [a]\tset read breakpoint at [a]");
-            this.println("bw [a]\tset write breakpoint at [a]");
-            this.println("bc [a]\tclear breakpoint at [a]");
-            this.println("bl\tlist all breakpoints");
+            this.printf("\nbreakpoint commands:\n");
+            this.printf("bp [a]\tset exec breakpoint at [a]\n");
+            this.printf("br [a]\tset read breakpoint at [a]\n");
+            this.printf("bw [a]\tset write breakpoint at [a]\n");
+            this.printf("bc [a]\tclear breakpoint at [a]\n");
+            this.printf("bl\tlist all breakpoints\n");
             return;
         }
         if (sAddr === undefined && sParm.length > 1) {
@@ -13701,30 +13736,30 @@ class C1PDebugger extends Component {
             var cBreaks = 0, i;
             var aAddrs = this.getExecBreakpoints();
             for (i = 0; i < aAddrs.length; i++) {
-                this.println("breakpoint enabled: " + Str.toHexWord(aAddrs[i]) + " (exec)");
+                this.printf("breakpoint enabled: %#06x (exec)\n", aAddrs[i]);
                 cBreaks++;
             }
             aAddrs = this.getReadBreakpoints();
             for (i = 0; i < aAddrs.length; i++) {
-                this.println("breakpoint enabled: " + Str.toHexWord(aAddrs[i]) + " (read)");
+                this.printf("breakpoint enabled: %#06x (read)\n", aAddrs[i]);
                 cBreaks++;
             }
             aAddrs = this.getWriteBreakpoints();
             for (i = 0; i < aAddrs.length; i++) {
-                this.println("breakpoint enabled: " + Str.toHexWord(aAddrs[i]) + " (write)");
+                this.printf("breakpoint enabled: %#06x (write)\n", aAddrs[i]);
                 cBreaks++;
             }
             if (!cBreaks)
-                this.println("no breakpoints");
+                this.printf("no breakpoints\n");
             return;
         }
         if (sAddr === undefined) {
-            this.println("missing breakpoint address");
+            this.printf("missing breakpoint address\n");
             return;
         }
         if (sParm == "c" && sAddr == "*") {
             this.clearBreakpoints();
-            this.println("all breakpoints cleared");
+            this.printf("all breakpoints cleared\n");
             return;
         }
         var addr = this.getUserAddr(sAddr);
@@ -13732,39 +13767,39 @@ class C1PDebugger extends Component {
             return;
         if (sParm == "p") {
             if (this.addExecBreakpoint(addr))
-                this.println("breakpoint enabled: " + Str.toHexWord(addr) + " (exec)");
+                this.printf("breakpoint enabled: %#06x (exec)\n", addr);
             else
-                this.println("breakpoint not set: " + Str.toHexWord(addr));
+                this.printf("breakpoint not set: %#06x\n", addr);
             return;
         }
         if (sParm == "c") {
             if (this.findExecBreakpoint(addr, true))
-                this.println("breakpoint cleared: " + Str.toHexWord(addr) + " (exec)");
+                this.printf("breakpoint cleared: %#06x (exec)\n", addr);
             else
             if (this.findReadBreakpoint(addr, true))
-                this.println("breakpoint cleared: " + Str.toHexWord(addr) + " (read)");
+                this.printf("breakpoint cleared: %#06x (read)\n", addr);
             else
             if (this.findWriteBreakpoint(addr, true))
-                this.println("breakpoint cleared: " + Str.toHexWord(addr) + " (write)");
+                this.printf("breakpoint cleared: %#06x (write)\n", addr);
             else
-                this.println("breakpoint missing: " + Str.toHexWord(addr));
+                this.printf("breakpoint missing: %#06x\n", addr);
             return;
         }
         if (sParm == "r") {
             if (this.addReadBreakpoint(addr))
-                this.println("breakpoint enabled: " + Str.toHexWord(addr) + " (read)");
+                this.printf("breakpoint enabled: %#06x (read)\n", addr);
             else
-                this.println("breakpoint not set: " + Str.toHexWord(addr));
+                this.printf("breakpoint not set: %#06x\n", addr);
             return;
         }
         if (sParm == "w") {
             if (this.addWriteBreakpoint(addr))
-                this.println("breakpoint enabled: " + Str.toHexWord(addr) + " (write)");
+                this.printf("breakpoint enabled: %#06x (write)\n", addr);
             else
-                this.println("breakpoint not set: " + Str.toHexWord(addr));
+                this.printf("breakpoint not set: %#06x\n", addr);
             return;
         }
-        this.println("unknown breakpoint command: " + sParm);
+        this.printf("unknown breakpoint command: %s\n", sParm);
     }
 
     /**
@@ -13775,8 +13810,8 @@ class C1PDebugger extends Component {
     doDump(sAddr, sLen)
     {
         if (sAddr == "?") {
-            this.println("\ndump commands:");
-            this.println("d [a] [#]    dump # lines of memory");
+            this.printf("\ndump commands:\n");
+            this.printf("d [a] [#]    dump # lines of memory\n");
             return;
         }
         var addr = this.getUserAddr(sAddr);
@@ -13800,7 +13835,7 @@ class C1PDebugger extends Component {
                 sChars += (b >= 32 && b < 127? String.fromCharCode(b) : ".");
                 addr++;
             }
-            this.println(Str.toHex(addrLine, 4) + " " + sBytes + sChars);
+            this.printf("%04x %s%s\n", addrLine, sBytes, sChars);
         }
         this.nextAddr = addr;
     }
@@ -13813,7 +13848,7 @@ class C1PDebugger extends Component {
     {
         var sAddr = asArgs[1];
         if (sAddr === undefined) {
-            this.println("missing address");
+            this.printf("missing address\n");
             return;
         }
         var addr = this.getUserAddr(sAddr);
@@ -13832,8 +13867,8 @@ class C1PDebugger extends Component {
     doFreqs(sParm)
     {
         if (sParm == "?") {
-            this.println("\nfrequency commands:");
-            this.println("clear\tclear all frequency counts");
+            this.printf("\nfrequency commands:\n");
+            this.printf("clear\tclear all frequency counts\n");
             return;
         }
         var cData = 0, i;
@@ -13841,11 +13876,11 @@ class C1PDebugger extends Component {
             if (sParm == "clear") {
                 for (i = 0; i < this.aaOpcodeFreqs.length; i++)
                     this.aaOpcodeFreqs[i] = [i, 0];
-                this.println("frequency data cleared");
+                this.printf("frequency data cleared\n");
                 cData++;
             }
             else if (sParm !== undefined) {
-                this.println("unknown frequency command: " + sParm);
+                this.printf("unknown frequency command: %s\n", sParm);
                 cData++;
             }
             else {
@@ -13855,14 +13890,14 @@ class C1PDebugger extends Component {
                     var bOpcode = aaSortedOpcodeFreqs[i][0];
                     var cFreq = aaSortedOpcodeFreqs[i][1];
                     if (cFreq) {
-                        this.println(this.aOpCodes[this.aaOperations[bOpcode][0]] + " (" + Str.toHexByte(bOpcode) + "): " + cFreq + " times");
+                        this.printf("%s (%#04x): %d times\n", this.aOpCodes[this.aaOperations[bOpcode][0]], bOpcode, cFreq);
                         cData++;
                     }
                 }
             }
         }
         if (!cData) {
-            this.println("no frequency data available");
+            this.printf("no frequency data available\n");
         }
     }
 
@@ -13888,12 +13923,12 @@ class C1PDebugger extends Component {
             if (n === undefined)
                 n = 10;
             if (n > aHistory.length) {
-                this.println("note: only " + aHistory.length + " available");
+                this.printf("note: only %d available\n", aHistory.length);
                 n = aHistory.length;
             }
             if (sCount !== undefined) {
                 this.nInsHistory = 0;
-                this.println(n + " instructions earlier:");
+                this.printf("%d instructions earlier:\n", n);
             }
             var nIns = (this.nInsHistory? this.nInsHistory : 1);
             iHistory -= n;
@@ -13901,7 +13936,7 @@ class C1PDebugger extends Component {
             while (cLines && iHistory != this.iStepHistory) {
                 var addr = aHistory[iHistory];
                 if (addr < 0) break;
-                this.println(this.getInstruction(addr, nIns++));
+                this.printf("%s\n", this.getInstruction(addr, nIns++));
                 if (++iHistory == aHistory.length) iHistory = 0;
                 cLines--;
                 n--;
@@ -13909,14 +13944,14 @@ class C1PDebugger extends Component {
             this.nextHistory = n;
             this.nInsHistory = nIns;
         }
-        if (cLines == 10) this.println("no history available");
+        if (cLines == 10) this.printf("no history available\n");
     }
 
     /**
      * Prints the contents of the Debugger's "info" buffer (filled by calls like cpu.dbg.info())
      * @this {C1PDebugger}
      * @param {string|undefined} sCount
-     * @return {boolean|undefined} true only if the "info" command is supported
+     * @returns {boolean|undefined} true only if the "info" command is supported
      */
     doInfo(sCount)
     {
@@ -13926,18 +13961,18 @@ class C1PDebugger extends Component {
             do {
                 var s = this.aInfoBuffer[i++];
                 if (s !== undefined) {
-                    this.println(s);
+                    this.printf("%s\n", s);
                     cLines--;
                 }
                 if (i >= this.aInfoBuffer.length)
                     i = 0;
             } while (cLines && i != this.iInfoBuffer);
-            this.println("nYieldsPerSecond: " + this.cpu.nYieldsPerSecond);
-            this.println("msPerYield: " + this.cpu.msPerYield);
-            this.println("nCyclesPerBurst: " + this.cpu.nCyclesPerBurst);
-            this.println("nCyclesPerYield: " + this.cpu.nCyclesPerYield);
-            this.println("nCyclesPerVideoUpdate: " + this.cpu.nCyclesPerVideoUpdate);
-            this.println("nCyclesPerStatusUpdate: " + this.cpu.nCyclesPerStatusUpdate);
+            this.printf("nYieldsPerSecond: %d\n", this.cpu.nYieldsPerSecond);
+            this.printf("msPerYield: %d\n", this.cpu.msPerYield);
+            this.printf("nCyclesPerBurst: %d\n", this.cpu.nCyclesPerBurst);
+            this.printf("nCyclesPerYield: %d\n", this.cpu.nCyclesPerYield);
+            this.printf("nCyclesPerVideoUpdate: %d\n", this.cpu.nCyclesPerVideoUpdate);
+            this.printf("nCyclesPerStatusUpdate: %d\n", this.cpu.nCyclesPerStatusUpdate);
             return true;
         }
     }
@@ -13964,22 +13999,23 @@ class C1PDebugger extends Component {
                 /*
                  * Limiting the amount of disassembled code to one "memory page" in non-DEBUG builds is partly
                  * to prevent the user from wedging their browser, but also a recognition that, in non-DEBUG builds,
-                 * the println() output buffer is truncated to 8K, which is only enough for about two pages of
-                 * disassembled code anyway.
+                 * the print buffer is truncated to 8K, which is only enough for about two pages of disassembled
+                 * code anyway.
                  */
-                this.println("range too large");
+                this.printf("range too large\n");
                 return;
             }
             addrEnd++;
             n = -1;
         }
 
-        if (addr != this.nextAddr)
-            this.println();
+        if (addr != this.nextAddr) {
+            this.printf("\n");
+        }
 
         while (n-- && addr < addrEnd) {
             var sIns = this.getInstruction(addr, this.isBusy(false) || this.fStepOver? this.cIns : 0);
-            this.println(sIns);
+            this.printf("%s\n", sIns);
             this.nextAddr = addr = this.nextIns;
         }
     }
@@ -13991,13 +14027,13 @@ class C1PDebugger extends Component {
     doOptions(asArgs)
     {
         if (asArgs[1] === undefined || asArgs[1] == "?") {
-            this.println("\noption commands:");
-            this.println("max\trun at maximum speed");
-            this.println("fast\trun faster (up to " + this.cpu.mhzFast + "Mhz)");
-            this.println("slow\trun at normal speed (1Mhz)");
-            this.println("classic\tuse classic operand syntax");
-            this.println("modern\tuse modern operand syntax");
-            this.println("msg\tenable message categories");
+            this.printf("\noption commands:\n");
+            this.printf("max\trun at maximum speed\n");
+            this.printf("fast\trun faster (up to %dMhz)\n", this.cpu.mhzFast);
+            this.printf("slow\trun at normal speed (1Mhz)\n");
+            this.printf("classic\tuse classic operand syntax\n");
+            this.printf("modern\tuse modern operand syntax\n");
+            this.printf("msg\tenable message categories\n");
             return;
         }
         var sOption = asArgs[1];
@@ -14013,11 +14049,11 @@ class C1PDebugger extends Component {
             break;
         case "classic":
             this.setOpModes(true);
-            this.println("classic syntax enabled");
+            this.printf("classic syntax enabled\n");
             break;
         case "modern":
             this.setOpModes(false);
-            this.println("modern syntax enabled");
+            this.printf("modern syntax enabled\n");
             break;
         case "msg":
             var bitsMessage = 0;
@@ -14038,11 +14074,11 @@ class C1PDebugger extends Component {
             for (var sCategory in this.aMessageCategories) {
                 if (asArgs[2] !== undefined && (asArgs[2] != "all" && asArgs[2] != sCategory)) continue;
                 bitsMessage = this.aMessageCategories[sCategory];
-                this.println(sCategory + " messages: " + ((this.bitsMessage & bitsMessage)? "on" : "off"));
+                this.printf("%s messages: %s\n", sCategory, ((this.bitsMessage & bitsMessage)? "on" : "off"));
             }
             break;
         default:
-            this.println("unknown option: " + sOption);
+            this.printf("unknown option: %s\n", sOption);
             break;
         }
     }
@@ -14054,11 +14090,11 @@ class C1PDebugger extends Component {
     doRegisters(asArgs)
     {
         if (asArgs && asArgs[1] == "?") {
-            this.println("\nregister commands:");
-            this.println("r to display all");
-            this.println("r [target=value] to modify");
-            this.println("supported targets:");
-            this.println("A,X,Y,S,PC and flags C,Z,D,V,N");
+            this.printf("\nregister commands:\n");
+            this.printf("r to display all\n");
+            this.printf("r [target=value] to modify\n");
+            this.printf("supported targets:\n");
+            this.printf("A,X,Y,S,PC and flags C,Z,D,V,N\n");
             return;
         }
         var fIns = true;
@@ -14075,7 +14111,7 @@ class C1PDebugger extends Component {
                 sValue = asArgs[2];
             }
             else {
-                this.println("missing value for " + asArgs[1]);
+                this.printf("missing value for %s\n", asArgs[1]);
                 return;
             }
             var b = parseInt(sValue, 16);
@@ -14107,7 +14143,7 @@ class C1PDebugger extends Component {
                     break;
                 case "S":
                     if ((b & ~0xff) != 0x100) {
-                        this.println("invalid stack pointer: " + sValue);
+                        this.printf("invalid stack pointer: %s\n", sValue);
                         return;
                     }
                     this.cpu.regS = b;
@@ -14118,17 +14154,17 @@ class C1PDebugger extends Component {
                     this.nextAddr = this.cpu.regPC;
                     break;
                 default:
-                    this.println("unknown register: " + sReg);
+                    this.printf("unknown register: %s\n", sReg);
                     return;
                 }
             }
             else {
-                this.println("invalid value: " + sValue);
+                this.printf("invalid value: %s\n", sValue);
                 return;
             }
             this.cpu.update();
         }
-        this.println(this.getRegs());
+        this.printf("%s\n", this.getRegs());
         if (fIns) this.doUnassemble(Str.toHex(this.nextAddr = this.cpu.regPC, 4));
     }
 
@@ -14188,7 +14224,7 @@ class C1PDebugger extends Component {
     {
         if (!sCmd.length) {
             if (dbg.fAssemble) {
-                dbg.println("ended assemble @" + Str.toHex(dbg.addrAssembleNext, 4));
+                dbg.printf("ended assemble @%04x\n", dbg.addrAssembleNext);
                 dbg.nextAddr = dbg.addrAssembleNext;
                 dbg.fAssemble = false;
             }
@@ -14261,7 +14297,7 @@ class C1PDebugger extends Component {
                 if (dbg.doInfo(asArgs[1])) break;
                 /* falls through */
             default:
-                dbg.println("unknown command: " + sCmd);
+                dbg.printf("unknown command: %s\n", sCmd);
                 break;
             }
         }
@@ -14357,7 +14393,7 @@ class C1PComputer extends Component {
             for (var i=0; i < this.modules[sType].length; i++) {
                 var component = this.modules[sType][i];
                 if (component && component.reset) {
-                    if (DEBUG) this.println("resetting " + sType);
+                    if (DEBUG) this.printf("resetting %s\n", sType);
                     component.reset();
                     if (sType == "cpu") cpu = component;
                 }
@@ -14417,7 +14453,7 @@ class C1PComputer extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -14443,7 +14479,7 @@ class C1PComputer extends Component {
      * @param {string} sType
      * @param {string} [idRelated] of related component
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     getComponentByType(sType, idRelated, componentPrev)
     {
@@ -14490,7 +14526,7 @@ class C1PComputer extends Component {
          */
         computer.setReady();
 
-        computer.println(APPNAME + " v" + APPVERSION + "\n" + COPYRIGHT);
+        computer.printf(Messages.DEFAULT, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
 
         /*
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to "power" the CPU;
@@ -14568,7 +14604,7 @@ class C1PComputer extends Component {
              * the Debugger needs our setBuffer(), setPower() and reset() notifications, and this relieves us from having an explicit
              * <module> entry for type="debugger".
              */
-            component = Component.getComponentByID('debugger', parmsComputer['id']);
+            component = Component.getComponentByType('C1PDebugger', parmsComputer['id'], false);
             if (component) {
                 modules['debugger'] = [component];
                 if (component.setBuffer) {
@@ -14582,7 +14618,7 @@ class C1PComputer extends Component {
              * Let's see if the Control Panel is installed (NOTE: its ID must be "panel", and only one per machine is supported);
              * the Panel needs our setPower() notifications, and this relieves us from having an explicit <module> entry for type="panel".
              */
-            var panel = Component.getComponentByID('panel', parmsComputer['id']);
+            var panel = Component.getComponentByType('C1PPanel', parmsComputer['id'], false);
             if (panel) {
                 modules['panel'] = [panel];
                 /*
@@ -14594,9 +14630,7 @@ class C1PComputer extends Component {
                     for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
                         component = aComponents[iComponent];
                         if (component == panel) continue;
-                        component.notice = panel.notice;
                         component.print = panel.print;
-                        component.println = panel.println;
                     }
                 }
             }
@@ -14955,7 +14989,7 @@ function resolveXML(sURL, sXML, display, done)
  * @param {string} [sXSLFile]
  * @param {string} [sParms] (machine parameters, if any)
  * @param {string} [sClass] (an optional machine class name used to style the machine)
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15005,7 +15039,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (match) sError = match[1];
             }
         }
-        Component.log(sError);
+        Component.printf(Messages.ERROR, "%s\n", sError);
         displayMessage("Error: " + sError + (sURL? " (" + sURL + ")" : ""));
         if (fSuccess) doneMachine();
         fSuccess = false;
@@ -15222,7 +15256,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15238,7 +15272,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15254,7 +15288,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15270,7 +15304,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15286,7 +15320,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15299,7 +15333,7 @@ function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  *
  * @param {string} idMachine
  * @param {string} sType
- * @return {Component|null}
+ * @returns {Component|null}
  */
 function findMachineComponent(idMachine, sType)
 {
@@ -15319,7 +15353,7 @@ function findMachineComponent(idMachine, sType)
  * @param {string} sComponent
  * @param {string} sCommand
  * @param {string} [sValue]
- * @return {boolean}
+ * @returns {boolean}
  */
 function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValue)
 {

@@ -15,7 +15,7 @@
       "'copy' is an optional property used by new machines to refer to another machine configuration that will be used",
       "for all other machine properties; it saves a bit of repetition for machines that are very similar.",
       "",
-      "'scripts' is a list of all the JavaScript files that comprise the machine; PCjs 'gulp' tasks will concatenate and",
+      "'modules' is a list of all the JavaScript files that comprise the machine; PCjs 'gulp' tasks will concatenate and",
       "compile the files in the order listed, and if the web server is configured to load uncompiled files, they will",
       "be loaded on their respective web pages in the order listed.",
       "",
@@ -33,8 +33,11 @@
       "I386"
     ],
     "factory": "embedPCx86",
-    "scripts": [
+    "modules": [
       "./machines/modules/v2/defines.js",
+      "./machines/modules/v2/messages.js",
+      "./machines/modules/v2/format.js",
+      "./machines/modules/v2/databuffer.js",
       "./machines/modules/v2/diskapi.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",
@@ -44,13 +47,12 @@
       "./machines/modules/v2/usrlib.js",
       "./machines/modules/v2/weblib.js",
       "./machines/modules/v2/component.js",
-      "./machines/modules/v3/databuffer.js",
-      "./machines/modules/v3/jsonlib.js",
+      "./machines/modules/v2/jsonlib.js",
       "./machines/pcx86/modules/v2/defines.js",
+      "./machines/pcx86/modules/v2/messages.js",
       "./machines/pcx86/modules/v2/x86.js",
       "./machines/pcx86/modules/v3/charset.js",
       "./machines/pcx86/modules/v2/interrupts.js",
-      "./machines/pcx86/modules/v2/messages.js",
       "./machines/pcx86/modules/v2/panel.js",
       "./machines/pcx86/modules/v2/bus.js",
       "./machines/pcx86/modules/v2/memory.js",
@@ -105,8 +107,9 @@
       "VERSION"
     ],
     "factory": "PCx86v3",
-    "scripts": [
+    "modules": [
       "./machines/modules/v3/defines.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -137,8 +140,10 @@
       "SITEURL"
     ],
     "factory": "embedC1P",
-    "scripts": [
+    "modules": [
       "./machines/modules/v2/defines.js",
+      "./machines/modules/v2/messages.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",
       "./machines/modules/v2/strlib.js",
@@ -180,8 +185,10 @@
       "SITEURL"
     ],
     "factory": "embedPCx80",
-    "scripts": [
+    "modules": [
       "./machines/modules/v2/defines.js",
+      "./machines/modules/v2/messages.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",
       "./machines/modules/v2/userapi.js",
@@ -191,8 +198,8 @@
       "./machines/modules/v2/weblib.js",
       "./machines/modules/v2/component.js",
       "./machines/pcx80/modules/v2/defines.js",
-      "./machines/pcx80/modules/v2/cpudef.js",
       "./machines/pcx80/modules/v2/messages.js",
+      "./machines/pcx80/modules/v2/cpudef.js",
       "./machines/pcx80/modules/v2/panel.js",
       "./machines/pcx80/modules/v2/bus.js",
       "./machines/pcx80/modules/v2/memory.js",
@@ -234,8 +241,10 @@
       "SITEURL"
     ],
     "factory": "embedPDP10",
-    "scripts": [
+    "modules": [
       "./machines/modules/v2/defines.js",
+      "./machines/modules/v2/messages.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",
       "./machines/modules/v2/userapi.js",
@@ -244,6 +253,7 @@
       "./machines/modules/v2/usrlib.js",
       "./machines/modules/v2/weblib.js",
       "./machines/modules/v2/component.js",
+      "./machines/modules/v2/debugger.js",
       "./machines/dec/pdp10/modules/v2/defines.js",
       "./machines/dec/pdp10/modules/v2/messages.js",
       "./machines/dec/pdp10/modules/v2/panel.js",
@@ -253,11 +263,10 @@
       "./machines/dec/pdp10/modules/v2/cpu.js",
       "./machines/dec/pdp10/modules/v2/cpustate.js",
       "./machines/dec/pdp10/modules/v2/cpuops.js",
+      "./machines/dec/pdp10/modules/v2/debugger.js",
       "./machines/dec/pdp10/modules/v2/rom.js",
       "./machines/dec/pdp10/modules/v2/ram.js",
       "./machines/dec/pdp10/modules/v2/serial.js",
-      "./machines/modules/v2/debugger.js",
-      "./machines/dec/pdp10/modules/v2/debugger.js",
       "./machines/dec/pdp10/modules/v2/macro10.js",
       "./machines/dec/pdp10/modules/v2/computer.js",
       "./machines/modules/v2/state.js",
@@ -286,8 +295,10 @@
       "SITEURL"
     ],
     "factory": "embedPDP11",
-    "scripts": [
+    "modules": [
       "./machines/modules/v2/defines.js",
+      "./machines/modules/v2/messages.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v2/diskapi.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",
@@ -344,8 +355,9 @@
       "VERSION"
     ],
     "factory": "TMS1500",
-    "scripts": [
+    "modules": [
       "./machines/modules/v3/defines.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -382,8 +394,9 @@
       "VERSION"
     ],
     "factory": "Invaders",
-    "scripts": [
+    "modules": [
       "./machines/modules/v3/defines.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -414,8 +427,9 @@
       "VERSION"
     ],
     "factory": "LEDs",
-    "scripts": [
+    "modules": [
       "./machines/modules/v3/defines.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -440,8 +454,9 @@
       "VERSION"
     ],
     "factory": "Pilot",
-    "scripts": [
+    "modules": [
       "./machines/modules/v3/defines.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -473,8 +488,9 @@
       "VERSION"
     ],
     "factory": "VT100",
-    "scripts": [
+    "modules": [
       "./machines/modules/v3/defines.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -508,8 +524,9 @@
       "VERSION"
     ],
     "factory": "PDP11v3",
-    "scripts": [
+    "modules": [
       "./machines/modules/v3/defines.js",
+      "./machines/modules/v2/format.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",

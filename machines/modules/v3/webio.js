@@ -28,7 +28,7 @@ import StdIO from "./stdio.js";
  */
 
 /**
- * @class {WebIO}
+ * @class WebIO
  * @unrestricted
  * @property {Object} bindings
  * @property {number} messages
@@ -234,7 +234,7 @@ export default class WebIO extends StdIO {
         }
         let s = this.sprintf(format, ...args);
         if (s) {
-            this.println(s);
+            this.printf("%s\n", s);
             if (!fDiag) alert(s);
         }
     }
@@ -655,7 +655,7 @@ export default class WebIO extends StdIO {
              * from the local file system (ie, when using the "file:" protocol), we have to be a bit more "flexible".
              */
             if (xmlHTTP.status == 200 || !xmlHTTP.status && sResource.length && webIO.getHostProtocol() == "file:") {
-                // if (MAXDEBUG) Web.log("xmlHTTP.onreadystatechange(" + url + "): returned " + sResource.length + " bytes");
+                // if (MAXDEBUG) Web.printf("xmlHTTP.onreadystatechange(%s): returned %d bytes\n", url, sResource.length);
             }
             else {
                 nErrorCode = xmlHTTP.status || -1;
@@ -721,7 +721,7 @@ export default class WebIO extends StdIO {
                     f = (window.localStorage.getItem(WebIO.LocalStorage.Test) == WebIO.LocalStorage.Test);
                     window.localStorage.removeItem(WebIO.LocalStorage.Test);
                 } catch(err) {
-                    this.println(err.message);
+                    this.printf("%s\n", err.message);
                     f = false;
                 }
             }
@@ -797,7 +797,7 @@ export default class WebIO extends StdIO {
                     sValue = window.localStorage.getItem(this.idMachine);
                     if (sValue) state = /** @type {Array} */ (JSON.parse(sValue));
                 } catch (err) {
-                    this.println(err.message);
+                    this.printf("%s\n", err.message);
                 }
             }
         }
@@ -898,7 +898,7 @@ export default class WebIO extends StdIO {
                     let i = text.lastIndexOf('\n', text.length - 2);
                     let commands = text.slice(i + 1, -1) || "";
                     let result = this.parseCommands(commands);
-                    if (result) this.println(result.replace(/\n$/, ""), false);
+                    if (result) this.printf("%s\n", result.replace(/\n$/, ""));
                 }
             }
         }
@@ -1162,7 +1162,7 @@ export default class WebIO extends StdIO {
                 window.localStorage.setItem(this.idMachine, sValue);
                 return true;
             } catch(err) {
-                this.println(err.message);
+                this.printf("%s\n", err.message);
             }
         }
         return false;

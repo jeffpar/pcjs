@@ -95,7 +95,7 @@ export default class TestMonitor {
      *
      * @this {TestMonitor}
      * @param {string} commandLine
-     * @return {boolean} (true if successful, false if error)
+     * @returns {boolean} (true if successful, false if error)
      */
     addCommand(commandLine)
     {
@@ -180,7 +180,7 @@ export default class TestMonitor {
      *
      * @this {TestMonitor}
      * @param {string} commandLine
-     * @return {boolean}
+     * @returns {boolean}
      */
     addForLoop(commandLine)
     {
@@ -240,7 +240,7 @@ export default class TestMonitor {
      *
      * @this {TestMonitor}
      * @param {number} [msDelay]
-     * @return {boolean}
+     * @returns {boolean}
      */
     nextOperation(msDelay)
     {

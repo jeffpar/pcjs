@@ -37,7 +37,7 @@ X86.helpAdd64 = function(r64Dst, r64Src)
  *
  * @param {Array.<number>} r64Dst is a 64-bit value
  * @param {Array.<number>} r64Src is a 64-bit value
- * @return {number} > 0 if r64Dst > r64Src, == 0 if r64Dst == r64Src, < 0 if r64Dst < r64Src
+ * @returns {number} > 0 if r64Dst > r64Src, == 0 if r64Dst == r64Src, < 0 if r64Dst < r64Src
  */
 X86.helpCmp64 = function(r64Dst, r64Src)
 {
@@ -52,7 +52,7 @@ X86.helpCmp64 = function(r64Dst, r64Src)
  * @param {Array.<number>} r64Dst
  * @param {number} lo
  * @param {number} hi
- * @return {Array.<number>}
+ * @returns {Array.<number>}
  */
 X86.helpSet64 = function(r64Dst, lo, hi)
 {
@@ -100,7 +100,7 @@ X86.helpSub64 = function(r64Dst, r64Src)
  *
  * @this {CPUx86}
  * @param {number} w
- * @return {number}
+ * @returns {number}
  */
 X86.helpDECreg = function(w)
 {
@@ -121,7 +121,7 @@ X86.helpDECreg = function(w)
  * @param {number} dstLo (low 32-bit portion of dividend)
  * @param {number} dstHi (high 32-bit portion of dividend)
  * @param {number} src (32-bit divisor)
- * @return {boolean} true if successful, false if overflow (ie, the divisor was either zero or too small)
+ * @returns {boolean} true if successful, false if overflow (ie, the divisor was either zero or too small)
  */
 X86.helpDIV32 = function(dstLo, dstHi, src)
 {
@@ -167,7 +167,7 @@ X86.helpDIV32 = function(dstLo, dstHi, src)
  * @param {number} dstLo (low 32-bit portion of dividend)
  * @param {number} dstHi (high 32-bit portion of dividend)
  * @param {number} src (32-bit divisor)
- * @return {boolean} true if successful, false if overflow (ie, the divisor was either zero or too small)
+ * @returns {boolean} true if successful, false if overflow (ie, the divisor was either zero or too small)
  */
 X86.helpIDIV32 = function(dstLo, dstHi, src)
 {
@@ -204,7 +204,7 @@ X86.helpIDIV32 = function(dstLo, dstHi, src)
  *
  * @this {CPUx86}
  * @param {number} w
- * @return {number}
+ * @returns {number}
  */
 X86.helpINCreg = function(w)
 {
@@ -276,7 +276,7 @@ X86.helpSETcc = function(fnSet)
  * @param {number} dst
  * @param {number} src
  * @param {number} count (0-31)
- * @return {number}
+ * @returns {number}
  */
 X86.helpSHLDw = function(dst, src, count)
 {
@@ -299,7 +299,7 @@ X86.helpSHLDw = function(dst, src, count)
  * @param {number} dst
  * @param {number} src
  * @param {number} count
- * @return {number}
+ * @returns {number}
  */
 X86.helpSHLDd = function(dst, src, count)
 {
@@ -318,7 +318,7 @@ X86.helpSHLDd = function(dst, src, count)
  * @param {number} dst
  * @param {number} src
  * @param {number} count (0-31)
- * @return {number}
+ * @returns {number}
  */
 X86.helpSHRDw = function(dst, src, count)
 {
@@ -341,7 +341,7 @@ X86.helpSHRDw = function(dst, src, count)
  * @param {number} dst
  * @param {number} src
  * @param {number} count
- * @return {number}
+ * @returns {number}
  */
 X86.helpSHRDd = function(dst, src, count)
 {
@@ -357,7 +357,7 @@ X86.helpSHRDd = function(dst, src, count)
  * helpSRC1()
  *
  * @this {CPUx86}
- * @return {number}
+ * @returns {number}
  */
 X86.helpSRC1 = function()
 {
@@ -369,7 +369,7 @@ X86.helpSRC1 = function()
  * helpSRCCL()
  *
  * @this {CPUx86}
- * @return {number}
+ * @returns {number}
  */
 X86.helpSRCCL = function()
 {
@@ -382,7 +382,7 @@ X86.helpSRCCL = function()
  * helpSRCByte()
  *
  * @this {CPUx86}
- * @return {number}
+ * @returns {number}
  */
 X86.helpSRCByte = function()
 {
@@ -395,7 +395,7 @@ X86.helpSRCByte = function()
  * helpSRCNone()
  *
  * @this {CPUx86}
- * @return {number|null}
+ * @returns {number|null}
  */
 X86.helpSRCNone = function()
 {
@@ -410,7 +410,7 @@ X86.helpSRCNone = function()
  * to the EA worker.
  *
  * @this {CPUx86}
- * @return {number} regXX
+ * @returns {number} regXX
  */
 X86.helpSRCxx = function()
 {
@@ -499,7 +499,7 @@ X86.helpINT = function(nIDT, nError, nCycles)
             case 0xCC:
                 if (DEBUGGER && this.dbg && this.flags.running) {
                     this.getIPByte();
-                    this.printMessage("debugger halting on INT 0x06,0xCC", DEBUGGER || this.bitsMessage);
+                    this.printf("debugger halting on INT 0x06,0xCC\n");
                     this.dbg.stopCPU();
                     return;
                 }
@@ -923,7 +923,7 @@ X86.helpPageFault = function(addr, fPresent, fWrite)
  * @param {number} nFault
  * @param {number|null} [nError] (if omitted, no error code will be reported)
  * @param {boolean} [fHalt] (true to halt the CPU, false to not, undefined if "it depends")
- * @return {boolean|undefined} true to block the fault (often desirable when fHalt is true), otherwise dispatch it
+ * @returns {boolean|undefined} true to block the fault (often desirable when fHalt is true), otherwise dispatch it
  */
 X86.helpCheckFault = function(nFault, nError, fHalt)
 {
@@ -1000,18 +1000,19 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
 
         let fRunning = this.flags.running;
         let sMessage = "Fault " + Str.toHexByte(nFault) + (nError != null? " (" + Str.toHexWord(nError) + ")" : "") + " on opcode " + Str.toHexByte(bOpcode);
-        if (fHalt && fRunning) sMessage += " (blocked)";
-
+        if (fHalt) {
+            if (fRunning) sMessage += " (blocked)";
+        }
         if (DEBUGGER && this.dbg) {
-            this.printMessage(sMessage, fHalt || bitsMessage, true);
+            this.printf((fHalt? Messages.PROGRESS : bitsMessage) + Messages.ADDRESS, "%s\n", sMessage);
             if (fHalt) {
                 /*
                  * By setting fHalt to fRunning (which is true while running but false while single-stepping),
                  * this allows a fault to be dispatched when you single-step over a faulting instruction; you can
                  * then continue single-stepping into the fault handler, or start running again.
                  *
-                 * Note that we had to capture fRunning before calling printMessage(), because if MESSAGE.HALT
-                 * is set, printMessage() will have already halted the CPU.
+                 * Note that we had to capture fRunning before calling printf(), because if MESSAGE.HALT is set,
+                 * printf() will have already halted the CPU.
                  */
                 fHalt = fRunning;
                 this.dbg.stopCPU();
@@ -1022,7 +1023,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
              * be true.  Which means we should shut the machine down.
              */
             this.assert(fHalt);
-            this.notice(sMessage);
+            this.printf(Messages.NOTICE, "%s\n", sMessage);
             this.stopCPU();
         }
     }

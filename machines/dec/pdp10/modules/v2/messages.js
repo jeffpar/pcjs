@@ -7,35 +7,30 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-const MessagesPDP10 = {
-    NONE:       0x00000000,
-    DEFAULT:    0x00000000,
-    ADDRESS:    0x00000001,
-    CPU:        0x00000002,
-    TRAP:       0x00000004,
-    FAULT:      0x00000008,
-    INT:        0x00000010,
-    BUS:        0x00000020,
-    MEMORY:     0x00000040,
-    MMU:        0x00000080,
-    ROM:        0x00000100,
-    DEVICE:     0x00000200,
-    PANEL:      0x00000400,
-    KEYBOARD:   0x00000800,
-    KEYS:       0x00001000,
-    PAPER:      0x00002000,
-    READ:       0x00004000,
-    WRITE:      0x00008000,
-    SERIAL:     0x00010000,
-    TIMER:      0x00020000,
-    SPEAKER:    0x00040000,
-    COMPUTER:   0x00080000,
-    LOG:        0x00100000,
-    WARN:       0x10000000,
-    HALT:       0x20000000,
-    BUFFER:     0x40000000,
-    ALL:        0xffffffff|0
-};
+import CommonMessages from "../../../../modules/v2/messages.js";
+
+const Messages = { ...CommonMessages };
+Messages.Categories = { ...CommonMessages.Categories };
+
+Messages.CPU        = 0x00000002;
+Messages.TRAP       = 0x00000004;
+Messages.FAULT      = 0x00000008;
+Messages.INT        = 0x00000010;
+Messages.BUS        = 0x00000020;
+Messages.MEMORY     = 0x00000040;
+Messages.MMU        = 0x00000080;
+Messages.ROM        = 0x00000100;
+Messages.DEVICE     = 0x00000200;
+Messages.PANEL      = 0x00000400;
+Messages.KEYBOARD   = 0x00000800;
+Messages.KEYS       = 0x00001000;
+Messages.PAPER      = 0x00002000;
+Messages.READ       = 0x00004000;
+Messages.WRITE      = 0x00008000;
+Messages.SERIAL     = 0x00010000;
+Messages.TIMER      = 0x00020000;
+Messages.SPEAKER    = 0x00040000;
+Messages.COMPUTER   = 0x00080000;
 
 /*
  * Message categories supported by the messageEnabled() function and other assorted message
@@ -51,37 +46,24 @@ const MessagesPDP10 = {
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-MessagesPDP10.CATEGORIES = {
-    "cpu":      MessagesPDP10.CPU,
-    "trap":     MessagesPDP10.TRAP,
-    "fault":    MessagesPDP10.FAULT,
-    "int":      MessagesPDP10.INT,
-    "bus":      MessagesPDP10.BUS,
-    "memory":   MessagesPDP10.MEMORY,
-    "mmu":      MessagesPDP10.MMU,
-    "rom":      MessagesPDP10.ROM,
-    "device":   MessagesPDP10.DEVICE,
-    "panel":    MessagesPDP10.PANEL,
-    "keyboard": MessagesPDP10.KEYBOARD, // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
-    "key":      MessagesPDP10.KEYS,     // using "key" instead of "keys", since the latter is a method on JavasScript objects
-    "paper":    MessagesPDP10.PAPER,
-    "read":     MessagesPDP10.READ,
-    "write":    MessagesPDP10.WRITE,
-    "serial":   MessagesPDP10.SERIAL,
-    "timer":    MessagesPDP10.TIMER,
-    "speaker":  MessagesPDP10.SPEAKER,
-    "computer": MessagesPDP10.COMPUTER,
-    "log":      MessagesPDP10.LOG,
-    "warn":     MessagesPDP10.WARN,
-    /*
-     * Now we turn to message actions rather than message types; for example, setting "halt"
-     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
-     *
-     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
-     * until "m buffer off" is issued.
-     */
-    "halt":     MessagesPDP10.HALT,
-    "buffer":   MessagesPDP10.BUFFER
-};
+Messages.Categories["cpu"]      = Messages.CPU;
+Messages.Categories["trap"]     = Messages.TRAP;
+Messages.Categories["fault"]    = Messages.FAULT;
+Messages.Categories["int"]      = Messages.INT;
+Messages.Categories["bus"]      = Messages.BUS;
+Messages.Categories["memory"]   = Messages.MEMORY;
+Messages.Categories["mmu"]      = Messages.MMU;
+Messages.Categories["rom"]      = Messages.ROM;
+Messages.Categories["device"]   = Messages.DEVICE;
+Messages.Categories["panel"]    = Messages.PANEL;
+Messages.Categories["keyboard"] = Messages.KEYBOARD;       // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
+Messages.Categories["key"]      = Messages.KEYS;           // using "key" instead of "keys", since the latter is a method on JavasScript objects
+Messages.Categories["paper"]    = Messages.PAPER;
+Messages.Categories["read"]     = Messages.READ;
+Messages.Categories["write"]    = Messages.WRITE;
+Messages.Categories["serial"]   = Messages.SERIAL;
+Messages.Categories["timer"]    = Messages.TIMER;
+Messages.Categories["speaker"]  = Messages.SPEAKER;
+Messages.Categories["computer"] = Messages.COMPUTER;
 
-export default MessagesPDP10;
+export default Messages;

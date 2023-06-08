@@ -16,7 +16,7 @@ import Debugger from "../../../../modules/v3/debugger.js";
 /**
  * 68K Debugger
  *
- * @class {Dbg68K}
+ * @class Dbg68K
  * @unrestricted
  */
 export default class Dbg68K extends Debugger {

@@ -11,32 +11,28 @@
  * See http://en.wikipedia.org/wiki/Design_of_the_FAT_file_system for more information.
  */
 
-"use strict";
+import fs from "fs";
+import path from "path";
+import glob from "glob";
+import mkdirp from "mkdirp";
+import crypto from "crypto";
+import net from "../../../../machines/modules/v2/netlib.js";
+import proc from "../../../../machines/modules/v2/proclib.js";
+import str from "../../../../machines/modules/v2/strlib.js";
+import web from "../../../../machines/modules/v2/weblib.js";
+import DiskAPI from "../../../../machines/modules/v2/diskapi.js";
+import DumpAPI from "../../../../machines/modules/v2/dumpapi.js";
+import X86 from "../../../../machines/pcx86/modules/v2/x86.js";
+import { COPYRIGHT } from "../../../../machines/modules/v2/defines.js";
 
-if (typeof module != "undefined") {     // we can't simply test for NODE, since defines.js hasn't been loaded yet
-    var NODE    = true;
-    var fs      = require("fs");
-    var path    = require("path");
-    var glob    = require("glob");
-    var http    = require("http");
-    var mkdirp  = require("mkdirp");
-    var crypto  = require("crypto");
-    var defines = require("../../../../machines/shared/lib/defines");
-    var net     = require("../../../../machines/shared/lib/netlib");
-    var proc    = require("../../../../machines/shared/lib/proclib");
-    var str     = require("../../../../machines/shared/lib/strlib");
-    var usr     = require("../../../../machines/shared/lib/usrlib");
-    var web     = require("../../../../machines/shared/lib/weblib");
-    var DiskAPI = require("../../../../machines/shared/lib/diskapi");
-    var DumpAPI = require("../../../../machines/shared/lib/dumpapi");
-    var X86     = require("../../../../machines/pcx86/lib/x86");
-    /**
-     * @class exports
-     * @property {string} name
-     * @property {string} version
-     */
-    var pkg = require("../../../../package.json");
-}
+var NODE = true;
+
+/**
+ * @class exports
+ * @property {string} name
+ * @property {string} version
+ */
+var pkg = JSON.parse(fs.readFileSync("../../../../package.json", "utf8"));
 
 /*
  * fConsole controls console messages; it is false by default but is enable by the CLI interface.
@@ -177,7 +173,7 @@ BufferPF.prototype.write = function(s, off, len)
  *
  * @this {BufferPF}
  * @param {number} off
- * @return {number}
+ * @returns {number}
  */
 BufferPF.prototype.readUInt8 = function(off)
 {
@@ -205,7 +201,7 @@ BufferPF.prototype.writeUInt8 = function(b, off)
  *
  * @this {BufferPF}
  * @param {number} off
- * @return {number}
+ * @returns {number}
  */
 BufferPF.prototype.readUInt16BE = function(off)
 {
@@ -217,7 +213,7 @@ BufferPF.prototype.readUInt16BE = function(off)
  *
  * @this {BufferPF}
  * @param {number} off
- * @return {number}
+ * @returns {number}
  */
 BufferPF.prototype.readUInt16LE = function(off)
 {
@@ -229,7 +225,7 @@ BufferPF.prototype.readUInt16LE = function(off)
  *
  * @this {BufferPF}
  * @param {number} off
- * @return {number}
+ * @returns {number}
  */
 BufferPF.prototype.readUInt32BE = function(off)
 {
@@ -241,7 +237,7 @@ BufferPF.prototype.readUInt32BE = function(off)
  *
  * @this {BufferPF}
  * @param {number} off
- * @return {number}
+ * @returns {number}
  */
 BufferPF.prototype.readUInt32LE = function(off)
 {
@@ -253,7 +249,7 @@ BufferPF.prototype.readUInt32LE = function(off)
  *
  * @this {BufferPF}
  * @param {number} off
- * @return {number}
+ * @returns {number}
  */
 BufferPF.prototype.readInt32BE = function(off)
 {
@@ -265,7 +261,7 @@ BufferPF.prototype.readInt32BE = function(off)
  *
  * @this {BufferPF}
  * @param {number} off
- * @return {number}
+ * @returns {number}
  */
 BufferPF.prototype.readInt32LE = function(off)
 {
@@ -315,7 +311,7 @@ BufferPF.prototype.copy = function(bufTarget, offTarget)
  * @this {BufferPF}
  * @param {number} [start]
  * @param {number} [end]
- * @return {BufferPF}
+ * @returns {BufferPF}
  */
 BufferPF.prototype.slice = function(start, end)
 {
@@ -327,7 +323,7 @@ BufferPF.prototype.slice = function(start, end)
  *
  * @this {BufferPF}
  * @param {string} [format]
- * @return {string}
+ * @returns {string}
  */
 BufferPF.prototype.toString = function(format)
 {
@@ -949,7 +945,7 @@ DiskDump.outputDisk = function(err, disk, sDiskPath, sOutputFile, fOverwrite, sM
  *
  * @param sID
  * @param sTag
- * @return {string|null}
+ * @returns {string|null}
  */
 DiskDump.getManifestAttr = function(sID, sTag)
 {
@@ -976,7 +972,7 @@ DiskDump.getManifestAttr = function(sID, sTag)
  * @param {string} [sTitle]
  * @param {string} [md5Disk] for the entire disk image
  * @param {string} [md5JSON] for the entire JSON-encoded disk image, if any
- * @return {boolean|undefined} true if disk has changed, false if not, undefined if unknown
+ * @returns {boolean|undefined} true if disk has changed, false if not, undefined if unknown
  */
 DiskDump.updateManifest = function(disk, sManifestFile, sDiskPath, sOutputFile, fOverwrite, sTitle, md5Disk, md5JSON)
 {
@@ -1138,7 +1134,7 @@ DiskDump.updateManifest = function(disk, sManifestFile, sDiskPath, sOutputFile, 
  * logConsole(s)
  *
  * @param {string} s
- * @return {string}
+ * @returns {string}
  */
 DiskDump.logConsole = function(s)
 {
@@ -1153,7 +1149,7 @@ DiskDump.logConsole = function(s)
  * Conditionally logs an error to the console
  *
  * @param {Error} err
- * @return {string} the error message that was logged (or that would have been logged had logging been enabled)
+ * @returns {string} the error message that was logged (or that would have been logged had logging been enabled)
  */
 DiskDump.logError = function(err)
 {
@@ -1172,7 +1168,7 @@ DiskDump.logError = function(err)
  * Conditionally logs a warning to the console
  *
  * @param {string} s
- * @return {string} the warning message that was logged (or that would have been logged had logging been enabled)
+ * @returns {string} the warning message that was logged (or that would have been logged had logging been enabled)
  */
 DiskDump.logWarning = function(s)
 {
@@ -1255,7 +1251,7 @@ DiskDump.readFile = function(sPath, sEncoding, done)
  *
  * @this {DiskDump}
  * @param {string} sName is the basename of a file under consideration
- * @return {boolean} is true if the file should be excluded, false if not
+ * @returns {boolean} is true if the file should be excluded, false if not
  */
 DiskDump.prototype.isExcluded = function(sName)
 {
@@ -1353,7 +1349,7 @@ DiskDump.prototype.setData = function(err, buf, done)
  * @param {number} [nIndent] is the relative number of characters to indent the given line (0 if none)
  * @param {string} [sLine] is the given line
  * @param {string} [sComment] is an optional comment to append to the line, if comment output is enabled
- * @return {string} the indented/commented line
+ * @returns {string} the indented/commented line
  */
 DiskDump.prototype.dumpLine = function(nIndent, sLine, sComment)
 {
@@ -1376,7 +1372,7 @@ DiskDump.prototype.dumpLine = function(nIndent, sLine, sComment)
  * @param {string} sKey
  * @param {number|string|null} value
  * @param {boolean} [fLast]
- * @return {string} the indented property
+ * @returns {string} the indented property
  */
 DiskDump.prototype.dumpProp = function(sKey, value, fLast)
 {
@@ -1396,7 +1392,7 @@ DiskDump.prototype.dumpProp = function(sKey, value, fLast)
  * @param {number} len is the number of bytes to dump
  * @param {number} cbItem is either 1 or 4, to dump bytes or dwords respectively
  * @param {number} [offData] is a relative offset of this data within the parent (for display purposes only)
- * @return {string} hex (or decimal) representation of the data
+ * @returns {string} hex (or decimal) representation of the data
  */
 DiskDump.prototype.dumpBuffer = function(sKey, buf, len, cbItem, offData)
 {
@@ -1447,7 +1443,7 @@ DiskDump.prototype.dumpBuffer = function(sKey, buf, len, cbItem, offData)
  * @param {number} nTrackNum
  * @param {Number} nTrackType
  * @param {number} [nTrackLoad]
- * @return {string}
+ * @returns {string}
  */
 DiskDump.prototype.dumpTrackOSI = function(sTrackSig, nTrackNum, nTrackType, nTrackLoad)
 {
@@ -1474,7 +1470,7 @@ DiskDump.prototype.dumpTrackOSI = function(sTrackSig, nTrackNum, nTrackType, nTr
  * @param {Buffer} bufSector
  * @param {String} sSectorEndSig
  * @param {number} nSectorOffset
- * @return {string}
+ * @returns {string}
  */
 DiskDump.prototype.dumpSectorOSI = function(nSectorSig, nSectorNum, nSectorPages, bufSector, sSectorEndSig, nSectorOffset)
 {
@@ -1507,7 +1503,7 @@ DiskDump.prototype.dumpSectorOSI = function(nSectorSig, nSectorNum, nSectorPages
  * @this {DiskDump}
  * @param {Buffer} buf
  * @param {number} len
- * @return {Array} containing [dwPattern, cbBuffer]
+ * @returns {Array} containing [dwPattern, cbBuffer]
  */
 DiskDump.prototype.trimSector = function(buf, len)
 {
@@ -1560,7 +1556,7 @@ DiskDump.prototype.trimSector = function(buf, len)
  *
  * @this {DiskDump}
  * @param {Date} dateTime
- * @return {boolean} true if date/time modified, false if not
+ * @returns {boolean} true if date/time modified, false if not
  */
 DiskDump.prototype.validateTime = function(dateTime)
 {
@@ -1605,7 +1601,7 @@ DiskDump.prototype.validateTime = function(dateTime)
  * @this {DiskDump}
  * @param {number} cb
  * @param {Array.<number>} [abInit]
- * @return {Array.<number>} of bytes, initialized with abInit (or with zero when abInit is empty or exhausted)
+ * @returns {Array.<number>} of bytes, initialized with abInit (or with zero when abInit is empty or exhausted)
  */
 DiskDump.prototype.buildData = function(cb, abInit)
 {
@@ -1622,7 +1618,7 @@ DiskDump.prototype.buildData = function(cb, abInit)
  * @this {DiskDump}
  * @param {number} offDisk
  * @param {Array.<number>} ab
- * @return {number} number of bytes written
+ * @returns {number} number of bytes written
  */
 DiskDump.prototype.copyData = function(offDisk, ab)
 {
@@ -1692,7 +1688,7 @@ DiskDump.prototype.buildManifestInfo = function(sImage)
  *
  * @this {DiskDump}
  * @param {Date} time
- * @return {number} (1 if time is INSIDE Daylight Savings Time, 0 if OUTSIDE)
+ * @returns {number} (1 if time is INSIDE Daylight Savings Time, 0 if OUTSIDE)
  */
 DiskDump.prototype.isDST = function(time)
 {
@@ -1714,7 +1710,7 @@ DiskDump.prototype.isDST = function(time)
  *
  * @this {DiskDump}
  * @param {Date} time (ie, some local file time)
- * @return {Date}
+ * @returns {Date}
  */
 DiskDump.prototype.getDSTAdjustedTime = function(time)
 {
@@ -1729,7 +1725,7 @@ DiskDump.prototype.getDSTAdjustedTime = function(time)
  *
  * @this {DiskDump}
  * @param {string} sData
- * @return {boolean} true if sData is entirely ASCII (ie, no bytes with bit 7 set)
+ * @returns {boolean} true if sData is entirely ASCII (ie, no bytes with bit 7 set)
  */
 DiskDump.prototype.isASCII = function(sData)
 {
@@ -1745,7 +1741,7 @@ DiskDump.prototype.isASCII = function(sData)
  *
  * @this {DiskDump}
  * @param {string} sFileName
- * @return {boolean} true if the filename contains a known text file extension, false if unknown
+ * @returns {boolean} true if the filename contains a known text file extension, false if unknown
  */
 DiskDump.prototype.isTextFile = function(sFileName)
 {
@@ -2033,7 +2029,7 @@ DiskDump.prototype.readPath = function(sPath, done)
  * @this {DiskDump}
  * @param {string} sFile is the basename of a file
  * @param {boolean} [fLabel]
- * @return {string} containing a corresponding filename in FAT "8.3" format
+ * @returns {string} containing a corresponding filename in FAT "8.3" format
  */
 DiskDump.prototype.buildShortName = function(sFile, fLabel)
 {
@@ -2071,7 +2067,7 @@ DiskDump.prototype.buildShortName = function(sFile, fLabel)
  *
  * @this {DiskDump}
  * @param {string} [sDir]
- * @return {FileInfo|null} (null if no suitable volume label)
+ * @returns {FileInfo|null} (null if no suitable volume label)
  */
 DiskDump.prototype.buildVolLabel = function(sDir)
 {
@@ -2131,7 +2127,7 @@ DiskDump.prototype.buildVolLabel = function(sDir)
  * @param {Array} aFiles
  * @param {number} iCluster
  * @param {number} cbCluster
- * @return {number}
+ * @returns {number}
  */
 DiskDump.prototype.buildFAT = function(abFAT, aFiles, iCluster, cbCluster)
 {
@@ -2201,7 +2197,7 @@ DiskDump.prototype.buildFATEntry = function(abFAT, iFAT, v)
  * @param {Date} [dateMod]
  * @param {number} [iCluster]
  * @param {number} [iParentCluster]
- * @return {number} number of directory entries built
+ * @returns {number} number of directory entries built
  */
 DiskDump.prototype.buildDir = function(abDir, aFiles, dateMod, iCluster, iParentCluster)
 {
@@ -2232,7 +2228,7 @@ DiskDump.prototype.buildDir = function(abDir, aFiles, dateMod, iCluster, iParent
  *
  * @this {DiskDump}
  * @param {Date} dateMod contains the modification time of a file
- * @return {number} the time (bits 0-15) and date (bits 16-31) in FAT format
+ * @returns {number} the time (bits 0-15) and date (bits 16-31) in FAT format
  */
 DiskDump.prototype.buildDateTime = function(dateMod)
 {
@@ -2265,7 +2261,7 @@ DiskDump.prototype.buildDateTime = function(dateMod)
  * @param {number} bAttr contains the attribute bits of the file
  * @param {Date} dateMod contains the modification date of the file
  * @param {number} iCluster is the starting cluster of the file
- * @return {number} number of bytes added to the directory (normally 32)
+ * @returns {number} number of bytes added to the directory (normally 32)
  */
 DiskDump.prototype.buildDirEntry = function(ab, off, sFile, cbFile, bAttr, dateMod, iCluster)
 {
@@ -2338,7 +2334,7 @@ DiskDump.prototype.buildDirEntry = function(ab, off, sFile, cbFile, bAttr, dateM
  * @param {number} iParentCluster
  * @param {number} iLevel
  * @param {function(Error)} done
- * @return {number} number of clusters built
+ * @returns {number} number of clusters built
  */
 DiskDump.prototype.buildClusters = function(aFiles, offDisk, cbCluster, iParentCluster, iLevel, done)
 {
@@ -2455,7 +2451,7 @@ DiskDump.prototype.buildImage = function(fDir, done)
  * @this {DiskDump}
  * @param {Array} aFiles
  * @param {number} [cSectorsPerCluster] (default is 1)
- * @return {number} of bytes required for all files, including all subdirectories
+ * @returns {number} of bytes required for all files, including all subdirectories
  */
 DiskDump.prototype.calcFileSizes = function(aFiles, cSectorsPerCluster)
 {
@@ -2554,7 +2550,7 @@ DiskDump.prototype.buildMBR = function(cHeads, cSectorsPerTrack, cbSector, cTota
  * @this {DiskDump}
  * @param {Array} aFiles
  * @param {function(Error)} done
- * @return {boolean} true if disk allocation successful, false if not
+ * @returns {boolean} true if disk allocation successful, false if not
  */
 DiskDump.prototype.buildImageFromFiles = function(aFiles, done)
 {
@@ -2757,7 +2753,7 @@ DiskDump.prototype.buildImageFromFiles = function(aFiles, done)
  *      --suppData=disks/pcx86/apps/microsoft/word/1.15/debugger/README.md
  *
  * @this {DiskDump}
- * @return {object}
+ * @returns {object}
  */
 DiskDump.prototype.readSuppData = function()
 {
@@ -2815,7 +2811,7 @@ DiskDump.prototype.readSuppData = function()
  * Converts the disk image data to JSON.
  *
  * @this {DiskDump}
- * @return {string|null} containing a JSON representation of the disk image, or null if unrecognized/malformed
+ * @returns {string|null} containing a JSON representation of the disk image, or null if unrecognized/malformed
  */
 DiskDump.prototype.convertToJSON = function()
 {
@@ -3411,7 +3407,7 @@ DiskDump.prototype.convertToJSON = function()
  * PSI files are PCE Sector Image files; see https://github.com/jeffpar/pce/blob/master/doc/psi-format.txt for details.
  *
  * @this {DiskDump}
- * @return {string|null} containing a JSON representation of the disk image, or null if unrecognized/malformed
+ * @returns {string|null} containing a JSON representation of the disk image, or null if unrecognized/malformed
  */
 DiskDump.prototype.convertPSItoJSON = function()
 {
@@ -3568,7 +3564,7 @@ DiskDump.prototype.convertPSItoJSON = function()
  * here and in the C1Pjs disk module.
  *
  * @this {DiskDump}
- * @return {string|null} containing a JSON representation of the disk image, or null if unrecognized/malformed
+ * @returns {string|null} containing a JSON representation of the disk image, or null if unrecognized/malformed
  */
 DiskDump.prototype.convertOSIDiskToJSON = function()
 {
@@ -3688,7 +3684,7 @@ DiskDump.prototype.convertOSIDiskToJSON = function()
  *
  * @this {DiskDump}
  * @param {boolean} [fRaw] (used by httpapi.js to get the underlying Buffer)
- * @return {Buffer|null} containing the disk image's raw data, or null if no data available (or parse error)
+ * @returns {Buffer|null} containing the disk image's raw data, or null if no data available (or parse error)
  */
 DiskDump.prototype.convertToIMG = function(fRaw)
 {
@@ -3867,7 +3863,7 @@ DiskDump.prototype.convertToIMG = function(fRaw)
  *
  * @this {DiskDump}
  * @param {Buffer} buf
- * @return {string}
+ * @returns {string}
  */
 DiskDump.prototype.encodeAsBase64 = function(buf)
 {
@@ -3879,9 +3875,7 @@ DiskDump.prototype.encodeAsBase64 = function(buf)
 
 };
 
-if (NODE) {
-    module.exports = DiskDump;
-} else {
-    let aParms = web.parseURLParms();
-    DiskDump.API(aParms);
-}
+// let aParms = web.parseURLParms();
+// DiskDump.API(aParms);
+
+export default DiskDump;

@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesX80 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -36,12 +36,12 @@ export default class ChipSetX80 extends Component {
      */
     constructor(parmsChipSet)
     {
-        super("ChipSet", parmsChipSet, MessagesX80.CHIPSET);
+        super("ChipSet", parmsChipSet, Messages.CHIPSET);
 
         var model = parmsChipSet['model'];
 
         if (model && !ChipSetX80.MODELS[model]) {
-            Component.notice("Unrecognized ChipSet model: " + model);
+            Component.printf(Messages.NOTICE, "Unrecognized ChipSet model: %s\n", model);
         }
 
         this.config = ChipSetX80.MODELS[model] || {};
@@ -70,7 +70,7 @@ export default class ChipSetX80 extends Component {
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
-                if (DEBUG) this.log("AudioContext not available");
+                if (DEBUG) this.printf(Messages.LOG, "AudioContext not available\n");
             }
         }
 
@@ -83,7 +83,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {string} sBits describing switch settings
      * @param {number} [bDefault]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseDIPSwitches(sBits, bDefault)
     {
@@ -110,7 +110,7 @@ export default class ChipSetX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "sw1")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -141,7 +141,7 @@ export default class ChipSetX80 extends Component {
         if (DEBUGGER) {
             if (dbg) {
                 var chipset = this;
-                dbg.messageDump(MessagesX80.NVR, function onDumpNVR() {
+                dbg.messageDump(Messages.NVR, function onDumpNVR() {
                     chipset.dumpNVR();
                 });
             }
@@ -154,7 +154,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -174,7 +174,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -196,7 +196,7 @@ export default class ChipSetX80 extends Component {
                 }
                 sDump += Str.toHexWord(this.aNVRWords[iWord]);
             }
-            this.dbg.println(sDump);
+            this.dbg.printf("%s\n", sDump);
         }
     }
 
@@ -208,7 +208,7 @@ export default class ChipSetX80 extends Component {
     reset()
     {
         if (this.config.INIT && !this.restore(this.config.INIT)) {
-            this.notice("reset error");
+            this.printf(Messages.NOTICE, "reset error\n");
         }
     }
 
@@ -218,7 +218,7 @@ export default class ChipSetX80 extends Component {
      * This implements save support for the ChipSet component.
      *
      * @this {ChipSetX80}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -244,7 +244,7 @@ export default class ChipSetX80 extends Component {
      *
      * @this {ChipSetX80}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -356,12 +356,12 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x00)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIStatus0(port, addrFrom)
     {
         var b = this.bStatus0;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS0", b, true);
+        this.printIO(port, undefined, addrFrom, "STATUS0", b, true);
         return b;
     }
 
@@ -371,12 +371,12 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x01)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIStatus1(port, addrFrom)
     {
         var b = this.bStatus1;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS1", b, true);
+        this.printIO(port, undefined, addrFrom, "STATUS1", b, true);
         return b;
     }
 
@@ -386,12 +386,12 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x02)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIStatus2(port, addrFrom)
     {
         var b = this.bStatus2;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS2", b, true);
+        this.printIO(port, undefined, addrFrom, "STATUS2", b, true);
         return b;
     }
 
@@ -401,12 +401,12 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x03)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIShiftResult(port, addrFrom)
     {
         var b = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
-        this.printMessageIO(port, undefined, addrFrom, "SHIFT.RESULT", b, true);
+        this.printIO(port, undefined, addrFrom, "SHIFT.RESULT", b, true);
         return b;
     }
 
@@ -420,7 +420,7 @@ export default class ChipSetX80 extends Component {
      */
     outSIShiftCount(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SHIFT.COUNT", undefined, true);
+        this.printIO(port, b, addrFrom, "SHIFT.COUNT", undefined, true);
         this.bShiftCount = b;
     }
 
@@ -434,7 +434,7 @@ export default class ChipSetX80 extends Component {
      */
     outSISound1(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SOUND1", undefined, true);
+        this.printIO(port, b, addrFrom, "SOUND1", undefined, true);
         this.bSound1 = b;
     }
 
@@ -448,7 +448,7 @@ export default class ChipSetX80 extends Component {
      */
     outSIShiftData(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SHIFT.DATA", undefined, true);
+        this.printIO(port, b, addrFrom, "SHIFT.DATA", undefined, true);
         this.wShiftData = (b << 8) | (this.wShiftData >> 8);
     }
 
@@ -462,7 +462,7 @@ export default class ChipSetX80 extends Component {
      */
     outSISound2(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SOUND2", undefined, true);
+        this.printIO(port, b, addrFrom, "SOUND2", undefined, true);
         this.bSound2 = b;
     }
 
@@ -476,7 +476,7 @@ export default class ChipSetX80 extends Component {
      */
     outSIWatchdog(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "WATCHDOG", undefined, true);
+        this.printIO(port, b, addrFrom, "WATCHDOG", undefined, true);
     }
 
     /**
@@ -490,7 +490,7 @@ export default class ChipSetX80 extends Component {
      * overall performance.
      *
      * @param {number} iBit
-     * @return {number}
+     * @returns {number}
      */
     getVT100LBA(iBit)
     {
@@ -500,7 +500,7 @@ export default class ChipSetX80 extends Component {
     /**
      * getNVRAddr()
      *
-     * @return {number}
+     * @returns {number}
      */
     getNVRAddr()
     {
@@ -540,7 +540,7 @@ export default class ChipSetX80 extends Component {
         case ChipSetX80.VT100.NVR.CMD.ERASE:
             addr = this.getNVRAddr();
             this.aNVRWords[addr] = ChipSetX80.VT100.NVR.WORDMASK;
-            this.printMessage("doNVRCommand(): erase data at addr " + Str.toHexWord(addr));
+            this.printf("doNVRCommand(): erase data at addr %#06x\n", addr);
             break;
 
         case ChipSetX80.VT100.NVR.CMD.ACCEPT_DATA:
@@ -551,7 +551,7 @@ export default class ChipSetX80 extends Component {
             addr = this.getNVRAddr();
             data = this.wNVRData & ChipSetX80.VT100.NVR.WORDMASK;
             this.aNVRWords[addr] = data;
-            this.printMessage("doNVRCommand(): write data " + Str.toHexWord(data) + " to addr " + Str.toHexWord(addr));
+            this.printf("doNVRCommand(): write data %#06x to addr %#06x\n", data, addr);
             break;
 
         case ChipSetX80.VT100.NVR.CMD.READ:
@@ -562,7 +562,7 @@ export default class ChipSetX80 extends Component {
              */
             if (data == null) data = ChipSetX80.VT100.NVR.WORDMASK;
             this.wNVRData = data;
-            this.printMessage("doNVRCommand():  read data " + Str.toHexWord(data) + " from addr " + Str.toHexWord(addr));
+            this.printf("doNVRCommand():  read data %#06x from addr %#06x\n", data, addr);
             break;
 
         case ChipSetX80.VT100.NVR.CMD.SHIFT_OUT:
@@ -574,7 +574,7 @@ export default class ChipSetX80 extends Component {
             break;
 
         default:
-            this.printMessage("doNVRCommand(): unrecognized command " + Str.toHexByte(bCmd));
+            this.printf("doNVRCommand(): unrecognized command %#04x\n", bCmd);
             break;
         }
     }
@@ -585,7 +585,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x42)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inVT100Flags(port, addrFrom)
     {
@@ -618,7 +618,7 @@ export default class ChipSetX80 extends Component {
         }
 
         this.bFlags = b;
-        this.printMessageIO(port, undefined, addrFrom, "FLAGS", b);
+        this.printIO(port, undefined, addrFrom, "FLAGS", b);
         return b;
     }
 
@@ -632,7 +632,7 @@ export default class ChipSetX80 extends Component {
      */
     outVT100Brightness(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "BRIGHTNESS");
+        this.printIO(port, b, addrFrom, "BRIGHTNESS");
         this.bBrightness = b;
     }
 
@@ -646,7 +646,7 @@ export default class ChipSetX80 extends Component {
      */
     outVT100NVRLatch(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "NVR.LATCH");
+        this.printIO(port, b, addrFrom, "NVR.LATCH");
         this.bNVRLatch = b;
     }
 
@@ -663,7 +663,7 @@ export default class ChipSetX80 extends Component {
      */
     outVT100DC012(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "DC012");
+        this.printIO(port, b, addrFrom, "DC012");
 
         var bOpt = b & 0x3;
         var bCmd = (b >> 2) & 0x3;
@@ -705,7 +705,7 @@ export default class ChipSetX80 extends Component {
      */
     outVT100DC011(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "DC011");
+        this.printIO(port, b, addrFrom, "DC011");
         if (b & ChipSetX80.VT100.DC011.RATE60) {
             b &= ChipSetX80.VT100.DC011.RATE50;
             if (this.bDC011Rate != b) {

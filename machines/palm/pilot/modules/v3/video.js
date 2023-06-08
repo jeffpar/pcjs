@@ -23,7 +23,7 @@ import Monitor from "../../../../modules/v3/monitor.js";
  */
 
 /**
- * @class {PilotVideo}
+ * @class PilotVideo
  * @unrestricted
  * @property {PilotVideoConfig} config
  */

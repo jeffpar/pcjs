@@ -11,6 +11,7 @@
   {%- assign item_title = item['@title'] -%}
   {%- assign item_tags = item['@tags'] | default: "" -%}
   {%- if item_title != "" and item_tags contains include_tag -%}
+    {%- if site.developer and item_tags contains "shareware" -%}{%- continue -%}{%- endif -%}
     {% assign item_num = item_num | plus:1 %}
     {%- assign item_link = item['@permalink'] -%}
     {%- assign item_id = item_link | slugify | prepend: "featured-" -%}

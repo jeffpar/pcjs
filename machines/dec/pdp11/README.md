@@ -1,6 +1,6 @@
 Support for [PDP-11 Machines](/machines/dec/pdp11/) was added to the PCjs Project in 2016.
 
-The PCjs PDP-11 emulator is currently comprised of the following components, as listed in [machines.json](/machines/machines.json) (see the *pdp11.scripts* property).
+The PCjs PDP-11 emulator is currently comprised of the following components, as listed in [machines.json](/machines/machines.json) (see the *pdp11.modules* property).
 Portions were adapted from the [PDP-11/70 Emulator](http://skn.noip.me/pdp11/pdp11.html) written by Paul Nankervis, with permission.
 
   - [bus.js](modules/v2/bus.js)
@@ -64,7 +64,7 @@ it encounters a file containing them.
 As a work-around, the bundled web server intercepts all requests for .js files and inserts line comments in front of
 every *import* and *export* statement, so that your web browser won't barf on them.  The statements are completely
 superfluous anyway, since the web server generates `<script>` tags for all the necessary scripts, in the order they are
-listed in [machines.json](/machines/machines.json) (see the *pdp11.scripts* property).
+listed in [machines.json](/machines/machines.json) (see the *pdp11.modules* property).
 
 This work-around assumes that all *export* statements appear AFTER the object they're exporting; e.g.:
 

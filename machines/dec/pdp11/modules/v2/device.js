@@ -12,7 +12,7 @@
 
 import BusPDP11 from "./bus.js";
 import MemoryPDP11 from "./memory.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import PC11 from "./pc11.js";
 import RL11 from "./rl11.js";
 import RK11 from "./rk11.js";
@@ -37,7 +37,7 @@ export default class DevicePDP11 extends Component {
      */
     constructor(parmsDevice)
     {
-        super("Device", parmsDevice, MessagesPDP11.DEVICE);
+        super("Device", parmsDevice, Messages.DEVICE);
 
         this.kw11 = {               // KW11 registers
             lks:        PDP11.KW11.LKS.MON,
@@ -66,13 +66,13 @@ export default class DevicePDP11 extends Component {
             device.interruptKW11();
         });
 
-        this.kw11.irq = cpu.addIRQ(PDP11.KW11.VEC, PDP11.KW11.PRI, MessagesPDP11.KW11);
+        this.kw11.irq = cpu.addIRQ(PDP11.KW11.VEC, PDP11.KW11.PRI, Messages.KW11);
 
         bus.addIOTable(this, DevicePDP11.UNIBUS_IOTABLE);
         bus.addResetHandler(this.reset.bind(this));
 
         if (DEBUGGER && dbg) {
-            dbg.messageDump(MessagesPDP11.MMU, function onDumpMMU(asArgs) {
+            dbg.messageDump(Messages.MMU, function onDumpMMU(asArgs) {
                 device.dumpMMU(asArgs);
             });
         }
@@ -141,7 +141,7 @@ export default class DevicePDP11 extends Component {
                 }
                 sDump += ' ' + dbg.toStrBase(aRegs[offset + i], nBits);
             }
-            dbg.println(sDump + (fBreak? '\n' : ''));
+            dbg.printf("%s", sDump + (fBreak? '\n' : ''));
         }
     }
 
@@ -151,7 +151,7 @@ export default class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -171,7 +171,7 @@ export default class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -195,7 +195,7 @@ export default class DevicePDP11 extends Component {
      * This implements save support for the DevicePDP11 component.
      *
      * @this {DevicePDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -213,7 +213,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -253,7 +253,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LKS or 177546)
-     * @return {number}
+     * @returns {number}
      */
     readLKS(addr)
     {
@@ -288,7 +288,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR0 or 177572)
-     * @return {number}
+     * @returns {number}
      */
     readMMR0(addr)
     {
@@ -312,7 +312,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR1 or 177574)
-     * @return {number}
+     * @returns {number}
      */
     readMMR1(addr)
     {
@@ -324,7 +324,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR2 or 177576)
-     * @return {number}
+     * @returns {number}
      */
     readMMR2(addr)
     {
@@ -336,7 +336,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR3 or 172516)
-     * @return {number}
+     * @returns {number}
      */
     readMMR3(addr)
     {
@@ -362,7 +362,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UNIMAP)
-     * @return {number}
+     * @returns {number}
      */
     readUNIMAP(addr)
     {
@@ -395,7 +395,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SIPDR0--SIPDR7 or 172200--172216)
-     * @return {number}
+     * @returns {number}
      */
     readSIPDR(addr)
     {
@@ -421,7 +421,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SDPDR0--SDPDR7 or 172220--172236)
-     * @return {number}
+     * @returns {number}
      */
     readSDPDR(addr)
     {
@@ -447,7 +447,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SIPAR0--SIPAR7 or 172240--172256)
-     * @return {number}
+     * @returns {number}
      */
     readSIPAR(addr)
     {
@@ -475,7 +475,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SDPAR0--SDPAR7 or 172260--172276)
-     * @return {number}
+     * @returns {number}
      */
     readSDPAR(addr)
     {
@@ -502,7 +502,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KIPDR0--KIPDR7 or 172300--172316)
-     * @return {number}
+     * @returns {number}
      */
     readKIPDR(addr)
     {
@@ -528,7 +528,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KDPDR0--KDPDR7 or 172320--172336)
-     * @return {number}
+     * @returns {number}
      */
     readKDPDR(addr)
     {
@@ -554,7 +554,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KIPAR0--KIPAR7 or 172340--172356)
-     * @return {number}
+     * @returns {number}
      */
     readKIPAR(addr)
     {
@@ -582,7 +582,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KDPAR0--KDPAR7 or 172360--172376)
-     * @return {number}
+     * @returns {number}
      */
     readKDPAR(addr)
     {
@@ -609,7 +609,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UIPDR0--UIPDR7 or 177600--177616)
-     * @return {number}
+     * @returns {number}
      */
     readUIPDR(addr)
     {
@@ -635,7 +635,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UDPDR0--UDPDR7 or 177620--177636)
-     * @return {number}
+     * @returns {number}
      */
     readUDPDR(addr)
     {
@@ -661,7 +661,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UIPAR0--UIPAR7 or 177640--177656)
-     * @return {number}
+     * @returns {number}
      */
     readUIPAR(addr)
     {
@@ -689,7 +689,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UDPAR0--UDPAR7 or 177660--177676)
-     * @return {number}
+     * @returns {number}
      */
     readUDPAR(addr)
     {
@@ -716,7 +716,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R0SET0--R5SET0 or 177700--177705)
-     * @return {number}
+     * @returns {number}
      */
     readRSET0(addr)
     {
@@ -752,7 +752,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6KERNEL or 177706)
-     * @return {number}
+     * @returns {number}
      */
     readR6KERNEL(addr)
     {
@@ -786,7 +786,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R7KERNEL or 177707)
-     * @return {number}
+     * @returns {number}
      */
     readR7KERNEL(addr)
     {
@@ -810,7 +810,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R0SET1--R5SET1 or 177710--177715)
-     * @return {number}
+     * @returns {number}
      */
     readRSET1(addr)
     {
@@ -846,7 +846,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6SUPER or 177716)
-     * @return {number}
+     * @returns {number}
      */
     readR6SUPER(addr)
     {
@@ -880,7 +880,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6USER or 177717)
-     * @return {number}
+     * @returns {number}
      */
     readR6USER(addr)
     {
@@ -914,7 +914,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LAERR--UNDEF2 or 177740--177756)
-     * @return {number}
+     * @returns {number}
      */
     readCTRL(addr)
     {
@@ -951,7 +951,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LSIZE--HSIZE or 177760--177762)
-     * @return {number}
+     * @returns {number}
      */
     readSIZE(addr)
     {
@@ -976,7 +976,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SYSID or 177764)
-     * @return {number}
+     * @returns {number}
      */
     readSYSID(addr)
     {
@@ -1001,7 +1001,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.CPUERR or 177766)
-     * @return {number}
+     * @returns {number}
      */
     readCPUERR(addr)
     {
@@ -1025,7 +1025,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MB or 177770)
-     * @return {number}
+     * @returns {number}
      */
     readMBR(addr)
     {
@@ -1053,7 +1053,7 @@ export default class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.PIR or 177772)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readPIR(addr, fPreWrite)
     {
@@ -1079,7 +1079,7 @@ export default class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SL or 177774)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readSLR(addr, fPreWrite)
     {
@@ -1104,7 +1104,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.PSW or 177776)
-     * @return {number}
+     * @returns {number}
      */
     readPSW(addr)
     {
@@ -1144,9 +1144,7 @@ export default class DevicePDP11 extends Component {
      */
     writeIgnored(data, addr)
     {
-        if (this.messageEnabled()) {
-            this.printMessage("writeIgnored(" + Str.toOct(addr) + "): " + Str.toOct(data), true, true);
-        }
+        this.printf(Messages.ADDRESS, "writeIgnored(%o): %o\n", addr, data);
     }
 
     /**
@@ -1195,23 +1193,23 @@ export default class DevicePDP11 extends Component {
  */
 DevicePDP11.UNIBUS_IOTABLE = {
     [PDP11.UNIBUS.UNIMAP]:  /* 170200 */    [null, null, DevicePDP11.prototype.readUNIMAP,  DevicePDP11.prototype.writeUNIMAP,  "UNIMAP",   64, PDP11.MODEL_1170],
-    [PDP11.UNIBUS.SIPDR0]:  /* 172200 */    [null, null, DevicePDP11.prototype.readSIPDR,   DevicePDP11.prototype.writeSIPDR,   "SIPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.SDPDR0]:  /* 172220 */    [null, null, DevicePDP11.prototype.readSDPDR,   DevicePDP11.prototype.writeSDPDR,   "SDPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.SIPAR0]:  /* 172240 */    [null, null, DevicePDP11.prototype.readSIPAR,   DevicePDP11.prototype.writeSIPAR,   "SIPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.SDPAR0]:  /* 172260 */    [null, null, DevicePDP11.prototype.readSDPAR,   DevicePDP11.prototype.writeSDPAR,   "SDPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KIPDR0]:  /* 172300 */    [null, null, DevicePDP11.prototype.readKIPDR,   DevicePDP11.prototype.writeKIPDR,   "KIPDR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KDPDR0]:  /* 172320 */    [null, null, DevicePDP11.prototype.readKDPDR,   DevicePDP11.prototype.writeKDPDR,   "KDPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KIPAR0]:  /* 172340 */    [null, null, DevicePDP11.prototype.readKIPAR,   DevicePDP11.prototype.writeKIPAR,   "KIPAR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KDPAR0]:  /* 172360 */    [null, null, DevicePDP11.prototype.readKDPAR,   DevicePDP11.prototype.writeKDPAR,   "KDPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.MMR3]:    /* 172516 */    [null, null, DevicePDP11.prototype.readMMR3,    DevicePDP11.prototype.writeMMR3,    "MMR3",     1,  PDP11.MODEL_1145, MessagesPDP11.MMU],
+    [PDP11.UNIBUS.SIPDR0]:  /* 172200 */    [null, null, DevicePDP11.prototype.readSIPDR,   DevicePDP11.prototype.writeSIPDR,   "SIPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.SDPDR0]:  /* 172220 */    [null, null, DevicePDP11.prototype.readSDPDR,   DevicePDP11.prototype.writeSDPDR,   "SDPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.SIPAR0]:  /* 172240 */    [null, null, DevicePDP11.prototype.readSIPAR,   DevicePDP11.prototype.writeSIPAR,   "SIPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.SDPAR0]:  /* 172260 */    [null, null, DevicePDP11.prototype.readSDPAR,   DevicePDP11.prototype.writeSDPAR,   "SDPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.KIPDR0]:  /* 172300 */    [null, null, DevicePDP11.prototype.readKIPDR,   DevicePDP11.prototype.writeKIPDR,   "KIPDR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.KDPDR0]:  /* 172320 */    [null, null, DevicePDP11.prototype.readKDPDR,   DevicePDP11.prototype.writeKDPDR,   "KDPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.KIPAR0]:  /* 172340 */    [null, null, DevicePDP11.prototype.readKIPAR,   DevicePDP11.prototype.writeKIPAR,   "KIPAR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.KDPAR0]:  /* 172360 */    [null, null, DevicePDP11.prototype.readKDPAR,   DevicePDP11.prototype.writeKDPAR,   "KDPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.MMR3]:    /* 172516 */    [null, null, DevicePDP11.prototype.readMMR3,    DevicePDP11.prototype.writeMMR3,    "MMR3",     1,  PDP11.MODEL_1145, Messages.MMU],
     [PDP11.UNIBUS.LKS]:     /* 177546 */    [null, null, DevicePDP11.prototype.readLKS,     DevicePDP11.prototype.writeLKS,     "LKS"],
-    [PDP11.UNIBUS.MMR0]:    /* 177572 */    [null, null, DevicePDP11.prototype.readMMR0,    DevicePDP11.prototype.writeMMR0,    "MMR0",     1,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.MMR1]:    /* 177574 */    [null, null, DevicePDP11.prototype.readMMR1,    DevicePDP11.prototype.writeIgnored, "MMR1",     1,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.MMR2]:    /* 177576 */    [null, null, DevicePDP11.prototype.readMMR2,    DevicePDP11.prototype.writeIgnored, "MMR2",     1,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UIPDR0]:  /* 177600 */    [null, null, DevicePDP11.prototype.readUIPDR,   DevicePDP11.prototype.writeUIPDR,   "UIPDR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UDPDR0]:  /* 177620 */    [null, null, DevicePDP11.prototype.readUDPDR,   DevicePDP11.prototype.writeUDPDR,   "UDPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UIPAR0]:  /* 177640 */    [null, null, DevicePDP11.prototype.readUIPAR,   DevicePDP11.prototype.writeUIPAR,   "UIPAR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UDPAR0]:  /* 177660 */    [null, null, DevicePDP11.prototype.readUDPAR,   DevicePDP11.prototype.writeUDPAR,   "UDPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
+    [PDP11.UNIBUS.MMR0]:    /* 177572 */    [null, null, DevicePDP11.prototype.readMMR0,    DevicePDP11.prototype.writeMMR0,    "MMR0",     1,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.MMR1]:    /* 177574 */    [null, null, DevicePDP11.prototype.readMMR1,    DevicePDP11.prototype.writeIgnored, "MMR1",     1,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.MMR2]:    /* 177576 */    [null, null, DevicePDP11.prototype.readMMR2,    DevicePDP11.prototype.writeIgnored, "MMR2",     1,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.UIPDR0]:  /* 177600 */    [null, null, DevicePDP11.prototype.readUIPDR,   DevicePDP11.prototype.writeUIPDR,   "UIPDR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.UDPDR0]:  /* 177620 */    [null, null, DevicePDP11.prototype.readUDPDR,   DevicePDP11.prototype.writeUDPDR,   "UDPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.UIPAR0]:  /* 177640 */    [null, null, DevicePDP11.prototype.readUIPAR,   DevicePDP11.prototype.writeUIPAR,   "UIPAR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.UDPAR0]:  /* 177660 */    [null, null, DevicePDP11.prototype.readUDPAR,   DevicePDP11.prototype.writeUDPAR,   "UDPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
     [PDP11.UNIBUS.R0SET0]:  /* 177700 */    [null, null, DevicePDP11.prototype.readRSET0,   DevicePDP11.prototype.writeRSET0,   "R0SET0"],
     [PDP11.UNIBUS.R1SET0]:  /* 177701 */    [null, null, DevicePDP11.prototype.readRSET0,   DevicePDP11.prototype.writeRSET0,   "R1SET0"],
     [PDP11.UNIBUS.R2SET0]:  /* 177702 */    [null, null, DevicePDP11.prototype.readRSET0,   DevicePDP11.prototype.writeRSET0,   "R2SET0"],

@@ -9,11 +9,10 @@
 
 import BusPDP10 from "./bus.js";
 import MemoryPDP10 from "./memory.js";
-import MessagesPDP10 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUGGER, PDP10 } from "./defines.js";
 
 export default class DevicePDP10 extends Component {
@@ -24,7 +23,7 @@ export default class DevicePDP10 extends Component {
      */
     constructor(parmsDevice)
     {
-        super("Device", parmsDevice, MessagesPDP10.DEVICE);
+        super("Device", parmsDevice, Messages.DEVICE);
     }
 
     /**
@@ -52,7 +51,7 @@ export default class DevicePDP10 extends Component {
      * @this {DevicePDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -72,7 +71,7 @@ export default class DevicePDP10 extends Component {
      * @this {DevicePDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -94,7 +93,7 @@ export default class DevicePDP10 extends Component {
      * This implements save support for the DevicePDP10 component.
      *
      * @this {DevicePDP10}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -109,7 +108,7 @@ export default class DevicePDP10 extends Component {
      *
      * @this {DevicePDP10}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {

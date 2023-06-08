@@ -213,7 +213,7 @@ export default class Int36 {
      *
      * @this {Int36}
      * @param {boolean} fUnsigned
-     * @return {string}
+     * @returns {string}
      */
     toDecimal(fUnsigned)
     {
@@ -264,7 +264,7 @@ export default class Int36 {
      * @this {Int36}
      * @param {number} [radix] (default is 10)
      * @param {boolean} [fUnsigned] (default is signed for radix 10, unsigned for any other radix)
-     * @return {string}
+     * @returns {string}
      */
     toString(radix = 10, fUnsigned = false)
     {
@@ -356,7 +356,7 @@ export default class Int36 {
      * @param {number} result
      * @param {number} [operand]
      * @param {boolean} [fSub] (true if operand was subtracted)
-     * @return {number}
+     * @returns {number}
      */
     truncate(result, operand, fSub)
     {
@@ -1062,7 +1062,7 @@ export default class Int36 {
      * isNeg()
      *
      * @this {Int36}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isNeg()
     {
@@ -1168,7 +1168,7 @@ export default class Int36 {
      *
      * @param {number} off (the bit position of the right-most bit of the result, using modern bit numbering)
      * @param {number} len
-     * @return {number}
+     * @returns {number}
      */
     readBits(off, len)
     {
@@ -1244,7 +1244,7 @@ export default class Int36 {
      *
      * @param {Array.<number>} dDst
      * @param {Array.<number>} dSrc
-     * @return {number} > 0 if dDst > dSrc, == 0 if dDst == dSrc, < 0 if dDst < dSrc
+     * @returns {number} > 0 if dDst > dSrc, == 0 if dDst == dSrc, < 0 if dDst < dSrc
      */
     static cmpD(dDst, dSrc)
     {
@@ -1303,7 +1303,7 @@ export default class Int36 {
      * octal(value)
      *
      * @param {number} value
-     * @return {string}
+     * @returns {string}
      */
     static octal(value)
     {
@@ -1324,7 +1324,7 @@ export default class Int36 {
      *
      * @param {number} num
      * @param {number} [bits] (an alternative number of bits to restrict the value to)
-     * @return {number}
+     * @returns {number}
      */
     static validate(num, bits = 36)
     {

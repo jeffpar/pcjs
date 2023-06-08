@@ -7,11 +7,11 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesX80 from "./messages.js";
-import Component from "../../../../modules/v2/component.js";
-import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import Messages from "./messages.js";
+import Component from "../../../modules/v2/component.js";
+import State from "../../../modules/v2/state.js";
+import Str from "../../../modules/v2/strlib.js";
+import Web from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG, RS232, globals } from "./defines.js";
 
 /**
@@ -58,7 +58,7 @@ export default class SerialPortX80 extends Component {
      */
     constructor(parmsSerial)
     {
-        super("SerialPort", parmsSerial, MessagesX80.SERIAL);
+        super("SerialPort", parmsSerial, Messages.SERIAL);
 
         this.iAdapter = +parmsSerial['adapter'];
 
@@ -155,7 +155,7 @@ export default class SerialPortX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "buffer")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -264,7 +264,7 @@ export default class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {number} b
-     * @return {boolean} true if echo, false if not
+     * @returns {boolean} true if echo, false if not
      */
     echoByte(b)
     {
@@ -299,7 +299,7 @@ export default class SerialPortX80 extends Component {
         }
         else if (this.consoleBuffer != null) {
             if (b == 0x0A || this.consoleBuffer.length >= 1024) {
-                this.println(this.consoleBuffer);
+                this.print(this.consoleBuffer);
                 this.consoleBuffer = "";
             }
             if (b != 0x0A) {
@@ -385,16 +385,16 @@ export default class SerialPortX80 extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.status("Connected %s.%s to %s", this.idMachine, sSourceID, sTargetID);
+                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
                     }
                 }
                 /*
-                 * Changed from notice() to status() because sometimes a connection fails simply because one of us is a laggard.
+                 * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.status("Unable to establish connection: %s", sConnection);
+                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }
@@ -405,7 +405,7 @@ export default class SerialPortX80 extends Component {
      * @this {SerialPortX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -434,7 +434,7 @@ export default class SerialPortX80 extends Component {
      * @this {SerialPortX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -457,7 +457,7 @@ export default class SerialPortX80 extends Component {
      * This implements save support for the SerialPortX80 component.
      *
      * @this {SerialPortX80}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -473,7 +473,7 @@ export default class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -485,7 +485,7 @@ export default class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {Array} [data]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(data)
     {
@@ -507,7 +507,7 @@ export default class SerialPortX80 extends Component {
      * saveRegisters()
      *
      * @this {SerialPortX80}
-     * @return {Array}
+     * @returns {Array}
      */
     saveRegisters()
     {
@@ -528,7 +528,7 @@ export default class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {number} maskRate (either SerialPortX80.UART8251.BAUDRATES.RECV_RATE or SerialPortX80.UART8251.BAUDRATES.XMIT_RATE)
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout(maskRate)
     {
@@ -547,12 +547,12 @@ export default class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {number} b
-     * @return {boolean}
+     * @returns {boolean}
      */
     receiveByte(b)
     {
         if (MAXDEBUG) this.echoByte(b);
-        this.printMessage("receiveByte(" + Str.toHexByte(b) + "), status=" + Str.toHexByte(this.bStatus));
+        this.printf("receiveByte(%#04x), status=%#04x\n", b, this.bStatus);
         if (!this.fAutoStop && !(this.bStatus & SerialPortX80.UART8251.STATUS.RECV_FULL)) {
             this.bDataIn = b;
             this.bStatus |= SerialPortX80.UART8251.STATUS.RECV_FULL;
@@ -573,7 +573,7 @@ export default class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {number|string|undefined} [data]
-     * @return {boolean} true if received, false if not
+     * @returns {boolean} true if received, false if not
      */
     receiveData(data)
     {
@@ -616,13 +616,13 @@ export default class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {number} b
-     * @return {boolean} true if transmitted, false if not
+     * @returns {boolean} true if transmitted, false if not
      */
     transmitByte(b)
     {
         var fTransmitted = false;
 
-        this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        this.printf("transmitByte(%#04x)\n", b);
 
         if (this.fAutoXOFF) {
             if (b == 0x13) {        // XOFF
@@ -660,7 +660,7 @@ export default class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {string} [sData]
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     transmitData(sData)
     {
@@ -677,7 +677,7 @@ export default class SerialPortX80 extends Component {
      * Called whenever a ChipSet circuit needs the SerialPortX80 UART's transmitter status.
      *
      * @this {SerialPortX80}
-     * @return {boolean} (true if ready, false if not)
+     * @returns {boolean} (true if ready, false if not)
      */
     isTransmitterReady()
     {
@@ -690,12 +690,12 @@ export default class SerialPortX80 extends Component {
      * @this {SerialPortX80}
      * @param {number} port (0x0)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inData(port, addrFrom)
     {
         var b = this.bDataIn;
-        this.printMessageIO(port, undefined, addrFrom, "DATA", b);
+        this.printIO(port, undefined, addrFrom, "DATA", b);
         this.bStatus &= ~SerialPortX80.UART8251.STATUS.RECV_FULL;
         return b;
     }
@@ -706,12 +706,12 @@ export default class SerialPortX80 extends Component {
      * @this {SerialPortX80}
      * @param {number} port (0x1)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inControl(port, addrFrom)
     {
         var b = this.bStatus;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS", b);
+        this.printIO(port, undefined, addrFrom, "STATUS", b);
         return b;
     }
 
@@ -725,7 +725,7 @@ export default class SerialPortX80 extends Component {
      */
     outData(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "DATA");
+        this.printIO(port, bOut, addrFrom, "DATA");
         this.bDataOut = bOut;
         this.bStatus &= ~(SerialPortX80.UART8251.STATUS.XMIT_READY | SerialPortX80.UART8251.STATUS.XMIT_EMPTY);
         /*
@@ -760,7 +760,7 @@ export default class SerialPortX80 extends Component {
      */
     outControl(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CONTROL");
+        this.printIO(port, bOut, addrFrom, "CONTROL");
         if (!this.fReady) {
             this.bMode = bOut;
             this.fReady = true;
@@ -799,7 +799,7 @@ export default class SerialPortX80 extends Component {
      */
     outBaudRates(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "BAUDRATES");
+        this.printIO(port, bOut, addrFrom, "BAUDRATES");
         this.bBaudRates = bOut;
     }
 

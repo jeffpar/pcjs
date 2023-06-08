@@ -8,6 +8,7 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
+import Messages from "../../../../modules/v2/messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
@@ -379,7 +380,7 @@ export default class C1PKeyboard extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc", "ctrl-c")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -426,7 +427,7 @@ export default class C1PKeyboard extends Component {
                 this.bindings[sBinding] = control;
                 control.onclick = function(kbd) {
                     return function(event) {
-                        if (DEBUG) kbd.println("keyPressSimulate(break)");
+                        if (DEBUG) kbd.printf("keyPressSimulate(break)\n");
                         if (kbd.cmp) kbd.cmp.reset(true);
                     };
                 }(this);
@@ -436,7 +437,7 @@ export default class C1PKeyboard extends Component {
                     this.bindings[sBinding] = control;
                     control.onclick = function(kbd, sButton, charCode) {
                         return function(event) {
-                            if (DEBUG) kbd.println("keyPressSimulate(" + sButton + ")");
+                            if (DEBUG) kbd.printf("keyPressSimulate(%s)\n", sButton);
                             if (kbd.cpu) kbd.cpu.setFocus();
                             return !kbd.keyPressSimulate(charCode);
                         };
@@ -487,7 +488,7 @@ export default class C1PKeyboard extends Component {
              * No inversion for model 542
              */
             this.bInvert = 0x00;
-            this.println("updated keyboard model: " + this.nModel);
+            this.printf("updated keyboard model: %d\n", this.nModel);
         }
     }
 
@@ -519,7 +520,7 @@ export default class C1PKeyboard extends Component {
         this.iOS = Web.isUserAgent("iOS");
         this.fMobile = (this.iOS || Web.isUserAgent("Android"));
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("mobile keyboard support: " + (this.fMobile? "true" : "false") + " (" + window.navigator.userAgent + ")");
+            this.dbg.printf("mobile keyboard support: %b (%s)\n", this.fMobile, window.navigator.userAgent);
         }
         super.setReady();
     }
@@ -536,7 +537,7 @@ export default class C1PKeyboard extends Component {
      *
      * @this {C1PKeyboard}
      * @param {boolean} fRepeat is true if a timeout had already been active for the current key
-     * @return {number}
+     * @returns {number}
      */
     calcReleaseDelay(fRepeat)
     {
@@ -565,7 +566,7 @@ export default class C1PKeyboard extends Component {
     {
         if (this.prevCharDown && (notCharCode === undefined || notCharCode != this.prevCharDown)) {
             if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-                this.dbg.message("autoClear(" + Str.toHexByte(this.prevCharDown) + ")");
+                this.dbg.printf("autoClear(%#04x)\n", this.prevCharDown);
             }
             Component.assert(this.aKeyTimers[this.prevCharDown]);
             clearTimeout(this.aKeyTimers[this.prevCharDown]);
@@ -581,7 +582,7 @@ export default class C1PKeyboard extends Component {
     injectKeys(sKeyCodes, msDelay)
     {
         this.sInjectBuffer = sKeyCodes;
-        if (DEBUG) this.log("injectKeys(" + this.sInjectBuffer.split("\n").join("\\n") + ")");
+        if (DEBUG) this.printf(Messages.LOG, "injectKeys(%s)\n", this.sInjectBuffer.split("\n").join("\\n"));
         this.injectKeysFromBuffer(msDelay || this.msInjectDelay);
     }
 
@@ -621,7 +622,7 @@ export default class C1PKeyboard extends Component {
      * @this {C1PKeyboard}
      * @param {Object} event
      * @param {boolean} fDown is true if called for a keyDown event, false if called for a keyUp event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     keyEvent(event, fDown)
     {
@@ -748,7 +749,7 @@ export default class C1PKeyboard extends Component {
         }
 
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message(/*(fDown?"\n":"") +*/ "key" + (fDown?"Down":"Up") + "(" + Str.toHexByte(keyCode) + "): " + (fPass? "pass" : "consume"));
+            this.dbg.printf("key%s(%#04x): %s\n", fDown? "Down" : "Up", keyCode, fPass? "pass" : "consume");
         }
         return fPass;
     }
@@ -756,7 +757,7 @@ export default class C1PKeyboard extends Component {
     /**
      * @this {C1PKeyboard}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      *
      * We've stopped relying on keyPress for keyboard emulation purposes, but it's still handy to hook and monitor
      * when debugging.
@@ -781,7 +782,7 @@ export default class C1PKeyboard extends Component {
             fPass = !this.keyPressSimulate(charCode);
 
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("keyPress(" + Str.toHexByte(charCode) + "): " + (fPass? "pass" : "consume"));
+            this.dbg.printf("keyPress(%#04x): %s\n", charCode, fPass? "pass" : "consume");
         }
         return fPass;
     }
@@ -789,7 +790,7 @@ export default class C1PKeyboard extends Component {
     /**
      * @this {C1PKeyboard}
      * @param {number} charCode
-     * @return {boolean} true if successfully simulated, false if unrecognized/unsupported key
+     * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
      */
     keyPressSimulate(charCode)
     {
@@ -855,14 +856,14 @@ export default class C1PKeyboard extends Component {
                     var msDelay = this.calcReleaseDelay(fRepeat);
                     this.aKeyTimers[this.prevCharDown = charCode] = setTimeout(function(kbd) { return function() {kbd.keyEventSimulate(charCode, false, kbd.SIMCODE_KEYTIMEOUT);}; }(this), msDelay);
                     if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-                        this.dbg.message("keyPressSimulate(" + Str.toHexByte(charCode) + "): setTimeout()");
+                        this.dbg.printf("keyPressSimulate(%#04x): setTimeout()\n", charCode);
                     }
                 }
                 fSimulated = true;
             }
         }
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("keyPressSimulate(" + Str.toHexByte(charCode) + "): " + (fSimulated? "true" : "false"));
+            this.dbg.printf("keyPressSimulate(%#04x): %b\n", charCode, fSimulated);
         }
         return fSimulated;
     }
@@ -872,7 +873,7 @@ export default class C1PKeyboard extends Component {
      * @param {number} charCode
      * @param {boolean} fDown
      * @param {number} simCode indicates the origin of the event
-     * @return {boolean} true if successfully simulated, false if unrecognized/unsupported key
+     * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
      */
     keyEventSimulate(charCode, fDown, simCode)
     {
@@ -1057,7 +1058,7 @@ export default class C1PKeyboard extends Component {
      *
      * @this {C1PKeyboard}
      * @param {number} charCode
-     * @return {boolean}
+     * @returns {boolean}
      *
      isShift(charCode)
      {

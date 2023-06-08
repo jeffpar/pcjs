@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import State from "../../../../modules/v2/state.js";
@@ -41,7 +41,7 @@ export default class PC11 extends Component {
      */
     constructor(parms)
     {
-        super("PC11", parms, MessagesPDP11.PC11);
+        super("PC11", parms, Messages.PC11);
 
         this.sDevice = "PTR";                   // TODO: Make the device name configurable
 
@@ -88,7 +88,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {*} config
-     * @return {*}
+     * @returns {*}
      */
     parseConfig(config)
     {
@@ -115,7 +115,7 @@ export default class PC11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listTapes")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -179,7 +179,7 @@ export default class PC11 extends Component {
             var controlInput = /** @type {Object} */ (control);
 
             if (!this.fLocalTapes) {
-                if (DEBUG) this.log("Local tape support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local tape support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -261,7 +261,7 @@ export default class PC11 extends Component {
             }
         }
 
-        this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, MessagesPDP11.PC11);
+        this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, Messages.PC11);
 
         this.timerReader = this.cpu.addTimer(function readyReader() {
             pc11.advanceReader();
@@ -283,7 +283,7 @@ export default class PC11 extends Component {
      * @this {PC11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -303,7 +303,7 @@ export default class PC11 extends Component {
      * @this {PC11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -329,7 +329,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted tapes
-     * @return {boolean} true if one or more tape images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more tape images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -373,7 +373,7 @@ export default class PC11 extends Component {
         }
 
         if (sTapePath == PC11.SOURCE.LOCAL) {
-            this.notice('Use "Choose File" and "Mount" to select and load a local tape.');
+            this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local tape.\n");
             return;
         }
 
@@ -390,7 +390,7 @@ export default class PC11 extends Component {
             sTapePath = window.prompt("Enter the URL of a remote tape image.", "") || "";
             if (!sTapePath) return;
             sTapeName = Str.getBaseName(sTapePath);
-            this.status('Attempting to load %s as "%s"', sTapePath, sTapeName);
+            this.printf(Messages.STATUS, 'Attempting to load %s as "%s"\n', sTapePath, sTapeName);
             this.sTapeSource = PC11.SOURCE.REMOTE;
         }
         else {
@@ -411,7 +411,7 @@ export default class PC11 extends Component {
      * @param {number} nTapeTarget
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
-     * @return {number} 1 if tape loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if tape loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadTape(sTapeName, sTapePath, nTapeTarget, fAutoMount, file)
     {
@@ -423,13 +423,13 @@ export default class PC11 extends Component {
             this.unloadTape(true);
 
             if (this.flags.busy) {
-                this.notice("PC11 busy");
+                this.printf(Messages.NOTICE, "PC11 busy\n");
             }
             else {
-                // this.status("tape queued: %s", sTapeName);
+                // this.printf(Messages.STATUS, "tape queued: %s\n", sTapeName);
                 if (fAutoMount) {
                     this.cAutoMount++;
-                    if (this.messageEnabled()) this.printMessage("auto-loading tape: " + sTapeName);
+                    this.printf("auto-loading tape \"%s\"\n", sTapeName);
                 }
                 if (this.load(sTapeName, sTapePath, nTapeTarget, file)) {
                     nResult++;
@@ -443,7 +443,7 @@ export default class PC11 extends Component {
              * Now that we're calling parseTape() again (so that the current tape can either be restarted on
              * the reader or reloaded into RAM), we can also rely on it to display an appropriate status message, too.
              *
-             *      this.status(this.nTapeTarget == PC11.TARGET.READER? "tape loaded" : "tape read");
+             *      this.printf(Messages.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape loaded" : "tape read");
              */
             this.parseTape(this.sTapeName, this.sTapePath, this.nTapeTarget, this.aBytes, this.addrLoad, this.addrExec);
         }
@@ -458,7 +458,7 @@ export default class PC11 extends Component {
      * @param {string} sTapePath
      * @param {number} nTapeTarget
      * @param {File} [file] is set if there's an associated File object
-     * @return {boolean} true if load completed (successfully or not), false if queued
+     * @returns {boolean} true if load completed (successfully or not), false if queued
      */
     load(sTapeName, sTapePath, nTapeTarget, file)
     {
@@ -467,7 +467,7 @@ export default class PC11 extends Component {
 
         if (DEBUG) {
             var sMessage = 'load("' + sTapeName + '","' + sTapePath + '")';
-            this.printMessage(sMessage);
+            this.printf("%s\n", sMessage);
         }
 
         if (file) {
@@ -526,11 +526,11 @@ export default class PC11 extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.notice("Unable to load tape \"" + sTapeName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.printf(Messages.NOTICE, "Unable to load tape \"%s\" (error %d: %s)\n", sTapeName, nErrorCode, sURL);
         }
         else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('finishLoad("' + sTapePath + '")');
+            if (DEBUG) {
+                this.printf("finishLoad(\"%s\")\n", sTapePath);
             }
             Component.addMachineResource(this.idMachine, sURL, sTapeData);
             var resource = Web.parseMemoryResource(sURL, sTapeData);
@@ -600,7 +600,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {string} sPath
-     * @return {string|null}
+     * @returns {string|null}
      */
     findTape(sPath)
     {
@@ -702,10 +702,10 @@ export default class PC11 extends Component {
                  *      this.sTapeSource = PC11.SOURCE.NONE;
                  *      this.nTapeTarget = PC11.TARGET.NONE;
                  */
-                this.notice('No valid memory address for tape "' + sTapeName + '"');
+                this.printf(Messages.NOTICE, "No valid memory address for tape \"%s\"\n", sTapeName);
                 return;
             }
-            this.status('Read tape "%s"', sTapeName);
+            this.printf(Messages.STATUS, 'Read tape "%s"\n', sTapeName);
             return;
         }
 
@@ -713,7 +713,7 @@ export default class PC11 extends Component {
         this.aTapeData = aBytes;
         this.regPRS &= ~PDP11.PC11.PRS.ERROR;
 
-        this.status('Loaded tape "%s" (%d bytes)', sTapeName, aBytes.length);
+        this.printf(Messages.STATUS, 'Loaded tape "%s" (%d bytes)\n', sTapeName, aBytes.length);
         this.displayProgress(0);
     }
 
@@ -732,7 +732,7 @@ export default class PC11 extends Component {
              * Avoid any unnecessary hysteresis regarding the display if this unload is merely a prelude to another load.
              */
             if (!fLoading) {
-                if (this.nTapeTarget) this.status(this.nTapeTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
+                if (this.nTapeTarget) this.printf(Messages.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
                 this.sTapeSource = PC11.SOURCE.NONE;
                 this.nTapeTarget = PC11.TARGET.NONE;
                 this.displayTape();
@@ -746,7 +746,7 @@ export default class PC11 extends Component {
      * This implements save support for the PC11 component.
      *
      * @this {PC11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -761,7 +761,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -775,7 +775,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} nBaud
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout(nBaud)
     {
@@ -808,7 +808,7 @@ export default class PC11 extends Component {
                      * the data assigned to PRB with 0xff.
                      */
                     this.regPRB = this.aTapeData[this.iTapeData] & 0xff;
-                    if (this.messageEnabled()) this.printMessage(this.type + ".advanceReader(" + this.iTapeData + "): " + Str.toHexByte(this.regPRB), true);
+                    this.printf("%s.advanceReader(%d): %#04x\n", this.type, this.iTapeData, this.regPRB);
                     this.iTapeData++;
                     this.displayProgress(this.iTapeData / this.aTapeData.length * 100);
                 }
@@ -834,7 +834,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PRS or 177550)
-     * @return {number}
+     * @returns {number}
      */
     readPRS(addr)
     {
@@ -883,7 +883,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PRB or 177552)
-     * @return {number}
+     * @returns {number}
      */
     readPRB(addr)
     {
@@ -912,7 +912,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PPS or 177554)
-     * @return {number}
+     * @returns {number}
      */
     readPPS(addr)
     {
@@ -945,7 +945,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PPB or 177556)
-     * @return {number}
+     * @returns {number}
      */
     readPPB(addr)
     {

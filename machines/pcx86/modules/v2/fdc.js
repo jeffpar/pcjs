@@ -11,9 +11,9 @@ import ChipSet from "./chipset.js";
 import Disk from "./disk.js";
 import Messages from "./messages.js";
 import Panel from "./panel.js";
-import JSONLib from "../../../modules/v3/jsonlib.js";
 import Component from "../../../modules/v2/component.js";
 import DiskAPI from "../../../modules/v2/diskapi.js";
+import JSONLib from "../../../modules/v2/jsonlib.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
@@ -245,7 +245,7 @@ export default class FDC extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listDisks")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -301,7 +301,7 @@ export default class FDC extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available");
                 /*
                  * We could also simply remove the control; eg:
                  *
@@ -326,14 +326,14 @@ export default class FDC extends Component {
                          */
                         let disk = drive.disk;
                         if (disk) {
-                            if (DEBUG) fdc.println("saving diskette " + disk.sDiskPath + "...");
+                            if (DEBUG) fdc.printf("saving diskette %s...\n", disk.sDiskPath);
                             let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
-                            fdc.notice("No diskette loaded in drive.");
+                            fdc.printf(Messages.NOTICE, "No diskette loaded in drive\n");
                         }
                     } else {
-                        fdc.notice("No diskette drive selected.");
+                        fdc.printf(Messages.NOTICE, "No diskette drive selected\n");
                     }
                 }
             };
@@ -341,7 +341,7 @@ export default class FDC extends Component {
 
         case "mountDisk":
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -423,12 +423,12 @@ export default class FDC extends Component {
         this.chipset = cmp.getMachineComponent("ChipSet");
         this.configMount = this.parseMount(this.cmp.getMachineParm('autoMount'), this.configMount);
 
-        this.panel = cmp.getMachineComponent("Panel");
+        this.panel = cmp.getMachineComponent("Panel", false);
 
         /*
-         * If we didn't need auto-mount support, we could defer controller initialization until we received a powerUp() notification,
-         * at which point reset() would call initController(), or restore() would restore the controller; in that case, all we'd need
-         * to do here is call setReady().
+         * If we didn't need auto-mount support, we could defer controller initialization until we received
+         * a powerUp() notification, at which point reset() would call initController(), or restore() would
+         * restore the controller; in that case, all we'd need to do here is call setReady().
          */
         this.initController();
 
@@ -436,9 +436,10 @@ export default class FDC extends Component {
         bus.addPortOutputTable(this, FDC.aPortOutput);
 
         /*
-         * We now allow the FDC's 'diskettes' parameter to be overridden with a machine parameter; fortunately, that's not a problem,
-         * since we weren't doing anything with the parameter until this point (initBus()) anyway.  It's nothing more than a comma-delimited
-         * list of diskettes.json files (the default one being /machines/pcx86/diskettes.json).
+         * We now allow the FDC's 'diskettes' parameter to be overridden with a machine parameter;
+         * fortunately, that's not a problem, since we weren't doing anything with the parameter until
+         * this point (initBus()) anyway, and it's just a comma-delimited list of "diskettes.json" files,
+         * the default one being "/machines/pcx86/diskettes.json".
          */
         this.aDiskettes = this.cmp.getMachineParm('diskettes') || this.aDiskettes;
 
@@ -447,29 +448,35 @@ export default class FDC extends Component {
             let hostName = Web.getHostName();
             let limits = fdc.getDriveLimits();
             let urls = fdc.aDiskettes.split(',');
-            var cRequested = 0, cLoaded = 0, cSuccessful = 0;
+            let cLoaded = 0, cSuccessful = 0;
+            /*
+             * Preprocess the list of URLs, removing any that are not appropriate for the current host.
+             */
+            for (let i = 0; i < urls.length; i++) {
+                if (hostName != "localhost" && urls[i].indexOf("private") >= 0) {
+                    urls.splice(i--, 1);
+                }
+            }
             fdc.aDiskettes = [];
             for (let i = 0; i < urls.length; i++) {
                 let url = urls[i];
-                if (hostName == "localhost" || url.indexOf("private") < 0) {
-                    cRequested++;
-                    let sProgress = "Loading " + url + "...";
-                    Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
-                        if (sResponse && !nErrorCode) {
-                            try {
-                                JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
-                                cSuccessful++;
-                            } catch(err) {
-                                fdc.println("Unable to parse " + url + ": " + err.message);
-                            }
-                        } else {
-                            fdc.println("Unable to open " + url + " (" + nErrorCode + ")");
+                let sProgress = "Loading " + url + "...";
+                Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
+                    let privateURL = url.indexOf("private") >= 0;
+                    if (sResponse && !nErrorCode) {
+                        try {
+                            JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
+                            cSuccessful++;
+                        } catch(err) {
+                            if (!privateURL || sResponse[0] != '<') fdc.printf(Messages.WARNING, "Unable to parse %s: %s\n", url, err.message);
                         }
-                        if (++cLoaded == cRequested) fdc.addDiskettes(!cSuccessful);
-                    }, function(nState) {
-                        fdc.println(sProgress, Component.PRINT.PROGRESS);
-                    });
-                }
+                    } else {
+                        if (!privateURL) fdc.printf(Messages.WARNING, "Unable to open %s (%d)\n", url, nErrorCode);
+                    }
+                    if (++cLoaded == urls.length) fdc.addDiskettes(!cSuccessful);
+                }, function(nState) {
+                    fdc.printf(Messages.PROGRESS, "%s\n", sProgress);
+                });
             }
             return;
         }
@@ -495,7 +502,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {Object|string|undefined} config
      * @param {Object} [configMerge]
-     * @return {Object}
+     * @returns {Object}
      */
     parseMount(config, configMerge)
     {
@@ -539,7 +546,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -568,7 +575,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -663,7 +670,7 @@ export default class FDC extends Component {
      * This implements save support for the FDC component.
      *
      * @this {FDC}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -679,7 +686,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -691,7 +698,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Array} [data]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(data)
     {
@@ -816,7 +823,7 @@ export default class FDC extends Component {
      * saveController()
      *
      * @this {FDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -849,7 +856,7 @@ export default class FDC extends Component {
      * @param {DriveType|null} driveType
      * @param {Array|undefined} data
      * @param {boolean} fInit
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initDrive(drive, iDrive, driveType, data, fInit)
     {
@@ -866,8 +873,8 @@ export default class FDC extends Component {
 
         if (fInit) {
             drive.fWritable = true;
-            if (nHeads) this.status("drive %d configured with %d head%s", iDrive, nHeads, nHeads > 1? 's' : '');
-            if (!drive.fBootable) this.status("drive %d configured as non-bootable", iDrive);
+            if (nHeads) this.printf(Messages.STATUS, "drive %d configured with %d head%s\n", iDrive, nHeads, nHeads > 1? 's' : '');
+            if (!drive.fBootable) this.printf(Messages.STATUS, "drive %d configured as non-bootable\n", iDrive);
         }
 
         if (data === undefined) {
@@ -1041,7 +1048,7 @@ export default class FDC extends Component {
      * getDriveLimits()
      *
      * @this {FDC}
-     * @return {Array} ([0] is max heads, and [1] is max cylinders)
+     * @returns {Array} ([0] is max heads, and [1] is max cylinders)
      */
     getDriveLimits()
     {
@@ -1063,7 +1070,7 @@ export default class FDC extends Component {
      * saveDrives()
      *
      * @this {FDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrives()
     {
@@ -1080,7 +1087,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} drive
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrive(drive)
     {
@@ -1130,7 +1137,7 @@ export default class FDC extends Component {
      * disk image(s), so we call updateHistory() for all those disks, and then aDiskHistory is ready to be saved.
      *
      * @this {FDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDeltas()
     {
@@ -1148,7 +1155,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {number} iDrive
-     * @return {Object|undefined} drive (which may be undefined if the requested drive does not exist)
+     * @returns {Object|undefined} drive (which may be undefined if the requested drive does not exist)
      */
     copyDrive(iDrive)
     {
@@ -1181,7 +1188,7 @@ export default class FDC extends Component {
      * @param {Object} drive
      * @param {number} iSector (a "logical" sector number, relative to the entire disk, NOT a physical sector number)
      * @param {number} nSectors
-     * @return {boolean} true if successful, false if invalid position request
+     * @returns {boolean} true if successful, false if invalid position request
      */
     seekDrive(drive, iSector, nSectors)
     {
@@ -1219,7 +1226,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted diskettes
-     * @return {boolean} true if one or more diskette images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more diskette images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -1240,7 +1247,7 @@ export default class FDC extends Component {
                     }
                     continue;
                 }
-                this.notice("Incorrect auto-mount settings for drive " + sDrive + " (" + JSON.stringify(configDrive) + ")");
+                this.printf(Messages.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDrive));
             }
         }
         return !!this.cAutoMount;
@@ -1254,7 +1261,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {...} args
-     * @return {boolean}
+     * @returns {boolean}
      */
     loadSelectedDisk(...args)
     {
@@ -1275,7 +1282,7 @@ export default class FDC extends Component {
      * @param {string} sDiskName
      * @param {string} sDiskPath
      * @param {File} [file] is set if there's an associated File object
-     * @return {boolean}
+     * @returns {boolean}
      */
     loadSelectedDrive(sDiskName, sDiskPath, file)
     {
@@ -1289,7 +1296,7 @@ export default class FDC extends Component {
             }
 
             if (sDiskPath == "?") {
-                this.notice('Use "Choose File" and "Mount" to select and load a local disk.');
+                this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk\n");
                 return false;
             }
 
@@ -1309,7 +1316,7 @@ export default class FDC extends Component {
                 }
                 if (!sDiskPath) return false;
                 sDiskName = Str.getBaseName(sDiskPath);
-                if (DEBUG) this.println("Attempting to load " + sDiskPath + " as \"" + sDiskName + "\"");
+                if (DEBUG) this.printf(Messages.DEFAULT, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
@@ -1317,7 +1324,7 @@ export default class FDC extends Component {
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
                 if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
-                    if (DEBUG) this.println("load cancelled");
+                    if (DEBUG) this.printf(Messages.DEFAULT, "load cancelled\n");
                     return false;
                 }
                 /*
@@ -1333,7 +1340,7 @@ export default class FDC extends Component {
             }
             return true;
         }
-        this.notice("Unable to load the selected drive");
+        this.printf(Messages.NOTICE, "Unable to load the selected drive\n");
         return false;
     }
 
@@ -1365,7 +1372,7 @@ export default class FDC extends Component {
      * @param {string} sDiskPath
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
-     * @return {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file)
     {
@@ -1380,14 +1387,14 @@ export default class FDC extends Component {
             if (drive.sDiskPath.toLowerCase() != sDiskPath.toLowerCase()) {
                 this.unloadDrive(iDrive, fAutoMount, true);
                 if (drive.fBusy) {
-                    this.notice("Drive " + iDrive + " busy");
+                    this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
                     return 0;
                 }
                 drive.fBusy = true;
                 if (fAutoMount) {
                     drive.fAutoMount = true;
                     this.cAutoMount++;
-                    this.printf("loading diskette '%s'\n", sDiskName);
+                    this.printf("loading diskette \"%s\"\n", sDiskName);
                 }
                 drive.fLocal = !!file;
                 let disk = new Disk(this, drive, DiskAPI.MODE.PRELOAD);
@@ -1427,7 +1434,7 @@ export default class FDC extends Component {
              */
             aDiskInfo = disk.info();
             if (disk && aDiskInfo[0] > drive.nCylinders || aDiskInfo[1] > drive.nHeads /* || aDiskInfo[2] > drive.nSectors */) {
-                this.notice("Diskette \"" + sDiskName + "\" too large for drive " + String.fromCharCode(0x41 + drive.iDrive));
+                this.printf(Messages.NOTICE, "Diskette \"%s\" too large for drive %s\n", sDiskName, String.fromCharCode(0x41 + drive.iDrive));
                 disk = null;
             }
         }
@@ -1484,7 +1491,7 @@ export default class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!drive.fnCallReady) {
-                this.notice("Mounted \"" + sDiskName + "\" (format " + (disk.imageInfo && disk.imageInfo.format || "unknown") + ") in drive " + String.fromCharCode(0x41 + drive.iDrive), true /* drive.fAutoMount || fAutoMount */);
+                this.printf(Messages.STATUS, "Mounted \"%s\" (format %s) in drive %s\n", sDiskName, (disk.imageInfo && disk.imageInfo.format || "unknown"), String.fromCharCode(0x41 + drive.iDrive));
             }
 
             /*
@@ -1623,7 +1630,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {string} sPath
-     * @return {string|null}
+     * @returns {string|null}
      */
     findDisketteByPath(sPath)
     {
@@ -1645,7 +1652,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {string|undefined} sName
-     * @return {string}
+     * @returns {string}
      */
     findDisketteByName(sName)
     {
@@ -1657,7 +1664,7 @@ export default class FDC extends Component {
                     if (control.text == sName) return control.value;
                 }
             }
-            this.notice("Unable to find diskette \"" + sName + "\"");
+            this.printf(Messages.NOTICE, "Unable to find diskette \"%s\"\n", sName);
         }
         return "";
     }
@@ -1688,7 +1695,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {number} iDrive
-     * @return {HTMLSelectElement|undefined}
+     * @returns {HTMLSelectElement|undefined}
      */
     getDiskList(iDrive)
     {
@@ -1811,7 +1818,7 @@ export default class FDC extends Component {
                     if (drive.fWritable != !(controlDrives.selectedIndex & 0x1)) {
                         drive.fWritable = !drive.fWritable;
                         if (!drive.fWritable) {
-                            this.notice("Any diskette loaded in this drive will now be write-protected.")
+                            this.printf(Messages.NOTICE, "Any diskette loaded in this drive will now be write-protected.");
                         }
                     }
                 }
@@ -1852,7 +1859,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {function()|null} fnCallReady
-     * @return {boolean} false if wait required, true otherwise
+     * @returns {boolean} false if wait required, true otherwise
      */
     waitDrives(fnCallReady)
     {
@@ -1895,7 +1902,7 @@ export default class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!fQuiet) {
-                this.notice("Drive " + String.fromCharCode(0x41 + iDrive) + " unloaded", true /* fAutoUnload */);
+                this.printf(Messages.STATUS, "Drive %s unloaded\n", String.fromCharCode(0x41 + iDrive));
             }
             /*
              * Try to avoid any unnecessary hysteresis regarding the diskette display if this unload is merely
@@ -2003,7 +2010,7 @@ export default class FDC extends Component {
      */
     outFDCOutput(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "OUTPUT");
+        this.printIO(port, bOut, addrFrom, "OUTPUT");
         if (!(bOut & FDC.REG_OUTPUT.ENABLE)) {
             this.initController();
             /*
@@ -2114,12 +2121,12 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {number} port (0x3F1, input only)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inFDCDiagnostic(port, addrFrom)
     {
         let b = 0x50;       // we simply return the expected pattern (01010000B); see code excerpt above
-        this.printMessageIO(port, undefined, addrFrom, "DIAG", b);
+        this.printIO(port, undefined, addrFrom, "DIAG", b);
         return b;
     }
 
@@ -2129,11 +2136,11 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {number} port (0x3F4, input only)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inFDCStatus(port, addrFrom)
     {
-        this.printMessageIO(port, undefined, addrFrom, "STATUS", this.regStatus);
+        this.printIO(port, undefined, addrFrom, "STATUS", this.regStatus);
         return this.regStatus;
     }
 
@@ -2143,7 +2150,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {number} port (0x3F5, input/output)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inFDCData(port, addrFrom)
     {
@@ -2158,7 +2165,7 @@ export default class FDC extends Component {
             if (this.chipset) this.chipset.clearIRR(ChipSet.IRQ.FDC);
         }
         if (this.messageEnabled()) {
-            this.printMessageIO(port, undefined, addrFrom, "DATA[" + this.regDataIndex + "]", bIn);
+            this.printIO(port, undefined, addrFrom, "DATA[" + this.regDataIndex + "]", bIn);
         }
         if (++this.regDataIndex >= this.regDataTotal) {
             this.regStatus &= ~(FDC.REG_STATUS.READ_DATA | FDC.REG_STATUS.BUSY);
@@ -2178,7 +2185,7 @@ export default class FDC extends Component {
     outFDCData(port, bOut, addrFrom)
     {
         if (this.messageEnabled()) {
-            this.printMessageIO(port, bOut, addrFrom, "DATA[" + this.regDataTotal + "]");
+            this.printIO(port, bOut, addrFrom, "DATA[" + this.regDataTotal + "]");
         }
 
         if (this.regDataTotal < this.regDataArray.length) {
@@ -2207,7 +2214,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {number} port (0x3F7, input only, MODEL_5170 only)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inFDCInput(port, addrFrom)
     {
@@ -2216,7 +2223,7 @@ export default class FDC extends Component {
          * TODO: Determine when the DISK_CHANGE bit is *really* cleared (this is just a guess)
          */
         this.regInput &= ~FDC.REG_INPUT.DISK_CHANGE;
-        this.printMessageIO(port, undefined, addrFrom, "INPUT", bIn);
+        this.printIO(port, undefined, addrFrom, "INPUT", bIn);
         return bIn;
     }
 
@@ -2230,7 +2237,7 @@ export default class FDC extends Component {
      */
     outFDCControl(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CONTROL");
+        this.printIO(port, bOut, addrFrom, "CONTROL");
         this.regControl  = bOut;
     }
 
@@ -2567,16 +2574,16 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {string|undefined} [name]
-     * @return {number}
+     * @returns {number}
      */
     popCmd(name)
     {
         this.assert((!this.regDataIndex || name !== undefined) && this.regDataIndex < this.regDataTotal);
         let bCmd = this.regDataArray[this.regDataIndex];
-        if (DEBUG && this.messageEnabled(Messages.PORT + Messages.FDC)) {
+        if (DEBUG) {
             let bCmdMasked = bCmd & FDC.REG_DATA.CMD.MASK;
             if (!name && !this.regDataIndex && FDC.aCmdInfo[bCmdMasked]) name = FDC.aCmdInfo[bCmdMasked].name;
-            this.printMessage(this.idComponent + ".popCmd(" + (name || this.regDataIndex) + "): " + Str.toHexByte(bCmd), true);
+            this.printf(Messages.PORT + Messages.FDC, "%s.popCmd(%s): %#04x\n", this.idComponent, (name || this.regDataIndex), bCmd);
         }
         this.regDataIndex++;
         return bCmd;
@@ -2643,9 +2650,7 @@ export default class FDC extends Component {
      */
     pushResult(bResult, name)
     {
-        if (DEBUG && this.messageEnabled(Messages.PORT + Messages.FDC)) {
-            this.printMessage(this.idComponent + ".pushResult(" + (name || this.regDataTotal) + "): " + Str.toHexByte(bResult), true);
-        }
+        if (DEBUG) this.printf(Messages.PORT + Messages.FDC, "%s.pushResult(%s): %#04x\n", this.idComponent, (name || this.regDataTotal), bResult);
         this.assert(!(bResult & ~0xff));
         this.regDataArray[this.regDataTotal++] = bResult;
     }
@@ -2721,7 +2726,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {Object} drive
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     doDMAWrite(drive, b)
     {
@@ -2758,7 +2763,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} drive
-     * @return {boolean}
+     * @returns {boolean}
      */
     doRead(drive)
     {
@@ -2800,7 +2805,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} drive
-     * @return {boolean}
+     * @returns {boolean}
      */
     doWrite(drive)
     {
@@ -2971,7 +2976,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {Object} drive
      * @param {number} b containing next byte to write
-     * @return {number} (b unchanged; return -1 if command should be terminated)
+     * @returns {number} (b unchanged; return -1 if command should be terminated)
      */
     writeData(drive, b)
     {
@@ -3037,7 +3042,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {Object} drive
      * @param {number} b containing a format command byte
-     * @return {number} (b if successful, -1 if command should be terminated)
+     * @returns {number} (b if successful, -1 if command should be terminated)
      */
     writeFormat(drive, b)
     {

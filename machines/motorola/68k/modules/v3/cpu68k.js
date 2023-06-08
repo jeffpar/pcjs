@@ -55,7 +55,7 @@ import EAModeImmediateLong  from "./eamodes.js";
 /**
  * 68K Emulator
  *
- * @class {CPU68K}
+ * @class CPU68K
  * @unrestricted
  * @property {Bus} busMemory
  * @property {Input} input
@@ -1918,7 +1918,7 @@ export default class CPU68K extends CPU
     loadState(stateCPU)
     {
         if (!stateCPU || !stateCPU.length) {
-            this.println("invalid saved state");
+            this.printf("invalid saved state\n");
             return false;
         }
         let idDevice = stateCPU.shift();
@@ -1931,7 +1931,7 @@ export default class CPU68K extends CPU
             this.regA = stateCPU.shift();
             this.regD = stateCPU.shift();
         } catch(err) {
-            this.println("CPU state error: " + err.message);
+            this.printf("CPU state error: %s\n", err.message);
             return false;
         }
         return true;
@@ -2000,7 +2000,7 @@ export default class CPU68K extends CPU
      */
     onReset()
     {
-        this.println("reset");
+        this.printf("reset\n");
         this.resetRegs();
         if (!this.time.isRunning()) this.print(this.toString());
     }

@@ -137,7 +137,7 @@ export default class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -151,7 +151,7 @@ export default class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -168,7 +168,7 @@ export default class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string} s
      * @param {string} sAddr
-     * @return {string}
+     * @returns {string}
      */
     parseAddrReference(s, sAddr)
     {
@@ -179,7 +179,7 @@ export default class DbgLib extends Component {
      * getNextCommand()
      *
      * @this {DbgLib}
-     * @return {string}
+     * @returns {string}
      */
     getNextCommand()
     {
@@ -197,7 +197,7 @@ export default class DbgLib extends Component {
      * getPrevCommand()
      *
      * @this {DbgLib}
-     * @return {string|null}
+     * @returns {string|null}
      */
     getPrevCommand()
     {
@@ -215,7 +215,7 @@ export default class DbgLib extends Component {
      * @param {string|undefined} sCmd
      * @param {boolean} [fSave] is true to save the command, false if not
      * @param {string} [chSep] is the command separator character (default is ';')
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     parseCommand(sCmd, fSave, chSep)
     {
@@ -295,7 +295,7 @@ export default class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst & src)
+     * @returns {number} (dst & src)
      */
     evalAND(dst, src)
     {
@@ -329,7 +329,7 @@ export default class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst | src)
+     * @returns {number} (dst | src)
      */
     evalIOR(dst, src)
     {
@@ -363,7 +363,7 @@ export default class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst ^ src)
+     * @returns {number} (dst ^ src)
      */
     evalXOR(dst, src)
     {
@@ -396,7 +396,7 @@ export default class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst * src)
+     * @returns {number} (dst * src)
      */
     evalMUL(dst, src)
     {
@@ -410,7 +410,7 @@ export default class DbgLib extends Component {
      * @param {number} v
      * @param {number} [nBits]
      * @param {boolean} [fUnsigned]
-     * @return {number}
+     * @returns {number}
      */
     truncate(v, nBits, fUnsigned)
     {
@@ -453,7 +453,7 @@ export default class DbgLib extends Component {
             }
         }
         if (v != vNew) {
-            if (MAXDEBUG) this.println("warning: value " + v + " truncated to " + vNew);
+            if (MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
             v = vNew;
         }
         return v;
@@ -484,7 +484,7 @@ export default class DbgLib extends Component {
      * @param {Array.<number>} aVals
      * @param {Array.<string>} aOps
      * @param {number} [cOps] (default is -1 for all)
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     evalOps(aVals, aOps, cOps = -1)
     {
@@ -608,7 +608,7 @@ export default class DbgLib extends Component {
      * @param {number} iLimit
      * @param {number} nBase
      * @param {Array|undefined} [aUndefined]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseArray(asValues, iValue, iLimit, nBase, aUndefined)
     {
@@ -751,7 +751,7 @@ export default class DbgLib extends Component {
             value = aVals.pop();
             this.assert(!aVals.length);
         } else if (!aUndefined) {
-            this.println("parse error (" + (sValue || sOp) + ")");
+            this.printf("parse error (%s)\n", (sValue || sOp));
         }
 
         this.nBase = nBasePrev;
@@ -766,7 +766,7 @@ export default class DbgLib extends Component {
      * @param {string} chDelim
      * @param {number} nBits
      * @param {number} cchMax
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseASCII(sExp, chDelim, nBits, cchMax)
     {
@@ -792,7 +792,7 @@ export default class DbgLib extends Component {
                 v = this.truncate(v * Math.pow(2, nBits) + c, nBits * cchMax, true);
             }
             if (cch >= 0) {
-                this.println("parse error (" + chDelim + sExp + chDelim + ")");
+                this.printf("parse error (%s%s%s)\n", chDelim, sExp, chDelim);
                 return undefined;
             } else {
                 sExp = sExp.substr(0, i) + this.toStrBase(v, -1) + sExp.substr(j);
@@ -828,7 +828,7 @@ export default class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string|undefined} sExp
      * @param {Array|undefined|boolean} [fQuiet]
-     * @return {number|undefined} numeric value, or undefined if sExp contains any undefined or invalid values
+     * @returns {number|undefined} numeric value, or undefined if sExp contains any undefined or invalid values
      */
     parseExpression(sExp, fQuiet)
     {
@@ -918,7 +918,7 @@ export default class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} s
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseReference(s)
     {
@@ -967,7 +967,7 @@ export default class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     parseSysVars(s)
     {
@@ -1001,7 +1001,7 @@ export default class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} value
      * @param {number} nUnary
-     * @return {number}
+     * @returns {number}
      */
     parseUnary(value, nUnary)
     {
@@ -1033,7 +1033,7 @@ export default class DbgLib extends Component {
      * @param {string} [sName] is the name of the value, if any
      * @param {Array|boolean} [fQuiet]
      * @param {number} [nUnary] (0 for none, 1 for negate, 2 for complement, 3 for leading zeros)
-     * @return {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
+     * @returns {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
      */
     parseValue(sValue, sName, fQuiet, nUnary = 0)
     {
@@ -1057,7 +1057,7 @@ export default class DbgLib extends Component {
                                 value += valueUndefined;
                             } else {
                                 if (!fQuiet) {
-                                    this.println("undefined " + (sName || "value") + ": " + sValue + " (" + sUndefined + ")");
+                                    this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
                                 }
                                 value = undefined;
                             }
@@ -1074,12 +1074,12 @@ export default class DbgLib extends Component {
                 value = this.truncate(this.parseUnary(value, nUnary));
             } else {
                 if (!fQuiet) {
-                    this.println("invalid " + (sName || "value") + ": " + sValue);
+                    this.printf("invalid %s: %s\n", (sName || "value"), sValue);
                 }
             }
         } else {
             if (!fQuiet) {
-                this.println("missing " + (sName || "value"));
+                this.printf("missing %s\n", (sName || "value"));
             }
         }
         return value;
@@ -1091,7 +1091,7 @@ export default class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string|null|*} sVar
      * @param {number|undefined} value
-     * @return {boolean} true if value defined, false if not
+     * @returns {boolean} true if value defined, false if not
      */
     printValue(sVar, value)
     {
@@ -1109,7 +1109,7 @@ export default class DbgLib extends Component {
             }
         }
         sVar = (sVar != null? (sVar + ": ") : "");
-        this.println(sVar + sValue);
+        this.printf("%s%s\n", sVar, sValue);
         return fDefined;
     }
 
@@ -1117,7 +1117,7 @@ export default class DbgLib extends Component {
      * resetVariables()
      *
      * @this {DbgLib}
-     * @return {Object}
+     * @returns {Object}
      */
     resetVariables()
     {
@@ -1142,7 +1142,7 @@ export default class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} [sVar]
-     * @return {boolean} true if all value(s) defined, false if not
+     * @returns {boolean} true if all value(s) defined, false if not
      */
     printVariable(sVar)
     {
@@ -1177,7 +1177,7 @@ export default class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getVariable(sVar)
     {
@@ -1193,7 +1193,7 @@ export default class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     getVariableFixup(sVar)
     {
@@ -1205,7 +1205,7 @@ export default class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {boolean}
+     * @returns {boolean}
      */
     isVariable(sVar)
     {
@@ -1235,7 +1235,7 @@ export default class DbgLib extends Component {
      * @param {number} [nBits] (-1 to strip leading zeros, 0 to allow a variable number of digits)
      * @param {number} [nBase]
      * @param {number} [nGrouping] (if nBase is 2, this is a grouping; otherwise, it's a prefix condition)
-     * @return {string}
+     * @returns {string}
      */
     toStrBase(n, nBits = 0, nBase = 0, nGrouping = 0)
     {

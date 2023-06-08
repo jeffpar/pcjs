@@ -18,7 +18,7 @@ import { APPVERSION, DEBUG, globals } from "./defines.js";
  * @param {string} idMachine
  * @param {string} sPCJSFile
  * @param {function(Object)} [callback]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function savePC(idMachine, sPCJSFile, callback)
 {
@@ -144,7 +144,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
                 let path = matchDisk[2];
                 if (path) {
                     if (res[path]) {
-                        Component.log("recording disk: '" + path + "'");
+                        Component.printf("recording disk: \"%s\"\n", path);
                     } else {
                         data = data.replace(matchDisk[0], "");
                     }
@@ -155,23 +155,23 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
         else if (sExt == "xsl") {
             sXSLFile = sName = Str.getBaseName(sName);
         }
-        Component.log("saving resource: '" + sName + "' (" + data.length + " bytes)");
+        Component.printf("saving resource: \"%s\" (%d bytes)\n", sName, data.length);
         resNew[sName] = data;
     }
 
     if (sCSS) {
         resNew[sName = 'css'] = sCSS;
-        Component.log("saving resource: '" + sName + "' (" + sCSS.length + " bytes)");
+        Component.printf("saving resource: \"%s\" (%d bytes)\n", sName, sCSS.length);
     }
 
     if (aMachineInfo[2]) {
         let sParms = resNew[sName = 'parms'] = aMachineInfo[2];
-        Component.log("saving resource: '" + sName + "' (" + sParms.length + " bytes)");
+        Component.printf("saving resource: \"%s\" (%d bytes)\n", sName, sParms.length);
     }
 
     if (aMachineInfo[3]) {
         let sState = resNew[sName = 'state'] = aMachineInfo[3];
-        Component.log("saving resource: '" + sName + "' (" + sState.length + " bytes)");
+        Component.printf("saving resource: \"%s\" (%d bytes)\n", sName, sState.length);
     }
 
     if (sXMLFile && sXSLFile) {
@@ -179,7 +179,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
 
         sScript += ".js";
         sPCJS = matchScript[1] + "var resources=" + sResources + ";" + matchScript[2] + matchScript[3];
-        Component.log("saving machine: '" + idMachine + "' (" + sPCJS.length + " bytes)");
+        Component.printf("saving machine: \"%s\" (%d bytes)\n", idMachine, sPCJS.length);
 
         /*
          * I don't recall exactly why I did this, because I just tested FireFox with copyright symbols intact,

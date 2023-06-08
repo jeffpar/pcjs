@@ -13,7 +13,7 @@ import path from "path";
 import url from "url";
 
 /**
- * @class {NetIO}
+ * @class NetIO
  * @unrestricted
  */
 export default class NetIO
@@ -32,7 +32,7 @@ export default class NetIO
      * @param {string} sParm
      * @param {string} [sValue] (pass undefined to check for the presence of ANY sParm)
      * @param {Object} [req] is the web server's (ie, Express) request object, if any
-     * @return {boolean} true if the request Object contains the specified parameter/value, false if not
+     * @returns {boolean} true if the request Object contains the specified parameter/value, false if not
      *
      * TODO: Consider whether sParm === null should check for the presence of ANY parameter in Net.asPropagate.
      */
@@ -59,7 +59,7 @@ export default class NetIO
      *
      * @param {string|null} sURL
      * @param {Object} [req] is the web server's (ie, Express) request object, if any
-     * @return {string} massaged sURL
+     * @returns {string} massaged sURL
      */
     static propagateParms(sURL, req)
     {
@@ -101,7 +101,7 @@ export default class NetIO
      * @param {string} sURL
      * @param {Object} req is the web server's (ie, Express) request object, if any
      * @param {boolean} [fDebug]
-     * @return {string} encoded URL
+     * @returns {string} encoded URL
      */
     static encodeURL(sURL, req, fDebug)
     {
@@ -132,7 +132,7 @@ export default class NetIO
      * TODO: Add support for FTP? HTTPS? Anything else?
      *
      * @param {string} sPath
-     * @return {boolean} true if sPath is a (supported) remote path, false if not
+     * @returns {boolean} true if sPath is a (supported) remote path, false if not
      */
     static isRemote(sPath)
     {
@@ -305,7 +305,7 @@ export default class NetIO
      * @param {Object|null} [dataPost] for a POST request (default is a GET request)
      * @param {boolean} [fAsync] is true for an asynchronous request
      * @param {function(string,string|null,number)} [done]
-     * @return {Array|null} Array containing [sResource, nErrorCode], or null if no response yet
+     * @returns {Array|null} Array containing [sResource, nErrorCode], or null if no response yet
      */
     static getResource(sURL, dataPost, fAsync, done)
     {

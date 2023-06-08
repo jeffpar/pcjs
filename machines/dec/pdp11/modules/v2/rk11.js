@@ -11,7 +11,7 @@
  */
 
 import DriveController from "./drive.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import { DEBUG, PDP11 } from "./defines.js";
 
@@ -34,7 +34,7 @@ export default class RK11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RK11", parms, MessagesPDP11.RK11, PDP11.RK11, PDP11.RK11.RK05, RK11.UNIBUS_IOTABLE);
+        super("RK11", parms, Messages.RK11, PDP11.RK11, PDP11.RK11.RK05, RK11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -49,7 +49,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -80,7 +80,7 @@ export default class RK11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RK11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -114,7 +114,7 @@ export default class RK11 extends DriveController {
         switch(func = this.regRKCS & RK11.RKCS.FUNC) {
 
         case RK11.FUNC.CRESET:
-            if (this.messageEnabled()) this.printMessage(this.type + ": CRESET(" + iDrive + ")", true);
+            this.printf("%s: CRESET(%d)\n", this.type, iDrive);
             this.regRKER = this.regRKDA = 0;
             this.regRKCS = RK11.RKCS.CRDY;
             break;
@@ -143,7 +143,7 @@ export default class RK11 extends DriveController {
             addr = (((this.regRKCS & RK11.RKCS.MEX)) << (16 - RK11.RKCS.SHIFT.MEX)) | this.regRKBA;
             inc = (this.regRKCS & RK11.RKCS.IBA)? 0 : 2;
 
-            if (this.messageEnabled()) this.printMessage(this.type + ": " + sFunc + "(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+            this.printf(Messages.ADDRESS, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
             if (iCylinder >= drive.nCylinders) {
                 this.regRKER |= RK11.RKER.NXC;
@@ -159,7 +159,7 @@ export default class RK11 extends DriveController {
 
         case RK11.FUNC.SEEK:
             iCylinder = (this.regRKDA & RK11.RKDA.CA) >> RK11.RKDA.SHIFT.CA;
-            if (this.messageEnabled()) this.printMessage(this.type + ": SEEK(" + iCylinder + ")", true);
+            this.printf("%s: SEEK(%d)\n", this.type, iCylinder);
             if (iCylinder < drive.nCylinders) {
                 this.regRKCS |= RK11.RKCS.SCP;
             } else {
@@ -168,13 +168,13 @@ export default class RK11 extends DriveController {
             break;
 
         case RK11.FUNC.DRESET:
-            if (this.messageEnabled()) this.printMessage(this.type + ": DRESET(" + iDrive + ")");
+            this.printf("%s: DRESET(%d)\n", this.type, iDrive);
             this.regRKER = this.regRKDA = 0;
             this.regRKCS = RK11.RKCS.CRDY | RK11.RKCS.SCP;
             break;
 
         default:
-            if (this.messageEnabled()) this.printMessage(this.type + ": UNSUPPORTED(" + func + ")");
+            this.printf("%s: UNSUPPORTED(%s)\n", this.type, func);
             break;
         }
 
@@ -202,7 +202,7 @@ export default class RK11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -244,7 +244,7 @@ export default class RK11 extends DriveController {
             if (!fCheck) {
                 var data = b0 | (b1 << 8);
                 this.bus.setWordDirect(this.cpu.mapUnibus(addr), data);
-                if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+                if (DEBUG && this.messageEnabled(Messages.READ)) {
                     if (!sWords) sWords = Str.toOct(addr) + ": ";
                     sWords += Str.toOct(data) + ' ';
                     if (sWords.length >= 64) {
@@ -277,7 +277,7 @@ export default class RK11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -358,7 +358,7 @@ export default class RK11 extends DriveController {
      * @param {number} iSector
      * @param {number} nWords
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     doneReadWrite(nError, iCylinder, iHead, iSector, nWords, addr)
     {
@@ -395,7 +395,7 @@ export default class RK11 extends DriveController {
             this.regRKER |= RK11.RKER.DRE;
             this.regRKCS |= RK11.RKCS.ERR;
             if (this.regRKER & RK11.RKER.HE) this.regRKCS |= RK11.RKCS.HE;
-            if (this.messageEnabled()) this.printMessage(this.type + ": ERROR: " + Str.toOct(this.regRKER));
+            this.printf("%s: ERROR: %o\n", this.type, this.regRKER);
         }
     }
 
@@ -404,7 +404,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDS or 177400)
-     * @return {number}
+     * @returns {number}
      */
     readRKDS(addr)
     {
@@ -430,7 +430,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKER or 177402)
-     * @return {number}
+     * @returns {number}
      */
     readRKER(addr)
     {
@@ -456,7 +456,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKCS or 177404)
-     * @return {number}
+     * @returns {number}
      */
     readRKCS(addr)
     {
@@ -482,7 +482,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKWC or 177406)
-     * @return {number}
+     * @returns {number}
      */
     readRKWC(addr)
     {
@@ -506,7 +506,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKBA or 177410)
-     * @return {number}
+     * @returns {number}
      */
     readRKBA(addr)
     {
@@ -530,7 +530,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDA or 177412)
-     * @return {number}
+     * @returns {number}
      */
     readRKDA(addr)
     {
@@ -554,7 +554,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDB or 177416)
-     * @return {number}
+     * @returns {number}
      */
     readRKDB(addr)
     {

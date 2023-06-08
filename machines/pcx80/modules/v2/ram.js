@@ -9,6 +9,7 @@
 
 import CPUDefX80 from "./cpudef.js";
 import MemoryX80 from "./memory.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -61,7 +62,7 @@ export default class RAMx80 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -101,7 +102,7 @@ export default class RAMx80 extends Component {
      * @this {RAMx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -120,7 +121,7 @@ export default class RAMx80 extends Component {
      * @this {RAMx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -144,7 +145,7 @@ export default class RAMx80 extends Component {
     doneLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load RAM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -241,7 +242,7 @@ export default class RAMx80 extends Component {
      *
      * @this {RAMx80}
      * @param {number} addr (of the HLT opcode)
-     * @return {boolean} true if special processing performed, false if not
+     * @returns {boolean} true if special processing performed, false if not
      */
     checkCPMVector(addr)
     {
@@ -268,7 +269,7 @@ export default class RAMx80 extends Component {
                 CPUDefX80.opRET.call(cpu);     // for recognized calls, automatically return
             }
             else if (dbg) {
-                this.println("\nCP/M vector " + Str.toHexWord(addr));
+                this.print("\nCP/M vector %#06x\n", addr);
                 cpu.setPC(addr);                // this is purely for the Debugger's benefit, to show the HLT
                 dbg.stopCPU();
             }
@@ -282,7 +283,7 @@ export default class RAMx80 extends Component {
      *
      * @this {RAMx80}
      * @param {number} ch
-     * @return {string}
+     * @returns {string}
      */
     getCPMChar(ch)
     {
@@ -295,7 +296,7 @@ export default class RAMx80 extends Component {
      * @this {RAMx80}
      * @param {number} addr (of a string)
      * @param {string|number} [chEnd] (terminating character, default is 0)
-     * @return {string}
+     * @returns {string}
      */
     getCPMString(addr, chEnd)
     {

@@ -90,7 +90,7 @@ function main(argc, argv)
 
     Device.DEBUG = !!argv['debug'];
 
-    printf("DirParse v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s\n", options) : ""));
+    printf("dirparse v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s\n", options) : ""));
 
     if (!argv[1]) {
         printf("missing filename\n");

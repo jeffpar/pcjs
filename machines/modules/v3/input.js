@@ -71,7 +71,7 @@ import Device from "./device.js";
  */
 
 /**
- * @class {Input}
+ * @class Input
  * @unrestricted
  * @property {InputConfig} config
  * @property {Array.<number>} location
@@ -1361,7 +1361,7 @@ export default class Input extends Device {
             state.xStart = state.yStart = -1;
         }
         else {
-            this.println("unrecognized action: " + action);
+            this.printf("unrecognized action: %d\n", action);
         }
     }
 

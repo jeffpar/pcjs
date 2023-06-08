@@ -2,7 +2,7 @@ This directory contains the PDP11 Node command-line "wrapper" utility [pdp11.js]
 
 When you run it, be sure to provide a valid machine XML file; e.g.:
 
-	node pdp11.js --cmd="load ../../../devices/pdp11/machine/1170/panel/debugger/machine.xml"
+	node pdp11.js --cmd="load ../1170/panel/debugger/machine.xml"
 
 which should then produce the following output:
 

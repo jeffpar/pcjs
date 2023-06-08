@@ -8,7 +8,7 @@
  */
 
 import MemoryPDP11 from "./memory.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import Str from "../../../../modules/v2/strlib.js";
@@ -60,7 +60,7 @@ export default class RAMPDP11 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -100,7 +100,7 @@ export default class RAMPDP11 extends Component {
      * @this {RAMPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -131,7 +131,7 @@ export default class RAMPDP11 extends Component {
      * @this {RAMPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -155,7 +155,7 @@ export default class RAMPDP11 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load RAM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -204,9 +204,9 @@ export default class RAMPDP11 extends Component {
                 if (!this.abInit) return;
 
                 if (this.loadImage(this.abInit, this.addrLoad, this.addrExec, this.addrRAM)) {
-                    this.status('Loaded image "%s"', this.sFileName);
+                    this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
-                    this.notice('Error loading image "' + this.sFileName + '"');
+                    this.printf(Messages.NOTICE, "Error loading image \"%s\"\n", this.sFileName);
                 }
 
                 /*
@@ -253,7 +253,7 @@ export default class RAMPDP11 extends Component {
      * @param {number|null} [addrExec] (this CAN override any starting address INSIDE the image)
      * @param {number|null} [addrInit]
      * @param {boolean} [fStart]
-     * @return {boolean} (true if loaded, false if not)
+     * @returns {boolean} (true if loaded, false if not)
      */
     loadImage(aBytes, addrLoad, addrExec, addrInit, fStart)
     {
@@ -298,11 +298,11 @@ export default class RAMPDP11 extends Component {
                 }
                 var offBlock = off;
                 if (w != 0x0001) {
-                    this.printMessage("invalid signature (" + Str.toHexWord(w) + ") at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printf(Messages.PAPER, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
                     break;
                 }
                 if (off + 6 >= aBytes.length) {
-                    this.printMessage("invalid block at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printf(Messages.PAPER, "invalid block at offset %#06x\n", offBlock);
                     break;
                 }
                 off += 2;
@@ -316,12 +316,12 @@ export default class RAMPDP11 extends Component {
                     len--;
                 }
                 if (len != 0 || off >= aBytes.length) {
-                    this.printMessage("insufficient data for block at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printf(Messages.PAPER, "insufficient data for block at offset %#06x\n", offBlock);
                     break;
                 }
                 checksum += aBytes[off++] & 0xff;
                 if (checksum & 0xff) {
-                    this.printMessage("invalid checksum (" + Str.toHexByte(checksum) + ") for block at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printf(Messages.PAPER, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
                     break;
                 }
                 if (!cbData) {
@@ -330,9 +330,9 @@ export default class RAMPDP11 extends Component {
                     } else {
                         if (addrExec == null) addrExec = addr;
                     }
-                    if (addrExec != null) this.printMessage("starting address: " + Str.toHexWord(addrExec), MessagesPDP11.PAPER);
+                    if (addrExec != null) this.printf(Messages.PAPER, "starting address: %#06x\n", addrExec);
                 } else {
-                    this.printMessage("loading " + Str.toHexWord(cbData) + " bytes at " + Str.toHexWord(addr) + "-" + Str.toHexWord(addr + cbData), MessagesPDP11.PAPER);
+                    this.printf(Messages.PAPER, "loading %#06x bytes at %#06x-%%#06x\n", cbData, addr, addr + cbData);
                     while (cbData--) {
                         this.bus.setByteDirect(addr++, aBytes[offData++] & 0xff);
                     }

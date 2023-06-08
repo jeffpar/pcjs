@@ -12,7 +12,7 @@
  *
  *      default (eg: `gulp` or `gulp default`)
  *
- *          Recompiles all machine scripts in their respective release folder that are out-of-date with
+ *          Recompiles all machine modules in their respective release folder that are out-of-date with
  *          respect to the individual files (under /machines).  The target version comes from
  *          machines/machines.json:shared.version.
  *
@@ -88,7 +88,7 @@ var pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"));
  * @property {string} factory
  * @property {Array.<string>} defines
  * @property {Array.<string>} externs
- * @property {Array.<string>} scripts
+ * @property {Array.<string>} modules
  * @property {Array.<string>} [styles]
  * @property {Array.<string>} [css]
  * @property {Array.<string>} [xsl]
@@ -147,9 +147,9 @@ aMachines.forEach(function(machineID)
         Machine = machines[Machine.copy];
     }
 
-    if (Machine.scripts) {
-        Machine.scripts.forEach((script) => {
-            if (aWatchedFiles.indexOf(script) < 0) aWatchedFiles.push(script);
+    if (Machine.modules) {
+        Machine.modules.forEach((module) => {
+            if (aWatchedFiles.indexOf(module) < 0) aWatchedFiles.push(module);
         });
     }
 
@@ -230,7 +230,7 @@ aMachines.forEach(function(machineID)
     let taskConcat = "concat/" + machineID;
     aConcatTasks.push(taskConcat);
     gulp.task(taskConcat, function() {
-        return gulp.src(Machine.scripts)
+        return gulp.src(Machine.modules)
             .pipe(gulpNewer(path.join(machineReleaseDir, machineUncompiledFile)))
             .pipe(gulpForEach(function(stream, file) {
                 aMachinesOutdated.push(machineID);
@@ -240,6 +240,7 @@ aMachines.forEach(function(machineID)
                     .pipe(gulpReplace(/(var\s+VERSION\s*=\s*)"[0-9.]*"/g, '$1"' + machineVersion + '"'))
                     .pipe(gulpReplace(/(^|\n)[ \t]*(['"])use strict\2;?/g, ""))
                     .pipe(gulpReplace(/^import[ \t]+[^\n]*\n/gm, ""))
+                    .pipe(gulpReplace(/^.*?Messages.*?=\s*\{\s*...CommonMessages.*?\};/gm, ""))
                     .pipe(gulpReplace(/^export[ \t]+(.*?;\n|default[ \t]+|\{.*?\}|)/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*var\s+\S+\s*=\s*require\((['"]).*?\1\)[^;]*;/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*(if\s+\(NODE\)\s*|)module\.exports\s*=\s*[^;]*;/gm, ""))

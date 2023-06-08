@@ -246,7 +246,7 @@ export default class CPUx86 extends CPULib {
      * @param {number} addr
      * @param {boolean} fWrite is true for a memory write breakpoint, false for a memory read breakpoint
      * @param {boolean} [fPhysical] (true for physical breakpoint, false for linear)
-     * @return {boolean}
+     * @returns {boolean}
      */
     addMemBreak(addr, fWrite, fPhysical)
     {
@@ -429,7 +429,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} addr
-     * @return {MemoryX86}
+     * @returns {MemoryX86}
      */
     acquirePageBlock(addr)
     {
@@ -496,7 +496,7 @@ export default class CPUx86 extends CPULib {
      * @param {number} addr is a linear address
      * @param {boolean} fWrite (true if called for a write, false if for a read)
      * @param {boolean} [fSuppress] (true if any faults, remapping, etc should be suppressed)
-     * @return {MemoryX86}
+     * @returns {MemoryX86}
      */
     mapPageBlock(addr, fWrite, fSuppress)
     {
@@ -586,7 +586,7 @@ export default class CPUx86 extends CPULib {
      * isPagingEnabled()
      *
      * @this {CPUx86}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isPagingEnabled()
     {
@@ -904,7 +904,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} i (0-7)
-     * @return {number}
+     * @returns {number}
      */
     getReg(i)
     {
@@ -1463,7 +1463,7 @@ export default class CPUx86 extends CPULib {
      * getChecksum()
      *
      * @this {CPUx86}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -1500,7 +1500,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} nInt
-     * @return {boolean} true if software interrupt may proceed, false if software interrupt should be skipped
+     * @returns {boolean} true if software interrupt may proceed, false if software interrupt should be skipped
      */
     checkIntNotify(nInt)
     {
@@ -1706,7 +1706,7 @@ export default class CPUx86 extends CPULib {
      * isProtMode()
      *
      * @this {CPUx86}
-     * @return {boolean} true if protected-mode, false if not
+     * @returns {boolean} true if protected-mode, false if not
      */
     isProtMode()
     {
@@ -1717,7 +1717,7 @@ export default class CPUx86 extends CPULib {
      * isV86Mode()
      *
      * @this {CPUx86}
-     * @return {boolean} true if V86-mode, false if not
+     * @returns {boolean} true if V86-mode, false if not
      */
     isV86Mode()
     {
@@ -1748,8 +1748,8 @@ export default class CPUx86 extends CPULib {
         if (fV86 === undefined) {
             fV86 = this.isV86Mode();
         }
-        if (DEBUG && (fProt != this.isProtMode() || fV86 != this.isV86Mode()) && this.messageEnabled()) {
-            this.printMessage("CPU switching to " + (fProt? (fV86? "v86" : "protected") : "real") + "-mode", this.bitsMessage, true);
+        if (DEBUG && (fProt != this.isProtMode() || fV86 != this.isV86Mode())) {
+            this.printf(Messages.ADDRESS, "CPU switching to %s-mode\n", (fProt? (fV86? "v86" : "protected") : "real"));
         }
         this.aOpGrp6 = (fProt && !fV86? X86.aOpGrp6Prot : X86.aOpGrp6Real);
         this.segCS.updateMode(false, fProt, fV86);
@@ -1775,7 +1775,7 @@ export default class CPUx86 extends CPULib {
      * Save CPU state related to protected-mode, for save()
      *
      * @this {CPUx86}
-     * @return {Array}
+     * @returns {Array}
      */
     saveProtMode()
     {
@@ -1848,7 +1848,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {boolean} [fRunning]
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save(fRunning)
     {
@@ -1873,7 +1873,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -1947,7 +1947,7 @@ export default class CPUx86 extends CPULib {
      * getSeg(sName)
      *
      * @param {string} sName
-     * @return {SegX86|Array}
+     * @returns {SegX86|Array}
      */
     getSeg(sName)
     {
@@ -1976,7 +1976,7 @@ export default class CPUx86 extends CPULib {
      * getCS()
      *
      * @this {CPUx86}
-     * @return {number}
+     * @returns {number}
      */
     getCS()
     {
@@ -1994,7 +1994,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} sel
-     * @return {boolean}
+     * @returns {boolean}
      */
     setCS(sel)
     {
@@ -2009,7 +2009,7 @@ export default class CPUx86 extends CPULib {
      * getDS()
      *
      * @this {CPUx86}
-     * @return {number}
+     * @returns {number}
      */
     getDS()
     {
@@ -2035,7 +2035,7 @@ export default class CPUx86 extends CPULib {
      * getSS()
      *
      * @this {CPUx86}
-     * @return {number}
+     * @returns {number}
      */
     getSS()
     {
@@ -2048,7 +2048,7 @@ export default class CPUx86 extends CPULib {
      * @this {CPUx86}
      * @param {number} sel
      * @param {boolean} [fInterruptable]
-     * @return {boolean}
+     * @returns {boolean}
      */
     setSS(sel, fInterruptable)
     {
@@ -2098,7 +2098,7 @@ export default class CPUx86 extends CPULib {
      * getES()
      *
      * @this {CPUx86}
-     * @return {number}
+     * @returns {number}
      */
     getES()
     {
@@ -2110,7 +2110,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} sel
-     * @return {boolean}
+     * @returns {boolean}
      */
     setES(sel)
     {
@@ -2127,7 +2127,7 @@ export default class CPUx86 extends CPULib {
      * NOTE: segFS is defined for I386 only.
      *
      * @this {CPUx86}
-     * @return {number}
+     * @returns {number}
      */
     getFS()
     {
@@ -2141,7 +2141,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} sel
-     * @return {boolean}
+     * @returns {boolean}
      */
     setFS(sel)
     {
@@ -2154,7 +2154,7 @@ export default class CPUx86 extends CPULib {
      * NOTE: segGS is defined for I386 only.
      *
      * @this {CPUx86}
-     * @return {number}
+     * @returns {number}
      */
     getGS()
     {
@@ -2168,7 +2168,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} sel
-     * @return {boolean}
+     * @returns {boolean}
      */
     setGS(sel)
     {
@@ -2179,7 +2179,7 @@ export default class CPUx86 extends CPULib {
      * getIP()
      *
      * @this {CPUx86}
-     * @return {number}
+     * @returns {number}
      */
     getIP()
     {
@@ -2244,7 +2244,7 @@ export default class CPUx86 extends CPULib {
      * @param {number} off
      * @param {number} sel
      * @param {boolean} [fCall] is true if CALLF in progress, false if RETF/IRET in progress, undefined otherwise
-     * @return {boolean|null} true if a stack switch occurred; the only operation that needs to pay attention is opRETFn()
+     * @returns {boolean|null} true if a stack switch occurred; the only operation that needs to pay attention is opRETFn()
      */
     setCSIP(off, sel, fCall)
     {
@@ -2290,7 +2290,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} inc (positive)
-     * @return {number} new LIP
+     * @returns {number} new LIP
      */
     checkIP(inc)
     {
@@ -2362,7 +2362,7 @@ export default class CPUx86 extends CPULib {
      * getSP()
      *
      * @this {CPUx86}
-     * @return {number}
+     * @returns {number}
      */
     getSP()
     {
@@ -2453,7 +2453,7 @@ export default class CPUx86 extends CPULib {
      * @param {number} type
      * @param {number} [carry]
      * @param {number} [overflow]
-     * @return {number} value
+     * @returns {number} value
      */
     setLogicResult(value, type, carry, overflow)
     {
@@ -2487,7 +2487,7 @@ export default class CPUx86 extends CPULib {
      * getCarry()
      *
      * @this {CPUx86}
-     * @return {number} 0 or 1, depending on whether CF is clear or set
+     * @returns {number} 0 or 1, depending on whether CF is clear or set
      */
     getCarry()
     {
@@ -2520,7 +2520,7 @@ export default class CPUx86 extends CPULib {
      * after the subtraction, so that the above truth table still applies; see setArithResult().
      *
      * @this {CPUx86}
-     * @return {number} 0 or X86.PS.CF
+     * @returns {number} 0 or X86.PS.CF
      */
     getCF()
     {
@@ -2557,7 +2557,7 @@ export default class CPUx86 extends CPULib {
      * simpler.  Note that PF must be SET if that byte has EVEN parity, and CLEAR if it has ODD parity.
      *
      * @this {CPUx86}
-     * @return {number} 0 or X86.PS.PF
+     * @returns {number} 0 or X86.PS.PF
      */
     getPF()
     {
@@ -2593,7 +2593,7 @@ export default class CPUx86 extends CPULib {
      *      (resultArith ^ (resultDst ^ resultSrc)) & 0x0010
      *
      * @this {CPUx86}
-     * @return {number} 0 or X86.PS.AF
+     * @returns {number} 0 or X86.PS.AF
      */
     getAF()
     {
@@ -2611,7 +2611,7 @@ export default class CPUx86 extends CPULib {
      * getZF()
      *
      * @this {CPUx86}
-     * @return {number} 0 or X86.PS.ZF
+     * @returns {number} 0 or X86.PS.ZF
      */
     getZF()
     {
@@ -2629,7 +2629,7 @@ export default class CPUx86 extends CPULib {
      * getSF()
      *
      * @this {CPUx86}
-     * @return {number} 0 or X86.PS.SF
+     * @returns {number} 0 or X86.PS.SF
      */
     getSF()
     {
@@ -2675,7 +2675,7 @@ export default class CPUx86 extends CPULib {
      * after the subtraction, so that the above truth table still applies; see setArithResult().
      *
      * @this {CPUx86}
-     * @return {number} 0 or X86.PS.OF
+     * @returns {number} 0 or X86.PS.OF
      */
     getOF()
     {
@@ -2693,7 +2693,7 @@ export default class CPUx86 extends CPULib {
      * getTF()
      *
      * @this {CPUx86}
-     * @return {number} 0 or X86.PS.TF
+     * @returns {number} 0 or X86.PS.TF
      */
     getTF()
     {
@@ -2704,7 +2704,7 @@ export default class CPUx86 extends CPULib {
      * getIF()
      *
      * @this {CPUx86}
-     * @return {number} 0 or X86.PS.IF
+     * @returns {number} 0 or X86.PS.IF
      */
     getIF()
     {
@@ -2715,7 +2715,7 @@ export default class CPUx86 extends CPULib {
      * getDF()
      *
      * @this {CPUx86}
-     * @return {number} 0 or X86.PS.DF
+     * @returns {number} 0 or X86.PS.DF
      */
     getDF()
     {
@@ -2898,7 +2898,7 @@ export default class CPUx86 extends CPULib {
      * getPS()
      *
      * @this {CPUx86}
-     * @return {number}
+     * @returns {number}
      */
     getPS()
     {
@@ -2990,7 +2990,7 @@ export default class CPUx86 extends CPULib {
      * @param {number} port (0x0000 to 0xffff)
      * @param {number} nPorts (1 to 4)
      * @param {boolean} [fInput] (true if input, false if output; output assumed if not specified)
-     * @return {boolean} true if allowed, false if not
+     * @returns {boolean} true if allowed, false if not
      */
     checkIOPM(port, nPorts, fInput)
     {
@@ -3007,7 +3007,7 @@ export default class CPUx86 extends CPULib {
             }
         }
         if (bitsPorts) {
-            if (this.messageEnabled(Messages.IOPM)) this.printMessage("checkIOPM(" + Str.toHexWord(port) + "," + nPorts + "," + (fInput? "input" : "output") + "): trapped", true, true);
+            this.printf(Messages.IOPM + Messages.ADDRESS, "checkIOPM(%#06x,%d,%s): trapped\n", port, nPorts, (fInput? "input" : "output"));
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return false;
         }
@@ -3022,7 +3022,7 @@ export default class CPUx86 extends CPULib {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "AX")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -3093,7 +3093,7 @@ export default class CPUx86 extends CPULib {
      * @param {number} addr is a linear address
      * @param {number} [size] is a length (default is 1; if specified, must be 1, 2 or 4)
      * @param {boolean} [fPhysical] (true for physical probe, false for linear; linear is the default)
-     * @return {number|null} value at the specified address, or null if invalid
+     * @returns {number|null} value at the specified address, or null if invalid
      */
     probeAddr(addr, size, fPhysical)
     {
@@ -3142,7 +3142,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} addr is a linear address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByte(addr)
     {
@@ -3158,7 +3158,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} addr is a linear address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getShort(addr)
     {
@@ -3192,7 +3192,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} addr is a linear address
-     * @return {number} long (32-bit) value at that address
+     * @returns {number} long (32-bit) value at that address
      */
     getLong(addr)
     {
@@ -3328,7 +3328,7 @@ export default class CPUx86 extends CPULib {
      * @this {CPUx86}
      * @param {SegX86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getEAByte(seg, off)
     {
@@ -3346,7 +3346,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} off is a segment-relative offset
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getEAByteData(off)
     {
@@ -3358,7 +3358,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} off is a segment-relative offset
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getEAByteStack(off)
     {
@@ -3371,7 +3371,7 @@ export default class CPUx86 extends CPULib {
      * @this {CPUx86}
      * @param {SegX86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
-     * @return {number} word (16-bit or 32-bit) value at that address
+     * @returns {number} word (16-bit or 32-bit) value at that address
      */
     getEAWord(seg, off)
     {
@@ -3402,7 +3402,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} off is a segment-relative offset
-     * @return {number} short (16-bit) value at that address
+     * @returns {number} short (16-bit) value at that address
      */
     getEAShortData(off)
     {
@@ -3434,7 +3434,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} off is a segment-relative offset
-     * @return {number} short (16-bit) value at that address
+     * @returns {number} short (16-bit) value at that address
      */
     getEAShortStack(off)
     {
@@ -3466,7 +3466,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} off is a segment-relative offset
-     * @return {number} long (32-bit) value at that address
+     * @returns {number} long (32-bit) value at that address
      */
     getEALongData(off)
     {
@@ -3487,7 +3487,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} off is a segment-relative offset
-     * @return {number} long (32-bit) value at that address
+     * @returns {number} long (32-bit) value at that address
      */
     getEALongDataWrite(off)
     {
@@ -3508,7 +3508,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} off is a segment-relative offset
-     * @return {number} long (32-bit) value at that address
+     * @returns {number} long (32-bit) value at that address
      */
     getEALongStack(off)
     {
@@ -3529,7 +3529,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} off is a segment-relative offset
-     * @return {number} long (32-bit) value at that address
+     * @returns {number} long (32-bit) value at that address
      */
     getEALongStackWrite(off)
     {
@@ -3638,7 +3638,7 @@ export default class CPUx86 extends CPULib {
      * @this {CPUx86}
      * @param {SegX86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getSOByte(seg, off)
     {
@@ -3653,7 +3653,7 @@ export default class CPUx86 extends CPULib {
      * @this {CPUx86}
      * @param {SegX86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getSOWord(seg, off)
     {
@@ -3719,7 +3719,7 @@ export default class CPUx86 extends CPULib {
      * getBytePrefetch()
      *
      * @this {CPUx86}
-     * @return {number} byte (8-bit) value at regLIP
+     * @returns {number} byte (8-bit) value at regLIP
      */
     getBytePrefetch()
     {
@@ -3737,7 +3737,7 @@ export default class CPUx86 extends CPULib {
      * getShortPrefetch()
      *
      * @this {CPUx86}
-     * @return {number} short (16-bit) value at regLIP
+     * @returns {number} short (16-bit) value at regLIP
      */
     getShortPrefetch()
     {
@@ -3760,7 +3760,7 @@ export default class CPUx86 extends CPULib {
      * getLongPrefetch()
      *
      * @this {CPUx86}
-     * @return {number} long (32-bit) value at regLIP
+     * @returns {number} long (32-bit) value at regLIP
      */
     getLongPrefetch()
     {
@@ -3783,7 +3783,7 @@ export default class CPUx86 extends CPULib {
      * getWordPrefetch()
      *
      * @this {CPUx86}
-     * @return {number} short (16-bit) or long (32-bit) value as appropriate
+     * @returns {number} short (16-bit) or long (32-bit) value as appropriate
      */
     getWordPrefetch()
     {
@@ -3834,7 +3834,7 @@ export default class CPUx86 extends CPULib {
      * getIPByte()
      *
      * @this {CPUx86}
-     * @return {number} byte at the current IP; IP advanced by 1
+     * @returns {number} byte at the current IP; IP advanced by 1
      */
     getIPByte()
     {
@@ -3859,7 +3859,7 @@ export default class CPUx86 extends CPULib {
      * getIPShort()
      *
      * @this {CPUx86}
-     * @return {number} short at the current IP; IP advanced by 2
+     * @returns {number} short at the current IP; IP advanced by 2
      */
     getIPShort()
     {
@@ -3889,7 +3889,7 @@ export default class CPUx86 extends CPULib {
      * getIPAddr()
      *
      * @this {CPUx86}
-     * @return {number} word at the current IP; IP advanced by 2 or 4, depending on address size
+     * @returns {number} word at the current IP; IP advanced by 2 or 4, depending on address size
      */
     getIPAddr()
     {
@@ -3919,7 +3919,7 @@ export default class CPUx86 extends CPULib {
      * getIPWord()
      *
      * @this {CPUx86}
-     * @return {number} word at the current IP; IP advanced by 2 or 4, depending on operand size
+     * @returns {number} word at the current IP; IP advanced by 2 or 4, depending on operand size
      */
     getIPWord()
     {
@@ -3949,7 +3949,7 @@ export default class CPUx86 extends CPULib {
      * getIPDisp()
      *
      * @this {CPUx86}
-     * @return {number} sign-extended (32-bit) value from the byte at the current IP; IP advanced by 1
+     * @returns {number} sign-extended (32-bit) value from the byte at the current IP; IP advanced by 1
      */
     getIPDisp()
     {
@@ -3964,7 +3964,7 @@ export default class CPUx86 extends CPULib {
      * peekIPByte()
      *
      * @this {CPUx86}
-     * @return {number} byte at the current IP
+     * @returns {number} byte at the current IP
      */
     peekIPByte()
     {
@@ -3975,7 +3975,7 @@ export default class CPUx86 extends CPULib {
      * popWord()
      *
      * @this {CPUx86}
-     * @return {number} word popped from the current SP; SP increased by 2 or 4
+     * @returns {number} word popped from the current SP; SP increased by 2 or 4
      */
     popWord()
     {
@@ -4161,7 +4161,7 @@ export default class CPUx86 extends CPULib {
      * TODO: Determine the priorities for the 80186.
      *
      * @this {CPUx86}
-     * @return {boolean} true if h/w interrupt (or trap) has just been acknowledged, false if not
+     * @returns {boolean} true if h/w interrupt (or trap) has just been acknowledged, false if not
      */
     checkINTR()
     {
@@ -4355,7 +4355,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
+     * @returns {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
      * was hit), -1 indicates a post-execution condition (eg, a read or write breakpoint was hit), and a positive
      * number indicates successful completion of that many cycles (which should always be >= nMinCycles).
      */
@@ -4456,7 +4456,7 @@ export default class CPUx86 extends CPULib {
                         if (!nMinCycles) {
                             this.assert(DEBUGGER);  // nMinCycles of zero should be generated ONLY by the Debugger
                             if (DEBUGGER) {
-                                this.println("interrupt dispatched");
+                                this.printf("interrupt dispatched\n");
                                 this.opFlags = 0;
                                 break;
                             }
@@ -4524,7 +4524,7 @@ export default class CPUx86 extends CPULib {
                 // Make sure that every instruction is assessing a cycle cost, and that the cost is a net positive.
                 //
                 if (this.flags.complete && this.nStepCycles >= this.nSnapCycles && !(this.opFlags & X86.OPFLAG_PREFIXES)) {
-                    this.println("cycle miscount: " + (this.nSnapCycles - this.nStepCycles));
+                    this.printf("cycle miscount: %d\n", (this.nSnapCycles - this.nStepCycles));
                     this.setIP(this.opLIP - this.segCS.base);
                     this.stopCPU();
                     break;

@@ -169,7 +169,7 @@ export default class Structure {
      * @this {Structure}
      * @param {string} name
      * @param {string} [encoding] (default is "utf8")
-     * @return {number|string}
+     * @returns {number|string}
      */
     getField(name, encoding = "utf8")
     {
@@ -241,7 +241,7 @@ export default class Structure {
      * @param {Object} object
      * @param {string|Array.<string>} name (or array of names)
      * @param {string} [encoding] (default is "utf8")
-     * @return {number|string}
+     * @returns {number|string}
      */
     assignField(object, name, encoding)
     {
@@ -261,7 +261,7 @@ export default class Structure {
      * @param {string} name
      * @param {number|string} [value]
      * @param {string} [encoding] (default is "utf8")
-     * @return {number|string}
+     * @returns {number|string}
      */
     verifyField(name, value, encoding)
     {

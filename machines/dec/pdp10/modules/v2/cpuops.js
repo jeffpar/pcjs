@@ -6169,7 +6169,7 @@ PDP10.opNOPM = function(op, ac)
  */
 PDP10.opUndefined = function(op, ac)
 {
-    this.println("undefined opcode: " + Str.toOct(op));
+    this.printf("undefined opcode: %o\n", op);
     this.advancePC(-1);
     this.stopCPU();
 };
@@ -6181,7 +6181,7 @@ PDP10.opUndefined = function(op, ac)
  *
  * @this {CPUStatePDP10}
  * @param {number} src (36-bit)
- * @return {number} (absolute value of src)
+ * @returns {number} (absolute value of src)
  */
 PDP10.doABS = function(src)
 {
@@ -6203,7 +6203,7 @@ PDP10.doABS = function(src)
  * @this {CPUStatePDP10}
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP10.doADD = function(dst, src)
 {
@@ -6225,7 +6225,7 @@ PDP10.doADD = function(dst, src)
  * @param {number} src (36-bit divisor)
  * @param {number} dst (36-bit value)
  * @param {number} [ext] (36-bit value extension)
- * @return {number} (dst / src) (the remainder is stored in regEX); -1 if error (no division performed)
+ * @returns {number} (dst / src) (the remainder is stored in regEX); -1 if error (no division performed)
  */
 PDP10.doDIV = function(src, dst, ext)
 {
@@ -6367,7 +6367,7 @@ PDP10.doDIV = function(src, dst, ext)
  * @param {number} src (36-bit value)
  * @param {boolean} [fTruncate] (true to truncate the result to 36 bits; used by IMUL instructions)
  * @param {boolean} [fExternal] (true if external caller; avoids modifying the CPU state)
- * @return {number} (dst * src) (the high 36 bits of the result; the low 36 bits are stored in regEX)
+ * @returns {number} (dst * src) (the high 36 bits of the result; the low 36 bits are stored in regEX)
  */
 PDP10.doMUL = function(dst, src, fTruncate, fExternal)
 {
@@ -6463,7 +6463,7 @@ PDP10.doMUL = function(dst, src, fTruncate, fExternal)
  *
  * @this {CPUStatePDP10}
  * @param {number} src (36-bit)
- * @return {number} (src negated, but as an unsigned 36-bit result)
+ * @returns {number} (src negated, but as an unsigned 36-bit result)
  */
 PDP10.doNEG = function(src)
 {
@@ -6492,7 +6492,7 @@ PDP10.doNEG = function(src)
  * @this {CPUStatePDP10}
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP10.doSUB = function(dst, src)
 {
@@ -6518,7 +6518,7 @@ PDP10.doSUB = function(dst, src)
  * @this {CPUStatePDP10}
  * @param {number} dst (36-bit value)
  * @param {number} ext (36-bit value)
- * @return {number} (returns the lower 36 bits; the upper 36 bits  are stored in regEX)
+ * @returns {number} (returns the lower 36 bits; the upper 36 bits  are stored in regEX)
  */
 PDP10.merge72 = function(dst, ext)
 {
@@ -6546,7 +6546,7 @@ PDP10.merge72 = function(dst, ext)
  * @param {number} res (36-bit value)
  * @param {number} ext (36-bit value)
  * @param {boolean} [fExternal] (true if external caller; avoids modifying the CPU state)
- * @return {number} (returns the upper 36 bits; the lower 36 bits are stored in regEX)
+ * @returns {number} (returns the upper 36 bits; the lower 36 bits are stored in regEX)
  */
 PDP10.split72 = function(res, ext, fExternal)
 {
@@ -6649,7 +6649,7 @@ PDP10.setAddFlags = function(dst, src, res)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst & src)
+ * @returns {number} (dst & src)
  */
 PDP10.AND = function(dst, src)
 {
@@ -6676,7 +6676,7 @@ PDP10.AND = function(dst, src)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst & ~src)
+ * @returns {number} (dst & ~src)
  */
 PDP10.CLR = function(dst, src)
 {
@@ -6690,7 +6690,7 @@ PDP10.CLR = function(dst, src)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP10.CMP = function(dst, src)
 {
@@ -6704,7 +6704,7 @@ PDP10.CMP = function(dst, src)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (~(dst ^ src))
+ * @returns {number} (~(dst ^ src))
  */
 PDP10.EQV = function(dst, src)
 {
@@ -6731,7 +6731,7 @@ PDP10.EQV = function(dst, src)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst | src)
+ * @returns {number} (dst | src)
  */
 PDP10.IOR = function(dst, src)
 {
@@ -6757,7 +6757,7 @@ PDP10.IOR = function(dst, src)
  * Performs the one's complement (NOT) of a 36-bit operand.
  *
  * @param {number} src (36-bit value)
- * @return {number} (~src)
+ * @returns {number} (~src)
  */
 PDP10.NOT = function(src)
 {
@@ -6783,7 +6783,7 @@ PDP10.NOT = function(src)
  * Returns the signed form of the 36-bit operand; more efficient than doCMP(dst, 0).
  *
  * @param {number} dst (36-bit value)
- * @return {number}
+ * @returns {number}
  */
 PDP10.SIGN = function(dst)
 {
@@ -6797,7 +6797,7 @@ PDP10.SIGN = function(dst)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst ^ src)
+ * @returns {number} (dst ^ src)
  */
 PDP10.XOR = function(dst, src)
 {
@@ -6825,7 +6825,7 @@ PDP10.XOR = function(dst, src)
  * NOTE: Since HALF_MASK is an 18-bit value, it's safe to use "&" with HALF_MASK (equivalent to "%" with HALF_SHIFT).
  *
  * @param {number} src
- * @return {number} (updated src)
+ * @returns {number} (updated src)
  */
 PDP10.SWAP = function(src)
 {
@@ -6840,7 +6840,7 @@ PDP10.SWAP = function(src)
  * @param {number} op
  * @param {number} dst (36-bit value whose 18-bit left half is either preserved or modified)
  * @param {number} src (18-bit value used to determine the sign extension, if any, for the left half of dst)
- * @return {number} (updated dst)
+ * @returns {number} (updated dst)
  */
 PDP10.GETHL = function(op, dst, src)
 {
@@ -6869,7 +6869,7 @@ PDP10.GETHL = function(op, dst, src)
  * @param {number} op
  * @param {number} dst (36-bit value whose 18-bit left half is either preserved or modified)
  * @param {number} src (18-bit value used to determine the sign extension, if any, for the left half of dst)
- * @return {number} (updated dst)
+ * @returns {number} (updated dst)
  */
 PDP10.SETHL = function(op, dst, src)
 {
@@ -6895,7 +6895,7 @@ PDP10.SETHL = function(op, dst, src)
  * @param {number} op
  * @param {number} dst (36-bit value whose 18-bit right half is either preserved or modified)
  * @param {number} src (36-bit value used to determine the sign extension, if any, for the right half of dst)
- * @return {number} (updated dst)
+ * @returns {number} (updated dst)
  */
 PDP10.GETHR = function(op, dst, src)
 {
@@ -6924,7 +6924,7 @@ PDP10.GETHR = function(op, dst, src)
  * @param {number} op
  * @param {number} dst (36-bit value whose 18-bit right half is either preserved or modified)
  * @param {number} src (36-bit value used to determine the sign extension, if any, for the right half of dst)
- * @return {number} (updated dst)
+ * @returns {number} (updated dst)
  */
 PDP10.SETHR = function(op, dst, src)
 {
@@ -6967,7 +6967,7 @@ PDP10.ADDD = function(dDst, dSrc)
  *
  * @param {Array.<number>} dDst
  * @param {Array.<number>} dSrc
- * @return {number} > 0 if dDst > dSrc, == 0 if dDst == dSrc, < 0 if dDst < dSrc
+ * @returns {number} > 0 if dDst > dSrc, == 0 if dDst == dSrc, < 0 if dDst < dSrc
  */
 PDP10.CMPD = function(dDst, dSrc)
 {
@@ -7031,7 +7031,7 @@ PDP10.SUBD = function(dDst, dSrc)
  * True if all bits in the double-length value (d) are zero, false otherwise.
  *
  * @param {Array.<number>} d
- * @return {boolean}
+ * @returns {boolean}
  */
 PDP10.ZEROD = function(d)
 {

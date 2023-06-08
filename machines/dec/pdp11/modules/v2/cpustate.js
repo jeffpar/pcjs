@@ -13,7 +13,7 @@
 import BusPDP11 from "./bus.js";
 import CPUPDP11 from "./cpu.js";
 import MemoryPDP11 from "./memory.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
@@ -215,7 +215,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -237,7 +237,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      */
     reset()
     {
-        this.status("Model %d", this.model);
+        this.printf(Messages.STATUS, "Model %d\n", this.model);
         if (this.flags.running) this.stopCPU();
         this.initCPU();
         this.resetCycles();
@@ -375,7 +375,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * Returns bit 0 set if 22-bit, bit 1 set if 18-bit, or bit 2 set if 16-bit; used by the Panel component.
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMUState()
     {
@@ -441,7 +441,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * nonr leng read trap unus unus ena mnt cmp  -mode- i/d  --page--   enable
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR0()
     {
@@ -495,7 +495,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getMMR1()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR1()
     {
@@ -522,7 +522,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getMMR2()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR2()
     {
@@ -545,7 +545,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getMMR3()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR3()
     {
@@ -631,7 +631,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * TODO: Implement
      *
      * @this {CPUStatePDP11}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -642,7 +642,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * save()
      *
      * @this {CPUStatePDP11}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -681,7 +681,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -743,7 +743,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getCF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.CF
+     * @returns {number} 0 or PDP11.PSW.CF
      */
     getCF()
     {
@@ -774,7 +774,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getVF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.VF
+     * @returns {number} 0 or PDP11.PSW.VF
      */
     getVF()
     {
@@ -805,7 +805,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getZF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.ZF
+     * @returns {number} 0 or PDP11.PSW.ZF
      */
     getZF()
     {
@@ -836,7 +836,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getNF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.NF
+     * @returns {number} 0 or PDP11.PSW.NF
      */
     getNF()
     {
@@ -857,7 +857,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getOpcode()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getOpcode()
     {
@@ -879,7 +879,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} off
-     * @return {number} (original PC)
+     * @returns {number} (original PC)
      */
     advancePC(off)
     {
@@ -914,7 +914,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getPC()
     {
@@ -925,7 +925,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getLastAddr()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getLastAddr()
     {
@@ -936,7 +936,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getLastPC()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getLastPC()
     {
@@ -964,7 +964,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getSP()
     {
@@ -993,7 +993,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} vector (-1 for floating vector)
      * @param {number} priority
      * @param {number} [message]
-     * @return {IRQ}
+     * @returns {IRQ}
      */
     addIRQ(vector, priority, message)
     {
@@ -1076,9 +1076,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | MessagesPDP11.INT)) {
-                this.printMessage("setIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -1092,9 +1090,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | MessagesPDP11.INT)) {
-                this.printMessage("clearIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -1103,7 +1099,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} vector
-     * @return {IRQ|null}
+     * @returns {IRQ|null}
      */
     findIRQ(vector)
     {
@@ -1119,7 +1115,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} priority
-     * @return {IRQ|null}
+     * @returns {IRQ|null}
      */
     checkIRQs(priority)
     {
@@ -1140,7 +1136,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * saveIRQs()
      *
      * @this {CPUStatePDP11}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     saveIRQs()
     {
@@ -1175,7 +1171,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * checkInterrupts()
      *
      * @this {CPUStatePDP11}
-     * @return {boolean} true if an interrupt was dispatched, false if not
+     * @returns {boolean} true if an interrupt was dispatched, false if not
      */
     checkInterrupts()
     {
@@ -1220,7 +1216,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} vector
      * @param {number} priority
-     * @return {boolean} (true if dispatched, false if not)
+     * @returns {boolean} (true if dispatched, false if not)
      */
     dispatchInterrupt(vector, priority)
     {
@@ -1276,7 +1272,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * TODO: Based on the above notes, we should probably be halting the CPU when a bus error occurs during a trap.
      *
      * @this {CPUStatePDP11}
-     * @return {boolean} (true if dispatched, false if not)
+     * @returns {boolean} (true if dispatched, false if not)
      */
     checkTraps()
     {
@@ -1299,7 +1295,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * isWaiting()
      *
      * @this {CPUStatePDP11}
-     * @return {boolean} (true if OPFLAG.WAIT is set, false otherwise)
+     * @returns {boolean} (true if OPFLAG.WAIT is set, false otherwise)
      */
     isWaiting()
     {
@@ -1310,7 +1306,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getPSW()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getPSW()
     {
@@ -1373,7 +1369,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getSLR()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getSLR()
     {
@@ -1395,7 +1391,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getPIR()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getPIR()
     {
@@ -1572,9 +1568,9 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     trap(vector, flag, reason)
     {
         if (DEBUG && this.dbg) {
-            if (this.messageEnabled(MessagesPDP11.TRAP)) {
+            if (this.messageEnabled(Messages.TRAP)) {
                 var sReason = reason < 0? PDP11.REASONS[-reason] : this.dbg.toStrBase(reason);
-                this.printMessage("trap to vector " + this.dbg.toStrBase(vector, 8) + " (" + sReason + ")", MessagesPDP11.TRAP, true);
+                this.printf(Messages.TRAP + Messages.ADDRESS, "trap to vector %s (%s)\n", this.dbg.toStrBase(vector, 8), sReason);
             }
         }
 
@@ -1717,7 +1713,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * getTrapStatus()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getTrapStatus()
     {
@@ -1757,7 +1753,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     mapUnibus(addr)
     {
@@ -1792,7 +1788,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} addr
      * @param {boolean} [fPhysical]
-     * @return {Array}
+     * @returns {Array}
      */
     getAddrInfo(addr, fPhysical)
     {
@@ -1883,7 +1879,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} addrVirtual
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     mapVirtualToPhysical(addrVirtual, access)
     {
@@ -2035,7 +2031,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * popWord()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     popWord()
     {
@@ -2103,7 +2099,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} mode
      * @param {number} reg
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     getAddrByMode(mode, reg, access)
     {
@@ -2290,7 +2286,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getByteChecked(addr)
     {
@@ -2308,7 +2304,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getWordChecked(addr)
     {
@@ -2361,7 +2357,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getByteSafe(addr)
     {
@@ -2378,7 +2374,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getWordSafe(addr)
     {
@@ -2461,7 +2457,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} mode
      * @param {number} reg
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     getPhysicalAddrByMode(mode, reg, access)
     {
@@ -2477,7 +2473,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} mode
      * @param {number} reg
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     getVirtualAddrByMode(mode, reg, access)
     {
@@ -2491,7 +2487,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPhysical(addr)
     {
@@ -2505,7 +2501,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPhysicalChecked(addr)
     {
@@ -2522,7 +2518,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addrVirtual (input address is 17 bit (I&D))
-     * @return {number}
+     * @returns {number}
      */
     readWordFromVirtual(addrVirtual)
     {
@@ -2536,7 +2532,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addrVirtual (input address is 17 bit (I&D))
-     * @return {number}
+     * @returns {number}
      */
     readWordFromVirtualChecked(addrVirtual)
     {
@@ -2614,7 +2610,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} opCode
      * @param {number} access (really just PDP11.ACCESS.DSPACE or PDP11.ACCESS.ISPACE)
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPrevSpace(opCode, access)
     {
@@ -2684,7 +2680,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readSrcByte(opCode)
     {
@@ -2726,7 +2722,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readSrcWord(opCode)
     {
@@ -2747,7 +2743,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readDstAddr(opCode)
     {
@@ -2761,7 +2757,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readDstByte(opCode)
     {
@@ -2781,7 +2777,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readDstWord(opCode)
     {
@@ -2924,7 +2920,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
+     * @returns {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
      * was hit), -1 indicates a post-execution condition (eg, a read or write breakpoint was hit), and a positive
      * number indicates successful completion of that many cycles (which should always be >= nMinCycles).
      */

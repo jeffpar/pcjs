@@ -16,7 +16,7 @@ import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, COMPILED, DESKPRO386, MAXDEBUG } from "./defines.js";
+import { APPCLASS, COMPILED, DEBUG, DESKPRO386, MAXDEBUG } from "./defines.js";
 
 /**
  * @class KbdX86
@@ -201,7 +201,7 @@ export default class KbdX86 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -335,7 +335,7 @@ export default class KbdX86 extends Component {
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
                 if (KbdX86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) console.log("binding click-code '" + sCode + "'");
+                    if (MAXDEBUG) this.printf(Messages.LOG, "binding click-code '%s'\n", sCode);
                     controlText.onclick = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingClick(event) {
                             kbd.printf(Messages.EVENT + Messages.KEY, "%s clicked\n", sKey);
@@ -357,7 +357,7 @@ export default class KbdX86 extends Component {
                     }
                     this.cSoftCodes++;
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) console.log("binding soft-code '" + sBinding + "'");
+                    if (MAXDEBUG) this.printf(Messages.LOG, "binding soft-code '%s'\n", sBinding);
                     let msLastEvent = 0, nClickState = 0;
                     let fStateKey = (KbdX86.KEYSTATES[KbdX86.SOFTCODES[sBinding]] <= KbdX86.STATE.ALL_MODIFIERS);
                     let fnDown = function(kbd, sKey, simCode) {
@@ -379,7 +379,7 @@ export default class KbdX86 extends Component {
                                 if (nClickState < 8) {
                                     kbd.removeActiveKey(simCode);
                                 } else {
-                                    if (MAXDEBUG) console.log("soft-locking '" + sBinding + "'");
+                                    if (MAXDEBUG) this.printf(Messages.LOG, "soft-locking '%s'\n", sBinding);
                                     nClickState = 0;
                                 }
                             }
@@ -445,7 +445,7 @@ export default class KbdX86 extends Component {
      * @param {number} simCode
      * @param {string} sType is the type of control (eg, "button" or "key")
      * @param {boolean} [fDown] is true if the key is going down, false if up, or undefined if unchanged
-     * @return {Object} is the HTML control DOM object (eg, HTMLButtonElement), or undefined if no such control exists
+     * @returns {Object} is the HTML control DOM object (eg, HTMLButtonElement), or undefined if no such control exists
      */
     findBinding(simCode, sType, fDown)
     {
@@ -567,7 +567,7 @@ export default class KbdX86 extends Component {
      *
      * @this {KbdX86}
      * @param {number} addr
-     * @return {boolean} true to proceed with the INT 0x21 software interrupt, false to skip
+     * @returns {boolean} true to proceed with the INT 0x21 software interrupt, false to skip
      */
     intDOS(addr)
     {
@@ -688,7 +688,7 @@ export default class KbdX86 extends Component {
      *
      * @this {KbdX86}
      * @param {number} bCmd should be one of the KbdX86.CMD.* command codes (Model M keyboards only)
-     * @return {number} response should be one of the KbdX86.CMDRES.* response codes, or -1 if unrecognized
+     * @returns {number} response should be one of the KbdX86.CMDRES.* response codes, or -1 if unrecognized
      */
     receiveCmd(bCmd)
     {
@@ -741,7 +741,7 @@ export default class KbdX86 extends Component {
      * @this {KbdX86}
      * @param {boolean} fData is true if the keyboard simulated data line should be enabled
      * @param {boolean} fClock is true if the keyboard's simulated clock line should be enabled
-     * @return {boolean} true if keyboard was re-enabled, false if not (or no change)
+     * @returns {boolean} true if keyboard was re-enabled, false if not (or no change)
      */
     setEnabled(fData, fClock)
     {
@@ -845,7 +845,7 @@ export default class KbdX86 extends Component {
      * @this {KbdX86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -874,7 +874,7 @@ export default class KbdX86 extends Component {
      * @this {KbdX86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -913,7 +913,7 @@ export default class KbdX86 extends Component {
      * This implements save support for the Keyboard component.
      *
      * @this {KbdX86}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -929,7 +929,7 @@ export default class KbdX86 extends Component {
      *
      * @this {KbdX86}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -941,7 +941,7 @@ export default class KbdX86 extends Component {
      *
      * @this {KbdX86}
      * @param {Array} [data]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(data)
     {
@@ -985,7 +985,7 @@ export default class KbdX86 extends Component {
      * saveState()
      *
      * @this {KbdX86}
-     * @return {Array}
+     * @returns {Array}
      */
     saveState()
     {
@@ -1107,17 +1107,17 @@ export default class KbdX86 extends Component {
      * @this {KbdX86}
      * @param {string} [sKeys]
      * @param {number} [msDelay] is an optional injection delay (default is msInjectDefault)
-     * @return {boolean}
+     * @returns {boolean}
      */
-    injectKeys(sKeys, msDelay)
+    injectKeys(sKeys, msDelay = this.msInjectDefault)
     {
         if (sKeys) {
             let sInjectBuffer = this.parseKeys(sKeys);
             if (sInjectBuffer) {
                 this.nInjection = KbdX86.INJECTION.NONE;
                 this.sInjectBuffer = sInjectBuffer;
-                if (!COMPILED) this.log("injectKeys(\"" + this.sInjectBuffer.split("\n").join("\\n") + "\")");
-                this.msInjectDelay = msDelay || this.msInjectDefault;
+                if (DEBUG) this.printf("injectKeys(\"%s\")\n", this.sInjectBuffer.split("\n").join("\\n"));
+                this.msInjectDelay = msDelay || 0;
                 this.injectKeys();
                 return true;
             }
@@ -1268,7 +1268,7 @@ export default class KbdX86 extends Component {
      *
      * @this {KbdX86}
      * @param {string|undefined} sKeys
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseKeys(sKeys)
     {
@@ -1304,7 +1304,7 @@ export default class KbdX86 extends Component {
      * @this {KbdX86}
      * @param {function()|null} fnCallReady
      * @param {string} [sOption]
-     * @return {boolean} false if wait required, true otherwise
+     * @returns {boolean} false if wait required, true otherwise
      */
     waitReady(fnCallReady, sOption)
     {
@@ -1406,7 +1406,7 @@ export default class KbdX86 extends Component {
      * @param {number} simCode (includes any ONDOWN and/or ONRIGHT modifiers)
      * @param {boolean} [fSim] is true to update simulated state only
      * @param {boolean|null} [fDown] is true for down, false for up, undefined for toggle
-     * @return {number} 0 if not a shift key, 1 if shift key down, -1 if shift key up
+     * @returns {number} 0 if not a shift key, 1 if shift key down, -1 if shift key up
      */
     updateShiftState(simCode, fSim, fDown)
     {
@@ -1472,7 +1472,7 @@ export default class KbdX86 extends Component {
      * @this {KbdX86}
      * @param {number} simCode
      * @param {boolean} [fPress]
-     * @return {boolean} true if added, false if not (eg, not recognized, already added, etc)
+     * @returns {boolean} true if added, false if not (eg, not recognized, already added, etc)
      */
     addActiveKey(simCode, fPress)
     {
@@ -1541,7 +1541,7 @@ export default class KbdX86 extends Component {
      * checkActiveKey()
      *
      * @this {KbdX86}
-     * @return {number} simCode of active key, 0 if none
+     * @returns {number} simCode of active key, 0 if none
      */
     checkActiveKey()
     {
@@ -1597,7 +1597,7 @@ export default class KbdX86 extends Component {
      *
      * @param {number} simCode
      * @param {boolean} [fFlush] is true whenever the key must be removed, independent of other factors
-     * @return {boolean} true if successfully removed, false if not
+     * @returns {boolean} true if successfully removed, false if not
      */
     removeActiveKey(simCode, fFlush)
     {
@@ -1701,7 +1701,7 @@ export default class KbdX86 extends Component {
      * @this {KbdX86}
      * @param {number} keyCode
      * @param {boolean} fShifted
-     * @return {number} simCode
+     * @returns {number} simCode
      */
     getSimCode(keyCode, fShifted)
     {
@@ -1758,7 +1758,7 @@ export default class KbdX86 extends Component {
      * @this {KbdX86}
      * @param {Object} event
      * @param {boolean} fDown is true for a keyDown event, false for a keyUp event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onKeyActive(event, fDown)
     {
@@ -2029,7 +2029,7 @@ export default class KbdX86 extends Component {
      *
      * @this {KbdX86}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onKeyPress(event)
     {
@@ -2170,7 +2170,7 @@ export default class KbdX86 extends Component {
      * @this {KbdX86}
      * @param {number} simCode
      * @param {boolean} fDown
-     * @return {boolean} true if successfully simulated, false if unrecognized/unsupported key
+     * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
      */
     simulateKey(simCode, fDown)
     {
@@ -2272,7 +2272,7 @@ export default class KbdX86 extends Component {
      * checkActiveKeyShift()
      *
      * @this {KbdX86}
-     * @return {number|null} bitsState for active key, null if none
+     * @returns {number|null} bitsState for active key, null if none
      *
      checkActiveKeyShift()
      {

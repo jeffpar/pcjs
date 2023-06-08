@@ -9,6 +9,7 @@
 
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
+import Messages from "../../../../modules/v2/messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
@@ -140,7 +141,7 @@ export default class C1PROM extends Component {
     convertImage(sImageName, sImageData, nErrorCode)
     {
         if (nErrorCode) {
-            this.println("Error loading ROM \"" + sImageName + "\" (" + nErrorCode + ")");
+            this.printf("Error loading ROM \"%s\" (%d)\n", sImageName, nErrorCode);
             return;
         }
         if (sImageData.charAt(0) == "[" || sImageData.charAt(0) == "{") {
@@ -156,7 +157,7 @@ export default class C1PROM extends Component {
                     this.abImage = rom;
                 }
             } catch (e) {
-                this.println("Error processing ROM \"" + sImageName + "\": " + e.message);
+                this.printf("Error processing ROM \"%s\": %s\n", sImageName, e.message);
                 return;
             }
         }
@@ -196,7 +197,7 @@ export default class C1PROM extends Component {
                     this.setError("ROM image size (" + Str.toHexWord(cbImage) + ") does not match component-specified size (" + Str.toHexWord(this.cbROM) + ")");
                     return;
                 }
-                if (DEBUG) this.log("copyImage(): copying ROM to " + Str.toHexWord(this.offROM) + " (" + Str.toHexWord(cbImage) + " bytes)");
+                if (DEBUG) this.printf(Messages.LOG, "copyImage(%#06x): %#06x bytes\n", this.offROM, cbImage);
                 for (var i=0; i < cbImage; i++) {
                     this.abMem[this.offROM + i] = this.abImage[i];
                 }

@@ -8,6 +8,7 @@
  */
 
 import MemoryX86 from "./memory.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -41,7 +42,7 @@ export default class ROMx86 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROMx86", parmsROM);
+        super("ROMx86", parmsROM, Messages.MEM);
 
         this.abROM = null;
         this.addrROM = +parmsROM['addr'];       // we allow numbers or strings (JSON strings permit hex)
@@ -59,6 +60,13 @@ export default class ROMx86 extends Component {
          * Most ROMs are not aliased, in which case the 'alias' property should have the default value of null.
          */
         this.addrAlias = parmsROM['alias'];
+        if (typeof this.addrAlias == "string") {
+            if (this.addrAlias[0] != '[') {
+                this.addrAlias = +this.addrAlias;
+            } else {
+                this.addrAlias = JSON.parse(this.addrAlias);
+            }
+        }
 
         /*
          * The 'notify' property can now (as of v1.18.2) contain an array of parameters that the notified
@@ -85,7 +93,7 @@ export default class ROMx86 extends Component {
 
         if (this.sFileURL) {
             let sFileName = Str.getBaseName(this.sFileURL);
-            if (DEBUG) this.log('load("' + this.sFileURL + '")');
+            if (DEBUG) this.printf("load(\"%s\")\n", this.sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -116,11 +124,10 @@ export default class ROMx86 extends Component {
 
         if (this.sFileURL) {
             let rom = this;
-            let sProgress = "Loading " + this.sFileURL + "...";
             Web.getResource(this.sFileURL, null, true, function doneROMLoad(sURL, sResponse, nErrorCode) {
                 rom.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
-                rom.println(sProgress, Component.PRINT.PROGRESS);
+                rom.printf(Messages.PROGRESS, "Loading %s...\n", rom.sFileURL);
             });
         }
     }
@@ -131,7 +138,7 @@ export default class ROMx86 extends Component {
      * @this {ROMx86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -159,7 +166,7 @@ export default class ROMx86 extends Component {
      * @this {ROMx86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -177,7 +184,7 @@ export default class ROMx86 extends Component {
     doneLoad(sURL, sROMData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load system ROM (error " + nErrorCode + ": " + sURL + ")", nErrorCode < 0);
+            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load system ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -254,7 +261,7 @@ export default class ROMx86 extends Component {
                     return;
                 }
             } catch (e) {
-                this.notice("ROM data error: " + e.message);
+                this.printf(Messages.NOTICE, "ROM data error: %s\n", e.message);
                 return;
             }
         }
@@ -325,7 +332,7 @@ export default class ROMx86 extends Component {
                         if (component) {
                             component.onROMLoad(this.abROM, this.aNotifyParms);
                         } else {
-                            this.notice("Unable to find component: " + this.idNotify);
+                            this.printf(Messages.NOTICE, "Unable to find component: %s\n", this.idNotify);
                         }
                     }
                     /*
@@ -350,12 +357,12 @@ export default class ROMx86 extends Component {
      *
      * @this {ROMx86}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX86.TYPE.ROM)) {
-            if (DEBUG) this.log("addROM(): copying ROM to " + Str.toHexLong(addr) + " (" + Str.toHexLong(this.abROM.length) + " bytes)");
+            if (DEBUG) this.printf("addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
             let bto = null;
             for (let off = 0; off < this.abROM.length; off++) {
                 this.bus.setByteDirect(addr + off, this.abROM[off]);

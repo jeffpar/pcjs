@@ -35,7 +35,7 @@ import WebIO from "./webio.js";
  *
  * Besides CPUs, other devices may have internal registers or ports that are useful to access by name, too.
  *
- * @class {Device}
+ * @class Device
  * @unrestricted
  * @property {string} idMachine
  * @property {string} idDevice
@@ -175,7 +175,7 @@ export default class Device extends WebIO {
                         }
                     }
                     config[prop] = value;
-                    this.println("overriding " + this.idDevice + " property '" + prop + "' with " + s);
+                    this.printf("overriding %s property '%s' with %s\n", this.idDevice, prop, s);
                 }
             }
         }

@@ -61,7 +61,7 @@ import Device from "./device.js";
  * simple for this device, but also simulates how the display goes blank for short periods of time while
  * the CPU is busy performing calculations.
  *
- * @class {LED}
+ * @class LED
  * @unrestricted
  * @property {LEDConfig} config
  * @property {number} type (one of the LED.TYPE values)

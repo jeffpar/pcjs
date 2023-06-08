@@ -1,0 +1,93 @@
+{
+  "machine": {
+    "id": "test386",
+    "type": "pcx86"
+  },
+  "computer": {
+    "id": "computer",
+    "name": "80386 Test Machine",
+    "resume": 0,
+    "state": "",
+    "busWidth": 32
+  },
+  "ram": [
+    { "id": "ramLow",
+      "name": "",
+      "addr": 0,
+      "size": 655360,
+      "test": false
+    }
+  ],
+  "rom": [
+    { "id": "test386",
+      "name": "",
+      "addr": 983296,
+      "size": 65276,
+      "alias": 4294902016,
+      "file": "/software/pcx86/test/cpu/bin/test386.json",
+      "notify": ""
+    }
+  ],
+  "video": [
+    { "id": "videoMDA",
+      "name": "Monochrome Display",
+      "model": "",
+      "mode": 7,
+      "screenWidth": 720,
+      "screenHeight": 350,
+      "scale": true,
+      "charCols": 80,
+      "charRows": 25,
+      "fontROM": "/machines/pcx86/ibm/video/mda/IBM-MDA.json5",
+      "screenColor": "black",
+      "touchScreen": false
+    }
+  ],
+  "cpu": {
+    "id": "cpu",
+    "name": "",
+    "model": 80386,
+    "clock": 0,
+    "multiplier": 1,
+    "autoStart": false,
+    "csStart": -1,
+    "csInterval": -1,
+    "csStop": -1
+  },
+  "keyboard": {
+    "id": "keyboard",
+    "name": "",
+    "model": ""
+  },
+  "fdc": {
+    "id": "fdcNEC",
+    "name": "",
+    "autoMount": {
+      "A": {
+        "name": "PC DOS 2.00 (Disk 1)",
+        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
+      },
+      "B": {
+        "name": "PC DOS 2.00 (Disk 2)",
+        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
+      }
+    }
+  },
+  "chipset": {
+    "id": "chipset",
+    "name": "",
+    "model": "deskpro386",
+    "sound": false
+  },
+	"serial": {
+    "id": "com2",
+    "adapter": 2,
+    "binding": "console"
+  },
+  "debugger": {
+    "id": "debugger",
+    "name": "",
+    "commands": "",
+    "messages": ""
+  }
+}

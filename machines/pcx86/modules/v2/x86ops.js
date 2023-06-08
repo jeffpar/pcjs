@@ -29,7 +29,7 @@ X86.opADDmb = function()
      * because its trace ("t") command doesn't "run" the CPU; it merely "steps" the CPU.
      */
     if (DEBUG && !this.bModRM && this.flags.running) {
-        this.printMessage("suspicious opcode: 0x00 0x00", DEBUGGER || this.bitsMessage);
+        this.printf("suspicious opcode (0x00,0x00)\n");
         if (DEBUGGER && this.dbg) this.dbg.stopCPU();
     }
 };
@@ -2515,7 +2515,7 @@ X86.opPUSHF = function()
     let regPS = this.getPS();
     if (I386) {
         if ((regPS & X86.PS.VM) && this.nIOPL < 3) {
-            if (DEBUG) this.printMessage("PUSHF in v86-mode (IOPL < 3)", this.bitsMessage, true);
+            if (DEBUG) this.printf(Messages.ADDRESS, "PUSHF in v86-mode (IOPL < 3)\n");
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return;
         }
@@ -2550,7 +2550,7 @@ X86.opPOPF = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printMessage("POPF in v86-mode (IOPL < 3)", this.bitsMessage, true);
+        if (DEBUG) this.printf(Messages.ADDRESS, "POPF in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -3486,7 +3486,7 @@ X86.opINT3 = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printMessage("INT 0x03 in v86-mode (IOPL < 3)", this.bitsMessage, true);
+        if (DEBUG) this.printf(Messages.ADDRESS, "INT 0x03 in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -3511,7 +3511,7 @@ X86.opINTn = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG && this.messageEnabled()) this.printMessage("INT " + Str.toHexByte(nInt) + " in v86-mode (IOPL < 3)", true, true);
+        if (DEBUG) this.printf(Messages.ADDRESS, "INT %#04x in v86-mode (IOPL < 3)\n", nInt);
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -3538,7 +3538,7 @@ X86.opINTO = function()
          * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
          */
         if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-            if (DEBUG) this.printMessage("INTO in v86-mode (IOPL < 3)", this.bitsMessage, true);
+            if (DEBUG) this.printf(Messages.ADDRESS, "INTO in v86-mode (IOPL < 3)\n");
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return;
         }
@@ -3559,7 +3559,7 @@ X86.opIRET = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printMessage("IRET in v86-mode (IOPL < 3)", this.bitsMessage, true);
+        if (DEBUG) this.printf(Messages.ADDRESS, "IRET in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -4308,7 +4308,7 @@ X86.opCLI = function()
      * and in V86-mode, CPL is always 3.
      */
     if (this.nCPL > this.nIOPL) {
-        if (DEBUG && (this.regPS & X86.PS.VM)) this.printMessage("CLI in v86-mode (IOPL < 3)", this.bitsMessage, true);
+        if (DEBUG && (this.regPS & X86.PS.VM)) this.printf(Messages.ADDRESS, "CLI in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -4328,7 +4328,7 @@ X86.opSTI = function()
      * and in V86-mode, CPL is always 3.
      */
     if (this.nCPL > this.nIOPL) {
-        if (DEBUG && (this.regPS & X86.PS.VM)) this.printMessage("STI in v86-mode (IOPL < 3)", this.bitsMessage, true);
+        if (DEBUG && (this.regPS & X86.PS.VM)) this.printf(Messages.ADDRESS, "STI in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -4409,7 +4409,7 @@ X86.opUndefined = function()
 X86.opTBD = function()
 {
     this.setIP(this.opLIP - this.segCS.base);
-    this.printMessage("unimplemented 80386 opcode", true);
+    this.printf(Messages.DEFAULT, "unimplemented 80386 opcode\n");
     this.stopCPU();
 };
 

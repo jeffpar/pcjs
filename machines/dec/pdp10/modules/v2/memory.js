@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesPDP10 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import { DEBUG, DEBUGGER, PDP10 } from "./defines.js";
 
@@ -152,7 +152,7 @@ export default class MemoryPDP10 {
      * which in turn is called by CPUState.save().
      *
      * @this {MemoryPDP10}
-     * @return {Array.<number>|null}
+     * @returns {Array.<number>|null}
      */
     save()
     {
@@ -168,7 +168,7 @@ export default class MemoryPDP10 {
      *
      * @this {MemoryPDP10}
      * @param {Array.<number>|null} aw
-     * @return {boolean} true if successful, false if block size mismatch
+     * @returns {boolean} true if successful, false if block size mismatch
      */
     restore(aw)
     {
@@ -301,8 +301,8 @@ export default class MemoryPDP10 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(MessagesPDP10.MEMORY)) {
-            this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id), true);
+        if (DEBUG && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
         }
     }
 
@@ -381,12 +381,12 @@ export default class MemoryPDP10 {
      * @this {MemoryPDP10}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP10.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to read invalid address " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
         return PDP10.WORD_INVALID;
@@ -402,8 +402,8 @@ export default class MemoryPDP10 {
      */
     writeNone(v, off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP10.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to write " + this.dbg.toStrBase(v) + " to invalid addresses " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
     }
@@ -414,7 +414,7 @@ export default class MemoryPDP10 {
      * @this {MemoryPDP10}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordMemory(off, addr)
     {
@@ -446,7 +446,7 @@ export default class MemoryPDP10 {
      * @this {MemoryPDP10}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordChecked(off, addr)
     {

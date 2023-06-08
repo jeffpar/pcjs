@@ -260,13 +260,11 @@ export default class Disk extends Component {
         this.controller = controller;
 
         /*
-         * Route all non-Debugger messages (eg, notice() and println() calls) through
-         * this.controller (eg, controller.notice() and controller.println()), because
-         * the Computer component is unaware of any Disk objects and therefore will not
-         * set up the usual overrides when a Control Panel is installed.
+         * Route all printing through this.controller (eg, controller.print()), because
+         * the Computer component is unaware of any Disk objects and therefore will not set
+         * up the usual overrides when a Control Panel is installed.
          */
-        this.notice = controller.notice;
-        this.println = controller.println;
+        this.print = controller.print;
 
         this.cmp = controller.cmp;
         this.dbg = controller.dbg;
@@ -319,7 +317,7 @@ export default class Disk extends Component {
      * isRemote()
      *
      * @this {Disk}
-     * @return {boolean} true if remote disk, false if not
+     * @returns {boolean} true if remote disk, false if not
      */
     isRemote()
     {
@@ -343,7 +341,7 @@ export default class Disk extends Component {
      * @this {Disk}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -388,7 +386,7 @@ export default class Disk extends Component {
      * @this {Disk}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean}
+     * @returns {Object|boolean}
      */
     powerDown(fSave, fShutdown)
     {
@@ -409,7 +407,7 @@ export default class Disk extends Component {
             }
             while ((response = this.findDirtySectors(false))) {
                 if ((nErrorCode = response[0])) {
-                    this.notice('Unable to save "' + this.sDiskName + '" (error ' + nErrorCode + ')');
+                    this.printf(Messages.NOTICE, "Unable to save \"%s\" (error %d)\n", this.sDiskName, nErrorCode);
                     break;
                 }
             }
@@ -422,7 +420,7 @@ export default class Disk extends Component {
              * all diskettes to their original state) and discarding remote changes (which could leave the remote disk
              * in a bad state).
              */
-            if (!nErrorCode && fSave) this.notice(this.sDiskName + " saved");
+            if (!nErrorCode && fSave) this.printf(Messages.NOTICE, "\"%s\" saved\n", this.sDiskName);
         }
         return true;
     }
@@ -452,8 +450,8 @@ export default class Disk extends Component {
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("blank disk for \"" + this.sDiskName + "\": " + this.nCylinders + " cylinders, " + this.nHeads + " head(s)");
+            if (DEBUG) {
+                this.printf("blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
             }
             let aCylinders = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
@@ -503,23 +501,18 @@ export default class Disk extends Component {
      * @param {File} [file] is set if there's an associated File object
      * @param {function(...)} [fnNotify]
      * @param {Component} [controller]
-     * @return {boolean} true if load completed (successfully or not), false if queued
+     * @returns {boolean} true if load completed (successfully or not), false if queued
      */
     load(sDiskName, sDiskPath, file, fnNotify, controller)
     {
         let sDiskURL = sDiskPath;
 
-        /*
-         * We could use this.log() as well, but it wouldn't display which component initiated the load.
-         */
         if (DEBUG) {
-            let sMessage = 'load("' + sDiskName + '","' + sDiskPath + '")';
-            this.controller.log(sMessage);
-            this.printMessage(sMessage);
+            this.printf('load("%s","%s")\n', sDiskName, sDiskPath);
         }
 
         if (this.fnNotify) {
-            if (DEBUG) this.controller.log('too many load requests for "' + sDiskName + '" (' + sDiskPath + ')');
+            if (DEBUG) this.printf('too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
             return true;
         }
 
@@ -602,7 +595,7 @@ export default class Disk extends Component {
         return !!Web.getResource(sDiskURL, this.sFormat, true, function loadDone(sURL, sResponse, nErrorCode) {
             disk.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
-            disk.println(sProgress, Component.PRINT.PROGRESS);
+            disk.printf(Messages.PROGRESS, "%s\n", sProgress);
         });
     }
 
@@ -652,7 +645,7 @@ export default class Disk extends Component {
             this.dwChecksum = dwChecksum;
             disk = this;
         } else {
-            this.notice(message || ("Unrecognized disk format (" + cbDiskData + " bytes)"));
+            this.printf(Messages.NOTICE, "%s\n", message || ("Unrecognized disk format (" + cbDiskData + " bytes)"));
         }
 
         if (this.fnNotify) {
@@ -676,17 +669,17 @@ export default class Disk extends Component {
     {
         let disk = null;
         this.fWriteProtected = false;
-        let fPrintOnly = !!(nErrorCode < 0 && this.cmp && !this.cmp.flags.powered);
+        let idMessage = (nErrorCode < 0 && this.cmp && !this.cmp.flags.powered)? Messages.STATUS : Messages.NOTICE;
 
         if (this.fOnDemand) {
             if (!nErrorCode) {
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage('doneLoad("' + this.sDiskPath + '")');
+                if (DEBUG) {
+                    this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
                 }
                 this.fRemote = true;
                 disk = this;
             } else {
-                this.notice('Unable to connect to disk "' + this.sDiskPath + '" (error ' + nErrorCode + ': ' + imageData + ')', fPrintOnly);
+                this.printf(idMessage, "Unable to connect to disk \"%s\" (error %d: %s)\n", this.sDiskPath, nErrorCode, imageData);
             }
         }
         else if (nErrorCode) {
@@ -697,10 +690,10 @@ export default class Disk extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.notice("Unable to load disk \"" + this.sDiskName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.printf(idMessage, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('doneLoad("' + this.sDiskPath + '")');
+            if (DEBUG) {
+                this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
             }
 
             /*
@@ -812,7 +805,7 @@ export default class Disk extends Component {
                         let sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
                         let nSectorsPerTrack = aDiskData[0][0].length;
                         let sSectorsPerTrack = nSectorsPerTrack + " sector" + (nSectorsPerTrack > 1 ? "s" : "") + "/track";
-                        this.printMessage(sCylinders + ", " + sHeads + ", " + sSectorsPerTrack);
+                        this.printf("%s, %s, %s\n", sCylinders, sHeads, sSectorsPerTrack);
                     }
                     /*
                      * Before the image is usable, we must "normalize" all the sectors.  In the past, this meant
@@ -1026,7 +1019,7 @@ export default class Disk extends Component {
      * @this {Disk}
      * @param {string} sModule
      * @param {number} nSegment
-     * @return {Object}
+     * @returns {Object}
      */
     getModuleInfo(sModule, nSegment)
     {
@@ -1066,7 +1059,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {string} sSymbol
-     * @return {Array}
+     * @returns {Array}
      */
     getSymbolInfo(sSymbol)
     {
@@ -1100,7 +1093,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {number} lba (logical block address)
-     * @return {Sector|null} sector
+     * @returns {Sector|null} sector
      */
     getSector(lba)
     {
@@ -1131,7 +1124,7 @@ export default class Disk extends Component {
      * @param {Sector} sector
      * @param {number} off (byte offset)
      * @param {number} len (1 to 4 bytes)
-     * @return {number}
+     * @returns {number}
      */
     getSectorData(sector, off, len)
     {
@@ -1169,7 +1162,7 @@ export default class Disk extends Component {
      * @param {number} idSector
      * @param {number} cbSector
      * @param {number|null} dwPattern
-     * @return {Sector}
+     * @returns {Sector}
      */
     initSector(sector, iCylinder, iHead, idSector, cbSector, dwPattern)
     {
@@ -1184,8 +1177,12 @@ export default class Disk extends Component {
         } else {
             sector[Disk.SECTOR.CYLINDER] = iCylinder;
             sector[Disk.SECTOR.HEAD] = iHead;
-            this.assert(sector[Disk.SECTOR.ID] == idSector);
-            this.assert(sector[Disk.SECTOR.LENGTH] == cbSector);
+            //
+            // These asserts will fail on disks with non-standard formats (eg, copy-protected disks
+            // like "ZORK1-READONLY.json"), so they have been disabled.
+            //
+            // this.assert(sector[Disk.SECTOR.ID] == idSector);
+            // this.assert(sector[Disk.SECTOR.LENGTH] == cbSector);
         }
         sector[Disk.SECTOR.PATTERN] = dwPattern;
         sector.iModify = sector.cModify = 0;
@@ -1202,7 +1199,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {string} sDiskPath
-     * @return {string} is the URL connection string required to connect to sDiskPath
+     * @returns {string} is the URL connection string required to connect to sDiskPath
      */
     connectRemoteDisk(sDiskPath)
     {
@@ -1228,8 +1225,8 @@ export default class Disk extends Component {
      */
     readRemoteSectors(iCylinder, iHead, iSector, nSectors, fAsync, done)
     {
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("readRemoteSectors(CHS=" + iCylinder + ':' + iHead + ':' + iSector + ",N=" + nSectors + ")");
+        if (DEBUG) {
+            this.printf("readRemoteSectors(CHS=%d:%d:%d,N=%d)\n", iCylinder, iHead, iSector, nSectors);
         }
 
         if (this.fRemote) {
@@ -1282,8 +1279,8 @@ export default class Disk extends Component {
                  */
                 let sector = this.seek(iCylinder, iHead, iSector, null, true);
                 if (!sector) {
-                    if (DEBUG && this.messageEnabled()) {
-                        this.printMessage("doneReadRemoteSectors(): seek(CHS=" + iCylinder + ':' + iHead + ':' + iSector + ") failed");
+                    if (DEBUG) {
+                        this.printf("doneReadRemoteSectors(): seek(CHS=%d:%d:%d) failed\n", iCylinder, iHead, iSector);
                     }
                     break;
                 }
@@ -1297,8 +1294,8 @@ export default class Disk extends Component {
             }
             fAsync = aRequest[4];
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("doneReadRemoteSectors(CHS=" + iCylinder + ':' + iHead + ':' + iSector + ",N=" + nSectors + ") returned error " + nErrorCode);
+            if (DEBUG) {
+                this.printf("doneReadRemoteSectors(CHS=%d:%d:%d,N=%d) returned error %d\n", iCylinder, iHead, iSector, nSectors, nErrorCode);
             }
         }
         let done = aRequest[5];
@@ -1324,12 +1321,12 @@ export default class Disk extends Component {
      * @param {number} nSectors (to write)
      * @param {Array.<number>} abSectors
      * @param {boolean} fAsync
-     * @return {boolean|Array}
+     * @returns {boolean|Array}
      */
     writeRemoteSectors(iCylinder, iHead, iSector, nSectors, abSectors, fAsync)
     {
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("writeRemoteSectors(CHS=" + iCylinder + ':' + iHead + ':' + iSector + ",N=" + nSectors + ")");
+        if (DEBUG) {
+            this.printf("writeRemoteSectors(CHS=%d:%d:%d,N=%d)\n", iCylinder, iHead, iSector, nSectors);
         }
 
         if (this.fRemote) {
@@ -1378,8 +1375,8 @@ export default class Disk extends Component {
                         sector.iModify = sector.cModify = 0;
                     }
                 } else {
-                    if (DEBUG && this.messageEnabled()) {
-                        this.printMessage("doneWriteRemoteSectors(CHS=" + iCylinder + ':' + iHead + ':' + sector[Disk.SECTOR.ID] + ") returned error " + nErrorCode);
+                    if (DEBUG) {
+                        this.printf("doneWriteRemoteSectors(CHS=%d:%d:%d) returned error %d\n", iCylinder, iHead, sector[Disk.SECTOR.ID], nErrorCode);
                     }
                     this.queueDirtySector(sector, false);
                 }
@@ -1424,7 +1421,7 @@ export default class Disk extends Component {
      * @this {Disk}
      * @param {Sector} sector
      * @param {boolean} fAsync (true to update write timer, false to not)
-     * @return {boolean} true if write timer set, false if not
+     * @returns {boolean} true if write timer set, false if not
      */
     queueDirtySector(sector, fAsync)
     {
@@ -1438,8 +1435,8 @@ export default class Disk extends Component {
         this.aDirtySectors.push(sector);
         this.aDirtyTimestamps.push(Component.getTime());
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("queueDirtySector(CHS=" + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + "): " + this.aDirtySectors.length + " dirty");
+        if (DEBUG) {
+            this.printf("queueDirtySector(CHS=%d:%d:%d): %d dirty\n", sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.aDirtySectors.length);
         }
 
         return fAsync && this.updateWriteTimer();
@@ -1452,7 +1449,7 @@ export default class Disk extends Component {
      * >= the timestamp of the next dirty sector + REMOTE_WRITE_DELAY); if not, cancel the timer and start a new one.
      *
      * @this {Disk}
-     * @return {boolean} true if write timer set, false if not
+     * @returns {boolean} true if write timer set, false if not
      */
     updateWriteTimer()
     {
@@ -1492,7 +1489,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {boolean} fAsync is true if this function is being called asynchronously, false otherwise
-     * @return {boolean|Array} false if no dirty sectors, otherwise true (or a response array if not fAsync)
+     * @returns {boolean|Array} false if no dirty sectors, otherwise true (or a response array if not fAsync)
      */
     findDirtySectors(fAsync)
     {
@@ -1511,8 +1508,8 @@ export default class Disk extends Component {
                 if (!sectorNext.fDirty) break;
                 let j = this.aDirtySectors.indexOf(sectorNext);
                 this.assert(j >= 0, "findDirtySectors(CHS=" + iCylinder + ':' + iHead + ':' + sectorNext[Disk.SECTOR.ID] + ") missing from aDirtySectors");
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("findDirtySectors(CHS=" + iCylinder + ':' + iHead + ':' + sectorNext[Disk.SECTOR.ID] + ")");
+                if (DEBUG) {
+                    this.printf("findDirtySectors(CHS=%d:%d:%d)\n", iCylinder, iHead, sectorNext[Disk.SECTOR.ID]);
                 }
                 this.aDirtySectors.splice(j, 1);
                 this.aDirtyTimestamps.splice(j, 1);
@@ -1531,7 +1528,7 @@ export default class Disk extends Component {
      * info()
      *
      * @this {Disk}
-     * @return {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
+     * @returns {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
      */
     info()
     {
@@ -1560,7 +1557,7 @@ export default class Disk extends Component {
      * @param {Sector|null} [sectorPrev]
      * @param {boolean} [fWrite]
      * @param {function(Sector,boolean)} [done]
-     * @return {Sector|null} is the requested sector, or null if not found (or not available yet)
+     * @returns {Sector|null} is the requested sector, or null if not found (or not available yet)
      */
     seek(iCylinder, iHead, iSector, sectorPrev, fWrite, done)
     {
@@ -1694,7 +1691,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {Sector} sector
-     * @return {Array.<number>} is an array of bytes
+     * @returns {Array.<number>} is an array of bytes
      */
     toBytes(sector)
     {
@@ -1721,14 +1718,14 @@ export default class Disk extends Component {
      * @param {Sector} sector (returned from a previous seek)
      * @param {number} iByte (byte index within the given sector)
      * @param {boolean} [fCompare] is true if this write-compare read
-     * @return {number} the specified (unsigned) byte, or -1 if no more data in the sector
+     * @returns {number} the specified (unsigned) byte, or -1 if no more data in the sector
      */
     read(sector, iByte, fCompare)
     {
         let b = -1;
         if (sector) {
-            if (DEBUG && !iByte && !fCompare && this.messageEnabled()) {
-                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + '): ' + this.getFileInfo(sector));
+            if (DEBUG && !iByte && !fCompare) {
+                this.printf("read(\"%s\",CHS=%d:%d:%d): %s\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.getFileInfo(sector));
             }
             if (iByte < sector[Disk.SECTOR.LENGTH]) {
                 let adw = sector[Disk.SECTOR.DATA];
@@ -1747,15 +1744,15 @@ export default class Disk extends Component {
      * @param {Sector} sector (returned from a previous seek)
      * @param {number} iByte (byte index within the given sector)
      * @param {number} b the byte value to write
-     * @return {boolean|null} true if write successful, false if write-protected, null if out of bounds
+     * @returns {boolean|null} true if write successful, false if write-protected, null if out of bounds
      */
     write(sector, iByte, b)
     {
         if (this.fWriteProtected)
             return false;
 
-        if (DEBUG && !iByte && this.messageEnabled()) {
-            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + ')');
+        if (DEBUG && !iByte) {
+            this.printf("write(\"%s\",CHS=%d:%d:%d)\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID]);
         }
 
         if (iByte < sector[Disk.SECTOR.LENGTH]) {
@@ -1792,7 +1789,7 @@ export default class Disk extends Component {
      * encodeAsBase64()
      *
      * @this {Disk}
-     * @return {string}
+     * @returns {string}
      */
     encodeAsBase64()
     {
@@ -1812,7 +1809,7 @@ export default class Disk extends Component {
      * encodeAsBinary()
      *
      * @this {Disk}
-     * @return {Uint8Array}
+     * @returns {Uint8Array}
      */
     encodeAsBinary() {
         let s = [], lba = 0, sector;
@@ -1838,7 +1835,7 @@ export default class Disk extends Component {
      * where [...] is an array of modified dword(s) in the corresponding sector.
      *
      * @this {Disk}
-     * @return {Array} of modified sectors
+     * @returns {Array} of modified sectors
      */
     save()
     {
@@ -1863,8 +1860,8 @@ export default class Disk extends Component {
                 }
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage('save("' + this.sDiskName + '"): saved ' + (deltas.length - 1) + ' change(s)');
+        if (DEBUG) {
+            this.printf("save(\"%s\"): saved %d change(s)\n", this.sDiskName, (deltas.length - 1));
         }
         return deltas;
     }
@@ -1884,7 +1881,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {Array} deltas
-     * @return {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
+     * @returns {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
      */
     restore(deltas)
     {
@@ -2001,11 +1998,11 @@ export default class Disk extends Component {
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
-                this.notice("Unable to restore disk '" + this.sDiskName + ": " + sReason);
+                this.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('restore("' + this.sDiskName + '"): restored ' + nChanges + ' change(s)');
+            if (DEBUG) {
+                this.printf("restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
             }
             /*
              * Last but not least, rebuild the disk's file table if BACKTRACK or SYMBOLS support is enabled.
@@ -2028,7 +2025,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {boolean} [fFormatted]
-     * @return {string} containing the entire disk image as JSON-encoded data
+     * @returns {string} containing the entire disk image as JSON-encoded data
      */
     convertToJSON(fFormatted)
     {
@@ -2111,7 +2108,7 @@ export default class Disk extends Component {
      * @param {Sector|null} sector (returned from a previous seek)
      * @param {number} [lba]
      * @param {string} [sDesc]
-     * @return {string}
+     * @returns {string}
      */
     dumpSector(sector, lba, sDesc)
     {
@@ -2210,7 +2207,7 @@ class FileInfo {
      * @this {FileInfo}
      * @param {number} off (offset relative to start of file)
      * @param {boolean} [fNearest] (true to return nearest symbol if a segment with symbols is found)
-     * @return {string} symbol corresponding to file offset (of the file name + offset if no symbol found)
+     * @returns {string} symbol corresponding to file offset (of the file name + offset if no symbol found)
      */
     getSymbol(off, fNearest)
     {

@@ -8,7 +8,7 @@
  */
 
 import ChipSetX80 from "./chipset.js";
-import MessagesX80 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
@@ -37,12 +37,12 @@ export default class KeyboardX80 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, MessagesX80.KEYBOARD);
+        super("Keyboard", parmsKbd, Messages.KEYBOARD);
 
         var model = parmsKbd['model'];
 
         if (model && !KeyboardX80.MODELS[model]) {
-            Component.notice("Unrecognized KeyboardX80 model: " + model);
+            Component.printf(Messages.NOTICE, "Unrecognized KeyboardX80 model: %s\n", model);
         }
 
         this.config = KeyboardX80.MODELS[model] || {};
@@ -60,7 +60,7 @@ export default class KeyboardX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -267,7 +267,7 @@ export default class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -287,7 +287,7 @@ export default class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -321,7 +321,7 @@ export default class KeyboardX80 extends Component {
         this.bitsState = 0;
 
         if (this.config.INIT && !this.restore(this.config.INIT)) {
-            this.notice("reset error");
+            this.printf(Messages.NOTICE, "reset error\n");
         }
     }
 
@@ -331,7 +331,7 @@ export default class KeyboardX80 extends Component {
      * This implements save support for the Keyboard component.
      *
      * @this {KeyboardX80}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -353,7 +353,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -431,7 +431,7 @@ export default class KeyboardX80 extends Component {
      * @param {number} keyCode (ie, either a keycode or string ID)
      * @param {boolean} fDown (true if key going down, false if key going up)
      * @param {boolean} [fRight] (true if key is on the right, false if not or unknown or n/a)
-     * @return {boolean} (fDown updated as needed for CAPS-LOCK weirdness)
+     * @returns {boolean} (fDown updated as needed for CAPS-LOCK weirdness)
      */
     checkModifierKeys(keyCode, fDown, fRight)
     {
@@ -479,7 +479,7 @@ export default class KeyboardX80 extends Component {
      * Returns a number if the keyCode exists in the KEYMAP, or a string if the keyCode has a string ID.
      *
      * @this {KeyboardX80}
-     * @return {string|number|null}
+     * @returns {string|number|null}
      */
     getSoftCode(keyCode)
     {
@@ -501,16 +501,14 @@ export default class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {Object} event
      * @param {boolean} fDown is true for a keyDown event, false for up
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onKeyDown(event, fDown)
     {
         var fPass = true;
         var keyCode = event.keyCode;
 
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
-            this.printMessage("onKey" + (fDown? "Down" : "Up") + "(" + keyCode + ")", true);
-        }
+        this.printf(Messages.KEYS, "onKey%s(%d)\n", (fDown? "Down" : "Up"), keyCode);
 
         /*
          * A note about Firefox: it uses different keyCodes for certain keys; there's a logic to the differences
@@ -586,11 +584,7 @@ export default class KeyboardX80 extends Component {
                 }
             }
         }
-
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
-            this.printMessage("onKey" + (fDown? "Down" : "Up") + "(" + keyCode + "): softCode=" + softCode + ", pass=" + fPass, true);
-        }
-
+        this.printf(Messages.KEYS, "onKey%s(%d): softCode=%s, pass=%b\n", (fDown? "Down" : "Up"), keyCode, softCode, fPass);
         return fPass;
     }
 
@@ -601,7 +595,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onKeyPress(event)
     {
@@ -630,11 +624,7 @@ export default class KeyboardX80 extends Component {
                 this.updateLEDs();
             }
         }
-
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
-            this.printMessage("onKeyPress(" + charCode + ")", true);
-        }
-
+        this.printf(Messages.KEYS, "onKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -644,7 +634,7 @@ export default class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {Object} event
      * @param {boolean} fDown is true for a keyDown event, false for up
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     oniOSKeyDown(event, fDown)
     {
@@ -669,9 +659,7 @@ export default class KeyboardX80 extends Component {
                 if (!this.indexOfCharMap(bMapping)) {
                     fPass = this.onSoftKeyDown(keyCode, fDown, true);
                     if (event.preventDefault) event.preventDefault();
-                    if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
-                        this.printMessage("oniOSKey" + (fDown ? "Down" : "Up") + "(" + keyCode + "): pass=" + fPass, true);
-                    }
+                    this.printf(Messages.KEYS, "oniOSKey%s(%d): pass=%b\n", (fDown ? "Down" : "Up"), keyCode, fPass);
                 }
             }
         }
@@ -683,7 +671,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     oniOSKeyPress(event)
     {
@@ -720,11 +708,7 @@ export default class KeyboardX80 extends Component {
                 this.onSoftKeyDown(softCode, true, true);
             }
         }
-
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
-            this.printMessage("oniOSKeyPress(" + charCode + ")", true);
-        }
-
+        this.printf(Messages.KEYS, "oniOSKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -733,7 +717,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onPaste(event)
     {
@@ -767,7 +751,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {number} bMapping
-     * @return {number}
+     * @returns {number}
      */
     indexOfKeyMap(bMapping)
     {
@@ -782,7 +766,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {number} bMapping
-     * @return {number}
+     * @returns {number}
      */
     indexOfCharMap(bMapping)
     {
@@ -797,7 +781,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {number|string} softCode
-     * @return {number} index of softCode in aKeysActive, or -1 if not found
+     * @returns {number} index of softCode in aKeysActive, or -1 if not found
      */
     indexOfSoftKey(softCode)
     {
@@ -814,13 +798,13 @@ export default class KeyboardX80 extends Component {
      * @param {number|string} softCode
      * @param {boolean} fDown is true for a down event, false for up
      * @param {boolean} [fAutoRelease] is true only if we know we want the key to auto-release
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onSoftKeyDown(softCode, fDown, fAutoRelease)
     {
         var i = this.indexOfSoftKey(softCode);
         if (fDown) {
-            // this.println(softCode + " down");
+            // this.printf("%s down\n", softCode);
             if (i < 0) {
                 this.aKeysActive.push({
                     softCode: softCode,
@@ -833,13 +817,13 @@ export default class KeyboardX80 extends Component {
             }
             if (fAutoRelease) this.checkSoftKeysToRelease();        // prime the pump
         } else if (i >= 0) {
-            // this.println(softCode + " up");
+            // this.printf("%s up\n", softCode);
             if (!this.aKeysActive[i].fAutoRelease) {
                 var msDown = this.aKeysActive[i].msDown;
                 if (msDown) {
                     var msElapsed = Date.now() - msDown;
                     if (msElapsed < KeyboardX80.MINPRESSTIME) {
-                        // this.println(softCode + " released after only " + msElapsed + "ms");
+                        // this.printf("%s released after only %dms\n", softCode, msElapsed);
                         this.aKeysActive[i].fAutoRelease = true;
                         this.checkSoftKeysToRelease();
                         return true;
@@ -848,7 +832,7 @@ export default class KeyboardX80 extends Component {
             }
             this.aKeysActive.splice(i, 1);
         } else {
-            // this.println(softCode + " up with no down?");
+            // this.printf("%s up with no down?\n", softCode);
         }
 
         if (this.chipset) {
@@ -956,7 +940,7 @@ export default class KeyboardX80 extends Component {
      * I'm going with solution #1 because it's less overhead.
      *
      * @this {KeyboardX80}
-     * @return {boolean} (true if ready, false if not)
+     * @returns {boolean} (true if ready, false if not)
      */
     isVT100TransmitterReady()
     {
@@ -984,7 +968,7 @@ export default class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {number} port (0x82)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to write the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inVT100UARTAddress(port, addrFrom)
     {
@@ -1017,7 +1001,7 @@ export default class KeyboardX80 extends Component {
             this.bVT100Address = b;
             this.cpu.requestINTR(1);
         }
-        this.printMessageIO(port, undefined, addrFrom, "KBDUART.ADDRESS", b);
+        this.printIO(port, undefined, addrFrom, "KBDUART.ADDRESS", b);
         return b;
     }
 
@@ -1031,7 +1015,7 @@ export default class KeyboardX80 extends Component {
      */
     outVT100UARTStatus(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "KBDUART.STATUS");
+        this.printIO(port, b, addrFrom, "KBDUART.STATUS");
         this.bVT100Status = b;
         this.fVT100UARTBusy = true;
         this.nVT100UARTCycleSnap = this.cpu.getCycles();

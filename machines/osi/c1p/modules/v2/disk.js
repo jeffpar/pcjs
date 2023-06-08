@@ -648,7 +648,7 @@ export default class C1PDiskController extends Component {
     * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listDisk")
     * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
     * @param {string} [sValue] optional data value
-    * @return {boolean} true if binding was successful, false if unrecognized binding request
+    * @returns {boolean} true if binding was successful, false if unrecognized binding request
     */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -681,7 +681,7 @@ export default class C1PDiskController extends Component {
                              */
                             sFileURL = "http://" + window.location.host + "/api/v1/dump?disk=" + sFilePath;
                         }
-                        controller.println("loading  " + Str.getBaseName(sFilePath) + "...");
+                        controller.printf("loading  %s...\n", Str.getBaseName(sFilePath));
                         Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                             controller.loadDisk(sURL, sResponse, nErrorCode);
                         });
@@ -748,11 +748,11 @@ export default class C1PDiskController extends Component {
     loadDisk(sDiskName, sDiskData, nErrorCode)
     {
         if (nErrorCode) {
-            this.println("disk load error (" + nErrorCode + ")");
+            this.printf("disk load error (%d)\n", nErrorCode);
             return;
         }
         var aHeads = [];
-        this.println("mounting " + sDiskName + "...");
+        this.printf("mounting %s...\n", sDiskName);
         try {
             /*
              * The most likely source of any exception will be right here, where we're parsing
@@ -760,16 +760,16 @@ export default class C1PDiskController extends Component {
              */
             aHeads = eval("(" + sDiskData + ")");
             if (!aHeads.length) {
-                this.println("no data: " + sDiskName);
+                this.printf("no data: %s\n", sDiskName);
                 return;
             }
             if (!aHeads[0].length) {
-                this.println("no tracks: " + sDiskName);
+                this.printf("no tracks: %s\n", sDiskName);
                 return;
             }
             var aTracks = aHeads[0];
             if (aTracks[0]['trackNum'] === undefined) {
-                this.println("data error: " + aTracks[0]);
+                this.printf("data error: %d\n", aTracks[0]);
                 return;
             }
             /*
@@ -777,7 +777,7 @@ export default class C1PDiskController extends Component {
              * in the first place. Can we guarantee that and eliminate this test?
              */
             if (!this.aDrives[0]) {
-                this.println("no available drives");
+                this.printf("no available drives\n");
                 return;
             }
             /*
@@ -839,13 +839,13 @@ export default class C1PDiskController extends Component {
                  */
                 aTracks[iTrackNum].trackData = trackData;
                 if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_DISK)) {
-                    this.dbg.message("track " + iTrackNum + ": " + trackData.length + " bytes");
+                    this.dbg.printf("track %d: %d bytes\n", iTrackNum, trackData.length);
                 }
             }
             this.aDrives[0].aTracks = aTracks;
-            this.println("mount of " + sDiskName + " complete");
+            this.printf("mount of %s complete\n", sDiskName);
         } catch (e) {
-            this.println("disk data error: " + e.message);
+            this.printf("disk data error: %s\n", e.message);
         }
     }
 
@@ -905,7 +905,7 @@ export default class C1PDiskController extends Component {
     * @this {C1PDiskController}
     * @param {number} port address (0x0000-0x00FF) relative to addrController (0xC000)
     * @param {boolean} fWrite is true if port write, false if port read
-    * @return {Object} reg will always be a valid register object, but it may be the "unknown" register if we don't recognize the port.
+    * @returns {Object} reg will always be a valid register object, but it may be the "unknown" register if we don't recognize the port.
     */
     getReg(port, fWrite)
     {
@@ -987,7 +987,7 @@ export default class C1PDiskController extends Component {
                     var bChanged = reg.bits ^ b;
                     while (bChanged && bTest) {
                         if (bChanged & bTest) {
-                            this.dbg.message("  changed " + reg.sName + "." + reg.aBitIDs[bTest] + " to " + ((b & bTest)? "1" : "0"));
+                            this.dbg.printf("  changed %s.%s to %s\n", reg.sName, reg.aBitIDs[bTest], (b & bTest)? "1" : "0");
                         }
                         bTest >>= 1;
                     }
@@ -1043,7 +1043,7 @@ export default class C1PDiskController extends Component {
 
     /**
      * @this {C1PDiskController}
-     * @return {number} current byte of data from the currently selected drive, or null if no (more) data available
+     * @returns {number} current byte of data from the currently selected drive, or null if no (more) data available
      */
     advanceDriveData()
     {
@@ -1074,7 +1074,7 @@ export default class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bPDA
-     * @return {number} updated bits for PDA
+     * @returns {number} updated bits for PDA
      */
     updatePDA(bPDA)
     {
@@ -1133,7 +1133,7 @@ export default class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bPDB
-     * @return {number} updated bits for PDB
+     * @returns {number} updated bits for PDB
      */
     updatePDB(bPDB)
     {
@@ -1160,7 +1160,7 @@ export default class C1PDiskController extends Component {
                         drive.iTrackSelect++;
 
                     if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_DISK)) {
-                        this.dbg.message("stepping " + ((bPDB & this.PDB_STI)? "down" : "up") + " to track " + drive.iTrackSelect);
+                        this.dbg.printf("stepping %s to track %d\n", (bPDB & this.PDB_STI)? "down" : "up", drive.iTrackSelect);
                     }
 
                     if (drive.iTrackSelect >= drive.nTracks)
@@ -1177,7 +1177,7 @@ export default class C1PDiskController extends Component {
             }
         }
         else if (DEBUG && this.iDriveSelect >= 0) {
-            this.println("updatePDB(" + Str.toHexByte(bPDB) + "): invalid drive: " + this.iDriveSelect);
+            this.printf("updatePDB(%#04x): invalid drive: %d\n", bPDB, this.iDriveSelect);
         }
         return bPDB;
     }
@@ -1187,7 +1187,7 @@ export default class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bSTAT
-     * @return {number} updated bits for STAT
+     * @returns {number} updated bits for STAT
      */
     updateSTAT(bSTAT)
     {
@@ -1212,7 +1212,7 @@ export default class C1PDiskController extends Component {
     /**
      * @this {C1PDiskController}
      * @param {boolean} fLoaded is true if the selected drive must be loaded, false if don't care
-     * @return {Object} drive reference to the selected drive, or null if no drive is selected or it doesn't meet the fLoaded requirement
+     * @returns {Object} drive reference to the selected drive, or null if no drive is selected or it doesn't meet the fLoaded requirement
      *
      getSelectedDrive(fLoaded)
      {

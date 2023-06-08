@@ -8,6 +8,7 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
+import Messages from "../../../../modules/v2/messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
@@ -501,7 +502,7 @@ export default class C1PCPU extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -626,7 +627,9 @@ export default class C1PCPU extends Component {
             if (this.addrReadUpper < end)
                 this.addrReadUpper = end;
             this.aReadNotify.push([start, end, component, fn]);
-            if (DEBUG) this.log("addReadNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new read range: " + Str.toHexWord(this.addrReadLower) + "-" + Str.toHexWord(this.addrReadUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+            }
         }
     }
 
@@ -654,7 +657,7 @@ export default class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {boolean} true if remove was successful, false if the handler was not found
+     * @returns {boolean} true if remove was successful, false if the handler was not found
      */
     removeReadNotify(start, end, component, fn)
     {
@@ -662,7 +665,9 @@ export default class C1PCPU extends Component {
         if (aBounds.length == 4) {
             this.addrReadLower = aBounds[2];
             this.addrReadUpper = aBounds[3];
-            if (DEBUG) this.log("removeReadNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new read range: " + Str.toHexWord(this.addrReadLower) + "-" + Str.toHexWord(this.addrReadUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "removeReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+            }
             return true;
         }
         return false;
@@ -685,7 +690,9 @@ export default class C1PCPU extends Component {
             if (this.addrWriteUpper < end)
                 this.addrWriteUpper = end;
             this.aWriteNotify.push([start, end, component, fn]);
-            if (DEBUG) this.log("addWriteNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new write range: " + Str.toHexWord(this.addrWriteLower) + "-" + Str.toHexWord(this.addrWriteUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+            }
         }
     }
 
@@ -713,7 +720,7 @@ export default class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {boolean} true if remove was successful, false if the handler was not found
+     * @returns {boolean} true if remove was successful, false if the handler was not found
      */
     removeWriteNotify(start, end, component, fn)
     {
@@ -721,7 +728,9 @@ export default class C1PCPU extends Component {
         if (aBounds.length == 4) {
             this.addrWriteLower = aBounds[2];
             this.addrWriteUpper = aBounds[3];
-            if (DEBUG) this.log("removeWriteNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new write range: " + Str.toHexWord(this.addrWriteLower) + "-" + Str.toHexWord(this.addrWriteUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "removeWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+            }
             return true;
         }
         return false;
@@ -736,7 +745,7 @@ export default class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {number} index of the matching handler, or -1 if not found
+     * @returns {number} index of the matching handler, or -1 if not found
      */
     findNotify(aNotify, start, end, component, fn)
     {
@@ -757,7 +766,7 @@ export default class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {Array} bounds of previous handler ([0] and [1]) and new lower and upper address bounds ([2] and [3])
+     * @returns {Array} bounds of previous handler ([0] and [1]) and new lower and upper address bounds ([2] and [3])
      */
     removeNotify(aNotify, start, end, component, fn)
     {
@@ -794,7 +803,7 @@ export default class C1PCPU extends Component {
             this.speed = speed;
             if (this.bindings["setSpeed"])
                 this.bindings["setSpeed"].innerHTML = this.aSpeeds[speed >= 2? 0 : speed+1];
-            this.println("running at " + this.aSpeeds[speed].toLowerCase() + " speed " + this.aSpeedDescs[speed]);
+            this.printf("running at %s speed %s\n", this.aSpeeds[speed].toLowerCase(), this.aSpeedDescs[speed]);
             if (fOnClick) this.setFocus();
         }
         this.nRunCycles = 0;
@@ -872,7 +881,7 @@ export default class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -949,7 +958,7 @@ export default class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -964,7 +973,7 @@ export default class C1PCPU extends Component {
              * and so applying that percentage to msPerYield should give us a better estimate of work vs. time.
              */
             msYield = Math.round(msYield * this.nCyclesThisRun / this.nCyclesPerYield);
-            // if (msYield < this.msPerYield) this.println("scaling msPerYield (" + this.msPerYield + ") to msYield (" + msYield + ")");
+            // if (msYield < this.msPerYield) this.printf("scaling msPerYield (%d) to msYield (%d)\n", this.msPerYield, msYield);
         }
 
         var msElapsedThisRun = msCurrent - this.msStartThisRun;
@@ -989,7 +998,7 @@ export default class C1PCPU extends Component {
         var msElapsed = msCurrent - this.msRunStart;
 
         if (DEBUG && msRemainsThisRun < 0 && this.speed == this.SPEED_FAST) {
-            this.println("warning: updates @" + msElapsedThisRun + "ms (prefer " + Math.round(msYield) + "ms)");
+            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);
@@ -1118,7 +1127,7 @@ export default class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {boolean|undefined} undefined indicates that the last instruction was not executed (eg,
+     * @returns {boolean|undefined} undefined indicates that the last instruction was not executed (eg,
      * we hit an execution breakpoint), false implies a post-execution condition was triggered (eg, a write
      * breakpoint), and true indicates successful completion of all requested cycles.
      */
@@ -1295,7 +1304,7 @@ export default class C1PCPU extends Component {
      * updateMemory() function).
      *
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     getCycles()
     {
@@ -1305,7 +1314,7 @@ export default class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      *
      * Unlike the Debugger versions of these functions, these presume that addr is always valid,
      * since it's internally generated, not user-supplied. Of course, we could still have internal
@@ -1327,7 +1336,7 @@ export default class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getWord(addr)
     {
@@ -1351,7 +1360,7 @@ export default class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     getRegP()
     {
@@ -1508,7 +1517,7 @@ export default class C1PCPU extends Component {
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
-     * @return {number}
+     * @returns {number}
      *
      * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
      * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
@@ -1573,7 +1582,7 @@ export default class C1PCPU extends Component {
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
-     * @return {number}
+     * @returns {number}
      *
      * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
      * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
@@ -3768,7 +3777,7 @@ export default class C1PCPU extends Component {
         switch(bSimOp) {
 
             case this.SIMOP_HLT:
-                this.println("HALT");
+                this.printf("HALT\n");
                 this.halt();
                 break;
 
@@ -3788,7 +3797,7 @@ export default class C1PCPU extends Component {
                  *      eg: %A for this.regA, %X for this.regX, etc
                  */
                 s = s.replace(/%A/g, Str.toHex(this.regA, 2)).replace(/%X/g, Str.toHex(this.regX, 2)).replace(/%Y/g, Str.toHex(this.regY, 2));
-                this.println(s);
+                this.printf("%s\n", s);
                 /*
                  * To make printing "smoother", let's force a yield
                  */
@@ -3797,7 +3806,7 @@ export default class C1PCPU extends Component {
 
             default:
                 this.regPC -= 2;
-                this.println("undefined opSim: " + Str.toHexByte(bSimOp) + " at " + Str.toHexWord(this.regPC));
+                this.printf("undefined opSim: %#04x at %#06x\n", bSimOp, this.regPC);
                 this.halt();
         }
     }
@@ -3808,7 +3817,7 @@ export default class C1PCPU extends Component {
     opUndefined()
     {
         var b = this.abMem[--this.regPC];
-        this.println("undefined opcode: " + Str.toHexByte(b) + " at " + Str.toHexWord(this.regPC));
+        this.printf("undefined opcode: %#04x at %#06x\n", b, this.regPC);
         this.halt();
     }
 

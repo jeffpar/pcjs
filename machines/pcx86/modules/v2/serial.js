@@ -45,7 +45,7 @@ export default class SerialPort extends Component {
      *
      *      binding: name of a control (based on its "binding" attribute) to bind to this port's I/O;
      *      as a special case, it can be set to "console" to direct all output to the component's default
-     *      println() handler (eg, the Control Panel's "print" control, if any, or console.log() if using
+     *      print() handler (eg, the Control Panel's "print" control, if any, or console.log() if using
      *      a DEBUG or non-COMPILED machine)
      *
      *      tabSize: a non-zero number specifies the tab-stop multiple to use for automatic tab-to-space
@@ -77,7 +77,7 @@ export default class SerialPort extends Component {
     {
         super("SerialPort", parms, Messages.SERIAL);
 
-        this.iAdapter = parms['adapter'];
+        this.iAdapter = +parms['adapter'];
 
         switch (this.iAdapter) {
         case 1:
@@ -126,8 +126,8 @@ export default class SerialPort extends Component {
          * at the beginning of every line.  This probably isn't generally useful; I use it internally to preformat serial
          * output.
          */
-        this.tabSize = parms['tabSize'] || 0;
-        this.charBOL = parms['charBOL'] || 0;
+        this.tabSize = +parms['tabSize'] || 0;
+        this.charBOL = +parms['charBOL'] || 0;
         this.charPrev = 0;
         this.iLogicalCol = 0;
 
@@ -197,7 +197,7 @@ export default class SerialPort extends Component {
      * @param {Component} connection
      * @param {function()} receiveData
      * @param {boolean} [fAutoFlow] (true to enable automatic flow control; default is false)
-     * @return {boolean}
+     * @returns {boolean}
      */
     bindConnection(connection, receiveData, fAutoFlow = false)
     {
@@ -217,7 +217,7 @@ export default class SerialPort extends Component {
      * @param {string} id
      * @param {Mouse} mouse
      * @param {function(number)} fnUpdate
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     bindMouse(id, mouse, fnUpdate)
     {
@@ -239,7 +239,7 @@ export default class SerialPort extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "buffer")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -388,16 +388,16 @@ export default class SerialPort extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.status("Connected %s.%s to %s", this.idMachine, sSourceID, sTargetID);
+                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
                     }
                 }
                 /*
-                 * Changed from notice() to status() because sometimes a connection fails simply because one of us is a laggard.
+                 * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.status("Unable to establish connection: %s", sConnection);
+                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }
@@ -408,7 +408,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -436,7 +436,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -459,7 +459,7 @@ export default class SerialPort extends Component {
      * This implements save support for the SerialPort component.
      *
      * @this {SerialPort}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -475,7 +475,7 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -487,7 +487,7 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {Array} [data]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(data)
     {
@@ -528,7 +528,7 @@ export default class SerialPort extends Component {
      * saveRegisters()
      *
      * @this {SerialPort}
-     * @return {Array}
+     * @returns {Array}
      */
     saveRegisters()
     {
@@ -556,7 +556,7 @@ export default class SerialPort extends Component {
      * which means there should be a 1000ms/150 or 6.667ms delay between bytes delivered.
      *
      * @this {SerialPort}
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout()
     {
@@ -574,7 +574,7 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {number|string|Array} [data]
-     * @return {boolean} true if received, false if not
+     * @returns {boolean} true if received, false if not
      */
     receiveData(data)
     {
@@ -643,12 +643,12 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3F8 or 0x2F8)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inRBR(port, addrFrom)
     {
         let b = ((this.bLCR & SerialPort.LCR.DLAB) ? (this.wDL & 0xff) : this.bRBR);
-        this.printMessageIO(port, undefined, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLL" : "RBR", b);
+        this.printIO(port, undefined, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLL" : "RBR", b);
         this.bLSR &= ~SerialPort.LSR.DR;
         this.advanceRBR();
         return b;
@@ -660,12 +660,12 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3F9 or 0x2F9)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inIER(port, addrFrom)
     {
         let b = ((this.bLCR & SerialPort.LCR.DLAB) ? (this.wDL >> 8) : this.bIER);
-        this.printMessageIO(port, undefined, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLM" : "IER", b);
+        this.printIO(port, undefined, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLM" : "IER", b);
         return b;
     }
 
@@ -675,7 +675,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3FA or 0x2FA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inIIR(port, addrFrom)
     {
@@ -686,7 +686,7 @@ export default class SerialPort extends Component {
         if (b == SerialPort.IIR.INT_THR) {
             this.bIIR = SerialPort.IIR.NO_INT;
         }
-        this.printMessageIO(port, undefined, addrFrom, "IIR", b);
+        this.printIO(port, undefined, addrFrom, "IIR", b);
         return b;
     }
 
@@ -696,12 +696,12 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3FB or 0x2FB)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inLCR(port, addrFrom)
     {
         let b = this.bLCR;
-        this.printMessageIO(port, undefined, addrFrom, "LCR", b);
+        this.printIO(port, undefined, addrFrom, "LCR", b);
         return b;
     }
 
@@ -711,12 +711,12 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3FC or 0x2FC)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inMCR(port, addrFrom)
     {
         let b = this.bMCR;
-        this.printMessageIO(port, undefined, addrFrom, "MCR", b);
+        this.printIO(port, undefined, addrFrom, "MCR", b);
         return b;
     }
 
@@ -726,12 +726,12 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3FD or 0x2FD)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inLSR(port, addrFrom)
     {
         let b = this.bLSR;
-        this.printMessageIO(port, undefined, addrFrom, "LSR", b);
+        this.printIO(port, undefined, addrFrom, "LSR", b);
         return b;
     }
 
@@ -741,13 +741,13 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3FE or 0x2FE)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inMSR(port, addrFrom)
     {
         let b = this.bMSR;
         this.bMSR &= ~(SerialPort.MSR.DCTS | SerialPort.MSR.DDSR);
-        this.printMessageIO(port, undefined, addrFrom, "MSR", b);
+        this.printIO(port, undefined, addrFrom, "MSR", b);
         return b;
     }
 
@@ -762,7 +762,7 @@ export default class SerialPort extends Component {
     outTHR(port, bOut, addrFrom)
     {
         let serial = this;
-        this.printMessageIO(port, bOut, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLL" : "THR");
+        this.printIO(port, bOut, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLL" : "THR");
         if (this.bLCR & SerialPort.LCR.DLAB) {
             this.wDL = (this.wDL & ~0xff) | bOut;
         } else {
@@ -800,7 +800,7 @@ export default class SerialPort extends Component {
      */
     outIER(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLM" : "IER");
+        this.printIO(port, bOut, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLM" : "IER");
         if (this.bLCR & SerialPort.LCR.DLAB) {
             this.wDL = (this.wDL & 0xff) | (bOut << 8);
         } else {
@@ -818,7 +818,7 @@ export default class SerialPort extends Component {
      */
     outLCR(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "LCR");
+        this.printIO(port, bOut, addrFrom, "LCR");
         this.bLCR = bOut;
     }
 
@@ -833,7 +833,7 @@ export default class SerialPort extends Component {
     outMCR(port, bOut, addrFrom)
     {
         let delta = (bOut ^ this.bMCR);
-        this.printMessageIO(port, bOut, addrFrom, "MCR");
+        this.printIO(port, bOut, addrFrom, "MCR");
         this.bMCR = bOut;
         /*
          * Whenever DTR or RTS changes, we also need to notify any connected machine or mouse, via updateStatus().
@@ -912,13 +912,13 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {number} b
-     * @return {boolean} true if transmitted, false if not
+     * @returns {boolean} true if transmitted, false if not
      */
     transmitByte(b)
     {
         let fTransmitted = false;
 
-        this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        this.printf("transmitByte(%#04x)\n", b);
 
         if (this.sendData) {
             if (this.sendData.call(this.connection, b)) {
@@ -963,7 +963,7 @@ export default class SerialPort extends Component {
         }
         else if (this.consoleBuffer != null) {
             if (b == 0x0A || this.consoleBuffer.length >= 1024) {
-                this.println(this.consoleBuffer);
+                this.print(this.consoleBuffer);
                 this.consoleBuffer = "";
             }
             if (b != 0x0A) {

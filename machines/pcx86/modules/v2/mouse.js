@@ -112,7 +112,7 @@ export default class Mouse extends Component {
      * isActive()
      *
      * @this {Mouse}
-     * @return {boolean} true if active, false if not
+     * @returns {boolean} true if active, false if not
      */
     isActive()
     {
@@ -144,7 +144,7 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -201,7 +201,7 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -224,7 +224,7 @@ export default class Mouse extends Component {
      * This implements save support for the Mouse component.
      *
      * @this {Mouse}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -240,7 +240,7 @@ export default class Mouse extends Component {
      *
      * @this {Mouse}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -252,7 +252,7 @@ export default class Mouse extends Component {
      *
      * @this {Mouse}
      * @param {Array} [data]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(data)
     {
@@ -280,7 +280,7 @@ export default class Mouse extends Component {
      * saveState()
      *
      * @this {Mouse}
-     * @return {Array}
+     * @returns {Array}
      */
     saveState()
     {
@@ -344,7 +344,7 @@ export default class Mouse extends Component {
      *
      * @this {Mouse}
      * @param {HTMLElement} control from the HTML DOM (eg, the control for the simulated screen)
-     * @return {boolean} true if event handlers were actually added, false if not
+     * @returns {boolean} true if event handlers were actually added, false if not
      */
     captureMouse(control)
     {
@@ -397,7 +397,7 @@ export default class Mouse extends Component {
      *
      * @this {Mouse}
      * @param {HTMLElement} control from the HTML DOM
-     * @return {boolean} true if event handlers were actually released, false if not
+     * @returns {boolean} true if event handlers were actually released, false if not
      */
     releaseMouse(control)
     {
@@ -479,7 +479,7 @@ export default class Mouse extends Component {
             default:
                 break;
             }
-            this.printMessage(sDiag + ": ignored");
+            this.printf("%s: ignored\n", sDiag);
         }
     }
 
@@ -500,15 +500,13 @@ export default class Mouse extends Component {
              * rounds negative numbers toward +infinity if the fraction is exactly 0.5.  All positive numbers are
              * rounded correctly, so we convert the value to positive and restore its sign afterward.  Additionally,
              * if the scaling factor turns a non-zero value into zero, we restore the value to its smallest legal
-             * non-zero value (thanks to Math.sign() again).  This ensures that tiniest movement of the physical
+             * non-zero value (thanks to Math.sign() again).  This ensures that the tiniest movement of the physical
              * mouse always results in at least the tiniest movement of the virtual mouse.
              */
             let xScaled = (Math.round(Math.abs(xDelta) * this.scale) * Math.sign(xDelta)) || Math.sign(xDelta);
             let yScaled = (Math.round(Math.abs(yDelta) * this.scale) * Math.sign(yDelta)) || Math.sign(yDelta);
             if (xScaled || yScaled) {
-                if (this.messageEnabled(Messages.MOUSE)) {
-                    this.printMessage("moveMouse(" + xScaled + "," + yScaled + ")");
-                }
+                this.printf(Messages.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
                 /*
                  * As sendPacket() indicates, any x and y coordinates we supply are for diagnostic purposes only.
                  * sendPacket() only cares about the xDelta and yDelta properties we provide above, which it then zeroes
@@ -543,9 +541,7 @@ export default class Mouse extends Component {
         let b1 = 0x40 | (this.fButton1? 0x20 : 0) | (this.fButton2? 0x10 : 0) | ((this.yDelta & 0xC0) >> 4) | ((this.xDelta & 0xC0) >> 6);
         let b2 = this.xDelta & 0x3F;
         let b3 = this.yDelta & 0x3F;
-        if (this.messageEnabled(Messages.SERIAL)) {
-            this.printMessage((sDiag? (sDiag + ": ") : "") + (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : "") + "serial packet [" + Str.toHexByte(b1) + "," + Str.toHexByte(b2) + "," + Str.toHexByte(b3) + "]", 0, true);
-        }
+        this.printf(Messages.SERIAL + Messages.ADDRESS, "%s%sserial packet [%#04x,%#04x,%#04x]\n", (sDiag? (sDiag + ": ") : ""), (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : ""), b1, b2, b3);
         this.componentDevice.receiveData([b1, b2, b3]);
         this.xDelta = this.yDelta = 0;
     }
@@ -576,11 +572,11 @@ export default class Mouse extends Component {
                 let fIdentify = false;
                 if (!(this.pins & RS232.RTS.MASK)) {
                     this.reset();
-                    this.printMessage("serial mouse reset");
+                    this.printf("serial mouse reset\n");
                     fIdentify = true;
                 }
                 if (!(this.pins & RS232.DTR.MASK)) {
-                    this.printMessage("serial mouse ID requested");
+                    this.printf("serial mouse ID requested\n");
                     fIdentify = true;
                 }
                 if (fIdentify) {
@@ -605,7 +601,7 @@ export default class Mouse extends Component {
                      * I'm calling this good enough for now.
                      */
                     this.componentDevice.receiveData([Mouse.SERIAL.ID, Mouse.SERIAL.ID]);
-                    this.printMessage("serial mouse ID sent");
+                    this.printf("serial mouse ID sent\n");
                 }
                 this.captureAll();
                 this.setActive(fActive);
@@ -624,7 +620,7 @@ export default class Mouse extends Component {
                  * a mouse device that's still powered may still send event data to the serial port, and if there was software
                  * polling the serial port, it might expect to see that data.  Unlikely, but not impossible.
                  */
-                this.printMessage("serial mouse inactive");
+                this.printf("serial mouse inactive\n");
                 this.releaseAll();
                 this.setActive(fActive);
             }
@@ -638,12 +634,12 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {number} port (eg, 0x23C)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inBusData(port, addrFrom)
     {
         let b = 0;
-        this.printMessageIO(port, undefined, addrFrom, "DATA", b);
+        this.printIO(port, undefined, addrFrom, "DATA", b);
         return b;
     }
 
@@ -653,12 +649,12 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {number} port (eg, 0x23D)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inBusTPPI(port, addrFrom)
     {
         let b = 0;
-        this.printMessageIO(port, undefined, addrFrom, "TPPI", b);
+        this.printIO(port, undefined, addrFrom, "TPPI", b);
         return b;
     }
 
@@ -668,12 +664,12 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {number} port (eg, 0x23E)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inBusCtrl(port, addrFrom)
     {
         let b = 0;
-        this.printMessageIO(port, undefined, addrFrom, "CTRL", b);
+        this.printIO(port, undefined, addrFrom, "CTRL", b);
         return b;
     }
 
@@ -683,12 +679,12 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {number} port (eg, 0x23F)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inBusCPPI(port, addrFrom)
     {
         let b = 0;
-        this.printMessageIO(port, undefined, addrFrom, "CPPI", b);
+        this.printIO(port, undefined, addrFrom, "CPPI", b);
         return b;
     }
 
@@ -702,7 +698,7 @@ export default class Mouse extends Component {
      */
     outBusData(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "DATA");
+        this.printIO(port, bOut, addrFrom, "DATA");
     }
 
     /**
@@ -715,7 +711,7 @@ export default class Mouse extends Component {
      */
     outBusTPPI(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "TPPI");
+        this.printIO(port, bOut, addrFrom, "TPPI");
     }
 
     /**
@@ -728,7 +724,7 @@ export default class Mouse extends Component {
      */
     outBusCtrl(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CTRL");
+        this.printIO(port, bOut, addrFrom, "CTRL");
     }
 
     /**
@@ -741,7 +737,7 @@ export default class Mouse extends Component {
      */
     outBusCPPI(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CPPI");
+        this.printIO(port, bOut, addrFrom, "CPPI");
     }
 
     /**

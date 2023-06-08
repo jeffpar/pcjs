@@ -662,7 +662,7 @@ export class Card extends Controller {
      * saveCard()
      *
      * @this {Card}
-     * @return {Array}
+     * @returns {Array}
      */
     saveCard()
     {
@@ -685,7 +685,7 @@ export class Card extends Controller {
      * saveEGA()
      *
      * @this {Card}
-     * @return {Array}
+     * @returns {Array}
      */
     saveEGA()
     {
@@ -921,7 +921,7 @@ export class Card extends Controller {
                 sDump += sData + "\n";
             }
 
-            if (sDump) this.dbg.printf("%s", sDump);
+            if (sDump) this.dbg.print(sDump);
             this.prevDump = idw;
         }
     }
@@ -934,7 +934,7 @@ export class Card extends Controller {
      *
      * @this {Card}
      * @param {number} addr
-     * @return {Array} containing the buffer (and the offset within that buffer that corresponds to the requested block)
+     * @returns {Array} containing the buffer (and the offset within that buffer that corresponds to the requested block)
      */
     getMemoryBuffer(addr)
     {
@@ -950,7 +950,7 @@ export class Card extends Controller {
      * Return the last set of memory access functions recorded by setMemoryAccess().
      *
      * @this {Card}
-     * @return {Array.<function()>}
+     * @returns {Array.<function()>}
      */
     getMemoryAccess()
     {
@@ -974,8 +974,8 @@ export class Card extends Controller {
             let nReadAccess = nAccess & Card.ACCESS.READ.MASK;
             let fnReadByte = Card.ACCESS.afn[nReadAccess];
             if (!fnReadByte) {
-                if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.VIDEO)) {
-                    this.dbg.message("Card.setMemoryAccess(" + Str.toHexWord(nAccess) + "): missing readByte handler");
+                if (DEBUG && this.dbg) {
+                    this.dbg.printf(Messages.VIDEO, "Card.setMemoryAccess(%#06x): missing readByte handler", nAccess);
                     /*
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
@@ -999,8 +999,8 @@ export class Card extends Controller {
             let nWriteAccess = nAccess & Card.ACCESS.WRITE.MASK;
             let fnWriteByte = Card.ACCESS.afn[nWriteAccess];
             if (!fnWriteByte) {
-                if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.VIDEO)) {
-                    this.dbg.message("Card.setMemoryAccess(" + Str.toHexWord(nAccess) + "): missing writeByte handler");
+                if (DEBUG && this.dbg) {
+                    this.dbg.printf(Messages.VIDEO, "Card.setMemoryAccess(%#06x): missing writeByte handler", nAccess);
                     /*
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
@@ -1033,7 +1033,7 @@ export class Card extends Controller {
      *
      * @this {Card}
      * @param {number} iReg
-     * @return {number}
+     * @returns {number}
      */
     getCRTCReg(iReg)
     {
@@ -1754,7 +1754,7 @@ Card.ACCESS.V1[0xE000] = Card.ACCESS.WRITE.MODE2 | Card.ACCESS.WRITE.XOR;
  * @this {MemoryX86}
  * @param {number} off
  * @param {number} [addr]
- * @return {number}
+ * @returns {number}
  */
 Card.ACCESS.readBytePairs = function readByte(off, addr)
 {
@@ -1768,7 +1768,7 @@ Card.ACCESS.readBytePairs = function readByte(off, addr)
  * @this {MemoryX86}
  * @param {number} off
  * @param {number} [addr]
- * @return {number}
+ * @returns {number}
  */
 Card.ACCESS.readByteMode0 = function readByteMode0(off, addr)
 {
@@ -1785,7 +1785,7 @@ Card.ACCESS.readByteMode0 = function readByteMode0(off, addr)
  * @this {MemoryX86}
  * @param {number} off
  * @param {number} [addr]
- * @return {number}
+ * @returns {number}
  */
 Card.ACCESS.readByteMode0Chain4 = function readByteMode0Chain4(off, addr)
 {
@@ -1800,7 +1800,7 @@ Card.ACCESS.readByteMode0Chain4 = function readByteMode0Chain4(off, addr)
  * @this {MemoryX86}
  * @param {number} off
  * @param {number} [addr]
- * @return {number}
+ * @returns {number}
  */
 Card.ACCESS.readByteMode0EvenOdd = function readByteMode0EvenOdd(off, addr)
 {
@@ -1832,7 +1832,7 @@ Card.ACCESS.readByteMode0EvenOdd = function readByteMode0EvenOdd(off, addr)
  * @this {MemoryX86}
  * @param {number} off
  * @param {number} [addr]
- * @return {number}
+ * @returns {number}
  */
 Card.ACCESS.readByteMode1 = function readByteMode1(off, addr)
 {
@@ -2715,7 +2715,7 @@ export default class VideoX86 extends Component {
             this.kbd.setBinding(this.inputTextArea? "textarea" : "canvas", "screen", this.inputScreen);
         }
 
-        this.panel = cmp.getMachineComponent("Panel");
+        this.panel = cmp.getMachineComponent("Panel", false);
         for (let i = 0; i < this.bindingsExternal.length; i++) {
             let binding = this.bindingsExternal[i];
             if (this.kbd && this.kbd.setBinding(...binding)) continue;
@@ -2736,7 +2736,7 @@ export default class VideoX86 extends Component {
          * touch-screen support.
          */
         if (this.sTouchScreen == "mouse") {
-            this.mouse = cmp.getMachineComponent("Mouse");
+            this.mouse = cmp.getMachineComponent("Mouse", false);
             if (this.mouse) this.captureTouch(VideoX86.TOUCH.MOUSE);
         }
         else if (this.sTouchScreen == "keygrid") {
@@ -2757,9 +2757,23 @@ export default class VideoX86 extends Component {
             Web.getResource(this.sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 video.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
-                video.println(sProgress, Component.PRINT.PROGRESS);
+                video.printf(Messages.PROGRESS, "%s\n", sProgress);
             });
+            return;
         }
+
+        /*
+         * TODO: Improve how Video readiness is signalled.  Currently, all the video cards we support either have
+         * a font ROM (which we load ourselves; see above) OR a system ROM (which the ROM component takes care of),
+         * but not both.
+         *
+         * If the former, doneLoad() will call setReady(), and if the latter, onROMLoad() will call setReady().
+         *
+         * However, theoretically, a video card could have NEITHER or BOTH; as things stand, a card with NEITHER
+         * will never be marked ready, and a card with BOTH will be prematurely marked as ready.  The Video component
+         * parameters (parmsVideo) should be updated to reflect how many resources we should be waiting for.
+         */
+        // this.setReady();
     }
 
     /**
@@ -2770,7 +2784,7 @@ export default class VideoX86 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "refresh")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -2795,7 +2809,7 @@ export default class VideoX86 extends Component {
                         video.goFullScreen();
                     };
                 } else {
-                    if (DEBUG) this.log("FullScreen API not available");
+                    if (DEBUG) this.printf(Messages.LOG, "FullScreen API not available\n");
                     control.parentNode.removeChild(/** @type {Node} */ (control));
                 }
                 return true;
@@ -2808,7 +2822,7 @@ export default class VideoX86 extends Component {
                         video.lockPointer(true);
                     };
                 } else {
-                    if (DEBUG) this.log("Pointer Lock API not available");
+                    if (DEBUG) this.printf(Messages.LOG, "Pointer Lock API not available\n");
                     control.parentNode.removeChild(/** @type {Node} */ (control));
                 }
                 return true;
@@ -2853,7 +2867,7 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {Mouse} [mouse]
-     * @return {Object|undefined}
+     * @returns {Object|undefined}
      */
     getScreen(mouse)
     {
@@ -2867,7 +2881,7 @@ export default class VideoX86 extends Component {
      * This is an interface used by the Computer component, so that it can display resource status messages.
      *
      * @this {VideoX86}
-     * @return {HTMLTextAreaElement|undefined}
+     * @returns {HTMLTextAreaElement|undefined}
      */
     getTextArea()
     {
@@ -2886,7 +2900,7 @@ export default class VideoX86 extends Component {
      * but that's easily accounted for (eg, every row must step through nColsBuffer -- not merely nCols -- of cell data).
      *
      * @this {VideoX86}
-     * @return {string}
+     * @returns {string}
      */
     getTextData()
     {
@@ -2911,7 +2925,7 @@ export default class VideoX86 extends Component {
      * goFullScreen()
      *
      * @this {VideoX86}
-     * @return {boolean} true if request successful, false if not (eg, failed OR not supported)
+     * @returns {boolean} true if request successful, false if not (eg, failed OR not supported)
      */
     goFullScreen()
     {
@@ -2994,7 +3008,7 @@ export default class VideoX86 extends Component {
                 this.canvasScreen.style.width = this.canvasScreen.style.height = "";
             }
         }
-        if (DEBUG) this.printf(Messages.ALL, "notifyFullScreen(%b)\n", fFullScreen);
+        if (DEBUG) this.printf("notifyFullScreen(%b)\n", fFullScreen);
         if (this.kbd) this.kbd.notifyEscape(fFullScreen == true);
     }
 
@@ -3003,7 +3017,7 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {boolean} fLock
-     * @return {boolean} true if request successful, false if not (eg, failed OR not supported)
+     * @returns {boolean} true if request successful, false if not (eg, failed OR not supported)
      */
     lockPointer(fLock)
     {
@@ -3032,7 +3046,7 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {boolean} fActive
-     * @return {boolean} true if autolock enabled AND pointer lock supported, false if not
+     * @returns {boolean} true if autolock enabled AND pointer lock supported, false if not
      */
     notifyPointerActive(fActive)
     {
@@ -3150,7 +3164,7 @@ export default class VideoX86 extends Component {
                     );
                 }
 
-                // this.log("touch events captured");
+                // this.printf(Messages.LOG, "touch events captured\n");
 
                 this.xTouch = this.yTouch = this.timeTouch = -1;
 
@@ -3409,7 +3423,7 @@ export default class VideoX86 extends Component {
      * endLongTouch()
      *
      * @this {VideoX86}
-     * @return {boolean} true if long touch was active, false if not
+     * @returns {boolean} true if long touch was active, false if not
      */
     endLongTouch()
     {
@@ -3427,7 +3441,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -3542,7 +3556,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -3695,7 +3709,7 @@ export default class VideoX86 extends Component {
      * This implements save support for the Video component.
      *
      * @this {VideoX86}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -3714,7 +3728,7 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -3764,7 +3778,7 @@ export default class VideoX86 extends Component {
     doneLoad(sURL, sFontData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load font ROM (error " + nErrorCode + ": " + sURL + ")", nErrorCode < 0);
+            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -3864,12 +3878,12 @@ export default class VideoX86 extends Component {
                 this.setFontData(ab, [0x0000]);
             }
             else {
-                this.notice("Unrecognized font data length (" + ab.length + ")");
+                this.printf(Messages.NOTICE, "Unrecognized font data length (%d)\n", ab.length);
                 return;
             }
 
         } catch (e) {
-            this.notice("Font ROM data error: " + e.message);
+            this.printf(Messages.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
         /*
@@ -3965,7 +3979,7 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {number} [nBitsPerPixel]
-     * @return {Array}
+     * @returns {Array}
      */
     getCardColors(nBitsPerPixel)
     {
@@ -4103,7 +4117,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {Array} aColors
      * @param {number} iColor
-     * @return {Array}
+     * @returns {Array}
      */
     getFontColor(aColors, iColor)
     {
@@ -4145,7 +4159,7 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {Array} rgb
-     * @return {Array}
+     * @returns {Array}
      */
     getIntenseColor(rgb)
     {
@@ -4166,7 +4180,7 @@ export default class VideoX86 extends Component {
      * getSelectedFonts()
      *
      * @this {VideoX86}
-     * @return {number} (low byte is "SELB" font number, used when attribute bit 3 is 0; high byte is "SELA" font number)
+     * @returns {number} (low byte is "SELB" font number, used when attribute bit 3 is 0; high byte is "SELA" font number)
      */
     getSelectedFonts()
     {
@@ -4202,7 +4216,7 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {boolean} [fRebuild] (true if this is a rebuild; default is false)
-     * @return {boolean}
+     * @returns {boolean}
      */
     buildFont(fRebuild = false)
     {
@@ -4350,7 +4364,7 @@ export default class VideoX86 extends Component {
      * @param {boolean} fNewData (true if abFontData contains potentially modified data, false if not)
      * @param {Array} aRGBColors is an array of color RGB variations, corresponding to supported FGND attribute values
      * @param {Array} [aColorMap] contains color indexes corresponding to attribute values (if not supplied, the mapping is assumed to be 1-1)
-     * @return {boolean} true if any or all fonts were (re)created, false if nothing changed
+     * @returns {boolean} true if any or all fonts were (re)created, false if nothing changed
      */
     createFont(nFont, cxChar, cyChar, offData, offSplit, abFontData, fNewData, aRGBColors, aColorMap)
     {
@@ -4479,7 +4493,7 @@ export default class VideoX86 extends Component {
      * @param {number} cxChar is the width of the font characters
      * @param {number} cyChar is the height of the font characters
      * @param {Array.<number>|null} abFontData is the raw font data, from the ROM font file
-     * @return {boolean} true if font created, false if not
+     * @returns {boolean} true if font created, false if not
      */
     createFontColor(font, iColor, rgbColor, nDouble, offData, offSplit, cxChar, cyChar, abFontData)
     {
@@ -4644,7 +4658,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} iFont
      * @param {number} iFontPrev
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     getFontDiff(iFont, iFontPrev)
     {
@@ -4685,7 +4699,7 @@ export default class VideoX86 extends Component {
      * supporting "half rate" blinking, too.
      *
      * @this {VideoX86}
-     * @return {boolean} true if there are things to blink, false if not
+     * @returns {boolean} true if there are things to blink, false if not
      */
     checkBlink()
     {
@@ -4740,7 +4754,7 @@ export default class VideoX86 extends Component {
      * CURSCAN is <= MAXSCAN; if CURSCAN > MAXSCAN, then nothing is drawn, regardless of CURSCANB.
      *
      * @this {VideoX86}
-     * @return {boolean} true if the cursor is visible, false if not
+     * @returns {boolean} true if the cursor is visible, false if not
      */
     checkCursor()
     {
@@ -4960,7 +4974,7 @@ export default class VideoX86 extends Component {
      * getCardAccess()
      *
      * @this {VideoX86}
-     * @return {number} current memory access setting
+     * @returns {number} current memory access setting
      */
     getCardAccess()
     {
@@ -5078,7 +5092,7 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {number} nAccess (one of the Card.ACCESS.* constants)
-     * @return {boolean} true if access may have changed, false if not
+     * @returns {boolean} true if access may have changed, false if not
      */
     setCardAccess(nAccess)
     {
@@ -5249,7 +5263,7 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {boolean} [fForce] is used to force a mode update, if we recognize the current mode
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     checkMode(fForce)
     {
@@ -5488,7 +5502,7 @@ export default class VideoX86 extends Component {
      * @param {number|null} nMode
      * @param {boolean} [fForce] is set when checkMode() wants to force a mode update
      * @param {boolean} [fRemap] is set when checkMode() detects a change in the buffer mapping
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     setMode(nMode, fForce, fRemap)
     {
@@ -5612,7 +5626,7 @@ export default class VideoX86 extends Component {
      * flag and bypass initCellCache() when it's set.
      *
      * @this {VideoX86}
-     * @return {number}
+     * @returns {number}
      */
     initCellCache()
     {
@@ -5636,7 +5650,7 @@ export default class VideoX86 extends Component {
      * @param {boolean} [fColors] (true if color(s) *may* have changed)
      * @param {number} [nFontSelect] (set along with nFontPrev if font(s) *may* have changed)
      * @param {number} [nFontPrev]
-     * @return {number} (number of cells invalidated; used for diagnostic purposes only)
+     * @returns {number} (number of cells invalidated; used for diagnostic purposes only)
      */
     invalidateCellCache(fColors, nFontSelect, nFontPrev)
     {
@@ -5880,10 +5894,15 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {boolean} [fForce] is used by setMode() to reset the cell cache and force a redraw
-     * @return {boolean}
+     * @returns {boolean}
      */
     updateScreen(fForce = false)
     {
+        /*
+         * Nothing to do for "headless" congfigurations.
+         */
+        if (!this.canvasScreen) return false;
+
         /*
          * The Computer component maintains the fPowered setting on our behalf, so we use it.
          */
@@ -6081,7 +6100,7 @@ export default class VideoX86 extends Component {
      * @param {number} nCells
      * @param {boolean} fForce
      * @param {boolean} fBlinkUpdate
-     * @return {number} (number of cells processed)
+     * @returns {number} (number of cells processed)
      */
     updateScreenCells(addrBuffer, addrScreen, cbScreen, iCell, nCells, fForce, fBlinkUpdate)
     {
@@ -6167,7 +6186,7 @@ export default class VideoX86 extends Component {
      * @param {number} addrScreenLimit
      * @param {number} iCell
      * @param {number} nCells
-     * @return {number} (number of cells processed)
+     * @returns {number} (number of cells processed)
      */
     updateScreenText(addrBuffer, addrScreen, addrScreenLimit, iCell, nCells)
     {
@@ -6278,7 +6297,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
-     * @return {number} (number of cells processed)
+     * @returns {number} (number of cells processed)
      */
     updateScreenGraphicsCGA(addrScreen, addrScreenLimit)
     {
@@ -6366,7 +6385,7 @@ export default class VideoX86 extends Component {
      * @param {number} addrBuffer
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
-     * @return {number} (number of cells processed)
+     * @returns {number} (number of cells processed)
      */
     updateScreenGraphicsEGA(addrBuffer, addrScreen, addrScreenLimit)
     {
@@ -6489,7 +6508,7 @@ export default class VideoX86 extends Component {
      * @param {number} addrBuffer
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
-     * @return {number} (number of cells processed)
+     * @returns {number} (number of cells processed)
      */
     updateScreenGraphicsVGA(addrBuffer, addrScreen, addrScreenLimit)
     {
@@ -6578,7 +6597,7 @@ export default class VideoX86 extends Component {
      *
      * @this {VideoX86}
      * @param {Object} card
-     * @return {number}
+     * @returns {number}
      */
     getRetraceBits(card)
     {
@@ -6626,7 +6645,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3B4)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     inMDAIndx(port, addrFrom)
     {
@@ -6652,7 +6671,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3B5)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     inMDAData(port, addrFrom)
     {
@@ -6678,7 +6697,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3B8)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inMDAMode(port, addrFrom)
     {
@@ -6704,7 +6723,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3BA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inMDAStatus(port, addrFrom)
     {
@@ -6724,7 +6743,7 @@ export default class VideoX86 extends Component {
     outFeat(port, bOut, addrFrom)
     {
         this.cardEGA.regFeat = (this.cardEGA.regFeat & ~Card.FEAT_CTRL.BITS) | (bOut & Card.FEAT_CTRL.BITS);
-        this.printMessageIO(port, bOut, addrFrom, "FEAT");
+        this.printIO(port, bOut, addrFrom, "FEAT");
     }
 
     /**
@@ -6737,13 +6756,13 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3C0)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inATCIndx(port, addrFrom)
     {
         let b = this.cardEGA.regATCIndx;
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.ATC.PORT, undefined, addrFrom, "ATC.INDX", b, true);
+            this.printIO(Card.ATC.PORT, undefined, addrFrom, "ATC.INDX", b, true);
         }
         return b;
     }
@@ -6758,13 +6777,13 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3C1)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inATCData(port, addrFrom)
     {
         let b = this.cardEGA.regATCData[this.cardEGA.regATCIndx & Card.ATC.INDX_MASK];
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.ATC.PORT, undefined, addrFrom, "ATC." + this.cardEGA.asATCRegs[this.cardEGA.regATCIndx & Card.ATC.INDX_MASK], b, true);
+            this.printIO(Card.ATC.PORT, undefined, addrFrom, "ATC." + this.cardEGA.asATCRegs[this.cardEGA.regATCIndx & Card.ATC.INDX_MASK], b, true);
         }
         return b;
     }
@@ -6783,7 +6802,7 @@ export default class VideoX86 extends Component {
         let fPalEnabled = (card.regATCIndx & Card.ATC.INDX_PAL_ENABLE);
         if (!card.fATCData) {
             card.regATCIndx = bOut;
-            this.printMessageIO(port, bOut, addrFrom, "ATC.INDX");
+            this.printIO(port, bOut, addrFrom, "ATC.INDX");
             card.fATCData = true;
             if ((bOut & Card.ATC.INDX_PAL_ENABLE) && !fPalEnabled) {
                 /*
@@ -6827,7 +6846,7 @@ export default class VideoX86 extends Component {
                 let fModified = (card.regATCData[iReg] !== bOut);
                 if (VideoX86.TRAPALL || fModified) {
                     if (!addrFrom || this.messageEnabled()) {
-                        this.printMessageIO(port, bOut, addrFrom, "ATC." + card.asATCRegs[iReg], undefined, true);
+                        this.printIO(port, bOut, addrFrom, "ATC." + card.asATCRegs[iReg], undefined, true);
                     }
                 }
                 if (fModified) {
@@ -6856,7 +6875,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3C2)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inStatus0(port, addrFrom)
     {
@@ -6908,7 +6927,7 @@ export default class VideoX86 extends Component {
          * TODO: Figure out where Card.STATUS0.FEAT bits should come from....
          */
         this.cardEGA.regStatus0 = b;
-        this.printMessageIO(Card.STATUS0.PORT, undefined, addrFrom, "STATUS0", b);
+        this.printIO(Card.STATUS0.PORT, undefined, addrFrom, "STATUS0", b);
         return b;
     }
 
@@ -6922,7 +6941,7 @@ export default class VideoX86 extends Component {
     {
         this.cardEGA.regMisc = bOut;
         this.enableEGA();
-        this.printMessageIO(Card.MISC.PORT_WRITE, bOut, addrFrom, "MISC");
+        this.printIO(Card.MISC.PORT_WRITE, bOut, addrFrom, "MISC");
     }
 
     /**
@@ -6931,12 +6950,12 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3C3)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inVGAEnable(port, addrFrom)
     {
         let b = this.cardEGA.regVGAEnable;
-        this.printMessageIO(Card.VGA_ENABLE.PORT, undefined, addrFrom, "VGA_ENABLE", b);
+        this.printIO(Card.VGA_ENABLE.PORT, undefined, addrFrom, "VGA_ENABLE", b);
         return b;
     }
 
@@ -6951,7 +6970,7 @@ export default class VideoX86 extends Component {
     outVGAEnable(port, bOut, addrFrom)
     {
         this.cardEGA.regVGAEnable = bOut;
-        this.printMessageIO(Card.VGA_ENABLE.PORT, bOut, addrFrom, "VGA_ENABLE");
+        this.printIO(Card.VGA_ENABLE.PORT, bOut, addrFrom, "VGA_ENABLE");
     }
 
     /**
@@ -6960,12 +6979,12 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3C4)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inSEQIndx(port, addrFrom)
     {
         let b = this.cardEGA.regSEQIndx;
-        this.printMessageIO(Card.SEQ.INDX.PORT, undefined, addrFrom, "SEQ.INDX", b);
+        this.printIO(Card.SEQ.INDX.PORT, undefined, addrFrom, "SEQ.INDX", b);
         return b;
     }
 
@@ -6980,7 +6999,7 @@ export default class VideoX86 extends Component {
     outSEQIndx(port, bOut, addrFrom)
     {
         this.cardEGA.regSEQIndx = bOut;
-        this.printMessageIO(Card.SEQ.INDX.PORT, bOut, addrFrom, "SEQ.INDX");
+        this.printIO(Card.SEQ.INDX.PORT, bOut, addrFrom, "SEQ.INDX");
     }
 
     /**
@@ -6989,13 +7008,13 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3C5)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inSEQData(port, addrFrom)
     {
         let b = this.cardEGA.regSEQData[this.cardEGA.regSEQIndx];
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.SEQ.DATA.PORT, undefined, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], b, true);
+            this.printIO(Card.SEQ.DATA.PORT, undefined, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], b, true);
         }
         return b;
     }
@@ -7012,7 +7031,7 @@ export default class VideoX86 extends Component {
     {
         if (VideoX86.TRAPALL || this.cardEGA.regSEQData[this.cardEGA.regSEQIndx] !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
-                this.printMessageIO(Card.SEQ.DATA.PORT, bOut, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], undefined, true);
+                this.printIO(Card.SEQ.DATA.PORT, bOut, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], undefined, true);
             }
             this.cardEGA.regSEQData[this.cardEGA.regSEQIndx] = bOut;
         }
@@ -7086,13 +7105,13 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3C6)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inDACMask(port, addrFrom)
     {
         let b = this.cardEGA.regDACMask;
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.MASK.PORT, undefined, addrFrom, "DAC.MASK", b, true);
+            this.printIO(Card.DAC.MASK.PORT, undefined, addrFrom, "DAC.MASK", b, true);
         }
         return b;
     }
@@ -7109,7 +7128,7 @@ export default class VideoX86 extends Component {
     {
         if (VideoX86.TRAPALL || this.cardEGA.regDACMask !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
-                this.printMessageIO(Card.DAC.MASK.PORT, bOut, addrFrom, "DAC.MASK", undefined, true);
+                this.printIO(Card.DAC.MASK.PORT, bOut, addrFrom, "DAC.MASK", undefined, true);
             }
             this.cardEGA.regDACMask = bOut;
         }
@@ -7121,13 +7140,13 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3C7)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inDACState(port, addrFrom)
     {
         let b = this.cardEGA.regDACState;
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.STATE.PORT, undefined, addrFrom, "DAC.STATE", b, true);
+            this.printIO(Card.DAC.STATE.PORT, undefined, addrFrom, "DAC.STATE", b, true);
         }
         return b;
     }
@@ -7143,7 +7162,7 @@ export default class VideoX86 extends Component {
     outDACRead(port, bOut, addrFrom)
     {
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.ADDR.PORT_READ, bOut, addrFrom, "DAC.READ", undefined, true);
+            this.printIO(Card.DAC.ADDR.PORT_READ, bOut, addrFrom, "DAC.READ", undefined, true);
         }
         this.cardEGA.regDACAddr = bOut;
         this.cardEGA.regDACState = Card.DAC.STATE.MODE_READ;
@@ -7161,7 +7180,7 @@ export default class VideoX86 extends Component {
     outDACWrite(port, bOut, addrFrom)
     {
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.ADDR.PORT_WRITE, bOut, addrFrom, "DAC.WRITE", undefined, true);
+            this.printIO(Card.DAC.ADDR.PORT_WRITE, bOut, addrFrom, "DAC.WRITE", undefined, true);
         }
         this.cardEGA.regDACAddr = bOut;
         this.cardEGA.regDACState = Card.DAC.STATE.MODE_WRITE;
@@ -7174,13 +7193,13 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3C9)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inDACData(port, addrFrom)
     {
         let b = (this.cardEGA.regDACData[this.cardEGA.regDACAddr] >> this.cardEGA.regDACShift) & 0x3f;
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.DATA.PORT, undefined, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", b, true);
+            this.printIO(Card.DAC.DATA.PORT, undefined, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", b, true);
         }
         this.cardEGA.regDACShift += 6;
         if (this.cardEGA.regDACShift > 12) {
@@ -7202,7 +7221,7 @@ export default class VideoX86 extends Component {
     {
         let dw = this.cardEGA.regDACData[this.cardEGA.regDACAddr];
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.DATA.PORT, bOut, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", undefined, true);
+            this.printIO(Card.DAC.DATA.PORT, bOut, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", undefined, true);
         }
         let dwNew = (dw & ~(0x3f << this.cardEGA.regDACShift)) | ((bOut & 0x3f) << this.cardEGA.regDACShift);
         if (dw !== dwNew) {
@@ -7222,12 +7241,12 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3CA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inVGAFeat(port, addrFrom)
     {
         let b = this.cardEGA.regFeat;
-        this.printMessageIO(Card.FEAT_CTRL.PORT_READ, undefined, addrFrom, "FEAT", b);
+        this.printIO(Card.FEAT_CTRL.PORT_READ, undefined, addrFrom, "FEAT", b);
         return b;
     }
 
@@ -7247,7 +7266,7 @@ export default class VideoX86 extends Component {
     outGRCPos2(port, bOut, addrFrom)
     {
         this.cardEGA.regGRCPos2 = bOut;
-        this.printMessageIO(Card.GRC.POS2_PORT, bOut, addrFrom, "GRC2");
+        this.printIO(Card.GRC.POS2_PORT, bOut, addrFrom, "GRC2");
     }
 
     /**
@@ -7256,12 +7275,12 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3CC)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inVGAMisc(port, addrFrom)
     {
         let b = this.cardEGA.regMisc;
-        this.printMessageIO(Card.MISC.PORT_READ, undefined, addrFrom, "MISC", b);
+        this.printIO(Card.MISC.PORT_READ, undefined, addrFrom, "MISC", b);
         return b;
     }
 
@@ -7284,7 +7303,7 @@ export default class VideoX86 extends Component {
     outGRCPos1(port, bOut, addrFrom)
     {
         this.cardEGA.regGRCPos1 = bOut;
-        this.printMessageIO(Card.GRC.POS1_PORT, bOut, addrFrom, "GRC1");
+        this.printIO(Card.GRC.POS1_PORT, bOut, addrFrom, "GRC1");
     }
 
     /**
@@ -7293,12 +7312,12 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3CE)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inGRCIndx(port, addrFrom)
     {
         let b = this.cardEGA.regGRCIndx;
-        this.printMessageIO(Card.GRC.INDX.PORT, undefined, addrFrom, "GRC.INDX", b);
+        this.printIO(Card.GRC.INDX.PORT, undefined, addrFrom, "GRC.INDX", b);
         return b;
     }
 
@@ -7313,7 +7332,7 @@ export default class VideoX86 extends Component {
     outGRCIndx(port, bOut, addrFrom)
     {
         this.cardEGA.regGRCIndx = bOut;
-        this.printMessageIO(Card.GRC.INDX.PORT, bOut, addrFrom, "GRC.INDX");
+        this.printIO(Card.GRC.INDX.PORT, bOut, addrFrom, "GRC.INDX");
     }
 
     /**
@@ -7322,13 +7341,13 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3CF)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inGRCData(port, addrFrom)
     {
         let b = this.cardEGA.regGRCData[this.cardEGA.regGRCIndx];
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.GRC.DATA.PORT, undefined, addrFrom, "GRC." + this.cardEGA.asGRCRegs[this.cardEGA.regGRCIndx], b);
+            this.printIO(Card.GRC.DATA.PORT, undefined, addrFrom, "GRC." + this.cardEGA.asGRCRegs[this.cardEGA.regGRCIndx], b);
         }
         return b;
     }
@@ -7345,7 +7364,7 @@ export default class VideoX86 extends Component {
     {
         if (VideoX86.TRAPALL || this.cardEGA.regGRCData[this.cardEGA.regGRCIndx] !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
-                this.printMessageIO(Card.GRC.DATA.PORT, bOut, addrFrom, "GRC." + this.cardEGA.asGRCRegs[this.cardEGA.regGRCIndx]);
+                this.printIO(Card.GRC.DATA.PORT, bOut, addrFrom, "GRC." + this.cardEGA.asGRCRegs[this.cardEGA.regGRCIndx]);
             }
             this.cardEGA.regGRCData[this.cardEGA.regGRCIndx] = bOut;
         }
@@ -7388,7 +7407,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3D4)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     inCGAIndx(port, addrFrom)
     {
@@ -7414,7 +7433,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3D5)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     inCGAData(port, addrFrom)
     {
@@ -7440,7 +7459,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3D8)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inCGAMode(port, addrFrom)
     {
@@ -7466,13 +7485,13 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3D9)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inCGAColor(port, addrFrom)
     {
         let b = this.cardColor.regColor;
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(port /* this.cardColor.port + 5 */, undefined, addrFrom, this.cardColor.type + ".COLOR", b);
+            this.printIO(port /* this.cardColor.port + 5 */, undefined, addrFrom, this.cardColor.type + ".COLOR", b);
         }
         return b;
     }
@@ -7488,7 +7507,7 @@ export default class VideoX86 extends Component {
     outCGAColor(port, bOut, addrFrom)
     {
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(port /* this.cardColor.port + 5 */, bOut, addrFrom, this.cardColor.type + ".COLOR");
+            this.printIO(port /* this.cardColor.port + 5 */, bOut, addrFrom, this.cardColor.type + ".COLOR");
         }
         if (this.cardColor.regColor !== bOut) {
             this.cardColor.regColor = bOut;
@@ -7502,7 +7521,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {number} port (0x3DA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inCGAStatus(port, addrFrom)
     {
@@ -7516,7 +7535,7 @@ export default class VideoX86 extends Component {
      * @param {Object} card
      * @param {number} port
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     inCRTCIndx(card, port, addrFrom)
     {
@@ -7532,7 +7551,7 @@ export default class VideoX86 extends Component {
          * it prefers (normally 0xff).
          */
         if (card.fActive) b = card.regCRTIndx;
-        this.printMessageIO(port, undefined, addrFrom, "CRTC.INDX", b);
+        this.printIO(port, undefined, addrFrom, "CRTC.INDX", b);
         return b;
     }
 
@@ -7549,7 +7568,7 @@ export default class VideoX86 extends Component {
     {
         card.regCRTPrev = card.regCRTIndx;
         card.regCRTIndx = bOut & Card.CGA.CRTC.INDX.MASK;
-        this.printMessageIO(port /* card.port */, bOut, addrFrom, "CRTC.INDX");
+        this.printIO(port /* card.port */, bOut, addrFrom, "CRTC.INDX");
     }
 
     /**
@@ -7559,7 +7578,7 @@ export default class VideoX86 extends Component {
      * @param {Object} card
      * @param {number} port
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     inCRTCData(card, port, addrFrom)
     {
@@ -7582,7 +7601,7 @@ export default class VideoX86 extends Component {
             b = card.regCRTData[card.regCRTIndx];
         }
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(port /* card.port + 1 */, undefined, addrFrom, "CRTC." + card.asCRTCRegs[card.regCRTIndx], b, true);
+            this.printIO(port /* card.port + 1 */, undefined, addrFrom, "CRTC." + card.asCRTCRegs[card.regCRTIndx], b, true);
         }
         return b;
     }
@@ -7621,7 +7640,7 @@ export default class VideoX86 extends Component {
             let fModified = (card.regCRTData[card.regCRTIndx] !== bOut);
             if (fModified || VideoX86.TRAPALL) {
                 if (!addrFrom || this.messageEnabled()) {
-                    this.printMessageIO(port /* card.port + 1 */, bOut, addrFrom, "CRTC." + card.asCRTCRegs[card.regCRTIndx]);
+                    this.printIO(port /* card.port + 1 */, bOut, addrFrom, "CRTC." + card.asCRTCRegs[card.regCRTIndx]);
                 }
                 card.regCRTData[card.regCRTIndx] = bOut;
             }
@@ -7683,12 +7702,12 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {Object} card
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inCardMode(card, addrFrom)
     {
         let b = card.regMode;
-        this.printMessageIO(card.port + 4, undefined, addrFrom, "MODE", b);
+        this.printIO(card.port + 4, undefined, addrFrom, "MODE", b);
         return b;
     }
 
@@ -7702,7 +7721,7 @@ export default class VideoX86 extends Component {
      */
     outCardMode(card, bOut, addrFrom)
     {
-        this.printMessageIO(card.port + 4, bOut, addrFrom, "MODE");
+        this.printIO(card.port + 4, bOut, addrFrom, "MODE");
         if ((card.regMode ^ bOut) & Card.MDA.MODE.BLINK_ENABLE) {
             card.video.iCellCacheValid = 0;
         }
@@ -7721,7 +7740,7 @@ export default class VideoX86 extends Component {
      * @this {VideoX86}
      * @param {Object} card
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number}
+     * @returns {number}
      */
     inCardStatus(card, addrFrom)
     {
@@ -7795,7 +7814,7 @@ export default class VideoX86 extends Component {
         }
 
         card.regStatus = b;
-        if (MAXDEBUG) this.printMessageIO(card.port + 6, undefined, addrFrom, (card === this.cardEGA? "STATUS1" : "STATUS"), b);
+        if (MAXDEBUG) this.printIO(card.port + 6, undefined, addrFrom, (card === this.cardEGA? "STATUS1" : "STATUS"), b);
         return b;
     }
 

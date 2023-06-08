@@ -8,11 +8,11 @@
  */
 
 import MemoryPDP10 from "./memory.js";
-import MessagesPDP10 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, PDP10 } from "./defines.js";
 
 export default class RAMPDP10 extends Component {
@@ -55,7 +55,7 @@ export default class RAMPDP10 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -95,7 +95,7 @@ export default class RAMPDP10 extends Component {
      * @this {RAMPDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -126,7 +126,7 @@ export default class RAMPDP10 extends Component {
      * @this {RAMPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -150,7 +150,7 @@ export default class RAMPDP10 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load RAM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -199,9 +199,9 @@ export default class RAMPDP10 extends Component {
                 if (!this.aData) return;
 
                 if (this.loadImage(this.aData, this.addrLoad, this.addrExec, this.addrRAM)) {
-                    this.status('Loaded image "%s"', this.sFileName);
+                    this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
-                    this.notice('Error loading image "' + this.sFileName + '"');
+                    this.printf(Messages.STATUS, 'Error loading image "%s"\n', this.sFileName);
                 }
 
                 /*
@@ -248,7 +248,7 @@ export default class RAMPDP10 extends Component {
      * @param {number|null} [addrExec] (this CAN override any starting address INSIDE the image)
      * @param {number|null} [addrInit]
      * @param {boolean} [fStart]
-     * @return {boolean} (true if loaded, false if not)
+     * @returns {boolean} (true if loaded, false if not)
      */
     loadImage(aData, addrLoad, addrExec, addrInit, fStart)
     {

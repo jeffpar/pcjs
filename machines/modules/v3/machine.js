@@ -10,7 +10,7 @@
 import Device from "./device.js";
 
 /**
- * @class {Machine}
+ * @class Machine
  * @unrestricted
  * @property {CPU} cpu
  * @property {string} sConfigFile
@@ -317,7 +317,7 @@ export default class Machine extends Device {
             if (match) {
                 sError += " ('" + sConfig.substr(+match[1], 40).replace(/\s+/g, ' ') + "...')";
             }
-            this.println("machine '" + this.idMachine + "' initialization error: " + sError);
+            this.printf("machine '%s' initialization error: %s\n", this.idMachine, sError);
         }
     }
 
@@ -331,7 +331,7 @@ export default class Machine extends Device {
     {
         if (this.isReady()) {
             let machine = this;
-            if (on) this.println("power on");
+            if (on) this.printf("power on\n");
             this.enumDevices(function onDevicePower(device) {
                 if (device.onPower && device != machine) {
                     if (device.config['class'] != "CPU" || machine.fAutoStart && machine.isReady()) {
@@ -348,7 +348,7 @@ export default class Machine extends Device {
                 return true;
             });
             this.fPowered = on;
-            if (!on) this.println("power off");
+            if (!on) this.printf("power off\n");
         }
     }
 
@@ -367,7 +367,7 @@ export default class Machine extends Device {
                 }
                 return true;
             });
-            this.println("reset");
+            this.printf("reset\n");
         }
     }
 

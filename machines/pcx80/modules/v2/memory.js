@@ -7,10 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import CPUDefX80 from "./cpudef.js";
-import MessagesX80 from "./messages.js";
-import Component from "../../../../modules/v2/component.js";
-import Str from "../../../../modules/v2/strlib.js";
+import Messages from "./messages.js";
+import Component from "../../../modules/v2/component.js";
+import Str from "../../../modules/v2/strlib.js";
 import { BYTEARRAYS, DEBUG, DEBUGGER, TYPEDARRAYS } from "./defines.js";
 
 /**
@@ -214,7 +213,7 @@ export default class MemoryX80 {
      * of the controller component.
      *
      * @this {MemoryX80}
-     * @return {Array|Int32Array|null}
+     * @returns {Array|Int32Array|null}
      */
     save()
     {
@@ -259,7 +258,7 @@ export default class MemoryX80 {
      *
      * @this {MemoryX80}
      * @param {Array|null} adw
-     * @return {boolean} true if successful, false if block size mismatch
+     * @returns {boolean} true if successful, false if block size mismatch
      */
     restore(adw)
     {
@@ -383,8 +382,8 @@ export default class MemoryX80 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(MessagesX80.MEM)) {
-            this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('%' + Str.toHex(this.addr)) : '#' + this.id), true);
+        if (DEBUG && this.dbg) {
+            this.dbg.printf(Messages.MEM, "%s %d\n", sMessage, (this.addr != null? ('%' + Str.toHex(this.addr)) : '#' + this.id));
         }
     }
 
@@ -475,12 +474,12 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesX80.CPU | MessagesX80.MEM) /* && !off */) {
-            this.dbg.message("attempt to read invalid block %" + Str.toHex(this.addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.CPU + Messages.MEM + Messages.ADDRESS, "attempt to read invalid block %#x\n", this.addr);
         }
         return 0xff;
     }
@@ -495,8 +494,8 @@ export default class MemoryX80 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesX80.CPU | MessagesX80.MEM) /* && !off */) {
-            this.dbg.message("attempt to write " + Str.toHexWord(v) + " to invalid block %" + Str.toHex(this.addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.CPU + Messages.MEM + Messages.ADDRESS, "attempt to write %#06x to invalid block %#x\n", v, this.addr);
         }
     }
 
@@ -506,7 +505,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortDefault(off, addr)
     {
@@ -533,7 +532,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteMemory(off, addr)
     {
@@ -549,7 +548,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortMemory(off, addr)
     {
@@ -621,7 +620,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteChecked(off, addr)
     {
@@ -637,7 +636,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortChecked(off, addr)
     {
@@ -685,7 +684,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteBE(off, addr)
     {
@@ -698,7 +697,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteLE(off, addr)
     {
@@ -711,7 +710,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortBE(off, addr)
     {
@@ -724,7 +723,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortLE(off, addr)
     {
@@ -804,7 +803,7 @@ export default class MemoryX80 {
      * adjustEndian(dw)
      *
      * @param {number} dw
-     * @return {number}
+     * @returns {number}
      */
     static adjustEndian(dw)
     {

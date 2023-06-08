@@ -20,7 +20,7 @@ import Memory from "./memory.js";
  */
 
 /**
- * @class {Bus}
+ * @class Bus
  * @unrestricted
  * @property {BusConfig} config
  * @property {number} type (Bus.TYPE value, converted from config['type'])

@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesPDP10 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import Str from "../../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
@@ -50,7 +50,7 @@ export default class CPUPDP10 extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, MessagesPDP10.CPU);
+        super("CPU", parmsCPU, Messages.CPU);
 
         var nCycles = +parmsCPU['cycles'] || nCyclesDefault;
 
@@ -150,7 +150,7 @@ export default class CPUPDP10 extends Component {
      * Stub for save support (overridden by the CPUStatePDP10 component).
      *
      * @this {CPUPDP10}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -164,7 +164,7 @@ export default class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -177,7 +177,7 @@ export default class CPUPDP10 extends Component {
      * @this {CPUPDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -210,10 +210,10 @@ export default class CPUPDP10 extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init(this.flags.autoStart);
             } else {
-                this.status("No debugger detected");
+                this.printf(Messages.STATUS, "No debugger detected\n");
             }
             if (!this.flags.autoStart) {
-                this.println("CPU will not be auto-started " + (this.panel? "(click Run to start)" : "(type 'go' to start)"));
+                this.printf("CPU will not be auto-started %s\n", (this.panel? "(click Run to start)" : "(type 'go' to start)"));
             }
         }
         /*
@@ -231,7 +231,7 @@ export default class CPUPDP10 extends Component {
      * @this {CPUPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -242,7 +242,7 @@ export default class CPUPDP10 extends Component {
      * autoStart()
      *
      * @this {CPUPDP10}
-     * @return {boolean} true if started, false if not
+     * @returns {boolean} true if started, false if not
      */
     autoStart()
     {
@@ -265,12 +265,12 @@ export default class CPUPDP10 extends Component {
      * isPowered()
      *
      * @this {CPUPDP10}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isPowered()
     {
         if (!this.flags.powered) {
-            this.println(this.toString() + " not powered");
+            this.printf("%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -280,7 +280,7 @@ export default class CPUPDP10 extends Component {
      * isRunning()
      *
      * @this {CPUPDP10}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -293,7 +293,7 @@ export default class CPUPDP10 extends Component {
      * This will be implemented by the CPUStatePDP10 component.
      *
      * @this {CPUPDP10}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -308,7 +308,7 @@ export default class CPUPDP10 extends Component {
      * the CPU is reset or restored.
      *
      * @this {CPUPDP10}
-     * @return {boolean} true if checksum generation enabled, false if not
+     * @returns {boolean} true if checksum generation enabled, false if not
      */
     resetChecksum()
     {
@@ -375,7 +375,7 @@ export default class CPUPDP10 extends Component {
      */
     displayChecksum()
     {
-        this.println(this.getCycles() + " cycles: " + "checksum=" + Str.toHex(this.nChecksum));
+        this.printf("%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
     }
 
     /**
@@ -386,7 +386,7 @@ export default class CPUPDP10 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -537,7 +537,7 @@ export default class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {boolean} [fScaled] is true if the caller wants a cycle count relative to a multiplier of 1
-     * @return {number}
+     * @returns {number}
      */
     getCycles(fScaled)
     {
@@ -572,7 +572,7 @@ export default class CPUPDP10 extends Component {
      * This returns the CPU's "base" speed (ie, the original cycles per second defined for the machine)
      *
      * @this {CPUPDP10}
-     * @return {number}
+     * @returns {number}
      */
     getCyclesPerSecond()
     {
@@ -601,7 +601,7 @@ export default class CPUPDP10 extends Component {
      * getSpeed()
      *
      * @this {CPUPDP10}
-     * @return {number} the current speed multiplier
+     * @returns {number} the current speed multiplier
      */
     getSpeed()
     {
@@ -612,7 +612,7 @@ export default class CPUPDP10 extends Component {
      * getSpeedCurrent()
      *
      * @this {CPUPDP10}
-     * @return {string} the current speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the current speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedCurrent()
     {
@@ -626,7 +626,7 @@ export default class CPUPDP10 extends Component {
      * getSpeedTarget()
      *
      * @this {CPUPDP10}
-     * @return {string} the target speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the target speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedTarget()
     {
@@ -648,7 +648,7 @@ export default class CPUPDP10 extends Component {
      * @this {CPUPDP10}
      * @param {number} [nMultiplier] is the new proposed multiplier (reverts to 1 if the target was too high)
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     setSpeed(nMultiplier, fUpdateFocus)
     {
@@ -669,7 +669,7 @@ export default class CPUPDP10 extends Component {
                 var sSpeed = this.getSpeedTarget();
                 var controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.println("target speed: " + sSpeed);
+                this.printf("target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.setFocus();
         }
@@ -740,7 +740,7 @@ export default class CPUPDP10 extends Component {
         if (this.msEndThisRun) {
             var msDelta = this.msStartThisRun - this.msEndThisRun;
             if (msDelta > this.msPerYield) {
-                if (MAXDEBUG) this.println("large time delay: " + msDelta + "ms");
+                if (MAXDEBUG) this.printf("large time delay: %dms\n", msDelta);
                 this.msStartRun += msDelta;
                 /*
                  * Bumping msStartRun forward should NEVER cause it to exceed msStartThisRun; however, just
@@ -759,7 +759,7 @@ export default class CPUPDP10 extends Component {
      * calcRemainingTime()
      *
      * @this {CPUPDP10}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -798,7 +798,7 @@ export default class CPUPDP10 extends Component {
         var msElapsed = this.msEndThisRun - this.msStartRun;
 
         if (MAXDEBUG && msRemainsThisRun < 0 && this.nCyclesMultiplier > 1) {
-            this.println("warning: updates @" + msElapsedThisRun + "ms (prefer " + Math.round(msYield) + "ms)");
+            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);
@@ -826,8 +826,8 @@ export default class CPUPDP10 extends Component {
          */
         this.nCyclesRecalc += this.nCyclesThisRun;
 
-        if (DEBUG && this.messageEnabled(MessagesPDP10.LOG) && msRemainsThisRun) {
-            this.log("calcRemainingTime: " + msRemainsThisRun + "ms to sleep after " + this.msEndThisRun + "ms");
+        if (DEBUG && msRemainsThisRun) {
+            this.printf(Messages.LOG + Messages.BUFFER, "calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
         }
 
         this.msEndThisRun += msRemainsThisRun;
@@ -854,7 +854,7 @@ export default class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {function()} callBack
-     * @return {number} timer index
+     * @returns {number} timer index
      */
     addTimer(callBack)
     {
@@ -882,7 +882,7 @@ export default class CPUPDP10 extends Component {
      * @param {number} iTimer
      * @param {number} ms (converted into a cycle countdown internally)
      * @param {boolean} [fReset] (true if the timer should be reset even if already armed)
-     * @return {number} (number of cycles used to arm timer, or -1 if error)
+     * @returns {number} (number of cycles used to arm timer, or -1 if error)
      */
     setTimer(iTimer, ms, fReset)
     {
@@ -910,7 +910,7 @@ export default class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {number} ms
-     * @return {number} number of corresponding cycles
+     * @returns {number} number of corresponding cycles
      */
     getMSCycles(ms)
     {
@@ -924,7 +924,7 @@ export default class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {number} nCycles (number of cycles about to execute)
-     * @return {number} (either nCycles or less if a timer needs to fire)
+     * @returns {number} (either nCycles or less if a timer needs to fire)
      */
     getBurstCycles(nCycles)
     {
@@ -943,7 +943,7 @@ export default class CPUPDP10 extends Component {
      * saveTimers()
      *
      * @this {CPUPDP10}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     saveTimers()
     {
@@ -999,7 +999,7 @@ export default class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {boolean} [fReset]
-     * @return {number} (number of cycles executed in the most recent burst)
+     * @returns {number} (number of cycles executed in the most recent burst)
      */
     endBurst(fReset)
     {
@@ -1098,7 +1098,7 @@ export default class CPUPDP10 extends Component {
      * For use by any component that wants to start the CPU.
      *
      * @param {boolean} [fUpdateFocus]
-     * @return {boolean}
+     * @returns {boolean}
      */
     startCPU(fUpdateFocus)
     {
@@ -1106,7 +1106,7 @@ export default class CPUPDP10 extends Component {
             return false;
         }
         if (this.flags.running) {
-            this.println(this.toString() + " busy");
+            this.printf("%s busy\n", this.toString());
             return false;
         }
         /*
@@ -1124,7 +1124,7 @@ export default class CPUPDP10 extends Component {
             if (fUpdateFocus) this.cmp.setFocus(true);
             this.cmp.start(this.msStartRun, this.getCycles());
         }
-        if (!this.dbg) this.status("Started");
+        if (!this.dbg) this.printf(Messages.STATUS, "Started\n");
         setTimeout(this.onRunTimeout, 0);
         return true;
     }
@@ -1136,7 +1136,7 @@ export default class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates that the last instruction was not executed
+     * @returns {number} of cycles executed; 0 indicates that the last instruction was not executed
      */
     stepCPU(nMinCycles)
     {
@@ -1153,7 +1153,7 @@ export default class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {boolean} [fComplete]
-     * @return {boolean} true if the CPU was stopped, false if it was already stopped
+     * @returns {boolean} true if the CPU was stopped, false if it was already stopped
      */
     stopCPU(fComplete)
     {
@@ -1169,7 +1169,7 @@ export default class CPUPDP10 extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
             }
             fStopped = true;
-            if (!this.dbg) this.status("Stopped");
+            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
         }
         this.flags.complete = fComplete;
         return fStopped;

@@ -18,7 +18,7 @@ import Ports from "../../../../modules/v3/ports.js";
  */
 
 /**
- * @class {InvadersPorts}
+ * @class InvadersPorts
  * @unrestricted
  * @property {InvadersPortsConfig} config
  */

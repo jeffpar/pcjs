@@ -5,7 +5,14 @@
 /**
  * @define {string}
  */
-const APPVERSION = "2.00";              // this @define is overridden by the Closure Compiler with the version in machines.json
+const APPVERSION = "2.20";              // this @define is overridden by the Closure Compiler with the version in machines.json
+
+/**
+ * COMPILED is false by default; overridden with true in the Closure Compiler release.
+ *
+ * @define {boolean}
+ */
+const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
 
 /**
  * @define {string}
@@ -15,24 +22,7 @@ const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
 /**
  * @define {string}
  */
-const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
-
-/**
- * @define {string}
- */
 const CSSCLASS = "pcjs";
-
-/**
- * @define {string}
- */
-const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
-
-/**
- * COMPILED is false by default; overridden with true in the Closure Compiler release.
- *
- * @define {boolean}
- */
-const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
 
 /**
  * DEBUG is true by default, enabling assertions and other runtime checks; overridden with false
@@ -58,6 +48,11 @@ const DEBUG = true;                     // this @define is overridden by the Clo
  * @define {boolean}
  */
 var DEBUGGER = true;                    // this @define is overridden by the Closure Compiler to remove Debugger-related support
+
+/**
+ * @define {string}
+ */
+const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -117,6 +112,21 @@ const RS232 = {
     }
 };
 
+/**
+ * @define {string}
+ */
+const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
+
+/**
+ * LOCALDISKS is intended to reflect the webserver's operating mode.  Normally, we assume that all web
+ * resources should be accessed remotely, but if the webserver is running in "developer" mode, then the
+ * webserver should indicate that fact by setting the global variable 'LOCALDISKS' to true on any pages
+ * with embedded machines.
+ *
+ * @define {boolean}
+ */
+var LOCALDISKS = false;
+
 /*
  * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
  */
@@ -134,7 +144,624 @@ if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
 if (!globals.pcjs['components']) globals.pcjs['components'] = [];
 if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
+globals.window['LOCALDISKS'] = LOCALDISKS;
 
+
+
+/**
+ * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ */
+
+/*
+ * Standard machine message flags.
+ *
+ * NOTE: Because this machine defines more than 32 message categories, some of these message flags
+ * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
+ */
+const Messages = {
+    NONE:       0x000000000000,
+    DEFAULT:    0x000000000000,
+    ADDRESS:    0x000000000001,
+    LOG:        0x001000000000,
+    STATUS:     0x002000000000,
+    NOTICE:     0x004000000000,
+    WARNING:    0x008000000000,
+    ERROR:      0x010000000000,
+    DEBUG:      0x020000000000,
+    PROGRESS:   0x040000000000,
+    SCRIPT:     0x080000000000,
+    TYPES:      0x0ff000000000,
+    HALT:       0x400000000000,
+    BUFFER:     0x800000000000,
+    ALL:        0x000ffffffffe
+};
+
+/*
+ * Message categories supported by the messageEnabled() function and other assorted message
+ * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
+ * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
+ * like so:
+ *
+ *      m port on
+ *      m port off
+ *      ...
+ *
+ * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
+ * aware that changing the bit values could break saved Debugger states (not a huge concern, just
+ * something to be aware of).
+ */
+Messages.Categories = {
+    "warn":     Messages.WARNING,
+    /*
+     * Now we turn to message actions rather than message types; for example, setting "halt"
+     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
+     *
+     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
+     * until "m buffer off" is issued.
+     */
+    "halt":     Messages.HALT,
+    "buffer":   Messages.BUFFER
+};
+
+
+/**
+ * @copyright https://www.pcjs.org/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ */
+
+/** @typedef {Function} */
+let Formatter;
+
+/**
+ * @class Format
+ * @property {Object.<string,(Formatter|null)>}>} formatters
+ */
+class Format {
+
+    /**
+     * constructor()
+     *
+     * @this {Format}
+     */
+    constructor()
+    {
+        /**
+         * We populate the sprintf() formatters table with null functions for all the predefined (built-in) types,
+         * so that type validation has only one look-up to perform.
+         *
+         * For reference purposes, the standard ANSI C set of format types is "dioxXucsfeEgGpn%", not all of which
+         * are supported.  Some built-in types have been added, including Date types (see the upper-case types),
+         * a boolean type ('b'), and a JSON type ('j'); external format types include the Debugger Address type ('a'),
+         * and a default number type ('n') that selects the appropriate base type ('d', 'o', or 'x'), um, based on
+         * current Debugger preferences.
+         */
+        this.formatters = {};
+        let predefinedTypes = "ACDFGHMNSTWYBbdfjcsoXx%";
+        for (let i = 0; i < predefinedTypes.length; i++) {
+            this.formatters[predefinedTypes[i]] = null;
+        }
+    }
+
+    /**
+     * addFormatType(type, func)
+     *
+     * Whenever the specified type character is encountered in a sprintf() call, the specified
+     * function will be called with all the associated formatting parameters; the function must
+     * return a stringified copy of the arg.
+     *
+     * @this {Format}
+     * @param {string} type (the sprintf standard requires this be a single character)
+     * @param {Formatter} func
+     * @returns {boolean} (true if successful, false if type character has already been defined)
+     */
+    addFormatType(type, func)
+    {
+        // assert(!this.formatters[type]);
+        if (!this.formatters[type]) {
+            this.formatters[type] = func;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * isDate(date)
+     *
+     * @param {Date} date
+     * @returns {boolean}
+     */
+    static isDate(date)
+    {
+        return !isNaN(date.getTime());
+    }
+
+    /**
+     * parseDate(date)
+     * parseDate(date, time)
+     * parseDate(year, month, day, hour, minute, second)
+     * parseDate(timestamp, fLocal)
+     *
+     * Produces a UTC date when ONLY a date (no time) is provided; otherwise, it combines the date and
+     * and time, producing a date that is either local or UTC, depending on the presence (or lack) of time
+     * zone information.  Finally, if numeric inputs are provided, then Date.UTC() is called to generate
+     * a UTC time (since there is no provision for a time zone in that case either).
+     *
+     * In general, you should use this instead of new Date(), because the Date constructor implicitly calls
+     * Date.parse(s), which behaves inconsistently.  For example, ISO date-only strings (e.g. "1970-01-01")
+     * generate a UTC time, but non-ISO date-only strings (eg, "10/1/1945" or "October 1, 1945") generate a
+     * local time.
+     *
+     * @param {...} args
+     * @returns {Date} (UTC unless a time string with a timezone is explicitly provided)
+     */
+    static parseDate(...args)
+    {
+        let date;
+        if (args[0] === undefined) {
+            date = new Date(Date.now());
+        }
+        else if (typeof args[0] === "string") {
+            let s = args[0];
+            if (s.indexOf(':') < 0) {
+                s += ' ' + (args[1] || "00:00:00 UTC");
+            } else if (s.match(/^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]$/)) {
+                /**
+                 * I don't care to support all the possible time zone specifiers just to determine whether or not
+                 * a time zone was provided, so for now, I simply look for common date+time patterns I use, such as
+                 * the "timestamp" pattern above.  TODO: Make this general-purpose someday.
+                 *
+                 * Also, when a timestamp is provided, then a second (optional) fLocal parameter can be specified;
+                 * requesting a (local) non-UTC date can be helpful, for example, when the date is going to be used
+                 * as a local file modification time.
+                 */
+                if (!args[1]) s += " UTC";
+            }
+            date = new Date(s);
+        }
+        else if (args[1] === undefined) {
+            date = new Date(args[0]);
+        } else {
+            // assert(args[1] < 12 && args[2] <= 31 && args[3] < 24 && args[4] < 60 && args[5] < 60);
+            date = new Date(Date.UTC(...args));
+        }
+        return date;
+    }
+
+    /**
+     * sprintf(format, ...args)
+     *
+     * This C-like version of sprintf() supports only a subset of the standard C formatting specifiers, plus a few
+     * non-standard ones (eg, to display booleans, dates, times, etc).
+     *
+     * This version also supports custom format specifiers; see addFormatType() for details.
+     *
+     * TODO: The %c and %s specifiers support a negative width for left-justified output, but the numeric specifiers
+     * (eg, %d and %x) do not; they support only positive widths and right-justified output.  That's one of the more
+     * glaring omissions at the moment.
+     *
+     * @this {Format}
+     * @param {string} format
+     * @param {...} [args]
+     * @returns {string}
+     */
+    sprintf(format, ...args)
+    {
+        /**
+         * This isn't just a nice optimization; it's also important if the caller is simply trying
+         * to printf() a string that may also contain '%' and doesn't want or expect any formatting.
+         */
+        if (!args || !args.length) {
+            return format;
+        }
+
+        let buffer = "";
+        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([bwhlL]?)([A-Za-z%])/);
+
+        let iArg = 0, iPart;
+        for (iPart = 0; iPart < aParts.length - 6; iPart += 6) {
+
+            buffer += aParts[iPart];
+            let arg, type = aParts[iPart+5];
+
+            /**
+             * Check for unrecognized types immediately, so we don't inadvertently pop any arguments.
+             */
+            if (this.formatters[type] === undefined) {
+                buffer += '%' + aParts[iPart+1] + aParts[iPart+2] + aParts[iPart+3] + aParts[iPart+4] + type;
+                continue;
+            }
+
+            if (iArg < args.length) {
+                arg = args[iArg];
+                if (type != '%') iArg++;
+            } else {
+                arg = args[args.length-1];
+            }
+            let flags = aParts[iPart+1];
+            let hash = flags.indexOf('#') >= 0;
+            let zeroPad = flags.indexOf('0') >= 0;
+            let width = aParts[iPart+2];
+            if (width == '*') {
+                width = arg;
+                if (iArg < args.length) {
+                    arg = args[iArg++];
+                } else {
+                    arg = args[args.length-1];
+                }
+            } else {
+                width = +width || 0;
+            }
+            let precision = aParts[iPart+3];
+            precision = precision? +precision.substr(1) : -1;
+            let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
+            let ach = null, s, radix = 0, prefix = "";
+
+            /**
+             * The following non-standard sprintf() format types provide handy alternatives to the
+             * PHP date() format types that we previously used with the old datelib.formatDate() function:
+             *
+             *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A (%.1A for a or p)
+             *      F:  month ("January", "February", ..., "December")                      %F (%.3F for 3-letter month)
+             *      g:  hour in 12-hour format                                              %G (%02G for leading zero)
+             *      h:  hour in 24-hour format                                              %H (%02H for leading zero)
+             *      i:  minutes (0, 1, ..., 59)                                             %N (%02N for leading zero)
+             *      j:  day of the month (1, 2, ..., 31)                                    %D (%02D for leading zero)
+             *      l:  day of the week ("Sunday", "Monday", ..., "Saturday")               %W (%.3W for 3-letter day)
+             *      n:  month (1, 2, ..., 12)                                               %M (%02M for leading zero)
+             *      s:  seconds (0, 1, ..., 59)                                             %S (%02S for leading zero)
+             *      Y:  4-digit year (eg, 2014)                                             %Y (%0.2Y for 2-digit year)
+             *
+             * We also support a few custom format types:
+             *
+             *      %C:  calendar output (equivalent to: %W, %F %D, %Y)
+             *      %T:  timestamp output (equivalent to: %Y-%02M-%02D %02H:%02N:%02S)
+             *
+             * Use the optional '#' flag with any of the above '%' format types to produce UTC results
+             * (eg, '%#G' instead of '%G').
+             *
+             * The %A, %F, and %W types act as strings (which support the '-' left justification flag, as well as
+             * the width and precision options), and the rest act as integers (which support the '0' padding flag
+             * and the width option).  Also, while %Y does act as an integer, it also supports truncation using the
+             * precision option (normally, integers do not); this enables a variable number of digits for the year.
+             *
+             * So old code like this:
+             *
+             *      printf("%s\n", formatDate("l, F j, Y", date));
+             *
+             * can now be written like this:
+             *
+             *      printf("%W, %F %D, %Y\n", date, date, date, date);
+             *
+             * or even more succinctly, as:
+             *
+             *      printf("%C\n", date);
+             *
+             * In fact, even the previous example can be written more succinctly as:
+             *
+             *      printf("%W, %F %D, %Y\n", date);
+             *
+             * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
+             */
+            let date = /** @type {Date} */ ("ACDFGHMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? Format.parseDate(arg) : arg);
+
+            switch(type) {
+            case 'C':
+                buffer += (Format.isDate(date)? this.sprintf("%#W, %#F %#D, %#Y".replaceAll('#', hash? '#' : ''), date) : undefined);
+                continue;
+
+            case 'D':
+                arg = hash? date.getUTCDate() : date.getDate();
+                type = 'd';
+                break;
+
+            case 'A':
+            case 'G':
+            case 'H':
+                arg = hash? date.getUTCHours() : date.getHours();
+                if (type == 'A') {
+                    arg = (arg < 12 ? "am" : "pm");
+                    type = 's';
+                }
+                else {
+                    if (type == 'G') {
+                        arg = (!arg? 12 : (arg > 12 ? arg - 12 : arg));
+                    }
+                    type = 'd';
+                }
+                break;
+
+            case 'F':
+            case 'M':
+                arg = hash? date.getUTCMonth() : date.getMonth();
+                if (type == 'F') {
+                    arg = Format.NamesOfMonths[arg];
+                    type = 's';
+                } else {
+                    arg++;
+                    type = 'd';
+                }
+                break;
+
+            case 'N':
+                arg = hash? date.getUTCMinutes() : date.getMinutes();
+                type = 'd';
+                break;
+
+            case 'S':
+                arg = hash? date.getUTCSeconds() : date.getSeconds();
+                type = 'd'
+                break;
+
+            case 'T':
+                buffer += (Format.isDate(date)? this.sprintf("%#Y-%#02M-%#02D %#02H:%#02N:%#02S".replaceAll('#', hash? '#' : ''), date) : undefined);
+                continue;
+
+            case 'W':
+                arg = Format.NamesOfDays[hash? date.getUTCDay() : date.getDay()];
+                type = 's';
+                break;
+
+            case 'Y':
+                arg = hash? date.getUTCFullYear() : date.getFullYear();
+                if (precision > 0) {
+                    arg = arg % (Math.pow(10, precision));
+                    precision = -1;
+                }
+                type = 'd';
+                break;
+            }
+
+            switch(type) {
+            /**
+             * "%b" is for boolean-like values.
+             */
+            case 'b':
+                buffer += (arg? "true" : "false");
+                break;
+
+            /**
+             * "%d" is for signed decimal numbers.
+             */
+            case 'd':
+                /**
+                 * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
+                 * so I use Math.trunc() instead.  Bit-wise operators also mask a lot of evils, by converting
+                 * complete nonsense into zero, so while I'm ordinarily a fan, that's not desirable here.
+                 *
+                 * Other (hidden) advantages of Math.trunc(): it automatically converts strings, it honors
+                 * numeric prefixes (the traditional "0x" for hex and the newer "0o" for octal), and it returns
+                 * NaN if the ENTIRE string cannot be converted.
+                 *
+                 * parseInt(), which would seem to be the more logical choice here, doesn't understand "0o",
+                 * doesn't return NaN if non-digits are embedded in the string, and doesn't behave consistently
+                 * across all browsers when parsing older octal values with a leading "0"; Math.trunc() doesn't
+                 * recognize those octal values either, but I'm OK with that, as long as it CONSISTENTLY doesn't
+                 * recognize them.
+                 *
+                 * That last problem is why some recommend you ALWAYS pass a radix to parseInt(), but that
+                 * forces you to parse the string first and determine the proper radix; otherwise, you end up
+                 * with NEW inconsistencies.  For example, if radix is 10 and the string is "0x10", the result
+                 * is zero, since parseInt() happily stops parsing when it reaches the first non-radix 10 digit.
+                 */
+                arg = Math.trunc(arg);
+                /**
+                 * Before falling into the decimal floating-point code, we take this opportunity to convert
+                 * the precision value, if any, to the minimum number of digits to print.  Which basically means
+                 * setting zeroPad to true, width to precision, and then unsetting precision.
+                 *
+                 * TODO: This isn't quite accurate.  For example, printf("%6.3d", 3) should print "   003", not
+                 * "000003".  But once again, this isn't a common enough case to worry about.
+                 */
+                if (precision >= 0) {
+                    zeroPad = true;
+                    if (width < precision) width = precision;
+                    precision = -1;
+                }
+                /* falls through */
+
+            /**
+             * "%f" is for floating-point numbers.
+             */
+            case 'f':
+                arg = +arg;             // convert to a number, if it isn't already
+                s = arg + "";
+                if (precision >= 0) {
+                    s = arg.toFixed(precision);
+                }
+                if (s.length < width) {
+                    if (zeroPad) {
+                        if (arg < 0) {
+                            width--;
+                            s = s.substr(1);
+                        }
+                        s = ("0".repeat(width) + s).slice(-width);
+                        if (arg < 0) s = '-' + s;
+                    } else {
+                        s = (" ".repeat(width) + s).slice(-width);
+                    }
+                }
+                buffer += s;
+                break;
+
+            /**
+             * "%j" is for objects (displayed as JSON, with configurable indentation).
+             */
+            case 'j':
+                /**
+                 * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
+                 * the caller is providing an Object that should be rendered as JSON.  If a width is included
+                 * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
+                 */
+                buffer += JSON.stringify(arg, null, width || undefined);
+                break;
+
+            /**
+             * "%c" is for characters (which can be either single-character strings or ASCII codes).
+             */
+            case 'c':
+                arg = typeof arg == "string"? arg[0] : String.fromCharCode(arg);
+                /* falls through */
+
+            /**
+             * "%s" is for strings.
+             */
+            case 's':
+                /**
+                 * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
+                 * we know undefined and null values don't have a toString() method, but hopefully everything
+                 * else does.
+                 */
+                if (arg != undefined) {
+                    if (typeof arg != "string") {
+                        arg = arg.toString();
+                    }
+                    if (precision >= 0) {
+                        arg = arg.substr(0, precision);
+                    }
+                    while (arg.length < width) {
+                        if (flags.indexOf('-') >= 0) {
+                            arg += ' ';
+                        } else {
+                            arg = ' ' + arg;
+                        }
+                    }
+                }
+                buffer += arg;
+                break;
+
+            /**
+             * "%B" is for binary integers.
+             */
+            case 'B':
+                radix = 2;
+                if (hash) prefix = "0b";
+                /* falls through */
+
+            /**
+             * "%o" is for octal integers.
+             */
+            case 'o':
+                if (!radix) radix = 8;
+                if (!prefix && hash) prefix = "0o";
+                /* falls through */
+
+            /**
+             * "%X" is for hexadecimal integers (using upper-case letters).
+             */
+            case 'X':
+                ach = Format.HexUpperCase;
+                // if (!prefix && hash) prefix = "0X";  // I don't like that %#X uppercases BOTH the prefix and the value
+                /* falls through */
+
+            /**
+             * "%x" is for hexadecimal integers (using lower-case letters).
+             */
+            case 'x':
+                s = "";
+                if (!radix) radix = 16;
+                if (!prefix && hash) prefix = "0x";
+                if (!ach) ach = Format.HexLowerCase;
+                /**
+                 * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
+                 * and we honor precision, if any, as the minimum number of digits to print.
+                 */
+                arg = Math.trunc(arg);
+                if (precision >= 0) {
+                    zeroPad = true;
+                    if (width < precision) width = precision;
+                    precision = -1;
+                }
+                if (zeroPad && !width) {
+                    /**
+                     * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
+                     */
+                    if (length == 'b') {
+                        width = 2;      // if an 8-bit length was specified (eg, "%0bx"), then default to 2
+                    } else if (length == 'h' || length == 'w') {
+                        width = 4;      // if a 16-bit length was specified (eg, "%0wx"), then default to 4
+                    } else if (length == 'l') {
+                        width = 8;      // if a 32-bit length was specified (eg, "%0lx"), then default to 8
+                    } else {
+                        let v = Math.abs(arg);
+                        if (v <= 0xff) {
+                            width = 2;
+                        } else if (v <= 0xffff) {
+                            width = 4;
+                        } else if (v <= 0xffffffff) {
+                            width = 8;
+                        } else {
+                            width = 9;
+                        }
+                    }
+                    width += prefix.length;
+                }
+                width -= prefix.length;
+                do {
+                    let d = 16;         // digit index corresponding to '?'
+                    /*
+                     * We default to '?' if isNaN(); since we always call Math.trunc() for integer args, if the original
+                     * arg was undefined, or a string containing a non-number, or anything else that couldn't be converted
+                     * to a number, the resulting arg should be NaN.
+                     */
+                    if (!Number.isNaN(arg)) {
+                        d = arg & (radix - 1);
+                        /*
+                         * We divide by the base (8 or 16) and truncate, instead of the more traditional bit-wise shift,
+                         * because, like the decimal integer case, this allows us to support values > 32 bits (up to 53 bits).
+                         */
+                        arg = Math.trunc(arg / radix);
+                        // arg >>>= (radix == 16? 4 : 3);
+                    }
+                    if (zeroPad || !s || d || arg) {
+                        s = ach[d] + s;
+                    } else {
+                        if (prefix) {
+                            s = prefix + s;
+                            prefix = "";
+                        }
+                        if (width > 0) s = ' ' + s;
+                    }
+                } while (--width > 0 || arg);
+                buffer += prefix + s;
+                break;
+
+            /**
+             * "%%" is for the percent symbol.
+             */
+            case '%':
+                buffer += '%';
+                break;
+
+            default:
+                // assert(this.formatters[type]);
+                if (this.formatters[type]) {
+                    buffer += this.formatters[type](type, flags, width, precision, arg);
+                    break;
+                }
+                buffer += "(unimplemented sprintf type: %" + type + ")";
+                break;
+            }
+        }
+
+        buffer += aParts[iPart];
+        return buffer;
+    }
+}
+
+//
+// TODO: Put these definitions inside the class once we have a Closure Compiler that doesn't complain about them:
+//
+//      This language feature is only supported for UNSTABLE mode or better: Public class fields
+//
+// static HexLowerCase = "0123456789abcdef?";
+// static HexUpperCase = "0123456789ABCDEF?";
+// static NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+// static NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+//
+
+Format.HexLowerCase = "0123456789abcdef?";
+Format.HexUpperCase = "0123456789ABCDEF?";
+Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/diskapi.js (C) 2012-2023 Jeff Parsons
@@ -833,7 +1460,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); only 2, 8, 10 and 16 are supported
-     * @return {boolean} true if valid, false if invalid (or the specified base isn't supported)
+     * @returns {boolean} true if valid, false if invalid (or the specified base isn't supported)
      */
     static isValidInt(s, base)
     {
@@ -866,7 +1493,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); can be overridden by prefixes/suffixes
-     * @return {number|undefined} corresponding value, or undefined if invalid
+     * @returns {number|undefined} corresponding value, or undefined if invalid
      */
     static parseInt(s, base)
     {
@@ -983,7 +1610,7 @@ class Str {
      * @param {number} cch (the desired number of digits)
      * @param {string} [sPrefix] (default is none)
      * @param {number} [nGrouping]
-     * @return {string}
+     * @returns {string}
      */
     static toBase(n, radix, cch, sPrefix = "", nGrouping = 0)
     {
@@ -1044,7 +1671,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of binary digits (0 or undefined for default of either 8, 18, or 36)
      * @param {number} [nGrouping]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBin(n, cch, nGrouping)
     {
@@ -1070,7 +1697,7 @@ class Str {
      * @param {number|null|undefined} n (interpreted as a 32-bit value)
      * @param {number} [cb] is the desired number of binary bytes (4 is both the default and the maximum)
      * @param {boolean} [fPrefix]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBinBytes(n, cb, fPrefix)
     {
@@ -1096,7 +1723,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of octal digits (0 or undefined for default of either 6, 8, or 12)
      * @param {boolean} [fPrefix]
-     * @return {string} the octal representation of n
+     * @returns {string} the octal representation of n
      */
     static toOct(n, cch, fPrefix)
     {
@@ -1125,7 +1752,7 @@ class Str {
      *
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of decimal digits (0 or undefined for default of either 5 or 11)
-     * @return {string} the decimal representation of n
+     * @returns {string} the decimal representation of n
      */
     static toDec(n, cch)
     {
@@ -1161,7 +1788,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of hex digits (0 or undefined for default of either 4, 8, or 9)
      * @param {boolean} [fPrefix]
-     * @return {string} the hex representation of n
+     * @returns {string} the hex representation of n
      */
     static toHex(n, cch, fPrefix)
     {
@@ -1185,7 +1812,7 @@ class Str {
      * Alias for Str.toHex(b, 2, true)
      *
      * @param {number|null|undefined} b is a byte value
-     * @return {string} the hex representation of b
+     * @returns {string} the hex representation of b
      */
     static toHexByte(b)
     {
@@ -1198,7 +1825,7 @@ class Str {
      * Alias for Str.toHex(w, 4, true)
      *
      * @param {number|null|undefined} w is a word (16-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexWord(w)
     {
@@ -1211,7 +1838,7 @@ class Str {
      * Alias for Str.toHex(l, 8, true)
      *
      * @param {number|null|undefined} l is a dword (32-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexLong(l)
     {
@@ -1228,7 +1855,7 @@ class Str {
      *
      * @param {string} sFileName
      * @param {boolean} [fStripExt]
-     * @return {string}
+     * @returns {string}
      */
     static getBaseName(sFileName, fStripExt)
     {
@@ -1260,7 +1887,7 @@ class Str {
      * Note that we EXCLUDE the period from the returned extension, whereas path.extname() includes it.
      *
      * @param {string} sFileName
-     * @return {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
+     * @returns {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
      */
     static getExtension(sFileName)
     {
@@ -1278,7 +1905,7 @@ class Str {
      *
      * @param {string} s
      * @param {string} sSuffix
-     * @return {boolean} true if s ends with sSuffix, false if not
+     * @returns {boolean} true if s ends with sSuffix, false if not
      */
     static endsWith(s, sSuffix)
     {
@@ -1289,7 +1916,7 @@ class Str {
      * escapeHTML(sHTML)
      *
      * @param {string} sHTML
-     * @return {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
+     * @returns {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
      */
     static escapeHTML(sHTML)
     {
@@ -1327,7 +1954,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replace(sSearch, sReplace, s)
     {
@@ -1344,7 +1971,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceAll(sSearch, sReplace, s)
     {
@@ -1358,7 +1985,7 @@ class Str {
      *
      * @param {Object} a
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceArray(a, s)
     {
@@ -1390,7 +2017,7 @@ class Str {
      * @param {string} s is a string
      * @param {number} cch is desired length
      * @param {boolean} [fPadLeft] (default is padding on the right)
-     * @return {string} the original string (s) with spaces padding it to the specified length
+     * @returns {string} the original string (s) with spaces padding it to the specified length
      */
     static pad(s, cch, fPadLeft)
     {
@@ -1414,7 +2041,7 @@ class Str {
      * local time.
      *
      * @param {...} args
-     * @return {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
+     * @returns {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
      */
     static parseDate(...args)
     {
@@ -1437,7 +2064,7 @@ class Str {
      * isValidDate(date)
      *
      * @param {Date} date
-     * @return {boolean}
+     * @returns {boolean}
      */
     static isValidDate(date)
     {
@@ -1445,393 +2072,11 @@ class Str {
     }
 
     /**
-     * sprintf(format, ...args)
-     *
-     * Copied from the CCjs project (https://github.com/jeffpar/ccjs/blob/master/lib/stdio.js) and extended.
-     * Far from complete, let alone sprintf-compatible, but it's adequate for the handful of sprintf-style format
-     * specifiers that I use.
-     *
-     * TODO: The %c and %s specifiers support a negative width for left-justified output, but the numeric specifiers
-     * (eg, %d and %x) do not; they support only positive widths and right-justified output.  That's one of the more
-     * glaring omissions at the moment.
-     *
-     * @param {string} format
-     * @param {...} args
-     * @return {string}
-     */
-    static sprintf(format, ...args)
-    {
-        /*
-         * This isn't just a nice optimization; it's also important if the caller is simply trying
-         * to printf() a string that may also contain '%' and doesn't want or expect any formatting.
-         */
-        if (!args || !args.length) {
-            return format;
-        }
-
-        let buffer = "";
-        let aParts = format.split(/%([-+ 0#]*)([0-9]*|\*)(\.[0-9]+|)([hlL]?)([A-Za-z%])/);
-
-        let iArg = 0, iPart;
-        for (iPart = 0; iPart < aParts.length - 6; iPart += 6) {
-
-            buffer += aParts[iPart];
-            let arg, type = aParts[iPart+5];
-
-            /*
-             * Check for unrecognized types immediately, so we don't inadvertently pop any arguments;
-             * the first 12 ("ACDFGHMNSTWY") are for our non-standard Date extensions (see below).
-             *
-             * For reference purposes, the standard ANSI C set of format types is: "dioxXucsfeEgGpn%".
-             */
-            let iType = "ACDFGHMNSTWYbdfjcsoXx%".indexOf(type);
-            if (iType < 0) {
-                buffer += '%' + aParts[iPart+1] + aParts[iPart+2] + aParts[iPart+3] + aParts[iPart+4] + type;
-                continue;
-            }
-
-            if (iArg < args.length) {
-                arg = args[iArg];
-                if (type != '%') iArg++;
-            } else {
-                arg = args[args.length-1];
-            }
-            let flags = aParts[iPart+1];
-            let hash = flags.indexOf('#') >= 0;
-            let zeroPad = flags.indexOf('0') >= 0;
-            let width = aParts[iPart+2];
-            if (width == '*') {
-                width = arg;
-                if (iArg < args.length) {
-                    arg = args[iArg++];
-                } else {
-                    arg = args[args.length-1];
-                }
-            } else {
-                width = +width || 0;
-            }
-            let precision = aParts[iPart+3];
-            precision = precision? +precision.substr(1) : -1;
-            // let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L' (all currently ignored)
-            let ach = null, s, radix = 0, prefix = "";
-
-            /*
-             * The following non-standard sprintf() format codes provide handy alternatives to the
-             * PHP date() format codes that we used to use with the old datelib.formatDate() function:
-             *
-             *      a:  lowercase ante meridiem and post meridiem (am or pm)                %A
-             *      d:  day of the month, 2 digits with leading zeros (01, 02, ..., 31)     %02D
-             *      D:  3-letter day of the week ("Sun", "Mon", ..., "Sat")                 %.3W
-             *      F:  month ("January", "February", ..., "December")                      %F
-             *      g:  hour in 12-hour format, without leading zeros (1, 2, ..., 12)       %G
-             *      h:  hour in 24-hour format, without leading zeros (0, 1, ..., 23)       %H
-             *      H:  hour in 24-hour format, with leading zeros (00, 01, ..., 23)        %02H
-             *      i:  minutes, with leading zeros (00, 01, ..., 59)                       %02N
-             *      j:  day of the month, without leading zeros (1, 2, ..., 31)             %D
-             *      l:  day of the week ("Sunday", "Monday", ..., "Saturday")               %W
-             *      m:  month, with leading zeros (01, 02, ..., 12)                         %02M
-             *      M:  3-letter month ("Jan", "Feb", ..., "Dec")                           %.3F
-             *      n:  month, without leading zeros (1, 2, ..., 12)                        %M
-             *      s:  seconds, with leading zeros (00, 01, ..., 59)                       %02S
-             *      y:  2-digit year (eg, 14)                                               %0.2Y
-             *      Y:  4-digit year (eg, 2014)                                             %Y
-             *
-             * We also support a few custom format codes:
-             *
-             *      %C:  calendar output (equivalent to: %W, %F %D, %Y)
-             *      %T:  timestamp output (equivalent to: %Y-%02M-%02D %02H:%02N:%02S)
-             *
-             * Use the optional '#' flag with any of the above '%' format codes to produce UTC results
-             * (eg, '%#G' instead of '%G').
-             *
-             * The %A, %F, and %W types act as strings (which support the '-' left justification flag, as well as
-             * the width and precision options), and the rest act as integers (which support the '0' padding flag
-             * and the width option).  Also, while %Y does act as an integer, it also supports truncation using the
-             * precision option (normally, integers do not); this enables a variable number of digits for the year.
-             *
-             * So old code like this:
-             *
-             *      printf("%s\n", formatDate("l, F j, Y", date));
-             *
-             * can now be written like this:
-             *
-             *      printf("%W, %F %D, %Y\n", date, date, date, date);
-             *
-             * or even more succinctly, as:
-             *
-             *      printf("%C\n", date);
-             *
-             * In fact, even the previous example can be written more succinctly as:
-             *
-             *      printf("%W, %F %D, %Y\n", date);
-             *
-             * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
-             */
-            let ch, date = /** @type {Date} */ (iType < 12 && typeof arg != "object"? Str.parseDate(arg) : arg), dateUndefined;
-
-            switch(type) {
-            case 'C':
-                ch = hash? '#' : '';
-                buffer += (Str.isValidDate(date)? Str.sprintf(Str.sprintf("%%%sW, %%%sF %%%sD, %%%sY", ch), date) : dateUndefined);
-                continue;
-
-            case 'D':
-                arg = hash? date.getUTCDate() : date.getDate();
-                type = 'd';
-                break;
-
-            case 'A':
-            case 'G':
-            case 'H':
-                arg = hash? date.getUTCHours() : date.getHours();
-                if (type == 'A') {
-                    arg = (arg < 12 ? "am" : "pm");
-                    type = 's';
-                }
-                else {
-                    if (type == 'G') {
-                        arg = (!arg? 12 : (arg > 12 ? arg - 12 : arg));
-                    }
-                    type = 'd';
-                }
-                break;
-
-            case 'F':
-            case 'M':
-                arg = hash? date.getUTCMonth() : date.getMonth();
-                if (type == 'F') {
-                    arg = Str.NamesOfMonths[arg];
-                    type = 's';
-                } else {
-                    arg++;
-                    type = 'd';
-                }
-                break;
-
-            case 'N':
-                arg = hash? date.getUTCMinutes() : date.getMinutes();
-                type = 'd';
-                break;
-
-            case 'S':
-                arg = hash? date.getUTCSeconds() : date.getSeconds();
-                type = 'd'
-                break;
-
-            case 'T':
-                ch = hash? '#' : '';
-                buffer += (Str.isValidDate(date)? Str.sprintf(Str.sprintf("%%%sY-%%%s02M-%%%s02D %%%s02H:%%%s02N:%%%s02S", ch), date) : dateUndefined);
-                continue;
-
-            case 'W':
-                arg = Str.NamesOfDays[hash? date.getUTCDay() : date.getDay()];
-                type = 's';
-                break;
-
-            case 'Y':
-                arg = hash? date.getUTCFullYear() : date.getFullYear();
-                if (precision > 0) {
-                    arg = arg % (Math.pow(10, precision));
-                    precision = -1;
-                }
-                type = 'd';
-                break;
-            }
-
-            switch(type) {
-            case 'b':
-                /*
-                 * This non-standard "boolean" format specifier seems handy.
-                 */
-                buffer += (arg? "true" : "false");
-                break;
-
-            case 'd':
-                /*
-                 * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
-                 * so I use Math.trunc() instead.  Bit-wise operators also mask a lot of evils, by converting
-                 * complete nonsense into zero, so while I'm ordinarily a fan, that's not desirable here.
-                 *
-                 * Other (hidden) advantages of Math.trunc(): it automatically converts strings, it honors
-                 * numeric prefixes (the traditional "0x" for hex and the newer "0o" for octal), and it returns
-                 * NaN if the ENTIRE string cannot be converted.
-                 *
-                 * parseInt(), which would seem to be the more logical choice here, doesn't understand "0o",
-                 * doesn't return NaN if non-digits are embedded in the string, and doesn't behave consistently
-                 * across all browsers when parsing older octal values with a leading "0"; Math.trunc() doesn't
-                 * recognize those octal values either, but I'm OK with that, as long as it CONSISTENTLY doesn't
-                 * recognize them.
-                 *
-                 * That last problem is why some recommend you ALWAYS pass a radix to parseInt(), but that
-                 * forces you to parse the string first and determine the proper radix; otherwise, you end up
-                 * with NEW inconsistencies.  For example, if radix is 10 and the string is "0x10", the result
-                 * is zero, since parseInt() happily stops parsing when it reaches the first non-radix 10 digit.
-                 */
-                arg = Math.trunc(arg);
-                /*
-                 * Before falling into the decimal floating-point code, we take this opportunity to convert
-                 * the precision value, if any, to the minimum number of digits to print.  Which basically means
-                 * setting zeroPad to true and width to precision, and then unsetting precision.
-                 *
-                 * TODO: This isn't quite accurate.  For example, printf("%6.3d", 3) should print "   003", not
-                 * "000003".  But once again, this isn't a common enough case to worry about.
-                 */
-                if (precision >= 0) {
-                    zeroPad = true;
-                    if (width < precision) width = precision;
-                    precision = -1;
-                }
-                /* falls through */
-
-            case 'f':
-                s = arg + "";
-                if (precision >= 0) {
-                    s = arg.toFixed(precision);
-                }
-                if (s.length < width) {
-                    if (zeroPad) {
-                        if (arg < 0) {
-                            width--;
-                            s = s.substr(1);
-                        }
-                        s = ("0000000000" + s).slice(-width);
-                        if (arg < 0) s = '-' + s;
-                    } else {
-                        s = ("          " + s).slice(-width);
-                    }
-                }
-                buffer += s;
-                break;
-
-            case 'j':
-                /*
-                 * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
-                 * the caller is providing an Object that should be rendered as JSON.  If a width is included
-                 * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
-                 */
-                buffer += JSON.stringify(arg, null, width || undefined);
-                break;
-
-            case 'c':
-                arg = typeof arg == "string"? arg[0] : String.fromCharCode(arg);
-                /* falls through */
-
-            case 's':
-                /*
-                 * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
-                 * we know undefined and null values don't have a toString() method, but hopefully everything
-                 * else does.
-                 */
-                if (arg != undefined) {
-                    if (typeof arg != "string") {
-                        arg = arg.toString();
-                    }
-                    if (precision >= 0) {
-                        arg = arg.substr(0, precision);
-                    }
-                    while (arg.length < width) {
-                        if (flags.indexOf('-') >= 0) {
-                            arg += ' ';
-                        } else {
-                            arg = ' ' + arg;
-                        }
-                    }
-                }
-                buffer += arg;
-                break;
-
-            case 'o':
-                radix = 8;
-                if (hash) prefix = "0";
-                /* falls through */
-
-            case 'X':
-                ach = Str.HexUpperCase;
-                // if (hash) prefix = "0X";     // I don't like that %#X uppercases both the prefix and the value
-                /* falls through */
-
-            case 'x':
-                s = "";
-                if (!radix) radix = 16;
-                if (!prefix && hash) prefix = "0x";
-                if (!ach) ach = Str.HexLowerCase;
-                /*
-                 * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
-                 * and we honor precision, if any, as the minimum number of digits to print.
-                 */
-                arg = Math.trunc(arg);
-                if (precision >= 0) {
-                    zeroPad = true;
-                    if (width < precision) width = precision;
-                    precision = -1;
-                }
-                if (zeroPad && !width) {
-                    /*
-                     * Here we replicate a bit of logic from toHex(), which selects a width based on the value, and
-                     * is triggered by the format specification "%0x", where zero-padding is requested without a width.
-                     */
-                    let v = Math.abs(arg);
-                    if (v <= 0xff) {
-                        width = 2;
-                    } else if (v <= 0xffff) {
-                        width = 4;
-                    } else if (v <= 0xffffffff) {
-                        width = 8;
-                    } else {
-                        width = 9;
-                    }
-                    width += prefix.length;
-                }
-                width -= prefix.length;
-                do {
-                    let d = 16;         // digit index corresponding to '?'
-                    /*
-                     * We default to '?' if isNaN(); since we always call Math.trunc() for integer args, if the original
-                     * arg was undefined, or a string containing a non-number, or anything else that couldn't be converted
-                     * to a number, the resulting arg should be NaN.
-                     */
-                    if (!Number.isNaN(arg)) {
-                        d = arg & (radix - 1);
-                        /*
-                         * We divide by the base (8 or 16) and truncate, instead of the more traditional bit-wise shift,
-                         * because, like the decimal integer case, this allows us to support values > 32 bits (up to 53 bits).
-                         */
-                        arg = Math.trunc(arg / radix);
-                        // arg >>>= (radix == 16? 4 : 3);
-                    }
-                    if (zeroPad || !s || d || arg) {
-                        s = ach[d] + s;
-                    } else {
-                        if (prefix) {
-                            s = prefix + s;
-                            prefix = "";
-                        }
-                        if (width > 0) s = ' ' + s;
-                    }
-                } while (--width > 0 || arg);
-                buffer += prefix + s;
-                break;
-
-            case '%':
-                buffer += '%';
-                break;
-
-            default:
-                buffer += "(unimplemented printf type %" + type + ")";
-                break;
-            }
-        }
-
-        buffer += aParts[iPart];
-        return buffer;
-    }
-
-    /**
      * stripLeadingZeros(s, fPad)
      *
      * @param {string} s
      * @param {boolean} [fPad]
-     * @return {string}
+     * @returns {string}
      */
     static stripLeadingZeros(s, fPad)
     {
@@ -1845,7 +2090,7 @@ class Str {
      * trim(s)
      *
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static trim(s)
     {
@@ -1859,7 +2104,7 @@ class Str {
      * toASCIICode(b)
      *
      * @param {number} b
-     * @return {string}
+     * @returns {string}
      */
     static toASCIICode(b)
     {
@@ -1928,44 +2173,6 @@ Str.ASCIICodeMap = {
 };
 
 /*
- * Refer to: https://en.wikipedia.org/wiki/Code_page_437
- */
-Str.CP437ToUnicode = [
-    '\u0000', '\u263A', '\u263B', '\u2665', '\u2666', '\u2663', '\u2660', '\u2022',
-    '\u25D8', '\u25CB', '\u25D9', '\u2642', '\u2640', '\u266A', '\u266B', '\u263C',
-    '\u25BA', '\u25C4', '\u2195', '\u203C', '\u00B6', '\u00A7', '\u25AC', '\u21A8',
-    '\u2191', '\u2193', '\u2192', '\u2190', '\u221F', '\u2194', '\u25B2', '\u25BC',
-    '\u0020', '\u0021', '\u0022', '\u0023', '\u0024', '\u0025', '\u0026', '\u0027',
-    '\u0028', '\u0029', '\u002A', '\u002B', '\u002C', '\u002D', '\u002E', '\u002F',
-    '\u0030', '\u0031', '\u0032', '\u0033', '\u0034', '\u0035', '\u0036', '\u0037',
-    '\u0038', '\u0039', '\u003A', '\u003B', '\u003C', '\u003D', '\u003E', '\u003F',
-    '\u0040', '\u0041', '\u0042', '\u0043', '\u0044', '\u0045', '\u0046', '\u0047',
-    '\u0048', '\u0049', '\u004A', '\u004B', '\u004C', '\u004D', '\u004E', '\u004F',
-    '\u0050', '\u0051', '\u0052', '\u0053', '\u0054', '\u0055', '\u0056', '\u0057',
-    '\u0058', '\u0059', '\u005A', '\u005B', '\u005C', '\u005D', '\u005E', '\u005F',
-    '\u0060', '\u0061', '\u0062', '\u0063', '\u0064', '\u0065', '\u0066', '\u0067',
-    '\u0068', '\u0069', '\u006A', '\u006B', '\u006C', '\u006D', '\u006E', '\u006F',
-    '\u0070', '\u0071', '\u0072', '\u0073', '\u0074', '\u0075', '\u0076', '\u0077',
-    '\u0078', '\u0079', '\u007A', '\u007B', '\u007C', '\u007D', '\u007E', '\u2302',
-    '\u00C7', '\u00FC', '\u00E9', '\u00E2', '\u00E4', '\u00E0', '\u00E5', '\u00E7',
-    '\u00EA', '\u00EB', '\u00E8', '\u00EF', '\u00EE', '\u00EC', '\u00C4', '\u00C5',
-    '\u00C9', '\u00E6', '\u00C6', '\u00F4', '\u00F6', '\u00F2', '\u00FB', '\u00F9',
-    '\u00FF', '\u00D6', '\u00DC', '\u00A2', '\u00A3', '\u00A5', '\u20A7', '\u0192',
-    '\u00E1', '\u00ED', '\u00F3', '\u00FA', '\u00F1', '\u00D1', '\u00AA', '\u00BA',
-    '\u00BF', '\u2310', '\u00AC', '\u00BD', '\u00BC', '\u00A1', '\u00AB', '\u00BB',
-    '\u2591', '\u2592', '\u2593', '\u2502', '\u2524', '\u2561', '\u2562', '\u2556',
-    '\u2555', '\u2563', '\u2551', '\u2557', '\u255D', '\u255C', '\u255B', '\u2510',
-    '\u2514', '\u2534', '\u252C', '\u251C', '\u2500', '\u253C', '\u255E', '\u255F',
-    '\u255A', '\u2554', '\u2569', '\u2566', '\u2560', '\u2550', '\u256C', '\u2567',
-    '\u2568', '\u2564', '\u2565', '\u2559', '\u2558', '\u2552', '\u2553', '\u256B',
-    '\u256A', '\u2518', '\u250C', '\u2588', '\u2584', '\u258C', '\u2590', '\u2580',
-    '\u03B1', '\u00DF', '\u0393', '\u03C0', '\u03A3', '\u03C3', '\u00B5', '\u03C4',
-    '\u03A6', '\u0398', '\u03A9', '\u03B4', '\u221E', '\u03C6', '\u03B5', '\u2229',
-    '\u2261', '\u00B1', '\u2265', '\u2264', '\u2320', '\u2321', '\u00F7', '\u2248',
-    '\u00B0', '\u2219', '\u00B7', '\u221A', '\u207F', '\u00B2', '\u25A0', '\u00A0'
-];
-
-/*
  * TODO: Future home of a complete ASCII table.
  */
 Str.ASCII = {
@@ -1985,10 +2192,8 @@ Str.TYPES = {
     ARRAY:      8
 };
 
-Str.HexLowerCase = "0123456789abcdef?";
-Str.HexUpperCase = "0123456789ABCDEF?";
-Str.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+Str.format = new Format();
+Str.sprintf = Str.format.sprintf.bind(Str.format);
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
@@ -2007,7 +2212,7 @@ class Usr {
      * @param {Array} a is an array
      * @param {number|string|Array|Object} v
      * @param {function((number|string|Array|Object), (number|string|Array|Object))} [fnCompare]
-     * @return {number} the index of matching entry if non-negative, otherwise the index of the insertion point
+     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
      */
     static binarySearch(a, v, fnCompare)
     {
@@ -2055,7 +2260,7 @@ class Usr {
     /**
      * getTimestamp()
      *
-     * @return {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
+     * @returns {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
      */
     static getTimestamp()
     {
@@ -2078,7 +2283,7 @@ class Usr {
      *
      * @param {number} nMonth (1-12)
      * @param {number} nYear (normally a 4-digit year, but it may also be mod 100)
-     * @return {number} the maximum (1-based) day allowed for the specified month and year
+     * @returns {number} the maximum (1-based) day allowed for the specified month and year
      */
     static getMonthDays(nMonth, nYear)
     {
@@ -2115,7 +2320,7 @@ class Usr {
      *
      * @param {Date} date
      * @param {number} days (+/-)
-     * @return {Date}
+     * @returns {Date}
      */
     static adjustDays(date, days)
     {
@@ -2127,7 +2332,7 @@ class Usr {
      *
      * @param {Date|string} date1
      * @param {Date|string} date2
-     * @return {number} (date1 - date2, returned as a signed integer number of days)
+     * @returns {number} (date1 - date2, returned as a signed integer number of days)
      */
     static subtractDays(date1, date2)
     {
@@ -2150,7 +2355,7 @@ class Usr {
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
      * @param {Object} bfs
-     * @return {BitFields}
+     * @returns {BitFields}
      */
     static defineBitFields(bfs)
     {
@@ -2169,7 +2374,7 @@ class Usr {
      *
      * @param {BitFields} bfs
      * @param {...number} var_args
-     * @return {number} a value containing all supplied bit fields
+     * @returns {number} a value containing all supplied bit fields
      */
     static initBitFields(bfs, var_args)
     {
@@ -2186,7 +2391,7 @@ class Usr {
      *
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
-     * @return {number} the value of the bit field in v defined by bf
+     * @returns {number} the value of the bit field in v defined by bf
      */
     static getBitField(bf, v)
     {
@@ -2199,7 +2404,7 @@ class Usr {
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
      * @param {number} n is a value to store in v in the bit field defined by bf
-     * @return {number} updated v
+     * @returns {number} updated v
      */
     static setBitField(bf, v, n)
     {
@@ -2323,48 +2528,6 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 class Web {
     /**
-     * log(s, type)
-     *
-     * For diagnostic output only.  DEBUG must be true (or "--debug" specified via the command-line)
-     * for Component.log() to display anything.
-     *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    static log(s, type)
-    {
-        Component.log(s, type);
-    }
-
-    /**
-     * notice(s, fPrintOnly, id)
-     *
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     */
-    static notice(s, fPrintOnly, id)
-    {
-        Component.notice(s, fPrintOnly, id);
-    }
-
-    /**
-     * alertUser(sMessage)
-     *
-     * NOTE: Legacy function for older modules (eg, DiskDump); see Component.alertUser().
-     *
-     * @param {string} sMessage
-     */
-    static alertUser(sMessage)
-    {
-        if (globals.window) {
-            globals.window.alert(sMessage);
-        } else {
-            Web.log(sMessage);
-        }
-    }
-
-    /**
      * getResource(sURL, type, fAsync, done, progress)
      *
      * Request the specified resource (sURL), and once the request is complete, notify done().
@@ -2403,19 +2566,52 @@ class Web {
             return response;
         }
 
-        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
-        } else {
+        /*
+         * While it would be nice to simply import LOCALDISKS from defines.js, that merely defines the *default*
+         * value of the global variable 'LOCALDISKS'; since imported values are immutable, we must look at the global
+         * variable, since that's the only one that *might* have been changed at runtime.
+         */
+        if (globals.window['LOCALDISKS'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
+        } else {
+            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
         if (globals.node.readFileSync) {
             resource = globals.node.readFileSync(sURL);
-            if (done) done(sURL, resource, nErrorCode);
+            if (resource !== undefined) {
+                if (done) done(sURL, resource, nErrorCode);
+                return [resource, nErrorCode];
+            }
+        }
+
+        let request;
+        if (globals.window.XMLHttpRequest) {
+            request = new globals.window.XMLHttpRequest();
+        } else if (globals.window.ActiveXObject) {
+            request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
+        } else if (globals.window.fetch) {
+            fetch(sURL)
+            .then(response => {
+                switch(type) {
+                case "json":
+                case "text":
+                    return response.text();
+                case "arraybuffer":
+                    return response.arrayBuffer();
+                default:
+                    throw new Error("unsupported response type: " + type);
+                }
+            })
+            .then(resource => {
+                if (done) done(sURL, resource, nErrorCode);
+            })
+            .catch(error => {
+                if (done) done(sURL, resource, nErrorCode);
+            });
             return response;
         }
 
-        let request = (globals.window.XMLHttpRequest? new globals.window.XMLHttpRequest() : new globals.window.ActiveXObject("Microsoft.XMLHTTP"));
         let fArrayBuffer = false, fXHR2 = (typeof request.responseType === 'string');
 
         let callback = function() {
@@ -2449,18 +2645,18 @@ class Web {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURL + ") exception: " + err.message);
+                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURL + "): returned " + resource.length + " bytes");
+                if (MAXDEBUG) Component.printf(Messages.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Web.log("xmlHTTPRequest(" + sURL + "): error code " + nErrorCode);
+                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
                 if (!request.status && !Web.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
@@ -2488,12 +2684,12 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            if (MAXDEBUG) Web.log("Web.getResource(POST " + sURL + "): " + sPost.length + " bytes");
+            if (MAXDEBUG) Component.printf("Web.getResource(POST %s): %d bytes\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            if (MAXDEBUG) Web.log("Web.getResource(GET " + sURL + ")");
+            if (MAXDEBUG) Component.printf("Web.getResource(GET %s)\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -2805,7 +3001,7 @@ class Web {
                     f = (globals.window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
                     globals.window.localStorage.removeItem(Web.sLocalStorageTest);
                 } catch (e) {
-                    Web.logLocalStorageError(e);
+                    Web.printLocalStorageError(e);
                     f = false;
                 }
             }
@@ -2815,13 +3011,13 @@ class Web {
     }
 
     /**
-     * logLocalStorageError(e)
+     * printLocalStorageError(e)
      *
      * @param {Error} e is an exception
      */
-    static logLocalStorageError(e)
+    static printLocalStorageError(e)
     {
-        Web.log(e.message, "localStorage error");
+        Component.printf(Messages.ERROR, "Local storage error: %s\n", e.message);
     }
 
     /**
@@ -2839,7 +3035,7 @@ class Web {
             try {
                 sValue = globals.window.localStorage.getItem(sKey);
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return sValue;
@@ -2859,7 +3055,7 @@ class Web {
                 globals.window.localStorage.setItem(sKey, sValue);
                 return true;
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return false;
@@ -2876,7 +3072,7 @@ class Web {
             try {
                 globals.window.localStorage.removeItem(sKey);
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
     }
@@ -2895,7 +3091,7 @@ class Web {
                     a.push(globals.window.localStorage.key(i));
                 }
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return a;
@@ -2948,7 +3144,7 @@ class Web {
              * Here's one case where we have to be careful with Component, because when isUserAgent() is called by
              * the init code below, component.js hasn't been loaded yet.  The simple solution for now is to remove the call.
              *
-             *      Web.log("agent: " + userAgent);
+             *      Component.printf("agent: %s\n", userAgent);
              *
              * And yes, it would be pointless to use the conditional (?) operator below, if not for the Google Closure
              * Compiler (v20130823) failing to detect the entire expression as a boolean.
@@ -3172,7 +3368,7 @@ class Web {
         };
         e.onmousedown = function()
         {
-            // Web.log("onMouseDown()");
+            // Component.printf(Messages.DEBUG, "onMouseDown()\n");
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -3182,7 +3378,7 @@ class Web {
         };
         e.ontouchstart = function()
         {
-            // Web.log("onTouchStart()");
+            // Component.printf(Messages.DEBUG, "onTouchStart()\n");
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -3190,7 +3386,7 @@ class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            // Web.log("onMouseUp()/onMouseOut()");
+            // Component.printf(Messages.DEBUG, "onMouseUp()/onMouseOut()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3198,7 +3394,7 @@ class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            // Web.log("onTouchEnd()/onTouchCancel()");
+            // Component.printf(Messages.DEBUG, "onTouchEnd()/onTouchCancel()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3281,7 +3477,7 @@ class Web {
      */
     static onError(sMessage)
     {
-        Web.notice(sMessage + "\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.");
+        Component.printf(Messages.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
     }
 
     /**
@@ -3389,7 +3585,7 @@ Web.addPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera"
  *
  * TODO: Consider yet another embedXXX() parameter that would also allow DEBUG to be turned off on a page-by-page basis;
  * it's low priority, because it would only affect machines that explicitly request un-COMPILED code, and there are very
- * few such machines (eg, /_posts/2015-01-17-pcjs-uncompiled.md).
+ * few such machines (eg, /blog/_posts/2015/2015-01-17-pcjs-uncompiled.md).
  *
  * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */
@@ -3550,7 +3746,7 @@ class Component {
         /*
          * This just generates a lot of useless noise, handy in the early days, not so much these days....
          *
-         *      if (DEBUG) Component.log("Component.add(" + component.type + "," + component.id + ")");
+         *      if (DEBUG) Component.printf("Component.add(%s,%s)\n", component.type, component.id);
          */
         globals.pcjs['components'].push(component);
     }
@@ -3618,26 +3814,36 @@ class Component {
     }
 
     /**
-     * Component.log(s, type)
+     * Component.printf(format, ...args)
      *
-     * For diagnostic output only.
+     * If format is a number, it's used as a message number, and the format string is the first arg.
      *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
+     * @param {string|number} format
+     * @param {...} args
      */
-    static log(s, type)
+    static printf(format, ...args)
     {
-        if (!COMPILED && (type != Component.PRINT.DEBUG || MAXDEBUG)) {
-            if (s) {
-                let sElapsed = "", sMsg = (type? (type + ": ") : "") + s;
-                if (typeof Usr != "undefined") {
-                    if (Component.msStart === undefined) {
-                        Component.msStart = Component.getTime();
-                    }
-                    sElapsed = (Component.getTime() - Component.msStart) + "ms: ";
+        if (DEBUG || format >= Messages.LOG && format <= Messages.ERROR) {
+            let alert = false;
+            let bitsMessage = 0;
+            if (typeof format == "number") {
+                bitsMessage = format;
+                format = args.shift();
+                if (bitsMessage == Messages.ERROR) {
+                    alert = true;
+                    format = "Error: " + format;
+                } else if (bitsMessage == Messages.WARNING) {
+                    alert = true;
+                    format = "Warning: " + format;
+                } else if (bitsMessage == Messages.NOTICE) {
+                    alert = true;
                 }
-                sMsg = sMsg.replace(/\r/g, '\\r').replace(/\n/g, ' ');
-                console.log(sElapsed + sMsg);
+            }
+            let sMessage = Str.sprintf(format, ...args).trim();
+            if (!alert) {
+                console.log(sMessage);
+            } else {
+                Component.alertUser(sMessage);
             }
         }
     }
@@ -3658,71 +3864,28 @@ class Component {
         if (DEBUG) {
             if (!f) {
                 if (!s) s = "assertion failure";
-                Component.log(s);
-                throw new Error(s);
+                /*
+                 * Why do we throw an Error only to immediately catch and ignore it?  Simply to give
+                 * any IDE the opportunity to inspect the application's state.  Even when the IDE has
+                 * control, you should still be able to invoke Debugger commands from the IDE's REPL,
+                 * using the global function that the Debugger constructor defines; eg:
+                 *
+                 *      pcx86('r')
+                 *      pcx86('dw 0:0')
+                 *      pcx86('h')
+                 *      ...
+                 *
+                 * If you have no desire to stop on assertions, consider this a no-op.  However, another
+                 * potential benefit of creating an Error object is that, for browsers like Chrome, we get
+                 * a stack trace, too.
+                 */
+                try {
+                    throw new Error(s);
+                } catch(e) {
+                    Component.printf(Messages.ERROR, "%s\n", e.stack || e.message);
+                }
             }
         }
-    }
-
-    /**
-     * Component.print(s)
-     *
-     * Components that inherit from this class should use this.print(), rather than Component.print(), because
-     * if a Control Panel is loaded, it will override only the instance method, not the class method (overriding the
-     * class method would improperly affect any other machines loaded on the same page).
-     *
-     * @this {Component}
-     * @param {string} s
-     */
-    static print(s)
-    {
-        if (!COMPILED) {
-            let i = s.lastIndexOf('\n');
-            if (i >= 0) {
-                Component.println(s.substr(0, i));
-                s = s.substr(i + 1);
-            }
-            Component.printBuffer += s;
-        }
-    }
-
-    /**
-     * Component.println(s, type, id)
-     *
-     * Components that inherit from this class should use this.println(), rather than Component.println(), because
-     * if a Control Panel is loaded, it will override only the instance method, not the class method (overriding the
-     * class method would improperly affect any other machines loaded on the same page).
-     *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     * @param {string} [id] is the caller's ID, if any
-     */
-    static println(s, type, id)
-    {
-        if (!COMPILED) {
-            s = Component.printBuffer + (s || "");
-            Component.log((id? (id + ": ") : "") + (s? ("\"" + s + "\"") : ""), type);
-            Component.printBuffer = "";
-        }
-    }
-
-    /**
-     * Component.notice(s, fPrintOnly, id)
-     *
-     * notice() is like println() but implies a need for user notification, so we alert() as well.
-     *
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     * @returns {boolean}
-     */
-    static notice(s, fPrintOnly, id)
-    {
-        if (!COMPILED) {
-            Component.println(s, Component.PRINT.NOTICE, id);
-        }
-        if (!fPrintOnly) Component.alertUser((id? (id + ": ") : "") + s);
-        return true;
     }
 
     /**
@@ -3732,10 +3895,7 @@ class Component {
      */
     static warning(s)
     {
-        if (!COMPILED) {
-            Component.println(s, Component.PRINT.WARNING);
-        }
-        Component.alertUser(s);
+        Component.printf(Messages.WARNING, s);
     }
 
     /**
@@ -3745,24 +3905,21 @@ class Component {
      */
     static error(s)
     {
-        if (!COMPILED) {
-            Component.println(s, Component.PRINT.ERROR);
-        }
-        Component.alertUser(s);
+        Component.printf(Messages.ERROR, s);
     }
 
     /**
-     * Component.alertUser(sMessage)
+     * Component.alertUser(sMessage, fPrinted)
      *
      * @param {string} sMessage
+     * @param {boolean} [fPrinted] (true if the message has already been printed)
      */
-    static alertUser(sMessage)
+    static alertUser(sMessage, fPrinted)
     {
-        if (window) {
-            window.alert(sMessage);
-        } else {
-            Component.log(sMessage);
+        if (globals.window.alert) {
+            globals.window.alert(sMessage);
         }
+        if (!fPrinted) console.log(sMessage);
     }
 
     /**
@@ -3774,8 +3931,8 @@ class Component {
     static confirmUser(sPrompt)
     {
         let fResponse = false;
-        if (window) {
-            fResponse = window.confirm(sPrompt);
+        if (globals.window.confirm) {
+            fResponse = globals.window.confirm(sPrompt);
         }
         return fResponse;
     }
@@ -3790,8 +3947,8 @@ class Component {
     static promptUser(sPrompt, sDefault)
     {
         let sResponse = null;
-        if (window) {
-            sResponse = window.prompt(sPrompt, sDefault === undefined? "" : sDefault);
+        if (globals.window.prompt) {
+            sResponse = globals.window.prompt(sPrompt, sDefault === undefined? "" : sDefault);
         }
         return sResponse;
     }
@@ -3891,12 +4048,12 @@ class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.log("Component '" + component.toString() + "' missing binding" + (parms? " for " + parms['type'] : ""), Component.PRINT.WARNING);
+                                Component.printf(Messages.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.log("Component.bindComponentControls(" + component.toString() + "): unrecognized control class \"" + sClass + "\"", Component.PRINT.WARNING);
+                            // if (DEBUG) Component.printf(Messages.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
                             break;
                     }
                 }
@@ -3947,10 +4104,10 @@ class Component {
      * this linear lookup into a property lookup, but some components may have no ID.
      *
      * @param {string} id of the desired component
-     * @param {string} [idRelated] of related component
+     * @param {string|boolean|null} [idRelated] of related component
      * @returns {Component|null}
      */
-    static getComponentByID(id, idRelated)
+    static getComponentByID(id, idRelated = null)
     {
         if (id !== undefined) {
             let i;
@@ -3968,8 +4125,8 @@ class Component {
                     return components[i];
                 }
             }
-            if (components.length) {
-                Component.log("Component ID '" + id + "' not found", Component.PRINT.WARNING);
+            if (components.length && idRelated !== false) {
+                Component.printf(Messages.WARNING, "Component ID \"%s\" not found\n", id);
             }
         }
         return null;
@@ -3980,10 +4137,10 @@ class Component {
      *
      * @param {string} sType of the desired component
      * @param {string} [idRelated] of related component
-     * @param {Component|null} [componentPrev] of previously returned component, if any
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
      * @returns {Component|null}
      */
-    static getComponentByType(sType, idRelated, componentPrev)
+    static getComponentByType(sType, idRelated, componentPrev = null)
     {
         if (sType !== undefined) {
             let i;
@@ -4009,7 +4166,9 @@ class Component {
                     return components[i];
                 }
             }
-            Component.log("Component type '" + sType + "' not found", Component.PRINT.DEBUG);
+            if (MAXDEBUG && componentPrev !== false) {
+                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+            }
         }
         return null;
     }
@@ -4109,7 +4268,7 @@ class Component {
             }
         }
         if (!ae.length) {
-            Component.log('No elements of class "' + sClass + '" found', Component.PRINT.DEBUG);
+            if (MAXDEBUG) Component.printf(Messages.WARNING, "No elements of class \"%s\" found\n", sClass);
         }
         return ae;
     }
@@ -4234,11 +4393,11 @@ class Component {
             let sCommand = aTokens[0];
 
             /*
-             * It's possible to route this output to the Debugger window with dbg.println()
+             * It's possible to route this output to the Debugger window with dbg.printf()
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.println(aTokens.join(' '), Component.PRINT.SCRIPT);
+            Component.printf(Messages.SCRIPT, aTokens.join(' '));
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -4408,36 +4567,19 @@ class Component {
             if (!this.bindings[sBinding]) {
                 let controlTextArea = /** @type {HTMLTextAreaElement} */(control);
                 this.bindings[sBinding] = controlTextArea;
-                /**
-                 * Override this.notice() with a replacement function that eliminates the Component.alertUser() call.
-                 *
-                 * @this {Component}
-                 * @param {string} s
-                 * @returns {boolean}
-                 */
-                this.notice = function noticeControl(s /*, fPrintOnly, id*/) {
-                    this.println(s, this.type);
-                    return true;
-                };
                 /*
                  * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
                  */
                 controlTextArea.value = "";
-                this.print = function(control) {
-                    return function printControl(s) {
-                        Component.appendControl(control, s);
-                    };
-                }(controlTextArea);
-                this.println = function(component, control) {
-                    return function printlnControl(s, type, id) {
-                        if (!s) s = "";
-                        if (type != Component.PRINT.PROGRESS || s.slice(-3) != "...") {
-                            if (type) s = type + ": " + s;
-                            Component.appendControl(control, s + '\n');
+                this.print = function(component, control) {
+                    return function printControl(sMessage, bitsMessage = 0) {
+                        if (!sMessage) sMessage = "";
+                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
+                            Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
-                            Component.replaceControl(control, s, s + '.');
+                            Component.appendControl(control, sMessage);
                         }
-                        if (!COMPILED) Component.println(s, type, id);
+                        if (!COMPILED) Component.printf(sMessage);
                     };
                 }(this, controlTextArea);
             }
@@ -4445,26 +4587,6 @@ class Component {
 
         default:
             return false;
-        }
-    }
-
-    /**
-     * log(s, type)
-     *
-     * For diagnostic output only.
-     *
-     * WARNING: Even though this function's body is completely wrapped in DEBUG, that won't prevent the Closure Compiler
-     * from including it, so all calls must still be prefixed with "if (DEBUG) ....".  For this reason, the class method,
-     * Component.log(), is preferred, because the compiler IS smart enough to remove those calls.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    log(s, type)
-    {
-        if (!COMPILED) {
-            Component.log(s, type || this.id || this.type);
         }
     }
 
@@ -4490,106 +4612,25 @@ class Component {
                 s = "assertion failure in " + (this.id || this.type) + (s? ": " + s : "");
                 if (DEBUGGER && this.dbg) {
                     this.dbg.stopCPU();
-                    /*
-                     * Why do we throw an Error only to immediately catch and ignore it?  Simply to give
-                     * any IDE the opportunity to inspect the application's state.  Even when the IDE has
-                     * control, you should still be able to invoke Debugger commands from the IDE's REPL,
-                     * using the global function that the Debugger constructor defines; eg:
-                     *
-                     *      pcx86('r')
-                     *      pcx86('dw 0:0')
-                     *      pcx86('h')
-                     *      ...
-                     *
-                     * If you have no desire to stop on assertions, consider this a no-op.  However, another
-                     * potential benefit of creating an Error object is that, for browsers like Chrome, we get
-                     * a stack trace, too.
-                     */
-                    try {
-                        throw new Error(s);
-                    } catch(e) {
-                        this.println(e.stack || e.message);
-                    }
-                    return;
                 }
-                this.log(s);
-                throw new Error(s);
+
             }
         }
     }
 
     /**
-     * print(s)
+     * print(s, bitsMessage)
      *
-     * Components using this.print() should wait until after their constructor has run to display any messages, because
+     * Components using print() should wait until after their constructor has run to display any messages;
      * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
      *
      * @this {Component}
      * @param {string} s
+     * @param {number} [bitsMessage] (optional; this method doesn't use it, but some overrides do)
      */
-    print(s)
+    print(s, bitsMessage = 0)
     {
-        Component.print(s);
-    }
-
-    /**
-     * println(s, type, id)
-     *
-     * Components using this.println() should wait until after their constructor has run to display any messages, because
-     * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     * @param {string} [id] is the caller's ID, if any
-     */
-    println(s, type, id)
-    {
-        Component.println(s, type, id || this.id);
-    }
-
-    /**
-     * status(format, ...args)
-     *
-     * status() is like println() but it also includes information about the component (ie, the component type),
-     * which is why there is no corresponding Component.status() function.
-     *
-     * @this {Component}
-     * @param {string} format
-     * @param {...} args
-     */
-    status(format, ...args)
-    {
-        this.println(this.type + ": " + Str.sprintf(format, ...args));
-    }
-
-    /**
-     * notice(s, fPrintOnly, id)
-     *
-     * notice() is like println() but implies a need for user notification, so we alert() as well; however, if this.println()
-     * is overridden, this.notice will be replaced with a similar override, on the assumption that the override is taking care
-     * of alerting the user.
-     *
-     * @this {Component}
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     * @returns {boolean}
-     */
-    notice(s, fPrintOnly, id)
-    {
-        if (!fPrintOnly) {
-            /*
-             * See if the associated computer, if any, is "unloading"....
-             */
-            let computer = Component.getComponentByType("Computer", this.id);
-            if (computer && computer.flags.unloading) {
-                console.log("ignoring notice during unload: " + s);
-                return false;
-            }
-        }
-        Component.notice(s, fPrintOnly, id || this.type);
-        return true;
+        Component.printf(bitsMessage, s);
     }
 
     /**
@@ -4597,13 +4638,15 @@ class Component {
      *
      * Set a fatal error condition
      *
+     * TODO: Any cases where we should still prefix the string with "Fatal error: "?
+     *
      * @this {Component}
      * @param {string} s describes a fatal error condition
      */
     setError(s)
     {
         this.flags.error = true;
-        this.notice(s);         // TODO: Any cases where we should still prefix this string with "Fatal error: "?
+        this.printf(Messages.NOTICE, "%s\n", s);
     }
 
     /**
@@ -4628,7 +4671,7 @@ class Component {
     isError()
     {
         if (this.flags.error) {
-            this.println(this.toString() + " error");
+            this.print(this.toString() + " error\n");
             return true;
         }
         return false;
@@ -4653,7 +4696,7 @@ class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.log("NOT ready");
+                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -4673,7 +4716,7 @@ class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.log("ready");
+                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -4696,7 +4739,7 @@ class Component {
             if (fCancel) {
                 this.flags.busyCancel = true;
             } else if (fCancel === undefined) {
-                this.println(this.toString() + " busy");
+                this.print(this.toString() + " busy\n");
             }
         }
         return this.flags.busy;
@@ -4719,7 +4762,7 @@ class Component {
             return false;
         }
         if (this.flags.error) {
-            this.println(this.toString() + " error");
+            this.print(this.toString() + " error\n");
             return false;
         }
         this.flags.busy = fBusy;
@@ -4772,6 +4815,23 @@ class Component {
     }
 
     /**
+     * maskBits(num, bits)
+     *
+     * Helper function for returning bits in numbers with more than 32 bits.
+     *
+     * @param {number} num
+     * @param {number} bits
+     * @returns {number}
+     */
+    maskBits(num, bits)
+    {
+        let shift = Math.pow(2, 32);
+        let numHi = (num / shift)|0;
+        let bitsHi = (bits / shift)|0;
+        return (num & bits) + (numHi & bitsHi) * shift
+    }
+
+    /**
      * setBits(num, bits)
      *
      * Helper function for setting bits in numbers with more than 32 bits.
@@ -4808,21 +4868,22 @@ class Component {
     /**
      * messageEnabled(bitsMessage)
      *
-     * If bitsMessage is Messages.DEFAULT (0), then the component's Messages category is used,
-     * and if it's Messages.ALL (-1), then the message is always displayed, regardless what's enabled.
+     * If bitsMessage is Messages.DEFAULT (0), then the component's Messages category is used.
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
-     * @returns {boolean} true if all specified message enabled, false if not
+     * @returns {boolean} true if the specified message(s) are enabled, false if not
      */
     messageEnabled(bitsMessage = 0)
     {
-        if (DEBUGGER && this.dbg) {
-            if (bitsMessage % 2) bitsMessage--;
-            bitsMessage = bitsMessage || this.bitsMessage;
-            if ((bitsMessage|1) == -1 || this.testBits(this.dbg.bitsMessage, bitsMessage)) {
-                return true;
-            }
+        /*
+         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.DEFAULT, because
+         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         */
+        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        bitsMessage = bitsMessage || this.bitsMessage;
+        if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+            return true;
         }
         return false;
     }
@@ -4830,8 +4891,13 @@ class Component {
     /**
      * printf(format, ...args)
      *
-     * If format is a number, then it's treated as one or more Messages flags, and the real format
-     * string is the first arg.
+     * If format is a number, it's used as a message number, and the format string is the first arg; the call
+     * will be suppressed unless the corresponding message category has been enabled by the debugger.
+     *
+     * Most components provide a default message number to their constructor, so any printf() without an explicit
+     * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
+     * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
+     * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
      * @param {string|number} format
@@ -4839,51 +4905,29 @@ class Component {
      */
     printf(format, ...args)
     {
-        if (DEBUGGER && this.dbg) {
-            let bitsMessage = 0;
-            if (typeof format == "number") {
-                bitsMessage = format;
-                format = args.shift();
+        let bitsMessage = 0;
+        if (typeof format == "number") {
+            bitsMessage = format || Messages.PROGRESS;
+            format = args.shift();
+            if (bitsMessage == Messages.LOG) {
+                format = (this.id || this.type || "log") + ": " + format;
             }
-            if (this.messageEnabled(bitsMessage)) {
-                let s = Str.sprintf(format, ...args);
-                /*
-                 * Since dbg.message() calls println(), we strip any ending linefeed.
-                 *
-                 * We could bypass the Debugger and go straight to this.print(), but we would lose
-                 * the benefits of debugger messages (eg, automatic buffering, halting, yielding, etc).
-                 */
-                if (s.slice(-1) == '\n') s = s.slice(0, -1);
-                this.dbg.message(s, !!(bitsMessage % 2));   // pass true for fAddress if Messages.ADDRESS is set
+            else if (bitsMessage == Messages.STATUS) {
+                format = this.type + ": " + format;
+            }
+        }
+        if (this.messageEnabled(bitsMessage)) {
+            let sMessage = Str.sprintf(format, ...args);
+            if (this.dbg && this.dbg.message) {
+                this.dbg.message(sMessage, bitsMessage);
+            } else {
+                this.print(sMessage, bitsMessage);
             }
         }
     }
 
     /**
-     * printMessage(sMessage, bitsMessage, fAddress)
-     *
-     * If bitsMessage is not specified, the component's Messages category is used, and if bitsMessage is true,
-     * the message is displayed regardless.
-     *
-     * @this {Component}
-     * @param {string} sMessage is any caller-defined message string
-     * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
-     * @param {boolean} [fAddress] is true to display the current address
-     */
-    printMessage(sMessage, bitsMessage, fAddress)
-    {
-        if (DEBUGGER && this.dbg) {
-            if (typeof bitsMessage == "boolean") {
-                bitsMessage = bitsMessage? -1 : 0;
-            }
-            if (this.messageEnabled(bitsMessage)) {
-                this.dbg.message(sMessage, fAddress);
-            }
-        }
-    }
-
-    /**
-     * printMessageIO(port, bOut, addrFrom, name, bIn, bitsMessage)
+     * printIO(port, bOut, addrFrom, name, bIn, bitsMessage)
      *
      * If bitsMessage is not specified, the component's Messages category is used,
      * and if bitsMessage is true, the message is displayed if Messages.PORT is enabled also.
@@ -4896,13 +4940,11 @@ class Component {
      * @param {number} [bIn] is the input value, if known, on an input operation
      * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
      */
-    printMessageIO(port, bOut, addrFrom, name, bIn, bitsMessage)
+    printIO(port, bOut, addrFrom, name, bIn, bitsMessage = this.bitsMessage)
     {
         if (DEBUGGER && this.dbg) {
             if (bitsMessage === true) {
                 bitsMessage = 0;
-            } else if (bitsMessage == undefined) {
-                bitsMessage = this.bitsMessage;
             }
             this.dbg.messageIO(this, port, bOut, addrFrom, name, bIn, bitsMessage);
         }
@@ -4916,20 +4958,6 @@ Component.TYPE = {
     NUMBER:     "number",
     OBJECT:     "object",
     STRING:     "string"
-};
-
-/*
- * These are the standard PRINT values you can pass as an optional argument to println(); in reality,
- * you can pass anything you want, because they are simply prepended to the message, although PROGRESS
- * messages may also be merged with earlier similar messages to keep the output buffer under control.
- */
-Component.PRINT = {
-    DEBUG:      "debug",
-    ERROR:      "error",
-    NOTICE:     "notice",
-    PROGRESS:   "progress",
-    SCRIPT:     "script",
-    WARNING:    "warning"
 };
 
 /*
@@ -4951,7 +4979,6 @@ Component.globalCommands = {
 Component.componentCommands = {
     'select':   Component.scriptSelect
 };
-Component.printBuffer = "";
 
 /*
  * The following polyfills provide ES5 functionality that's missing in older browsers (eg, IE8),
@@ -5931,41 +5958,32 @@ PDP11.PSW.FLAGS         = (PDP11.PSW.NF | PDP11.PSW.ZF | PDP11.PSW.VF | PDP11.PS
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
 
-const MessagesPDP11 = {
-    NONE:       0x00000000,
-    DEFAULT:    0x00000000,
-    ADDRESS:    0x00000001,
-    CPU:        0x00000002,
-    TRAP:       0x00000004,
-    FAULT:      0x00000008,
-    INT:        0x00000010,
-    BUS:        0x00000020,
-    MEMORY:     0x00000040,
-    MMU:        0x00000080,
-    ROM:        0x00000100,
-    DEVICE:     0x00000200,
-    PANEL:      0x00000400,
-    KEYBOARD:   0x00000800,
-    KEYS:       0x00001000,
-    PC11:       0x00002000,
-    PAPER:      0x00004000,
-    DISK:       0x00008000,
-    READ:       0x00010000,
-    WRITE:      0x00020000,
-    RK11:       0x00040000,
-    RL11:       0x00080000,
-    RX11:       0x00100000,
-    DL11:       0x00200000,
-    SERIAL:     0x00400000,
-    KW11:       0x00800000,
-    TIMER:      0x01000000,
-    SPEAKER:    0x02000000,
-    COMPUTER:   0x04000000,
-    WARN:       0x10000000,
-    HALT:       0x20000000,
-    BUFFER:     0x40000000,
-    ALL:        0xffffffff|0
-};
+Messages.CPU         = 0x00000002;
+Messages.TRAP        = 0x00000004;
+Messages.FAULT       = 0x00000008;
+Messages.INT         = 0x00000010;
+Messages.BUS         = 0x00000020;
+Messages.MEMORY      = 0x00000040;
+Messages.MMU         = 0x00000080;
+Messages.ROM         = 0x00000100;
+Messages.DEVICE      = 0x00000200;
+Messages.PANEL       = 0x00000400;
+Messages.KEYBOARD    = 0x00000800;
+Messages.KEYS        = 0x00001000;
+Messages.PC11        = 0x00002000;
+Messages.PAPER       = 0x00004000;
+Messages.DISK        = 0x00008000;
+Messages.READ        = 0x00010000;
+Messages.WRITE       = 0x00020000;
+Messages.RK11        = 0x00040000;
+Messages.RL11        = 0x00080000;
+Messages.RX11        = 0x00100000;
+Messages.DL11        = 0x00200000;
+Messages.SERIAL      = 0x00400000;
+Messages.KW11        = 0x00800000;
+Messages.TIMER       = 0x01000000;
+Messages.SPEAKER     = 0x02000000;
+Messages.COMPUTER    = 0x04000000;
 
 /*
  * Message categories supported by the messageEnabled() function and other assorted message
@@ -5981,44 +5999,32 @@ const MessagesPDP11 = {
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-MessagesPDP11.CATEGORIES = {
-    "cpu":      MessagesPDP11.CPU,
-    "trap":     MessagesPDP11.TRAP,
-    "fault":    MessagesPDP11.FAULT,
-    "int":      MessagesPDP11.INT,
-    "bus":      MessagesPDP11.BUS,
-    "memory":   MessagesPDP11.MEMORY,
-    "mmu":      MessagesPDP11.MMU,
-    "rom":      MessagesPDP11.ROM,
-    "device":   MessagesPDP11.DEVICE,
-    "panel":    MessagesPDP11.PANEL,
-    "keyboard": MessagesPDP11.KEYBOARD, // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
-    "key":      MessagesPDP11.KEYS,     // using "key" instead of "keys", since the latter is a method on JavasScript objects
-    "pc11":     MessagesPDP11.PC11,
-    "paper":    MessagesPDP11.PAPER,
-    "disk":     MessagesPDP11.DISK,
-    "read":     MessagesPDP11.READ,
-    "write":    MessagesPDP11.WRITE,
-    "rk11":     MessagesPDP11.RK11,
-    "rl11":     MessagesPDP11.RL11,
-    "rx11":     MessagesPDP11.RX11,
-    "dl11":     MessagesPDP11.DL11,
-    "serial":   MessagesPDP11.SERIAL,
-    "kw11":     MessagesPDP11.KW11,
-    "timer":    MessagesPDP11.TIMER,
-    "speaker":  MessagesPDP11.SPEAKER,
-    "computer": MessagesPDP11.COMPUTER,
-    "warn":     MessagesPDP11.WARN,
-    /*
-     * Now we turn to message actions rather than message types; for example, setting "halt"
-     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
-     *
-     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
-     * until "m buffer off" is issued.
-     */
-    "halt":     MessagesPDP11.HALT,
-    "buffer":   MessagesPDP11.BUFFER
-};
+Messages.Categories["cpu"]       = Messages.CPU;
+Messages.Categories["trap"]      = Messages.TRAP;
+Messages.Categories["fault"]     = Messages.FAULT;
+Messages.Categories["int"]       = Messages.INT;
+Messages.Categories["bus"]       = Messages.BUS;
+Messages.Categories["memory"]    = Messages.MEMORY;
+Messages.Categories["mmu"]       = Messages.MMU;
+Messages.Categories["rom"]       = Messages.ROM;
+Messages.Categories["device"]    = Messages.DEVICE;
+Messages.Categories["panel"]     = Messages.PANEL;
+Messages.Categories["keyboard"]  = Messages.KEYBOARD;   // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
+Messages.Categories["key"]       = Messages.KEYS,       // using "key" instead of "keys"; since the latter is a method on JavasScript objects
+Messages.Categories["pc11"]      = Messages.PC11;
+Messages.Categories["paper"]     = Messages.PAPER;
+Messages.Categories["disk"]      = Messages.DISK;
+Messages.Categories["read"]      = Messages.READ;
+Messages.Categories["write"]     = Messages.WRITE;
+Messages.Categories["rk11"]      = Messages.RK11;
+Messages.Categories["rl11"]      = Messages.RL11;
+Messages.Categories["rx11"]      = Messages.RX11;
+Messages.Categories["dl11"]      = Messages.DL11;
+Messages.Categories["serial"]    = Messages.SERIAL;
+Messages.Categories["kw11"]      = Messages.KW11;
+Messages.Categories["timer"]     = Messages.TIMER;
+Messages.Categories["speaker"]   = Messages.SPEAKER;
+Messages.Categories["computer"]  = Messages.COMPUTER;
 
 
 /**
@@ -6061,7 +6067,7 @@ class PanelPDP11 extends Component {
      */
     constructor(parmsPanel, fBindings)
     {
-        super("Panel", parmsPanel, MessagesPDP11.PANEL);
+        super("Panel", parmsPanel, Messages.PANEL);
 
         /*
          * If there are any live registers, LEDs, etc, to display, this will provide a count.
@@ -6187,7 +6193,7 @@ class PanelPDP11 extends Component {
      * getAR()
      *
      * @this {PanelPDP11}
-     * @return {number} (current ADDRESS register)
+     * @returns {number} (current ADDRESS register)
      */
     getAR()
     {
@@ -6209,7 +6215,7 @@ class PanelPDP11 extends Component {
      * getDR()
      *
      * @this {PanelPDP11}
-     * @return {number} (current DISPLAY register)
+     * @returns {number} (current DISPLAY register)
      */
     getDR()
     {
@@ -6221,7 +6227,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {number} value (new DISPLAY register)
-     * @return {number}
+     * @returns {number}
      */
     setDR(value)
     {
@@ -6232,7 +6238,7 @@ class PanelPDP11 extends Component {
      * getSR()
      *
      * @this {PanelPDP11}
-     * @return {number} (current SWITCH register)
+     * @returns {number} (current SWITCH register)
      */
     getSR()
     {
@@ -6255,7 +6261,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {string} name
-     * @return {number|undefined} 0 if switch is off ("down"), 1 if on ("up"), or undefined if unrecognized
+     * @returns {number|undefined} 0 if switch is off ("down"), 1 if on ("up"), or undefined if unrecognized
      */
     getSwitch(name)
     {
@@ -6294,7 +6300,7 @@ class PanelPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -6411,7 +6417,7 @@ class PanelPDP11 extends Component {
      * @this {PanelPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -6438,7 +6444,7 @@ class PanelPDP11 extends Component {
      * @this {PanelPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -6451,7 +6457,7 @@ class PanelPDP11 extends Component {
      * This implements save support for the PanelPDP11 component.
      *
      * @this {PanelPDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -6471,7 +6477,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -6488,7 +6494,7 @@ class PanelPDP11 extends Component {
      * resetSwitches()
      *
      * @this {PanelPDP11}
-     * @return {boolean}
+     * @returns {boolean}
      */
     resetSwitches()
     {
@@ -6598,7 +6604,7 @@ class PanelPDP11 extends Component {
      * @param {function()|null} fnCallback
      * @param {string} sBinding
      * @param {string} [sDelay]
-     * @return {boolean} false if wait required, true otherwise
+     * @returns {boolean} false if wait required, true otherwise
      */
     holdSwitch(fnCallback, sBinding, sDelay)
     {
@@ -6623,7 +6629,7 @@ class PanelPDP11 extends Component {
      * @this {PanelPDP11}
      * @param {string} sBinding
      * @param {string} sValue
-     * @return {boolean}
+     * @returns {boolean}
      */
     setSwitch(sBinding, sValue)
     {
@@ -6644,7 +6650,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     toggleSwitch(sBinding)
     {
@@ -6660,7 +6666,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     pressSwitch(sBinding)
     {
@@ -6698,7 +6704,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     releaseSwitch(sBinding)
     {
@@ -7010,7 +7016,7 @@ class PanelPDP11 extends Component {
      * from 177676.
      *
      * @this {PanelPDP11}
-     * @return {number}
+     * @returns {number}
      */
     advanceAddr()
     {
@@ -7027,7 +7033,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateAddr(value)
     {
@@ -7044,7 +7050,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateData(value)
     {
@@ -7062,7 +7068,7 @@ class PanelPDP11 extends Component {
      * @this {PanelPDP11}
      * @param {string} sBinding
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateLED(sBinding, value)
     {
@@ -7092,7 +7098,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {number|undefined} value
-     * @return {boolean}
+     * @returns {boolean}
      */
     setSRSwitches(value)
     {
@@ -7227,7 +7233,7 @@ class PanelPDP11 extends Component {
      * @this {PanelPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.CNSW or 177570)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readCNSW(addr, fPreWrite)
     {
@@ -7271,7 +7277,7 @@ class PanelPDP11 extends Component {
         for (var iPanel=0; iPanel < aePanels.length; iPanel++) {
             var ePanel = aePanels[iPanel];
             var parmsPanel = Component.getComponentParms(ePanel);
-            var panel = Component.getComponentByID(parmsPanel['id']);
+            var panel = Component.getComponentByID(parmsPanel['id'], false);
             if (!panel) panel = new PanelPDP11(parmsPanel, true);
             Component.bindComponentControls(panel, ePanel, APPCLASS);
         }
@@ -7363,7 +7369,7 @@ class BusPDP11 extends Component {
      */
     constructor(parmsBus, cpu, dbg)
     {
-        super("Bus", parmsBus, MessagesPDP11.BUS);
+        super("Bus", parmsBus, Messages.BUS);
 
         this.cpu = cpu;
         this.dbg = dbg;
@@ -7534,7 +7540,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr
-     * @return {Array} containing the buffer (and the offset within that buffer that corresponds to the requested block)
+     * @returns {Array} containing the buffer (and the offset within that buffer that corresponds to the requested block)
      */
     getControllerBuffer(addr)
     {
@@ -7550,7 +7556,7 @@ class BusPDP11 extends Component {
      * Our Bus component also acts as custom memory controller for the IOPAGE, so it must also provide this function.
      *
      * @this {BusPDP11}
-     * @return {Array.<function()>}
+     * @returns {Array.<function()>}
      */
     getControllerAccess()
     {
@@ -7561,7 +7567,7 @@ class BusPDP11 extends Component {
      * getWidth()
      *
      * @this {BusPDP11}
-     * @return {number}
+     * @returns {number}
      */
     getWidth()
     {
@@ -7589,7 +7595,7 @@ class BusPDP11 extends Component {
      * @this {BusPDP11}
      * @param {Object|null} data (always null because we supply no powerDown() handler)
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -7609,7 +7615,7 @@ class BusPDP11 extends Component {
      * @this {BusPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -7620,7 +7626,7 @@ class BusPDP11 extends Component {
      * save()
      *
      * @this {BusPDP11}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -7634,7 +7640,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -7669,7 +7675,7 @@ class BusPDP11 extends Component {
      * @param {number} size of the request, in bytes
      * @param {number} type is one of the MemoryPDP11.TYPE constants
      * @param {Object} [controller] is an optional memory controller component
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     addMemory(addr, size, type, controller)
     {
@@ -7724,7 +7730,7 @@ class BusPDP11 extends Component {
         }
 
         if (sizeLeft <= 0) {
-            this.status("Added %dKb %s at %o", (size >> 10), MemoryPDP11.TYPE_NAMES[type], addr);
+            this.printf(Messages.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP11.TYPE_NAMES[type], addr);
             return true;
         }
 
@@ -7737,7 +7743,7 @@ class BusPDP11 extends Component {
      * @this {BusPDP11}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
+     * @returns {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
      */
     cleanMemory(addr, size)
     {
@@ -7785,7 +7791,7 @@ class BusPDP11 extends Component {
      * @param {BusInfo} [info] previous BusInfo, if any
      * @param {number} [addr] starting address of range (0 if none provided)
      * @param {number} [size] size of range, in bytes (up to end of address space if none provided)
-     * @return {BusInfo} updated info (or new info if no previous info provided)
+     * @returns {BusInfo} updated info (or new info if no previous info provided)
      */
     scanMemory(info, addr, size)
     {
@@ -7820,7 +7826,7 @@ class BusPDP11 extends Component {
      * @this {BusPDP11}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     removeMemory(addr, size)
     {
@@ -7845,7 +7851,7 @@ class BusPDP11 extends Component {
      * @this {BusPDP11}
      * @param {number} addr is the starting physical address
      * @param {number} size of the request, in bytes
-     * @return {Array} of Memory blocks
+     * @returns {Array} of Memory blocks
      */
     getMemoryBlocks(addr, size)
     {
@@ -7870,7 +7876,7 @@ class BusPDP11 extends Component {
      * @param {number} size
      * @param {Array.<function()>} [afn]
      * @param {boolean} [fQuiet] (true if any error should be quietly logged)
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     setMemoryAccess(addr, size, afn, fQuiet)
     {
@@ -7928,7 +7934,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr is a physical address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByte(addr)
     {
@@ -7940,7 +7946,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr is a physical address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getWord(addr)
     {
@@ -7989,7 +7995,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr is a physical address
-     * @return {MemoryPDP11}
+     * @returns {MemoryPDP11}
      */
     getBlockDirect(addr)
     {
@@ -8003,7 +8009,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr is a physical address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByteDirect(addr)
     {
@@ -8021,7 +8027,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr is a physical address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getWordDirect(addr)
     {
@@ -8137,7 +8143,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {boolean} [fAll] (true to save all non-ROM memory blocks, regardless of their dirty flags)
-     * @return {Array} a
+     * @returns {Array} a
      */
     saveMemory(fAll)
     {
@@ -8175,7 +8181,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {Array} a
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     restoreMemory(a)
     {
@@ -8205,7 +8211,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} type is one of the MemoryPDP11.TYPE constants
-     * @return {number} (the limiting address of the specified memory type, zero if none)
+     * @returns {number} (the limiting address of the specified memory type, zero if none)
      */
     getMemoryLimit(type)
     {
@@ -8242,7 +8248,7 @@ class BusPDP11 extends Component {
      * @param {function(number,number)|null|undefined} fnWriteWord
      * @param {number} [message]
      * @param {string} [sName]
-     * @return {boolean} (true if entire range successfully registered, false if any conflicts)
+     * @returns {boolean} (true if entire range successfully registered, false if any conflicts)
      */
     addIOHandlers(start, end, fnReadByte, fnWriteByte, fnReadWord, fnWriteWord, message, sName)
     {
@@ -8255,8 +8261,8 @@ class BusPDP11 extends Component {
             }
             var s = sName || "unknown";
             if (s && index >= 0) s += index++;
-            this.aIOHandlers[off] = [fnReadByte, fnWriteByte, fnReadWord, fnWriteWord, s, message || MessagesPDP11.BUS, false];
-            if (MAXDEBUG) this.log("addIOHandlers(" + Str.toHexLong(addr) + ")");
+            this.aIOHandlers[off] = [fnReadByte, fnWriteByte, fnReadWord, fnWriteWord, s, message || Messages.BUS, false];
+            if (MAXDEBUG) this.printf(Messages.LOG, "addIOHandlers(%#010x)\n", addr);
         }
         return true;
     }
@@ -8270,7 +8276,7 @@ class BusPDP11 extends Component {
      * @param {Component} component
      * @param {Object} table
      * @param {number} [offReg] (optional offset to add to all register addresses)
-     * @return {boolean} (true if entire range successfully registered, false if any conflicts)
+     * @returns {boolean} (true if entire range successfully registered, false if any conflicts)
      */
     addIOTable(component, table, offReg)
     {
@@ -8330,7 +8336,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr (physical)
-     * @return {string|null}
+     * @returns {string|null}
      */
     getAddrInfo(addr)
     {
@@ -8350,7 +8356,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {string} sName
-     * @return {number|null}
+     * @returns {number|null}
      */
     getAddrByName(sName)
     {
@@ -8390,8 +8396,8 @@ class BusPDP11 extends Component {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.FAULT)) {
-                this.dbg.printMessage("memory fault (" + access + ") on " + this.dbg.toStrBase(addr), true, true);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.FAULT + Messages.ADDRESS, "memory fault (%d) on %s\n", access, this.dbg.toStrBase(addr));
             }
             if (err) this.cpu.regErr |= err;
             this.cpu.trap(PDP11.TRAP.BUS, 0, addr);
@@ -8404,7 +8410,7 @@ class BusPDP11 extends Component {
      * This also serves as a clearFault() function.
      *
      * @this {BusPDP11}
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkFault()
     {
@@ -8421,20 +8427,11 @@ class BusPDP11 extends Component {
      * @param {number} addr
      * @param {number} size
      * @param {boolean} [fQuiet] (true if any error should be quietly logged)
-     * @return {boolean} false
+     * @returns {boolean} false
      */
     reportError(errNum, addr, size, fQuiet)
     {
-        var sError = "Memory block error (" + errNum + ": " + Str.toHex(addr) + "," + Str.toHex(size) + ")";
-        if (fQuiet) {
-            if (this.dbg) {
-                this.dbg.message(sError);
-            } else {
-                this.log(sError);
-            }
-        } else {
-            Component.error(sError);
-        }
+        this.printf(fQuiet? Messages.DEFAULT : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
         return false;
     }
 }
@@ -8513,7 +8510,7 @@ BusPDP11.IOController = {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByte: function(off, addr)
     {
@@ -8553,15 +8550,15 @@ BusPDP11.IOController = {
             }
         }
         if (b >= 0) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".readByte(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.readByte(%s): %s\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
             }
             return b;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.READ_BYTE);
         b = 0xff;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
-            this.dbg.printMessage("warning: unconverted read access to byte @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted read access to byte @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
         return b;
     },
@@ -8634,14 +8631,14 @@ BusPDP11.IOController = {
             }
         }
         if (fWrite) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".writeByte(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(b) + ")", true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.writeByte(%s,%s)\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
             }
             return;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.WRITE_BYTE);
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
-            this.dbg.printMessage("warning: unconverted write access to byte @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted write access to byte @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
     },
 
@@ -8651,7 +8648,7 @@ BusPDP11.IOController = {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWord: function(off, addr)
     {
@@ -8673,15 +8670,15 @@ BusPDP11.IOController = {
             }
         }
         if (w >= 0) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".readWord(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.readWord(%s): %s\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
             }
             return w;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.READ_WORD);
         w = 0xffff;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
-            this.dbg.printMessage("warning: unconverted read access to word @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted read access to word @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
         return w;
     },
@@ -8717,14 +8714,14 @@ BusPDP11.IOController = {
             }
         }
         if (fWrite) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".writeWord(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(w) + ")", true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.writeWord(%s,%s)\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
             }
             return;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.WRITE_WORD);
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
-            this.dbg.printMessage("warning: unconverted write access to word @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted write access to word @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
     }
 };
@@ -8747,7 +8744,7 @@ class DevicePDP11 extends Component {
      */
     constructor(parmsDevice)
     {
-        super("Device", parmsDevice, MessagesPDP11.DEVICE);
+        super("Device", parmsDevice, Messages.DEVICE);
 
         this.kw11 = {               // KW11 registers
             lks:        PDP11.KW11.LKS.MON,
@@ -8776,13 +8773,13 @@ class DevicePDP11 extends Component {
             device.interruptKW11();
         });
 
-        this.kw11.irq = cpu.addIRQ(PDP11.KW11.VEC, PDP11.KW11.PRI, MessagesPDP11.KW11);
+        this.kw11.irq = cpu.addIRQ(PDP11.KW11.VEC, PDP11.KW11.PRI, Messages.KW11);
 
         bus.addIOTable(this, DevicePDP11.UNIBUS_IOTABLE);
         bus.addResetHandler(this.reset.bind(this));
 
         if (DEBUGGER && dbg) {
-            dbg.messageDump(MessagesPDP11.MMU, function onDumpMMU(asArgs) {
+            dbg.messageDump(Messages.MMU, function onDumpMMU(asArgs) {
                 device.dumpMMU(asArgs);
             });
         }
@@ -8851,7 +8848,7 @@ class DevicePDP11 extends Component {
                 }
                 sDump += ' ' + dbg.toStrBase(aRegs[offset + i], nBits);
             }
-            dbg.println(sDump + (fBreak? '\n' : ''));
+            dbg.printf("%s", sDump + (fBreak? '\n' : ''));
         }
     }
 
@@ -8861,7 +8858,7 @@ class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -8881,7 +8878,7 @@ class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -8905,7 +8902,7 @@ class DevicePDP11 extends Component {
      * This implements save support for the DevicePDP11 component.
      *
      * @this {DevicePDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -8923,7 +8920,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -8963,7 +8960,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LKS or 177546)
-     * @return {number}
+     * @returns {number}
      */
     readLKS(addr)
     {
@@ -8998,7 +8995,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR0 or 177572)
-     * @return {number}
+     * @returns {number}
      */
     readMMR0(addr)
     {
@@ -9022,7 +9019,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR1 or 177574)
-     * @return {number}
+     * @returns {number}
      */
     readMMR1(addr)
     {
@@ -9034,7 +9031,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR2 or 177576)
-     * @return {number}
+     * @returns {number}
      */
     readMMR2(addr)
     {
@@ -9046,7 +9043,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR3 or 172516)
-     * @return {number}
+     * @returns {number}
      */
     readMMR3(addr)
     {
@@ -9072,7 +9069,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UNIMAP)
-     * @return {number}
+     * @returns {number}
      */
     readUNIMAP(addr)
     {
@@ -9105,7 +9102,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SIPDR0--SIPDR7 or 172200--172216)
-     * @return {number}
+     * @returns {number}
      */
     readSIPDR(addr)
     {
@@ -9131,7 +9128,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SDPDR0--SDPDR7 or 172220--172236)
-     * @return {number}
+     * @returns {number}
      */
     readSDPDR(addr)
     {
@@ -9157,7 +9154,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SIPAR0--SIPAR7 or 172240--172256)
-     * @return {number}
+     * @returns {number}
      */
     readSIPAR(addr)
     {
@@ -9185,7 +9182,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SDPAR0--SDPAR7 or 172260--172276)
-     * @return {number}
+     * @returns {number}
      */
     readSDPAR(addr)
     {
@@ -9212,7 +9209,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KIPDR0--KIPDR7 or 172300--172316)
-     * @return {number}
+     * @returns {number}
      */
     readKIPDR(addr)
     {
@@ -9238,7 +9235,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KDPDR0--KDPDR7 or 172320--172336)
-     * @return {number}
+     * @returns {number}
      */
     readKDPDR(addr)
     {
@@ -9264,7 +9261,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KIPAR0--KIPAR7 or 172340--172356)
-     * @return {number}
+     * @returns {number}
      */
     readKIPAR(addr)
     {
@@ -9292,7 +9289,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KDPAR0--KDPAR7 or 172360--172376)
-     * @return {number}
+     * @returns {number}
      */
     readKDPAR(addr)
     {
@@ -9319,7 +9316,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UIPDR0--UIPDR7 or 177600--177616)
-     * @return {number}
+     * @returns {number}
      */
     readUIPDR(addr)
     {
@@ -9345,7 +9342,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UDPDR0--UDPDR7 or 177620--177636)
-     * @return {number}
+     * @returns {number}
      */
     readUDPDR(addr)
     {
@@ -9371,7 +9368,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UIPAR0--UIPAR7 or 177640--177656)
-     * @return {number}
+     * @returns {number}
      */
     readUIPAR(addr)
     {
@@ -9399,7 +9396,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UDPAR0--UDPAR7 or 177660--177676)
-     * @return {number}
+     * @returns {number}
      */
     readUDPAR(addr)
     {
@@ -9426,7 +9423,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R0SET0--R5SET0 or 177700--177705)
-     * @return {number}
+     * @returns {number}
      */
     readRSET0(addr)
     {
@@ -9462,7 +9459,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6KERNEL or 177706)
-     * @return {number}
+     * @returns {number}
      */
     readR6KERNEL(addr)
     {
@@ -9496,7 +9493,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R7KERNEL or 177707)
-     * @return {number}
+     * @returns {number}
      */
     readR7KERNEL(addr)
     {
@@ -9520,7 +9517,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R0SET1--R5SET1 or 177710--177715)
-     * @return {number}
+     * @returns {number}
      */
     readRSET1(addr)
     {
@@ -9556,7 +9553,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6SUPER or 177716)
-     * @return {number}
+     * @returns {number}
      */
     readR6SUPER(addr)
     {
@@ -9590,7 +9587,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6USER or 177717)
-     * @return {number}
+     * @returns {number}
      */
     readR6USER(addr)
     {
@@ -9624,7 +9621,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LAERR--UNDEF2 or 177740--177756)
-     * @return {number}
+     * @returns {number}
      */
     readCTRL(addr)
     {
@@ -9661,7 +9658,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LSIZE--HSIZE or 177760--177762)
-     * @return {number}
+     * @returns {number}
      */
     readSIZE(addr)
     {
@@ -9686,7 +9683,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SYSID or 177764)
-     * @return {number}
+     * @returns {number}
      */
     readSYSID(addr)
     {
@@ -9711,7 +9708,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.CPUERR or 177766)
-     * @return {number}
+     * @returns {number}
      */
     readCPUERR(addr)
     {
@@ -9735,7 +9732,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MB or 177770)
-     * @return {number}
+     * @returns {number}
      */
     readMBR(addr)
     {
@@ -9763,7 +9760,7 @@ class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.PIR or 177772)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readPIR(addr, fPreWrite)
     {
@@ -9789,7 +9786,7 @@ class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SL or 177774)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readSLR(addr, fPreWrite)
     {
@@ -9814,7 +9811,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.PSW or 177776)
-     * @return {number}
+     * @returns {number}
      */
     readPSW(addr)
     {
@@ -9854,9 +9851,7 @@ class DevicePDP11 extends Component {
      */
     writeIgnored(data, addr)
     {
-        if (this.messageEnabled()) {
-            this.printMessage("writeIgnored(" + Str.toOct(addr) + "): " + Str.toOct(data), true, true);
-        }
+        this.printf(Messages.ADDRESS, "writeIgnored(%o): %o\n", addr, data);
     }
 
     /**
@@ -9905,23 +9900,23 @@ class DevicePDP11 extends Component {
  */
 DevicePDP11.UNIBUS_IOTABLE = {
     [PDP11.UNIBUS.UNIMAP]:  /* 170200 */    [null, null, DevicePDP11.prototype.readUNIMAP,  DevicePDP11.prototype.writeUNIMAP,  "UNIMAP",   64, PDP11.MODEL_1170],
-    [PDP11.UNIBUS.SIPDR0]:  /* 172200 */    [null, null, DevicePDP11.prototype.readSIPDR,   DevicePDP11.prototype.writeSIPDR,   "SIPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.SDPDR0]:  /* 172220 */    [null, null, DevicePDP11.prototype.readSDPDR,   DevicePDP11.prototype.writeSDPDR,   "SDPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.SIPAR0]:  /* 172240 */    [null, null, DevicePDP11.prototype.readSIPAR,   DevicePDP11.prototype.writeSIPAR,   "SIPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.SDPAR0]:  /* 172260 */    [null, null, DevicePDP11.prototype.readSDPAR,   DevicePDP11.prototype.writeSDPAR,   "SDPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KIPDR0]:  /* 172300 */    [null, null, DevicePDP11.prototype.readKIPDR,   DevicePDP11.prototype.writeKIPDR,   "KIPDR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KDPDR0]:  /* 172320 */    [null, null, DevicePDP11.prototype.readKDPDR,   DevicePDP11.prototype.writeKDPDR,   "KDPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KIPAR0]:  /* 172340 */    [null, null, DevicePDP11.prototype.readKIPAR,   DevicePDP11.prototype.writeKIPAR,   "KIPAR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KDPAR0]:  /* 172360 */    [null, null, DevicePDP11.prototype.readKDPAR,   DevicePDP11.prototype.writeKDPAR,   "KDPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.MMR3]:    /* 172516 */    [null, null, DevicePDP11.prototype.readMMR3,    DevicePDP11.prototype.writeMMR3,    "MMR3",     1,  PDP11.MODEL_1145, MessagesPDP11.MMU],
+    [PDP11.UNIBUS.SIPDR0]:  /* 172200 */    [null, null, DevicePDP11.prototype.readSIPDR,   DevicePDP11.prototype.writeSIPDR,   "SIPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.SDPDR0]:  /* 172220 */    [null, null, DevicePDP11.prototype.readSDPDR,   DevicePDP11.prototype.writeSDPDR,   "SDPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.SIPAR0]:  /* 172240 */    [null, null, DevicePDP11.prototype.readSIPAR,   DevicePDP11.prototype.writeSIPAR,   "SIPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.SDPAR0]:  /* 172260 */    [null, null, DevicePDP11.prototype.readSDPAR,   DevicePDP11.prototype.writeSDPAR,   "SDPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.KIPDR0]:  /* 172300 */    [null, null, DevicePDP11.prototype.readKIPDR,   DevicePDP11.prototype.writeKIPDR,   "KIPDR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.KDPDR0]:  /* 172320 */    [null, null, DevicePDP11.prototype.readKDPDR,   DevicePDP11.prototype.writeKDPDR,   "KDPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.KIPAR0]:  /* 172340 */    [null, null, DevicePDP11.prototype.readKIPAR,   DevicePDP11.prototype.writeKIPAR,   "KIPAR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.KDPAR0]:  /* 172360 */    [null, null, DevicePDP11.prototype.readKDPAR,   DevicePDP11.prototype.writeKDPAR,   "KDPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.MMR3]:    /* 172516 */    [null, null, DevicePDP11.prototype.readMMR3,    DevicePDP11.prototype.writeMMR3,    "MMR3",     1,  PDP11.MODEL_1145, Messages.MMU],
     [PDP11.UNIBUS.LKS]:     /* 177546 */    [null, null, DevicePDP11.prototype.readLKS,     DevicePDP11.prototype.writeLKS,     "LKS"],
-    [PDP11.UNIBUS.MMR0]:    /* 177572 */    [null, null, DevicePDP11.prototype.readMMR0,    DevicePDP11.prototype.writeMMR0,    "MMR0",     1,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.MMR1]:    /* 177574 */    [null, null, DevicePDP11.prototype.readMMR1,    DevicePDP11.prototype.writeIgnored, "MMR1",     1,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.MMR2]:    /* 177576 */    [null, null, DevicePDP11.prototype.readMMR2,    DevicePDP11.prototype.writeIgnored, "MMR2",     1,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UIPDR0]:  /* 177600 */    [null, null, DevicePDP11.prototype.readUIPDR,   DevicePDP11.prototype.writeUIPDR,   "UIPDR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UDPDR0]:  /* 177620 */    [null, null, DevicePDP11.prototype.readUDPDR,   DevicePDP11.prototype.writeUDPDR,   "UDPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UIPAR0]:  /* 177640 */    [null, null, DevicePDP11.prototype.readUIPAR,   DevicePDP11.prototype.writeUIPAR,   "UIPAR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UDPAR0]:  /* 177660 */    [null, null, DevicePDP11.prototype.readUDPAR,   DevicePDP11.prototype.writeUDPAR,   "UDPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
+    [PDP11.UNIBUS.MMR0]:    /* 177572 */    [null, null, DevicePDP11.prototype.readMMR0,    DevicePDP11.prototype.writeMMR0,    "MMR0",     1,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.MMR1]:    /* 177574 */    [null, null, DevicePDP11.prototype.readMMR1,    DevicePDP11.prototype.writeIgnored, "MMR1",     1,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.MMR2]:    /* 177576 */    [null, null, DevicePDP11.prototype.readMMR2,    DevicePDP11.prototype.writeIgnored, "MMR2",     1,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.UIPDR0]:  /* 177600 */    [null, null, DevicePDP11.prototype.readUIPDR,   DevicePDP11.prototype.writeUIPDR,   "UIPDR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.UDPDR0]:  /* 177620 */    [null, null, DevicePDP11.prototype.readUDPDR,   DevicePDP11.prototype.writeUDPDR,   "UDPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.UIPAR0]:  /* 177640 */    [null, null, DevicePDP11.prototype.readUIPAR,   DevicePDP11.prototype.writeUIPAR,   "UIPAR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.UDPAR0]:  /* 177660 */    [null, null, DevicePDP11.prototype.readUDPAR,   DevicePDP11.prototype.writeUDPAR,   "UDPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
     [PDP11.UNIBUS.R0SET0]:  /* 177700 */    [null, null, DevicePDP11.prototype.readRSET0,   DevicePDP11.prototype.writeRSET0,   "R0SET0"],
     [PDP11.UNIBUS.R1SET0]:  /* 177701 */    [null, null, DevicePDP11.prototype.readRSET0,   DevicePDP11.prototype.writeRSET0,   "R1SET0"],
     [PDP11.UNIBUS.R2SET0]:  /* 177702 */    [null, null, DevicePDP11.prototype.readRSET0,   DevicePDP11.prototype.writeRSET0,   "R2SET0"],
@@ -10177,7 +10172,7 @@ class MemoryPDP11 {
      * of the controller component.
      *
      * @this {MemoryPDP11}
-     * @return {Array|Int32Array|null}
+     * @returns {Array|Int32Array|null}
      */
     save()
     {
@@ -10225,7 +10220,7 @@ class MemoryPDP11 {
      *
      * @this {MemoryPDP11}
      * @param {Array|null} adw
-     * @return {boolean} true if successful, false if block size mismatch
+     * @returns {boolean} true if successful, false if block size mismatch
      */
     restore(adw)
     {
@@ -10393,8 +10388,8 @@ class MemoryPDP11 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
-            this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id), true);
+        if (DEBUG && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
         }
     }
 
@@ -10487,12 +10482,12 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to read invalid address " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr, PDP11.CPUERR.NOMEMORY, PDP11.ACCESS.READ);
         return 0xff;
@@ -10508,8 +10503,8 @@ class MemoryPDP11 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to write " + this.dbg.toStrBase(v) + " to invalid addresses " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr, PDP11.CPUERR.NOMEMORY, PDP11.ACCESS.WRITE);
     }
@@ -10520,7 +10515,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordDefault(off, addr)
     {
@@ -10547,7 +10542,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteMemory(off, addr)
     {
@@ -10563,7 +10558,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordMemory(off, addr)
     {
@@ -10641,7 +10636,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteChecked(off, addr)
     {
@@ -10657,7 +10652,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordChecked(off, addr)
     {
@@ -10705,7 +10700,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteBE(off, addr)
     {
@@ -10718,13 +10713,13 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteLE(off, addr)
     {
         var b = this.ab[off];
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
-            this.dbg.printMessage("Memory.readByte(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(b), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.readByte(%s): %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
         return b;
     }
@@ -10735,7 +10730,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordBE(off, addr)
     {
@@ -10751,7 +10746,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordLE(off, addr)
     {
@@ -10768,8 +10763,8 @@ class MemoryPDP11 {
         } else {
             w = this.ab[off] | (this.ab[off+1] << 8);
         }
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
-            this.dbg.printMessage("Memory.readWord(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(w), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.readWord(%s): %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
         return w;
     }
@@ -10800,8 +10795,8 @@ class MemoryPDP11 {
     {
         this.ab[off] = b;
         this.fDirty = true;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
-            this.dbg.printMessage("Memory.writeByte(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(b) + ")", true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.writeByte(%s,%s)\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
     }
 
@@ -10846,8 +10841,8 @@ class MemoryPDP11 {
             this.ab[off+1] = w >> 8;
         }
         this.fDirty = true;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
-            this.dbg.printMessage("Memory.writeWord(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(w) + ")", true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.writeWord(%s,%s)\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
     }
 }
@@ -10976,7 +10971,7 @@ class CPUPDP11 extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, MessagesPDP11.CPU);
+        super("CPU", parmsCPU, Messages.CPU);
 
         var nCycles = +parmsCPU['cycles'] || nCyclesDefault;
 
@@ -11076,7 +11071,7 @@ class CPUPDP11 extends Component {
      * Stub for save support (overridden by the CPUStatePDP11 component).
      *
      * @this {CPUPDP11}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -11090,7 +11085,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -11103,7 +11098,7 @@ class CPUPDP11 extends Component {
      * @this {CPUPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -11136,10 +11131,10 @@ class CPUPDP11 extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init(this.flags.autoStart);
             } else {
-                this.status("No debugger detected");
+                this.printf(Messages.STATUS, "No debugger detected\n");
             }
             if (!this.flags.autoStart) {
-                this.println("CPU will not be auto-started " + (this.panel? "(click Run to start)" : "(type 'go' to start)"));
+                this.printf("CPU will not be auto-started %s\n", (this.panel? "(click Run to start)" : "(type 'go' to start)"));
             }
         }
         /*
@@ -11157,7 +11152,7 @@ class CPUPDP11 extends Component {
      * @this {CPUPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -11168,7 +11163,7 @@ class CPUPDP11 extends Component {
      * autoStart()
      *
      * @this {CPUPDP11}
-     * @return {boolean} true if started, false if not
+     * @returns {boolean} true if started, false if not
      */
     autoStart()
     {
@@ -11190,12 +11185,12 @@ class CPUPDP11 extends Component {
      * isPowered()
      *
      * @this {CPUPDP11}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isPowered()
     {
         if (!this.flags.powered) {
-            this.println(this.toString() + " not powered");
+            this.printf("%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -11205,7 +11200,7 @@ class CPUPDP11 extends Component {
      * isRunning()
      *
      * @this {CPUPDP11}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -11218,7 +11213,7 @@ class CPUPDP11 extends Component {
      * This will be implemented by the CPUStatePDP11 component.
      *
      * @this {CPUPDP11}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -11233,7 +11228,7 @@ class CPUPDP11 extends Component {
      * the CPU is reset or restored.
      *
      * @this {CPUPDP11}
-     * @return {boolean} true if checksum generation enabled, false if not
+     * @returns {boolean} true if checksum generation enabled, false if not
      */
     resetChecksum()
     {
@@ -11300,7 +11295,7 @@ class CPUPDP11 extends Component {
      */
     displayChecksum()
     {
-        this.println(this.getCycles() + " cycles: " + "checksum=" + Str.toHex(this.nChecksum));
+        this.printf("%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
     }
 
     /**
@@ -11311,7 +11306,7 @@ class CPUPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -11462,7 +11457,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {boolean} [fScaled] is true if the caller wants a cycle count relative to a multiplier of 1
-     * @return {number}
+     * @returns {number}
      */
     getCycles(fScaled)
     {
@@ -11497,7 +11492,7 @@ class CPUPDP11 extends Component {
      * This returns the CPU's "base" speed (ie, the original cycles per second defined for the machine)
      *
      * @this {CPUPDP11}
-     * @return {number}
+     * @returns {number}
      */
     getCyclesPerSecond()
     {
@@ -11526,7 +11521,7 @@ class CPUPDP11 extends Component {
      * getSpeed()
      *
      * @this {CPUPDP11}
-     * @return {number} the current speed multiplier
+     * @returns {number} the current speed multiplier
      */
     getSpeed()
     {
@@ -11537,7 +11532,7 @@ class CPUPDP11 extends Component {
      * getSpeedCurrent()
      *
      * @this {CPUPDP11}
-     * @return {string} the current speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the current speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedCurrent()
     {
@@ -11551,7 +11546,7 @@ class CPUPDP11 extends Component {
      * getSpeedTarget()
      *
      * @this {CPUPDP11}
-     * @return {string} the target speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the target speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedTarget()
     {
@@ -11573,7 +11568,7 @@ class CPUPDP11 extends Component {
      * @this {CPUPDP11}
      * @param {number} [nMultiplier] is the new proposed multiplier (reverts to 1 if the target was too high)
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     setSpeed(nMultiplier, fUpdateFocus)
     {
@@ -11594,7 +11589,7 @@ class CPUPDP11 extends Component {
                 var sSpeed = this.getSpeedTarget();
                 var controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.println("target speed: " + sSpeed);
+                this.printf("target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.setFocus();
         }
@@ -11665,7 +11660,7 @@ class CPUPDP11 extends Component {
         if (this.msEndThisRun) {
             var msDelta = this.msStartThisRun - this.msEndThisRun;
             if (msDelta > this.msPerYield) {
-                if (MAXDEBUG) this.println("large time delay: " + msDelta + "ms");
+                if (MAXDEBUG) this.printf("large time delay: %dms\n", msDelta);
                 this.msStartRun += msDelta;
                 /*
                  * Bumping msStartRun forward should NEVER cause it to exceed msStartThisRun; however, just
@@ -11684,7 +11679,7 @@ class CPUPDP11 extends Component {
      * calcRemainingTime()
      *
      * @this {CPUPDP11}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -11723,7 +11718,7 @@ class CPUPDP11 extends Component {
         var msElapsed = this.msEndThisRun - this.msStartRun;
 
         if (MAXDEBUG && msRemainsThisRun < 0 && this.nCyclesMultiplier > 1) {
-            this.println("warning: updates @" + msElapsedThisRun + "ms (prefer " + Math.round(msYield) + "ms)");
+            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);
@@ -11751,8 +11746,8 @@ class CPUPDP11 extends Component {
          */
         this.nCyclesRecalc += this.nCyclesThisRun;
 
-        if (DEBUG && this.messageEnabled(MessagesPDP11.BUFFER) && msRemainsThisRun) {
-            this.log("calcRemainingTime: " + msRemainsThisRun + "ms to sleep after " + this.msEndThisRun + "ms");
+        if (DEBUG && msRemainsThisRun) {
+            this.printf(Messages.LOG + Messages.BUFFER, "calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
         }
 
         this.msEndThisRun += msRemainsThisRun;
@@ -11779,7 +11774,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {function()} callBack
-     * @return {number} timer index
+     * @returns {number} timer index
      */
     addTimer(callBack)
     {
@@ -11807,7 +11802,7 @@ class CPUPDP11 extends Component {
      * @param {number} iTimer
      * @param {number} ms (converted into a cycle countdown internally)
      * @param {boolean} [fReset] (true if the timer should be reset even if already armed)
-     * @return {number} (number of cycles used to arm timer, or -1 if error)
+     * @returns {number} (number of cycles used to arm timer, or -1 if error)
      */
     setTimer(iTimer, ms, fReset)
     {
@@ -11835,7 +11830,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {number} ms
-     * @return {number} number of corresponding cycles
+     * @returns {number} number of corresponding cycles
      */
     getMSCycles(ms)
     {
@@ -11849,7 +11844,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {number} nCycles (number of cycles about to execute)
-     * @return {number} (either nCycles or less if a timer needs to fire)
+     * @returns {number} (either nCycles or less if a timer needs to fire)
      */
     getBurstCycles(nCycles)
     {
@@ -11868,7 +11863,7 @@ class CPUPDP11 extends Component {
      * saveTimers()
      *
      * @this {CPUPDP11}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     saveTimers()
     {
@@ -11924,7 +11919,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {boolean} [fReset]
-     * @return {number} (number of cycles executed in the most recent burst)
+     * @returns {number} (number of cycles executed in the most recent burst)
      */
     endBurst(fReset)
     {
@@ -12023,7 +12018,7 @@ class CPUPDP11 extends Component {
      * For use by any component that wants to start the CPU.
      *
      * @param {boolean} [fUpdateFocus]
-     * @return {boolean}
+     * @returns {boolean}
      */
     startCPU(fUpdateFocus)
     {
@@ -12031,7 +12026,7 @@ class CPUPDP11 extends Component {
             return false;
         }
         if (this.flags.running) {
-            this.println(this.toString() + " busy");
+            this.printf("%s busy\n", this.toString());
             return false;
         }
         /*
@@ -12049,7 +12044,7 @@ class CPUPDP11 extends Component {
             if (fUpdateFocus) this.cmp.setFocus(true);
             this.cmp.start(this.msStartRun, this.getCycles());
         }
-        if (!this.dbg) this.status("Started");
+        if (!this.dbg) this.printf(Messages.STATUS, "Started\n");
         setTimeout(this.onRunTimeout, 0);
         return true;
     }
@@ -12061,7 +12056,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates that the last instruction was not executed
+     * @returns {number} of cycles executed; 0 indicates that the last instruction was not executed
      */
     stepCPU(nMinCycles)
     {
@@ -12078,7 +12073,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {boolean} [fComplete]
-     * @return {boolean} true if the CPU was stopped, false if it was already stopped
+     * @returns {boolean} true if the CPU was stopped, false if it was already stopped
      */
     stopCPU(fComplete)
     {
@@ -12094,7 +12089,7 @@ class CPUPDP11 extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
             }
             fStopped = true;
-            if (!this.dbg) this.status("Stopped");
+            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
         }
         this.flags.complete = fComplete;
         return fStopped;
@@ -12339,7 +12334,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -12361,7 +12356,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      */
     reset()
     {
-        this.status("Model %d", this.model);
+        this.printf(Messages.STATUS, "Model %d\n", this.model);
         if (this.flags.running) this.stopCPU();
         this.initCPU();
         this.resetCycles();
@@ -12499,7 +12494,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * Returns bit 0 set if 22-bit, bit 1 set if 18-bit, or bit 2 set if 16-bit; used by the Panel component.
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMUState()
     {
@@ -12565,7 +12560,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * nonr leng read trap unus unus ena mnt cmp  -mode- i/d  --page--   enable
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR0()
     {
@@ -12619,7 +12614,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getMMR1()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR1()
     {
@@ -12646,7 +12641,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getMMR2()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR2()
     {
@@ -12669,7 +12664,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getMMR3()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR3()
     {
@@ -12755,7 +12750,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * TODO: Implement
      *
      * @this {CPUStatePDP11}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -12766,7 +12761,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * save()
      *
      * @this {CPUStatePDP11}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -12805,7 +12800,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -12867,7 +12862,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getCF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.CF
+     * @returns {number} 0 or PDP11.PSW.CF
      */
     getCF()
     {
@@ -12898,7 +12893,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getVF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.VF
+     * @returns {number} 0 or PDP11.PSW.VF
      */
     getVF()
     {
@@ -12929,7 +12924,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getZF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.ZF
+     * @returns {number} 0 or PDP11.PSW.ZF
      */
     getZF()
     {
@@ -12960,7 +12955,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getNF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.NF
+     * @returns {number} 0 or PDP11.PSW.NF
      */
     getNF()
     {
@@ -12981,7 +12976,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getOpcode()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getOpcode()
     {
@@ -13003,7 +12998,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} off
-     * @return {number} (original PC)
+     * @returns {number} (original PC)
      */
     advancePC(off)
     {
@@ -13038,7 +13033,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getPC()
     {
@@ -13049,7 +13044,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getLastAddr()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getLastAddr()
     {
@@ -13060,7 +13055,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getLastPC()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getLastPC()
     {
@@ -13088,7 +13083,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getSP()
     {
@@ -13117,7 +13112,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} vector (-1 for floating vector)
      * @param {number} priority
      * @param {number} [message]
-     * @return {IRQ}
+     * @returns {IRQ}
      */
     addIRQ(vector, priority, message)
     {
@@ -13200,9 +13195,7 @@ class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | MessagesPDP11.INT)) {
-                this.printMessage("setIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -13216,9 +13209,7 @@ class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | MessagesPDP11.INT)) {
-                this.printMessage("clearIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -13227,7 +13218,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} vector
-     * @return {IRQ|null}
+     * @returns {IRQ|null}
      */
     findIRQ(vector)
     {
@@ -13243,7 +13234,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} priority
-     * @return {IRQ|null}
+     * @returns {IRQ|null}
      */
     checkIRQs(priority)
     {
@@ -13264,7 +13255,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * saveIRQs()
      *
      * @this {CPUStatePDP11}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     saveIRQs()
     {
@@ -13299,7 +13290,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * checkInterrupts()
      *
      * @this {CPUStatePDP11}
-     * @return {boolean} true if an interrupt was dispatched, false if not
+     * @returns {boolean} true if an interrupt was dispatched, false if not
      */
     checkInterrupts()
     {
@@ -13344,7 +13335,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} vector
      * @param {number} priority
-     * @return {boolean} (true if dispatched, false if not)
+     * @returns {boolean} (true if dispatched, false if not)
      */
     dispatchInterrupt(vector, priority)
     {
@@ -13400,7 +13391,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * TODO: Based on the above notes, we should probably be halting the CPU when a bus error occurs during a trap.
      *
      * @this {CPUStatePDP11}
-     * @return {boolean} (true if dispatched, false if not)
+     * @returns {boolean} (true if dispatched, false if not)
      */
     checkTraps()
     {
@@ -13423,7 +13414,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * isWaiting()
      *
      * @this {CPUStatePDP11}
-     * @return {boolean} (true if OPFLAG.WAIT is set, false otherwise)
+     * @returns {boolean} (true if OPFLAG.WAIT is set, false otherwise)
      */
     isWaiting()
     {
@@ -13434,7 +13425,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getPSW()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getPSW()
     {
@@ -13497,7 +13488,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getSLR()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getSLR()
     {
@@ -13519,7 +13510,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getPIR()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getPIR()
     {
@@ -13696,9 +13687,9 @@ class CPUStatePDP11 extends CPUPDP11 {
     trap(vector, flag, reason)
     {
         if (DEBUG && this.dbg) {
-            if (this.messageEnabled(MessagesPDP11.TRAP)) {
+            if (this.messageEnabled(Messages.TRAP)) {
                 var sReason = reason < 0? PDP11.REASONS[-reason] : this.dbg.toStrBase(reason);
-                this.printMessage("trap to vector " + this.dbg.toStrBase(vector, 8) + " (" + sReason + ")", MessagesPDP11.TRAP, true);
+                this.printf(Messages.TRAP + Messages.ADDRESS, "trap to vector %s (%s)\n", this.dbg.toStrBase(vector, 8), sReason);
             }
         }
 
@@ -13841,7 +13832,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getTrapStatus()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getTrapStatus()
     {
@@ -13881,7 +13872,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     mapUnibus(addr)
     {
@@ -13916,7 +13907,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} addr
      * @param {boolean} [fPhysical]
-     * @return {Array}
+     * @returns {Array}
      */
     getAddrInfo(addr, fPhysical)
     {
@@ -14007,7 +13998,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} addrVirtual
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     mapVirtualToPhysical(addrVirtual, access)
     {
@@ -14159,7 +14150,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * popWord()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     popWord()
     {
@@ -14227,7 +14218,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} mode
      * @param {number} reg
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     getAddrByMode(mode, reg, access)
     {
@@ -14414,7 +14405,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getByteChecked(addr)
     {
@@ -14432,7 +14423,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getWordChecked(addr)
     {
@@ -14485,7 +14476,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getByteSafe(addr)
     {
@@ -14502,7 +14493,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getWordSafe(addr)
     {
@@ -14585,7 +14576,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} mode
      * @param {number} reg
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     getPhysicalAddrByMode(mode, reg, access)
     {
@@ -14601,7 +14592,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} mode
      * @param {number} reg
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     getVirtualAddrByMode(mode, reg, access)
     {
@@ -14615,7 +14606,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPhysical(addr)
     {
@@ -14629,7 +14620,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPhysicalChecked(addr)
     {
@@ -14646,7 +14637,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addrVirtual (input address is 17 bit (I&D))
-     * @return {number}
+     * @returns {number}
      */
     readWordFromVirtual(addrVirtual)
     {
@@ -14660,7 +14651,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addrVirtual (input address is 17 bit (I&D))
-     * @return {number}
+     * @returns {number}
      */
     readWordFromVirtualChecked(addrVirtual)
     {
@@ -14738,7 +14729,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} opCode
      * @param {number} access (really just PDP11.ACCESS.DSPACE or PDP11.ACCESS.ISPACE)
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPrevSpace(opCode, access)
     {
@@ -14808,7 +14799,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readSrcByte(opCode)
     {
@@ -14850,7 +14841,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readSrcWord(opCode)
     {
@@ -14871,7 +14862,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readDstAddr(opCode)
     {
@@ -14885,7 +14876,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readDstByte(opCode)
     {
@@ -14905,7 +14896,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readDstWord(opCode)
     {
@@ -15048,7 +15039,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
+     * @returns {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
      * was hit), -1 indicates a post-execution condition (eg, a read or write breakpoint was hit), and a positive
      * number indicates successful completion of that many cycles (which should always be >= nMinCycles).
      */
@@ -15227,7 +15218,7 @@ Web.onInit(CPUStatePDP11.init);
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnADD = function(src, dst)
 {
@@ -15242,7 +15233,7 @@ PDP11.fnADD = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnADDB = function(src, dst)
 {
@@ -15257,7 +15248,7 @@ PDP11.fnADDB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst << 1)
+ * @returns {number} (dst << 1)
  */
 PDP11.fnASL = function(src, dst)
 {
@@ -15272,7 +15263,7 @@ PDP11.fnASL = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst << 1)
+ * @returns {number} (dst << 1)
  */
 PDP11.fnASLB = function(src, dst)
 {
@@ -15287,7 +15278,7 @@ PDP11.fnASLB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnASR = function(src, dst)
 {
@@ -15302,7 +15293,7 @@ PDP11.fnASR = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnASRB = function(src, dst)
 {
@@ -15317,7 +15308,7 @@ PDP11.fnASRB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (~src & dst)
+ * @returns {number} (~src & dst)
  */
 PDP11.fnBIC = function(src, dst)
 {
@@ -15332,7 +15323,7 @@ PDP11.fnBIC = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (~src & dst)
+ * @returns {number} (~src & dst)
  */
 PDP11.fnBICB = function(src, dst)
 {
@@ -15347,7 +15338,7 @@ PDP11.fnBICB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst | src)
+ * @returns {number} (dst | src)
  */
 PDP11.fnBIS = function(src, dst)
 {
@@ -15362,7 +15353,7 @@ PDP11.fnBIS = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst | src)
+ * @returns {number} (dst | src)
  */
 PDP11.fnBISB = function(src, dst)
 {
@@ -15377,7 +15368,7 @@ PDP11.fnBISB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (~dst)
+ * @returns {number} (~dst)
  */
 PDP11.fnCOM = function(src, dst)
 {
@@ -15392,7 +15383,7 @@ PDP11.fnCOM = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (~dst)
+ * @returns {number} (~dst)
  */
 PDP11.fnCOMB = function(src, dst)
 {
@@ -15407,7 +15398,7 @@ PDP11.fnCOMB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnDEC = function(src, dst)
 {
@@ -15422,7 +15413,7 @@ PDP11.fnDEC = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnDECB = function(src, dst)
 {
@@ -15437,7 +15428,7 @@ PDP11.fnDECB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnINC = function(src, dst)
 {
@@ -15452,7 +15443,7 @@ PDP11.fnINC = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnINCB = function(src, dst)
 {
@@ -15467,7 +15458,7 @@ PDP11.fnINCB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (-dst)
+ * @returns {number} (-dst)
  */
 PDP11.fnNEG = function(src, dst)
 {
@@ -15485,7 +15476,7 @@ PDP11.fnNEG = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (-dst)
+ * @returns {number} (-dst)
  */
 PDP11.fnNEGB = function(src, dst)
 {
@@ -15503,7 +15494,7 @@ PDP11.fnNEGB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnROL = function(src, dst)
 {
@@ -15518,7 +15509,7 @@ PDP11.fnROL = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnROLB = function(src, dst)
 {
@@ -15533,7 +15524,7 @@ PDP11.fnROLB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnROR = function(src, dst)
 {
@@ -15548,7 +15539,7 @@ PDP11.fnROR = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnRORB = function(src, dst)
 {
@@ -15563,7 +15554,7 @@ PDP11.fnRORB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnSUB = function(src, dst)
 {
@@ -15578,7 +15569,7 @@ PDP11.fnSUB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnSUBB = function(src, dst)
 {
@@ -15593,7 +15584,7 @@ PDP11.fnSUBB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst with bytes swapped)
+ * @returns {number} (dst with bytes swapped)
  */
 PDP11.fnSWAB = function(src, dst)
 {
@@ -15611,7 +15602,7 @@ PDP11.fnSWAB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst ^ src)
+ * @returns {number} (dst ^ src)
  */
 PDP11.fnXOR = function(src, dst)
 {
@@ -17726,7 +17717,7 @@ class ROMPDP11 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROM", parmsROM, MessagesPDP11.ROM);
+        super("ROM", parmsROM, Messages.ROM);
 
         this.abInit = null;
         this.aSymbols = null;
@@ -17756,7 +17747,7 @@ class ROMPDP11 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -17796,7 +17787,7 @@ class ROMPDP11 extends Component {
      * @this {ROMPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -17824,7 +17815,7 @@ class ROMPDP11 extends Component {
      * @this {ROMPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -17842,7 +17833,7 @@ class ROMPDP11 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load ROM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -17926,7 +17917,7 @@ class ROMPDP11 extends Component {
      *
      * @this {ROMPDP11}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addROM(addr)
     {
@@ -17946,15 +17937,16 @@ class ROMPDP11 extends Component {
                 [addr]: [ROMPDP11.prototype.readROMByte, ROMPDP11.prototype.writeROMByte, null, null, null, this.sizeROM >> 1]
             };
             if (this.bus.addIOTable(this, IOTable)) {
-                this.status("Added %d-byte ROM at %o", this.sizeROM, addr);
+                this.printf(Messages.STATUS, "Added %d-byte ROM at %o\n", this.sizeROM, addr);
                 this.fRetainROM = true;
                 return true;
             }
         }
         else if (this.bus.addMemory(addr, this.sizeROM, MemoryPDP11.TYPE.ROM)) {
-            if (DEBUG) this.log("addROM(): copying ROM to " + Str.toHexLong(addr) + " (" + Str.toHexLong(this.abInit.length) + " bytes)");
-            var i;
-            for (i = 0; i < this.abInit.length; i++) {
+            if (DEBUG) {
+                this.printf(Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
+            }
+            for (let i = 0; i < this.abInit.length; i++) {
                 this.bus.setByteDirect(addr + i, this.abInit[i]);
             }
             return true;
@@ -17990,7 +17982,7 @@ class ROMPDP11 extends Component {
      *
      * @this {ROMPDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readROMByte(addr)
     {
@@ -18102,7 +18094,7 @@ class RAMPDP11 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -18142,7 +18134,7 @@ class RAMPDP11 extends Component {
      * @this {RAMPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -18173,7 +18165,7 @@ class RAMPDP11 extends Component {
      * @this {RAMPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -18197,7 +18189,7 @@ class RAMPDP11 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load RAM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -18246,9 +18238,9 @@ class RAMPDP11 extends Component {
                 if (!this.abInit) return;
 
                 if (this.loadImage(this.abInit, this.addrLoad, this.addrExec, this.addrRAM)) {
-                    this.status('Loaded image "%s"', this.sFileName);
+                    this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
-                    this.notice('Error loading image "' + this.sFileName + '"');
+                    this.printf(Messages.NOTICE, "Error loading image \"%s\"\n", this.sFileName);
                 }
 
                 /*
@@ -18295,7 +18287,7 @@ class RAMPDP11 extends Component {
      * @param {number|null} [addrExec] (this CAN override any starting address INSIDE the image)
      * @param {number|null} [addrInit]
      * @param {boolean} [fStart]
-     * @return {boolean} (true if loaded, false if not)
+     * @returns {boolean} (true if loaded, false if not)
      */
     loadImage(aBytes, addrLoad, addrExec, addrInit, fStart)
     {
@@ -18340,11 +18332,11 @@ class RAMPDP11 extends Component {
                 }
                 var offBlock = off;
                 if (w != 0x0001) {
-                    this.printMessage("invalid signature (" + Str.toHexWord(w) + ") at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printf(Messages.PAPER, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
                     break;
                 }
                 if (off + 6 >= aBytes.length) {
-                    this.printMessage("invalid block at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printf(Messages.PAPER, "invalid block at offset %#06x\n", offBlock);
                     break;
                 }
                 off += 2;
@@ -18358,12 +18350,12 @@ class RAMPDP11 extends Component {
                     len--;
                 }
                 if (len != 0 || off >= aBytes.length) {
-                    this.printMessage("insufficient data for block at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printf(Messages.PAPER, "insufficient data for block at offset %#06x\n", offBlock);
                     break;
                 }
                 checksum += aBytes[off++] & 0xff;
                 if (checksum & 0xff) {
-                    this.printMessage("invalid checksum (" + Str.toHexByte(checksum) + ") for block at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printf(Messages.PAPER, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
                     break;
                 }
                 if (!cbData) {
@@ -18372,9 +18364,9 @@ class RAMPDP11 extends Component {
                     } else {
                         if (addrExec == null) addrExec = addr;
                     }
-                    if (addrExec != null) this.printMessage("starting address: " + Str.toHexWord(addrExec), MessagesPDP11.PAPER);
+                    if (addrExec != null) this.printf(Messages.PAPER, "starting address: %#06x\n", addrExec);
                 } else {
-                    this.printMessage("loading " + Str.toHexWord(cbData) + " bytes at " + Str.toHexWord(addr) + "-" + Str.toHexWord(addr + cbData), MessagesPDP11.PAPER);
+                    this.printf(Messages.PAPER, "loading %#06x bytes at %#06x-%%#06x\n", cbData, addr, addr + cbData);
                     while (cbData--) {
                         this.bus.setByteDirect(addr++, aBytes[offData++] & 0xff);
                     }
@@ -18448,7 +18440,7 @@ class KeyboardPDP11 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, MessagesPDP11.KEYBOARD);
+        super("Keyboard", parmsKbd, Messages.KEYBOARD);
 
         this.setReady();
     }
@@ -18461,7 +18453,7 @@ class KeyboardPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -18573,7 +18565,7 @@ class SerialPortPDP11 extends Component {
      */
     constructor(parmsSerial)
     {
-        super("SerialPort", parmsSerial, MessagesPDP11.SERIAL);
+        super("SerialPort", parmsSerial, Messages.SERIAL);
 
         this.iAdapter = +parmsSerial['adapter'];
         this.nBaudReceive = +parmsSerial['baudReceive'] || PDP11.DL11.RCSR.BAUD;
@@ -18669,7 +18661,7 @@ class SerialPortPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "buffer")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -18794,7 +18786,7 @@ class SerialPortPDP11 extends Component {
 
         var serial = this;
 
-        this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, MessagesPDP11.DL11);
+        this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, Messages.DL11);
 
         this.timerReceiveInterrupt = this.cpu.addTimer(function readyReceiver() {
             var b = serial.receiveByte();
@@ -18811,7 +18803,7 @@ class SerialPortPDP11 extends Component {
             }
         });
 
-        this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, MessagesPDP11.DL11);
+        this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, Messages.DL11);
 
         this.timerTransmitInterrupt = this.cpu.addTimer(function readyTransmitter() {
             serial.regXCSR |= PDP11.DL11.XCSR.READY;
@@ -18868,16 +18860,16 @@ class SerialPortPDP11 extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.status("Connected %s.%s to %s", this.idMachine, sSourceID, sTargetID);
+                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
                     }
                 }
                 /*
-                 * Changed from notice() to status() because sometimes a connection fails simply because one of us is a laggard.
+                 * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.status("Unable to establish connection: %s", sConnection);
+                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }
@@ -18888,7 +18880,7 @@ class SerialPortPDP11 extends Component {
      * @this {SerialPortPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -18917,7 +18909,7 @@ class SerialPortPDP11 extends Component {
      * @this {SerialPortPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -18940,7 +18932,7 @@ class SerialPortPDP11 extends Component {
      * This implements save support for the SerialPort component.
      *
      * @this {SerialPortPDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -18956,7 +18948,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -18968,7 +18960,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {Array} [a]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(a)
     {
@@ -18996,7 +18988,7 @@ class SerialPortPDP11 extends Component {
      * Basically, the inverse of initState().
      *
      * @this {SerialPortPDP11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveRegisters()
     {
@@ -19015,7 +19007,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} nBaud
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout(nBaud)
     {
@@ -19036,7 +19028,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number|string|Array} data
-     * @return {boolean} true if received, false if not
+     * @returns {boolean} true if received, false if not
      */
     receiveData(data)
     {
@@ -19073,7 +19065,7 @@ class SerialPortPDP11 extends Component {
      * receiveByte()
      *
      * @this {SerialPortPDP11}
-     * @return {number} (0x00-0xff if byte available, -1 if not)
+     * @returns {number} (0x00-0xff if byte available, -1 if not)
      */
     receiveByte()
     {
@@ -19086,7 +19078,7 @@ class SerialPortPDP11 extends Component {
              * the data assigned to RBUF with 0xff.
              */
             b = this.abReceive.shift() & 0xff;
-            this.printMessage("receiveByte(" + Str.toHexByte(b) + ")");
+            this.printf("receiveByte(%#04x)\n", b);
             if (this.fUpperCase) {
                 /*
                  * Automatically transform lower-case ASCII codes to upper-case; fUpperCase should
@@ -19130,7 +19122,7 @@ class SerialPortPDP11 extends Component {
      * @this {SerialPortPDP11}
      * @param {Object|null} component
      * @param {function(number)} fn
-     * @return {boolean}
+     * @returns {boolean}
      */
     setConnection(component, fn)
     {
@@ -19147,13 +19139,13 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} b
-     * @return {boolean} true if transmitted, false if not
+     * @returns {boolean} true if transmitted, false if not
      */
     transmitByte(b)
     {
         var fTransmitted = false;
 
-        if (MAXDEBUG) this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        if (MAXDEBUG) this.printf("transmitByte(%#04x)\n", b);
 
         if (this.sendData) {
             if (this.sendData.call(this.connection, b)) {
@@ -19202,7 +19194,7 @@ class SerialPortPDP11 extends Component {
         }
         else if (this.consoleBuffer != null) {
             if (b == 0x0A || this.consoleBuffer.length >= 1024) {
-                this.println(this.consoleBuffer);
+                this.print(this.consoleBuffer);
                 this.consoleBuffer = "";
             }
             if (b != 0x0A) {
@@ -19226,7 +19218,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.RCSR or 177560)
-     * @return {number}
+     * @returns {number}
      */
     readRCSR(addr)
     {
@@ -19269,7 +19261,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.RBUF or 177562)
-     * @return {number}
+     * @returns {number}
      */
     readRBUF(addr)
     {
@@ -19293,7 +19285,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.XCSR or 177564)
-     * @return {number}
+     * @returns {number}
      */
     readXCSR(addr)
     {
@@ -19333,7 +19325,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.XBUF or 177566)
-     * @return {number}
+     * @returns {number}
      */
     readXBUF(addr)
     {
@@ -19418,7 +19410,7 @@ class PC11 extends Component {
      */
     constructor(parms)
     {
-        super("PC11", parms, MessagesPDP11.PC11);
+        super("PC11", parms, Messages.PC11);
 
         this.sDevice = "PTR";                   // TODO: Make the device name configurable
 
@@ -19465,7 +19457,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {*} config
-     * @return {*}
+     * @returns {*}
      */
     parseConfig(config)
     {
@@ -19492,7 +19484,7 @@ class PC11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listTapes")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -19556,7 +19548,7 @@ class PC11 extends Component {
             var controlInput = /** @type {Object} */ (control);
 
             if (!this.fLocalTapes) {
-                if (DEBUG) this.log("Local tape support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local tape support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -19638,7 +19630,7 @@ class PC11 extends Component {
             }
         }
 
-        this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, MessagesPDP11.PC11);
+        this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, Messages.PC11);
 
         this.timerReader = this.cpu.addTimer(function readyReader() {
             pc11.advanceReader();
@@ -19660,7 +19652,7 @@ class PC11 extends Component {
      * @this {PC11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -19680,7 +19672,7 @@ class PC11 extends Component {
      * @this {PC11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -19706,7 +19698,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted tapes
-     * @return {boolean} true if one or more tape images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more tape images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -19750,7 +19742,7 @@ class PC11 extends Component {
         }
 
         if (sTapePath == PC11.SOURCE.LOCAL) {
-            this.notice('Use "Choose File" and "Mount" to select and load a local tape.');
+            this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local tape.\n");
             return;
         }
 
@@ -19767,7 +19759,7 @@ class PC11 extends Component {
             sTapePath = window.prompt("Enter the URL of a remote tape image.", "") || "";
             if (!sTapePath) return;
             sTapeName = Str.getBaseName(sTapePath);
-            this.status('Attempting to load %s as "%s"', sTapePath, sTapeName);
+            this.printf(Messages.STATUS, 'Attempting to load %s as "%s"\n', sTapePath, sTapeName);
             this.sTapeSource = PC11.SOURCE.REMOTE;
         }
         else {
@@ -19788,7 +19780,7 @@ class PC11 extends Component {
      * @param {number} nTapeTarget
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
-     * @return {number} 1 if tape loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if tape loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadTape(sTapeName, sTapePath, nTapeTarget, fAutoMount, file)
     {
@@ -19800,13 +19792,13 @@ class PC11 extends Component {
             this.unloadTape(true);
 
             if (this.flags.busy) {
-                this.notice("PC11 busy");
+                this.printf(Messages.NOTICE, "PC11 busy\n");
             }
             else {
-                // this.status("tape queued: %s", sTapeName);
+                // this.printf(Messages.STATUS, "tape queued: %s\n", sTapeName);
                 if (fAutoMount) {
                     this.cAutoMount++;
-                    if (this.messageEnabled()) this.printMessage("auto-loading tape: " + sTapeName);
+                    this.printf("auto-loading tape \"%s\"\n", sTapeName);
                 }
                 if (this.load(sTapeName, sTapePath, nTapeTarget, file)) {
                     nResult++;
@@ -19820,7 +19812,7 @@ class PC11 extends Component {
              * Now that we're calling parseTape() again (so that the current tape can either be restarted on
              * the reader or reloaded into RAM), we can also rely on it to display an appropriate status message, too.
              *
-             *      this.status(this.nTapeTarget == PC11.TARGET.READER? "tape loaded" : "tape read");
+             *      this.printf(Messages.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape loaded" : "tape read");
              */
             this.parseTape(this.sTapeName, this.sTapePath, this.nTapeTarget, this.aBytes, this.addrLoad, this.addrExec);
         }
@@ -19835,7 +19827,7 @@ class PC11 extends Component {
      * @param {string} sTapePath
      * @param {number} nTapeTarget
      * @param {File} [file] is set if there's an associated File object
-     * @return {boolean} true if load completed (successfully or not), false if queued
+     * @returns {boolean} true if load completed (successfully or not), false if queued
      */
     load(sTapeName, sTapePath, nTapeTarget, file)
     {
@@ -19844,7 +19836,7 @@ class PC11 extends Component {
 
         if (DEBUG) {
             var sMessage = 'load("' + sTapeName + '","' + sTapePath + '")';
-            this.printMessage(sMessage);
+            this.printf("%s\n", sMessage);
         }
 
         if (file) {
@@ -19903,11 +19895,11 @@ class PC11 extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.notice("Unable to load tape \"" + sTapeName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.printf(Messages.NOTICE, "Unable to load tape \"%s\" (error %d: %s)\n", sTapeName, nErrorCode, sURL);
         }
         else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('finishLoad("' + sTapePath + '")');
+            if (DEBUG) {
+                this.printf("finishLoad(\"%s\")\n", sTapePath);
             }
             Component.addMachineResource(this.idMachine, sURL, sTapeData);
             var resource = Web.parseMemoryResource(sURL, sTapeData);
@@ -19977,7 +19969,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {string} sPath
-     * @return {string|null}
+     * @returns {string|null}
      */
     findTape(sPath)
     {
@@ -20079,10 +20071,10 @@ class PC11 extends Component {
                  *      this.sTapeSource = PC11.SOURCE.NONE;
                  *      this.nTapeTarget = PC11.TARGET.NONE;
                  */
-                this.notice('No valid memory address for tape "' + sTapeName + '"');
+                this.printf(Messages.NOTICE, "No valid memory address for tape \"%s\"\n", sTapeName);
                 return;
             }
-            this.status('Read tape "%s"', sTapeName);
+            this.printf(Messages.STATUS, 'Read tape "%s"\n', sTapeName);
             return;
         }
 
@@ -20090,7 +20082,7 @@ class PC11 extends Component {
         this.aTapeData = aBytes;
         this.regPRS &= ~PDP11.PC11.PRS.ERROR;
 
-        this.status('Loaded tape "%s" (%d bytes)', sTapeName, aBytes.length);
+        this.printf(Messages.STATUS, 'Loaded tape "%s" (%d bytes)\n', sTapeName, aBytes.length);
         this.displayProgress(0);
     }
 
@@ -20109,7 +20101,7 @@ class PC11 extends Component {
              * Avoid any unnecessary hysteresis regarding the display if this unload is merely a prelude to another load.
              */
             if (!fLoading) {
-                if (this.nTapeTarget) this.status(this.nTapeTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
+                if (this.nTapeTarget) this.printf(Messages.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
                 this.sTapeSource = PC11.SOURCE.NONE;
                 this.nTapeTarget = PC11.TARGET.NONE;
                 this.displayTape();
@@ -20123,7 +20115,7 @@ class PC11 extends Component {
      * This implements save support for the PC11 component.
      *
      * @this {PC11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -20138,7 +20130,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -20152,7 +20144,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} nBaud
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout(nBaud)
     {
@@ -20185,7 +20177,7 @@ class PC11 extends Component {
                      * the data assigned to PRB with 0xff.
                      */
                     this.regPRB = this.aTapeData[this.iTapeData] & 0xff;
-                    if (this.messageEnabled()) this.printMessage(this.type + ".advanceReader(" + this.iTapeData + "): " + Str.toHexByte(this.regPRB), true);
+                    this.printf("%s.advanceReader(%d): %#04x\n", this.type, this.iTapeData, this.regPRB);
                     this.iTapeData++;
                     this.displayProgress(this.iTapeData / this.aTapeData.length * 100);
                 }
@@ -20211,7 +20203,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PRS or 177550)
-     * @return {number}
+     * @returns {number}
      */
     readPRS(addr)
     {
@@ -20260,7 +20252,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PRB or 177552)
-     * @return {number}
+     * @returns {number}
      */
     readPRB(addr)
     {
@@ -20289,7 +20281,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PPS or 177554)
-     * @return {number}
+     * @returns {number}
      */
     readPPS(addr)
     {
@@ -20322,7 +20314,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PPB or 177556)
-     * @return {number}
+     * @returns {number}
      */
     readPPB(addr)
     {
@@ -20452,13 +20444,12 @@ class DiskPDP11 extends Component {
      */
     constructor(controller, drive, mode)
     {
-        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, MessagesPDP11.DISK);
+        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, Messages.DISK);
 
         /*
-         * Route all non-Debugger messages (eg, notice() and println() calls) through
-         * this.controller (eg, controller.notice() and controller.println()), because
-         * the Computer component is unaware of any Disk objects and therefore will not
-         * set up the usual overrides when a Control Panel is installed.
+         * Route all non-Debugger messages (eg, print() calls) through this.controller
+         * (eg, controller.print()), because the Computer component is unaware of any Disk objects
+         * and therefore will not set up the usual overrides when a Control Panel is installed.
          */
         this.controller = controller;
         this.cmp = controller.cmp;
@@ -20530,8 +20521,8 @@ class DiskPDP11 extends Component {
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("blank disk for \"" + this.sDiskName + "\": " + this.nCylinders + " cylinders, " + this.nHeads + " head(s)");
+            if (DEBUG) {
+                this.printf("blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
             }
             var aCylinders = new Array(this.nCylinders);
             for (var iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
@@ -20577,23 +20568,19 @@ class DiskPDP11 extends Component {
      * @param {File} [file] is set if there's an associated File object
      * @param {function(...)} [fnNotify]
      * @param {Component} [controller]
-     * @return {boolean} true if load completed (successfully or not), false if queued
+     * @returns {boolean} true if load completed (successfully or not), false if queued
      */
     load(sDiskName, sDiskPath, file, fnNotify, controller)
     {
         var sDiskURL = sDiskPath;
 
-        /*
-         * We could use this.log() as well, but it wouldn't display which component initiated the load.
-         */
         if (DEBUG) {
-            var sMessage = 'load("' + sDiskName + '","' + sDiskPath + '")';
-            this.controller.log(sMessage);
-            this.printMessage(sMessage);
+            this.controller.printf(Messages.LOG, "load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
+            this.printf("load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
         }
 
         if (this.fnNotify) {
-            if (DEBUG) this.controller.log('too many load requests for "' + sDiskName + '" (' + sDiskPath + ')');
+            if (DEBUG) this.controller.printf(Messages.LOG, "too many load requests for \"%s\" (%s)\n", sDiskName, sDiskPath);
             return true;
         }
 
@@ -20710,7 +20697,7 @@ class DiskPDP11 extends Component {
             this.dwChecksum = dwChecksum;
             disk = this;
         } else {
-            this.notice("Unrecognized disk format (" + cbDiskData + " bytes)");
+            this.printf(Messages.NOTICE, "Unrecognized disk format (%d bytes)\n", cbDiskData);
         }
 
         if (this.fnNotify) {
@@ -20745,10 +20732,10 @@ class DiskPDP11 extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.controller.notice("Unable to load disk \"" + this.sDiskName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.controller.printf(Messages.NOTICE, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('doneLoad("' + this.sDiskPath + '")');
+            if (DEBUG) {
+                this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
             }
 
             Component.addMachineResource(this.controller.idMachine, sURL, sDiskData);
@@ -20844,13 +20831,13 @@ class DiskPDP11 extends Component {
                  * conversion to a forward-compatible 'data' array.
                  */
                 else {
-                    if (DEBUG && this.messageEnabled(MessagesPDP11.DISK | MessagesPDP11.BUFFER)) {
+                    if (DEBUG && this.messageEnabled(Messages.DISK | Messages.BUFFER)) {
                         var sCylinders = aDiskData.length + " track" + (aDiskData.length > 1 ? "s" : "");
                         var nHeads = aDiskData[0].length;
                         var sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
                         var nSectorsPerTrack = aDiskData[0][0].length;
                         var sSectorsPerTrack = nSectorsPerTrack + " sector" + (nSectorsPerTrack > 1 ? "s" : "") + "/track";
-                        this.printMessage(sCylinders + ", " + sHeads + ", " + sSectorsPerTrack);
+                        this.printf("%s, %s, %s\n", sCylinders, sHeads, sSectorsPerTrack);
                     }
                     /*
                      * Before the image is usable, we must "normalize" all the sectors.  In the past, this meant
@@ -20947,7 +20934,7 @@ class DiskPDP11 extends Component {
      * @param {Object} sector
      * @param {number} off (byte offset)
      * @param {number} len (use -1 to read a null-terminated string)
-     * @return {string}
+     * @returns {string}
      */
     getSectorString(sector, off, len)
     {
@@ -20984,7 +20971,7 @@ class DiskPDP11 extends Component {
      * @param {number} [iSector]
      * @param {number} [cbSector]
      * @param {number|null} [dwPattern]
-     * @return {Object}
+     * @returns {Object}
      */
     initSector(sector, iCylinder, iHead, iSector, cbSector, dwPattern)
     {
@@ -21005,7 +20992,7 @@ class DiskPDP11 extends Component {
      * properties of the Disk object directly.
      *
      * @this {DiskPDP11}
-     * @return {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
+     * @returns {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
      */
     info()
     {
@@ -21033,7 +21020,7 @@ class DiskPDP11 extends Component {
      * @param {number} iSector
      * @param {boolean} [fWrite]
      * @param {function(Object,boolean)} [done]
-     * @return {Object|null} is the requested sector, or null if not found (or not available yet)
+     * @returns {Object|null} is the requested sector, or null if not found (or not available yet)
      */
     seek(iCylinder, iHead, iSector, fWrite, done)
     {
@@ -21104,7 +21091,7 @@ class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {Object} sector
-     * @return {Array.<number>} is an array of bytes
+     * @returns {Array.<number>} is an array of bytes
      */
     toBytes(sector)
     {
@@ -21131,7 +21118,7 @@ class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} ibSector a byte index within the given sector
      * @param {boolean} [fCompare] is true if this write-compare read
-     * @return {number} the specified (unsigned) byte, or -1 if no more data in the sector
+     * @returns {number} the specified (unsigned) byte, or -1 if no more data in the sector
      */
     read(sector, ibSector, fCompare)
     {
@@ -21143,8 +21130,8 @@ class DiskPDP11 extends Component {
                 var dw = (idw < adw.length ? adw[idw] : sector['pattern']);
                 b = ((dw >> ((ibSector & 0x3) << 3)) & 0xff);
             }
-            if (DEBUG && !fCompare && this.messageEnabled()) {
-                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + ',index=' + ibSector + ',value=' + Str.toHexByte(b) + ')');
+            if (DEBUG && !fCompare) {
+                this.printf("read(\"%s\",CHS=%d:%d:%d,index=%d,value=%#04x)\n", this.sDiskFile, sector.iCylinder, sector.iHead, sector['sector'], ibSector, b);
             }
         }
         return b;
@@ -21157,15 +21144,15 @@ class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} ibSector a byte index within the given sector
      * @param {number} b the byte value to write
-     * @return {boolean|null} true if write successful, false if write-protected, null if out of bounds
+     * @returns {boolean|null} true if write successful, false if write-protected, null if out of bounds
      */
     write(sector, ibSector, b)
     {
         if (this.fWriteProtected)
             return false;
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + ',index=' + ibSector + ',value=' + Str.toHexByte(b) + ')');
+        if (DEBUG) {
+            this.printf("write(\"%s\",CHS=%d:%d:%d,index=%d,value=%#04x)\n", this.sDiskFile, sector.iCylinder, sector.iHead, sector['sector'], ibSector, b);
         }
 
         if (ibSector < sector['length']) {
@@ -21201,7 +21188,7 @@ class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {number} pba (physical block address)
-     * @return {Object|null} sector
+     * @returns {Object|null} sector
      */
     getSector(pba)
     {
@@ -21232,7 +21219,7 @@ class DiskPDP11 extends Component {
      * @param {Object} sector
      * @param {number} off (byte offset)
      * @param {number} len (1 to 4 bytes)
-     * @return {number}
+     * @returns {number}
      */
     getSectorData(sector, off, len)
     {
@@ -21254,7 +21241,7 @@ class DiskPDP11 extends Component {
      * encodeAsBase64()
      *
      * @this {DiskPDP11}
-     * @return {string}
+     * @returns {string}
      */
     encodeAsBase64()
     {
@@ -21284,7 +21271,7 @@ class DiskPDP11 extends Component {
      * where [...] is an array of modified dword(s) in the corresponding sector.
      *
      * @this {DiskPDP11}
-     * @return {Array} of modified sectors
+     * @returns {Array} of modified sectors
      */
     save()
     {
@@ -21309,8 +21296,8 @@ class DiskPDP11 extends Component {
                 }
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage('save("' + this.sDiskName + '"): saved ' + (deltas.length - 1) + ' change(s)');
+        if (DEBUG) {
+            this.printf("save(\"%s\"): saved %d change(s)\n", this.sDiskName, (deltas.length - 1));
         }
         return deltas;
     }
@@ -21330,7 +21317,7 @@ class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {Array} deltas
-     * @return {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
+     * @returns {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
      */
     restore(deltas)
     {
@@ -21442,11 +21429,11 @@ class DiskPDP11 extends Component {
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
-                this.controller.notice("Unable to restore disk '" + this.sDiskName + ": " + sReason);
+                this.controller.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('restore("' + this.sDiskName + '"): restored ' + nChanges + ' change(s)');
+            if (DEBUG) {
+                this.printf("restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
             }
         }
         return nChanges;
@@ -21465,7 +21452,7 @@ class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {boolean} [fFormatted]
-     * @return {string} containing the entire disk image as JSON-encoded data
+     * @returns {string} containing the entire disk image as JSON-encoded data
      */
     convertToJSON(fFormatted)
     {
@@ -21548,7 +21535,7 @@ class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} [pba]
      * @param {string} [sDesc]
-     * @return {string}
+     * @returns {string}
      */
     dumpSector(sector, pba, sDesc)
     {
@@ -21686,7 +21673,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {*} config
-     * @return {*}
+     * @returns {*}
      */
     parseConfig(config)
     {
@@ -21713,7 +21700,7 @@ class DriveController extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listDisks")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -21764,7 +21751,7 @@ class DriveController extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -21789,14 +21776,14 @@ class DriveController extends Component {
                          */
                         var disk = drive.disk;
                         if (disk) {
-                            if (DEBUG) dc.println("saving disk " + disk.sDiskPath + "...");
+                            if (DEBUG) dc.printf("saving disk %s...\n", disk.sDiskPath);
                             var sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
-                            dc.notice("No disk loaded in drive.");
+                            dc.printf(Messages.NOTICE, "No disk loaded in drive.\n");
                         }
                     } else {
-                        dc.notice("No disk drive selected.");
+                        dc.printf(Messages.NOTICE, "No disk drive selected.\n");
                     }
                 }
             };
@@ -21806,7 +21793,7 @@ class DriveController extends Component {
             var controlInput = /** @type {Object} */ (control);
 
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -21904,7 +21891,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {number} iDrive
-     * @return {string}
+     * @returns {string}
      */
     getDriveName(iDrive)
     {
@@ -21917,7 +21904,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {string} sDrive
-     * @return {number} (0-3, or -1 if error)
+     * @returns {number} (0-3, or -1 if error)
      */
     getDriveNumber(sDrive)
     {
@@ -21935,7 +21922,7 @@ class DriveController extends Component {
      * @this {DriveController}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -21983,7 +21970,7 @@ class DriveController extends Component {
      * @this {DriveController}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -22007,7 +21994,7 @@ class DriveController extends Component {
      * This implements save support for the DriveController component.
      *
      * @this {DriveController}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -22025,7 +22012,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -22043,7 +22030,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -22056,7 +22043,7 @@ class DriveController extends Component {
      * Placeholder for subclasses.
      *
      * @this {DriveController}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -22071,7 +22058,7 @@ class DriveController extends Component {
      * @param {number} iDrive
      * @param {Array} configDrive
      * @param {Array} [configDisk]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initDrive(drive, iDrive, configDrive, configDisk)
     {
@@ -22157,7 +22144,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Array} [aConfigDisks]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initDrives(aConfigDisks)
     {
@@ -22180,7 +22167,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Object} drive
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrive(drive)
     {
@@ -22195,7 +22182,7 @@ class DriveController extends Component {
      * saveDrives()
      *
      * @this {DriveController}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrives()
     {
@@ -22211,7 +22198,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Array} [aHistory]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initHistory(aHistory)
     {
@@ -22235,7 +22222,7 @@ class DriveController extends Component {
      * disk image(s), so we call updateHistory() for all those disks, and then aDiskHistory is ready to be saved.
      *
      * @this {DriveController}
-     * @return {Array}
+     * @returns {Array}
      */
     saveHistory()
     {
@@ -22253,7 +22240,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted disks
-     * @return {boolean} true if one or more disk images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more disk images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -22271,7 +22258,7 @@ class DriveController extends Component {
                     continue;
                 }
             }
-            this.notice("Incorrect auto-mount settings for drive " + sDrive + " (" + JSON.stringify(configDisk) + ")");
+            this.printf(Messages.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDisk));
         }
         return !!this.cAutoMount;
     }
@@ -22283,7 +22270,7 @@ class DriveController extends Component {
      * @param {string} [sDiskName]
      * @param {string} [sDiskPath]
      * @param {File} [file] is set if there's an associated File object
-     * @return {boolean}
+     * @returns {boolean}
      */
     loadSelectedDisk(sDiskName, sDiskPath, file)
     {
@@ -22299,7 +22286,7 @@ class DriveController extends Component {
         var iDrive = controlDrives && Str.parseInt(controlDrives.value, 10);
 
         if (iDrive === undefined || iDrive < 0 || iDrive >= this.aDrives.length) {
-            this.notice("Unable to load the selected drive");
+            this.printf(Messages.NOTICE, "Unable to load the selected drive\n");
             return false;
         }
 
@@ -22309,7 +22296,7 @@ class DriveController extends Component {
         }
 
         if (sDiskPath == DriveController.SOURCE.LOCAL) {
-            this.notice('Use "Choose File" and "Mount" to select and load a local disk.');
+            this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk.\n");
             return false;
         }
 
@@ -22326,7 +22313,7 @@ class DriveController extends Component {
             sDiskPath = globals.window.prompt("Enter the URL of a remote disk image.", "") || "";
             if (!sDiskPath) return false;
             sDiskName = Str.getBaseName(sDiskPath);
-            this.status('Attempting to load %s as "%s"', sDiskPath, sDiskName);
+            this.printf(Messages.STATUS, 'Attempting to load %s as "%s"\n', sDiskPath, sDiskName);
             this.sDiskSource = DriveController.SOURCE.REMOTE;
         }
         else {
@@ -22341,7 +22328,7 @@ class DriveController extends Component {
      * bootSelectedDisk()
      *
      * @this {DriveController}
-     * @return {boolean}
+     * @returns {boolean}
      */
     bootSelectedDisk()
     {
@@ -22350,12 +22337,12 @@ class DriveController extends Component {
         var iDrive = controlDrives && Str.parseInt(controlDrives.value, 10);
 
         if (iDrive == null || iDrive < 0 || iDrive >= this.aDrives.length || !(drive = this.aDrives[iDrive])) {
-            this.notice("Unable to boot the selected drive");
+            this.printf(Messages.NOTICE, "Unable to boot the selected drive\n");
             return false;
         }
 
         if (!drive.disk) {
-            this.notice("Load a disk into the drive first");
+            this.printf(Messages.NOTICE, "Load a disk into the drive first\n");
             return false;
         }
 
@@ -22370,7 +22357,7 @@ class DriveController extends Component {
 
         var err = this.readData(drive, drive.iCylinderBoot, drive.iHeadBoot, drive.iSectorBoot, drive.cbSectorBoot, 0x0000, 2);
         if (err) {
-            this.notice("Unable to read the boot sector (" + err + ")");
+            this.printf(Messages.NOTICE, "Unable to read the boot sector (%s)\n", err);
             return false;
         }
         return true;
@@ -22404,7 +22391,7 @@ class DriveController extends Component {
      * @param {string} sDiskPath
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
-     * @return {number} 1 if disk loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if disk loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file)
     {
@@ -22417,15 +22404,15 @@ class DriveController extends Component {
             this.unloadDrive(iDrive, true);
 
             if (drive.fBusy) {
-                this.notice(this.type + " busy");
+                this.printf(Messages.NOTICE, "%s busy\n", this.type);
             }
             else {
-                // this.status("disk queued: %s", sDiskName);
+                // this.printf(Messages.STATUS, "disk queued: %s\n", sDiskName);
                 drive.fBusy = true;
                 if (fAutoMount) {
                     drive.fAutoMount = true;
                     this.cAutoMount++;
-                    if (this.messageEnabled()) this.printMessage("auto-loading disk: " + sDiskName);
+                    this.printf("auto-loading disk \"%s\"\n", sDiskName);
                 }
                 drive.fLocal = !!file;
                 var disk = new DiskPDP11(this, drive, DiskAPI.MODE.PRELOAD);
@@ -22459,7 +22446,7 @@ class DriveController extends Component {
              * have done this itself, since we passed our Drive object to it (it already knows the drive's limits).
              */
             if (disk.nCylinders > drive.nCylinders || disk.nHeads > drive.nHeads /* || disk.nSectors > drive.nSectors */) {
-                this.notice("Disk \"" + sDiskName + "\" too large for drive " + this.getDriveName(drive.iDrive));
+                this.printf(Messages.NOTICE, "Disk \"%s\" too large for drive %s\n", sDiskName, this.getDriveName(drive.iDrive));
                 disk = null;
             }
         }
@@ -22492,7 +22479,7 @@ class DriveController extends Component {
              * With the addition of notify(), users are now "alerted" whenever a disk has finished loading;
              * notify() is selective about its output, using print() if a print window is open, alert() otherwise.
              */
-            this.notice("Loaded disk \"" + sDiskName + "\" in drive " + this.getDriveName(drive.iDrive), drive.fAutoMount || fAutoMount);
+            this.printf(Messages.NOTICE, "Loaded disk \"%s\" in drive %s\n", sDiskName, this.getDriveName(drive.iDrive));
 
             /*
              * Since you usually want the Computer to have focus again after loading a new disk, let's try automatically
@@ -22551,7 +22538,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {string} sPath
-     * @return {string|null}
+     * @returns {string|null}
      */
     findDisk(sPath)
     {
@@ -22574,7 +22561,7 @@ class DriveController extends Component {
      * @this {DriveController}
      * @param {number} iDrive (unvalidated)
      * @param {boolean} [fUpdateDrive] is true to update the drive list to match the specified drive (eg, the auto-mount case)
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     displayDisk(iDrive, fUpdateDrive)
     {
@@ -22635,7 +22622,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {number} sDrive
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     selectDrive(sDrive)
     {
@@ -22687,7 +22674,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {function()|null} fnCallReady
-     * @return {boolean} false if wait required, true otherwise
+     * @returns {boolean} false if wait required, true otherwise
      */
     waitDrives(fnCallReady)
     {
@@ -22725,7 +22712,7 @@ class DriveController extends Component {
             drive.fLocal = false;
 
             if (!fLoading) {
-                this.notice("Drive " + this.getDriveName(iDrive) + " unloaded", fLoading);
+                this.printf(Messages.NOTICE, "Drive %s unloaded\n", this.getDriveName(iDrive));
                 this.sDiskSource = DriveController.SOURCE.NONE;
                 this.displayDisk(iDrive);
             }
@@ -22767,14 +22754,14 @@ class DriveController extends Component {
         for (i = 0; i < this.aDiskHistory.length; i++) {
             if (this.aDiskHistory[i][1] == sDiskPath) {
                 var nChanges = disk.restore(this.aDiskHistory[i][2]);
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("disk '" + sDiskName + "' restored from history (" + nChanges + " changes)");
+                if (DEBUG) {
+                    this.printf("disk \"%s\" restored from history (%d changes)\n", sDiskName, nChanges);
                 }
                 return;
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("disk '" + sDiskName + "' added to history (nothing to restore)");
+        if (DEBUG) {
+            this.printf("disk \"%s\" added to history (nothing to restore)\n", sDiskName);
         }
         this.aDiskHistory[i] = [sDiskName, sDiskPath, []];
     }
@@ -22792,14 +22779,14 @@ class DriveController extends Component {
         for (i = 0; i < this.aDiskHistory.length; i++) {
             if (this.aDiskHistory[i][1] == sDiskPath) {
                 this.aDiskHistory.splice(i, 1);
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("disk '" + sDiskName + "' removed from history");
+                if (DEBUG) {
+                    this.printf("disk \"%s\" removed from history\n", sDiskName);
                 }
                 return;
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("unable to remove disk '" + sDiskName + "' from history (" + sDiskPath + ")");
+        if (DEBUG) {
+            this.printf("unable to remove disk \"%s\" from history (%s)\n", sDiskName, sDiskPath);
         }
     }
 
@@ -22817,8 +22804,8 @@ class DriveController extends Component {
         for (i = 0; i < this.aDiskHistory.length; i++) {
             if (this.aDiskHistory[i][1] == sDiskPath) {
                 this.aDiskHistory[i][2] = disk.save();
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("disk '" + sDiskName + "' updated in history");
+                if (DEBUG) {
+                    this.printf("disk \"%s\" updated in history\n", sDiskName);
                 }
                 return;
             }
@@ -22829,8 +22816,8 @@ class DriveController extends Component {
          * unload, and then reload/remount.  And since unloadDrive's normal behavior is to call updateDiskHistory()
          * before unloading, the fact that the disk is no longer listed here can't be treated as an error.
          */
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("unable to update disk '" + sDiskName + "' in history (" + sDiskPath + ")");
+        if (DEBUG) {
+            this.printf("unable to update disk \"%s\" in history (%s)\n", sDiskName, sDiskPath);
         }
     }
 
@@ -22873,7 +22860,7 @@ class DriveController extends Component {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -22895,7 +22882,7 @@ class DriveController extends Component {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -22935,7 +22922,7 @@ class RK11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RK11", parms, MessagesPDP11.RK11, PDP11.RK11, PDP11.RK11.RK05, RK11.UNIBUS_IOTABLE);
+        super("RK11", parms, Messages.RK11, PDP11.RK11, PDP11.RK11.RK05, RK11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -22950,7 +22937,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -22981,7 +22968,7 @@ class RK11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RK11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -23015,7 +23002,7 @@ class RK11 extends DriveController {
         switch(func = this.regRKCS & RK11.RKCS.FUNC) {
 
         case RK11.FUNC.CRESET:
-            if (this.messageEnabled()) this.printMessage(this.type + ": CRESET(" + iDrive + ")", true);
+            this.printf("%s: CRESET(%d)\n", this.type, iDrive);
             this.regRKER = this.regRKDA = 0;
             this.regRKCS = RK11.RKCS.CRDY;
             break;
@@ -23044,7 +23031,7 @@ class RK11 extends DriveController {
             addr = (((this.regRKCS & RK11.RKCS.MEX)) << (16 - RK11.RKCS.SHIFT.MEX)) | this.regRKBA;
             inc = (this.regRKCS & RK11.RKCS.IBA)? 0 : 2;
 
-            if (this.messageEnabled()) this.printMessage(this.type + ": " + sFunc + "(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+            this.printf(Messages.ADDRESS, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
             if (iCylinder >= drive.nCylinders) {
                 this.regRKER |= RK11.RKER.NXC;
@@ -23060,7 +23047,7 @@ class RK11 extends DriveController {
 
         case RK11.FUNC.SEEK:
             iCylinder = (this.regRKDA & RK11.RKDA.CA) >> RK11.RKDA.SHIFT.CA;
-            if (this.messageEnabled()) this.printMessage(this.type + ": SEEK(" + iCylinder + ")", true);
+            this.printf("%s: SEEK(%d)\n", this.type, iCylinder);
             if (iCylinder < drive.nCylinders) {
                 this.regRKCS |= RK11.RKCS.SCP;
             } else {
@@ -23069,13 +23056,13 @@ class RK11 extends DriveController {
             break;
 
         case RK11.FUNC.DRESET:
-            if (this.messageEnabled()) this.printMessage(this.type + ": DRESET(" + iDrive + ")");
+            this.printf("%s: DRESET(%d)\n", this.type, iDrive);
             this.regRKER = this.regRKDA = 0;
             this.regRKCS = RK11.RKCS.CRDY | RK11.RKCS.SCP;
             break;
 
         default:
-            if (this.messageEnabled()) this.printMessage(this.type + ": UNSUPPORTED(" + func + ")");
+            this.printf("%s: UNSUPPORTED(%s)\n", this.type, func);
             break;
         }
 
@@ -23103,7 +23090,7 @@ class RK11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -23145,7 +23132,7 @@ class RK11 extends DriveController {
             if (!fCheck) {
                 var data = b0 | (b1 << 8);
                 this.bus.setWordDirect(this.cpu.mapUnibus(addr), data);
-                if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+                if (DEBUG && this.messageEnabled(Messages.READ)) {
                     if (!sWords) sWords = Str.toOct(addr) + ": ";
                     sWords += Str.toOct(data) + ' ';
                     if (sWords.length >= 64) {
@@ -23178,7 +23165,7 @@ class RK11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -23259,7 +23246,7 @@ class RK11 extends DriveController {
      * @param {number} iSector
      * @param {number} nWords
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     doneReadWrite(nError, iCylinder, iHead, iSector, nWords, addr)
     {
@@ -23296,7 +23283,7 @@ class RK11 extends DriveController {
             this.regRKER |= RK11.RKER.DRE;
             this.regRKCS |= RK11.RKCS.ERR;
             if (this.regRKER & RK11.RKER.HE) this.regRKCS |= RK11.RKCS.HE;
-            if (this.messageEnabled()) this.printMessage(this.type + ": ERROR: " + Str.toOct(this.regRKER));
+            this.printf("%s: ERROR: %o\n", this.type, this.regRKER);
         }
     }
 
@@ -23305,7 +23292,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDS or 177400)
-     * @return {number}
+     * @returns {number}
      */
     readRKDS(addr)
     {
@@ -23331,7 +23318,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKER or 177402)
-     * @return {number}
+     * @returns {number}
      */
     readRKER(addr)
     {
@@ -23357,7 +23344,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKCS or 177404)
-     * @return {number}
+     * @returns {number}
      */
     readRKCS(addr)
     {
@@ -23383,7 +23370,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKWC or 177406)
-     * @return {number}
+     * @returns {number}
      */
     readRKWC(addr)
     {
@@ -23407,7 +23394,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKBA or 177410)
-     * @return {number}
+     * @returns {number}
      */
     readRKBA(addr)
     {
@@ -23431,7 +23418,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDA or 177412)
-     * @return {number}
+     * @returns {number}
      */
     readRKDA(addr)
     {
@@ -23455,7 +23442,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDB or 177416)
-     * @return {number}
+     * @returns {number}
      */
     readRKDB(addr)
     {
@@ -23522,7 +23509,7 @@ class RL11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RL11", parms, MessagesPDP11.RL11, PDP11.RL11, PDP11.RL11.RL02K, RL11.UNIBUS_IOTABLE);
+        super("RL11", parms, Messages.RL11, PDP11.RL11, PDP11.RL11.RL02K, RL11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -23535,7 +23522,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -23565,7 +23552,7 @@ class RL11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RL11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -23657,7 +23644,7 @@ class RL11 extends DriveController {
             nWords = (0x10000 - this.regRLMP) & 0xffff;
             addr = (((this.regRLBE & RL11.RLBE.MASK)) << 16) | this.regRLBA;   // 22 bit mode
 
-            if (this.messageEnabled()) this.printMessage(this.type + ": " + sFunc + "(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+            this.printf(Messages.ADDRESS, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
             fInterrupt = fnReadWrite.call(this, drive, iCylinder, iHead, iSector, nWords, addr, 2, false, this.doneReadWrite.bind(this));
             break;
@@ -23685,7 +23672,7 @@ class RL11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -23720,7 +23707,7 @@ class RL11 extends DriveController {
              * code, so let's review the documentation on this.
              */
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data = b0 | (b1 << 8));
-            if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+            if (DEBUG && this.messageEnabled(Messages.READ)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -23750,7 +23737,7 @@ class RL11 extends DriveController {
             }
         }
 
-        if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+        if (DEBUG && this.messageEnabled(Messages.READ)) {
             console.log("checksum: " + (checksum|0));
         }
 
@@ -23770,7 +23757,7 @@ class RL11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -23796,7 +23783,7 @@ class RL11 extends DriveController {
                 nError = RL11.ERRC.NXM;
                 break;
             }
-            if (DEBUG && this.messageEnabled(MessagesPDP11.WRITE)) {
+            if (DEBUG && this.messageEnabled(Messages.WRITE)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -23834,7 +23821,7 @@ class RL11 extends DriveController {
             }
         }
 
-        if (DEBUG && this.messageEnabled(MessagesPDP11.WRITE)) {
+        if (DEBUG && this.messageEnabled(Messages.WRITE)) {
             console.log("checksum: " + (checksum|0));
         }
 
@@ -23851,7 +23838,7 @@ class RL11 extends DriveController {
      * @param {number} iSector
      * @param {number} nWords
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     doneReadWrite(nError, iCylinder, iHead, iSector, nWords, addr)
     {
@@ -23872,7 +23859,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLCS or 174400)
-     * @return {number}
+     * @returns {number}
      */
     readRLCS(addr)
     {
@@ -23898,7 +23885,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLBA or 174402)
-     * @return {number}
+     * @returns {number}
      */
     readRLBA(addr)
     {
@@ -23922,7 +23909,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLDA or 174404)
-     * @return {number}
+     * @returns {number}
      */
     readRLDA(addr)
     {
@@ -23946,7 +23933,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLMP or 174406)
-     * @return {number}
+     * @returns {number}
      */
     readRLMP(addr)
     {
@@ -23970,7 +23957,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLBE or 174410)
-     * @return {number}
+     * @returns {number}
      */
     readRLBE(addr)
     {
@@ -24041,7 +24028,7 @@ class RX11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RX11", parms, MessagesPDP11.RX11, PDP11.RX11, PDP11.RX11.RX01, RX11.UNIBUS_IOTABLE);
+        super("RX11", parms, Messages.RX11, PDP11.RX11, PDP11.RX11.RX01, RX11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -24068,7 +24055,7 @@ class RX11 extends DriveController {
      *
      * @this {RX11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -24110,7 +24097,7 @@ class RX11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RX11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -24166,7 +24153,7 @@ class RX11 extends DriveController {
         this.regRXCS &= ~(RX11.RXCS.GO | RX11.RXCS.TR | RX11.RXCS.DONE | RX11.RXCS.ERR);
         this.cpu.clearIRQ(this.irq);
 
-        if (this.messageEnabled()) this.printMessage(this.type + ".processCommand(" + RX11.FUNCS[this.funCode >> 1]+ ")", true, true);
+        this.printf(Messages.ADDRESS, "%s.processCommand(%s)\n", this.type, RX11.FUNCS[this.funCode >> 1]);
 
         switch(this.funCode) {
 
@@ -24235,7 +24222,7 @@ class RX11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -24243,7 +24230,7 @@ class RX11 extends DriveController {
         var disk = drive.disk;
         var sector = null, ibSector;
 
-        if (this.messageEnabled()) this.printMessage(this.type + ".readData(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+        this.printf(Messages.ADDRESS, "%s.readData(%d:%d:%d) %o-%o\n", this.type, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
         if (!disk) {
             nError = drive.iDrive?  RX11.ERROR.HOME1 : RX11.ERROR.HOME0;
@@ -24278,7 +24265,7 @@ class RX11 extends DriveController {
             }
             var data = b0 | (b1 << 8);
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data);
-            if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+            if (DEBUG && this.messageEnabled(Messages.READ)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -24311,7 +24298,7 @@ class RX11 extends DriveController {
 
         if (disk) {
             this.regRXES |= RX11.RXES.DRDY;
-            if (this.messageEnabled()) this.printMessage(this.type + ".readSector(" + iCylinder + ":" + iHead + ":" + nSector + ")", true, true);
+            this.printf(Messages.ADDRESS, "%s.readSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
 
             var sector = disk.seek(iCylinder, iHead, nSector, true);
             if (sector) {
@@ -24352,7 +24339,7 @@ class RX11 extends DriveController {
 
         if (disk) {
             this.regRXES |= RX11.RXES.DRDY;
-            if (this.messageEnabled()) this.printMessage(this.type + ".writeSector(" + iCylinder + ":" + iHead + ":" + nSector + ")", true, true);
+            this.printf(Messages.ADDRESS, "%s.writeSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
 
             var sector = disk.seek(iCylinder, iHead, nSector, true);
             if (sector) {
@@ -24409,7 +24396,7 @@ class RX11 extends DriveController {
      * @this {RX11}
      * @param {number} addr (eg, PDP11.UNIBUS.RXCS or 177170)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readRXCS(addr, fPreWrite)
     {
@@ -24474,7 +24461,7 @@ class RX11 extends DriveController {
      * @this {RX11}
      * @param {number} addr (eg, PDP11.UNIBUS.RXDB or 177172)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readRXDB(addr, fPreWrite)
     {
@@ -24486,7 +24473,7 @@ class RX11 extends DriveController {
                     this.regRXCS &= ~RX11.RXCS.TR;
 
                     this.regRXDB = this.abBuffer[this.iBuffer] & 0xff;
-                    if (this.messageEnabled()) this.printMessage(this.type + ".readByte(" + this.iBuffer + "): " + Str.toHexByte(this.regRXDB), true, true);
+                    this.printf(Messages.ADDRESS, "%s.readByte(%d): %#04x\n", this.type, this.iBuffer, this.regRXDB);
                     if (++this.iBuffer >= this.abBuffer.length) {
                         this.doneCommand();
                     }
@@ -24513,7 +24500,7 @@ class RX11 extends DriveController {
                 this.regRXCS &= ~RX11.RXCS.TR;
 
                 this.abBuffer[this.iBuffer] = data & 0xff;
-                if (this.messageEnabled()) this.printMessage(this.type + ".writeByte(" + this.iBuffer + "," + Str.toHexByte(data) + ")", true, true);
+                this.printf(Messages.ADDRESS, "%s.writeByte(%d,%#04x)\n", this.type, this.iBuffer, data);
                 if (++this.iBuffer >= this.abBuffer.length) {
                     this.doneCommand();
                 }
@@ -24695,7 +24682,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -24709,7 +24696,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -24726,7 +24713,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string} s
      * @param {string} sAddr
-     * @return {string}
+     * @returns {string}
      */
     parseAddrReference(s, sAddr)
     {
@@ -24737,7 +24724,7 @@ class DbgLib extends Component {
      * getNextCommand()
      *
      * @this {DbgLib}
-     * @return {string}
+     * @returns {string}
      */
     getNextCommand()
     {
@@ -24755,7 +24742,7 @@ class DbgLib extends Component {
      * getPrevCommand()
      *
      * @this {DbgLib}
-     * @return {string|null}
+     * @returns {string|null}
      */
     getPrevCommand()
     {
@@ -24773,7 +24760,7 @@ class DbgLib extends Component {
      * @param {string|undefined} sCmd
      * @param {boolean} [fSave] is true to save the command, false if not
      * @param {string} [chSep] is the command separator character (default is ';')
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     parseCommand(sCmd, fSave, chSep)
     {
@@ -24853,7 +24840,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst & src)
+     * @returns {number} (dst & src)
      */
     evalAND(dst, src)
     {
@@ -24887,7 +24874,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst | src)
+     * @returns {number} (dst | src)
      */
     evalIOR(dst, src)
     {
@@ -24921,7 +24908,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst ^ src)
+     * @returns {number} (dst ^ src)
      */
     evalXOR(dst, src)
     {
@@ -24954,7 +24941,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst * src)
+     * @returns {number} (dst * src)
      */
     evalMUL(dst, src)
     {
@@ -24968,7 +24955,7 @@ class DbgLib extends Component {
      * @param {number} v
      * @param {number} [nBits]
      * @param {boolean} [fUnsigned]
-     * @return {number}
+     * @returns {number}
      */
     truncate(v, nBits, fUnsigned)
     {
@@ -25011,7 +24998,7 @@ class DbgLib extends Component {
             }
         }
         if (v != vNew) {
-            if (MAXDEBUG) this.println("warning: value " + v + " truncated to " + vNew);
+            if (MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
             v = vNew;
         }
         return v;
@@ -25042,7 +25029,7 @@ class DbgLib extends Component {
      * @param {Array.<number>} aVals
      * @param {Array.<string>} aOps
      * @param {number} [cOps] (default is -1 for all)
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     evalOps(aVals, aOps, cOps = -1)
     {
@@ -25166,7 +25153,7 @@ class DbgLib extends Component {
      * @param {number} iLimit
      * @param {number} nBase
      * @param {Array|undefined} [aUndefined]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseArray(asValues, iValue, iLimit, nBase, aUndefined)
     {
@@ -25309,7 +25296,7 @@ class DbgLib extends Component {
             value = aVals.pop();
 
         } else if (!aUndefined) {
-            this.println("parse error (" + (sValue || sOp) + ")");
+            this.printf("parse error (%s)\n", (sValue || sOp));
         }
 
         this.nBase = nBasePrev;
@@ -25324,7 +25311,7 @@ class DbgLib extends Component {
      * @param {string} chDelim
      * @param {number} nBits
      * @param {number} cchMax
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseASCII(sExp, chDelim, nBits, cchMax)
     {
@@ -25350,7 +25337,7 @@ class DbgLib extends Component {
                 v = this.truncate(v * Math.pow(2, nBits) + c, nBits * cchMax, true);
             }
             if (cch >= 0) {
-                this.println("parse error (" + chDelim + sExp + chDelim + ")");
+                this.printf("parse error (%s%s%s)\n", chDelim, sExp, chDelim);
                 return undefined;
             } else {
                 sExp = sExp.substr(0, i) + this.toStrBase(v, -1) + sExp.substr(j);
@@ -25386,7 +25373,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string|undefined} sExp
      * @param {Array|undefined|boolean} [fQuiet]
-     * @return {number|undefined} numeric value, or undefined if sExp contains any undefined or invalid values
+     * @returns {number|undefined} numeric value, or undefined if sExp contains any undefined or invalid values
      */
     parseExpression(sExp, fQuiet)
     {
@@ -25476,7 +25463,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} s
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseReference(s)
     {
@@ -25525,7 +25512,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     parseSysVars(s)
     {
@@ -25559,7 +25546,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} value
      * @param {number} nUnary
-     * @return {number}
+     * @returns {number}
      */
     parseUnary(value, nUnary)
     {
@@ -25591,7 +25578,7 @@ class DbgLib extends Component {
      * @param {string} [sName] is the name of the value, if any
      * @param {Array|boolean} [fQuiet]
      * @param {number} [nUnary] (0 for none, 1 for negate, 2 for complement, 3 for leading zeros)
-     * @return {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
+     * @returns {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
      */
     parseValue(sValue, sName, fQuiet, nUnary = 0)
     {
@@ -25615,7 +25602,7 @@ class DbgLib extends Component {
                                 value += valueUndefined;
                             } else {
                                 if (!fQuiet) {
-                                    this.println("undefined " + (sName || "value") + ": " + sValue + " (" + sUndefined + ")");
+                                    this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
                                 }
                                 value = undefined;
                             }
@@ -25632,12 +25619,12 @@ class DbgLib extends Component {
                 value = this.truncate(this.parseUnary(value, nUnary));
             } else {
                 if (!fQuiet) {
-                    this.println("invalid " + (sName || "value") + ": " + sValue);
+                    this.printf("invalid %s: %s\n", (sName || "value"), sValue);
                 }
             }
         } else {
             if (!fQuiet) {
-                this.println("missing " + (sName || "value"));
+                this.printf("missing %s\n", (sName || "value"));
             }
         }
         return value;
@@ -25649,7 +25636,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string|null|*} sVar
      * @param {number|undefined} value
-     * @return {boolean} true if value defined, false if not
+     * @returns {boolean} true if value defined, false if not
      */
     printValue(sVar, value)
     {
@@ -25667,7 +25654,7 @@ class DbgLib extends Component {
             }
         }
         sVar = (sVar != null? (sVar + ": ") : "");
-        this.println(sVar + sValue);
+        this.printf("%s%s\n", sVar, sValue);
         return fDefined;
     }
 
@@ -25675,7 +25662,7 @@ class DbgLib extends Component {
      * resetVariables()
      *
      * @this {DbgLib}
-     * @return {Object}
+     * @returns {Object}
      */
     resetVariables()
     {
@@ -25700,7 +25687,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} [sVar]
-     * @return {boolean} true if all value(s) defined, false if not
+     * @returns {boolean} true if all value(s) defined, false if not
      */
     printVariable(sVar)
     {
@@ -25735,7 +25722,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getVariable(sVar)
     {
@@ -25751,7 +25738,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     getVariableFixup(sVar)
     {
@@ -25763,7 +25750,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {boolean}
+     * @returns {boolean}
      */
     isVariable(sVar)
     {
@@ -25793,7 +25780,7 @@ class DbgLib extends Component {
      * @param {number} [nBits] (-1 to strip leading zeros, 0 to allow a variable number of digits)
      * @param {number} [nBase]
      * @param {number} [nGrouping] (if nBase is 2, this is a grouping; otherwise, it's a prefix condition)
-     * @return {string}
+     * @returns {string}
      */
     toStrBase(n, nBits = 0, nBase = 0, nGrouping = 0)
     {
@@ -26057,7 +26044,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {DbgAddrPDP11|null} [dbgAddr]
      * @param {boolean} [fWrite]
      * @param {number} [nb] number of bytes to check (1 or 2); default is 1
-     * @return {number} is the corresponding linear address, or PDP11.ADDR_INVALID
+     * @returns {number} is the corresponding linear address, or PDP11.ADDR_INVALID
      */
     getAddr(dbgAddr, fWrite, nb)
     {
@@ -26075,7 +26062,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {number|null} [addr]
      * @param {boolean} [fPhysical]
      * @param {number} [nBase]
-     * @return {DbgAddrPDP11}
+     * @returns {DbgAddrPDP11}
      */
     newAddr(addr = null, fPhysical = false, nBase)
     {
@@ -26090,7 +26077,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
      * @param {number} addr
-     * @return {DbgAddrPDP11}
+     * @returns {DbgAddrPDP11}
      */
     setAddr(dbgAddr, addr)
     {
@@ -26107,7 +26094,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
-     * @return {Array}
+     * @returns {Array}
      */
     packAddr(dbgAddr)
     {
@@ -26121,7 +26108,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {Array} aAddr
-     * @return {DbgAddrPDP11}
+     * @returns {DbgAddrPDP11}
      */
     unpackAddr(aAddr)
     {
@@ -26162,7 +26149,7 @@ class DebuggerPDP11 extends DbgLib {
             this.aOpReserved = this.aOpReserved.concat(DebuggerPDP11.OP1145);
         }
 
-        this.messageDump(MessagesPDP11.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
 
         this.setReady();
     }
@@ -26175,7 +26162,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "debugInput")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -26229,7 +26216,7 @@ class DebuggerPDP11 extends DbgLib {
                         dbg.doCommands(sCmd, true);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer");
                     return false;
                 }
             );
@@ -26291,7 +26278,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     mapUnibus(addr)
     {
@@ -26306,7 +26293,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
      * @param {number} [inc]
-     * @return {number}
+     * @returns {number}
      */
     getByte(dbgAddr, inc)
     {
@@ -26325,7 +26312,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
      * @param {number} [inc]
-     * @return {number}
+     * @returns {number}
      */
     getWord(dbgAddr, inc)
     {
@@ -26396,7 +26383,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {string|undefined} sAddr
      * @param {boolean} [fCode] (true if target is code, false if target is data)
      * @param {boolean} [fNoChecks] (true when setting breakpoints that may not be valid now, but will be later)
-     * @return {DbgAddrPDP11|null|undefined}
+     * @returns {DbgAddrPDP11|null|undefined}
      */
     parseAddr(sAddr, fCode, fNoChecks)
     {
@@ -26464,7 +26451,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number|null|undefined} [off]
-     * @return {string} the hex representation of off
+     * @returns {string} the hex representation of off
      */
     toStrOffset(off)
     {
@@ -26476,7 +26463,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
-     * @return {string} the hex representation of the address
+     * @returns {string} the hex representation of the address
      */
     toStrAddr(dbgAddr)
     {
@@ -26493,7 +26480,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
      * @param {number} [cchMax] (default is 256)
-     * @return {string} (and dbgAddr advanced past the terminating zero)
+     * @returns {string} (and dbgAddr advanced past the terminating zero)
      */
     getSZ(dbgAddr, cchMax)
     {
@@ -26521,26 +26508,26 @@ class DebuggerPDP11 extends DbgLib {
         if (sAddr) {
             addr = this.getAddr(this.parseAddr(sAddr));
             if (addr === PDP11.ADDR_INVALID) {
-                this.println("invalid address: " + sAddr);
+                this.printf("invalid address: %s\n", sAddr);
                 return;
             }
             i = addr >>> this.bus.nBlockShift;
             n = 1;
         }
 
-        this.println("blockid   physical   blockaddr  used    size    type");
-        this.println("--------  ---------  ---------  ------  ------  ----");
+        this.printf("blockid   physical   blockaddr  used    size    type\n");
+        this.printf("--------  ---------  ---------  ------  ------  ----\n");
 
         var typePrev = -1, cPrev = 0;
         while (n--) {
             var block = aBlocks[i];
             if (block.type == typePrev) {
-                if (!cPrev++) this.println("...");
+                if (!cPrev++) this.printf("...\n");
             } else {
                 typePrev = block.type;
                 var sType = MemoryPDP11.TYPE_NAMES[typePrev];
                 if (block) {
-                    this.println(Str.toHex(block.id, 8) + "  %" + Str.toHex(i << this.bus.nBlockShift, 8) + "  %" + Str.toHex(block.addr, 8) + "  " + Str.toHexWord(block.used) + "  " + Str.toHexWord(block.size) + "  " + sType);
+                    this.printf("%08x  %%08x  %%08x  %#06x  %#06x  %s\n", block.id, i << this.bus.nBlockShift, block.addr, block.used, block.size, sType);
                 }
                 if (typePrev != MemoryPDP11.TYPE.NONE) typePrev = -1;
                 cPrev = 0;
@@ -26592,7 +26579,7 @@ class DebuggerPDP11 extends DbgLib {
             }
 
             if (nPrev > aHistory.length) {
-                this.println("note: only " + aHistory.length + " available");
+                this.printf("note: only %d available\n", aHistory.length);
                 nPrev = aHistory.length;
             }
 
@@ -26616,7 +26603,7 @@ class DebuggerPDP11 extends DbgLib {
             }
 
             if (sPrev !== undefined) {
-                this.println(nPrev + " instructions earlier:");
+                this.printf("%d instructions earlier:\n", nPrev);
             }
 
             /*
@@ -26658,7 +26645,7 @@ class DebuggerPDP11 extends DbgLib {
                 var sInstruction = this.getInstruction(dbgAddrNew, sComment, nSequence);
 
                 if (!aFilters.length || sInstruction.indexOf(aFilters[0]) >= 0) {
-                    this.println(sInstruction);
+                    this.printf("%s\n", sInstruction);
                 }
 
                 /*
@@ -26682,7 +26669,7 @@ class DebuggerPDP11 extends DbgLib {
         }
 
         if (!cHistory) {
-            this.println("no " + sMore + "history available");
+            this.printf("no %shistory available\n", sMore);
             this.nextHistory = undefined;
         }
     }
@@ -26696,7 +26683,7 @@ class DebuggerPDP11 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = MessagesPDP11.WARN;
+        this.bitsMessage = this.bitsWarning = Messages.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*
@@ -26705,10 +26692,10 @@ class DebuggerPDP11 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
         if (aEnable.length) {
-            for (var m in MessagesPDP11.CATEGORIES) {
+            for (var m in Messages.Categories) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= MessagesPDP11.CATEGORIES[m];
-                    this.println(m + " messages enabled");
+                    this.bitsMessage |= Messages.Categories[m];
+                    this.printf("%s messages enabled\n", m);
                 }
             }
         }
@@ -26720,12 +26707,12 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {number} bitMessage is one Messages category flag
      * @param {function(Array.<string>)} fnDumper is a function the Debugger can use to dump data for that category
-     * @return {boolean} true if successfully registered, false if not
+     * @returns {boolean} true if successfully registered, false if not
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in MessagesPDP11.CATEGORIES) {
-            if (bitMessage == MessagesPDP11.CATEGORIES[m]) {
+        for (var m in Messages.Categories) {
+            if (bitMessage == Messages.Categories[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -26739,7 +26726,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -26760,7 +26747,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} iReg (0-7; not used for other registers)
-     * @return {string}
+     * @returns {string}
      */
     getRegName(iReg)
     {
@@ -26777,7 +26764,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -26842,7 +26829,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     replaceRegs(s)
     {
@@ -26850,36 +26837,37 @@ class DebuggerPDP11 extends DbgLib {
     }
 
     /**
-     * message(sMessage, fAddress)
+     * message(sMessage, bitsMessage)
      *
      * @this {DebuggerPDP11}
-     * @param {string} sMessage is any caller-defined message string
-     * @param {boolean} [fAddress] is true to display the current address
+     * @param {string} sMessage
+     * @param {number} [bitsMessage]
      */
-    message(sMessage, fAddress)
+    message(sMessage, bitsMessage)
     {
-        if (fAddress) {
-            sMessage += " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
+        var sAddress, fRunning;
+        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+            sAddress = " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
+            sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.bitsMessage & MessagesPDP11.BUFFER) {
+        if (this.bitsMessage & Messages.BUFFER) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
 
-        var fRunning;
-        if ((this.bitsMessage & MessagesPDP11.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
+        if ((this.bitsMessage & Messages.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
+            if (fRunning) sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
-            if (fRunning) sMessage += " (cpu halted)";
         }
 
-        this.println(sMessage); // + " (" + this.cpu.getCycles() + " cycles)"
+        this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
         /*
-         * We have no idea what the frequency of println() calls might be; all we know is that they easily
+         * We have no idea what the frequency of print() calls might be; all we know is that they easily
          * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
          * message, to effectively end the current burst and start fresh.
          *
@@ -26898,7 +26886,7 @@ class DebuggerPDP11 extends DbgLib {
     init(fAutoStart)
     {
         this.fInit = true;
-        this.println("Type ? for help with PDPjs Debugger commands");
+        this.printf("Type ? for help with PDPjs Debugger commands\n");
         this.updateStatus();
         if (!fAutoStart) this.setFocus();
         if (this.sInitCommands) {
@@ -26926,7 +26914,7 @@ class DebuggerPDP11 extends DbgLib {
         var i;
         if (!this.checksEnabled()) {
             if (this.aInstructionHistory && this.aInstructionHistory.length && !fQuiet) {
-                this.println("instruction history buffer freed");
+                this.printf("instruction history buffer freed\n");
             }
             this.iInstructionHistory = 0;
             this.aInstructionHistory = [];
@@ -26943,7 +26931,7 @@ class DebuggerPDP11 extends DbgLib {
             }
             this.iInstructionHistory = 0;
             if (!fQuiet) {
-                this.println("instruction history buffer allocated");
+                this.printf("instruction history buffer allocated\n");
             }
         }
     }
@@ -26954,7 +26942,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {boolean} [fUpdateFocus] is true to update focus
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if run request successful, false if not
+     * @returns {boolean} true if run request successful, false if not
      */
     startCPU(fUpdateFocus, fQuiet)
     {
@@ -26970,7 +26958,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {number} nCycles (0 for one instruction without checking breakpoints)
      * @param {boolean|null} [fRegs] is true to display registers after step (default is false; use null for previous setting)
      * @param {boolean} [fUpdateDisplays] is false to disable Computer display updates (default is true)
-     * @return {boolean}
+     * @returns {boolean}
      */
     stepCPU(nCycles, fRegs, fUpdateDisplays)
     {
@@ -27057,14 +27045,14 @@ class DebuggerPDP11 extends DbgLib {
         if (fRegs === undefined) fRegs = true;
 
         if (sCmd) {
-            this.println(DebuggerPDP11.PROMPT + sCmd);
+            this.printf("%s%s\n", DebuggerPDP11.PROMPT, sCmd);
         }
 
         var trapStatus = this.cpu.getTrapStatus();
         if (trapStatus) {
             var reason = trapStatus >> 8;
             var sReason = reason < 0? PDP11.REASONS[-reason] : this.toStrBase(reason);
-            this.println("trapped to " + this.toStrBase(trapStatus & 0xff, 8) + " (" + sReason + ")");
+            this.printf("trapped to %s (%s)\n", this.toStrBase(trapStatus & 0xff, 8), sReason);
         }
 
         this.dbgAddrNextCode = this.newAddr(this.cpu.getPC());
@@ -27087,12 +27075,12 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {boolean} [fQuiet]
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkCPU(fQuiet)
     {
         if (!this.cpu || !this.cpu.isReady() || !this.cpu.isPowered() || this.cpu.isRunning()) {
-            if (!fQuiet) this.println("cpu busy or unavailable, command ignored");
+            if (!fQuiet) this.printf("cpu busy or unavailable, command ignored\n");
             return false;
         }
         return !this.cpu.isError();
@@ -27104,7 +27092,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -27116,7 +27104,7 @@ class DebuggerPDP11 extends DbgLib {
              */
             this.reset(true);
 
-            // this.println(data? "resuming" : "powering up");
+            // this.printf("%s\n", data? "resuming" : "powering up");
 
             if (data) {
                 return this.restore(data);
@@ -27131,11 +27119,11 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean}
+     * @returns {Object|boolean}
      */
     powerDown(fSave, fShutdown)
     {
-        if (fShutdown) this.println(fSave? "suspending" : "shutting down");
+        if (fShutdown) this.printf("%s\n", fSave? "suspending" : "shutting down");
         return fSave? this.save() : true;
     }
 
@@ -27170,7 +27158,7 @@ class DebuggerPDP11 extends DbgLib {
      * This implements (very rudimentary) save support for the Debugger component.
      *
      * @this {DebuggerPDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -27189,7 +27177,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -27217,7 +27205,7 @@ class DebuggerPDP11 extends DbgLib {
      */
     start(ms, nCycles)
     {
-        if (!this.nStep) this.println("running");
+        if (!this.nStep) this.printf("running\n");
         this.flags.running = true;
         this.msStart = ms;
         this.nCyclesStart = nCycles;
@@ -27255,7 +27243,7 @@ class DebuggerPDP11 extends DbgLib {
                     }
                     sStopped += this.nCycles + " cycles, " + msTotal + " ms, " + nCyclesPerSecond + " hz)";
                 } else {
-                    if (this.messageEnabled(MessagesPDP11.HALT)) {
+                    if (this.messageEnabled(Messages.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -27264,7 +27252,7 @@ class DebuggerPDP11 extends DbgLib {
                         sStopped += " (use the 't' command to execute blocked faults)";
                     }
                 }
-                this.println(sStopped);
+                this.printf("%s\n", sStopped);
             }
             this.updateStatus(true);
             this.setFocus();
@@ -27285,7 +27273,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {boolean} [fRelease] is true for release criteria only; default is false (any criteria)
-     * @return {boolean} true if every instruction needs to pass through checkInstruction(), false if not
+     * @returns {boolean} true if every instruction needs to pass through checkInstruction(), false if not
      */
     checksEnabled(fRelease)
     {
@@ -27301,7 +27289,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {number} addr
      * @param {number} nState is < 0 if stepping, 0 if starting, or > 0 if running
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkInstruction(addr, nState)
     {
@@ -27363,7 +27351,7 @@ class DebuggerPDP11 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling MessagesPDP11.INT messages.
+         * well, OK, and a few other things now, like enabling Messages.INT messages.
          */
         if (nState >= 0 && this.aInstructionHistory.length) {
             this.cInstructions++;
@@ -27387,14 +27375,14 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} [sMessage]
-     * @return {boolean} true if stopping is enabled, false if not
+     * @returns {boolean} true if stopping is enabled, false if not
      */
     stopInstruction(sMessage)
     {
         var cpu = this.cpu;
         if (cpu.isRunning()) {
             cpu.setPC(this.cpu.getLastPC());
-            if (sMessage) this.println(sMessage);
+            if (sMessage) this.printf("%s\n", sMessage);
             this.stopCPU();
             /*
              * TODO: Review the appropriate-ness of throwing a bogus vector number in order to immediately stop
@@ -27411,12 +27399,12 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} opCode
-     * @return {boolean} true if stopping is enabled, false if not
+     * @returns {boolean} true if stopping is enabled, false if not
      */
     undefinedInstruction(opCode)
     {
-        if (this.messageEnabled(MessagesPDP11.CPU)) {
-            this.printMessage("undefined opcode " + this.toStrBase(opCode), true, true);
+        if (this.messageEnabled(Messages.CPU)) {
+            this.printf(Messages.CPU + Messages.ADDRESS, "undefined opcode %s\n", this.toStrBase(opCode));
             return this.stopInstruction();  // allow the caller to step over it if they really want a trap generated
         }
         return false;
@@ -27436,7 +27424,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryRead(addr, nb)
     {
@@ -27461,7 +27449,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryWrite(addr, nb)
     {
@@ -27538,7 +27526,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {Array} aBreak
      * @param {DbgAddrPDP11} dbgAddr
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint added, false if already exists
+     * @returns {boolean} true if breakpoint added, false if already exists
      */
     addBreakpoint(aBreak, dbgAddr, fTemporary)
     {
@@ -27561,7 +27549,7 @@ class DebuggerPDP11 extends DbgLib {
         if (aBreak != this.aBreakExec) {
             var addr = this.getAddr(dbgAddr);
             if (addr === PDP11.ADDR_INVALID) {
-                this.println("invalid address: " + this.toStrAddr(dbgAddr));
+                this.printf("invalid address: %s\n", this.toStrAddr(dbgAddr));
                 fSuccess = false;
             } else {
                 var fWrite = (aBreak == this.aBreakWrite);
@@ -27603,7 +27591,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {boolean} [fRemove]
      * @param {boolean} [fTemporary]
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if found, false if not
+     * @returns {boolean} true if found, false if not
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTemporary, fQuiet)
     {
@@ -27649,7 +27637,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {Array} aBreak
-     * @return {number} of breakpoints listed, 0 if none
+     * @returns {number} of breakpoints listed, 0 if none
      */
     listBreakpoints(aBreak)
     {
@@ -27670,7 +27658,7 @@ class DebuggerPDP11 extends DbgLib {
     printBreakpoint(aBreak, i, sAction)
     {
         var dbgAddr = aBreak[i];
-        this.println(aBreak[0] + ' ' + this.toStrAddr(dbgAddr) + (sAction? (' ' + sAction) : (dbgAddr.sCmd? (' "' + dbgAddr.sCmd + '"') : '')));
+        this.printf("%s %s%s\n", aBreak[0], this.toStrAddr(dbgAddr), (sAction? (' ' + sAction) : (dbgAddr.sCmd? (' "' + dbgAddr.sCmd + '"') : '')));
     }
 
     /**
@@ -27714,7 +27702,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {number} nb (# of bytes)
      * @param {Array} aBreak
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} true if breakpoint has been hit, false if not
      */
     checkBreakpoint(addr, nb, aBreak, fTemporary)
     {
@@ -27805,7 +27793,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {DbgAddrPDP11} dbgAddr
      * @param {string} [sComment] is an associated comment
      * @param {number|null} [nSequence] is an associated sequence number, undefined if none
-     * @return {string} (and dbgAddr is updated to the next instruction)
+     * @returns {string} (and dbgAddr is updated to the next instruction)
      */
     getInstruction(dbgAddr, sComment, nSequence)
     {
@@ -27903,7 +27891,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {number} opCode
      * @param {number} opType
      * @param {DbgAddrPDP11} dbgAddr
-     * @return {string|Array.<string>}
+     * @returns {string|Array.<string>}
      */
     getOperand(opCode, opType, dbgAddr)
     {
@@ -28057,7 +28045,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} addr
-     * @return {string|null}
+     * @returns {string|null}
      */
     getTarget(addr)
     {
@@ -28079,12 +28067,12 @@ class DebuggerPDP11 extends DbgLib {
      * @param {string} sOp
      * @param {string|undefined} sOperand
      * @param {DbgAddrPDP11} dbgAddr of memory where this instruction is being assembled
-     * @return {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
      */
     parseInstruction(sOp, sOperand, dbgAddr)
     {
         var aOpBytes = [];
-        this.println("not supported yet");
+        this.printf("not supported yet\n");
         return aOpBytes;
     }
 
@@ -28093,7 +28081,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} sFlag
-     * @return {string} value of flag
+     * @returns {string} value of flag
      */
     getFlagOutput(sFlag)
     {
@@ -28123,7 +28111,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} iReg
-     * @return {string}
+     * @returns {string}
      */
     getRegOutput(iReg)
     {
@@ -28142,7 +28130,7 @@ class DebuggerPDP11 extends DbgLib {
      *      M0=xxxxxx M1=xxxxxx M2=xxxxxx M3=xxxxxx ER=xxxxxx
      *
      * @this {DebuggerPDP11}
-     * @return {string}
+     * @returns {string}
      */
     getMiscDump()
     {
@@ -28164,7 +28152,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {boolean} [fMisc] (true to include misc registers)
-     * @return {string}
+     * @returns {string}
      */
     getRegDump(fMisc)
     {
@@ -28187,7 +28175,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {number|string|Array|Object} p1
      * @param {number|string|Array|Object} p2
-     * @return {number}
+     * @returns {number}
      */
     comparePairs(p1, p2)
     {
@@ -28316,7 +28304,7 @@ class DebuggerPDP11 extends DbgLib {
                 if (offSymbol === undefined) continue;
                 var sSymbolOrig = symbolTable.aSymbols[sSymbol]['l'];
                 if (sSymbolOrig) sSymbol = sSymbolOrig;
-                this.println(this.toStrOffset(offSymbol) + ' ' + sSymbol);
+                this.printf("%s %s\n", this.toStrOffset(offSymbol), sSymbol);
             }
         }
     }
@@ -28332,7 +28320,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
      * @param {boolean} [fNearest]
-     * @return {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
+     * @returns {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
      */
     findSymbol(dbgAddr, fNearest)
     {
@@ -28366,7 +28354,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} sSymbol
-     * @return {DbgAddrPDP11|undefined}
+     * @returns {DbgAddrPDP11|undefined}
      */
     findSymbolAddr(sSymbol)
     {
@@ -28439,7 +28427,7 @@ class DebuggerPDP11 extends DbgLib {
             s += '\n' + Str.pad(sCommand, 9) + DebuggerPDP11.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: history disabled if no exec breakpoints";
-        this.println(s);
+        this.printf("%s\n", s);
     }
 
     /**
@@ -28479,7 +28467,7 @@ class DebuggerPDP11 extends DbgLib {
 
         this.dbgAddrAssemble = dbgAddr;
         if (asArgs[2] === undefined) {
-            this.println("begin assemble at " + this.toStrAddr(dbgAddr));
+            this.printf("begin assemble at %s\n", this.toStrAddr(dbgAddr));
             this.fAssemble = true;
             this.cmp.updateDisplays();
             return;
@@ -28493,7 +28481,7 @@ class DebuggerPDP11 extends DbgLib {
             /*
              * Since getInstruction() also updates the specified address, dbgAddrAssemble is automatically advanced.
              */
-            this.println(this.getInstruction(this.dbgAddrAssemble));
+            this.printf("%s\n", this.getInstruction(this.dbgAddrAssemble));
         }
     }
 
@@ -28521,13 +28509,13 @@ class DebuggerPDP11 extends DbgLib {
     doBreak(sCmd, sAddr, sOptions)
     {
         if (sAddr == '?') {
-            this.println("breakpoint commands:");
-            this.println("\tbp #\tset exec breakpoint");
-            this.println("\tbr #\tset read breakpoint");
-            this.println("\tbw #\tset write breakpoint");
-            this.println("\tbc #\tclear breakpoint (* to clear all)");
-            this.println("\tbl\tlist all breakpoints");
-            this.println("\tbn [#]\tbreak after # instruction(s)");
+            this.printf("breakpoint commands:\n");
+            this.printf("\tbp #\tset exec breakpoint\n");
+            this.printf("\tbr #\tset read breakpoint\n");
+            this.printf("\tbw #\tset write breakpoint\n");
+            this.printf("\tbc #\tclear breakpoint (* to clear all)\n");
+            this.printf("\tbl\tlist all breakpoints\n");
+            this.printf("\tbn [#]\tbreak after # instruction(s)\n");
             return;
         }
 
@@ -28537,19 +28525,19 @@ class DebuggerPDP11 extends DbgLib {
             cBreaks += this.listBreakpoints(this.aBreakExec);
             cBreaks += this.listBreakpoints(this.aBreakRead);
             cBreaks += this.listBreakpoints(this.aBreakWrite);
-            if (!cBreaks) this.println("no breakpoints");
+            if (!cBreaks) this.printf("no breakpoints\n");
             return;
         }
 
         if (sParm == 'n') {
             var n = +sAddr || 0;
             if (sAddr) this.nBreakInstructions = n;
-            this.println("break after " + n + " instruction(s)");
+            this.printf("break after %d instruction(s)\n", n);
             return;
         }
 
         if (sAddr === undefined) {
-            this.println("missing breakpoint address");
+            this.printf("missing breakpoint address\n");
             return;
         }
 
@@ -28562,7 +28550,7 @@ class DebuggerPDP11 extends DbgLib {
         if (sParm == 'c') {
             if (dbgAddr.addr == null) {
                 this.clearBreakpoints();
-                this.println("all breakpoints cleared");
+                this.printf("all breakpoints cleared\n");
                 return;
             }
             if (this.findBreakpoint(this.aBreakExec, dbgAddr, true))
@@ -28571,7 +28559,7 @@ class DebuggerPDP11 extends DbgLib {
                 return;
             if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true))
                 return;
-            this.println("breakpoint missing: " + this.toStrAddr(dbgAddr));
+            this.printf("breakpoint missing: %s\n", this.toStrAddr(dbgAddr));
             return;
         }
 
@@ -28591,7 +28579,7 @@ class DebuggerPDP11 extends DbgLib {
             this.addBreakpoint(this.aBreakWrite, dbgAddr);
             return;
         }
-        this.println("unknown breakpoint command: " + sParm);
+        this.printf("unknown breakpoint command: %s\n", sParm);
     }
 
     /**
@@ -28624,21 +28612,21 @@ class DebuggerPDP11 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in MessagesPDP11.CATEGORIES) {
+            for (m in Messages.Categories) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers += m;
                 }
             }
             sDumpers += ",state,symbols";
-            this.println("dump memory commands:");
-            this.println("\tda [a]        dump info for address a");
-            this.println("\tdb [a] [n]    dump n bytes at address a");
-            this.println("\tdw [a] [n]    dump n words at address a");
-            this.println("\tdd [a] [n]    dump n dwords at address a");
-            this.println("\tds [a] [n]    dump n words at address a as JSON");
-            this.println("\tdh [p] [n]    dump n instructions from history position p");
-            if (sDumpers.length) this.println("dump extension commands:\n\t" + sDumpers);
+            this.printf("dump memory commands:\n");
+            this.printf("\tda [a]        dump info for address a\n");
+            this.printf("\tdb [a] [n]    dump n bytes at address a\n");
+            this.printf("\tdw [a] [n]    dump n words at address a\n");
+            this.printf("\tdd [a] [n]    dump n dwords at address a\n");
+            this.printf("\tds [a] [n]    dump n words at address a as JSON\n");
+            this.printf("\tdh [p] [n]    dump n instructions from history position p\n");
+            if (sDumpers.length) this.printf("dump extension commands:\n\t%s\n", sDumpers);
             return;
         }
 
@@ -28660,7 +28648,7 @@ class DebuggerPDP11 extends DbgLib {
                 console.log(sState);
             } else {
                 this.doClear();
-                if (sState) this.println(sState);
+                if (sState) this.printf("%s\n", sState);
             }
             return;
         }
@@ -28671,7 +28659,7 @@ class DebuggerPDP11 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in MessagesPDP11.CATEGORIES) {
+            for (m in Messages.Categories) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -28679,7 +28667,7 @@ class DebuggerPDP11 extends DbgLib {
                         asArgs.shift();
                         fnDumper(asArgs);
                     } else {
-                        this.println("no dump registered for " + sAddr);
+                        this.printf("no dump registered for %s\n", sAddr);
                     }
                     return;
                 }
@@ -28718,18 +28706,18 @@ class DebuggerPDP11 extends DbgLib {
              */
             var fPhysical = (dbgAddr.fPhysical || dbgAddr.addr > 0xffff);
             var a = this.cpu.getAddrInfo(dbgAddr.addr || 0, fPhysical);
-            this.println(Str.pad("", fPhysical? 12: 19) + Str.toBin(dbgAddr.addr, fPhysical? 22 : 17, 3) + "  " + Str.toOct(dbgAddr.addr, 8));
+            this.printf("%s%s  %08o\n", Str.pad("", fPhysical? 12: 19), Str.toBin(dbgAddr.addr, fPhysical? 22 : 17, 3), dbgAddr.addr);
             if (a.length < 6) {
                 if (a.length > 2) {
-                    this.println("    OFFSET:             " + Str.toBin(a[3], 13, 3) + "  " + Str.toOct(a[3], 8));
-                    this.println("UNIMAP[" + Str.toDec(a[1], 2) + "]: " + Str.toBin(a[2], 22, 3) + "  " + Str.toOct(a[2], 8));
+                    this.printf("    OFFSET:             %s  %08o\n", Str.toBin(a[3], 13, 3), a[3]);
+                    this.printf("UNIMAP[%s]: %s  %08o\n", Str.toDec(a[1], 2), Str.toBin(a[2], 22, 3), a[2]);
                 }
-                this.println("  PHYSICAL: " + Str.toBin(a[0], 22, 3) + "  " + Str.toOct(a[0], 8))
+                this.printf("  PHYSICAL: %s  %08o\n", Str.toBin(a[0], 22, 3), a[0]);
             } else {
-                this.println("    OFFSET:             " + Str.toBin(a[1], 13, 3) + "  " + Str.toOct(a[1], 8));
-                this.println("+   " + DebuggerPDP11.MODES[a[2]] + "PAR" + a[3] + ": " + Str.toBin(a[4], 22, 3) + "  " + Str.toOct(a[4], 8));
-                this.println("&  MMUMASK: " + Str.toBin(a[5], 22, 3) + "  " + Str.toOct(a[5], 8));
-                this.println("= PHYSICAL: " + Str.toBin(a[0], 22, 3) + "  " + Str.toOct(a[0], 8))
+                this.printf("    OFFSET:             %s  %08o\n", Str.toBin(a[1], 13, 3), a[1]);
+                this.printf("+   %sPAR%s: %s  %08o\n", DebuggerPDP11.MODES[a[2]], a[3], Str.toBin(a[4], 22, 3), a[4]);
+                this.printf("&  MMUMASK: %s  %08o\n", Str.toBin(a[5], 22, 3), a[5]);
+                this.printf("= PHYSICAL: %s  %08o\n", Str.toBin(a[0], 22, 3), a[0]);
             }
             return;
         }
@@ -28807,7 +28795,7 @@ class DebuggerPDP11 extends DbgLib {
             }
         }
 
-        if (sDump) this.println(sDump);
+        if (sDump) this.printf("%s\n", sDump);
 
         this.dbgAddrNextData = dbgAddr;
         this.nBase = nBase;
@@ -28840,9 +28828,9 @@ class DebuggerPDP11 extends DbgLib {
             sAddr = null;
         }
         if (sAddr == null) {
-            this.println("edit memory commands:");
-            this.println("\teb [a] [...]  edit bytes at address a");
-            this.println("\tew [a] [...]  edit words at address a");
+            this.printf("edit memory commands:\n");
+            this.printf("\teb [a] [...]  edit bytes at address a\n");
+            this.printf("\tew [a] [...]  edit words at address a\n");
             return;
         }
         var dbgAddr = this.parseAddr(sAddr);
@@ -28850,13 +28838,13 @@ class DebuggerPDP11 extends DbgLib {
         for (var i = 2; i < asArgs.length; i++) {
             var vNew = this.parseExpression(asArgs[i]);
             if (vNew === undefined) {
-                this.println("unrecognized value: " + asArgs[i]);
+                this.printf("unrecognized value: %s\n", asArgs[i]);
                 break;
             }
             if (vNew & ~mask) {
-                this.println("warning: " + Str.toHex(vNew) + " exceeds " + size + "-byte value");
+                this.printf("warning: %x exceeds %s-byte value\n", vNew, size);
             }
-            this.println("changing " + this.toStrAddr(dbgAddr) + (this.messageEnabled(MessagesPDP11.BUS)? "" : (" from " + this.toStrBase(fnGet.call(this, dbgAddr), size << 3))) + " to " + this.toStrBase(vNew, size << 3));
+            this.printf("changing %s%s to %s\n", this.toStrAddr(dbgAddr), (this.messageEnabled(Messages.BUS)? "" : (" from " + this.toStrBase(fnGet.call(this, dbgAddr), size << 3))), this.toStrBase(vNew, size << 3));
             fnSet.call(this, dbgAddr, vNew, size);
         }
     }
@@ -28871,11 +28859,11 @@ class DebuggerPDP11 extends DbgLib {
     {
         var sMsg;
         if (this.flags.running) {
-            if (!fQuiet) this.println("halting");
+            if (!fQuiet) this.printf("halting\n");
             this.stopCPU();
         } else {
             if (this.isBusy(true)) return;
-            if (!fQuiet) this.println("already halted");
+            if (!fQuiet) this.printf("already halted\n");
         }
     }
 
@@ -28892,16 +28880,16 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
+     * @returns {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
      */
     doIf(sCmd, fQuiet)
     {
         sCmd = Str.trim(sCmd);
         if (!this.parseExpression(sCmd)) {
-            if (!fQuiet) this.println("false: " + sCmd);
+            if (!fQuiet) this.printf("false: %s\n", sCmd);
             return false;
         }
-        if (!fQuiet) this.println("true: " + sCmd);
+        if (!fQuiet) this.printf("true: %s\n", sCmd);
         return true;
     }
 
@@ -28910,13 +28898,13 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {Array.<string>} asArgs
-     * @return {boolean} true only if the instruction info command ("n") is supported
+     * @returns {boolean} true only if the instruction info command ("n") is supported
      */
     doInfo(asArgs)
     {
         if (DEBUG) {
-            this.println("msPerYield: " + this.cpu.msPerYield);
-            this.println("nCyclesPerYield: " + this.cpu.nCyclesPerYield);
+            this.printf("msPerYield: %d\n", this.cpu.msPerYield);
+            this.printf("nCyclesPerYield: %d\n", this.cpu.nCyclesPerYield);
             return true;
         }
         return false;
@@ -28934,14 +28922,14 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} sCmd
-     * @return {boolean} true if valid "var" assignment, false if not
+     * @returns {boolean} true if valid "var" assignment, false if not
      */
     doVar(sCmd)
     {
         var a = sCmd.match(/^\s*([A-Z_]?[A-Z0-9_]*)\s*(=?)\s*(.*)$/i);
         if (a) {
             if (!a[1]) {
-                if (!this.printVariable()) this.println("no variables");
+                if (!this.printVariable()) this.printf("no variables\n");
                 return true;    // it's not considered an error to print an empty list of variables
             }
             if (!a[2]) {
@@ -28958,7 +28946,7 @@ class DebuggerPDP11 extends DbgLib {
             }
             return false;
         }
-        this.println("invalid assignment:" + sCmd);
+        this.printf("invalid assignment: %s\n", sCmd);
         return false;
     }
 
@@ -28968,7 +28956,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {string} sAddr
      * @param {boolean} [fPrint]
-     * @return {string|null}
+     * @returns {string|null}
      */
     doList(sAddr, fPrint)
     {
@@ -28985,7 +28973,7 @@ class DebuggerPDP11 extends DbgLib {
                     nDelta = dbgAddr.addr - aSymbol[1];
                     if (nDelta) sDelta = " + " + Str.toHexWord(nDelta);
                     s = aSymbol[0] + " (" + this.toStrOffset(aSymbol[1]) + ')' + sDelta;
-                    if (fPrint) this.println(s);
+                    if (fPrint) this.printf("%s\n", s);
                     sSymbol = s;
                 }
                 if (aSymbol.length > 4 && aSymbol[4]) {
@@ -28993,11 +28981,11 @@ class DebuggerPDP11 extends DbgLib {
                     nDelta = aSymbol[5] - dbgAddr.addr;
                     if (nDelta) sDelta = " - " + Str.toHexWord(nDelta);
                     s = aSymbol[4] + " (" + this.toStrOffset(aSymbol[5]) + ')' + sDelta;
-                    if (fPrint) this.println(s);
+                    if (fPrint) this.printf("%s\n", s);
                     if (!sSymbol) sSymbol = s;
                 }
             } else {
-                if (fPrint) this.println("no symbols");
+                if (fPrint) this.printf("no symbols\n");
             }
         }
         return sSymbol;
@@ -29019,7 +29007,7 @@ class DebuggerPDP11 extends DbgLib {
         if (sCategory !== undefined) {
             var bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(MessagesPDP11.HALT | MessagesPDP11.KEYS | MessagesPDP11.BUFFER);
+                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.BUFFER);
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -29034,15 +29022,15 @@ class DebuggerPDP11 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in MessagesPDP11.CATEGORIES) {
+                for (m in Messages.Categories) {
                     if (sCategory == m) {
-                        bitsMessage = MessagesPDP11.CATEGORIES[m];
+                        bitsMessage = Messages.Categories[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
                 }
                 if (!bitsMessage) {
-                    this.println("unknown message category: " + sCategory);
+                    this.printf("unknown message category: %s\n", sCategory);
                     return;
                 }
             }
@@ -29054,10 +29042,10 @@ class DebuggerPDP11 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage &= ~bitsMessage;
                     fCriteria = false;
-                    if (bitsMessage == MessagesPDP11.BUFFER) {
+                    if (bitsMessage == Messages.BUFFER) {
                         var i = this.aMessageBuffer.length >= 1000? this.aMessageBuffer.length - 1000 : 0;
                         while (i < this.aMessageBuffer.length) {
-                            this.println(this.aMessageBuffer[i++]);
+                            this.printf("%s\n", this.aMessageBuffer[i++]);
                         }
                         this.aMessageBuffer = [];
                     }
@@ -29070,9 +29058,9 @@ class DebuggerPDP11 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in MessagesPDP11.CATEGORIES) {
+        for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = MessagesPDP11.CATEGORIES[m];
+                var bitMessage = Messages.Categories[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -29087,12 +29075,12 @@ class DebuggerPDP11 extends DbgLib {
         }
 
         if (sCategory === undefined) {
-            this.println("message commands:\n\tm [category] [on|off]\tturn categories on/off");
+            this.printf("message commands:\n\tm [category] [on|off]\tturn categories on/off\n");
         }
 
-        this.println((fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t") + (sCategories || "none"));
+        this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
 
-        this.historyInit();     // call this just in case MessagesPDP11.INT was turned on
+        this.historyInit();     // call this just in case Messages.INT was turned on
     }
 
     /**
@@ -29111,11 +29099,11 @@ class DebuggerPDP11 extends DbgLib {
                 if (nBase == 8 || nBase == 10 || nBase == 16) {
                     this.nBase = nBase;
                 } else {
-                    this.println("invalid base: " + nBase);
+                    this.printf("invalid base: %d\n", nBase);
                     break;
                 }
             }
-            this.println("default base: " + this.nBase);
+            this.printf("default base: %d\n", this.nBase);
             break;
 
         case "cs":
@@ -29132,38 +29120,38 @@ class DebuggerPDP11 extends DbgLib {
                     this.cpu.nCyclesChecksumStop = nCycles;
                     break;
                 default:
-                    this.println("unknown cs option");
+                    this.printf("unknown cs option\n");
                     return;
             }
             if (nCycles !== undefined) {
                 this.cpu.resetChecksum();
             }
-            this.println("checksums " + (this.cpu.flags.checksum? "enabled" : "disabled"));
+            this.printf("checksums %s\n", (this.cpu.flags.checksum? "enabled" : "disabled"));
             return;
 
         case "sp":
             if (asArgs[2] !== undefined) {
                 if (!this.cpu.setSpeed(+asArgs[2])) {
-                    this.println("warning: using 1x multiplier, previous target not reached");
+                    this.printf("warning: using 1x multiplier, previous target not reached\n");
                 }
             }
-            this.println("target speed: " + this.cpu.getSpeedTarget() + " (" + this.cpu.getSpeed() + "x)");
+            this.printf("target speed: %s (%dx)\n", this.cpu.getSpeedTarget(), this.cpu.getSpeed());
             return;
 
         default:
             if (asArgs[1]) {
-                this.println("unknown option: " + asArgs[1]);
+                this.printf("unknown option: %s\n", asArgs[1]);
                 return;
             }
             /* falls through */
 
         case "?":
-            this.println("debugger options:");
-            this.println("\tbase #\t\tset default base to #");
-            this.println("\tcs int #\tset checksum cycle interval to #");
-            this.println("\tcs start #\tset checksum cycle start count to #");
-            this.println("\tcs stop #\tset checksum cycle stop count to #");
-            this.println("\tsp #\t\tset speed multiplier to #");
+            this.printf("debugger options:\n");
+            this.printf("\tbase #\t\tset default base to #\n");
+            this.printf("\tcs int #\tset checksum cycle interval to #\n");
+            this.printf("\tcs start #\tset checksum cycle start count to #\n");
+            this.printf("\tcs stop #\tset checksum cycle stop count to #\n");
+            this.printf("\tsp #\t\tset speed multiplier to #\n");
             break;
         }
     }
@@ -29178,10 +29166,10 @@ class DebuggerPDP11 extends DbgLib {
     doRegisters(asArgs, fInstruction)
     {
         if (asArgs && asArgs[1] == '?') {
-            this.println("register commands:");
-            this.println("\tr\tdump registers");
-            this.println("\trm\tdump misc registers");
-            this.println("\trx [#]\tset flag or register x to [#]");
+            this.printf("register commands:\n");
+            this.printf("\tr\tdump registers\n");
+            this.printf("\trm\tdump misc registers\n");
+            this.printf("\trx [#]\tset flag or register x to [#]\n");
             return;
         }
 
@@ -29206,7 +29194,7 @@ class DebuggerPDP11 extends DbgLib {
                     sValue = asArgs[2];
                 }
                 else {
-                    this.println("missing value for " + asArgs[1]);
+                    this.printf("missing value for %s\n", asArgs[1]);
                     return;
                 }
 
@@ -29277,15 +29265,15 @@ class DebuggerPDP11 extends DbgLib {
                             break;
                         }
                     }
-                    this.println("unknown register: " + sReg);
+                    this.printf("unknown register: %s\n", sReg);
                     return;
                 }
                 this.cmp.updateDisplays();
-                this.println("updated registers:");
+                this.printf("updated registers:\n");
             }
         }
 
-        this.println(this.getRegDump(fMisc));
+        this.printf("%s\n", this.getRegDump(fMisc));
 
         if (fInstruction) {
             this.dbgAddrNextCode = this.newAddr(cpu.getPC());
@@ -29333,7 +29321,7 @@ class DebuggerPDP11 extends DbgLib {
             this.parseExpression(sCmd, false);
         } else {
             if (a[2].length > 1) {
-                this.println(this.replaceRegs(a[2]));
+                this.printf("%s\n", this.replaceRegs(a[2]));
             } else {
                 this.printValue(null, a[2].charCodeAt(0));
             }
@@ -29350,9 +29338,9 @@ class DebuggerPDP11 extends DbgLib {
     doStep(sCmd, sOption)
     {
         if (sOption == '?') {
-            this.println("step commands:");
-            this.println("\tp\tstep over instruction");
-            this.println("\tpr\tstep over instruction with register update");
+            this.printf("step commands:\n");
+            this.printf("\tp\tstep over instruction\n");
+            this.printf("\tpr\tstep over instruction with register update\n");
             return;
         }
 
@@ -29399,7 +29387,7 @@ class DebuggerPDP11 extends DbgLib {
                 this.doTrace(nRegs? "tr" : "t");
             }
         } else {
-            this.println("step in progress");
+            this.printf("step in progress\n");
         }
     }
 
@@ -29411,7 +29399,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
-     * @return {string|null} CALL instruction at or near dbgAddr, or null if none
+     * @returns {string|null} CALL instruction at or near dbgAddr, or null if none
      */
     getCall(dbgAddr)
     {
@@ -29455,16 +29443,16 @@ class DebuggerPDP11 extends DbgLib {
     doStackTrace(sCmd, sAddr)
     {
         if (sAddr == '?') {
-            this.println("stack trace commands:");
-            this.println("\tk\tshow frame addresses");
-            this.println("\tks\tshow symbol information");
+            this.printf("stack trace commands:\n");
+            this.printf("\tk\tshow frame addresses\n");
+            this.printf("\tks\tshow symbol information\n");
             return;
         }
 
         var nFrames = 10, cFrames = 0;
         var dbgAddrCall = this.newAddr();
         var dbgAddrStack = this.newAddr(this.cpu.getSP());
-        this.println("stack trace for " + this.toStrAddr(dbgAddrStack));
+        this.printf("stack trace for %s\n", this.toStrAddr(dbgAddrStack));
 
         while (cFrames < nFrames) {
             var sCall = null, sCallPrev = null, cTests = 256;
@@ -29492,11 +29480,11 @@ class DebuggerPDP11 extends DbgLib {
                 if (a) sSymbol = this.doList(a[0]);
             }
             sCall = Str.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
-            this.println(sCall);
+            this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;
         }
-        if (!cFrames) this.println("no return addresses found");
+        if (!cFrames) this.printf("no return addresses found\n");
     }
 
     /**
@@ -29523,11 +29511,11 @@ class DebuggerPDP11 extends DbgLib {
     doTrace(sCmd, sCount)
     {
         if (sCount == '?') {
-            this.println("trace commands:");
-            this.println("\tt  [#]\ttrace # instructions");
-            this.println("\ttr [#]\ttrace # instructions with register updates");
-            this.println("\ttc [#]\ttrace # cycles");
-            this.println("note: bn [#] breaks after # instructions without updates");
+            this.printf("trace commands:\n");
+            this.printf("\tt  [#]\ttrace # instructions\n");
+            this.printf("\ttr [#]\ttrace # instructions with register updates\n");
+            this.printf("\ttc [#]\ttrace # cycles\n");
+            this.printf("note: bn [#] breaks after # instructions without updates\n");
             return;
         }
 
@@ -29600,9 +29588,9 @@ class DebuggerPDP11 extends DbgLib {
                     /*
                      * Limiting the amount of disassembled code to 256 bytes in non-DEBUG builds is partly to
                      * prevent the user from wedging the browser by dumping too many lines, but also a recognition
-                     * that, in non-DEBUG builds, this.println() keeps print output buffer truncated to 8Kb anyway.
+                     * that, in non-DEBUG builds, this.printf() keeps print output buffer truncated to 8Kb anyway.
                      */
-                    this.println("range too large");
+                    this.printf("range too large\n");
                     return;
                 }
                 nLines = -1;
@@ -29624,7 +29612,7 @@ class DebuggerPDP11 extends DbgLib {
                 if (!nPrinted && nLines || aSymbol[0].indexOf('+') < 0) {
                     var sLabel = aSymbol[0] + ':';
                     if (aSymbol[2]) sLabel += ' ' + aSymbol[2];
-                    this.println(sLabel);
+                    this.printf("%s\n", sLabel);
                 }
             }
 
@@ -29635,7 +29623,7 @@ class DebuggerPDP11 extends DbgLib {
 
             sInstruction = this.getInstruction(dbgAddr, sComment, nSequence);
 
-            this.println(sInstruction);
+            this.printf("%s\n", sInstruction);
             this.dbgAddrNextCode = dbgAddr;
             nBytes -= dbgAddr.addr - addr;
             nPrinted++;
@@ -29647,7 +29635,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} sCmd
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     splitArgs(sCmd)
     {
@@ -29674,7 +29662,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if command processed, false if unrecognized
+     * @returns {boolean} true if command processed, false if unrecognized
      */
     doCommand(sCmd, fQuiet)
     {
@@ -29683,14 +29671,14 @@ class DebuggerPDP11 extends DbgLib {
         try {
             if (!sCmd.length || sCmd == "end") {
                 if (this.fAssemble) {
-                    this.println("ended assemble at " + this.toStrAddr(this.dbgAddrAssemble));
+                    this.printf("ended assemble at %s\n", this.toStrAddr(this.dbgAddrAssemble));
                     this.dbgAddrNextCode = this.dbgAddrAssemble;
                     this.fAssemble = false;
                 }
                 sCmd = "";
             }
             else if (!fQuiet) {
-                this.println(DebuggerPDP11.PROMPT + sCmd);
+                this.printf("%s%s\n", DebuggerPDP11.PROMPT, sCmd);
             }
 
             var ch = sCmd.charAt(0);
@@ -29726,7 +29714,7 @@ class DebuggerPDP11 extends DbgLib {
                 case 'd':
                     if (!COMPILED && sCmd == "debug") {
                         window.DEBUG = true;
-                        this.println("DEBUG checks on");
+                        this.printf("DEBUG checks on\n");
                         break;
                     }
                     this.doDump(asArgs);
@@ -29794,8 +29782,8 @@ class DebuggerPDP11 extends DbgLib {
                         break;
                     }
                     if (asArgs[0] == "ver") {
-                        this.println((APPNAME || "PDP11") + " version " + APPVERSION + " (" + this.cpu.model + (PDP11.COMPILED? ",RELEASE" : (PDP11.DEBUG? ",DEBUG" : ",NODEBUG")) + (PDP11.TYPEDARRAYS? ",TYPEDARRAYS" : (PDP11.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")) + ')');
-                        this.println(Web.getUserAgent());
+                        this.printf("%s version %s (%s%s%s)\n", (APPNAME || "PDP11"), APPVERSION, this.cpu.model, (PDP11.COMPILED? ",RELEASE" : (PDP11.DEBUG? ",DEBUG" : ",NODEBUG")), (PDP11.TYPEDARRAYS? ",TYPEDARRAYS" : (PDP11.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")));
+                        this.printf("%s\n", Web.getUserAgent());
                         break;
                     }
                     fError = true;
@@ -29810,7 +29798,7 @@ class DebuggerPDP11 extends DbgLib {
                 case 'n':
                     if (!COMPILED && sCmd == "nodebug") {
                         window.DEBUG = false;
-                        this.println("DEBUG checks off");
+                        this.printf("DEBUG checks off\n");
                         break;
                     }
                     if (this.doInfo(asArgs)) break;
@@ -29820,12 +29808,12 @@ class DebuggerPDP11 extends DbgLib {
                     break;
                 }
                 if (fError) {
-                    this.println("unknown command: " + sCmd);
+                    this.printf("unknown command: %s\n", sCmd);
                     result = false;
                 }
             }
         } catch(e) {
-            this.println("debugger error: " + (e.stack || e.message));
+            this.printf("debugger error: %s\n", (e.stack || e.message));
             result = false;
         }
         return result;
@@ -29837,7 +29825,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {string} sCmds
      * @param {boolean} [fSave]
-     * @return {boolean} true if all commands processed, false if not
+     * @returns {boolean} true if all commands processed, false if not
      */
     doCommands(sCmds, fSave)
     {
@@ -30255,7 +30243,7 @@ class ComputerPDP11 extends Component {
      */
     constructor(parmsComputer, parmsMachine, fSuspended)
     {
-        super("Computer", parmsComputer, MessagesPDP11.COMPUTER);
+        super("Computer", parmsComputer, Messages.COMPUTER);
 
         this.flags.powered = false;
 
@@ -30324,20 +30312,18 @@ class ComputerPDP11 extends Component {
                 component = aComponents[iComponent];
                 /*
                  * I can think of many "cleaner" ways for the Control Panel component to pass its
-                 * notice(), println(), etc, overrides on to all the other components, but it's just
-                 * too darn convenient to slam those overrides into the components directly.
+                 * print() override on to all the other components, but it's just too darn convenient
+                 * to slam these overrides into the components directly.
                  */
-                component.notice = this.panel.notice;
                 component.print = this.panel.print;
-                component.println = this.panel.println;
             }
         }
 
-        this.println(APPNAME + " v" + APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.printf(Messages.DEFAULT, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        this.println("Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>");
+        this.printf(Messages.DEFAULT, "Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");
 
-        if (DEBUG && this.messageEnabled()) this.printMessage("TYPEDARRAYS: " + TYPEDARRAYS);
+        if (MAXDEBUG) this.printf(Messages.DEBUG, "TYPEDARRAYS: %s\n", TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -30439,7 +30425,7 @@ class ComputerPDP11 extends Component {
      * getMachineID()
      *
      * @this {ComputerPDP11}
-     * @return {string}
+     * @returns {string}
      */
     getMachineID()
     {
@@ -30488,7 +30474,7 @@ class ComputerPDP11 extends Component {
      * @param {Object|null} [parmsComponent]
      * @param {number} [type] (from Str.TYPES)
      * @param {*} [defaultValue]
-     * @return {*}
+     * @returns {*}
      */
     getMachineParm(sParm, parmsComponent, type, defaultValue)
     {
@@ -30523,7 +30509,7 @@ class ComputerPDP11 extends Component {
      * saveMachineParms()
      *
      * @this {ComputerPDP11}
-     * @return {string|null}
+     * @returns {string|null}
      */
     saveMachineParms()
     {
@@ -30534,7 +30520,7 @@ class ComputerPDP11 extends Component {
      * getUserID()
      *
      * @this {ComputerPDP11}
-     * @return {string}
+     * @returns {string}
      */
     getUserID()
     {
@@ -30554,13 +30540,13 @@ class ComputerPDP11 extends Component {
         if (!nErrorCode) {
             this.sStateData = sStateData;
             this.fStateData = true;
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("loaded state file " + sURL.replace(this.sUserID || "xxx", "xxx"));
+            if (DEBUG) {
+                this.printf("loaded state file %s\n", sURL.replace(this.sUserID || "xxx", "xxx"));
             }
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.notice('Unable to load machine state from server (error ' + nErrorCode + (sStateData? ': ' + Str.trim(sStateData) : '') + ')');
+            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -30596,7 +30582,7 @@ class ComputerPDP11 extends Component {
                 return;
             }
         }
-        if (DEBUG && this.messageEnabled()) this.printMessage("ComputerPDP11.wait(ready)");
+        if (DEBUG) this.printf("ComputerPDP11.wait(ready)\n");
         fn.call(this, parms);
     }
 
@@ -30607,7 +30593,7 @@ class ComputerPDP11 extends Component {
      *
      * @this {ComputerPDP11}
      * @param {State|null} [stateComputer]
-     * @return {boolean} true if state passes validation, false if not
+     * @returns {boolean} true if state passes validation, false if not
      */
     validateState(stateComputer)
     {
@@ -30617,12 +30603,12 @@ class ComputerPDP11 extends Component {
             var sTimestampValidate = stateValidate.get(ComputerPDP11.STATE_TIMESTAMP);
             var sTimestampComputer = stateComputer? stateComputer.get(ComputerPDP11.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.notice("Machine state may be out-of-date\n(" + sTimestampValidate + " vs. " + sTimestampComputer + ")\nCheck your browser's local storage limits");
+                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("Last state: " + sTimestampComputer + " (validate: " + sTimestampValidate + ")");
+                if (DEBUG) {
+                    this.printf("Last state: %s (validate: %s)\n", sTimestampComputer, sTimestampValidate);
                 }
             }
         }
@@ -30643,8 +30629,8 @@ class ComputerPDP11 extends Component {
             resume = this.resume || (this.sStateData? ComputerPDP11.RESUME_AUTO : ComputerPDP11.RESUME_NONE);
         }
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("ComputerPDP11.powerOn(" + (resume == ComputerPDP11.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")) + ")");
+        if (DEBUG) {
+            this.printf("ComputerPDP11.powerOn(%s)\n", (resume == ComputerPDP11.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")));
         }
 
         if (this.nPowerChange) {
@@ -30701,10 +30687,10 @@ class ComputerPDP11 extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.notice("Error: " + sData);
+                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
-                                    this.println(sCode + ": " + sData);
+                                    this.printf("%s: %s\n", sCode, sData);
                                 }
                                 /*
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the
@@ -30778,7 +30764,7 @@ class ComputerPDP11 extends Component {
      * @param {State} stateComputer
      * @param {boolean} fRepower
      * @param {boolean} fRestore
-     * @return {boolean} true if restore should continue, false if not
+     * @returns {boolean} true if restore should continue, false if not
      */
     powerRestore(component, stateComputer, fRepower, fRestore)
     {
@@ -30871,7 +30857,7 @@ class ComputerPDP11 extends Component {
                 if (!fRepower && component.comment) {
                     var asComments = component.comment.split("|");
                     for (var i = 0; i < asComments.length; i++) {
-                        component.status(asComments[i]);
+                        component.printf(Messages.STATUS, "%s\n", asComments[i]);
                     }
                 }
             }
@@ -30896,8 +30882,8 @@ class ComputerPDP11 extends Component {
         var fRepower = (aParms[1] < 0);
         var fRestore = aParms[2];
 
-        if (DEBUG && this.flags.powered && this.messageEnabled()) {
-            this.printMessage("ComputerPDP11.donePowerOn(): redundant");
+        if (DEBUG && this.flags.powered) {
+            this.printf("ComputerPDP11.donePowerOn(): redundant\n");
         }
 
         this.fInitialized = true;
@@ -30939,7 +30925,7 @@ class ComputerPDP11 extends Component {
      * checkPower()
      *
      * @this {ComputerPDP11}
-     * @return {boolean} true if the computer is fully powered, false otherwise
+     * @returns {boolean} true if the computer is fully powered, false otherwise
      */
     checkPower()
     {
@@ -31011,15 +30997,15 @@ class ComputerPDP11 extends Component {
      * @this {ComputerPDP11}
      * @param {boolean} [fSave] is true to request a saved state
      * @param {boolean} [fShutdown] is true if the machine is being shut down
-     * @return {string|null} string representing the saved state (or null if error)
+     * @returns {string|null} string representing the saved state (or null if error)
      */
     powerOff(fSave, fShutdown)
     {
         var data;
         var sState = "none";
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("ComputerPDP11.powerOff(" + (fSave ? "save" : "nosave") + (fShutdown ? ",shutdown" : "") + ")");
+        if (DEBUG) {
+            this.printf("ComputerPDP11.powerOff(%s%s)\n", (fSave ? "save" : "nosave"), (fShutdown ? ",shutdown" : ""));
         }
 
         if (this.nPowerChange) {
@@ -31145,18 +31131,18 @@ class ComputerPDP11 extends Component {
     {
         this.flags.reset = true;
         if (this.bus && this.bus.reset) {
-            this.printMessage("Resetting " + this.bus.type);
+            this.printf("Resetting %s\n", this.bus.type);
             this.bus.reset();
         }
         if (this.cpu && this.cpu.reset) {
-            this.printMessage("Resetting " + this.cpu.type);
+            this.printf("Resetting %s\n", this.cpu.type);
             this.cpu.reset();
         }
         var aComponents = Component.getComponents(this.id);
         for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
             var component = aComponents[iComponent];
             if (component !== this && component !== this.bus && component !== this.cpu && component.reset) {
-                this.printMessage("Resetting " + component.type);
+                this.printf("Resetting %s\n", component.type);
                 component.reset();
             }
         }
@@ -31260,7 +31246,7 @@ class ComputerPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -31294,7 +31280,7 @@ class ComputerPDP11 extends Component {
              * particular host.
              */
             if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.log("Remote user API not available");
+                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -31321,7 +31307,7 @@ class ComputerPDP11 extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.notice("Resume disabled, machine state not saved");
+                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -31379,11 +31365,11 @@ class ComputerPDP11 extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.notice("The user ID is invalid.");
+                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.notice("Browser local storage is not available");
+                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -31394,13 +31380,13 @@ class ComputerPDP11 extends Component {
      *
      * @this {ComputerPDP11}
      * @param {string} sUserID
-     * @return {string} validated user ID, or null if error
+     * @returns {string} validated user ID, or null if error
      */
     verifyUserID(sUserID)
     {
         this.sUserID = null;
         var fMessages = DEBUG && this.messageEnabled();
-        if (fMessages) this.printMessage("verifyUserID(" + sUserID + ")");
+        if (fMessages) this.printf("verifyUserID(%s)\n", sUserID);
         var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
         var response = Web.getResource(sRequest);
         var nErrorCode = response[0];
@@ -31410,16 +31396,16 @@ class ComputerPDP11 extends Component {
                 response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
                     Web.setLocalStorageItem(ComputerPDP11.STATE_USERID, response.data);
-                    if (fMessages) this.printMessage(ComputerPDP11.STATE_USERID + " updated: " + response.data);
+                    if (fMessages) this.printf("%s updated: %s\n", ComputerPDP11.STATE_USERID, response.data);
                     this.sUserID = response.data;
                 } else {
-                    if (fMessages) this.printMessage(response.code + ": " + response.data);
+                    if (fMessages) this.printf("%s: %s\n", response.code, response.data);
                 }
             } catch (e) {
                 Component.error(e.message + " (" + sResponse + ")");
             }
         } else {
-            if (fMessages) this.printMessage("invalid response (error " + nErrorCode + ")");
+            if (fMessages) this.printf("invalid response (error %d)\n", nErrorCode);
         }
         return this.sUserID;
     }
@@ -31428,19 +31414,19 @@ class ComputerPDP11 extends Component {
      * getServerStatePath()
      *
      * @this {ComputerPDP11}
-     * @return {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
+     * @returns {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
      */
     getServerStatePath()
     {
         var sStatePath = null;
         if (this.sUserID) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(ComputerPDP11.STATE_USERID + " for load: " + this.sUserID);
+            if (DEBUG) {
+                this.printf("%s for load: %s\n", ComputerPDP11.STATE_USERID, this.sUserID);
             }
             sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(ComputerPDP11.STATE_USERID + " unavailable");
+            if (DEBUG) {
+                this.printf("%s unavailable\n", ComputerPDP11.STATE_USERID);
             }
         }
         return sStatePath;
@@ -31462,12 +31448,12 @@ class ComputerPDP11 extends Component {
          * tend to blow off alerts() and the like when closing down.
          */
         if (sState) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("size of server state: " + sState.length + " bytes");
+            if (DEBUG) {
+                this.printf("size of server state: %d bytes\n", sState.length);
             }
             var response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.notice("Machine state saved to server");
+                this.printf(Messages.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 var sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -31475,12 +31461,12 @@ class ComputerPDP11 extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.notice(sError);
+                this.printf(Messages.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("no state to store");
+            if (DEBUG) {
+                this.printf("no state to store\n");
             }
         }
     }
@@ -31492,12 +31478,12 @@ class ComputerPDP11 extends Component {
      * @param {string} sUserID
      * @param {string} sState
      * @param {boolean} [fSync] is true if we're powering down and should perform a synchronous request (default is async)
-     * @return {*} server response if fSync is true and a response was received; otherwise null
+     * @returns {*} server response if fSync is true and a response was received; otherwise null
      */
     storeServerState(sUserID, sState, fSync)
     {
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage(ComputerPDP11.STATE_USERID + " for store: " + sUserID);
+        if (DEBUG) {
+            this.printf("%s for store: %s\n", ComputerPDP11.STATE_USERID, sUserID);
         }
         /*
          * TODO: Determine whether or not any browsers cancel our request if we're called during a browser "shutdown" event,
@@ -31522,7 +31508,7 @@ class ComputerPDP11 extends Component {
                 }
                 sResponse = '{"' + UserAPI.RES.CODE + '":' + response[1] + ',"' + UserAPI.RES.DATA + '":"' + sResponse + '"}';
             }
-            if (DEBUG && this.messageEnabled()) this.printMessage(sResponse);
+            if (DEBUG) this.printf("%s\n", sResponse);
             return JSON.parse(sResponse);
         }
         return null;
@@ -31607,10 +31593,10 @@ class ComputerPDP11 extends Component {
      *
      * @this {ComputerPDP11}
      * @param {string} sType
-     * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
+     * @returns {Component|null}
      */
-    getMachineComponent(sType, componentPrev)
+    getMachineComponent(sType, componentPrev = null)
     {
         var componentLast = componentPrev;
         var aComponents = Component.getComponents(this.id);
@@ -31622,7 +31608,9 @@ class ComputerPDP11 extends Component {
             }
             if (component.type == sType) return component;
         }
-        if (!componentLast) Component.log("Machine component type '" + sType + "' not found", "warning");
+        if (!componentLast && DEBUG && componentPrev !== false) {
+            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
+        }
         return null;
     }
 
@@ -31688,8 +31676,8 @@ class ComputerPDP11 extends Component {
                  */
                 var computer = new ComputerPDP11(parmsComputer, parmsMachine, true);
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onInit(" + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onInit(%b)\n", computer.flags.powered);
                 }
 
                 /*
@@ -31727,8 +31715,8 @@ class ComputerPDP11 extends Component {
 
                 computer.flags.unloading = false;
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onShow(" + computer.fInitialized + "," + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onShow(%b,%b)\n", computer.fInitialized, computer.flags.powered);
                 }
 
                 /*
@@ -31786,8 +31774,8 @@ class ComputerPDP11 extends Component {
                  */
                 computer.flags.unloading = true;
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onExit(" + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onExit(%b)\n", computer.flags.powered);
                 }
 
                 if (computer.flags.powered) {
@@ -31881,7 +31869,7 @@ class State {
         try {
             this.state[id] = data;
         } catch(e) {
-            Component.log(e.message);
+            Component.printf(Messages.ERROR, e.message);
         }
     }
 
@@ -31890,7 +31878,7 @@ class State {
      *
      * @this {State}
      * @param {number|string} id
-     * @return {Object|string|null}
+     * @returns {Object|string|null}
      */
     get(id)
     {
@@ -31901,7 +31889,7 @@ class State {
      * data()
      *
      * @this {State}
-     * @return {Object}
+     * @returns {Object}
      */
     data()
     {
@@ -31916,7 +31904,7 @@ class State {
      *
      * @this {State}
      * @param {string|null} [json]
-     * @return {boolean} true if state exists in localStorage, false if not
+     * @returns {boolean} true if state exists in localStorage, false if not
      */
     load(json)
     {
@@ -31937,7 +31925,7 @@ class State {
             if (s) {
                 this.json = s;
                 this.fLoaded = true;
-                if (DEBUG) Component.log("localStorage(" + this.key + "): " + s.length + " bytes loaded");
+                if (DEBUG) Component.printf("localStorage(%s): %d bytes loaded\n", this.key, s.length);
                 return true;
             }
         }
@@ -31952,7 +31940,7 @@ class State {
      * Otherwise, load() could have just as easily done this, too.
      *
      * @this {State}
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     parse()
     {
@@ -31973,7 +31961,7 @@ class State {
      * store()
      *
      * @this {State}
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     store()
     {
@@ -31981,7 +31969,7 @@ class State {
         if (Web.hasLocalStorage()) {
             let s = JSON.stringify(this.state);
             if (Web.setLocalStorageItem(this.key, s)) {
-                if (DEBUG) Component.log("localStorage(" + this.key + "): " + s.length + " bytes stored");
+                if (DEBUG) Component.printf("localStorage(%s): %d bytes stored\n", this.key, s.length);
             } else {
                 /*
                  * WARNING: Because browsers tend to disable all alerts() during an "unload" operation,
@@ -31989,7 +31977,7 @@ class State {
                  * think of some way to notify the user that there's a problem, and offer a way of cleaning
                  * up old states.
                  */
-                Component.error("Unable to store " + s.length + " bytes in browser local storage");
+                Component.printf(Messages.ERROR, "Unable to store %d bytes in browser local storage\n", s.length);
                 fSuccess = false;
             }
         }
@@ -32000,7 +31988,7 @@ class State {
      * toString()
      *
      * @this {State}
-     * @return {string} JSON-encoded state
+     * @returns {string} JSON-encoded state
      */
     toString()
     {
@@ -32042,7 +32030,7 @@ class State {
             let sKey = aKeys[i];
             if (sKey && (fAll || sKey.substr(0, this.key.length) == this.key)) {
                 Web.removeLocalStorageItem(sKey);
-                if (DEBUG) Component.log("localStorage(" + sKey + ") removed");
+                Component.printf(Messages.DEBUG, "localStorage(%s) removed\n", sKey);
                 aKeys.splice(i, 1);
                 i = 0;
             }
@@ -32057,7 +32045,7 @@ class State {
      * @param {Component} component
      * @param {string} [sVersion] is used to append a major version number to the key
      * @param {string} [sSuffix] is used to append any additional suffixes to the key
-     * @return {string} key
+     * @returns {string} key
      */
     static getKey(component, sVersion, sSuffix)
     {
@@ -32076,7 +32064,7 @@ class State {
      * State.compress(aSrc)
      *
      * @param {Array.<number>|null} aSrc
-     * @return {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
+     * @returns {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
     static compress(aSrc)
     {
@@ -32103,7 +32091,7 @@ class State {
      *
      * @param {Array.<number>} aComp
      * @param {number} [nLength] (expected length of decompressed data)
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     static decompress(aComp, nLength)
     {
@@ -32132,7 +32120,7 @@ class State {
      * and return an uninitialized array.
      *
      * @param {Array.<number>|null} aSrc
-     * @return {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
+     * @returns {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
     static compressEvenOdd(aSrc)
     {
@@ -32165,7 +32153,7 @@ class State {
      *
      * @param {Array.<number>} aComp
      * @param {number} nLength is expected length of decompressed data
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     static decompressEvenOdd(aComp, nLength)
     {
@@ -32528,7 +32516,7 @@ function resolveXML(sURL, sXML, display, done)
  * @param {string} [sXSLFile]
  * @param {string} [sParms] (machine parameters, if any)
  * @param {string} [sClass] (an optional machine class name used to style the machine)
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32578,7 +32566,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (match) sError = match[1];
             }
         }
-        Component.log(sError);
+        Component.printf(Messages.ERROR, "%s\n", sError);
         displayMessage("Error: " + sError + (sURL? " (" + sURL + ")" : ""));
         if (fSuccess) doneMachine();
         fSuccess = false;
@@ -32795,7 +32783,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32811,7 +32799,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32827,7 +32815,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32843,7 +32831,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32859,7 +32847,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32872,7 +32860,7 @@ function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  *
  * @param {string} idMachine
  * @param {string} sType
- * @return {Component|null}
+ * @returns {Component|null}
  */
 function findMachineComponent(idMachine, sType)
 {
@@ -32892,7 +32880,7 @@ function findMachineComponent(idMachine, sType)
  * @param {string} sComponent
  * @param {string} sCommand
  * @param {string} [sValue]
- * @return {boolean}
+ * @returns {boolean}
  */
 function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValue)
 {

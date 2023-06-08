@@ -8,9 +8,10 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
+import Messages from "../../../../modules/v2/messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import Web from "../../../../modules/v2/weblib.js";
-import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
+import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
  * @class C1PDebugger
@@ -473,7 +474,7 @@ export default class C1PDebugger extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -514,7 +515,7 @@ export default class C1PDebugger extends Component {
                         C1PDebugger.input(dbg, sBinding);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -720,6 +721,16 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
+     * @param {string} sMessage is any caller-defined message string
+     */
+    message(sMessage)
+    {
+        this.print(sMessage);
+        this.cpu.yieldCPU();    // these print() calls are at risk of being called with high frequency, so we need to yieldCPU() more
+    }
+
+    /**
+     * @this {C1PDebugger}
      * @param {Component} component
      * @param {number} addr
      * @param {number|undefined} addrFrom
@@ -731,18 +742,8 @@ export default class C1PDebugger extends Component {
     {
         if ((this.bitsMessage & bitsMessage) == bitsMessage) {
             var b = this.cpu.getByte(addr);
-            this.message(component.id + "." + (fWrite? "setByte":"getByte") + "(" + Str.toHexWord(addr) + ")" + (addrFrom !== undefined? (" @" + Str.toHexWord(addrFrom)) : "") + ": " + (name? (name + "=") : "") + Str.toHexByte(b));
+            this.printf("%s.%s(%#06x) @%#06x %s=%#04x\n", component.id, fWrite? "setByte" : "getByte", addr, addrFrom, name || "unknown", b);
         }
-    }
-
-    /**
-     * @this {C1PDebugger}
-     * @param {string} sMessage is any caller-defined message string
-     */
-    message(sMessage)
-    {
-        this.println(sMessage);
-        this.cpu.yieldCPU();    // these print() calls are at risk of being called with high frequency, so we need to yieldCPU() more
     }
 
     /**
@@ -751,12 +752,12 @@ export default class C1PDebugger extends Component {
     init()
     {
         // this.doHelp();
-        this.println("Type ? for list of debugger commands\n");
+        this.printf("Type ? for list of debugger commands\n\n");
     }
 
     /**
      * @this {C1PDebugger}
-     * @return {boolean}
+     * @returns {boolean}
      */
     run()
     {
@@ -768,7 +769,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} n (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {boolean}
+     * @returns {boolean}
      */
     step(n)
     {
@@ -806,7 +807,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {boolean}
+     * @returns {boolean}
      *
      * Make sure the CPU is ready (finished initializing), not busy (already running), and not in an error state.
      */
@@ -849,7 +850,7 @@ export default class C1PDebugger extends Component {
      */
     start()
     {
-        if (!this.fStepOver) this.println("running");
+        if (!this.fStepOver) this.printf("running\n");
     }
 
     /**
@@ -862,21 +863,21 @@ export default class C1PDebugger extends Component {
     stop(msStart, nCycles)
     {
         if (!this.fStepOver) {
-            this.println("stopped");
+            this.printf("stopped\n");
             if (nCycles) {
                 var msTotal = Component.getTime();
                 msTotal -= msStart;
-                this.println(msTotal + "ms (" + nCycles + " cycles)");
-                if (DEBUG && msTotal > 0) {
+                this.printf("%dms (%d cycles)\n", msTotal, nCycles);
+                if (MAXDEBUG && msTotal > 0) {
                     nCycles = nCycles * 1000 / msTotal;
-                    this.println("total cycles/second: " + Math.round(nCycles));
+                    this.printf("total cycles/second: %d\n", Math.round(nCycles));
                     var percent = Math.round((this.cIns? this.cReads / this.cIns : 0) * 1000) / 10;
-                    this.println("total reads: " + this.cReads + " (" + percent + "%)");
+                    this.printf("total reads: %d (%d%)\n", this.cReads, percent);
                     percent = Math.round((this.cIns? this.cWrites / this.cIns : 0) * 1000) / 10;
-                    this.println("total writes: " + this.cWrites + " (" + percent + "%)");
+                    this.printf("total writes: %d (%d%)\n", this.cWrites, percent);
                     percent = Math.round((this.cIns? this.cWritesZP / this.cIns : 0) * 1000) / 10;
-                    this.println("total zero-page writes: " + this.cWritesZP + " (" + percent + "%)");
-                    this.println("total instructions: " + this.cIns);
+                    this.printf("total zero-page writes: %d (%d%)\n", this.cWritesZP, percent);
+                    this.printf("total instructions: %d\n", this.cIns);
                 }
             }
         }
@@ -903,7 +904,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} bOpCode
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us about the next instruction to be executed, giving
      * us an opportunity to look for "exec" breakpoints and update opcode frequencies and instruction history.
@@ -926,7 +927,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us that a memory read occurred, giving us an
      * opportunity to track the read if we want, and look for a matching "read" breakpoint, if any.
@@ -944,7 +945,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} value written
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us that a memory write occurred, giving us an
      * opportunity to track the write if we want, and look for a matching "write" breakpoint, if any.
@@ -962,7 +963,7 @@ export default class C1PDebugger extends Component {
         if (!(addr & 0xff00))
             this.cWritesZP++;
         if ((value & 0xff) != value) {
-            this.println("invalid value at " + Str.toHexWord(addr) + ": " + value);
+            this.printf("invalid value at %#06x: %s\n", addr, value);
             fBreak = true;
         }
         if (this.checkBreakpoint(addr, this.aWriteBreak, "write"))
@@ -974,7 +975,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     addSignedByte(addr, b)
     {
@@ -988,7 +989,7 @@ export default class C1PDebugger extends Component {
      *
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getByte(addr)
     {
@@ -1019,7 +1020,7 @@ export default class C1PDebugger extends Component {
     setByte(addr, b)
     {
         if (addr < this.offMem || addr >= this.offLimit) {
-            this.println("invalid address: " + Str.toHexWord(addr));
+            this.printf("invalid address: %#06x\n", addr);
             return;
         }
         this.abMem[this.offMem + addr] = (b & 0xff);
@@ -1040,7 +1041,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addExecBreakpoint(addr)
     {
@@ -1053,7 +1054,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addReadBreakpoint(addr)
     {
@@ -1066,7 +1067,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addWriteBreakpoint(addr)
     {
@@ -1078,7 +1079,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getExecBreakpoints()
     {
@@ -1087,7 +1088,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getReadBreakpoints()
     {
@@ -1096,7 +1097,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getWriteBreakpoints()
     {
@@ -1108,7 +1109,7 @@ export default class C1PDebugger extends Component {
      * @param {Array} aBreak
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findBreakpoint(aBreak, addr, fRemove)
     {
@@ -1129,7 +1130,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findExecBreakpoint(addr, fRemove)
     {
@@ -1140,7 +1141,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findReadBreakpoint(addr, fRemove)
     {
@@ -1151,7 +1152,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findWriteBreakpoint(addr, fRemove)
     {
@@ -1195,7 +1196,7 @@ export default class C1PDebugger extends Component {
      * @param {number} addr
      * @param {Array} aBreakpoints
      * @param {string} sType (ie, "exec" or "write")
-     * @return {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} true if breakpoint has been hit, false if not
      */
     checkBreakpoint(addr, aBreakpoints, sType)
     {
@@ -1207,7 +1208,7 @@ export default class C1PDebugger extends Component {
         for (var i=0; i < aBreakpoints.length; i++) {
             if (aBreakpoints[i] == addr) {
                 if (addr != this.addrTempBP)
-                    this.println("breakpoint hit: " + Str.toHexWord(addr) + " (" + sType + ")");
+                    this.printf("breakpoint hit: %#06x (%s)\n", addr, sType);
                 fBreak = true;
                 break;
             }
@@ -1219,7 +1220,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} [nIns] is an associated instruction number, or 0 (or undefined) if none
-     * @return {string}
+     * @returns {string}
      */
     getInstruction(addr, nIns)
     {
@@ -1329,7 +1330,7 @@ export default class C1PDebugger extends Component {
      * @param {string} sCode
      * @param {string|undefined} sOperand
      * @param {number} addr of memory where this instruction is being assembled
-     * @return {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
      */
     parseInstruction(sCode, sOperand, addr)
     {
@@ -1350,7 +1351,7 @@ export default class C1PDebugger extends Component {
                 }
             }
             if (iCode == this.aOpCodes.length) {
-                this.println("unknown operation: " + sCode);
+                this.printf("unknown operation: %s\n", sCode);
                 iCode = -1;
             }
             var sMode = "", aModeMatch, i;
@@ -1360,8 +1361,8 @@ export default class C1PDebugger extends Component {
                     var cModes = 0;
                     for (i = 0; i < this.aaOperations.length; i++) {
                         if (this.aaOperations[i][0] === iCode) {
-                            if (!cModes) this.println("supported opcodes:");
-                            this.println("     " + Str.toHex(i, 2) + ": " + sCode + (this.aaOperations[i][2] !== undefined? (" " + this.aOpModes[this.aaOperations[i][2]]) : ""));
+                            if (!cModes) this.printf("supported opcodes:\n");
+                            this.printf("     %02x: %s%s\n", i, sCode, (this.aaOperations[i][2] !== undefined? (" " + this.aOpModes[this.aaOperations[i][2]]) : ""));
                             cModes++;
                         }
                     }
@@ -1387,7 +1388,7 @@ export default class C1PDebugger extends Component {
                                      * This is really an internal consistency error; regardless what the user types, this should not occur.
                                      */
                                     //noinspection JSUnusedAssignment
-                                    this.println("too many operand matches (both " + this.aOpModes[iMode] + " and " + this.aOpModes[i-1] + ")");
+                                    this.printf("too many operand matches (both %s and %s)\n", this.aOpModes[iMode], this.aOpModes[i-1]);
                                     iCode = -1;
                                     break;
                                 }
@@ -1412,7 +1413,7 @@ export default class C1PDebugger extends Component {
                         }
                     }
                     else {
-                        this.println("unknown operand: " + sMode);
+                        this.printf("unknown operand: %s\n", sMode);
                         iCode = -1;
                     }
                 }
@@ -1430,7 +1431,7 @@ export default class C1PDebugger extends Component {
                             /*
                              * This is really an internal consistency error; regardless what the user types, this should not occur.
                              */
-                            this.println("too many instruction matches (both " + Str.toHexByte(bOpCode) + " and " + Str.toHexByte(i) + ")");
+                            this.printf("too many instruction matches (both %#04x and %#04x)\n", bOpCode, i);
                             bOpCode = -2;
                             break;
                         }
@@ -1446,7 +1447,7 @@ export default class C1PDebugger extends Component {
                             if (cb == 1 && iMode == this.MODE_DISP) {
                                 nHex -= (addr + 2);
                                 if (nHex < -128 || nHex > 127) {
-                                    this.println("branch out of range (" + nHex + ")");
+                                    this.printf("branch out of range (%d)\n", nHex);
                                     aOpBytes = [];
                                     cb = 0;
                                 }
@@ -1460,12 +1461,12 @@ export default class C1PDebugger extends Component {
                             /*
                              * This is really an internal consistency error; regardless what the user types, this should not occur.
                              */
-                            this.println("instruction missing " + cb + " bytes");
+                            this.printf("instruction missing %d bytes\n", cb);
                         }
                     }
                 }
                 else {
-                    this.println("unknown instruction: " + sCode + " " + sMode + (DEBUG? (" (" + iMode + ")") : ""));
+                    this.printf("unknown instruction: %s %s%s\n", sCode, sMode, (DEBUG? (" (" + iMode + ")") : ""));
                 }
             }
         }
@@ -1474,7 +1475,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {string}
+     * @returns {string}
      */
     getRegs()
     {
@@ -1489,7 +1490,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {string|undefined} [sAddr]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getUserAddr(sAddr)
     {
@@ -1508,12 +1509,12 @@ export default class C1PDebugger extends Component {
             }
             addr = parseInt(sAddr, nBase);
             if (isNaN(addr)) {
-                this.println("invalid base-" + nBase + " address: " + sAddr);
+                this.printf("invalid base-%d address: %s\n", nBase, sAddr);
                 addr = undefined;
             }
         }
         if (addr !== undefined && (addr < this.offMem || addr >= this.offLimit)) {
-            this.println("address out of range: " + Str.toHex(addr));
+            this.printf("address out of range: %x\n", addr);
             addr = undefined;
         }
         return addr;
@@ -1524,8 +1525,8 @@ export default class C1PDebugger extends Component {
      */
     doHelp()
     {
-        this.println("\ncommands:\n?\thelp\na [#]\tassemble\nb [#]\tbreakpoint\nd [#]\tdump memory\ne [#]\tedit memory\nf\tdump frequencies\ng [#]\trun to [#]\nh\thalt\no\toptions\np [#]\tdump history\nr\tdump/edit registers\ns\tstep over instruction\nt [#]\tstep instruction(s)\nu [#]\tunassemble");
-        this.println("note: frequency and history commands operate only when breakpoints are set");
+        this.printf("\ncommands:\n?\thelp\na [#]\tassemble\nb [#]\tbreakpoint\nd [#]\tdump memory\ne [#]\tedit memory\nf\tdump frequencies\ng [#]\trun to [#]\nh\thalt\no\toptions\np [#]\tdump history\nr\tdump/edit registers\ns\tstep over instruction\nt [#]\tstep instruction(s)\nu [#]\tunassemble\n");
+        this.printf("note: frequency and history commands operate only when breakpoints are set\n");
     }
 
     /**
@@ -1563,7 +1564,7 @@ export default class C1PDebugger extends Component {
             return;
         this.addrAssembleNext = addr;
         if (asArgs[2] === undefined) {
-            this.println("begin assemble @" + Str.toHexWord(this.addrAssembleNext));
+            this.printf("begin assemble @%#06x\n", this.addrAssembleNext);
             this.fAssemble = true;
             this.cpu.update();
             return;
@@ -1571,10 +1572,10 @@ export default class C1PDebugger extends Component {
         var aOpBytes = this.parseInstruction(asArgs[2], asArgs[3], this.addrAssembleNext);
         if (aOpBytes.length) {
             for (var i=0; i < aOpBytes.length; i++) {
-                // this.println(Str.toHexWord(this.addrAssembleNext) + ": " + Str.toHexByte(aOpBytes[i]));
+                // this.printf("%#06x: %#04x\n", this.addrAssembleNext, aOpBytes[i]);
                 this.setByte(this.addrAssembleNext+i, aOpBytes[i]);
             }
-            this.println(this.getInstruction(this.addrAssembleNext));
+            this.printf("%s\n", this.getInstruction(this.addrAssembleNext));
             this.addrAssembleNext += aOpBytes.length;
         }
     }
@@ -1587,12 +1588,12 @@ export default class C1PDebugger extends Component {
     doBreak(sParm, sAddr)
     {
         if (sParm === undefined || sParm == "?") {
-            this.println("\nbreakpoint commands:");
-            this.println("bp [a]\tset exec breakpoint at [a]");
-            this.println("br [a]\tset read breakpoint at [a]");
-            this.println("bw [a]\tset write breakpoint at [a]");
-            this.println("bc [a]\tclear breakpoint at [a]");
-            this.println("bl\tlist all breakpoints");
+            this.printf("\nbreakpoint commands:\n");
+            this.printf("bp [a]\tset exec breakpoint at [a]\n");
+            this.printf("br [a]\tset read breakpoint at [a]\n");
+            this.printf("bw [a]\tset write breakpoint at [a]\n");
+            this.printf("bc [a]\tclear breakpoint at [a]\n");
+            this.printf("bl\tlist all breakpoints\n");
             return;
         }
         if (sAddr === undefined && sParm.length > 1) {
@@ -1603,30 +1604,30 @@ export default class C1PDebugger extends Component {
             var cBreaks = 0, i;
             var aAddrs = this.getExecBreakpoints();
             for (i = 0; i < aAddrs.length; i++) {
-                this.println("breakpoint enabled: " + Str.toHexWord(aAddrs[i]) + " (exec)");
+                this.printf("breakpoint enabled: %#06x (exec)\n", aAddrs[i]);
                 cBreaks++;
             }
             aAddrs = this.getReadBreakpoints();
             for (i = 0; i < aAddrs.length; i++) {
-                this.println("breakpoint enabled: " + Str.toHexWord(aAddrs[i]) + " (read)");
+                this.printf("breakpoint enabled: %#06x (read)\n", aAddrs[i]);
                 cBreaks++;
             }
             aAddrs = this.getWriteBreakpoints();
             for (i = 0; i < aAddrs.length; i++) {
-                this.println("breakpoint enabled: " + Str.toHexWord(aAddrs[i]) + " (write)");
+                this.printf("breakpoint enabled: %#06x (write)\n", aAddrs[i]);
                 cBreaks++;
             }
             if (!cBreaks)
-                this.println("no breakpoints");
+                this.printf("no breakpoints\n");
             return;
         }
         if (sAddr === undefined) {
-            this.println("missing breakpoint address");
+            this.printf("missing breakpoint address\n");
             return;
         }
         if (sParm == "c" && sAddr == "*") {
             this.clearBreakpoints();
-            this.println("all breakpoints cleared");
+            this.printf("all breakpoints cleared\n");
             return;
         }
         var addr = this.getUserAddr(sAddr);
@@ -1634,39 +1635,39 @@ export default class C1PDebugger extends Component {
             return;
         if (sParm == "p") {
             if (this.addExecBreakpoint(addr))
-                this.println("breakpoint enabled: " + Str.toHexWord(addr) + " (exec)");
+                this.printf("breakpoint enabled: %#06x (exec)\n", addr);
             else
-                this.println("breakpoint not set: " + Str.toHexWord(addr));
+                this.printf("breakpoint not set: %#06x\n", addr);
             return;
         }
         if (sParm == "c") {
             if (this.findExecBreakpoint(addr, true))
-                this.println("breakpoint cleared: " + Str.toHexWord(addr) + " (exec)");
+                this.printf("breakpoint cleared: %#06x (exec)\n", addr);
             else
             if (this.findReadBreakpoint(addr, true))
-                this.println("breakpoint cleared: " + Str.toHexWord(addr) + " (read)");
+                this.printf("breakpoint cleared: %#06x (read)\n", addr);
             else
             if (this.findWriteBreakpoint(addr, true))
-                this.println("breakpoint cleared: " + Str.toHexWord(addr) + " (write)");
+                this.printf("breakpoint cleared: %#06x (write)\n", addr);
             else
-                this.println("breakpoint missing: " + Str.toHexWord(addr));
+                this.printf("breakpoint missing: %#06x\n", addr);
             return;
         }
         if (sParm == "r") {
             if (this.addReadBreakpoint(addr))
-                this.println("breakpoint enabled: " + Str.toHexWord(addr) + " (read)");
+                this.printf("breakpoint enabled: %#06x (read)\n", addr);
             else
-                this.println("breakpoint not set: " + Str.toHexWord(addr));
+                this.printf("breakpoint not set: %#06x\n", addr);
             return;
         }
         if (sParm == "w") {
             if (this.addWriteBreakpoint(addr))
-                this.println("breakpoint enabled: " + Str.toHexWord(addr) + " (write)");
+                this.printf("breakpoint enabled: %#06x (write)\n", addr);
             else
-                this.println("breakpoint not set: " + Str.toHexWord(addr));
+                this.printf("breakpoint not set: %#06x\n", addr);
             return;
         }
-        this.println("unknown breakpoint command: " + sParm);
+        this.printf("unknown breakpoint command: %s\n", sParm);
     }
 
     /**
@@ -1677,8 +1678,8 @@ export default class C1PDebugger extends Component {
     doDump(sAddr, sLen)
     {
         if (sAddr == "?") {
-            this.println("\ndump commands:");
-            this.println("d [a] [#]    dump # lines of memory");
+            this.printf("\ndump commands:\n");
+            this.printf("d [a] [#]    dump # lines of memory\n");
             return;
         }
         var addr = this.getUserAddr(sAddr);
@@ -1702,7 +1703,7 @@ export default class C1PDebugger extends Component {
                 sChars += (b >= 32 && b < 127? String.fromCharCode(b) : ".");
                 addr++;
             }
-            this.println(Str.toHex(addrLine, 4) + " " + sBytes + sChars);
+            this.printf("%04x %s%s\n", addrLine, sBytes, sChars);
         }
         this.nextAddr = addr;
     }
@@ -1715,7 +1716,7 @@ export default class C1PDebugger extends Component {
     {
         var sAddr = asArgs[1];
         if (sAddr === undefined) {
-            this.println("missing address");
+            this.printf("missing address\n");
             return;
         }
         var addr = this.getUserAddr(sAddr);
@@ -1734,8 +1735,8 @@ export default class C1PDebugger extends Component {
     doFreqs(sParm)
     {
         if (sParm == "?") {
-            this.println("\nfrequency commands:");
-            this.println("clear\tclear all frequency counts");
+            this.printf("\nfrequency commands:\n");
+            this.printf("clear\tclear all frequency counts\n");
             return;
         }
         var cData = 0, i;
@@ -1743,11 +1744,11 @@ export default class C1PDebugger extends Component {
             if (sParm == "clear") {
                 for (i = 0; i < this.aaOpcodeFreqs.length; i++)
                     this.aaOpcodeFreqs[i] = [i, 0];
-                this.println("frequency data cleared");
+                this.printf("frequency data cleared\n");
                 cData++;
             }
             else if (sParm !== undefined) {
-                this.println("unknown frequency command: " + sParm);
+                this.printf("unknown frequency command: %s\n", sParm);
                 cData++;
             }
             else {
@@ -1757,14 +1758,14 @@ export default class C1PDebugger extends Component {
                     var bOpcode = aaSortedOpcodeFreqs[i][0];
                     var cFreq = aaSortedOpcodeFreqs[i][1];
                     if (cFreq) {
-                        this.println(this.aOpCodes[this.aaOperations[bOpcode][0]] + " (" + Str.toHexByte(bOpcode) + "): " + cFreq + " times");
+                        this.printf("%s (%#04x): %d times\n", this.aOpCodes[this.aaOperations[bOpcode][0]], bOpcode, cFreq);
                         cData++;
                     }
                 }
             }
         }
         if (!cData) {
-            this.println("no frequency data available");
+            this.printf("no frequency data available\n");
         }
     }
 
@@ -1790,12 +1791,12 @@ export default class C1PDebugger extends Component {
             if (n === undefined)
                 n = 10;
             if (n > aHistory.length) {
-                this.println("note: only " + aHistory.length + " available");
+                this.printf("note: only %d available\n", aHistory.length);
                 n = aHistory.length;
             }
             if (sCount !== undefined) {
                 this.nInsHistory = 0;
-                this.println(n + " instructions earlier:");
+                this.printf("%d instructions earlier:\n", n);
             }
             var nIns = (this.nInsHistory? this.nInsHistory : 1);
             iHistory -= n;
@@ -1803,7 +1804,7 @@ export default class C1PDebugger extends Component {
             while (cLines && iHistory != this.iStepHistory) {
                 var addr = aHistory[iHistory];
                 if (addr < 0) break;
-                this.println(this.getInstruction(addr, nIns++));
+                this.printf("%s\n", this.getInstruction(addr, nIns++));
                 if (++iHistory == aHistory.length) iHistory = 0;
                 cLines--;
                 n--;
@@ -1811,14 +1812,14 @@ export default class C1PDebugger extends Component {
             this.nextHistory = n;
             this.nInsHistory = nIns;
         }
-        if (cLines == 10) this.println("no history available");
+        if (cLines == 10) this.printf("no history available\n");
     }
 
     /**
      * Prints the contents of the Debugger's "info" buffer (filled by calls like cpu.dbg.info())
      * @this {C1PDebugger}
      * @param {string|undefined} sCount
-     * @return {boolean|undefined} true only if the "info" command is supported
+     * @returns {boolean|undefined} true only if the "info" command is supported
      */
     doInfo(sCount)
     {
@@ -1828,18 +1829,18 @@ export default class C1PDebugger extends Component {
             do {
                 var s = this.aInfoBuffer[i++];
                 if (s !== undefined) {
-                    this.println(s);
+                    this.printf("%s\n", s);
                     cLines--;
                 }
                 if (i >= this.aInfoBuffer.length)
                     i = 0;
             } while (cLines && i != this.iInfoBuffer);
-            this.println("nYieldsPerSecond: " + this.cpu.nYieldsPerSecond);
-            this.println("msPerYield: " + this.cpu.msPerYield);
-            this.println("nCyclesPerBurst: " + this.cpu.nCyclesPerBurst);
-            this.println("nCyclesPerYield: " + this.cpu.nCyclesPerYield);
-            this.println("nCyclesPerVideoUpdate: " + this.cpu.nCyclesPerVideoUpdate);
-            this.println("nCyclesPerStatusUpdate: " + this.cpu.nCyclesPerStatusUpdate);
+            this.printf("nYieldsPerSecond: %d\n", this.cpu.nYieldsPerSecond);
+            this.printf("msPerYield: %d\n", this.cpu.msPerYield);
+            this.printf("nCyclesPerBurst: %d\n", this.cpu.nCyclesPerBurst);
+            this.printf("nCyclesPerYield: %d\n", this.cpu.nCyclesPerYield);
+            this.printf("nCyclesPerVideoUpdate: %d\n", this.cpu.nCyclesPerVideoUpdate);
+            this.printf("nCyclesPerStatusUpdate: %d\n", this.cpu.nCyclesPerStatusUpdate);
             return true;
         }
     }
@@ -1866,22 +1867,23 @@ export default class C1PDebugger extends Component {
                 /*
                  * Limiting the amount of disassembled code to one "memory page" in non-DEBUG builds is partly
                  * to prevent the user from wedging their browser, but also a recognition that, in non-DEBUG builds,
-                 * the println() output buffer is truncated to 8K, which is only enough for about two pages of
-                 * disassembled code anyway.
+                 * the print buffer is truncated to 8K, which is only enough for about two pages of disassembled
+                 * code anyway.
                  */
-                this.println("range too large");
+                this.printf("range too large\n");
                 return;
             }
             addrEnd++;
             n = -1;
         }
 
-        if (addr != this.nextAddr)
-            this.println();
+        if (addr != this.nextAddr) {
+            this.printf("\n");
+        }
 
         while (n-- && addr < addrEnd) {
             var sIns = this.getInstruction(addr, this.isBusy(false) || this.fStepOver? this.cIns : 0);
-            this.println(sIns);
+            this.printf("%s\n", sIns);
             this.nextAddr = addr = this.nextIns;
         }
     }
@@ -1893,13 +1895,13 @@ export default class C1PDebugger extends Component {
     doOptions(asArgs)
     {
         if (asArgs[1] === undefined || asArgs[1] == "?") {
-            this.println("\noption commands:");
-            this.println("max\trun at maximum speed");
-            this.println("fast\trun faster (up to " + this.cpu.mhzFast + "Mhz)");
-            this.println("slow\trun at normal speed (1Mhz)");
-            this.println("classic\tuse classic operand syntax");
-            this.println("modern\tuse modern operand syntax");
-            this.println("msg\tenable message categories");
+            this.printf("\noption commands:\n");
+            this.printf("max\trun at maximum speed\n");
+            this.printf("fast\trun faster (up to %dMhz)\n", this.cpu.mhzFast);
+            this.printf("slow\trun at normal speed (1Mhz)\n");
+            this.printf("classic\tuse classic operand syntax\n");
+            this.printf("modern\tuse modern operand syntax\n");
+            this.printf("msg\tenable message categories\n");
             return;
         }
         var sOption = asArgs[1];
@@ -1915,11 +1917,11 @@ export default class C1PDebugger extends Component {
             break;
         case "classic":
             this.setOpModes(true);
-            this.println("classic syntax enabled");
+            this.printf("classic syntax enabled\n");
             break;
         case "modern":
             this.setOpModes(false);
-            this.println("modern syntax enabled");
+            this.printf("modern syntax enabled\n");
             break;
         case "msg":
             var bitsMessage = 0;
@@ -1940,11 +1942,11 @@ export default class C1PDebugger extends Component {
             for (var sCategory in this.aMessageCategories) {
                 if (asArgs[2] !== undefined && (asArgs[2] != "all" && asArgs[2] != sCategory)) continue;
                 bitsMessage = this.aMessageCategories[sCategory];
-                this.println(sCategory + " messages: " + ((this.bitsMessage & bitsMessage)? "on" : "off"));
+                this.printf("%s messages: %s\n", sCategory, ((this.bitsMessage & bitsMessage)? "on" : "off"));
             }
             break;
         default:
-            this.println("unknown option: " + sOption);
+            this.printf("unknown option: %s\n", sOption);
             break;
         }
     }
@@ -1956,11 +1958,11 @@ export default class C1PDebugger extends Component {
     doRegisters(asArgs)
     {
         if (asArgs && asArgs[1] == "?") {
-            this.println("\nregister commands:");
-            this.println("r to display all");
-            this.println("r [target=value] to modify");
-            this.println("supported targets:");
-            this.println("A,X,Y,S,PC and flags C,Z,D,V,N");
+            this.printf("\nregister commands:\n");
+            this.printf("r to display all\n");
+            this.printf("r [target=value] to modify\n");
+            this.printf("supported targets:\n");
+            this.printf("A,X,Y,S,PC and flags C,Z,D,V,N\n");
             return;
         }
         var fIns = true;
@@ -1977,7 +1979,7 @@ export default class C1PDebugger extends Component {
                 sValue = asArgs[2];
             }
             else {
-                this.println("missing value for " + asArgs[1]);
+                this.printf("missing value for %s\n", asArgs[1]);
                 return;
             }
             var b = parseInt(sValue, 16);
@@ -2009,7 +2011,7 @@ export default class C1PDebugger extends Component {
                     break;
                 case "S":
                     if ((b & ~0xff) != 0x100) {
-                        this.println("invalid stack pointer: " + sValue);
+                        this.printf("invalid stack pointer: %s\n", sValue);
                         return;
                     }
                     this.cpu.regS = b;
@@ -2020,17 +2022,17 @@ export default class C1PDebugger extends Component {
                     this.nextAddr = this.cpu.regPC;
                     break;
                 default:
-                    this.println("unknown register: " + sReg);
+                    this.printf("unknown register: %s\n", sReg);
                     return;
                 }
             }
             else {
-                this.println("invalid value: " + sValue);
+                this.printf("invalid value: %s\n", sValue);
                 return;
             }
             this.cpu.update();
         }
-        this.println(this.getRegs());
+        this.printf("%s\n", this.getRegs());
         if (fIns) this.doUnassemble(Str.toHex(this.nextAddr = this.cpu.regPC, 4));
     }
 
@@ -2090,7 +2092,7 @@ export default class C1PDebugger extends Component {
     {
         if (!sCmd.length) {
             if (dbg.fAssemble) {
-                dbg.println("ended assemble @" + Str.toHex(dbg.addrAssembleNext, 4));
+                dbg.printf("ended assemble @%04x\n", dbg.addrAssembleNext);
                 dbg.nextAddr = dbg.addrAssembleNext;
                 dbg.fAssemble = false;
             }
@@ -2163,7 +2165,7 @@ export default class C1PDebugger extends Component {
                 if (dbg.doInfo(asArgs[1])) break;
                 /* falls through */
             default:
-                dbg.println("unknown command: " + sCmd);
+                dbg.printf("unknown command: %s\n", sCmd);
                 break;
             }
         }

@@ -12,13 +12,15 @@ import path from "path";
 import fs from "fs";
 import repl from "repl";
 import xml2js from "xml2js";
-import File from "../../../modules/v2/filelib.js";
+import FileLib from "../../../modules/v2/filelib.js";
 import Proc from "../../../modules/v2/proclib.js";
 import Str from "../../../modules/v2/strlib.js";
 
 //
 // The following list of imports should be a strict subset of the scripts listed in machines.json for 'pdp11'.
 //
+import "../../../modules/v2/format.js";
+import "../../../modules/v2/messages.js";
 import "../../../modules/v2/defines.js";
 import "../../../modules/v2/diskapi.js";
 import "../../../modules/v2/dumpapi.js";
@@ -195,7 +197,7 @@ function initMachine(xml)
  * loadMachine(sFile)
  *
  * @param {string} sFile
- * @return {boolean}
+ * @returns {boolean}
  */
 function loadMachine(sFile)
 {
@@ -213,7 +215,7 @@ function loadMachine(sFile)
  * @param {Array|null} aTags
  * @param {number} iTag
  * @param {function(Object)} done
- * @return {boolean}
+ * @returns {boolean}
  */
 function readXML(xml, sNode, sFile, aTags, iTag, done)
 {
@@ -261,7 +263,7 @@ function readXML(xml, sNode, sFile, aTags, iTag, done)
  * doCommand(sCmd)
  *
  * @param {string} sCmd
- * @return {*}
+ * @returns {*}
  */
 function doCommand(sCmd)
 {
@@ -374,7 +376,7 @@ function sendData(b)
 /**
  * startInput()
  *
- * @return {boolean}
+ * @returns {boolean}
  */
 function startInput()
 {

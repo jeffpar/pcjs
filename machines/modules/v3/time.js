@@ -71,7 +71,7 @@ import Device from "./device.js";
  */
 
 /**
- * @class {Time}
+ * @class Time
  * @unrestricted
  * @property {TimeConfig} config
  * @property {number} nCyclesMinimum
@@ -490,7 +490,7 @@ export default class Time extends Device {
                 nCycles = (this.nCyclesDeposited += this.nCyclesDepositPerFrame);
             }
             if (nCycles < 0) {
-                this.printf(Device.MESSAGE.WARN, "warning: cycle count dropped below zero: %f\n", nCycles);
+                this.printf(Device.MESSAGE.TIME, "warning: cycle count dropped below zero: %f\n", nCycles);
                 nCycles = this.nCyclesDeposited = 0;
             }
             nCycles |= 0;
@@ -563,7 +563,7 @@ export default class Time extends Device {
     isPowered()
     {
         if (!this.fPowered) {
-            this.println("not powered");
+            this.printf("not powered\n");
             return false;
         }
         return true;
@@ -703,7 +703,7 @@ export default class Time extends Device {
                     this.step(nRepeat);
                 }
             } else {
-                this.println("already running");
+                this.printf("already running\n");
             }
         }
     }
@@ -791,7 +791,7 @@ export default class Time extends Device {
             } while (this.fRunning && !this.fYield);
         }
         catch (err) {
-            this.println(err.message);
+            this.printf("%s\n", err.message);
             this.stop();
         }
     }
@@ -1039,7 +1039,7 @@ export default class Time extends Device {
     update(fTransition)
     {
         if (fTransition) {
-            this.println(this.fRunning? "started with " + this.getSpeedTarget() + " target" : "stopped");
+            this.printf(this.fRunning? "started with %s target\n" : "stopped\n", this.getSpeedTarget());
         }
         this.setBindingText(Time.BINDING.RUN, this.fRunning? "Halt" : "Run");
         this.setBindingText(Time.BINDING.STEP, this.nStepping? "Stop" : "Step");

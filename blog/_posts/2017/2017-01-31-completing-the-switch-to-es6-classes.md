@@ -21,7 +21,7 @@ pretty proficient at the conversion, so I was able to bulldoze my way through al
 and fixing all the Closure Compiler compilation errors only took another hour or so.
 
 It's hard to say whether the conversion was really worth the effort, since I'm still using the Closure Compiler to
-transpile the code back to ES5.  Also, since two of the emulators ([PCx86]({{ site.github.pages }}/machines/pcx86/bin/)
+transpile the code back to ES5.  Also, since two of the emulators ([PCx86]({{ site.github.pages }}/tools/pcjs/)
 and [PDP11]({{ site.github.pages }}/machines/dec/pdp11/bin/)) can also be launched from the Node command-line,
 I've adopted Node's *require()* convention for importing the other scripts as modules, which makes them difficult to load
 inside a web browser if you want to test or debug the uncompiled code.

@@ -16,7 +16,7 @@ import Memory from "./memory.js";
  */
 
 /**
- * @class {Ports}
+ * @class Ports
  * @unrestricted
  * @property {PortsConfig} config
  * @property {number} addr

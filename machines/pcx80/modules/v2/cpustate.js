@@ -175,7 +175,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getChecksum()
      *
      * @this {CPUStateX80}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -190,7 +190,7 @@ export default class CPUStateX80 extends CPUx80 {
      * This implements save support for the CPUStateX80 component.
      *
      * @this {CPUStateX80}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -208,7 +208,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -238,7 +238,7 @@ export default class CPUStateX80 extends CPUx80 {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "AX")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -278,7 +278,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getBC()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getBC()
     {
@@ -301,7 +301,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getDE()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getDE()
     {
@@ -324,7 +324,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getHL()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getHL()
     {
@@ -347,7 +347,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getSP()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getSP()
     {
@@ -369,7 +369,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getPC()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getPC()
     {
@@ -381,7 +381,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     offPC(off)
     {
@@ -413,7 +413,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getCF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or 1 (CPUDefX80.PS.CF)
+     * @returns {number} 0 or 1 (CPUDefX80.PS.CF)
      */
     getCF()
     {
@@ -455,7 +455,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getPF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or CPUDefX80.PS.PF
+     * @returns {number} 0 or CPUDefX80.PS.PF
      */
     getPF()
     {
@@ -486,7 +486,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getAF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or CPUDefX80.PS.AF
+     * @returns {number} 0 or CPUDefX80.PS.AF
      */
     getAF()
     {
@@ -517,7 +517,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getZF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or CPUDefX80.PS.ZF
+     * @returns {number} 0 or CPUDefX80.PS.ZF
      */
     getZF()
     {
@@ -548,7 +548,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getSF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or CPUDefX80.PS.SF
+     * @returns {number} 0 or CPUDefX80.PS.SF
      */
     getSF()
     {
@@ -579,7 +579,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getIF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or CPUDefX80.PS.IF
+     * @returns {number} 0 or CPUDefX80.PS.IF
      */
     getIF()
     {
@@ -600,7 +600,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getPS()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getPS()
     {
@@ -629,7 +629,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getPSW()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getPSW()
     {
@@ -653,7 +653,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA + src
+     * @returns {number} regA + src
      */
     addByte(src)
     {
@@ -666,7 +666,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA + src + carry
+     * @returns {number} regA + src + carry
      */
     addByteCarry(src)
     {
@@ -682,7 +682,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA & src
+     * @returns {number} regA & src
      */
     andByte(src)
     {
@@ -699,7 +699,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     decByte(b)
     {
@@ -714,7 +714,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     incByte(b)
     {
@@ -729,7 +729,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA | src
+     * @returns {number} regA | src
      */
     orByte(src)
     {
@@ -768,7 +768,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA - src
+     * @returns {number} regA - src
      */
     subByte(src)
     {
@@ -789,7 +789,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA - src - carry
+     * @returns {number} regA - src - carry
      */
     subByteBorrow(src)
     {
@@ -803,7 +803,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA ^ src
+     * @returns {number} regA ^ src
      */
     xorByte(src)
     {
@@ -815,7 +815,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} addr is a linear address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByte(addr)
     {
@@ -827,7 +827,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} addr is a linear address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getWord(addr)
     {
@@ -862,7 +862,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getPCByte()
      *
      * @this {CPUStateX80}
-     * @return {number} byte at the current PC; PC advanced by 1
+     * @returns {number} byte at the current PC; PC advanced by 1
      */
     getPCByte()
     {
@@ -875,7 +875,7 @@ export default class CPUStateX80 extends CPUx80 {
      * getPCWord()
      *
      * @this {CPUStateX80}
-     * @return {number} word at the current PC; PC advanced by 2
+     * @returns {number} word at the current PC; PC advanced by 2
      */
     getPCWord()
     {
@@ -888,7 +888,7 @@ export default class CPUStateX80 extends CPUx80 {
      * popWord()
      *
      * @this {CPUStateX80}
-     * @return {number} word popped from the current SP; SP increased by 2
+     * @returns {number} word popped from the current SP; SP increased by 2
      */
     popWord()
     {
@@ -913,7 +913,7 @@ export default class CPUStateX80 extends CPUx80 {
      * checkINTR()
      *
      * @this {CPUStateX80}
-     * @return {boolean} true if execution may proceed, false if not
+     * @returns {boolean} true if execution may proceed, false if not
      */
     checkINTR()
     {
@@ -1065,7 +1065,7 @@ export default class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
+     * @returns {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
      * was hit), -1 indicates a post-execution condition (eg, a read or write breakpoint was hit), and a positive
      * number indicates successful completion of that many cycles (which should always be >= nMinCycles).
      */

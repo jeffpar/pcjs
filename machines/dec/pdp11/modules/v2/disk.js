@@ -25,7 +25,7 @@
  */
 
 import BusPDP11 from "./bus.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import DiskAPI from "../../../../modules/v2/diskapi.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
@@ -88,13 +88,12 @@ export default class DiskPDP11 extends Component {
      */
     constructor(controller, drive, mode)
     {
-        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, MessagesPDP11.DISK);
+        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, Messages.DISK);
 
         /*
-         * Route all non-Debugger messages (eg, notice() and println() calls) through
-         * this.controller (eg, controller.notice() and controller.println()), because
-         * the Computer component is unaware of any Disk objects and therefore will not
-         * set up the usual overrides when a Control Panel is installed.
+         * Route all non-Debugger messages (eg, print() calls) through this.controller
+         * (eg, controller.print()), because the Computer component is unaware of any Disk objects
+         * and therefore will not set up the usual overrides when a Control Panel is installed.
          */
         this.controller = controller;
         this.cmp = controller.cmp;
@@ -166,8 +165,8 @@ export default class DiskPDP11 extends Component {
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("blank disk for \"" + this.sDiskName + "\": " + this.nCylinders + " cylinders, " + this.nHeads + " head(s)");
+            if (DEBUG) {
+                this.printf("blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
             }
             var aCylinders = new Array(this.nCylinders);
             for (var iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
@@ -213,23 +212,19 @@ export default class DiskPDP11 extends Component {
      * @param {File} [file] is set if there's an associated File object
      * @param {function(...)} [fnNotify]
      * @param {Component} [controller]
-     * @return {boolean} true if load completed (successfully or not), false if queued
+     * @returns {boolean} true if load completed (successfully or not), false if queued
      */
     load(sDiskName, sDiskPath, file, fnNotify, controller)
     {
         var sDiskURL = sDiskPath;
 
-        /*
-         * We could use this.log() as well, but it wouldn't display which component initiated the load.
-         */
         if (DEBUG) {
-            var sMessage = 'load("' + sDiskName + '","' + sDiskPath + '")';
-            this.controller.log(sMessage);
-            this.printMessage(sMessage);
+            this.controller.printf(Messages.LOG, "load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
+            this.printf("load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
         }
 
         if (this.fnNotify) {
-            if (DEBUG) this.controller.log('too many load requests for "' + sDiskName + '" (' + sDiskPath + ')');
+            if (DEBUG) this.controller.printf(Messages.LOG, "too many load requests for \"%s\" (%s)\n", sDiskName, sDiskPath);
             return true;
         }
 
@@ -346,7 +341,7 @@ export default class DiskPDP11 extends Component {
             this.dwChecksum = dwChecksum;
             disk = this;
         } else {
-            this.notice("Unrecognized disk format (" + cbDiskData + " bytes)");
+            this.printf(Messages.NOTICE, "Unrecognized disk format (%d bytes)\n", cbDiskData);
         }
 
         if (this.fnNotify) {
@@ -381,10 +376,10 @@ export default class DiskPDP11 extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.controller.notice("Unable to load disk \"" + this.sDiskName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.controller.printf(Messages.NOTICE, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('doneLoad("' + this.sDiskPath + '")');
+            if (DEBUG) {
+                this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
             }
 
             Component.addMachineResource(this.controller.idMachine, sURL, sDiskData);
@@ -480,13 +475,13 @@ export default class DiskPDP11 extends Component {
                  * conversion to a forward-compatible 'data' array.
                  */
                 else {
-                    if (DEBUG && this.messageEnabled(MessagesPDP11.DISK | MessagesPDP11.BUFFER)) {
+                    if (DEBUG && this.messageEnabled(Messages.DISK | Messages.BUFFER)) {
                         var sCylinders = aDiskData.length + " track" + (aDiskData.length > 1 ? "s" : "");
                         var nHeads = aDiskData[0].length;
                         var sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
                         var nSectorsPerTrack = aDiskData[0][0].length;
                         var sSectorsPerTrack = nSectorsPerTrack + " sector" + (nSectorsPerTrack > 1 ? "s" : "") + "/track";
-                        this.printMessage(sCylinders + ", " + sHeads + ", " + sSectorsPerTrack);
+                        this.printf("%s, %s, %s\n", sCylinders, sHeads, sSectorsPerTrack);
                     }
                     /*
                      * Before the image is usable, we must "normalize" all the sectors.  In the past, this meant
@@ -583,7 +578,7 @@ export default class DiskPDP11 extends Component {
      * @param {Object} sector
      * @param {number} off (byte offset)
      * @param {number} len (use -1 to read a null-terminated string)
-     * @return {string}
+     * @returns {string}
      */
     getSectorString(sector, off, len)
     {
@@ -620,7 +615,7 @@ export default class DiskPDP11 extends Component {
      * @param {number} [iSector]
      * @param {number} [cbSector]
      * @param {number|null} [dwPattern]
-     * @return {Object}
+     * @returns {Object}
      */
     initSector(sector, iCylinder, iHead, iSector, cbSector, dwPattern)
     {
@@ -641,7 +636,7 @@ export default class DiskPDP11 extends Component {
      * properties of the Disk object directly.
      *
      * @this {DiskPDP11}
-     * @return {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
+     * @returns {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
      */
     info()
     {
@@ -669,7 +664,7 @@ export default class DiskPDP11 extends Component {
      * @param {number} iSector
      * @param {boolean} [fWrite]
      * @param {function(Object,boolean)} [done]
-     * @return {Object|null} is the requested sector, or null if not found (or not available yet)
+     * @returns {Object|null} is the requested sector, or null if not found (or not available yet)
      */
     seek(iCylinder, iHead, iSector, fWrite, done)
     {
@@ -740,7 +735,7 @@ export default class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {Object} sector
-     * @return {Array.<number>} is an array of bytes
+     * @returns {Array.<number>} is an array of bytes
      */
     toBytes(sector)
     {
@@ -767,7 +762,7 @@ export default class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} ibSector a byte index within the given sector
      * @param {boolean} [fCompare] is true if this write-compare read
-     * @return {number} the specified (unsigned) byte, or -1 if no more data in the sector
+     * @returns {number} the specified (unsigned) byte, or -1 if no more data in the sector
      */
     read(sector, ibSector, fCompare)
     {
@@ -779,8 +774,8 @@ export default class DiskPDP11 extends Component {
                 var dw = (idw < adw.length ? adw[idw] : sector['pattern']);
                 b = ((dw >> ((ibSector & 0x3) << 3)) & 0xff);
             }
-            if (DEBUG && !fCompare && this.messageEnabled()) {
-                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + ',index=' + ibSector + ',value=' + Str.toHexByte(b) + ')');
+            if (DEBUG && !fCompare) {
+                this.printf("read(\"%s\",CHS=%d:%d:%d,index=%d,value=%#04x)\n", this.sDiskFile, sector.iCylinder, sector.iHead, sector['sector'], ibSector, b);
             }
         }
         return b;
@@ -793,15 +788,15 @@ export default class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} ibSector a byte index within the given sector
      * @param {number} b the byte value to write
-     * @return {boolean|null} true if write successful, false if write-protected, null if out of bounds
+     * @returns {boolean|null} true if write successful, false if write-protected, null if out of bounds
      */
     write(sector, ibSector, b)
     {
         if (this.fWriteProtected)
             return false;
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + ',index=' + ibSector + ',value=' + Str.toHexByte(b) + ')');
+        if (DEBUG) {
+            this.printf("write(\"%s\",CHS=%d:%d:%d,index=%d,value=%#04x)\n", this.sDiskFile, sector.iCylinder, sector.iHead, sector['sector'], ibSector, b);
         }
 
         if (ibSector < sector['length']) {
@@ -837,7 +832,7 @@ export default class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {number} pba (physical block address)
-     * @return {Object|null} sector
+     * @returns {Object|null} sector
      */
     getSector(pba)
     {
@@ -868,7 +863,7 @@ export default class DiskPDP11 extends Component {
      * @param {Object} sector
      * @param {number} off (byte offset)
      * @param {number} len (1 to 4 bytes)
-     * @return {number}
+     * @returns {number}
      */
     getSectorData(sector, off, len)
     {
@@ -890,7 +885,7 @@ export default class DiskPDP11 extends Component {
      * encodeAsBase64()
      *
      * @this {DiskPDP11}
-     * @return {string}
+     * @returns {string}
      */
     encodeAsBase64()
     {
@@ -920,7 +915,7 @@ export default class DiskPDP11 extends Component {
      * where [...] is an array of modified dword(s) in the corresponding sector.
      *
      * @this {DiskPDP11}
-     * @return {Array} of modified sectors
+     * @returns {Array} of modified sectors
      */
     save()
     {
@@ -945,8 +940,8 @@ export default class DiskPDP11 extends Component {
                 }
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage('save("' + this.sDiskName + '"): saved ' + (deltas.length - 1) + ' change(s)');
+        if (DEBUG) {
+            this.printf("save(\"%s\"): saved %d change(s)\n", this.sDiskName, (deltas.length - 1));
         }
         return deltas;
     }
@@ -966,7 +961,7 @@ export default class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {Array} deltas
-     * @return {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
+     * @returns {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
      */
     restore(deltas)
     {
@@ -1078,11 +1073,11 @@ export default class DiskPDP11 extends Component {
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
-                this.controller.notice("Unable to restore disk '" + this.sDiskName + ": " + sReason);
+                this.controller.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('restore("' + this.sDiskName + '"): restored ' + nChanges + ' change(s)');
+            if (DEBUG) {
+                this.printf("restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
             }
         }
         return nChanges;
@@ -1101,7 +1096,7 @@ export default class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {boolean} [fFormatted]
-     * @return {string} containing the entire disk image as JSON-encoded data
+     * @returns {string} containing the entire disk image as JSON-encoded data
      */
     convertToJSON(fFormatted)
     {
@@ -1184,7 +1179,7 @@ export default class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} [pba]
      * @param {string} [sDesc]
-     * @return {string}
+     * @returns {string}
      */
     dumpSector(sector, pba, sDesc)
     {

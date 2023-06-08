@@ -8,7 +8,7 @@
  */
 
 import MemoryX80 from "./memory.js";
-import MessagesX80 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import State from "../../../modules/v2/state.js";
@@ -78,7 +78,7 @@ export default class VideoX80 extends Component {
      */
     constructor(parmsVideo, canvas, context, textarea, container)
     {
-        super("Video", parmsVideo, MessagesX80.VIDEO);
+        super("Video", parmsVideo, Messages.VIDEO);
 
         var video = this, sProp, sEvent;
         this.fGecko = Web.isUserAgent("Gecko/");
@@ -108,7 +108,7 @@ export default class VideoX80 extends Component {
             this.rotateBuffer = this.rotateBuffer % 360;
             if (this.rotateBuffer > 0) this.rotateBuffer -= 360;
             if (this.rotateBuffer != -90) {
-                this.notice("unsupported buffer rotation: " + this.rotateBuffer);
+                this.printf(Messages.NOTICE, "unsupported buffer rotation: %d\n", this.rotateBuffer);
                 this.rotateBuffer = 0;
             }
         }
@@ -163,7 +163,7 @@ export default class VideoX80 extends Component {
              * both is most likely a mistake, but who knows, maybe someone wants to use both for 180-degree rotation?
              */
             if (this.rotateScreen != -90) {
-                this.notice("unsupported screen rotation: " + this.rotateScreen);
+                this.printf(Messages.NOTICE, "unsupported screen rotation: %d\n", this.rotateScreen);
                 this.rotateScreen = 0;
             } else {
                 this.contextScreen.translate(0, this.cyScreen);
@@ -217,7 +217,7 @@ export default class VideoX80 extends Component {
      * initBuffers()
      *
      * @this {VideoX80}
-     * @return {boolean}
+     * @returns {boolean}
      */
     initBuffers()
     {
@@ -331,7 +331,7 @@ export default class VideoX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "refresh")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -350,11 +350,11 @@ export default class VideoX80 extends Component {
             this.bindings[sBinding] = control;
             if (this.container && this.container.doFullScreen) {
                 control.onclick = function onClickFullScreen() {
-                    if (DEBUG) video.printMessage("fullScreen()");
+                    if (DEBUG) video.printf("fullScreen()\n");
                     video.doFullScreen();
                 };
             } else {
-                if (DEBUG) this.log("FullScreen API not available");
+                if (DEBUG) this.printf(Messages.LOG, "FullScreen API not available\n");
                 control.parentNode.removeChild(/** @type {Node} */ (control));
             }
             return true;
@@ -421,7 +421,7 @@ export default class VideoX80 extends Component {
     doneLoad(sURL, sFontData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load font ROM (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -452,12 +452,12 @@ export default class VideoX80 extends Component {
                 this.createFonts();
             }
             else {
-                this.notice("Unrecognized font data length (" + abFontData.length + ")");
+                this.printf(Messages.NOTICE, "Unrecognized font data length (%d)\n", abFontData.length);
                 return;
             }
 
         } catch (e) {
-            this.notice("Font ROM data error: " + e.message);
+            this.printf(Messages.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
 
@@ -475,7 +475,7 @@ export default class VideoX80 extends Component {
      * createFonts()
      *
      * @this {VideoX80}
-     * @return {boolean}
+     * @returns {boolean}
      */
     createFonts()
     {
@@ -515,7 +515,7 @@ export default class VideoX80 extends Component {
      * @param {number} cxCell is the target width of each character in the grid
      * @param {number} cyCell is the target height of each character in the grid
      * @param {boolean} [fUnderline] (null for unmodified font, false for reverse video, true for underline)
-     * @return {Object}
+     * @returns {Object}
      */
     createFontVariation(cxCell, cyCell, fUnderline)
     {
@@ -587,7 +587,7 @@ export default class VideoX80 extends Component {
      * @this {VideoX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -673,7 +673,7 @@ export default class VideoX80 extends Component {
      * @this {VideoX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -686,7 +686,7 @@ export default class VideoX80 extends Component {
      * This implements save support for the VideoX80 component.
      *
      * @this {VideoX80}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -702,7 +702,7 @@ export default class VideoX80 extends Component {
      *
      * @this {VideoX80}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -720,7 +720,7 @@ export default class VideoX80 extends Component {
      */
     updateDimensions(nCols, nRows)
     {
-        this.printMessage("updateDimensions(" + nCols + "," + nRows + ")");
+        this.printf("updateDimensions(%d,%d)\n", nCols, nRows);
         this.nColsBuffer = nCols;
         /*
          * Even when the number of effective rows is 14 (or 15 counting the scroll line buffer), we want
@@ -746,7 +746,7 @@ export default class VideoX80 extends Component {
      */
     updateRate(nRate)
     {
-        this.printMessage("updateRate(" + nRate + ")");
+        this.printf("updateRate(%d)\n", nRate);
         this.rateMonitor = nRate;
     }
 
@@ -760,7 +760,7 @@ export default class VideoX80 extends Component {
      */
     updateScrollOffset(bScroll)
     {
-        this.printMessage("updateScrollOffset(" + bScroll + ")");
+        this.printf("updateScrollOffset(%s)\n", bScroll);
         if (this.bScrollOffset !== bScroll) {
             this.bScrollOffset = bScroll;
             /*
@@ -790,7 +790,7 @@ export default class VideoX80 extends Component {
      * doFullScreen()
      *
      * @this {VideoX80}
-     * @return {boolean} true if request successful, false if not (eg, failed OR not supported)
+     * @returns {boolean} true if request successful, false if not (eg, failed OR not supported)
      */
     doFullScreen()
     {
@@ -870,7 +870,7 @@ export default class VideoX80 extends Component {
                 this.canvasScreen.style.width = this.canvasScreen.style.height = "";
             }
         }
-        this.printMessage("notifyFullScreen(" + fFullScreen + ")");
+        this.printf("notifyFullScreen(%s)\n", fFullScreen);
     }
 
     /**
@@ -887,7 +887,7 @@ export default class VideoX80 extends Component {
      * getRefreshTime()
      *
      * @this {VideoX80}
-     * @return {number} (number of milliseconds per refresh)
+     * @returns {number} (number of milliseconds per refresh)
      */
     getRefreshTime()
     {

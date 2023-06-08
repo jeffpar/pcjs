@@ -7,16 +7,14 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
-var fs      = require("fs");
-var path    = require("path");
-var mkdirp  = require("mkdirp");
-var defines = require("../../../../machines/shared/lib/defines.js");
-var net     = require("../../../../machines/shared/lib/netlib");
-var proc    = require("../../../../machines/shared/lib/proclib");
-var str     = require("../../../../machines/shared/lib/strlib");
-var DumpAPI = require("../../../../machines/shared/lib/dumpapi");
+import fs from "fs";
+import path from "path";
+import mkdirp from "mkdirp";
+import net from "../../../../machines/modules/v2/netlib.js";
+import proc from "../../../../machines/modules/v2/proclib.js";
+import str from "../../../../machines/modules/v2/strlib.js";
+import DumpAPI from "../../../../machines/modules/v2/dumpapi.js";
+import { COPYRIGHT } from "../../../../machines/modules/v2/defines.js";
 
 /**
  * FileDump()
@@ -240,7 +238,7 @@ FileDump.CLI = function()
  * Conditionally logs an error to the console.
  *
  * @param {Error} err
- * @return {string} the error message that was logged (or that would have been logged had logging been enabled)
+ * @returns {string} the error message that was logged (or that would have been logged had logging been enabled)
  */
 FileDump.logError = function(err)
 {
@@ -256,7 +254,7 @@ FileDump.logError = function(err)
  * validateFormat(sFormat)
  *
  * @param {string} sFormat
- * @return {null|string|boolean} the validated format, null if unspecified, or false if invalid
+ * @returns {null|string|boolean} the validated format, null if unspecified, or false if invalid
  */
 FileDump.validateFormat = function(sFormat)
 {
@@ -331,7 +329,7 @@ FileDump.prototype.loadFile = function(sFile, iStart, nSkip, done)
  *
  * @this {FileDump}
  * @param {string} sListing
- * @return {Array.<number>}
+ * @returns {Array.<number>}
  */
 FileDump.prototype.parseListing = function(sListing)
 {
@@ -456,7 +454,7 @@ FileDump.prototype.setData = function(buf, iStart, nSkip, sExt)
  * getData()
  *
  * @this {FileDump}
- * @return {Buffer|null}
+ * @returns {Buffer|null}
  */
 FileDump.prototype.getData = function()
 {
@@ -467,7 +465,7 @@ FileDump.prototype.getData = function()
  * getChecksum()
  *
  * @this {FileDump}
- * @return {number|null}
+ * @returns {number|null}
  */
 FileDump.prototype.getChecksum = function()
 {
@@ -486,7 +484,7 @@ FileDump.prototype.getChecksum = function()
  * @param {number} [nIndent] is the relative number of characters to indent the given line (0 if none)
  * @param {string} [sLine] is the given line
  * @param {string} [sComment] is an optional comment to append to the line, if comment output is enabled
- * @return {string} the indented/commented line
+ * @returns {string} the indented/commented line
  */
 FileDump.prototype.dumpLine = function(nIndent, sLine, sComment)
 {
@@ -514,7 +512,7 @@ FileDump.prototype.dumpLine = function(nIndent, sLine, sComment)
  * @param {number} [offDump] is a relative offset (default is 0; see constructor)
  * @param {number} [lenDump] is a relative length (default is 0; see constructor)
  * @param {number} [nWidthDump] is an alternate width (default is 16; see constructor)
- * @return {string} hex (or decimal) representation of the data
+ * @returns {string} hex (or decimal) representation of the data
  */
 FileDump.prototype.dumpBuffer = function(sKey, buf, len, cbItem, offDump, lenDump, nWidthDump)
 {
@@ -934,4 +932,6 @@ FileDump.prototype.outputFile = function(sOutputFile, fOverwrite)
     }
 };
 
-module.exports = FileDump;
+// module.exports = FileDump;
+
+export default FileDump;

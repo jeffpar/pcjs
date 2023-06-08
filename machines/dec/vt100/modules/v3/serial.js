@@ -11,7 +11,7 @@ import Device from "../../../../modules/v3/device.js";
 import LED    from "../../../../modules/v3/led.js";
 
 /**
- * @class {VT100Serial}
+ * @class VT100Serial
  * @unrestricted
  */
 export default class VT100Serial extends Device {

@@ -16,7 +16,7 @@ import DiskAPI from "../../../modules/v2/diskapi.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG } from "./defines.js";
+import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /**
  * @typedef {Object} DriveConfig
@@ -148,7 +148,7 @@ export default class HDC extends Component {
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
-        this.fLocalDisks = (!Web.isMobile() && window && 'FileReader' in window);
+        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
 
         /*
          * The remainder of HDC initialization now takes place in our initBus() handler.
@@ -163,7 +163,7 @@ export default class HDC extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (e.g., "listDisks")
      * @param {HTMLElement} control is the HTML control DOM object (e.g., HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -183,7 +183,7 @@ export default class HDC extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply remove the control; eg:
                  *
@@ -215,11 +215,11 @@ export default class HDC extends Component {
                         let i = sDiskName.lastIndexOf('.');
                         if (i >= 0) sDiskName = sDiskName.substr(0, i);
                         sDiskName += ".img";
-                        if (DEBUG) hdc.println("saving disk " + sDiskName + "...");
+                        if (DEBUG) hdc.printf("saving disk %s...\n", sDiskName);
                         let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {
-                        hdc.notice("Hard drive " + iDrive + " is not available.");
+                        hdc.printf(Messages.NOTICE, "Hard drive %d is not available.\n", iDrive);
                     }
                 };
             }(+sBinding.slice(-1));
@@ -333,7 +333,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -360,7 +360,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean}
+     * @returns {Object|boolean}
      */
     powerDown(fSave, fShutdown)
     {
@@ -370,7 +370,7 @@ export default class HDC extends Component {
     /**
      * getMachineID()
      *
-     * @return {string}
+     * @returns {string}
      */
     getMachineID()
     {
@@ -380,7 +380,7 @@ export default class HDC extends Component {
     /**
      * getUserID()
      *
-     * @return {string}
+     * @returns {string}
      */
     getUserID()
     {
@@ -407,7 +407,7 @@ export default class HDC extends Component {
      * This implements save support for the HDC component.
      *
      * @this {HDC}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -423,7 +423,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -436,7 +436,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Array} [data]
      * @param {boolean} [fHard] true if a machine reset (not just a controller reset)
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(data, fHard)
     {
@@ -539,9 +539,7 @@ export default class HDC extends Component {
             this.drive = this.aDrives[this.iDrive];
         }
 
-        if (this.messageEnabled()) {
-            this.printMessage("HDC initialized for " + this.aDrives.length + " drive(s)");
-        }
+        this.printf("HDC initialized for %d drive(s)\n", this.aDrives.length);
         return fSuccess;
     }
 
@@ -549,7 +547,7 @@ export default class HDC extends Component {
      * saveController()
      *
      * @this {HDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -610,7 +608,7 @@ export default class HDC extends Component {
      * @param {DriveConfig} driveConfig
      * @param {Array} [data]
      * @param {boolean} [fHard] true if a machine reset (not just a controller reset)
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initDrive(iDrive, drive, driveConfig, data, fHard)
     {
@@ -687,7 +685,7 @@ export default class HDC extends Component {
          */
         if (drive.disk === undefined) {
             drive.disk = null;
-            this.notice("Type " + drive.type + " \"" + drive.name + "\" is fixed disk " + iDrive, true);
+            this.printf(Messages.STATUS, "Type %d \"%s\" is fixed disk %d\n", drive.type, drive.name, iDrive);
         }
 
         /*
@@ -723,7 +721,7 @@ export default class HDC extends Component {
      * saveDrives()
      *
      * @this {HDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrives()
     {
@@ -739,7 +737,7 @@ export default class HDC extends Component {
      * saveDrive(drive)
      *
      * @this {HDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrive(drive)
     {
@@ -766,7 +764,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {number} iDrive
-     * @return {Object|undefined} (undefined if the requested drive does not exist)
+     * @returns {Object|undefined} (undefined if the requested drive does not exist)
      */
     copyDrive(iDrive)
     {
@@ -829,7 +827,7 @@ export default class HDC extends Component {
                 let driveType = HDC.aDriveTypes[this.iDriveTable][drive.type];
                 if (driveType) {
                     if (nCylinders != driveType[0] && nHeads != driveType[1]) {
-                        this.notice("Warning: drive parameters (" + nCylinders + "," + nHeads + ") do not match drive type " + drive.type + " (" + driveType[0] + "," + driveType[1] + ")");
+                        this.printf(Messages.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
                     }
                 }
                 drive.nCylinders = nCylinders;
@@ -859,7 +857,7 @@ export default class HDC extends Component {
      * @param {Drive} drive
      * @param {number} iSector (a "logical" sector number, relative to the entire disk, NOT a physical sector number)
      * @param {number} nSectors
-     * @return {boolean} true if successful, false if invalid position request
+     * @returns {boolean} true if successful, false if invalid position request
      */
     seekDrive(drive, iSector, nSectors)
     {
@@ -907,7 +905,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted disks
-     * @return {boolean} true if one or more disk images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more disk images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -944,21 +942,21 @@ export default class HDC extends Component {
      * @param {string} sDiskName
      * @param {string} sDiskPath
      * @param {boolean} fAutoMount
-     * @return {boolean} true if disk (already) loaded, false if queued up (or busy)
+     * @returns {boolean} true if disk (already) loaded, false if queued up (or busy)
      */
     loadDisk(iDrive, sDiskName, sDiskPath, fAutoMount)
     {
         let drive = this.aDrives[iDrive];
         if (!drive.type) return true;
         if (drive.fBusy) {
-            this.notice("Drive " + iDrive + " busy");
+            this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
             return true;
         }
         drive.fBusy = true;
         if (fAutoMount) {
             drive.fAutoMount = true;
             this.cAutoMount++;
-            if (this.messageEnabled()) this.printMessage("loading " + sDiskName);
+            this.printf("loading \"%s\"\n", sDiskName);
         }
         let disk = drive.disk || new Disk(this, drive, drive.mode);
         sDiskPath = Web.redirectResource(sDiskPath);
@@ -1003,7 +1001,7 @@ export default class HDC extends Component {
              * WARNING: This conversion of drive number to drive letter, starting with "C:" (0x43), is very simplistic
              * and is not guaranteed to match the drive mapping that DOS ultimately uses.
              */
-            this.notice("Mounted disk \"" + sDiskName + "\" in drive " + String.fromCharCode(0x43 + drive.iDrive), drive.fAutoMount);
+            this.printf(drive.fAutoMount? Messages.STATUS : Messages.NOTICE, "Mounted disk \"%s\" in drive %s\n", sDiskName, String.fromCharCode(0x43 + drive.iDrive));
 
             let aDiskInfo = disk.info();
             if (aDiskInfo[0] != drive.nCylinders || aDiskInfo[1] != drive.nHeads || aDiskInfo[2] != drive.nSectors || aDiskInfo[3] != drive.cbSector) {
@@ -1012,7 +1010,7 @@ export default class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                this.notice("Warning: disk geometry (" + aDiskInfo[0] + ':' + aDiskInfo[1] + ':' + aDiskInfo[2] + ") does not match " + HDC.aDriveTables[this.iDriveTable] + " drive type " + drive.type + " (" + drive.nCylinders + ':' + drive.nHeads + ':' + drive.nSectors + ")");
+                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], HDC.aDriveTables[this.iDriveTable], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
             }
         }
         if (drive.fAutoMount) {
@@ -1027,7 +1025,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x320)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inXTCData(port, addrFrom)
     {
@@ -1038,7 +1036,7 @@ export default class HDC extends Component {
         if (this.chipset) this.chipset.clearIRR(ChipSet.IRQ.XTC);
         this.regStatus &= ~HDC.XTC.STATUS.INTERRUPT;
 
-        this.printMessageIO(port, undefined, addrFrom, "DATA[" + this.regDataIndex + "]", bIn);
+        this.printIO(port, undefined, addrFrom, "DATA[" + this.regDataIndex + "]", bIn);
         if (++this.regDataIndex >= this.regDataTotal) {
             this.regDataIndex = this.regDataTotal = 0;
             this.regStatus &= ~(HDC.XTC.STATUS.IOMODE | HDC.XTC.STATUS.BUS | HDC.XTC.STATUS.BUSY);
@@ -1056,7 +1054,7 @@ export default class HDC extends Component {
      */
     outXTCData(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "DATA[" + this.regDataTotal + "]");
+        this.printIO(port, bOut, addrFrom, "DATA[" + this.regDataTotal + "]");
         if (this.regDataTotal < this.regDataArray.length) {
             this.regDataArray[this.regDataTotal++] = bOut;
         }
@@ -1086,12 +1084,12 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x321)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inXTCStatus(port, addrFrom)
     {
         let b = this.regStatus;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS", b);
+        this.printIO(port, undefined, addrFrom, "STATUS", b);
         /*
          * HACK: The HDC BIOS will not finish the HDC.XTC.DATA.CMD.INIT_DRIVE sequence unless it sees XTC.STATUS.REQ set again, nor will
          * it read any of the XTC.DATA bytes returned from a HDC.XTC.DATA.CMD.REQ_SENSE command unless XTC.STATUS.REQ is set again, so
@@ -1113,7 +1111,7 @@ export default class HDC extends Component {
      */
     outXTCReset(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "RESET");
+        this.printIO(port, bOut, addrFrom, "RESET");
         /*
          * Not sure what to do with this value, and the value itself may be "don't care", but we'll save it anyway.
          */
@@ -1128,11 +1126,11 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x322)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inXTCConfig(port, addrFrom)
     {
-        this.printMessageIO(port, undefined, addrFrom, "CONFIG", this.regConfig);
+        this.printIO(port, undefined, addrFrom, "CONFIG", this.regConfig);
         return this.regConfig;
     }
 
@@ -1146,7 +1144,7 @@ export default class HDC extends Component {
      */
     outXTCPulse(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "PULSE");
+        this.printIO(port, bOut, addrFrom, "PULSE");
         /*
          * Not sure what to do with this value, and the value itself may be "don't care", but we'll save it anyway.
          */
@@ -1173,7 +1171,7 @@ export default class HDC extends Component {
      */
     outXTCPattern(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "PATTERN");
+        this.printIO(port, bOut, addrFrom, "PATTERN");
         this.regPattern = bOut;
     }
 
@@ -1187,7 +1185,7 @@ export default class HDC extends Component {
      */
     outXTCNoise(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "NOISE");
+        this.printIO(port, bOut, addrFrom, "NOISE");
     }
 
     /**
@@ -1196,7 +1194,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F0)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCByte(port, addrFrom)
     {
@@ -1214,8 +1212,8 @@ export default class HDC extends Component {
             bIn = this.readData(drive, function onATCReadData(b, fAsync, obj, off) {
                 hdc.assert(!fAsync);
                 if (BACKTRACK && obj) {
-                    if (!off && obj.file && hdc.messageEnabled(Messages.DISK)) {
-                        hdc.printMessage("loading " + obj.file.path + '[' + obj.offFile + "] via port " + Str.toHexWord(port), true);
+                    if (!off && obj.file) {
+                        hdc.printf(Messages.DISK, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
                     }
                     /*
                      * TODO: We could define a cached BTO that's reset prior to a new ATC command, and then pass that
@@ -1231,16 +1229,16 @@ export default class HDC extends Component {
 
             if (drive.iByte == 1 || drive.iByte == drive.cbTransfer) {
                 /*
-                 * printMessageIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
+                 * printIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
                  * and last bytes of each sector.
                  */
                 if (this.messageEnabled(Messages.PORT + Messages.HDC)) {
-                    this.printMessageIO(port, undefined, addrFrom, "DATA[" + drive.iByte + "]", bIn);
+                    this.printIO(port, undefined, addrFrom, "DATA[" + drive.iByte + "]", bIn);
                 }
                 if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
                     if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
                         let sDump = drive.disk.dumpSector(drive.sector);
-                        if (sDump) this.dbg.message(sDump);
+                        if (sDump) this.print(sDump);
                     }
                     /*
                      * Now that we've supplied a full sector of data, see if the caller's expecting additional sectors;
@@ -1287,7 +1285,7 @@ export default class HDC extends Component {
                                  */
                                 hdc.regStatus = HDC.ATC.STATUS.ERROR;
                                 hdc.regError = HDC.ATC.ERROR.NO_CHS;
-                                if (DEBUG) hdc.printMessage(this.idComponent + ".inATCByte(): read failed");
+                                if (DEBUG) hdc.printf("%s.inATCByte(): read failed\n", this.idComponent);
                             }
                         }, false);
                     } else {
@@ -1314,7 +1312,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F0,0x170)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port data
+     * @returns {number} simulated port data
      */
     inATCData(port, addrFrom)
     {
@@ -1341,22 +1339,22 @@ export default class HDC extends Component {
                      */
                     this.regStatus = HDC.ATC.STATUS.ERROR;
                     this.regError = HDC.ATC.ERROR.NO_CHS;
-                    if (DEBUG && this.messageEnabled()) {
-                        this.printMessage(this.idComponent + ".outATCByte(" + Str.toHexByte(bOut) + "): write failed");
+                    if (DEBUG) {
+                        this.printf("%s.outATCByte(%#04x): write failed\n", this.idComponent, bOut);
                     }
                 }
                 else if (drive.iByte == 1 || drive.iByte == drive.cbTransfer) {
                     /*
-                     * printMessageIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
+                     * printIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
                      * and last bytes of each sector.
                      */
                     if (this.messageEnabled(Messages.PORT + Messages.HDC)) {
-                        this.printMessageIO(port, bOut, addrFrom, "DATA[" + drive.iByte + "]");
+                        this.printIO(port, bOut, addrFrom, "DATA[" + drive.iByte + "]");
                     }
                     if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
                         if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
                             let sDump = drive.disk.dumpSector(drive.sector);
-                            if (sDump) this.dbg.message(sDump);
+                            if (sDump) this.print(sDump);
                         }
                         drive.nBytes -= drive.cbTransfer;
                         this.regSecCnt = (this.regSecCnt - 1) & 0xff;
@@ -1377,16 +1375,16 @@ export default class HDC extends Component {
                 /*
                  * TODO: What to do about unexpected writes? The number of bytes has exceeded what the command specified.
                  */
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage(this.idComponent + ".outATCByte(" + Str.toHexByte(bOut) + "): write exceeds count (" + this.drive.nBytes + ")");
+                if (DEBUG) {
+                    this.printf("%s.outATCByte(%#04x): write exceeds count (%d)\n", this.idComponent, bOut, this.drive.nBytes);
                 }
             }
         } else {
             /*
              * TODO: What to do about unexpected writes? No command was specified.
              */
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(this.idComponent + ".outATCByte(" + Str.toHexByte(bOut) + "): write without command");
+            if (DEBUG) {
+                this.printf("%s.outATCByte(%#04x): write without command\n", this.idComponent, bOut);
             }
         }
     }
@@ -1413,12 +1411,12 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F1,0x171)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCError(port, addrFrom)
     {
         let bIn = this.regError;
-        this.printMessageIO(port, undefined, addrFrom, "ERROR", bIn);
+        this.printIO(port, undefined, addrFrom, "ERROR", bIn);
         return bIn;
     }
 
@@ -1432,7 +1430,7 @@ export default class HDC extends Component {
      */
     outATCWPreC(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "WPREC");
+        this.printIO(port, bOut, addrFrom, "WPREC");
         this.regWPreC = bOut;
     }
 
@@ -1442,12 +1440,12 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F2,0x172)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCSecCnt(port, addrFrom)
     {
         let bIn = this.regSecCnt;
-        this.printMessageIO(port, undefined, addrFrom, "SECCNT", bIn);
+        this.printIO(port, undefined, addrFrom, "SECCNT", bIn);
         return bIn;
     }
 
@@ -1461,7 +1459,7 @@ export default class HDC extends Component {
      */
     outATCSecCnt(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "SECCNT");
+        this.printIO(port, bOut, addrFrom, "SECCNT");
         this.regSecCnt = bOut;
     }
 
@@ -1471,12 +1469,12 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F3,0x173)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCSecNum(port, addrFrom)
     {
         let bIn = this.regSecNum;
-        this.printMessageIO(port, undefined, addrFrom, "SECNUM", bIn);
+        this.printIO(port, undefined, addrFrom, "SECNUM", bIn);
         return bIn;
     }
 
@@ -1490,7 +1488,7 @@ export default class HDC extends Component {
      */
     outATCSecNum(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "SECNUM");
+        this.printIO(port, bOut, addrFrom, "SECNUM");
         this.regSecNum = bOut;
     }
 
@@ -1500,12 +1498,12 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F4,0x174)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCCylLo(port, addrFrom)
     {
         let bIn = this.regCylLo;
-        this.printMessageIO(port, undefined, addrFrom, "CYLLO", bIn);
+        this.printIO(port, undefined, addrFrom, "CYLLO", bIn);
         return bIn;
     }
 
@@ -1519,7 +1517,7 @@ export default class HDC extends Component {
      */
     outATCCylLo(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CYLLO");
+        this.printIO(port, bOut, addrFrom, "CYLLO");
         this.regCylLo = bOut;
     }
 
@@ -1529,12 +1527,12 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F5,0x175)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCCylHi(port, addrFrom)
     {
         let bIn = this.regCylHi;
-        this.printMessageIO(port, undefined, addrFrom, "CYLHI", bIn);
+        this.printIO(port, undefined, addrFrom, "CYLHI", bIn);
         return bIn;
     }
 
@@ -1548,7 +1546,7 @@ export default class HDC extends Component {
      */
     outATCCylHi(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CYLHI");
+        this.printIO(port, bOut, addrFrom, "CYLHI");
         this.regCylHi = bOut;
     }
 
@@ -1558,12 +1556,12 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F6,0x176)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCDrvHd(port, addrFrom)
     {
         let bIn = this.regDrvHd;
-        this.printMessageIO(port, undefined, addrFrom, "DRVHD", bIn);
+        this.printIO(port, undefined, addrFrom, "DRVHD", bIn);
         return bIn;
     }
 
@@ -1577,7 +1575,7 @@ export default class HDC extends Component {
      */
     outATCDrvHd(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "DRVHD");
+        this.printIO(port, bOut, addrFrom, "DRVHD");
         this.regDrvHd = bOut;
         /*
          * The MODEL_5170_REV3 BIOS (see "POST2_CHK_HF2" @F000:14FC) probes for a 2nd hard drive when the number
@@ -1612,12 +1610,12 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F7,0x177)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCStatus(port, addrFrom)
     {
         let bIn = this.regStatus;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS", bIn);
+        this.printIO(port, undefined, addrFrom, "STATUS", bIn);
         /*
          * Despite what IBM's documentation for the "Personal Computer AT Fixed Disk and Diskette Drive Adapter"
          * (August 31, 1984) says (ie, "A read of the status register clears interrupt request 14"), we cannot
@@ -1650,7 +1648,7 @@ export default class HDC extends Component {
      */
     outATCCommand(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "COMMAND");
+        this.printIO(port, bOut, addrFrom, "COMMAND");
         this.regCommand = bOut;
         if (this.chipset) this.chipset.clearIRR(ChipSet.IRQ.ATC1 + this.nInterface);
         this.doATC();
@@ -1668,7 +1666,7 @@ export default class HDC extends Component {
      */
     outATCFDR(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "FDR");
+        this.printIO(port, bOut, addrFrom, "FDR");
         /*
          * I'm not really sure if I should set HDC.ATC.DIAG.NO_ERROR in regError after *every* write where
          * HDC.ATC.FDR.RESET is clear, or only after it has transitioned from set to clear; since the BIOS only
@@ -1718,9 +1716,7 @@ export default class HDC extends Component {
         this.regStatus = HDC.ATC.STATUS.READY | HDC.ATC.STATUS.SEEK_OK;
         let drive = this.aDrives[iDrive];
 
-        if (this.messageEnabled(Messages.HDC)) {
-            this.printMessage(this.idComponent + ".doATC(" + (this.nInterface*2+iDrive) + "," + Str.toHexByte(bCmd) + "): " + HDC.aATACommands[bCmd] + (drive? "" : " (drive " + iDrive + " not present)"), true, true);
-        }
+        this.printf(Messages.HDC + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
 
         if (!drive) return;
         this.iDrive = iDrive;
@@ -1769,8 +1765,8 @@ export default class HDC extends Component {
             /* falls through */
 
         case HDC.ATC.COMMAND.READ_DATA:             // 0x20 (ATA)
-            if (this.messageEnabled(Messages.HDC) && !drive.useBuffer) {
-                this.printMessage(this.idComponent + ".doATCRead(" + iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + nSectors + ")", true);
+            if (!drive.useBuffer) {
+                this.printf(Messages.HDC, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             /*
              * We're using a call to readData() that disables auto-increment, so that once we've got the first
@@ -1809,8 +1805,8 @@ export default class HDC extends Component {
             /* falls through */
 
         case HDC.ATC.COMMAND.WRITE_DATA:            // 0x30 (ATA)
-            if (this.messageEnabled(Messages.HDC) && !drive.useBuffer) {
-                this.printMessage(this.idComponent + ".doATCWrite(" + iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + nSectors + ")", true);
+            if (!drive.useBuffer) {
+                this.printf(Messages.HDC, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             this.regStatus = HDC.ATC.STATUS.DATA_REQ;
             fProcessed = true;
@@ -1871,7 +1867,7 @@ export default class HDC extends Component {
             this.regStatus = HDC.ATC.STATUS.ERROR;
             this.regError = HDC.ATC.ERROR.CMD_ABORT;
             if (this.messageEnabled()) {
-                this.printMessage(this.idComponent + ".doATC(" + Str.toHexByte(this.regCommand) + "): unsupported operation");
+                this.printf("%s.doATC(%#04x): unsupported operation\n", this.idComponent, this.regCommand);
                 if (MAXDEBUG) this.dbg.stopCPU();
             }
         }
@@ -1912,9 +1908,9 @@ export default class HDC extends Component {
                  * has a low tolerance for fast controller interrupts during multi-sector operations.
                  */
                 this.chipset.setIRR(ChipSet.IRQ.ATC1 + this.nInterface, 120);
-                if (DEBUG) this.printMessage(this.idComponent + ".setATCIRR(): enabled", Messages.PIC + Messages.HDC);
+                if (DEBUG) this.printf(Messages.PIC + Messages.HDC, "%s.setATCIRR(): enabled\n", this.idComponent);
             } else {
-                if (DEBUG) this.printMessage(this.idComponent + ".setATCIRR(): disabled", Messages.PIC + Messages.HDC);
+                if (DEBUG) this.printf(Messages.PIC + Messages.HDC, "%s.setATCIRR(): disabled\n", this.idComponent);
             }
         }
     }
@@ -1997,7 +1993,7 @@ export default class HDC extends Component {
             bDataStatus = HDC.XTC.DATA.STATUS.OK;
             if (!drive && this.iDriveAllowFail == iDrive) {
                 this.iDriveAllowFail = -1;
-                if (DEBUG) this.printMessage(this.idComponent + ".doXTC(): fake failure triggered");
+                if (DEBUG) this.printf("%s.doXTC(): fake failure triggered\n", this.idComponent);
                 bDataStatus = HDC.XTC.DATA.STATUS.ERROR;
             }
             this.beginResult(bDataStatus | bDrive);
@@ -2033,8 +2029,8 @@ export default class HDC extends Component {
 
             case HDC.XTC.DATA.CMD.RECALIBRATE:      // 0x01
                 drive.bControl = bControl;
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage(this.idComponent + ".doXTC(): drive " + iDrive + " control byte: " + Str.toHexByte(bControl));
+                if (DEBUG) {
+                    this.printf("%s.doXTC(): drive %d control byte: %#04x\n", this.idComponent, iDrive, bControl);
                 }
                 this.beginResult(HDC.XTC.DATA.STATUS.OK | bDrive);
                 break;
@@ -2072,7 +2068,7 @@ export default class HDC extends Component {
             default:
                 this.beginResult(HDC.XTC.DATA.STATUS.ERROR | bDrive);
                 if (this.messageEnabled()) {
-                    this.printMessage(this.idComponent + ".doXTC(" + Str.toHexByte(bCmdOrig) + "): " + (bCmd < 0? ("invalid drive (" + iDrive + ")") : "unsupported operation"));
+                    this.printf("%s.doXTC(%#04x): %d\n", this.idComponent, bCmdOrig, (bCmd < 0? ("invalid drive (" + iDrive + ")") : "unsupported operation"));
                     if (MAXDEBUG && bCmd >= 0) this.dbg.stopCPU();
                 }
                 break;
@@ -2084,7 +2080,7 @@ export default class HDC extends Component {
      * popCmd()
      *
      * @this {HDC}
-     * @return {number}
+     * @returns {number}
      */
     popCmd()
     {
@@ -2092,9 +2088,7 @@ export default class HDC extends Component {
         let bCmdIndex = this.regDataIndex;
         if (bCmdIndex < this.regDataTotal) {
             bCmd = this.regDataArray[this.regDataIndex++];
-            if (this.messageEnabled((bCmdIndex > 0? Messages.PORT : 0) + Messages.HDC)) {
-                this.printMessage(this.idComponent + ".popCmd(" + bCmdIndex + "): " + Str.toHexByte(bCmd) + (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""), true);
-            }
+            this.printf((bCmdIndex > 0? Messages.PORT : 0) + Messages.HDC, "%s.popCmd(%d): %#04x%s\n", this.idComponent, bCmdIndex, bCmd, (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""));
         }
         return bCmd;
     }
@@ -2126,8 +2120,8 @@ export default class HDC extends Component {
      */
     pushResult(bResult)
     {
-        if (DEBUG && this.messageEnabled((this.regDataTotal > 0? Messages.PORT : 0) + Messages.HDC)) {
-            this.printMessage(this.idComponent + ".pushResult(" + this.regDataTotal + "): " + Str.toHexByte(bResult), true);
+        if (DEBUG) {
+            this.printf((this.regDataTotal > 0? Messages.PORT : 0) + Messages.HDC, "%s.pushResult(%d): %#04x\n", this.idComponent, this.regDataTotal, bResult);
         }
         this.regDataArray[this.regDataTotal++] = bResult;
     }
@@ -2149,7 +2143,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be ASKING for data, not GIVING us data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMARead(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMARead(): invalid DMA acknowledgement\n", this.idComponent);
         done(-1, false);
     }
 
@@ -2159,7 +2153,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     doDMAWrite(drive, b)
     {
@@ -2168,7 +2162,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMAWrite(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMAWrite(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -2178,7 +2172,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     doDMAWriteBuffer(drive, b)
     {
@@ -2187,7 +2181,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMAWriteBuffer(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMAWriteBuffer(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -2206,7 +2200,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMAWriteFormat(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMAWriteFormat(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -2221,9 +2215,7 @@ export default class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (this.messageEnabled()) {
-            this.printMessage(this.idComponent + ".doRead(" + drive.iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + ((drive.nBytes / drive.cbSector)|0) + ")");
-        }
+        this.printf("%s.doRead(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
 
         if (drive.disk) {
             drive.sector = null;
@@ -2265,9 +2257,7 @@ export default class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (this.messageEnabled()) {
-            this.printMessage(this.idComponent + ".doWrite(" + drive.iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + ((drive.nBytes / drive.cbSector)|0) + ")");
-        }
+        this.printf("%s.doWrite(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
 
         if (drive.disk) {
             drive.sector = null;
@@ -2316,7 +2306,7 @@ export default class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (DEBUG) this.printMessage(this.idComponent + ".doWriteBuffer()");
+        if (DEBUG) this.printf("%s.doWriteBuffer()\n", this.idComponent);
 
         this.initBuffer(drive);
 
@@ -2367,7 +2357,7 @@ export default class HDC extends Component {
      * @param {Drive} drive
      * @param {function(number,boolean,Object,number)} [done] (number is next available byte from drive, or -1 if no more bytes available)
      * @param {boolean} [fAutoInc] (default is true to auto-increment)
-     * @return {number} the requested byte, or -1 if unavailable
+     * @returns {number} the requested byte, or -1 if unavailable
      */
     readData(drive, done, fAutoInc)
     {
@@ -2455,7 +2445,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} b containing next byte to write
-     * @return {number} (b unchanged; return -1 if command should be terminated)
+     * @returns {number} (b unchanged; return -1 if command should be terminated)
      */
     writeData(drive, b)
     {
@@ -2546,7 +2536,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} b containing next byte to write
-     * @return {number} (b unchanged; return -1 if command should be terminated)
+     * @returns {number} (b unchanged; return -1 if command should be terminated)
      */
     writeBuffer(drive, b)
     {
@@ -2568,7 +2558,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} b containing a format command byte
-     * @return {number} (b if successful, -1 if command should be terminated)
+     * @returns {number} (b if successful, -1 if command should be terminated)
      */
     writeFormat(drive, b)
     {
@@ -2581,9 +2571,7 @@ export default class HDC extends Component {
             drive.nBytes = 128 << drive.abFormat[3];// N (0 => 128, 1 => 256, 2 => 512, 3 => 1024)
             drive.cbFormat = 0;
 
-            if (this.messageEnabled()) {
-                this.printMessage(this.idComponent + ".writeFormat(" + drive.wCylinder + ":" + drive.bHead + ":" + drive.bSector + ":" + drive.nBytes + ")");
-            }
+            this.printf("%s.writeFormat(%d:%d:%d:%d)\n", this.idComponent, drive.wCylinder, drive.bHead, drive.bSector, drive.nBytes);
 
             for (let i = 0; i < drive.nBytes; i++) {
                 if (this.writeData(drive, drive.bFiller) < 0) {
@@ -2604,7 +2592,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} bCmd
-     * @return {boolean} (true if processed, false otherwise)
+     * @returns {boolean} (true if processed, false otherwise)
      */
     processIdentify(drive, bCmd)
     {
@@ -2782,9 +2770,7 @@ export default class HDC extends Component {
 
         bPacketCmd = getByte(0);
 
-        if (this.messageEnabled(Messages.HDC)) {
-            this.printMessage(this.idComponent + ".packet(" + Str.toHexByte(bPacketCmd) + "): " + HDC.aATAPICommands[bPacketCmd] + " (drive " + drive.iDrive + ")", true);
-        }
+        this.printf(Messages.HDC, "%s.packet(%#04x): %s (drive %d)\n", this.idComponent, bPacketCmd, HDC.aATAPICommands[bPacketCmd], drive.iDrive);
 
         switch(bPacketCmd) {
         case HDC.ATC.PACKET.COMMAND.TEST_UNIT:  // 0x00
@@ -2875,9 +2861,7 @@ export default class HDC extends Component {
                 break;
 
             default:
-                if (this.messageEnabled(Messages.HDC)) {
-                    this.printMessage(this.idComponent + ".packet(" + Str.toHexByte(bPacketCmd) + "): unsupported format " + format, true);
-                }
+                this.printf(Messages.HDC, "%s.packet(%#04x): unsupported format %d\n", this.idComponent, bPacketCmd, format);
                 if (MAXDEBUG) this.dbg.stopCPU();
                 bPacketCmd = -1;                // TODO: Add support for other READ_TOC formats
                 break;
@@ -2980,9 +2964,7 @@ export default class HDC extends Component {
                 break;
 
             default:
-                if (this.messageEnabled(Messages.HDC)) {
-                    this.printMessage(this.idComponent + ".packet(" + Str.toHexByte(bPacketCmd) + "): unsupported page code " + pageCode, true);
-                }
+                this.printf(Messages.HDC, "%s.packet(%#04x): unsupported page code %d\n", this.idComponent, bPacketCmd, pageCode);
                 if (MAXDEBUG) this.dbg.stopCPU();
                 bPacketCmd = -1;        // TODO: Add support for other Page Codes
                 break;
@@ -3005,7 +2987,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {Drive} drive
-     * @return {boolean}
+     * @returns {boolean}
      */
     processReset(drive)
     {
@@ -3053,7 +3035,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {number} addr
-     * @return {boolean} true to proceed with the INT 0x13 software interrupt, false to skip
+     * @returns {boolean} true to proceed with the INT 0x13 software interrupt, false to skip
      */
     intBIOSDisk(addr)
     {
@@ -3090,13 +3072,13 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {number} addr
-     * @return {boolean} true to proceed with the INT 0x40 software interrupt, false to skip
+     * @returns {boolean} true to proceed with the INT 0x40 software interrupt, false to skip
      */
     intBIOSDiskette(addr)
     {
         let AH = this.cpu.regEAX >> 8;
         if ((!AH && this.chipset && this.chipset.checkIMR(ChipSet.IRQ.FDC))) {
-            if (DEBUG) this.printMessage(this.idComponent + ".intBIOSDiskette(): skipping useless INT 0x40 diskette reset");
+            if (DEBUG) this.printf("%s.intBIOSDiskette(): skipping useless INT 0x40 diskette reset\n", this.idComponent);
             return false;
         }
         return true;
@@ -3118,7 +3100,7 @@ export default class HDC extends Component {
     //     // WARNING: This conversion of drive number to drive letter, starting with "C:" (0x43), is very simplistic
     //     // and is not guaranteed to match the drive mapping that DOS ultimately uses.
     //     //
-    //     this.notice("Drive " + String.fromCharCode(0x43 + iDrive) + " unloaded");
+    //     this.printf(Messages.NOTICE, "Drive %s unloaded\n", String.fromCharCode(0x43 + iDrive));
     // }
 
     /**

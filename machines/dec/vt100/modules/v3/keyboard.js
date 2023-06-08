@@ -17,7 +17,7 @@ import LED    from "../../../../modules/v3/led.js";
  */
 
 /**
- * @class {VT100Keyboard}
+ * @class VT100Keyboard
  * @unrestricted
  * @property {VT100KeyboardConfig} config
  */

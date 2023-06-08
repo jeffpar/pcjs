@@ -7,15 +7,12 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
-var fs      = require("fs");
-var path    = require("path");
-var mkdirp  = require("mkdirp");
-var defines = require("../../../../machines/shared/lib/defines");
-var net     = require("../../../../machines/shared/lib/netlib");
-var proc    = require("../../../../machines/shared/lib/proclib");
-var str     = require("../../../../machines/shared/lib/strlib");
+import fs from "fs";
+import path from "path";
+import mkdirp from "mkdirp";
+import net from "../../../../machines/modules/v2/netlib.js";
+import proc from "../../../../machines/modules/v2/proclib.js";
+import str from "../../../../machines/modules/v2/strlib.js";
 
 /**
  * TextOut()
@@ -103,7 +100,7 @@ TextOut.CLI = function()
  * Conditionally logs an error to the console.
  *
  * @param {Error} err
- * @return {string} the error message that was logged (or that would have been logged had logging been enabled)
+ * @returns {string} the error message that was logged (or that would have been logged had logging been enabled)
  */
 TextOut.logError = function(err)
 {
@@ -166,7 +163,7 @@ TextOut.prototype.loadFile = function(sFile, done)
  *
  * @this {TextOut}
  * @param {Buffer|string} buf
- * @return {boolean}
+ * @returns {boolean}
  */
 TextOut.prototype.setText = function(buf)
 {
@@ -255,7 +252,7 @@ TextOut.prototype.massageLines = function()
  * encodeASCII(s)
  *
  * @param s
- * @return {string}
+ * @returns {string}
  */
 TextOut.prototype.encodeASCII = function(s)
 {
@@ -441,7 +438,7 @@ TextOut.prototype.alignVertical = function()
  * @this {TextOut}
  * @param {string} sSrc
  * @param {boolean} [fDebug]
- * @return {number} logical position of sTarget within sSrc, -1 if not found
+ * @returns {number} logical position of sTarget within sSrc, -1 if not found
  */
 TextOut.prototype.findTarget = function(sSrc, fDebug)
 {
@@ -486,7 +483,7 @@ TextOut.prototype.findTarget = function(sSrc, fDebug)
  * @this {TextOut}
  * @param {number} iLine
  * @param {boolean} [fBogus]
- * @return {Array.<string>}
+ * @returns {Array.<string>}
  */
 TextOut.prototype.getLineParts = function(iLine, fBogus)
 {
@@ -537,4 +534,6 @@ TextOut.prototype.outputText = function(sOutputFile, fOverwrite)
     }
 };
 
-module.exports = TextOut;
+// module.exports = TextOut;
+
+export default TextOut;

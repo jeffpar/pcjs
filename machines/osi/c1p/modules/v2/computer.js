@@ -7,6 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import Messages from "../../../../modules/v2/messages.js";
 import Component from "../../../../modules/v2/component.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG } from "./defines.js";
@@ -68,7 +69,7 @@ export default class C1PComputer extends Component {
             for (var i=0; i < this.modules[sType].length; i++) {
                 var component = this.modules[sType][i];
                 if (component && component.reset) {
-                    if (DEBUG) this.println("resetting " + sType);
+                    if (DEBUG) this.printf("resetting %s\n", sType);
                     component.reset();
                     if (sType == "cpu") cpu = component;
                 }
@@ -128,7 +129,7 @@ export default class C1PComputer extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -154,7 +155,7 @@ export default class C1PComputer extends Component {
      * @param {string} sType
      * @param {string} [idRelated] of related component
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     getComponentByType(sType, idRelated, componentPrev)
     {
@@ -201,7 +202,7 @@ export default class C1PComputer extends Component {
          */
         computer.setReady();
 
-        computer.println(APPNAME + " v" + APPVERSION + "\n" + COPYRIGHT);
+        computer.printf(Messages.DEFAULT, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
 
         /*
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to "power" the CPU;
@@ -279,7 +280,7 @@ export default class C1PComputer extends Component {
              * the Debugger needs our setBuffer(), setPower() and reset() notifications, and this relieves us from having an explicit
              * <module> entry for type="debugger".
              */
-            component = Component.getComponentByID('debugger', parmsComputer['id']);
+            component = Component.getComponentByType('C1PDebugger', parmsComputer['id'], false);
             if (component) {
                 modules['debugger'] = [component];
                 if (component.setBuffer) {
@@ -293,7 +294,7 @@ export default class C1PComputer extends Component {
              * Let's see if the Control Panel is installed (NOTE: its ID must be "panel", and only one per machine is supported);
              * the Panel needs our setPower() notifications, and this relieves us from having an explicit <module> entry for type="panel".
              */
-            var panel = Component.getComponentByID('panel', parmsComputer['id']);
+            var panel = Component.getComponentByType('C1PPanel', parmsComputer['id'], false);
             if (panel) {
                 modules['panel'] = [panel];
                 /*
@@ -305,9 +306,7 @@ export default class C1PComputer extends Component {
                     for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
                         component = aComponents[iComponent];
                         if (component == panel) continue;
-                        component.notice = panel.notice;
                         component.print = panel.print;
-                        component.println = panel.println;
                     }
                 }
             }

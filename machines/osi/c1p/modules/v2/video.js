@@ -8,6 +8,7 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
+import Messages from "../../../../modules/v2/messages.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
@@ -199,7 +200,7 @@ export default class C1PVideo extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "refresh")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -208,7 +209,7 @@ export default class C1PVideo extends Component {
             this.bindings[sBinding] = control;
             control.onclick = function(video) {
                 return function() {
-                    if (DEBUG) video.println("refreshScreen()");
+                    if (DEBUG) video.printf("refreshScreen()\n");
                     video.initScreen();
                     video.updateScreen();
                 };
@@ -312,7 +313,7 @@ export default class C1PVideo extends Component {
             }
         }
         else {
-            this.println("updated video model: " + this.nModel);
+            this.printf("updated video model: %d\n", this.nModel);
             this.setDimensions(64, 32);
         }
         this.initScreen();
@@ -456,7 +457,7 @@ export default class C1PVideo extends Component {
      * updateScreen() updates the screen buffer from the video buffer and updates the window with any changes.
      *
      * @this {C1PVideo}
-     * @return {boolean}
+     * @returns {boolean}
      *
      * For every byte in the video buffer, this renders it if it differs from the byte stored in the screen buffer,
      * and then updates the screen buffer to match.  Since initScreen() sets every byte in the screen buffer
@@ -485,7 +486,7 @@ export default class C1PVideo extends Component {
      * @this {C1PVideo}
      * @param {number} offset
      * @param {number} b
-     * @return {boolean}
+     * @returns {boolean}
      */
     writeByte(offset, b)
     {
@@ -503,7 +504,7 @@ export default class C1PVideo extends Component {
      * @param {number} col
      * @param {number} row
      * @param {number} b
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      *
      * I originally used (screenWidth,screenHeight) == (512,448) and (cols,rows) == (32,32) and (cxChar,cyChar) == (16,16),
      * and I simply copied the source cells 1-to-1 to the destination (16,16), knowing that we would never try to display
@@ -528,7 +529,7 @@ export default class C1PVideo extends Component {
                 var xSrc = xChar % this.imgChars.width;
                 var xDst = col * this.cxCharDst;
                 var yDst = row * this.cyCharDst;
-                // if (DEBUG) this.log("updateWindow(" + col + "," + row + "," + b +"): drawing from " + xSrc + "," + ySrc + " to " + xDst + "," + yDst);
+                // if (DEBUG) this.printf(Messages.LOG, "updateWindow(%d,%d,%#04x): drawing from %d,%d to %d,%d\n", col, row, b, xSrc, ySrc, xDst, yDst);
                 this.contextScreen.drawImage(this.imgChars, xSrc, ySrc, this.cxChar, this.cyChar, xDst, yDst, this.cxCharDst, this.cyCharDst);
             }
         }
@@ -610,7 +611,7 @@ export default class C1PVideo extends Component {
             var sCharSet = parmsVideo['fontROM'] || parmsVideo['charSet'];
             imgCharSet.onload = function(video, sCharSet) {
                 return function() {
-                    if (DEBUG) video.log("onload(): finished loading " + sCharSet);
+                    if (DEBUG) video.printf(Messages.LOG, "onload(): finished loading %s\n", sCharSet);
                     video.setReady();
                 };
             }(video, sCharSet);

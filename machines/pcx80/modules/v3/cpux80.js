@@ -13,7 +13,7 @@ import Debugger from "../../../modules/v3/debugger.js";
 /**
  * Emulation of the 8080 CPU
  *
- * @class {CPUx80}
+ * @class CPUx80
  * @unrestricted
  * @property {Bus} busIO
  * @property {Bus} busMemory
@@ -188,7 +188,7 @@ export default class CPUx80 extends CPU {
     loadState(stateCPU)
     {
         if (!stateCPU || !stateCPU.length) {
-            this.println("invalid saved state");
+            this.printf("invalid saved state\n");
             return false;
         }
         let idDevice = stateCPU.shift();
@@ -210,7 +210,7 @@ export default class CPUx80 extends CPU {
             this.setPS(stateCPU.shift());
             this.intFlags = stateCPU.shift();
         } catch(err) {
-            this.println("CPU state error: " + err.message);
+            this.printf("CPU state error: %s\n", err.message);
             return false;
         }
         return true;
@@ -288,7 +288,7 @@ export default class CPUx80 extends CPU {
      */
     onReset()
     {
-        this.println("reset");
+        this.printf("reset\n");
         this.resetRegs();
         if (!this.time.isRunning()) this.print(this.toString());
     }

@@ -9,6 +9,7 @@
 
 import BusX86 from "./bus.js";
 import MemoryX86 from "./memory.js";
+import Messages from "./messages.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -68,7 +69,7 @@ class Color {
      * toString()
      *
      * @this {Color}
-     * @return {string}
+     * @returns {string}
      */
     toString()
     {
@@ -101,7 +102,7 @@ class Rectangle {
      * @this {Rectangle}
      * @param {number} x
      * @param {number} y
-     * @return {boolean} true if (x,y) lies within the rectangle, false if not
+     * @returns {boolean} true if (x,y) lies within the rectangle, false if not
      */
     contains(x, y)
     {
@@ -120,7 +121,7 @@ class Rectangle {
      * @param {number} units
      * @param {number} unitsTotal
      * @param {boolean} [fHorizontal]
-     * @return {Rectangle}
+     * @returns {Rectangle}
      */
     subDivide(units, unitsTotal, fHorizontal)
     {
@@ -271,7 +272,7 @@ export default class Panel extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -398,7 +399,7 @@ export default class Panel extends Component {
      * @this {Panel}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -412,7 +413,7 @@ export default class Panel extends Component {
      * @this {Panel}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -492,7 +493,7 @@ export default class Panel extends Component {
         this.xMouse = x;
         this.yMouse = y;
 
-        if (MAXDEBUG) this.log("Panel.moveMouse(" + x + "," + y + ")");
+        if (MAXDEBUG) this.printf(Messages.LOG, "Panel.moveMouse(%d,%d)\n", x, y);
 
         if (x >= 0 && x < Panel.LIVECANVAS.CX && y >= 0 && y < Panel.LIVECANVAS.CY) {
             /*
@@ -515,7 +516,7 @@ export default class Panel extends Component {
      * @this {Panel}
      * @param {number} x
      * @param {number} y
-     * @return {number} address corresponding to (x,y) canvas coordinates, or ADDR_INVALID if none
+     * @returns {number} address corresponding to (x,y) canvas coordinates, or ADDR_INVALID if none
      */
     findAddress(x, y)
     {
@@ -542,7 +543,7 @@ export default class Panel extends Component {
 
                     addr |= 0;
                     if (addr > addrLimit) addr = addrLimit;
-                    if (MAXDEBUG) this.log("Panel.findAddress(" + x + "," + y + ") found type " + MemoryX86.TYPE.NAMES[region.type] + ", address %" + Str.toHex(addr));
+                    if (MAXDEBUG) this.printf(Messages.LOG, "Panel.findAddress(%d,%d) found type %s, address %#010x\n", x, y, MemoryX86.TYPE.NAMES[region.type], addr);
                     return addr;
                 }
             }
@@ -569,7 +570,7 @@ export default class Panel extends Component {
             this.initPen(10, Panel.LIVECANVAS.FONT.CY, this.canvasLiveMem, this.contextLiveMem, this.canvas.style.color);
 
             if (this.fVisual) {
-                if (DEBUG) this.log("begin scanMemory()");
+                if (DEBUG) this.printf(Messages.LOG, "begin scanMemory()\n");
                 this.busInfo = this.bus.scanMemory(this.busInfo);
                 /*
                  * Calculate the pixel-to-memory-address ratio
@@ -596,7 +597,7 @@ export default class Panel extends Component {
                     for (i = 0; i < this.busInfo.cRegions; i++) {
                         let cBlocksRegion = this.busInfo.aRegions[i].cBlocks;
                         this.busInfo.aRects.push(rect = rectAvail.subDivide(cBlocksRegion, cBlocksRemaining, !i));
-                        if (MAXDEBUG) this.log("region " + i + " rectangle: (" + rect.x + "," + rect.y + " " + rect.cx + "," + rect.cy + ")");
+                        if (MAXDEBUG) this.printf(Messages.LOG, "region %d rectangle (x=%d,y=%d cx=%d,cy=%d)\n", i, rect.x, rect.y, rect.cx, rect.cy);
                         cBlocksRemaining -= cBlocksRegion;
                     }
 
@@ -617,7 +618,7 @@ export default class Panel extends Component {
                         this.centerText(MemoryX86.TYPE.NAMES[region.type] + " (" + (((region.cBlocks * this.bus.nBlockSize) / 1024) | 0) + "Kb)");
                     }
                 }
-                if (DEBUG) this.log("end scanMemory(): total bytes: " + this.busInfo.cbTotal + ", total blocks: " + this.busInfo.cBlocks + ", total regions: " + this.busInfo.cRegions);
+                if (DEBUG) this.printf(Messages.LOG, "end scanMemory(): %d total bytes, %d total blocks, %d total regions\n", this.busInfo.cbTotal, this.busInfo.cBlocks, this.busInfo.cRegions);
             } else {
                 this.drawText("This space intentionally left blank");
             }
@@ -658,7 +659,7 @@ export default class Panel extends Component {
      * It calls addRegion() for each discrete region (set of contiguous blocks with the same type) that it finds.
      *
      * @this {Panel}
-     * @return {boolean} true if current region checksum differed from previous checksum (ie, one or more regions changed)
+     * @returns {boolean} true if current region checksum differed from previous checksum (ie, one or more regions changed)
      */
     findRegions()
     {
@@ -699,11 +700,11 @@ export default class Panel extends Component {
      * @param {number} iBlock
      * @param {number} cBlocks
      * @param {number} type
-     * @return {number} bitfield containing the above values (used for checksum)
+     * @returns {number} bitfield containing the above values (used for checksum)
      */
     addRegion(addr, iBlock, cBlocks, type)
     {
-        if (DEBUG) this.log("region " + this.busInfo.cRegions + " (addr " + Str.toHexLong(addr) + ", type " + MemoryX86.TYPE.NAMES[type] + ") contains " + cBlocks + " blocks");
+        if (DEBUG) this.printf(Messages.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, MemoryX86.TYPE.NAMES[type], cBlocks);
         this.busInfo.aRegions[this.busInfo.cRegions++] = {iBlock: iBlock, cBlocks: cBlocks, type: type};
         return Usr.initBitFields(BusX86.BlockInfo, iBlock, cBlocks, 0, type);
     }
@@ -1009,7 +1010,7 @@ export default class Panel extends Component {
         for (let iPanel=0; iPanel < aePanels.length; iPanel++) {
             let ePanel = aePanels[iPanel];
             let parmsPanel = Component.getComponentParms(ePanel);
-            let panel = Component.getComponentByID(parmsPanel['id']);
+            let panel = Component.getComponentByID(parmsPanel['id'], false);
             if (!panel) {
                 fReady = true;
                 panel = new Panel(parmsPanel);

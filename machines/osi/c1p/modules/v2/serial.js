@@ -8,7 +8,7 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
-import Str from "../../../../modules/v2/strlib.js";
+import Messages from "../../../../modules/v2/messages.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
@@ -82,7 +82,7 @@ export default class C1PSerialPort extends Component {
     loadFile(sFileName, sFileData, nResponse)
     {
         if (!sFileData) {
-            this.println("Error loading file \"" + sFileName + "\" (" + nResponse + ")");
+            this.printf("Error loading file \"%s\" (%d)\n", sFileName, nResponse);
             return;
         }
 
@@ -114,17 +114,17 @@ export default class C1PSerialPort extends Component {
                 this.sInput = s;
                 this.fConvertLF = false;
             } catch (e) {
-                this.println("Error processing file \"" + sFileName + "\": " + e.message);
+                this.printf("Error processing file \"%s\": %s\n", sFileName, e.message);
                 return;
             }
         }
 
         if (this.cmp && this.kbd && this.cpu.isRunning()) {
-            this.println("auto-loading " + sFileName);
+            this.printf("auto-loading %s\n", sFileName);
             if (!this.fDemo) this.startLoad(true);
         }
         else {
-            this.println(sFileName + " ready to load");
+            this.printf("%s ready to load\n", sFileName);
         }
     }
 
@@ -177,7 +177,7 @@ export default class C1PSerialPort extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listSerial")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -194,7 +194,7 @@ export default class C1PSerialPort extends Component {
             control.onclick = function onClickLoadSerial(event) {
                 if (serial.bindings["listSerial"]) {
                     var sFile = serial.bindings["listSerial"].value;
-                    // serial.println("loading " + sFile + "...");
+                    // serial.printf("loading %s...\n", sFile);
                     Web.getResource(sFile, null, true, function(sURL, sResponse, nErrorCode) {
                         serial.loadFile(sURL, sResponse, nErrorCode);
                     });
@@ -223,7 +223,7 @@ export default class C1PSerialPort extends Component {
 
                     var reader = new FileReader();
                     reader.onload = function() {
-                        // serial.println("mounting " + file.name + "...");
+                        // serial.printf("mounting %s...\n", file.name);
                         serial.loadFile(file.name, reader.result.toString(), 0);
                     };
                     reader.readAsText(file);
@@ -235,7 +235,7 @@ export default class C1PSerialPort extends Component {
                 };
             }
             else {
-                if (DEBUG) this.log("Local file support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local file support not available\n");
                 controlInput.parentNode.removeChild(/** @type {Node} */ (controlInput));
             }
             return true;
@@ -394,12 +394,12 @@ export default class C1PSerialPort extends Component {
                     if (b == 0x0a) b = 0x0d;
                 }
                 this.bInput = b;
-                // if (DEBUG) this.log("advanceInput(" + Str.toHexByte(b) + ")");
+                // if (DEBUG) this.printf(Messages.LOG, "advanceInput(%#04x)\n", b);
             }
             else {
                 this.sInput = "";
                 this.iInput = 0;
-                if (DEBUG) this.log("advanceInput(): out of data");
+                if (DEBUG) this.printf(Messages.LOG, "advanceInput(): out of data\n");
                 if (this.autoLoad == C1PSerialPort.AUTOLOAD_BASIC && this.kbd) {
                     this.kbd.injectKeys(" \nRUN\n");
                 }
@@ -407,7 +407,7 @@ export default class C1PSerialPort extends Component {
             }
             this.updateMemory();
         }
-        // else if (DEBUG) this.log("advanceInput(): no input");
+        // else if (DEBUG) this.printf(Messages.LOG, "advanceInput(): no input\n");
     }
 
     /**

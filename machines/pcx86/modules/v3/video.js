@@ -20,7 +20,7 @@ import Monitor from "../../../modules/v3/monitor.js";
  */
 
 /**
- * @class {PCx86Video}
+ * @class PCx86Video
  * @unrestricted
  * @property {PCx86VideoConfig} config
  */

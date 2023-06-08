@@ -12,7 +12,7 @@ import Debugger from "../../../modules/v3/debugger.js";
 /**
  * Debugger for the x86 CPU
  *
- * @class {Dbgx86}
+ * @class Dbgx86
  * @unrestricted
  */
 export default class Dbgx86 extends Debugger {

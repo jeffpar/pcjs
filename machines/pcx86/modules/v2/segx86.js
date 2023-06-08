@@ -114,7 +114,7 @@ export default class SegX86 {
      *
      * @this {SegX86}
      * @param {function()} fn
-     * @return {Array.<number>} containing offset and selector of call-break address
+     * @returns {Array.<number>} containing offset and selector of call-break address
      */
     addCallBreak(fn)
     {
@@ -131,7 +131,7 @@ export default class SegX86 {
      * @param {number} off
      * @param {number} sel
      * @param {boolean|undefined} fCall is true if CALLF in progress, false if RETF/IRET in progress, undefined otherwise
-     * @return {number} base address of selected segment, or X86.ADDR_INVALID if error
+     * @returns {number} base address of selected segment, or X86.ADDR_INVALID if error
      */
     loadCode(off, sel, fCall)
     {
@@ -148,7 +148,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} sel
      * @param {boolean} [fProbe] (here only to make the function signatures of loadReal() and loadProt() match)
-     * @return {number} base address of selected segment
+     * @returns {number} base address of selected segment
      */
     loadReal(sel, fProbe)
     {
@@ -184,7 +184,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} sel
      * @param {boolean} [fProbe]
-     * @return {number} base address of selected segment, or X86.ADDR_INVALID if error
+     * @returns {number} base address of selected segment, or X86.ADDR_INVALID if error
      */
     loadProt(sel, fProbe)
     {
@@ -236,7 +236,7 @@ export default class SegX86 {
      *
      * @this {SegX86}
      * @param {number} nIDT
-     * @return {number} address from selected vector
+     * @returns {number} address from selected vector
      */
     loadIDTReal(nIDT)
     {
@@ -265,7 +265,7 @@ export default class SegX86 {
      *
      * @this {SegX86}
      * @param {number} nIDT
-     * @return {number} address from selected vector, or X86.ADDR_INVALID if error
+     * @returns {number} address from selected vector, or X86.ADDR_INVALID if error
      */
     loadIDTProt(nIDT)
     {
@@ -290,7 +290,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
-     * @return {number} corresponding linear address
+     * @returns {number} corresponding linear address
      */
     checkReadWriteNone(off, cb)
     {
@@ -303,7 +303,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
-     * @return {number} corresponding linear address
+     * @returns {number} corresponding linear address
      */
     checkReadWriteReal(off, cb)
     {
@@ -327,7 +327,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
-     * @return {number} corresponding linear address if valid, or X86.ADDR_INVALID if not
+     * @returns {number} corresponding linear address if valid, or X86.ADDR_INVALID if not
      */
     checkReadProt(off, cb)
     {
@@ -347,7 +347,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
-     * @return {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
      */
     checkReadProtDown(off, cb)
     {
@@ -367,7 +367,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
-     * @return {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
      */
     checkReadProtDisallowed(off, cb)
     {
@@ -381,7 +381,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
-     * @return {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
      */
     checkWriteProt(off, cb)
     {
@@ -401,7 +401,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
-     * @return {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
      */
     checkWriteProtDown(off, cb)
     {
@@ -421,7 +421,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
-     * @return {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
      */
     checkWriteProtDisallowed(off, cb)
     {
@@ -435,7 +435,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
-     * @return {number} corresponding linear address if valid, or X86.ADDR_INVALID if error
+     * @returns {number} corresponding linear address if valid, or X86.ADDR_INVALID if error
      */
     checkReadDebugger(off, cb)
     {
@@ -461,7 +461,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
-     * @return {number} corresponding linear address if valid, or X86.ADDR_INVALID if error
+     * @returns {number} corresponding linear address if valid, or X86.ADDR_INVALID if error
      */
     checkWriteDebugger(off, cb)
     {
@@ -527,7 +527,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} addrDesc is the descriptor address
      * @param {number} sel is the associated selector
-     * @return {number} base address of selected segment
+     * @returns {number} base address of selected segment
      */
     loadDesc6(addrDesc, sel)
     {
@@ -585,7 +585,7 @@ export default class SegX86 {
      * @param {number} addrDesc is the descriptor address
      * @param {number} sel is the associated selector, or nIDT*8 if IDT descriptor
      * @param {boolean} [fProbe] (true if this is a probe)
-     * @return {number} base address of selected segment, or X86.ADDR_INVALID if error
+     * @returns {number} base address of selected segment, or X86.ADDR_INVALID if error
      */
     loadDesc8(addrDesc, sel, fProbe)
     {
@@ -1135,7 +1135,7 @@ export default class SegX86 {
      * @this {SegX86}
      * @param {number} selNew
      * @param {boolean|null} [fNest] is true if nesting, false if un-nesting, null if neither
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     switchTSS(selNew, fNest)
     {
@@ -1165,8 +1165,8 @@ export default class SegX86 {
         }
 
         let addrNew = cpu.segTSS.base;
-        if (DEBUG && DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.TSS)) {
-            this.dbg.message((fNest? "Task switch" : "Task return") + ": TR " + Str.toHexWord(selOld) + " (%" + Str.toHex(addrOld, 6) + "), new TR " + Str.toHexWord(selNew) + " (%" + Str.toHex(addrNew, 6) + ")");
+        if (DEBUG && DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
         }
 
         if (fNest !== false) {
@@ -1314,7 +1314,7 @@ export default class SegX86 {
      *
      * @this {SegX86}
      * @param {number} addr
-     * @return {number} addr, truncated as needed
+     * @returns {number} addr, truncated as needed
      */
     setBase(addr)
     {
@@ -1330,7 +1330,7 @@ export default class SegX86 {
      * than those that updateMode() will take care of restoring later).
      *
      * @this {SegX86}
-     * @return {Array}
+     * @returns {Array}
      */
     save()
     {
@@ -1556,7 +1556,7 @@ export default class SegX86 {
                 let ch = (this.sName.length < 3? " " : "");
                 let sDPL = " dpl=" + this.dpl;
                 if (this.id == SegX86.ID.CODE) sDPL += " cpl=" + this.cpl;
-                this.dbg.message("loadSeg(" + this.sName + "):" + ch + "sel=" + Str.toHexWord(sel) + " base=" + Str.toHex(base) + " limit=" + Str.toHexWord(limit) + " type=" + Str.toHexWord(type) + sDPL, true);
+                this.dbg.printf(Messages.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
             }
             /*
              * Unless I've got a bug that's causing descriptor corruption, it appears that Windows 3.0 may be setting the
@@ -1580,7 +1580,7 @@ export default class SegX86 {
      *
      * @this {SegX86}
      * @param {number} sel
-     * @return {number} base address of selected segment, or X86.ADDR_INVALID if error
+     * @returns {number} base address of selected segment, or X86.ADDR_INVALID if error
      */
     probeDesc(sel)
     {

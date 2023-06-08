@@ -11,7 +11,7 @@
  */
 
 import DriveController from "./drive.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import { DEBUG, PDP11 } from "./defines.js";
 
@@ -33,7 +33,7 @@ export default class RX11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RX11", parms, MessagesPDP11.RX11, PDP11.RX11, PDP11.RX11.RX01, RX11.UNIBUS_IOTABLE);
+        super("RX11", parms, Messages.RX11, PDP11.RX11, PDP11.RX11.RX01, RX11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -60,7 +60,7 @@ export default class RX11 extends DriveController {
      *
      * @this {RX11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -102,7 +102,7 @@ export default class RX11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RX11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -158,7 +158,7 @@ export default class RX11 extends DriveController {
         this.regRXCS &= ~(RX11.RXCS.GO | RX11.RXCS.TR | RX11.RXCS.DONE | RX11.RXCS.ERR);
         this.cpu.clearIRQ(this.irq);
 
-        if (this.messageEnabled()) this.printMessage(this.type + ".processCommand(" + RX11.FUNCS[this.funCode >> 1]+ ")", true, true);
+        this.printf(Messages.ADDRESS, "%s.processCommand(%s)\n", this.type, RX11.FUNCS[this.funCode >> 1]);
 
         switch(this.funCode) {
 
@@ -227,7 +227,7 @@ export default class RX11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -235,7 +235,7 @@ export default class RX11 extends DriveController {
         var disk = drive.disk;
         var sector = null, ibSector;
 
-        if (this.messageEnabled()) this.printMessage(this.type + ".readData(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+        this.printf(Messages.ADDRESS, "%s.readData(%d:%d:%d) %o-%o\n", this.type, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
         if (!disk) {
             nError = drive.iDrive?  RX11.ERROR.HOME1 : RX11.ERROR.HOME0;
@@ -270,7 +270,7 @@ export default class RX11 extends DriveController {
             }
             var data = b0 | (b1 << 8);
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data);
-            if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+            if (DEBUG && this.messageEnabled(Messages.READ)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -303,7 +303,7 @@ export default class RX11 extends DriveController {
 
         if (disk) {
             this.regRXES |= RX11.RXES.DRDY;
-            if (this.messageEnabled()) this.printMessage(this.type + ".readSector(" + iCylinder + ":" + iHead + ":" + nSector + ")", true, true);
+            this.printf(Messages.ADDRESS, "%s.readSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
             this.assert(nSector);       // RX sector numbers (unlike RK and RL) are supposed to be 1-based
             var sector = disk.seek(iCylinder, iHead, nSector, true);
             if (sector) {
@@ -344,7 +344,7 @@ export default class RX11 extends DriveController {
 
         if (disk) {
             this.regRXES |= RX11.RXES.DRDY;
-            if (this.messageEnabled()) this.printMessage(this.type + ".writeSector(" + iCylinder + ":" + iHead + ":" + nSector + ")", true, true);
+            this.printf(Messages.ADDRESS, "%s.writeSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
             this.assert(nSector);       // RX sector numbers (unlike RK and RL) are supposed to be 1-based
             var sector = disk.seek(iCylinder, iHead, nSector, true);
             if (sector) {
@@ -401,7 +401,7 @@ export default class RX11 extends DriveController {
      * @this {RX11}
      * @param {number} addr (eg, PDP11.UNIBUS.RXCS or 177170)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readRXCS(addr, fPreWrite)
     {
@@ -466,7 +466,7 @@ export default class RX11 extends DriveController {
      * @this {RX11}
      * @param {number} addr (eg, PDP11.UNIBUS.RXDB or 177172)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readRXDB(addr, fPreWrite)
     {
@@ -478,7 +478,7 @@ export default class RX11 extends DriveController {
                     this.regRXCS &= ~RX11.RXCS.TR;
                     this.assert(this.iBuffer < this.abBuffer.length);
                     this.regRXDB = this.abBuffer[this.iBuffer] & 0xff;
-                    if (this.messageEnabled()) this.printMessage(this.type + ".readByte(" + this.iBuffer + "): " + Str.toHexByte(this.regRXDB), true, true);
+                    this.printf(Messages.ADDRESS, "%s.readByte(%d): %#04x\n", this.type, this.iBuffer, this.regRXDB);
                     if (++this.iBuffer >= this.abBuffer.length) {
                         this.doneCommand();
                     }
@@ -505,7 +505,7 @@ export default class RX11 extends DriveController {
                 this.regRXCS &= ~RX11.RXCS.TR;
                 this.assert(this.iBuffer < this.abBuffer.length);
                 this.abBuffer[this.iBuffer] = data & 0xff;
-                if (this.messageEnabled()) this.printMessage(this.type + ".writeByte(" + this.iBuffer + "," + Str.toHexByte(data) + ")", true, true);
+                this.printf(Messages.ADDRESS, "%s.writeByte(%d,%#04x)\n", this.type, this.iBuffer, data);
                 if (++this.iBuffer >= this.abBuffer.length) {
                     this.doneCommand();
                 }

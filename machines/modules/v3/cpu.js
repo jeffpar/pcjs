@@ -15,7 +15,7 @@ import Device from "./device.js";
  */
 
 /**
- * @class {CPU}
+ * @class CPU
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
@@ -83,7 +83,7 @@ export default class CPU extends Device {
     abort(err)
     {
         this.regPC = this.regPCLast;
-        this.println(err.message);
+        this.printf("%s\n", err.message);
         this.time.stop();
     }
 

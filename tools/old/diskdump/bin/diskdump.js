@@ -8,10 +8,6 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import DiskDump from "../lib/diskdump.js";
 
-var path = require("path");
-var fs = require("fs");
-var lib = path.join(path.dirname(fs.realpathSync(__filename)), "../lib/");
-
-require(lib + "diskdump.js").CLI();
+DiskDump.CLI();

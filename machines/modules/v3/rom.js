@@ -25,7 +25,7 @@ import Memory from "./memory.js";
  */
 
 /**
- * @class {ROM}
+ * @class ROM
  * @unrestricted
  * @property {ROMConfig} config
  */
