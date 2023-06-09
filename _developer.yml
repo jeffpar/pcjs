@@ -34,7 +34,7 @@ exclude:
   - gulpfile.js
   - README.md
   - "*.log"
-  - tmp
+  - "**/tmp"
   - "**/archive"
   - /package*.json
   - /.history
