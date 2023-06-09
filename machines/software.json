@@ -30,8 +30,12 @@
     }
   },
   "pcjs": {
-    "@title": "PCjs Archives",
+    "@title": "PCjs",
     "@instances": [
+      {
+        "@title": "PCjs Tools",
+        "@permalink": "/tools/"
+      },
       {
         "@title": "Software Archive",
         "@permalink": "/software/pcjs/"

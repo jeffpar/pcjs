@@ -4,21 +4,21 @@ title: PCjs Tools
 permalink: /tools/
 ---
 
-## DiskImage.js
+### DiskImage.js
 
 [DiskImage.js](diskimage/) is a JavaScript command-line application that reads/writes PCjs v2 disk images, using the [DiskInfo](../machines/pcx86/modules/v3/diskinfo.js) module to parse the data.  It supersedes the older PCjs [DiskDump](old/diskdump/) utility.
 
-## FileImage.js
+### FileImage.js
 
 [FileImage.js](fileimage/) is a JavaScript command-line application that reads/writes PCjs file images, producing JSON-encoded versions of binary files (eg, ROM images).  It supersedes the older PCjs [FileDump](old/filedump/) utility.
 
-## PC.js
+### PC.js
 
 [PC.js](pcjs/) is a JavaScript command-line application that allows you to start a "headless" PCjs machine with all TTY (eg, INT 0x10) output redirected to your console.
 
-## Assorted Modules
+### Other Modules
 
-Here are a few JavaScript modules I've written for the project:
+Here are a few other JavaScript modules I've written for the project:
 
   - [BASConvert.js](basconvert/), a library to convert IBM PC BASIC files to plain-text
   - [StreamZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/streamzip.js), an improved version of the [node-stream-zip](https://www.npmjs.com/package/node-stream-zip) package
@@ -34,12 +34,10 @@ Here are a few JavaScript modules I've written for the project:
       - Imploded files (ZIP compression format #6)
       - Deflated files (ZIP compression format #8)
 
-The combination of **StreamZip** with **LegacyZip** should be able to decompress *any* old ARC or ZIP archive, so test it out with the new [DiskImage](diskimage/) `--arc` and `--zip` options.
-
-Similarly, any old IBM PC BASIC files can be converted to plain-text with the [DiskImage](diskimage/) `--normalize` option.
+The [DiskImage.js](diskimage/) `--arc` and `--zip` options use **StreamZip** along with **LegacyZip** to decompress old ARC or ZIP archives, and the `--normalize` option can be included to convert old IBM PC BASIC files to plain-text during the extraction/decompression process.
 
 If you find any ARC, ZIP, or BAS files can't be decompressed or converted, [let me know](mailto:Jeff@pcjs.org).
 
-## Miscellaneous Tools
+### Miscellaneous Scripts
 
 There are a variety of small [miscellaneous](https://github.com/jeffpar/pcjs/tree/master/tools/misc) JavaScript command-line scripts that I've written over the years to help generate and test pieces of PCjs.

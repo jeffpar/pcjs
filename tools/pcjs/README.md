@@ -5,13 +5,13 @@ permalink: /tools/pcjs/
 redirect_from: /machines/pcx86/modules/bin/
 ---
 
-This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
+This directory contains the PCjs machine command-line utility [PC.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
 
 Load a JSON machine file, such as [ibm5150.json5](ibm5150.json5) or [compaq386.json5](compaq386.json5), with the utility's `load` command, either interactively or with the `--load` command-line argument.
 
 For example:
 
-	pc.js --load=ibm5150.json5
+	node pc.js --load=ibm5150.json5
 
 should produce the following output:
 
@@ -55,19 +55,19 @@ You can begin interacting with the machine OR you can press CTRL-A to enter the 
 
 To destroy the machine, type `quit` (or press CTRL-C) at the debugger prompt.
 
-`pc.js` is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` machines so far.
+`PC.js` is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` machines so far.
 
 This utility is very much a "work in progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
 
-## Support for XML Machine Files
+### Support for XML Machine Files
 
 Limited support for XML-based machines now exists; eg:
 
-    pc.js --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
+    node pc.js --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
 
 loads and runs the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
 
-## Historical Notes
+### Historical Notes
 
 One early use of this utility was running a set of [80386 CPU Tests](/software/pcx86/test/cpu/80386/test386.asm) as a custom ROM image inside an [80386 Test Machine](test386.json5), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.
 
