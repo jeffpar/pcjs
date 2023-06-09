@@ -1021,7 +1021,7 @@
       }
     },
     {
-      "name": "PCjs Saveable Machine",
+      "name": "PCx86 Saveable Machine",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/",
@@ -1033,10 +1033,10 @@
       }
     },
     {
-      "name": "PCjs Saved Machine Test Page",
+      "name": "PCx86 Saved Machine Test Page",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/tools/test/save/",
+      "url": "http://localhost:4000/machines/pcx86/test/saved/",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
