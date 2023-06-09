@@ -2,6 +2,8 @@
 layout: page
 title: PCjs DiskImage Utility
 permalink: /tools/diskimage/
+redirect_from:
+  - /modules/diskdump/
 ---
 
 [DiskImage.js](diskimage.js) is a Node command-line application that reads/writes PCjs v2 disk images,
