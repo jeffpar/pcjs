@@ -1433,7 +1433,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=pcsig/0001-0999/DISK0001",
+        "--collection=NU400-ADV-DISK1",
         "--checkpage",
         "--rebuild"
       ],
