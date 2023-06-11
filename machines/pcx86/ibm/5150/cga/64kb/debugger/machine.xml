@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
 <machine id="ibm5150" type="pcx86" border="1" pos="center" background="default">
-	<name pos="center">IBM PC (Model 5150), 64Kb RAM, CGA</name>
+	<name pos="center">IBM PC (Model 5150), 64Kb RAM, CGA, Color Display (with Debugger)</name>
 	<computer id="pc-cga-64k" name="IBM PC"/>
 	<ram id="ramLow" addr="0x00000"/>
 	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5150/rom/basic/BASIC100.json5"/>

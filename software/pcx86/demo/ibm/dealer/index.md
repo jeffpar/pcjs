@@ -10,7 +10,7 @@ machines:
     autoGen: true
     autoMount:
       B: "IBM PC Dealer Demo (1982)"
-    autoType: $date\r$time\rB:\rDIR\r
+    autoType: $date\r$time\rB:\rDIR\rDEMMEN\r
 ---
 
 {% include machine.html id="ibm5150" %}
