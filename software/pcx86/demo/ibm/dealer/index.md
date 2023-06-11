@@ -9,13 +9,13 @@ machines:
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
     autoGen: true
     autoMount:
-      B: "IBM PC Dealer Demo #1"
+      B: "IBM PC Dealer Demo (1982)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of IBM PC Dealer Demo #1
+### Directory of IBM PC Dealer Demo (1982)
 
      Volume in drive A has no label
      Directory of A:\
@@ -44,4 +44,4 @@ machines:
            21 file(s)     155147 bytes
                              512 bytes free
 
-![IBM PC Dealer Demo #1]({{ site.software.miscdisks.server }}/pcx86/demo/ibm/dealer/IBMPC-DEALER-DEMO1.png)
+![IBM PC Dealer Demo (1982)]({{ site.software.miscdisks.server }}/pcx86/demo/ibm/dealer/IBMPC-DEALER-DEMO1.png)
