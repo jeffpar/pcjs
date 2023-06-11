@@ -1,5 +1,5 @@
 {
-  "name": "IBM PC, 64Kb RAM, Dual Floppy Drives, CGA, Debugger",
+  "name": "IBM PC, 64Kb RAM, Dual Floppy Drives, CGA, Color Display (with Debugger)",
   "make": "ibm",
   "model": "5150",
   "defaults": {

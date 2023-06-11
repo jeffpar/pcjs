@@ -721,6 +721,18 @@
       }
     },
     {
+      "name": "IBM PC Dealer Demo (1982)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/demo/ibm/dealer/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
       "name": "IBM TopView 1.01 [Debugger]",
       "type": "chrome",
       "request": "launch",
