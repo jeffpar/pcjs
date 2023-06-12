@@ -5677,6 +5677,77 @@
 		},
 		"microsoft": {
 			"@title": "Microsoft",
+			"learningdos": {
+				"@title": "Learning MS-DOS",
+				"@versions": {
+					"1.00": {
+						"@title": "Learning MS-DOS 1.00",
+						"@media": [
+							{
+								"@title": "Learning MS-DOS 1.00 (Disk #1)",
+								"@diskette": "LEARNING-DOS-089-014-007-ERRORS.json",
+								"@photo": "jpg",
+								"@source": "PCjs",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "Learning MS-DOS 1.00 (Disk #2)",
+								"@diskette": "LEARNING-DOS-089-014-008-ERRORS.json",
+								"@photo": "jpg",
+								"@source": "PCjs",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "Learning MS-DOS 1.00 (Disk #3)",
+								"@diskette": "LEARNING-DOS-089-014-009-ERRORS.json",
+								"@photo": "jpg",
+								"@source": "PCjs",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "Learning MS-DOS 1.00 (Disk #4)",
+								"@diskette": "LEARNING-DOS-089-014-010-ERRORS.json",
+								"@photo": "jpg",
+								"@source": "PCjs",
+								"@format": "PC360K"
+							}
+						]
+					},
+					"1.01": {
+						"@title": "Learning MS-DOS 1.01",
+						"@media": [
+							{
+								"@title": "Learning MS-DOS 1.01 (Disk #1)",
+								"@diskette": "LEARNING-DOS-089-014-032.json",
+								"@photo": "jpg",
+								"@source": "PCjs",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "Learning MS-DOS 1.01 (Disk #2)",
+								"@diskette": "LEARNING-DOS-089-014-033.json",
+								"@photo": "jpg",
+								"@source": "PCjs",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "Learning MS-DOS 1.01 (Disk #3)",
+								"@diskette": "LEARNING-DOS-089-014-034.json",
+								"@photo": "jpg",
+								"@source": "PCjs",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "Learning MS-DOS 1.01 (Disk #4)",
+								"@diskette": "LEARNING-DOS-089-014-035.json",
+								"@photo": "jpg",
+								"@source": "PCjs",
+								"@format": "PC360K"
+							}
+						]
+					}
+				}
+			},
 			"chart": {
 				"@title": "Microsoft Chart",
 				"@versions": {
@@ -6829,6 +6900,7 @@
 								"@title": "IBM PC Dealer Demo (1982)",
 								"@diskette": "IBMPC-DEALER-DEMO1.json",
 								"@photo": "jpg",
+								"@source": "PCjs",
 								"@format": "P160K"
 							}
 						]
