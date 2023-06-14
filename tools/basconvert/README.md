@@ -7,8 +7,8 @@ modules_init:
   - new BASConvertUI("convertBAS", "displayBAS");
 ---
 
-Select a BASIC file from your machine and click `Convert`.
+Select a IBM PC BASIC file from your machine and click `Convert`.
 
 {% include web/transform.html form="convertBAS" action="Convert" output="displayBAS" %}
 
-This page uses my [BASConvert.js](basconvert.js) JavaScript library that converts encrypted and/or binary IBM PC BASIC program files to plain-text; this library is built into the [DiskImage.js](../diskimage/) command-line utility and is used in conjunction with the `--normalize` option.
+This page uses the [BASConvert.js](basconvert.js) JavaScript library to convert encrypted and/or binary IBM PC BASIC program files to plain-text, with any CP437 non-ASCII characters converted to UTF-8.  This library is also built into the [DiskImage.js](../diskimage/) command-line utility and is used in conjunction with the `--normalize` option.
