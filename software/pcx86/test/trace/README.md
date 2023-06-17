@@ -36,9 +36,9 @@ To load TRACE.COM and TRACE.TXT onto a virtual disk image that PCjs can access, 
 <fdc id="fdcNEC" autoMount='{B:{name:"Trace Tests",path:"/software/pcx86/test/TRACE.json"}}'/>
 ```
 
-To create the necessary TRACE disk image, using our built-in DiskImage utility:
+To create the necessary TRACE disk image, using our built-in [DiskImage](/tools/diskimage/) utility:
 
-	node tools/diskimage/diskimage.js --dir=software/pcx86/test/trace --output=software/pcx86/test/TRACE.json
+	diskimage.js --dir=software/pcx86/test/trace --output=software/pcx86/test/TRACE.json
 
 OS X users can also create an ISO image like so:
 

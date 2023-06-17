@@ -9,9 +9,13 @@ This directory contains the PCjs machine command-line utility [PC.js](pc.js), wh
 
 Load a JSON machine file, such as [ibm5150.json5](ibm5150.json5) or [compaq386.json5](compaq386.json5), with the utility's `load` command, either interactively or with the `--load` command-line argument.
 
-For example:
+For example, this command:
 
-	node pc.js --load=ibm5150.json5
+	pc.js --load=ibm5150
+
+or, if your operating system doesn't automatically associate `.js` files with [Node](https://nodejs.org/en), this command:
+
+	node pc.js --load=ibm5150
 
 should produce the following output:
 
@@ -63,7 +67,7 @@ This utility is very much a "work in progress" and is intended for development w
 
 Limited support for XML-based machines now exists; eg:
 
-    node pc.js --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
+    pc.js --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
 
 loads and runs the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
 

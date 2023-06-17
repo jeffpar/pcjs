@@ -81,8 +81,8 @@ connected to GND, but apparently there are exceptions to that general rule.
 	cd 1986-09-04
 	fileimage.js --file=archive/1986-09-04-HI.rom --output=1986-09-04-HI.json
 
-[1988-01-28](1988-01-28/1988-01-28.json) was created using the `.hex` files [109591-001.hex](109591-001.hex)
-and [109592-001.hex](109592-001.hex) described above:
+[1988-01-28](1988-01-28/1988-01-28.json) was created using the [109591-001.hex](1988-01-28/109591-001.hex)
+and [109592-001.hex](1988-01-28/109592-001.hex) files dumped earlier:
 
 	cd 1988-01-28
 	fileimage.js --file=109592-001.hex --merge=109591-001.hex --output=1988-01-28.json

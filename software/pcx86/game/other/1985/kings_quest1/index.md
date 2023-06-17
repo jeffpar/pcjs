@@ -56,7 +56,7 @@ which translates to these commands:
     pfi disk1.pfi -p double-step -r 600000 -p decode pri disk1.pri
     pri disk1.pri -c 40-99 -p delete disk1.pri
     pri disk1.pri -p decode mfm disk1.psi
-    node tools/diskimage/diskimage.js disk1.psi disk1.json
+    diskimage.js disk1.psi disk1.json
 
 NOTE: Prior to running the above PCE utilities, I put all the odd-numbered Kryoflux RAW track files back with the even numbered ones,
 to avoid any confusion.

@@ -152,7 +152,7 @@ All those files were deleted as well, leaving 8 files dated "Aug 11 1983".  Next
 [DiskImage]({{ site.github.pages }}/tools/diskimage/diskimage.js) utility to create a disk image from a directory
 ("archive/ADVENTMATH-100/") containing those files:
  
-	node diskimage.js --dir=archive/ADVENTMATH-100/ --label=ADVEMATH100 --output=ADVENTMATH-100.json
+	diskimage.js --dir=archive/ADVENTMATH-100/ --label=ADVEMATH100 --output=ADVENTMATH-100.json
 
 Here's a directory listing of the resulting 160Kb disk image:
 

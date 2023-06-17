@@ -321,9 +321,9 @@ so overall, the disks from our private collection may be more authentic.
     01F0| 7E 48 00 70 08 06 18 00 | ~H.p....
     01F8| 18 10 C8 19 E0 CC 83 E3 | ........
 
-The following *diskimage* command was used to reflect the above error in our "dBASE III 1.0 (Disk 1)" disk image:
+The following [DiskImage](/tools/diskimage/) command was used to reflect the above error in our "dBASE III 1.0 (Disk 1)" disk image:
 
-    node diskimage.js --disk=archive/DBIII-100-DISK1-KF.img --output=DBIII-100-DISK1-KF.json --sectorError=39:0:5:272
+    diskimage.js --disk=archive/DBIII-100-DISK1-KF.img --output=DBIII-100-DISK1-KF.json --sectorError=39:0:5:272
 
 Note that we used an IMG built from the Kryoflux stream files instead of the IMG provided by WinWorld.  However, the
 only difference was in the 512-byte sector at offset 0x58400, which corresponds precisely to the bad sector at 39:0:5
@@ -338,7 +338,7 @@ of dBASE III that I restored onto the "dBASE III 1.0 (Locked)" disk image, secto
 the damaged sector, and the point of damage must occur at approximately byte 204 rather than 272.  So I updated that
 disk image as follows:
 
-    node diskimage.js --disk=archive/DBIII-100-LOCKED.img --output=DBIII-100-LOCKED.json --sectorError=39:0:2:204
+    diskimage.js --disk=archive/DBIII-100-LOCKED.img --output=DBIII-100-LOCKED.json --sectorError=39:0:2:204
 
 I didn't have the original contents of the bad sector, but since that copy of DBASE.EXE now runs, it's safe to say that
 the copy-protection code doesn't actually care about the sector's initial state.

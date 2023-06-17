@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * @fileoverview Command-line utility for JSON file conversion
  * @author Jeff Parsons <Jeff@pcjs.org>
@@ -802,7 +803,7 @@ FileImage.FORMAT = {
  *
  * Usage:
  *
- *      node fileimage.js [options]
+ *      [node] fileimage.js [options]
  *
  * Options:
  *
@@ -854,7 +855,7 @@ FileImage.FORMAT = {
  *
  * Examples:
  *
- *      node fileimage.js --file=devices/pc/video/ibm-ega.rom --format=bytes --decimal
+ *      fileimage.js --file=devices/pc/video/ibm-ega.rom --format=bytes --decimal
  *
  * Details:
  *
