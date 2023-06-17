@@ -4,7 +4,7 @@ This Paradise VGA board was manufactured in 1988 and sold by Western Digital Cor
  
 [<img src="https://www.pcjs.org/devices/pcx86/video/paradise/vga/Paradise_VGA_1988-640.jpg" alt="Paradise VGA Board">](https://www.pcjs.org/devices/pcx86/video/paradise/vga/Paradise_VGA_1988.jpg)
 
-A copy of the board's [ROM BIOS](1988-05-23.json) was created by [dumping](/machines/pcx86/compaq/deskpro386/rom/#dumping-the-roms)
+A copy of the board's [ROM BIOS](1988-05-23.json) was created by [dumping](/machines/pcx86/compaq/deskpro386/rom/#dumping-roms)
 the contents of each of the board's two M27128AZB PROMs to a *.hex* file, and then merging the *.hex* files with the following
 [FileImage](/tools/fileimage/) command:
 
