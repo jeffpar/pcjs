@@ -795,6 +795,6 @@ machines:
     GENERIC_SHUGART_DD_FLOPPYMODE
     Shugart Interface
 
-The following *diskimage* command was used to reflect the above data in our disk image:
+The following [DiskImage](/tools/diskimage/) command was used to reflect the above data in our disk image:
 
-    node diskimage.js --disk=archive/MSWORD-115-PROGRAM-BACKUP.img --output=MSWORD-115-PROGRAM-BACKUP.json --suppData=/software/pcx86/app/microsoft/word/1.15/index.md --overwrite
+    diskimage.js --disk=archive/MSWORD-115-PROGRAM-BACKUP.img --output=MSWORD-115-PROGRAM-BACKUP.json --suppData=/software/pcx86/app/microsoft/word/1.15/index.md --overwrite

@@ -3702,6 +3702,6 @@ Unfortunately, installation still fails, so this copy-protection scheme is still
     End Sector cell:97614
     Number of cells:160
 
-The JSON disk image was created with the following command:
+The JSON disk image was created with the following [DiskImage](/tools/diskimage/) command:
 
-    node diskimage.js --disk archive/SOFTWARE-CAROUSEL-203.img --output SOFTWARE-CAROUSEL-203.json --suppData /software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md --overwrite
+    diskimage.js --disk archive/SOFTWARE-CAROUSEL-203.img --output SOFTWARE-CAROUSEL-203.json --suppData /software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md --overwrite

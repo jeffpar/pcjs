@@ -78,7 +78,7 @@ function convertXML(xml, idAttrs = '@')
         for (let key in xml) {
             if (key == idAttrs) {
                 /*
-                 * Our XSL files include rules to providing default IDs, so we do, too...
+                 * Our XSL files include rules for providing default IDs, so we do, too...
                  */
                 if (!xml[key]['id']) {
                     obj['id'] = oid;
@@ -150,6 +150,16 @@ async function loadModules(factory, modules, done)
         case "interrupts":
             Interrupts = module.default;
             break;
+        }
+        /*
+         * If there's any chance that the module might print something, add a function to intercept it.
+         */
+        if (module.default && module.default.prototype) {
+            module.default.prototype.print = function print(s, bitsMessage) {
+                if (fDebug || bitsMessage != Messages.LOG) {
+                    printf(s);
+                }
+            };
         }
     }
     done();

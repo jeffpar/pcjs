@@ -47,10 +47,9 @@ such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to
 
 ### Building PCjs Disk Images from IMG files
 
-To build a PCjs disk image, such as this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json),
-from an IMG file:
+To build a PCjs disk image, such as this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json), from an IMG file:
 
-    node diskimage.js /diskettes/pcx86/sys/dos/2.00/PCDOS200-DISK1.img PCDOS200-DISK1.json
+    diskimage.js /diskettes/pcx86/sys/dos/2.00/PCDOS200-DISK1.img PCDOS200-DISK1.json
 
 In addition to IMG files, DiskImage also includes (experimental) support for PSI (PCE Sector Image) files, which can in
 turn be built from Kryoflux RAW files.  Here are the basic steps, using tools from [PCE](http://www.hampa.ch/pce/):
@@ -58,7 +57,7 @@ turn be built from Kryoflux RAW files.  Here are the basic steps, using tools fr
  1. From the Kryoflux RAW files, create a PFI ("PCE Flux Image") file
  2. Next, create a PRI ("PCE Raw Image") file, with the flux reversal pulses converted to bits
  3. From the PRI file, create a PSI ("PCE Sector Image") file
- 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs **DiskImage** utility
+ 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs [DiskImage](/tools/diskimage/) utility
 
 which translates to these commands (using a 360K PC diskette named "disk1" as an example):
 
@@ -66,14 +65,14 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
     pfi disk1.pfi -p double-step -r 600000 -p decode pri disk1.pri
     pri disk1.pri -c 40-99 -p delete disk1.pri
     pri disk1.pri -p decode mfm disk1.psi
-    node diskimage.js disk1.psi disk1.json
+    diskimage.js disk1.psi disk1.json
 
 ### Building PCjs Disk Images from Directories
 
 To build a [VisiCalc diskette](https://miscdisks.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash, like so:
 
-    node diskimage.js /miscdisks/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
+    diskimage.js /miscdisks/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
 
 By default, the diskette will be given an 11-character volume label derived from the directory name (eg, "VISICALC-19");
 however, you can use `--label` to specify your own label (eg, `--label=VISICALC81`), or use `--label=none` to suppress
@@ -90,7 +89,7 @@ data.  The list of recognized text file extensions is likely to grow over time.
 
 ### Building PCjs Disk Images from ZIP (and ARC) files
 
-There are many large software collections where the diskette contents have been archived as ZIP files rather than as disk images, and in theory, it's trivial to `unzip` them into separate folders and then use **DiskImage** to build new images from those folders (see above).
+There are many large software collections where the diskette contents have been archived as ZIP files rather than as disk images, and in theory, it's trivial to `unzip` them into separate folders and then use [DiskImage](/tools/diskimage/) to build new images from those folders (see above).
 
 For example, I originally recreated all the [PC-SIG Library](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/0001/) diskette images from the "PC-SIG Library Eighth Edition" CD-ROM files stored at [cd.textfiles.com](http://cd.textfiles.com/pcsig08/).  Some of the diskettes on the CD-ROM had been completely archived as single ZIP files -- probably because the diskettes contained filenames that were not allowed on CD-ROM -- so I used `unzip` on macOS to extract those ZIP files to folders, and then recreated disk images from those folders.
 
@@ -100,13 +99,13 @@ First, the original order of the filenames was not preserved.  Modern operating 
 
 Second, while the ZIP archives appeared to more-or-less preserve non-ASCII filenames, `unzip` did not.  IBM PCs used a character set now known as [Code Page 437](https://en.wikipedia.org/wiki/Code_page_437) (*CP437*), which included a variety of line-drawing characters and other symbols that `unzip` failed to translate to their modern (*UTF-8*) counterparts.
 
-To resolve all these issues, I updated **DiskImage** with an option (`--zip`) to read ZIP archives directly.  I started with an NPM package called [node-stream-zip](https://www.npmjs.com/package/node-stream-zip), which is essentially a module that understands the ZIP file format, identifies all the compressed files inside the ZIP file, and uses Node's built-in *zlib* functionality to decompress them.
+To resolve all these issues, I updated [DiskImage](/tools/diskimage/) with an option (`--zip`) to read ZIP archives directly.  I started with an NPM package called [node-stream-zip](https://www.npmjs.com/package/node-stream-zip), which is essentially a module that understands the ZIP file format, identifies all the compressed files inside the ZIP file, and uses Node's built-in *zlib* functionality to decompress them.
 
 Unfortunately, I quickly discovered that *zlib* could not decompress the contents of many old ZIP files, because instead of the now-popular *Deflate* compression algorithm, older ZIP files used compression methods such as *Shrink*, *Reduce*, and *Implode*.  So I imported *node-stream-zip* into PCjs as [StreamZip](../modules/streamzip.js), modernized it, and then extended it with a new decompression module named [LegacyZip](../modules/legacyzip.js), which I wrote by hand-translating the excellent C code at [hanshq.net](https://www.hanshq.net/zip2.html) into JavaScript.
 
 Here's an example of `--zip` in action:
 
-    node diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
+    diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
 
     DiskImage v2.11
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
@@ -128,25 +127,25 @@ Here's an example of `--zip` in action:
 
 The `--verbose` option generates the `PKZIP`-style file listing, displaying the individual file names, compressed and uncompressed file sizes, compression ratio, etc.
 
-In fact, creating a disk image is entirely optional; you can use **DiskImage** to simply examine the contents of `ZIP` file:
+In fact, creating a disk image is entirely optional; you can use [DiskImage](/tools/diskimage/) to simply examine the contents of `ZIP` file:
 
-    node diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --verbose
+    diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --verbose
 
 To simplify dealing with large collections of files, I also added an `--all` option:
 
-    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --verbose
+    diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --verbose
 
 That command will locate *all* matching `ZIP` files and process each one with any other options you specify (eg, `--verbose` to display their contents).  `--all` also supports file extensions `JSON` and `IMG`; `--disk` is assumed for any file ending with one of those extensions, whereas `--zip` is assumed for any file ending with a `ZIP` extension.
 
 If you want to create a disk image for every `ZIP` file:
 
-    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --output=tmp --type=img
+    diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --output=tmp --type=img
 
 `--output` specifies the output folder and `--type` specifies the output file type (either `IMG` or `JSON`).  Each output file will have the same basename as the `ZIP` file.  You can use also "%d" anywhere in the `--output` value to represent the directory of the corresponding input file (eg, `--output=%d`, `--output=%d/tmp`, etc).
 
 Any `ZIP` files *inside* disk images can be automatically expanded during disk image processing as well; just add the new `--expand` option.  Each `ZIP` file will be replaced with a folder of the same name, and that folder will contain the entire uncompressed contents of the archive; the original `ZIP` file will *not* be included in the disk image:
 
-    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --expand --output=tmp
+    diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --expand --output=tmp
 
 Finally, support for the ARC file format (ZIP's predecessor) is now available.  Just use `--arc` instead of `--zip`, or specify input files with `.ARC` extensions instead of `.ZIP`.  All the same capabilities apply.
 
@@ -154,23 +153,23 @@ Finally, support for the ARC file format (ZIP's predecessor) is now available.  
 
 You can extract the contents of a single disk image to your current directory, or to a specific directory using `--extdir`:
 
-    node diskimage.js DISK0001.IMG --extract
-    node diskimage.js DISK0001.IMG --extract --extdir=tmp
+    diskimage.js DISK0001.IMG --extract
+    diskimage.js DISK0001.IMG --extract --extdir=tmp
 
 You can also extract the contents of an entire collection of disk images, placing the contents of each either in the same directory as the original disk image or in a specific directory:
 
-    node diskimage.js --all="*.IMG" --extract --extdir=%d
-    node diskimage.js --all="*.IMG" --extract --extdir=tmp
+    diskimage.js --all="*.IMG" --extract --extdir=%d
+    diskimage.js --all="*.IMG" --extract --extdir=tmp
 
 You can also expand any `ZIP` files during the extraction process, by including the `--expand` option:
 
-    node diskimage.js --all="*.IMG" --extract --expand --extdir=tmp
+    diskimage.js --all="*.IMG" --extract --expand --extdir=tmp
 
 Also, while the `--normalize` option was originally created to "normalize" files *read* from the host (eg, to convert LF to CR/LF in text files), it can also be used during extraction now, when files are being *written* to the host.
 
 For example, if you want any filenames with CP437 characters to be created properly on the host, or you want the contents of any CP437 text files, BASIC files, etc, to be stored in readable form on the host, use the `--normalize` option along with the `--extract` option; eg:
 
-    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --extract --expand --normalize --extdir=tmp
+    diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --extract --expand --normalize --extdir=tmp
 
 In addition to converting line-endings back from CR/LF to LF, `--normalize` will also convert any tokenized `.BAS` files to plain-text UTF-8 files on the host, as well as decrypt any `.BAS` files that have been "protected" by `BASIC` with the `P` option of the `SAVE` command.
 
@@ -181,11 +180,11 @@ The `--output` option is available with all of the above commands as well, but t
 Both local and remote diskette images can be examined.  To examine a remote image, you *must* use the `--disk` option,
 with either an explicit URL, as in:
 
-    node diskimage.js --disk=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    diskimage.js --disk=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
 or with one of PCjs' implicit diskette paths, such as `/diskettes`, which currently maps to disk server `https://diskettes.pcjs.org`:
 
-    node diskimage.js --disk=/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    diskimage.js --disk=/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
 If you happen to have a local file that exists in the same location as the implicit diskette path, use `--server` to force
 the server mapping.  The list of implicit paths for PC disks currently includes (but is not limited to):
@@ -203,11 +202,11 @@ NOTE: Implicit disk paths should normally begin with `/disks`, because when [run
 
 To get a DOS-compatible directory listing of a disk image:
 
-    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list
+    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list
 
 To display all the unused bytes of a disk image (JSON-encoded disk images only):
 
-    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list=unused
+    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list=unused
 
 NOTE: Unused bytes are a superset of free bytes.  Free bytes are always measured in terms of unused clusters,
 multiplied by the cluster size, whereas unused bytes are the combination of all completely unused cluster space *plus* any partially
@@ -218,20 +217,20 @@ TODO: Update the unused byte report to include unused bytes, if any, in all FAT 
 
 To extract all the files from a disk image:
 
-    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract
+    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract
 
 To extract a specific file from a disk image:
 
-    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract=COMMAND.COM
+    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract=COMMAND.COM
 
 To extract files from a disk image into a specific directory (eg, tmp):
 
-    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract --extdir=tmp
+    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract --extdir=tmp
 
 To dump a specific (C:H:S) sector from a disk image:
 
-    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1
+    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1
 
 To dump multiple (C:H:S) sectors from a disk image track, follow the C:H:S values with a sector count; eg:
 
-    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1:4
+    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1:4

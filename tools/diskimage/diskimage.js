@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * @fileoverview Command-line interface to disk image processing module
  * @author Jeff Parsons <Jeff@pcjs.org>
@@ -1464,7 +1465,7 @@ function processFile(argv)
  *
  * Usage:
  *
- *      node diskimage.js [input disk image or directory] [output disk image] [options]
+ *      [node] diskimage.js [input disk image or directory] [output disk image] [options]
  *
  * You can use --disk and --dir to explicitly specify an input disk or directory, or you can implicitly
  * specify one as the first non-option argument (a directory is indicated by a trailing slash); similarly,
