@@ -19,10 +19,10 @@ create a single 47Mb partition, you must use [COMPAQ MS-DOS 3.31](/software/pcx8
 of DOS could create partitions only up to 32Mb, and all partitions had to reside within the first 32Mb of disk space.
 
   - [DeskPro 386 with 640Kb and IBM CGA](/machines/pcx86/compaq/deskpro386/cga/640kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/cga/640kb/debugger/machine.xml))
-  - [DeskPro 386 with 2Mb and IBM EGA](/machines/pcx86/compaq/deskpro386/ega/2048kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/machine.xml))
+  - [DeskPro 386 with 2Mb and IBM EGA](/machines/pcx86/compaq/deskpro386/ega/2048kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/))
   - [DeskPro 386 with 4Mb and IBM EGA](/machines/pcx86/compaq/deskpro386/ega/4096kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/ega/4096kb/debugger/machine.xml))
   - [DeskPro 386 with 2Mb and COMPAQ VGA (Debugger)](/machines/pcx86/compaq/deskpro386/other/2048kb/debugger/machine.xml), ([Visualizer](/machines/pcx86/compaq/deskpro386/other/2048kb/debugger/visual/machine.xml))
-  - [DeskPro 386 with 2Mb and IBM VGA](/machines/pcx86/compaq/deskpro386/vga/2048kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/machine.xml), [Visualizer](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/visual/machine.xml))
+  - [DeskPro 386 with 2Mb and IBM VGA](/machines/pcx86/compaq/deskpro386/vga/2048kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/), [Visualizer](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/visual/machine.xml))
   - [DeskPro 386 with 4Mb and IBM VGA](/machines/pcx86/compaq/deskpro386/vga/4096kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/vga/4096kb/debugger/machine.xml), [Visualizer](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/visual/machine.xml))
   - [DeskPro 386 with 4Mb and IBM VGA running Windows 95](/software/pcx86/sys/windows/win95/4.00.950/) ([Debugger](/software/pcx86/sys/windows/win95/4.00.950/debugger/))
 

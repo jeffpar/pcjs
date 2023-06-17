@@ -21,13 +21,25 @@ let argv = args.argv;
 let fDebug = argv['debug'] || false;
 let machineType = argv['type'] || "pcx86";
 
-let sCmdPrev = "";
 let Component, Interrupts;
 let strlib, weblib, embedMachine;
-let cpu, dbg, kbd;
+let cpu, dbg, kbd, debugMode;
+let prompt = ">";
+let sCmdPrev = "";
 
 filelib.setRootDir("../..");
 let machines = JSON.parse(filelib.readFileSync("/machines/machines.json", "utf8"));
+
+function setDebugMode(f)
+{
+    if (!f && debugMode != f) {
+        printf("Press ctrl-a to enter debugger, ctrl-c to terminate process\n");
+    }
+    debugMode = f;
+    if (debugMode) {
+        printf("%s> ", prompt);
+    }
+}
 
 /**
  * convertXML(xml, idAttrs)
@@ -204,6 +216,11 @@ function initMachine(machine, sMachine)
  */
 function intVideo(addr)
 {
+    /*
+     * If this function is called, then the CPU is presumably running, so let's make sure that
+     * has been reflected in the debugMode setting.
+     */
+    setDebugMode(false);
     let AH = ((cpu.regEAX >> 8) & 0xff), AL = (cpu.regEAX & 0xff);
     if (AH == 0x0e) {
         printf("%c", AL);
@@ -374,18 +391,6 @@ function doCommand(sCmd)
 function readInput(stdin, stdout)
 {
     let command = "";
-    let debugMode = undefined;
-    let prompt = ">";
-
-    let setDebugMode = function(f) {
-        if (!f && debugMode != f) {
-            printf("Press ctrl-a to enter debugger, ctrl-c to terminate process\n");
-        }
-        debugMode = f;
-        if (debugMode) {
-            printf("%s> ", prompt);
-        }
-    };
 
     setDebugMode(!kbd);
 
