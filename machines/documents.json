@@ -120,58 +120,42 @@
           {
             "@title": "8088",
             "@file": "INTEL_8088_CPU.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEmGsBJPGmhiKeyTA",
-            "@cover": "jpg",
-            "@source": ""
+            "@cover": "jpg"
           },
           {
             "@title": "8087",
             "@file": "INTEL_8087_FPU.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEoVotqW_MruMmLfw",
-            "@cover": "jpg",
-            "@source": ""
+            "@cover": "jpg"
           },
           {
             "@title": "80186",
             "@file": "INTEL_80186_CPU.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEvskcvMIf8KCHaKg",
-            "@cover": "jpg",
-            "@source": ""
+            "@cover": "jpg"
           },
           {
             "@title": "8237A",
             "@file": "INTEL_8237A_DMA.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEplB6u0R8D4bOTDw",
-            "@cover": "jpg",
-            "@source": ""
+            "@cover": "jpg"
           },
           {
             "@title": "8254",
             "@file": "INTEL_82C54_TIMER.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEnm15_gGWgUcpq6g",
-            "@cover": "jpg",
-            "@source": ""
+            "@cover": "jpg"
           },
           {
             "@title": "8255A",
             "@file": "INTEL_8255A_PPI.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqErS8v_ueBb4mxD4Q",
-            "@cover": "jpg",
-            "@source": ""
+            "@cover": "jpg"
           },
           {
             "@title": "8259A",
             "@file": "INTEL_8259A_PIC.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEqEu5mCovLRzAbqQ",
-            "@cover": "jpg",
-            "@source": ""
+            "@cover": "jpg"
           },
           {
             "@title": "27128A",
             "@file": "INTEL_27128A_EPROM.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEu9pZaLgq772i_fQ",
-            "@cover": "jpg",
-            "@source": ""
+            "@cover": "jpg"
           }
         ]
       },
