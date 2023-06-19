@@ -1512,12 +1512,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/fileimage/fileimage.js",
       "args": [
-        "--file=/machines/pcx86/progressive/pro386/rom/1986-04-25/archive/PRO386.ROM",
-        "--output=/machines/pcx86/progressive/pro386/rom/1986-04-25/PRO386.json",
-        "--length=200",
+        "--file=archive/109592-005.U11.bin",
+        "--merge=archive/109591-005.U13.bin",
+        "--output=1989-04-14.json5",
+        "--comments",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/machines/pcx86/compaq/deskpro386/rom/1989-04-14",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1566,6 +1567,30 @@
         "--comments"
       ],
       "cwd": "${workspaceFolder}/machines/pcx86/compaq/deskpro386/rom/1988-01-28",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "fileimage.js --file --rom",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/fileimage/fileimage.js",
+      "args": [
+        "--file",
+        "1988-01-28.json5",
+        "--output",
+        "test.rom",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}/machines/pcx86/compaq/deskpro386/rom/1988-05-10",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

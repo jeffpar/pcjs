@@ -37,7 +37,7 @@
       "addr": 0xf8000,
       "size": 0x8000,
       "alias": [0xf0000,0xffff0000,0xffff8000],
-      "file": "/machines/pcx86/compaq/deskpro386/rom/1988-01-28/1988-01-28.json"
+      "file": "/machines/pcx86/compaq/deskpro386/rom/1988-01-28/1988-01-28.json5"
     },
     {
       "id": "romVGA",

@@ -35,8 +35,8 @@ turns out, that entire address range is actually write-protected RAM (since, at 
 than ROM), where the first 32Kb contained a modified copy of the second.  For example, the first 32Kb contains some data
 structures that are updated by COMPAQ utilities such as `CEMM` to record "Built-in Memory" allocations.
 
-Sure enough, attempting to use the [first 32Kb](/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-LO.json) as a DeskPro 386 ROM generated a
-"ROM Error", no doubt due to a checksum mismatch.  However, the [second 32Kb](/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-HI.json) appeared
+Sure enough, attempting to use the [first 32Kb](/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-LO.json5) as a DeskPro 386 ROM generated a
+"ROM Error", no doubt due to a checksum mismatch.  However, the [second 32Kb](/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-HI.json5) appeared
 to work fine.  I can't guarantee that its contents are identical to the original `Rev F` ROM, because the ROM may
 have been self-modifying, but it works, and it's all we've got.  All our EGA-based COMPAQ machine configurations
 (eg, [COMPAQ DeskPro 386 (2Mb) with IBM EGA](/machines/pcx86/compaq/deskpro386/ega/2048kb/machine.xml))

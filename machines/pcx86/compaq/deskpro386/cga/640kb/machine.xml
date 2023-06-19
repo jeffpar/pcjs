@@ -6,7 +6,7 @@
 	<cpu id="cpu386" model="80386"/>
 	<ram id="ramLow" addr="0x00000" test="false" size="0xa0000" comment="ROM BIOS memory test has been disabled"/>
 	<ram id="ramCPQ" addr="0xfa0000" size="0x60000" comment="COMPAQ memory at 0xFA0000"/>
-	<rom id="romBIOS" addr="0xf8000" size="0x8000" alias="[0xf0000,0xffff0000,0xffff8000]" file="/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-HI.json"/>
+	<rom id="romBIOS" addr="0xf8000" size="0x8000" alias="[0xf0000,0xffff0000,0xffff8000]" file="/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-HI.json5"/>
 	<video ref="/machines/pcx86/ibm/video/cga/ibm-cga-lock.xml"/>
 	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A: {name: "COMPAQ MS-DOS 3.31 (Disk 1)"}, B: {name: "None"}}'/>
 	<hdc ref="/machines/pcx86/ibm/hdc/47mb/unformatted-at5.xml"/>

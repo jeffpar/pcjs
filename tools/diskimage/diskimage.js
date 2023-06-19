@@ -20,6 +20,7 @@ import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import JSONLib    from "../../machines/modules/v2/jsonlib.js";
+import strlib     from "../../machines/modules/v2/strlib.js";
 import { addMetaData, device, existsFile, getArchiveFiles, getFullPath, getHash, isArchiveFile, isTextFile, makeDir, printError, printf, readDir, readFile, readJSON, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
 
 let pcjslib = new PCJSLib();
@@ -89,16 +90,16 @@ function createDisk(diskFile, diskette, argv, done)
     let sectorErrors = diskette.argv['sectorError'] || argv['sectorError'];
     let suppData = diskette.argv['suppData'] || argv['suppData'];
     if (suppData) suppData = readFile(suppData);
-    let fDir = false, arcType = 0, sExt = path.parse(sArchiveFile).ext.toLowerCase();
+    let fDir = false, arcType = 0, sExt = strlib.getExtension(sArchiveFile);
     if (sArchiveFile.endsWith(path.sep)) {
         fDir = true;
         diskette.command = "--dir=" + name;
     }
-    else if (sExt == ".arc") {
+    else if (sExt == "arc") {
         arcType = 1;
         diskette.command = "--arc=" + name;
     }
-    else if (sExt == ".zip") {
+    else if (sExt == "zip") {
         arcType = 2;
         diskette.command = "--zip=" + name;
     }
@@ -563,7 +564,7 @@ function processDisk(di, diskFile, argv, diskette)
      * If --rewrite, then rewrite the JSON disk image.  --overwrite is implicit.
      */
     if (argv['rewrite']) {
-        if (diskFile.endsWith(".json")) {
+        if (strlib.getExtension(diskFile) == "json") {
             writeDisk(diskFile, di, argv['legacy'], 0, true, argv['quiet'], undefined, argv['source']);
         }
     }
@@ -588,14 +589,14 @@ function processDisk(di, diskFile, argv, diskette)
          * If a JSON disk image was originally built from kryoflux data AND included special args (eg, for copy-protection),
          * then don't bother with the rebuild, because those disks can't be saved as IMG disk images.
          */
-        if (diskFile.endsWith(".json") && !(diskette.kryoflux && diskette.args)) {
+        if (strlib.getExtension(diskFile) == "json" && !(diskette.kryoflux && diskette.args)) {
             if (typeof argv['checkdisk'] == "string" && diskFile.indexOf(argv['checkdisk']) < 0) return;
             createDisk(diskFile, diskette, argv, function(diTemp) {
                 let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                 diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
                 writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
                 let warning = false;
-                if (diskette.archive.endsWith(".img")) {
+                if (strlib.getExtension(diskette.archive) == "img") {
                     let json = diTemp.getJSON();
                     diTemp.buildDiskFromJSON(json);
                     let sTempIMG = sTempJSON.replace(".json",".img");
@@ -889,7 +890,7 @@ function processDisk(di, diskFile, argv, diskette)
                 let sample = readFile(sampleFile);
                 if (sample) {
                     if (CharSet.isText(sample)) {
-                        let fileType = sampleFile.endsWith(".BAS")? "bas" : "";
+                        let fileType = strlib.getExtension(sampleFile) == "BAS"? "bas" : "";
                         if (sample[sample.length-1] != '\n') sample += '\n';
                         sample = "{% raw %}\n```" + fileType + "\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n{% endraw %}\n";
                         samples += "\n## " + path.basename(sampleFile) + "\n\n" + sample;
@@ -1148,7 +1149,7 @@ function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
     try {
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);
-        if (diskName.endsWith(".json")) {
+        if (strlib.getExtension(diskName) == "json") {
             db = readFile(diskFile, "utf8");
             if (!db) {
                 di = null;
@@ -1164,7 +1165,7 @@ function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
             if (!db) {
                 di = null;
             } else {
-                if (diskName.endsWith(".psi")) {
+                if (strlib.getExtension(diskName) == "psi") {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
                     if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
@@ -1249,7 +1250,7 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
     try {
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);
-        if (diskName.endsWith(".json")) {
+        if (strlib.getExtension(diskName) == "json") {
             diskFile = mapDiskToServer(diskFile);
             if (diskFile.startsWith("http")) {
                 printf("fetching %s\n", diskFile);
@@ -1272,7 +1273,7 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
             if (!db) {
                 di = null;
             } else {
-                if (diskName.endsWith(".psi")) {
+                if (strlib.getExtension(diskName) == "psi") {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
                     if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
