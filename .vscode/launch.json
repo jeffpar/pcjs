@@ -1507,6 +1507,29 @@
       }
     },
     {
+      "name": "fileimage.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/fileimage/fileimage.js",
+      "args": [
+        "IBM-EGA.rom",
+        "IBM-EGA.json5",
+        "--comments",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}/machines/pcx86/ibm/video/ega/1984-09-13",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
       "name": "fileimage.js --file",
       "type": "node",
       "request": "launch",

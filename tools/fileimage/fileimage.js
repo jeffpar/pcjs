@@ -229,7 +229,7 @@ class FileImage {
             if (sExt == "lst" || sExt == "txt") {
                 ab = this.parseListing(buf);
             }
-            else if (buf.indexOf('{') >= 0) {
+            else if (buf.match(/^[{[/]/)) {
                 /*
                  * Treat the incoming string data as JSON data.
                  */
@@ -243,13 +243,17 @@ class FileImage {
                 }
                 if (json) {
                     let values, bytes;
-                    if ((values = json['values'])) {
-                        bytes = (json['width'] / 8);
+                    if (Array.isArray(json['values'])) {
+                        values = json['values'];
+                        bytes = ((json['width'] || 8) / 8);
                     }
                     else if ((values = json['longs']) || (values = json['data'])) {
                         bytes = 4;
                     } else if ((values = json['words'])) {
                         bytes = 2;
+                    } else if (Array.isArray(json)) {
+                        bytes = 1;
+                        values = json;
                     }
                     if (values) {
                         for (i = 0; i < values.length; i++) {
@@ -377,16 +381,16 @@ class FileImage {
         for (let prop in addrs) {
             let addr = addrs[prop];
             if (addr != null) {
-                sDump += this.dumpLine(2, '"' + prop + '":' + strlib.toHexWord(addr) + (nBase == 8? "/*" + strlib.toOct(addr, 6) + "*/" : "") + ',');
+                sDump += this.dumpLine(2, '"' + prop + '": ' + strlib.toHexWord(addr) + (nBase == 8? "/*" + strlib.toOct(addr, 6) + "*/" : "") + ',');
             }
         }
 
         if (sKey == "bytes") {
-            sDump += this.dumpLine(2, '"width":8,');
+            sDump += this.dumpLine(2, '"width": 8,');
             sKey = "values";
         }
         else if (sKey == "longs") {
-            sDump += this.dumpLine(2, '"width":32,');
+            sDump += this.dumpLine(2, '"width": 32,');
             sKey = "values";
         }
         sDump += this.dumpLine(2, (sKey? '"' + sKey + '":' : "") + this.sJSONWhitespace + chOpen);
@@ -545,7 +549,7 @@ class FileImage {
                          */
                         let aSymbols;
                         let nBias = 0;
-                        let asLines = strlib.split('\n');
+                        let asLines = str.split('\n');
                         if (obj.symbolFormat == "array") {
                             aSymbols = [];
                         } else {
@@ -654,7 +658,7 @@ class FileImage {
                             }
                         }
                         if (sMapData) {
-                            obj.json = '{\n' + obj.json + ',"symbols":' + sMapData + '}';
+                            obj.json = "{\n" + obj.json.replace(/\n$/, ',\n') + '  "symbols": ' + sMapData.replace(/^/gm, "  ").slice(2) + "\n}";
                         }
                     }
                     if (!sMapData) {
