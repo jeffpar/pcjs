@@ -1512,12 +1512,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/fileimage/fileimage.js",
       "args": [
-        "IBM-EGA.rom",
-        "IBM-EGA.json5",
+        "ATBIOS-REV1.rom",
+        "ATBIOS-REV1.json5",
         "--comments",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/machines/pcx86/ibm/video/ega/1984-09-13",
+      "cwd": "${workspaceFolder}/machines/pcx86/ibm/5170/rom/bios/1984-01-10",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

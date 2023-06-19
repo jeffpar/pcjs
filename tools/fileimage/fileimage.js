@@ -558,7 +558,7 @@ class FileImage {
                         for (let iLine = 0; iLine < asLines.length; iLine++){
                             let s = asLines[iLine].trim();
                             if (!s || s.charAt(0) == ';') continue;
-                            let match = s.match(/^\s*([0-9A-Z:]+)\s+([=124@.+;])(?:\t| {3})(.*?)\s*$/i);
+                            let match = s.match(/^\s*([0-9A-Z:]+)\s+([=124@.+;])(?:\t| {3}|)(.*?)\s*$/i);
                             if (match) {
                                 let sValue = match[1];
                                 let sType = match[2];
