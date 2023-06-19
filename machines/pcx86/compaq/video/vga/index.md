@@ -46,16 +46,10 @@ a way of getting the sharpest and fastest graphics without abandoning your commi
 As such, this board is in perfect accord with the Compaq philosophy, and it may be the best way available
 for mating a VGA-style monitor and VGA graphics to your AT.
 
-A copy of the board's [VGA ROM BIOS](109360-001/COMPAQ-VGA-1988-05-18.json) was created by
-[dumping](/machines/pcx86/compaq/deskpro386/rom/#dumping-roms) the contents of each EPROM chip to a `.hex` file,
-and then merging the *.hex* files with the following [FileImage](/tools/fileimage/) command:
+A copy of the board's [VGA ROM BIOS](109360-001/COMPAQ-VGA-1988-05-18.json5) was created by [dumping](/machines/pcx86/compaq/deskpro386/rom/#dumping-roms) the contents of each EPROM chip to a `.hex` file, and then merging the `.hex` files with the following [FileImage](/tools/fileimage/) command:
 
 	cd 109360-001
-	fileimage.js --file=109793-002.hex --merge=109794-002.hex --output=COMPAQ-VGA-1988-05-18.json
-
-For a more human-readable dump, use the `--comments` option:
-
-	fileimage.js --file=109793-002.hex --merge=109794-002.hex --output=1988-05-18.dump --comments
+	fileimage.js --file=109794-002.hex --merge=109793-002.hex --output=COMPAQ-VGA-1988-05-18.json5 --comments
 
 The COMPAQ VGA ROM BIOS concludes with the usual copyright string and author initials:
 
@@ -67,9 +61,7 @@ The COMPAQ VGA ROM BIOS concludes with the usual copyright string and author ini
 Four of the authors -- **RWS**, **NPB**, **DJC**, and **CAB** -- are also listed as authors of the
 [DeskPro 386 ROM BIOS](/machines/pcx86/compaq/deskpro386/rom/).
 
-An older version of the VGA ROM BIOS, [1987-10-27](109360-001/COMPAQ-VGA-1987-10-27.json), is also available online.  It comes
-from an [earlier revision](http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/) of the same board, with
-the same part number (109360-001).
+An older version of the VGA ROM BIOS, [1987-10-27](109360-001/COMPAQ-VGA-1987-10-27.json5), is also available online.  It comes from an [earlier revision](http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/) of the same board, with the same part number (109360-001).
 
 	cd 109360-001
-	fileimage.js --file=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/109328-002.BIN --merge=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/109327-002.BIN --output=COMPAQ-VGA-1987-10-27.json
+	fileimage.js --file=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/109328-002.BIN --merge=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/109327-002.BIN --output=COMPAQ-VGA-1987-10-27.json5 --comments

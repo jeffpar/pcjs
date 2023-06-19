@@ -5,12 +5,10 @@ permalink: /machines/pcx86/compaq/video/ega/
 redirect_from: /devices/pcx86/video/compaq/ega/
 ---
 
-Our COMPAQ [EGA ROM BIOS](000412-001B/COMPAQ-EGA-001B.json) comes from
-[bitsavers](http://bitsavers.trailing-edge.com/pdf/compaq/firmware/000412-001B_EGA/),
-using the PCjs [FileImage](/tools/fileimage/) utility:
+Our COMPAQ [EGA ROM BIOS](000412-001B/COMPAQ-EGA-001B.json5) comes from [bitsavers](http://bitsavers.trailing-edge.com/pdf/compaq/firmware/000412-001B_EGA/), using the PCjs [FileImage](/tools/fileimage/) utility:
 
 	cd 000412-001B
-	fileimage --file=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/000412-001B_EGA/108281-001.bin --output=COMPAQ-EGA-001B.json
+	fileimage.js --file=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/000412-001B_EGA/108281-001.bin --output=COMPAQ-EGA-001B.json5 --comments
 
 ### Font Information
 
@@ -46,11 +44,9 @@ for the first 9 8x14 characters:
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x18,0x3C,0x3C,0x18,0x00,0x00,0x00,0x00,0x00, // 0x00002290 ................
 	0xFF,0xFF,0xFF,0xFF,0xFF,0xE7,0xC3,0xC3,0xE7,0xFF,0xFF,0xFF,0xFF,0xFF,0x00,0x00, // 0x000022A0 ................
 
-Happily, COMPAQ provided excellent compatibility with IBM's EGA ROM, because if you compare the above font data to
-[IBM's EGA Font Data](/machines/pcx86/ibm/video/ega/#font-information), you'll see that it matches. 
+Happily, COMPAQ provided excellent compatibility with IBM's EGA ROM, because if you compare the above font data to [IBM's EGA Font Data](/machines/pcx86/ibm/video/ega/#font-information), you'll see that it matches.
 
-However, any card where the ROM font data is in a non-standard location can still be used.  You simply
-add the 8x14 and 8x8 font data offsets to the ROM component's *notify* attribute.
+However, any card where the ROM font data is in a non-standard location can still be used.  You simply add the 8x14 and 8x8 font data offsets to the ROM component's *notify* attribute.
 
 For example, here's how we deal with the font data offsets used by the IBM VGA:
 
