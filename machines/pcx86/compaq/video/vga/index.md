@@ -65,3 +65,10 @@ An older version of the VGA ROM BIOS, [1987-10-27](109360-001/COMPAQ-VGA-1987-10
 
 	cd 109360-001
 	fileimage.js --file=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/109328-002.BIN --merge=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/109327-002.BIN --output=COMPAQ-VGA-1987-10-27.json5 --comments
+
+The older COMPAQ VGA ROM BIOS concludes with:
+
+	Copyright COMPAQ Computer Corporation, 1982, 1983, 1984, 1985, 1986, 1987
+	RWS*PNA*NPB*DJC*CAB*ALL*
+	V1A 05COMPAQ
+	10/27/87

@@ -5,10 +5,22 @@ permalink: /machines/pcx86/compaq/video/ega/
 redirect_from: /devices/pcx86/video/compaq/ega/
 ---
 
-Our COMPAQ [EGA ROM BIOS](000412-001B/COMPAQ-EGA-001B.json5) comes from [bitsavers](http://bitsavers.trailing-edge.com/pdf/compaq/firmware/000412-001B_EGA/), using the PCjs [FileImage](/tools/fileimage/) utility:
+Our COMPAQ [EGA ROM BIOS (Rev B)](000412-001B/COMPAQ-EGA-001B.json5) comes from [bitsavers](http://bitsavers.trailing-edge.com/pdf/compaq/firmware/000412-001B_EGA/):
 
 	cd 000412-001B
 	fileimage.js --file=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/000412-001B_EGA/108281-001.bin --output=COMPAQ-EGA-001B.json5 --comments
+
+We also have COMPAQ [EGA ROM BIOS (Rev E)](000412-001E/COMPAQ-EGA-001E.json5), courtesy of Monty McGraw, a member of the Compaq Deskpro 386-16 electronics design team:
+
+	cd 000412-001E
+	fileimage.js --file=archive/EGABIOSrevE.bin --output=COMPAQ-EGA-001E.json5 --comments
+
+And COMPAQ [EGA ROM BIOS (Rev G)](000412-001E/COMPAQ-EGA-001E.json5), also courtesy of Monty McGraw:
+
+	cd 000412-001G
+	fileimage.js --file=archive/Compaq-EGA-106633-003-1987.BIN --output=COMPAQ-EGA-001G.json5 --comments
+
+All PCjs ROM images are JSON files created with the PCjs [FileImage](/tools/fileimage/) utility, which supports a variety of file formats and includes the ability to embed symbols from a PCjs MAP file.
 
 ### Font Information
 
