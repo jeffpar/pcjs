@@ -18,5 +18,5 @@
 			<control type="button" binding="fullScreen" padLeft="8px">Full Screen</control>
 		</control>
 	</menu>
-	<rom id="romEGA" addr="0xc0000" size="0x4000" file="/machines/pcx86/compaq/video/ega/000412-001B/COMPAQ-EGA-001B.json" notify="videoEGA"/>
+	<rom id="romEGA" addr="0xc0000" size="0x4000" file="/machines/pcx86/compaq/video/ega/000412-001B/COMPAQ-EGA-001B.json5" notify="videoEGA"/>
 </video>

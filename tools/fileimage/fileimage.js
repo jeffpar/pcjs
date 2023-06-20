@@ -13,8 +13,8 @@ import os         from "os";
 import path       from "path";
 import PCJSLib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/v3/device.js";
-import net        from "../../machines/modules/v3/netio.js";
-import str        from "../../machines/modules/v2/strlib.js"
+import netio      from "../../machines/modules/v3/netio.js";
+import strlib     from "../../machines/modules/v2/strlib.js"
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
@@ -78,13 +78,12 @@ class FileImage {
         this.fDebug = false;
         this.sFormat = (sFormat || FileImage.FORMAT.JSON);
         this.fJSONNative = (this.sFormat == FileImage.FORMAT.JSON && !fComments);
-        this.nJSONIndent = 0;
         this.fJSONComments = fComments;
         this.sJSONWhitespace = (this.fJSONComments? " " : "");
         this.fDecimal = fDecimal;
         this.offDump = +offDump || 0;
         this.lenDump = +lenDump || 0;
-        this.nWidthDump = +nWidthDump || 16;
+        this.nWidthDump = +nWidthDump || (fComments? 16 : 32);
         this.symbolFormat = symbolFormat || "";
         this.buf = null;
         this.addrLoad = null;
@@ -131,7 +130,7 @@ class FileImage {
         let obj = this;
 
         let encoding = null;
-        let sExt = path.extname(sFile).slice(1).toLowerCase();
+        let sExt = strlib.getExtension(sFile);
         if (sExt == FileImage.FORMAT.JSON || sExt == FileImage.FORMAT.HEX || sExt == "lst" || sExt == "txt") {
             encoding = "utf8";
         }
@@ -145,8 +144,8 @@ class FileImage {
             printf("loadFile(%s,%d,%d)\n", sFilePath, iStart, nSkip);
         }
 
-        if (net.isRemote(sFilePath)) {
-            net.getFile(sFilePath, options.encoding, function(err, status, buf) {
+        if (netio.isRemote(sFilePath)) {
+            netio.getFile(sFilePath, options.encoding, function(err, status, buf) {
                 if (err) {
                     printError(err);
                     done(err);
@@ -230,7 +229,7 @@ class FileImage {
             if (sExt == "lst" || sExt == "txt") {
                 ab = this.parseListing(buf);
             }
-            else if (buf.indexOf('{') >= 0) {
+            else if (buf.match(/^[{[/]/)) {
                 /*
                  * Treat the incoming string data as JSON data.
                  */
@@ -244,13 +243,17 @@ class FileImage {
                 }
                 if (json) {
                     let values, bytes;
-                    if ((values = json['values'])) {
-                        bytes = (json['width'] / 8);
+                    if (Array.isArray(json['values'])) {
+                        values = json['values'];
+                        bytes = ((json['width'] || 8) / 8);
                     }
                     else if ((values = json['longs']) || (values = json['data'])) {
                         bytes = 4;
                     } else if ((values = json['words'])) {
                         bytes = 2;
+                    } else if (Array.isArray(json)) {
+                        bytes = 1;
+                        values = json;
                     }
                     if (values) {
                         for (i = 0; i < values.length; i++) {
@@ -334,16 +337,8 @@ class FileImage {
      */
     dumpLine(nIndent, sLine, sComment)
     {
-        if (nIndent < 0) {
-            this.nJSONIndent += nIndent;
-        }
-        if (this.fJSONComments) {
-            sLine = "                                ".substr(0, this.nJSONIndent) + (sLine? (sLine + (sComment? (" // " + sComment) : "")) : "");
-        }
+        sLine = "                                ".substr(0, nIndent) + (sLine? (sLine + (sComment? (" // " + sComment) : "")) : "");
         if (sLine) sLine += "\n";
-        if (nIndent > 0) {
-            this.nJSONIndent += nIndent;
-        }
         return sLine;
     }
 
@@ -381,21 +376,21 @@ class FileImage {
         nWidthDump = nWidthDump || this.nWidthDump;
 
         let sDump = "";
-
         let addrs = {'load': this.addrLoad, 'exec': this.addrExec};
+
         for (let prop in addrs) {
             let addr = addrs[prop];
             if (addr != null) {
-                sDump += this.dumpLine(2, '"' + prop + '":' + str.toHexWord(addr) + (nBase == 8? "/*" + str.toOct(addr, 6) + "*/" : "") + ',');
+                sDump += this.dumpLine(2, '"' + prop + '": ' + strlib.toHexWord(addr) + (nBase == 8? "/*" + strlib.toOct(addr, 6) + "*/" : "") + ',');
             }
         }
 
         if (sKey == "bytes") {
-            sDump += this.dumpLine(2, '"width":8,');
+            sDump += this.dumpLine(2, '"width": 8,');
             sKey = "values";
         }
         else if (sKey == "longs") {
-            sDump += this.dumpLine(2, '"width":32,');
+            sDump += this.dumpLine(2, '"width": 32,');
             sKey = "values";
         }
         sDump += this.dumpLine(2, (sKey? '"' + sKey + '":' : "") + this.sJSONWhitespace + chOpen);
@@ -418,7 +413,7 @@ class FileImage {
             if (off > offDump) {
                 sLine += chSep;
                 if (!(cb % nWidthDump)) {
-                    sDump += this.dumpLine(0, sLine, sASCII);
+                    sDump += this.dumpLine(4, sLine, sASCII);
                     sLine = sASCII = "";
                 }
             }
@@ -426,22 +421,22 @@ class FileImage {
                 if (cbItem > 2) {
                     sLine += v;
                 } else {
-                    sLine += str.toHexWord(v) + (nBase == 8? "/*" + str.toOct(v & 0xffff, 6) + "*/" : "");
+                    sLine += strlib.toHexWord(v) + (nBase == 8? "/*" + strlib.toOct(v & 0xffff, 6) + "*/" : "");
                 }
             }
             else {
                 if (this.fDecimal) {
                     sLine += v;
                 } else {
-                    sLine += str.toHexByte(v);
+                    sLine += strlib.toHexByte(v);
                 }
-                if (!sASCII) sASCII = str.toHex(off, 0, true) + " ";
+                if (!sASCII) sASCII = strlib.toHex(off, 0, true) + " ";
                 sASCII += (v >= 0x20 && v < 0x7F && v != 0x3C && v != 0x3E? String.fromCharCode(v) : ".");
             }
         }
 
-        sDump += this.dumpLine(0, sLine + chClose, sASCII);
-        this.dumpLine(-2);
+        sDump += this.dumpLine(4, sLine + ' ', sASCII);
+        sDump += this.dumpLine(2, chClose);
 
         return sDump;
     }
@@ -468,9 +463,9 @@ class FileImage {
             }
             let obj = this;
 
-            sMapFile = sMapFile.replace(/\.(rom|json|bin)$/, ".map");
+            sMapFile = sMapFile.replace(/\.(rom|json|bin)$/i, ".map");
 
-            if (str.endsWith(sMapFile, ".map")) {
+            if (strlib.endsWith(sMapFile, ".map")) {
 
                 let sMapName = path.basename(sMapFile);
 
@@ -563,7 +558,7 @@ class FileImage {
                         for (let iLine = 0; iLine < asLines.length; iLine++){
                             let s = asLines[iLine].trim();
                             if (!s || s.charAt(0) == ';') continue;
-                            let match = s.match(/^\s*([0-9A-Z:]+)\s+([=124@.+;])(?:\t| {3})(.*?)\s*$/i);
+                            let match = s.match(/^\s*([0-9A-Z:]+)\s+([=124@.+;])(?:\t| {3}|)(.*?)\s*$/i);
                             if (match) {
                                 let sValue = match[1];
                                 let sType = match[2];
@@ -663,17 +658,17 @@ class FileImage {
                             }
                         }
                         if (sMapData) {
-                            obj.json = '{' + obj.json + ',"symbols":' + sMapData + '}';
+                            obj.json = "{\n" + obj.json.replace(/\n$/, ',\n') + '  "symbols": ' + sMapData.replace(/^/gm, "  ").slice(2) + "\n}";
                         }
                     }
                     if (!sMapData) {
-                        obj.json = '{' + obj.json + '}';
+                        obj.json = '{\n' + obj.json + '}';
                     }
                     done(null, obj.json);
                 });
                 return;
             }
-            this.json = '{' + this.json + '}';
+            this.json = '{\n' + this.json + '}';
         }
         done(null, this.json);
     }
@@ -729,7 +724,6 @@ class FileImage {
      */
     convertToFile(sOutputFile, fOverwrite)
     {
-        // sOutputFile = path.join(rootDir, sOutputFile);
         if (this.sFormat != FileImage.FORMAT.ROM) {
             let obj = this;
             this.buildJSON();
@@ -912,7 +906,7 @@ FileImage.FORMAT = {
  *
  *      Consider adding a "map" option that allows the user to supply a MAP filename (via a "map" API parameter
  *      or a "--map" command-line option), which in turn triggers a call to loadMap().  Note that loadMap() will need to
- *      be a bit more general and use a worker function that calls either net.getFile() or fs.readFile(), similar to
+ *      be a bit more general and use a worker function that calls either netio.getFile() or fs.readFile(), similar to
  *      what the loadFile() function already does.
  *
  * @param {number} argc
@@ -937,13 +931,16 @@ function main(argc, argv)
 
     device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
 
-    let sFile = argv['file'] || argv[1];
+    let sFile = argv['file'];
+    if (typeof sFile != "string") sFile = argv[1] || "";
+
     if (sFile) {
 
-        let sOutputFile = argv['output'] || argv[2];
+        let sOutputFile = argv['output'];
+        if (typeof sOutputFile != "string") sOutputFile = argv[2] || "";
         let fOverwrite = argv['overwrite'];
 
-        let sFormat = FileImage.validateFormat(argv['format']);
+        let sFormat = FileImage.validateFormat(argv['format'] || strlib.getExtension(sOutputFile));
         if (sFormat === false) {
             printError(new Error("unrecognized format"));
             return;
@@ -959,8 +956,8 @@ function main(argc, argv)
             }
         }
 
-        file.addrLoad = str.parseInt(argv['load']);
-        file.addrExec = str.parseInt(argv['exec']);
+        file.addrLoad = strlib.parseInt(argv['load']);
+        file.addrExec = strlib.parseInt(argv['exec']);
 
         let cMergesPending = asMergeFiles.length, iStart = 0, nSkip = cMergesPending;
 

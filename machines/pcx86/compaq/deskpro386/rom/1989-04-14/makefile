@@ -3,12 +3,15 @@
 #
 
 FIMG=node ../../../../../../tools/fileimage/fileimage.js
-TEXTOUT=node ../../../../../../tools/misc/old/textout/bin/textout.js
+TEXTOUT=node ../../../../../../tools/old/textout/bin/textout.js
 
-all: 1989-04-14-test.rom
+all: 1989-04-14.json5 1989-04-14-test.rom
 
-1989-04-14.rom: 1989-04-14.json
-	$(FIMG) --file=1989-04-14.json --output=1989-04-14.rom --format=rom
+1989-04-14.json5: archive/109592-005.U11.bin archive/109591-005.U13.bin
+	$(FIMG) --file=archive/109592-005.U11.bin --merge=archive/109591-005.U13.bin --output=1989-04-14.json5 --comments
+
+1989-04-14.rom: 1989-04-14.json5
+	$(FIMG) --file=1989-04-14.json5 --output=1989-04-14.rom --format=rom
 
 1989-04-14-test.nasm: 1989-04-14.rom
 	ndisasm -o0x8000 1989-04-14.rom > 1989-04-14-test.nasm

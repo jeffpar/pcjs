@@ -1,3 +1,3 @@
-## Paraside Video Adapters
+## Paradise Video Adapters
 
 * [Paradise VGA](vga/)
