@@ -22,7 +22,6 @@ redirect_from: /devices/pcx86/rom/compaq/lte286/rom/
 	B.1  117222-003  117221-003  1989-09-07
 	B.3  117222-004  117221-004  1990-02-22
 
-
 ## Dumping the ROMs
 
 Same procedure as for the [Deskpro386](/machines/pcx86/compaq/deskpro386/rom/), with the addition of needing a PLCC32 to DIP28 conversion socket.

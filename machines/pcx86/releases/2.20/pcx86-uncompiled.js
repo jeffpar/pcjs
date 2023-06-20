@@ -53820,10 +53820,10 @@ class VideoX86 extends Component {
              */
             let abFontData = eval("(" + sFontData + ")");
 
-            let ab = /** @type {Array} */ (abFontData['bytes'] || abFontData['values'] || abFontData);
+            let ab = /** @type {Array} */ (abFontData['bytes'] || (abFontData['width'] == 8 && abFontData['values']) || abFontData);
 
-            if (!ab.length) {
-                Component.error("Empty font ROM: " + sURL);
+            if (!ab || !ab.length) {
+                Component.error("Unsupported font ROM: " + sURL);
                 return;
             }
             else if (ab.length == 1) {
