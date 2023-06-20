@@ -53820,7 +53820,7 @@ class VideoX86 extends Component {
              */
             let abFontData = eval("(" + sFontData + ")");
 
-            let ab = /** @type {Array} */ (abFontData['bytes'] || abFontData);
+            let ab = /** @type {Array} */ (abFontData['bytes'] || abFontData['values'] || abFontData);
 
             if (!ab.length) {
                 Component.error("Empty font ROM: " + sURL);
