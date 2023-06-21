@@ -28,10 +28,10 @@ Same procedure as for the [Deskpro386](/machines/pcx86/compaq/deskpro386/rom/), 
  
 ![Arduino Breadboard EPROM Reader](/machines/pcx86/compaq/lte286/rom/photos/Compaq_LTE286_Breadboard.jpg)
 
-The PCjs ROM image [1989-09-07](1989-09-07.json5) was created from [117221-003.hex](117221-003.hex) and [117222-003.hex](117222-003.hex):
+The PCjs ROM image [1989-09-07](1989-09-07/1989-09-07.json5) was created from [117221-003.hex](1989-09-07/117221-003.hex) and [117222-003.hex](1989-09-07/117222-003.hex):
 
     fileimage.js --file=117222-003.hex --merge=117221-003.hex --output=1989-09-07.json5 --comments
 
-The PCjs ROM image [1990-02-22](1990-02-22.json5) was created from [117221-004.hex](117221-004.hex) and [117222-004.hex](117222-004.hex):
+The PCjs ROM image [1990-02-22](1990-02-22/1990-02-22.json5) was created from [117221-004.hex](1990-02-22/117221-004.hex) and [117222-004.hex](1990-02-22/117222-004.hex):
 
     fileimage.js --file=117222-004.hex --merge=117221-004.hex --output=1990-02-22.json5 --comments

@@ -49,7 +49,7 @@ such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to
 
 To build a PCjs disk image, such as this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json), from an IMG file:
 
-    diskimage.js /diskettes/pcx86/sys/dos/2.00/PCDOS200-DISK1.img PCDOS200-DISK1.json
+    diskimage.js PCDOS200-DISK1.img PCDOS200-DISK1.json
 
 In addition to IMG files, DiskImage also includes (experimental) support for PSI (PCE Sector Image) files, which can in
 turn be built from Kryoflux RAW files.  Here are the basic steps, using tools from [PCE](http://www.hampa.ch/pce/):
@@ -57,7 +57,7 @@ turn be built from Kryoflux RAW files.  Here are the basic steps, using tools fr
  1. From the Kryoflux RAW files, create a PFI ("PCE Flux Image") file
  2. Next, create a PRI ("PCE Raw Image") file, with the flux reversal pulses converted to bits
  3. From the PRI file, create a PSI ("PCE Sector Image") file
- 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs [DiskImage](/tools/diskimage/) utility
+ 4. From the PSI file, create a JSON-encoded disk image file, using `diskimage.js`
 
 which translates to these commands (using a 360K PC diskette named "disk1" as an example):
 
@@ -72,7 +72,11 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
 To build a [VisiCalc diskette](https://miscdisks.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash, like so:
 
-    diskimage.js /miscdisks/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
+    diskimage.js /miscdisks/pcx86/app/other/visicalc/1981/archive/VISICALC-1981/ VISICALC-1981.json
+
+Alternatively, use the `--dir` option:
+
+    diskimage.js --dir=/miscdisks/pcx86/app/other/visicalc/1981/archive/VISICALC-1981 VISICALC-1981.json
 
 By default, the diskette will be given an 11-character volume label derived from the directory name (eg, "VISICALC-19");
 however, you can use `--label` to specify your own label (eg, `--label=VISICALC81`), or use `--label=none` to suppress
@@ -89,7 +93,7 @@ data.  The list of recognized text file extensions is likely to grow over time.
 
 ### Building PCjs Disk Images from ZIP (and ARC) files
 
-There are many large software collections where the diskette contents have been archived as ZIP files rather than as disk images, and in theory, it's trivial to `unzip` them into separate folders and then use [DiskImage](/tools/diskimage/) to build new images from those folders (see above).
+There are many large software collections where the diskette contents have been archived as ZIP files rather than as disk images, and in theory, it's trivial to `unzip` them into separate folders and then use `diskimage.js` to build new images from those folders (see `--dir` above).
 
 For example, I originally recreated all the [PC-SIG Library](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/0001/) diskette images from the "PC-SIG Library Eighth Edition" CD-ROM files stored at [cd.textfiles.com](http://cd.textfiles.com/pcsig08/).  Some of the diskettes on the CD-ROM had been completely archived as single ZIP files -- probably because the diskettes contained filenames that were not allowed on CD-ROM -- so I used `unzip` on macOS to extract those ZIP files to folders, and then recreated disk images from those folders.
 
@@ -99,7 +103,7 @@ First, the original order of the filenames was not preserved.  Modern operating 
 
 Second, while the ZIP archives appeared to more-or-less preserve non-ASCII filenames, `unzip` did not.  IBM PCs used a character set now known as [Code Page 437](https://en.wikipedia.org/wiki/Code_page_437) (*CP437*), which included a variety of line-drawing characters and other symbols that `unzip` failed to translate to their modern (*UTF-8*) counterparts.
 
-To resolve all these issues, I updated [DiskImage](/tools/diskimage/) with an option (`--zip`) to read ZIP archives directly.  I started with an NPM package called [node-stream-zip](https://www.npmjs.com/package/node-stream-zip), which is essentially a module that understands the ZIP file format, identifies all the compressed files inside the ZIP file, and uses Node's built-in *zlib* functionality to decompress them.
+To resolve all these issues, I updated `diskimage.js` with an option (`--zip`) to read ZIP archives directly.  I started with an NPM package called [node-stream-zip](https://www.npmjs.com/package/node-stream-zip), which is essentially a module that understands the ZIP file format, identifies all the compressed files inside the ZIP file, and uses Node's built-in *zlib* functionality to decompress them.
 
 Unfortunately, I quickly discovered that *zlib* could not decompress the contents of many old ZIP files, because instead of the now-popular *Deflate* compression algorithm, older ZIP files used compression methods such as *Shrink*, *Reduce*, and *Implode*.  So I imported *node-stream-zip* into PCjs as [StreamZip](../modules/streamzip.js), modernized it, and then extended it with a new decompression module named [LegacyZip](../modules/legacyzip.js), which I wrote by hand-translating the excellent C code at [hanshq.net](https://www.hanshq.net/zip2.html) into JavaScript.
 
@@ -127,7 +131,7 @@ Here's an example of `--zip` in action:
 
 The `--verbose` option generates the `PKZIP`-style file listing, displaying the individual file names, compressed and uncompressed file sizes, compression ratio, etc.
 
-In fact, creating a disk image is entirely optional; you can use [DiskImage](/tools/diskimage/) to simply examine the contents of `ZIP` file:
+In fact, creating a disk image is entirely optional; you can use `diskimage.js` to simply examine the contents of `ZIP` file:
 
     diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --verbose
 
@@ -189,10 +193,10 @@ or with one of PCjs' implicit diskette paths, such as `/diskettes`, which curren
 If you happen to have a local file that exists in the same location as the implicit diskette path, use `--server` to force
 the server mapping.  The list of implicit paths for PC disks currently includes (but is not limited to):
 
-  - [/disks/diskettes](https://diskettes.pcjs.org)
-  - [/disks/gamedisks](https://gamedisks.pcjs.org)
-  - [/disks/miscdisks](https://miscdisks.pcjs.org)
-  - [/disks/pcsigdisks](https://pcsigdisks.pcjs.org)
+  - [/disks/diskettes](https://github.com/jeffpar/pcjs-diskettes)
+  - [/disks/gamedisks](https://github.com/jeffpar/pcjs-gamedisks)
+  - [/disks/miscdisks](https://github.com/jeffpar/pcjs-miscdisks)
+  - [/disks/pcsigdisks](https://github.com/jeffpar/pcjs-pcsigdisks)
   - [/disks/harddisks](https://harddisks.pcjs.org)
   - [/disks/cdroms/cds001](https://cds001.pcjs.org)
 
