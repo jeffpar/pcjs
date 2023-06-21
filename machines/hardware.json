@@ -130,6 +130,15 @@
       },
       "deskpro386": {
         "@title": "DeskPro 386",
+        "cga": {
+          "@title": "Color Graphics"
+        },
+        "ega": {
+          "@title": "Enhanced Graphics"
+        },
+        "vga": {
+          "@title": "VGA Display"
+        },
         "@documents": [
           {
             "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume I, Sep 1986)",
