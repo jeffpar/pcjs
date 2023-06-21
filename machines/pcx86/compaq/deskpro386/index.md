@@ -7,26 +7,13 @@ redirect_from:
   - /pubs/pc/reference/compaq/deskpro386/
 ---
 
-All our CGA and EGA configurations use the `Rev F` [COMPAQ DeskPro 386 ROM](/machines/pcx86/compaq/deskpro386/rom/),
-dated September 4, 1986.  It is currently the oldest available DeskPro 386 ROM.  The VGA did not exist until 1987,
-so it makes sense to use the CGA and EGA with the older ROM.
+DeskPro 386 configurations currently include:
 
-All the VGA configurations use the `Rev J.4` [COMPAQ DeskPro 386 ROM](/machines/pcx86/compaq/deskpro386/rom/), dated
-January 28, 1988.
+  - [Color Graphics](cga/)
+  - [Enhanced Graphics](ega/)
+  - [VGA Display](vga/)
 
-All these machine configurations also include an unformatted "Type 5" [47Mb Hard Disk](/machines/pcx86/ibm/hdc/47mb/).  To
-create a single 47Mb partition, you must use [COMPAQ MS-DOS 3.31](/software/pcx86/sys/dos/compaq/3.31/) or newer; older versions
-of DOS could create partitions only up to 32Mb, and all partitions had to reside within the first 32Mb of disk space.
-
-  - [DeskPro 386 with 640Kb and IBM CGA](/machines/pcx86/compaq/deskpro386/cga/640kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/cga/640kb/debugger/machine.xml))
-  - [DeskPro 386 with 2Mb and IBM EGA](/machines/pcx86/compaq/deskpro386/ega/2048kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/))
-  - [DeskPro 386 with 4Mb and IBM EGA](/machines/pcx86/compaq/deskpro386/ega/4096kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/ega/4096kb/debugger/machine.xml))
-  - [DeskPro 386 with 2Mb and COMPAQ VGA (Debugger)](/machines/pcx86/compaq/deskpro386/other/2048kb/debugger/machine.xml), ([Visualizer](/machines/pcx86/compaq/deskpro386/other/2048kb/debugger/visual/machine.xml))
-  - [DeskPro 386 with 2Mb and IBM VGA](/machines/pcx86/compaq/deskpro386/vga/2048kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/), [Visualizer](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/visual/machine.xml))
-  - [DeskPro 386 with 4Mb and IBM VGA](/machines/pcx86/compaq/deskpro386/vga/4096kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/vga/4096kb/debugger/machine.xml), [Visualizer](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/visual/machine.xml))
-  - [DeskPro 386 with 4Mb and IBM VGA running Windows 95](/software/pcx86/sys/windows/win95/4.00.950/) ([Debugger](/software/pcx86/sys/windows/win95/4.00.950/debugger/))
-
-{% include gallery/documents.html width="200" height="200" %}
+All configurations currently use IBM display adapters.  Configurations with COMPAQ Monochrome Graphics, COMPAQ Enhanced Graphics, and COMPAQ VGA will eventually be added as well.
 
 ### COMPAQ DeskPro 386/25 Technical Reference Guide
 
@@ -121,3 +108,5 @@ The following table comes from pages 4-189 and 4-190 of the DeskPro 386/25 Techn
                at power-down.
            3.  Drive types supported by Compaq.
     -------------------------------------------------------------------------------
+
+{% include gallery/documents.html width="200" height="200" %}
