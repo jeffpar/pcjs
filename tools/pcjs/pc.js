@@ -13,6 +13,7 @@ import xml2js from "xml2js";
 import Messages from "../../machines/modules/v2/messages.js";
 import filelib from "../../machines/modules/v2/filelib.js";
 import proclib from "../../machines/modules/v2/proclib.js";
+import strlib from "../../machines/modules/v2/strlib.js";
 import { printf } from "../../machines/modules/v2/printf.js";
 import { readDir, writeDisk } from "../modules/disklib.js";
 
@@ -22,8 +23,9 @@ let fDebug = argv['debug'] || false;
 let machineType = argv['type'] || "pcx86";
 
 let Component, Interrupts;
-let strlib, weblib, embedMachine;
-let cpu, dbg, kbd, debugMode;
+let weblib, embedMachine;
+let cpu, dbg, kbd, serial, fnSendSerial;
+let debugMode;
 let prompt = ">";
 let sCmdPrev = "";
 
@@ -138,9 +140,6 @@ async function loadModules(factory, modules, done)
         }
         let module = await import(modulePath);
         switch(name) {
-        case "strlib":
-            strlib = module.default;
-            break;
         case "weblib":
             weblib = module.default;
             break;
@@ -190,12 +189,13 @@ function initMachine(machine, sMachine)
          * a few interrupts (eg, INT 0x10).  Get the Debugger component so we can override
          * the debugger's print() function.
          */
-        if (Interrupts && Interrupts.VIDEO) {
-            cpu = Component.getComponentByType("CPU");
-            if (cpu && cpu.addIntNotify) {
+        cpu = Component.getComponentByType("CPU");
+        if (cpu && cpu.addIntNotify) {
+            if (Interrupts && Interrupts.VIDEO) {
                 cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
             }
         }
+
         /*
          * Get the Debugger component so we can override the debugger's print() function.
          */
@@ -213,6 +213,20 @@ function initMachine(machine, sMachine)
          * injection of keystrokes into the machine.
          */
         kbd = Component.getComponentByType("Keyboard");
+
+        serial = Component.getComponentByType("SerialPort");
+        if (serial) {
+            let exports = serial['exports'];
+            if (exports) {
+                var fnSetConnection = exports['setConnection'];
+                if (fnSetConnection) {
+                    if (fnSetConnection.call(serial, null, receiveSerial)) {
+                        fnSendSerial = exports['receiveData'];
+                    }
+                }
+            }
+        }
+
     }
     catch(err) {
         printf("machine initialization error: %s\n", err.message);
@@ -237,6 +251,37 @@ function intVideo(addr)
         printf("%c", AL);
     }
     return true;
+}
+
+/**
+ * receiveSerial(b)
+ *
+ * @param {number} b
+ */
+function receiveSerial(b)
+{
+    let s;
+    if (b != strlib.ASCII.CR && b != strlib.ASCII.LF) {
+        s = strlib.ASCIICodeMap[b];
+    }
+    if (s) {
+        s = '<' + s + '>';
+    } else {
+        s = String.fromCharCode(b);
+    }
+    printf(s);
+}
+
+/**
+ * sendSerial(b)
+ *
+ * @param {number} b
+ */
+function sendSerial(b)
+{
+    if (serial && fnSendSerial) {
+        fnSendSerial.call(serial, b);
+    }
 }
 
 /**
@@ -428,7 +473,10 @@ function readInput(stdin, stdout)
         }
         if (!debugMode) {
             data = data.replace(/\x7f/g, "\b");     // convert DEL to BS
-            kbd.injectKeys.call(kbd, data, 0);
+            if (kbd) {
+                kbd.injectKeys.call(kbd, data, 0);
+            }
+            sendSerial(code);
             return;
         }
         if (data == "\x08" || data == "\x7f") {     // implement BS/DEL ourselves (since we're in "raw" mode)
