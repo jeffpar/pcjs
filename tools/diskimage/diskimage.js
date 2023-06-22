@@ -49,12 +49,10 @@ function compareDisks(sDisk1, sDisk2)
  * @param {string} diskFile
  * @param {Object} diskette
  * @param {Array} argv
- * @param {function(DiskInfo)} [done]
- * @returns {DiskInfo|null}
+ * @param {function(DiskInfo)} done
  */
 function createDisk(diskFile, diskette, argv, done)
 {
-    let di;
     let sArchiveFolder = "archive/";
     if (path.dirname(diskFile).endsWith("/disks")) {
         sArchiveFolder = "../archive/";
@@ -115,14 +113,10 @@ function createDisk(diskFile, diskette, argv, done)
         let normalize = diskette.normalize || argv['normalize'];
         let target = getTargetValue(diskette.format);
         let verbose = argv['verbose'];
-        di = readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
+        readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, sectorIDs, sectorErrors, suppData, done);
     } else {
-        di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
-        if (di && done) {
-            done(di);
-        }
+        done(readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData));
     }
-    return di;
 }
 
 /**
@@ -1040,16 +1034,20 @@ function readCollection(argv)
                 } else {
                     aDiskNames[sName] = diskFile;
                 }
-                let di = readDisk(diskFile);
-                if (!di) {
-                    di = createDisk(diskFile, diskette, argv);
+                let done = function(di, fWrite = true) {
                     if (di) {
-                        writeDisk(diskFile, di, false, 0, undefined, undefined, undefined, diskette.source);
+                        if (fWrite) {
+                            writeDisk(diskFile, di, false, 0, undefined, undefined, undefined, diskette.source);
+                        }
+                        processDisk(di, diskFile, argv, diskette);
+                        cDisks++;
                     }
-                }
+                };
+                let di = readDisk(diskFile);
                 if (di) {
-                    processDisk(di, diskFile, argv, diskette);
-                    cDisks++;
+                    done(di, false);
+                } else {
+                    createDisk(diskFile, diskette, argv, done);
                 }
             });
         }
@@ -1429,18 +1427,22 @@ function processFile(argv)
         }
     }
 
+    let sectorIDs = argv['sectorID'];
+    let sectorErrors = argv['sectorError'];
+    let suppData = readFile(argv['suppData']);
+
     if (fDir || arcType) {
         let offset = getArchiveOffset(input, arcType, argv['offset']);
         if (offset < 0) {
             printf("error: %s is not a supported archive file\n", input);
             return true;
         }
-        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
+        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], sectorIDs, sectorErrors, suppData, done);
         return true;
     }
 
     if (input) {
-        return done(readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData'])));
+        return done(readDisk(input, argv['forceBPB'], sectorIDs, sectorErrors, suppData));
     }
 
     return false;

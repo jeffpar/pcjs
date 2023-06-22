@@ -298,7 +298,7 @@ export function addMetaData(di, sDir, sPath, aFiles)
 }
 
 /**
- * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, done, sectorIDs, sectorErrors, suppData)
+ * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
  *
  * @param {string} sDir (directory name)
  * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
@@ -309,13 +309,12 @@ export function addMetaData(di, sDir, sPath, aFiles)
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
  * @param {boolean} [verbose] (true for verbose output)
- * @param {function(DiskInfo)} [done] (optional function to call on completion)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
- * @returns {DiskInfo|null}
+ * @param {function(DiskInfo)} [done] (optional function to call on completion)
  */
-export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, done, sectorIDs, sectorErrors, suppData)
+export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
 {
     let di;
     let diskName = path.basename(sDir);
@@ -341,36 +340,32 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
             for (let i = 0; i < aFileData.length; i++) {
                 addMetaData(di, sDir, aFileData[i].path, aFileData[i].files);
             }
-            if (done) {
-                done(di);
-                return null;
-            }
         }
-        return di;
+        done(di);
     };
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
-        if (arcType) {
-            readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, verbose, readDone);
+        if (!arcType) {
+            readDirFiles(sDir, sLabel, fNormalize, 0, readDone);
         } else {
-            di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
+            readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, verbose, readDone);
         }
     } catch(err) {
         printError(err);
     }
-    return di;
 }
 
 /**
- * readDirFiles(sDir, sLabel, fNormalize, iLevel)
+ * readDirFiles(sDir, sLabel, fNormalize, iLevel, done)
  *
  * @param {string} sDir (directory name)
  * @param {boolean|null} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [iLevel] (current directory level, primarily for diagnostic purposes only; zero if unspecified)
+ * @param {function(Array.<FileData>)} [done] (optional function to call on completion)
  * @returns {Array.<FileData>}
  */
-function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
+function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
 {
     let aFileData = [];
 
@@ -471,6 +466,9 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
     }
     if (iFile < asFiles.length && nMaxCount <= 0) {
         printf("warning: %d file limit reached, use --maxfiles # to increase\n", nMaxInit);
+    }
+    if (done) {
+        done(aFileData);
     }
     return aFileData;
 }

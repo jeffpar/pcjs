@@ -1470,9 +1470,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=NU400-ADV-DISK1",
-        "--checkpage",
-        "--rebuild"
+        "--collection",
+        "--checkpage"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
