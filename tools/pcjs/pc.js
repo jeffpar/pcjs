@@ -190,11 +190,12 @@ function initMachine(machine, sMachine)
          * a few interrupts (eg, INT 0x10).  Get the Debugger component so we can override
          * the debugger's print() function.
          */
-        cpu = Component.getComponentByType("CPU");
-        if (cpu && Interrupts.VIDEO) {
-            cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
+        if (Interrupts && Interrupts.VIDEO) {
+            cpu = Component.getComponentByType("CPU");
+            if (cpu && cpu.addIntNotify) {
+                cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
+            }
         }
-
         /*
          * Get the Debugger component so we can override the debugger's print() function.
          */
@@ -247,7 +248,7 @@ function intVideo(addr)
 function loadMachine(sFile)
 {
     let getFactory = function(machine, sMachine) {
-        let type = machine['type'] || machineType;
+        let type = machine['type'] || (machine['machine'] && machine['machine']['type']) || machineType;
         loadModules(machines[type]['factory'], machines[type]['modules'], function() {
             initMachine(machine, sMachine);
         });
