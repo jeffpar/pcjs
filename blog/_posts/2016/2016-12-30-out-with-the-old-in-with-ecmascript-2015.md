@@ -141,96 +141,79 @@ want to include a small pre-loader that checks your browser's capabilities and t
 appropriate.
 
 Last but not least, does the new ES6 code really work in Node, too?  Happily, it does.  To test, I wrote
-a small JavaScript shell app, [pdp11]({{ site.github.pages }}/machines/dec/pdp11/bin/pdp11), which reads a machine XML file
+a small JavaScript shell app, [pc.js]({{ site.github.pages }}/tools/pcjs/), which reads a machine XML file
 (like [this one](/machines/dec/pdp11/1170/panel/debugger/machine.xml)), simulates the loading and initialization
 process that a web browser would perform, and then connects *stdin* and *stdout* to the machine's serial port:
 
 Here's a sample run, from a macOS Terminal window:
 
-	cd modules/pdp11/bin
-	node pdp11 --cmd="load ../../../devices/pdp11/machine/1170/panel/debugger/machine.xml"
-	Panel object created: test1170.panel
-	Device object created: test1170.default
-	CPU object created: test1170.cpu
-	ROM object created: test1170.m9312
-	RAM object created: test1170.ram
-	SerialPort object created: test1170.dl11
-	PC11 object created: test1170.pc11
-	RK11 object created: test1170.rk11
-	RL11 object created: test1170.rl11
-	Debugger object created: test1170.debugger
-	bus: 8Kb H/W at 17760000
-	PDPjs v1.x.x
-	Copyright © 2012-2016 Jeff Parsons <Jeff@pcjs.org>
-	License: MIT <https://www.pcjs.org/LICENSE.txt>
-	Portions adapted from the PDP-11/70 Emulator v1.4 by Paul Nankervis <paulnank@hotmail.com>
-	bus: 256Kb RAM at 000000
-	Net.getResource("https://pdp11-disks.pcjs.org/dec/rk03/RK03-XXDP.json"): unimplemented
-	notice: Unable to load disk "RK03-XXDP" (error -1: RK03-XXDP.json)
-	Computer object created: test1170.computer
-	console connected to machine (alt-r for REPL prompt, alt-x to exit)
-	m9312: 512-byte ROM at 165000
-	ram: Loaded image "BOOTMON.json"
-	pc11: Loaded tape "BOOTSTRAP-16KB"
-	cpu: Model 1170
-	Type ? for help with PDPjs Debugger commands
-	R0=000000 R1=000000 R2=000000 R3=000000 R4=000000 R5=000000 
-	SP=000000 PC=140000 PS=000013 PI=000000 SL=000000 T0 N1 Z0 V1 C1 
-	140000: 000005                 RESET
-	running
-	PDP-11 MONITOR V1.0
-	
-	BOOT> help
-	COMMANDS ARE BOOT, HALT, TEST, DIAG, LIGHTS AND HELP
-	BOOT DEVICES ARE RK? RL? OR RP?
-	BOOT> alt-r detected, starting REPL...
-	PDP11> ?
-	>> ?
-	commands:
-	?        help/print
-	a [#]    assemble
-	b [#]    breakpoint
-	c        clear output
-	d [#]    dump memory
-	e [#]    edit memory
-	g [#]    go [to #]
-	h        halt
-	if       eval expression
-	int [#]  request interrupt
-	k        stack trace
-	ln       list nearest symbol(s)
-	m        messages
-	p        step over
-	print    print expression
-	r        dump/set registers
-	reset    reset machine
-	s        set options
-	t [#]    trace
-	u [#]    unassemble
-	var      assign variable
-	ver      print version
-	note: history disabled if no exec breakpoints
-	.exit    exit REPL and connect console to machine
-	false
-	PDP11> r
-	>> r
-	R0=002114 R1=000000 R2=000000 R3=000000 R4=000000 R5=000000 
-	SP=137522 PC=140074 PS=000004 PI=000000 SL=000000 T0 N0 Z1 V0 C0 
-	140074: 000001                 WAIT 
-	false
-	PDP11> u
-	>> u
-	140076: 005200                 INC   R0
-	140100: 005767 000014          TST   140120
-	140104: 001773                 BEQ   140074
-	140106: 012746 054000          MOV   #54000,-(SP)
-	140112: 016746 000002          MOV   140120,-(SP)
-	140116: 000002                 RTI  
-	140120: 000000                 HALT 
-	140122: 002225                 BGE   137576
-	false
-	PDP11> .exit
-	console connected to machine (alt-r for REPL prompt, alt-x to exit)
-	
-	BOOT> 
-	BOOT> alt-x detected, exiting...
+    PDPjs v2.20
+    Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
+    License: MIT <https://www.pcjs.org/LICENSE.txt>
+    Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>
+    PC11: Loaded tape "BOOTSTRAP-16KB" (28 bytes)
+    ROM: Added 512-byte ROM at 165000
+    Bus: Added 256Kb RAM at 0
+    RAM: Loaded image "BOOTMON.json"
+    CPU: Model 1170
+    Type ? for help with PDPjs Debugger commands
+    R0=000000 R1=000000 R2=000000 R3=000000 R4=000000 R5=000000 
+    SP=000000 PC=140000 PS=000013 PI=000000 SL=000000 T0 N1 Z0 V1 C1 
+    140000: 000005                 RESET
+    g
+    >> g
+    running
+    Press ctrl-a to enter debugger, ctrl-c to terminate process
+    PDP-11 MONITOR V1.0
+
+    BOOT> help
+    COMMANDS ARE BOOT, HALT, TEST, DIAG, LIGHTS AND HELP
+    BOOT DEVICES ARE RK? RL? OR RP?
+    BOOT> stopped (30621509 instructions, 92444438 cycles, 13867 ms, 6666506 hz)
+    R0=001512 R1=000000 R2=000000 R3=000000 R4=000000 R5=000000 
+    SP=137522 PC=140074 PS=000004 PI=000000 SL=000000 T0 N0 Z1 V0 C0 
+    140074: 000001                 WAIT 
+    >> ?
+    >> ?
+    commands:
+    ?        help/print
+    a [#]    assemble
+    b [#]    breakpoint
+    c        clear output
+    d [#]    dump memory
+    e [#]    edit memory
+    g [#]    go [to #]
+    h        halt
+    if       eval expression
+    int [#]  request interrupt
+    k        stack trace
+    ln       list nearest symbol(s)
+    m        messages
+    p        step over
+    print    print expression
+    r        dump/set registers
+    reset    reset machine
+    s        set options
+    t [#]    trace
+    u [#]    unassemble
+    var      assign variable
+    ver      print version
+    >> r
+    >> r
+    R0=001512 R1=000000 R2=000000 R3=000000 R4=000000 R5=000000 
+    SP=137522 PC=140074 PS=000004 PI=000000 SL=000000 T0 N0 Z1 V0 C0 
+    140074: 000001                 WAIT 
+    >> u
+    >> u
+    140076: 005200                 INC   R0
+    140100: 005767 000014          TST   140120
+    140104: 001773                 BEQ   140074
+    140106: 012746 054000          MOV   #54000,-(SP)
+    140112: 016746 000002          MOV   140120,-(SP)
+    140116: 000002                 RTI  
+    140120: 000000                 HALT 
+    140122: 001477                 BEQ   140322
+    >> g
+    >> g
+    running
+    Press ctrl-a to enter debugger, ctrl-c to terminate process
