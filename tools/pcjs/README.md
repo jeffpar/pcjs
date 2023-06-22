@@ -59,7 +59,7 @@ You can begin interacting with the machine OR you can press CTRL-A to enter the 
 
 To destroy the machine, type `quit` (or press CTRL-C) at the debugger prompt.
 
-[PC.js](https://github.com/jeffpar/pcjs/tree/master/tools/pcjs) is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` machines so far.
+[PC.js](https://github.com/jeffpar/pcjs/tree/master/tools/pcjs) is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` and `pdp11` machines so far.
 
 This utility is very much a "work in progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
 
@@ -71,8 +71,12 @@ Limited support for XML-based machines now exists; eg:
 
 loads and runs the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
 
+And here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/panel/debugger/machine.xml):
+
+    pc.js --load=/machines/dec/pdp11/1170/panel/debugger/machine.xml
+
 ### Historical Notes
 
-One early use of this utility was running a set of [80386 CPU Tests](https://github.com/jeffpar/pcjs/tree/master/software/pcx86/test/cpu/80386) as a custom ROM image inside an [80386 Test Machine](test386.json5), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.
+One early use of this utility was running a set of [80386 CPU Tests](https://github.com/jeffpar/pcjs/blob/master/software/pcx86/test/cpu/80386/test386.asm) as a custom ROM image inside an [80386 Test Machine](https://github.com/jeffpar/pcjs/blob/master/tools/pcjs/test386.json5), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.
 
 The test program ([test386.asm](/software/pcx86/test/cpu/80386/test386.asm)) was carefully designed to be built as a binary (`test386.com`) that could either be run as a DOS program *or* loaded as a ROM image.  See [PCx86 CPU Tests](/software/pcx86/test/cpu/) for more information.

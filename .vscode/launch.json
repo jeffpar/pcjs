@@ -500,7 +500,7 @@
       }
     },
     {
-      "name": "pc.js /machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
+      "name": "pc.js pcx86 machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pcjs/pc.js",
@@ -521,7 +521,7 @@
       }
     },
     {
-      "name": "pc.js /machines/dec/pdp11/1170/panel/debugger/machine.xml",
+      "name": "pc.js pdp11 machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pcjs/pc.js",
