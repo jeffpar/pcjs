@@ -21,10 +21,10 @@ import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import JSONLib    from "../../machines/modules/v2/jsonlib.js";
 import strlib     from "../../machines/modules/v2/strlib.js";
-import { addMetaData, device, existsFile, getArchiveFiles, getFullPath, getHash, isArchiveFile, isTextFile, makeDir, printError, printf, readDir, readFile, readJSON, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
+import { addMetaData, device, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, isArchiveFile, isTextFile, makeDir, printError, printf, readDir, readFile, readJSON, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
 
 let pcjslib = new PCJSLib();
-let rootDir, sFileIndex, useServer;
+let rootDir, sFileIndexCache;
 
 /**
  * compareDisks(sDisk1, sDisk2)
@@ -249,9 +249,9 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
 
     let fSuccess = false;
     let dir = path.dirname(sPath);
-    makeDir(getFullPath(dir), true, argv['overwrite']);
+    makeDir(getLocalPath(dir), true, argv['overwrite']);
     if (attr & DiskInfo.ATTR.SUBDIR) {
-        fSuccess = makeDir(getFullPath(sPath), true);
+        fSuccess = makeDir(getLocalPath(sPath), true);
     } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
         let fPrinted = false;
         let fQuiet = argv['quiet'];
@@ -330,10 +330,10 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
                 db = BASConvert.modernize(db, true);
             }
         }
-        fSuccess = writeFile(getFullPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
+        fSuccess = writeFile(getLocalPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
     }
     if (fSuccess) {
-        fs.utimesSync(getFullPath(sPath), date, date);
+        fs.utimesSync(getLocalPath(sPath), date, date);
         if (files) {
             for (let file of files) {
                 if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, false, file.files)) {
@@ -344,21 +344,6 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
         }
     }
     return fSuccess;
-}
-
-/**
- * mapDiskToServer(diskFile)
- *
- * @param {string} diskFile
- * @param {boolean} [fRemote] (true to return remote address)
- * @returns {string}
- */
-function mapDiskToServer(diskFile, fRemote)
-{
-    if (useServer || !existsFile(getFullPath(diskFile)) || fRemote) {
-        diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
-    }
-    return diskFile;
 }
 
 /**
@@ -430,14 +415,14 @@ function processDisk(di, diskFile, argv, diskette)
                  * We cheat and search for matching hash values in the provided index; this is much faster than laboriously
                  * opening and searching all the other disk images, even when they DO contain pre-generated file tables.
                  */
-                if (sFileIndex === undefined) {
-                    sFileIndex = readFile(argv['index']);
-                    if (!sFileIndex) sFileIndex = null;
+                if (sFileIndexCache === undefined) {
+                    sFileIndexCache = readFile(argv['index']);
+                    if (!sFileIndexCache) sFileIndexCache = null;
                 }
                 let cMatches = 0;
-                if (sFileIndex) {
+                if (sFileIndexCache) {
                     let re = new RegExp("^" + desc[DiskInfo.FILEDESC.HASH] + ".*$", "gm"), match;
-                    while ((match = re.exec(sFileIndex))) {
+                    while ((match = re.exec(sFileIndexCache))) {
                         if (match[0].indexOf(diskFile) >= 0) continue;
                         if (!cMatches++) printf("see also:\n");
                         printf("%s\n", match[0]);
@@ -545,7 +530,7 @@ function processDisk(di, diskFile, argv, diskette)
             if (extractFolder || name == argv['extract']) {
                 let fSuccess = false;
                 if (argv['collection'] && !extractDir) {
-                    extractFolder = getFullPath(path.join(path.dirname(diskFile), "archive", extractFolder));
+                    extractFolder = getLocalPath(path.join(path.dirname(diskFile), "archive", extractFolder));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
                         extractFolder = extractFolder.replace("/disks/archive", "/archive");
                     }
@@ -611,7 +596,7 @@ function processDisk(di, diskFile, argv, diskette)
                 if (!warning) {
                     if (argv['rebuild']) {
                         printf("rebuilding %s\n", diskFile);
-                        fs.renameSync(sTempJSON, getFullPath(diskFile));
+                        fs.renameSync(sTempJSON, getLocalPath(diskFile));
                     } else {
                         fs.unlinkSync(sTempJSON);
                     }
@@ -726,7 +711,7 @@ function processDisk(di, diskFile, argv, diskette)
                     return aPossibleOptions[0];
                 };
                 let findConfig = function(configPath) {
-                    configPath = getFullPath(configPath);
+                    configPath = getLocalPath(configPath);
                     let configPossible;
                     let aPossibleConfigs = glob.sync(configPath);
                     let optionMemory = findOption(["kb"]);
@@ -819,7 +804,7 @@ function processDisk(di, diskFile, argv, diskette)
                     match = sFrontMatter.match(/\npermalink:.*\n/);
                     if (match) {
                         let n = match.index + match[0].length;
-                        sDiskPic = mapDiskToServer(sDiskPic, true);
+                        sDiskPic = getServerPath(sDiskPic, true);
                         sFrontMatter = sFrontMatter.slice(0, n) + "preview: " + sDiskPic + "\n" + sFrontMatter.slice(n);
                         sIndexNew = sFrontMatter + sIndexNew.slice(matchFrontMatter[0].length);
                     }
@@ -884,7 +869,7 @@ function processDisk(di, diskFile, argv, diskette)
          */
         let samples = "";
         if (diskFile.indexOf("/pcsig/") >= 0) {
-            let sampleSpec = path.join(path.dirname(getFullPath(diskette.path)), "archive", "**", "*.{ASM,BAS,DOC,TXT}");
+            let sampleSpec = path.join(path.dirname(getLocalPath(diskette.path)), "archive", "**", "*.{ASM,BAS,DOC,TXT}");
             let sampleFiles = glob.sync(sampleSpec);
             for (let sampleFile of sampleFiles) {
                 let sample = readFile(sampleFile);
@@ -966,7 +951,7 @@ function processDisk(di, diskFile, argv, diskette)
         }
         else if (sIndexNew != sIndex) {
             if (argv['rebuild']) {
-                if (writeFile(getFullPath(sIndexFile), sIndexNew, true, true)) {
+                if (writeFile(getLocalPath(sIndexFile), sIndexNew, true, true)) {
                     printf("\t%s index for \"%s\": %s\n", sAction, diskette.title, sIndexFile);
                 }
             } else {
@@ -1173,7 +1158,7 @@ function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
             }
         }
         if (di) {
-            let sDir = getFullPath(diskFile.replace(/\.[a-z]+$/i, ""));
+            let sDir = getLocalPath(diskFile.replace(/\.[a-z]+$/i, ""));
             let aDiskFiles = glob.sync(path.join(sDir, "**"));
             for (let i = 0; i < aDiskFiles.length; i++) {
                 addMetaData(di, sDir, aDiskFiles[i].slice(sDir.length));
@@ -1251,7 +1236,7 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);
         if (strlib.getExtension(diskName) == "json") {
-            diskFile = mapDiskToServer(diskFile);
+            diskFile = getServerPath(diskFile);
             if (diskFile.startsWith("http")) {
                 printf("fetching %s\n", diskFile);
                 let response = await got(diskFile);
@@ -1295,7 +1280,7 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
  */
 function readFileAsync(sFile, encoding = "utf8")
 {
-    sFile = getFullPath(sFile);
+    sFile = getLocalPath(sFile);
     return new Promise((resolve, reject) => {
         fs.readFile(sFile, encoding, (err, data) => {
             if (err) reject(err);
@@ -1314,7 +1299,7 @@ function processAll(all, argv)
 {
     if (all && typeof all == "string") {
         let max = +argv['max'] || 0;
-        let asFiles = glob.sync(getFullPath(all));
+        let asFiles = glob.sync(getLocalPath(all));
         if (asFiles.length) {
             let outdir = argv['output'];                // if specified, --output is assumed to be a directory
             if (!outdir || typeof outdir == "boolean") {
@@ -1500,7 +1485,6 @@ function main(argc, argv)
     setRootDir(rootDir);
 
     Device.DEBUG = !!argv['debug'];
-    useServer = !!argv['server'];
 
     if (!argv['quiet']) {
         printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s", options) : ""));

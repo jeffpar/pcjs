@@ -15,49 +15,9 @@ import PCJSLib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import netio      from "../../machines/modules/v3/netio.js";
 import strlib     from "../../machines/modules/v2/strlib.js"
+import { device, getLocalPath, printError, printf, sprintf, setRootDir } from "../modules/disklib.js";
 
-let device = new Device("node");
-let printf = device.printf.bind(device);
-let sprintf = device.sprintf.bind(device);
 let pcjslib = new PCJSLib();
-let moduleDir, rootDir;
-
-function printError(err)
-{
-    printf("%s\n", err.message);
-}
-
-/**
- * getFullPath(sFile)
- *
- * @param {string} sFile
- * @returns {string}
- */
-function getFullPath(sFile)
-{
-    if (sFile[0] == '~') {
-        sFile = os.homedir() + sFile.substr(1);
-    }
-    else {
-        sFile = getServerPath(sFile);
-    }
-    return sFile;
-}
-
-/**
- * getServerPath(sFile)
- *
- * @param {string} sFile
- * @returns {string}
- */
-function getServerPath(sFile)
-{
-    let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
-    if (match) {
-        sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software"? "" : "disks"), match[2], match[3]);
-    }
-    return sFile;
-}
 
 /**
  * @class FileImage
@@ -135,7 +95,7 @@ class FileImage {
             encoding = "utf8";
         }
         let options = {encoding: encoding};
-        let sFilePath = getFullPath(sFile);
+        let sFilePath = getLocalPath(sFile);
 
         if (!this.sFilePath) {
             this.sFilePath = sFilePath;
@@ -917,9 +877,9 @@ function main(argc, argv)
     let argv0 = argv[0].split(' ');
     let options = argv0.slice(1).join(' ');
 
+    setRootDir(path.join(path.dirname(argv0[0]), "../.."));
+
     Device.DEBUG = !!argv['debug'];
-    moduleDir = path.dirname(argv0[0]);
-    rootDir = path.join(moduleDir, "../..");
 
     if (!argv['quiet']) {
         printf("FileImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s", options) : ""));

@@ -47,7 +47,7 @@ const asArchiveFileExts = [".ARC", ".ZIP"];       // order must match StreamZip.
  */
 const asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
 
-let nMaxDefault = 512, nMaxInit, nMaxCount, rootDir = ".";
+let nMaxDefault = 512, nMaxInit, nMaxCount;
 
 /**
  * checkArchive(sPath, fExt)
@@ -86,7 +86,7 @@ function checkArchive(sPath, fExt)
 export function existsDir(sDir, fError = true)
 {
     try {
-        sDir = getFullPath(sDir);
+        sDir = getLocalPath(sDir);
         let stat = fs.statSync(sDir);
         return stat.isDirectory();
     } catch(err) {
@@ -107,7 +107,7 @@ export function existsDir(sDir, fError = true)
 export function existsFile(sFile, fError = true)
 {
     try {
-        sFile = getFullPath(sFile);
+        sFile = getLocalPath(sFile);
         return fs.existsSync(sFile);
     } catch(err) {
         if (fError) printError(err);
@@ -134,20 +134,35 @@ export function getHash(data, type = "md5")
 }
 
 /**
- * getFullPath(sFile)
+ * getLocalPath(sFile)
  *
  * @param {string} sFile
  * @returns {string}
  */
-export function getFullPath(sFile)
+export function getLocalPath(sFile)
 {
     if (sFile[0] == '~') {
         sFile = os.homedir() + sFile.substr(1);
     }
     else {
-        sFile = FileLib.getServerPath(sFile);
+        sFile = FileLib.getLocalPath(sFile);
     }
     return sFile;
+}
+
+/**
+ * getServerPath(diskFile, fRemote)
+ *
+ * @param {string} diskFile
+ * @param {boolean} [fRemote] (true to return remote address)
+ * @returns {string}
+ */
+export function getServerPath(diskFile, fRemote)
+{
+    if (fRemote || !existsFile(getLocalPath(diskFile))) {
+        diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
+    }
+    return diskFile;
 }
 
 /**
@@ -314,7 +329,7 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
          * When we're given a list of files, we don't pick a default label; use --label if you want one.
          */
     }
-    sDir = getFullPath(sDir);
+    sDir = getLocalPath(sDir);
     let readDone = function(aFileData) {
         let db = new DataBuffer();
         let di = new DiskInfo(device);
@@ -625,7 +640,7 @@ export function readFile(sFile, encoding = "utf8")
     let data;
     if (sFile) {
         try {
-            sFile = getFullPath(sFile);
+            sFile = getLocalPath(sFile);
             data = FileLib.readFileSync(sFile, encoding);
         } catch(err) {
             printError(err);
@@ -680,7 +695,7 @@ export function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite 
             }
             if (data) {
                 if (!fQuiet) printf("writing %s...\n", diskFile);
-                diskFile = getFullPath(diskFile);
+                diskFile = getLocalPath(diskFile);
                 let sDir = path.dirname(diskFile);
                 makeDir(sDir, true);
                 if (fExists) fs.unlinkSync(diskFile);

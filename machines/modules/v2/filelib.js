@@ -19,12 +19,12 @@ let rootDir = "";
  */
 export default class FileLib {
     /**
-     * getServerPath(sFile)
+     * getLocalPath(sFile)
      *
      * @param {string} sFile
      * @returns {string}
      */
-    static getServerPath(sFile)
+    static getLocalPath(sFile)
     {
         /*
          * In addition to disk server paths, we had to add /machines (for diskette config files), /software
@@ -48,7 +48,7 @@ export default class FileLib {
     {
         let data;
         if (sFile && sFile.indexOf("http") != 0) {
-            sFile = FileLib.getServerPath(sFile);
+            sFile = FileLib.getLocalPath(sFile);
             data = fs.readFileSync(sFile, encoding);
             if (!encoding) data = new DataBuffer(data);
         }
