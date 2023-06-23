@@ -588,11 +588,11 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     /*
-     * If --checkpage, then get the disk's listing and see if it's up-to-date in the website's index.md.
+     * If --checkpage, then get the disk's listing and see if it's up-to-date in the website's README.md.
      *
      * Additionally, if the page doesn't have a machine, add one, tailored to the software's requirements as best we can.
      *
-     * You must ALSO specify --rebuild if you want the index.md updated (or created) as well.
+     * You must ALSO specify --rebuild if you want the README.md updated (or created) as well.
      */
     if (argv['checkpage'] && diskette && !diskette.hidden && !diskette.demos) {
         /*
@@ -616,7 +616,7 @@ function processDisk(di, diskFile, argv, diskette)
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
         let sHeading = "\n### Directory of " + diskette.name + "\n";
-        let sIndexFile = path.join(path.dirname(replaceServerPrefix(diskFile, "/software/")), "index.md");
+        let sIndexFile = path.join(path.dirname(replaceServerPrefix(diskFile, "/software/")), "README.md");
         if (existsFile(sIndexFile)) {
             sIndex = sIndexNew = readFile(sIndexFile);
             sAction = "updated";
@@ -1111,7 +1111,7 @@ function getArchiveOffset(sArchive, arcType, sOffset)
  * @param {boolean} [forceBPB]
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
- * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
  * @returns {DiskInfo|null}
  */
 function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
@@ -1213,7 +1213,7 @@ async function processDiskAsync(input, argv)
  * @param {boolean} [forceBPB]
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
- * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
  */
 async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
 {
