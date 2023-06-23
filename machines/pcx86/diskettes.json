@@ -2553,7 +2553,7 @@
 									"@photo": "jpg",
 									"@format": "PC360K",
 									"@kryoflux": true,
-									"@args": "--suppData=/software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md"
+									"@args": "--suppData=/software/pcx86/sys/ext/softlogic/carousel/2.0.3/README.md"
 								}
 							]
 						},
@@ -2581,7 +2581,7 @@
 									"@diskette": "DOUBLEDOS.json",
 									"@format": "PC360K",
 									"@kryoflux": true,
-									"@args": "--suppData=/software/pcx86/sys/ext/softlogic/doubledos/2.1/index.md"
+									"@args": "--suppData=/software/pcx86/sys/ext/softlogic/doubledos/2.1/README.md"
 								}
 							]
 						},
@@ -5126,7 +5126,7 @@
 							"@diskette": "BOP-PROG.json",
 							"@format": "PC360K",
 							"@kryoflux": true,
-							"@args": "--suppData=/software/pcx86/game/other/1985/balance_of_power/index.md"
+							"@args": "--suppData=/software/pcx86/game/other/1985/balance_of_power/README.md"
 						},
 						{
 							"@title": "Balance of Power (Setup Disk)",
@@ -5393,7 +5393,7 @@
 							"@archive": ".img",
 							"@format": "PC360K",
 							"@kryoflux": true,
-							"@args": "--suppData=/software/pcx86/game/other/1990/life_and_death_ii/index.md"
+							"@args": "--suppData=/software/pcx86/game/other/1990/life_and_death_ii/README.md"
 						},
 						{
 							"@title": "Life & Death II (Disk 2)",
@@ -5441,7 +5441,7 @@
 							"@archive": "folder",
 							"@format": "PC360K",
 							"@kryoflux": true,
-							"@args": "--suppData=/software/pcx86/game/other/1985/nine_princes/index.md"
+							"@args": "--suppData=/software/pcx86/game/other/1985/nine_princes/README.md"
 						},
 						{
 							"@title": "Nine Princes in Amber (Disk B)",
@@ -6117,7 +6117,7 @@
 								"@diskette": "MSWORD-110.json",
 								"@format": "PC320K",
 								"@kryoflux": true,
-								"@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/index.md"
+								"@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/README.md"
 							}
 						]
 					},
@@ -6129,7 +6129,7 @@
 								"@diskette": "MSWORD-115-PROGRAM-BACKUP.json",
 								"@format": "PC360K",
 								"@kryoflux": true,
-								"@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/index.md"
+								"@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/README.md"
 							},
 							{
 								"@title": "MS Word 1.15 (Utilities)",
@@ -6151,7 +6151,7 @@
 								"@diskette": "WORD20-DISK1.json",
 								"@format": "PC360K",
 								"@kryoflux": true,
-								"@args": "--suppData=/software/pcx86/app/microsoft/word/2.00/index.md",
+								"@args": "--suppData=/software/pcx86/app/microsoft/word/2.00/README.md",
 								"@photo": "jpg",
 								"@source": "https://winworldpc.com/product/microsoft-word/2x-dos"
 							},
@@ -6160,7 +6160,7 @@
 								"@diskette": "WORD20-DISK1-BACKUP.json",
 								"@format": "PC360K",
 								"@kryoflux": true,
-								"@args": "--suppData=/software/pcx86/app/microsoft/word/2.00/index.md",
+								"@args": "--suppData=/software/pcx86/app/microsoft/word/2.00/README.md",
 								"@photo": "jpg",
 								"@source": "https://winworldpc.com/product/microsoft-word/2x-dos"
 							},

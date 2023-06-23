@@ -310,7 +310,7 @@ export function addMetaData(di, sDir, sPath, aFiles)
  * @param {boolean} [verbose] (true for verbose output)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
- * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
  * @param {function(DiskInfo)} [done] (optional function to call on completion)
  */
 export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
