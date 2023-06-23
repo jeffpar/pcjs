@@ -166,28 +166,27 @@ export function getServerPath(diskFile, fRemote)
 }
 
 /**
- * getTargetValue(sTarget)
+ * getServerPrefix(diskFile)
  *
- * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
- * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
- * equivalent to 10240K).
- *
- * @param {string} sTarget
- * @returns {number} (target Kb for disk image, 0 if no target)
+ * @param {string} diskFile
+ * @returns {string|undefined}
  */
-function getTargetValue(sTarget)
+export function getServerPrefix(diskFile)
 {
-    let target = 0;
-    if (sTarget) {
-        let match = sTarget.match(/^(PC|)([0-9]+)([KM]*)/i);
-        if (match) {
-            target = +match[2];
-            if (match[3].toUpperCase() == 'M') {
-                target *= 1024;
-            }
-        }
-    }
-    return target;
+    let match = diskFile.match(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)\//);
+    return match && (match[1] + match[2]);
+}
+
+/**
+ * replaceServerPrefix(diskFile, sReplace)
+ *
+ * @param {string} diskFile
+ * @param {string} sReplace (eg, "/software/")
+ * @returns {string}
+ */
+export function replaceServerPrefix(diskFile, sReplace)
+{
+    return diskFile.replace(/\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|pcsigdisks|pcsig[0-9a-z-]*-disks|private)\//, sReplace)
 }
 
 /**

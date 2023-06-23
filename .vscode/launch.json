@@ -1058,7 +1058,7 @@
       }
     },
     {
-      "name": "PCx86 Saveable Machine",
+      "name": "PCjs Saveable Machine",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/",
@@ -1070,7 +1070,7 @@
       }
     },
     {
-      "name": "PCx86 Saved Machine Test Page",
+      "name": "PCjs Saved Machine Test Page",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/test/saved/",
@@ -1079,6 +1079,18 @@
         "hidden": false,
         "group": "tools",
         "order": 40
+      }
+    },
+    {
+      "name": "Blog: Puzzled Programmers",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000//blog/2017/09/21/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "user",
+        "order": 45
       }
     },
     {

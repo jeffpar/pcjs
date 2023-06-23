@@ -21,7 +21,7 @@ import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import JSONLib    from "../../machines/modules/v2/jsonlib.js";
 import strlib     from "../../machines/modules/v2/strlib.js";
-import { addMetaData, device, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, isArchiveFile, isTextFile, makeDir, printError, printf, readDir, readFile, readJSON, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
+import { addMetaData, device, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isTextFile, makeDir, printError, printf, readDir, readFile, readJSON, replaceServerPrefix, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
 
 let pcjslib = new PCJSLib();
 let rootDir, sFileIndexCache;
@@ -145,18 +145,6 @@ function dumpSector(di, sector, offset = 0, limit = -1)
     }
     if (sBytes) sLines += sprintf("%-48s %-16s\n", sBytes, sChars);
     return sLines;
-}
-
-/**
- * getDiskServer(diskFile)
- *
- * @param {string} diskFile
- * @returns {string|undefined}
- */
-function getDiskServer(diskFile)
-{
-    let match = diskFile.match(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)\//);
-    return match && (match[1] + match[2]);
 }
 
 /**
@@ -628,7 +616,7 @@ function processDisk(di, diskFile, argv, diskette)
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
         let sHeading = "\n### Directory of " + diskette.name + "\n";
-        let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|pcsigdisks|pcsig[0-9a-z-]*-disks|private)\//, "/software/")), "index.md");
+        let sIndexFile = path.join(path.dirname(replaceServerPrefix(diskFile, "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
             sIndex = sIndexNew = readFile(sIndexFile);
             sAction = "updated";
@@ -783,7 +771,7 @@ function processDisk(di, diskFile, argv, diskette)
             sDiskPic = diskette.path.replace(".json", ".png");
         }
         if (existsFile(sDiskPic)) {
-            let sDiskServer = getDiskServer(sDiskPic);
+            let sDiskServer = getServerPrefix(sDiskPic);
             if (sDiskServer) {
                 sListing += "\n![" + diskette.name + "]({{ site.software." + sDiskServer.replace("disks/", "") + ".server }}" + sDiskPic.slice(sDiskServer.length + 1) + ")\n";
             }
