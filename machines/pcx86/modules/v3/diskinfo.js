@@ -2562,7 +2562,7 @@ export default class DiskInfo {
         let aLBA = [];
         let cluster = dir.cluster;
         if (cluster) {
-            do {
+            while (cluster <= vol.clusMax) {
                 if (cluster < DiskInfo.FAT12.CLUSNUM_MIN) {
                     break;
                 }
@@ -2571,8 +2571,7 @@ export default class DiskInfo {
                     aLBA.push(vol.lbaStart + vba++);
                 }
                 cluster = this.getClusterEntry(vol, cluster, 0) | this.getClusterEntry(vol, cluster, 1);
-            } while (cluster <= vol.clusMax);
-
+            }
             if (cluster < DiskInfo.FAT12.CLUSNUM_MIN || cluster == vol.clusMax + 1 /* aka CLUSNUM_BAD */) {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %s contains invalid cluster (%d)\n", this.diskName, dir.name, cluster);
             }
@@ -4190,13 +4189,13 @@ DiskInfo.FAT16 = {
  * For more details on MODTIME and MODDATE, see buildDateTime().
  */
 DiskInfo.DIRENT = {
-    NAME:           0x000,      // 8 bytes
-    EXT:            0x008,      // 3 bytes
-    ATTR:           0x00B,      // 1 byte
-    MODTIME:        0x016,      // 2 bytes: bits 15-11 is hour (0-31), bits 10-5 is minute (0-63), bits 4-0 is second/2 (0-31)
-    MODDATE:        0x018,      // 2 bytes: bits 15-9 is year (0 for 1980, 127 for 2107), bits 8-5 is month (1-12), bits 4-0 is day (1-31)
-    CLUSTER:        0x01A,      // 2 bytes
-    SIZE:           0x01C,      // 4 bytes (typically zero for subdirectories)
+    NAME:           0x00,       // 8 bytes
+    EXT:            0x08,       // 3 bytes
+    ATTR:           0x0B,       // 1 byte
+    MODTIME:        0x16,       // 2 bytes: bits 15-11 is hour (0-31), bits 10-5 is minute (0-63), bits 4-0 is second/2 (0-31)
+    MODDATE:        0x18,       // 2 bytes: bits 15-9 is year (0 for 1980, 127 for 2107), bits 8-5 is month (1-12), bits 4-0 is day (1-31)
+    CLUSTER:        0x1A,       // 2 bytes
+    SIZE:           0x1C,       // 4 bytes (typically zero for subdirectories)
     LENGTH:         0x20,       // 32 bytes total
     UNUSED:         0x00,       // indicates this and all subsequent directory entries are unused
     INVALID:        0xE5        // indicates this directory entry is unused

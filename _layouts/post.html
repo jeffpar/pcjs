@@ -8,7 +8,9 @@ layout: default
 
 {{content}}
 
-<p class="view"><a href="{{ site.author_url }}">{{ page.author | default: site.author }}</a><br>
+<p class="pcjs-page-link">[<a href="{{ site.github.pages }}/blog/_posts/{{ page.date | date: '%Y' }}/{{ page.date | date: '%Y-%m-%d' }}-{{ page.title | slugify }}.md">GitHub Source</a>]</p>
+
+<p class="pcjs-page-signature"><a href="{{ site.author_url }}">{{ page.author | default: site.author }}</a><br>
 	<small>{{ page.date | date: "%b %-d, %Y" }}</small>
 </p>
 {% if page.tags and page.tags[0] %}

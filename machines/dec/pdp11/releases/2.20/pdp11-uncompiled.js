@@ -19444,7 +19444,7 @@ class PC11 extends Component {
          * when this flag is set, setBinding() allows local tape bindings and informs initBus() to update the
          * "listTapes" binding accordingly.
          */
-        this.fLocalTapes = (!Web.isMobile() && window && 'FileReader' in window);
+        this.fLocalTapes = (!Web.isMobile() && 'FileReader' in globals.window);
 
         this.irqReader = null;
         this.timerReader = -1;
@@ -19755,7 +19755,7 @@ class PC11 extends Component {
          * to the save/restore data.
          */
         if (sTapePath == PC11.SOURCE.REMOTE) {
-            sTapePath = window.prompt("Enter the URL of a remote tape image.", "") || "";
+            sTapePath = globals.window.prompt("Enter the URL of a remote tape image.", "") || "";
             if (!sTapePath) return;
             sTapeName = Str.getBaseName(sTapePath);
             this.printf(Messages.STATUS, 'Attempting to load %s as "%s"\n', sTapePath, sTapeName);

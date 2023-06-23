@@ -47,7 +47,7 @@ const asArchiveFileExts = [".ARC", ".ZIP"];       // order must match StreamZip.
  */
 const asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
 
-let nMaxDefault = 512, nMaxInit, nMaxCount, rootDir = ".";
+let nMaxDefault = 512, nMaxInit, nMaxCount;
 
 /**
  * checkArchive(sPath, fExt)
@@ -86,7 +86,7 @@ function checkArchive(sPath, fExt)
 export function existsDir(sDir, fError = true)
 {
     try {
-        sDir = getFullPath(sDir);
+        sDir = getLocalPath(sDir);
         let stat = fs.statSync(sDir);
         return stat.isDirectory();
     } catch(err) {
@@ -107,7 +107,7 @@ export function existsDir(sDir, fError = true)
 export function existsFile(sFile, fError = true)
 {
     try {
-        sFile = getFullPath(sFile);
+        sFile = getLocalPath(sFile);
         return fs.existsSync(sFile);
     } catch(err) {
         if (fError) printError(err);
@@ -134,45 +134,59 @@ export function getHash(data, type = "md5")
 }
 
 /**
- * getFullPath(sFile)
+ * getLocalPath(sFile)
  *
  * @param {string} sFile
  * @returns {string}
  */
-export function getFullPath(sFile)
+export function getLocalPath(sFile)
 {
     if (sFile[0] == '~') {
         sFile = os.homedir() + sFile.substr(1);
     }
     else {
-        sFile = FileLib.getServerPath(sFile);
+        sFile = FileLib.getLocalPath(sFile);
     }
     return sFile;
 }
 
 /**
- * getTargetValue(sTarget)
+ * getServerPath(diskFile, fRemote)
  *
- * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
- * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
- * equivalent to 10240K).
- *
- * @param {string} sTarget
- * @returns {number} (target Kb for disk image, 0 if no target)
+ * @param {string} diskFile
+ * @param {boolean} [fRemote] (true to return remote address)
+ * @returns {string}
  */
-function getTargetValue(sTarget)
+export function getServerPath(diskFile, fRemote)
 {
-    let target = 0;
-    if (sTarget) {
-        let match = sTarget.match(/^(PC|)([0-9]+)([KM]*)/i);
-        if (match) {
-            target = +match[2];
-            if (match[3].toUpperCase() == 'M') {
-                target *= 1024;
-            }
-        }
+    if (fRemote || !existsFile(getLocalPath(diskFile))) {
+        diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
     }
-    return target;
+    return diskFile;
+}
+
+/**
+ * getServerPrefix(diskFile)
+ *
+ * @param {string} diskFile
+ * @returns {string|undefined}
+ */
+export function getServerPrefix(diskFile)
+{
+    let match = diskFile.match(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)\//);
+    return match && (match[1] + match[2]);
+}
+
+/**
+ * replaceServerPrefix(diskFile, sReplace)
+ *
+ * @param {string} diskFile
+ * @param {string} sReplace (eg, "/software/")
+ * @returns {string}
+ */
+export function replaceServerPrefix(diskFile, sReplace)
+{
+    return diskFile.replace(/\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|pcsigdisks|pcsig[0-9a-z-]*-disks|private)\//, sReplace)
 }
 
 /**
@@ -283,7 +297,7 @@ export function addMetaData(di, sDir, sPath, aFiles)
 }
 
 /**
- * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, done, sectorIDs, sectorErrors, suppData)
+ * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
  *
  * @param {string} sDir (directory name)
  * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
@@ -294,13 +308,12 @@ export function addMetaData(di, sDir, sPath, aFiles)
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
  * @param {boolean} [verbose] (true for verbose output)
- * @param {function(DiskInfo)} [done] (optional function to call on completion)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
- * @returns {DiskInfo|null}
+ * @param {function(DiskInfo)} [done] (optional function to call on completion)
  */
-export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, done, sectorIDs, sectorErrors, suppData)
+export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
 {
     let di;
     let diskName = path.basename(sDir);
@@ -314,7 +327,7 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
          * When we're given a list of files, we don't pick a default label; use --label if you want one.
          */
     }
-    sDir = getFullPath(sDir);
+    sDir = getLocalPath(sDir);
     let readDone = function(aFileData) {
         let db = new DataBuffer();
         let di = new DiskInfo(device);
@@ -326,36 +339,32 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
             for (let i = 0; i < aFileData.length; i++) {
                 addMetaData(di, sDir, aFileData[i].path, aFileData[i].files);
             }
-            if (done) {
-                done(di);
-                return null;
-            }
         }
-        return di;
+        done(di);
     };
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
-        if (arcType) {
-            readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, verbose, readDone);
+        if (!arcType) {
+            readDirFiles(sDir, sLabel, fNormalize, 0, readDone);
         } else {
-            di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
+            readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, verbose, readDone);
         }
     } catch(err) {
         printError(err);
     }
-    return di;
 }
 
 /**
- * readDirFiles(sDir, sLabel, fNormalize, iLevel)
+ * readDirFiles(sDir, sLabel, fNormalize, iLevel, done)
  *
  * @param {string} sDir (directory name)
  * @param {boolean|null} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [iLevel] (current directory level, primarily for diagnostic purposes only; zero if unspecified)
+ * @param {function(Array.<FileData>)} [done] (optional function to call on completion)
  * @returns {Array.<FileData>}
  */
-function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
+function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
 {
     let aFileData = [];
 
@@ -456,6 +465,9 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
     }
     if (iFile < asFiles.length && nMaxCount <= 0) {
         printf("warning: %d file limit reached, use --maxfiles # to increase\n", nMaxInit);
+    }
+    if (done) {
+        done(aFileData);
     }
     return aFileData;
 }
@@ -625,7 +637,7 @@ export function readFile(sFile, encoding = "utf8")
     let data;
     if (sFile) {
         try {
-            sFile = getFullPath(sFile);
+            sFile = getLocalPath(sFile);
             data = FileLib.readFileSync(sFile, encoding);
         } catch(err) {
             printError(err);
@@ -680,7 +692,7 @@ export function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite 
             }
             if (data) {
                 if (!fQuiet) printf("writing %s...\n", diskFile);
-                diskFile = getFullPath(diskFile);
+                diskFile = getLocalPath(diskFile);
                 let sDir = path.dirname(diskFile);
                 makeDir(sDir, true);
                 if (fExists) fs.unlinkSync(diskFile);

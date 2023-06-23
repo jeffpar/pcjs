@@ -500,7 +500,7 @@
       }
     },
     {
-      "name": "pc.js machine.xml",
+      "name": "pc.js pcx86 machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pcjs/pc.js",
@@ -521,14 +521,15 @@
       }
     },
     {
-      "name": "pdp11.js",
+      "name": "pc.js pdp11 machine.xml",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/machines/dec/pdp11/bin/pdp11.js",
+      "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
-        "--cmd=load ../1170/panel/debugger/machine.xml"
+        "--load=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
+        "--debug"
       ],
-      "cwd": "${workspaceFolder}/machines/dec/pdp11/bin",
+      "cwd": "${workspaceFolder}/tools/pcjs",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1057,7 +1058,7 @@
       }
     },
     {
-      "name": "PCx86 Saveable Machine",
+      "name": "PCjs Saveable Machine",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/",
@@ -1069,7 +1070,7 @@
       }
     },
     {
-      "name": "PCx86 Saved Machine Test Page",
+      "name": "PCjs Saved Machine Test Page",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/test/saved/",
@@ -1078,6 +1079,18 @@
         "hidden": false,
         "group": "tools",
         "order": 40
+      }
+    },
+    {
+      "name": "Blog: Puzzled Programmers",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000//blog/2017/09/21/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "user",
+        "order": 45
       }
     },
     {
@@ -1469,9 +1482,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=NU400-ADV-DISK1",
-        "--checkpage",
-        "--rebuild"
+        "--collection",
+        "--checkpage"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
