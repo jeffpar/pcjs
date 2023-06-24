@@ -59,7 +59,7 @@
   ],
   "cpu": {
     "id": "cpu",
-    "name": "",
+    "name": "Intel 80386",
     "model": 80386,
     "clock": 0,
     "multiplier": 1,
@@ -67,22 +67,22 @@
   },
   "keyboard": {
     "id": "keyboard",
-    "name": "",
-    "model": ""
+    "name": "PC AT Keyboard",
+    "model": "US84"
   },
   "fdc": {
     "id": "fdcNEC",
-    "name": "",
-    "autoMount": {
-      "A": {
-        "name": "COMPAQ MS-DOS 3.31 (Disk 2)",
-        "path": "/diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-DISK2.json"
-      },
-      "B": {
-        "name": "COMPAQ MS-DOS 3.31 (Disk 3)",
-        "path": "/diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-DISK3.json"
+  },
+  "hdc": {
+    "id": "hdcAT",
+    "type": "AT",
+    "drives": [
+      {
+        "name": "10Mb Hard Disk",
+        "type": 1,
+        "path": "archive/MSDOS.json"
       }
-    }
+    ]
   },
   "chipset": {
     "id": "chipset",

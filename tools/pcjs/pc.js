@@ -456,10 +456,23 @@ function buildDisk(sProgram)
                 if (desc) aFileDescs.push(desc);
             }
             let dbBoot = getDiskSector(diSystem, 0);
+            /*
+             * For reasons that are unclear at the moment, the MS-DOS 3.20 boot sector did not rely on the
+             * DL register containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk); instead,
+             * whenever the operating system wrote the boot sector to the media, it would insert the media's
+             * drive number at offset 0x1fd (before the 0x55,0xAA signature).  So that's we do, too.
+             *
+             * Wikipedia claims this was done "only in DOS 3.2 to 3.31 boot sectors" and that in "OS/2 1.0
+             * and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".  Something
+             * to study later.
+             */
+            if (dbBoot) {
+                dbBoot.writeUInt8(0x80, 0x1fd);
+            }
             let done = function(di) {
                 di.updateBootSector(dbBoot);
                 di.updateBootSector(dbMBR, -1);
-                writeDisk("MSDOS.json", di, false, 0, true, true);
+                writeDisk("archive/MSDOS.json", di, false, 0, true, true);
             }
             readDir("archive/MSDOS320-C400-JSON/", 0, 0, "PCJS", null, false, 10240, 1024, false, null, null, aFileDescs, done);
         }

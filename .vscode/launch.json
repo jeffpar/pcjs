@@ -548,6 +548,7 @@
       "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
         "pkunzip.exe",
+        "--load=compaq386",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pcjs",
