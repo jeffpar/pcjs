@@ -463,7 +463,7 @@ function buildDisk(sProgram)
     sProgram = sProgram.toUpperCase();
     if (sProgram.match(/\.(COM|EXE|BAT)/)) {
         let diSystem = readDisk("/diskettes/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json");
-        let dbMBR = readFile(path.join(pcjsDir, "MSDOS-MBR-10M.bin"), null);
+        let dbMBR = readFile(path.join(pcjsDir, "MSDOS.mbr"), null);
         if (diSystem && dbMBR) {
             let aFileDescs = [];
             let aFileNames = ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"];
