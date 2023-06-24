@@ -109,12 +109,12 @@ export default class PCJSLib {
                         sValue = quoteMatch[2];
                     }
                 }
+                if (typeof argv[sArg] == "number") {
+                    sArg = '#' + sArg;      // avoid conflict with the built-in 'length' property
+                }
                 if (!argv.hasOwnProperty(sArg)) {
                     argv[sArg] = sValue;
                     continue;
-                }
-                if (typeof argv[sArg] == "number") {
-                    sArg = '#' + sArg;      // avoid conflict with the built-in 'length' property
                 }
                 if (!Array.isArray(argv[sArg])) {
                     argv[sArg] = [argv[sArg]];

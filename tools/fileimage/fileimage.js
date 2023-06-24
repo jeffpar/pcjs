@@ -9,7 +9,6 @@
  */
 
 import fs         from "fs";
-import os         from "os";
 import path       from "path";
 import PCJSLib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/v3/device.js";
@@ -30,10 +29,10 @@ class FileImage {
      * @param {boolean|string} [fDecimal] forces decimal output if not undefined
      * @param {number|string} [offDump]
      * @param {number|string} [lenDump]
-     * @param {number|string} [nWidthDump]
+     * @param {number|string} [rowBytes]
      * @param {string} [symbolFormat]
      */
-    constructor(sFormat, fComments, fDecimal, offDump, lenDump, nWidthDump, symbolFormat)
+    constructor(sFormat, fComments, fDecimal, offDump, lenDump, rowBytes, symbolFormat)
     {
         this.fDebug = false;
         this.sFormat = (sFormat || FileImage.FORMAT.JSON);
@@ -43,7 +42,7 @@ class FileImage {
         this.fDecimal = fDecimal;
         this.offDump = +offDump || 0;
         this.lenDump = +lenDump || 0;
-        this.nWidthDump = +nWidthDump || (fComments? 16 : 32);
+        this.rowBytes = +rowBytes || (fComments? 16 : 32);
         this.symbolFormat = symbolFormat || "";
         this.buf = null;
         this.addrLoad = null;
@@ -207,13 +206,41 @@ class FileImage {
                         values = json['values'];
                         bytes = ((json['width'] || 8) / 8);
                     }
+                    else if ((values = json['bytes'])) {
+                        bytes = 1;
+                    }
+                    else if ((values = json['words'])) {
+                        bytes = 2;
+                    }
                     else if ((values = json['longs']) || (values = json['data'])) {
                         bytes = 4;
-                    } else if ((values = json['words'])) {
-                        bytes = 2;
-                    } else if (Array.isArray(json)) {
+                    }
+                    else if (Array.isArray(json)) {
                         bytes = 1;
                         values = json;
+                    }
+                    else {
+                        let imageInfo = json['imageInfo'];
+                        if (imageInfo && imageInfo['type'] == "CHS") {
+                            values = [], bytes = 4;
+                            let cylinders = json['diskData'];
+                            for (let c = 0; c < cylinders.length; c++) {
+                                let heads = cylinders[c];
+                                for (let h = 0; h < heads.length; h++) {
+                                    let sectors = heads[h];
+                                    for (let s = 0; s < sectors.length; s++) {
+                                        let dw = 0;
+                                        let sector = sectors[s];
+                                        let data = sector['d'];
+                                        let dwords = sector['l'] / bytes;
+                                        for (let i = 0; i < dwords; i++) {
+                                            if (i < data.length) dw = data[i];
+                                            values.push(dw);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     if (values) {
                         for (i = 0; i < values.length; i++) {
@@ -228,7 +255,7 @@ class FileImage {
             }
             else {
                 /*
-                 * Treat the incoming string data as HEX (ie, a series of byte values encoded in hex, separated by whitespace)
+                 * Treat the string as a series of hex byte values, separated by whitespace.
                  */
                 let as = buf.split(/\s+/);
                 for (i = 0; i < as.length; i++) {
@@ -303,7 +330,7 @@ class FileImage {
     }
 
     /**
-     * dumpBuffer(sKey, buf, len, cbItem, offDump, lenDump, nWidthDump)
+     * dumpBuffer(sKey, buf, len, cbItem, offDump, lenDump, rowBytes)
      *
      * @this {FileImage}
      * @param {String} sKey is name of buffer data element
@@ -312,10 +339,10 @@ class FileImage {
      * @param {number} cbItem is either 1 or 4, to dump bytes or dwords respectively
      * @param {number} [offDump] is a relative offset (default is 0; see constructor)
      * @param {number} [lenDump] is a relative length (default is 0; see constructor)
-     * @param {number} [nWidthDump] is an alternate width (default is 16; see constructor)
+     * @param {number} [rowBytes] is an alternate row length (default is 16; see constructor)
      * @returns {string} hex (or decimal) representation of the data
      */
-    dumpBuffer(sKey, buf, len, cbItem, offDump, lenDump, nWidthDump)
+    dumpBuffer(sKey, buf, len, cbItem, offDump, lenDump, rowBytes)
     {
         let chOpen = '', chClose = '', chSep = ' ', sHexPrefix = "";
 
@@ -333,7 +360,7 @@ class FileImage {
 
         offDump = offDump || this.offDump;
         lenDump = lenDump || this.lenDump || len;
-        nWidthDump = nWidthDump || this.nWidthDump;
+        rowBytes = rowBytes || this.rowBytes;
 
         let sDump = "";
         let addrs = {'load': this.addrLoad, 'exec': this.addrExec};
@@ -372,7 +399,7 @@ class FileImage {
 
             if (off > offDump) {
                 sLine += chSep;
-                if (!(cb % nWidthDump)) {
+                if (!(cb % rowBytes)) {
                     sDump += this.dumpLine(4, sLine, sASCII);
                     sLine = sASCII = "";
                 }
@@ -664,6 +691,8 @@ class FileImage {
      *
      * Converts the data buffer to JSON.
      *
+     * TODO: This is dead code now -- remove?
+     *
      * @this {FileImage}
      * @param {function(Error,string)} done
      */
@@ -684,7 +713,7 @@ class FileImage {
      */
     convertToFile(sOutputFile, fOverwrite)
     {
-        if (this.sFormat != FileImage.FORMAT.ROM) {
+        if (this.sFormat != FileImage.FORMAT.ROM && this.sFormat != FileImage.FORMAT.BIN) {
             let obj = this;
             this.buildJSON();
             this.loadMap(this.sFilePath || sOutputFile, function(err, str) {
@@ -708,7 +737,13 @@ class FileImage {
      */
     outputFile(sOutputFile, fOverwrite)
     {
-        let data = this.json || this.buf;
+        let data = this.json;
+        if (!data) {
+            data = this.buf;
+            if (this.offDump || this.lenDump) {
+                data = data.slice(this.offDump, this.lenDump? this.offDump + this.lenDump : data.length);
+            }
+        }
 
         let sFormat = this.sFormat.toUpperCase();
 
@@ -733,7 +768,7 @@ class FileImage {
             if (typeof data == "string") {
                 printf("%s\n", data);
             } else {
-                printf("specify --output=[file] to save %d-byte %s file", data.length, sFormat);
+                printf("specify --output=[file] to save %d-byte %s file\n", data.length, sFormat);
             }
         }
     }
@@ -749,7 +784,8 @@ FileImage.FORMAT = {
     WORDS:      "words",    // displays data as hex words; normally used only when comments are enabled
     LONGS:      "longs",    // displays data as dwords
     IMG:        "img",      // returns the raw disk data (ie, using a Buffer object) (DiskImage only)
-    ROM:        "rom"       // returns the raw file data (ie, using a Buffer object) (FileImage only)
+    ROM:        "rom",      // returns the raw file data (ie, using a Buffer object) (FileImage only)
+    BIN:        "bin"       // alias for "rom"
 };
 
 /**
@@ -769,7 +805,7 @@ FileImage.FORMAT = {
  *      --offset=[number]
  *      --length=[number]
  *      --symbols
- *      --width=[number]
+ *      --row=[number]
  *      --load=[number]
  *      --exec=[number]
  *      --output=[path]
@@ -907,7 +943,7 @@ function main(argc, argv)
         }
 
         let sMergeFile, asMergeFiles = [];
-        let file = new FileImage(sFormat, argv['comments'], argv['decimal'], argv['offset'], argv['#length'], argv['width'], argv['symbols']);
+        let file = new FileImage(sFormat, argv['comments'], argv['decimal'], argv['offset'], argv['#length'], argv['row'], argv['symbols']);
         if (argv['merge']) {
             if (typeof argv['merge'] == "string") {
                 asMergeFiles.push(argv['merge']);

@@ -16,6 +16,7 @@ import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for 
 import { DEBUG }  from "../../machines/modules/v2/defines.js";
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import FileLib    from "../../machines/modules/v2/filelib.js";
+import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
@@ -113,6 +114,32 @@ export function existsFile(sFile, fError = true)
         if (fError) printError(err);
     }
     return false;
+}
+
+/**
+ * getDiskSector(di, lba)
+ *
+ * @param {DiskInfo} di
+ * @param {number} lba (logical block address, aka 0-based sector number)
+ * @returns {DataBuffer}
+ */
+export function getDiskSector(di, lba)
+{
+    let db;
+    let sector = di.getSector(lba);
+    if (sector) {
+        let ab = [], dw = 0;
+        let data = sector[DiskInfo.SECTOR.DATA];
+        let dwords = sector[DiskInfo.SECTOR.LENGTH] / 4;
+        for (let i = 0; i < dwords; i++) {
+            if (i < data.length) dw = data[i];
+            for (let shift = 0; shift < 32; shift += 8) {
+                ab.push((dw >>> shift) & 0xff);
+            }
+        }
+        db = new DataBuffer(ab);
+    }
+    return db;
 }
 
 /**
@@ -260,7 +287,7 @@ export function makeDir(sDir, recursive = false, deleteFile = false)
  * @param {string} sPath
  * @param {Array.<FileData>} [aFiles]
  */
-export function addMetaData(di, sDir, sPath, aFiles)
+function addMetaData(di, sDir, sPath, aFiles)
 {
     sPath = path.join(sDir, sPath);
     let sArchiveDir = checkArchive(sPath, true);
@@ -310,7 +337,7 @@ export function addMetaData(di, sDir, sPath, aFiles)
  * @param {boolean} [verbose] (true for verbose output)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
- * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
+ * @param {Array|string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
  * @param {function(DiskInfo)} [done] (optional function to call on completion)
  */
 export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
@@ -331,6 +358,18 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
     let readDone = function(aFileData) {
         let db = new DataBuffer();
         let di = new DiskInfo(device);
+        if (Array.isArray(suppData)) {
+            for (let i = suppData.length - 1; i >= 0; i--) {
+                let desc = suppData[i];
+                desc.attr = +desc[DiskInfo.FILEDESC.ATTR];
+                desc.data = new DataBuffer(desc[DiskInfo.FILEDESC.CONTENTS]);
+                desc.date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
+                delete desc[DiskInfo.FILEDESC.HASH];
+                delete desc[DiskInfo.FILEDESC.CONTENTS];
+                aFileData.unshift(desc);
+            }
+            suppData = null;
+        }
         if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, sectorIDs, sectorErrors, suppData)) {
             /*
              * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
@@ -357,7 +396,7 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
 /**
  * readDirFiles(sDir, sLabel, fNormalize, iLevel, done)
  *
- * @param {string} sDir (directory name)
+ * @param {string} sDir (slash-terminated directory name OR comma-delimited list of files)
  * @param {boolean|null} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [iLevel] (current directory level, primarily for diagnostic purposes only; zero if unspecified)
@@ -623,6 +662,59 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbo
     zip.on('error', function readArchiveFilesError(err) {
         printError(err, sArchive);
     });
+}
+
+/**
+ * readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ *
+ * @param {string} diskFile
+ * @param {boolean} [forceBPB]
+ * @param {Array|string} [sectorIDs]
+ * @param {Array|string} [sectorErrors]
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
+ * @returns {DiskInfo|null}
+ */
+export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+{
+    let db, di
+    try {
+        let diskName = path.basename(diskFile);
+        di = new DiskInfo(device, diskName);
+        if (StrLib.getExtension(diskName) == "json") {
+            db = readFile(diskFile, "utf8");
+            if (!db) {
+                di = null;
+            } else {
+                if (!di.buildDiskFromJSON(db)) di = null;
+            }
+        }
+        else {
+            /*
+             * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
+             */
+            db = readFile(diskFile, null);
+            if (!db) {
+                di = null;
+            } else {
+                if (StrLib.getExtension(diskName) == "psi") {
+                    if (!di.buildDiskFromPSI(db)) di = null;
+                } else {
+                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
+                }
+            }
+        }
+        if (di) {
+            let sDir = getLocalPath(diskFile.replace(/\.[a-z]+$/i, ""));
+            let aDiskFiles = glob.sync(path.join(sDir, "**"));
+            for (let i = 0; i < aDiskFiles.length; i++) {
+                addMetaData(di, sDir, aDiskFiles[i].slice(sDir.length));
+            }
+        }
+    } catch(err) {
+        printError(err);
+        return null;
+    }
+    return di;
 }
 
 /**

@@ -15,13 +15,13 @@ import got        from "got";
 import BASConvert from "../basconvert/basconvert.js";
 import PCJSLib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
-import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
+import JSONLib    from "../../machines/modules/v2/jsonlib.js";
+import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
-import JSONLib    from "../../machines/modules/v2/jsonlib.js";
-import strlib     from "../../machines/modules/v2/strlib.js";
-import { addMetaData, device, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isTextFile, makeDir, printError, printf, readDir, readFile, readJSON, replaceServerPrefix, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
+import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
+import { device, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isTextFile, makeDir, printError, printf, readDir, readDisk, readFile, readJSON, replaceServerPrefix, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
 
 let pcjslib = new PCJSLib();
 let rootDir, sFileIndexCache;
@@ -88,7 +88,7 @@ function createDisk(diskFile, diskette, argv, done)
     let sectorErrors = diskette.argv['sectorError'] || argv['sectorError'];
     let suppData = diskette.argv['suppData'] || argv['suppData'];
     if (suppData) suppData = readFile(suppData);
-    let fDir = false, arcType = 0, sExt = strlib.getExtension(sArchiveFile);
+    let fDir = false, arcType = 0, sExt = StrLib.getExtension(sArchiveFile);
     if (sArchiveFile.endsWith(path.sep)) {
         fDir = true;
         diskette.command = "--dir=" + name;
@@ -385,7 +385,7 @@ function processDisk(di, diskFile, argv, diskette)
     let sFindName = argv['file'];
     if (typeof sFindName == "string") {
         let sFindText = argv['find'];
-        if (typeof sFindText != "string") sFindText = undefined;
+        if (typeof sFindText != "string") sFindText = false;
         /*
          * TODO: Implement support for finding text in findFile()....
          */
@@ -394,7 +394,7 @@ function processDisk(di, diskFile, argv, diskette)
             printFileDesc(di.getName(), desc);
             if (argv['index']) {
                 /*
-                 * We cheat and search for matching hash values in the provided index; this is much faster than laboriously
+                 * We cheat and search for matching hash values in the provided index; this is much faster than
                  * opening and searching all the other disk images, even when they DO contain pre-generated file tables.
                  */
                 if (sFileIndexCache === undefined) {
@@ -531,7 +531,7 @@ function processDisk(di, diskFile, argv, diskette)
      * If --rewrite, then rewrite the JSON disk image.  --overwrite is implicit.
      */
     if (argv['rewrite']) {
-        if (strlib.getExtension(diskFile) == "json") {
+        if (StrLib.getExtension(diskFile) == "json") {
             writeDisk(diskFile, di, argv['legacy'], 0, true, argv['quiet'], undefined, argv['source']);
         }
     }
@@ -556,14 +556,14 @@ function processDisk(di, diskFile, argv, diskette)
          * If a JSON disk image was originally built from kryoflux data AND included special args (eg, for copy-protection),
          * then don't bother with the rebuild, because those disks can't be saved as IMG disk images.
          */
-        if (strlib.getExtension(diskFile) == "json" && !(diskette.kryoflux && diskette.args)) {
+        if (StrLib.getExtension(diskFile) == "json" && !(diskette.kryoflux && diskette.args)) {
             if (typeof argv['checkdisk'] == "string" && diskFile.indexOf(argv['checkdisk']) < 0) return;
             createDisk(diskFile, diskette, argv, function(diTemp) {
                 let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                 diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
                 writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
                 let warning = false;
-                if (strlib.getExtension(diskette.archive) == "img") {
+                if (StrLib.getExtension(diskette.archive) == "img") {
                     let json = diTemp.getJSON();
                     diTemp.buildDiskFromJSON(json);
                     let sTempIMG = sTempJSON.replace(".json",".img");
@@ -857,7 +857,7 @@ function processDisk(di, diskFile, argv, diskette)
                 let sample = readFile(sampleFile);
                 if (sample) {
                     if (CharSet.isText(sample)) {
-                        let fileType = strlib.getExtension(sampleFile) == "BAS"? "bas" : "";
+                        let fileType = StrLib.getExtension(sampleFile) == "BAS"? "bas" : "";
                         if (sample[sample.length-1] != '\n') sample += '\n';
                         sample = "{% raw %}\n```" + fileType + "\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n{% endraw %}\n";
                         samples += "\n## " + path.basename(sampleFile) + "\n\n" + sample;
@@ -1105,59 +1105,6 @@ function getArchiveOffset(sArchive, arcType, sOffset)
 }
 
 /**
- * readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
- *
- * @param {string} diskFile
- * @param {boolean} [forceBPB]
- * @param {Array|string} [sectorIDs]
- * @param {Array|string} [sectorErrors]
- * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
- * @returns {DiskInfo|null}
- */
-function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
-{
-    let db, di
-    try {
-        let diskName = path.basename(diskFile);
-        di = new DiskInfo(device, diskName);
-        if (strlib.getExtension(diskName) == "json") {
-            db = readFile(diskFile, "utf8");
-            if (!db) {
-                di = null;
-            } else {
-                if (!di.buildDiskFromJSON(db)) di = null;
-            }
-        }
-        else {
-            /*
-             * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
-             */
-            db = readFile(diskFile, null);
-            if (!db) {
-                di = null;
-            } else {
-                if (strlib.getExtension(diskName) == "psi") {
-                    if (!di.buildDiskFromPSI(db)) di = null;
-                } else {
-                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
-                }
-            }
-        }
-        if (di) {
-            let sDir = getLocalPath(diskFile.replace(/\.[a-z]+$/i, ""));
-            let aDiskFiles = glob.sync(path.join(sDir, "**"));
-            for (let i = 0; i < aDiskFiles.length; i++) {
-                addMetaData(di, sDir, aDiskFiles[i].slice(sDir.length));
-            }
-        }
-    } catch(err) {
-        printError(err);
-        return null;
-    }
-    return di;
-}
-
-/**
  * writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
  *
  * @param {string} sFile
@@ -1221,7 +1168,7 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
     try {
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);
-        if (strlib.getExtension(diskName) == "json") {
+        if (StrLib.getExtension(diskName) == "json") {
             diskFile = getServerPath(diskFile);
             if (diskFile.startsWith("http")) {
                 printf("fetching %s\n", diskFile);
@@ -1244,7 +1191,7 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
             if (!db) {
                 di = null;
             } else {
-                if (strlib.getExtension(diskName) == "psi") {
+                if (StrLib.getExtension(diskName) == "psi") {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
                     if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
@@ -1304,7 +1251,7 @@ function processAll(all, argv)
                 for (let arg of ['list', 'expand', 'extract', 'extdir', 'normalize', 'overwrite', 'quiet', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }
-                processFile(args);
+                processArg(args);
                 if (!--max) break;
             }
         } else {
@@ -1316,14 +1263,14 @@ function processAll(all, argv)
 }
 
 /**
- * processFile(argv)
+ * processArg(argv)
  *
  * Formerly part of main(), but factored out so that it can also be called for a list of files ("--all").
  *
  * @param {Array} argv
  * @returns {boolean} true if something was processed, false if not
  */
-function processFile(argv)
+function processArg(argv)
 {
     let input;
     let fDir = false, fFiles = false, arcType = 0;
@@ -1551,7 +1498,7 @@ function main(argc, argv)
         }
     }
 
-    if (processAll(argv['all'], argv) || processFile(argv)) {
+    if (processAll(argv['all'], argv) || processArg(argv)) {
         return;
     }
 

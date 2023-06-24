@@ -15,7 +15,7 @@ import filelib from "../../machines/modules/v2/filelib.js";
 import proclib from "../../machines/modules/v2/proclib.js";
 import strlib from "../../machines/modules/v2/strlib.js";
 import { printf } from "../../machines/modules/v2/printf.js";
-import { readDir, writeDisk } from "../modules/disklib.js";
+import { getDiskSector, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
 
 let args = proclib.getArgs();
 let argv = args.argv;
@@ -236,6 +236,7 @@ function initMachine(machine, sMachine)
 /**
  * intVideo(addr)
  *
+ * @param {CPUx86} this
  * @param {number} addr
  * @returns {boolean} true to proceed with the INT 0x10 software interrupt, false to skip
  */
@@ -246,7 +247,7 @@ function intVideo(addr)
      * has been reflected in the debugMode setting.
      */
     setDebugMode(false);
-    let AH = ((cpu.regEAX >> 8) & 0xff), AL = (cpu.regEAX & 0xff);
+    let AH = ((this.regEAX >> 8) & 0xff), AL = (this.regEAX & 0xff);
     if (AH == 0x0e) {
         printf("%c", AL);
     }
@@ -439,6 +440,33 @@ function doCommand(sCmd)
 }
 
 /**
+ * buildDisk(sProgram)
+ */
+function buildDisk(sProgram)
+{
+    sProgram = sProgram.toUpperCase();
+    if (sProgram.endsWith(".EXE")) {
+        let diSystem = readDisk("/diskettes/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json");
+        let dbMBR = readFile("./MBR-10M.bin", null);
+        if (diSystem) {
+            let aFileDescs = [];
+            let aFileNames = ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"];
+            for (let name of aFileNames) {
+                let desc = diSystem.findFile(name);
+                if (desc) aFileDescs.push(desc);
+            }
+            let dbBoot = getDiskSector(diSystem, 0);
+            let done = function(di) {
+                di.updateBootSector(dbBoot);
+                di.updateBootSector(dbMBR, -1);
+                writeDisk("MSDOS.json", di, false, 0, true, true);
+            }
+            readDir("archive/MSDOS320-C400-JSON/", 0, 0, "PCJS", null, false, 10240, 1024, false, null, null, aFileDescs, done);
+        }
+    }
+}
+
+/**
  * readInput(stdin, stdout)
  *
  * @param {Object} stdin
@@ -453,6 +481,10 @@ function readInput(stdin, stdout)
     stdin.resume();
     stdin.setEncoding("utf8");
     stdin.setRawMode(true);
+
+    if (typeof argv[1] == "string") {
+        buildDisk(argv[1]);
+    }
 
     if (typeof argv['load'] == "string" ) {         // process --load argument, if any
         printf(doCommand("load " + argv['load']));
