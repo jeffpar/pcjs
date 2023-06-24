@@ -489,10 +489,13 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
             if (fText) {
                 if (CharSet.isText(data)) {
                     let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
-                    if (dataNew != data) printf("replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
+                    if (dataNew != data) {
+                        if (Device.DEBUG) printf("replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
+                    }
                     data = dataNew;
                 } else {
-                    printf("non-ASCII data in %s (line endings unchanged)\n", sName);
+                    if (Device.DEBUG) printf("non-ASCII data in %s (line endings unchanged)\n", sName);
+                    CharSet.isText(data);
                 }
                 data = new DataBuffer(data);
             }

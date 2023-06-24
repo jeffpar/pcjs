@@ -547,11 +547,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
-        "pkunzip.exe",
-        "--load=compaq386",
-        "--debug"
+        "pkunzip.exe"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "/Users/jeff/Desktop/Disks/MSDOS320",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

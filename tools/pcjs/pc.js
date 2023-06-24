@@ -8,19 +8,26 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import path from "path";
-import xml2js from "xml2js";
-import Messages from "../../machines/modules/v2/messages.js";
-import filelib from "../../machines/modules/v2/filelib.js";
-import proclib from "../../machines/modules/v2/proclib.js";
-import strlib from "../../machines/modules/v2/strlib.js";
+import path       from "path";
+import xml2js     from "xml2js";
+import Messages   from "../../machines/modules/v2/messages.js";
+import FileLib    from "../../machines/modules/v2/filelib.js";
+import ProcLib    from "../../machines/modules/v2/proclib.js";
+import StrLib     from "../../machines/modules/v2/strlib.js";
+import Device     from "../../machines/modules/v3/device.js";
 import { printf } from "../../machines/modules/v2/printf.js";
 import { getDiskSector, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
 
-let args = proclib.getArgs();
+let args = ProcLib.getArgs();
 let argv = args.argv;
-let fDebug = argv['debug'] || false;
+
+Device.DEBUG = argv['debug'] || false;
 let machineType = argv['type'] || "pcx86";
+
+let cwd = process.cwd();
+let rootDir = path.join(path.dirname(argv[0]), "../..");
+let pcjsDir = path.join(rootDir, "/tools/pcjs");
+FileLib.setRootDir(rootDir);
 
 let Component, Interrupts;
 let weblib, embedMachine;
@@ -28,9 +35,7 @@ let cpu, dbg, kbd, serial, fnSendSerial;
 let debugMode;
 let prompt = ">";
 let sCmdPrev = "";
-
-filelib.setRootDir("../..");
-let machines = JSON.parse(filelib.readFileSync("/machines/machines.json", "utf8"));
+let machines = JSON.parse(FileLib.readFileSync("/machines/machines.json", "utf8"));
 
 function setDebugMode(f)
 {
@@ -131,7 +136,7 @@ async function loadModules(factory, modules, done)
          * which is bizarre, because backslash is actually Windows' preferred path separator.
          * ¯\_(ツ)_/¯
          */
-        modulePath = path.join("../..", modulePath).replace(/\\/g, '/');
+        modulePath = path.join(rootDir, modulePath).replace(/\\/g, '/');
         let name = path.basename(modulePath, ".js");
         if (name == "embed") {
             let { [factory]: embed } = await import(modulePath);
@@ -155,7 +160,7 @@ async function loadModules(factory, modules, done)
          */
         if (module.default && module.default.prototype) {
             module.default.prototype.print = function print(s, bitsMessage) {
-                if (fDebug || bitsMessage != Messages.LOG) {
+                if (Device.DEBUG && bitsMessage != Messages.LOG) {
                     printf(s);
                 }
             };
@@ -202,7 +207,7 @@ function initMachine(machine, sMachine)
         dbg = Component.getComponentByType("Debugger");
         if (dbg) {
             dbg.print = function print(s, bitsMessage) {
-                if (fDebug || bitsMessage != Messages.LOG) {
+                if (Device.DEBUG || bitsMessage != Messages.LOG) {
                     printf(s);
                 }
             };
@@ -262,8 +267,8 @@ function intVideo(addr)
 function receiveSerial(b)
 {
     let s;
-    if (b != strlib.ASCII.CR && b != strlib.ASCII.LF) {
-        s = strlib.ASCIICodeMap[b];
+    if (b != StrLib.ASCII.CR && b != StrLib.ASCII.LF) {
+        s = StrLib.ASCIICodeMap[b];
     }
     if (s) {
         s = '<' + s + '>';
@@ -301,7 +306,9 @@ function loadMachine(sFile)
     };
     let result = "no machine";
     if (sFile) {
-        if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
+        if (Device.DEBUG) {
+            printf("loadMachine(\"%s\")\n", sFile);
+        }
         if (sFile.indexOf('.') < 0) sFile += ".json5";
         if (sFile.endsWith(".json") || sFile.endsWith(".json5")) {
             result = readJSON(sFile, getFactory);
@@ -327,7 +334,10 @@ function readJSON(sFile, done)
 {
     let result = "";
     try {
-        let sMachine = filelib.readFileSync(sFile, "utf8");
+        if (sFile.indexOf(path.sep) < 0) {
+            sFile = path.join(pcjsDir, sFile);
+        }
+        let sMachine = FileLib.readFileSync(sFile, "utf8");
         /*
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
@@ -357,7 +367,10 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
     let idAttrs = '@';
     try {
         xml._resolving++;
-        let sXML = filelib.readFileSync(sFile, "utf8");
+        if (sFile.indexOf(path.sep) < 0) {
+            sFile = path.join(pcjsDir, sFile);
+        }
+        let sXML = FileLib.readFileSync(sFile, "utf8");
         let parser = new xml2js.Parser({attrkey: idAttrs});
         parser.parseString(sXML, function parseXML(err, xmlNode) {
             if (!aTags) {
@@ -414,7 +427,7 @@ function doCommand(sCmd)
 
     switch(aTokens[0]) {
     case "cwd":
-        result = process.cwd();
+        result = cwd;
         break;
     case "load":
         result = loadMachine(aTokens[1]);
@@ -441,14 +454,17 @@ function doCommand(sCmd)
 
 /**
  * buildDisk(sProgram)
+ *
+ * @param {string} sProgram
+ * @returns {string}
  */
 function buildDisk(sProgram)
 {
     sProgram = sProgram.toUpperCase();
-    if (sProgram.endsWith(".EXE")) {
+    if (sProgram.match(/\.(COM|EXE|BAT)/)) {
         let diSystem = readDisk("/diskettes/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json");
-        let dbMBR = readFile("./MBR-10M.bin", null);
-        if (diSystem) {
+        let dbMBR = readFile(path.join(pcjsDir, "MSDOS-MBR-10M.bin"), null);
+        if (diSystem && dbMBR) {
             let aFileDescs = [];
             let aFileNames = ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"];
             for (let name of aFileNames) {
@@ -466,17 +482,18 @@ function buildDisk(sProgram)
              * and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".  Something
              * to study later.
              */
-            if (dbBoot) {
-                dbBoot.writeUInt8(0x80, 0x1fd);
-            }
+            dbBoot.writeUInt8(0x80, 0x1fd);
             let done = function(di) {
                 di.updateBootSector(dbBoot);
                 di.updateBootSector(dbMBR, -1);
-                writeDisk("archive/MSDOS.json", di, false, 0, true, true);
+                writeDisk(path.join(pcjsDir, "MSDOS.json"), di, false, 0, true, true);
             }
-            readDir("archive/MSDOS320-C400-JSON/", 0, 0, "PCJS", null, false, 10240, 1024, false, null, null, aFileDescs, done);
+            let normalize = true;
+            readDir("./", 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);
+            return true;
         }
     }
+    return false;
 }
 
 /**
@@ -496,7 +513,11 @@ function readInput(stdin, stdout)
     stdin.setRawMode(true);
 
     if (typeof argv[1] == "string") {
-        buildDisk(argv[1]);
+        if (buildDisk(argv[1])) {
+            if (!argv['load']) {
+                printf(doCommand("load compaq386"));
+            }
+        }
     }
 
     if (typeof argv['load'] == "string" ) {         // process --load argument, if any
