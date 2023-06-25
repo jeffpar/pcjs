@@ -289,9 +289,10 @@ export default class DiskInfo {
                         this.printf(Device.MESSAGE.WARN, "BPB media ID (%#0bx) does not match physical media ID (%#0bx)\n", bMediaIDBPB, bMediaID);
                     }
                     if (nCylinders != nCylindersBPB) {
-                        this.printf(Device.MESSAGE.WARN, "BPB cylinders (%d) do not match physical cylinders (%d)\n", nCylindersBPB, nCylinders);
-                        if (nCylinders - nCylindersBPB == 1) {
-                            this.printf(Device.MESSAGE.WARN, "BIOS may have reserved the last cylinder for diagnostics\n");
+                        let message = (nCylinders - nCylindersBPB == 1)? Device.MESSAGE.INFO : Device.MESSAGE.WARN;
+                        this.printf(message, "BPB cylinders (%d) do not match physical cylinders (%d)\n", nCylindersBPB, nCylinders);
+                        if (message == Device.MESSAGE.INFO) {
+                            this.printf(message, "BIOS may have reserved the last cylinder for diagnostics and/or head-parking\n");
                         }
                     }
                     if (nHeads != nHeadsBPB) {
