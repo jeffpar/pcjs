@@ -7,7 +7,7 @@
     "id": "computer",
     "name": "Compaq DeskPro 386",
     "resume": 0,
-    "state": "/tools/pcjs/compaq386.json",
+    "state": "/tools/pc/compaq386.json",
     "busWidth": 32
   },
   "ram": [
@@ -80,7 +80,7 @@
       {
         "name": "10Mb Hard Disk",
         "type": 1,
-        "path": "/tools/pcjs/MSDOS.json"
+        "path": "/tools/pc/MSDOS.json"
       }
     ]
   },

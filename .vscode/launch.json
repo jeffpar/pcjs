@@ -440,12 +440,12 @@
       "name": "pc.js ibm5150",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--load=ibm5150",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -461,12 +461,12 @@
       "name": "pc.js compaq386",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--load=compaq386",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -482,12 +482,12 @@
       "name": "pc.js test386",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--load=test386",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -503,12 +503,12 @@
       "name": "pc.js pcx86 machine.xml",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -524,12 +524,12 @@
       "name": "pc.js pdp11 machine.xml",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--load=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -545,11 +545,11 @@
       "name": "pc.js test.exe",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "test.exe"
       ],
-      "cwd": "/Users/jeff/Desktop/Disks/MSDOS320",
+      "cwd": "/Users/jeff/Disks/MSDOS320",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1645,7 +1645,7 @@
         "--length=512",
         "--output=MSDOS320-MBR-10M.bin"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs/archive",
+      "cwd": "${workspaceFolder}/tools/pc/archive",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

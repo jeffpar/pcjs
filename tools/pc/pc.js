@@ -28,7 +28,7 @@ let machineType = argv['type'] || "pcx86";
 
 let cwd = process.cwd();
 let rootDir = path.join(path.dirname(argv[0]), "../..");
-let pcjsDir = path.join(rootDir, "/tools/pcjs");
+let pcjsDir = path.join(rootDir, "/tools/pc");
 FileLib.setRootDir(rootDir);
 
 let Component, Interrupts;

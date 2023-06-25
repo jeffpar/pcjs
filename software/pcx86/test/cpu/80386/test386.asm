@@ -17,7 +17,7 @@
 ;   The code which attempts to update myGDT and addrGDT will have no effect when installed as a ROM,
 ;   which is fine, because those data structures are predefined with appropriate ROM-based addresses.
 ;
-;   See the machine configuration file "/tools/pcjs/test386.json5" for a test machine that can load
+;   See the machine configuration file "/tools/pc/test386.json5" for a test machine that can load
 ;   this file as a ROM image.
 ;
 ;   REAL32 Notes

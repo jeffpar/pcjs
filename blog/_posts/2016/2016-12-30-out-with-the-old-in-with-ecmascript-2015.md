@@ -141,7 +141,7 @@ want to include a small pre-loader that checks your browser's capabilities and t
 appropriate.
 
 Last but not least, does the new ES6 code really work in Node, too?  Happily, it does.  To test, I wrote
-a small JavaScript shell app, [pc.js]({{ site.github.pages }}/tools/pcjs/), which reads a machine XML file
+a small JavaScript shell app, [pc.js]({{ site.github.pages }}/tools/pc/), which reads a machine XML file
 (like [this one](/machines/dec/pdp11/1170/panel/debugger/machine.xml)), simulates the loading and initialization
 process that a web browser would perform, and then connects *stdin* and *stdout* to the machine's serial port:
 
