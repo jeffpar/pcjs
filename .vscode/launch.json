@@ -542,12 +542,12 @@
       }
     },
     {
-      "name": "pc.js pkunzip.exe",
+      "name": "pc.js test.exe",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
-        "pkunzip.exe"
+        "test.exe"
       ],
       "cwd": "/Users/jeff/Desktop/Disks/MSDOS320",
       "stopOnEntry": false,

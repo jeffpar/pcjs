@@ -344,7 +344,7 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
 {
     let di;
     let diskName = path.basename(sDir);
-    if (sDir.endsWith(path.sep)) {
+    if (sDir.endsWith('/')) {
         if (!sLabel) {
             sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
         }
@@ -378,8 +378,10 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
             for (let i = 0; i < aFileData.length; i++) {
                 addMetaData(di, sDir, aFileData[i].path, aFileData[i].files);
             }
+            done(di);
+            return;
         }
-        done(di);
+        done();
     };
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
@@ -408,7 +410,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
     let aFileData = [];
 
     let asFiles;
-    if (sDir.endsWith(path.sep)) {
+    if (sDir.endsWith('/')) {
         asFiles = fs.readdirSync(sDir);
         for (let i = 0; i < asFiles.length; i++) {
             asFiles[i] = path.join(sDir, asFiles[i]);
@@ -478,23 +480,23 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
             file.attr = DiskInfo.ATTR.SUBDIR;
             file.size = -1;
             file.data = new DataBuffer();
-            file.files = readDirFiles(sPath + path.sep, null, fNormalize, iLevel + 1);
+            file.files = readDirFiles(sPath + '/', null, fNormalize, iLevel + 1);
         } else {
             let fText = fNormalize && isTextFile(sName);
             let data = readFile(sPath, fText? "utf8" : null);
             if (!data) continue;
-            if (data.length != stats.size) {
+            if (data.length != stats.size && !fText) {   // ignore differences in UTF-8 encoded files
                 printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
             }
             if (fText) {
                 if (CharSet.isText(data)) {
                     let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
                     if (dataNew != data) {
-                        if (Device.DEBUG) printf("replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
+                        printf(Device.MESSAGE.FILE + Device.MESSAGE.INFO, "replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
                     }
                     data = dataNew;
                 } else {
-                    if (Device.DEBUG) printf("non-ASCII data in %s (line endings unchanged)\n", sName);
+                    printf(Device.MESSAGE.FILE + Device.MESSAGE.INFO, "non-ASCII data in %s (line endings unchanged)\n", sName);
                     CharSet.isText(data);
                 }
                 data = new DataBuffer(data);

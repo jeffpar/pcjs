@@ -484,7 +484,7 @@ function processDisk(di, diskFile, argv, diskette)
         } else {
             extractDir = extractDir.replace("%d", path.dirname(diskFile));
         }
-        let manifest = di.getFileManifest(null, false);             // pass true for sorted manifest
+        let manifest = di.getFileManifest(null, false);         // pass true for sorted manifest
         manifest.forEach(function extractDiskFile(desc) {
             /*
              * Parse each file descriptor in much the same way that buildFileTableFromJSON() does.  That function
@@ -493,7 +493,7 @@ function processDisk(di, diskFile, argv, diskette)
              * which calls getFileDesc(true), which returns a complete file descriptor that includes CONTENTS.
              */
             let sPath = desc[DiskInfo.FILEDESC.PATH];
-            if (sPath[0] == path.sep) sPath = sPath.substr(1);      // PATH should ALWAYS start with a slash, but let's be safe
+            if (sPath[0] == '/') sPath = sPath.substr(1);       // PATH should ALWAYS start with a slash, but let's be safe
             let name = path.basename(sPath);
             let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
             let attr = +desc[DiskInfo.FILEDESC.ATTR];
@@ -559,28 +559,30 @@ function processDisk(di, diskFile, argv, diskette)
         if (StrLib.getExtension(diskFile) == "json" && !(diskette.kryoflux && diskette.args)) {
             if (typeof argv['checkdisk'] == "string" && diskFile.indexOf(argv['checkdisk']) < 0) return;
             createDisk(diskFile, diskette, argv, function(diTemp) {
-                let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
-                diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
-                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
-                let warning = false;
-                if (StrLib.getExtension(diskette.archive) == "img") {
-                    let json = diTemp.getJSON();
-                    diTemp.buildDiskFromJSON(json);
-                    let sTempIMG = sTempJSON.replace(".json",".img");
-                    writeDisk(sTempIMG, diTemp, true, 0, true, true, undefined, diskette.source);
-                    if (!compareDisks(sTempIMG, diskette.archive)) {
-                        printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
-                        warning = true;
-                    } else {
-                        fs.unlinkSync(sTempIMG);
+                if (diTemp) {
+                    let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
+                    diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
+                    writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
+                    let warning = false;
+                    if (StrLib.getExtension(diskette.archive) == "img") {
+                        let json = diTemp.getJSON();
+                        diTemp.buildDiskFromJSON(json);
+                        let sTempIMG = sTempJSON.replace(".json",".img");
+                        writeDisk(sTempIMG, diTemp, true, 0, true, true, undefined, diskette.source);
+                        if (!compareDisks(sTempIMG, diskette.archive)) {
+                            printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
+                            warning = true;
+                        } else {
+                            fs.unlinkSync(sTempIMG);
+                        }
                     }
-                }
-                if (!warning) {
-                    if (argv['rebuild']) {
-                        printf("rebuilding %s\n", diskFile);
-                        fs.renameSync(sTempJSON, getLocalPath(diskFile));
-                    } else {
-                        fs.unlinkSync(sTempJSON);
+                    if (!warning) {
+                        if (argv['rebuild']) {
+                            printf("rebuilding %s\n", diskFile);
+                            fs.renameSync(sTempJSON, getLocalPath(diskFile));
+                        } else {
+                            fs.unlinkSync(sTempJSON);
+                        }
                     }
                 }
             });
@@ -626,7 +628,7 @@ function processDisk(di, diskFile, argv, diskette)
                 if (sTitle.match(/[#:[\]{}]/)) {
                     sTitle = '"' + sTitle + '"';
                 }
-                let permalink = path.dirname(diskette.path.replace(/^\/(disks\/|)[^/]+/, "/software")) + path.sep;
+                let permalink = path.dirname(diskette.path.replace(/^\/(disks\/|)[^/]+/, "/software")) + '/';
                 sIndexNew = "---\nlayout: page\ntitle: " + sTitle + "\npermalink: " + permalink + "\n---\n";
                 sIndexNew += sHeading + sListing;
                 sAction = "created";
@@ -914,7 +916,7 @@ function processDisk(di, diskFile, argv, diskette)
         if (diskette.documents) {
             let skip = true;
             for (let document of diskette.documents) {
-                if (document['@link'] != path.dirname(sIndexFile) + path.sep) {
+                if (document['@link'] != path.dirname(sIndexFile) + '/') {
                     skip = false;
                     break;
                 }
@@ -1321,7 +1323,7 @@ function processArg(argv)
                 fDir = false;
             }
         }
-        if (input && !input.endsWith(path.sep)) input += path.sep;
+        if (input && !input.endsWith('/')) input += '/';
     } else {
         input = argv['files'];
         if (input) {                // if --files, the list of files should be separated with commas (and NO trailing slash)
@@ -1349,7 +1351,7 @@ function processArg(argv)
                 if (input) {
                     argv.splice(1, 1);
                     if (!arcType) {
-                        if (input.endsWith(path.sep)) {
+                        if (input.endsWith('/')) {
                             fDir = true;
                         } else {
                             arcType = isArchiveFile(input);

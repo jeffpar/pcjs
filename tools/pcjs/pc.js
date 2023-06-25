@@ -16,12 +16,14 @@ import ProcLib    from "../../machines/modules/v2/proclib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import { printf } from "../../machines/modules/v2/printf.js";
-import { getDiskSector, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
+import { device, getDiskSector, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
 
 let args = ProcLib.getArgs();
 let argv = args.argv;
 
 Device.DEBUG = argv['debug'] || false;
+device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
+
 let machineType = argv['type'] || "pcx86";
 
 let cwd = process.cwd();
@@ -135,8 +137,16 @@ async function loadModules(factory, modules, done)
          *
          * which is bizarre, because backslash is actually Windows' preferred path separator.
          * ¯\_(ツ)_/¯
+         *
+         * Moreover, we cannot join modulePath with rootDir, because rootDir will start with
+         * a drive letter (eg, "C:") on Windows, which then fails with the following error:
+         *
+         *      Only URLs with a scheme in: file and data are supported by the default ESM loader.
+         *      On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:'
+         *
+         * so we MUST join it with a relative directory (ie, "../..").
          */
-        modulePath = path.join(rootDir, modulePath).replace(/\\/g, '/');
+        modulePath = path.join("../..", modulePath).replace(/\\/g, '/');
         let name = path.basename(modulePath, ".js");
         if (name == "embed") {
             let { [factory]: embed } = await import(modulePath);
@@ -484,9 +494,11 @@ function buildDisk(sProgram)
              */
             dbBoot.writeUInt8(0x80, 0x1fd);
             let done = function(di) {
-                di.updateBootSector(dbBoot);
-                di.updateBootSector(dbMBR, -1);
-                writeDisk(path.join(pcjsDir, "MSDOS.json"), di, false, 0, true, true);
+                if (di) {
+                    di.updateBootSector(dbBoot);
+                    di.updateBootSector(dbMBR, -1);
+                    writeDisk(path.join(pcjsDir, "MSDOS.json"), di, false, 0, true, true);
+                }
             }
             let normalize = true;
             readDir("./", 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);

@@ -75,6 +75,21 @@ And here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/117
 
     pc.js --load=/machines/dec/pdp11/1170/panel/debugger/machine.xml
 
+### Dynamic Access to Local Files from MS-DOS
+
+If you run `pc.js` with the name of DOS executable in your current directory; eg:
+
+    pc.js pkunzip.exe
+
+it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc` folder with all the files/folders in your current directory and then load the [compaq386](compaq386.json5) machine with that disk image mounted as drive C:.
+
+One of the pre-requisites of this feature is having a copy of the [pcjs-diskettes](https://github.com/jeffpar/pcjs-diskettes) repository in the `/disks/diskettes` folder of your PCjs repository:
+
+    cd pcjs
+    mkdir disks
+    cd disks
+    git clone https://github.com/jeffpar/pcjs-diskettes.git diskettes
+
 ### Historical Notes
 
 One early use of this utility was running a set of [80386 CPU Tests](https://github.com/jeffpar/pcjs/blob/master/software/pcx86/test/cpu/80386/test386.asm) as a custom ROM image inside an [80386 Test Machine](https://github.com/jeffpar/pcjs/blob/master/tools/pcjs/test386.json5), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.

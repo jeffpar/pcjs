@@ -3454,7 +3454,7 @@ export default class DiskInfo {
         let b = -1;
         if (sector) {
             if (Device.DEBUG && !iByte && !fCompare) {
-                this.printf(Device.MESSAGE.DISK, 'read("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, 'read("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
             }
             if (iByte < sector[DiskInfo.SECTOR.LENGTH]) {
                 let adw = sector[DiskInfo.SECTOR.DATA];
