@@ -547,7 +547,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "test.exe"
+        "test.exe",
+        "--debug"
       ],
       "cwd": "/Users/jeff/Disks/MSDOS320",
       "stopOnEntry": false,

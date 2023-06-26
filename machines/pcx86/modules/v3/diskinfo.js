@@ -1033,11 +1033,11 @@ export default class DiskInfo {
             for (let iFile = 0; iFile < aFileData.length; iFile++) {
                 let cb = aFileData[iFile].size;
                 if (cb < 0) {
-                    if (Device.DEBUG) this.printf(Device.MESSAGE.DISK, "%#x: buildClusters()\n", offDisk);
+                    if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%#x: buildClusters()\n", offDisk);
                     let cSubClusters = this.buildClusters(dbDisk, aFileData[iFile].files, offDisk, cbCluster, aFileData[iFile].cluster, iLevel + 1);
                     cClusters += cSubClusters;
                     offDisk += cSubClusters * cbCluster;
-                    if (Device.DEBUG) this.printf(Device.MESSAGE.DISK, "%#x: buildClusters() returned, writing %d clusters\n", offDisk, cSubClusters);
+                    if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%#x: buildClusters() returned, writing %d clusters\n", offDisk, cSubClusters);
                 }
             }
         }
@@ -2444,7 +2444,7 @@ export default class DiskInfo {
 
         dir.path = path + "\\";
 
-        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK, 'getDir("%s","%s")\n', this.diskName, dir.path);
+        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, 'getDir("%s","%s")\n', this.diskName, dir.path);
 
         for (let iSector = 0; iSector < aLBA.length; iSector++) {
             let lba = aLBA[iSector];
@@ -3577,7 +3577,7 @@ export default class DiskInfo {
         if (!fForce && !this.fWritable) return false;
 
         if (Device.DEBUG && !iByte) {
-            this.printf(Device.MESSAGE.DISK, 'write("%s",CHS=%d:%d:%d)\n', this.diskName, sector.iCylinder, sector.iHead, sector[DiskInfo.SECTOR.ID]);
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, 'write("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
         }
 
         if (iByte < sector[DiskInfo.SECTOR.LENGTH]) {
