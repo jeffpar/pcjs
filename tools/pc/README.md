@@ -1,11 +1,11 @@
 ---
 layout: page
-title: PCjs Machine Command-Line Utility
+title: PCjs Machine Utility
 permalink: /tools/pc/
 redirect_from: /machines/pcx86/modules/bin/
 ---
 
-This directory contains the PCjs machine command-line utility [PC.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
+This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
 
 Load a JSON machine file, such as [ibm5150.json5](ibm5150.json5) or [compaq386.json5](compaq386.json5), with the utility's `load` command, either interactively or with the `--load` command-line argument.
 
@@ -59,7 +59,7 @@ You can begin interacting with the machine OR you can press CTRL-A to enter the 
 
 To destroy the machine, type `quit` (or press CTRL-C) at the debugger prompt.
 
-[PC.js](https://github.com/jeffpar/pcjs/tree/master/tools/pc) is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` and `pdp11` machines so far.
+[pc.js](https://github.com/jeffpar/pcjs/tree/master/tools/pc) is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` and `pdp11` machines so far.
 
 This utility is very much a "work in progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
 
@@ -71,13 +71,13 @@ Limited support for XML-based machines now exists; eg:
 
 loads and runs the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
 
-And here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/panel/debugger/machine.xml):
+Here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/panel/debugger/machine.xml):
 
     pc.js --load=/machines/dec/pdp11/1170/panel/debugger/machine.xml
 
 ### Dynamic Access to Local Files from MS-DOS
 
-If you run [pc.js](pc.js) with the name of DOS executable in your current directory; eg:
+If you run [pc.js](pc.js) with the name of a DOS executable; eg:
 
     pc.js pkunzip.exe
 
@@ -90,7 +90,7 @@ One of the pre-requisites of this feature is having a copy of the [pcjs-diskette
     cd disks
     git clone https://github.com/jeffpar/pcjs-diskettes.git diskettes
 
-because [pc.js](pc.js) uses system files from MS-DOS diskettes (eg, [MSDOS320-DISK1](https://github.com/jeffpar/pcjs-diskettes/blob/master/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json)) to build a bootable hard disk image.
+This is because [pc.js](pc.js) uses system files from MS-DOS diskettes (eg, [MSDOS320-DISK1](https://github.com/jeffpar/pcjs-diskettes/blob/master/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json)) to build a bootable hard disk image.
 
 ### Historical Notes
 
