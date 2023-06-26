@@ -12,7 +12,7 @@ import fs         from "fs";
 import glob       from "glob";
 import path       from "path";
 import got        from "got";
-import BASConvert from "../basconvert/basconvert.js";
+import BASConvert from "../modules/basconvert.js";
 import PCJSLib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
