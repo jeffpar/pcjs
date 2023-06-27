@@ -45,7 +45,7 @@ const COMPILED = false;
  *
  * @define {boolean}
  */
-var DEBUG = true;
+const DEBUG = true;
 
 /**
  * FACTORY is "PCjsMachine" by default; overridden with the machine's "factory" string in machines.json
@@ -187,4 +187,4 @@ Defines.Components = typeof window != "undefined"? window['PCjs']['components'] 
 Defines.CLASSES = {};
 Defines.CLASSES["Defines"] = Defines;
 
-export { COMMAND, COMPILED, COPYRIGHT, DEBUG, FACTORY, LITTLE_ENDIAN, MAXDEBUG, MESSAGE, REPOSITORY, RS232, VERSION };
+export { Defines, COMMAND, COMPILED, COPYRIGHT, DEBUG, FACTORY, LITTLE_ENDIAN, MAXDEBUG, MESSAGE, REPOSITORY, RS232, VERSION };

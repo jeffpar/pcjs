@@ -40,7 +40,7 @@ const COMPILED = false;
  *
  * @define {boolean}
  */
-var DEBUG = true;
+const DEBUG = true;
 
 /**
  * FACTORY is "PCjsMachine" by default; overridden with the machine's "factory" string in machines.json

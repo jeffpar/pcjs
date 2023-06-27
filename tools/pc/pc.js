@@ -16,7 +16,7 @@ import Messages   from "../../machines/modules/v2/messages.js";
 import { printf } from "../../machines/modules/v2/printf.js";
 import ProcLib    from "../../machines/modules/v2/proclib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
-import { DEBUG, MESSAGE } from "../../machines/modules/v3/defines.js";
+import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
 import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
 
 let args = ProcLib.getArgs();
@@ -25,7 +25,7 @@ let fDebug = argv['debug'] || false;
 let machineType = argv['type'] || "pcx86";
 
 device.setDebug(fDebug);
-device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0), true);
+device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (Defines.DEBUG? MESSAGE.DEBUG : 0), true);
 
 let cwd = process.cwd();
 let rootDir = path.join(path.dirname(argv[0]), "../..");
@@ -171,7 +171,7 @@ async function loadModules(factory, modules, done)
          */
         if (module.default && module.default.prototype) {
             module.default.prototype.print = function print(s, bitsMessage) {
-                if (fDebug && bitsMessage != Messages.LOG) {
+                if (Defines.DEBUG && bitsMessage != Messages.LOG) {
                     printf(s);
                 }
             };
@@ -218,7 +218,7 @@ function initMachine(machine, sMachine)
         dbg = Component.getComponentByType("Debugger");
         if (dbg) {
             dbg.print = function print(s, bitsMessage) {
-                if (fDebug || bitsMessage != Messages.LOG) {
+                if (Defines.DEBUG || bitsMessage != Messages.LOG) {
                     printf(s);
                 }
             };
@@ -320,7 +320,7 @@ function loadMachine(sFile)
         if (sFile.indexOf(path.sep) < 0) {
             sFile = path.join(pcjsDir, sFile);
         }
-        if (fDebug) {
+        if (Defines.DEBUG) {
             printf("loadMachine(\"%s\")\n", sFile);
         }
         let sOpen = sFile;
@@ -544,7 +544,7 @@ function readInput(stdin, stdout)
     stdin.setEncoding("utf8");
     stdin.setRawMode(true);
 
-    if (typeof argv[1] == "string") {
+    if (typeof argv[1] == "string" && argv[1][0] != '-') {     // process first argument, if any
         if (buildDisk(argv[1])) {
             if (!argv['load']) {
                 printf(doCommand("load compaq386"));
