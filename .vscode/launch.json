@@ -542,13 +542,12 @@
       }
     },
     {
-      "name": "pc.js chkdsk.exe",
+      "name": "pc.js chkdsk",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "chkdsk.exe",
-        "--debug"
+        "chkdsk"
       ],
       "cwd": "/Users/jeff/Disks/MSDOS320",
       "stopOnEntry": false,

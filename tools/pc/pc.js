@@ -8,6 +8,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import glob       from "glob";
 import path       from "path";
 import xml2js     from "xml2js";
 import Messages   from "../../machines/modules/v2/messages.js";
@@ -466,21 +467,24 @@ function doCommand(sCmd)
  * buildDisk(sProgram)
  *
  * The first three files on the disk image will be those listed below (ie, IO.SYS, MSDOS.SYS, and COMMAND.COM);
- * if any of those files already exist in the current directory, ours will take precedence.  We include a special
- * flag in the file descriptor to indicate that any conflicting file should be removed.
+ * if any of those files already exist in the current directory, ours will take precedence.
  *
- * CONFIG.SYS and AUTOEXEC.BAT present a slightly different problem.  For the moment, I'm just going to leave any
- * CONFIG.SYS as-is.  AUTOEXEC.BAT is a different story: if none exists, then I need to supply my own containing the
- * name of the executable to run, and if one already exists, then I need to read it, append my executable, and then
- * add it to my list along with the special flag to exclude the existing copy.
+ * As for AUTOEXEC.BAT, I read any existing copy (or create an empty file) and append the name of the executable to it.
  *
  * @param {string} sProgram
  * @returns {string}
  */
 function buildDisk(sProgram)
 {
-    sProgram = sProgram.toUpperCase();
-    if (sProgram.match(/\.(COM|EXE|BAT)/)) {
+    let sGlob = sProgram.toUpperCase();
+    if (sGlob.indexOf('.') < 0) {
+        sGlob += ".{COM,EXE,BAT}";
+    }
+    if (sGlob.indexOf('/') < 0 && sGlob.indexOf('\\') < 0) {
+        sGlob = path.join("**", sGlob);
+    }
+    let aFiles = glob.sync(sGlob);
+    if (aFiles.length) {
         let diSystem = readDisk("/diskettes/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json");
         let dbMBR = readFile(path.join(pcjsDir, "MSDOS.mbr"), null);
         if (diSystem && dbMBR) {
@@ -490,6 +494,8 @@ function buildDisk(sProgram)
                 let desc = diSystem.findFile(name);
                 if (desc) aFileDescs.push(desc);
             }
+            sProgram = aFiles[0].replace(/\//g, '\\');
+            sProgram = "C:" + (sProgram[0] != '\\'? '\\' : '') + sProgram;
             let contents = readFile("AUTOEXEC.BAT", "utf8") || "";
             contents += sProgram + "\r\n";
             aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", contents));
