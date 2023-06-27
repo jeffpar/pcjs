@@ -5,7 +5,17 @@
 /**
  * @class Defines
  */
-class Defines {}
+class Defines {
+    /**
+     * setDebug(debug)
+     *
+     * @param {boolean} debug
+     */
+    setDebug(debug)
+    {
+        Defines.DEBUG = debug;
+    }
+}
 
 /**
  * COMMAND is the default name of the global command handler we will define, to provide
@@ -30,7 +40,7 @@ const COMPILED = false;
  *
  * @define {boolean}
  */
-const DEBUG = true;
+var DEBUG = true;
 
 /**
  * FACTORY is "PCjsMachine" by default; overridden with the machine's "factory" string in machines.json
@@ -3708,7 +3718,8 @@ Device.MESSAGE.TOUCH            = 0x000001000000;
 Device.MESSAGE.INFO             = 0x000002000000;
 Device.MESSAGE.WARN             = 0x000004000000;
 Device.MESSAGE.ERROR            = 0x000008000000;
-Device.MESSAGE.HALT             = 0x000010000000;
+Device.MESSAGE.DEBUG            = 0x000010000000;
+Device.MESSAGE.HALT             = 0x000020000000;
 Device.MESSAGE.CUSTOM           = 0x000100000000;       // all custom device messages must start here
 
 Device.MESSAGE_NAMES["addr"]    = Device.MESSAGE.ADDR;

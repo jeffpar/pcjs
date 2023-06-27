@@ -10,7 +10,17 @@
 /**
  * @class Defines
  */
-export default class Defines {}
+export default class Defines {
+    /**
+     * setDebug(debug)
+     *
+     * @param {boolean} debug
+     */
+    setDebug(debug)
+    {
+        Defines.DEBUG = debug;
+    }
+}
 
 /**
  * COMMAND is the default name of the global command handler we will define, to provide
@@ -35,7 +45,7 @@ const COMPILED = false;
  *
  * @define {boolean}
  */
-const DEBUG = true;
+var DEBUG = true;
 
 /**
  * FACTORY is "PCjsMachine" by default; overridden with the machine's "factory" string in machines.json

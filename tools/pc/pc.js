@@ -11,21 +11,21 @@
 import glob       from "glob";
 import path       from "path";
 import xml2js     from "xml2js";
-import Messages   from "../../machines/modules/v2/messages.js";
 import FileLib    from "../../machines/modules/v2/filelib.js";
+import Messages   from "../../machines/modules/v2/messages.js";
+import { printf } from "../../machines/modules/v2/printf.js";
 import ProcLib    from "../../machines/modules/v2/proclib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
-import Device     from "../../machines/modules/v3/device.js";
-import { printf } from "../../machines/modules/v2/printf.js";
+import { DEBUG, MESSAGE } from "../../machines/modules/v3/defines.js";
 import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
 
 let args = ProcLib.getArgs();
 let argv = args.argv;
-
-Device.DEBUG = argv['debug'] || false;
-device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
-
+let fDebug = argv['debug'] || false;
 let machineType = argv['type'] || "pcx86";
+
+device.setDebug(fDebug);
+device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0), true);
 
 let cwd = process.cwd();
 let rootDir = path.join(path.dirname(argv[0]), "../..");
@@ -136,7 +136,7 @@ async function loadModules(factory, modules, done)
          *      TypeError [ERR_INVALID_MODULE_SPECIFIER]: Invalid module
          *      "..\..\..\machines\modules\v2\defines.js" is not a valid package name ....
          *
-         * which is bizarre, because backslash is actually Windows' preferred path separator.
+         * which seems bizarre, since backslash is actually Windows' preferred path separator.
          * ¯\_(ツ)_/¯
          *
          * Moreover, we cannot join modulePath with rootDir, because rootDir will start with
@@ -145,7 +145,7 @@ async function loadModules(factory, modules, done)
          *      Only URLs with a scheme in: file and data are supported by the default ESM loader.
          *      On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:'
          *
-         * so we MUST join it with a relative directory (ie, "../..").
+         * so we join it with a relative directory (ie, "../..").
          */
         modulePath = path.join("../..", modulePath).replace(/\\/g, '/');
         let name = path.basename(modulePath, ".js");
@@ -171,7 +171,7 @@ async function loadModules(factory, modules, done)
          */
         if (module.default && module.default.prototype) {
             module.default.prototype.print = function print(s, bitsMessage) {
-                if (Device.DEBUG && bitsMessage != Messages.LOG) {
+                if (fDebug && bitsMessage != Messages.LOG) {
                     printf(s);
                 }
             };
@@ -218,7 +218,7 @@ function initMachine(machine, sMachine)
         dbg = Component.getComponentByType("Debugger");
         if (dbg) {
             dbg.print = function print(s, bitsMessage) {
-                if (Device.DEBUG || bitsMessage != Messages.LOG) {
+                if (fDebug || bitsMessage != Messages.LOG) {
                     printf(s);
                 }
             };
@@ -317,11 +317,14 @@ function loadMachine(sFile)
     };
     let result = "no machine";
     if (sFile) {
-        if (Device.DEBUG) {
+        if (sFile.indexOf(path.sep) < 0) {
+            sFile = path.join(pcjsDir, sFile);
+        }
+        if (fDebug) {
             printf("loadMachine(\"%s\")\n", sFile);
         }
         let sOpen = sFile;
-        if (sOpen.indexOf(".json") > 0 || existsFile(sOpen = sFile + ".json", false) || existsFile(sOpen = sFile + ".json5", false)) {
+        if (sOpen.indexOf(".json") > 0 || existsFile(sOpen = sFile + ".json5", false) || existsFile(sOpen = sFile + ".json", false)) {
             result = readJSON(sOpen, getFactory);
         }
         else {
@@ -348,9 +351,6 @@ function readJSON(sFile, done)
 {
     let result = "";
     try {
-        if (sFile.indexOf(path.sep) < 0) {
-            sFile = path.join(pcjsDir, sFile);
-        }
         let sMachine = FileLib.readFileSync(sFile, "utf8");
         /*
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
@@ -381,9 +381,6 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
     let idAttrs = '@';
     try {
         xml._resolving++;
-        if (sFile.indexOf(path.sep) < 0) {
-            sFile = path.join(pcjsDir, sFile);
-        }
         let sXML = FileLib.readFileSync(sFile, "utf8");
         let parser = new xml2js.Parser({attrkey: idAttrs});
         parser.parseString(sXML, function parseXML(err, xmlNode) {
@@ -525,6 +522,8 @@ function buildDisk(sProgram)
             readDir("./", 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);
             return true;
         }
+    } else {
+        printf("program not found: %s\n", sProgram);
     }
     return false;
 }
