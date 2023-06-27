@@ -7,7 +7,7 @@ redirect_from: /machines/pcx86/modules/bin/
 
 This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
 
-Load a JSON machine file, such as [ibm5150.json5](ibm5150.json5) or [compaq386.json5](compaq386.json5), with the utility's `load` command, either interactively or with the `--load` command-line argument.
+Load a JSON machine file, such as [ibm5150.json](ibm5150.json) or [compaq386.json5](compaq386.json5), with the utility's `load` command, either interactively or with the `--load` command-line argument.
 
 For example, this command:
 
@@ -104,6 +104,6 @@ Coming soon:
 
 ### Historical Notes
 
-One early use of this utility was running a set of [80386 CPU Tests](https://github.com/jeffpar/pcjs/blob/master/software/pcx86/test/cpu/80386/test386.asm) as a custom ROM image inside an [80386 Test Machine](https://github.com/jeffpar/pcjs/blob/master/tools/pc/test386.json5), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.
+One early use of this utility was running a set of [80386 CPU Tests](https://github.com/jeffpar/pcjs/blob/master/software/pcx86/test/cpu/80386/test386.asm) as a custom ROM image inside an [80386 Test Machine](https://github.com/jeffpar/pcjs/blob/master/tools/pc/test386.json), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.
 
 The test program ([test386.asm](/software/pcx86/test/cpu/80386/test386.asm)) was carefully designed to be built as a binary (`test386.com`) that could either be run as a DOS program *or* loaded as a ROM image.  See [PCx86 CPU Tests](/software/pcx86/test/cpu/) for more information.
