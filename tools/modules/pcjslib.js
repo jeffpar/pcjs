@@ -7,51 +7,39 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import StdIO from "../../machines/modules/v3/stdio.js";
-
 /**
  * @class PCJSLib
- * @property {number} argc
- * @property {Array.<string>} argv
  */
-export default class PCJSLib {
-    /**
-     * PCJSLib()
-     *
-     * @this {PCJSLib}
-     */
-    constructor()
-    {
-        this.stdio = new StdIO();
-        [this.argc, this.argv] = this.parseArgs(process.argv);
-    }
+export default class PCJSLib
+{
+    static argc = 0;
+    static argv = [];
 
     /**
      * getArgs(s)
      *
-     * @this {PCJSLib}
      * @param {string|object} [s]
      * @returns {Array} [argc, argv]
      */
-    getArgs(s)
+    static getArgs(s)
     {
         if (s) {
             if (typeof s == "string") {
                 let args = s.split(' ');
-                return this.parseArgs(args, 0);
+                return parseArgs(args, 0);
             }
             /*
              * If a map of option aliases is provided, then we copy any aliased options as needed.
              */
             for (let arg in s) {
                 if (s.hasOwnProperty(arg)) {
-                    if (this.argv[arg] !== undefined && this.argv[s[arg]] === undefined) {
-                        this.argv[s[arg]] = this.argv[arg];
+                    if (PCJSLib.argv[arg] !== undefined && PCJSLib.argv[s[arg]] === undefined) {
+                        PCJSLib.argv[s[arg]] = PCJSLib.argv[arg];
                     }
                 }
             }
         }
-        return [this.argc, this.argv];
+        return [PCJSLib.argc, PCJSLib.argv];
     }
 
     /**
@@ -78,12 +66,11 @@ export default class PCJSLib {
      * Finally, since argv is an Array, it has a built-in 'length' property, so if you also need to specify
      * a "--length" argument, we must precede the key with a '#' (ie, '#length') to avoid a conflict.
      *
-     * @this {PCJSLib}
      * @param {Array.<string>} [args]
      * @param {number} [i] (default is 1, because if you're passing process.argv, process.argv[0] is useless)
      * @returns {Array} [argc, argv]
      */
-    parseArgs(args, i = 1)
+    static parseArgs(args, i = 1)
     {
         let argc = 0;
         let argv = [];
@@ -137,3 +124,5 @@ export default class PCJSLib {
         return [argc, argv];
     }
 }
+
+[PCJSLib.argc, PCJSLib.argv] = PCJSLib.parseArgs(process.argv);

@@ -13,7 +13,7 @@ import glob       from "glob";
 import path       from "path";
 import got        from "got";
 import BASConvert from "../modules/basconvert.js";
-import PCJSLib    from "../modules/pcjslib.js";
+import pcjslib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import JSONLib    from "../../machines/modules/v2/jsonlib.js";
@@ -23,7 +23,6 @@ import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 import { device, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isTextFile, makeDir, printError, printf, readDir, readDisk, readFile, readJSON, replaceServerPrefix, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
 
-let pcjslib = new PCJSLib();
 let rootDir, sFileIndexCache;
 
 /**

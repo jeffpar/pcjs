@@ -1211,7 +1211,7 @@
         "--output=new.img",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/tools/diskimage/archive",
+      "cwd": "${workspaceFolder}/disks/tmp",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

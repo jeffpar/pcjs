@@ -17,13 +17,13 @@ import glob from "glob";
 import mkdirp from "mkdirp";
 import crypto from "crypto";
 import net from "../../../../machines/modules/v2/netlib.js";
-import proc from "../../../../machines/modules/v2/proclib.js";
 import str from "../../../../machines/modules/v2/strlib.js";
 import web from "../../../../machines/modules/v2/weblib.js";
 import DiskAPI from "../../../../machines/modules/v2/diskapi.js";
 import DumpAPI from "../../../../machines/modules/v2/dumpapi.js";
 import X86 from "../../../../machines/pcx86/modules/v2/x86.js";
 import { COPYRIGHT } from "../../../../machines/modules/v2/defines.js";
+import pcjslib from "../../../modules/pcjslib.js";
 
 var NODE = true;
 
@@ -353,6 +353,7 @@ BufferPF.prototype.toString = function(format)
 function DiskDump(sDiskPath, asExclude, sFormat, fComments, sSize, sServerRoot, sManifestFile, argv)
 {
     this.argv = argv || {};
+    console.log(this.argv);
     this.sDiskPath = sDiskPath;
     this.sServerRoot = sServerRoot || "";
     if (this.sServerRoot && !net.isRemote(sDiskPath) && sDiskPath[0] == '/' && sDiskPath.indexOf(';') < 0) {
@@ -697,13 +698,11 @@ DiskDump.asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".ASM", ".LRF", ".MAK",
 DiskDump.CLI = function()
 {
     let err = null;
-    let args = proc.getArgs();
+    let [argc, argv] = pcjslib.getArgs();
 
     fConsole = true;
 
-    if (args.argc) {
-        let argv = args.argv;
-
+    if (argc) {
         if (argv['debug'] !== undefined) fDebug = argv['debug'];
 
         if (fDebug) {

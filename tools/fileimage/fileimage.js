@@ -10,13 +10,11 @@
 
 import fs         from "fs";
 import path       from "path";
-import PCJSLib    from "../modules/pcjslib.js";
+import pcjslib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import netio      from "../../machines/modules/v3/netio.js";
 import strlib     from "../../machines/modules/v2/strlib.js"
 import { device, getLocalPath, printError, printf, sprintf, setRootDir } from "../modules/disklib.js";
-
-let pcjslib = new PCJSLib();
 
 /**
  * @class FileImage

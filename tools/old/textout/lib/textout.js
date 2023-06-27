@@ -11,8 +11,8 @@ import fs from "fs";
 import path from "path";
 import mkdirp from "mkdirp";
 import net from "../../../../machines/modules/v2/netlib.js";
-import proc from "../../../../machines/modules/v2/proclib.js";
 import str from "../../../../machines/modules/v2/strlib.js";
+import pcjslib from "../../../modules/pcjslib.js";
 
 /**
  * TextOut()
@@ -66,14 +66,13 @@ TextOut.asTargetRefs = ["call", "jmp", "jz", "jnz", "jc", "jnc", "ja", "jna", "j
  */
 TextOut.CLI = function()
 {
-    var args = proc.getArgs();
+    var [argc, argv] = pcjslib.getArgs();
 
-    if (!args.argc) {
+    if (!argc) {
         console.log("usage: textout --file=({path}|{URL}) [--nasm]");
         return;
     }
 
-    var argv = args.argv;
     var sFile = argv['file'];
     if (!sFile) {
         TextOut.logError(new Error("bad or missing input filename"));

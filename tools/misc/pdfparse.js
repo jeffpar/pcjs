@@ -10,16 +10,16 @@
 
 import fs from "fs";
 import pdf from "pdf-parse";
-import proclib from "../../machines/modules/v2/proclib.js";
+import pcjslib from "../modules/pcjslib.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
-const args = proclib.getArgs();
+const [argc, argv] = pcjslib.getArgs();
 
 let dataBuffer;
 
 function renderSheet(pageData)
 {
-    let fDebug = args.argv['debug'];
+    let fDebug = argv['debug'];
     let sHeadings = [], xHeadings = [], xPrev = -1, yPrev = -1, nLines = 0, rows = [];
 
     let checkItem = function(item) {
@@ -101,7 +101,7 @@ function renderSheet(pageData)
     }
 
     return pageData.getTextContent(render_options).then(function(textContent) {
-        if (args.argv['page'] && pageData.pageNumber != args.argv['page']) return "";
+        if (argv['page'] && pageData.pageNumber != argv['page']) return "";
         for (let i = 0; i < textContent.items.length; i++) {
             let item = textContent.items[i];
             checkItem(item);
@@ -116,7 +116,7 @@ function renderSheet(pageData)
 
 function renderPage(pageData)
 {
-    let fDebug = args.argv['debug'];
+    let fDebug = argv['debug'];
     /*
      * headings and subs are arrays of descriptors: [string, x, y, cx, cy].
      *
@@ -232,7 +232,7 @@ function renderPage(pageData)
     }
 
     return pageData.getTextContent(render_options).then(function(textContent) {
-        if (args.argv['page'] && pageData.pageNumber != args.argv['page']) return "";
+        if (argv['page'] && pageData.pageNumber != argv['page']) return "";
         if (pageData.pageNumber < 10 || pageData.pageNumber > 457) return "";
         for (let i = 0; i < textContent.items.length; i++) {
             let item = textContent.items[i];
@@ -292,4 +292,4 @@ function main(argc, argv)
     });
 }
 
-main(args.argc, args.argv);
+main(argc, argv);

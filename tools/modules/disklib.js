@@ -13,7 +13,6 @@ import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
-import { DEBUG }  from "../../machines/modules/v2/defines.js";
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import FileLib    from "../../machines/modules/v2/filelib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
@@ -29,7 +28,7 @@ export { device, printf, sprintf }
 
 export function printError(err, filename)
 {
-    let msg = err.stack || err.message;
+    let msg = err.message || err.stack;
     if (filename) msg = path.basename(filename) + ": " + msg;
     printf("%s\n", msg);
 }
@@ -643,7 +642,7 @@ export function getArchiveFiles(zip, verbose)
             if (filename.length > 14) {
                 filename = "..." + filename.slice(filename.length - 11);
             }
-            let filesize = file.size;
+            let filesize = file.size || 0;
             if (filesize < 0) {
                 filesize = 0;
                 filename += path.sep;
@@ -652,7 +651,7 @@ export function getArchiveFiles(zip, verbose)
             if (entry.encrypted) method += '*';
             let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
             if (entry.errors) filesize = -1;
-            if (!DEBUG) {
+            if (!Device.DEBUG) {
                 printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
                     filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
             } else {

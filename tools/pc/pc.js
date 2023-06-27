@@ -13,14 +13,13 @@ import path       from "path";
 import xml2js     from "xml2js";
 import FileLib    from "../../machines/modules/v2/filelib.js";
 import Messages   from "../../machines/modules/v2/messages.js";
-import { printf } from "../../machines/modules/v2/printf.js";
-import ProcLib    from "../../machines/modules/v2/proclib.js";
+import printf     from "../../machines/modules/v2/printf.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
 import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
+import pcjslib    from "../modules/pcjslib.js";
 
-let args = ProcLib.getArgs();
-let argv = args.argv;
+let argv = pcjslib.getArgs()[1];
 let fDebug = argv['debug'] || false;
 let machineType = argv['type'] || "pcx86";
 

@@ -9,13 +9,12 @@
  */
 
 import fs         from "fs";
-import PCJSLib    from "../modules/pcjslib.js";
+import pcjslib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/v3/device.js";
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
-let pcjslib = new PCJSLib();
 
 /**
  * getArg(s, delimiter)

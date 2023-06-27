@@ -66,11 +66,10 @@ import gulpForEach from "gulp-foreach";
 import gulpHeader from "gulp-header";
 import gulpReplace from "gulp-replace";
 import closureCompiler from "google-closure-compiler";
-import Proc from "./machines/modules/v2/proclib.js";
 import gulpSourceMaps from "gulp-sourcemaps";
+import pcjslib from "./tools/modules/pcjslib.js";
 
-var args = Proc.getArgs();
-var argv = args.argv;
+var argv = pcjslib.getArgs()[1];
 var gulpClosureCompiler = closureCompiler.gulp();
 var pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"));
 

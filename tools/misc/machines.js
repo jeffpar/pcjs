@@ -12,11 +12,10 @@ import fs from "fs";
 import glob from "glob";
 import path from "path";
 import xml2js from "xml2js";
-import strlib from "../../machines/modules/v2/strlib.js";
-import proclib from "../../machines/modules/v2/proclib.js";
+import pcjslib from "../modules/pcjslib.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
-let args = proclib.getArgs();
+let [argc, argv] = pcjslib.getArgs();
 let idAttrs = '@';
 let sRootDir = "../..";
 
@@ -311,10 +310,9 @@ function readXML(xml, sNode, sFile, aTags, iTag, done, fDebug)
     return fLoading;
 }
 
-if (args.argc < 2) {
+if (argc < 2) {
     printf("usage: node machines.js [directory]\n");
 } else {
-    let argv = args.argv;
     processMachines(argv[1]);
     // processPages(argv[1], argv['launch'], argv['debug']);
 }

@@ -17,9 +17,9 @@ let sprintf = strlib.sprintf;
  * @param {string} format
  * @param {...} args
  */
-export function printf(format, ...args)
+export default function printf(format, ...args)
 {
     process.stdout.write(sprintf(format, ...args));
 }
 
-export { sprintf }
+export { printf, sprintf }

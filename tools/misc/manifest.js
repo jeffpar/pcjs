@@ -9,10 +9,10 @@
  */
 
 import fs from "fs";
-import proclib from "../../machines/modules/v2/proclib.js";
+import pcjslib from "../modules/pcjslib.js";
 import { printf } from "../../machines/modules/v2/printf.js";
 
-var args = proclib.getArgs();
+var [argc, argv] = pcjslib.getArgs();
 
 /**
  * processManifest(sManifest, iStart, iEnd)
@@ -109,8 +109,7 @@ function processManifest(sManifest, iStart, iEnd)
     }
 }
 
-if (args.argc > 1) {
-    var argv = args.argv;
+if (argc > 1) {
     processManifest(argv[1], +argv[2], +argv[3]);
     process.exit(0);
 }

@@ -14,10 +14,10 @@ import mkdirp from "mkdirp";
 import os from "os";
 import path from "path";
 import xml2js from "xml2js";
-import proclib from "../../machines/modules/v2/proclib.js";
+import pcjslib from "../modules/pcjslib.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
-let args = proclib.getArgs();
+let [argc, argv] = pcjslib.getArgs();
 let idAttrs = '@';
 let moduleDir, rootDir, rootRelative = "../..";
 
@@ -828,10 +828,10 @@ function remapPath(sPath, fDebug)
     return sNewPath;
 }
 
-if (args.argc < 2) {
+if (argc < 2) {
     printf("usage: node diskettes.js [directory] [options]\n");
 } else {
-    let argv = args.argv;
+    let argv = argv;
     let argv0 = argv[0].split(' ');
     moduleDir = path.dirname(argv0[0]);
     rootDir = path.join(moduleDir, rootRelative);

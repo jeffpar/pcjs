@@ -12,11 +12,10 @@ import fs from "fs";
 import glob from "glob";
 import os from "os";
 import path from "path";
-import strlib from "../../machines/modules/v2/strlib.js";
-import proclib from "../../machines/modules/v2/proclib.js";
+import pcjslib from "../modules/pcjslib.js";
 import { printf } from "../../machines/modules/v2/printf.js";
 
-let args = proclib.getArgs();
+let [argc, argv] = pcjslib.getArgs();
 let sRootDir = "../..";
 let remappings = {
     "/tests/pcx86/testmon": "/software/pcx86/test/testmon"
@@ -247,10 +246,9 @@ function processFiles(sDir, fDebug, fFix)
     }
 }
 
-if (args.argc < 2) {
+if (argc < 2) {
     printf("usage: node links.js [directory] [options]\n");
 } else {
-    let argv = args.argv;
     let sDir = argv[1].replace(/^~/, os.homedir());
     processFiles(sDir, argv['debug'], argv['fix']);
 }

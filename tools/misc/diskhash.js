@@ -11,10 +11,10 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
-import proclib from "../../machines/modules/v2/proclib.js";
+import pcjslib from "../modules/pcjslib.js";
 import { printf } from "../../machines/modules/v2/printf.js";
 
-var args = proclib.getArgs();
+var [argc, argv] = pcjslib.getArgs();
 
 /**
  * findFile(buf, name)
@@ -120,8 +120,7 @@ function processDisk(sDisk)
     }
 }
 
-if (args.argc > 1) {
-    var argv = args.argv;
+if (argc > 1) {
     processDisk(argv[1]);
     process.exit(0);
 }
