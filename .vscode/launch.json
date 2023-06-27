@@ -526,7 +526,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
+        "--load=/machines/dec/pdp11/1170/panel/debugger/machine",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",

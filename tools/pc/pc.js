@@ -17,7 +17,7 @@ import ProcLib    from "../../machines/modules/v2/proclib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import { printf } from "../../machines/modules/v2/printf.js";
-import { device, getDiskSector, makeFileDesc, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
+import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
 
 let args = ProcLib.getArgs();
 let argv = args.argv;
@@ -320,15 +320,18 @@ function loadMachine(sFile)
         if (Device.DEBUG) {
             printf("loadMachine(\"%s\")\n", sFile);
         }
-        if (sFile.indexOf('.') < 0) sFile += ".json5";
-        if (sFile.endsWith(".json") || sFile.endsWith(".json5")) {
-            result = readJSON(sFile, getFactory);
+        let sOpen = sFile;
+        if (sOpen.indexOf(".json") > 0 || existsFile(sOpen = sFile + ".json", false) || existsFile(sOpen = sFile + ".json5", false)) {
+            result = readJSON(sOpen, getFactory);
         }
-        else if (sFile.endsWith(".xml")) {
-            let xml = {_resolving: 0};
-            result = readXML(sFile, xml, 'machine', null, 0, getFactory);
-        } else {
-            result = "unsupported machine configuration file: " + sFile;
+        else {
+            sOpen = sFile;
+            if (sOpen.indexOf(".xml") > 0 || existsFile(sOpen = sFile + ".xml", false)) {
+                let xml = {_resolving: 0};
+                result = readXML(sOpen, xml, 'machine', null, 0, getFactory);
+            } else {
+                result = "unsupported machine configuration file: " + sFile;
+            }
         }
     }
     return result;
