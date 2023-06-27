@@ -537,23 +537,24 @@ function readInput(stdin, stdout)
 {
     let command = "";
 
-    setDebugMode(!kbd);
-
-    stdin.resume();
-    stdin.setEncoding("utf8");
-    stdin.setRawMode(true);
-
     if (typeof argv[1] == "string" && argv[1][0] != '-') {     // process first argument, if any
-        if (buildDisk(argv[1])) {
-            if (!argv['load']) {
-                printf(doCommand("load compaq386"));
-            }
+        if (!buildDisk(argv[1])) {
+            return;
+        }
+        if (!argv['load']) {
+            printf(doCommand("load compaq386"));
         }
     }
 
     if (typeof argv['load'] == "string" ) {         // process --load argument, if any
         printf(doCommand("load " + argv['load']));
     }
+
+    setDebugMode(!kbd);
+
+    stdin.resume();
+    stdin.setEncoding("utf8");
+    stdin.setRawMode(true);
 
     stdin.on("data", function(data) {
         let code = data.charCodeAt(0);
