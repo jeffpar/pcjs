@@ -29,9 +29,9 @@ export { device, printf, sprintf }
 
 export function printError(err, filename)
 {
-    let msg = err.message;
+    let msg = err.stack || err.message;
     if (filename) msg = path.basename(filename) + ": " + msg;
-    printf("error: %s\n", msg);
+    printf("%s\n", msg);
 }
 
 /*
@@ -324,6 +324,31 @@ function addMetaData(di, sDir, sPath, aFiles)
 }
 
 /**
+ * makeFileDesc(name, contents, attr, date)
+ *
+ * This mimics getFileDesc() in diskinfo.js, but it creates a FILEDESC object from input
+ * parameters rather than a FileInfo object.
+ *
+ * @param {string} name
+ * @param {DataBuffer|string} contents
+ * @param {number} [attr]
+ * @param {Date} [date]
+ * @returns {Object}
+ */
+export function makeFileDesc(name, contents, attr = DiskInfo.ATTR.ARCHIVE, date = new Date())
+{
+    return {
+        [DiskInfo.FILEDESC.PATH]: "/" + name,
+        [DiskInfo.FILEDESC.NAME]: name,
+        [DiskInfo.FILEDESC.ATTR]: sprintf("%#0bx", attr),
+        [DiskInfo.FILEDESC.DATE]: sprintf("%T", date),
+        [DiskInfo.FILEDESC.SIZE]: contents.length,
+        [DiskInfo.FILEDESC.CONTENTS]: contents,
+        [DiskInfo.FILEDESC.VOL]:  0
+    };
+}
+
+/**
  * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
  *
  * @param {string} sDir (directory name)
@@ -366,6 +391,10 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
                 desc.date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
                 delete desc[DiskInfo.FILEDESC.HASH];
                 delete desc[DiskInfo.FILEDESC.CONTENTS];
+                let j = aFileData.findIndex((file) => (file.name === desc.name));
+                if (j >= 0) {
+                    aFileData.splice(j, 1);
+                }
                 aFileData.unshift(desc);
             }
             suppData = null;

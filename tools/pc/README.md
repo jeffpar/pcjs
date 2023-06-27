@@ -75,13 +75,15 @@ Here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/pa
 
     pc.js --load=/machines/dec/pdp11/1170/panel/debugger/machine.xml
 
-### Dynamic Access to Local Files from MS-DOS
+### Access Local Files from MS-DOS
 
 If you run [pc.js](pc.js) with the name of a DOS executable; eg:
 
     pc.js pkunzip.exe
 
-it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc` folder with all the files/folders in your current directory and then load the [compaq386](compaq386.json5) machine with that disk image mounted as drive C.
+it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc` folder with copies of all the files/folders in your current local directory, automatically start a [COMPAQ DeskPro 386](compaq386.json5) machine with that disk image mounted as drive C, and then run the specified DOS executable.
+
+This allows you to run console-based DOS applications on your modern operating system (eg, macOS or Windows), with excellent IBM PC (or in this case, COMPAQ DeskPro 386) compatibility.  The experience comes with a number of caveats, and there are some important limitations to be aware of, such as limits on the size and number of files you can have in your current directory (the overall limit is currently 10Mb) and the fact that only console-based DOS applications are usable in this environment.
 
 One of the pre-requisites of this feature is having a copy of the [pcjs-diskettes](https://github.com/jeffpar/pcjs-diskettes) repository in the `/disks/diskettes` folder of your PCjs repository:
 
@@ -90,7 +92,15 @@ One of the pre-requisites of this feature is having a copy of the [pcjs-diskette
     cd disks
     git clone https://github.com/jeffpar/pcjs-diskettes.git diskettes
 
-This is because [pc.js](pc.js) uses system files from MS-DOS diskettes (eg, [MSDOS320-DISK1](https://github.com/jeffpar/pcjs-diskettes/blob/master/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json)) to build a bootable hard disk image.
+This is because [pc.js](pc.js) automatically copies system files from MS-DOS diskettes (eg, [MSDOS320-DISK1](https://github.com/jeffpar/pcjs-diskettes/blob/master/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json)) to build a bootable hard disk image.
+
+There are no plans to perform any kind of "dynamic" file system updates.  This means if you modify any files on your local file system, don't expect those modifications to show up inside the machine until you restart `pc.js`.  Similarly, don't expect any file modifications inside the machine to show up on your local file system until you terminate `pc.js` -- and only once that feature has actually been implemented (see below).
+
+Coming soon:
+
+- Options to select another machine type and/or DOS version
+- Runtime options to load diskette images into drives A: and B:
+- On machine termination, automatic detection of modified files and update of local file(s)
 
 ### Historical Notes
 

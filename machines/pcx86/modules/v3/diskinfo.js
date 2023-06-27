@@ -45,7 +45,7 @@ import FileInfo from "./fileinfo.js";
  * @property {Date} date
  * @property {number} size
  * @property {DataBuffer} data
- * @property {number} cluster
+ * @property {number} cluster (leave uninitialized; buildFAT() will fill this in)
  * @property {Array.<FileData>} files
  */
 
