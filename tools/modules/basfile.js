@@ -17,9 +17,9 @@ import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
  * I'm sure there are still some lingering issues here (perhaps some magic whitespace rules that I'm unaware of), but
  * this code seems to work pretty well now, and the PCjs tokens dictionary is *much* more straightforward.
  *
- * @class BASConvert
+ * @class BASFile
  */
-export default class BASConvert {
+export default class BASFile {
 
     static tokens = {
         0x11:   "0",
@@ -220,9 +220,9 @@ export default class BASConvert {
     };
 
     /**
-     * BASConvert(db, normalize, name, print)
+     * BASFile(db, normalize, name, print)
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @param {ArrayBuffer|DataBuffer|string} db
      * @param {boolean} [normalize] (implies "utf-8" conversion)
      * @param {string} [name]
@@ -239,7 +239,7 @@ export default class BASConvert {
     /**
      * eof()
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @returns {boolean}
      */
     eof() {
@@ -249,7 +249,7 @@ export default class BASConvert {
     /**
      * readU8()
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @returns {number}
      */
     readU8() {
@@ -259,7 +259,7 @@ export default class BASConvert {
     /**
      * peekU8(v)
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @param {number} v
      * @returns {boolean}
      */
@@ -270,7 +270,7 @@ export default class BASConvert {
     /**
      * peekU16(v1, v2)
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @param {number} v1
      * @param {number} v2
      * @returns {boolean}
@@ -283,7 +283,7 @@ export default class BASConvert {
     /**
      * skip(off)
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @param {number} off
      */
     skip(off)
@@ -294,7 +294,7 @@ export default class BASConvert {
     /**
      * readU16()
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @returns {number}
      */
     readU16()
@@ -307,7 +307,7 @@ export default class BASConvert {
     /**
      * readS16()
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @returns {number}
      */
     readS16()
@@ -320,7 +320,7 @@ export default class BASConvert {
     /**
      * readMBF32()
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @returns {number}
      */
     readMBF32()
@@ -347,7 +347,7 @@ export default class BASConvert {
     /**
      * readMBF64()
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @returns {number}
      */
     readMBF64()
@@ -378,7 +378,7 @@ export default class BASConvert {
     /**
      * getToken(lineNum)
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @param {number} lineNum
      * @returns {string|null}
      */
@@ -463,7 +463,7 @@ export default class BASConvert {
                         this.skip(1);
                         break;
                     }
-                    token = BASConvert.tokens[v];
+                    token = BASFile.tokens[v];
                     if (token == "REM") {
                         this.comment = true;
                     }
@@ -587,7 +587,7 @@ export default class BASConvert {
     /**
      * convert()
      *
-     * @this {BASConvert}
+     * @this {BASFile}
      * @returns {DataBuffer}
      */
     convert()
@@ -598,7 +598,7 @@ export default class BASConvert {
         this.lineWarning = 0;
 
         this.off = 0;
-        this.db = BASConvert.unprotect(this.db);
+        this.db = BASFile.unprotect(this.db);
 
         if (this.readU8() != 0xFF) {
             /*
@@ -606,7 +606,7 @@ export default class BASConvert {
              * normalization was requested, too.
              */
             if (this.normalize) {
-                this.db = BASConvert.modernize(this.db);
+                this.db = BASFile.modernize(this.db);
             }
         }
         else {

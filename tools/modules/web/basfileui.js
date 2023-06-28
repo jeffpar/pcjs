@@ -7,17 +7,17 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import BASConvert from "../modules/basconvert.js";
+import BASFile from "../basfile.js";
 
 /**
- * @class BASConvertUI
+ * @class BASFileUI
  * @property {boolean} localFiles
  */
-export default class BASConvertUI {
+export default class BASFileUI {
     /**
-     * BASConvertUI(idForm, idOutput)
+     * BASFileUI(idForm, idOutput)
      *
-     * @this {BASConvertUI}
+     * @this {BASFileUI}
      * @param {string} [idForm]
      * @param {string} [idOutput]
      */
@@ -41,7 +41,7 @@ export default class BASConvertUI {
     /**
      * doChange(event)
      *
-     * @this {BASConvertUI}
+     * @this {BASFileUI}
      * @param {Event} event
      */
     doChange(event)
@@ -53,7 +53,7 @@ export default class BASConvertUI {
     /**
      * doConvert(event)
      *
-     * @this {BASConvertUI}
+     * @this {BASFileUI}
      * @param {Event} event
      */
     doConvert(event)
@@ -63,8 +63,8 @@ export default class BASConvertUI {
             let ui = this;
             let reader = new FileReader();
             reader.onload = function() {
-                let converter = new BASConvert(reader.result, true);
-                let s = converter.convert().toString("utf-8");
+                let baslib = new BASFile(reader.result, true);
+                let s = baslib.convert().toString("utf-8");
                 if (ui.output) {
                     ui.output.innerHTML = s;
                 }

@@ -7,11 +7,12 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import fs         from "fs";
-import os         from "os";
 import crypto     from "crypto";
+import fs         from "fs";
 import glob       from "glob";
+import os         from "os";
 import path       from "path";
+import BASFile    from "../modules/basfile.js";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import FileLib    from "../../machines/modules/v2/filelib.js";
@@ -74,6 +75,32 @@ function checkArchive(sPath, fExt)
         }
     }
     return sArchive;
+}
+
+/**
+ * isBASICFile(sFile)
+ *
+ * @param {string} sFile
+ * @returns {boolean} true if the filename has a ".BAS" extension
+ */
+export function isBASICFile(sFile)
+{
+    let ext = path.parse(sFile).ext;
+    return ext && ext.toUpperCase() == ".BAS";
+}
+
+/**
+ * convertBASICFile(db, fNormalize, sPath)
+ *
+ * @param {DataBuffer} db (the contents of the BASIC file)
+ * @param {boolean} [fNormalize] (true if we should convert characters from CP437 to UTF-8, revert line-endings, and omit EOF)
+ * @param {string} [sPath] (for informational purposes only, since we're working entirely with the DataBuffer)
+ * @returns {DataBuffer}
+ */
+export function convertBASICFile(db, fNormalize, sPath)
+{
+    let basfile = new BASFile(db, fNormalize, sPath, printf);
+    return basfile.convert();
 }
 
 /**
@@ -348,6 +375,17 @@ export function makeFileDesc(name, contents, attr = DiskInfo.ATTR.ARCHIVE, date 
 }
 
 /**
+ * modernizeTextFile(db)
+ *
+ * @param {DataBuffer} db
+ * @returns {DataBuffer}
+ */
+export function modernizeTextFile(db)
+{
+    return BASFile.modernize(db, true);
+}
+
+/**
  * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
  *
  * @param {string} sDir (directory name)
@@ -510,7 +548,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
             file.data = new DataBuffer();
             file.files = readDirFiles(sPath + '/', null, fNormalize, iLevel + 1);
         } else {
-            let fText = fNormalize && isTextFile(sName);
+            let fText = fNormalize && isTextFile(sName) && !isBASICFile(sName);
             let data = readFile(sPath, fText? "utf8" : null);
             if (!data) continue;
             if (data.length != stats.size && !fText) {   // ignore differences in UTF-8 encoded files

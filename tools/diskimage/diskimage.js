@@ -12,7 +12,6 @@ import fs         from "fs";
 import glob       from "glob";
 import path       from "path";
 import got        from "got";
-import BASConvert from "../modules/basconvert.js";
 import pcjslib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
@@ -21,7 +20,7 @@ import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
-import { device, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isTextFile, makeDir, printError, printf, readDir, readDisk, readFile, readJSON, replaceServerPrefix, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
+import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, modernizeTextFile, printError, printf, readDir, readDisk, readFile, readJSON, replaceServerPrefix, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
 
 let rootDir, sFileIndexCache;
 
@@ -172,32 +171,6 @@ function getTargetValue(sTarget)
 }
 
 /**
- * isBASICFile(sFile)
- *
- * @param {string} sFile
- * @returns {boolean} true if the filename has a ".BAS" extension
- */
-function isBASICFile(sFile)
-{
-    let ext = path.parse(sFile).ext;
-    return ext && ext.toUpperCase() == ".BAS";
-}
-
-/**
- * convertBASICFile(db, fNormalize, sPath)
- *
- * @param {DataBuffer} db (the contents of the BASIC file)
- * @param {boolean} [fNormalize] (true if we should convert characters from CP437 to UTF-8, revert line-endings, and omit EOF)
- * @param {string} [sPath] (for informational purposes only, since we're working entirely with the DataBuffer)
- * @returns {DataBuffer}
- */
-function convertBASICFile(db, fNormalize, sPath)
-{
-    let converter = new BASConvert(db, fNormalize, sPath, printf);
-    return converter.convert();
-}
-
-/**
  * extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
  *
  * @param {string} sDir
@@ -308,7 +281,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
                 db = convertBASICFile(db, true, sPath);
             }
             else if (isTextFile(sPath)) {
-                db = BASConvert.modernize(db, true);
+                db = modernizeTextFile(db);
             }
         }
         fSuccess = writeFile(getLocalPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);

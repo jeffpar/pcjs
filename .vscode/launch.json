@@ -1431,12 +1431,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0052/DISK0052.json",
-        "--extract=HIDEFILE.BAS",
+        "--dir=../../disks/tmp/DISK0001",
+        "--extract=BLACKJCK.BAS",
         "--normalize",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/disks/tmp",
+      "cwd": "${workspaceFolder}/tools/diskimage",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

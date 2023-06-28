@@ -20,7 +20,6 @@ permalink: /tools/
 
 Here are a few other JavaScript modules I've written for the project:
 
-  - [BASConvert.js](basconvert/), a library to convert IBM PC BASIC files to plain-text
   - [StreamZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/streamzip.js), an improved version of the [node-stream-zip](https://www.npmjs.com/package/node-stream-zip) package
   - [Structure.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/structure.js), a helper class for defining and reading on-disk structures
   - [LegacyZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/legacyzip.js), a decompression library used by **StreamZip** that supports:
@@ -33,8 +32,9 @@ Here are a few other JavaScript modules I've written for the project:
       - Reduced files (ZIP compression formats #2, #3, #4, and #5)
       - Imploded files (ZIP compression format #6)
       - Deflated files (ZIP compression format #8)
+  - [BASFile.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js), a BASIC file de-tokenizer and character conversion library, which also uses [CharSet.js](https://github.com/jeffpar/pcjs/tree/master/machines/pcx86/modules/v3/charset.js)
 
-The [DiskImage.js](diskimage/) `--arc` and `--zip` options use **StreamZip** along with **LegacyZip** to decompress old ARC or ZIP archives, and the `--normalize` option can be included to convert old IBM PC BASIC files to plain-text during the extraction/decompression process.
+The [DiskImage.js](diskimage/) `--arc` and `--zip` options use **StreamZip** along with **LegacyZip** to decompress old ARC or ZIP archives, and the `--normalize` option uses **BASFile** to convert old IBM PC BASIC files to plain-text during the extraction/decompression process.
 
 If you find any ARC, ZIP, or BAS files can't be decompressed or converted, [let me know](mailto:Jeff@pcjs.org).
 
