@@ -1206,9 +1206,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--dir=MSDOS320-C400-JSON",
-        "--target=10M",
-        "--output=new.img",
+        "--dir=DISK0001",
+        "--normalize",
+        "--output=TEST001.img",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}/disks/tmp",

@@ -20,7 +20,7 @@ import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
-import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, modernizeTextFile, printError, printf, readDir, readDisk, readFile, readJSON, replaceServerPrefix, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
+import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, normalizeTextFile, printError, printf, readDir, readDisk, readFile, readJSON, replaceServerPrefix, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
 
 let rootDir, sFileIndexCache;
 
@@ -269,7 +269,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
         if (argv['normalize']) {
             /*
              * BASIC files are dealt with separately, because there are 3 kinds: ASCII (for which we call
-             * modernize()), tokenized (which we convert to ASCII and automatically normalize in the process),
+             * normalize()), tokenized (which we convert to ASCII and automatically normalize in the process),
              * and protected (which we decrypt and then de-tokenize).
              */
             if (isBASICFile(sPath)) {
@@ -281,7 +281,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
                 db = convertBASICFile(db, true, sPath);
             }
             else if (isTextFile(sPath)) {
-                db = modernizeTextFile(db);
+                db = normalizeTextFile(db);
             }
         }
         fSuccess = writeFile(getLocalPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);

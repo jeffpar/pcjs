@@ -220,18 +220,18 @@ export default class BASFile {
     };
 
     /**
-     * BASFile(db, normalize, name, print)
+     * BASFile(db, toUTF8, name, print)
      *
      * @this {BASFile}
      * @param {ArrayBuffer|DataBuffer|string} db
-     * @param {boolean} [normalize] (implies "utf-8" conversion)
+     * @param {boolean} [toUTF8] (also implies CR/LF to LF conversion and EOF filtering)
      * @param {string} [name]
      * @param {function} [print]
      */
-    constructor(db, normalize, name, print)
+    constructor(db, toUTF8, name, print)
     {
         this.db = new DataBuffer(db);
-        this.normalize = normalize;
+        this.toUTF8 = toUTF8;
         this.name = name || "unknown";
         this.print = print || console.log;
     }
@@ -402,7 +402,7 @@ export default class BASFile {
              */
             if ((this.comment || this.quote || this.data && v != 0x3A) && v < 0xFF || v >= 0x20 && v <= 0x7E && v != 0x3A) {
                 token = String.fromCharCode(v);
-                if (this.normalize && v != 0x09) {      // normalize all characters except TAB
+                if (this.toUTF8 && v != 0x09) {         // transform everything except TAB
                     token = CharSet.fromCP437(token, true);
                 }
                 if (v == 0x22 && !this.comment) this.quote = !this.quote;
@@ -489,7 +489,7 @@ export default class BASFile {
                             v >>= 8;                    // and shift the value back to 8 bits
                         }
                         token = String.fromCharCode(v);
-                        if (this.normalize) {
+                        if (this.toUTF8) {
                             token = CharSet.fromCP437(token, true);
                         }
                         if (this.lineWarning != lineNum) {
@@ -514,9 +514,9 @@ export default class BASFile {
     }
 
     /**
-     * modernize(db, assumeText)
+     * normalize(db, assumeText)
      *
-     * In the context of old BASIC programs, normalization means modernizing the character set
+     * In the context of old BASIC programs, normalization means transforming the character set
      * (ie, from CP437 to UTF-8).  For tokenized programs, normalization was performed as tokens
      * were processed; for plain-text files, we use this function.
      *
@@ -524,7 +524,7 @@ export default class BASFile {
      * @param {boolean} [assumeText]
      * @returns {DataBuffer}
      */
-    static modernize(db, assumeText)
+    static normalize(db, assumeText)
     {
         /*
          * Either the caller tells us the data is text, or we make sure the first 4 bytes look like text.
@@ -598,15 +598,23 @@ export default class BASFile {
         this.lineWarning = 0;
 
         this.off = 0;
+
+        /*
+         * If the first byte is 0xFE, then this is a protected GW-BASIC program,
+         * which we transform into an unprotected (but still tokenized) stream.
+         */
         this.db = BASFile.unprotect(this.db);
 
+        /*
+         * If the first byte is 0xFF, then this is a tokenized GW-BASIC program.
+         */
         if (this.readU8() != 0xFF) {
             /*
              * This does not appear to be a tokenized BASIC program, so there's nothing to do UNLESS
-             * normalization was requested, too.
+             * character set transformation was requested, too.
              */
-            if (this.normalize) {
-                this.db = BASFile.modernize(this.db);
+            if (this.toUTF8) {
+                this.db = BASFile.normalize(this.db);
             }
         }
         else {
@@ -622,7 +630,7 @@ export default class BASFile {
                 let off = this.readU16();
                 if (!off) {
                     if (this.peekU8(0x1A)) {
-                        if (!this.normalize) s += String.fromCharCode(0x1A);
+                        if (!this.toUTF8) s += String.fromCharCode(0x1A);
                     } else if (!this.eof()) {
                         this.print("warning: " + this.name + " contains non-EOF at offset " + this.off + " (" + this.readU8() + ")\n");
                     }
@@ -635,7 +643,7 @@ export default class BASFile {
                 while ((t = this.getToken(lineNum)) !== null) {
                     line += t;
                 }
-                s += line.trim() + (this.normalize? "\n" : "\r\n");
+                s += line.trim() + (this.toUTF8? "\n" : "\r\n");
                 this.quote = false;             // if you end a line with an open quote, BASIC automatically "closes" it
                 this.comment = false;           // ditto for comments
                 this.data = false;              // ditto for DATA statements

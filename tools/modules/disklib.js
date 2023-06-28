@@ -90,16 +90,16 @@ export function isBASICFile(sFile)
 }
 
 /**
- * convertBASICFile(db, fNormalize, sPath)
+ * convertBASICFile(db, toUTF8, sPath)
  *
  * @param {DataBuffer} db (the contents of the BASIC file)
- * @param {boolean} [fNormalize] (true if we should convert characters from CP437 to UTF-8, revert line-endings, and omit EOF)
+ * @param {boolean} [toUTF8] (true if we should convert characters from CP437 to UTF-8)
  * @param {string} [sPath] (for informational purposes only, since we're working entirely with the DataBuffer)
  * @returns {DataBuffer}
  */
-export function convertBASICFile(db, fNormalize, sPath)
+export function convertBASICFile(db, toUTF8, sPath)
 {
-    let basfile = new BASFile(db, fNormalize, sPath, printf);
+    let basfile = new BASFile(db, toUTF8, sPath, printf);
     return basfile.convert();
 }
 
@@ -375,14 +375,14 @@ export function makeFileDesc(name, contents, attr = DiskInfo.ATTR.ARCHIVE, date 
 }
 
 /**
- * modernizeTextFile(db)
+ * normalizeTextFile(db)
  *
  * @param {DataBuffer} db
  * @returns {DataBuffer}
  */
-export function modernizeTextFile(db)
+export function normalizeTextFile(db)
 {
-    return BASFile.modernize(db, true);
+    return BASFile.normalize(db, true);
 }
 
 /**
@@ -548,13 +548,26 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
             file.data = new DataBuffer();
             file.files = readDirFiles(sPath + '/', null, fNormalize, iLevel + 1);
         } else {
-            let fText = fNormalize && isTextFile(sName) && !isBASICFile(sName);
-            let data = readFile(sPath, fText? "utf8" : null);
+            /*
+             * To properly deal with normalization of BASIC files, we first read the file into
+             * a DataBuffer and make sure the first byte isn't 0xFE or 0xFF (because that indicates
+             * the BASIC program is tokenized and should be left as-is).
+             *
+             * Once we're convinced we're dealing with a text file, we re-read the file with UTF-8
+             * encoding.  The assumption here is that YOU, by specifically requesting normalization,
+             * are telling us that the files being read here are "modern" (eg, UTF-8 or at least plain
+             * ASCII) files that should be converted to PC standards.
+             */
+            let data = readFile(sPath, null);
             if (!data) continue;
-            if (data.length != stats.size && !fText) {   // ignore differences in UTF-8 encoded files
-                printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
+            let fText = fNormalize && isTextFile(sName);
+            if (fText) {
+                if (isBASICFile(sName)) {
+                    if (data.length && data.readUInt8(0) >= 0xFE) fText = false;
+                }
             }
             if (fText) {
+                data = readFile(sPath, "utf8");
                 if (CharSet.isText(data)) {
                     let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
                     if (dataNew != data) {
@@ -563,9 +576,12 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
                     data = dataNew;
                 } else {
                     printf(Device.MESSAGE.FILE + Device.MESSAGE.INFO, "non-ASCII data in %s (line endings unchanged)\n", sName);
-                    CharSet.isText(data);
                 }
                 data = new DataBuffer(data);
+            } else {
+                if (data.length != stats.size) {
+                    printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
+                }
             }
             file.attr = DiskInfo.ATTR.ARCHIVE;
             file.size = data.length;
