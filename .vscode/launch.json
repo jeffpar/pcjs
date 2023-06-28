@@ -1538,6 +1538,34 @@
       }
     },
     {
+      "name": "diskimage.js --files basicdos",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "--files",
+        "./software/pcx86/bdsrc/boot/makefile,mk.bat,boot.asm,wboot.asm,./software/pcx86/bdsrc/inc/8086.inc,bios.inc,dev.inc,devapi.inc,disk.inc,dos.inc,dosapi.inc,macros.inc,parser.inc,version.inc",
+        "--output",
+        "./software/pcx86/disks/BDS-BOOT.json",
+        "--output",
+        "./software/pcx86/disks/archive/BDS-BOOT.img",
+        "--writable",
+        "--target=360",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}/../basicdos",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
       "name": "fileimage.js",
       "type": "node",
       "request": "launch",

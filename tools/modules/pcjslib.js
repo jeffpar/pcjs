@@ -74,6 +74,7 @@ export default class PCJSLib
     {
         let argc = 0;
         let argv = [];
+        let lastOp = "";
         if (i) argv.push(args.slice(i++).join(' '));
         while (i < args.length) {
             let j, sSep;
@@ -99,8 +100,12 @@ export default class PCJSLib
                 if (typeof argv[sArg] == "number") {
                     sArg = '#' + sArg;      // avoid conflict with the built-in 'length' property
                 }
+                lastOp = sArg;
                 if (!argv.hasOwnProperty(sArg)) {
                     argv[sArg] = sValue;
+                    continue;
+                }
+                if (typeof sValue == "boolean") {
                     continue;
                 }
                 if (!Array.isArray(argv[sArg])) {
@@ -117,6 +122,17 @@ export default class PCJSLib
                     }
                 }
                 continue;
+            }
+            if (lastOp) {
+                if (typeof argv[lastOp] == "boolean") {
+                    argv[lastOp] = sArg;
+                }
+                else {
+                    if (!Array.isArray(argv[lastOp])) {
+                        argv[lastOp] = [argv[lastOp]];
+                    }
+                    argv[lastOp].push(sArg);
+                }
             }
             argv.push(sArg);
         }

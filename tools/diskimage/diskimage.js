@@ -926,15 +926,16 @@ function processDisk(di, diskFile, argv, diskette)
             di.updateBootSector(readFile(argv['boot'], null));
         }
         let output = argv['output'];
-        if (!output || typeof output == "boolean") {
-            output = argv[1];
-        }
         if (output) {
             if (typeof output == "string") output = [output];
-            output.forEach((outputFile) => {
-                let file = outputFile.replace("%d", path.dirname(diskFile));
-                writeDisk(file, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
-            });
+            if (Array.isArray(output)) {
+                output.forEach((outputFile) => {
+                    let file = outputFile.replace("%d", path.dirname(diskFile));
+                    writeDisk(file, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
+                });
+            } else {
+                printf("missing output file(s)\n");
+            }
         }
     }
 }
@@ -1209,9 +1210,6 @@ function processAll(all, argv)
         let asFiles = glob.sync(getLocalPath(all));
         if (asFiles.length) {
             let outdir = argv['output'];                // if specified, --output is assumed to be a directory
-            if (!outdir || typeof outdir == "boolean") {
-                outdir = argv[1];
-            }
             let type =  argv['type'] || "json";         // if specified, --type should be a known file extension
             if (type[0] != '.') type = '.' + type;
             let filter = argv['filter'];
@@ -1260,8 +1258,8 @@ function processArg(argv)
                 * This only affects the 'name' property in 'imageInfo', which is of limited interest anyway.
                 */
                 let name = argv['output'];
-                if (!name || typeof name == "boolean") {
-                    name = argv[1];
+                if (Array.isArray(name)) {
+                    name = name[0];
                 }
                 if (name) {
                     /*
@@ -1280,34 +1278,14 @@ function processArg(argv)
         return false;
     };
 
-    /*
-     * Checking each --dir, --files, etc, for a boolean value allows the user to specify a value
-     * without an equal sign (ie, a small convenience).
-     */
     input = argv['dir'];
-    if (input) {
-        fDir = true;                // if --dir, the directory should end with a trailing slash (but we'll make sure)
-        if (typeof input == "boolean") {
-            input = argv[1];
-            if (input) {
-                argv.splice(1, 1);
-            } else {
-                fDir = false;
-            }
-        }
+    if (input) {                    // if --dir, the directory should end with a trailing slash (but we'll make sure)
+        fDir = (typeof input == "string");
         if (input && !input.endsWith('/')) input += '/';
     } else {
         input = argv['files'];
         if (input) {                // if --files, the list of files should be separated with commas (and NO trailing slash)
-            fDir = fFiles = true;
-            if (typeof input == "boolean") {
-                input = argv[1];
-                if (input) {
-                    argv.splice(1, 1);
-                } else {
-                    fDir = fFiles = false;
-                }
-            }
+            fDir = fFiles = (typeof input == "string");
         } else {
             input = argv['arc'];
             if (input) {
@@ -1321,7 +1299,6 @@ function processArg(argv)
             if (!input || typeof input == "boolean") {
                 input = argv[1];
                 if (input) {
-                    argv.splice(1, 1);
                     if (!arcType) {
                         if (input.endsWith('/')) {
                             fDir = true;
@@ -1330,7 +1307,7 @@ function processArg(argv)
                         }
                     }
                 } else {
-                    arcType = 0
+                    arcType = 0;
                 }
             }
         }
@@ -1458,18 +1435,12 @@ function main(argc, argv)
     }
 
     let input = argv['disk'];
-    if (input) {
+    if (input && typeof input == "string") {
         /*
          * If you use --disk to specify a disk image, then I call the experimental async function.
          */
-        if (typeof input == "boolean") {
-            input = argv[1];
-            if (input) argv.splice(1, 1);
-        }
-        if (input) {
-            processDiskAsync(input, argv);
-            return;
-        }
+        processDiskAsync(input, argv);
+        return;
     }
 
     if (processAll(argv['all'], argv) || processArg(argv)) {

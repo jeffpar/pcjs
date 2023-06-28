@@ -557,7 +557,7 @@ export default class Computer extends Component {
                  * and of course, eval() will convert them all, but there's no expectation of any but those I've
                  * listed above, in part because of Jekyll limitations in some of our templates; eg:
                  *
-                 *      https://github.com/jeffpar/pcjs/blob/jekyll/_includes/machine-engines.html
+                 *      https://github.com/jeffpar/pcjs.v1/blob/jekyll/_includes/machine-engines.html
                  *
                  * which could be overcome, but there's really no need to support more, since \xNN can be used to
                  * represent anything else.
