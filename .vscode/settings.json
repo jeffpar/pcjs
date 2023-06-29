@@ -192,6 +192,7 @@
     "bset",
     "BSLASH",
     "BSWIN",
+    "btmod",
     "btst",
     "BUGBUG",
     "builtins",

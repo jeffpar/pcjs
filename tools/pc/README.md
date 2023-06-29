@@ -77,7 +77,7 @@ Here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/pa
 
 ### Access Local Files from MS-DOS
 
-If you run [pc.js](pc.js) with the name of a DOS executable; eg:
+If you run [pc.js](pc.js) with the name of a DOS executable in your current directory; eg:
 
     pc.js pkunzip.exe
 
@@ -98,7 +98,7 @@ There are no plans to perform any kind of "dynamic" file system updates.  This m
 
 Coming soon:
 
-- Options to select another machine type and/or DOS version
+- Command-line options to select another machine type and/or DOS version
 - Runtime options to load diskette images into drives A: and B:
 - On machine termination, automatic detection of modified files and update of local file(s)
 
