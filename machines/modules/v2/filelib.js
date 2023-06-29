@@ -63,6 +63,7 @@ export default class FileLib {
     static setRootDir(sDir)
     {
         rootDir = sDir;
+        globals.window['LOCALDISKS'] = true;
     }
 }
 

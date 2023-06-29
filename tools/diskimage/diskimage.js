@@ -1366,10 +1366,10 @@ function processArg(argv)
  */
 function main(argc, argv)
 {
-    let argv0 = argv[0].split(' ');
-    let options = argv0.slice(1).join(' ');
+    let arg0 = argv[0].split(' ');
+    let options = arg0.slice(1).join(' ');
 
-    rootDir = path.join(path.dirname(argv0[0]), "../..");
+    rootDir = path.join(path.dirname(arg0[0]), "../..");
     setRootDir(rootDir);
 
     Device.DEBUG = !!argv['debug'];

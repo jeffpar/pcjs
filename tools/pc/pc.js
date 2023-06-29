@@ -11,16 +11,16 @@
 import glob       from "glob";
 import path       from "path";
 import xml2js     from "xml2js";
-import FileLib    from "../../machines/modules/v2/filelib.js";
 import Messages   from "../../machines/modules/v2/messages.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
-import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
+import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDisk, readFile, setRootDir, writeDisk } from "../modules/disklib.js";
 import pcjslib    from "../modules/pcjslib.js";
 
 let argv = pcjslib.getArgs()[1];
+let arg0 = argv[0].split(' ');
 let fDebug = argv['debug'] || false;
 let machineType = argv['type'] || "pcx86";
 
@@ -29,17 +29,17 @@ device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (Defines.DEBUG?
 let messagesFilter = fDebug? Messages.TYPES : Messages.ALERTS;
 
 let cwd = process.cwd();
-let rootDir = path.join(path.dirname(argv[0]), "../..");
+let rootDir = path.join(path.dirname(arg0[0]), "../..");
 let pcjsDir = path.join(rootDir, "/tools/pc");
-FileLib.setRootDir(rootDir);
+setRootDir(rootDir);
 
 let Component, Interrupts;
 let weblib, embedMachine;
-let cpu, dbg, kbd, serial, fnSendSerial;
+let cpu, dbg, fdc, kbd, serial, fnSendSerial;
 let debugMode;
 let prompt = ">";
 let sCmdPrev = "";
-let machines = JSON.parse(FileLib.readFileSync("/machines/machines.json", "utf8"));
+let machines = JSON.parse(readFile("/machines/machines.json"));
 
 function setDebugMode(f)
 {
@@ -215,7 +215,12 @@ function initMachine(machine, sMachine)
         }
 
         /*
-         * Get the Debugger component so we can override the debugger's print() function.
+         * Get the FDC component so we can query its complete list of diskettes.
+         */
+        fdc = Component.getComponentByType("FDC");
+
+        /*
+         * Get the Debugger component so we can send the debugger commands.
          */
         dbg = Component.getComponentByType("Debugger");
 
@@ -346,7 +351,7 @@ function readJSON(sFile, done)
 {
     let result = "";
     try {
-        let sMachine = FileLib.readFileSync(sFile, "utf8");
+        let sMachine = readFile(sFile);
         /*
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
@@ -376,7 +381,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
     let idAttrs = '@';
     try {
         xml._resolving++;
-        let sXML = FileLib.readFileSync(sFile, "utf8");
+        let sXML = readFileSync(sFile);
         let parser = new xml2js.Parser({attrkey: idAttrs});
         parser.parseString(sXML, function parseXML(err, xmlNode) {
             if (!aTags) {
@@ -529,6 +534,42 @@ function buildDisk(sProgram)
         printf("program not found: %s\n", sProgram);
     }
     return false;
+}
+
+/**
+ * buildFileIndex()
+ */
+function buildFileIndex()
+{
+    let total = 0;
+    let aDiskettes = fdc.aDiskettes;
+    let fileIndex = {};
+    if (aDiskettes) {
+        for (let i = 0; i < aDiskettes.length; i++) {
+            let diskette = aDiskettes[i];
+            let diskJSON = readFile(diskette['path'], "utf8", true);
+            if (diskJSON) {
+                let disk = JSON.parse(diskJSON);
+                let fileTable = disk['fileTable'];
+                if (!fileTable) continue;
+                for (let j = 0; j < fileTable.length; j++) {
+                    let file = fileTable[j];
+                    let parts = file['path'].split('/');
+                    let name = parts[parts.length - 1];
+                    if (!fileIndex[name]) {
+                        fileIndex[name] = [];
+                    }
+                    fileIndex[name].push(i);
+                }
+                total++;
+                if (total % 100 == 0) {
+                    printf("diskettes loaded: %d\r", total);
+                }
+            }
+        }
+    }
+    printf("total diskettes loaded: %d\n", total);
+    return fileIndex;
 }
 
 /**

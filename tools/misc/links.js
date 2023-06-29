@@ -38,7 +38,7 @@ function fileExists(sFile)
 /**
  * parseDiskettes(library, propPath)
  *
- * See /machines/modules/jsonlib.js for the same basic function; the difference here is that we're validating the existence of each diskette.
+ * See /machines/modules/v2/jsonlib.js for the same basic function; the difference here is that we're validating the existence of each diskette.
  *
  * TODO: Can we use jsonlib.js instead?
  *

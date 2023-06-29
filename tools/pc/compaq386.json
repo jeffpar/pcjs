@@ -71,7 +71,8 @@
     "model": "US84"
   },
   "fdc": {
-    "id": "fdcNEC"
+    "id": "fdcNEC",
+    "diskettes": "/machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json,/disks/private/pcx86/diskettes.json"
   },
   "hdc": {
     "id": "hdcAT",
