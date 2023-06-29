@@ -362,7 +362,7 @@ export default class ROMx86 extends Component {
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX86.TYPE.ROM)) {
-            if (DEBUG) this.printf(Messages.LOG, "addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
+            if (MAXDEBUG) this.printf(Messages.LOG, "addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
             let bto = null;
             for (let off = 0; off < this.abROM.length; off++) {
                 this.bus.setByteDirect(addr + off, this.abROM[off]);
