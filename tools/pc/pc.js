@@ -26,6 +26,7 @@ let machineType = argv['type'] || "pcx86";
 
 device.setDebug(fDebug);
 device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (Defines.DEBUG? MESSAGE.DEBUG : 0), true);
+let messagesFilter = fDebug? Messages.TYPES : Messages.ALERTS;
 
 let cwd = process.cwd();
 let rootDir = path.join(path.dirname(argv[0]), "../..");
@@ -46,6 +47,7 @@ function setDebugMode(f)
         printf("Press ctrl-a to enter debugger, ctrl-c to terminate process\n");
     }
     debugMode = f;
+    if (f && cpu) cpu.stopCPU();
     if (debugMode) {
         printf("%s> ", prompt);
     }
@@ -171,7 +173,7 @@ async function loadModules(factory, modules, done)
          */
         if (module.default && module.default.prototype) {
             module.default.prototype.print = function print(s, bitsMessage) {
-                if (Defines.DEBUG && bitsMessage != Messages.LOG) {
+                if (debugMode && !bitsMessage || (bitsMessage || fDebug) && this.testBits(messagesFilter, bitsMessage)) {
                     printf(s);
                 }
             };
@@ -216,13 +218,6 @@ function initMachine(machine, sMachine)
          * Get the Debugger component so we can override the debugger's print() function.
          */
         dbg = Component.getComponentByType("Debugger");
-        if (dbg) {
-            dbg.print = function print(s, bitsMessage) {
-                if (Defines.DEBUG || bitsMessage != Messages.LOG) {
-                    printf(s);
-                }
-            };
-        }
 
         /*
          * Get the Keyboard component to get access to injectKeys(), which simplifies the
@@ -320,7 +315,7 @@ function loadMachine(sFile)
         if (sFile.indexOf(path.sep) < 0) {
             sFile = path.join(pcjsDir, sFile);
         }
-        if (Defines.DEBUG) {
+        if (fDebug) {
             printf("loadMachine(\"%s\")\n", sFile);
         }
         let sOpen = sFile;
@@ -493,8 +488,7 @@ function buildDisk(sProgram)
             for (let name of aFileNames) {
                 let desc = diSystem.findFile(name);
                 if (desc) {
-                    let attr = +desc.attr | DiskInfo.ATTR.HIDDEN;
-                    desc.attr = sprintf("%#04bx", attr);
+                    desc.attr = +desc.attr | DiskInfo.ATTR.HIDDEN;
                     aFileDescs.push(desc);
                 }
             }
@@ -560,7 +554,7 @@ function readInput(stdin, stdout)
         printf(doCommand("load " + argv['load']));
     }
 
-    setDebugMode(!kbd);
+    // setDebugMode(!kbd);
 
     stdin.resume();
     stdin.setEncoding("utf8");
@@ -569,9 +563,8 @@ function readInput(stdin, stdout)
     stdin.on("data", function(data) {
         let code = data.charCodeAt(0);
         if (code == 0x01 && !debugMode) {           // check for CTRL-A when NOT in debug mode
-            if (cpu) cpu.stopCPU();
-            command = "";
             setDebugMode(true);
+            command = "";
             return;
         }
         if (code == 0x03 && debugMode) {            // check for CTRL-C when in debug mode

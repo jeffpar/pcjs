@@ -545,7 +545,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "mouse"
+        "mouse",
+        "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc/archive/MSDOS320",
       "stopOnEntry": false,

@@ -636,7 +636,7 @@ export default class Computer extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
+            this.printf(Messages.NOTICE, "Unable to load machine state (%s) from server (error %d%s)\n", sURL, nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
         }
         this.setReady();
     }

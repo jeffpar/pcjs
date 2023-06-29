@@ -64,7 +64,7 @@ export default class ROMx86 extends Component {
             if (this.addrAlias[0] != '[') {
                 this.addrAlias = +this.addrAlias;
             } else {
-                this.addrAlias = JSON.parse(this.addrAlias);
+                this.addrAlias = eval(this.addrAlias);
             }
         }
 

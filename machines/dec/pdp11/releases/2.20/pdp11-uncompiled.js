@@ -167,6 +167,7 @@ const Messages = {
     NOTICE:     0x004000000000,
     WARNING:    0x008000000000,
     ERROR:      0x010000000000,
+    ALERTS:     0x01c000000000,
     DEBUG:      0x020000000000,
     PROGRESS:   0x040000000000,
     SCRIPT:     0x080000000000,
@@ -2577,7 +2578,11 @@ class Web {
         }
 
         if (globals.node.readFileSync) {
-            resource = globals.node.readFileSync(sURL);
+            try {
+                resource = globals.node.readFileSync(sURL);
+            } catch (err) {
+                nErrorCode = err['errno'];
+            }
             if (resource !== undefined) {
                 if (done) done(sURL, resource, nErrorCode);
                 return [resource, nErrorCode];

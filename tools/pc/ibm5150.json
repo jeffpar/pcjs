@@ -76,6 +76,10 @@
       "A": {
         "name": "PC DOS 2.00 (Disk 1)",
         "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
+      },
+      "B": {
+        "name": "PC DOS 2.00 (Disk 2)",
+        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK2.json"
       }
     }
   },

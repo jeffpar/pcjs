@@ -167,6 +167,7 @@ const Messages = {
     NOTICE:     0x004000000000,
     WARNING:    0x008000000000,
     ERROR:      0x010000000000,
+    ALERTS:     0x01c000000000,
     DEBUG:      0x020000000000,
     PROGRESS:   0x040000000000,
     SCRIPT:     0x080000000000,
@@ -2941,7 +2942,11 @@ class Web {
         }
 
         if (globals.node.readFileSync) {
-            resource = globals.node.readFileSync(sURL);
+            try {
+                resource = globals.node.readFileSync(sURL);
+            } catch (err) {
+                nErrorCode = err['errno'];
+            }
             if (resource !== undefined) {
                 if (done) done(sURL, resource, nErrorCode);
                 return [resource, nErrorCode];
@@ -45569,7 +45574,7 @@ class ROMx86 extends Component {
             if (this.addrAlias[0] != '[') {
                 this.addrAlias = +this.addrAlias;
             } else {
-                this.addrAlias = JSON.parse(this.addrAlias);
+                this.addrAlias = eval(this.addrAlias);
             }
         }
 
@@ -81266,7 +81271,7 @@ class Computer extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
+            this.printf(Messages.NOTICE, "Unable to load machine state (%s) from server (error %d%s)\n", sURL, nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
         }
         this.setReady();
     }
