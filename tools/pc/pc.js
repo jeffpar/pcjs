@@ -13,8 +13,9 @@ import path       from "path";
 import xml2js     from "xml2js";
 import FileLib    from "../../machines/modules/v2/filelib.js";
 import Messages   from "../../machines/modules/v2/messages.js";
-import printf     from "../../machines/modules/v2/printf.js";
+import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
+import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
 import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDisk, readFile, writeDisk } from "../modules/disklib.js";
 import pcjslib    from "../modules/pcjslib.js";
@@ -491,13 +492,22 @@ function buildDisk(sProgram)
             let aFileNames = ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"];
             for (let name of aFileNames) {
                 let desc = diSystem.findFile(name);
-                if (desc) aFileDescs.push(desc);
+                if (desc) {
+                    let attr = +desc.attr | DiskInfo.ATTR.HIDDEN;
+                    desc.attr = sprintf("%#04bx", attr);
+                    aFileDescs.push(desc);
+                }
             }
             sProgram = aFiles[0].replace(/\//g, '\\');
             sProgram = "C:" + (sProgram[0] != '\\'? '\\' : '') + sProgram;
-            let contents = readFile("AUTOEXEC.BAT", "utf8") || "";
+            let attr = DiskInfo.ATTR.ARCHIVE;
+            let contents = readFile("AUTOEXEC.BAT", "utf8", true);
+            if (!contents) {
+                contents = "";
+                attr |= DiskInfo.ATTR.HIDDEN;
+            }
             contents += sProgram + "\r\n";
-            aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", contents));
+            aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", contents, attr));
             let dbBoot = getDiskSector(diSystem, 0);
             /*
              * For reasons that are unclear at the moment, the MS-DOS 3.20 boot sector did not rely on the
@@ -573,8 +583,9 @@ function readInput(stdin, stdout)
             data = data.replace(/\x7f/g, "\b");     // convert DEL to BS
             if (kbd) {
                 kbd.injectKeys.call(kbd, data, 0);
+            } else {
+                sendSerial(code);
             }
-            sendSerial(code);
             return;
         }
         if (data == "\x08" || data == "\x7f") {     // implement BS/DEL ourselves (since we're in "raw" mode)

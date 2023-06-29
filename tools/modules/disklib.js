@@ -805,13 +805,14 @@ export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
 }
 
 /**
- * readFile(sFile, encoding)
+ * readFile(sFile, encoding, quiet)
  *
  * @param {string} sFile
  * @param {string|null} [encoding]
+ * @param {boolean} [quiet]
  * @returns {DataBuffer|string|undefined}
  */
-export function readFile(sFile, encoding = "utf8")
+export function readFile(sFile, encoding = "utf8", quiet = false)
 {
     let data;
     if (sFile) {
@@ -819,7 +820,7 @@ export function readFile(sFile, encoding = "utf8")
             sFile = getLocalPath(sFile);
             data = FileLib.readFileSync(sFile, encoding);
         } catch(err) {
-            printError(err);
+            if (!quiet) printError(err);
         }
     }
     return data;

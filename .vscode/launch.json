@@ -540,14 +540,14 @@
       }
     },
     {
-      "name": "pc.js chkdsk",
+      "name": "pc.js mouse",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "chkdsk"
+        "mouse"
       ],
-      "cwd": "/Users/jeff/Disks/MSDOS320",
+      "cwd": "${workspaceFolder}/tools/pc/archive/MSDOS320",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
