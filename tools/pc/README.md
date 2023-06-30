@@ -7,7 +7,7 @@ redirect_from: /machines/pcx86/modules/bin/
 
 This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
 
-Load a JSON machine file, such as [ibm5150.json](ibm5150.json) or [compaq386.json5](compaq386.json5), with the utility's `load` command, either interactively or with the `--load` command-line argument.
+Load a JSON machine file, such as [ibm5150.json](ibm5150.json) or [compaq386.json](compaq386.json), with the utility's `load` command, either interactively or with the `--load` command-line argument.
 
 For example, this command:
 
@@ -17,7 +17,9 @@ or, if your operating system doesn't automatically associate `.js` files with [N
 
 	node pc.js --load=ibm5150
 
-should produce the following output:
+If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  As a convenience, you can also omit `--load=` option if the JSON file is in your current directory.
+
+Loading [ibm5150.json](ibm5150.json) should produce the following output:
 
     PCx86 v2.00
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
@@ -67,13 +69,15 @@ This utility is very much a "work in progress" and is intended for development w
 
 Limited support for XML-based machines now exists; eg:
 
-    pc.js --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
+    pc.js --debug --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
 
 loads and runs the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
 
 Here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/panel/debugger/machine.xml):
 
-    pc.js --load=/machines/dec/pdp11/1170/panel/debugger/machine.xml
+    pc.js --debug --load=/machines/dec/pdp11/1170/panel/debugger/machine.xml
+
+The above examples also include `--debug` because those particular machines do *not* automatically start running, and `--debug` provides useful feedback in such cases.
 
 ### Access Local Files from MS-DOS
 
@@ -81,7 +85,7 @@ If you run [pc.js](pc.js) with the name of a DOS executable in your current dire
 
     pc.js pkunzip.exe
 
-it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc` folder with copies of all the files/folders in your current local directory, automatically start a [COMPAQ DeskPro 386](compaq386.json5) machine with that disk image mounted as drive C, and then run the specified DOS executable.
+it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc` folder with copies of all the files/folders in your current local directory, automatically start a [COMPAQ DeskPro 386](compaq386.json) machine with that disk image mounted as drive C, and then run the specified DOS executable.
 
 This allows you to run console-based DOS applications on your modern operating system (eg, macOS or Windows), with excellent IBM PC (or in this case, COMPAQ DeskPro 386) compatibility.  The experience comes with a number of caveats, and there are some important limitations to be aware of, such as limits on the size and number of files you can have in your current directory (the overall limit is currently 10Mb) and the fact that only console-based DOS applications are usable in this environment.
 

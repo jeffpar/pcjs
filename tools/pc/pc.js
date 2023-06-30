@@ -43,11 +43,14 @@ let machines = JSON.parse(readFile("/machines/machines.json"));
 
 function setDebugMode(f)
 {
+    let prevMode = debugMode;
     if (!f && debugMode != f) {
         printf("Press ctrl-a to enter debugger, ctrl-c to terminate process\n");
     }
     debugMode = f;
-    if (f && cpu) cpu.stopCPU();
+    if (f && prevMode !== undefined && cpu) {
+        cpu.stopCPU();
+    }
     if (debugMode) {
         printf("%s> ", prompt);
     }
@@ -242,7 +245,7 @@ function initMachine(machine, sMachine)
                 }
             }
         }
-
+        setDebugMode(true);
     }
     catch(err) {
         printf("machine initialization error: %s\n", err.message);
@@ -581,21 +584,29 @@ function buildFileIndex()
 function readInput(stdin, stdout)
 {
     let command = "";
+    let loading = false;
 
-    if (typeof argv[1] == "string" && argv[1][0] != '-') {     // process first argument, if any
-        if (!buildDisk(argv[1])) {
-            return;
-        }
-        if (!argv['load']) {
-            printf(doCommand("load compaq386"));
+    if (typeof argv['load'] == "string") {          // process --load argument, if any
+        printf(loadMachine(argv['load']));
+        loading = true;
+    }
+    else if (argv[1]) {                             // process first non-option argument, if any
+        if (existsFile(argv[1]) || existsFile(argv[1] + ".json")) {
+            printf(loadMachine(argv[1]));           // perform an implicit load
+            argv.splice(1, 1);
+            loading = true;
+        } else {
+            if (!buildDisk(argv[1])) {              // otherwise, assume the argument was a program name
+                return;
+            }
+            if (!argv['load']) {                    // and if it was, automatically load a machine to run it
+                printf(loadMachine("compaq386"));
+                loading = true;
+            }
         }
     }
 
-    if (typeof argv['load'] == "string" ) {         // process --load argument, if any
-        printf(doCommand("load " + argv['load']));
-    }
-
-    // setDebugMode(!kbd);
+    if (!loading) setDebugMode(true);
 
     stdin.resume();
     stdin.setEncoding("utf8");

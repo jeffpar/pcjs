@@ -1023,9 +1023,9 @@ export default class DebuggerPDP11 extends DbgLib {
         this.updateStatus();
         if (!fAutoStart) this.setFocus();
         if (this.sInitCommands) {
-            var sCmds = this.sInitCommands;
+            var sCommands = this.sInitCommands;
             this.sInitCommands = null;
-            this.doCommands(sCmds);
+            this.doCommands(sCommands);
         }
     }
 
@@ -3953,18 +3953,19 @@ export default class DebuggerPDP11 extends DbgLib {
     }
 
     /**
-     * doCommands(sCmds, fSave)
+     * doCommands(sCommands, fSave, fQuiet)
      *
      * @this {DebuggerPDP11}
-     * @param {string} sCmds
+     * @param {string} sCommands
      * @param {boolean} [fSave]
+     * @param {boolean} [fQuiet]
      * @returns {boolean} true if all commands processed, false if not
      */
-    doCommands(sCmds, fSave)
+    doCommands(sCommands, fSave = false, fQuiet = false)
     {
-        var a = this.parseCommand(sCmds, fSave);
+        var a = this.parseCommand(sCommands, fSave);
         for (var s in a) {
-            if (!this.doCommand(a[+s])) return false;
+            if (!this.doCommand(a[+s], fQuiet)) return false;
         }
         return true;
     }
