@@ -467,48 +467,59 @@ function doCommand(sCmd)
 }
 
 /**
- * buildDisk(sProgram)
+ * buildDisk(sCommand)
  *
- * The first three files on the disk image will be those listed below (ie, IO.SYS, MSDOS.SYS, and COMMAND.COM);
- * if any of those files already exist in the current directory, ours will take precedence.
+ * The first three system files on the disk image will be those listed below (ie, IO.SYS, MSDOS.SYS, and
+ * COMMAND.COM); if any of those files already exist in the current directory, ours will take precedence.
+ * As for AUTOEXEC.BAT, we read any existing file (or create an empty file) and append the provided command.
  *
- * As for AUTOEXEC.BAT, I read any existing copy (or create an empty file) and append the name of the executable to it.
+ * NOTE: The list of allowed internal commands is not intended to be exhaustive (yet); it's just a start.
  *
- * @param {string} sProgram
+ * @param {string} sCommand (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
  * @returns {string}
  */
-function buildDisk(sProgram)
+function buildDisk(sCommand)
 {
-    let sGlob = sProgram.toUpperCase();
-    if (sGlob.indexOf('.') < 0) {
-        sGlob += ".{COM,EXE,BAT}";
+    let aSystemFiles = ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"];
+    let aInternalCommands = ["COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
+    let aParts = sCommand.split(' ');
+    let sProgram = aParts[0].toUpperCase();
+    let iCommand = aInternalCommands.indexOf(sProgram);
+    if (iCommand < 0) {
+        if (sProgram.indexOf('.') < 0) {
+            sProgram += ".{COM,EXE,BAT}";
+        }
+        if (sProgram.indexOf('/') < 0 && sProgram.indexOf('\\') < 0) {
+            sProgram = path.join("**", sProgram);
+        }
+        let aFiles = glob.sync(sProgram);
+        if (!aFiles.length) {
+            sProgram = null;
+        } else {
+            let sArguments = aParts.slice(1).join(' ');
+            sCommand = aFiles[0].replace(/\//g, '\\');
+            sCommand = "C:" + (sCommand[0] != '\\'? '\\' : '') + sCommand + (sArguments? " " + sArguments : "");
+        }
     }
-    if (sGlob.indexOf('/') < 0 && sGlob.indexOf('\\') < 0) {
-        sGlob = path.join("**", sGlob);
-    }
-    let aFiles = glob.sync(sGlob);
-    if (aFiles.length) {
+    if (sProgram) {
         let diSystem = readDisk("/diskettes/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json");
         let dbMBR = readFile(path.join(pcjsDir, "MSDOS.mbr"), null);
         if (diSystem && dbMBR) {
             let aFileDescs = [];
-            let aFileNames = ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"];
-            for (let name of aFileNames) {
+            for (let name of aSystemFiles) {
                 let desc = diSystem.findFile(name);
                 if (desc) {
                     desc.attr = +desc.attr | DiskInfo.ATTR.HIDDEN;
                     aFileDescs.push(desc);
                 }
             }
-            sProgram = aFiles[0].replace(/\//g, '\\');
-            sProgram = "C:" + (sProgram[0] != '\\'? '\\' : '') + sProgram;
             let attr = DiskInfo.ATTR.ARCHIVE;
             let contents = readFile("AUTOEXEC.BAT", "utf8", true);
             if (!contents) {
                 contents = "";
                 attr |= DiskInfo.ATTR.HIDDEN;
             }
-            contents += sProgram + "\r\n";
+            contents += sCommand + "\r\n";
             aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", contents, attr));
             let dbBoot = getDiskSector(diSystem, 0);
             /*
@@ -534,7 +545,7 @@ function buildDisk(sProgram)
             return true;
         }
     } else {
-        printf("program not found: %s\n", sProgram);
+        printf("command not found: %s\n", sCommand);
     }
     return false;
 }
@@ -596,8 +607,13 @@ function readInput(stdin, stdout)
             argv.splice(1, 1);
             loading = true;
         } else {
-            if (!buildDisk(argv[1])) {              // otherwise, assume the argument was a program name
-                return;
+            /*
+             * NOTE: Arguments like "*.*" are problematic (since modern shells will expand them), so
+             * any arguments you want to pass along with the command to buildDisk() should be included
+             * as part of a single fully-quoted argument (eg, pc.js "dir *.* /s").
+             */
+            if (!buildDisk(argv[1])) {              // the argument is presumably a DOS command or program
+                return;                             // exit on error (buildDisk() should have explained)
             }
             if (!argv['load']) {                    // and if it was, automatically load a machine to run it
                 printf(loadMachine("compaq386"));
