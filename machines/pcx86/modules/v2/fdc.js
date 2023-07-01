@@ -814,7 +814,7 @@ export default class FDC extends Component {
         this.regInput = data[i++] || 0;                             // TODO: Determine if we should default to FDC.REG_INPUT.DISK_CHANGE instead of 0
         this.regControl = data[i] || FDC.REG_CONTROL.RATE500K;      // default to maximum data rate
 
-        if (this.messageEnabled()) this.printf("FDC initialized for %d drive(s)\n", this.aDrives.length);
+        this.printf("FDC initialized for %d drive(s)\n", this.aDrives.length);
 
         return fSuccess;
     }
@@ -1316,7 +1316,7 @@ export default class FDC extends Component {
                 }
                 if (!sDiskPath) return false;
                 sDiskName = Str.getBaseName(sDiskPath);
-                if (DEBUG) this.printf(Messages.DEFAULT, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
+                this.printf(Messages.DEBUG, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
@@ -1324,16 +1324,16 @@ export default class FDC extends Component {
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
                 if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
-                    if (DEBUG) this.printf(Messages.DEFAULT, "load cancelled\n");
+                    this.printf(Messages.DEBUG, "load cancelled\n");
                     return false;
                 }
                 /*
-                 * So here's the story: loadDrive() returned true, which it does ONLY if the specified disk is already
-                 * mounted, AND the user clicked OK to reload the original disk image.  So we must toss any history we have
-                 * for the disk, unload it, and then loop back around to loadDrive().
+                 * So here's the story: loadDrive() returned -1, which it does ONLY if the specified disk is
+                 * already mounted AND the user clicked OK to reload the original disk image.  So at the user's
+                 * request, we toss any disk history, unload the disk, and then loop back around to loadDrive().
                  *
-                 * loadDrive() should NEVER return true the second time, since no disk is loaded. In other words,
-                 * this isn't really a loop so much as a one-time retry operation.
+                 * loadDrive() should NEVER return -1 the second time, since no disk should be loaded, so this
+                 * isn't really a loop, just a one-time retry operation.
                  */
                 this.removeDiskHistory(sDiskName, sDiskPath);
                 this.unloadDrive(iDrive, false, true);
@@ -1372,19 +1372,24 @@ export default class FDC extends Component {
      * @param {string} sDiskPath
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
+     * @param {function(Disk,number)} [done] optional callback on completion of the load request
      * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
      */
-    loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file)
+    loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file, done)
     {
+        let doneLoadDisk = (drive, disk, sDiskName, sDiskPath, nErrorCode) => {
+            this.doneLoadDrive(drive, disk, sDiskName, sDiskPath);
+            if (done) done(disk, nErrorCode);
+        };
         let drive = this.aDrives[iDrive];
         if (sDiskPath) {
             sDiskPath = Web.redirectResource(sDiskPath);
             /*
              * TODO: Machines with saved states may be using lower-case disk image names, whereas we now use
-             * UPPER-CASE names for disk images, so we lower-case both before comparing.  The only problem with
+             * UPPER-CASE names for disk images, so we upper-case both before comparing.  The only problem with
              * removing these hacks is that we can never be sure when all saved states in the wild have been updated.
              */
-            if (drive.sDiskPath.toLowerCase() != sDiskPath.toLowerCase()) {
+            if (drive.sDiskPath.toUpperCase() != sDiskPath.toUpperCase()) {
                 this.unloadDrive(iDrive, fAutoMount, true);
                 if (drive.fBusy) {
                     this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
@@ -1398,11 +1403,14 @@ export default class FDC extends Component {
                 }
                 drive.fLocal = !!file;
                 let disk = new Disk(this, drive, DiskAPI.MODE.PRELOAD);
-                if (!disk.load(sDiskName, sDiskPath, file, this.doneLoadDrive)) {
+                if (!disk.load(sDiskName, sDiskPath, file, doneLoadDisk)) {
                     return 0;
                 }
                 return 1;
             }
+        }
+        if (done) {
+            done(drive && drive.disk, -1);
         }
         return -1;
     }
@@ -1412,7 +1420,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} drive
-     * @param {Disk} disk is set if the disk was successfully loaded, null if not
+     * @param {Disk} disk (set if the disk was successfully loaded, null if not)
      * @param {string} sDiskName
      * @param {string} sDiskPath
      * @param {boolean} [fAutoMount]
@@ -2199,10 +2207,8 @@ export default class FDC extends Component {
             }
             return;
         }
-        if (this.messageEnabled()) {
-            this.printf("unsupported FDC command: %02x\n", bCmd);
-            if (MAXDEBUG) this.dbg.stopCPU();
-        }
+        this.printf("unsupported FDC command: %02x\n", bCmd);
+        if (MAXDEBUG) this.dbg.stopCPU();
     }
 
     /**
@@ -2461,10 +2467,8 @@ export default class FDC extends Component {
             break;
 
         default:
-            if (this.messageEnabled()) {
-                this.printf("unsupported FDC operation: %02x\n", bCmd);
-                if (MAXDEBUG) this.dbg.stopCPU();
-            }
+            this.printf("unsupported FDC operation: %02x\n", bCmd);
+            if (MAXDEBUG) this.dbg.stopCPU();
             break;
         }
 

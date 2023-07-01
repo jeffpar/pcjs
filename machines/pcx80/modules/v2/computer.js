@@ -170,7 +170,7 @@ export default class ComputerX80 extends Component {
             }
         }
 
-        this.printf(Messages.DEFAULT, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
         if (MAXDEBUG) this.printf(Messages.DEBUG, "TYPEDARRAYS: %s\n", TYPEDARRAYS);
 

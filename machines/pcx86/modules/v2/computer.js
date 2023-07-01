@@ -178,7 +178,7 @@ export default class Computer extends Component {
             this.enableDiagnostics();
         }
 
-        this.printf(Messages.DEFAULT, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
         if (MAXDEBUG) this.printf(Messages.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
@@ -385,11 +385,11 @@ export default class Computer extends Component {
                         cmp.notifyKbdEvent();
                     };
                 }(this), 2000);
-                this.printf(Messages.DEFAULT, "Initialization complete\n");
+                this.printf(Messages.NONE, "Initialization complete\n");
             }
             if (this.nDiagnostics == 2) {
                 this.nDiagnostics += 2;
-                this.printf(Messages.DEFAULT, "Initialization complete, press a key to continue...\n");
+                this.printf(Messages.NONE, "Initialization complete, press a key to continue...\n");
             }
             if (this.nDiagnostics == 3 || this.nDiagnostics == 4) {
                 /*
@@ -447,7 +447,7 @@ export default class Computer extends Component {
         let nDiagnostics = this.nDiagnostics;
         if (event && event.keyCode == 16 && this.nDiagnostics == 3) {
             this.nDiagnostics++;        // if we're waiting for a timeout and a shift key was pressed, wait for another key
-            this.printf(Messages.DEFAULT, "Machine paused, press another key to continue...\n");
+            this.printf(Messages.NONE, "Machine paused, press another key to continue...\n");
             event = null;
         }
         if (!event && this.nDiagnostics == 3 || event && fDown && this.nDiagnostics == 4) {

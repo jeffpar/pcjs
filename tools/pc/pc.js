@@ -39,6 +39,8 @@ let cpu, dbg, fdc, kbd, serial, fnSendSerial;
 let debugMode;
 let prompt = ">";
 let sCmdPrev = "";
+let diskIndexCache = null, diskIndexKeys = [];
+let fileIndexCache = null, fileIndexKeys = [];
 let machines = JSON.parse(readFile("/machines/machines.json"));
 
 function setDebugMode(f)
@@ -429,44 +431,6 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
 }
 
 /**
- * doCommand(sCmd)
- *
- * @param {string} sCmd
- * @returns {string} (result of command)
- */
-function doCommand(sCmd)
-{
-    let result = "";
-    let aTokens = sCmd.split(' ');
-
-    switch(aTokens[0]) {
-    case "cwd":
-        result = cwd;
-        break;
-    case "load":
-        result = loadMachine(aTokens[1]);
-        break;
-    case "q":
-    case "quit":
-        process.exit();
-        break;
-    default:
-        if (sCmd) {
-            try {
-                if (dbg && !dbg.doCommands(sCmd, true, true)) {
-                    result = eval('(' + sCmd + ')');
-                }
-            } catch(err) {
-                result =  err.message;
-            }
-        }
-        break;
-    }
-    sCmdPrev = sCmd;
-    return result? result + "\n" : "";
-}
-
-/**
  * buildDisk(sCommand)
  *
  * The first three system files on the disk image will be those listed below (ie, IO.SYS, MSDOS.SYS, and
@@ -551,13 +515,17 @@ function buildDisk(sCommand)
 }
 
 /**
- * buildFileIndex()
+ * buildDiskIndexes()
+ *
+ * Returns diskIndex object (properties are disk names) and fileIndex (properties are file names).
+ *
+ * @returns {Array}
  */
-function buildFileIndex()
+function buildDiskIndexes()
 {
     let total = 0;
+    let diskIndex = {}, fileIndex = {};
     let aDiskettes = fdc.aDiskettes;
-    let fileIndex = {};
     if (aDiskettes) {
         for (let i = 0; i < aDiskettes.length; i++) {
             let diskette = aDiskettes[i];
@@ -566,14 +534,20 @@ function buildFileIndex()
                 let disk = JSON.parse(diskJSON);
                 let fileTable = disk['fileTable'];
                 if (!fileTable) continue;
+                let diskPath = diskette['path'];
+                let diskName = diskette['name'];
+                /*
+                 * TODO: Decide what to do if diskName already exists...
+                 */
+                diskIndex[diskName] = {'path': diskPath};
                 for (let j = 0; j < fileTable.length; j++) {
                     let file = fileTable[j];
                     let parts = file['path'].split('/');
-                    let name = parts[parts.length - 1];
-                    if (!fileIndex[name]) {
-                        fileIndex[name] = [];
+                    let fileName = parts[parts.length - 1];
+                    if (!fileIndex[fileName]) {
+                        fileIndex[fileName] = [];
                     }
-                    fileIndex[name].push(i);
+                    fileIndex[fileName].push(diskName);
                 }
                 total++;
                 if (total % 100 == 0) {
@@ -583,7 +557,100 @@ function buildFileIndex()
         }
     }
     printf("total diskettes loaded: %d\n", total);
-    return fileIndex;
+    return [diskIndex, fileIndex];
+}
+
+/**
+ * loadDiskette(chDrive, aTokens)
+ *
+ * @param {string} chDrive ('A' through 'Z')
+ * @param {Array.<string>} aTokens
+ * @returns {string} (result of command)
+ */
+function loadDiskette(chDrive, aTokens)
+{
+    let result = "";
+    let diskName = "";
+    let done = function(disk, error) {
+        result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error);
+    };
+    if (fdc) {
+        if (!diskIndexCache) {
+            [diskIndexCache, fileIndexCache] = buildDiskIndexes();
+            if (diskIndexCache) {
+                diskIndexKeys = Object.keys(diskIndexCache);
+            }
+            if (fileIndexCache) {
+                fileIndexKeys = Object.keys(fileIndexCache);
+            }
+        }
+        if (diskIndexCache) {
+            diskName = aTokens.join(' ');
+            if (diskName) {
+                diskName = diskIndexKeys.find(function(s) {return s.toUpperCase().indexOf(diskName.toUpperCase()) >= 0;});
+                if (diskName) {
+                    let iDrive = chDrive.charCodeAt(0) - 'A'.charCodeAt(0);
+                    let diskPath = diskIndexCache[diskName]['path'];
+                    result = "loading \"" + diskName + "\" in drive " + chDrive;
+                    fdc.loadDrive(iDrive, diskName, diskPath, false, null, done);
+                }
+                else {
+                    result = "no disk(s) found";
+                }
+            } else {
+                result = "missing disk name";
+            }
+        }
+    } else {
+        result = "no floppy drive(s)";
+    }
+    return result;
+}
+
+/**
+ * doCommand(sCmd)
+ *
+ * @param {string} sCmd
+ * @returns {string} (result of command)
+ */
+function doCommand(sCmd)
+{
+    let result = "";
+    let aTokens = sCmd.split(' ');
+
+    switch(aTokens[0]) {
+    case "cwd":
+        result = cwd;
+        break;
+    case "load":
+        if (aTokens[1]) {
+            let matchDrive = aTokens[1].match(/^([a-z]):/i);
+            if (matchDrive) {
+                aTokens.splice(0, 2)
+                result = loadDiskette(matchDrive[1].toUpperCase(), aTokens);
+            } else {
+                result = loadMachine(aTokens[1]);
+            }
+        }
+        break;
+    case "q":
+    case "quit":
+        process.exit();
+        break;
+    default:
+        if (sCmd) {
+            try {
+                if (dbg && !dbg.doCommands(sCmd, true, true)) {
+                    result = eval('(' + sCmd + ')');
+                }
+            } catch(err) {
+                result = err.message;
+            }
+        }
+        break;
+    }
+    sCmdPrev = sCmd;
+    return result? result + "\n" : "";
 }
 
 /**
@@ -601,9 +668,9 @@ function readInput(stdin, stdout)
         printf(loadMachine(argv['load']));
         loading = true;
     }
-    else if (argv[1]) {                             // process first non-option argument, if any
+    else if (argv[1]) {                             // alternatively, process first non-option argument as --load argument
         if (existsFile(argv[1]) || existsFile(argv[1] + ".json")) {
-            printf(loadMachine(argv[1]));           // perform an implicit load
+            printf(loadMachine(argv[1]));           // and perform an implicit load
             argv.splice(1, 1);
             loading = true;
         } else {
@@ -615,7 +682,7 @@ function readInput(stdin, stdout)
             if (!buildDisk(argv[1])) {              // the argument is presumably a DOS command or program
                 return;                             // exit on error (buildDisk() should have explained)
             }
-            if (!argv['load']) {                    // and if it was, automatically load a machine to run it
+            if (!argv['load']) {                    // and if it was, automatically load a machine to boot and run it
                 printf(loadMachine("compaq386"));
                 loading = true;
             }

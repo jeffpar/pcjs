@@ -202,7 +202,7 @@ export default class C1PComputer extends Component {
          */
         computer.setReady();
 
-        computer.printf(Messages.DEFAULT, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
+        computer.printf(Messages.NONE, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
 
         /*
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to "power" the CPU;

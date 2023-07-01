@@ -1494,7 +1494,7 @@ export default class BusX86 extends Component {
      */
     reportError(op, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.DEBUG : Messages.DEFAULT, "Memory block error (%d: %x,%x)\n", op, addr, size);
+        this.printf(fQuiet? Messages.DEBUG : Messages.NONE, "Memory block error (%d: %x,%x)\n", op, addr, size);
         return false;
     }
 

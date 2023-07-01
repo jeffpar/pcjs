@@ -160,7 +160,6 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
  */
 const Messages = {
     NONE:       0x000000000000,
-    DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
     LOG:        0x001000000000,
     STATUS:     0x002000000000,
@@ -4224,7 +4223,7 @@ class Component {
      * The Closure Compiler should automatically remove all references to Component.assert() in non-DEBUG builds.
      * TODO: Add a task to the build process that "asserts" there are no instances of "assertion failure" in RELEASE builds.
      *
-     * @param {boolean} f is the expression we are asserting to be true
+     * @param {boolean|number|undefined} f is the expression we are asserting to be true
      * @param {string} [s] is description of the assertion on failure
      */
     static assert(f, s)
@@ -4970,7 +4969,7 @@ class Component {
      * TODO: Add a task to the build process that "asserts" there are no instances of "assertion failure" in RELEASE builds.
      *
      * @this {Component}
-     * @param {boolean|number} f is the expression asserted to be true
+     * @param {boolean|number|undefined} f is the expression asserted to be true
      * @param {string} [s] is a description of the assertion to be displayed or logged on failure
      */
     assert(f, s)
@@ -5236,7 +5235,7 @@ class Component {
     /**
      * messageEnabled(bitsMessage)
      *
-     * If bitsMessage is Messages.DEFAULT (0), then the component's Messages category is used.
+     * If bitsMessage is Messages.NONE (0), then the component's Messages category is used.
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
@@ -5245,13 +5244,19 @@ class Component {
     messageEnabled(bitsMessage = 0)
     {
         /*
-         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.DEFAULT, because
+         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.NONE, because
          * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
          */
         if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
         bitsMessage = bitsMessage || this.bitsMessage;
-        if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
-            return true;
+        /*
+         * printf() calls that specify Messages.DEBUG should be stripped out of non-DEBUG builds, but just in case
+         * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
+         */
+        if (DEBUG || !this.testBits(bitsMessage, Messages.DEBUG)) {
+            if (this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+                return true;
+            }
         }
         return false;
     }
@@ -5264,7 +5269,7 @@ class Component {
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
      * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
-     * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
+     * of whether the debugger has enabled it, the caller can use printf(Messages.NONE), and if the caller wants
      * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
@@ -11487,7 +11492,7 @@ class BusX86 extends Component {
      */
     reportError(op, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.DEBUG : Messages.DEFAULT, "Memory block error (%d: %x,%x)\n", op, addr, size);
+        this.printf(fQuiet? Messages.DEBUG : Messages.NONE, "Memory block error (%d: %x,%x)\n", op, addr, size);
         return false;
     }
 
@@ -13714,7 +13719,7 @@ class CPULib extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init();
             } else {
-                this.printf(Messages.DEFAULT, "No debugger detected\n");
+                this.printf(Messages.NONE, "No debugger detected\n");
             }
         }
         /*
@@ -13777,7 +13782,7 @@ class CPULib extends Component {
     isPowered()
     {
         if (!this.flags.powered) {
-            this.printf(Messages.DEFAULT, "%s not powered\n", this.toString());
+            this.printf(Messages.NONE, "%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -14204,7 +14209,7 @@ class CPULib extends Component {
                 let sSpeed = this.getSpeedTarget();
                 let controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.printf(Messages.DEFAULT, "target speed: %s\n", sSpeed);
+                this.printf(Messages.NONE, "target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.updateFocus();
         }
@@ -14749,7 +14754,7 @@ class CPULib extends Component {
             return false;
         }
         if (this.flags.running) {
-            if (!fQuiet) this.printf(Messages.DEFAULT, "%s busy\n", this.toString());
+            if (!fQuiet) this.printf(Messages.NONE, "%s busy\n", this.toString());
             return false;
         }
         if (this.idRunTimeout) {
@@ -37317,7 +37322,7 @@ X86.opUndefined = function()
 X86.opTBD = function()
 {
     this.setIP(this.opLIP - this.segCS.base);
-    this.printf(Messages.DEFAULT, "unimplemented 80386 opcode\n");
+    this.printf(Messages.NONE, "unimplemented 80386 opcode\n");
     this.stopCPU();
 };
 
@@ -39438,7 +39443,7 @@ class ChipSet extends Component {
             let volume = +sound || 0;
             this.volumeInit = (sound == "true" || volume < 0 || volume > 1? 0.5 : volume);
         }
-        if (!this.volumeInit) this.printf(Messages.DEFAULT, "note: speaker disabled\n");
+        if (!this.volumeInit) this.printf(Messages.NONE, "note: speaker disabled\n");
 
         /*
          * This divisor is invariant, so we calculate it as soon as we're able to query the CPU's base speed.
@@ -39753,9 +39758,9 @@ class ChipSet extends Component {
          */
         if (Object.prototype.toString.call(date) !== "[object Date]" || isNaN(date.getTime())) {
             date = new Date();
-            this.printf(Messages.DEFAULT, "CMOS date invalid (%s), using %T\n", sDate, date);
+            this.printf(Messages.NONE, "CMOS date invalid (%s), using %T\n", sDate, date);
         } else if (sDate) {
-            this.printf(Messages.DEFAULT, "CMOS date: %T\n", date);
+            this.printf(Messages.NONE, "CMOS date: %T\n", date);
         }
 
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = date.getSeconds();
@@ -43648,7 +43653,7 @@ class ChipSet extends Component {
              * determine if that's what the caller intended.
              */
             if (!COMPILED) {
-                this.printf(Messages.DEFAULT, "unexpected 8042 output port reset: %#04X\n", b);
+                this.printf(Messages.NONE, "unexpected 8042 output port reset: %#04X\n", b);
                 if (this.dbg) this.dbg.stopCPU();
             }
             this.cpu.resetRegs();
@@ -62501,12 +62506,10 @@ class Disk extends Component {
     {
         let sDiskURL = sDiskPath;
 
-        if (DEBUG) {
-            this.printf('load("%s","%s")\n', sDiskName, sDiskPath);
-        }
+        this.printf(Messages.DEBUG, 'load("%s","%s")\n', sDiskName, sDiskPath);
 
         if (this.fnNotify) {
-            if (DEBUG) this.printf('too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
+            this.printf(Messages.DEBUG, 'too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
             return true;
         }
 
@@ -62932,7 +62935,7 @@ class Disk extends Component {
         }
 
         if (this.fnNotify) {
-            this.fnNotify.call(this.controllerNotify, this.drive, disk, this.sDiskName, this.sDiskPath);
+            this.fnNotify.call(this.controllerNotify, this.drive, disk, this.sDiskName, this.sDiskPath, nErrorCode);
             this.fnNotify = null;
         }
     }
@@ -65012,7 +65015,7 @@ class FDC extends Component {
         this.regInput = data[i++] || 0;                             // TODO: Determine if we should default to FDC.REG_INPUT.DISK_CHANGE instead of 0
         this.regControl = data[i] || FDC.REG_CONTROL.RATE500K;      // default to maximum data rate
 
-        if (this.messageEnabled()) this.printf("FDC initialized for %d drive(s)\n", this.aDrives.length);
+        this.printf("FDC initialized for %d drive(s)\n", this.aDrives.length);
 
         return fSuccess;
     }
@@ -65514,7 +65517,7 @@ class FDC extends Component {
                 }
                 if (!sDiskPath) return false;
                 sDiskName = Str.getBaseName(sDiskPath);
-                if (DEBUG) this.printf(Messages.DEFAULT, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
+                this.printf(Messages.DEBUG, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
@@ -65522,16 +65525,16 @@ class FDC extends Component {
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
                 if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
-                    if (DEBUG) this.printf(Messages.DEFAULT, "load cancelled\n");
+                    this.printf(Messages.DEBUG, "load cancelled\n");
                     return false;
                 }
                 /*
-                 * So here's the story: loadDrive() returned true, which it does ONLY if the specified disk is already
-                 * mounted, AND the user clicked OK to reload the original disk image.  So we must toss any history we have
-                 * for the disk, unload it, and then loop back around to loadDrive().
+                 * So here's the story: loadDrive() returned -1, which it does ONLY if the specified disk is
+                 * already mounted AND the user clicked OK to reload the original disk image.  So at the user's
+                 * request, we toss any disk history, unload the disk, and then loop back around to loadDrive().
                  *
-                 * loadDrive() should NEVER return true the second time, since no disk is loaded. In other words,
-                 * this isn't really a loop so much as a one-time retry operation.
+                 * loadDrive() should NEVER return -1 the second time, since no disk should be loaded, so this
+                 * isn't really a loop, just a one-time retry operation.
                  */
                 this.removeDiskHistory(sDiskName, sDiskPath);
                 this.unloadDrive(iDrive, false, true);
@@ -65570,19 +65573,24 @@ class FDC extends Component {
      * @param {string} sDiskPath
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
+     * @param {function(Disk,number)} [done] optional callback on completion of the load request
      * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
      */
-    loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file)
+    loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file, done)
     {
+        let doneLoadDisk = (drive, disk, sDiskName, sDiskPath, nErrorCode) => {
+            this.doneLoadDrive(drive, disk, sDiskName, sDiskPath);
+            if (done) done(disk, nErrorCode);
+        };
         let drive = this.aDrives[iDrive];
         if (sDiskPath) {
             sDiskPath = Web.redirectResource(sDiskPath);
             /*
              * TODO: Machines with saved states may be using lower-case disk image names, whereas we now use
-             * UPPER-CASE names for disk images, so we lower-case both before comparing.  The only problem with
+             * UPPER-CASE names for disk images, so we upper-case both before comparing.  The only problem with
              * removing these hacks is that we can never be sure when all saved states in the wild have been updated.
              */
-            if (drive.sDiskPath.toLowerCase() != sDiskPath.toLowerCase()) {
+            if (drive.sDiskPath.toUpperCase() != sDiskPath.toUpperCase()) {
                 this.unloadDrive(iDrive, fAutoMount, true);
                 if (drive.fBusy) {
                     this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
@@ -65596,11 +65604,14 @@ class FDC extends Component {
                 }
                 drive.fLocal = !!file;
                 let disk = new Disk(this, drive, DiskAPI.MODE.PRELOAD);
-                if (!disk.load(sDiskName, sDiskPath, file, this.doneLoadDrive)) {
+                if (!disk.load(sDiskName, sDiskPath, file, doneLoadDisk)) {
                     return 0;
                 }
                 return 1;
             }
+        }
+        if (done) {
+            done(drive && drive.disk, -1);
         }
         return -1;
     }
@@ -65610,7 +65621,7 @@ class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} drive
-     * @param {Disk} disk is set if the disk was successfully loaded, null if not
+     * @param {Disk} disk (set if the disk was successfully loaded, null if not)
      * @param {string} sDiskName
      * @param {string} sDiskPath
      * @param {boolean} [fAutoMount]
@@ -66397,10 +66408,8 @@ class FDC extends Component {
             }
             return;
         }
-        if (this.messageEnabled()) {
-            this.printf("unsupported FDC command: %02x\n", bCmd);
-            if (MAXDEBUG) this.dbg.stopCPU();
-        }
+        this.printf("unsupported FDC command: %02x\n", bCmd);
+        if (MAXDEBUG) this.dbg.stopCPU();
     }
 
     /**
@@ -66659,10 +66668,8 @@ class FDC extends Component {
             break;
 
         default:
-            if (this.messageEnabled()) {
-                this.printf("unsupported FDC operation: %02x\n", bCmd);
-                if (MAXDEBUG) this.dbg.stopCPU();
-            }
+            this.printf("unsupported FDC operation: %02x\n", bCmd);
+            if (MAXDEBUG) this.dbg.stopCPU();
             break;
         }
 
@@ -80813,7 +80820,7 @@ class Computer extends Component {
             this.enableDiagnostics();
         }
 
-        this.printf(Messages.DEFAULT, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
         if (MAXDEBUG) this.printf(Messages.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
@@ -81020,11 +81027,11 @@ class Computer extends Component {
                         cmp.notifyKbdEvent();
                     };
                 }(this), 2000);
-                this.printf(Messages.DEFAULT, "Initialization complete\n");
+                this.printf(Messages.NONE, "Initialization complete\n");
             }
             if (this.nDiagnostics == 2) {
                 this.nDiagnostics += 2;
-                this.printf(Messages.DEFAULT, "Initialization complete, press a key to continue...\n");
+                this.printf(Messages.NONE, "Initialization complete, press a key to continue...\n");
             }
             if (this.nDiagnostics == 3 || this.nDiagnostics == 4) {
                 /*
@@ -81082,7 +81089,7 @@ class Computer extends Component {
         let nDiagnostics = this.nDiagnostics;
         if (event && event.keyCode == 16 && this.nDiagnostics == 3) {
             this.nDiagnostics++;        // if we're waiting for a timeout and a shift key was pressed, wait for another key
-            this.printf(Messages.DEFAULT, "Machine paused, press another key to continue...\n");
+            this.printf(Messages.NONE, "Machine paused, press another key to continue...\n");
             event = null;
         }
         if (!event && this.nDiagnostics == 3 || event && fDown && this.nDiagnostics == 4) {

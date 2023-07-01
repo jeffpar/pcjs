@@ -270,7 +270,7 @@ export default class CPULib extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init();
             } else {
-                this.printf(Messages.DEFAULT, "No debugger detected\n");
+                this.printf(Messages.NONE, "No debugger detected\n");
             }
         }
         /*
@@ -333,7 +333,7 @@ export default class CPULib extends Component {
     isPowered()
     {
         if (!this.flags.powered) {
-            this.printf(Messages.DEFAULT, "%s not powered\n", this.toString());
+            this.printf(Messages.NONE, "%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -760,7 +760,7 @@ export default class CPULib extends Component {
                 let sSpeed = this.getSpeedTarget();
                 let controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.printf(Messages.DEFAULT, "target speed: %s\n", sSpeed);
+                this.printf(Messages.NONE, "target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.updateFocus();
         }
@@ -1305,7 +1305,7 @@ export default class CPULib extends Component {
             return false;
         }
         if (this.flags.running) {
-            if (!fQuiet) this.printf(Messages.DEFAULT, "%s busy\n", this.toString());
+            if (!fQuiet) this.printf(Messages.NONE, "%s busy\n", this.toString());
             return false;
         }
         if (this.idRunTimeout) {

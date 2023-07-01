@@ -15,7 +15,6 @@
  */
 const Messages = {
     NONE:       0x000000000000,
-    DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
     LOG:        0x001000000000,
     STATUS:     0x002000000000,

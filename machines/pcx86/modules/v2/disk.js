@@ -507,12 +507,10 @@ export default class Disk extends Component {
     {
         let sDiskURL = sDiskPath;
 
-        if (DEBUG) {
-            this.printf('load("%s","%s")\n', sDiskName, sDiskPath);
-        }
+        this.printf(Messages.DEBUG, 'load("%s","%s")\n', sDiskName, sDiskPath);
 
         if (this.fnNotify) {
-            if (DEBUG) this.printf('too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
+            this.printf(Messages.DEBUG, 'too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
             return true;
         }
 
@@ -938,7 +936,7 @@ export default class Disk extends Component {
         }
 
         if (this.fnNotify) {
-            this.fnNotify.call(this.controllerNotify, this.drive, disk, this.sDiskName, this.sDiskPath);
+            this.fnNotify.call(this.controllerNotify, this.drive, disk, this.sDiskName, this.sDiskPath, nErrorCode);
             this.fnNotify = null;
         }
     }

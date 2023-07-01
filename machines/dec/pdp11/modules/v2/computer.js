@@ -157,9 +157,9 @@ export default class ComputerPDP11 extends Component {
             }
         }
 
-        this.printf(Messages.DEFAULT, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        this.printf(Messages.DEFAULT, "Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");
+        this.printf(Messages.NONE, "Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");
 
         if (MAXDEBUG) this.printf(Messages.DEBUG, "TYPEDARRAYS: %s\n", TYPEDARRAYS);
 
