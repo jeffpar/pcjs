@@ -65578,9 +65578,10 @@ class FDC extends Component {
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file, done)
     {
-        let doneLoadDisk = (drive, disk, sDiskName, sDiskPath, nErrorCode) => {
+        let result = -1;
+        let doneLoadDisk = (drive, disk, sDiskName, sDiskPath, error) => {
             this.doneLoadDrive(drive, disk, sDiskName, sDiskPath);
-            if (done) done(disk, nErrorCode);
+            if (done) done(disk, error);
         };
         let drive = this.aDrives[iDrive];
         if (sDiskPath) {
@@ -65591,6 +65592,7 @@ class FDC extends Component {
              * removing these hacks is that we can never be sure when all saved states in the wild have been updated.
              */
             if (drive.sDiskPath.toUpperCase() != sDiskPath.toUpperCase()) {
+                result = 1;
                 this.unloadDrive(iDrive, fAutoMount, true);
                 if (drive.fBusy) {
                     this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
@@ -65605,15 +65607,15 @@ class FDC extends Component {
                 drive.fLocal = !!file;
                 let disk = new Disk(this, drive, DiskAPI.MODE.PRELOAD);
                 if (!disk.load(sDiskName, sDiskPath, file, doneLoadDisk)) {
-                    return 0;
+                    result = 0;
                 }
-                return 1;
+                return result;
             }
         }
         if (done) {
-            done(drive && drive.disk, -1);
+            done(drive && drive.disk, result);
         }
-        return -1;
+        return result;
     }
 
     /**

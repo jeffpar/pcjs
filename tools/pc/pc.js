@@ -515,13 +515,14 @@ function buildDisk(sCommand)
 }
 
 /**
- * buildDiskIndexes()
+ * buildDiskIndexes(getFileIndex)
  *
  * Returns diskIndex object (properties are disk names) and fileIndex (properties are file names).
  *
+ * @param {boolean} [getFileIndex]
  * @returns {Array}
  */
-function buildDiskIndexes()
+function buildDiskIndexes(getFileIndex)
 {
     let total = 0;
     let diskIndex = {}, fileIndex = {};
@@ -529,34 +530,36 @@ function buildDiskIndexes()
     if (aDiskettes) {
         for (let i = 0; i < aDiskettes.length; i++) {
             let diskette = aDiskettes[i];
-            let diskJSON = readFile(diskette['path'], "utf8", true);
-            if (diskJSON) {
-                let disk = JSON.parse(diskJSON);
-                let fileTable = disk['fileTable'];
-                if (!fileTable) continue;
-                let diskPath = diskette['path'];
-                let diskName = diskette['name'];
-                /*
-                 * TODO: Decide what to do if diskName already exists...
-                 */
-                diskIndex[diskName] = {'path': diskPath};
-                for (let j = 0; j < fileTable.length; j++) {
-                    let file = fileTable[j];
-                    let parts = file['path'].split('/');
-                    let fileName = parts[parts.length - 1];
-                    if (!fileIndex[fileName]) {
-                        fileIndex[fileName] = [];
+            let diskPath = diskette['path'];
+            let diskName = diskette['name'];
+            diskIndex[diskName] = {'path': diskPath};
+            if (getFileIndex) {
+                let diskJSON = readFile(diskPath, "utf8", true);
+                if (diskJSON) {
+                    let disk = JSON.parse(diskJSON);
+                    let fileTable = disk['fileTable'];
+                    if (!fileTable) continue;
+                    /*
+                     * TODO: Decide what to do if diskName already exists...
+                     */
+                    for (let j = 0; j < fileTable.length; j++) {
+                        let file = fileTable[j];
+                        let parts = file['path'].split('/');
+                        let fileName = parts[parts.length - 1];
+                        if (!fileIndex[fileName]) {
+                            fileIndex[fileName] = [];
+                        }
+                        fileIndex[fileName].push(diskName);
                     }
-                    fileIndex[fileName].push(diskName);
                 }
-                total++;
-                if (total % 100 == 0) {
-                    printf("diskettes loaded: %d\r", total);
-                }
+            }
+            total++;
+            if (total % 100 == 0) {
+                printf("diskettes available: %d\r", total);
             }
         }
     }
-    printf("total diskettes loaded: %d\n", total);
+    printf("total diskettes available: %d\n", total);
     return [diskIndex, fileIndex];
 }
 
