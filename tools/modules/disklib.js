@@ -567,7 +567,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
                 }
             }
             if (fText) {
-                data = readFile(sPath, "utf8");
+                data = readFile(sPath);
                 if (CharSet.isText(data)) {
                     let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
                     if (dataNew != data) {
@@ -768,7 +768,7 @@ export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);
         if (StrLib.getExtension(diskName) == "json") {
-            db = readFile(diskFile, "utf8");
+            db = readFile(diskFile);
             if (!db) {
                 di = null;
             } else {

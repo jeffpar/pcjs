@@ -8,6 +8,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import fs         from "fs";
 import glob       from "glob";
 import path       from "path";
 import xml2js     from "xml2js";
@@ -515,44 +516,23 @@ function buildDisk(sCommand)
 }
 
 /**
- * buildDiskIndexes(getFileIndex)
+ * buildDiskIndex()
  *
- * Returns diskIndex object (properties are disk names) and fileIndex (properties are file names).
+ * Returns diskIndex object (properties are disk names).
  *
- * @param {boolean} [getFileIndex]
- * @returns {Array}
+ * @returns {Object}
  */
-function buildDiskIndexes(getFileIndex)
+function buildDiskIndex()
 {
     let total = 0;
-    let diskIndex = {}, fileIndex = {};
-    let aDiskettes = fdc.aDiskettes;
+    let diskIndex = {};
+    let aDiskettes = fdc && fdc.aDiskettes;
     if (aDiskettes) {
         for (let i = 0; i < aDiskettes.length; i++) {
             let diskette = aDiskettes[i];
             let diskPath = diskette['path'];
             let diskName = diskette['name'];
             diskIndex[diskName] = {'path': diskPath};
-            if (getFileIndex) {
-                let diskJSON = readFile(diskPath, "utf8", true);
-                if (diskJSON) {
-                    let disk = JSON.parse(diskJSON);
-                    let fileTable = disk['fileTable'];
-                    if (!fileTable) continue;
-                    /*
-                     * TODO: Decide what to do if diskName already exists...
-                     */
-                    for (let j = 0; j < fileTable.length; j++) {
-                        let file = fileTable[j];
-                        let parts = file['path'].split('/');
-                        let fileName = parts[parts.length - 1];
-                        if (!fileIndex[fileName]) {
-                            fileIndex[fileName] = [];
-                        }
-                        fileIndex[fileName].push(diskName);
-                    }
-                }
-            }
             total++;
             if (total % 100 == 0) {
                 printf("diskettes available: %d\r", total);
@@ -560,11 +540,70 @@ function buildDiskIndexes(getFileIndex)
         }
     }
     printf("total diskettes available: %d\n", total);
-    return [diskIndex, fileIndex];
+    return diskIndex;
+}
+
+/**
+ * buildFileIndex(diskIndex)
+ *
+ * Returns fileIndex (properties are file names) built from diskIndex.
+ *
+ * @param {Object} diskIndex
+ * @returns {Object}
+ */
+function buildFileIndex(diskIndex)
+{
+    let total = 0;
+    let pathIndex = path.join(pcjsDir, "files.json");
+    let fileIndex = readFile(pathIndex, "utf8", true);
+    if (fileIndex) {
+        fileIndex = JSON.parse(fileIndex);
+    } else {
+        fileIndex = {};
+        for (let diskName in diskIndex) {
+            let diskPath = diskIndex[diskName]['path'];
+            let diskJSON = readFile(diskPath, "utf8", true);
+            if (diskJSON) {
+                let disk = JSON.parse(diskJSON);
+                let fileTable = disk['fileTable'];
+                if (!fileTable) continue;
+                for (let j = 0; j < fileTable.length; j++) {
+                    let file = fileTable[j];
+                    let parts = file['path'].split('/');
+                    let fileName = parts[parts.length - 1];
+                    if (!fileIndex[fileName]) {
+                        fileIndex[fileName] = [];
+                    }
+                    fileIndex[fileName].push({'name': diskName, 'date': file['date'], 'hash': file['hash']});
+                }
+                total++;
+                if (total % 100 == 0) {
+                    printf("diskettes read: %d\r", total);
+                }
+            }
+        }
+        printf("total diskettes read: %d\n", total);
+        fs.writeFileSync(pathIndex, JSON.stringify(fileIndex));
+    }
+    return fileIndex;
 }
 
 /**
  * loadDiskette(chDrive, aTokens)
+ *
+ * When then "load" command is followed by a drive-letter and colon (eg, "load a:"), this function is called
+ * with all the remaining tokens on the command-line.  Those tokens determine which disk(s) to display for selection
+ * and subsequent loading.
+ *
+ * Tokens fall into two categories: dash tokens (eg, "--disk", "--file") and non-dash tokens.  Non-dash tokens simply
+ * add to the search criteria of whichever dash token is in effect; initially, "--disk" is in effect; eg:
+ *
+ *      load a: --disk pc dos --file chkdsk --date 1982
+ *
+ * The two primary criteria are disk and file.  Other criteria are secondary; for example, date criteria are secondary
+ * file criteria (in other words, without any file criteria, date criteria will be ignored).
+ *
+ * NOTE: Any number of dashes, including a single dash, is sufficient for a dash token.
  *
  * @param {string} chDrive ('A' through 'Z')
  * @param {Array.<string>} aTokens
@@ -573,36 +612,101 @@ function buildDiskIndexes(getFileIndex)
 function loadDiskette(chDrive, aTokens)
 {
     let result = "";
-    let diskName = "";
-    let done = function(disk, error) {
-        result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error);
-    };
     if (fdc) {
-        if (!diskIndexCache) {
-            [diskIndexCache, fileIndexCache] = buildDiskIndexes();
-            if (diskIndexCache) {
-                diskIndexKeys = Object.keys(diskIndexCache);
+        let criteria = 'date';
+        let dateParts = [];
+        let diskNameParts = [];
+        let fileNameParts = [];
+        for (let token of aTokens) {
+            let matchDash = token.match(/^-+(.*)$/);
+            if (matchDash) {
+                criteria = matchDash[1].toLowerCase();
+                continue;
             }
-            if (fileIndexCache) {
-                fileIndexKeys = Object.keys(fileIndexCache);
+            token = token.toUpperCase();
+            switch (criteria) {
+            case 'date':
+                dateParts.push(token);
+                break;
+            case 'disk':
+                diskNameParts.push(token);
+                break;
+            case 'file':
+                fileNameParts.push(token);
+                break;
+            default:
+                printf("unknown criteria: %s\n", criteria);
+                break;
             }
         }
-        if (diskIndexCache) {
-            diskName = aTokens.join(' ');
-            if (diskName) {
-                diskName = diskIndexKeys.find(function(s) {return s.toUpperCase().indexOf(diskName.toUpperCase()) >= 0;});
-                if (diskName) {
+        if (dateParts.length || diskNameParts.length || fileNameParts.length) {
+            if (!diskIndexCache) {
+                diskIndexCache = buildDiskIndex();
+                if (diskIndexCache) {
+                    diskIndexKeys = Object.keys(diskIndexCache);
+                }
+            }
+            if (diskIndexKeys.length) {
+                if (fileNameParts.length) {
+                    fileIndexCache = buildFileIndex(diskIndexCache);
+                    if (fileIndexCache) {
+                        fileIndexKeys = Object.keys(fileIndexCache);
+                    }
+                }
+                /*
+                 * If we have file name criteria AND file name index, then we dig through the file index keys
+                 * and build up a list of disk names, similar to diskIndexKeys.  Otherwise, we start with diskIndexKeys.
+                 */
+                let index = null;
+                let itemNames = diskIndexKeys;
+                let itemParts = diskNameParts;
+                if (fileNameParts.length && fileIndexKeys.length) {
+                    index = fileIndexCache;
+                    itemNames = fileIndexKeys;
+                    itemParts = fileNameParts;
+                }
+                let searchNames = function(names, parts, index) {
+                    let matches = [];
+                    for (let name of names) {
+                        let match = true;
+                        for (let part of parts) {
+                            if (name.indexOf(part) < 0) {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if (match) {
+                            if (!index) {
+                                matches.push(name);
+                            } else {
+                                let a = index[name];
+                                for (let i = 0; i < a.length; i++) {
+                                    matches.push(a[i]['name']);
+                                }
+                            }
+                        }
+                    }
+                    return matches;
+                };
+                let matches = searchNames(itemNames, itemParts, index);
+                if (matches.length) {
+                    let diskName = matches[0];
                     let iDrive = chDrive.charCodeAt(0) - 'A'.charCodeAt(0);
                     let diskPath = diskIndexCache[diskName]['path'];
+                    let done = function(disk, error) {
+                        result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error);
+                    };
                     result = "loading \"" + diskName + "\" in drive " + chDrive;
                     fdc.loadDrive(iDrive, diskName, diskPath, false, null, done);
-                }
-                else {
+                } else {
                     result = "no disk(s) found";
                 }
-            } else {
-                result = "missing disk name";
             }
+            else {
+                result = "no disk(s) available";
+            }
+        } else {
+            result = "no disk criteria";
         }
     } else {
         result = "no floppy drive(s)";
