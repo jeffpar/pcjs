@@ -1373,7 +1373,7 @@ export default class FDC extends Component {
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
      * @param {function(Disk,number)} [done] optional callback on completion of the load request
-     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded, -2 if drive not found
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file, done)
     {
@@ -1383,7 +1383,10 @@ export default class FDC extends Component {
             if (done) done(disk, error);
         };
         let drive = this.aDrives[iDrive];
-        if (sDiskPath) {
+        if (!drive) {
+            result = -2;
+        }
+        else if (sDiskPath) {
             sDiskPath = Web.redirectResource(sDiskPath);
             /*
              * TODO: Machines with saved states may be using lower-case disk image names, whereas we now use

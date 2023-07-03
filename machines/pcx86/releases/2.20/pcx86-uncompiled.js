@@ -3735,7 +3735,7 @@ class Web {
         };
         e.onmousedown = function()
         {
-            // Component.printf(Messages.DEBUG, "onMouseDown()\n");
+            //
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -3745,7 +3745,7 @@ class Web {
         };
         e.ontouchstart = function()
         {
-            // Component.printf(Messages.DEBUG, "onTouchStart()\n");
+            //
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -3753,7 +3753,7 @@ class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            // Component.printf(Messages.DEBUG, "onMouseUp()/onMouseOut()\n");
+            //
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3761,7 +3761,7 @@ class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            // Component.printf(Messages.DEBUG, "onTouchEnd()/onTouchCancel()\n");
+            //
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -10945,10 +10945,10 @@ class BusX86 extends Component {
                 if (btiPrev && slotPrev) {
                     let btoPrev = this.abtObjects[slotPrev-1];
                     if (!btoPrev) {
-                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to empty slot (%d)\n", addr, bti, btiPrev, slotPrev);
+
                     }
                     else if (btoPrev.refs <= 0) {
-                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
+
                         /*
                          * We used to just slam a null into the previous slot and consider it gone, but there may still
                          * be "weak references" to that slot (ie, it may still be associated with a register bti).
@@ -62506,10 +62506,10 @@ class Disk extends Component {
     {
         let sDiskURL = sDiskPath;
 
-        this.printf(Messages.DEBUG, 'load("%s","%s")\n', sDiskName, sDiskPath);
+
 
         if (this.fnNotify) {
-            this.printf(Messages.DEBUG, 'too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
+
             return true;
         }
 
@@ -65517,7 +65517,7 @@ class FDC extends Component {
                 }
                 if (!sDiskPath) return false;
                 sDiskName = Str.getBaseName(sDiskPath);
-                this.printf(Messages.DEBUG, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
+
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
@@ -65525,7 +65525,7 @@ class FDC extends Component {
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
                 if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
-                    this.printf(Messages.DEBUG, "load cancelled\n");
+
                     return false;
                 }
                 /*
@@ -65574,7 +65574,7 @@ class FDC extends Component {
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
      * @param {function(Disk,number)} [done] optional callback on completion of the load request
-     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded, -2 if drive not found
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file, done)
     {
@@ -65584,7 +65584,10 @@ class FDC extends Component {
             if (done) done(disk, error);
         };
         let drive = this.aDrives[iDrive];
-        if (sDiskPath) {
+        if (!drive) {
+            result = -2;
+        }
+        else if (sDiskPath) {
             sDiskPath = Web.redirectResource(sDiskPath);
             /*
              * TODO: Machines with saved states may be using lower-case disk image names, whereas we now use
@@ -80824,7 +80827,7 @@ class Computer extends Component {
 
         this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        if (MAXDEBUG) this.printf(Messages.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
+        if (MAXDEBUG)
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -81420,7 +81423,7 @@ class Computer extends Component {
                                     this.printf(Messages.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
-                                    this.printf(Messages.DEBUG, "%s: %s\n", sCode, sData);
+
                                 }
                                 /*
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the
@@ -82783,7 +82786,7 @@ class State {
             let sKey = aKeys[i];
             if (sKey && (fAll || sKey.substr(0, this.key.length) == this.key)) {
                 Web.removeLocalStorageItem(sKey);
-                Component.printf(Messages.DEBUG, "localStorage(%s) removed\n", sKey);
+
                 aKeys.splice(i, 1);
                 i = 0;
             }
