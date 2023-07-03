@@ -794,6 +794,11 @@ function doCommand(sCmd)
     case "cwd":
         result = cwd;
         break;
+    case "help":
+        result = "pc.js commands:\n" +
+                    "  load [drive] [disk or file name]\n" +
+                    "  quit\n" +
+                    "type \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
     case "load":
         if (aTokens[1]) {
             let matchDrive = aTokens[1].match(/^([a-z]:?)$/i);
