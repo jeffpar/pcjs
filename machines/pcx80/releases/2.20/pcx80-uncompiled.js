@@ -3132,7 +3132,7 @@ class Web {
         };
         e.onmousedown = function()
         {
-            // Component.printf(Messages.DEBUG, "onMouseDown()\n");
+            //
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -3142,7 +3142,7 @@ class Web {
         };
         e.ontouchstart = function()
         {
-            // Component.printf(Messages.DEBUG, "onTouchStart()\n");
+            //
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -3150,7 +3150,7 @@ class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            // Component.printf(Messages.DEBUG, "onMouseUp()/onMouseOut()\n");
+            //
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3158,7 +3158,7 @@ class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            // Component.printf(Messages.DEBUG, "onTouchEnd()/onTouchCancel()\n");
+            //
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -23836,7 +23836,7 @@ class ComputerX80 extends Component {
 
         this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        if (MAXDEBUG) this.printf(Messages.DEBUG, "TYPEDARRAYS: %s\n", TYPEDARRAYS);
+
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -25524,7 +25524,7 @@ class State {
             let sKey = aKeys[i];
             if (sKey && (fAll || sKey.substr(0, this.key.length) == this.key)) {
                 Web.removeLocalStorageItem(sKey);
-                Component.printf(Messages.DEBUG, "localStorage(%s) removed\n", sKey);
+
                 aKeys.splice(i, 1);
                 i = 0;
             }

@@ -80827,7 +80827,7 @@ class Computer extends Component {
 
         this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        if (MAXDEBUG)
+
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
