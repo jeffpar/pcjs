@@ -249,7 +249,7 @@ function initMachine(machine, sMachine)
                 }
             }
         }
-        setDebugMode(true);
+        setDebugMode(!cpu || !cpu.isRunning());
     }
     catch(err) {
         printf("machine initialization error: %s\n", err.message);
@@ -322,8 +322,15 @@ function loadMachine(sFile)
             initMachine(machine, sMachine);
         });
     };
-    let result = "no machine";
-    if (sFile) {
+    let result = "missing machine";
+    if (cpu) {
+        /*
+         * TODO: To make way for another machine, we'd have to first destroy the previous one, and there's no
+         * support for that yet.  The simplest solution is forcing the user to restart pc.js.
+         */
+        result = "machine already loaded";
+    }
+    else if (sFile) {
         if (sFile.indexOf(path.sep) < 0) {
             sFile = path.join(pcjsDir, sFile);
         }
@@ -340,7 +347,7 @@ function loadMachine(sFile)
                 let xml = {_resolving: 0};
                 result = readXML(sOpen, xml, 'machine', null, 0, getFactory);
             } else {
-                result = "unsupported machine configuration file: " + sFile;
+                result = "unsupported machine file: " + sFile;
             }
         }
     }
@@ -792,7 +799,7 @@ function loadDiskette(sDrive, aTokens)
                 result = "no disk(s) available";
             }
         } else {
-            result = "no disk criteria";
+            result = "missing disk criteria";
         }
     } else {
         result = "no floppy drive(s)";
@@ -817,9 +824,11 @@ function doCommand(sCmd)
         break;
     case "help":
         result = "pc.js commands:\n" +
-                    "  load [drive] [disk or file name]\n" +
+                    "  load [machine]\n" +
+                    "  load [drive] [search terms]\n" +
                     "  quit\n" +
                     "type \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
+        break;
     case "load":
         if (aTokens[1]) {
             let matchDrive = aTokens[1].match(/^([a-z]:?)$/i);
@@ -829,6 +838,8 @@ function doCommand(sCmd)
             } else {
                 result = loadMachine(aTokens[1]);
             }
+        } else {
+            result = "missing" + (cpu? "" : " machine file or") + " drive letter";
         }
         break;
     case "q":

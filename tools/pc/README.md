@@ -7,7 +7,7 @@ redirect_from: /machines/pcx86/modules/bin/
 
 This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
 
-Load a JSON machine file, such as [ibm5150.json](ibm5150.json) or [compaq386.json](compaq386.json), with the utility's `load` command, either interactively or with the `--load` command-line argument.
+Load a JSON machine configuration file, such as [ibm5150.json](ibm5150.json) or [compaq386.json](compaq386.json), with the utility's `load` command, either interactively or with the `--load` command-line argument.
 
 For example, this command:
 
