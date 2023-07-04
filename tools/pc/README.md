@@ -81,13 +81,13 @@ The above examples also include `--debug` because those particular machines do *
 
 ### Access Local Files from MS-DOS
 
-If you run [pc.js](pc.js) with the name of a DOS executable in your current directory; eg:
+If you run [pc.js](pc.js) with the name of a DOS command or executable in your current directory; eg:
 
     pc.js pkunzip.exe
 
-it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc` folder with copies of all the files/folders in your current local directory, automatically start a [COMPAQ DeskPro 386](compaq386.json) machine with that disk image mounted as drive C, and then run the specified DOS executable.
+it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc` folder with copies of all the files/folders in your current local directory, automatically start a [COMPAQ DeskPro 386](compaq386.json) machine with that disk image mounted as drive C, and then run the specified DOS command or executable.
 
-This allows you to run console-based DOS applications on your modern operating system (eg, macOS or Windows), with excellent IBM PC (or in this case, COMPAQ DeskPro 386) compatibility.  The experience comes with a number of caveats, and there are some important limitations to be aware of, such as limits on the size and number of files you can have in your current directory (the overall limit is currently 10Mb) and the fact that only console-based DOS applications are usable in this environment.
+This allows you to run console-based DOS applications on your modern operating system (eg, macOS or Windows), with excellent IBM PC (or in this case, COMPAQ DeskPro 386) compatibility.  The experience currently comes with a number of caveats, and there are some important limitations to be aware of, such as limits on the size and number of files you can have in your current directory (the overall limit is currently 10Mb) and the fact that only console-based DOS applications are usable in this environment.
 
 One of the pre-requisites of this feature is having a copy of the [pcjs-diskettes](https://github.com/jeffpar/pcjs-diskettes) repository in the `/disks/diskettes` folder of your PCjs repository:
 
