@@ -1,0 +1,100 @@
+
+{
+  "machine": {
+    "id": "ibm5150",
+    "type": "pcx86"
+  },
+  "computer": {
+    "id": "pc-mda-64k",
+    "name": "IBM PC",
+    "resume": "1",
+    "state": ""
+  },
+  "ram": [
+    {
+      "id": "ramLow",
+      "name": "",
+      "addr": "0x00000",
+      "size": 0,
+      "test": true
+    }
+  ],
+  "rom": [
+    {
+      "id": "romBASIC",
+      "name": "",
+      "addr": "0xf6000",
+      "size": "0x08000",
+      "file": "/machines/pcx86/ibm/5150/rom/basic/BASIC100.json5",
+      "notify": ""
+    },
+    {
+      "id": "romBIOS",
+      "name": "",
+      "addr": "0xfe000",
+      "size": "0x02000",
+      "file": "/machines/pcx86/ibm/5150/rom/bios/1981-04-24/PCBIOS-REV1.json5",
+      "notify": ""
+    }
+  ],
+  "video": [
+    {
+      "id": "videoMDA",
+      "name": "Monochrome Display",
+      "model": "",
+      "mode": 7,
+      "screenWidth": 720,
+      "screenHeight": 350,
+      "scale": true,
+      "charCols": 80,
+      "charRows": 25,
+      "fontROM": "/machines/pcx86/ibm/video/mda/IBM-MDA.json5",
+      "screenColor": "black",
+      "touchScreen": false
+    }
+  ],
+  "cpu": {
+    "id": "cpu8088",
+    "name": "",
+    "model": 8088,
+    "clock": 0,
+    "multiplier": 1,
+    "autoStart": true,
+    "csStart": -1,
+    "csInterval": -1,
+    "csStop": -1
+  },
+  "keyboard": {
+    "id": "keyboard",
+    "name": "",
+    "model": ""
+  },
+  "fdc": {
+    "id": "fdcNEC",
+    "name": "",
+    "autoMount": {
+      "A": {
+        "name": "PC DOS 2.00 (Disk 1)",
+        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
+      },
+      "B": {
+        "name": "PC DOS 2.00 (Disk 2)",
+        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK2.json"
+      }
+    }
+  },
+  "chipset": {
+    "id": "chipset",
+    "name": "",
+    "model": "5150",
+    "sw1": "01000001",
+    "sw2": "11110000",
+    "sound": true
+  },
+  "debugger": {
+    "id": "debugger",
+    "name": "",
+    "messages": ""
+  },
+  "xml": "/machines/pcx86/ibm/5150/mda/64kb/machine.xml"
+}

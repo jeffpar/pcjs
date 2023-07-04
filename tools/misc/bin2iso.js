@@ -9,10 +9,10 @@
  */
 
 import fs from "fs";
-import proclib from "../../machines/modules/v2/proclib.js";
+import pcjslib from "../modules/pcjslib.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
-var args = proclib.getArgs();
+var [argc, argv] = pcjslib.getArgs();
 
 /**
  * dumpBytes(buffer, offset, length, desc)
@@ -128,9 +128,8 @@ function convertBinToISO(sInput, sOutput, fDebug, fOverwrite, fVerbose, nSkip)
     }
 }
 
-if (args.argc < 2) {
+if (argc < 2) {
     printf("usage: bin2iso.js [input file] [output file] [options]\n");
 } else {
-    let argv = args.argv;
     convertBinToISO(argv[1], argv[2], argv['debug'], argv['overwrite'], argv['verbose'], argv['skip']);
 }

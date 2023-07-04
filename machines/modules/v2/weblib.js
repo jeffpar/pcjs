@@ -148,7 +148,11 @@ export default class Web {
         }
 
         if (globals.node.readFileSync) {
-            resource = globals.node.readFileSync(sURL);
+            try {
+                resource = globals.node.readFileSync(sURL);
+            } catch (err) {
+                nErrorCode = err['errno'];
+            }
             if (resource !== undefined) {
                 if (done) done(sURL, resource, nErrorCode);
                 return [resource, nErrorCode];

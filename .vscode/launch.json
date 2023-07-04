@@ -437,15 +437,34 @@
       }
     },
     {
+      "name": "pc.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
       "name": "pc.js ibm5150",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=ibm5150",
-        "--debug"
+        "--load=ibm5150"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -461,12 +480,12 @@
       "name": "pc.js compaq386",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--load=compaq386",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -482,12 +501,12 @@
       "name": "pc.js test386",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--load=test386",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -503,12 +522,11 @@
       "name": "pc.js pcx86 machine.xml",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
-        "--debug"
+        "--load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -524,12 +542,32 @@
       "name": "pc.js pdp11 machine.xml",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/pcjs/pc.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
+        "--load=/machines/dec/pdp11/1170/panel/debugger/machine",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/pcjs",
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js chkdsk",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "chkdsk"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/archive/MSDOS320",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1122,7 +1160,7 @@
         "DISK0186.json",
         "t.json"
       ],
-      "cwd": "${workspaceFolder}/tmp",
+      "cwd": "${workspaceFolder}/disks/tmp",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1188,11 +1226,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--dir=tmp/DISK4313",
-        "--output=tmp/DISK4313.json",
+        "--dir=DISK0001",
+        "--normalize",
+        "--output=TEST001.img",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/disks/tmp",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1216,7 +1255,7 @@
         "--extdir=CSRC",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/tmp",
+      "cwd": "${workspaceFolder}/disks/tmp",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1239,7 +1278,7 @@
         "--overwrite",
         "--verbose"
       ],
-      "cwd": "${workspaceFolder}/tmp",
+      "cwd": "${workspaceFolder}/disks/tmp",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1262,7 +1301,7 @@
         "--expand",
         "--verbose"
       ],
-      "cwd": "${workspaceFolder}/tmp",
+      "cwd": "${workspaceFolder}/disks/tmp",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1284,7 +1323,7 @@
         "--extract",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/tmp",
+      "cwd": "${workspaceFolder}/disks/tmp",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1394,7 +1433,7 @@
         "--verbose",
         "--extract"
       ],
-      "cwd": "${workspaceFolder}/tmp/arcs",
+      "cwd": "${workspaceFolder}/disks/tmp/arcs",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1412,12 +1451,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "../disks/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0052/DISK0052.json",
-        "--extract=HIDEFILE.BAS",
+        "--dir=../../disks/tmp/DISK0001",
+        "--extract=BLACKJCK.BAS",
         "--normalize",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/tmp",
+      "cwd": "${workspaceFolder}/tools/diskimage",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1519,6 +1558,34 @@
       }
     },
     {
+      "name": "diskimage.js --files basicdos",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "--files",
+        "./software/pcx86/bdsrc/boot/makefile,mk.bat,boot.asm,wboot.asm,./software/pcx86/bdsrc/inc/8086.inc,bios.inc,dev.inc,devapi.inc,disk.inc,dos.inc,dosapi.inc,macros.inc,parser.inc,version.inc",
+        "--output",
+        "./software/pcx86/disks/BDS-BOOT.json",
+        "--output",
+        "./software/pcx86/disks/archive/BDS-BOOT.img",
+        "--writable",
+        "--target=360",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}/../basicdos",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
       "name": "fileimage.js",
       "type": "node",
       "request": "launch",
@@ -1602,6 +1669,29 @@
         "--comments"
       ],
       "cwd": "${workspaceFolder}/machines/pcx86/compaq/deskpro386/rom/1988-01-28",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "fileimage.js --file --offset",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/fileimage/fileimage.js",
+      "args": [
+        "--file=MSDOS320-C400-JSON.img",
+        "--offset=0",
+        "--length=512",
+        "--output=MSDOS320-MBR-10M.bin"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/archive",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

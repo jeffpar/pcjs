@@ -13,14 +13,13 @@ import { SerialPort } from "serialport";
 
 import Keys from "../../../../machines/modules/v2/keys.js";
 import Str from "../../../../machines/modules/v2/strlib.js";
-import Proc from "../../../../machines/modules/v2/proclib.js";
 import TestMonitor from "../../../../machines/pcx86/modules/v2/testmon.js";
+import pcjslib from "../../../../tools/modules/pcjslib.js";
 
 var Machines = JSON.parse(fs.readFileSync("../../../../machines/machines.json", "utf8"));
 
 var fDebug = false;
-var args = Proc.getArgs();
-var argv = args.argv;
+var argv = pcjslib.getArgs()[1];
 
 var baudRate = 2400;
 var rts_cts = true;

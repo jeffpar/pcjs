@@ -204,7 +204,7 @@ export default class ChipSet extends Component {
             let volume = +sound || 0;
             this.volumeInit = (sound == "true" || volume < 0 || volume > 1? 0.5 : volume);
         }
-        if (!this.volumeInit) this.printf(Messages.DEFAULT, "note: speaker disabled\n");
+        if (!this.volumeInit) this.printf(Messages.NONE, "note: speaker disabled\n");
 
         /*
          * This divisor is invariant, so we calculate it as soon as we're able to query the CPU's base speed.
@@ -519,9 +519,9 @@ export default class ChipSet extends Component {
          */
         if (Object.prototype.toString.call(date) !== "[object Date]" || isNaN(date.getTime())) {
             date = new Date();
-            this.printf(Messages.DEFAULT, "CMOS date invalid (%s), using %T\n", sDate, date);
+            this.printf(Messages.NONE, "CMOS date invalid (%s), using %T\n", sDate, date);
         } else if (sDate) {
-            this.printf(Messages.DEFAULT, "CMOS date: %T\n", date);
+            this.printf(Messages.NONE, "CMOS date: %T\n", date);
         }
 
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = date.getSeconds();
@@ -4414,7 +4414,7 @@ export default class ChipSet extends Component {
              * determine if that's what the caller intended.
              */
             if (!COMPILED) {
-                this.printf(Messages.DEFAULT, "unexpected 8042 output port reset: %#04X\n", b);
+                this.printf(Messages.NONE, "unexpected 8042 output port reset: %#04X\n", b);
                 if (this.dbg) this.dbg.stopCPU();
             }
             this.cpu.resetRegs();

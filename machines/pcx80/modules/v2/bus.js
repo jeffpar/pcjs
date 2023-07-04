@@ -983,7 +983,7 @@ export default class BusX80 extends Component {
      */
     reportError(op, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.DEFAULT : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", op, addr, size);
+        this.printf(fQuiet? Messages.NONE : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", op, addr, size);
         return false;
     }
 }

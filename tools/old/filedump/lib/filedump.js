@@ -11,10 +11,10 @@ import fs from "fs";
 import path from "path";
 import mkdirp from "mkdirp";
 import net from "../../../../machines/modules/v2/netlib.js";
-import proc from "../../../../machines/modules/v2/proclib.js";
 import str from "../../../../machines/modules/v2/strlib.js";
 import DumpAPI from "../../../../machines/modules/v2/dumpapi.js";
 import { COPYRIGHT } from "../../../../machines/modules/v2/defines.js";
+import pcjslib from "../../../modules/pcjslib.js";
 
 /**
  * FileDump()
@@ -169,14 +169,13 @@ FileDump.asBadExts = [
  */
 FileDump.CLI = function()
 {
-    let args = proc.getArgs();
+    let [argc, argv] = pcjslib.getArgs();
 
-    if (!args.argc) {
+    if (!argc) {
         console.log("usage: filedump --file=({path}|{URL}) [--merge=({path}|{url})] [--format=(json|longs|hex|octal|bytes|words|rom)] [--comments] [--decimal] [--offset={number}] [--width={number}] [--output={path}] [--overwrite]");
         return;
     }
 
-    let argv = args.argv;
     let sFile = argv['file'];
     if (!sFile || FileDump.asBadExts.indexOf(str.getExtension(sFile)) >= 0) {
         FileDump.logError(new Error("bad or missing input filename"));

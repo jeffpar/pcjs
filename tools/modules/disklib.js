@@ -7,15 +7,16 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import fs         from "fs";
-import os         from "os";
 import crypto     from "crypto";
+import fs         from "fs";
 import glob       from "glob";
+import os         from "os";
 import path       from "path";
+import BASFile    from "../modules/basfile.js";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
-import { DEBUG }  from "../../machines/modules/v2/defines.js";
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import FileLib    from "../../machines/modules/v2/filelib.js";
+import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
@@ -28,9 +29,9 @@ export { device, printf, sprintf }
 
 export function printError(err, filename)
 {
-    let msg = err.message;
+    let msg = err.message || err.stack;
     if (filename) msg = path.basename(filename) + ": " + msg;
-    printf("error: %s\n", msg);
+    printf("%s\n", msg);
 }
 
 /*
@@ -77,6 +78,32 @@ function checkArchive(sPath, fExt)
 }
 
 /**
+ * isBASICFile(sFile)
+ *
+ * @param {string} sFile
+ * @returns {boolean} true if the filename has a ".BAS" extension
+ */
+export function isBASICFile(sFile)
+{
+    let ext = path.parse(sFile).ext;
+    return ext && ext.toUpperCase() == ".BAS";
+}
+
+/**
+ * convertBASICFile(db, toUTF8, sPath)
+ *
+ * @param {DataBuffer} db (the contents of the BASIC file)
+ * @param {boolean} [toUTF8] (true if we should convert characters from CP437 to UTF-8)
+ * @param {string} [sPath] (for informational purposes only, since we're working entirely with the DataBuffer)
+ * @returns {DataBuffer}
+ */
+export function convertBASICFile(db, toUTF8, sPath)
+{
+    let basfile = new BASFile(db, toUTF8, sPath, printf);
+    return basfile.convert();
+}
+
+/**
  * existsDir(sDir, fError)
  *
  * @param {string} sDir
@@ -113,6 +140,32 @@ export function existsFile(sFile, fError = true)
         if (fError) printError(err);
     }
     return false;
+}
+
+/**
+ * getDiskSector(di, lba)
+ *
+ * @param {DiskInfo} di
+ * @param {number} lba (logical block address, aka 0-based sector number)
+ * @returns {DataBuffer}
+ */
+export function getDiskSector(di, lba)
+{
+    let db;
+    let sector = di.getSector(lba);
+    if (sector) {
+        let ab = [], dw = 0;
+        let data = sector[DiskInfo.SECTOR.DATA];
+        let dwords = sector[DiskInfo.SECTOR.LENGTH] / 4;
+        for (let i = 0; i < dwords; i++) {
+            if (i < data.length) dw = data[i];
+            for (let shift = 0; shift < 32; shift += 8) {
+                ab.push((dw >>> shift) & 0xff);
+            }
+        }
+        db = new DataBuffer(ab);
+    }
+    return db;
 }
 
 /**
@@ -260,7 +313,7 @@ export function makeDir(sDir, recursive = false, deleteFile = false)
  * @param {string} sPath
  * @param {Array.<FileData>} [aFiles]
  */
-export function addMetaData(di, sDir, sPath, aFiles)
+function addMetaData(di, sDir, sPath, aFiles)
 {
     sPath = path.join(sDir, sPath);
     let sArchiveDir = checkArchive(sPath, true);
@@ -297,6 +350,42 @@ export function addMetaData(di, sDir, sPath, aFiles)
 }
 
 /**
+ * makeFileDesc(name, contents, attr, date)
+ *
+ * This mimics getFileDesc() in diskinfo.js, but it creates a FILEDESC object from input
+ * parameters rather than a FileInfo object.
+ *
+ * @param {string} name
+ * @param {DataBuffer|string} contents
+ * @param {number} [attr]
+ * @param {Date} [date]
+ * @returns {Object}
+ */
+export function makeFileDesc(name, contents, attr = DiskInfo.ATTR.ARCHIVE, date = new Date())
+{
+    return {
+        [DiskInfo.FILEDESC.PATH]: "/" + name,
+        [DiskInfo.FILEDESC.NAME]: name,
+        [DiskInfo.FILEDESC.ATTR]: sprintf("%#0bx", attr),
+        [DiskInfo.FILEDESC.DATE]: sprintf("%T", date),
+        [DiskInfo.FILEDESC.SIZE]: contents.length,
+        [DiskInfo.FILEDESC.CONTENTS]: contents,
+        [DiskInfo.FILEDESC.VOL]:  0
+    };
+}
+
+/**
+ * normalizeTextFile(db)
+ *
+ * @param {DataBuffer} db
+ * @returns {DataBuffer}
+ */
+export function normalizeTextFile(db)
+{
+    return BASFile.normalize(db, true);
+}
+
+/**
  * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
  *
  * @param {string} sDir (directory name)
@@ -310,14 +399,14 @@ export function addMetaData(di, sDir, sPath, aFiles)
  * @param {boolean} [verbose] (true for verbose output)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
- * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
+ * @param {Array|string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
  * @param {function(DiskInfo)} [done] (optional function to call on completion)
  */
 export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
 {
     let di;
     let diskName = path.basename(sDir);
-    if (sDir.endsWith(path.sep)) {
+    if (sDir.endsWith('/')) {
         if (!sLabel) {
             sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
         }
@@ -331,6 +420,22 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
     let readDone = function(aFileData) {
         let db = new DataBuffer();
         let di = new DiskInfo(device);
+        if (Array.isArray(suppData)) {
+            for (let i = suppData.length - 1; i >= 0; i--) {
+                let desc = suppData[i];
+                desc.attr = +desc[DiskInfo.FILEDESC.ATTR];
+                desc.data = new DataBuffer(desc[DiskInfo.FILEDESC.CONTENTS]);
+                desc.date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
+                delete desc[DiskInfo.FILEDESC.HASH];
+                delete desc[DiskInfo.FILEDESC.CONTENTS];
+                let j = aFileData.findIndex((file) => (file.name === desc.name));
+                if (j >= 0) {
+                    aFileData.splice(j, 1);
+                }
+                aFileData.unshift(desc);
+            }
+            suppData = null;
+        }
         if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, sectorIDs, sectorErrors, suppData)) {
             /*
              * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
@@ -339,8 +444,10 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
             for (let i = 0; i < aFileData.length; i++) {
                 addMetaData(di, sDir, aFileData[i].path, aFileData[i].files);
             }
+            done(di);
+            return;
         }
-        done(di);
+        done();
     };
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
@@ -357,7 +464,7 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
 /**
  * readDirFiles(sDir, sLabel, fNormalize, iLevel, done)
  *
- * @param {string} sDir (directory name)
+ * @param {string} sDir (slash-terminated directory name OR comma-delimited list of files)
  * @param {boolean|null} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [iLevel] (current directory level, primarily for diagnostic purposes only; zero if unspecified)
@@ -369,7 +476,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
     let aFileData = [];
 
     let asFiles;
-    if (sDir.endsWith(path.sep)) {
+    if (sDir.endsWith('/')) {
         asFiles = fs.readdirSync(sDir);
         for (let i = 0; i < asFiles.length; i++) {
             asFiles[i] = path.join(sDir, asFiles[i]);
@@ -439,23 +546,42 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
             file.attr = DiskInfo.ATTR.SUBDIR;
             file.size = -1;
             file.data = new DataBuffer();
-            file.files = readDirFiles(sPath + path.sep, null, fNormalize, iLevel + 1);
+            file.files = readDirFiles(sPath + '/', null, fNormalize, iLevel + 1);
         } else {
-            let fText = fNormalize && isTextFile(sName);
-            let data = readFile(sPath, fText? "utf8" : null);
+            /*
+             * To properly deal with normalization of BASIC files, we first read the file into
+             * a DataBuffer and make sure the first byte isn't 0xFE or 0xFF (because that indicates
+             * the BASIC program is tokenized and should be left as-is).
+             *
+             * Once we're convinced we're dealing with a text file, we re-read the file with UTF-8
+             * encoding.  The assumption here is that YOU, by specifically requesting normalization,
+             * are telling us that the files being read here are "modern" (eg, UTF-8 or at least plain
+             * ASCII) files that should be converted to PC standards.
+             */
+            let data = readFile(sPath, null);
             if (!data) continue;
-            if (data.length != stats.size) {
-                printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
+            let fText = fNormalize && isTextFile(sName);
+            if (fText) {
+                if (isBASICFile(sName)) {
+                    if (data.length && data.readUInt8(0) >= 0xFE) fText = false;
+                }
             }
             if (fText) {
+                data = readFile(sPath);
                 if (CharSet.isText(data)) {
                     let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
-                    if (dataNew != data) printf("replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
+                    if (dataNew != data) {
+                        printf(Device.MESSAGE.FILE + Device.MESSAGE.INFO, "replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
+                    }
                     data = dataNew;
                 } else {
-                    printf("non-ASCII data in %s (line endings unchanged)\n", sName);
+                    printf(Device.MESSAGE.FILE + Device.MESSAGE.INFO, "non-ASCII data in %s (line endings unchanged)\n", sName);
                 }
                 data = new DataBuffer(data);
+            } else {
+                if (data.length != stats.size) {
+                    printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
+                }
             }
             file.attr = DiskInfo.ATTR.ARCHIVE;
             file.size = data.length;
@@ -570,7 +696,7 @@ export function getArchiveFiles(zip, verbose)
             if (filename.length > 14) {
                 filename = "..." + filename.slice(filename.length - 11);
             }
-            let filesize = file.size;
+            let filesize = file.size || 0;
             if (filesize < 0) {
                 filesize = 0;
                 filename += path.sep;
@@ -579,7 +705,7 @@ export function getArchiveFiles(zip, verbose)
             if (entry.encrypted) method += '*';
             let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
             if (entry.errors) filesize = -1;
-            if (!DEBUG) {
+            if (!Device.DEBUG) {
                 printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
                     filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
             } else {
@@ -626,13 +752,67 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbo
 }
 
 /**
- * readFile(sFile, encoding)
+ * readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ *
+ * @param {string} diskFile
+ * @param {boolean} [forceBPB]
+ * @param {Array|string} [sectorIDs]
+ * @param {Array|string} [sectorErrors]
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
+ * @returns {DiskInfo|null}
+ */
+export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+{
+    let db, di
+    try {
+        let diskName = path.basename(diskFile);
+        di = new DiskInfo(device, diskName);
+        if (StrLib.getExtension(diskName) == "json") {
+            db = readFile(diskFile);
+            if (!db) {
+                di = null;
+            } else {
+                if (!di.buildDiskFromJSON(db)) di = null;
+            }
+        }
+        else {
+            /*
+             * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
+             */
+            db = readFile(diskFile, null);
+            if (!db) {
+                di = null;
+            } else {
+                if (StrLib.getExtension(diskName) == "psi") {
+                    if (!di.buildDiskFromPSI(db)) di = null;
+                } else {
+                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
+                }
+            }
+        }
+        if (di) {
+            let sDir = getLocalPath(diskFile.replace(/\.[a-z]+$/i, ""));
+            let aDiskFiles = glob.sync(path.join(sDir, "**"));
+            for (let i = 0; i < aDiskFiles.length; i++) {
+                addMetaData(di, sDir, aDiskFiles[i].slice(sDir.length));
+            }
+        }
+    } catch(err) {
+        printError(err);
+        return null;
+    }
+    return di;
+}
+
+/**
+ * readFile(sFile, encoding, quiet)
  *
  * @param {string} sFile
  * @param {string|null} [encoding]
+ * @param {boolean} [quiet]
  * @returns {DataBuffer|string|undefined}
  */
-export function readFile(sFile, encoding = "utf8")
+export function readFile(sFile, encoding = "utf8", quiet = false)
 {
     let data;
     if (sFile) {
@@ -640,7 +820,7 @@ export function readFile(sFile, encoding = "utf8")
             sFile = getLocalPath(sFile);
             data = FileLib.readFileSync(sFile, encoding);
         } catch(err) {
-            printError(err);
+            if (!quiet) printError(err);
         }
     }
     return data;

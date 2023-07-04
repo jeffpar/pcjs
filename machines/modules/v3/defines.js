@@ -10,7 +10,17 @@
 /**
  * @class Defines
  */
-export default class Defines {}
+export default class Defines {
+    /**
+     * setDebug(debug)
+     *
+     * @param {boolean} debug
+     */
+    setDebug(debug)
+    {
+        Defines.DEBUG = debug;
+    }
+}
 
 /**
  * COMMAND is the default name of the global command handler we will define, to provide
@@ -177,4 +187,4 @@ Defines.Components = typeof window != "undefined"? window['PCjs']['components'] 
 Defines.CLASSES = {};
 Defines.CLASSES["Defines"] = Defines;
 
-export { COMMAND, COMPILED, COPYRIGHT, DEBUG, FACTORY, LITTLE_ENDIAN, MAXDEBUG, MESSAGE, REPOSITORY, RS232, VERSION };
+export { Defines, COMMAND, COMPILED, COPYRIGHT, DEBUG, FACTORY, LITTLE_ENDIAN, MAXDEBUG, MESSAGE, REPOSITORY, RS232, VERSION };

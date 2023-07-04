@@ -4409,7 +4409,7 @@ X86.opUndefined = function()
 X86.opTBD = function()
 {
     this.setIP(this.opLIP - this.segCS.base);
-    this.printf(Messages.DEFAULT, "unimplemented 80386 opcode\n");
+    this.printf(Messages.NONE, "unimplemented 80386 opcode\n");
     this.stopCPU();
 };
 

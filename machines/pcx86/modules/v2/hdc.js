@@ -119,10 +119,10 @@ export default class HDC extends Component {
         this.aDriveConfigs = [];
 
         /*
-         * We used to eval() sDriveConfigs immediately, but now we wait until initBus() is called, so that
+         * We used to eval() driveConfigs immediately, but now we wait until initBus() is called, so that
          * we can check for any machine overrides.
          */
-        this.sDriveConfigs = parmsHDC['drives'];
+        this.driveConfigs = parmsHDC['drives'];
 
         /*
          * Set fATC (AT Controller flag) according to the 'type' parameter.  This in turn determines other
@@ -247,29 +247,19 @@ export default class HDC extends Component {
         /*
          * Any machine-specific 'drives' settings apply only the first HDC interface.
          */
-        let aDriveConfigs = cmp.getMachineParm(this.nInterface? 'cdromDrives' : 'drives');
-        if (aDriveConfigs) {
-            if (typeof aDriveConfigs == "string") {
-                this.sDriveConfigs = aDriveConfigs;
-            } else {
-                this.aDriveConfigs = aDriveConfigs;
-                this.sDriveConfigs = "";
-            }
-        }
+        let driveConfigs = cmp.getMachineParm(this.nInterface? 'cdromDrives' : 'drives') || this.driveConfigs;
 
-        if (this.sDriveConfigs) {
+        if (Array.isArray(driveConfigs)) {
+            this.aDriveConfigs = driveConfigs;
+        }
+        else if (typeof driveConfigs == "string") {
             try {
                 /*
                  * We must take care when parsing user-supplied JSON-encoded drive data.
                  */
-                this.aDriveConfigs = eval("(" + this.sDriveConfigs + ")");
-                /*
-                 * Nothing more to do with aDriveConfigs now. initController() and autoMount() (if there are
-                 * any disk image "path" properties to process) will take care of the rest.
-                 */
-                this.sDriveConfigs = "";
+                this.aDriveConfigs = eval("(" + driveConfigs + ")");
             } catch (e) {
-                Component.error("HDC drive configuration error: " + e.message + " (" + this.sDriveConfigs + ")");
+                Component.error("HDC drive configuration error: " + e.message + " (" + driveConfigs + ")");
             }
         }
 

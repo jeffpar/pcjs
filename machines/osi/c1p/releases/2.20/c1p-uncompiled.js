@@ -160,13 +160,13 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
  */
 const Messages = {
     NONE:       0x000000000000,
-    DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
     LOG:        0x001000000000,
     STATUS:     0x002000000000,
     NOTICE:     0x004000000000,
     WARNING:    0x008000000000,
     ERROR:      0x010000000000,
+    ALERTS:     0x01c000000000,
     DEBUG:      0x020000000000,
     PROGRESS:   0x040000000000,
     SCRIPT:     0x080000000000,
@@ -1979,7 +1979,11 @@ class Web {
         }
 
         if (globals.node.readFileSync) {
-            resource = globals.node.readFileSync(sURL);
+            try {
+                resource = globals.node.readFileSync(sURL);
+            } catch (err) {
+                nErrorCode = err['errno'];
+            }
             if (resource !== undefined) {
                 if (done) done(sURL, resource, nErrorCode);
                 return [resource, nErrorCode];
@@ -3257,7 +3261,7 @@ class Component {
      * The Closure Compiler should automatically remove all references to Component.assert() in non-DEBUG builds.
      * TODO: Add a task to the build process that "asserts" there are no instances of "assertion failure" in RELEASE builds.
      *
-     * @param {boolean} f is the expression we are asserting to be true
+     * @param {boolean|number|undefined} f is the expression we are asserting to be true
      * @param {string} [s] is description of the assertion on failure
      */
     static assert(f, s)
@@ -4003,7 +4007,7 @@ class Component {
      * TODO: Add a task to the build process that "asserts" there are no instances of "assertion failure" in RELEASE builds.
      *
      * @this {Component}
-     * @param {boolean|number} f is the expression asserted to be true
+     * @param {boolean|number|undefined} f is the expression asserted to be true
      * @param {string} [s] is a description of the assertion to be displayed or logged on failure
      */
     assert(f, s)
@@ -4269,7 +4273,7 @@ class Component {
     /**
      * messageEnabled(bitsMessage)
      *
-     * If bitsMessage is Messages.DEFAULT (0), then the component's Messages category is used.
+     * If bitsMessage is Messages.NONE (0), then the component's Messages category is used.
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
@@ -4278,13 +4282,19 @@ class Component {
     messageEnabled(bitsMessage = 0)
     {
         /*
-         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.DEFAULT, because
+         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.NONE, because
          * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
          */
         if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
         bitsMessage = bitsMessage || this.bitsMessage;
-        if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
-            return true;
+        /*
+         * printf() calls that specify Messages.DEBUG should be stripped out of non-DEBUG builds, but just in case
+         * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
+         */
+        if (DEBUG || !this.testBits(bitsMessage, Messages.DEBUG)) {
+            if (this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+                return true;
+            }
         }
         return false;
     }
@@ -4297,7 +4307,7 @@ class Component {
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
      * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
-     * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
+     * of whether the debugger has enabled it, the caller can use printf(Messages.NONE), and if the caller wants
      * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
@@ -14525,7 +14535,7 @@ class C1PComputer extends Component {
          */
         computer.setReady();
 
-        computer.printf(Messages.DEFAULT, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
+        computer.printf(Messages.NONE, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
 
         /*
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to "power" the CPU;

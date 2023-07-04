@@ -1135,7 +1135,7 @@ export default class BusPDP11 extends Component {
      */
     reportError(errNum, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.DEFAULT : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
+        this.printf(fQuiet? Messages.NONE : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
         return false;
     }
 }

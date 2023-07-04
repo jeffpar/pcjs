@@ -13,7 +13,7 @@ import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, BACKTRACK, DEBUG } from "./defines.js";
+import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG } from "./defines.js";
 
 /**
  * @class ROMx86
@@ -64,7 +64,7 @@ export default class ROMx86 extends Component {
             if (this.addrAlias[0] != '[') {
                 this.addrAlias = +this.addrAlias;
             } else {
-                this.addrAlias = JSON.parse(this.addrAlias);
+                this.addrAlias = eval(this.addrAlias);
             }
         }
 
@@ -362,7 +362,7 @@ export default class ROMx86 extends Component {
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX86.TYPE.ROM)) {
-            if (DEBUG) this.printf(Messages.LOG, "addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
+            if (MAXDEBUG) this.printf(Messages.LOG, "addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
             let bto = null;
             for (let off = 0; off < this.abROM.length; off++) {
                 this.bus.setByteDirect(addr + off, this.abROM[off]);

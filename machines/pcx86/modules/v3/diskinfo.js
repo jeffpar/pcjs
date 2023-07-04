@@ -45,7 +45,7 @@ import FileInfo from "./fileinfo.js";
  * @property {Date} date
  * @property {number} size
  * @property {DataBuffer} data
- * @property {number} cluster
+ * @property {number} cluster (leave uninitialized; buildFAT() will fill this in)
  * @property {Array.<FileData>} files
  */
 
@@ -116,13 +116,15 @@ export default class DiskInfo {
         this.printf = device.printf.bind(device);
         this.assert = device.assert.bind(device);
         this.diskName = diskName;
-        this.hash = "none";
         this.args = "";
         this.fWritable = fWritable;
         this.volTable = [];
         this.fileTable = [];
         this.aMetaData = [];
         this.tablesBuilt = false;
+        this.cbDiskData = 0;
+        this.dwChecksum = 0;
+        this.hash = "none";
     }
 
     /**
@@ -287,9 +289,10 @@ export default class DiskInfo {
                         this.printf(Device.MESSAGE.WARN, "BPB media ID (%#0bx) does not match physical media ID (%#0bx)\n", bMediaIDBPB, bMediaID);
                     }
                     if (nCylinders != nCylindersBPB) {
-                        this.printf(Device.MESSAGE.WARN, "BPB cylinders (%d) do not match physical cylinders (%d)\n", nCylindersBPB, nCylinders);
-                        if (nCylinders - nCylindersBPB == 1) {
-                            this.printf(Device.MESSAGE.WARN, "BIOS may have reserved the last cylinder for diagnostics\n");
+                        let message = (nCylinders - nCylindersBPB == 1)? Device.MESSAGE.INFO : Device.MESSAGE.WARN;
+                        this.printf(message, "BPB cylinders (%d) do not match physical cylinders (%d)\n", nCylindersBPB, nCylinders);
+                        if (message == Device.MESSAGE.INFO) {
+                            this.printf(message, "BIOS may have reserved the last cylinder for diagnostics and/or head-parking\n");
                         }
                     }
                     if (nHeads != nHeadsBPB) {
@@ -1030,11 +1033,11 @@ export default class DiskInfo {
             for (let iFile = 0; iFile < aFileData.length; iFile++) {
                 let cb = aFileData[iFile].size;
                 if (cb < 0) {
-                    if (Device.DEBUG) this.printf("%#x: buildClusters()\n", offDisk);
+                    if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%#x: buildClusters()\n", offDisk);
                     let cSubClusters = this.buildClusters(dbDisk, aFileData[iFile].files, offDisk, cbCluster, aFileData[iFile].cluster, iLevel + 1);
                     cClusters += cSubClusters;
                     offDisk += cSubClusters * cbCluster;
-                    if (Device.DEBUG) this.printf("%#x: buildClusters() returned, writing %d clusters\n", offDisk, cSubClusters);
+                    if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%#x: buildClusters() returned, writing %d clusters\n", offDisk, cSubClusters);
                 }
             }
         }
@@ -2018,6 +2021,62 @@ export default class DiskInfo {
     }
 
     /**
+     * getFileDesc(file, fComplete, fnHash)
+     *
+     * @this {DiskInfo}
+     * @param {FileInfo} file
+     * @param {boolean} [fComplete] (if not "complete", then the descriptor omits NAME, since PATH includes it, as well as SIZE and VOL when they are zero)
+     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
+     * @returns {Object}
+     */
+    getFileDesc(file, fComplete, fnHash)
+    {
+        let ab = null;
+        let desc = {
+            [DiskInfo.FILEDESC.HASH]: file.hash,
+            [DiskInfo.FILEDESC.PATH]: file.path.replace(/\\/g, '/'),
+            [DiskInfo.FILEDESC.NAME]: file.name,
+            [DiskInfo.FILEDESC.ATTR]: this.device.sprintf("%#0bx", file.attr),
+            [DiskInfo.FILEDESC.DATE]: this.device.sprintf("%T", file.date),
+            [DiskInfo.FILEDESC.SIZE]: file.size,
+            [DiskInfo.FILEDESC.VOL]:  file.iVolume
+        };
+        if (file.size && !(file.attr & DiskInfo.ATTR.METADATA) && (fComplete || fnHash)) {
+            this.assert(file.name[0] != '.');   // make sure we're not hashing "." and ".." DIRENTs
+            ab = new Array(file.size);
+            this.readSectorArray(file, ab);
+        }
+        if (fComplete) {
+            if (ab) desc[DiskInfo.FILEDESC.CONTENTS] = ab;
+        } else {
+            delete desc[DiskInfo.FILEDESC.NAME];
+            if (!file.size && (file.attr & DiskInfo.ATTR.SUBDIR | DiskInfo.ATTR.VOLUME)) {
+                delete desc[DiskInfo.FILEDESC.SIZE];
+            }
+            if (!file.iVolume) {
+                delete desc[DiskInfo.FILEDESC.VOL];
+            }
+        }
+        if (file.module) {
+            desc[DiskInfo.FILEDESC.MODULE] = {
+                [DiskInfo.FILEDESC.MODNAME]: file.module,
+                [DiskInfo.FILEDESC.MODDESC]: file.modDesc,
+                [DiskInfo.FILEDESC.MODSEGS]: file.segments
+            }
+        }
+        if (fnHash && ab) {
+            let hash = fnHash(ab);
+            if (desc[DiskInfo.FILEDESC.HASH] && hash != desc[DiskInfo.FILEDESC.HASH]) {
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: original hash (%s) does not match current hash (%s)\n", desc[DiskInfo.FILEDESC.PATH], desc[DiskInfo.FILEDESC.HASH], hash);
+            }
+            desc[DiskInfo.FILEDESC.HASH] = hash;
+        } else {
+            if (!desc[DiskInfo.FILEDESC.HASH]) delete desc[DiskInfo.FILEDESC.HASH];
+        }
+        return desc;
+    }
+
+    /**
      * getFileListing(iVolume, indent, options)
      *
      * @this {DiskInfo}
@@ -2161,105 +2220,12 @@ export default class DiskInfo {
     }
 
     /**
-     * getFileDesc(file, fComplete, fnHash)
-     *
-     * @this {DiskInfo}
-     * @param {FileInfo} file
-     * @param {boolean} [fComplete] (if not "complete", then the descriptor omits NAME, since PATH includes it, as well as SIZE and VOL when they are zero)
-     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @returns {Object}
-     */
-    getFileDesc(file, fComplete, fnHash)
-    {
-        let ab = null;
-        let desc = {
-            [DiskInfo.FILEDESC.HASH]: file.hash,
-            [DiskInfo.FILEDESC.PATH]: file.path.replace(/\\/g, '/'),
-            [DiskInfo.FILEDESC.NAME]: file.name,
-            [DiskInfo.FILEDESC.ATTR]: this.device.sprintf("%#0bx", file.attr),
-            [DiskInfo.FILEDESC.DATE]: this.device.sprintf("%T", file.date),
-            [DiskInfo.FILEDESC.SIZE]: file.size,
-            [DiskInfo.FILEDESC.VOL]:  file.iVolume
-        };
-        if (file.size && !(file.attr & DiskInfo.ATTR.METADATA) && (fComplete || fnHash)) {
-            this.assert(file.name[0] != '.');   // make sure we're not hashing "." and ".." DIRENTs
-            ab = new Array(file.size);
-            this.readSectorArray(file, ab);
-        }
-        if (fComplete) {
-            if (ab) desc[DiskInfo.FILEDESC.CONTENTS] = ab;
-        } else {
-            delete desc[DiskInfo.FILEDESC.NAME];
-            if (!file.size && (file.attr & DiskInfo.ATTR.SUBDIR | DiskInfo.ATTR.VOLUME)) {
-                delete desc[DiskInfo.FILEDESC.SIZE];
-            }
-            if (!file.iVolume) {
-                delete desc[DiskInfo.FILEDESC.VOL];
-            }
-        }
-        if (file.module) {
-            desc[DiskInfo.FILEDESC.MODULE] = {
-                [DiskInfo.FILEDESC.MODNAME]: file.module,
-                [DiskInfo.FILEDESC.MODDESC]: file.modDesc,
-                [DiskInfo.FILEDESC.MODSEGS]: file.segments
-            }
-        }
-        if (fnHash && ab) {
-            let hash = fnHash(ab);
-            if (desc[DiskInfo.FILEDESC.HASH] && hash != desc[DiskInfo.FILEDESC.HASH]) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: original hash (%s) does not match current hash (%s)\n", desc[DiskInfo.FILEDESC.PATH], desc[DiskInfo.FILEDESC.HASH], hash);
-            }
-            desc[DiskInfo.FILEDESC.HASH] = hash;
-        } else {
-            if (!desc[DiskInfo.FILEDESC.HASH]) delete desc[DiskInfo.FILEDESC.HASH];
-        }
-        return desc;
-    }
-
-    /**
-     * getVolDesc(vol, fComplete)
-     *
-     * @this {DiskInfo}
-     * @param {VolInfo} vol
-     * @param {boolean} [fComplete]
-     * @returns {Object}
-     */
-    getVolDesc(vol, fComplete)
-    {
-        let desc = {
-            [DiskInfo.VOLDESC.PARTITION]:  vol.iPartition,
-            [DiskInfo.VOLDESC.MEDIA_ID]:   vol.idMedia,
-            [DiskInfo.VOLDESC.LBA_VOL]:    vol.lbaStart,
-            [DiskInfo.VOLDESC.LBA_TOTAL]:  vol.lbaTotal,
-            [DiskInfo.VOLDESC.FAT_ID]:     vol.nFATBits,
-            [DiskInfo.VOLDESC.VBA_FAT]:    vol.vbaFAT,
-            [DiskInfo.VOLDESC.VBA_ROOT]:   vol.vbaRoot,
-            [DiskInfo.VOLDESC.ROOT_TOTAL]: vol.nEntries,
-            [DiskInfo.VOLDESC.VBA_DATA]:   vol.vbaData,
-            [DiskInfo.VOLDESC.CLUS_SECS]:  vol.clusSecs,
-            [DiskInfo.VOLDESC.CLUS_MAX]:   vol.clusMax,
-            [DiskInfo.VOLDESC.CLUS_BAD]:   vol.clusBad,
-            [DiskInfo.VOLDESC.CLUS_FREE]:  vol.clusFree,
-            [DiskInfo.VOLDESC.CLUS_TOTAL]: vol.clusTotal
-        };
-        /*
-         * By default, we don't include a partition number if it's an unpartitioned disk.
-         */
-        if (!fComplete) {
-            if (vol.iPartition < 0) {
-                delete desc[DiskInfo.VOLDESC.PARTITION];
-            }
-        }
-        return desc;
-    }
-
-    /**
      * getFileManifest(fnHash, fSorted, fMetaData)
      *
-     * Returns an array of FILEDESC (file descriptors).  Each object is largely a clone
-     * of the FileInfo object, with the exception of cluster and aLBA properties (which aren't
-     * useful outside the context of the DiskInfo object), and with the inclusion of
-     * a HASH property, if the caller provides a hash function.
+     * Returns an array of FILEDESC (file descriptors).  Each object is largely a clone of the
+     * FileInfo object, with the exception of cluster and aLBA properties (which aren't useful
+     * outside the context of the DiskInfo object), and with the inclusion of a HASH property,
+     * if the caller provides a hash function.
      *
      * @this {DiskInfo}
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
@@ -2353,6 +2319,43 @@ export default class DiskInfo {
     }
 
     /**
+     * getVolDesc(vol, fComplete)
+     *
+     * @this {DiskInfo}
+     * @param {VolInfo} vol
+     * @param {boolean} [fComplete]
+     * @returns {Object}
+     */
+    getVolDesc(vol, fComplete)
+    {
+        let desc = {
+            [DiskInfo.VOLDESC.PARTITION]:  vol.iPartition,
+            [DiskInfo.VOLDESC.MEDIA_ID]:   vol.idMedia,
+            [DiskInfo.VOLDESC.LBA_VOL]:    vol.lbaStart,
+            [DiskInfo.VOLDESC.LBA_TOTAL]:  vol.lbaTotal,
+            [DiskInfo.VOLDESC.FAT_ID]:     vol.nFATBits,
+            [DiskInfo.VOLDESC.VBA_FAT]:    vol.vbaFAT,
+            [DiskInfo.VOLDESC.VBA_ROOT]:   vol.vbaRoot,
+            [DiskInfo.VOLDESC.ROOT_TOTAL]: vol.nEntries,
+            [DiskInfo.VOLDESC.VBA_DATA]:   vol.vbaData,
+            [DiskInfo.VOLDESC.CLUS_SECS]:  vol.clusSecs,
+            [DiskInfo.VOLDESC.CLUS_MAX]:   vol.clusMax,
+            [DiskInfo.VOLDESC.CLUS_BAD]:   vol.clusBad,
+            [DiskInfo.VOLDESC.CLUS_FREE]:  vol.clusFree,
+            [DiskInfo.VOLDESC.CLUS_TOTAL]: vol.clusTotal
+        };
+        /*
+         * By default, we don't include a partition number if it's an unpartitioned disk.
+         */
+        if (!fComplete) {
+            if (vol.iPartition < 0) {
+                delete desc[DiskInfo.VOLDESC.PARTITION];
+            }
+        }
+        return desc;
+    }
+
+    /**
      * getDate(modDate, modTime, sFile)
      *
      * If modDate wasn't set (ie, 0x0000), then m will be -1 and d will be 0,
@@ -2441,7 +2444,7 @@ export default class DiskInfo {
 
         dir.path = path + "\\";
 
-        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK, 'getDir("%s","%s")\n', this.diskName, dir.path);
+        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, 'getDir("%s","%s")\n', this.diskName, dir.path);
 
         for (let iSector = 0; iSector < aLBA.length; iSector++) {
             let lba = aLBA[iSector];
@@ -3205,10 +3208,10 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {string} name
-     * @param {string} [text]
+     * @param {string|boolean} [text]
      * @returns {Object|null}
      */
-    findFile(name)
+    findFile(name, text = true)
     {
         let desc = null;
         if (this.buildTables() > 0) {
@@ -3217,7 +3220,7 @@ export default class DiskInfo {
                 for (let i = 0; i < this.fileTable.length; i++) {
                     let file = this.fileTable[i];
                     if (name == file.name) {
-                        desc = this.getFileDesc(file, true);
+                        desc = this.getFileDesc(file, !!text);
                         break;
                     }
                 }
@@ -3452,7 +3455,7 @@ export default class DiskInfo {
         let b = -1;
         if (sector) {
             if (Device.DEBUG && !iByte && !fCompare) {
-                this.printf(Device.MESSAGE.DISK, 'read("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, 'read("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
             }
             if (iByte < sector[DiskInfo.SECTOR.LENGTH]) {
                 let adw = sector[DiskInfo.SECTOR.DATA];
@@ -3574,7 +3577,7 @@ export default class DiskInfo {
         if (!fForce && !this.fWritable) return false;
 
         if (Device.DEBUG && !iByte) {
-            this.printf(Device.MESSAGE.DISK, 'write("%s",CHS=%d:%d:%d)\n', this.diskName, sector.iCylinder, sector.iHead, sector[DiskInfo.SECTOR.ID]);
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, 'write("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
         }
 
         if (iByte < sector[DiskInfo.SECTOR.LENGTH]) {
@@ -3613,23 +3616,30 @@ export default class DiskInfo {
     }
 
     /**
-     * updateBootSector(dbBoot, fReplaceBPB, iVolume)
+     * updateBootSector(dbBoot, iVolume, fReplaceBPB)
      *
      * We use the write() interface to modify the bytes of the boot sector, with fForce
      * set, which allows writes even when the disk wasn't opened for writing.
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
+     * @param {number} [iVolume] (default is first volume; -1 for MBR, if any)
      * @param {boolean} [fReplaceBPB] (default is false, so we preserve the existing BPB)
-     * @param {number} [iVolume] (default is first volume, which is all most disks have anyway)
      * @returns {boolean} (true if successful, false otherwise)
      */
-    updateBootSector(db, fReplaceBPB = false, iVolume = 0)
+    updateBootSector(db, iVolume = 0, fReplaceBPB = false)
     {
         let fSuccess = false;
         if (db && this.buildTables() >= 0) {
-            if (iVolume >= 0 && iVolume < this.volTable.length) {
-                let lbaBoot = this.volTable[iVolume].lbaStart;
+            let lbaBoot = -1;
+            let fCheckBPB = false;
+            if (iVolume < 0) {
+                lbaBoot = 0;
+            } else if (iVolume >= 0 && iVolume < this.volTable.length) {
+                fCheckBPB = true;
+                lbaBoot = this.volTable[iVolume].lbaStart;
+            }
+            if (lbaBoot >= 0) {
                 let sectorBoot = this.getSector(lbaBoot);
                 if (sectorBoot) {
                     fSuccess = true;
@@ -3639,25 +3649,27 @@ export default class DiskInfo {
                      * need to check for a disk using our extended BPB format, and make sure those
                      * fields are in sync with the existing BPB fields.
                      */
-                    let bOpcode = db.readUInt8(0);
-                    if (bOpcode == CPUx86.OPCODE.CLD) {
-                        let nSecBytes = this.getSectorData(sectorBoot, DiskInfo.BPB.SECBYTES, 2);
-                        let nFATs = this.getSectorData(sectorBoot, DiskInfo.BPB.FATS, 1);
-                        let nFATSecs = this.getSectorData(sectorBoot, DiskInfo.BPB.FATSECS, 2);
-                        let nResSecs = this.getSectorData(sectorBoot, DiskInfo.BPB.RESSECS, 2);
-                        let nLBARoot = nResSecs + nFATs * nFATSecs;
-                        let nDirEnts = this.getSectorData(sectorBoot, DiskInfo.BPB.DIRENTS, 2);
-                        let nLBAData = (nLBARoot + ((nDirEnts * 0x20) + (nSecBytes - 1)) / nSecBytes)|0;
-                        let nTrackSecs = this.getSectorData(sectorBoot, DiskInfo.BPB.TRACKSECS, 2);
-                        let nDriveHeads = this.getSectorData(sectorBoot, DiskInfo.BPB.DRIVEHEADS, 2);
-                        let nCylSecs = nTrackSecs * nDriveHeads;
-                        db.writeUInt8(0, DiskInfo.BPB.DRIVE);
-                        db.writeUInt16LE(nCylSecs, DiskInfo.BPB.CYLSECS);
-                        db.writeUInt16LE(nLBARoot, DiskInfo.BPB.LBAROOT);
-                        db.writeUInt16LE(nLBAData, DiskInfo.BPB.LBADATA);
+                    if (fCheckBPB) {
+                        let bOpcode = db.readUInt8(0);
+                        if (bOpcode == CPUx86.OPCODE.CLD) {
+                            let nSecBytes = this.getSectorData(sectorBoot, DiskInfo.BPB.SECBYTES, 2);
+                            let nFATs = this.getSectorData(sectorBoot, DiskInfo.BPB.FATS, 1);
+                            let nFATSecs = this.getSectorData(sectorBoot, DiskInfo.BPB.FATSECS, 2);
+                            let nResSecs = this.getSectorData(sectorBoot, DiskInfo.BPB.RESSECS, 2);
+                            let nLBARoot = nResSecs + nFATs * nFATSecs;
+                            let nDirEnts = this.getSectorData(sectorBoot, DiskInfo.BPB.DIRENTS, 2);
+                            let nLBAData = (nLBARoot + ((nDirEnts * 0x20) + (nSecBytes - 1)) / nSecBytes)|0;
+                            let nTrackSecs = this.getSectorData(sectorBoot, DiskInfo.BPB.TRACKSECS, 2);
+                            let nDriveHeads = this.getSectorData(sectorBoot, DiskInfo.BPB.DRIVEHEADS, 2);
+                            let nCylSecs = nTrackSecs * nDriveHeads;
+                            db.writeUInt8(0, DiskInfo.BPB.DRIVE);
+                            db.writeUInt16LE(nCylSecs, DiskInfo.BPB.CYLSECS);
+                            db.writeUInt16LE(nLBARoot, DiskInfo.BPB.LBAROOT);
+                            db.writeUInt16LE(nLBAData, DiskInfo.BPB.LBADATA);
+                        }
                     }
                     for (let ib = 0; ib < cb; ib++) {
-                        if (!fReplaceBPB) {
+                        if (fCheckBPB && !fReplaceBPB) {
                             if (ib >= DiskInfo.BPB.BEGIN && ib < DiskInfo.BPB.END) continue;
                         }
                         let b = db.readUInt8(ib);

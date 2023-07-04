@@ -4630,9 +4630,9 @@ export default class DebuggerX86 extends DbgLib {
      */
     doHelp()
     {
-        let s = "commands:";
+        let s = "debugger commands:";
         for (let sCommand in DebuggerX86.COMMANDS) {
-            s += '\n' + Str.pad(sCommand, 7) + DebuggerX86.COMMANDS[sCommand];
+            s += '\n  ' + Str.pad(sCommand, 7) + DebuggerX86.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
         this.printf("%s\n", s);
