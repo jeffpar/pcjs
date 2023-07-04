@@ -533,6 +533,7 @@ function buildDiskIndex()
             let diskette = aDiskettes[i];
             let diskPath = diskette['path'];
             let diskName = diskette['name'];
+            if (diskPath.indexOf("/private") >= 0) continue;
             diskIndex[diskName] = {'path': diskPath};
             total++;
             if (total % 100 == 0) {
@@ -610,12 +611,12 @@ function buildFileIndex(diskIndex)
  * The two primary criteria are disk and file.  Other criteria are secondary; for example, date criteria are secondary
  * file criteria (in other words, without any file criteria, date criteria will be ignored).
  *
- * If this is more than one disk that matches the criteria, then a numbered list of diskettes will be displayed, and then
+ * If this is more than one disk that matches the criteria, then a numbered list of diskettes will be displayed, and
  * a subsequent "load" command with a number:
  *
  *      load a: 14
  *
- * will load the corresponding diskette.  After any successful load command, any previous numbered list will be deleted.
+ * will load the corresponding diskette.
  *
  * @param {string} sDrive ('A:' through 'Z:')
  * @param {Array.<string>} aTokens
@@ -637,12 +638,32 @@ function loadDiskette(sDrive, aTokens)
         };
         result = "loading \"" + diskName + "\" in drive " + sDrive;
         fdc.loadDrive(iDrive, diskName, diskPath, false, null, done);
-    }
+    };
+    let displayItems = function(sDrive, items, message = "") {
+        for (let i = 0; i < items.length; i++) {
+            let item = items[i];
+            if (result) result += '\n';
+            if (!item['file']) {
+                result += sprintf("%3d: %s", i + 1, item['disk']);
+            } else {
+                result += sprintf("%3d: %-12s %8d %.10s  \"%s\"", i+1, item['file'], item['size'], item['date'], item['disk']);
+            }
+        }
+        result += "\nenter \"load " + sDrive + " #\" to load diskette by number" + (message? "\n" + message : "");
+        return result;
+    };
     if (fdc) {
         if (diskItems && aTokens.length == 1 && aTokens[0].match(/^\d+$/)) {
-            let item = diskItems[+aTokens[0] - 1];
-            if (item) {
-                doLoad(sDrive, item['disk']);
+            let diskItem = diskItems[+aTokens[0] - 1];
+            if (diskItem) {
+                if (!diskItem['others']) {
+                    doLoad(sDrive, diskItem['disk']);
+                } else {
+                    diskItems = diskItem['others'];
+                    diskItems.unshift(diskItem);
+                    delete diskItem['others'];
+                    result = displayItems(sDrive, diskItems, "multiple disks with identical file (use \"load a: 1\" to load original selection)");
+                }
             } else {
                 result = "invalid diskette number (" + aTokens[0] + ")";
             }
@@ -650,7 +671,7 @@ function loadDiskette(sDrive, aTokens)
         }
         diskItems = [];
         let criteria = 'disk';
-        let criteriaFound = false;
+        let cTokens = 0;
         let dateParts = [];
         let diskNameParts = [];
         let fileNameParts = [];
@@ -658,30 +679,30 @@ function loadDiskette(sDrive, aTokens)
             let matchDash = token.match(/^-+(.*)$/);
             if (matchDash) {
                 criteria = matchDash[1].toLowerCase();
-                criteriaFound = true;
-                continue;
+            } else {
+                token = token.toUpperCase();
+                if (!cTokens && token.match(/\.[A-Z][A-Z][A-Z]$/)) {
+                    /*
+                    * If no criteria has been specified, and the token looks like a filename, then assume it's a file.
+                    */
+                    criteria = 'file';
+                }
+                switch (criteria) {
+                case 'date':
+                    dateParts.push(token);
+                    break;
+                case 'disk':
+                    diskNameParts.push(token);
+                    break;
+                case 'file':
+                    fileNameParts.push(token);
+                    break;
+                default:
+                    printf("unknown criteria: %s\n", criteria);
+                    break;
+                }
             }
-            token = token.toUpperCase();
-            if (!criteriaFound && token.match(/\.[A-Z][A-Z][A-Z]$/)) {
-                /*
-                 * If no criteria has been specified, and the token looks like a filename, then assume it's a file.
-                 */
-                criteria = 'file';
-            }
-            switch (criteria) {
-            case 'date':
-                dateParts.push(token);
-                break;
-            case 'disk':
-                diskNameParts.push(token);
-                break;
-            case 'file':
-                fileNameParts.push(token);
-                break;
-            default:
-                printf("unknown criteria: %s\n", criteria);
-                break;
-            }
+            cTokens++;
         }
         if (dateParts.length || diskNameParts.length || fileNameParts.length) {
             if (!diskIndexCache) {
@@ -712,12 +733,16 @@ function loadDiskette(sDrive, aTokens)
                 let searchNames = function(names, parts, index) {
                     let matches = [];
                     for (let name of names) {
+                        let i = 0;
                         let match = true;
+                        let test = name.toUpperCase();
                         for (let part of parts) {
-                            if (name.indexOf(part) < 0) {
+                            i = test.indexOf(part, i);
+                            if (i < 0) {
                                 match = false;
                                 break;
                             }
+                            i += part.length;
                         }
                         if (match) {
                             if (!Array.isArray(index[name])) {
@@ -732,12 +757,17 @@ function loadDiskette(sDrive, aTokens)
                                 let hashIndex = {};
                                 for (let i = 0; i < a.length; i++) {
                                     let item = a[i];
-                                    if (hashIndex[item['hash']]) {
-                                        hashIndex[item['hash']].push(item['disk']);
+                                    let diskItem = {'disk': item['disk'], 'file': name, 'size': item['size'], 'date': item['date']};
+                                    let prevItem = hashIndex[item['hash']];
+                                    if (prevItem) {
+                                        if (!prevItem['others']) {
+                                            prevItem['others'] = [];
+                                        }
+                                        prevItem['others'].push(diskItem);
                                         continue;
                                     }
-                                    hashIndex[item['hash']] = [item['disk']];
-                                    matches.push({'disk': item['disk'], 'file': name, 'size': item['size'], 'date': item['date']});
+                                    hashIndex[item['hash']] = diskItem;
+                                    matches.push(diskItem);
                                 }
                             }
                         }
@@ -752,17 +782,8 @@ function loadDiskette(sDrive, aTokens)
                      * Since there are multiple items, our job is to display rather than to load; a subsequent
                      * call to loadDiskette() with an item number will do the actual loading of the selected disk.
                      */
-                    for (let i = 0; i < items.length; i++) {
-                        let item = items[i];
-                        if (result) result += '\n';
-                        if (!item['file']) {
-                            result += sprintf("%3d: %s", i + 1, item['disk']);
-                        } else {
-                            result += sprintf("%3d: %s %8d %.10s  \"%s\"", i+1, item['file'], item['size'], item['date'], item['disk']);
-                        }
-                    }
-                    result += "\nenter \"load " + sDrive + " #\" to load diskette by number";
                     diskItems = items;
+                    result = displayItems(sDrive, diskItems);
                 } else {
                     result = "no disk(s) found";
                 }

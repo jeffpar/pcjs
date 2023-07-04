@@ -77,7 +77,7 @@ Here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/pa
 
     pc.js --debug --load=/machines/dec/pdp11/1170/panel/debugger/machine.xml
 
-The above examples also include `--debug` because those particular machines do *not* automatically start running, and `--debug` provides useful feedback in such cases.
+The above examples also include `--debug` because those particular machines do *not* automatically start running, and `--debug` provides useful feedback in those situations.
 
 ### Access Local Files from MS-DOS
 
@@ -98,12 +98,142 @@ One of the pre-requisites of this feature is having a copy of the [pcjs-diskette
 
 This is because [pc.js](pc.js) automatically copies system files from MS-DOS diskettes (eg, [MSDOS320-DISK1](https://github.com/jeffpar/pcjs-diskettes/blob/master/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json)) to build a bootable hard disk image.
 
-There are no plans to perform any kind of "dynamic" file system updates.  This means if you modify any files on your local file system, don't expect those modifications to show up inside the machine until you restart `pc.js`.  Similarly, don't expect any file modifications inside the machine to show up on your local file system until you terminate `pc.js` -- and only once that feature has actually been implemented (see below).
+There are no plans to perform any kind of "dynamic" file system updates.  This means if you modify any files on your local file system, don't expect those modifications to show up inside the machine until you restart `pc.js`.  Similarly, don't expect any file modifications inside the machine to show up on your local file system until you terminate `pc.js` -- and only once that feature has actually been implemented (see [below](#future-features)).
 
-Coming soon:
+### Loading Machines and Diskettes
+
+Normally, when you run `pc.js`, a machine is started, either explicitly via `--load`, or implicitly by typing the name of a DOS executable.  Otherwise, you can start a machine from the pc.js `>>` prompt, using the "load" internal command; eg:
+
+    >> load compaq386
+
+Once a machine is running, you can access the `>>` prompt by typing **CTRL-A**.  That will stop the machine until you enter the "g" command.  Any command not recognized by `pc.js` is passed to the machine's built-in debugger.  Type "?" to get a list of debugger commands.
+
+The "load" command is also used to load PCjs diskettes images into the machine's floppy drives, by including a drive letter, as in:
+
+    >> load a: PC DOS
+
+That command will search for all PCjs diskettes with "PC" and "DOS" in the diskette name and list them by number:
+
+      1: COMPAQ PC DOS 3.20 Support
+      2: Jeff's PC DOS 1.00 with MASM
+      3: PC DOS 0.90
+      4: PC DOS 1.00
+      5: PC DOS 1.10
+      6: PC DOS 2.00 (Disk 1)
+      7: PC DOS 2.00 (Disk 2)
+      8: PC DOS 2.10 (Disk 1)
+      9: PC DOS 2.10 (Disk 2)
+     10: PC DOS 3.00 (Disk 1)
+     11: PC DOS 3.00 (Disk 2)
+     12: PC DOS 3.10 (Disk 1)
+     13: PC DOS 3.10 (Disk 2)
+     14: PC DOS 3.10 (Patched Disk 1)
+     15: PC DOS 3.20 (720K)
+     16: PC DOS 3.20 (Disk 1)
+     17: PC DOS 3.20 (Disk 2)
+     18: PC DOS 3.30 (720K)
+     19: PC DOS 3.30 (Disk 1)
+     20: PC DOS 3.30 (Disk 2)
+     21: PC DOS 3.30 (TechRef)
+     22: PC DOS 4.00 (Disk 1)
+     23: PC DOS 4.00 (Disk 2)
+     24: PC DOS 4.00 (Disk 3)
+     25: PC DOS 4.00 (Disk 4)
+     26: PC DOS 4.00 (Disk 5)
+     27: PC DOS 4.00 (TechRef)
+     28: PC DOS 4.01 (Disk 1)
+     29: PC DOS 4.01 (Disk 2)
+     30: PC DOS 5.00 (Disk 1)
+     31: PC DOS 5.00 (Disk 2)
+     32: PC DOS 5.00 (Disk 3)
+     33: PC DOS 5.02 (Disk 1)
+     34: PC DOS 5.02 (Disk 2)
+     35: PC DOS 5.02 (Disk 3)
+     36: PC DOS 6.10 (Disk 1)
+     37: PC DOS 6.10 (Disk 2)
+     38: PC DOS 6.10 (Disk 3)
+     39: PC DOS 6.10 (Disk 4)
+     40: PC DOS 6.30 (Disk 1)
+     41: PC DOS 6.30 (Disk 2)
+     42: PC DOS 6.30 (Disk 3)
+     43: PC DOS 6.30 (Disk 4)
+     44: PC DOS 6.30 (Disk 5)
+     45: PC DOS 7.00 (1.2M Boot)
+     46: PC DOS 7.00 (1.44M Boot)
+     47: PC DOS 7.00 (Disk 1)
+     48: PC DOS 7.00 (Disk 2)
+     49: PC DOS 7.00 (Disk 3)
+     50: PC DOS 7.00 (Disk 4)
+     51: PC DOS 7.00 (Disk 5)
+
+You can then use a second "load" command to load a diskette by number.  For example, to load "PC DOS 2.00 (Disk 1)":
+
+    >> load a: 6
+
+You can also search for disks containing a specific file name:
+
+    >> load a: --file pkunzip.exe
+
+That command will display the following diskettes:
+
+      1: PKUNZIP.EXE    19080 1980-01-01  "PC-SIG Library Disk #3165"
+      2: PKUNZIP.EXE    18208 1989-03-06  "PC-SIG Library Disk #0621"
+      3: PKUNZIP.EXE    21440 1989-07-21  "PC-SIG Library Disk #0687"
+      4: PKUNZIP.EXE    35258 1989-07-21  "PC-SIG Library Disk #2382"
+      5: PKUNZIP.EXE    22022 1989-10-01  "Small Computer Book Club (1990)"
+      6: PKUNZIP.EXE    23528 1990-03-15  "Undocumented Windows"
+      7: PKUNZIP.EXE    19025 1990-03-15  "PC-SIG Library Disk #2715"
+      8: PKUNZIP.EXE    19041 1990-03-15  "PC-SIG Library Disk #3036"
+      9: PKUNZIP.EXE    19025 1990-03-15  "PC-SIG Library Disk #3475"
+     10: PKUNZIP.EXE    22540 1990-06-01  "PC-SIG Library Disk #0765"
+     11: PKUNZIP.EXE    17931 1990-09-07  "PC-SIG Library Disk #1773"
+     12: PKUNZIP.EXE    23536 1991-01-16  "PC-SIG Library Disk #2835"
+     13: PKUNZIP.EXE    19044 1991-04-03  "PC-SIG Library Disk #2610"
+     14: PKUNZIP.EXE    19025 1991-08-01  "PC-SIG Library Disk #3245"
+     15: PKUNZIP.EXE    19411 1991-10-15  "PC-SIG Library Disk #3220"
+     16: PKUNZIP.EXE    29371 1993-01-25  "PC-SIG Library Disk #4052"
+     17: PKUNZIP.EXE    29378 1993-02-01  "PC-SIG Library Disk #3418"
+     18: PKUNZIP.EXE     2750 1993-02-01  "PC-SIG Library Disk #3853"
+
+which represent 18 different copies of PKUNZIP.EXE.  Differences are based on the file contents, not file size or timestamp.
+
+Again, to load one of the diskettes listed, specify it by number.  For example, to load the diskette named ""Undocumented Windows", use:
+
+    >> load a: 6
+
+If there were other diskettes with an identical copy of that file that weren't initially listed, they will be listed next:
+
+      1: PKUNZIP.EXE     23528 1990-03-15  "Undocumented Windows"
+      2: PKUNZIP.EXE     23528 1990-03-15  "PC-SIG Library Disk #1502"
+      3: PKUNZIP.EXE     23528 1990-03-15  "PC-SIG Library Disk #2367"
+      4: PKUNZIP.EXE     23528 1990-03-15  "PC-SIG Library Disk #2491"
+      5: PKUNZIP.EXE     23528 1990-03-15  "PC-SIG Library Disk #2536"
+      6: PKUNZIP.EXE     23528 1990-03-15  "PC-SIG Library Disk #2587"
+    ...
+
+If you still want your original selection, use "load a: 1".  You can always give the full diskette name as well:
+
+    >> load a: undocumented windows
+
+The comparison is case-insensitive and the given string need only be a subset of the desired diskette name; however, if the name is not unique, you'll be presented with another list of diskettes to choose from.
+
+Use `--disk` and `--file` to enter a mix of search criteria.  `--disk` is assumed if there are no other criteria, and `--file` is assumed if the string looks like a filename *and* no other criteria has been specified.  For example:
+
+    >> load a: pkunzip.exe
+
+is equivalent to `load a: --file pkunzip.exe`, but `--file` can also be useful for casting a wider search net.  For example:
+
+    >> load a: --file pkunzip
+
+will match any file with `PKUNZIP` in the name (eg, `PKUNZIP.COM`, `PKUNZIP.EXE`), and:
+
+    >> load a: --file pkunzip exe
+
+will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EXE`, `PKUNZIP2.EXE`).  There is no support for wildcards, since multiple search terms provide largely the same capability.
+
+### Future Features
 
 - Command-line options to select another machine type and/or DOS version
-- Runtime options to load diskette images into drives A: and B:
 - On machine termination, automatic detection of modified files and update of local file(s)
 
 ### Historical Notes
