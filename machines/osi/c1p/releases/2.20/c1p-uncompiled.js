@@ -2773,7 +2773,7 @@ class Web {
         };
         e.onmousedown = function()
         {
-            // Component.printf(Messages.DEBUG, "onMouseDown()\n");
+            //
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -2783,7 +2783,7 @@ class Web {
         };
         e.ontouchstart = function()
         {
-            // Component.printf(Messages.DEBUG, "onTouchStart()\n");
+            //
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -2791,7 +2791,7 @@ class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            // Component.printf(Messages.DEBUG, "onMouseUp()/onMouseOut()\n");
+            //
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -2799,7 +2799,7 @@ class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            // Component.printf(Messages.DEBUG, "onTouchEnd()/onTouchCancel()\n");
+            //
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
