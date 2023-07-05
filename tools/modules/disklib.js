@@ -327,7 +327,7 @@ function addMetaData(di, sDir, sPath, aFiles)
                 let sName = path.basename(sPath);
                 let stats = fs.statSync(sPath);
                 if (!stats.isDirectory()) {
-                    let data = readFile(sPath, null);
+                    let data = readFileSync(sPath, null);
                     if (!data) continue;
                     let file = {
                         hash: getHash(data),
@@ -558,7 +558,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
              * are telling us that the files being read here are "modern" (eg, UTF-8 or at least plain
              * ASCII) files that should be converted to PC standards.
              */
-            let data = readFile(sPath, null);
+            let data = readFileSync(sPath, null);
             if (!data) continue;
             let fText = fNormalize && isTextFile(sName);
             if (fText) {
@@ -567,7 +567,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
                 }
             }
             if (fText) {
-                data = readFile(sPath);
+                data = readFileSync(sPath);
                 if (CharSet.isText(data)) {
                     let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
                     if (dataNew != data) {
@@ -752,7 +752,7 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbo
 }
 
 /**
- * readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ * readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} diskFile
  * @param {boolean} [forceBPB]
@@ -761,14 +761,14 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbo
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
  * @returns {DiskInfo|null}
  */
-export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+export function readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
 {
     let db, di
     try {
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);
         if (StrLib.getExtension(diskName) == "json") {
-            db = readFile(diskFile);
+            db = readFileSync(diskFile);
             if (!db) {
                 di = null;
             } else {
@@ -777,9 +777,9 @@ export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
         }
         else {
             /*
-             * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
+             * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
              */
-            db = readFile(diskFile, null);
+            db = readFileSync(diskFile, null);
             if (!db) {
                 di = null;
             } else {
@@ -805,14 +805,14 @@ export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
 }
 
 /**
- * readFile(sFile, encoding, quiet)
+ * readFileSync(sFile, encoding, quiet)
  *
  * @param {string} sFile
  * @param {string|null} [encoding]
  * @param {boolean} [quiet]
  * @returns {DataBuffer|string|undefined}
  */
-export function readFile(sFile, encoding = "utf8", quiet = false)
+export function readFileSync(sFile, encoding = "utf8", quiet = false)
 {
     let data;
     if (sFile) {
@@ -827,16 +827,16 @@ export function readFile(sFile, encoding = "utf8", quiet = false)
 }
 
 /**
- * readJSON(sFile)
+ * readJSONSync(sFile)
  *
  * @param {string} sFile
  * @returns {Object|undefined}
  */
-export function readJSON(sFile)
+export function readJSONSync(sFile)
 {
     let data, json;
     try {
-        data = readFile(sFile);
+        data = readFileSync(sFile);
         json = JSON.parse(data);
     } catch(err) {
         printError(err);
@@ -845,7 +845,7 @@ export function readJSON(sFile)
 }
 
 /**
- * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fQuiet, fWritable, source)
+ * writeDiskSync(diskFile, di, fLegacy, indent, fOverwrite, fQuiet, fWritable, source)
  *
  * @param {string} diskFile
  * @param {DiskInfo} di
@@ -856,7 +856,7 @@ export function readJSON(sFile)
  * @param {boolean} [fWritable]
  * @param {string} [source]
  */
-export function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fQuiet = false, fWritable = false, source = "")
+export function writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fQuiet = false, fWritable = false, source = "")
 {
     let diskName = path.basename(diskFile);
     try {

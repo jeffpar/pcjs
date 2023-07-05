@@ -20,7 +20,7 @@ import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
-import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, normalizeTextFile, printError, printf, readDir, readDisk, readFile, readJSON, replaceServerPrefix, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
+import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, normalizeTextFile, printError, printf, readDir, readDiskSync, readFileSync, readJSONSync, replaceServerPrefix, setRootDir, sprintf, writeDiskSync  } from "../modules/disklib.js";
 
 let rootDir, sFileIndexCache;
 
@@ -34,10 +34,10 @@ let rootDir, sFileIndexCache;
 function compareDisks(sDisk1, sDisk2)
 {
     /*
-     * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
+     * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
      */
-    let db1 = readFile(sDisk1, null);
-    let db2 = readFile(sDisk2, null);
+    let db1 = readFileSync(sDisk1, null);
+    let db2 = readFileSync(sDisk2, null);
     return db1 && db2 && db1.compare(db2) || false;
 }
 
@@ -85,7 +85,7 @@ function createDisk(diskFile, diskette, argv, done)
     let sectorIDs = diskette.argv['sectorID'] || argv['sectorID'];
     let sectorErrors = diskette.argv['sectorError'] || argv['sectorError'];
     let suppData = diskette.argv['suppData'] || argv['suppData'];
-    if (suppData) suppData = readFile(suppData);
+    if (suppData) suppData = readFileSync(suppData);
     let fDir = false, arcType = 0, sExt = StrLib.getExtension(sArchiveFile);
     if (sArchiveFile.endsWith(path.sep)) {
         fDir = true;
@@ -113,7 +113,7 @@ function createDisk(diskFile, diskette, argv, done)
         let verbose = argv['verbose'];
         readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, sectorIDs, sectorErrors, suppData, done);
     } else {
-        done(readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData));
+        done(readDiskSync(sArchiveFile, false, sectorIDs, sectorErrors, suppData));
     }
 }
 
@@ -370,7 +370,7 @@ function processDisk(di, diskFile, argv, diskette)
                  * opening and searching all the other disk images, even when they DO contain pre-generated file tables.
                  */
                 if (sFileIndexCache === undefined) {
-                    sFileIndexCache = readFile(argv['index']);
+                    sFileIndexCache = readFileSync(argv['index']);
                     if (!sFileIndexCache) sFileIndexCache = null;
                 }
                 let cMatches = 0;
@@ -504,7 +504,7 @@ function processDisk(di, diskFile, argv, diskette)
      */
     if (argv['rewrite']) {
         if (StrLib.getExtension(diskFile) == "json") {
-            writeDisk(diskFile, di, argv['legacy'], 0, true, argv['quiet'], undefined, argv['source']);
+            writeDiskSync(diskFile, di, argv['legacy'], 0, true, argv['quiet'], undefined, argv['source']);
         }
     }
 
@@ -534,13 +534,13 @@ function processDisk(di, diskFile, argv, diskette)
                 if (diTemp) {
                     let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                     diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
-                    writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
+                    writeDiskSync(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
                     let warning = false;
                     if (StrLib.getExtension(diskette.archive) == "img") {
                         let json = diTemp.getJSON();
                         diTemp.buildDiskFromJSON(json);
                         let sTempIMG = sTempJSON.replace(".json",".img");
-                        writeDisk(sTempIMG, diTemp, true, 0, true, true, undefined, diskette.source);
+                        writeDiskSync(sTempIMG, diTemp, true, 0, true, true, undefined, diskette.source);
                         if (!compareDisks(sTempIMG, diskette.archive)) {
                             printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
                             warning = true;
@@ -592,7 +592,7 @@ function processDisk(di, diskFile, argv, diskette)
         let sHeading = "\n### Directory of " + diskette.name + "\n";
         let sIndexFile = path.join(path.dirname(replaceServerPrefix(diskFile, "/software/")), "README.md");
         if (existsFile(sIndexFile)) {
-            sIndex = sIndexNew = readFile(sIndexFile);
+            sIndex = sIndexNew = readFileSync(sIndexFile);
             sAction = "updated";
         } else {
             if (diskette.title) {
@@ -828,7 +828,7 @@ function processDisk(di, diskFile, argv, diskette)
             let sampleSpec = path.join(path.dirname(getLocalPath(diskette.path)), "archive", "**", "*.{ASM,BAS,DOC,TXT}");
             let sampleFiles = glob.sync(sampleSpec);
             for (let sampleFile of sampleFiles) {
-                let sample = readFile(sampleFile);
+                let sample = readFileSync(sampleFile);
                 if (sample) {
                     if (CharSet.isText(sample)) {
                         let fileType = StrLib.getExtension(sampleFile) == "BAS"? "bas" : "";
@@ -918,20 +918,23 @@ function processDisk(di, diskFile, argv, diskette)
 
     /*
      * NOTE: When recreating an IMG file from a JSON file, if the JSON file preserved the original BPB
-     * (which includes the original OEM signature), then you can use --legacy to tell writeDisk() to tell
+     * (which includes the original OEM signature), then you can use --legacy to tell writeDiskSync() to tell
      * getData() to restore those BPB bytes as well.  Otherwise, we leave the PCJS_OEM signature, if any, alone.
      */
     if (!diskette) {
         if (argv['boot']) {
-            di.updateBootSector(readFile(argv['boot'], null));
+            di.updateBootSector(readFileSync(argv['boot'], null));
         }
         let output = argv['output'];
+        if (!output || typeof output == "boolean") {
+            output = argv[2];
+        }
         if (output) {
             if (typeof output == "string") output = [output];
             if (Array.isArray(output)) {
                 output.forEach((outputFile) => {
                     let file = outputFile.replace("%d", path.dirname(diskFile));
-                    writeDisk(file, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
+                    writeDiskSync(file, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
                 });
             } else {
                 printf("missing output file(s)\n");
@@ -964,7 +967,7 @@ function readCollection(argv)
     asCollections.forEach(function readAllCollections(collectionFile) {
         collectionFile = collectionFile.substr(rootDir.length);
         if (argv['verbose']) printf("reading collection %s...\n", collectionFile);
-        let library = readJSON(collectionFile);
+        let library = readJSONSync(collectionFile);
         if (library) {
             let aDiskettes = [];
             JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
@@ -1000,13 +1003,13 @@ function readCollection(argv)
                 let done = function(di, fWrite = true) {
                     if (di) {
                         if (fWrite) {
-                            writeDisk(diskFile, di, false, 0, undefined, undefined, undefined, diskette.source);
+                            writeDiskSync(diskFile, di, false, 0, undefined, undefined, undefined, diskette.source);
                         }
                         processDisk(di, diskFile, argv, diskette);
                         cDisks++;
                     }
                 };
-                let di = readDisk(diskFile);
+                let di = readDiskSync(diskFile);
                 if (di) {
                     done(di, false);
                 } else {
@@ -1059,7 +1062,7 @@ function getArchiveOffset(sArchive, arcType, sOffset)
     } else {
         if (arcType == StreamZip.TYPE_ARC && sArchive.toUpperCase().endsWith(".EXE")) {
             offset = -1
-            let data = readFile(sArchive, null);
+            let data = readFileSync(sArchive, null);
             if (data) {
                 let sizeArc = -1, sizeFile;
                 let max = 512;      // limit the search to the last 512 bytes of the file
@@ -1122,7 +1125,7 @@ function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
  */
 async function processDiskAsync(input, argv)
 {
-    let di = await readDiskAsync(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
+    let di = await readDiskAsync(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFileSync(argv['suppData']));
     if (di) {
         processDisk(di, input, argv);
     }
@@ -1160,7 +1163,7 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
         }
         else {
             /*
-             * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
+             * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
              */
             db = await readFileAsync(diskFile, null);
             if (!db) {
@@ -1190,7 +1193,7 @@ function readFileAsync(sFile, encoding = "utf8")
 {
     sFile = getLocalPath(sFile);
     return new Promise((resolve, reject) => {
-        fs.readFile(sFile, encoding, (err, data) => {
+        fs.readFileSync(sFile, encoding, (err, data) => {
             if (err) reject(err);
             resolve(data);
         });
@@ -1315,7 +1318,7 @@ function processArg(argv)
 
     let sectorIDs = argv['sectorID'];
     let sectorErrors = argv['sectorError'];
-    let suppData = readFile(argv['suppData']);
+    let suppData = readFileSync(argv['suppData']);
 
     if (fDir || arcType) {
         let offset = getArchiveOffset(input, arcType, argv['offset']);
@@ -1328,7 +1331,7 @@ function processArg(argv)
     }
 
     if (input) {
-        return done(readDisk(input, argv['forceBPB'], sectorIDs, sectorErrors, suppData));
+        return done(readDiskSync(input, argv['forceBPB'], sectorIDs, sectorErrors, suppData));
     }
 
     return false;

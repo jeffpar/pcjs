@@ -17,7 +17,7 @@ import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
-import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDisk, readFile, setRootDir, writeDisk } from "../modules/disklib.js";
+import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync, readFileSync, setRootDir, writeDiskSync } from "../modules/disklib.js";
 import pcjslib    from "../modules/pcjslib.js";
 
 let argv = pcjslib.getArgs()[1];
@@ -43,7 +43,7 @@ let sCmdPrev = "";
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
-let machines = JSON.parse(readFile("/machines/machines.json"));
+let machines = JSON.parse(readFileSync("/machines/machines.json"));
 
 function setDebugMode(f)
 {
@@ -365,7 +365,7 @@ function readJSON(sFile, done)
 {
     let result = "";
     try {
-        let sMachine = readFile(sFile);
+        let sMachine = readFileSync(sFile);
         /*
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
@@ -440,7 +440,9 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
 }
 
 /**
- * buildDisk(sCommand)
+ * buildDrive(sCommand)
+ *
+ * Builds a bootable hard drive image containing all files in the current directory.
  *
  * The first three system files on the disk image will be those listed below (ie, IO.SYS, MSDOS.SYS, and
  * COMMAND.COM); if any of those files already exist in the current directory, ours will take precedence.
@@ -451,7 +453,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  * @param {string} sCommand (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
  * @returns {string}
  */
-function buildDisk(sCommand)
+function buildDrive(sCommand)
 {
     let aSystemFiles = ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"];
     let aInternalCommands = ["COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
@@ -475,8 +477,8 @@ function buildDisk(sCommand)
         }
     }
     if (sProgram) {
-        let diSystem = readDisk("/diskettes/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json");
-        let dbMBR = readFile(path.join(pcjsDir, "MSDOS.mbr"), null);
+        let diSystem = readDiskSync("/diskettes/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json");
+        let dbMBR = readFileSync(path.join(pcjsDir, "MSDOS.mbr"), null);
         if (diSystem && dbMBR) {
             let aFileDescs = [];
             for (let name of aSystemFiles) {
@@ -487,7 +489,7 @@ function buildDisk(sCommand)
                 }
             }
             let attr = DiskInfo.ATTR.ARCHIVE;
-            let contents = readFile("AUTOEXEC.BAT", "utf8", true);
+            let contents = readFileSync("AUTOEXEC.BAT", "utf8", true);
             if (!contents) {
                 contents = "";
                 attr |= DiskInfo.ATTR.HIDDEN;
@@ -510,7 +512,7 @@ function buildDisk(sCommand)
                 if (di) {
                     di.updateBootSector(dbBoot);
                     di.updateBootSector(dbMBR, -1);
-                    writeDisk(path.join(pcjsDir, "MSDOS.json"), di, false, 0, true, true);
+                    writeDiskSync(path.join(pcjsDir, "MSDOS.json"), di, false, 0, true, true);
                 }
             }
             let normalize = true;
@@ -564,14 +566,14 @@ function buildFileIndex(diskIndex)
 {
     let total = 0;
     let pathIndex = path.join(pcjsDir, "files.json");
-    let fileIndex = readFile(pathIndex, "utf8", true);
+    let fileIndex = readFileSync(pathIndex, "utf8", true);
     if (fileIndex) {
         fileIndex = JSON.parse(fileIndex);
     } else {
         fileIndex = {};
         for (let diskName in diskIndex) {
             let diskPath = diskIndex[diskName]['path'];
-            let diskJSON = readFile(diskPath, "utf8", true);
+            let diskJSON = readFileSync(diskPath, "utf8", true);
             if (diskJSON) {
                 let disk = JSON.parse(diskJSON);
                 let fileTable = disk['fileTable'];
@@ -885,11 +887,11 @@ function readInput(stdin, stdout)
         } else {
             /*
              * NOTE: Arguments like "*.*" are problematic (since modern shells will expand them), so
-             * any arguments you want to pass along with the command to buildDisk() should be included
+             * any arguments you want to pass along with the command to buildDrive() should be included
              * as part of a single fully-quoted argument (eg, pc.js "dir *.* /s").
              */
-            if (!buildDisk(argv[1])) {              // the argument is presumably a DOS command or program
-                return;                             // exit on error (buildDisk() should have explained)
+            if (!buildDrive(argv[1])) {             // the argument is presumably a DOS command or program
+                return;                             // exit on error (buildDrive() should have explained)
             }
             if (!argv['load']) {                    // and if it was, automatically load a machine to boot and run it
                 printf(loadMachine("compaq386"));

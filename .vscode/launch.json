@@ -1157,8 +1157,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "DISK0186.json",
-        "t.json"
+        "TEST0001.img",
+        "TEST0001.json"
       ],
       "cwd": "${workspaceFolder}/disks/tmp",
       "stopOnEntry": false,
@@ -1408,7 +1408,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--disk=/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0798/DISK0798.json",
+        "--disk",
+        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0798/DISK0798.json",
         "--list"
       ],
       "cwd": "${workspaceFolder}",
