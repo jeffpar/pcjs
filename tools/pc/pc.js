@@ -444,11 +444,24 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  *
  * Builds a bootable hard drive image containing all files in the current directory.
  *
- * The first three system files on the disk image will be those listed below (ie, IO.SYS, MSDOS.SYS, and
+ * At present, the image size is hard-coded to 10Mb (which corresponds to an XT type 3 or AT type 1 drive)
+ * and the operating system files are hard-coded to MS-DOS 3.20.  I plan to add command-line options for
+ * overriding those defaults, starting with a choice of operating system software (both type and version).
+ *
+ * Initially, the software types will probably just be "msdos" and "pcdos", and the versions will be any
+ * available in the PCjs diskette repo.
+ *
+ * Choice of hardware (ie, drives other than 10Mb) will be a bit trickier, because that also requires
+ * tweaking the machine configuration file to specify a compatible drive type and customizing the master
+ * boot record (currently we use a hard-coded "MSDOS.mbr").  There are no plans to support more than one
+ * partition/one volume, and if you want to use a volume larger than 32Mb, you'll have to make sure your
+ * choice of operating system supports it (eg, COMPAQ MS-DOS 3.31).
+ *
+ * The first three system files on the disk image will be those listed below (eg, IO.SYS, MSDOS.SYS, and
  * COMMAND.COM); if any of those files already exist in the current directory, ours will take precedence.
  * As for AUTOEXEC.BAT, we read any existing file (or create an empty file) and append the provided command.
  *
- * NOTE: The list of allowed internal commands is not intended to be exhaustive (yet); it's just a start.
+ * NOTE: The list of allowed internal commands below is not intended to be exhaustive; it's just a start.
  *
  * @param {string} sCommand (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
  * @returns {string}
@@ -510,8 +523,8 @@ function buildDrive(sCommand)
             dbBoot.writeUInt8(0x80, 0x1fd);
             let done = function(di) {
                 if (di) {
-                    di.updateBootSector(dbBoot);
-                    di.updateBootSector(dbMBR, -1);
+                    di.updateBootSector(dbBoot);            // a volume of 0 is the default
+                    di.updateBootSector(dbMBR, -1);         // a volume of -1 indicates the master boot record
                     writeDiskSync(path.join(pcjsDir, "MSDOS.json"), di, false, 0, true, true);
                 }
             }
@@ -621,11 +634,13 @@ function buildFileIndex(diskIndex)
  * file criteria (in other words, without any file criteria, date criteria will be ignored).
  *
  * If this is more than one disk that matches the criteria, then a numbered list of diskettes will be displayed, and
- * a subsequent "load" command with a number:
+ * a subsequent "load" command with a number, such as:
  *
  *      load a: 14
  *
  * will load the corresponding diskette.
+ *
+ * TODO: Date criteria are accepted but not yet acted upon; they should supplement the file criteria.
  *
  * @param {string} sDrive ('A:' through 'Z:')
  * @param {Array.<string>} aTokens
@@ -713,7 +728,7 @@ function loadDiskette(sDrive, aTokens)
             }
             cTokens++;
         }
-        if (dateParts.length || diskNameParts.length || fileNameParts.length) {
+        if (diskNameParts.length || fileNameParts.length) {
             if (!diskIndexCache) {
                 diskIndexCache = buildDiskIndex();
                 if (diskIndexCache) {
