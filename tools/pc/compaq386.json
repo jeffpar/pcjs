@@ -81,7 +81,7 @@
       {
         "name": "10Mb Hard Disk",
         "type": 1,
-        "path": "/tools/pc/MSDOS.json"
+        "path": "/tools/pc/DOS.json"
       }
     ]
   },

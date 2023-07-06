@@ -20,31 +20,21 @@ import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
 import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
 import pcjslib    from "../modules/pcjslib.js";
 
-let argv = pcjslib.getArgs()[1];
-let arg0 = argv[0].split(' ');
-let fDebug = argv['debug'] || false;
-let machineType = argv['type'] || "pcx86";
+let fDebug = false;
+let machineType = "pcx86";
+let systemType = "msdos";
+let systemVersion = "3.20";
 
-device.setDebug(fDebug);
-device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (Defines.DEBUG? MESSAGE.DEBUG : 0), true);
-let messagesFilter = fDebug? Messages.TYPES : Messages.ALERTS;
-
-let rootDir = path.join(path.dirname(arg0[0]), "../..");
-let pcjsDir = path.join(rootDir, "/tools/pc");
-setRootDir(rootDir);
-
-let debugMode;
+let rootDir, pcjsDir;
+let debugMode, messagesFilter, machines;
 let Component, Interrupts, weblib, embedMachine;
 let cpu, dbg, fdc, hdc, kbd, serial, fnSendSerial;
 let prompt = ">";
 let sCmdPrev = "";
-
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
-
 let driveManifest = [];
-let machines = JSON.parse(readFileSync("/machines/machines.json"));
 
 function setDebugMode(f)
 {
@@ -219,6 +209,7 @@ function initMachine(machine, sMachine)
         if (cpu && cpu.addIntNotify) {
             if (Interrupts && Interrupts.VIDEO) {
                 cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
+                cpu.addIntNotify(Interrupts.BOOTSTRAP, intReboot.bind(cpu));
             }
         }
 
@@ -277,6 +268,19 @@ function intVideo(addr)
     if (AH == 0x0e) {
         printf("%c", AL);
     }
+    return true;
+}
+
+/**
+ * intReboot(addr)
+ *
+ * @param {CPUx86} this
+ * @param {number} addr
+ * @returns {boolean} true to proceed with the INT 0x19 software interrupt, false to skip
+ */
+function intReboot(addr)
+{
+    exit();
     return true;
 }
 
@@ -449,14 +453,14 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  *
  * At present, the image size is hard-coded to 10Mb (which corresponds to an XT type 3 or AT type 1 drive)
  * and the operating system files are hard-coded to MS-DOS 3.20.  I plan to add command-line options for
- * overriding those defaults, starting with a choice of operating system software (both type and version).
+ * overriding those defaults, starting with a choice of operating system software (both system and version).
  *
- * Initially, the allowed types will probably just be "msdos" and "pcdos", and the versions will be any
+ * Initially, the allowed systems will probably just be "msdos" and "pcdos", and the versions will be any
  * available in the PCjs diskette repo.
  *
  * Choice of hardware (ie, drives other than 10Mb) will be a bit trickier, because that also requires
  * tweaking the machine configuration file to specify a compatible drive type and customizing the master
- * boot record (currently we use a hard-coded "MSDOS.mbr").  There are no plans to support more than one
+ * boot record (currently we use a hard-coded ".mbr" file).  There are no plans to support more than one
  * partition/one volume, and to support volumes larger than 32Mb, we'll have to make sure your choice
  * of operating system supports it (eg, COMPAQ MS-DOS 3.31).
  *
@@ -471,12 +475,27 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  */
 function buildDrive(sCommand)
 {
+    const systemInfo = {
+        "msdos": {
+            "vendor": "microsoft",
+            "files": ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"],
+        },
+        "pcdos": {
+            "vendor": "ibm",
+            "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
+        }
+    };
+    const aInternalCommands = ["COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
+
     let manifest;
-    let aSystemFiles = ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"];
-    let aInternalCommands = ["COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
     let aParts = sCommand.split(' ');
     let sProgram = aParts[0].toUpperCase();
     let iCommand = aInternalCommands.indexOf(sProgram);
+    let system = systemInfo[systemType];
+    if (!system) {
+        printf("unsupported system type: %s\n", systemType);
+        return null;
+    }
     if (iCommand < 0) {
         if (sProgram.indexOf('.') < 0) {
             sProgram += ".{COM,EXE,BAT}";
@@ -494,43 +513,83 @@ function buildDrive(sCommand)
         }
     }
     if (sProgram) {
-        let diSystem = readDiskSync("/diskettes/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json");
-        let dbMBR = readFileSync(path.join(pcjsDir, "MSDOS.mbr"), null);
+        let sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + systemVersion + "/";
+        sSystemDisk += systemType.toUpperCase() + systemVersion.replace('.', '') + "-DISK1.json";
+        let diSystem = readDiskSync(sSystemDisk);
+        if (!diSystem) {
+            printf("system diskette not found: %s\n", )
+        }
+        let dbMBR = readFileSync(path.join(pcjsDir, systemType.toUpperCase() + ".mbr"), null);
         if (diSystem && dbMBR) {
             let aFileDescs = [];
-            for (let name of aSystemFiles) {
+            for (let name of system.files) {
                 let desc = diSystem.findFile(name);
                 if (desc) {
                     desc.attr = +desc.attr | DiskInfo.ATTR.HIDDEN;
                     aFileDescs.push(desc);
                 }
             }
+            /*
+             * In addition to the system files, we also add a hidden RETURN.COM in the root, which does nothing
+             * more than "INT 0x19" to reboot the machine.  Our intReboot() interrupt handler should intercept it,
+             * allowing us to gracefully invoke checkDrive() to look for any changes and them terminate the machine.
+             */
+            let returnName = "RETURN.COM";
+            let returnContents = [0xcd, 0x19];
+            let descReturn = {
+                'name': returnName,
+                'path': "/" + returnName,
+                'contents': returnContents,
+                'size': returnContents.length,
+                'attr': sprintf("%#0bx", DiskInfo.ATTR.HIDDEN),
+                'date': sprintf("%T", new Date())
+            };
+            aFileDescs.push(descReturn);
+            /*
+             * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
+             * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
+             * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
+             * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "return" to run
+             * our hidden "RETURN.COM" program regardless of the current directory.
+             */
             let attr = DiskInfo.ATTR.ARCHIVE;
             let contents = readFileSync("AUTOEXEC.BAT", "utf8", true);
             if (!contents) {
                 contents = "";
                 attr |= DiskInfo.ATTR.HIDDEN;
             }
+            let matchPath = contents.match(/^PATH\s*(.*)$/im);
+            if (matchPath) {
+                let matchPathRoot = matchPath[1].match(/(^|;|C:|)\\(;|$)/i);
+                if (!matchPathRoot) {
+                    contents = contents.replace(/^PATH\s*(.*)$/im, "PATH C:\\;$1");
+                }
+            } else {
+                contents += "PATH C:\\\r\n";
+            }
             contents += sCommand + "\r\n";
             aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", contents, attr));
-            let dbBoot = getDiskSector(diSystem, 0);
             /*
-             * For reasons that are unclear at the moment, the MS-DOS 3.20 boot sector did not rely on the
-             * DL register containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk); instead,
-             * whenever the operating system wrote the boot sector to the media, it would insert the media's
-             * drive number at offset 0x1fd (before the 0x55,0xAA signature).  So that's we do, too.
+             * Load the boot sector from the system diskette we read above, and use it to update the boot
+             * sector on the hard drive image.
+             *
+             * NOTE: For reasons unknown, the MS-DOS 3.20 boot sector did not rely on the DL register
+             * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk); instead, whenever
+             * the operating system wrote the boot sector to the media, it would insert the media's drive
+             * number at offset 0x1fd (before the 0x55,0xAA signature).  So that's we do, too.
              *
              * Wikipedia claims this was done "only in DOS 3.2 to 3.31 boot sectors" and that in "OS/2 1.0
              * and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".  Something
              * to study later.
              */
+            let dbBoot = getDiskSector(diSystem, 0);
             dbBoot.writeUInt8(0x80, 0x1fd);
             let done = function(di) {
                 if (di) {
                     manifest = di.getFileManifest(null, true);
                     di.updateBootSector(dbBoot);            // a volume of 0 is the default
                     di.updateBootSector(dbMBR, -1);         // a volume of -1 indicates the master boot record
-                    writeDiskSync(path.join(pcjsDir, "MSDOS.json"), di, false, 0, true, true);
+                    writeDiskSync(path.join(pcjsDir, "DOS.json"), di, false, 0, true, true);
                 }
             }
             let normalize = true;
@@ -635,7 +694,7 @@ function checkDrive(oldManifest)
     if (hdc && oldManifest) {
         let imageData = hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
         if (imageData) {
-            let di = new DiskInfo(device, "MSDOS");
+            let di = new DiskInfo(device, "DOS");
             if (di.buildDiskFromJSON(imageData)) {
                 let newManifest = di.getFileManifest(null, true);
                 /*
@@ -673,6 +732,7 @@ function checkDrive(oldManifest)
                              * Here's where things get complicated, because we could have scenarios like a directory removed
                              * and a file with the same name created in its place.
                              */
+                            fs.chmodSync(newItem.path.slice(1), (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666);
                         }
                         if (oldDate.getTime() != newDate.getTime()) {
                             fs.utimesSync(newItem.path.slice(1), newDate, newDate);
@@ -702,6 +762,9 @@ function checkDrive(oldManifest)
                             writeFileSync(newItem.path.slice(1), newItem.contents, true, false);
                         }
                         fs.utimesSync(newItem.path.slice(1), newDate, newDate);
+                        if (newAttr & DiskInfo.ATTR.READONLY) {
+                            fs.chmodSync(newItem.path.slice(1), 0o444);
+                        }
                         iNew++;
                     }
                 }
@@ -975,12 +1038,13 @@ function doCommand(sCmd)
 }
 
 /**
- * readInput(stdin, stdout)
+ * readInput(argv, stdin, stdout)
  *
+ * @param {Array} argv
  * @param {Object} stdin
  * @param {Object} stdout
  */
-function readInput(stdin, stdout)
+function readInput(argv, stdin, stdout)
 {
     let command = "";
     let loading = false;
@@ -1017,11 +1081,6 @@ function readInput(stdin, stdout)
     stdin.setEncoding("utf8");
     stdin.setRawMode(true);
 
-    let exit = function() {
-        stdin.setRawMode(false);
-        process.exit();
-    }
-
     stdin.on("data", function(data) {
         let code = data.charCodeAt(0);
         if (code == 0x01 && !debugMode) {           // check for CTRL-A when NOT in debug mode
@@ -1031,7 +1090,6 @@ function readInput(stdin, stdout)
         }
         if (code == 0x03 && debugMode) {            // check for CTRL-C when in debug mode
             printf("terminating...\n");
-            checkDrive(driveManifest);
             exit();
             return;
         }
@@ -1080,4 +1138,67 @@ function readInput(stdin, stdout)
     });
 }
 
-readInput(process.stdin, process.stdout);
+/**
+ * exit()
+ */
+function exit()
+{
+    checkDrive(driveManifest);
+    process.stdin.setRawMode(false);
+    process.exit();
+}
+
+/**
+ * main(argc, argv)
+ *
+ * @param {number} argc
+ * @param {Array} argv
+ */
+function main(argc, argv)
+{
+    if (argv['help']) {
+        let optionsMain = {
+            "--load=[machine file]":    "load machine configuration file",
+            "--type=[machine type]":    "set machine type (default is " + machineType + ")",
+            "--sys=[system type]":      "operating system type (default is " + systemType + ")",
+            "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
+        };
+        let optionsOther = {
+            "--debug (-d)\t":           "enable DEBUG messages"
+        };
+        let optionGroups = {
+            "main options:":            optionsMain,
+            "other options:":           optionsOther
+        }
+        printf("usage:\n\t[node] pc.js [options] [DOS command or program name]\n");
+        printf("\noptions:\n");
+        for (let group in optionGroups) {
+            for (let option in optionGroups[group]) {
+                printf("\t%s\t%s\n", option, optionGroups[group][option]);
+            }
+        }
+        return;
+    }
+
+    fDebug = argv['debug'] || fDebug;
+    machineType = argv['type'] || machineType;
+    systemType = (argv['sys'] || systemType).toLowerCase();
+    systemVersion = (argv['ver'] || systemVersion);
+
+    device.setDebug(fDebug);
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (Defines.DEBUG? MESSAGE.DEBUG : 0), true);
+    messagesFilter = fDebug? Messages.TYPES : Messages.ALERTS;
+
+    rootDir = path.join(path.dirname(argv[0].split(' ')[0]), "../..");
+    pcjsDir = path.join(rootDir, "/tools/pc");
+    setRootDir(rootDir);
+
+    machines = JSON.parse(readFileSync("/machines/machines.json"));
+
+    readInput(argv, process.stdin, process.stdout);
+}
+
+main(...pcjslib.getArgs({
+    '?': "help",
+    'd': "debug"
+}));
