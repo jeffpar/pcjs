@@ -97,7 +97,7 @@ export default class PCJSLib
                 if (typeof argv[sArg] == "number") {
                     sArg = '#' + sArg;      // avoid conflict with the built-in 'length' property
                 }
-                lastOp = sArg;
+                lastOp = (j < 0? sArg : "");
                 if (!argv.hasOwnProperty(sArg)) {
                     argv[sArg] = sValue;
                     continue;
@@ -130,6 +130,7 @@ export default class PCJSLib
                     }
                     argv[lastOp].push(sArg);
                 }
+                lastOp = "";
             }
             argv.push(sArg);
         }

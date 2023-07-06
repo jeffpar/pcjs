@@ -15,6 +15,7 @@ import xml2js     from "xml2js";
 import Messages   from "../../machines/modules/v2/messages.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
+import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
 import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
@@ -555,7 +556,7 @@ function buildDrive(sCommand)
             let attr = DiskInfo.ATTR.ARCHIVE;
             let contents = readFileSync("AUTOEXEC.BAT", "utf8", true);
             if (!contents) {
-                contents = "";
+                contents = "ECHO OFF\r\n";
                 attr |= DiskInfo.ATTR.HIDDEN;
             }
             let matchPath = contents.match(/^PATH\s*(.*)$/im);
@@ -981,7 +982,7 @@ function loadDiskette(sDrive, aTokens)
             result = "missing disk criteria";
         }
     } else {
-        result = "no floppy drive(s)";
+        result = "no floppy drives (load a machine first)";
     }
     return result;
 }
@@ -1015,7 +1016,7 @@ function doCommand(sCmd)
                 result = loadMachine(aTokens[1]);
             }
         } else {
-            result = "missing" + (cpu? "" : " machine file or") + " drive letter";
+            result = "missing " + (cpu? "drive letter" : "machine file");
         }
         break;
     case "q":
@@ -1171,8 +1172,8 @@ function main(argc, argv)
             "other options:":           optionsOther
         }
         printf("usage:\n\t[node] pc.js [options] [DOS command or program name]\n");
-        printf("\noptions:\n");
         for (let group in optionGroups) {
+            printf("\n%s\n\n", group);
             for (let option in optionGroups[group]) {
                 printf("\t%s\t%s\n", option, optionGroups[group][option]);
             }
@@ -1182,16 +1183,22 @@ function main(argc, argv)
 
     fDebug = argv['debug'] || fDebug;
     machineType = argv['type'] || machineType;
-    systemType = (argv['sys'] || systemType).toLowerCase();
-    systemVersion = (argv['ver'] || systemVersion);
+    systemType = (typeof argv['sys'] == "string" && argv['sys'] || systemType).toLowerCase();
+    systemVersion = (typeof argv['ver'] == "string" && argv['ver'] || systemVersion);
 
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (Defines.DEBUG? MESSAGE.DEBUG : 0), true);
     messagesFilter = fDebug? Messages.TYPES : Messages.ALERTS;
 
-    rootDir = path.join(path.dirname(argv[0].split(' ')[0]), "../..");
+    let arg0 = argv[0].split(' ');
+    rootDir = path.join(path.dirname(arg0[0]), "../..");
     pcjsDir = path.join(rootDir, "/tools/pc");
     setRootDir(rootDir);
+
+    if (!argv[1] || argv['debug']) {
+        let options = arg0.slice(1).join(' ');
+        printf("pc.js v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s", options) : ""));
+    }
 
     machines = JSON.parse(readFileSync("/machines/machines.json"));
 
