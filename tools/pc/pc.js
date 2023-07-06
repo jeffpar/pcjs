@@ -17,7 +17,7 @@ import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
-import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync, readFileSync, setRootDir, writeDiskSync } from "../modules/disklib.js";
+import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
 import pcjslib    from "../modules/pcjslib.js";
 
 let argv = pcjslib.getArgs()[1];
@@ -29,21 +29,21 @@ device.setDebug(fDebug);
 device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (Defines.DEBUG? MESSAGE.DEBUG : 0), true);
 let messagesFilter = fDebug? Messages.TYPES : Messages.ALERTS;
 
-let cwd = process.cwd();
 let rootDir = path.join(path.dirname(arg0[0]), "../..");
 let pcjsDir = path.join(rootDir, "/tools/pc");
 setRootDir(rootDir);
 
-let Component, Interrupts;
-let weblib, embedMachine;
-let cpu, dbg, fdc, hdc, kbd, serial, fnSendSerial;
 let debugMode;
+let Component, Interrupts, weblib, embedMachine;
+let cpu, dbg, fdc, hdc, kbd, serial, fnSendSerial;
 let prompt = ">";
 let sCmdPrev = "";
+
 let diskItems = [];
-let diskManifest = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
+
+let driveManifest = [];
 let machines = JSON.parse(readFileSync("/machines/machines.json"));
 
 function setDebugMode(f)
@@ -223,8 +223,8 @@ function initMachine(machine, sMachine)
         }
 
         /*
-         * Get the FDC component so we can query its complete list of diskettes,
-         * and get the HDC component so we can query the state of its hard drive(s).
+         * Get the FDC component so we can query its list of available diskettes,
+         * and get the HDC component so we can get the state of its hard drive(s).
          */
         fdc = Component.getComponentByType("FDC");
         hdc = Component.getComponentByType("HDC");
@@ -451,14 +451,14 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  * and the operating system files are hard-coded to MS-DOS 3.20.  I plan to add command-line options for
  * overriding those defaults, starting with a choice of operating system software (both type and version).
  *
- * Initially, the software types will probably just be "msdos" and "pcdos", and the versions will be any
+ * Initially, the allowed types will probably just be "msdos" and "pcdos", and the versions will be any
  * available in the PCjs diskette repo.
  *
  * Choice of hardware (ie, drives other than 10Mb) will be a bit trickier, because that also requires
  * tweaking the machine configuration file to specify a compatible drive type and customizing the master
  * boot record (currently we use a hard-coded "MSDOS.mbr").  There are no plans to support more than one
- * partition/one volume, and if you want to use a volume larger than 32Mb, you'll have to make sure your
- * choice of operating system supports it (eg, COMPAQ MS-DOS 3.31).
+ * partition/one volume, and to support volumes larger than 32Mb, we'll have to make sure your choice
+ * of operating system supports it (eg, COMPAQ MS-DOS 3.31).
  *
  * The first three system files on the disk image will be those listed below (eg, IO.SYS, MSDOS.SYS, and
  * COMMAND.COM); if any of those files already exist in the current directory, ours will take precedence.
@@ -467,10 +467,11 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  * NOTE: The list of allowed internal commands below is not intended to be exhaustive; it's just a start.
  *
  * @param {string} sCommand (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
- * @returns {string}
+ * @returns {Array|undefined} (drive manifest)
  */
 function buildDrive(sCommand)
 {
+    let manifest;
     let aSystemFiles = ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"];
     let aInternalCommands = ["COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
     let aParts = sCommand.split(' ');
@@ -526,7 +527,7 @@ function buildDrive(sCommand)
             dbBoot.writeUInt8(0x80, 0x1fd);
             let done = function(di) {
                 if (di) {
-                    diskManifest = di.getFileManifest(null, true);
+                    manifest = di.getFileManifest(null, true);
                     di.updateBootSector(dbBoot);            // a volume of 0 is the default
                     di.updateBootSector(dbMBR, -1);         // a volume of -1 indicates the master boot record
                     writeDiskSync(path.join(pcjsDir, "MSDOS.json"), di, false, 0, true, true);
@@ -534,12 +535,11 @@ function buildDrive(sCommand)
             }
             let normalize = true;
             readDir("./", 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);
-            return true;
         }
     } else {
         printf("command not found: %s\n", sCommand);
     }
-    return false;
+    return manifest;
 }
 
 /**
@@ -623,20 +623,93 @@ function buildFileIndex(diskIndex)
 }
 
 /**
- * checkDrive()
+ * checkDrive(oldManifest)
  *
  * If we built a drive on entry, this checks the drive on exit for any changes that need to be propagated.
  *
+ * @param {Array} [oldManifest]
  * @returns {boolean}
  */
-function checkDrive()
+function checkDrive(oldManifest)
 {
-    if (hdc && diskManifest) {
-        let data = hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
-        if (data) {
+    if (hdc && oldManifest) {
+        let imageData = hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
+        if (imageData) {
             let di = new DiskInfo(device, "MSDOS");
-            if (di.buildDiskFromJSON(data)) {
+            if (di.buildDiskFromJSON(imageData)) {
                 let newManifest = di.getFileManifest(null, true);
+                /*
+                 * We now have the old and new manifests, and both should be sorted, so all we have to do now
+                 * is walk them, looking for differences.
+                 */
+                let removedDirs = [];
+                let iOld = 0, iNew = 0;
+                let compareContents = function(a, b) {
+                    let aContents = a.contents || [];
+                    let bContents = b.contents || [];
+                    return aContents.length === bContents.length && aContents.every((element, i) => element === bContents[i]);
+                };
+                while (iOld < oldManifest.length && iNew < newManifest.length) {
+
+                    let oldItem = oldManifest[iOld];
+                    let newItem = newManifest[iNew];
+                    let oldAttr = +oldItem.attr;
+                    let newAttr = +newItem.attr;
+                    let oldDate = device.parseDate(oldItem.date, true);
+                    let newDate = device.parseDate(newItem.date, true);
+
+                    if (oldItem.path == newItem.path) {
+                        if (oldAttr == newAttr) {
+                            /*
+                             * Even if both entries are SUBDIR or VOLUME, that's OK, because those entries don't have
+                             * contents, so the compare will succeed and writeFileSync() will be bypassed.
+                             */
+                            if (!compareContents(oldItem, newItem)) {
+                                printf("updating %s\n", newItem.path);
+                                writeFileSync(newItem.path.slice(1), newItem.contents, false, true);
+                            }
+                        } else {
+                            /*
+                             * Here's where things get complicated, because we could have scenarios like a directory removed
+                             * and a file with the same name created in its place.
+                             */
+                        }
+                        if (oldDate.getTime() != newDate.getTime()) {
+                            fs.utimesSync(newItem.path.slice(1), newDate, newDate);
+                        }
+                        iOld++;
+                        iNew++;
+                    } else if (oldItem.path < newItem.path) {
+                        /*
+                         * Unfortunately, whenever a directory has been removed, we see the directory first,
+                         * followed by any files or other directories that it used to contain.  While we could
+                         * perform a recursive removal of the directory right now, that comes with some inherent
+                         * risk *and* will cause all subsequent unlink() calls for any contained files to fail.
+                         * So instead, we simply queue the directory for removal later.
+                         */
+                        if (oldAttr & DiskInfo.ATTR.SUBDIR) {
+                            removedDirs.push(oldItem.path);
+                        } else {
+                            printf("removing %s\n", oldItem.path);
+                            fs.unlinkSync(oldItem.path.slice(1));
+                        }
+                        iOld++;
+                    } else {
+                        printf("creating %s\n", newItem.path);
+                        if (newAttr & DiskInfo.ATTR.SUBDIR) {
+                            fs.mkdirSync(newItem.path.slice(1));
+                        } else {
+                            writeFileSync(newItem.path.slice(1), newItem.contents, true, false);
+                        }
+                        fs.utimesSync(newItem.path.slice(1), newDate, newDate);
+                        iNew++;
+                    }
+                }
+                while (removedDirs.length) {
+                    let dir = removedDirs.pop();
+                    printf("removing %s\n", dir);
+                    fs.rmdirSync(dir.slice(1));
+                }
                 return true;
             }
         }
@@ -656,17 +729,17 @@ function checkDrive()
  *
  *      load a: --disk pc dos --file chkdsk --date 1982
  *
- * The two primary criteria are disk and file.  Other criteria are secondary; for example, date criteria are secondary
- * file criteria (in other words, without any file criteria, date criteria will be ignored).
+ * The two primary criteria are disk and file.  Other criteria are secondary; for example, any date criteria will
+ * be applied only after any file criteria.
  *
- * If this is more than one disk that matches the criteria, then a numbered list of diskettes will be displayed, and
- * a subsequent "load" command with a number, such as:
+ * If more than one disk matches the criteria, then a numbered list of diskettes will be displayed, and a subsequent
+ * "load" command with a number, such as:
  *
  *      load a: 14
  *
  * will load the corresponding diskette.
  *
- * TODO: Date criteria are accepted but not yet acted upon; they should supplement the file criteria.
+ * TODO: Date criteria are accepted but not yet acted upon; consider other criteria as well.
  *
  * @param {string} sDrive ('A:' through 'Z:')
  * @param {Array.<string>} aTokens
@@ -733,8 +806,8 @@ function loadDiskette(sDrive, aTokens)
                 token = token.toUpperCase();
                 if (!cTokens && token.match(/\.[A-Z][A-Z][A-Z]$/)) {
                     /*
-                    * If no criteria has been specified, and the token looks like a filename, then assume it's a file.
-                    */
+                     * If no criteria has been specified, and the token looks like a filename, then assume it's a file.
+                     */
                     criteria = 'file';
                 }
                 switch (criteria) {
@@ -854,7 +927,7 @@ function loadDiskette(sDrive, aTokens)
  * doCommand(sCmd)
  *
  * @param {string} sCmd
- * @returns {string} (result of command)
+ * @returns {string|null} (result of command, or null to quit)
  */
 function doCommand(sCmd)
 {
@@ -862,9 +935,6 @@ function doCommand(sCmd)
     let aTokens = sCmd.split(' ');
 
     switch(aTokens[0].toLowerCase()) {
-    case "cwd":
-        result = cwd;
-        break;
     case "help":
         result = "pc.js commands:\n" +
                     "  load [machine]\n" +
@@ -887,8 +957,7 @@ function doCommand(sCmd)
         break;
     case "q":
     case "quit":
-        process.exit();
-        break;
+        return null;
     default:
         if (sCmd) {
             try {
@@ -920,7 +989,7 @@ function readInput(stdin, stdout)
         printf(loadMachine(argv['load']));
         loading = true;
     }
-    else if (argv[1]) {                             // alternatively, process first non-option argument as --load argument
+    else if (argv[1]) {                             // alternatively, process first non-option argument
         if (existsFile(argv[1]) || existsFile(argv[1] + ".json")) {
             printf(loadMachine(argv[1]));           // and perform an implicit load
             argv.splice(1, 1);
@@ -931,7 +1000,8 @@ function readInput(stdin, stdout)
              * any arguments you want to pass along with the command to buildDrive() should be included
              * as part of a single fully-quoted argument (eg, pc.js "dir *.* /s").
              */
-            if (!buildDrive(argv[1])) {             // the argument is presumably a DOS command or program
+            driveManifest = buildDrive(argv[1]);
+            if (!driveManifest) {                   // the argument is presumably a DOS command or program name
                 return;                             // exit on error (buildDrive() should have explained)
             }
             if (!argv['load']) {                    // and if it was, automatically load a machine to boot and run it
@@ -947,6 +1017,11 @@ function readInput(stdin, stdout)
     stdin.setEncoding("utf8");
     stdin.setRawMode(true);
 
+    let exit = function() {
+        stdin.setRawMode(false);
+        process.exit();
+    }
+
     stdin.on("data", function(data) {
         let code = data.charCodeAt(0);
         if (code == 0x01 && !debugMode) {           // check for CTRL-A when NOT in debug mode
@@ -956,8 +1031,8 @@ function readInput(stdin, stdout)
         }
         if (code == 0x03 && debugMode) {            // check for CTRL-C when in debug mode
             printf("terminating...\n");
-            checkDrive();
-            process.exit();
+            checkDrive(driveManifest);
+            exit();
             return;
         }
         if (!debugMode) {
@@ -989,7 +1064,12 @@ function readInput(stdin, stdout)
             if (i < 0) break;
             let sCmd = command.slice(0, i);
             printf("\n");
-            printf(doCommand(sCmd));
+            let result = doCommand(sCmd);
+            if (result == null) {
+                exit();
+                return;
+            }
+            printf(result);
             if (cpu && cpu.isRunning()) {
                 setDebugMode(false);
                 break;

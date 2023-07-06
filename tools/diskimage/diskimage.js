@@ -11,7 +11,6 @@
 import fs         from "fs";
 import glob       from "glob";
 import path       from "path";
-import got        from "got";
 import pcjslib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
@@ -20,7 +19,7 @@ import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
-import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, normalizeTextFile, printError, printf, readDir, readDiskSync, readFileSync, readJSONSync, replaceServerPrefix, setRootDir, sprintf, writeDiskSync  } from "../modules/disklib.js";
+import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, normalizeTextFile, printError, printf, readDir, readDiskAsync, readDiskSync, readFileSync, readJSONSync, replaceServerPrefix, setRootDir, sprintf, writeDiskSync, writeFileSync  } from "../modules/disklib.js";
 
 let rootDir, sFileIndexCache;
 
@@ -284,7 +283,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
                 db = normalizeTextFile(db);
             }
         }
-        fSuccess = writeFile(getLocalPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
+        fSuccess = writeFileSync(getLocalPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
     }
     if (fSuccess) {
         fs.utimesSync(getLocalPath(sPath), date, date);
@@ -309,7 +308,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
  */
 function printFileDesc(diskFile, diskName, desc)
 {
-    printf("%-32s  %-12s  %s  %s %7d  %s\n", desc[DiskInfo.FILEDESC.HASH] || "-".repeat(32), desc[DiskInfo.FILEDESC.NAME], desc[DiskInfo.FILEDESC.DATE], desc[DiskInfo.FILEDESC.ATTR], desc[DiskInfo.FILEDESC.SIZE] || 0, diskName + ':' + desc[DiskInfo.FILEDESC.PATH]);
+    printf("%-32s  %-12s  %s  %#05x %7d  %s\n", desc[DiskInfo.FILEDESC.HASH] || "-".repeat(32), desc[DiskInfo.FILEDESC.NAME], desc[DiskInfo.FILEDESC.DATE], +desc[DiskInfo.FILEDESC.ATTR], desc[DiskInfo.FILEDESC.SIZE] || 0, diskName + ':' + desc[DiskInfo.FILEDESC.PATH]);
 }
 
 /**
@@ -907,7 +906,7 @@ function processDisk(di, diskFile, argv, diskette)
         }
         else if (sIndexNew != sIndex) {
             if (argv['rebuild']) {
-                if (writeFile(getLocalPath(sIndexFile), sIndexNew, true, true)) {
+                if (writeFileSync(getLocalPath(sIndexFile), sIndexNew, true, true)) {
                     printf("\t%s index for \"%s\": %s\n", sAction, diskette.title, sIndexFile);
                 }
             } else {
@@ -1083,41 +1082,6 @@ function getArchiveOffset(sArchive, arcType, sOffset)
 }
 
 /**
- * writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
- *
- * @param {string} sFile
- * @param {DataBuffer|string} data
- * @param {boolean} [fCreateDir]
- * @param {boolean} [fOverwrite]
- * @param {boolean} [fReadOnly]
- * @param {boolean} [fQuiet]
- * @returns {boolean}
- */
-function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
-{
-    if (sFile) {
-        try {
-            if (data instanceof DataBuffer) {
-                data = data.buffer;
-            }
-            if (fCreateDir) {
-                let sDir = path.dirname(sFile);
-                makeDir(sDir, true);
-            }
-            if (!existsFile(sFile) || fOverwrite) {
-                fs.writeFileSync(sFile, data);
-                if (fReadOnly) fs.chmodSync(sFile, 0o444);
-                return true;
-            }
-            if (!fQuiet) printf("warning: %s exists, use --overwrite to replace\n", sFile);
-        } catch(err) {
-            printError(err);
-        }
-    }
-    return false;
-}
-
-/**
  * processDiskAsync(input, argv)
  *
  * @param {string} input
@@ -1129,75 +1093,6 @@ async function processDiskAsync(input, argv)
     if (di) {
         processDisk(di, input, argv);
     }
-}
-
-/**
- * readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
- *
- * @param {string} diskFile
- * @param {boolean} [forceBPB]
- * @param {Array|string} [sectorIDs]
- * @param {Array|string} [sectorErrors]
- * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
- */
-async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
-{
-    let db, di
-    try {
-        let diskName = path.basename(diskFile);
-        di = new DiskInfo(device, diskName);
-        if (StrLib.getExtension(diskName) == "json") {
-            diskFile = getServerPath(diskFile);
-            if (diskFile.startsWith("http")) {
-                printf("fetching %s\n", diskFile);
-                let response = await got(diskFile);
-                db = response.body;
-            } else {
-                db = await readFileAsync(diskFile, "utf8");
-            }
-            if (!db) {
-                di = null;
-            } else {
-                if (!di.buildDiskFromJSON(db)) di = null;
-            }
-        }
-        else {
-            /*
-             * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
-             */
-            db = await readFileAsync(diskFile, null);
-            if (!db) {
-                di = null;
-            } else {
-                if (StrLib.getExtension(diskName) == "psi") {
-                    if (!di.buildDiskFromPSI(db)) di = null;
-                } else {
-                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
-                }
-            }
-        }
-    } catch(err) {
-        printError(err);
-        return null;
-    }
-    return di;
-}
-
-/**
- * readFileAsync(sFile, encoding)
- *
- * @param {string} sFile
- * @param {string|null} [encoding]
- */
-function readFileAsync(sFile, encoding = "utf8")
-{
-    sFile = getLocalPath(sFile);
-    return new Promise((resolve, reject) => {
-        fs.readFileSync(sFile, encoding, (err, data) => {
-            if (err) reject(err);
-            resolve(data);
-        });
-    });
 }
 
 /**

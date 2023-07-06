@@ -10,6 +10,7 @@
 import crypto     from "crypto";
 import fs         from "fs";
 import glob       from "glob";
+import got        from "got";
 import os         from "os";
 import path       from "path";
 import BASFile    from "../modules/basfile.js";
@@ -752,6 +753,58 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbo
 }
 
 /**
+ * readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ *
+ * @param {string} diskFile
+ * @param {boolean} [forceBPB]
+ * @param {Array|string} [sectorIDs]
+ * @param {Array|string} [sectorErrors]
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
+ */
+export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+{
+    let db, di
+    try {
+        let diskName = path.basename(diskFile);
+        di = new DiskInfo(device, diskName);
+        if (StrLib.getExtension(diskName) == "json") {
+            diskFile = getServerPath(diskFile);
+            if (diskFile.startsWith("http")) {
+                printf("fetching %s\n", diskFile);
+                let response = await got(diskFile);
+                db = response.body;
+            } else {
+                db = await readFileAsync(diskFile, "utf8");
+            }
+            if (!db) {
+                di = null;
+            } else {
+                if (!di.buildDiskFromJSON(db)) di = null;
+            }
+        }
+        else {
+            /*
+             * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
+             */
+            db = await readFileAsync(diskFile, null);
+            if (!db) {
+                di = null;
+            } else {
+                if (StrLib.getExtension(diskName) == "psi") {
+                    if (!di.buildDiskFromPSI(db)) di = null;
+                } else {
+                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
+                }
+            }
+        }
+    } catch(err) {
+        printError(err);
+        return null;
+    }
+    return di;
+}
+
+/**
  * readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} diskFile
@@ -803,6 +856,23 @@ export function readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
         return null;
     }
     return di;
+}
+
+/**
+ * readFileAsync(sFile, encoding)
+ *
+ * @param {string} sFile
+ * @param {string|null} [encoding]
+ */
+export function readFileAsync(sFile, encoding = "utf8")
+{
+    sFile = getLocalPath(sFile);
+    return new Promise((resolve, reject) => {
+        fs.readFileSync(sFile, encoding, (err, data) => {
+            if (err) reject(err);
+            resolve(data);
+        });
+    });
 }
 
 /**
@@ -889,6 +959,46 @@ export function writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwr
     catch(err) {
         printError(err);
     }
+}
+
+/**
+ * writeFileSync(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
+ *
+ * @param {string} sFile
+ * @param {DataBuffer|Array|string|undefined} data
+ * @param {boolean} [fCreateDir]
+ * @param {boolean} [fOverwrite]
+ * @param {boolean} [fReadOnly]
+ * @param {boolean} [fQuiet]
+ * @returns {boolean}
+ */
+export function writeFileSync(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
+{
+    if (sFile) {
+        try {
+            if (data === undefined) {
+                data = [];
+            }
+            if (data instanceof DataBuffer) {
+                data = data.buffer;
+            } else if (Array.isArray(data)) {
+                data = new DataBuffer(data).buffer;
+            }
+            if (fCreateDir) {
+                let sDir = path.dirname(sFile);
+                makeDir(sDir, true);
+            }
+            if (!existsFile(sFile) || fOverwrite) {
+                fs.writeFileSync(sFile, data);
+                if (fReadOnly) fs.chmodSync(sFile, 0o444);
+                return true;
+            }
+            if (!fQuiet) printf("warning: %s exists, use --overwrite to replace\n", sFile);
+        } catch(err) {
+            printError(err);
+        }
+    }
+    return false;
 }
 
 /**
