@@ -456,7 +456,7 @@ function processDisk(di, diskFile, argv, diskette)
         } else {
             extractDir = extractDir.replace("%d", path.dirname(diskFile));
         }
-        let manifest = di.getFileManifest(null, false);         // pass true for sorted manifest
+        let manifest = di.getFileManifest(null);                // add true for sorted manifest
         manifest.forEach(function extractDiskFile(desc) {
             /*
              * Parse each file descriptor in much the same way that buildFileTableFromJSON() does.  That function

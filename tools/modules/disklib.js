@@ -792,6 +792,7 @@ export function readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
         }
         if (di) {
             let sDir = getLocalPath(diskFile.replace(/\.[a-z]+$/i, ""));
+            // sDir = path.join(path.dirname(sDir), "archive", path.basename(sDir));
             let aDiskFiles = glob.sync(path.join(sDir, "**"));
             for (let i = 0; i < aDiskFiles.length; i++) {
                 addMetaData(di, sDir, aDiskFiles[i].slice(sDir.length));

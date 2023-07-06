@@ -26,7 +26,7 @@ export default class PCJSLib
         if (s) {
             if (typeof s == "string") {
                 let args = s.split(' ');
-                return parseArgs(args, 0);
+                return PCJSLib.parseArgs(args, 0);
             }
             /*
              * If a map of option aliases is provided, then we copy any aliased options as needed.
@@ -88,9 +88,6 @@ export default class PCJSLib
                     sArg = sArg.substr(0, j);
                     sValue = (sValue == "true") ? true : ((sValue == "false") ? false : sValue);
                 }
-                // else if (i < args.length && args[i][0] != '-') {
-                //     sValue = args[i++];      // we no longer automatically consume the next argument; you must use "="
-                // }
                 if (typeof sValue == "string") {
                     let quoteMatch = sValue.match(/^(["'])(.*)\1$/);
                     if (quoteMatch) {

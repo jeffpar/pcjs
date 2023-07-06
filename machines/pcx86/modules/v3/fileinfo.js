@@ -19,14 +19,14 @@ import DiskInfo from "./diskinfo.js";
 
 /**
  * @class FileInfo
- * @property {DiskInfo}  disk
- * @property {number}    iVolume
- * @property {string}    path
- * @property {string}    name
- * @property {number}    attr
- * @property {Date}      date
- * @property {number}    size
- * @property {number}    cluster
+ * @property {DiskInfo}         disk
+ * @property {number}           iVolume
+ * @property {string}           path
+ * @property {string}           name
+ * @property {number}           attr
+ * @property {Date}             date
+ * @property {number}           size
+ * @property {number}           cluster
  * @property {Array.<number>}   aLBA
  * @property {string}           [module]
  * @property {string}           [modDesc]
@@ -50,7 +50,6 @@ export default class FileInfo {
      */
     constructor(disk, iVolume, path, name, attr, date, size, cluster = -1, aLBA = null)
     {
-        this.device = disk.device;
         this.disk = disk;
         this.iVolume = iVolume;
         this.path = path;
@@ -60,6 +59,7 @@ export default class FileInfo {
         this.size = size;
         this.cluster = cluster;
         this.aLBA = aLBA;
+        this.device = disk.device;
         if (Device.DEBUG && cluster >= 0) {
             this.device.printf(Device.MESSAGE.FILE, '"%d:%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', iVolume, path, size, attr, date, cluster, aLBA);
         }

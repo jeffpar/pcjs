@@ -560,12 +560,12 @@
       }
     },
     {
-      "name": "pc.js chkdsk",
+      "name": "pc.js dir *.*",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "chkdsk"
+        "dir *.*"
       ],
       "cwd": "${workspaceFolder}/tools/pc/archive/MSDOS320",
       "stopOnEntry": false,
@@ -1475,10 +1475,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=pcsig/0001-0999/DISK0126",
+        "--collection=miscdisks/pcx86/lang/borland/pascal/6.00/TURBO-PASCAL-600-DISK4",
         "--checkdisk",
-        "--rebuild",
-        "--verbose"
+        "--rebuild"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

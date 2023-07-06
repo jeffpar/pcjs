@@ -2567,8 +2567,8 @@ export default class FDC extends Component {
             h ^= i;
             if (!bHead) i = 0;
             r = drive.bSector;                          // REQUIRED in order for MINIX 1.1 to load ROOT diskette
-            if (drive.disk && drive.disk.aDiskData && drive.disk.aDiskData[c] && drive.disk.aDiskData[c][h] && drive.disk.aDiskData[c][h][r-1]) {
-                r = drive.disk.aDiskData[c][h][r-1][Disk.SECTOR.ID];
+            if (drive.disk && drive.disk.diskData && drive.disk.diskData[c] && drive.disk.diskData[c][h] && drive.disk.diskData[c][h][r-1]) {
+                r = drive.disk.diskData[c][h][r-1][Disk.SECTOR.ID];
             }
         }
         c += i;

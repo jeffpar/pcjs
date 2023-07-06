@@ -62234,7 +62234,7 @@ class Disk extends Component {
     /**
      * Disk(controller, drive, mode)
      *
-     * Disk contents are stored as an array (aDiskData) of cylinders, each of which is an array of
+     * Disk contents are stored as an array (diskData) of cylinders, each of which is an array of
      * heads, each of which is an array of sector objects; the latter contain sector numbers and
      * sector data, where sector data is an array of dwords.  The format does not impose any
      * limitations on number of cylinders, number of heads, sectors per track, or bytes per sector.
@@ -62443,7 +62443,7 @@ class Disk extends Component {
         this.nHeads = nHeads;
         this.nSectors = nSectors;
         this.cbSector = cbSector;
-        this.aDiskData = [];
+        this.diskData = [];
         /*
          * If the drive is using PRELOAD mode, then it will use the load()/mount() process to initialize the disk contents;
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
@@ -62473,7 +62473,7 @@ class Disk extends Component {
                 }
                 aCylinders[iCylinder] = aHeads;
             }
-            this.aDiskData = aCylinders;
+            this.diskData = aCylinders;
         }
         this.dwChecksum = null;
     }
@@ -62622,9 +62622,9 @@ class Disk extends Component {
             let dv = new DataView(buffer, 0, cbDiskData);
             let cdw = this.cbSector >> 2, dwPattern = 0, dwChecksum = 0;
 
-            this.aDiskData = new Array(this.nCylinders);
-            for (let iCylinder = 0; iCylinder < this.aDiskData.length; iCylinder++) {
-                let cylinder = this.aDiskData[iCylinder] = new Array(this.nHeads);
+            this.diskData = new Array(this.nCylinders);
+            for (let iCylinder = 0; iCylinder < this.diskData.length; iCylinder++) {
+                let cylinder = this.diskData[iCylinder] = new Array(this.nHeads);
                 for (let iHead = 0; iHead < cylinder.length; iHead++) {
                     let head = cylinder[iHead] = new Array(this.nSectors);
                     for (let iSector = 0; iSector < head.length; iSector++) {
@@ -62727,7 +62727,7 @@ class Disk extends Component {
                 /*
                  * The most likely source of any exception will be here, where we're parsing the disk data.
                  */
-                let aDiskData, aFileDescs, imageInfo;
+                let diskData, fileTable, imageInfo;
                 if (imageData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
                     /*
                      * Early server configs reported an error (via the nErrorCode parameter) if a disk URL was invalid,
@@ -62738,7 +62738,7 @@ class Disk extends Component {
                      * So, if the data we've received appears to be "HTML-like", all we can really do is assume that the
                      * disk image is missing.  And so we pretend we received an error message to that effect.
                      */
-                    aDiskData = ["Missing disk image: " + this.sDiskName];
+                    diskData = ["Missing disk image: " + this.sDiskName];
                 } else {
                     /*
                      * TODO: IE9 is rather unfriendly and restrictive with regard to how much data it's willing to
@@ -62761,24 +62761,24 @@ class Disk extends Component {
                      */
                     if (imageData[0] == '{') {
                         let image = JSON.parse(imageData);
-                        aDiskData = image['diskData'];
-                        aFileDescs = image['fileTable'];
+                        diskData = image['diskData'];
+                        fileTable = image['fileTable'];
                         imageInfo = image['imageInfo'];
                     } else if (imageData.indexOf("0x") < 0 && imageData.substr(0, 2) != "[\"") {
-                        aDiskData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
+                        diskData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
                     } else {
-                        aDiskData = eval("(" + imageData + ")");
+                        diskData = eval("(" + imageData + ")");
                     }
                 }
 
-                if (!aDiskData.length) {
+                if (!diskData.length) {
                     Component.error("Empty disk image: " + this.sDiskName);
                 }
-                else if (aDiskData.length == 1) {
-                    Component.error(aDiskData[0]);
+                else if (diskData.length == 1) {
+                    Component.error(diskData[0]);
                 }
                 /*
-                 * aDiskData is an array of cylinders, each of which is an array of heads, each of which
+                 * diskData is an array of cylinders, each of which is an array of heads, each of which
                  * is an array of sector objects.  The format does not impose any limitations on number of
                  * cylinders, number of heads, or number of bytes in any of the sector object byte-arrays.
                  *
@@ -62797,10 +62797,10 @@ class Disk extends Component {
                  */
                 else {
                     if (DEBUG && this.messageEnabled(Messages.DISK + Messages.DATA)) {
-                        let sCylinders = aDiskData.length + " track" + (aDiskData.length > 1 ? "s" : "");
-                        let nHeads = aDiskData[0].length;
+                        let sCylinders = diskData.length + " track" + (diskData.length > 1 ? "s" : "");
+                        let nHeads = diskData[0].length;
                         let sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
-                        let nSectorsPerTrack = aDiskData[0][0].length;
+                        let nSectorsPerTrack = diskData[0][0].length;
                         let sSectorsPerTrack = nSectorsPerTrack + " sector" + (nSectorsPerTrack > 1 ? "s" : "") + "/track";
                         this.printf("%s, %s, %s\n", sCylinders, sHeads, sSectorsPerTrack);
                     }
@@ -62812,17 +62812,17 @@ class Disk extends Component {
                      * This includes detecting sector data in older formats (eg, the old array of 'bytes' instead
                      * of the new DATA array of dwords) and converting them on-the-fly to the current format.
                      */
-                    this.nCylinders = aDiskData.length;
-                    this.nHeads = aDiskData[0].length;
-                    this.nSectors = aDiskData[0][0].length;
-                    let sector = aDiskData[0][0][0];
+                    this.nCylinders = diskData.length;
+                    this.nHeads = diskData[0].length;
+                    this.nSectors = diskData[0][0].length;
+                    let sector = diskData[0][0][0];
                     this.cbSector = (sector && (sector[Disk.SECTOR.LENGTH] || sector['length'])) || 512;
 
                     let dwChecksum = 0;
                     for (let iCylinder = 0; iCylinder < this.nCylinders; iCylinder++) {
                         for (let iHead = 0; iHead < this.nHeads; iHead++) {
                             for (let iSector = 0; iSector < this.nSectors; iSector++) {
-                                sector = aDiskData[iCylinder][iHead][iSector];
+                                sector = diskData[iCylinder][iHead][iSector];
                                 if (!sector) continue;          // non-standard (eg, XDF) disk images may have "unused" (null) sectors
                                 /*
                                  * "Upgrade" all sector object properties.
@@ -62918,10 +62918,10 @@ class Disk extends Component {
                             }
                         }
                     }
-                    this.aDiskData = aDiskData;
+                    this.diskData = diskData;
                     this.dwChecksum = dwChecksum;
                     this.imageInfo = imageInfo;
-                    if (BACKTRACK || SYMBOLS) this.buildFileTable(aFileDescs);
+                    if (BACKTRACK || SYMBOLS) this.buildFileTable(fileTable);
                     disk = this;
                 }
             } catch (e) {
@@ -62941,31 +62941,31 @@ class Disk extends Component {
     }
 
     /**
-     * buildFileTable(aFileDescs)
+     * buildFileTable(fileTable)
      *
      * This function builds a table of FileInfo objects from any and all file descriptors present in the
      * "extended" JSON disk image, and updates all the sector objects to point back to the corresponding FileInfo.
      * Used for BACKTRACK and SYMBOLS support.
      *
      * @this {Disk}
-     * @param {Array.<FileDesc>} [aFileDescs] (array of FileDescs, if any, stored in the JSON disk image)
+     * @param {Array.<FileDesc>} [fileTable] (array of FileDescs, if any, stored in the JSON disk image)
      */
-    buildFileTable(aFileDescs)
+    buildFileTable(fileTable)
     {
         if (BACKTRACK || SYMBOLS) {
-            if (aFileDescs) {
-                let aDiskData = this.aDiskData;
+            if (fileTable) {
+                let diskData = this.diskData;
                 this.aFileTable = [];
-                for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
-                    for (let iHead = 0; iHead < aDiskData[iCylinder].length; iHead++) {
-                        for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
-                            let sector = aDiskData[iCylinder][iHead][iSector];
+                for (let iCylinder = 0; iCylinder < diskData.length; iCylinder++) {
+                    for (let iHead = 0; iHead < diskData[iCylinder].length; iHead++) {
+                        for (let iSector = 0; iSector < diskData[iCylinder][iHead].length; iSector++) {
+                            let sector = diskData[iCylinder][iHead][iSector];
                             if (sector) {
                                 let index = sector[Disk.SECTOR.FILE_INDEX];
                                 if (index != undefined) {
                                     let file = this.aFileTable[index];
                                     if (!file) {
-                                        let desc = aFileDescs[index];
+                                        let desc = fileTable[index];
                                         file = new FileInfo(this, desc.path, Str.getBaseName(desc.path), +desc.attr, desc.size || 0, desc.module);
                                         this.aFileTable[index] = file;
                                     }
@@ -63363,9 +63363,9 @@ class Disk extends Component {
         let fAsync = aRequest[4];
         this.fWriteInProgress = false;
 
-        if (iCylinder >= 0 && iCylinder < this.aDiskData.length && iHead >= 0 && iHead < this.aDiskData[iCylinder].length) {
-            for (let i = iSector - 1; nSectors-- > 0 && i >= 0 && i < this.aDiskData[iCylinder][iHead].length; i++) {
-                let sector = this.aDiskData[iCylinder][iHead][i];
+        if (iCylinder >= 0 && iCylinder < this.diskData.length && iHead >= 0 && iHead < this.diskData[iCylinder].length) {
+            for (let i = iSector - 1; nSectors-- > 0 && i >= 0 && i < this.diskData[iCylinder][iHead].length; i++) {
+                let sector = this.diskData[iCylinder][iHead][i];
 
                 if (!nErrorCode) {
                     if (!sector.fDirty) {
@@ -63500,8 +63500,8 @@ class Disk extends Component {
             let iSector = sector[Disk.SECTOR.ID];
             let nSectors = 0;
             let abSectors = [];
-            for (let i = iSector - 1; i < this.aDiskData[iCylinder][iHead].length; i++) {
-                let sectorNext = this.aDiskData[iCylinder][iHead][i];
+            for (let i = iSector - 1; i < this.diskData[iCylinder][iHead].length; i++) {
+                let sectorNext = this.diskData[iCylinder][iHead][i];
                 if (!sectorNext.fDirty) break;
                 let j = this.aDirtySectors.indexOf(sectorNext);
 
@@ -63529,10 +63529,10 @@ class Disk extends Component {
      */
     info()
     {
-        if (!this.aDiskData.length) {
+        if (!this.diskData.length) {
             return [0, 0, 0, 0];
         }
-        return [this.aDiskData.length, this.aDiskData[0].length, this.aDiskData[0][0].length, this.aDiskData[0][0][0][Disk.SECTOR.LENGTH]];
+        return [this.diskData.length, this.diskData[0].length, this.diskData[0][0].length, this.diskData[0][0][0][Disk.SECTOR.LENGTH]];
     }
 
     /**
@@ -63560,7 +63560,7 @@ class Disk extends Component {
     {
         let sector = null;
         let drive = this.drive;
-        let cylinder = this.aDiskData[iCylinder];
+        let cylinder = this.diskData[iCylinder];
         if (cylinder) {
             let i;
             let track = cylinder[iHead];
@@ -63840,11 +63840,11 @@ class Disk extends Component {
         let deltas = [];
         deltas[i++] = [this.sDiskPath, this.dwChecksum, this.nCylinders, this.nHeads, this.nSectors, this.cbSector];
         if (!this.fRemote && !this.fWriteProtected) {
-            let aDiskData = this.aDiskData;
-            for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
-                for (let iHead = 0; iHead < aDiskData[iCylinder].length; iHead++) {
-                    for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
-                        let sector = aDiskData[iCylinder][iHead][iSector];
+            let diskData = this.diskData;
+            for (let iCylinder = 0; iCylinder < diskData.length; iCylinder++) {
+                for (let iHead = 0; iHead < diskData[iCylinder].length; iHead++) {
+                    for (let iSector = 0; iSector < diskData[iCylinder][iHead].length; iSector++) {
+                        let sector = diskData[iCylinder][iHead][iSector];
                         if (sector && sector.cModify) {
                             let mods = [], n = 0;
                             let iModify = sector.iModify, iModifyLimit = sector.iModify + sector.cModify;
@@ -63889,11 +63889,11 @@ class Disk extends Component {
         let nChanges = 0;
         let sReason = "unsupported restore format";
         /*
-         * I originally added a check for aDiskData here on the assumption that if there was an error loading
+         * I originally added a check for diskData here on the assumption that if there was an error loading
          * a disk image, we will have already notified the user, so any additional errors about differing checksums,
          * failure to restore the disk state, etc, would just be annoying.  HOWEVER, HDC will create an empty disk
          * image if its initialization code discovers that no disk was loaded earlier (see verifyDrive).  So while
-         * checking aDiskData is still a good idea, be aware that it won't necessarily avoid redundant error messages
+         * checking diskData is still a good idea, be aware that it won't necessarily avoid redundant error messages
          * (at least in the case of HDC).
          */
         if (deltas && deltas.length > 0) {
@@ -63907,7 +63907,7 @@ class Disk extends Component {
                  * disk image from a complete set of deltas.  And that is only possible if the disk was saved with the
                  * original disk geometry.
                  */
-                if (!this.aDiskData.length && aDiskInfo.length >= 6) {
+                if (!this.diskData.length && aDiskInfo.length >= 6) {
                     this.create(DiskAPI.MODE.LOCAL, aDiskInfo[2], aDiskInfo[3], aDiskInfo[4], aDiskInfo[5]);
                     /*
                      * TODO: Consider setting a flag here that we can check at the end of the restore() function
@@ -63942,7 +63942,7 @@ class Disk extends Component {
                 }
             }
 
-            if (!this.aDiskData.length) nChanges = -1;
+            if (!this.diskData.length) nChanges = -1;
 
             while (i < deltas.length && nChanges >= 0) {
                 let m = 0;
@@ -63956,7 +63956,7 @@ class Disk extends Component {
                  * because save() should never generate any mods for a write-protected disk, and (c) it
                  * centralizes all the failure conditions we're currently checking (which, admittedly, ain't much).
                  */
-                if (iCylinder >= this.aDiskData.length || iHead >= this.aDiskData[iCylinder].length || iSector >= this.aDiskData[iCylinder][iHead].length) {
+                if (iCylinder >= this.diskData.length || iHead >= this.diskData[iCylinder].length || iSector >= this.diskData[iCylinder][iHead].length) {
                     sReason = "sector (CHS=" + iCylinder + ':' + iHead + ':' + iSector + ") out of range (" + nChanges + " changes applied)";
                     nChanges = -1;
                     break;
@@ -63969,7 +63969,7 @@ class Disk extends Component {
                 let iModify = mod[m++];
                 let mods = mod[m++];
                 let iModifyLimit = iModify + mods.length;
-                let sector = this.aDiskData[iCylinder][iHead][iSector];
+                let sector = this.diskData[iCylinder][iHead][iSector];
                 if (!sector) continue;
                 /*
                  * Since write() now deals with empty/partial sectors, we no longer need to completely "inflate"
@@ -64032,7 +64032,7 @@ class Disk extends Component {
             this.deflateSector(sector);
         }
 
-        s = JSON.stringify(this.aDiskData, function(key, value) {
+        s = JSON.stringify(this.diskData, function(key, value) {
             /*
              * If BACKTRACK support is enabled, we have to filter out any 'file' properties that may
              * be attached to the sector objects, lest we risk blowing the stack due to circular references.
@@ -66768,8 +66768,8 @@ class FDC extends Component {
             h ^= i;
             if (!bHead) i = 0;
             r = drive.bSector;                          // REQUIRED in order for MINIX 1.1 to load ROOT diskette
-            if (drive.disk && drive.disk.aDiskData && drive.disk.aDiskData[c] && drive.disk.aDiskData[c][h] && drive.disk.aDiskData[c][h][r-1]) {
-                r = drive.disk.aDiskData[c][h][r-1][Disk.SECTOR.ID];
+            if (drive.disk && drive.disk.diskData && drive.disk.diskData[c] && drive.disk.diskData[c][h] && drive.disk.diskData[c][h][r-1]) {
+                r = drive.disk.diskData[c][h][r-1][Disk.SECTOR.ID];
             }
         }
         c += i;

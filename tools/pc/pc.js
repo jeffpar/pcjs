@@ -36,11 +36,12 @@ setRootDir(rootDir);
 
 let Component, Interrupts;
 let weblib, embedMachine;
-let cpu, dbg, fdc, kbd, serial, fnSendSerial;
+let cpu, dbg, fdc, hdc, kbd, serial, fnSendSerial;
 let debugMode;
 let prompt = ">";
 let sCmdPrev = "";
 let diskItems = [];
+let diskManifest = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
 let machines = JSON.parse(readFileSync("/machines/machines.json"));
@@ -222,9 +223,11 @@ function initMachine(machine, sMachine)
         }
 
         /*
-         * Get the FDC component so we can query its complete list of diskettes.
+         * Get the FDC component so we can query its complete list of diskettes,
+         * and get the HDC component so we can query the state of its hard drive(s).
          */
         fdc = Component.getComponentByType("FDC");
+        hdc = Component.getComponentByType("HDC");
 
         /*
          * Get the Debugger component so we can send the debugger commands.
@@ -523,6 +526,7 @@ function buildDrive(sCommand)
             dbBoot.writeUInt8(0x80, 0x1fd);
             let done = function(di) {
                 if (di) {
+                    diskManifest = di.getFileManifest(null, true);
                     di.updateBootSector(dbBoot);            // a volume of 0 is the default
                     di.updateBootSector(dbMBR, -1);         // a volume of -1 indicates the master boot record
                     writeDiskSync(path.join(pcjsDir, "MSDOS.json"), di, false, 0, true, true);
@@ -616,6 +620,28 @@ function buildFileIndex(diskIndex)
         fs.writeFileSync(pathIndex, JSON.stringify(fileIndex));
     }
     return fileIndex;
+}
+
+/**
+ * checkDrive()
+ *
+ * If we built a drive on entry, this checks the drive on exit for any changes that need to be propagated.
+ *
+ * @returns {boolean}
+ */
+function checkDrive()
+{
+    if (hdc && diskManifest) {
+        let data = hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
+        if (data) {
+            let di = new DiskInfo(device, "MSDOS");
+            if (di.buildDiskFromJSON(data)) {
+                let newManifest = di.getFileManifest(null, true);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /**
@@ -930,6 +956,7 @@ function readInput(stdin, stdout)
         }
         if (code == 0x03 && debugMode) {            // check for CTRL-C when in debug mode
             printf("terminating...\n");
+            checkDrive();
             process.exit();
             return;
         }
