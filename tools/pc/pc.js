@@ -665,7 +665,7 @@ function checkDrive(oldManifest)
                              * contents, so the compare will succeed and writeFileSync() will be bypassed.
                              */
                             if (!compareContents(oldItem, newItem)) {
-                                printf("updating %s\n", newItem.path);
+                                if (fDebug) printf("updating %s\n", newItem.path);
                                 writeFileSync(newItem.path.slice(1), newItem.contents, false, true);
                             }
                         } else {
@@ -690,12 +690,12 @@ function checkDrive(oldManifest)
                         if (oldAttr & DiskInfo.ATTR.SUBDIR) {
                             removedDirs.push(oldItem.path);
                         } else {
-                            printf("removing %s\n", oldItem.path);
+                            if (fDebug) printf("removing %s\n", oldItem.path);
                             fs.unlinkSync(oldItem.path.slice(1));
                         }
                         iOld++;
                     } else {
-                        printf("creating %s\n", newItem.path);
+                        if (fDebug) printf("creating %s\n", newItem.path);
                         if (newAttr & DiskInfo.ATTR.SUBDIR) {
                             fs.mkdirSync(newItem.path.slice(1));
                         } else {
@@ -707,7 +707,7 @@ function checkDrive(oldManifest)
                 }
                 while (removedDirs.length) {
                     let dir = removedDirs.pop();
-                    printf("removing %s\n", dir);
+                    if (fDebug) printf("removing %s\n", dir);
                     fs.rmdirSync(dir.slice(1));
                 }
                 return true;
