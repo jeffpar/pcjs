@@ -351,26 +351,26 @@ function addMetaData(di, sDir, sPath, aFiles)
 }
 
 /**
- * makeFileDesc(name, contents, attr, date)
+ * makeFileDesc(name, data, attr, date)
  *
  * This mimics getFileDesc() in diskinfo.js, but it creates a FILEDESC object from input
  * parameters rather than a FileInfo object.
  *
  * @param {string} name
- * @param {DataBuffer|string} contents
+ * @param {DataBuffer|string} data
  * @param {number} [attr]
  * @param {Date} [date]
  * @returns {Object}
  */
-export function makeFileDesc(name, contents, attr = DiskInfo.ATTR.ARCHIVE, date = new Date())
+export function makeFileDesc(name, data, attr = DiskInfo.ATTR.ARCHIVE, date = new Date())
 {
     return {
         [DiskInfo.FILEDESC.PATH]: "/" + name,
         [DiskInfo.FILEDESC.NAME]: name,
         [DiskInfo.FILEDESC.ATTR]: sprintf("%#0bx", attr),
         [DiskInfo.FILEDESC.DATE]: sprintf("%T", date),
-        [DiskInfo.FILEDESC.SIZE]: contents.length,
-        [DiskInfo.FILEDESC.CONTENTS]: contents,
+        [DiskInfo.FILEDESC.SIZE]: data.length,
+        [DiskInfo.FILEDESC.CONTENTS]: data,
         [DiskInfo.FILEDESC.VOL]:  0
     };
 }

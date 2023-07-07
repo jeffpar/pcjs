@@ -1537,7 +1537,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Gets zero-terminated (aka "ASCIIZ") string from dbgAddr.  It also stops at the first '$', in case this is
      * a '$'-terminated string -- mainly because I'm lazy and didn't feel like writing a separate get() function.
-     * Yes, a zero-terminated string containing a '$' will be prematurely terminated, and no, I don't care.
+     * Yes, a zero-terminated string containing a '$' will be prematurely terminated -- not a big deal.
      *
      * @this {DebuggerX86}
      * @param {DbgAddrX86} dbgAddr

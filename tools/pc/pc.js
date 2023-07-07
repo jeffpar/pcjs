@@ -16,6 +16,7 @@ import Messages   from "../../machines/modules/v2/messages.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
+import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
 import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
@@ -28,10 +29,10 @@ let systemVersion = "3.20";
 
 let rootDir, pcjsDir;
 let debugMode, messagesFilter, machines;
-let Component, Interrupts, weblib, embedMachine;
+let Component, Errors, Interrupts, weblib, embedMachine;
 let cpu, dbg, fdc, hdc, kbd, serial, fnSendSerial;
 let prompt = ">";
-let sCmdPrev = "";
+let command = "", commandPrev = "";
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
@@ -48,6 +49,7 @@ function setDebugMode(f)
         cpu.stopCPU();
     }
     if (debugMode) {
+        command = "";
         printf("%s> ", prompt);
     }
 }
@@ -163,6 +165,9 @@ async function loadModules(factory, modules, done)
         case "component":
             Component = module.default;
             break;
+        case "errors":
+            Errors = module.default;
+            break;
         case "interrupts":
             Interrupts = module.default;
             break;
@@ -211,6 +216,7 @@ function initMachine(machine, sMachine)
             if (Interrupts && Interrupts.VIDEO) {
                 cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
                 cpu.addIntNotify(Interrupts.BOOTSTRAP, intReboot.bind(cpu));
+                cpu.addIntNotify(Interrupts.DOS_EXIT, intLoad.bind(cpu));
             }
         }
 
@@ -282,6 +288,45 @@ function intVideo(addr)
 function intReboot(addr)
 {
     exit();
+    return true;
+}
+
+/**
+ * intLoad(addr)
+ *
+ * @param {CPUx86} this
+ * @param {number} addr
+ * @returns {boolean} true to proceed with the INT 0x20 software interrupt, false to skip
+ */
+function intLoad(addr)
+{
+    if (this.getIP() == 0x102) {
+        if (fDebug) {
+            setDebugMode(true);
+            return false;
+        }
+        let cpu = this;
+        let sig = cpu.getSOWord(cpu.segCS, cpu.getIP()+1) + (cpu.getSOWord(cpu.segCS, cpu.getIP()+3) << 16);
+        if (sig == 0x534A4350) {
+            let getString = function(seg, off, len) {
+                let s = "";
+                while (len--) {
+                    s += CharSet.fromCP437(cpu.getSOByte(seg, off++))
+                }
+                return s;
+            };
+            let len = cpu.getSOByte(cpu.segDS, 0x80);
+            let loadCommand = getString(cpu.segDS, 0x81, len).trim();
+            let aTokens = loadCommand.split(' ');
+            let matchDrive = aTokens[0].match(/^([a-z]:?)$/i);
+            if (matchDrive) {
+                aTokens.splice(0, 1)
+                printf("%s\n", loadDiskette(matchDrive[1], aTokens));
+            } else {
+                printf("invalid load command (%s)\n", loadCommand);
+            }
+        }
+    }
     return true;
 }
 
@@ -486,7 +531,7 @@ function buildDrive(sCommand)
             "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
         }
     };
-    const aInternalCommands = ["COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
+    const aInternalCommands = ["CD", "COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
 
     let manifest;
     let aParts = sCommand.split(' ');
@@ -531,21 +576,17 @@ function buildDrive(sCommand)
                 }
             }
             /*
-             * In addition to the system files, we also add a hidden RETURN.COM in the root, which does nothing
-             * more than "INT 0x19" to reboot the machine.  Our intReboot() interrupt handler should intercept it,
-             * allowing us to gracefully invoke checkDrive() to look for any changes and them terminate the machine.
+             * In addition to the system files, we also add a hidden LOAD.COM in the root, which immediately
+             * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
+             * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
              */
-            let returnName = "RETURN.COM";
-            let returnContents = [0xcd, 0x19];
-            let descReturn = {
-                'name': returnName,
-                'path': "/" + returnName,
-                'contents': returnContents,
-                'size': returnContents.length,
-                'attr': sprintf("%#0bx", DiskInfo.ATTR.HIDDEN),
-                'date': sprintf("%T", new Date())
-            };
-            aFileDescs.push(descReturn);
+            aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
+            /*
+             * We also add a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
+             * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke checkDrive()
+             * to look for any changes and then terminate the machine.
+             */
+            aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
             /*
              * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
              * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
@@ -554,22 +595,22 @@ function buildDrive(sCommand)
              * our hidden "RETURN.COM" program regardless of the current directory.
              */
             let attr = DiskInfo.ATTR.ARCHIVE;
-            let contents = readFileSync("AUTOEXEC.BAT", "utf8", true);
-            if (!contents) {
-                contents = "ECHO OFF\r\n";
+            let data = readFileSync("AUTOEXEC.BAT", "utf8", true);
+            if (!data) {
+                data = "ECHO OFF\r\n";
                 attr |= DiskInfo.ATTR.HIDDEN;
             }
-            let matchPath = contents.match(/^PATH\s*(.*)$/im);
+            let matchPath = data.match(/^PATH\s*(.*)$/im);
             if (matchPath) {
                 let matchPathRoot = matchPath[1].match(/(^|;|C:|)\\(;|$)/i);
                 if (!matchPathRoot) {
-                    contents = contents.replace(/^PATH\s*(.*)$/im, "PATH C:\\;$1");
+                    data = data.replace(/^PATH\s*(.*)$/im, "PATH C:\\;$1");
                 }
             } else {
-                contents += "PATH C:\\\r\n";
+                data += "PATH C:\\\r\n";
             }
-            contents += sCommand + "\r\n";
-            aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", contents, attr));
+            data += sCommand + "\r\n";
+            aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
             /*
              * Load the boot sector from the system diskette we read above, and use it to update the boot
              * sector on the hard drive image.
@@ -817,7 +858,7 @@ function loadDiskette(sDrive, aTokens)
         let iDrive = sDrive.charCodeAt(0) - 'A'.charCodeAt(0);
         let diskPath = diskIndexCache[diskName]['path'];
         let done = function(disk, error) {
-            if (error == -2) {
+            if (error == Errors.DOS.INVALID_DRIVE) {
                 result = "invalid drive (" + sDrive + ")";
             } else {
                 result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error);
@@ -939,12 +980,12 @@ function loadDiskette(sDrive, aTokens)
                                 /*
                                  * The items in this array are sorted by date, but we also want to eliminate duplicates
                                  * based on the hash value, so we maintain a hash index here.  The key is the hash value,
-                                 * and the contents of each hash index entry is an array of disk names.
+                                 * and each hash entry is an array of disk names.
                                  */
                                 let hashIndex = {};
                                 for (let i = 0; i < a.length; i++) {
                                     let item = a[i];
-                                    let diskItem = {'disk': item['disk'], 'file': name, 'size': item['size'], 'date': item['date']};
+                                    let diskItem = {'issk': item['disk'], 'file': name, 'size': item['size'], 'date': item['date']};
                                     let prevItem = hashIndex[item['hash']];
                                     if (prevItem) {
                                         if (!prevItem['others']) {
@@ -988,15 +1029,15 @@ function loadDiskette(sDrive, aTokens)
 }
 
 /**
- * doCommand(sCmd)
+ * doCommand(s)
  *
- * @param {string} sCmd
+ * @param {string} s
  * @returns {string|null} (result of command, or null to quit)
  */
-function doCommand(sCmd)
+function doCommand(s)
 {
     let result = "";
-    let aTokens = sCmd.split(' ');
+    let aTokens = s.split(' ');
 
     switch(aTokens[0].toLowerCase()) {
     case "help":
@@ -1023,10 +1064,10 @@ function doCommand(sCmd)
     case "quit":
         return null;
     default:
-        if (sCmd) {
+        if (s) {
             try {
-                if (dbg && !dbg.doCommands(sCmd, true, true)) {
-                    result = eval('(' + sCmd + ')');
+                if (dbg && !dbg.doCommands(s, true, true)) {
+                    result = eval('(' + s + ')');
                 }
             } catch(err) {
                 result = err.message;
@@ -1034,7 +1075,7 @@ function doCommand(sCmd)
         }
         break;
     }
-    sCmdPrev = sCmd;
+    commandPrev = s;
     return result? result + "\n" : "";
 }
 
@@ -1047,7 +1088,6 @@ function doCommand(sCmd)
  */
 function readInput(argv, stdin, stdout)
 {
-    let command = "";
     let loading = false;
 
     if (typeof argv['load'] == "string") {          // process --load argument, if any
@@ -1086,7 +1126,6 @@ function readInput(argv, stdin, stdout)
         let code = data.charCodeAt(0);
         if (code == 0x01 && !debugMode) {           // check for CTRL-A when NOT in debug mode
             setDebugMode(true);
-            command = "";
             return;
         }
         if (code == 0x03 && debugMode) {            // check for CTRL-C when in debug mode
@@ -1111,7 +1150,7 @@ function readInput(argv, stdin, stdout)
             return;
         }
         if (data == "\x1b[A" && !command.length) {  // implement UP ARROW ourselves (since we're in "raw" mode)
-            data = sCmdPrev;
+            data = commandPrev;
         }
         else if (code < 0x20 && code != 0x0d) {     // anything else (including any ESC codes) is ignored
             return;
@@ -1121,9 +1160,9 @@ function readInput(argv, stdin, stdout)
         do {
             let i = command.indexOf("\r");
             if (i < 0) break;
-            let sCmd = command.slice(0, i);
+            let s = command.slice(0, i);
             printf("\n");
-            let result = doCommand(sCmd);
+            let result = doCommand(s);
             if (result == null) {
                 exit();
                 return;

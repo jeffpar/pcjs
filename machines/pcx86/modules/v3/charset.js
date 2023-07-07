@@ -21,15 +21,21 @@ export default class CharSet {
     /**
      * fromCP437(data, controlChars)
      *
-     * @param {string|DataBuffer} data
+     * @param {number|Array|string|DataBuffer} data
      * @param {boolean} [controlChars] (true to include control characters)
      * @returns {string}
      */
     static fromCP437(data, controlChars = false)
     {
         let u = "";
+        if (typeof data == "number") data = [data];
         for (let i = 0; i < data.length; i++) {
-            let c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
+            let c;
+            if (Array.isArray(data)) {
+                c = data[i];
+            } else {
+                c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
+            }
             if (c < CharSet.CP437.length && (c >= 32 || controlChars)) {
                 u += CharSet.CP437[c];
             } else {

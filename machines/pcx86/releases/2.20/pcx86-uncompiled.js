@@ -6673,15 +6673,21 @@ class CharSet {
     /**
      * fromCP437(data, controlChars)
      *
-     * @param {string|DataBuffer} data
+     * @param {number|Array|string|DataBuffer} data
      * @param {boolean} [controlChars] (true to include control characters)
      * @returns {string}
      */
     static fromCP437(data, controlChars = false)
     {
         let u = "";
+        if (typeof data == "number") data = [data];
         for (let i = 0; i < data.length; i++) {
-            let c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
+            let c;
+            if (Array.isArray(data)) {
+                c = data[i];
+            } else {
+                c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
+            }
             if (c < CharSet.CP437.length && (c >= 32 || controlChars)) {
                 u += CharSet.CP437[c];
             } else {
@@ -6823,6 +6829,30 @@ CharSet.CP437 = [
 // ];
 
 /**
+ * @copyright https://www.pcjs.org/modules/v2/errors.js (C) 2012-2023 Jeff Parsons
+ */
+
+const Errors = {
+    DOS: {
+        INVALID_FUNC:           0x01,       // Invalid function number
+        FILE_NOT_FOUND:         0x02,       // File not found
+        PATH_NOT_FOUND:         0x03,       // Path not found
+        TOO_MANY_OPEN_FILES:    0x04,       // Too many open files (no handles left)
+        ACCESS_DENIED:          0x05,       // Access denied
+        INVALID_HANDLE:         0x06,       // Invalid handle
+        MEM_BLOCK_DAMAGED:      0x07,       // Memory control blocks destroyed
+        OUT_OF_MEMORY:          0x08,       // Insufficient memory
+        INVALID_MEM_BLOCK:      0x09,       // Invalid memory block address
+        INVALID_ENV:            0x0A,       // Invalid environment
+        INVALID_FORMAT:         0x0B,       // Invalid format
+        INVALID_ACCESS:         0x0C,       // Invalid access code
+        INVALID_DATA:           0x0D,       // Invalid data
+        INVALID_DRIVE:          0x0F        // Invalid drive specified
+    }
+};
+
+
+/**
  * @copyright https://www.pcjs.org/modules/v2/interrupts.js (C) 2012-2023 Jeff Parsons
  */
 
@@ -6852,6 +6882,7 @@ const Interrupts = {
      * mode, it was up to software to provide the font data and set the VID_EXT vector to point to it.
      */
     VID_EXT:    0x1F,               // graphics characters 0x80-0xFF (aka EXT_PTR)
+    DOS_EXIT:   0x20,
     DOS:        0x21,
     DOS_IDLE:   0x28,
     DOS_NETBIOS:0x2A,
@@ -16818,6 +16849,12 @@ class CPUx86 extends CPULib {
         if (a[4] != null) {
             this.restoreTimers(a[4]);
         }
+        /*
+         * Making sure the ROM BIOS timer values are synced with the RTC (if any) is something the ChipSet component
+         * would take care of automatically, but alas, it is initialized long before RAM is restored, so we have to make
+         * this callback.
+         */
+        if (this.chipset) this.chipset.syncRTCTime();
         return fRestored;
     }
 
@@ -39730,6 +39767,7 @@ class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {string} [sDate]
+     * @returns {number} (programmed number of seconds since midnight)
      */
     initRTCTime(sDate)
     {
@@ -39763,11 +39801,12 @@ class ChipSet extends Component {
             this.printf(Messages.NONE, "CMOS date: %T\n", date);
         }
 
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = date.getSeconds();
+        let h, m, s;
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = s = date.getSeconds();
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALARM] = 0;
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] = date.getMinutes();
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] = m = date.getMinutes();
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALARM] = 0;
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] = date.getHours();
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] = h = date.getHours();
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALARM] = 0;
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_WEEK_DAY] = date.getDay() + 1;
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH_DAY] = date.getDate();
@@ -39784,6 +39823,12 @@ class ChipSet extends Component {
 
         this.nRTCCyclesLastUpdate = this.nRTCCyclesNextUpdate = 0;
         this.nRTCPeriodsPerSecond = this.nRTCCyclesPerPeriod = null;
+
+        /*
+         * Return the number of seconds since midnight that have been programmed into the RTC, so that the
+         * caller can easily convert that into TIMER_LOW/TIMER_HIGH values for the ROM BIOS data area, if needed.
+         */
+        return h * 3600 + m * 60 + s;
     }
 
     /**
@@ -40198,6 +40243,37 @@ class ChipSet extends Component {
     }
 
     /**
+     * syncRTCTime()
+     *
+     * On a normal startup, obviously the ROM will take care of initializing BIOS data area TIMER_LOW/TIMER_HIGH
+     * values to match the RTC values.  If we're restoring a machine state, that initialization will be bypassed,
+     * but if it was a *full* restore, all values would still be synced.  However, if we've decided to override the
+     * machine's date/time with the current date/time, they will be out of sync.
+     *
+     * In that case, nRTCSeconds will be set, and we must sync the BIOS data area with that value.
+     *
+     * Moreover, that sync must occur not only after the RAM component has been initialized but also after RAM contents
+     * have been restored; otherwise, the sync'ed value will be overwritten.  Since the CPU's restore() function is
+     * when RAM finally gets restored, that's where you'll find the call to syncRTCTime().
+     *
+     * @this {ChipSet}
+     */
+    syncRTCTime()
+    {
+        if (this.nRTCSeconds != undefined) {
+            /*
+             * The 8254 ("PIT") is wired to a clock with a frequency of 1.193182MHz, and the PIT is configured
+             * to divide that by 65536, which gives us 18.2065 interrupts ("ticks") per second.
+             */
+            let ticks = this.nRTCSeconds * 18.2065;
+            this.bus.setShort(ROMx86.BIOS.TIMER_LOW, ticks & 0xffff);
+            this.bus.setShort(ROMx86.BIOS.TIMER_HIGH, ticks >>> 16);
+            this.bus.setByte(ROMx86.BIOS.TIMER_OFL, 0);
+            this.nRTCSeconds = undefined;
+        }
+    }
+
+    /**
      * updateCMOSChecksum()
      *
      * This sums all the CMOS bytes from 0x10-0x2D, creating a 16-bit checksum.  That's a total of 30 (unsigned) 8-bit
@@ -40318,7 +40394,7 @@ class ChipSet extends Component {
              * the CMOS bytes above, instead of overwriting them all, in which case this extra call to initRTCTime()
              * could be avoided.
              */
-            this.initRTCTime();
+            this.nRTCSeconds = this.initRTCTime();
         }
         return true;
     }
@@ -65574,7 +65650,7 @@ class FDC extends Component {
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
      * @param {function(Disk,number)} [done] optional callback on completion of the load request
-     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded, -2 if drive not found
+     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file, done)
     {
@@ -65585,7 +65661,7 @@ class FDC extends Component {
         };
         let drive = this.aDrives[iDrive];
         if (!drive) {
-            result = -2;
+            result = Errors.DOS.INVALID_DRIVE;
         }
         else if (sDiskPath) {
             sDiskPath = Web.redirectResource(sDiskPath);
@@ -74238,7 +74314,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Gets zero-terminated (aka "ASCIIZ") string from dbgAddr.  It also stops at the first '$', in case this is
      * a '$'-terminated string -- mainly because I'm lazy and didn't feel like writing a separate get() function.
-     * Yes, a zero-terminated string containing a '$' will be prematurely terminated, and no, I don't care.
+     * Yes, a zero-terminated string containing a '$' will be prematurely terminated -- not a big deal.
      *
      * @this {DebuggerX86}
      * @param {DbgAddrX86} dbgAddr
