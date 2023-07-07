@@ -48,7 +48,7 @@ function setDebugMode(f)
     if (f && prevMode !== undefined && cpu) {
         cpu.stopCPU();
     }
-    if (debugMode) {
+    if (debugMode && !prevMode) {
         command = "";
         printf("%s> ", prompt);
     }
@@ -828,6 +828,7 @@ function checkDrive(oldManifest)
                     if (fDebug) printf("removing %s\n", dir);
                     fs.rmdirSync(dir.slice(1));
                 }
+                writeDiskSync(path.join(pcjsDir, "DOS.img"), di, false, 0, true, true);
                 return true;
             }
         }

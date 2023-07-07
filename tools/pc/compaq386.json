@@ -13,19 +13,21 @@
   "ram": [
     {
       "id": "ramLow",
-      "name": "",
+      "name": "640K RAM",
       "addr": 0,
       "size": "0xa0000",
       "test": false
     },
     {
 	    "id": "ramCPQ",
+      "name": "COMPAQ memory",
       "addr": "0xfa0000",
       "size": "0x60000",
       "comment": "COMPAQ memory at 0xFA0000"
     },
     {
       "id": "ramExt",
+      "name": "Extended memory",
       "addr": "0x100000",
       "size": "0x100000",
       "comment": "Extended memory at 0x100000"
@@ -34,6 +36,7 @@
   "rom": [
     {
       "id": "romBIOS",
+      "name": "ROM BIOS",
       "addr": "0xf8000",
       "size": "0x8000",
       "alias": "[0xf0000,0xffff0000,0xffff8000]",
@@ -41,6 +44,7 @@
     },
     {
       "id": "romVGA",
+      "name": "VGA BIOS",
       "addr": "0xc0000",
       "size": "0x6000",
       "file": "/machines/pcx86/ibm/video/vga/1986-10-27/IBM-VGA.json5",
@@ -50,7 +54,8 @@
   "video": [
     {
       "id": "videoVGA",
-      "name": "vga",
+      "name": "VGA Display Card",
+      "model": "vga",
       "screenWidth": 1280,
       "screenHeight": 960,
       "screenColor": "black",
@@ -72,10 +77,12 @@
   },
   "fdc": {
     "id": "fdcNEC",
-    "diskettes": "/machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json,/disks/private/pcx86/diskettes.json"
+    "name": "Floppy Disk Controller",
+    "diskettes": "/machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json"
   },
   "hdc": {
     "id": "hdcAT",
+    "name": "Hard Disk Controller",
     "type": "AT",
     "drives": [
       {
@@ -87,19 +94,21 @@
   },
   "chipset": {
     "id": "chipset",
-    "name": "",
+    "name": "COMPAQ DeskPro Chipset",
     "model": "deskpro386",
     "floppies": [1440, 1440],
-    "sound": false
+    "sound": false,
+    "monitor": "vga"
   },
 	"serial": {
     "id": "com2",
+    "name": "COM2",
     "adapter": 2,
     "binding": "console"
   },
   "debugger": {
     "id": "debugger",
-    "name": "",
+    "name": "PCjs Debugger",
     "commands": "",
     "messages": ""
   }
