@@ -287,7 +287,16 @@ function intVideo(addr)
  */
 function intReboot(addr)
 {
-    exit();
+    if (this.getIP() == 0x102) {
+        if (fDebug) {
+            setDebugMode(true);
+            return false;
+        }
+        let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
+        if (sig == 0x534A4350) {        // "PCJS"
+            exit();                     // INT 19h appears to have come from "RETURN.COM"
+        }
+    }
     return true;
 }
 
@@ -305,9 +314,9 @@ function intLoad(addr)
             setDebugMode(true);
             return false;
         }
-        let cpu = this;
-        let sig = cpu.getSOWord(cpu.segCS, cpu.getIP()+1) + (cpu.getSOWord(cpu.segCS, cpu.getIP()+3) << 16);
-        if (sig == 0x534A4350) {
+        let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
+        if (sig == 0x534A4350) {        // "PCJS"
+            let cpu = this;             // INT 20h appears to have come from "LOAD.COM"
             let getString = function(seg, off, len) {
                 let s = "";
                 while (len--) {
@@ -323,7 +332,11 @@ function intLoad(addr)
                 aTokens.splice(0, 1)
                 printf("%s\n", loadDiskette(matchDrive[1], aTokens));
             } else {
-                printf("invalid load command (%s)\n", loadCommand);
+                if (!loadCommand) {
+                    printf("usage: load [drive] [search terms]\n");
+                } else {
+                    printf("invalid load command: \"%s\"\n", loadCommand);
+                }
             }
         }
     }
