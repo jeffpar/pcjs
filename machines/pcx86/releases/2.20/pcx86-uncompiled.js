@@ -39764,11 +39764,11 @@ class ChipSet extends Component {
         }
 
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = date.getSeconds();
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALRM] = 0;
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALARM] = 0;
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] = date.getMinutes();
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALRM] = 0;
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALARM] = 0;
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] = date.getHours();
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALRM] = 0;
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALARM] = 0;
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_WEEK_DAY] = date.getDay() + 1;
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH_DAY] = date.getDate();
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH] = date.getMonth() + 1;
@@ -39800,7 +39800,7 @@ class ChipSet extends Component {
 
         if (iRTC < ChipSet.CMOS.ADDR.STATUSA) {
             let f12HourValue = false;
-            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALRM) {
+            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALARM) {
                 if (!(this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.HOUR24)) {
                     if (b < 12) {
                         b = (!b? 12 : b);
@@ -39858,7 +39858,7 @@ class ChipSet extends Component {
                 b = (b >> 4) * 10 + (b & 0xf);
                 fBCD = true;
             }
-            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALRM) {
+            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALARM) {
                 if (fBCD) {
                     /*
                      * If the original BCD hour was 0x81-0x92, then the previous BINARY-to-BCD conversion
@@ -39999,9 +39999,9 @@ class ChipSet extends Component {
         /*
          * Step 2: Deal with Alarm Interrupts
          */
-        if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALRM]) {
-            if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALRM]) {
-                if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALRM]) {
+        if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALARM]) {
+            if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALARM]) {
+                if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALARM]) {
                     this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.AF;
                     if (this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.AIE) {
                         this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.IRQF;
@@ -45137,11 +45137,11 @@ ChipSet.CMOS = {
     ADDR: {                     // this.bCMOSAddr
         PORT:           0x70,
         RTC_SEC:        0x00,
-        RTC_SEC_ALRM:   0x01,
+        RTC_SEC_ALARM:  0x01,
         RTC_MIN:        0x02,
-        RTC_MIN_ALRM:   0x03,
+        RTC_MIN_ALARM:  0x03,
         RTC_HOUR:       0x04,
-        RTC_HOUR_ALRM:  0x05,
+        RTC_HOUR_ALARM: 0x05,
         RTC_WEEK_DAY:   0x06,
         RTC_MONTH_DAY:  0x07,
         RTC_MONTH:      0x08,

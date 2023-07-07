@@ -1940,6 +1940,12 @@ export default class CPUx86 extends CPULib {
         if (a[4] != null) {
             this.restoreTimers(a[4]);
         }
+        /*
+         * Making sure the ROM BIOS timer values are synced with the RTC (if any) is something the ChipSet component
+         * would take care of automatically, but alas, it is initialized long before RAM is restored, so we have to make
+         * this callback.
+         */
+        if (this.chipset) this.chipset.syncRTCTime();
         return fRestored;
     }
 
