@@ -27,14 +27,14 @@ let fDebug = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.20";
-let debugMode;
 
 let rootDir, pcjsDir;
-let messagesFilter, machines;
+let messagesFilter, machines, debugMode;
 let Component, Errors, Interrupts, Web, embedMachine;
 let cpu, dbg, fdc, hdc, kbd, serial, fnSendSerial;
-let prompt = ">";
-let command = "", commandPrev = "";
+let prompt = ">", command = "", commandPrev = "";
+let rowCursor = 0, colCursor = 0;
+
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
@@ -285,8 +285,19 @@ function initMachine(machine, sMachine)
 function intVideo(addr)
 {
     let AH = ((this.regEAX >> 8) & 0xff), AL = (this.regEAX & 0xff);
-    if (AH == 0x0e) {
+    let DH = ((this.regEDX >> 8) & 0xff), DL = (this.regEDX & 0xff);
+    switch (AH) {
+    case 0x02:
+        if (DL < colCursor || DH != rowCursor) {
+            printf("\n");
+        }
+        rowCursor = DH;
+        colCursor = DL;
+        break;
+    case 0x09:
+    case 0x0E:
         printf("%c", AL);
+        break;
     }
     return true;
 }
