@@ -27,7 +27,7 @@ let fDebug = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.20";
-let debugMode = DbgLib.EVENTS.EXIT;
+let debugMode;
 
 let rootDir, pcjsDir;
 let messagesFilter, machines;
@@ -38,7 +38,7 @@ let command = "", commandPrev = "";
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
-let driveManifest = [];
+let driveManifest = null;
 
 /**
  * setDebugMode(nEvent)
@@ -263,6 +263,11 @@ function initMachine(machine, sMachine)
                 }
             }
         }
+
+        /*
+         * Since there may be no debugger (and even if there is, machines that are auto-started won't
+         * trigger any debugger events), we simulate an appropriate event.
+         */
         setDebugMode(cpu && cpu.isRunning()? DbgLib.EVENTS.EXIT : DbgLib.EVENTS.READY);
     }
     catch(err) {
@@ -279,7 +284,6 @@ function initMachine(machine, sMachine)
  */
 function intVideo(addr)
 {
-    // setDebugMode(false);
     let AH = ((this.regEAX >> 8) & 0xff), AL = (this.regEAX & 0xff);
     if (AH == 0x0e) {
         printf("%c", AL);
@@ -539,7 +543,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  * NOTE: The list of allowed internal commands below is not intended to be exhaustive; it's just a start.
  *
  * @param {string} sCommand (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
- * @returns {Array|undefined} (drive manifest)
+ * @returns {Array|null} (drive manifest)
  */
 function buildDrive(sCommand)
 {
@@ -555,7 +559,7 @@ function buildDrive(sCommand)
     };
     const aInternalCommands = ["CD", "COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
 
-    let manifest;
+    let manifest = null;
     let aParts = sCommand.split(' ');
     let sProgram = aParts[0].toUpperCase();
     let iCommand = aInternalCommands.indexOf(sProgram);
@@ -1193,7 +1197,6 @@ function readInput(argv, stdin, stdout)
             }
             printf(result);
             if (cpu && cpu.isRunning()) {
-                // setDebugMode(false);
                 break;
             }
             printf("%s> ", prompt);
