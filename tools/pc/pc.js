@@ -536,11 +536,9 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  * Builds a bootable hard drive image containing all files in the current directory.
  *
  * At present, the image size is hard-coded to 10Mb (which corresponds to an XT type 3 or AT type 1 drive)
- * and the operating system files are hard-coded to MS-DOS 3.20.  I plan to add command-line options for
- * overriding those defaults, starting with a choice of operating system software (both system and version).
- *
- * Initially, the allowed systems will probably just be "msdos" and "pcdos", and the versions will be any
- * available in the PCjs diskette repo.
+ * and the operating system files default to MS-DOS 3.20.  Use --sys and --ver command-line options to
+ * override those defaults.  The allowed systems are currently "msdos" and "pcdos", and the allowed versions
+ * are any available in the PCjs diskette repo.
  *
  * Choice of hardware (ie, drives other than 10Mb) will be a bit trickier, because that also requires
  * tweaking the machine configuration file to specify a compatible drive type and customizing the master
@@ -601,7 +599,8 @@ function buildDrive(sCommand)
         sSystemDisk += systemType.toUpperCase() + systemVersion.replace('.', '') + "-DISK1.json";
         let diSystem = readDiskSync(sSystemDisk);
         if (!diSystem) {
-            printf("system diskette not found: %s\n", )
+            printf("system diskette not found: %s\n", sSystemDisk);
+            return null;
         }
         let dbMBR = readFileSync(path.join(pcjsDir, systemType.toUpperCase() + ".mbr"), null);
         if (diSystem && dbMBR) {

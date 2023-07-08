@@ -830,7 +830,7 @@ export function readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
         }
         else {
             /*
-             * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
+             * Passing null for the encoding parameter tells readFileSync() to return a DataBuffer.
              */
             db = readFileSync(diskFile, null);
             if (!db) {
