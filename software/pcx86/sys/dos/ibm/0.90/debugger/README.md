@@ -16,18 +16,13 @@ machines:
         name: None
 ---
 
-There was no PC DOS 0.90 product *per se*.  It has been dubbed version 0.90 simply because it predates
-[PC DOS 1.00](/software/pcx86/sys/dos/ibm/1.00) by several months.  More information about this preliminary version
-of PC DOS can be found at the [OS/2 Museum](http://www.os2museum.com/wp/pc-dos-1-0-but-not-quite/).
+There was no PC DOS 0.90 product *per se*.  It has been dubbed version 0.90 simply because it predates [PC DOS 1.00](/software/pcx86/sys/dos/ibm/1.00) by several months.  More information about this preliminary version of PC DOS can be found at the [OS/2 Museum](http://www.os2museum.com/wp/pc-dos-1-0-but-not-quite/).
 
-Below is an IBM PC (Model 5150) with an original IBM ROM BIOS and Monochrome (MDA) Display that will boot PC DOS 0.90.
-The machine is configured to run at 4.77Mhz, so the ROM BIOS memory test has been disabled, since a PC with 256Kb
-was rather slow to boot.  A similar configuration with [Color Display](/software/pcx86/sys/dos/ibm/0.90/) is also available.
+Below is an IBM PC (Model 5150) with an original IBM ROM BIOS and Monochrome (MDA) Display that will boot PC DOS 0.90. The machine is configured to run at 4.77Mhz, so the ROM BIOS memory test has been disabled, since a PC with 256Kb was rather slow to boot.  A similar configuration with [Color Display](/software/pcx86/sys/dos/ibm/0.90/) is also available.
 
 {% include machine.html id="ibm5150-pcdos090" %}
 
-PC DOS 0.90 files were distributed on one single-sided (160Kb) diskette.  A directory listing of the disk is
-provided below.
+PC DOS 0.90 files were distributed on one single-sided (160Kb) diskette.  A directory listing of the disk is provided below.
 
 ### Directory of PC DOS 0.90
 
@@ -107,12 +102,9 @@ The boot sector of the original PC DOS 0.90 disk image contained the following b
 	000001e0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 	000001f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 
-Note that if you download the disk image from the PCjs website (using the "Save" button on a PCjs machine),
-the following boot sector bytes will differ:
+Note that if you download the disk image from the PCjs website (using the "Save" button on a PCjs machine), the following boot sector bytes will differ:
 
 	00000000  eb 2f 14 00 00 00 60 00  20 37 2d 00 02 01 01 00  |./....`. 7-.....|
 	00000010  02 40 00 40 01 fe 01 00  08 00 01 00 00 00 00 00  |.@.@............|
 
-This is simply a side-effect of the [DiskDump]({{ site.github.pages }}/tools/old/diskdump/) utility that's used to prepare disk images for the
-PCjs website.  It automatically adds a BPB to the boot sector if the BPB is missing or incorrect, making it easier for
-modern operating systems to mount the disk image.
+This is simply a side-effect of the [DiskImage](/tools/diskimage/) utility that's used to prepare disk images for the PCjs website.  It automatically adds a BPB to the boot sector if the BPB is missing or incorrect, making it easier for modern operating systems to mount the disk image.

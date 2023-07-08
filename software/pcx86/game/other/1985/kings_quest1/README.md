@@ -13,42 +13,32 @@ machines:
         name: None
 ---
 
-According to [Nerdly Pleasures](http://nerdlypleasures.blogspot.com/2017/04/the-evolution-of-kings-quest.html), the 1985 releases of
-King's Quest were for the Tandy 1000 and IBM PCjr.  These releases were also known as "PC Booter" editions, because you use Disk 1 as a
-boot disk to start the machine, which in turn starts the game.
+According to [Nerdly Pleasures](http://nerdlypleasures.blogspot.com/2017/04/the-evolution-of-kings-quest.html), the 1985 releases of King's Quest were for the Tandy 1000 and IBM PCjr.  These releases were also known as "PC Booter" editions, because you use Disk 1 as a boot disk to start the machine, which in turn starts the game.
 
-The PCjs disk images preserve the [Copy-Protection](#copy-protection) that the game used, and PCx86 successfully passes the game's
-copy-protection test.
+The PCjs disk images preserve the [Copy Protection](#copy-protection) that the game used, and PCx86 successfully passes the game's copy protection test.
 
-However, since PCx86 does not yet support the graphics hardware in those machines, you cannot currently play those releases here.  Once that
-support is added, we'll remove the PCjs Debugger from this page and update this notice.
+However, since PCx86 does not yet support the graphics hardware in those machines, you cannot currently play those releases here.  Once that support is added, we'll remove the PCjs Debugger from this page and update this notice.
 
 {% include machine.html id="ibm5160-cga" %}
 
-### Copy-Protection
+### Copy Protection
 
-This version of King's Quest (from [archive.org](https://archive.org/details/kingsquestipcbooter)) seemed like a good copy-protection candidate
-to examine, because it came with a complete set of Kryoflux files (along with an IMG file) for each of the game's two 360K diskettes.
+This version of King's Quest (from [archive.org](https://archive.org/details/kingsquestipcbooter)) seemed like a good copy protection candidate to examine, because it came with a complete set of Kryoflux files (along with an IMG file) for each of the game's two 360K diskettes.
 
-The Kryoflux RAW files included 84 tracks of data for each diskette, even though these were 40-track diskettes, so I moved all the odd-numbered
-tracks (and tracks >= 80) into a tmp directory, loaded the 40 remaining even-numbered tracks in the HxC Floppy Emulator, saved the data as a new
-IMG file, and then compared the resulting IMG file to the one included with the download.
+The Kryoflux RAW files included 84 tracks of data for each diskette, even though these were 40-track diskettes, so I moved all the odd-numbered tracks (and tracks >= 80) into a tmp directory, loaded the 40 remaining even-numbered tracks in the HxC Floppy Emulator, saved the data as a new IMG file, and then compared the resulting IMG file to the one included with the download.
 
-They were identical, up until offset 0x55800 (350208).  If we divide that by 4608 (the number of bytes in a normal 9-sector track),
-we get 76, which corresponds to track 38 on side 0.  And when I examined the tracks visually in the HxC Floppy Emulator, using "Disk view mode",
-I could see that track 38 contained 10 256-byte sectors; in addition, the first sector ID was 1, whereas all the other 9 sector IDs were 0.
+They were identical, up until offset 0x55800 (350208).  If we divide that by 4608 (the number of bytes in a normal 9-sector track), we get 76, which corresponds to track 38 on side 0.  And when I examined the tracks visually in the HxC Floppy Emulator, using "Disk view mode", I could see that track 38 contained 10 256-byte sectors; in addition, the first sector ID was 1, whereas all the other 9 sector IDs were 0.
 
 ![King's Quest 1985 Kryoflux Screenshot]({{ site.software.gamedisks.server }}/pcx86/game/other/1985/kings_quest1/KINGS_QUEST1-1985-09-04-DISK1-Kryoflux.jpg)
 
-Next, just as I did for [Microsoft Adventure](/blog/2019/06/13/), I wanted to create a PSI ("PCE Sector Image") representation of the disk,
-since I already have some tools that understand PSI files.
+Next, just as I did for [Microsoft Adventure](/blog/2019/06/13/), I wanted to create a PSI ("PCE Sector Image") representation of the disk, since I already have some tools that understand PSI files.
 
 To quickly recap, here are the basic steps, using tools from [PCE](http://www.hampa.ch/pce/):
 
  1. From the Kryoflux RAW files, create a PFI ("PCE Flux Image") file
  2. Next, create a PRI ("PCE Raw Image") file, with the flux reversal pulses converted to bits
  3. From the PRI file, create a PSI ("PCE Sector Image") file
- 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools) utility
+ 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs [DiskImage](/tools/diskimage/) utility
 
 which translates to these commands:
 
@@ -58,15 +48,13 @@ which translates to these commands:
     pri disk1.pri -p decode mfm disk1.psi
     diskimage.js disk1.psi disk1.json
 
-NOTE: Prior to running the above PCE utilities, I put all the odd-numbered Kryoflux RAW track files back with the even numbered ones,
-to avoid any confusion.
+NOTE: Prior to running the above PCE utilities, I put all the odd-numbered Kryoflux RAW track files back with the even numbered ones, to avoid any confusion.
 
 Now, the first step (creating a PCE Flux Image file) is optional, because you can actually create a PRI file directly from the RAW files:
 
     pfi KINGS_QUEST1-DISK1.00.0.raw -p double-step -r 600000 -p decode pri disk1.pri
 
-but it's nice to have the PCE flux representation of the diskette in a single PFI file as well, because then you can use the PFI utility
-to display image information (`pfi disk1.pfi -p info`), track information (`pfi disk1.pfi -l`), and more (see `pfi --help`).
+but it's nice to have the PCE flux representation of the diskette in a single PFI file as well, because then you can use the PFI utility to display image information (`pfi disk1.pfi -p info`), track information (`pfi disk1.pfi -l`), and more (see `pfi --help`).
 
 Similarly, the PSI utility has some handy display options (eg, `psi disk1.psi -L`).
 
@@ -107,18 +95,11 @@ That last read occurs when the game executes this code:
     &0060:4D3F B402             MOV      AH,02
     &0060:4D41 CD13             INT      13
 
-which requests sector ID 0 from track 38.  But, as noted above, there *nine* sectors on that track with a sector ID of 0.
-And originally, PCx86's simplistic seek() logic would always return the *first* sector with a matching ID on the desired track.
-However, as the [Nerdly Pleasures](http://nerdlypleasures.blogspot.com/2015/11/ibm-pc-floppy-disks-deeper-look-at-disk.html)
-blog pointed out, this copy-protection scheme relies on the controller returning whichever sector happened to be next, and
-depending on timing, that will *not* always be the first such sector on the track.
+which requests sector ID 0 from track 38.  But, as noted above, there *nine* sectors on that track with a sector ID of 0.  And originally, PCx86's simplistic seek() logic would always return the *first* sector with a matching ID on the desired track. However, as the [Nerdly Pleasures](http://nerdlypleasures.blogspot.com/2015/11/ibm-pc-floppy-disks-deeper-look-at-disk.html) blog pointed out, this copy protection scheme relies on the controller returning whichever sector happened to be next, and depending on timing, that will *not* always be the first such sector on the track.
 
-I resolved this problem by having the FDC drive object maintain a cached reference to the last sector read (or written) on that drive,
-which is then passed to the Disk component's seek() function.  If the previous sector matches the next *candidate* sector, then
-the rest of the track is checked for any *other* candidate sectors with the same sector ID, and if such a sector is found, that sector
-is selected instead.
+I resolved this problem by having the FDC drive object maintain a cached reference to the last sector read (or written) on that drive, which is then passed to the Disk component's seek() function.  If the previous sector matches the next *candidate* sector, then the rest of the track is checked for any *other* candidate sectors with the same sector ID, and if such a sector is found, that sector is selected instead.
 
-That appears to have resolved the copy-protection issue.  The next hurdle is now adding support for the graphics mode the game uses.
+That appears to have resolved the copy protection issue.  The next hurdle is now adding support for the graphics mode the game uses.
 
 ### Online References
 

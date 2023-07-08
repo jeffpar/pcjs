@@ -24,6 +24,7 @@ import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync,
 import pcjslib    from "../modules/pcjslib.js";
 
 let fDebug = false;
+let fSave = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.20";
@@ -852,7 +853,9 @@ function checkDrive(oldManifest)
                     if (fDebug) printf("removing %s\n", dir);
                     fs.rmdirSync(dir.slice(1));
                 }
-                writeDiskSync(path.join(pcjsDir, "DOS.img"), di, false, 0, true, true);
+                if (fSave) {
+                    writeDiskSync(path.join(pcjsDir, "DOS.img"), di, false, 0, true, true);
+                }
                 return true;
             }
         }
@@ -1242,7 +1245,9 @@ function main(argc, argv)
             "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
-            "--debug (-d)\t":           "enable DEBUG messages"
+            "--help (-?)\t":            "display command-line usage",
+            "--debug (-d)\t":           "enable DEBUG messages",
+            "--save (-s)\t":            "save temporary hard disk image on exit"
         };
         let optionGroups = {
             "main options:":            optionsMain,
@@ -1259,6 +1264,7 @@ function main(argc, argv)
     }
 
     fDebug = argv['debug'] || fDebug;
+    fSave = argv['save'] || fSave;
     machineType = argv['type'] || machineType;
     systemType = (typeof argv['sys'] == "string" && argv['sys'] || systemType).toLowerCase();
     systemVersion = (typeof argv['ver'] == "string" && argv['ver'] || systemVersion);
@@ -1284,5 +1290,6 @@ function main(argc, argv)
 
 main(...pcjslib.getArgs({
     '?': "help",
-    'd': "debug"
+    'd': "debug",
+    's': "save"
 }));

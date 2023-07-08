@@ -71600,6 +71600,11 @@ class DbgLib extends Component {
              */
             this.aVariables = {};
 
+            /*
+             * Array of functions to call when notifyEvent() is called.  Functions are added with onEvent().
+             */
+            this.afnNotify = [];
+
         }   // endif DEBUGGER
     }
 
@@ -72734,6 +72739,28 @@ class DbgLib extends Component {
         }
         return (nBits < 0? Str.stripLeadingZeros(s) : s);
     }
+
+    /**
+     * onEvent(fnNotify)
+     *
+     * @param {function()} fnNotify
+     */
+    onEvent(fnNotify)
+    {
+        this.afnNotify.push(fnNotify);
+    }
+
+    /**
+     * notifyEvent(nEvent)
+     *
+     * @param {number} nEvent (see DbgLib.EVENTS)
+     */
+    notifyEvent(nEvent)
+    {
+        for (let i = 0; i < this.afnNotify.length; i++) {
+            this.afnNotify[i](nEvent);
+        }
+    }
 }
 
 if (DEBUGGER) {
@@ -72810,6 +72837,11 @@ if (DEBUGGER) {
 
 }   // endif DEBUGGER
 
+DbgLib.EVENTS = {
+    EXIT:       0,
+    ENTER:      1,
+    READY:      2,
+};
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
@@ -75740,6 +75772,7 @@ class DebuggerX86 extends DbgLib {
         this.flags.running = true;
         this.msStart = ms;
         this.nCyclesStart = nCycles;
+        this.notifyEvent(DbgLib.EVENTS.EXIT);
     }
 
     /**
@@ -75756,6 +75789,7 @@ class DebuggerX86 extends DbgLib {
         if (this.flags.running) {
             this.flags.running = false;
             this.nCycles = nCycles - this.nCyclesStart;
+            this.notifyEvent(DbgLib.EVENTS.ENTER);
             if (!this.nStep) {
                 let sStopped = "stopped";
                 if (this.nCycles) {
@@ -75812,6 +75846,7 @@ class DebuggerX86 extends DbgLib {
             this.updateStatus(true);
             this.updateFocus();
             this.clearTempBreakpoint(this.cpu.regLIP);
+            this.notifyEvent(DbgLib.EVENTS.READY);
         }
     }
 
