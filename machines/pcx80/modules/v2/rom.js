@@ -363,5 +363,3 @@ export default class ROMx80 extends Component {
  * Initialize all the ROMx80 modules on the page.
  */
 Web.onInit(ROMx80.init);
-
-if (typeof module !== "undefined") module.exports = ROMx80;

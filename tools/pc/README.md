@@ -27,7 +27,7 @@ Loading [ibm5150.json](ibm5150.json) should produce the following output:
     BusX86: 32Kb ROM at 0xF6000
     BusX86: 8Kb ROM at 0xFE000
     Machine loaded: ibm5150
-    Press ctrl-a to enter debugger, ctrl-c to terminate debugger
+    Press CTRL-D to enter debugger, CTRL-C to terminate debugger
     FDC: Mounted "PC DOS 2.00 (Disk 1)" (format PC180K) in drive A
     BusX86: 576Kb RAM at 0x0
     BusX86: 4Kb VIDEO at 0xB0000
@@ -42,7 +42,7 @@ After the machine finishes booting (about 10 seconds), you should see the follow
     Current date is Tue  1-01-1980
     Enter new date: 
 
-You can begin interacting with the machine OR you can press CTRL-A to enter the PCjs debugger.  For example, if you'd like to dump the machine's video buffer, press CTRL-A and type `D B000:0`:
+You can begin interacting with the machine OR you can press CTRL-D to enter the PCjs debugger.  For example, if you'd like to dump the machine's video buffer, press CTRL-D and type `D B000:0`:
 
     Enter new date: stopped (326282712 cycles, 68534 ms, 4760888 hz)
     AX=0091 BX=0165 CX=0586 DX=007F SP=0BAA BP=0535 SI=0140 DI=01AA 
@@ -106,7 +106,7 @@ Normally, when you run `pc.js`, a machine is started, either explicitly via `--l
 
     >> load compaq386
 
-Once a machine is running, you can access the `>>` prompt by typing **CTRL-A**.  That will stop the machine until you enter the "g" command.  Any command not recognized by `pc.js` is passed to the machine's built-in debugger.  Type "?" to get a list of debugger commands.
+Once a machine is running, you can access the `>>` prompt by typing **CTRL-D**.  That will stop the machine until you enter the "g" command.  Any command not recognized by `pc.js` is passed to the machine's built-in debugger.  Type "?" to get a list of debugger commands.
 
 The "load" command is also used to load PCjs diskettes images into the machine's floppy drives, by including a drive letter, as in:
 

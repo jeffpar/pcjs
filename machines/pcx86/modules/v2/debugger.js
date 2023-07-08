@@ -2963,6 +2963,7 @@ export default class DebuggerX86 extends DbgLib {
         this.flags.running = true;
         this.msStart = ms;
         this.nCyclesStart = nCycles;
+        this.notifyEvent(DbgLib.EVENTS.EXIT);
     }
 
     /**
@@ -2979,6 +2980,7 @@ export default class DebuggerX86 extends DbgLib {
         if (this.flags.running) {
             this.flags.running = false;
             this.nCycles = nCycles - this.nCyclesStart;
+            this.notifyEvent(DbgLib.EVENTS.ENTER);
             if (!this.nStep) {
                 let sStopped = "stopped";
                 if (this.nCycles) {
@@ -3035,6 +3037,7 @@ export default class DebuggerX86 extends DbgLib {
             this.updateStatus(true);
             this.updateFocus();
             this.clearTempBreakpoint(this.cpu.regLIP);
+            this.notifyEvent(DbgLib.EVENTS.READY);
         }
     }
 

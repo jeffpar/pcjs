@@ -12,6 +12,7 @@ import fs         from "fs";
 import glob       from "glob";
 import path       from "path";
 import xml2js     from "xml2js";
+import DbgLib     from "../../machines/modules/v2/debugger.js";
 import Messages   from "../../machines/modules/v2/messages.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
@@ -26,10 +27,11 @@ let fDebug = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.20";
+let debugMode = DbgLib.EVENTS.EXIT;
 
 let rootDir, pcjsDir;
-let debugMode, messagesFilter, machines;
-let Component, Errors, Interrupts, weblib, embedMachine;
+let messagesFilter, machines;
+let Component, Errors, Interrupts, Web, embedMachine;
 let cpu, dbg, fdc, hdc, kbd, serial, fnSendSerial;
 let prompt = ">";
 let command = "", commandPrev = "";
@@ -38,17 +40,19 @@ let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
 let driveManifest = [];
 
-function setDebugMode(f)
+/**
+ * setDebugMode(nEvent)
+ *
+ * @param {number} nEvent (eg, DbgLib.EVENTS.ENTER, DbgLib.EVENTS.READY, DbgLib.EVENTS.EXIT)
+ */
+function setDebugMode(nEvent)
 {
     let prevMode = debugMode;
-    if (!f && debugMode != f) {
-        printf("Press ctrl-a to enter debugger, ctrl-c to terminate process\n");
+    if (!nEvent && debugMode != nEvent) {
+        printf("Press CTRL-D to enter debugger, CTRL-C to terminate process\n");
     }
-    debugMode = f;
-    if (f && prevMode !== undefined && cpu) {
-        cpu.stopCPU();
-    }
-    if (debugMode && !prevMode) {
+    debugMode = nEvent;
+    if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
         command = "";
         printf("%s> ", prompt);
     }
@@ -158,9 +162,16 @@ async function loadModules(factory, modules, done)
             continue;
         }
         let module = await import(modulePath);
+        /*
+         * Below are the set of classes that we need access to (eg, for static methods, constants, etc).
+         *
+         * In the case of the debugger, we just want the parent class (which is loaded first), not the subclass.
+         *
+         * TODO: Internally, the parent debugger class is named DbgLib, so perhaps we should rename the file to match?
+         */
         switch(name) {
         case "weblib":
-            weblib = module.default;
+            Web = module.default;
             break;
         case "component":
             Component = module.default;
@@ -204,7 +215,7 @@ function initMachine(machine, sMachine)
          * Simulate the page embedding and page initialization process now.
          */
         embedMachine(idMachine, null, null, sMachine);
-        weblib.doPageInit();
+        Web.doPageInit();
 
         /*
          * Get the CPU component so we can keep tabs on its running state and also hook
@@ -228,9 +239,11 @@ function initMachine(machine, sMachine)
         hdc = Component.getComponentByType("HDC");
 
         /*
-         * Get the Debugger component so we can send the debugger commands.
+         * Get the Debugger component so we can receive debugger events and send
+         * debugger commands.
          */
         dbg = Component.getComponentByType("Debugger");
+        if (dbg) dbg.onEvent(setDebugMode);
 
         /*
          * Get the Keyboard component to get access to injectKeys(), which simplifies the
@@ -250,7 +263,7 @@ function initMachine(machine, sMachine)
                 }
             }
         }
-        setDebugMode(!cpu || !cpu.isRunning());
+        setDebugMode(cpu && cpu.isRunning()? DbgLib.EVENTS.EXIT : DbgLib.EVENTS.READY);
     }
     catch(err) {
         printf("machine initialization error: %s\n", err.message);
@@ -266,11 +279,7 @@ function initMachine(machine, sMachine)
  */
 function intVideo(addr)
 {
-    /*
-     * If this function is called, then the CPU is presumably running, so let's make sure that
-     * has been reflected in the debugMode setting.
-     */
-    setDebugMode(false);
+    // setDebugMode(false);
     let AH = ((this.regEAX >> 8) & 0xff), AL = (this.regEAX & 0xff);
     if (AH == 0x0e) {
         printf("%c", AL);
@@ -289,7 +298,7 @@ function intReboot(addr)
 {
     if (this.getIP() == 0x102) {
         if (fDebug) {
-            setDebugMode(true);
+            if (cpu) cpu.stopCPU();
             return false;
         }
         let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
@@ -311,7 +320,7 @@ function intLoad(addr)
 {
     if (this.getIP() == 0x102) {
         if (fDebug) {
-            setDebugMode(true);
+            if (cpu) cpu.stopCPU();
             return false;
         }
         let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
@@ -999,7 +1008,7 @@ function loadDiskette(sDrive, aTokens)
                                 let hashIndex = {};
                                 for (let i = 0; i < a.length; i++) {
                                     let item = a[i];
-                                    let diskItem = {'issk': item['disk'], 'file': name, 'size': item['size'], 'date': item['date']};
+                                    let diskItem = {'disk': item['disk'], 'file': name, 'size': item['size'], 'date': item['date']};
                                     let prevItem = hashIndex[item['hash']];
                                     if (prevItem) {
                                         if (!prevItem['others']) {
@@ -1130,7 +1139,7 @@ function readInput(argv, stdin, stdout)
         }
     }
 
-    if (!loading) setDebugMode(true);
+    if (!loading) setDebugMode(DbgLib.EVENTS.READY);
 
     stdin.resume();
     stdin.setEncoding("utf8");
@@ -1138,8 +1147,9 @@ function readInput(argv, stdin, stdout)
 
     stdin.on("data", function(data) {
         let code = data.charCodeAt(0);
-        if (code == 0x01 && !debugMode) {           // check for CTRL-A when NOT in debug mode
-            setDebugMode(true);
+        if (code == 0x04 && !debugMode) {           // check for CTRL-D when NOT in debug mode
+            if (cpu) cpu.stopCPU();
+            setDebugMode(DbgLib.EVENTS.READY);
             return;
         }
         if (code == 0x03 && debugMode) {            // check for CTRL-C when in debug mode
@@ -1183,7 +1193,7 @@ function readInput(argv, stdin, stdout)
             }
             printf(result);
             if (cpu && cpu.isRunning()) {
-                setDebugMode(false);
+                // setDebugMode(false);
                 break;
             }
             printf("%s> ", prompt);
@@ -1250,7 +1260,7 @@ function main(argc, argv)
 
     if (!argv[1] || argv['debug']) {
         let options = arg0.slice(1).join(' ');
-        printf("pc.js v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s", options) : ""));
+        printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
     }
 
     machines = JSON.parse(readFileSync("/machines/machines.json"));

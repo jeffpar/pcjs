@@ -442,7 +442,6 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
