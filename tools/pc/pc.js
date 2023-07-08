@@ -297,7 +297,7 @@ function intVideo(addr)
         break;
     case 0x09:
     case 0x0E:
-        printf("%c", AL);
+        if (AL != 0x0D) printf("%c", AL);
         break;
     }
     return true;
