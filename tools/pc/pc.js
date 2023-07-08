@@ -34,7 +34,7 @@ let messagesFilter, machines, debugMode;
 let Component, Errors, Interrupts, Web, embedMachine;
 let cpu, dbg, fdc, hdc, kbd, serial, fnSendSerial;
 let prompt = ">", command = "", commandPrev = "";
-let rowCursor = 0, colCursor = 0;
+let rowCursor = 0, colCursor = 0, nestedVideo = 0;
 
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
@@ -289,15 +289,21 @@ function intVideo(addr)
     let DH = ((this.regEDX >> 8) & 0xff), DL = (this.regEDX & 0xff);
     switch (AH) {
     case 0x02:
-        // if (DL < colCursor || DH != rowCursor) {
-        //     printf("\n");
-        // }
+        if (!nestedVideo) {
+            if (DL < colCursor || DH != rowCursor) {
+                printf("\n");
+            }
+        }
         rowCursor = DH;
         colCursor = DL;
         break;
     case 0x09:
     case 0x0E:
         printf("%c", AL);
+        nestedVideo++;
+        this.addIntReturn(addr, function onVideoReturn(nLevel) {
+            nestedVideo--;
+        });
         break;
     }
     return true;
