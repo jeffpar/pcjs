@@ -289,15 +289,15 @@ function intVideo(addr)
     let DH = ((this.regEDX >> 8) & 0xff), DL = (this.regEDX & 0xff);
     switch (AH) {
     case 0x02:
-        if (DL < colCursor || DH != rowCursor) {
-            printf("\n");
-        }
+        // if (DL < colCursor || DH != rowCursor) {
+        //     printf("\n");
+        // }
         rowCursor = DH;
         colCursor = DL;
         break;
     case 0x09:
     case 0x0E:
-        if (AL != 0x0D) printf("%c", AL);
+        printf("%c", AL);
         break;
     }
     return true;
@@ -1069,12 +1069,13 @@ function loadDiskette(sDrive, aTokens)
 }
 
 /**
- * doCommand(s)
+ * doCommand(s, argv)
  *
  * @param {string} s
+ * @param {Array} argv
  * @returns {string|null} (result of command, or null to quit)
  */
-function doCommand(s)
+function doCommand(s, argv)
 {
     let result = "";
     let aTokens = s.split(' ');
@@ -1086,6 +1087,12 @@ function doCommand(s)
                     "  load [drive] [search terms]\n" +
                     "  quit\n" +
                     "type \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
+        break;
+    case "argv":
+        printf("%2j\n", argv);
+        break;
+    case "cwd":
+        printf("%s\n", process.cwd());
         break;
     case "load":
         if (aTokens[1]) {
@@ -1203,7 +1210,7 @@ function readInput(argv, stdin, stdout)
             if (i < 0) break;
             let s = command.slice(0, i);
             printf("\n");
-            let result = doCommand(s);
+            let result = doCommand(s, argv);
             if (result == null) {
                 exit();
                 return;

@@ -17,6 +17,10 @@ or, if your operating system doesn't automatically associate `.js` files with [N
 
 	node pc.js --load=ibm5150
 
+NOTE: On Windows, the first time you attempt to run a `.js` file from the command-line, Windows may prompt you to associate a program with it (eg, "C:\Program Files\nodejs\node.exe"), and while this will eliminate the need to include `node`, the association doesn't automatically pass along any command-line arguments.  You may be able to fix this by running `REGEDIT` and appending ` %*` to the default value for "Computer\HKEY_CLASSES_ROOT\Applications\node.exe\shell\open\command"; ie:
+
+    "C:\Program Files\nodejs\node.exe" "%1" %*
+
 If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  As a convenience, you can also omit `--load=` option if the JSON file is in your current directory.
 
 Loading [ibm5150.json](ibm5150.json) should produce the following output:

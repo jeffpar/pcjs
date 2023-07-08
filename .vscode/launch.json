@@ -461,7 +461,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=ibm5150"
+        "ibm5150"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
