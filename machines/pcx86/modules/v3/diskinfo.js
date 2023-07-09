@@ -3620,27 +3620,33 @@ export default class DiskInfo {
     }
 
     /**
-     * updateBootSector(dbBoot, iVolume, fReplaceBPB)
+     * updateBootSector(dbBoot, iVolume, verBPB)
      *
-     * We use the write() interface to modify the bytes of the boot sector, with fForce
-     * set, which allows writes even when the disk wasn't opened for writing.
+     * We use the write() interface to modify the bytes of the boot sector, with fForce set,
+     * which allows writes even when the disk wasn't opened for writing.
+     *
+     * The verBPB values are as follows:
+     *
+     *      0: The BPB portion of the target boot sector is unchanged
+     *      1: The BPB portion of the target boot sector is replaced with dbBoot
+     *      2: Only DOS 2.x specific bytes in the boot sector are replaced; the rest is unchanged
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
      * @param {number} [iVolume] (default is first volume; -1 for MBR, if any)
-     * @param {boolean} [fReplaceBPB] (default is false, so we preserve the existing BPB)
+     * @param {number} [verBPB] (default is 0; see above)
      * @returns {boolean} (true if successful, false otherwise)
      */
-    updateBootSector(db, iVolume = 0, fReplaceBPB = false)
+    updateBootSector(db, iVolume = 0, verBPB = 0)
     {
         let fSuccess = false;
         if (db && this.buildTables() >= 0) {
             let lbaBoot = -1;
-            let fCheckBPB = false;
+            let hasBPB = false;
             if (iVolume < 0) {
                 lbaBoot = 0;
             } else if (iVolume >= 0 && iVolume < this.volTable.length) {
-                fCheckBPB = true;
+                hasBPB = true;
                 lbaBoot = this.volTable[iVolume].lbaStart;
             }
             if (lbaBoot >= 0) {
@@ -3653,7 +3659,7 @@ export default class DiskInfo {
                      * need to check for a disk using our extended BPB format, and make sure those
                      * fields are in sync with the existing BPB fields.
                      */
-                    if (fCheckBPB) {
+                    if (hasBPB) {
                         let bOpcode = db.readUInt8(0);
                         if (bOpcode == CPUx86.OPCODE.CLD) {
                             let nSecBytes = this.getSectorData(sectorBoot, DiskInfo.BPB.SECBYTES, 2);
@@ -3673,8 +3679,17 @@ export default class DiskInfo {
                         }
                     }
                     for (let ib = 0; ib < cb; ib++) {
-                        if (fCheckBPB && !fReplaceBPB) {
-                            if (ib >= DiskInfo.BPB.BEGIN && ib < DiskInfo.BPB.END) continue;
+                        if (hasBPB) {
+                            switch(verBPB) {
+                            case 0:
+                                if (ib >= DiskInfo.BPB.BEGIN && ib < DiskInfo.BPB.END) continue;
+                                break;
+                            case 1:
+                                break;
+                            case 2:
+                                if (ib >= DiskInfo.BPB.BEGIN && ib < DiskInfo.BPB.BOOTDRIVE) continue;
+                                break;
+                            }
                         }
                         let b = db.readUInt8(ib);
                         if (!this.write(sectorBoot, ib, b, true)) {
@@ -3866,6 +3881,8 @@ DiskInfo.BPB = {
     TRACKSECS:      0x018,      // 2 bytes: sectors per track (eg, 8)
     DRIVEHEADS:     0x01A,      // 2 bytes: number of heads (eg, 1)
     HIDDENSECS:     0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (always 0 for non-partitioned media)
+    BOOTDRIVE:      0x01E,      // 1 byte (DOS 2.x): the BIOS boot drive
+    BOOTHEAD:       0x01F,      // 1 byte (DOS 2.x): the BIOS boot head # (0-based)
     LARGESECS:      0x020,      // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
     END:            0x024,      // end of standard BPB
     /*
