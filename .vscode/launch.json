@@ -581,6 +581,30 @@
       }
     },
     {
+      "name": "pc.js --sys=pcdos --ver=2.00 --debug dir",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--sys=pcdos",
+        "--ver=2.00",
+        "--debug",
+        "--save",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200-C400",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
       "name": "101 Monochrome Mazes (1983)",
       "type": "chrome",
       "request": "launch",

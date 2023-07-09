@@ -319,10 +319,6 @@ function intVideo(addr)
 function intReboot(addr)
 {
     if (this.getIP() == 0x102) {
-        if (fDebug) {
-            if (cpu) cpu.stopCPU();
-            return false;
-        }
         let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
         if (sig == 0x534A4350) {        // "PCJS"
             exit();                     // INT 19h appears to have come from "RETURN.COM"
@@ -341,10 +337,6 @@ function intReboot(addr)
 function intLoad(addr)
 {
     if (this.getIP() == 0x102) {
-        if (fDebug) {
-            if (cpu) cpu.stopCPU();
-            return false;
-        }
         let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
         if (sig == 0x534A4350) {        // "PCJS"
             let cpu = this;             // INT 20h appears to have come from "LOAD.COM"
@@ -467,6 +459,9 @@ function readJSON(sFile, done)
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
         let machine = eval('(' + sMachine + ')');
+        if (fDebug) {
+            machine['cpu']['autoStart'] = false;        // TODO: Figure out why this doesn't work
+        }
         done(machine, sMachine);
     }
     catch(err) {
@@ -608,7 +603,7 @@ function buildDrive(sCommand)
             printf("system diskette not found: %s\n", sSystemDisk);
             return null;
         }
-        let dbMBR = readFileSync(path.join(pcjsDir, systemType.toUpperCase() + ".mbr"), null);
+        let dbMBR = readFileSync(path.join(pcjsDir, "MSDOS" /*systemType.toUpperCase() */ + ".mbr"), null);
         if (diSystem && dbMBR) {
             let aFileDescs = [];
             for (let name of system.files) {
@@ -658,22 +653,37 @@ function buildDrive(sCommand)
              * Load the boot sector from the system diskette we read above, and use it to update the boot
              * sector on the hard drive image.
              *
-             * NOTE: For reasons unknown, the MS-DOS 3.20 boot sector did not rely on the DL register
-             * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk); instead, whenever
-             * the operating system wrote the boot sector to the media, it would insert the media's drive
-             * number at offset 0x1fd (before the 0x55,0xAA signature).  So that's we do, too.
+             * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register
+             * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk) even though the DOS
+             * MBR *does* appear to preserve and pass DL on to the boot sector.
              *
-             * Wikipedia claims this was done "only in DOS 3.2 to 3.31 boot sectors" and that in "OS/2 1.0
-             * and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".  Something
-             * to study later.
+             * For example, when MS-DOS 3.20 writes the boot sector to the media, it inserts the media's
+             * drive number at offset 0x1fd (before the 0x55,0xAA signature).  So that's we do, too.
+             *
+             * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
+             * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
+             *
+             * TODO: Obviously this will have to be fully fleshed out for ALL supported versions of DOS.
              */
+            let verBPB = 0;
             let dbBoot = getDiskSector(diSystem, 0);
-            dbBoot.writeUInt8(0x80, 0x1fd);
+            let version = +systemVersion;
+            if (systemType == "msdos") {
+                if (version >= 3.2 && version <= 3.31) {
+                    dbBoot.writeUInt8(0x80, 0x1fd);
+                }
+            } else if (systemType == "pcdos") {
+                if (version|0 == 2) {
+                    verBPB = 2;
+                    dbBoot.writeUInt8(0x80, DiskInfo.BPB.BOOTDRIVE);
+                    dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);
+                }
+            }
             let done = function(di) {
                 if (di) {
                     manifest = di.getFileManifest(null, true);
-                    di.updateBootSector(dbBoot);            // a volume of 0 is the default
                     di.updateBootSector(dbMBR, -1);         // a volume of -1 indicates the master boot record
+                    di.updateBootSector(dbBoot, 0, verBPB);
                     writeDiskSync(path.join(pcjsDir, "DOS.json"), di, false, 0, true, true);
                 }
             }
@@ -1259,7 +1269,7 @@ function main(argc, argv)
         let optionsOther = {
             "--help (-?)\t":            "display command-line usage",
             "--debug (-d)\t":           "enable DEBUG messages",
-            "--save (-s)\t":            "save temporary hard disk image on exit"
+            "--save (-s)\t":            "save modified hard disk image on exit"
         };
         let optionGroups = {
             "main options:":            optionsMain,

@@ -17,29 +17,18 @@ or, if your operating system doesn't automatically associate `.js` files with [N
 
 	node pc.js --load=ibm5150
 
-NOTE: On Windows, the first time you attempt to run a `.js` file from the command-line, Windows may prompt you to associate a program with it (eg, "C:\Program Files\nodejs\node.exe"), and while this will eliminate the need to include `node`, the association doesn't automatically pass along any command-line arguments.  You may be able to fix this by running `REGEDIT` and appending ` %*` to the default value for "Computer\HKEY_CLASSES_ROOT\Applications\node.exe\shell\open\command"; ie:
+NOTE: On Windows, the first time you attempt to run a `.js` file from the command-line, Windows may prompt you to associate a program with it (eg, "C:\Program Files\nodejs\node.exe"), and while this will eliminate the need to type `node`, the association doesn't automatically pass along any command-line arguments.  You may be able to fix this by running `REGEDIT` and appending ` %*` to the default value for "HKEY_CLASSES_ROOT\Applications\node.exe\shell\open\command":
 
     "C:\Program Files\nodejs\node.exe" "%1" %*
 
 If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  As a convenience, you can also omit `--load=` option if the JSON file is in your current directory.
 
-Loading [ibm5150.json](ibm5150.json) should produce the following output:
+Loading [ibm5150.json](ibm5150.json) with the should produce the following output:
 
-    PCx86 v2.00
+    pc.js v3.00
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
-    License: MIT <https://www.pcjs.org/LICENSE.txt>
-    BusX86: 32Kb ROM at 0xF6000
-    BusX86: 8Kb ROM at 0xFE000
-    Machine loaded: ibm5150
-    Press CTRL-D to enter debugger, CTRL-C to terminate debugger
-    FDC: Mounted "PC DOS 2.00 (Disk 1)" (format PC180K) in drive A
-    BusX86: 576Kb RAM at 0x0
-    BusX86: 4Kb VIDEO at 0xB0000
-    Type ? for help with PCx86 Debugger commands
-    AX=0000 BX=0000 CX=0000 DX=0000 SP=0000 BP=0000 SI=0000 DI=0000 
-    SS=0000 DS=0000 ES=0000 PS=F002 V0 D0 I0 T0 S0 Z0 A0 P0 C0 
-    &FFFF:0000 EA5BE000F0       JMP      &F000:E05B (romBIOS+0x005B)
-    running
+    Options: --load=ibm5150
+    Press CTRL-D to enter debugger, CTRL-C to terminate process
 
 After the machine finishes booting (about 10 seconds), you should see the following output:
 
@@ -102,7 +91,7 @@ One of the pre-requisites of this feature is having a copy of the [pcjs-diskette
 
 This is because [pc.js](pc.js) automatically copies system files from MS-DOS diskettes (eg, [MSDOS320-DISK1](https://github.com/jeffpar/pcjs-diskettes/blob/master/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json)) to build a bootable hard disk image.
 
-There are no plans to perform any kind of "dynamic" file system updates.  This means if you modify any files on your local file system, don't expect those modifications to show up inside the machine until you restart `pc.js`.  Similarly, don't expect any file modifications inside the machine to show up on your local file system until you terminate `pc.js` -- and only once that feature has actually been implemented (see [below](#future-features)).
+There are no plans to perform "dynamic" file system updates.  This means if you modify any files on your local file system, those modifications won't show up inside the machine until you restart `pc.js`.  Similarly, any file modifications inside the machine will not show up on your local file system until you terminate `pc.js`.
 
 ### Loading Machines and Diskettes
 
@@ -234,11 +223,6 @@ will match any file with `PKUNZIP` in the name (eg, `PKUNZIP.COM`, `PKUNZIP.EXE`
     >> load a: --file pkunzip exe
 
 will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EXE`, `PKUNZIP2.EXE`).  There is no support for wildcards, since multiple search terms provide largely the same capability.
-
-### Future Features
-
-- Command-line options to select another machine type and/or DOS version
-- On machine termination, automatic detection of modified files and update of local file(s)
 
 ### Historical Notes
 
