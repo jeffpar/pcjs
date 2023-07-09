@@ -318,7 +318,7 @@ export default class CPULib extends Component {
         /*
          * Start running automatically on power-up, assuming there's no Debugger.
          */
-        if (this.flags.autoStart || this.flags.autoStart == undefined && !this.dbg) {
+        if (this.flags.autoStart || this.flags.autoStart == null && !this.dbg) {
             return this.startCPU(true);
         }
         return false;

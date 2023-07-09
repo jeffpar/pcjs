@@ -24,6 +24,7 @@ import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync,
 import pcjslib    from "../modules/pcjslib.js";
 
 let fDebug = false;
+let fHalt = false;
 let fSave = false;
 let machineType = "pcx86";
 let systemType = "msdos";
@@ -214,23 +215,18 @@ async function loadModules(factory, modules, done)
 }
 
 /**
- * initMachine(machine, sMachine)
+ * initMachine(idMachine, sParms)
  *
- * @param {Object} machine
- * @param {string} [sMachine]
+ * @param {string} idMachine
+ * @param {string} sParms
  */
-function initMachine(machine, sMachine)
+function initMachine(idMachine, sParms)
 {
     try {
-        let idMachine = "";
-        if (machine['machine']) {
-            idMachine = machine['machine']['id'];
-        }
-
         /*
          * Simulate the page embedding and page initialization process now.
          */
-        embedMachine(idMachine, null, null, sMachine);
+        embedMachine(idMachine, null, null, sParms);
         Web.doPageInit();
 
         /*
@@ -420,10 +416,18 @@ function sendSerial(b)
  */
 function loadMachine(sFile)
 {
-    let getFactory = function(machine, sMachine) {
+    let getFactory = function(machine) {
         let type = machine['type'] || (machine['machine'] && machine['machine']['type']) || machineType;
+        let idMachine = "";
+        if (machine['machine']) {
+            idMachine = machine['machine']['id'];
+        }
+        if (fHalt && machine['cpu']) {
+            machine['cpu']['autoStart'] = 0;
+        }
+        let sParms = JSON.stringify(machine);
         loadModules(machines[type]['factory'], machines[type]['modules'], function() {
-            initMachine(machine, sMachine);
+            initMachine(idMachine, sParms);
         });
     };
     let result = "missing machine";
@@ -474,10 +478,7 @@ function readJSON(sFile, done)
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
         let machine = eval('(' + sMachine + ')');
-        if (fDebug) {
-            machine['cpu']['autoStart'] = false;        // TODO: Figure out why this doesn't work
-        }
-        done(machine, sMachine);
+        done(machine);
     }
     catch(err) {
         result = err.message;
@@ -535,7 +536,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
                 }
                 if (!--xml._resolving) {
                     let machine = convertXML(xml, idAttrs);
-                    done(machine, JSON.stringify(machine));
+                    done(machine);
                 }
             }
         });
@@ -1289,8 +1290,9 @@ function main(argc, argv)
             "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
-            "--help (-?)\t":            "display command-line usage",
             "--debug (-d)\t":           "enable DEBUG messages",
+            "--halt (-h)\t":            "halt machine on startup",
+            "--help (-?)\t":            "display command-line usage",
             "--save (-s)\t":            "save modified hard disk image on exit"
         };
         let optionGroups = {
@@ -1308,6 +1310,7 @@ function main(argc, argv)
     }
 
     fDebug = argv['debug'] || fDebug;
+    fHalt = argv['halt'] || fHalt;
     fSave = argv['save'] || fSave;
     machineType = argv['type'] || machineType;
     systemType = (typeof argv['sys'] == "string" && argv['sys'] || systemType).toLowerCase();

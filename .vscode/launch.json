@@ -482,6 +482,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--load=compaq386",
+        "--halt",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
