@@ -7,6 +7,8 @@ redirect_from: /machines/pcx86/modules/bin/
 
 This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
 
+### Starting Machines from the Command-Line
+
 Load a JSON machine configuration file, such as [ibm5150.json](ibm5150.json) or [compaq386.json](compaq386.json), with the utility's `load` command, either interactively or with the `--load` command-line argument.
 
 For example, this command:
@@ -72,7 +74,7 @@ Here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/pa
 
 The above examples also include `--debug` because those particular machines do *not* automatically start running, and `--debug` provides useful feedback in those situations.
 
-### Access Local Files from MS-DOS
+### Accessing Local Files from MS-DOS
 
 If you run [pc.js](pc.js) with the name of a DOS command or executable in your current directory; eg:
 

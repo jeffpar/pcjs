@@ -14,7 +14,7 @@ permalink: /tools/
 
 ### PC.js
 
-[PC.js](pcjs/) is a JavaScript command-line application that allows you to start a "headless" PCjs machine with all TTY (eg, INT 0x10) output redirected to your console.
+[PC.js](pc/) is a JavaScript command-line application that allows you to start a "headless" PCjs machine with all TTY (eg, INT 0x10) output redirected to your console.
 
 ### Other Modules
 
