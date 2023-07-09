@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
+<machine id="ibm5150" type="pcx86" border="1" pos="center" background="default">
+	<name pos="center">IBM PC (Model 5150 Rev 3), 256Kb RAM, MDA</name>
+	<computer id="pc-mda-256k" name="IBM PC"/>
+	<ram id="ramLow" addr="0x00000" test="false" comment="ROM BIOS memory test has been disabled"/>
+	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5150/rom/basic/BASIC100.json5"/>
+	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5150/rom/bios/1982-10-27/PCBIOS-REV3.json5"/>
+	<video ref="/machines/pcx86/ibm/video/mda/ibm-mda.xml"/>
+	<fdc ref="/machines/pcx86/ibm/fdc/library.xml"/>
+	<cpu id="cpu8088" model="8088" autostart="false"/>
+	<keyboard ref="/machines/pcx86/ibm/keyboard/us83-softkeys.xml"/>
+	<debugger id="debugger"/>
+	<panel ref="/machines/pcx86/panel/wide.xml"/>
+	<chipset id="chipset" model="5150" sw1="01000001" sw2="10011000" pos="left" padLeft="8px" padBottom="8px">
+		<control type="switches" label="SW1" binding="sw1" left="0px"/>
+		<control type="switches" label="SW2" binding="sw2" left="0px"/>
+		<control type="description" binding="swdesc" left="0px"/>
+	</chipset>
+	<serial id="com1" adapter="1" binding="print"/>
+	<parallel id="lpt1" adapter="2" binding="print"/>
+</machine>

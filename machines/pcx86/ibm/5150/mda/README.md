@@ -17,4 +17,9 @@ machines:
 
 This machine is also available with [Single-Sided Diskette Drives](ssdd/).
 
+Other MDA configurations include:
+
+  - [IBM PC (Model 5150) with 256Kb](/machines/pcx86/ibm/5150/mda/256kb/machine.xml) ([Debugger](/machines/pcx86/ibm/5150/mda/256kb/debugger/machine.xml))
+  - [IBM PC (Model 5150 Rev 3) with 256Kb](/machines/pcx86/ibm/5150/mda/256kb/rev3/machine.xml) ([Debugger](/machines/pcx86/ibm/5150/mda/256kb/rev3/debugger/machine.xml))
+
 {% include gallery/documents.html width="200" height="280" %}
