@@ -43,6 +43,10 @@ let fileIndexCache = null, fileIndexKeys = [];
 let driveManifest = null;
 
 const functionKeys = {
+    "\u001b[A":     "$up",
+    "\u001b[B":     "$down",
+    "\u001b[C":     "$right",
+    "\u001b[D":     "$left",
     "\u001bOP":     "$f1",
     "\u001bOQ":     "$f2",
     "\u001bOR":     "$f3",
