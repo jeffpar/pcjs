@@ -6673,15 +6673,21 @@ class CharSet {
     /**
      * fromCP437(data, controlChars)
      *
-     * @param {string|DataBuffer} data
+     * @param {number|Array|string|DataBuffer} data
      * @param {boolean} [controlChars] (true to include control characters)
      * @returns {string}
      */
     static fromCP437(data, controlChars = false)
     {
         let u = "";
+        if (typeof data == "number") data = [data];
         for (let i = 0; i < data.length; i++) {
-            let c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
+            let c;
+            if (Array.isArray(data)) {
+                c = data[i];
+            } else {
+                c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
+            }
             if (c < CharSet.CP437.length && (c >= 32 || controlChars)) {
                 u += CharSet.CP437[c];
             } else {
@@ -6823,6 +6829,30 @@ CharSet.CP437 = [
 // ];
 
 /**
+ * @copyright https://www.pcjs.org/modules/v2/errors.js (C) 2012-2023 Jeff Parsons
+ */
+
+const Errors = {
+    DOS: {
+        INVALID_FUNC:           0x01,       // Invalid function number
+        FILE_NOT_FOUND:         0x02,       // File not found
+        PATH_NOT_FOUND:         0x03,       // Path not found
+        TOO_MANY_OPEN_FILES:    0x04,       // Too many open files (no handles left)
+        ACCESS_DENIED:          0x05,       // Access denied
+        INVALID_HANDLE:         0x06,       // Invalid handle
+        MEM_BLOCK_DAMAGED:      0x07,       // Memory control blocks destroyed
+        OUT_OF_MEMORY:          0x08,       // Insufficient memory
+        INVALID_MEM_BLOCK:      0x09,       // Invalid memory block address
+        INVALID_ENV:            0x0A,       // Invalid environment
+        INVALID_FORMAT:         0x0B,       // Invalid format
+        INVALID_ACCESS:         0x0C,       // Invalid access code
+        INVALID_DATA:           0x0D,       // Invalid data
+        INVALID_DRIVE:          0x0F        // Invalid drive specified
+    }
+};
+
+
+/**
  * @copyright https://www.pcjs.org/modules/v2/interrupts.js (C) 2012-2023 Jeff Parsons
  */
 
@@ -6852,6 +6882,7 @@ const Interrupts = {
      * mode, it was up to software to provide the font data and set the VID_EXT vector to point to it.
      */
     VID_EXT:    0x1F,               // graphics characters 0x80-0xFF (aka EXT_PTR)
+    DOS_EXIT:   0x20,
     DOS:        0x21,
     DOS_IDLE:   0x28,
     DOS_NETBIOS:0x2A,
@@ -13767,7 +13798,7 @@ class CPULib extends Component {
         /*
          * Start running automatically on power-up, assuming there's no Debugger.
          */
-        if (this.flags.autoStart || this.flags.autoStart == undefined && !this.dbg) {
+        if (this.flags.autoStart || this.flags.autoStart == null && !this.dbg) {
             return this.startCPU(true);
         }
         return false;
@@ -16812,12 +16843,23 @@ class CPUx86 extends CPULib {
         a = data[3];
         this.nTotalCycles = a[1];   // a[0] was previously nBurstDivisor (no longer used)
         this.setSpeed(a[2]);        // old states didn't contain a value from getSpeed(), but setSpeed() checks
-        if (a[3] != null) {         // less old states didn't preserve the original running state, so we must check it
-            this.flags.autoStart = a[3] || undefined;   // prefer undefined over false, because false is a firm no-autoStart
+        /*
+         * autoStart is normally either true, false, or null (the latter depends on the presence of a debugger),
+         * but there are special circumstances where it can be a number (ie, zero) if someone has decided that the
+         * machine should NOT be auto-started regardless.
+         */
+        if (a[3] != null && this.flags.autoStart !== 0) {   // less old states didn't preserve the original running state
+            this.flags.autoStart = a[3] || null;            // prefer null over false, because false is a firm no-autoStart
         }
         if (a[4] != null) {
             this.restoreTimers(a[4]);
         }
+        /*
+         * Making sure the ROM BIOS timer values are synced with the RTC (if any) is something the ChipSet component
+         * would take care of automatically, but alas, it is initialized long before RAM is restored, so we have to make
+         * this callback.
+         */
+        if (this.chipset) this.chipset.syncRTCTime();
         return fRestored;
     }
 
@@ -39730,6 +39772,7 @@ class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {string} [sDate]
+     * @returns {number} (programmed number of seconds since midnight)
      */
     initRTCTime(sDate)
     {
@@ -39763,12 +39806,13 @@ class ChipSet extends Component {
             this.printf(Messages.NONE, "CMOS date: %T\n", date);
         }
 
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = date.getSeconds();
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALRM] = 0;
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] = date.getMinutes();
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALRM] = 0;
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] = date.getHours();
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALRM] = 0;
+        let h, m, s;
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = s = date.getSeconds();
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALARM] = 0;
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] = m = date.getMinutes();
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALARM] = 0;
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] = h = date.getHours();
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALARM] = 0;
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_WEEK_DAY] = date.getDay() + 1;
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH_DAY] = date.getDate();
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH] = date.getMonth() + 1;
@@ -39784,6 +39828,12 @@ class ChipSet extends Component {
 
         this.nRTCCyclesLastUpdate = this.nRTCCyclesNextUpdate = 0;
         this.nRTCPeriodsPerSecond = this.nRTCCyclesPerPeriod = null;
+
+        /*
+         * Return the number of seconds since midnight that have been programmed into the RTC, so that the
+         * caller can easily convert that into TIMER_LOW/TIMER_HIGH values for the ROM BIOS data area, if needed.
+         */
+        return h * 3600 + m * 60 + s;
     }
 
     /**
@@ -39800,7 +39850,7 @@ class ChipSet extends Component {
 
         if (iRTC < ChipSet.CMOS.ADDR.STATUSA) {
             let f12HourValue = false;
-            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALRM) {
+            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALARM) {
                 if (!(this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.HOUR24)) {
                     if (b < 12) {
                         b = (!b? 12 : b);
@@ -39858,7 +39908,7 @@ class ChipSet extends Component {
                 b = (b >> 4) * 10 + (b & 0xf);
                 fBCD = true;
             }
-            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALRM) {
+            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALARM) {
                 if (fBCD) {
                     /*
                      * If the original BCD hour was 0x81-0x92, then the previous BINARY-to-BCD conversion
@@ -39999,9 +40049,9 @@ class ChipSet extends Component {
         /*
          * Step 2: Deal with Alarm Interrupts
          */
-        if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALRM]) {
-            if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALRM]) {
-                if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALRM]) {
+        if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALARM]) {
+            if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALARM]) {
+                if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALARM]) {
                     this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.AF;
                     if (this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.AIE) {
                         this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.IRQF;
@@ -40198,6 +40248,37 @@ class ChipSet extends Component {
     }
 
     /**
+     * syncRTCTime()
+     *
+     * On a normal startup, obviously the ROM will take care of initializing BIOS data area TIMER_LOW/TIMER_HIGH
+     * values to match the RTC values.  If we're restoring a machine state, that initialization will be bypassed,
+     * but if it was a *full* restore, all values would still be synced.  However, if we've decided to override the
+     * machine's date/time with the current date/time, they will be out of sync.
+     *
+     * In that case, nRTCSeconds will be set, and we must sync the BIOS data area with that value.
+     *
+     * Moreover, that sync must occur not only after the RAM component has been initialized but also after RAM contents
+     * have been restored; otherwise, the sync'ed value will be overwritten.  Since the CPU's restore() function is
+     * when RAM finally gets restored, that's where you'll find the call to syncRTCTime().
+     *
+     * @this {ChipSet}
+     */
+    syncRTCTime()
+    {
+        if (this.nRTCSeconds != undefined) {
+            /*
+             * The 8254 ("PIT") is wired to a clock with a frequency of 1.193182MHz, and the PIT is configured
+             * to divide that by 65536, which gives us 18.2065 interrupts ("ticks") per second.
+             */
+            let ticks = this.nRTCSeconds * 18.2065;
+            this.bus.setShort(ROMx86.BIOS.TIMER_LOW, ticks & 0xffff);
+            this.bus.setShort(ROMx86.BIOS.TIMER_HIGH, ticks >>> 16);
+            this.bus.setByte(ROMx86.BIOS.TIMER_OFL, 0);
+            this.nRTCSeconds = undefined;
+        }
+    }
+
+    /**
      * updateCMOSChecksum()
      *
      * This sums all the CMOS bytes from 0x10-0x2D, creating a 16-bit checksum.  That's a total of 30 (unsigned) 8-bit
@@ -40318,7 +40399,7 @@ class ChipSet extends Component {
              * the CMOS bytes above, instead of overwriting them all, in which case this extra call to initRTCTime()
              * could be avoided.
              */
-            this.initRTCTime();
+            this.nRTCSeconds = this.initRTCTime();
         }
         return true;
     }
@@ -45137,11 +45218,11 @@ ChipSet.CMOS = {
     ADDR: {                     // this.bCMOSAddr
         PORT:           0x70,
         RTC_SEC:        0x00,
-        RTC_SEC_ALRM:   0x01,
+        RTC_SEC_ALARM:  0x01,
         RTC_MIN:        0x02,
-        RTC_MIN_ALRM:   0x03,
+        RTC_MIN_ALARM:  0x03,
         RTC_HOUR:       0x04,
-        RTC_HOUR_ALRM:  0x05,
+        RTC_HOUR_ALARM: 0x05,
         RTC_WEEK_DAY:   0x06,
         RTC_MONTH_DAY:  0x07,
         RTC_MONTH:      0x08,
@@ -47932,7 +48013,7 @@ class KbdX86 extends Component {
      * injectKeys(sKeys, msDelay)
      *
      * @this {KbdX86}
-     * @param {string} [sKeys]
+     * @param {string} [sKeys] (keys listed in SOFTCODES must be prefixed with '$')
      * @param {number} [msDelay] is an optional injection delay (default is msInjectDefault)
      * @returns {boolean}
      */
@@ -62234,7 +62315,7 @@ class Disk extends Component {
     /**
      * Disk(controller, drive, mode)
      *
-     * Disk contents are stored as an array (aDiskData) of cylinders, each of which is an array of
+     * Disk contents are stored as an array (diskData) of cylinders, each of which is an array of
      * heads, each of which is an array of sector objects; the latter contain sector numbers and
      * sector data, where sector data is an array of dwords.  The format does not impose any
      * limitations on number of cylinders, number of heads, sectors per track, or bytes per sector.
@@ -62443,7 +62524,7 @@ class Disk extends Component {
         this.nHeads = nHeads;
         this.nSectors = nSectors;
         this.cbSector = cbSector;
-        this.aDiskData = [];
+        this.diskData = [];
         /*
          * If the drive is using PRELOAD mode, then it will use the load()/mount() process to initialize the disk contents;
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
@@ -62473,7 +62554,7 @@ class Disk extends Component {
                 }
                 aCylinders[iCylinder] = aHeads;
             }
-            this.aDiskData = aCylinders;
+            this.diskData = aCylinders;
         }
         this.dwChecksum = null;
     }
@@ -62622,9 +62703,9 @@ class Disk extends Component {
             let dv = new DataView(buffer, 0, cbDiskData);
             let cdw = this.cbSector >> 2, dwPattern = 0, dwChecksum = 0;
 
-            this.aDiskData = new Array(this.nCylinders);
-            for (let iCylinder = 0; iCylinder < this.aDiskData.length; iCylinder++) {
-                let cylinder = this.aDiskData[iCylinder] = new Array(this.nHeads);
+            this.diskData = new Array(this.nCylinders);
+            for (let iCylinder = 0; iCylinder < this.diskData.length; iCylinder++) {
+                let cylinder = this.diskData[iCylinder] = new Array(this.nHeads);
                 for (let iHead = 0; iHead < cylinder.length; iHead++) {
                     let head = cylinder[iHead] = new Array(this.nSectors);
                     for (let iSector = 0; iSector < head.length; iSector++) {
@@ -62727,7 +62808,7 @@ class Disk extends Component {
                 /*
                  * The most likely source of any exception will be here, where we're parsing the disk data.
                  */
-                let aDiskData, aFileDescs, imageInfo;
+                let diskData, fileTable, imageInfo;
                 if (imageData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
                     /*
                      * Early server configs reported an error (via the nErrorCode parameter) if a disk URL was invalid,
@@ -62738,7 +62819,7 @@ class Disk extends Component {
                      * So, if the data we've received appears to be "HTML-like", all we can really do is assume that the
                      * disk image is missing.  And so we pretend we received an error message to that effect.
                      */
-                    aDiskData = ["Missing disk image: " + this.sDiskName];
+                    diskData = ["Missing disk image: " + this.sDiskName];
                 } else {
                     /*
                      * TODO: IE9 is rather unfriendly and restrictive with regard to how much data it's willing to
@@ -62761,24 +62842,24 @@ class Disk extends Component {
                      */
                     if (imageData[0] == '{') {
                         let image = JSON.parse(imageData);
-                        aDiskData = image['diskData'];
-                        aFileDescs = image['fileTable'];
+                        diskData = image['diskData'];
+                        fileTable = image['fileTable'];
                         imageInfo = image['imageInfo'];
                     } else if (imageData.indexOf("0x") < 0 && imageData.substr(0, 2) != "[\"") {
-                        aDiskData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
+                        diskData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
                     } else {
-                        aDiskData = eval("(" + imageData + ")");
+                        diskData = eval("(" + imageData + ")");
                     }
                 }
 
-                if (!aDiskData.length) {
+                if (!diskData.length) {
                     Component.error("Empty disk image: " + this.sDiskName);
                 }
-                else if (aDiskData.length == 1) {
-                    Component.error(aDiskData[0]);
+                else if (diskData.length == 1) {
+                    Component.error(diskData[0]);
                 }
                 /*
-                 * aDiskData is an array of cylinders, each of which is an array of heads, each of which
+                 * diskData is an array of cylinders, each of which is an array of heads, each of which
                  * is an array of sector objects.  The format does not impose any limitations on number of
                  * cylinders, number of heads, or number of bytes in any of the sector object byte-arrays.
                  *
@@ -62797,10 +62878,10 @@ class Disk extends Component {
                  */
                 else {
                     if (DEBUG && this.messageEnabled(Messages.DISK + Messages.DATA)) {
-                        let sCylinders = aDiskData.length + " track" + (aDiskData.length > 1 ? "s" : "");
-                        let nHeads = aDiskData[0].length;
+                        let sCylinders = diskData.length + " track" + (diskData.length > 1 ? "s" : "");
+                        let nHeads = diskData[0].length;
                         let sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
-                        let nSectorsPerTrack = aDiskData[0][0].length;
+                        let nSectorsPerTrack = diskData[0][0].length;
                         let sSectorsPerTrack = nSectorsPerTrack + " sector" + (nSectorsPerTrack > 1 ? "s" : "") + "/track";
                         this.printf("%s, %s, %s\n", sCylinders, sHeads, sSectorsPerTrack);
                     }
@@ -62812,17 +62893,17 @@ class Disk extends Component {
                      * This includes detecting sector data in older formats (eg, the old array of 'bytes' instead
                      * of the new DATA array of dwords) and converting them on-the-fly to the current format.
                      */
-                    this.nCylinders = aDiskData.length;
-                    this.nHeads = aDiskData[0].length;
-                    this.nSectors = aDiskData[0][0].length;
-                    let sector = aDiskData[0][0][0];
+                    this.nCylinders = diskData.length;
+                    this.nHeads = diskData[0].length;
+                    this.nSectors = diskData[0][0].length;
+                    let sector = diskData[0][0][0];
                     this.cbSector = (sector && (sector[Disk.SECTOR.LENGTH] || sector['length'])) || 512;
 
                     let dwChecksum = 0;
                     for (let iCylinder = 0; iCylinder < this.nCylinders; iCylinder++) {
                         for (let iHead = 0; iHead < this.nHeads; iHead++) {
                             for (let iSector = 0; iSector < this.nSectors; iSector++) {
-                                sector = aDiskData[iCylinder][iHead][iSector];
+                                sector = diskData[iCylinder][iHead][iSector];
                                 if (!sector) continue;          // non-standard (eg, XDF) disk images may have "unused" (null) sectors
                                 /*
                                  * "Upgrade" all sector object properties.
@@ -62918,10 +62999,10 @@ class Disk extends Component {
                             }
                         }
                     }
-                    this.aDiskData = aDiskData;
+                    this.diskData = diskData;
                     this.dwChecksum = dwChecksum;
                     this.imageInfo = imageInfo;
-                    if (BACKTRACK || SYMBOLS) this.buildFileTable(aFileDescs);
+                    if (BACKTRACK || SYMBOLS) this.buildFileTable(fileTable);
                     disk = this;
                 }
             } catch (e) {
@@ -62941,31 +63022,31 @@ class Disk extends Component {
     }
 
     /**
-     * buildFileTable(aFileDescs)
+     * buildFileTable(fileTable)
      *
      * This function builds a table of FileInfo objects from any and all file descriptors present in the
      * "extended" JSON disk image, and updates all the sector objects to point back to the corresponding FileInfo.
      * Used for BACKTRACK and SYMBOLS support.
      *
      * @this {Disk}
-     * @param {Array.<FileDesc>} [aFileDescs] (array of FileDescs, if any, stored in the JSON disk image)
+     * @param {Array.<FileDesc>} [fileTable] (array of FileDescs, if any, stored in the JSON disk image)
      */
-    buildFileTable(aFileDescs)
+    buildFileTable(fileTable)
     {
         if (BACKTRACK || SYMBOLS) {
-            if (aFileDescs) {
-                let aDiskData = this.aDiskData;
+            if (fileTable) {
+                let diskData = this.diskData;
                 this.aFileTable = [];
-                for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
-                    for (let iHead = 0; iHead < aDiskData[iCylinder].length; iHead++) {
-                        for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
-                            let sector = aDiskData[iCylinder][iHead][iSector];
+                for (let iCylinder = 0; iCylinder < diskData.length; iCylinder++) {
+                    for (let iHead = 0; iHead < diskData[iCylinder].length; iHead++) {
+                        for (let iSector = 0; iSector < diskData[iCylinder][iHead].length; iSector++) {
+                            let sector = diskData[iCylinder][iHead][iSector];
                             if (sector) {
                                 let index = sector[Disk.SECTOR.FILE_INDEX];
                                 if (index != undefined) {
                                     let file = this.aFileTable[index];
                                     if (!file) {
-                                        let desc = aFileDescs[index];
+                                        let desc = fileTable[index];
                                         file = new FileInfo(this, desc.path, Str.getBaseName(desc.path), +desc.attr, desc.size || 0, desc.module);
                                         this.aFileTable[index] = file;
                                     }
@@ -63363,9 +63444,9 @@ class Disk extends Component {
         let fAsync = aRequest[4];
         this.fWriteInProgress = false;
 
-        if (iCylinder >= 0 && iCylinder < this.aDiskData.length && iHead >= 0 && iHead < this.aDiskData[iCylinder].length) {
-            for (let i = iSector - 1; nSectors-- > 0 && i >= 0 && i < this.aDiskData[iCylinder][iHead].length; i++) {
-                let sector = this.aDiskData[iCylinder][iHead][i];
+        if (iCylinder >= 0 && iCylinder < this.diskData.length && iHead >= 0 && iHead < this.diskData[iCylinder].length) {
+            for (let i = iSector - 1; nSectors-- > 0 && i >= 0 && i < this.diskData[iCylinder][iHead].length; i++) {
+                let sector = this.diskData[iCylinder][iHead][i];
 
                 if (!nErrorCode) {
                     if (!sector.fDirty) {
@@ -63500,8 +63581,8 @@ class Disk extends Component {
             let iSector = sector[Disk.SECTOR.ID];
             let nSectors = 0;
             let abSectors = [];
-            for (let i = iSector - 1; i < this.aDiskData[iCylinder][iHead].length; i++) {
-                let sectorNext = this.aDiskData[iCylinder][iHead][i];
+            for (let i = iSector - 1; i < this.diskData[iCylinder][iHead].length; i++) {
+                let sectorNext = this.diskData[iCylinder][iHead][i];
                 if (!sectorNext.fDirty) break;
                 let j = this.aDirtySectors.indexOf(sectorNext);
 
@@ -63529,10 +63610,10 @@ class Disk extends Component {
      */
     info()
     {
-        if (!this.aDiskData.length) {
+        if (!this.diskData.length) {
             return [0, 0, 0, 0];
         }
-        return [this.aDiskData.length, this.aDiskData[0].length, this.aDiskData[0][0].length, this.aDiskData[0][0][0][Disk.SECTOR.LENGTH]];
+        return [this.diskData.length, this.diskData[0].length, this.diskData[0][0].length, this.diskData[0][0][0][Disk.SECTOR.LENGTH]];
     }
 
     /**
@@ -63560,7 +63641,7 @@ class Disk extends Component {
     {
         let sector = null;
         let drive = this.drive;
-        let cylinder = this.aDiskData[iCylinder];
+        let cylinder = this.diskData[iCylinder];
         if (cylinder) {
             let i;
             let track = cylinder[iHead];
@@ -63840,11 +63921,11 @@ class Disk extends Component {
         let deltas = [];
         deltas[i++] = [this.sDiskPath, this.dwChecksum, this.nCylinders, this.nHeads, this.nSectors, this.cbSector];
         if (!this.fRemote && !this.fWriteProtected) {
-            let aDiskData = this.aDiskData;
-            for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
-                for (let iHead = 0; iHead < aDiskData[iCylinder].length; iHead++) {
-                    for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
-                        let sector = aDiskData[iCylinder][iHead][iSector];
+            let diskData = this.diskData;
+            for (let iCylinder = 0; iCylinder < diskData.length; iCylinder++) {
+                for (let iHead = 0; iHead < diskData[iCylinder].length; iHead++) {
+                    for (let iSector = 0; iSector < diskData[iCylinder][iHead].length; iSector++) {
+                        let sector = diskData[iCylinder][iHead][iSector];
                         if (sector && sector.cModify) {
                             let mods = [], n = 0;
                             let iModify = sector.iModify, iModifyLimit = sector.iModify + sector.cModify;
@@ -63889,11 +63970,11 @@ class Disk extends Component {
         let nChanges = 0;
         let sReason = "unsupported restore format";
         /*
-         * I originally added a check for aDiskData here on the assumption that if there was an error loading
+         * I originally added a check for diskData here on the assumption that if there was an error loading
          * a disk image, we will have already notified the user, so any additional errors about differing checksums,
          * failure to restore the disk state, etc, would just be annoying.  HOWEVER, HDC will create an empty disk
          * image if its initialization code discovers that no disk was loaded earlier (see verifyDrive).  So while
-         * checking aDiskData is still a good idea, be aware that it won't necessarily avoid redundant error messages
+         * checking diskData is still a good idea, be aware that it won't necessarily avoid redundant error messages
          * (at least in the case of HDC).
          */
         if (deltas && deltas.length > 0) {
@@ -63907,7 +63988,7 @@ class Disk extends Component {
                  * disk image from a complete set of deltas.  And that is only possible if the disk was saved with the
                  * original disk geometry.
                  */
-                if (!this.aDiskData.length && aDiskInfo.length >= 6) {
+                if (!this.diskData.length && aDiskInfo.length >= 6) {
                     this.create(DiskAPI.MODE.LOCAL, aDiskInfo[2], aDiskInfo[3], aDiskInfo[4], aDiskInfo[5]);
                     /*
                      * TODO: Consider setting a flag here that we can check at the end of the restore() function
@@ -63942,7 +64023,7 @@ class Disk extends Component {
                 }
             }
 
-            if (!this.aDiskData.length) nChanges = -1;
+            if (!this.diskData.length) nChanges = -1;
 
             while (i < deltas.length && nChanges >= 0) {
                 let m = 0;
@@ -63956,7 +64037,7 @@ class Disk extends Component {
                  * because save() should never generate any mods for a write-protected disk, and (c) it
                  * centralizes all the failure conditions we're currently checking (which, admittedly, ain't much).
                  */
-                if (iCylinder >= this.aDiskData.length || iHead >= this.aDiskData[iCylinder].length || iSector >= this.aDiskData[iCylinder][iHead].length) {
+                if (iCylinder >= this.diskData.length || iHead >= this.diskData[iCylinder].length || iSector >= this.diskData[iCylinder][iHead].length) {
                     sReason = "sector (CHS=" + iCylinder + ':' + iHead + ':' + iSector + ") out of range (" + nChanges + " changes applied)";
                     nChanges = -1;
                     break;
@@ -63969,7 +64050,7 @@ class Disk extends Component {
                 let iModify = mod[m++];
                 let mods = mod[m++];
                 let iModifyLimit = iModify + mods.length;
-                let sector = this.aDiskData[iCylinder][iHead][iSector];
+                let sector = this.diskData[iCylinder][iHead][iSector];
                 if (!sector) continue;
                 /*
                  * Since write() now deals with empty/partial sectors, we no longer need to completely "inflate"
@@ -64032,7 +64113,7 @@ class Disk extends Component {
             this.deflateSector(sector);
         }
 
-        s = JSON.stringify(this.aDiskData, function(key, value) {
+        s = JSON.stringify(this.diskData, function(key, value) {
             /*
              * If BACKTRACK support is enabled, we have to filter out any 'file' properties that may
              * be attached to the sector objects, lest we risk blowing the stack due to circular references.
@@ -65574,7 +65655,7 @@ class FDC extends Component {
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
      * @param {function(Disk,number)} [done] optional callback on completion of the load request
-     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded, -2 if drive not found
+     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file, done)
     {
@@ -65585,7 +65666,7 @@ class FDC extends Component {
         };
         let drive = this.aDrives[iDrive];
         if (!drive) {
-            result = -2;
+            result = Errors.DOS.INVALID_DRIVE;
         }
         else if (sDiskPath) {
             sDiskPath = Web.redirectResource(sDiskPath);
@@ -66768,8 +66849,8 @@ class FDC extends Component {
             h ^= i;
             if (!bHead) i = 0;
             r = drive.bSector;                          // REQUIRED in order for MINIX 1.1 to load ROOT diskette
-            if (drive.disk && drive.disk.aDiskData && drive.disk.aDiskData[c] && drive.disk.aDiskData[c][h] && drive.disk.aDiskData[c][h][r-1]) {
-                r = drive.disk.aDiskData[c][h][r-1][Disk.SECTOR.ID];
+            if (drive.disk && drive.disk.diskData && drive.disk.diskData[c] && drive.disk.diskData[c][h] && drive.disk.diskData[c][h][r-1]) {
+                r = drive.disk.diskData[c][h][r-1][Disk.SECTOR.ID];
             }
         }
         c += i;
@@ -71524,6 +71605,11 @@ class DbgLib extends Component {
              */
             this.aVariables = {};
 
+            /*
+             * Array of functions to call when notifyEvent() is called.  Functions are added with onEvent().
+             */
+            this.afnNotify = [];
+
         }   // endif DEBUGGER
     }
 
@@ -72658,6 +72744,28 @@ class DbgLib extends Component {
         }
         return (nBits < 0? Str.stripLeadingZeros(s) : s);
     }
+
+    /**
+     * onEvent(fnNotify)
+     *
+     * @param {function()} fnNotify
+     */
+    onEvent(fnNotify)
+    {
+        this.afnNotify.push(fnNotify);
+    }
+
+    /**
+     * notifyEvent(nEvent)
+     *
+     * @param {number} nEvent (see DbgLib.EVENTS)
+     */
+    notifyEvent(nEvent)
+    {
+        for (let i = 0; i < this.afnNotify.length; i++) {
+            this.afnNotify[i](nEvent);
+        }
+    }
 }
 
 if (DEBUGGER) {
@@ -72734,6 +72842,11 @@ if (DEBUGGER) {
 
 }   // endif DEBUGGER
 
+DbgLib.EVENTS = {
+    EXIT:       0,
+    ENTER:      1,
+    READY:      2,
+};
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
@@ -74238,7 +74351,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Gets zero-terminated (aka "ASCIIZ") string from dbgAddr.  It also stops at the first '$', in case this is
      * a '$'-terminated string -- mainly because I'm lazy and didn't feel like writing a separate get() function.
-     * Yes, a zero-terminated string containing a '$' will be prematurely terminated, and no, I don't care.
+     * Yes, a zero-terminated string containing a '$' will be prematurely terminated -- not a big deal.
      *
      * @this {DebuggerX86}
      * @param {DbgAddrX86} dbgAddr
@@ -75664,6 +75777,7 @@ class DebuggerX86 extends DbgLib {
         this.flags.running = true;
         this.msStart = ms;
         this.nCyclesStart = nCycles;
+        this.notifyEvent(DbgLib.EVENTS.EXIT);
     }
 
     /**
@@ -75680,6 +75794,7 @@ class DebuggerX86 extends DbgLib {
         if (this.flags.running) {
             this.flags.running = false;
             this.nCycles = nCycles - this.nCyclesStart;
+            this.notifyEvent(DbgLib.EVENTS.ENTER);
             if (!this.nStep) {
                 let sStopped = "stopped";
                 if (this.nCycles) {
@@ -75736,6 +75851,7 @@ class DebuggerX86 extends DbgLib {
             this.updateStatus(true);
             this.updateFocus();
             this.clearTempBreakpoint(this.cpu.regLIP);
+            this.notifyEvent(DbgLib.EVENTS.READY);
         }
     }
 

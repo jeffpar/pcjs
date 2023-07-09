@@ -16,16 +16,13 @@ machines:
     autoType: $date\rB:\rA:BASICA CASTLE\r
 ---
 
-To start "Adventures in Math" (if it doesn't start automatically), either press the **Reset** button or, at the DOS
-prompt, switch to drive B: and run "A:BASICA CASTLE".
+To start "Adventures in Math" (if it doesn't start automatically), either press the **Reset** button or, at the DOS prompt, switch to drive B: and run "A:BASICA CASTLE".
 
 {% include machine.html id="ibm5150-adventmath" %}
 
-Adventures in Archiving
------------------------
+### Adventures in Archiving
 
-The files for this game were obtained from the [Internet Archive](https://archive.org/details/msdos_Adventures_in_Math_1983).
-The contents of their ZIP archive contained:
+The files for this game were obtained from the [Internet Archive](https://archive.org/details/msdos_Adventures_in_Math_1983).  The contents of their ZIP archive contained:
 
 	-rwxr-xr-x@ 1 Jeff  staff  18688 Dec 24  1996 Adventur.bas
 	-rwxr-xr-x@ 1 Jeff  staff      0 Dec 24  1996 Adventures in Math (1983).ba1
@@ -41,11 +38,9 @@ The contents of their ZIP archive contained:
 	-rwxr-xr-x@ 1 Jeff  staff     13 Dec 24  1996 Sn
 	-rwxr-xr-x@ 1 Jeff  staff    369 Dec 24  1996 Topten
 
-Unfortunately, that archive did not contain a complete dump of the original "Adventures in Math" diskette, and all
-the files in the archive were dated "Dec 24 1996", making their authenticity questionable.
+Unfortunately, that archive did not contain a complete dump of the original "Adventures in Math" diskette, and all the files in the archive were dated "Dec 24 1996", making their authenticity questionable.
 
-After digging around a bit more on the Internet Archive, I discovered that
-[A Large Collection of DOS Collections](https://archive.org/details/large_dos_collection_2013_08) contained:
+After digging around a bit more on the Internet Archive, I discovered that [A Large Collection of DOS Collections](https://archive.org/details/large_dos_collection_2013_08) contained:
 
 - DOS Collection v0.7/DVD1/Adventures In Math (1983)(Ibm).zip
 - main torrent/1983/Adventures in Math (1983)(IBM) [Educational].zip
@@ -82,8 +77,7 @@ And in the second ZIP file:
 	-rw-r--r--@ 1 Jeff  staff    369 Sep 17  1999 Topten
 	-rw-r--r--@ 1 Jeff  staff    170 Jan 22  2011 file_id.diz
 
-I decided to start with the contents of the second ZIP file, since the timestamps of most of the files
-appeared to be legitimate.
+I decided to start with the contents of the second ZIP file, since the timestamps of most of the files appeared to be legitimate.
 
 One strange file common to *all* the archives was **MONOCODE.000**.  Dumping that file revealed:
 
@@ -99,22 +93,15 @@ One strange file common to *all* the archives was **MONOCODE.000**.  Dumping tha
 
 So at some point, unrelated "MONOPOLY" files were mingled with this game.  I deleted **MONOCODE.000**.
 
-Another unexpected file was **BASICA.EXE** (54277 bytes) from 1999.  It seems unlikely that IBM would have distributed
-*any* BASIC binary with this game, because DOS was a prerequisite, and at the time, all versions of DOS included BASIC.
-IBM's PC DOS shipped with **BASICA.COM** and OEM versions of DOS shipped with either **GWBASIC.EXE** or **BASIC.EXE**.
+Another unexpected file was **BASICA.EXE** (54277 bytes) from 1999.  It seems unlikely that IBM would have distributed *any* BASIC binary with this game, because DOS was a prerequisite, and at the time, all versions of DOS included BASIC.  IBM's PC DOS shipped with **BASICA.COM** and OEM versions of DOS shipped with either **GWBASIC.EXE** or **BASIC.EXE**.
 
-Unsurprisingly, this **BASICA.EXE** is neither from 1999 nor from IBM.  It's virtually identical to the circa 1983
-**BASICA.EXE** found in [COMPAQ DOS 1.11](/software/pcx86/sys/dos/compaq/1.11/), and it's 5 bytes larger only because the
-string "MsDos" was appended to the file.  They both contain the following strings:
+Unsurprisingly, this **BASICA.EXE** is neither from 1999 nor from IBM.  It's virtually identical to the circa 1983 **BASICA.EXE** found in [COMPAQ DOS 1.11](/software/pcx86/sys/dos/compaq/1.11/), and it's 5 bytes larger only because the string "MsDos" was appended to the file.  They both contain the following strings:
 
 	The COMPAQ Personal Computer BASIC
 	Version 1.13
 	(C) Copyright COMPAQ Computer Corp. 1983
 
-It's safe to say that IBM would not have distributed a COMPAQ binary; if IBM had distributed any BASIC binary at all,
-it would have been their own **BASICA.COM**.  Of course, the problem with IBM's **BASICA.COM** is that it also requires
-an IBM PC with ROM BASIC installed, which is why some people would have preferred the COMPAQ binary: it had no ROM
-dependencies.  Anyway, I deleted **BASICA.EXE**.
+It's safe to say that IBM would not have distributed a COMPAQ binary; if IBM had distributed any BASIC binary at all, it would have been their own **BASICA.COM**.  Of course, the problem with IBM's **BASICA.COM** is that it also requires an IBM PC with ROM BASIC installed, which is why some people would have preferred the COMPAQ binary: it had no ROMdependencies.  Anyway, I deleted **BASICA.EXE**.
 
 Finally, there was **FILE_ID.DIZ**:
 
@@ -148,9 +135,7 @@ and **TOPTEN**:
 	Z[z],55677,LARGE,07-24-81
 	[z],55197,LARGE,07-23-81
 
-All those files were deleted as well, leaving 8 files dated "Aug 11 1983".  Next, I used the PCjs
-[DiskImage]({{ site.github.pages }}/tools/diskimage/diskimage.js) utility to create a disk image from a directory
-("archive/ADVENTMATH-100/") containing those files:
+All those files were deleted as well, leaving 8 files dated "Aug 11 1983".  Next, I used the PCjs [DiskImage](/tools/diskimage/) utility to create a disk image from a directory ("archive/ADVENTMATH-100/") containing those files:
  
 	diskimage.js --dir=archive/ADVENTMATH-100/ --label=ADVEMATH100 --output=ADVENTMATH-100.json
 
@@ -172,8 +157,7 @@ Here's a directory listing of the resulting 160Kb disk image:
 
 This disk has now been added to the PCjs IBM PC Disk Library as "Adventures in Math (1983)".
 
-To run the game, I originally selected an [IBM PC (Model 5150, 64Kb) with Color Display](/machines/pcx86/ibm/5150/cga/),
-which boots PC DOS 2.00 by default.  However, in the course of starting the game, it crashed:
+To run the game, I originally selected an [IBM PC (Model 5150, 64Kb) with Color Display](/machines/pcx86/ibm/5150/cga/), which boots PC DOS 2.00 by default.  However, in the course of starting the game, it crashed:
 
 ![ADVENTMATH-CRASH](images/crash.png)
 
@@ -185,9 +169,7 @@ It appeared to run fine with 256Kb of RAM, but these were IBM's "System Requirem
 
 > One diskette drive
 
-so I reconfigured the machine to boot PC DOS 1.00, which requires less RAM than PC DOS 2.00, and that worked.
-Note that the game was released in October 1983, well after the March 1983 release of PC DOS 2.00, so it should
-have been tested with PC DOS 2.00 on a 64Kb machine, but perhaps it wasn't.
+so I reconfigured the machine to boot PC DOS 1.00, which requires less RAM than PC DOS 2.00, and that worked. Note that the game was released in October 1983, well after the March 1983 release of PC DOS 2.00, so it should have been tested with PC DOS 2.00 on a 64Kb machine, but perhaps it wasn't.
 
 The machine on this page is configured with the following "autoType" sequence:
  
@@ -199,17 +181,11 @@ which translates to:
 	B:                  [switch to drive B:]
 	A:BASICA CASTLE     [run BASICA on drive A: and load CASTLE.BAS on drive B:]
 
-This is one of the preferred methods of demonstrating software in PCjs: loading unmodified disk images into machines
-that match the software's system requirements as closely as possible, powering the machine, and then automatically
-executing a series of commands appropriate for the hardware and software combination.
+This is one of the preferred methods of demonstrating software in PCjs: loading unmodified disk images into machines that match the software's system requirements as closely as possible, powering the machine, and then automatically executing a series of commands appropriate for the hardware and software combination.
 
-The other preferred method is to use a machine state file, which restores the machine to a state where the software
-is already running.  That's the quickest method for starting the software, and it's useful when the software has an
-involved installation process, but it takes more effort to set up.  The [VisiCalc (1981)](/software/pcx86/app/other/visicalc/1981/)
-demo is configured that way, but that's purely a matter of convenience -- and because it predates the "autoType" feature.
+The other preferred method is to use a machine state file, which restores the machine to a state where the software is already running.  That's the quickest method for starting the software, and it's useful when the software has an involved installation process, but it takes more effort to set up.  The [VisiCalc (1981)](/software/pcx86/app/other/visicalc/1981/) demo is configured that way, but that's purely a matter of convenience -- and because it predates the "autoType" feature.
 
-References
-----------
+### References
 
   - [MobyGames](http://www.mobygames.com/game/dos/adventures-in-math)
   - [Internet Archive](https://archive.org/details/msdos_Adventures_in_Math_1983)

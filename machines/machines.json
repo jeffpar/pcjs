@@ -52,6 +52,7 @@
       "./machines/pcx86/modules/v2/messages.js",
       "./machines/pcx86/modules/v2/x86.js",
       "./machines/pcx86/modules/v3/charset.js",
+      "./machines/pcx86/modules/v2/errors.js",
       "./machines/pcx86/modules/v2/interrupts.js",
       "./machines/pcx86/modules/v2/panel.js",
       "./machines/pcx86/modules/v2/bus.js",

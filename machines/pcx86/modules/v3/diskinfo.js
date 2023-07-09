@@ -1388,18 +1388,16 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromJSON(sData)
+     * buildDiskFromJSON(imageData)
      *
-     * Build a disk image from JSON data.
+     * Build a disk image from a JSON object (parsed or unparsed).
      *
      * @this {DiskInfo}
-     * @param {string} sData
+     * @param {Object|string} imageData
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromJSON(sData)
+    buildDiskFromJSON(imageData)
     {
-        let imageData;
-
         this.aDiskData = null;
         this.cbDiskData = 0;
         this.dwChecksum = 0;
@@ -1408,13 +1406,15 @@ export default class DiskInfo {
         this.fBPBModified = false;
         this.hash = "none";
 
-        try {
-            imageData = JSON.parse(sData);
-        } catch(e) {
+        if (typeof imageData == "string") {
             try {
-                imageData = JSON.parse(sData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
-            } catch(err) {
-                this.printf(Device.MESSAGE.ERROR, "error: %s\n", err.message);
+                imageData = JSON.parse(imageData);
+            } catch(e) {
+                try {
+                    imageData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
+                } catch(err) {
+                    this.printf(Device.MESSAGE.ERROR, "error: %s\n", err.message);
+                }
             }
         }
 
@@ -1435,8 +1435,7 @@ export default class DiskInfo {
                     }
                     this.volTable = volTable;
                 }
-                this.buildFileTableFromJSON(imageData[DiskInfo.DESC.FILES]);
-                this.tablesBuilt = this.fromJSON = true;
+                this.tablesBuilt = this.fromJSON = this.buildFileTableFromJSON(imageData[DiskInfo.DESC.FILES]);
             }
             let aDiskData = imageData[DiskInfo.DESC.DISKDATA] || imageData;
             if (aDiskData && aDiskData.length) {
@@ -1645,31 +1644,35 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {Array.<Object>} fileTable
+     * @returns {boolean}
      */
     buildFileTableFromJSON(fileTable)
     {
-        if (!fileTable) return;
-        if (!this.fileTable.length) {
-            for (let i = 0; i < fileTable.length; i++) {
-                let desc = fileTable[i];
-                let iVolume = desc[DiskInfo.FILEDESC.VOL] || 0;
-                let name = this.device.getBaseName(desc[DiskInfo.FILEDESC.PATH], false, true);
-                let path = desc[DiskInfo.FILEDESC.PATH].replace(/\//g, '\\');
-                let attr = +desc[DiskInfo.FILEDESC.ATTR];
-                /*
-                 * parseDate() *must* return local time (the second parameter must be true), because we've changed
-                 * everything else to use local time (eg, getFileListing()).
-                 */
-                let date = this.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
-                let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
-                let file = new FileInfo(this, iVolume, path, name, attr, date, size);
-                file.index = i;
-                fileTable[i] = file;
-                let hash = desc[DiskInfo.FILEDESC.HASH];
-                if (hash) file.hash = hash;
+        if (fileTable) {
+            if (!this.fileTable.length) {
+                for (let i = 0; i < fileTable.length; i++) {
+                    let desc = fileTable[i];
+                    let iVolume = desc[DiskInfo.FILEDESC.VOL] || 0;
+                    let name = this.device.getBaseName(desc[DiskInfo.FILEDESC.PATH], false, true);
+                    let path = desc[DiskInfo.FILEDESC.PATH].replace(/\//g, '\\');
+                    let attr = +desc[DiskInfo.FILEDESC.ATTR];
+                    /*
+                    * parseDate() *must* return local time (the second parameter must be true), because we've changed
+                    * everything else to use local time (eg, getFileListing()).
+                    */
+                    let date = this.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
+                    let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
+                    let file = new FileInfo(this, iVolume, path, name, attr, date, size);
+                    file.index = i;
+                    fileTable[i] = file;
+                    let hash = desc[DiskInfo.FILEDESC.HASH];
+                    if (hash) file.hash = hash;
+                }
+                this.fileTable = fileTable;
             }
-            this.fileTable = fileTable;
+            return true;
         }
+        return false;
     }
 
     /**
@@ -1694,7 +1697,7 @@ export default class DiskInfo {
      * a new JSON disk image is loaded.
      *
      * @this {DiskInfo}
-     * @param {boolean} fRebuild
+     * @param {boolean} [fRebuild]
      * @returns {number} (-1 if error, otherwise number of files found across all volumes)
      */
     buildTables(fRebuild)
@@ -2220,7 +2223,7 @@ export default class DiskInfo {
     }
 
     /**
-     * getFileManifest(fnHash, fSorted, fMetaData)
+     * getFileManifest(fnHash, fSorted, fMetaData, fComplete)
      *
      * Returns an array of FILEDESC (file descriptors).  Each object is largely a clone of the
      * FileInfo object, with the exception of cluster and aLBA properties (which aren't useful
@@ -2229,11 +2232,12 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @param {boolean} [fSorted]
-     * @param {boolean} [fMetaData]
+     * @param {boolean} [fSorted] (default is false)
+     * @param {boolean} [fMetaData] (default is false)
+     * @param {boolean} [fComplete] (default is true)
      * @returns {Array}
      */
-    getFileManifest(fnHash, fSorted, fMetaData)
+    getFileManifest(fnHash, fSorted = false, fMetaData = false, fComplete = true)
     {
         let aFiles = [];
         if (this.buildTables() > 0) {
@@ -2241,7 +2245,7 @@ export default class DiskInfo {
                 let file = this.fileTable[i];
                 if (file.name == "." || file.name == "..") continue;
                 if ((file.attr & DiskInfo.ATTR.METADATA) && !fMetaData) continue;
-                aFiles.push(this.getFileDesc(file, true, fnHash));
+                aFiles.push(this.getFileDesc(file, fComplete, fnHash));
             }
             if (fSorted) {
                 aFiles.sort(function(a, b) {
@@ -3616,27 +3620,33 @@ export default class DiskInfo {
     }
 
     /**
-     * updateBootSector(dbBoot, iVolume, fReplaceBPB)
+     * updateBootSector(dbBoot, iVolume, verBPB)
      *
-     * We use the write() interface to modify the bytes of the boot sector, with fForce
-     * set, which allows writes even when the disk wasn't opened for writing.
+     * We use the write() interface to modify the bytes of the boot sector, with fForce set,
+     * which allows writes even when the disk wasn't opened for writing.
+     *
+     * The verBPB values are as follows:
+     *
+     *      0: The BPB portion of the target boot sector is unchanged
+     *      1: The BPB portion of the target boot sector is replaced with dbBoot
+     *      2: Only DOS 2.x specific bytes in the boot sector are replaced; the rest is unchanged
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
      * @param {number} [iVolume] (default is first volume; -1 for MBR, if any)
-     * @param {boolean} [fReplaceBPB] (default is false, so we preserve the existing BPB)
+     * @param {number} [verBPB] (default is 0; see above)
      * @returns {boolean} (true if successful, false otherwise)
      */
-    updateBootSector(db, iVolume = 0, fReplaceBPB = false)
+    updateBootSector(db, iVolume = 0, verBPB = 0)
     {
         let fSuccess = false;
         if (db && this.buildTables() >= 0) {
             let lbaBoot = -1;
-            let fCheckBPB = false;
+            let hasBPB = false;
             if (iVolume < 0) {
                 lbaBoot = 0;
             } else if (iVolume >= 0 && iVolume < this.volTable.length) {
-                fCheckBPB = true;
+                hasBPB = true;
                 lbaBoot = this.volTable[iVolume].lbaStart;
             }
             if (lbaBoot >= 0) {
@@ -3649,7 +3659,7 @@ export default class DiskInfo {
                      * need to check for a disk using our extended BPB format, and make sure those
                      * fields are in sync with the existing BPB fields.
                      */
-                    if (fCheckBPB) {
+                    if (hasBPB) {
                         let bOpcode = db.readUInt8(0);
                         if (bOpcode == CPUx86.OPCODE.CLD) {
                             let nSecBytes = this.getSectorData(sectorBoot, DiskInfo.BPB.SECBYTES, 2);
@@ -3669,8 +3679,17 @@ export default class DiskInfo {
                         }
                     }
                     for (let ib = 0; ib < cb; ib++) {
-                        if (fCheckBPB && !fReplaceBPB) {
-                            if (ib >= DiskInfo.BPB.BEGIN && ib < DiskInfo.BPB.END) continue;
+                        if (hasBPB) {
+                            switch(verBPB) {
+                            case 0:
+                                if (ib >= DiskInfo.BPB.BEGIN && ib < DiskInfo.BPB.END) continue;
+                                break;
+                            case 1:
+                                break;
+                            case 2:
+                                if (ib >= DiskInfo.BPB.BEGIN && ib < DiskInfo.BPB.BOOTDRIVE) continue;
+                                break;
+                            }
                         }
                         let b = db.readUInt8(ib);
                         if (!this.write(sectorBoot, ib, b, true)) {
@@ -3862,6 +3881,8 @@ DiskInfo.BPB = {
     TRACKSECS:      0x018,      // 2 bytes: sectors per track (eg, 8)
     DRIVEHEADS:     0x01A,      // 2 bytes: number of heads (eg, 1)
     HIDDENSECS:     0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (always 0 for non-partitioned media)
+    BOOTDRIVE:      0x01E,      // 1 byte (DOS 2.x): the BIOS boot drive
+    BOOTHEAD:       0x01F,      // 1 byte (DOS 2.x): the BIOS boot head # (0-based)
     LARGESECS:      0x020,      // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
     END:            0x024,      // end of standard BPB
     /*
@@ -4224,5 +4245,5 @@ DiskInfo.ATTR = {
     LFN:            0x0f,       // combination used by Windows 95 (MS-DOS 7.0) and up, indicating a long filename (LFN) DIRENT
     SUBDIR:         0x10,       // PC DOS 2.0 and up
     ARCHIVE:        0x20,       // PC DOS 2.0 and up
-    METADATA:       0x40        // for internal use only (used to mark "pseudo" file table entries that list compressed archive contents)
+    METADATA:     0x0100        // for internal use only (used to mark "pseudo" file table entries that list compressed archive contents)
 };

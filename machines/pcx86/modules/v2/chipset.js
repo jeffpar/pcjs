@@ -9,6 +9,7 @@
 
 import Interrupts from "./interrupts.js";
 import Messages from "./messages.js";
+import ROMx86 from "./rom.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
@@ -491,6 +492,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {string} [sDate]
+     * @returns {number} (programmed number of seconds since midnight)
      */
     initRTCTime(sDate)
     {
@@ -524,12 +526,13 @@ export default class ChipSet extends Component {
             this.printf(Messages.NONE, "CMOS date: %T\n", date);
         }
 
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = date.getSeconds();
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALRM] = 0;
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] = date.getMinutes();
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALRM] = 0;
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] = date.getHours();
-        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALRM] = 0;
+        let h, m, s;
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = s = date.getSeconds();
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALARM] = 0;
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] = m = date.getMinutes();
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALARM] = 0;
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] = h = date.getHours();
+        this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALARM] = 0;
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_WEEK_DAY] = date.getDay() + 1;
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH_DAY] = date.getDate();
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH] = date.getMonth() + 1;
@@ -545,6 +548,12 @@ export default class ChipSet extends Component {
 
         this.nRTCCyclesLastUpdate = this.nRTCCyclesNextUpdate = 0;
         this.nRTCPeriodsPerSecond = this.nRTCCyclesPerPeriod = null;
+
+        /*
+         * Return the number of seconds since midnight that have been programmed into the RTC, so that the
+         * caller can easily convert that into TIMER_LOW/TIMER_HIGH values for the ROM BIOS data area, if needed.
+         */
+        return h * 3600 + m * 60 + s;
     }
 
     /**
@@ -561,7 +570,7 @@ export default class ChipSet extends Component {
 
         if (iRTC < ChipSet.CMOS.ADDR.STATUSA) {
             let f12HourValue = false;
-            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALRM) {
+            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALARM) {
                 if (!(this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.HOUR24)) {
                     if (b < 12) {
                         b = (!b? 12 : b);
@@ -619,7 +628,7 @@ export default class ChipSet extends Component {
                 b = (b >> 4) * 10 + (b & 0xf);
                 fBCD = true;
             }
-            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALRM) {
+            if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALARM) {
                 if (fBCD) {
                     /*
                      * If the original BCD hour was 0x81-0x92, then the previous BINARY-to-BCD conversion
@@ -760,9 +769,9 @@ export default class ChipSet extends Component {
         /*
          * Step 2: Deal with Alarm Interrupts
          */
-        if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALRM]) {
-            if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALRM]) {
-                if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALRM]) {
+        if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALARM]) {
+            if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MIN_ALARM]) {
+                if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR_ALARM]) {
                     this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.AF;
                     if (this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.AIE) {
                         this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.IRQF;
@@ -959,6 +968,37 @@ export default class ChipSet extends Component {
     }
 
     /**
+     * syncRTCTime()
+     *
+     * On a normal startup, obviously the ROM will take care of initializing BIOS data area TIMER_LOW/TIMER_HIGH
+     * values to match the RTC values.  If we're restoring a machine state, that initialization will be bypassed,
+     * but if it was a *full* restore, all values would still be synced.  However, if we've decided to override the
+     * machine's date/time with the current date/time, they will be out of sync.
+     *
+     * In that case, nRTCSeconds will be set, and we must sync the BIOS data area with that value.
+     *
+     * Moreover, that sync must occur not only after the RAM component has been initialized but also after RAM contents
+     * have been restored; otherwise, the sync'ed value will be overwritten.  Since the CPU's restore() function is
+     * when RAM finally gets restored, that's where you'll find the call to syncRTCTime().
+     *
+     * @this {ChipSet}
+     */
+    syncRTCTime()
+    {
+        if (this.nRTCSeconds != undefined) {
+            /*
+             * The 8254 ("PIT") is wired to a clock with a frequency of 1.193182MHz, and the PIT is configured
+             * to divide that by 65536, which gives us 18.2065 interrupts ("ticks") per second.
+             */
+            let ticks = this.nRTCSeconds * 18.2065;
+            this.bus.setShort(ROMx86.BIOS.TIMER_LOW, ticks & 0xffff);
+            this.bus.setShort(ROMx86.BIOS.TIMER_HIGH, ticks >>> 16);
+            this.bus.setByte(ROMx86.BIOS.TIMER_OFL, 0);
+            this.nRTCSeconds = undefined;
+        }
+    }
+
+    /**
      * updateCMOSChecksum()
      *
      * This sums all the CMOS bytes from 0x10-0x2D, creating a 16-bit checksum.  That's a total of 30 (unsigned) 8-bit
@@ -1079,7 +1119,7 @@ export default class ChipSet extends Component {
              * the CMOS bytes above, instead of overwriting them all, in which case this extra call to initRTCTime()
              * could be avoided.
              */
-            this.initRTCTime();
+            this.nRTCSeconds = this.initRTCTime();
         }
         return true;
     }
@@ -5898,11 +5938,11 @@ ChipSet.CMOS = {
     ADDR: {                     // this.bCMOSAddr
         PORT:           0x70,
         RTC_SEC:        0x00,
-        RTC_SEC_ALRM:   0x01,
+        RTC_SEC_ALARM:  0x01,
         RTC_MIN:        0x02,
-        RTC_MIN_ALRM:   0x03,
+        RTC_MIN_ALARM:  0x03,
         RTC_HOUR:       0x04,
-        RTC_HOUR_ALRM:  0x05,
+        RTC_HOUR_ALARM: 0x05,
         RTC_WEEK_DAY:   0x06,
         RTC_MONTH_DAY:  0x07,
         RTC_MONTH:      0x08,

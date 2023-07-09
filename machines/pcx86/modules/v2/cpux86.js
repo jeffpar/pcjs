@@ -1934,12 +1934,23 @@ export default class CPUx86 extends CPULib {
         a = data[3];
         this.nTotalCycles = a[1];   // a[0] was previously nBurstDivisor (no longer used)
         this.setSpeed(a[2]);        // old states didn't contain a value from getSpeed(), but setSpeed() checks
-        if (a[3] != null) {         // less old states didn't preserve the original running state, so we must check it
-            this.flags.autoStart = a[3] || undefined;   // prefer undefined over false, because false is a firm no-autoStart
+        /*
+         * autoStart is normally either true, false, or null (the latter depends on the presence of a debugger),
+         * but there are special circumstances where it can be a number (ie, zero) if someone has decided that the
+         * machine should NOT be auto-started regardless.
+         */
+        if (a[3] != null && this.flags.autoStart !== 0) {   // less old states didn't preserve the original running state
+            this.flags.autoStart = a[3] || null;            // prefer null over false, because false is a firm no-autoStart
         }
         if (a[4] != null) {
             this.restoreTimers(a[4]);
         }
+        /*
+         * Making sure the ROM BIOS timer values are synced with the RTC (if any) is something the ChipSet component
+         * would take care of automatically, but alas, it is initialized long before RAM is restored, so we have to make
+         * this callback.
+         */
+        if (this.chipset) this.chipset.syncRTCTime();
         return fRestored;
     }
 

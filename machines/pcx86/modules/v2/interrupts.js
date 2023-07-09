@@ -33,6 +33,7 @@ const Interrupts = {
      * mode, it was up to software to provide the font data and set the VID_EXT vector to point to it.
      */
     VID_EXT:    0x1F,               // graphics characters 0x80-0xFF (aka EXT_PTR)
+    DOS_EXIT:   0x20,
     DOS:        0x21,
     DOS_IDLE:   0x28,
     DOS_NETBIOS:0x2A,

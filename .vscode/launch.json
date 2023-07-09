@@ -442,7 +442,6 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -462,7 +461,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=ibm5150"
+        "ibm5150"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -483,6 +482,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--load=compaq386",
+        "--halt",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -560,14 +560,40 @@
       }
     },
     {
-      "name": "pc.js chkdsk",
+      "name": "pc.js dir *.*",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "chkdsk"
+        "--sys=msdos",
+        "--ver=3.20",
+        "dir *.*"
       ],
       "cwd": "${workspaceFolder}/tools/pc/archive/MSDOS320",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js --sys=pcdos --ver=2.00 --debug dir",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--sys=pcdos",
+        "--ver=2.00",
+        "--debug",
+        "--save",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200-C400",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1157,8 +1183,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "DISK0186.json",
-        "t.json"
+        "TEST0001.img",
+        "TEST0001.json"
       ],
       "cwd": "${workspaceFolder}/disks/tmp",
       "stopOnEntry": false,
@@ -1228,7 +1254,7 @@
       "args": [
         "--dir=DISK0001",
         "--normalize",
-        "--output=TEST001.img",
+        "--output=TEST0001.img",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}/disks/tmp",
@@ -1408,7 +1434,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--disk=/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0798/DISK0798.json",
+        "--disk",
+        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0798/DISK0798.json",
         "--list"
       ],
       "cwd": "${workspaceFolder}",
@@ -1474,10 +1501,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=pcsig/0001-0999/DISK0126",
+        "--collection=miscdisks/pcx86/lang/borland/pascal/6.00/TURBO-PASCAL-600-DISK4",
         "--checkdisk",
-        "--rebuild",
-        "--verbose"
+        "--rebuild"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

@@ -1978,7 +1978,7 @@
 				}
 			},
 			"microsoft": {
-				"@title": "MS-DOS",
+				"@title": "Microsoft",
 				"@versions": {
 					"2.00": {
 						"@title": "MS-DOS 2.00",
@@ -8684,7 +8684,8 @@
 					{
 						"@title": "Jeff's Misc Disk #1",
 						"@diskette": "JEFFPAR-MISCDISK1.json",
-						"@format": "PC1200K"
+						"@format": "PC1200K",
+						"@label": "JEFF 1"
 					},
 					{
 						"@title": "Jeff's Misc Disk #2",

@@ -9,6 +9,7 @@
 
 import ChipSet from "./chipset.js";
 import Disk from "./disk.js";
+import Errors from "./errors.js";
 import Messages from "./messages.js";
 import Panel from "./panel.js";
 import Component from "../../../modules/v2/component.js";
@@ -1373,7 +1374,7 @@ export default class FDC extends Component {
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
      * @param {function(Disk,number)} [done] optional callback on completion of the load request
-     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded, -2 if drive not found
+     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file, done)
     {
@@ -1384,7 +1385,7 @@ export default class FDC extends Component {
         };
         let drive = this.aDrives[iDrive];
         if (!drive) {
-            result = -2;
+            result = Errors.DOS.INVALID_DRIVE;
         }
         else if (sDiskPath) {
             sDiskPath = Web.redirectResource(sDiskPath);
@@ -2567,8 +2568,8 @@ export default class FDC extends Component {
             h ^= i;
             if (!bHead) i = 0;
             r = drive.bSector;                          // REQUIRED in order for MINIX 1.1 to load ROOT diskette
-            if (drive.disk && drive.disk.aDiskData && drive.disk.aDiskData[c] && drive.disk.aDiskData[c][h] && drive.disk.aDiskData[c][h][r-1]) {
-                r = drive.disk.aDiskData[c][h][r-1][Disk.SECTOR.ID];
+            if (drive.disk && drive.disk.diskData && drive.disk.diskData[c] && drive.disk.diskData[c][h] && drive.disk.diskData[c][h][r-1]) {
+                r = drive.disk.diskData[c][h][r-1][Disk.SECTOR.ID];
             }
         }
         c += i;

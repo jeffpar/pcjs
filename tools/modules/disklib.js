@@ -10,6 +10,7 @@
 import crypto     from "crypto";
 import fs         from "fs";
 import glob       from "glob";
+import got        from "got";
 import os         from "os";
 import path       from "path";
 import BASFile    from "../modules/basfile.js";
@@ -327,7 +328,7 @@ function addMetaData(di, sDir, sPath, aFiles)
                 let sName = path.basename(sPath);
                 let stats = fs.statSync(sPath);
                 if (!stats.isDirectory()) {
-                    let data = readFile(sPath, null);
+                    let data = readFileSync(sPath, null);
                     if (!data) continue;
                     let file = {
                         hash: getHash(data),
@@ -350,26 +351,26 @@ function addMetaData(di, sDir, sPath, aFiles)
 }
 
 /**
- * makeFileDesc(name, contents, attr, date)
+ * makeFileDesc(name, data, attr, date)
  *
  * This mimics getFileDesc() in diskinfo.js, but it creates a FILEDESC object from input
  * parameters rather than a FileInfo object.
  *
  * @param {string} name
- * @param {DataBuffer|string} contents
+ * @param {DataBuffer|string} data
  * @param {number} [attr]
  * @param {Date} [date]
  * @returns {Object}
  */
-export function makeFileDesc(name, contents, attr = DiskInfo.ATTR.ARCHIVE, date = new Date())
+export function makeFileDesc(name, data, attr = DiskInfo.ATTR.ARCHIVE, date = new Date())
 {
     return {
         [DiskInfo.FILEDESC.PATH]: "/" + name,
         [DiskInfo.FILEDESC.NAME]: name,
         [DiskInfo.FILEDESC.ATTR]: sprintf("%#0bx", attr),
         [DiskInfo.FILEDESC.DATE]: sprintf("%T", date),
-        [DiskInfo.FILEDESC.SIZE]: contents.length,
-        [DiskInfo.FILEDESC.CONTENTS]: contents,
+        [DiskInfo.FILEDESC.SIZE]: data.length,
+        [DiskInfo.FILEDESC.CONTENTS]: data,
         [DiskInfo.FILEDESC.VOL]:  0
     };
 }
@@ -558,7 +559,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
              * are telling us that the files being read here are "modern" (eg, UTF-8 or at least plain
              * ASCII) files that should be converted to PC standards.
              */
-            let data = readFile(sPath, null);
+            let data = readFileSync(sPath, null);
             if (!data) continue;
             let fText = fNormalize && isTextFile(sName);
             if (fText) {
@@ -567,7 +568,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
                 }
             }
             if (fText) {
-                data = readFile(sPath);
+                data = readFileSync(sPath);
                 if (CharSet.isText(data)) {
                     let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
                     if (dataNew != data) {
@@ -752,23 +753,29 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbo
 }
 
 /**
- * readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ * readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} diskFile
  * @param {boolean} [forceBPB]
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
- * @returns {DiskInfo|null}
  */
-export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
 {
     let db, di
     try {
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);
         if (StrLib.getExtension(diskName) == "json") {
-            db = readFile(diskFile);
+            diskFile = getServerPath(diskFile);
+            if (diskFile.startsWith("http")) {
+                printf("fetching %s\n", diskFile);
+                let response = await got(diskFile);
+                db = response.body;
+            } else {
+                db = await readFileAsync(diskFile, "utf8");
+            }
             if (!db) {
                 di = null;
             } else {
@@ -777,9 +784,55 @@ export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
         }
         else {
             /*
-             * Passing null for the encoding parameter tells readFile() to return a buffer (which, in our case, is a DataBuffer).
+             * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
              */
-            db = readFile(diskFile, null);
+            db = await readFileAsync(diskFile, null);
+            if (!db) {
+                di = null;
+            } else {
+                if (StrLib.getExtension(diskName) == "psi") {
+                    if (!di.buildDiskFromPSI(db)) di = null;
+                } else {
+                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
+                }
+            }
+        }
+    } catch(err) {
+        printError(err);
+        return null;
+    }
+    return di;
+}
+
+/**
+ * readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ *
+ * @param {string} diskFile
+ * @param {boolean} [forceBPB]
+ * @param {Array|string} [sectorIDs]
+ * @param {Array|string} [sectorErrors]
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
+ * @returns {DiskInfo|null}
+ */
+export function readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+{
+    let db, di
+    try {
+        let diskName = path.basename(diskFile);
+        di = new DiskInfo(device, diskName);
+        if (StrLib.getExtension(diskName) == "json") {
+            db = readFileSync(diskFile);
+            if (!db) {
+                di = null;
+            } else {
+                if (!di.buildDiskFromJSON(db)) di = null;
+            }
+        }
+        else {
+            /*
+             * Passing null for the encoding parameter tells readFileSync() to return a DataBuffer.
+             */
+            db = readFileSync(diskFile, null);
             if (!db) {
                 di = null;
             } else {
@@ -792,6 +845,7 @@ export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
         }
         if (di) {
             let sDir = getLocalPath(diskFile.replace(/\.[a-z]+$/i, ""));
+            // sDir = path.join(path.dirname(sDir), "archive", path.basename(sDir));
             let aDiskFiles = glob.sync(path.join(sDir, "**"));
             for (let i = 0; i < aDiskFiles.length; i++) {
                 addMetaData(di, sDir, aDiskFiles[i].slice(sDir.length));
@@ -805,14 +859,31 @@ export function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
 }
 
 /**
- * readFile(sFile, encoding, quiet)
+ * readFileAsync(sFile, encoding)
+ *
+ * @param {string} sFile
+ * @param {string|null} [encoding]
+ */
+export function readFileAsync(sFile, encoding = "utf8")
+{
+    sFile = getLocalPath(sFile);
+    return new Promise((resolve, reject) => {
+        fs.readFileSync(sFile, encoding, (err, data) => {
+            if (err) reject(err);
+            resolve(data);
+        });
+    });
+}
+
+/**
+ * readFileSync(sFile, encoding, quiet)
  *
  * @param {string} sFile
  * @param {string|null} [encoding]
  * @param {boolean} [quiet]
  * @returns {DataBuffer|string|undefined}
  */
-export function readFile(sFile, encoding = "utf8", quiet = false)
+export function readFileSync(sFile, encoding = "utf8", quiet = false)
 {
     let data;
     if (sFile) {
@@ -827,16 +898,16 @@ export function readFile(sFile, encoding = "utf8", quiet = false)
 }
 
 /**
- * readJSON(sFile)
+ * readJSONSync(sFile)
  *
  * @param {string} sFile
  * @returns {Object|undefined}
  */
-export function readJSON(sFile)
+export function readJSONSync(sFile)
 {
     let data, json;
     try {
-        data = readFile(sFile);
+        data = readFileSync(sFile);
         json = JSON.parse(data);
     } catch(err) {
         printError(err);
@@ -845,7 +916,7 @@ export function readJSON(sFile)
 }
 
 /**
- * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fQuiet, fWritable, source)
+ * writeDiskSync(diskFile, di, fLegacy, indent, fOverwrite, fQuiet, fWritable, source)
  *
  * @param {string} diskFile
  * @param {DiskInfo} di
@@ -856,7 +927,7 @@ export function readJSON(sFile)
  * @param {boolean} [fWritable]
  * @param {string} [source]
  */
-export function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fQuiet = false, fWritable = false, source = "")
+export function writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fQuiet = false, fWritable = false, source = "")
 {
     let diskName = path.basename(diskFile);
     try {
@@ -888,6 +959,46 @@ export function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite 
     catch(err) {
         printError(err);
     }
+}
+
+/**
+ * writeFileSync(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
+ *
+ * @param {string} sFile
+ * @param {DataBuffer|Array|string|undefined} data
+ * @param {boolean} [fCreateDir]
+ * @param {boolean} [fOverwrite]
+ * @param {boolean} [fReadOnly]
+ * @param {boolean} [fQuiet]
+ * @returns {boolean}
+ */
+export function writeFileSync(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
+{
+    if (sFile) {
+        try {
+            if (data === undefined) {
+                data = [];
+            }
+            if (data instanceof DataBuffer) {
+                data = data.buffer;
+            } else if (Array.isArray(data)) {
+                data = new DataBuffer(data).buffer;
+            }
+            if (fCreateDir) {
+                let sDir = path.dirname(sFile);
+                makeDir(sDir, true);
+            }
+            if (!existsFile(sFile) || fOverwrite) {
+                fs.writeFileSync(sFile, data);
+                if (fReadOnly) fs.chmodSync(sFile, 0o444);
+                return true;
+            }
+            if (!fQuiet) printf("warning: %s exists, use --overwrite to replace\n", sFile);
+        } catch(err) {
+            printError(err);
+        }
+    }
+    return false;
 }
 
 /**
