@@ -1143,8 +1143,10 @@ function doCommand(s, argv)
         result = "pc.js commands:\n" +
                     "  load [machine]\n" +
                     "  load [drive] [search terms]\n" +
-                    "  quit\n" +
-                    "type \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
+                    "  quit";
+        if (dbg) {
+            result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
+        }
         break;
     case "argv":
         printf("%2j\n", argv);

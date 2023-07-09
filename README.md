@@ -24,9 +24,9 @@ which covers topics such as:
 
 Topics covered in the repository itself include:
 
-  - [PCjs Disk Images](/tools/diskimage/)
-  - [PCjs File Images](/tools/fileimage/)
-  - [Running machines from the command-line with PC.js](/tools/pc/)
+  - [PCjs disk images](/tools/diskimage/)
+  - [PCjs file images](/tools/fileimage/)
+  - [Running machines from the command-line with pc.js](/tools/pc/)
 
 ### License
 
