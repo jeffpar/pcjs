@@ -1105,7 +1105,7 @@ export default class KbdX86 extends Component {
      * injectKeys(sKeys, msDelay)
      *
      * @this {KbdX86}
-     * @param {string} [sKeys]
+     * @param {string} [sKeys] (keys listed in SOFTCODES must be prefixed with '$')
      * @param {number} [msDelay] is an optional injection delay (default is msInjectDefault)
      * @returns {boolean}
      */

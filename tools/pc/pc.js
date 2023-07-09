@@ -41,6 +41,21 @@ let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
 let driveManifest = null;
 
+const functionKeys = {
+    "\u001bOP":     "$f1",
+    "\u001bOQ":     "$f2",
+    "\u001bOR":     "$f3",
+    "\u001bOS":     "$f4",
+    "\u001b[15~":   "$f5",
+    "\u001b[17~":   "$f6",
+    "\u001b[18~":   "$f7",
+    "\u001b[19~":   "$f8",
+    "\u001b[20~":   "$f9",
+    "\u001b[21~":   "$f10",
+    "\u001b[23~":   "$f11",
+    "\u001b[24~":   "$f12"
+};
+
 /**
  * setDebugMode(nEvent)
  *
@@ -1187,6 +1202,9 @@ function readInput(argv, stdin, stdout)
 
     stdin.on("data", function(data) {
         let code = data.charCodeAt(0);
+        if (Defines.MAXDEBUG) {
+            printf("key(s): %j\n", data);
+        }
         if (code == 0x04 && !debugMode) {           // check for CTRL-D when NOT in debug mode
             if (cpu) cpu.stopCPU();
             setDebugMode(DbgLib.EVENTS.READY);
@@ -1198,8 +1216,12 @@ function readInput(argv, stdin, stdout)
             return;
         }
         if (!debugMode) {
+            data = functionKeys[data] || data;
             data = data.replace(/\x7f/g, "\b");     // convert DEL to BS
             if (kbd) {
+                if (Defines.MAXDEBUG) {
+                    printf("injecting key(s): %s\n", data);
+                }
                 kbd.injectKeys.call(kbd, data, 0);
             } else {
                 sendSerial(code);
