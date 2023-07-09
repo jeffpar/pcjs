@@ -625,16 +625,19 @@ function buildDrive(sCommand)
             printf("system diskette not found: %s\n", sSystemDisk);
             return null;
         }
-        let dbMBR = readFileSync(path.join(pcjsDir, "MSDOS" /*systemType.toUpperCase() */ + ".mbr"), null);
+        let dbMBR = readFileSync(path.join(pcjsDir, "MSDOS" /*systemType.toUpperCase()*/ + ".mbr"), null);
         if (diSystem && dbMBR) {
             let aFileDescs = [];
             for (let name of system.files) {
                 let desc = diSystem.findFile(name);
                 if (desc) {
                     desc.attr = +desc.attr;
-                    // if (majorVersion != 2 || name != "COMMAND.COM") {
-                        desc.attr |= DiskInfo.ATTR.HIDDEN;
-                    // }
+                    /*
+                     * There may be situations where we must leave COMMAND.COM unhidden; we'll see.
+                     *
+                     *      if (name != "COMMAND.COM" || majorVersion != 2) ...
+                     */
+                    desc.attr |= DiskInfo.ATTR.HIDDEN;
                     aFileDescs.push(desc);
                 }
             }
@@ -680,15 +683,15 @@ function buildDrive(sCommand)
              *
              * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register
              * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk) even though the DOS
-             * MBR *does* appear to preserve and pass DL on to the boot sector.
+             * MBR does appear to preserve and pass DL on to the boot sector.
              *
-             * For example, when MS-DOS 3.20 writes the boot sector to the media, it inserts the media's
-             * drive number at offset 0x1fd (before the 0x55,0xAA signature).  So that's we do, too.
+             * For example, when MS-DOS 3.20 writes the boot sector to the media, it inserts the boot drive
+             * at offset 0x1fd (just before the 0x55,0xAA signature).  So that's we do, too.
              *
              * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
              * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
              *
-             * TODO: Obviously this will have to be fully fleshed out for ALL supported versions of DOS.
+             * TODO: Obviously this code will have to be fully fleshed out for ALL supported versions of DOS.
              */
             let verBPB = 0;
             let dbBoot = getDiskSector(diSystem, 0);
@@ -698,8 +701,19 @@ function buildDrive(sCommand)
                 }
             } else if (systemType == "pcdos") {
                 if (majorVersion == 2) {
+                    /*
+                     * PC DOS 2.x requires the boot drive (AND drive head # -- go figure) to be stored in locations
+                     * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
+                     * part of the BPB unless we specify a BPB version number (which, in this case, must be 2).
+                     */
                     verBPB = 2;
                     dbBoot.writeUInt8(0x80, DiskInfo.BPB.BOOTDRIVE);
+                    /*
+                     * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
+                     * drive image, we place the first (and only) partition immediately after the MBR.  Some systems
+                     * reserve the entire first track for the MBR, in which case the first partition would not necessarily
+                     * be located at head 0, but that's not something we need to worry about for now.
+                     */
                     dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);
                 }
             }
