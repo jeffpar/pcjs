@@ -591,8 +591,14 @@ function buildDrive(sCommand)
     let sProgram = aParts[0].toUpperCase();
     let iCommand = aInternalCommands.indexOf(sProgram);
     let system = systemInfo[systemType];
+    let version = +systemVersion;
+    let majorVersion = version | 0;
     if (!system) {
         printf("unsupported system type: %s\n", systemType);
+        return null;
+    }
+    if (majorVersion < 2) {
+        printf("minimum DOS version with hard disk support is 2.00\n");
         return null;
     }
     if (iCommand < 0) {
@@ -625,7 +631,10 @@ function buildDrive(sCommand)
             for (let name of system.files) {
                 let desc = diSystem.findFile(name);
                 if (desc) {
-                    desc.attr = +desc.attr | DiskInfo.ATTR.HIDDEN;
+                    desc.attr = +desc.attr;
+                    // if (majorVersion != 2 || name != "COMMAND.COM") {
+                        desc.attr |= DiskInfo.ATTR.HIDDEN;
+                    // }
                     aFileDescs.push(desc);
                 }
             }
@@ -683,13 +692,12 @@ function buildDrive(sCommand)
              */
             let verBPB = 0;
             let dbBoot = getDiskSector(diSystem, 0);
-            let version = +systemVersion;
             if (systemType == "msdos") {
                 if (version >= 3.2 && version <= 3.31) {
                     dbBoot.writeUInt8(0x80, 0x1fd);
                 }
             } else if (systemType == "pcdos") {
-                if (version|0 == 2) {
+                if (majorVersion == 2) {
                     verBPB = 2;
                     dbBoot.writeUInt8(0x80, DiskInfo.BPB.BOOTDRIVE);
                     dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);
