@@ -3889,11 +3889,16 @@ export default class VideoX86 extends Component {
         /*
          * If we're still here, then we're ready!
          *
-         * UPDATE: Per issue #21, I'm issuing setReady() *only* if a valid contextScreen exists *or* a Debugger is attached.
+         * UPDATE: Per issue #21 (https://github.com/jeffpar/pcjs.v1/issues/21), I issued setReady() *only* if a valid
+         * contextScreen existed *or* a debugger was attached, and decided to consider a more general-purpose solution for
+         * whether or not the user wanted to run in a "headless" mode at a later date.
          *
-         * TODO: Consider a more general-purpose solution for deciding whether or not the user wants to run in a "headless" mode.
+         * Well, that later date is now, and since pc.js always runs machines in a "headless" mode, we're going to always
+         * mark ourselves ready.
+         *
+         *      if (this.contextScreen || this.dbg) this.setReady();
          */
-        if (this.contextScreen || this.dbg) this.setReady();
+        this.setReady();
     }
 
     /**

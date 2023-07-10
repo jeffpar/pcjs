@@ -1581,7 +1581,7 @@ export default class FDC extends Component {
             }
         }
         /*
-         * Why didn't we sorted aDiskettes before adding them to the controlDisks list control?
+         * Why didn't we sort aDiskettes before adding them to the controlDisks list control?
          * Because that wouldn't handle any prepopulated entries already stored in the list control.
          */
         if (this.sortBy) {
@@ -1649,10 +1649,17 @@ export default class FDC extends Component {
     findDisketteByPath(sPath)
     {
         let controlDisks = this.bindings["listDisks"];
-        if (controlDisks && controlDisks.options) {
-            for (let i = 0; i < controlDisks.options.length; i++) {
-                let control = controlDisks.options[i];
-                if (control.value == sPath) return control.text;
+        if (controlDisks) {
+            if (controlDisks.options) {
+                for (let i = 0; i < controlDisks.options.length; i++) {
+                    let control = controlDisks.options[i];
+                    if (control.value == sPath) return control.text;
+                }
+            }
+        } else if (this.aDiskettes) {
+            for (let i = 0; i < this.aDiskettes.length; i++) {
+                let diskette = this.aDiskettes[i];
+                if (diskette['path'] == sPath) return diskette['name'];
             }
         }
         return null;
@@ -1672,10 +1679,17 @@ export default class FDC extends Component {
     {
         if (sName) {
             let controlDisks = this.bindings["listDisks"];
-            if (controlDisks && controlDisks.options) {
-                for (let i = 0; i < controlDisks.options.length; i++) {
-                    let control = controlDisks.options[i];
-                    if (control.text == sName) return control.value;
+            if (controlDisks) {
+                if (controlDisks.options) {
+                    for (let i = 0; i < controlDisks.options.length; i++) {
+                        let control = controlDisks.options[i];
+                        if (control.text == sName) return control.value;
+                    }
+                }
+            } else if (this.aDiskettes) {
+                for (let i = 0; i < this.aDiskettes.length; i++) {
+                    let diskette = this.aDiskettes[i];
+                    if (diskette['name'] == sName) return diskette['path'];
                 }
             }
             this.printf(Messages.NOTICE, "Unable to find diskette \"%s\"\n", sName);

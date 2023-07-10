@@ -54010,11 +54010,16 @@ class VideoX86 extends Component {
         /*
          * If we're still here, then we're ready!
          *
-         * UPDATE: Per issue #21, I'm issuing setReady() *only* if a valid contextScreen exists *or* a Debugger is attached.
+         * UPDATE: Per issue #21 (https://github.com/jeffpar/pcjs.v1/issues/21), I issued setReady() *only* if a valid
+         * contextScreen existed *or* a debugger was attached, and decided to consider a more general-purpose solution for
+         * whether or not the user wanted to run in a "headless" mode at a later date.
          *
-         * TODO: Consider a more general-purpose solution for deciding whether or not the user wants to run in a "headless" mode.
+         * Well, that later date is now, and since pc.js always runs machines in a "headless" mode, we're going to always
+         * mark ourselves ready.
+         *
+         *      if (this.contextScreen || this.dbg) this.setReady();
          */
-        if (this.contextScreen || this.dbg) this.setReady();
+        this.setReady();
     }
 
     /**
@@ -65862,7 +65867,7 @@ class FDC extends Component {
             }
         }
         /*
-         * Why didn't we sorted aDiskettes before adding them to the controlDisks list control?
+         * Why didn't we sort aDiskettes before adding them to the controlDisks list control?
          * Because that wouldn't handle any prepopulated entries already stored in the list control.
          */
         if (this.sortBy) {
@@ -65930,10 +65935,17 @@ class FDC extends Component {
     findDisketteByPath(sPath)
     {
         let controlDisks = this.bindings["listDisks"];
-        if (controlDisks && controlDisks.options) {
-            for (let i = 0; i < controlDisks.options.length; i++) {
-                let control = controlDisks.options[i];
-                if (control.value == sPath) return control.text;
+        if (controlDisks) {
+            if (controlDisks.options) {
+                for (let i = 0; i < controlDisks.options.length; i++) {
+                    let control = controlDisks.options[i];
+                    if (control.value == sPath) return control.text;
+                }
+            }
+        } else if (this.aDiskettes) {
+            for (let i = 0; i < this.aDiskettes.length; i++) {
+                let diskette = this.aDiskettes[i];
+                if (diskette['path'] == sPath) return diskette['name'];
             }
         }
         return null;
@@ -65953,10 +65965,17 @@ class FDC extends Component {
     {
         if (sName) {
             let controlDisks = this.bindings["listDisks"];
-            if (controlDisks && controlDisks.options) {
-                for (let i = 0; i < controlDisks.options.length; i++) {
-                    let control = controlDisks.options[i];
-                    if (control.text == sName) return control.value;
+            if (controlDisks) {
+                if (controlDisks.options) {
+                    for (let i = 0; i < controlDisks.options.length; i++) {
+                        let control = controlDisks.options[i];
+                        if (control.text == sName) return control.value;
+                    }
+                }
+            } else if (this.aDiskettes) {
+                for (let i = 0; i < this.aDiskettes.length; i++) {
+                    let diskette = this.aDiskettes[i];
+                    if (diskette['name'] == sName) return diskette['path'];
                 }
             }
             this.printf(Messages.NOTICE, "Unable to find diskette \"%s\"\n", sName);

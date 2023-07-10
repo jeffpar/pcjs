@@ -70,7 +70,7 @@ function setDebugMode(nEvent)
 {
     let prevMode = debugMode;
     if (!nEvent && debugMode != nEvent) {
-        printf("Press CTRL-D to enter debugger, CTRL-C to terminate process\n");
+        printf("Press CTRL-D to enter command mode, CTRL-C to terminate process\n");
     }
     debugMode = nEvent;
     if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
@@ -1138,15 +1138,25 @@ function doCommand(s, argv)
     let result = "";
     let aTokens = s.split(' ');
 
-    switch(aTokens[0].toLowerCase()) {
-    case "help":
-        result = "pc.js commands:\n" +
+    let cmd = aTokens[0].toLowerCase();
+    let help = function() {
+        let result = "pc.js commands:\n" +
                     "  load [machine]\n" +
                     "  load [drive] [search terms]\n" +
                     "  quit";
         if (dbg) {
             result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
+        } else {
+            result += "\nmachine commands:\n" +
+                    "  g (to continue running)\n" +
+                    "load a machine with a debugger for more machine commands";
         }
+        return result;
+    };
+
+    switch(cmd) {
+    case "help":
+        result = help();
         break;
     case "argv":
         printf("%2j\n", argv);
@@ -1172,12 +1182,33 @@ function doCommand(s, argv)
         return null;
     default:
         if (s) {
-            try {
-                if (dbg && !dbg.doCommands(s, true, true)) {
-                    result = eval('(' + s + ')');
+            if (!dbg) {
+                /*
+                 * For machines without a debugger, we provide some limited machine control.
+                 */
+                switch(cmd) {
+                case "?":
+                    result = help();
+                    break;
+                case "g":
+                    if (cpu) {
+                        if (cpu.startCPU()) {
+                            setDebugMode(DbgLib.EVENTS.EXIT);
+                        }
+                    }
+                    break;
+                default:
+                    result = "unknown command: " + s;
+                    break;
                 }
-            } catch(err) {
-                result = err.message;
+            } else {
+                try {
+                    if (!dbg.doCommands(s, true, true)) {
+                        result = eval('(' + s + ')');
+                    }
+                } catch(err) {
+                    result = err.message;
+                }
             }
         }
         break;
