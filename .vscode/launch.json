@@ -622,14 +622,13 @@
       }
     },
     {
-      "name": "pc.js --sys=pcdos --ver=2.00 --debug dir",
+      "name": "pc.js --sys=pcdos --ver=2.00 dir",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--sys=pcdos",
         "--ver=2.00",
-        "--debug",
         "--save",
         "dir"
       ],

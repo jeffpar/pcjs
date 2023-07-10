@@ -720,7 +720,7 @@ function buildDrive(sCommand)
                     /*
                      * PC DOS 2.x requires the boot drive (AND drive head # -- go figure) to be stored in locations
                      * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
-                     * part of the BPB unless we specify a BPB version number (which, in this case, must be 2).
+                     * part of the BPB unless we specify a BPB version number, so in this case, it must be 2.
                      */
                     verBPB = 2;
                     dbBoot.writeUInt8(0x80, DiskInfo.BPB.BOOTDRIVE);
@@ -728,7 +728,7 @@ function buildDrive(sCommand)
                      * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
                      * drive image, we place the first (and only) partition immediately after the MBR.  Some systems
                      * reserve the entire first track for the MBR, in which case the first partition would not necessarily
-                     * be located at head 0, but that's not something we need to worry about for now.
+                     * be located at head 0.
                      */
                     dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);
                 }

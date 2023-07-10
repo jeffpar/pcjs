@@ -65963,7 +65963,7 @@ class FDC extends Component {
      */
     findDisketteByName(sName)
     {
-        if (sName) {
+        if (sName && sName != "None") {
             let controlDisks = this.bindings["listDisks"];
             if (controlDisks) {
                 if (controlDisks.options) {
