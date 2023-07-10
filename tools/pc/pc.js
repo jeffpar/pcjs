@@ -30,6 +30,7 @@ let autoStart = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.20";
+let driveName = "DOS.json";
 
 let rootDir, pcjsDir;
 let messagesFilter, machines, debugMode;
@@ -604,6 +605,13 @@ function buildDrive(sCommand)
     let system = systemInfo[systemType];
     let version = +systemVersion;
     let majorVersion = version | 0;
+
+    if (driveManifest) {
+        return "drive already built";
+    }
+    if (!sCommand) {
+        return "missing command or program name";
+    }
     if (!system) {
         return "unsupported system type: " + systemType;
     }
@@ -727,10 +735,14 @@ function buildDrive(sCommand)
             }
             let done = function(di) {
                 if (di) {
-                    driveManifest = di.getFileManifest(null, true);
+                    let fileName = path.join(pcjsDir, driveName);
+                    let manifest = di.getFileManifest(null, true);
                     di.updateBootSector(dbMBR, -1);         // a volume of -1 indicates the master boot record
                     di.updateBootSector(dbBoot, 0, verBPB);
-                    writeDiskSync(path.join(pcjsDir, "DOS.json"), di, false, 0, true, true);
+                    if (writeDiskSync(fileName, di, false, 0, true, true)) {
+                        if (fDebug) printf("drive built: %s\n", fileName);
+                        driveManifest = manifest;
+                    }
                 }
             }
             let normalize = true;
@@ -831,8 +843,8 @@ function buildFileIndex(diskIndex)
  */
 function checkDrive()
 {
-    if (hdc && driveManifest) {
-        let imageData = hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
+    if (driveManifest) {
+        let imageData = hdc && hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
         if (imageData) {
             let di = new DiskInfo(device, "DOS");
             if (di.buildDiskFromJSON(imageData)) {
@@ -915,7 +927,10 @@ function checkDrive()
                     fs.rmdirSync(dir.slice(1));
                 }
                 if (fSave) {
-                    writeDiskSync(path.join(pcjsDir, "DOS.img"), di, false, 0, true, true);
+                    let fileName = path.join(pcjsDir, driveName.replace(".json", ".img"));
+                    if (writeDiskSync(fileName, di, false, 0, true, true)) {
+                        if (fDebug) printf("drive saved: %s\n", fileName);
+                    }
                 }
                 return true;
             }
@@ -1142,10 +1157,14 @@ function doCommand(s, argv)
 {
     let result = "";
     let aTokens = s.split(' ');
-
     let cmd = aTokens[0].toLowerCase();
+
+    aTokens.splice(0, 1);
+    let args = aTokens.join(' ');
+
     let help = function() {
         let result = "pc.js commands:\n" +
+                    "  build [command or program]\n" +
                     "  load [machine]\n" +
                     "  load [drive] [search terms]\n" +
                     "  quit";
@@ -1164,19 +1183,25 @@ function doCommand(s, argv)
         result = help();
         break;
     case "argv":
-        printf("%2j\n", argv);
+        result = sprintf("%2j\n", argv);
+        break;
+    case "build":
+        result = buildDrive(args);
+        if (!result && driveManifest) {
+            result = "drive built (" + driveName + ")";
+        }
         break;
     case "cwd":
-        printf("%s\n", process.cwd());
+        result = process.cwd();
         break;
     case "load":
-        if (aTokens[1]) {
-            let matchDrive = aTokens[1].match(/^([a-z]:?)$/i);
+        if (aTokens[0]) {
+            let matchDrive = aTokens[0].match(/^([a-z]:?)$/i);
             if (matchDrive) {
-                aTokens.splice(0, 2)
+                aTokens.splice(0, 1)
                 result = loadDiskette(matchDrive[1], aTokens);
             } else {
-                result = loadMachine(aTokens[1]);
+                result = loadMachine(aTokens[0]);
             }
         } else {
             result = "missing " + (cpu? "drive letter" : "machine file");
@@ -1253,8 +1278,8 @@ function readInput(argv, stdin, stdout)
              * any arguments you want to pass along with the command to buildDrive() should be included
              * as part of a single fully-quoted argument (eg, pc.js "dir *.* /s").
              */
-            result = buildDrive(argv[1]);
-            if (!result) {                          // the argument is presumably a DOS command or program name
+            result = buildDrive(argv[1]);           // the argument must be a DOS command or program name
+            if (!result) {
                 result = loadMachine("compaq386");
                 if (!result) {
                     loading = true;

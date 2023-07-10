@@ -926,6 +926,7 @@ export function readJSONSync(sFile)
  * @param {boolean} [fQuiet]
  * @param {boolean} [fWritable]
  * @param {string} [source]
+ * @returns {boolean}
  */
 export function writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fQuiet = false, fWritable = false, source = "")
 {
@@ -949,6 +950,7 @@ export function writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwr
                 if (fExists) fs.unlinkSync(diskFile);
                 fs.writeFileSync(diskFile, data);
                 if (diskFileLC.endsWith(".img") && !fWritable) fs.chmodSync(diskFile, 0o444);
+                return true;
             } else {
                 printf("%s not written, no data\n", diskName);
             }
@@ -959,6 +961,7 @@ export function writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwr
     catch(err) {
         printError(err);
     }
+    return false;
 }
 
 /**
