@@ -627,6 +627,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "ibm5170",
         "--sys=pcdos",
         "--ver=2.00",
         "--save",

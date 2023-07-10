@@ -302,6 +302,7 @@ function initMachine(idMachine, sParms)
  */
 function intVideo(addr)
 {
+    const preserve = [0x08, 0x09, 0x0A, 0x0D];
     let AH = ((this.regEAX >> 8) & 0xff), AL = (this.regEAX & 0xff);
     let DH = ((this.regEDX >> 8) & 0xff), DL = (this.regEDX & 0xff);
     switch (AH) {
@@ -330,7 +331,13 @@ function intVideo(addr)
         break;
     case 0x09:
     case 0x0E:
-        printf("%c", CharSet.fromCP437(AL));
+        /*
+         * By default, fromCP437() preserves control characters (ie, does NOT translate to UTF-8), which
+         * is the proper thing to do for characters like BS, TAB, LF, and CR, but most other characters
+         * should actually be translated (eg, ESC or 0x1B, which BASIC uses to display a left-arrow symbol).
+         * and when non-TTY output is being requested (AH==0x09), everything should be translated.
+         */
+        printf("%c", CharSet.fromCP437(AL, AH == 0x09 || preserve.indexOf(AL) < 0));
         if (AL == '\r') {
             colCursor = 0;
         } else if (AL == '\n' && rowCursor < 25) {
