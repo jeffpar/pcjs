@@ -11,11 +11,11 @@ This directory contains the PCjs machine command-line utility [pc.js](pc.js), wh
 
 Load a JSON machine configuration file, such as [ibm5150.json](ibm5150.json) or [compaq386.json](compaq386.json), with the utility's `load` command, either interactively or with the `--load` command-line argument.
 
-For example, this command:
+For example:
 
 	pc.js --load=ibm5150
 
-or, if your operating system doesn't automatically associate `.js` files with [Node](https://nodejs.org/en), this command:
+or, if your operating system doesn't automatically associate `.js` files with [Node](https://nodejs.org/en):
 
 	node pc.js --load=ibm5150
 
