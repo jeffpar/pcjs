@@ -315,7 +315,7 @@ function intVideo(addr)
         break;
     case 0x09:
     case 0x0E:
-        printf("%c", AL);
+        printf("%c", CharSet.fromCP437(AL));
         nestedVideo++;
         this.addIntReturn(addr, function onVideoReturn(nLevel) {
             nestedVideo--;
