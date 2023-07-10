@@ -581,7 +581,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  * NOTE: The list of allowed internal commands below is not intended to be exhaustive; it's just a start.
  *
  * @param {string} sCommand (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
- * @returns {Array|null} (drive manifest)
+ * @returns {string} (error message, if any)
  */
 function buildDrive(sCommand)
 {
@@ -597,7 +597,7 @@ function buildDrive(sCommand)
     };
     const aInternalCommands = ["CD", "COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
 
-    let manifest = null;
+    let result = "";
     let aParts = sCommand.split(' ');
     let sProgram = aParts[0].toUpperCase();
     let iCommand = aInternalCommands.indexOf(sProgram);
@@ -605,12 +605,10 @@ function buildDrive(sCommand)
     let version = +systemVersion;
     let majorVersion = version | 0;
     if (!system) {
-        printf("unsupported system type: %s\n", systemType);
-        return null;
+        return "unsupported system type: " + systemType;
     }
     if (majorVersion < 2) {
-        printf("minimum DOS version with hard disk support is 2.00\n");
-        return null;
+        return "minimum DOS version with hard disk support is 2.00";
     }
     if (iCommand < 0) {
         if (sProgram.indexOf('.') < 0) {
@@ -633,8 +631,7 @@ function buildDrive(sCommand)
         sSystemDisk += systemType.toUpperCase() + systemVersion.replace('.', '') + "-DISK1.json";
         let diSystem = readDiskSync(sSystemDisk);
         if (!diSystem) {
-            printf("system diskette not found: %s\n", sSystemDisk);
-            return null;
+            return "system diskette not found: " + sSystemDisk;
         }
         let dbMBR = readFileSync(path.join(pcjsDir, "MSDOS" /*systemType.toUpperCase()*/ + ".mbr"), null);
         if (diSystem && dbMBR) {
@@ -730,7 +727,7 @@ function buildDrive(sCommand)
             }
             let done = function(di) {
                 if (di) {
-                    manifest = di.getFileManifest(null, true);
+                    driveManifest = di.getFileManifest(null, true);
                     di.updateBootSector(dbMBR, -1);         // a volume of -1 indicates the master boot record
                     di.updateBootSector(dbBoot, 0, verBPB);
                     writeDiskSync(path.join(pcjsDir, "DOS.json"), di, false, 0, true, true);
@@ -740,9 +737,9 @@ function buildDrive(sCommand)
             readDir("./", 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);
         }
     } else {
-        printf("command not found: %s\n", sCommand);
+        result = "command not found: " + sCommand;
     }
-    return manifest;
+    return result || (driveManifest == null? "unable to build drive" : "");
 }
 
 /**
@@ -826,20 +823,20 @@ function buildFileIndex(diskIndex)
 }
 
 /**
- * checkDrive(oldManifest)
+ * checkDrive()
  *
  * If we built a drive on entry, this checks the drive on exit for any changes that need to be propagated.
  *
- * @param {Array} [oldManifest]
  * @returns {boolean}
  */
-function checkDrive(oldManifest)
+function checkDrive()
 {
-    if (hdc && oldManifest) {
+    if (hdc && driveManifest) {
         let imageData = hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
         if (imageData) {
             let di = new DiskInfo(device, "DOS");
             if (di.buildDiskFromJSON(imageData)) {
+                let oldManifest = driveManifest;
                 let newManifest = di.getFileManifest(null, true);
                 /*
                  * We now have the old and new manifests, and both should be sorted, so all we have to do now
@@ -923,6 +920,7 @@ function checkDrive(oldManifest)
                 return true;
             }
         }
+        driveManifest = null;
     }
     return false;
 }
@@ -1235,15 +1233,18 @@ function doCommand(s, argv)
  */
 function readInput(argv, stdin, stdout)
 {
+    let result;
     let loading = false;
 
     if (typeof argv['load'] == "string") {          // process --load argument, if any
-        printf(loadMachine(argv['load']));
-        loading = true;
+        result = loadMachine(argv['load']);
+        if (!result) {
+            loading = true;
+        }
     }
     else if (argv[1]) {                             // alternatively, process first non-option argument
-        if (existsFile(argv[1]) || existsFile(argv[1] + ".json")) {
-            printf(loadMachine(argv[1]));           // and perform an implicit load
+        result = loadMachine(argv[1]);
+        if (!result) {
             argv.splice(1, 1);
             loading = true;
         } else {
@@ -1252,15 +1253,18 @@ function readInput(argv, stdin, stdout)
              * any arguments you want to pass along with the command to buildDrive() should be included
              * as part of a single fully-quoted argument (eg, pc.js "dir *.* /s").
              */
-            driveManifest = buildDrive(argv[1]);
-            if (!driveManifest) {                   // the argument is presumably a DOS command or program name
-                return;                             // exit on error (buildDrive() should have explained)
-            }
-            if (!argv['load']) {                    // and if it was, automatically load a machine to boot and run it
-                printf(loadMachine("compaq386"));
-                loading = true;
+            result = buildDrive(argv[1]);
+            if (!result) {                          // the argument is presumably a DOS command or program name
+                result = loadMachine("compaq386");
+                if (!result) {
+                    loading = true;
+                }
             }
         }
+    }
+
+    if (result) {
+        printf("%s\n", result);
     }
 
     if (!loading) setDebugMode(DbgLib.EVENTS.READY);
@@ -1337,7 +1341,7 @@ function readInput(argv, stdin, stdout)
  */
 function exit()
 {
-    checkDrive(driveManifest);
+    checkDrive();
     process.stdin.setRawMode(false);
     process.exit();
 }
