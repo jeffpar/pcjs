@@ -306,17 +306,40 @@ function intVideo(addr)
     let DH = ((this.regEDX >> 8) & 0xff), DL = (this.regEDX & 0xff);
     switch (AH) {
     case 0x02:
-        if (!nestedVideo) {
-            if (DL < colCursor || DH != rowCursor) {
-                printf("\n");
-            }
+        if (DL >= 80 || DH >= 25) {
+            break;      // ignore "off-screen" positions
         }
-        rowCursor = DH;
-        colCursor = DL;
+        if (!nestedVideo) {
+            if (DL < colCursor) {
+                if (!DL) {
+                    printf('\r');
+                } else {
+                    let s = "";
+                    while (DL + s.length < colCursor) {
+                        s += '\b';
+                    }
+                    printf(s);
+                }
+            }
+            if (DH != rowCursor) {
+                printf('\n');
+            }
+            rowCursor = DH;
+            colCursor = DL;
+        }
         break;
     case 0x09:
     case 0x0E:
         printf("%c", CharSet.fromCP437(AL));
+        if (AL == '\r') {
+            colCursor = 0;
+        } else if (AL == '\n' && rowCursor < 25) {
+            rowCursor++;
+        } else if (AL == '\b' && colCursor > 0) {
+            colCursor--;
+        } else if (colCursor < 80) {
+            colCursor++;
+        }
         nestedVideo++;
         this.addIntReturn(addr, function onVideoReturn(nLevel) {
             nestedVideo--;

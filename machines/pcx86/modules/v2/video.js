@@ -3491,7 +3491,7 @@ export default class VideoX86 extends Component {
                         }
                     }
                     card.nCyclesVertRetrace = video.cpu.getCycles();
-                    if (DEBUG) video.printf(Messages.VIDEO + Messages.INT, "vertical retrace timer fired (%d cycles)\n", card.nCyclesVertRetrace);
+                    if (DEBUG) video.printf(Messages.VIDEO + Messages.TIMER, "vertical retrace timer fired (%d cycles)\n", card.nCyclesVertRetrace);
                     if (video.nIRQ) {
                         if (!(card.regCRTData[Card.CRTC.EGA.VREND.INDX] & Card.CRTC.EGA.VREND.DISABLE_VRINT)) {
                             if (video.chipset) video.chipset.setIRR(video.nIRQ);
@@ -3538,7 +3538,7 @@ export default class VideoX86 extends Component {
                         video.msUpdatePrev = msUpdate - (msDelta >= video.msUpdateInterval? 0 : msDelta);
                     }
                     else if (DEBUG) {
-                        video.printf(Messages.VIDEO + Messages.INT, "skipping update (%dms too soon)\n", -msDelta);
+                        video.printf(Messages.VIDEO + Messages.TIMER, "skipping update (%dms too soon)\n", -msDelta);
                     }
                     video.latchStartAddress();
                 }, -this.cardActive.nCyclesVertPeriod);

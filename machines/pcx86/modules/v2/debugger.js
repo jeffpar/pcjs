@@ -5540,7 +5540,7 @@ export default class DebuggerX86 extends DbgLib {
                     this.bitsMessage = this.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
                     if (bitsMessage == Messages.BUFFER) {
-                        this.printf("%s\n", this.aMessageBuffer.join('\n'));
+                        this.printf("%s\n", this.aMessageBuffer.join(""));
                         this.aMessageBuffer = [];
                     }
                 }
