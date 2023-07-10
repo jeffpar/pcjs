@@ -64,15 +64,13 @@ This utility is very much a "work in progress" and is intended for development w
 
 Limited support for XML-based machines now exists; eg:
 
-    pc.js --debug --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
+    pc.js --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
 
 loads and runs the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
 
 Here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/panel/debugger/machine.xml):
 
-    pc.js --debug --load=/machines/dec/pdp11/1170/panel/debugger/machine.xml
-
-The above examples also include `--debug` because those particular machines do *not* automatically start running, and `--debug` provides useful feedback in those situations.
+    pc.js --load=/machines/dec/pdp11/1170/panel/debugger/machine.xml
 
 ### Accessing Local Files from MS-DOS
 

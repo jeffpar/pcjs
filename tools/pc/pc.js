@@ -26,6 +26,7 @@ import pcjslib    from "../modules/pcjslib.js";
 let fDebug = false;
 let fHalt = false;
 let fSave = false;
+let autoStart = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.20";
@@ -209,7 +210,7 @@ async function loadModules(factory, modules, done)
          */
         if (module.default && module.default.prototype) {
             module.default.prototype.print = function print(s, bitsMessage) {
-                if (debugMode && !bitsMessage || (bitsMessage || fDebug) && this.testBits(messagesFilter, bitsMessage)) {
+                if ((debugMode || !autoStart) && !bitsMessage || (bitsMessage || fDebug) && this.testBits(messagesFilter, bitsMessage)) {
                     printf(s);
                 }
             };
@@ -426,8 +427,14 @@ function loadMachine(sFile)
         if (machine['machine']) {
             idMachine = machine['machine']['id'];
         }
-        if (fHalt && machine['cpu']) {
-            machine['cpu']['autoStart'] = 0;
+        if (machine['cpu']) {
+            if (fHalt) {
+                machine['cpu']['autoStart'] = 0;
+            }
+            autoStart = machine['cpu']['autoStart'];
+            if (autoStart == undefined) {
+                autoStart = !machine['debugger'];
+            }
         }
         let sParms = JSON.stringify(machine);
         loadModules(machines[type]['factory'], machines[type]['modules'], function() {
@@ -1146,7 +1153,7 @@ function doCommand(s, argv)
                     "  quit";
         if (dbg) {
             result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
-        } else {
+        } else if (cpu) {
             result += "\nmachine commands:\n" +
                     "  g (to continue running)\n" +
                     "load a machine with a debugger for more machine commands";
@@ -1195,6 +1202,8 @@ function doCommand(s, argv)
                         if (cpu.startCPU()) {
                             setDebugMode(DbgLib.EVENTS.EXIT);
                         }
+                    } else {
+                        result = "no machine loaded";
                     }
                     break;
                 default:
@@ -1352,7 +1361,7 @@ function main(argc, argv)
             "--debug (-d)\t":           "enable DEBUG messages",
             "--halt (-h)\t":            "halt machine on startup",
             "--help (-?)\t":            "display command-line usage",
-            "--save (-s)\t":            "save modified hard disk image on exit"
+            "--save (-s)\t":            "save auto-built disk image on exit"
         };
         let optionGroups = {
             "main options:":            optionsMain,

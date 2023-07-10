@@ -524,8 +524,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
-        "--debug"
+        "--load=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
