@@ -911,7 +911,7 @@ function main(argc, argv)
     let argv0 = argv[0].split(' ');
     let options = argv0.slice(1).join(' ');
 
-    setRootDir(path.join(path.dirname(argv0[0]), "../.."));
+    setRootDir(path.join(path.dirname(argv0[0]), "../.."), argv['local']);
 
     Device.DEBUG = !!argv['debug'];
 

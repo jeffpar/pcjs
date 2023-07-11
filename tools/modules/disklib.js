@@ -214,7 +214,7 @@ export function getLocalPath(sFile)
 export function getServerPath(diskFile, fRemote)
 {
     if (fRemote || !existsFile(getLocalPath(diskFile))) {
-        diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
+        diskFile = diskFile.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$2.pcjs.org/");
     }
     return diskFile;
 }
@@ -1005,11 +1005,12 @@ export function writeFileSync(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQ
 }
 
 /**
- * setRootDir(sDir)
+ * setRootDir(sDir, fLocalDisks)
  *
  * @param {string} sDir
+ * @param {boolean} [fLocalDisks]
  */
-export function setRootDir(sDir)
+export function setRootDir(sDir, fLocalDisks = false)
 {
-    FileLib.setRootDir(sDir);
+    FileLib.setRootDir(sDir, fLocalDisks);
 }

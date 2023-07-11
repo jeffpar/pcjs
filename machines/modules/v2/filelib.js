@@ -56,14 +56,15 @@ export default class FileLib {
     }
 
     /**
-     * setRootDir(sDir)
+     * setRootDir(sDir, fLocalDisks)
      *
      * @param {string} sDir
+     * @param {boolean} [fLocalDisks]
      */
-    static setRootDir(sDir)
+    static setRootDir(sDir, fLocalDisks = false)
     {
         rootDir = sDir;
-        globals.window['LOCALDISKS'] = true;
+        globals.window['LOCALDISKS'] = fLocalDisks;
     }
 }
 

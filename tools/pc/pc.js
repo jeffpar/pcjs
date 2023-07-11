@@ -20,7 +20,7 @@ import Device     from "../../machines/modules/v3/device.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
-import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
+import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync, readDiskAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
 import pcjslib    from "../modules/pcjslib.js";
 
 let fDebug = false;
@@ -285,8 +285,11 @@ function initMachine(idMachine, sParms)
         /*
          * Since there may be no debugger (and even if there is, machines that are auto-started won't
          * trigger any debugger events), we simulate an appropriate event.
+         *
+         * NOTE: The test here used to be "cpu && cpu.isRunning()", but if you're not using the --local
+         * option, the CPU may not up and running yet, so we rely on the autoStart setting instead.
          */
-        setDebugMode(cpu && cpu.isRunning()? DbgLib.EVENTS.EXIT : DbgLib.EVENTS.READY);
+        setDebugMode(cpu && autoStart? DbgLib.EVENTS.EXIT : DbgLib.EVENTS.READY);
     }
     catch(err) {
         printf("machine initialization error: %s\n", err.message);
@@ -614,7 +617,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  * @param {string} sCommand (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
  * @returns {string} (error message, if any)
  */
-function buildDrive(sCommand)
+/*async*/ function buildDrive(sCommand)
 {
     const systemInfo = {
         "msdos": {
@@ -667,7 +670,7 @@ function buildDrive(sCommand)
     if (sProgram) {
         let sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + systemVersion + "/";
         sSystemDisk += systemType.toUpperCase() + systemVersion.replace('.', '') + "-DISK1.json";
-        let diSystem = readDiskSync(sSystemDisk);
+        let diSystem = /*await*/ readDiskSync(sSystemDisk);
         if (!diSystem) {
             return "system diskette not found: " + sSystemDisk;
         }
@@ -1177,13 +1180,12 @@ function loadDiskette(sDrive, aTokens)
 }
 
 /**
- * doCommand(s, argv)
+ * doCommand(s)
  *
  * @param {string} s
- * @param {Array} argv
  * @returns {string|null} (result of command, or null to quit)
  */
-function doCommand(s, argv)
+function doCommand(s)
 {
     let result = "";
     let aTokens = s.split(' ');
@@ -1211,9 +1213,6 @@ function doCommand(s, argv)
     switch(cmd) {
     case "help":
         result = help();
-        break;
-    case "argv":
-        result = sprintf("%2j\n", argv);
         break;
     case "build":
         result = buildDrive(args);
@@ -1280,13 +1279,11 @@ function doCommand(s, argv)
 }
 
 /**
- * readInput(argv, stdin, stdout)
+ * processArgs(argv)
  *
  * @param {Array} argv
- * @param {Object} stdin
- * @param {Object} stdout
  */
-function readInput(argv, stdin, stdout)
+/*async*/ function processArgs(argv)
 {
     let result;
     let loading = false;
@@ -1308,7 +1305,7 @@ function readInput(argv, stdin, stdout)
              * any arguments you want to pass along with the command to buildDrive() should be included
              * as part of a single fully-quoted argument (eg, pc.js "dir *.* /s").
              */
-            result = buildDrive(argv[1]);           // the argument must be a DOS command or program name
+            result = /*await*/ buildDrive(argv[1]); // the argument must be a DOS command or program name
             if (!result) {
                 result = loadMachine("compaq386");
                 if (!result) {
@@ -1323,7 +1320,16 @@ function readInput(argv, stdin, stdout)
     }
 
     if (!loading) setDebugMode(DbgLib.EVENTS.READY);
+}
 
+/**
+ * readInput(stdin, stdout)
+ *
+ * @param {Object} stdin
+ * @param {Object} stdout
+ */
+function readInput(stdin, stdout)
+{
     stdin.resume();
     stdin.setEncoding("utf8");
     stdin.setRawMode(true);
@@ -1376,7 +1382,7 @@ function readInput(argv, stdin, stdout)
             if (i < 0) break;
             let s = command.slice(0, i);
             printf("\n");
-            let result = doCommand(s, argv);
+            let result = doCommand(s);
             if (result == null) {
                 exit();
                 return;
@@ -1450,7 +1456,7 @@ function main(argc, argv)
     let arg0 = argv[0].split(' ');
     rootDir = path.join(path.dirname(arg0[0]), "../..");
     pcjsDir = path.join(rootDir, "/tools/pc");
-    setRootDir(rootDir);
+    setRootDir(rootDir, argv['local']);
 
     if (!argv[1] || argv['debug']) {
         let options = arg0.slice(1).join(' ');
@@ -1459,7 +1465,9 @@ function main(argc, argv)
 
     machines = JSON.parse(readFileSync("/machines/machines.json"));
 
-    readInput(argv, process.stdin, process.stdout);
+    processArgs(argv);
+
+    readInput(process.stdin, process.stdout);
 }
 
 main(...pcjslib.getArgs({
