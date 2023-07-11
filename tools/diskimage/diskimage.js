@@ -531,7 +531,7 @@ function processDisk(di, diskFile, argv, diskette)
             if (typeof argv['checkdisk'] == "string" && diskFile.indexOf(argv['checkdisk']) < 0) return;
             createDisk(diskFile, diskette, argv, function(diTemp) {
                 if (diTemp) {
-                    let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
+                    let sTempJSON = path.join(rootDir, "disks", "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                     diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
                     writeDiskSync(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
                     let warning = false;

@@ -1431,7 +1431,7 @@ function main(argc, argv)
             "main options:":            optionsMain,
             "other options:":           optionsOther
         }
-        printf("usage:\n\t[node] pc.js [options] [DOS command or program name]\n");
+        printf("usage:\n\t[node] pc.js [options] [machine file, DOS command, or program name]\n");
         for (let group in optionGroups) {
             printf("\n%s\n\n", group);
             for (let option in optionGroups[group]) {

@@ -19,11 +19,13 @@ or, if your operating system doesn't automatically associate `.js` files with [N
 
 	node pc.js --load=ibm5150
 
-NOTE: On Windows, the first time you attempt to run a `.js` file from the command-line, Windows may prompt you to associate a program with it (eg, "C:\Program Files\nodejs\node.exe"), and while this will eliminate the need to type `node`, the association doesn't automatically pass along any command-line arguments.  You may be able to fix this by running `REGEDIT` and appending ` %*` to the default value for "HKEY_CLASSES_ROOT\Applications\node.exe\shell\open\command":
+> NOTE: On Windows, the first time you attempt to run a `.js` file from the command-line, Windows may prompt you to associate a program with it (eg, "C:\Program Files\nodejs\node.exe"), and while this will eliminate the need to type `node`, the association may not automatically pass along any command-line arguments.
+> 
+> If that happens, you may be able to fix it by running `REGEDIT` and appending ` %*` to the default value for `HKEY_CLASSES_ROOT\Applications\node.exe\shell\open\command`:
+> 
+>     "C:\Program Files\nodejs\node.exe" "%1" %*
 
-    "C:\Program Files\nodejs\node.exe" "%1" %*
-
-If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  As a convenience, you can also omit `--load=` option if the JSON file is in your current directory.
+If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  You can also omit the `--load=` option if the name of the JSON file doesn't conflict with another command or program name.
 
 Loading [ibm5150.json](ibm5150.json) with the should produce the following output:
 
@@ -95,7 +97,7 @@ There are no plans to perform "dynamic" file system updates.  This means if you 
 
 ### Loading Machines and Diskettes
 
-Normally, when you run `pc.js`, a machine is started, either explicitly via `--load`, or implicitly by typing the name of a DOS executable.  Otherwise, you can start a machine from the pc.js `>>` prompt, using the "load" internal command; eg:
+Normally, when you run `pc.js`, a machine is started, either explicitly via `--load`, or implicitly by typing the name of a DOS command or program name.  Otherwise, you can start a machine from the pc.js `>>` prompt, using the "load" internal command; eg:
 
     >> load compaq386
 
