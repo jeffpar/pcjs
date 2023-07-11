@@ -487,18 +487,17 @@ function loadMachine(sFile)
         if (sFile.indexOf(path.sep) < 0) {
             sFile = path.join(pcjsDir, sFile);
         }
-        if (fDebug) {
-            printf("loadMachine(\"%s\")\n", sFile);
-        }
-        let sOpen = sFile;
-        if (sOpen.indexOf(".json") > 0 || existsFile(sOpen = sFile + ".json5", false) || existsFile(sOpen = sFile + ".json", false)) {
-            result = readJSON(sOpen, getFactory);
+        let sLoad = sFile;
+        if (sLoad.indexOf(".json") > 0 || existsFile(sLoad = sFile + ".json5", false) || existsFile(sLoad = sFile + ".json", false)) {
+            if (fDebug) printf("loadMachine(\"%s\")\n", sLoad);
+            result = readJSON(sLoad, getFactory);
         }
         else {
-            sOpen = sFile;
-            if (sOpen.indexOf(".xml") > 0 || existsFile(sOpen = sFile + ".xml", false)) {
+            sLoad = sFile;
+            if (sLoad.indexOf(".xml") > 0 || existsFile(sLoad = sFile + ".xml", false)) {
                 let xml = {_resolving: 0};
-                result = readXML(sOpen, xml, 'machine', null, 0, getFactory);
+                if (fDebug) printf("loadMachine(\"%s\")\n", sLoad);
+                result = readXML(sLoad, xml, 'machine', null, 0, getFactory);
             } else {
                 result = "unsupported machine file: " + sFile;
             }
@@ -617,7 +616,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  * @param {string} sCommand (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
  * @returns {string} (error message, if any)
  */
-/*async*/ function buildDrive(sCommand)
+async function buildDrive(sCommand)
 {
     const systemInfo = {
         "msdos": {
@@ -670,7 +669,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
     if (sProgram) {
         let sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + systemVersion + "/";
         sSystemDisk += systemType.toUpperCase() + systemVersion.replace('.', '') + "-DISK1.json";
-        let diSystem = /*await*/ readDiskSync(sSystemDisk);
+        let diSystem = await readDiskAsync(sSystemDisk);
         if (!diSystem) {
             return "system diskette not found: " + sSystemDisk;
         }
@@ -698,7 +697,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
             aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
             /*
              * We also add a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
-             * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke checkDrive()
+             * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDrive()
              * to look for any changes and then terminate the machine.
              */
             aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
@@ -773,7 +772,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
                     di.updateBootSector(dbMBR, -1);         // a volume of -1 indicates the master boot record
                     di.updateBootSector(dbBoot, 0, verBPB);
                     if (writeDiskSync(fileName, di, false, 0, true, true)) {
-                        if (fDebug) printf("drive built: %s\n", fileName);
+                        if (fDebug) printf("buildDrive(\"%s\")\n", fileName);
                         driveManifest = manifest;
                     }
                 }
@@ -868,13 +867,13 @@ function buildFileIndex(diskIndex)
 }
 
 /**
- * checkDrive()
+ * saveDrive()
  *
- * If we built a drive on entry, this checks the drive on exit for any changes that need to be propagated.
+ * If we built a drive on entry, this checks the drive on exit for any changes that need to be saved.
  *
  * @returns {boolean}
  */
-function checkDrive()
+function saveDrive()
 {
     if (driveManifest) {
         let imageData = hdc && hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
@@ -910,7 +909,7 @@ function checkDrive()
                              * contents, so the compare will succeed and writeFileSync() will be bypassed.
                              */
                             if (!compareContents(oldItem, newItem)) {
-                                if (fDebug) printf("updating %s\n", newItem.path);
+                                if (fDebug) printf("updating: %s\n", newItem.path);
                                 writeFileSync(newItem.path.slice(1), newItem.contents, false, true);
                             }
                         } else {
@@ -936,12 +935,12 @@ function checkDrive()
                         if (oldAttr & DiskInfo.ATTR.SUBDIR) {
                             removedDirs.push(oldItem.path);
                         } else {
-                            if (fDebug) printf("removing %s\n", oldItem.path);
+                            if (fDebug) printf("removing: %s\n", oldItem.path);
                             fs.unlinkSync(oldItem.path.slice(1));
                         }
                         iOld++;
                     } else {
-                        if (fDebug) printf("creating %s\n", newItem.path);
+                        if (fDebug) printf("creating: %s\n", newItem.path);
                         if (newAttr & DiskInfo.ATTR.SUBDIR) {
                             fs.mkdirSync(newItem.path.slice(1));
                         } else {
@@ -956,13 +955,13 @@ function checkDrive()
                 }
                 while (removedDirs.length) {
                     let dir = removedDirs.pop();
-                    if (fDebug) printf("removing %s\n", dir);
+                    if (fDebug) printf("removing: %s\n", dir);
                     fs.rmdirSync(dir.slice(1));
                 }
                 if (fSave) {
                     let fileName = path.join(pcjsDir, driveName.replace(".json", ".img"));
                     if (writeDiskSync(fileName, di, false, 0, true, true)) {
-                        if (fDebug) printf("drive saved: %s\n", fileName);
+                        if (fDebug) printf("saveDrive(\"%s\")\n", fileName);
                     }
                 }
                 return true;
@@ -1283,7 +1282,7 @@ function doCommand(s)
  *
  * @param {Array} argv
  */
-/*async*/ function processArgs(argv)
+async function processArgs(argv)
 {
     let result;
     let loading = false;
@@ -1305,7 +1304,7 @@ function doCommand(s)
              * any arguments you want to pass along with the command to buildDrive() should be included
              * as part of a single fully-quoted argument (eg, pc.js "dir *.* /s").
              */
-            result = /*await*/ buildDrive(argv[1]); // the argument must be a DOS command or program name
+            result = await buildDrive(argv[1]);     // the argument must be a DOS command or program name
             if (!result) {
                 result = loadMachine("compaq386");
                 if (!result) {
@@ -1402,7 +1401,7 @@ function readInput(stdin, stdout)
  */
 function exit()
 {
-    checkDrive();
+    saveDrive();
     process.stdin.setRawMode(false);
     process.exit();
 }

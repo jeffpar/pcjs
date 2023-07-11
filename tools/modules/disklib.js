@@ -769,8 +769,8 @@ export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors,
         di = new DiskInfo(device, diskName);
         if (StrLib.getExtension(diskName) == "json") {
             diskFile = getServerPath(diskFile);
+            if (Device.DEBUG) printf("readDiskAsync(\"%s\")\n", diskFile);
             if (diskFile.startsWith("http")) {
-                printf("fetching %s\n", diskFile);
                 let response = await got(diskFile);
                 db = response.body;
             } else {
@@ -864,11 +864,11 @@ export function readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
  * @param {string} sFile
  * @param {string|null} [encoding]
  */
-export function readFileAsync(sFile, encoding = "utf8")
+export async function readFileAsync(sFile, encoding = "utf8")
 {
     sFile = getLocalPath(sFile);
     return new Promise((resolve, reject) => {
-        fs.readFileSync(sFile, encoding, (err, data) => {
+        fs.readFile(sFile, encoding, (err, data) => {
             if (err) reject(err);
             resolve(data);
         });

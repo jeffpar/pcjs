@@ -600,7 +600,7 @@
       }
     },
     {
-      "name": "pc.js dir *.*",
+      "name": "pc.js --sys=msdos --ver=3.20 dir",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
