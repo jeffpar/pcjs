@@ -784,12 +784,13 @@ export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors,
         }
         else {
             /*
-             * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
+             * Passing null for the encoding parameter tells readFileAsync() to return a buffer instead of a string.
              */
             db = await readFileAsync(diskFile, null);
             if (!db) {
                 di = null;
             } else {
+                db = new DataBuffer(db);
                 if (StrLib.getExtension(diskName) == "psi") {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {

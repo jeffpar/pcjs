@@ -1475,7 +1475,7 @@
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--disk",
-        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0798/DISK0798.json",
+        "/Users/jeff/Sites/pcjs/archive/tmp/MSC51-UTILITIES-320KB.img",
         "--list"
       ],
       "cwd": "${workspaceFolder}",
