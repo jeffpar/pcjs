@@ -774,7 +774,7 @@ export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors,
                 let response = await got(diskFile);
                 db = response.body;
             } else {
-                db = await readFileAsync(diskFile, "utf8");
+                db = await readFile(diskFile);
             }
             if (!db) {
                 di = null;
@@ -784,9 +784,9 @@ export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors,
         }
         else {
             /*
-             * Passing null for the encoding parameter tells readFileAsync() to return a buffer instead of a string.
+             * Passing null for the encoding parameter tells readFile() to return a buffer instead of a string.
              */
-            db = await readFileAsync(diskFile, null);
+            db = await readFile(diskFile, null);
             if (!db) {
                 di = null;
             } else {
@@ -860,12 +860,12 @@ export function readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
 }
 
 /**
- * readFileAsync(sFile, encoding)
+ * readFile(sFile, encoding)
  *
  * @param {string} sFile
  * @param {string|null} [encoding]
  */
-export async function readFileAsync(sFile, encoding = "utf8")
+export async function readFile(sFile, encoding = "utf8")
 {
     sFile = getLocalPath(sFile);
     return new Promise((resolve, reject) => {
@@ -874,6 +874,30 @@ export async function readFileAsync(sFile, encoding = "utf8")
             resolve(data);
         });
     });
+}
+
+/**
+ * readFileAsync(sFile, encoding)
+ *
+ * @param {string} sFile
+ * @param {string|null} [encoding]
+ */
+export async function readFileAsync(sFile, encoding = "utf8")
+{
+    let db;
+    sFile = getServerPath(sFile);
+    if (Device.DEBUG) printf("readFileAsync(\"%s\")\n", sFile);
+    if (sFile.startsWith("http")) {
+        try {
+            let response = await got(sFile);
+            db = response.body;
+        } catch(err) {
+            printError(err);
+        }
+    } else {
+        db = await readFile(sFile);
+    }
+    return db;
 }
 
 /**

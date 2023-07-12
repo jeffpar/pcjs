@@ -20,7 +20,7 @@ import Device     from "../../machines/modules/v3/device.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
-import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
+import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
 import pcjslib    from "../modules/pcjslib.js";
 
 let fDebug = false;
@@ -493,6 +493,9 @@ function sendSerial(b)
 function checkMachine(sFile)
 {
     if (sFile) {
+        if (sFile.indexOf("http") == 0) {
+            return sFile;
+        }
         if (existsFile(sFile, false)) {
             return sFile;
         }
@@ -562,6 +565,7 @@ function loadMachine(sFile)
         } else {
             result = "unsupported machine file: " + sFile;
         }
+        if (typeof result != "string") result = "";
     }
     return result;
 }
@@ -573,11 +577,11 @@ function loadMachine(sFile)
  * @param {function(Object, string)} done
  * @returns {string}
  */
-function readJSON(sFile, done)
+async function readJSON(sFile, done)
 {
     let result = "";
     try {
-        let sMachine = readFileSync(sFile);
+        let sMachine = await readFileAsync(sFile);
         /*
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
@@ -601,13 +605,13 @@ function readJSON(sFile, done)
  * @param {function(Object)} done
  * @returns {string}
  */
-function readXML(sFile, xml, sNode, aTags, iTag, done)
+async function readXML(sFile, xml, sNode, aTags, iTag, done)
 {
     let result = "";
     let idAttrs = '@';
     try {
         xml._resolving++;
-        let sXML = readFileSync(sFile);
+        let sXML = await readFileAsync(sFile);
         let parser = new xml2js.Parser({attrkey: idAttrs});
         parser.parseString(sXML, function parseXML(err, xmlNode) {
             if (!aTags) {
@@ -1275,7 +1279,7 @@ function doCommand(s)
         result = help();
         break;
     case "build":
-        sCommand = checkCommand(sParms);        // check for a DOS command or program name
+        sCommand = checkCommand(sParms);
         if (!sCommand && sParms) {
             result = "unknown command: " + sParms;
         } else {
@@ -1311,7 +1315,7 @@ function doCommand(s)
         if (s) {
             if (!dbg) {
                 /*
-                 * For machines without a debugger, we provide some limited machine control.
+                 * For machines without a debugger, provide some *very* limited machine control.
                  */
                 switch(cmd) {
                 case "?":

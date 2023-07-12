@@ -476,6 +476,26 @@
       }
     },
     {
+      "name": "pc.js ibm5160",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
       "name": "pc.js ibm5170",
       "type": "node",
       "request": "launch",
