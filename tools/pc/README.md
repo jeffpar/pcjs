@@ -32,7 +32,7 @@ Loading [ibm5150.json](ibm5150.json) with the should produce the following outpu
     pc.js v3.00
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
     Options: --load=ibm5150
-    Press CTRL-D to enter debugger, CTRL-C to terminate process
+    Press CTRL-D to enter command mode, CTRL-C to terminate process
 
 After the machine finishes booting (about 10 seconds), you should see the following output:
 
