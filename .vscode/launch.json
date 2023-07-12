@@ -503,7 +503,7 @@
       "args": [
         "ibm5170",
         "--sys=pcdos",
-        "--ver=2.00",
+        "--ver=3.00",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200",

@@ -617,8 +617,17 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
             if (!aTags) {
                 xml[sNode] = xmlNode[sNode];
             } else {
+                /*
+                 * Preserve any non-ref attributes in the tag we're updating.
+                 */
+                let attrs = aTags[iTag][idAttrs];
                 aTags[iTag] = xmlNode[sNode];
-            }
+                for (let attr in attrs) {
+                    if (attr != 'ref') {
+                        aTags[iTag][idAttrs][attr] = attrs[attr];
+                    }
+                }
+}
             if (err) {
                 printf("%s\n", err.message);
             }
@@ -632,7 +641,7 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
                         if (sFileXML) {
                             readXML(sFileXML, xml, sTag, aTagsXML, iTagXML, done);
                             /*
-                             * Any non-ref attributes in the tag override those in the referenced file.
+                             * Any non-ref attributes in the tag should override those in the referenced file.
                              */
                             for (let attr in attrs) {
                                 if (attr != 'ref') {
@@ -750,33 +759,33 @@ async function buildDrive(sCommand)
             if (desc) {
                 desc.attr = +desc.attr;
                 /*
-                    * There may be situations where we must leave COMMAND.COM unhidden; we'll see.
-                    *
-                    *      if (name != "COMMAND.COM" || majorVersion != 2) ...
-                    */
+                 * There may be situations where we must leave COMMAND.COM unhidden; we'll see.
+                 *
+                 *      if (name != "COMMAND.COM" || majorVersion != 2) ...
+                 */
                 desc.attr |= DiskInfo.ATTR.HIDDEN;
                 aFileDescs.push(desc);
             }
         }
         /*
-            * In addition to the system files, we also add a hidden LOAD.COM in the root, which immediately
-            * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
-            * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
-            */
+         * In addition to the system files, we also add a hidden LOAD.COM in the root, which immediately
+         * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
+         * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
+         */
         aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
         /*
-            * We also add a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
-            * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDrive()
-            * to look for any changes and then terminate the machine.
-            */
+         * We also add a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
+         * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDrive()
+         * to look for any changes and then terminate the machine.
+         */
         aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
         /*
-            * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
-            * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
-            * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
-            * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "return" to run
-            * our hidden "RETURN.COM" program regardless of the current directory.
-            */
+         * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
+         * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
+         * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
+         * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "return" to run
+         * our hidden "RETURN.COM" program regardless of the current directory.
+         */
         let attr = DiskInfo.ATTR.ARCHIVE;
         let data = readFileSync("AUTOEXEC.BAT", "utf8", true);
         if (!data) {
@@ -795,50 +804,49 @@ async function buildDrive(sCommand)
         if (sCommand) data += sCommand + "\r\n";
         aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
         /*
-            * Load the boot sector from the system diskette we read above, and use it to update the boot
-            * sector on the hard drive image.
-            *
-            * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register
-            * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk) even though the DOS
-            * MBR does appear to preserve and pass DL on to the boot sector.
-            *
-            * For example, when MS-DOS 3.20 writes the boot sector to the media, it inserts the boot drive
-            * at offset 0x1fd (just before the 0x55,0xAA signature).  So that's we do, too.
-            *
-            * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
-            * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
-            *
-            * TODO: Obviously this code will have to be fully fleshed out for ALL supported versions of DOS.
-            */
+         * Load the boot sector from the system diskette we read above, and use it to update the boot
+         * sector on the hard drive image.
+         *
+         * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register
+         * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk) even though the DOS
+         * MBR does appear to preserve and pass DL on to the boot sector.
+         */
         let verBPB = 0;
         let dbBoot = getDiskSector(diSystem, 0);
-        if (systemType == "msdos") {
-            if (version >= 3.2 && version <= 3.31) {
-                dbBoot.writeUInt8(0x80, 0x1fd);
-            }
-        } else if (systemType == "pcdos") {
-            if (majorVersion == 2) {
-                /*
-                    * PC DOS 2.x requires the boot drive (AND drive head # -- go figure) to be stored in locations
-                    * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
-                    * part of the BPB unless we specify a BPB version number, so in this case, it must be 2.
-                    */
-                verBPB = 2;
-                dbBoot.writeUInt8(0x80, DiskInfo.BPB.BOOTDRIVE);
-                /*
-                    * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
-                    * drive image, we place the first (and only) partition immediately after the MBR.  Some systems
-                    * reserve the entire first track for the MBR, in which case the first partition would not necessarily
-                    * be located at head 0.
-                    */
-                dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);
-            }
+        if (majorVersion == 2 || version >= 3.0 && version < 3.2) {
+            /*
+             * PC DOS 2.x requires the boot drive (AND drive head # -- go figure) to be stored in locations
+             * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
+             * part of the BPB unless we specify a BPB version number, so in this case, it must be 2.
+             */
+            verBPB = 2;
+            dbBoot.writeUInt8(0x80, DiskInfo.BPB.BOOTDRIVE);    // boot sector offset 0x001E
+            /*
+             * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
+             * drive image, we place the first (and only) partition immediately after the MBR.  Some systems
+             * reserve the entire first track for the MBR, in which case the first partition would not necessarily
+             * be located at head 0.
+             */
+            dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);     // boot sector offset 0x001F
+        }
+        else if (version >= 3.2 && version < 4.0) {
+            /*
+             * When DOS 3.20 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
+             * (just before the 0x55,0xAA signature).  So that's we do, too.
+             *
+             * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
+             * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
+             */
+            dbBoot.writeUInt8(0x80, 0x1FD);                     // boot sector offset 0x01FD
+        }
+        else if (majorVersion >= 4) {
+            dbBoot.writeUInt8(0x80, DiskInfo.BPB.DRIVE);        // boot sector offset 0x0024
         }
         let done = function(di) {
             if (di) {
                 let fileName = path.join(pcjsDir, driveName);
                 let manifest = di.getFileManifest(null, true);
-                di.updateBootSector(dbMBR, -1);         // a volume of -1 indicates the master boot record
+                di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
                 di.updateBootSector(dbBoot, 0, verBPB);
                 if (writeDiskSync(fileName, di, false, 0, true, true)) {
                     if (fDebug) printf("buildDrive(\"%s\")\n", fileName);
