@@ -1257,9 +1257,8 @@ function doCommand(s)
 
     let help = function() {
         let result = "pc.js commands:\n" +
-                    "  build [command or program]\n" +
-                    "  load [machine]\n" +
-                    "  load [drive] [search terms]\n" +
+                    "  build [command]\n" +
+                    "  load [machine] or [drive] [search terms]\n" +
                     "  quit";
         if (dbg) {
             result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
@@ -1502,7 +1501,7 @@ function main(argc, argv)
         let optionsMain = {
             "--load=[machine file]":    "load machine configuration file",
             "--type=[machine type]":    "set machine type (default is " + machineType + ")",
-            "--build=[DOS command]":    "build disk image with optional command",
+            "--build=[command]":        "build disk image w/optional DOS command",
             "--sys=[system type]":      "operating system type (default is " + systemType + ")",
             "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
         };
@@ -1510,7 +1509,7 @@ function main(argc, argv)
             "--debug (-d)\t":           "enable DEBUG messages",
             "--halt (-h)\t":            "halt machine on startup",
             "--help (-?)\t":            "display command-line usage",
-            "--save (-s)\t":            "save built disk image on exit"
+            "--save (-s)\t":            "save built disk image on return"
         };
         let optionGroups = {
             "main options:":            optionsMain,
