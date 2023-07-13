@@ -771,15 +771,18 @@ async function buildDrive(sCommand)
     if (!system) {
         return "unsupported system type: " + systemType;
     }
+
     if (majorVersion < 2) {
         return "minimum DOS version with hard disk support is 2.00";
     }
+
     let sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + systemVersion + "/";
     sSystemDisk += systemType.toUpperCase() + systemVersion.replace('.', '') + "-DISK1.json";
     let diSystem = await readDiskAsync(sSystemDisk);
     if (!diSystem) {
         return "missing system diskette: " + sSystemDisk;
     }
+
     let dbMBR = readFileSync(path.join(pcjsDir, "MSDOS" /*systemType.toUpperCase()*/ + ".mbr"), null);
     if (diSystem && dbMBR) {
         let aFileDescs = [];
@@ -861,7 +864,7 @@ async function buildDrive(sCommand)
         else if (version >= 3.2 && version < 4.0) {
             /*
              * When DOS 3.20 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
-             * (just before the 0x55,0xAA signature).  So that's we do, too.
+             * (just before the 0x55,0xAA signature).
              *
              * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
              * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
@@ -1345,30 +1348,44 @@ function doCommand(s)
         if (!sCommand && sParms) {
             result = "unknown command: " + sParms;
         } else {
+            printf("building drive: %s\n", driveName);
             result = buildDrive(sCommand);
             if (typeof result != "string") result = "";
         }
         break;
-    case "cwd":
-        result = process.cwd();
+    case "cd":
+        try {
+            process.chdir(sParms);
+            result = process.cwd();
+        } catch(err) {
+            result = err.message;
+        }
         break;
     case "load":
-        if (aTokens[0]) {
-            let matchDrive = aTokens[0].match(/^([a-z]:?)$/i);
+        sCommand = aTokens[0];
+        if (!sCommand && !cpu) {
+            sCommand = "compaq386";
+        }
+        if (sCommand) {
+            let matchDrive = sCommand.match(/^([a-z]:?)$/i);
             if (matchDrive) {
                 aTokens.splice(0, 1)
                 result = loadDiskette(matchDrive[1], aTokens);
             } else {
-                sFile = checkMachine(aTokens[0]);
+                sFile = checkMachine(sCommand);
                 if (sFile) {
+                    printf("loading machine: %s\n", sFile);
                     result = loadMachine(sFile, driveManifest? 10 : 0);
                 } else {
-                    result = "unknown machine: " + aTokens[0];
+                    result = "unknown machine: " + sCommand;
                 }
             }
         } else {
             result = "missing " + (cpu? "drive letter" : "machine file");
         }
+        break;
+    case "pwd":
+        result = process.cwd();
         break;
     case "q":
     case "quit":
