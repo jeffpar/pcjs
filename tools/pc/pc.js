@@ -519,12 +519,19 @@ function checkMachine(sFile)
 }
 
 /**
- * loadMachine(sFile)
+ * loadMachine(sFile, bootHD)
+ *
+ * If bootHD, then we want to 1) remove any boot floppy from drive A: and 2) make the sure the 'type'
+ * for the first hard drive is set correctly.  For example, if bootHD is 10, then the drive type should
+ * be 3 for XT controllers and 1 for AT controllers.
+ *
+ * NOTE: At present, the only supported bootHD value is, in fact, 10. ;-)
  *
  * @param {string} sFile
+ * @param {number} [bootHD] (eg, 10 for a 10Mb drive)
  * @returns {string}
  */
-function loadMachine(sFile)
+function loadMachine(sFile, bootHD = 0)
 {
     let result = "";
     let getFactory = function(machine) {
@@ -540,6 +547,28 @@ function loadMachine(sFile)
             autoStart = machine['cpu']['autoStart'];
             if (autoStart == undefined) {
                 autoStart = !machine['debugger'];
+            }
+        }
+        if (bootHD == 10) {
+            if (machine['fdc']) {
+                machine['fdc']['autoMount'] = "{A: {name: \"None\"}}";
+            }
+            if (machine['hdc']) {
+                let type = machine['hdc']['type'];
+                let drives = machine['hdc']['drives'];
+                if (typeof drives == "string") {
+                    try {
+                        drives = eval(drives);
+                    } catch(err) {
+                        drives = null;
+                    }
+                }
+                if (!drives) drives = [];
+                /*
+                 * Set the *drive* type below based on the *controller* type obtained above.
+                 */
+                drives[0] = {'name': "10Mb Hard Disk", 'type': type == "XT"? 3 : 1, 'path': "/tools/pc/DOS.json"};
+                machine['hdc']['drives'] = drives;
             }
         }
         let sParms = JSON.stringify(machine);
@@ -813,7 +842,7 @@ async function buildDrive(sCommand)
          */
         let verBPB = 0;
         let dbBoot = getDiskSector(diSystem, 0);
-        if (majorVersion == 2 || version >= 3.0 && version < 3.2) {
+        if (version >= 2.0 && version < 3.2) {
             /*
              * PC DOS 2.x requires the boot drive (AND drive head # -- go figure) to be stored in locations
              * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
@@ -839,7 +868,7 @@ async function buildDrive(sCommand)
              */
             dbBoot.writeUInt8(0x80, 0x1FD);                     // boot sector offset 0x01FD
         }
-        else if (majorVersion >= 4) {
+        else if (version >= 4.0) {
             dbBoot.writeUInt8(0x80, DiskInfo.BPB.DRIVE);        // boot sector offset 0x0024
         }
         let done = function(di) {
@@ -1307,7 +1336,7 @@ function doCommand(s)
             } else {
                 sFile = checkMachine(aTokens[0]);
                 if (sFile) {
-                    result = loadMachine(sFile);
+                    result = loadMachine(sFile, driveManifest? 10 : 0);
                 } else {
                     result = "unknown machine: " + aTokens[0];
                 }
@@ -1361,6 +1390,10 @@ function doCommand(s)
 /**
  * processArgs(argv)
  *
+ * Arguments like "*.*" are problematic (since modern shells will expand them), so any arguments
+ * you want to pass along with the command to buildDrive() should be included as part of a single
+ * fully-quoted argument (eg, pc.js "dir *.* /s").
+ *
  * @param {Array} argv
  */
 async function processArgs(argv)
@@ -1376,11 +1409,6 @@ async function processArgs(argv)
         sFile = checkMachine(argv[1]);
         if (sFile) argv.splice(1, 1);
     }
-    /*
-     * NOTE: Arguments like "*.*" are problematic (since modern shells will expand them), so
-     * any arguments you want to pass along with the command to buildDrive() should be included
-     * as part of a single fully-quoted argument (eg, pc.js "dir *.* /s").
-     */
     let sParms;
     if (argv[1]) {
         sParms = argv.slice(1).join(' ');
@@ -1395,7 +1423,7 @@ async function processArgs(argv)
         } else {
             result = await buildDrive(sCommand);
             if (!result) {
-                result = loadMachine(sFile || checkMachine("compaq386"));
+                result = loadMachine(sFile || checkMachine("compaq386"), 10);
                 if (!result) {
                     loading = true;
                 }

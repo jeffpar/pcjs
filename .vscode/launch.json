@@ -481,7 +481,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml"
+        "https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml",
+        "--build"
       ],
       "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200",
       "stopOnEntry": false,
