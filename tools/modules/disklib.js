@@ -519,8 +519,9 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
          * And remember, of all the Date() constructor parameters, month is the oddball;
          * it's interpreted as the actual month - 1, so 8 corresponds to September.  Brilliant.
          */
+        let sPath = '/' + path.basename(sLabel);
         let dateLabel = new Date(1989, 8, 27, 3, 0, 0);
-        let file = {path: sDir, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel, size: 0};
+        let file = {path: sPath, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel, size: 0};
         aFileData.push(file);
     }
 
@@ -535,7 +536,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
         let sPath = asFiles[iFile];
         let sName = path.basename(sPath);
         if (sName.charAt(0) == '.') continue;
-        let file = {path: sPath, name: sName, nameEncoding: "utf8"};
+        let file = {path: '/' + sPath, name: sName, nameEncoding: "utf8"};
         let stats = fs.statSync(sPath);
         file.date = stats.mtime;
         if (stats.isDirectory()) {

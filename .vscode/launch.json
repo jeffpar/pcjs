@@ -503,11 +503,11 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--sys=pcdos",
-        "--ver=3.00",
-        "dir"
+        "dir",
+        "--build",
+        "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200",
+      "cwd": "${workspaceFolder}/../test",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

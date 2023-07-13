@@ -1020,10 +1020,18 @@ function saveDrive()
                              * Here's where things get complicated, because we could have scenarios like a directory removed
                              * and a file with the same name created in its place.
                              */
-                            fs.chmodSync(newItem.path.slice(1), (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666);
+                            try {
+                                fs.chmodSync(newItem.path.slice(1), (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666);
+                            } catch (err) {
+                                printf("%s\n", err);
+                            }
                         }
                         if (oldDate.getTime() != newDate.getTime()) {
-                            fs.utimesSync(newItem.path.slice(1), newDate, newDate);
+                            try {
+                                fs.utimesSync(newItem.path.slice(1), newDate, newDate);
+                            } catch (err) {
+                                printf("%s\n", err);
+                            }
                         }
                         iOld++;
                         iNew++;
@@ -1035,23 +1043,36 @@ function saveDrive()
                          * risk *and* will cause all subsequent unlink() calls for any contained files to fail.
                          * So instead, we simply queue the directory for removal later.
                          */
+                        let sPath = oldItem.origin || oldItem.path;
                         if (oldAttr & DiskInfo.ATTR.SUBDIR) {
-                            removedDirs.push(oldItem.path);
+                            removedDirs.push(sPath);
                         } else {
-                            if (fDebug) printf("removing: %s\n", oldItem.path);
-                            fs.unlinkSync(oldItem.path.slice(1));
+                            if (fDebug) printf("removing: %s\n", sPath);
+                            try {
+                                fs.unlinkSync(sPath.slice(1));
+                            } catch(err) {
+                                printf("%s\n", err.message);
+                            }
                         }
                         iOld++;
                     } else {
                         if (fDebug) printf("creating: %s\n", newItem.path);
                         if (newAttr & DiskInfo.ATTR.SUBDIR) {
-                            fs.mkdirSync(newItem.path.slice(1));
+                            try {
+                                fs.mkdirSync(newItem.path.slice(1));
+                            } catch(err) {
+                                printf("%s\n", err.message);
+                            }
                         } else {
                             writeFileSync(newItem.path.slice(1), newItem.contents, true, false);
                         }
                         fs.utimesSync(newItem.path.slice(1), newDate, newDate);
                         if (newAttr & DiskInfo.ATTR.READONLY) {
-                            fs.chmodSync(newItem.path.slice(1), 0o444);
+                            try {
+                                fs.chmodSync(newItem.path.slice(1), 0o444);
+                            } catch(err) {
+                                printf("%s\n", err.message);
+                            }
                         }
                         iNew++;
                     }
@@ -1059,7 +1080,11 @@ function saveDrive()
                 while (removedDirs.length) {
                     let dir = removedDirs.pop();
                     if (fDebug) printf("removing: %s\n", dir);
-                    fs.rmdirSync(dir.slice(1));
+                    try {
+                        fs.rmdirSync(dir.slice(1));
+                    } catch(err) {
+                        printf("%s\n", err.message);
+                    }
                 }
                 if (fSave) {
                     let fileName = path.join(pcjsDir, driveName.replace(".json", ".img"));
