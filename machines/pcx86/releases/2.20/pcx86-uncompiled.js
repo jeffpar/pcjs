@@ -6671,13 +6671,13 @@ X86.OPFLAG_PREFIXES = (X86.OPFLAG.SEG | X86.OPFLAG.LOCK | X86.OPFLAG.REPZ | X86.
 class CharSet {
 
     /**
-     * fromCP437(data, controlChars)
+     * fromCP437(data, translateControl)
      *
      * @param {number|Array|string|DataBuffer} data
-     * @param {boolean} [controlChars] (true to include control characters)
+     * @param {boolean} [translateControl] (true to translate control characters; default is false)
      * @returns {string}
      */
-    static fromCP437(data, controlChars = false)
+    static fromCP437(data, translateControl = false)
     {
         let u = "";
         if (typeof data == "number") data = [data];
@@ -6688,7 +6688,7 @@ class CharSet {
             } else {
                 c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
             }
-            if (c < CharSet.CP437.length && (c >= 32 || controlChars)) {
+            if (c < CharSet.CP437.length && (c >= 32 || translateControl)) {
                 u += CharSet.CP437[c];
             } else {
                 u += String.fromCharCode(c);
@@ -79547,7 +79547,7 @@ class DebuggerX86 extends DbgLib {
                     if (this.doInfo(asArgs)) break;
                     /* falls through */
                 default:
-                    this.printf("unknown command: %s\n", sCmd);
+                    if (!fQuiet) this.printf("unknown command: %s\n", sCmd);
                     result = false;
                     break;
                 }

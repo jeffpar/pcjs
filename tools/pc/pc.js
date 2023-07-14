@@ -20,7 +20,7 @@ import Device     from "../../machines/modules/v3/device.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
-import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
+import { device, existsDir, existsFile, getDiskSector, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
 import pcjslib    from "../modules/pcjslib.js";
 
 let fDebug = false;
@@ -550,9 +550,6 @@ function loadMachine(sFile, bootHD = 0)
             }
         }
         if (bootHD == 10) {
-            if (machine['fdc']) {
-                machine['fdc']['autoMount'] = "{A: {name: \"None\"}}";
-            }
             if (machine['hdc']) {
                 let type = machine['hdc']['type'];
                 let drives = machine['hdc']['drives'];
@@ -569,6 +566,12 @@ function loadMachine(sFile, bootHD = 0)
                  */
                 drives[0] = {'name': "10Mb Hard Disk", 'type': type == "XT"? 3 : 1, 'path': "/tools/pc/DOS.json"};
                 machine['hdc']['drives'] = drives;
+                /*
+                 * Since the machine has a hard disk, we'll also try to remove any boot floppy from drive A:
+                 */
+                if (machine['fdc']) {
+                    machine['fdc']['autoMount'] = "{A: {name: \"None\"}}";
+                }
             }
         }
         let sParms = JSON.stringify(machine);
@@ -727,7 +730,7 @@ function checkCommand(sCommand)
 }
 
 /**
- * buildDrive(sCommand)
+ * buildDrive(sDir, sCommand)
  *
  * Builds a bootable hard drive image containing all files in the current directory.
  *
@@ -748,10 +751,11 @@ function checkCommand(sCommand)
  *
  * NOTE: The list of allowed internal commands below is not intended to be exhaustive; it's just a start.
  *
+ * @param {string} [sDir]
  * @param {string} [sCommand] (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
  * @returns {string} (error message, if any)
  */
-async function buildDrive(sCommand)
+async function buildDrive(sDir = ".", sCommand = "")
 {
     const systemInfo = {
         "msdos": {
@@ -881,13 +885,14 @@ async function buildDrive(sCommand)
                 di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
                 di.updateBootSector(dbBoot, 0, verBPB);
                 if (writeDiskSync(fileName, di, false, 0, true, true)) {
-                    if (fDebug) printf("buildDrive(\"%s\")\n", fileName);
+                    if (fDebug) printf("buildDrive(\"%s\",\"%s\"): %s\n", sDir, sCommand, fileName);
                     driveManifest = manifest;
                 }
             }
         }
         let normalize = true;
-        readDir("./", 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);
+        if (!sDir.endsWith('/')) sDir += '/';
+        readDir(sDir, 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);
     }
     return driveManifest? "" : "unable to build drive";
 }
@@ -1326,6 +1331,7 @@ function doCommand(s)
 
     let help = function() {
         let result = "pc.js commands:\n" +
+                    "  cd [directory]\n" +
                     "  build [command]\n" +
                     "  load [machine] or [drive] [search terms]\n" +
                     "  quit";
@@ -1343,16 +1349,6 @@ function doCommand(s)
     case "help":
         result = help();
         break;
-    case "build":
-        sCommand = checkCommand(sParms);
-        if (!sCommand && sParms) {
-            result = "unknown command: " + sParms;
-        } else {
-            printf("building drive: %s\n", driveName);
-            result = buildDrive(sCommand);
-            if (typeof result != "string") result = "";
-        }
-        break;
     case "cd":
         try {
             if (sParms) {
@@ -1362,6 +1358,20 @@ function doCommand(s)
         } catch(err) {
             result = err.message;
         }
+        break;
+    case "build":
+        if (cpu) {
+            result = "machine already running";
+            break;
+        }
+        sCommand = checkCommand(sParms);
+        if (!sCommand && sParms) {
+            result = "unknown command: " + sParms;
+            break;
+        }
+        printf("building drive%s\n", sCommand? " with command: " + sCommand : "");
+        result = buildDrive(".", sCommand);
+        if (typeof result != "string") result = "";
         break;
     case "load":
         sCommand = aTokens[0];
@@ -1450,34 +1460,33 @@ async function processArgs(argv)
         sFile = checkMachine(argv[1]);
         if (sFile) argv.splice(1, 1);
     }
-    let sParms;
-    if (argv[1]) {
-        sParms = argv.slice(1).join(' ');
+    let sDir = argv['dir'];
+    if (typeof sDir == "string" && !existsDir(sDir, false)) {
+        result = "invalid directory: " + sDir;
     } else {
-        sParms = argv['build'];
-        if (typeof sParms == "boolean") sParms = "";
-    }
-    if (sParms !== undefined) {
-        let sCommand = checkCommand(sParms);        // check for a DOS command or program name
-        if (!sCommand && sParms) {
-            result = "unknown command: " + sParms;
-        } else {
-            result = await buildDrive(sCommand);
-            if (!result) {
-                result = loadMachine(sFile || checkMachine("compaq386"), 10);
+        if (typeof sDir != "string") sDir = ".";
+        if (argv[1]) {
+            let sParms = argv.slice(1).join(' ');
+            let sCommand = checkCommand(sParms);    // check for a DOS command or program name
+            if (!sCommand && sParms) {
+                result = "unknown command: " + sParms;
+            } else {
+                result = await buildDrive(sDir, sCommand);
                 if (!result) {
-                    loading = true;
+                    result = loadMachine(sFile || checkMachine("compaq386"), 10);
+                    if (!result) {
+                        loading = true;
+                    }
                 }
             }
         }
-    }
-    else if (sFile) {
-        result = loadMachine(sFile);
-        if (!result) {
-            loading = true;
+        else if (sFile) {
+            result = loadMachine(sFile);
+            if (!result) {
+                loading = true;
+            }
         }
     }
-
     if (result) {
         printf("%s\n", result);
     }
@@ -1582,7 +1591,7 @@ function main(argc, argv)
         let optionsMain = {
             "--load=[machine file]":    "load machine configuration file",
             "--type=[machine type]":    "set machine type (default is " + machineType + ")",
-            "--build=[command]":        "build disk image w/optional DOS command",
+            "--dir=[directory]":        "set source directory for disk (default is \".\")",
             "--sys=[system type]":      "operating system type (default is " + systemType + ")",
             "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
         };
@@ -1637,5 +1646,6 @@ function main(argc, argv)
 main(...pcjslib.getArgs({
     '?': "help",
     'd': "debug",
+    'd': "halt",
     's': "save"
 }));

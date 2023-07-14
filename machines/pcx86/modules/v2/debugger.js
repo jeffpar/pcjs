@@ -6714,7 +6714,7 @@ export default class DebuggerX86 extends DbgLib {
                     if (this.doInfo(asArgs)) break;
                     /* falls through */
                 default:
-                    this.printf("unknown command: %s\n", sCmd);
+                    if (!fQuiet) this.printf("unknown command: %s\n", sCmd);
                     result = false;
                     break;
                 }
