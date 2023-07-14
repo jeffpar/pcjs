@@ -73,7 +73,7 @@ function setDebugMode(nEvent)
 {
     let prevMode = debugMode;
     if (!nEvent && debugMode != nEvent) {
-        printf("Press CTRL-D to enter command mode, CTRL-C to terminate process\n");
+        printf("Press CTRL-D to enter command mode, CTRL-C to terminate pc.js\n");
     }
     debugMode = nEvent;
     if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {

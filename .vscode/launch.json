@@ -1498,7 +1498,7 @@
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--disk",
-        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0798/DISK0798.json",
+        "https://harddisks.pcjs.org/pcx86/10mb/PCDOS200-C400.json",
         "--list"
       ],
       "cwd": "${workspaceFolder}",
