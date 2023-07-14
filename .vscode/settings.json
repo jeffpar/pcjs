@@ -1125,6 +1125,7 @@
     "NODEBUG",
     "nodebugger",
     "NODISP",
+    "nofloppy",
     "NOHIST",
     "noindex",
     "NOINTR",

@@ -25,6 +25,7 @@ import pcjslib    from "../modules/pcjslib.js";
 
 let fDebug = false;
 let fHalt = false;
+let fNoFloppy = false;
 let fSave = false;
 let autoStart = false;
 let machineType = "pcx86";
@@ -549,6 +550,7 @@ function loadMachine(sFile, bootHD = 0)
                 autoStart = !machine['debugger'];
             }
         }
+        let removeFloppy = fNoFloppy;
         if (bootHD == 10) {
             if (machine['hdc']) {
                 let type = machine['hdc']['type'];
@@ -566,13 +568,11 @@ function loadMachine(sFile, bootHD = 0)
                  */
                 drives[0] = {'name': "10Mb Hard Disk", 'type': type == "XT"? 3 : 1, 'path': "/tools/pc/DOS.json"};
                 machine['hdc']['drives'] = drives;
-                /*
-                 * Since the machine has a hard disk, we'll also try to remove any boot floppy from drive A:
-                 */
-                if (machine['fdc']) {
-                    machine['fdc']['autoMount'] = "{A: {name: \"None\"}}";
-                }
+                removeFloppy = true;
             }
+        }
+        if (removeFloppy && machine['fdc']) {
+            machine['fdc']['autoMount'] = "{A: {name: \"None\"}}";
         }
         let sParms = JSON.stringify(machine);
         loadModules(machines[type]['factory'], machines[type]['modules'], function() {
@@ -1599,6 +1599,7 @@ function main(argc, argv)
             "--debug (-d)\t":           "enable DEBUG messages",
             "--halt (-h)\t":            "halt machine on startup",
             "--help (-?)\t":            "display command-line usage",
+            "--nofloppy (-n)\t":        "remove any diskette from drive A:",
             "--save (-s)\t":            "save built disk image on return"
         };
         let optionGroups = {
@@ -1617,6 +1618,7 @@ function main(argc, argv)
 
     fDebug = argv['debug'] || fDebug;
     fHalt = argv['halt'] || fHalt;
+    fNoFloppy = argv['nofloppy'] || fNoFloppy;
     fSave = argv['save'] || fSave;
     machineType = argv['type'] || machineType;
     systemType = (typeof argv['sys'] == "string" && argv['sys'] || systemType).toLowerCase();
@@ -1646,6 +1648,7 @@ function main(argc, argv)
 main(...pcjslib.getArgs({
     '?': "help",
     'd': "debug",
-    'd': "halt",
+    'h': "halt",
+    'n': "nofloppy",
     's': "save"
 }));

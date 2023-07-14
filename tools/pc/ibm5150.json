@@ -16,7 +16,7 @@
       "name": "",
       "addr": "0x00000",
       "size": 0,
-      "test": true
+      "test": false
     }
   ],
   "rom": [
@@ -74,12 +74,8 @@
     "name": "",
     "autoMount": {
       "A": {
-        "name": "PC DOS 2.00 (Disk 1)",
-        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
-      },
-      "B": {
-        "name": "PC DOS 2.00 (Disk 2)",
-        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK2.json"
+        "name": "PC DOS 1.00",
+        "path": "/diskettes/pcx86/sys/dos/ibm/1.00/PCDOS100.json"
       }
     }
   },
