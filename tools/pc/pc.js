@@ -1355,7 +1355,9 @@ function doCommand(s)
         break;
     case "cd":
         try {
-            process.chdir(sParms);
+            if (sParms) {
+                process.chdir(sParms);
+            }
             result = process.cwd();
         } catch(err) {
             result = err.message;
@@ -1383,9 +1385,6 @@ function doCommand(s)
         } else {
             result = "missing " + (cpu? "drive letter" : "machine file");
         }
-        break;
-    case "pwd":
-        result = process.cwd();
         break;
     case "q":
     case "quit":
