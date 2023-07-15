@@ -337,7 +337,7 @@ If your search terms match more than one diskette in the library, a numbered lis
 You can also search for files by *filename*.  For example, if you want load a diskette containing a file named `RATBAS`, you can use the `--file` search option to find diskettes containing such a file:
 
     C:\>load a: --file ratbas
-    1: RATBAS  213       NaN 2017-06-17  "RatBas (1982)"
+    1: RATBAS  213         0 2017-06-17  "RatBas (1982)"
     2: RATBAS.LBR      68096 1984-11-23  "PC User Group Disk #3002"
     3: RATBAS.TXT      30080 1982-08-13  "RatBas (1982)"
     4: RATBAS.UM        9856 1982-08-09  "RatBas (1982)"

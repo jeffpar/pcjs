@@ -1164,7 +1164,7 @@ function loadDiskette(sDrive, aTokens)
             if (!item['file']) {
                 result += sprintf("%3d: %s", i + 1, item['disk']);
             } else {
-                result += sprintf("%3d: %-12s %8d %.10s  \"%s\"", i+1, item['file'], item['size'], item['date'], item['disk']);
+                result += sprintf("%3d: %-12s %8d %.10s  \"%s\"", i+1, item['file'], item['size'] || 0, item['date'], item['disk']);
             }
         }
         result += "\nenter \"load " + sDrive + " #\" to load diskette by number" + (message? "\n" + message : "");
