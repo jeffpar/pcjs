@@ -334,7 +334,27 @@ If your search terms match more than one diskette in the library, a numbered lis
     WORKUTIL BAT     5086   9-25-89   4:30p
         17 File(s)      1024 bytes free
 
-Any files that you're interested in can be copied to the C: drive, and when you type `return`, those files should be automatically transferred to your current directory.
+You can also search for files by *filename*.  For example, if you want load a diskette containing a file named `RATBAS`, you can use the `--file` search option to find diskettes containing such a file:
+
+    C:\>load a: --file ratbas
+    1: RATBAS  213       NaN 2017-06-17  "RatBas (1982)"
+    2: RATBAS.LBR      68096 1984-11-23  "PC User Group Disk #3002"
+    3: RATBAS.TXT      30080 1982-08-13  "RatBas (1982)"
+    4: RATBAS.UM        9856 1982-08-09  "RatBas (1982)"
+    enter "load a: #" to load diskette by number
+
+    C:\>load a: 4
+    1: RATBAS.UM        9856 1982-08-09  "RatBas (1982)"
+    2: RATBAS.UM        9856 1982-08-10  "PC-SIG Library Disk #0003"
+    enter "load a: #" to load diskette by number
+    multiple disks with identical file (use "load a: 1" to load original selection)
+
+    C:\>load a: 2
+    loading "PC-SIG Library Disk #0003" in drive A:
+
+In the above example, there were multiple diskettes with an *identical* version of the file `RATBAS.UM`, so only the first matching diskette was displayed in the first list, and then once we selected a diskette, a list of all the *other* diskettes containing that *same* version was displayed next.
+
+Any files you're interested in can be copied to the C: drive, and when you type `return`, those files should be automatically transferred to your current directory.
 
 ### More To Come
 
