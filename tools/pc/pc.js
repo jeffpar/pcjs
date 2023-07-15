@@ -827,7 +827,7 @@ async function buildDrive(sDir = ".", sCommand = "")
          * our hidden "RETURN.COM" program regardless of the current directory.
          */
         let attr = DiskInfo.ATTR.ARCHIVE;
-        let data = readFileSync("AUTOEXEC.BAT", "utf8", true);
+        let data = readFileSync(path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
         if (!data) {
             data = "ECHO OFF\r\n";
             attr |= DiskInfo.ATTR.HIDDEN;
