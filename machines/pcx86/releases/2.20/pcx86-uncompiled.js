@@ -6671,13 +6671,13 @@ X86.OPFLAG_PREFIXES = (X86.OPFLAG.SEG | X86.OPFLAG.LOCK | X86.OPFLAG.REPZ | X86.
 class CharSet {
 
     /**
-     * fromCP437(data, controlChars)
+     * fromCP437(data, translateControl)
      *
      * @param {number|Array|string|DataBuffer} data
-     * @param {boolean} [controlChars] (true to include control characters)
+     * @param {boolean} [translateControl] (true to translate control characters; default is false)
      * @returns {string}
      */
-    static fromCP437(data, controlChars = false)
+    static fromCP437(data, translateControl = false)
     {
         let u = "";
         if (typeof data == "number") data = [data];
@@ -6688,7 +6688,7 @@ class CharSet {
             } else {
                 c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
             }
-            if (c < CharSet.CP437.length && (c >= 32 || controlChars)) {
+            if (c < CharSet.CP437.length && (c >= 32 || translateControl)) {
                 u += CharSet.CP437[c];
             } else {
                 u += String.fromCharCode(c);
@@ -53612,7 +53612,7 @@ class VideoX86 extends Component {
                         }
                     }
                     card.nCyclesVertRetrace = video.cpu.getCycles();
-                    if (DEBUG) video.printf(Messages.VIDEO + Messages.INT, "vertical retrace timer fired (%d cycles)\n", card.nCyclesVertRetrace);
+                    if (DEBUG) video.printf(Messages.VIDEO + Messages.TIMER, "vertical retrace timer fired (%d cycles)\n", card.nCyclesVertRetrace);
                     if (video.nIRQ) {
                         if (!(card.regCRTData[Card.CRTC.EGA.VREND.INDX] & Card.CRTC.EGA.VREND.DISABLE_VRINT)) {
                             if (video.chipset) video.chipset.setIRR(video.nIRQ);
@@ -53659,7 +53659,7 @@ class VideoX86 extends Component {
                         video.msUpdatePrev = msUpdate - (msDelta >= video.msUpdateInterval? 0 : msDelta);
                     }
                     else if (DEBUG) {
-                        video.printf(Messages.VIDEO + Messages.INT, "skipping update (%dms too soon)\n", -msDelta);
+                        video.printf(Messages.VIDEO + Messages.TIMER, "skipping update (%dms too soon)\n", -msDelta);
                     }
                     video.latchStartAddress();
                 }, -this.cardActive.nCyclesVertPeriod);
@@ -54010,11 +54010,16 @@ class VideoX86 extends Component {
         /*
          * If we're still here, then we're ready!
          *
-         * UPDATE: Per issue #21, I'm issuing setReady() *only* if a valid contextScreen exists *or* a Debugger is attached.
+         * UPDATE: Per issue #21 (https://github.com/jeffpar/pcjs.v1/issues/21), I issued setReady() *only* if a valid
+         * contextScreen existed *or* a debugger was attached, and decided to consider a more general-purpose solution for
+         * whether or not the user wanted to run in a "headless" mode at a later date.
          *
-         * TODO: Consider a more general-purpose solution for deciding whether or not the user wants to run in a "headless" mode.
+         * Well, that later date is now, and since pc.js always runs machines in a "headless" mode, we're going to always
+         * mark ourselves ready.
+         *
+         *      if (this.contextScreen || this.dbg) this.setReady();
          */
-        if (this.contextScreen || this.dbg) this.setReady();
+        this.setReady();
     }
 
     /**
@@ -65862,7 +65867,7 @@ class FDC extends Component {
             }
         }
         /*
-         * Why didn't we sorted aDiskettes before adding them to the controlDisks list control?
+         * Why didn't we sort aDiskettes before adding them to the controlDisks list control?
          * Because that wouldn't handle any prepopulated entries already stored in the list control.
          */
         if (this.sortBy) {
@@ -65930,10 +65935,17 @@ class FDC extends Component {
     findDisketteByPath(sPath)
     {
         let controlDisks = this.bindings["listDisks"];
-        if (controlDisks && controlDisks.options) {
-            for (let i = 0; i < controlDisks.options.length; i++) {
-                let control = controlDisks.options[i];
-                if (control.value == sPath) return control.text;
+        if (controlDisks) {
+            if (controlDisks.options) {
+                for (let i = 0; i < controlDisks.options.length; i++) {
+                    let control = controlDisks.options[i];
+                    if (control.value == sPath) return control.text;
+                }
+            }
+        } else if (this.aDiskettes) {
+            for (let i = 0; i < this.aDiskettes.length; i++) {
+                let diskette = this.aDiskettes[i];
+                if (diskette['path'] == sPath) return diskette['name'];
             }
         }
         return null;
@@ -65951,12 +65963,19 @@ class FDC extends Component {
      */
     findDisketteByName(sName)
     {
-        if (sName) {
+        if (sName && sName != "None") {
             let controlDisks = this.bindings["listDisks"];
-            if (controlDisks && controlDisks.options) {
-                for (let i = 0; i < controlDisks.options.length; i++) {
-                    let control = controlDisks.options[i];
-                    if (control.text == sName) return control.value;
+            if (controlDisks) {
+                if (controlDisks.options) {
+                    for (let i = 0; i < controlDisks.options.length; i++) {
+                        let control = controlDisks.options[i];
+                        if (control.text == sName) return control.value;
+                    }
+                }
+            } else if (this.aDiskettes) {
+                for (let i = 0; i < this.aDiskettes.length; i++) {
+                    let diskette = this.aDiskettes[i];
+                    if (diskette['name'] == sName) return diskette['path'];
                 }
             }
             this.printf(Messages.NOTICE, "Unable to find diskette \"%s\"\n", sName);
@@ -78354,7 +78373,7 @@ class DebuggerX86 extends DbgLib {
                     this.bitsMessage = this.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
                     if (bitsMessage == Messages.BUFFER) {
-                        this.printf("%s\n", this.aMessageBuffer.join('\n'));
+                        this.printf("%s\n", this.aMessageBuffer.join(""));
                         this.aMessageBuffer = [];
                     }
                 }
@@ -79528,7 +79547,7 @@ class DebuggerX86 extends DbgLib {
                     if (this.doInfo(asArgs)) break;
                     /* falls through */
                 default:
-                    this.printf("unknown command: %s\n", sCmd);
+                    if (!fQuiet) this.printf("unknown command: %s\n", sCmd);
                     result = false;
                     break;
                 }

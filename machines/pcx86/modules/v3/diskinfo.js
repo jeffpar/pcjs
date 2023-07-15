@@ -738,6 +738,12 @@ export default class DiskInfo {
         this.fBPBModified = false;
 
         /*
+         * Originally, we did not need to save a copy of the original file data, but now we do, so that we can
+         * create associations between the built files *inside* the disk and the original files *outside* the disk.
+         */
+        this.aFileData = aFileData;
+
+        /*
          * Put reasonable upper limits on both individual file sizes and the total size of all files.
          */
         let cbMax = (kbTarget || 1440) * 1024;
@@ -1731,11 +1737,34 @@ export default class DiskInfo {
             }
 
             /*
+             * If there's an original aFileData list, then we built this disk from a list of files, and we should
+             * have saved the starting cluster number for each file in that list, so let's build a cluster lookup table
+             * that will allow us to quickly associate each of the original file paths with the files on the disk.
+             */
+            let clusterPaths = [];
+            if (this.aFileData) {
+                let scanFiles = function(files) {
+                    for (let i = 0; i < files.length; i++) {
+                        let file = files[i];
+                        if (file.cluster) {
+                            clusterPaths[file.cluster] = file.path;
+                        }
+                        if (file.files) scanFiles(file.files);
+                    }
+                };
+                scanFiles(this.aFileData);
+            }
+
+            /*
              * For all files in the file table, create the sector-to-file mappings now.
              */
             for (let iFile = 0; iFile < this.fileTable.length; iFile++) {
                 let file = this.fileTable[iFile], off = 0;
                 if (file.name == "." || file.name == "..") continue;
+                if (file.cluster) {
+                    let origin = clusterPaths[file.cluster];
+                    if (origin) file.origin = origin;
+                }
                 for (let iSector = 0; iSector < file.aLBA.length; iSector++) {
                     if (!this.updateSector(iFile, off, file.aLBA[iSector])) {
                         this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unable to map sector to offset %d\n", file.name, off);
@@ -2051,6 +2080,7 @@ export default class DiskInfo {
         }
         if (fComplete) {
             if (ab) desc[DiskInfo.FILEDESC.CONTENTS] = ab;
+            if (file.origin) desc[DiskInfo.FILEDESC.ORIGIN] = file.origin;
         } else {
             delete desc[DiskInfo.FILEDESC.NAME];
             if (!file.size && (file.attr & DiskInfo.ATTR.SUBDIR | DiskInfo.ATTR.VOLUME)) {
@@ -3781,7 +3811,8 @@ DiskInfo.FILEDESC = {
     MODNAME:    'name',
     MODDESC:    'description',
     MODSEGS:    'segments',
-    CONTENTS:   'contents'
+    CONTENTS:   'contents',
+    ORIGIN:     'origin'            // path of original file (if the file originated from non-DOS media)
 };
 
 /*

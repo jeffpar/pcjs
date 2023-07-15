@@ -19,13 +19,13 @@ import DataBuffer from "../../../modules/v2/databuffer.js";
 export default class CharSet {
 
     /**
-     * fromCP437(data, controlChars)
+     * fromCP437(data, translateControl)
      *
      * @param {number|Array|string|DataBuffer} data
-     * @param {boolean} [controlChars] (true to include control characters)
+     * @param {boolean} [translateControl] (true to translate control characters; default is false)
      * @returns {string}
      */
-    static fromCP437(data, controlChars = false)
+    static fromCP437(data, translateControl = false)
     {
         let u = "";
         if (typeof data == "number") data = [data];
@@ -36,7 +36,7 @@ export default class CharSet {
             } else {
                 c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
             }
-            if (c < CharSet.CP437.length && (c >= 32 || controlChars)) {
+            if (c < CharSet.CP437.length && (c >= 32 || translateControl)) {
                 u += CharSet.CP437[c];
             } else {
                 u += String.fromCharCode(c);

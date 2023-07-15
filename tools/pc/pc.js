@@ -20,15 +20,18 @@ import Device     from "../../machines/modules/v3/device.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
-import { device, existsFile, getDiskSector, makeFileDesc, readDir, readDiskSync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
+import { device, existsDir, existsFile, getDiskSector, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
 import pcjslib    from "../modules/pcjslib.js";
 
 let fDebug = false;
 let fHalt = false;
+let fNoFloppy = false;
 let fSave = false;
+let autoStart = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.20";
+let driveName = "DOS.json";
 
 let rootDir, pcjsDir;
 let messagesFilter, machines, debugMode;
@@ -70,7 +73,7 @@ function setDebugMode(nEvent)
 {
     let prevMode = debugMode;
     if (!nEvent && debugMode != nEvent) {
-        printf("Press CTRL-D to enter debugger, CTRL-C to terminate process\n");
+        printf("Press CTRL-D to enter command mode, CTRL-C to terminate pc.js\n");
     }
     debugMode = nEvent;
     if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
@@ -184,11 +187,7 @@ async function loadModules(factory, modules, done)
         }
         let module = await import(modulePath);
         /*
-         * Below are the set of classes that we need access to (eg, for static methods, constants, etc).
-         *
-         * In the case of the debugger, we just want the parent class (which is loaded first), not the subclass.
-         *
-         * TODO: Internally, the parent debugger class is named DbgLib, so perhaps we should rename the file to match?
+         * Below are the set of classes that we need access to (eg, static methods, constants, etc).
          */
         switch(name) {
         case "weblib":
@@ -209,7 +208,7 @@ async function loadModules(factory, modules, done)
          */
         if (module.default && module.default.prototype) {
             module.default.prototype.print = function print(s, bitsMessage) {
-                if (debugMode && !bitsMessage || (bitsMessage || fDebug) && this.testBits(messagesFilter, bitsMessage)) {
+                if ((debugMode || !autoStart) && !bitsMessage || (bitsMessage || fDebug) && this.testBits(messagesFilter, bitsMessage)) {
                     printf(s);
                 }
             };
@@ -283,8 +282,11 @@ function initMachine(idMachine, sParms)
         /*
          * Since there may be no debugger (and even if there is, machines that are auto-started won't
          * trigger any debugger events), we simulate an appropriate event.
+         *
+         * NOTE: The test here used to be "cpu && cpu.isRunning()", but if you're not using the --local
+         * option, the CPU may not up and running yet, so we rely on the autoStart setting instead.
          */
-        setDebugMode(cpu && cpu.isRunning()? DbgLib.EVENTS.EXIT : DbgLib.EVENTS.READY);
+        setDebugMode(cpu && autoStart? DbgLib.EVENTS.EXIT : DbgLib.EVENTS.READY);
     }
     catch(err) {
         printf("machine initialization error: %s\n", err.message);
@@ -300,25 +302,89 @@ function initMachine(idMachine, sParms)
  */
 function intVideo(addr)
 {
+    let maxRows = 25, maxCols = 80;     // TODO: update these to reflect active video mode
+    let CX = (this.regECX & 0xffff);
     let AH = ((this.regEAX >> 8) & 0xff), AL = (this.regEAX & 0xff);
     let DH = ((this.regEDX >> 8) & 0xff), DL = (this.regEDX & 0xff);
+
+    if (nestedVideo) {                  // some BIOSes issue calls within the TTY function call
+        return true;                    // and we want to ignore those
+    }
+
     switch (AH) {
-    case 0x02:
-        if (!nestedVideo) {
-            if (DL < colCursor || DH != rowCursor) {
-                printf("\n");
+    case 0x02:                          // set cursor position (row=DH, col=DL)
+        if (DL >= maxCols || DH >= maxRows) {
+            break;                      // ignore "off-screen" positions
+        }
+        if (DL < colCursor) {
+            if (!DL) {
+                printf('\r');
+            } else {
+                let s = "";
+                while (DL + s.length < colCursor) {
+                    s += '\b';
+                }
+                printf(s);
             }
+        }
+        if (DH != rowCursor) {
+            printf('\n');
+        } else if (DL > colCursor) {
+            /*
+             * When BASIC/BASICA erases a character (in response to a BS/DEL key), it wants to redraw
+             * the entire line (eg, with spaces if there was nothing past the character being deleted);
+             * in that situation, it seems best (well, certainly easiest) to simply ignore the cursor
+             * updates and let the spaces ("chips") fall where they may.
+             */
+            break;
         }
         rowCursor = DH;
         colCursor = DL;
         break;
-    case 0x09:
-    case 0x0E:
-        printf("%c", AL);
-        nestedVideo++;
-        this.addIntReturn(addr, function onVideoReturn(nLevel) {
-            nestedVideo--;
-        });
+    case 0x06:                          // scroll up (AL lines)
+        while (AL--) {                  // TODO: Should probably check the boundaries of the scroll
+            printf('\n');               // but that's more work than our cheesy TTY emulation deserves
+        }
+        break;
+    case 0x09:                          // write raw char/attr (AL/BL) with count (CX)
+    case 0x0A:                          // write raw char (AL) with count (CX)
+        /* falls through */
+    case 0x0E:                          // write TTY char (AL)
+        /*
+         * By default, fromCP437() does NOT translate control characters to UTF-8, which is the proper
+         * thing to do for TTY control characters (ie, BEL, BS, LF, and CR) that the TTY function (0x0E)
+         * wants to handle, but all other characters must be translated (including ESC or 0x1B, which
+         * BASIC uses to display a left-arrow symbol).  And when non-TTY output is being performed, there
+         * are no exceptions (ie, translate everything).
+         */
+        let s = CharSet.fromCP437(AL, AH != 0x0E || [0x07, 0x08, 0x0A, 0x0D].indexOf(AL) < 0);
+        /*
+         * NOTE: I don't think the BIOS actually handled CX == 0 very well (it looped 65536 times instead),
+         * but we're not going to emulate/risk that.
+         */
+        if (AH == 0x0E || !CX) CX = 1;
+        printf("%s", s.repeat(CX));
+        if (AL == '\r') {
+            colCursor = 0;
+        } else if (AL == '\n') {
+            while (rowCursor < maxRows && CX--) {
+                rowCursor++;
+            }
+        } else if (AL == '\b') {
+            while (colCursor > 0 && CX--) {
+                colCursor--;
+            }
+        } else {
+            while (colCursor < maxCols && CX--) {
+                colCursor++;
+            }
+        }
+        if (AH == 0x0E) {
+            nestedVideo++;              // TTY function performs nested cursor control calls (eg, AH=0x02)
+            this.addIntReturn(addr, function onVideoReturn(nLevel) {
+                nestedVideo--;
+            });
+        }
         break;
     }
     return true;
@@ -413,28 +479,106 @@ function sendSerial(b)
 }
 
 /**
- * loadMachine(sFile)
+ * checkMachine(sFile)
+ *
+ * We now allow a machine file to be specified with or without the --load option, with or without a path, and
+ * with or without an extension.  If you don't use --load, then it must be the first non-option argument.  If you
+ * don't specify a path, then it must either be in the current directory or the pc.js directory (ie, /tools/pc),
+ * and if you don't specify an extension, we'll try ".json", ".json5", and ".xml", in that order.
+ *
+ * If no file can be found, we return an empty string.
  *
  * @param {string} sFile
+ * @returns {string} (sFile with a path prepended and/or an extension appended as needed)
+ */
+function checkMachine(sFile)
+{
+    if (sFile) {
+        if (sFile.indexOf("http") == 0) {
+            return sFile;
+        }
+        if (existsFile(sFile, false)) {
+            return sFile;
+        }
+        const exts = [".json", ".json5", ".xml"];
+        for (let ext of exts) {
+            if (existsFile(sFile + ext, false)) {
+                return sFile + ext;
+            }
+        }
+        if (sFile.indexOf(path.sep) < 0) {
+            sFile = path.join(pcjsDir, sFile);
+            for (let ext of exts) {
+                if (existsFile(sFile + ext, false)) {
+                    return sFile + ext;
+                }
+            }
+        }
+        sFile = "";
+    }
+    return sFile;
+}
+
+/**
+ * loadMachine(sFile, bootHD)
+ *
+ * If bootHD, then we want to 1) remove any boot floppy from drive A: and 2) make the sure the 'type'
+ * for the first hard drive is set correctly.  For example, if bootHD is 10, then the drive type should
+ * be 3 for XT controllers and 1 for AT controllers.
+ *
+ * NOTE: At present, the only supported bootHD value is, in fact, 10. ;-)
+ *
+ * @param {string} sFile
+ * @param {number} [bootHD] (eg, 10 for a 10Mb drive)
  * @returns {string}
  */
-function loadMachine(sFile)
+function loadMachine(sFile, bootHD = 0)
 {
+    let result = "";
     let getFactory = function(machine) {
         let type = machine['type'] || (machine['machine'] && machine['machine']['type']) || machineType;
         let idMachine = "";
         if (machine['machine']) {
             idMachine = machine['machine']['id'];
         }
-        if (fHalt && machine['cpu']) {
-            machine['cpu']['autoStart'] = 0;
+        if (machine['cpu']) {
+            if (fHalt) {
+                machine['cpu']['autoStart'] = 0;
+            }
+            autoStart = machine['cpu']['autoStart'];
+            if (autoStart == undefined) {
+                autoStart = !machine['debugger'];
+            }
+        }
+        let removeFloppy = fNoFloppy;
+        if (bootHD == 10) {
+            if (machine['hdc']) {
+                let type = machine['hdc']['type'];
+                let drives = machine['hdc']['drives'];
+                if (typeof drives == "string") {
+                    try {
+                        drives = eval(drives);
+                    } catch(err) {
+                        drives = null;
+                    }
+                }
+                if (!drives) drives = [];
+                /*
+                 * Set the *drive* type below based on the *controller* type obtained above.
+                 */
+                drives[0] = {'name': "10Mb Hard Disk", 'type': type == "XT"? 3 : 1, 'path': "/tools/pc/DOS.json"};
+                machine['hdc']['drives'] = drives;
+                removeFloppy = true;
+            }
+        }
+        if (removeFloppy && machine['fdc']) {
+            machine['fdc']['autoMount'] = "{A: {name: \"None\"}}";
         }
         let sParms = JSON.stringify(machine);
         loadModules(machines[type]['factory'], machines[type]['modules'], function() {
             initMachine(idMachine, sParms);
         });
     };
-    let result = "missing machine";
     if (cpu) {
         /*
          * TODO: To make way for another machine, we'd have to first destroy the previous one, and there's no
@@ -442,26 +586,18 @@ function loadMachine(sFile)
          */
         result = "machine already loaded";
     }
-    else if (sFile) {
-        if (sFile.indexOf(path.sep) < 0) {
-            sFile = path.join(pcjsDir, sFile);
+    else {
+        if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
+        if (sFile.indexOf(".json") > 0) {
+            result = readJSON(sFile, getFactory);
         }
-        if (fDebug) {
-            printf("loadMachine(\"%s\")\n", sFile);
+        else if (sFile.indexOf(".xml") > 0) {
+            let xml = {_resolving: 0};
+            result = readXML(sFile, xml, 'machine', null, 0, getFactory);
+        } else {
+            result = "unsupported machine file: " + sFile;
         }
-        let sOpen = sFile;
-        if (sOpen.indexOf(".json") > 0 || existsFile(sOpen = sFile + ".json5", false) || existsFile(sOpen = sFile + ".json", false)) {
-            result = readJSON(sOpen, getFactory);
-        }
-        else {
-            sOpen = sFile;
-            if (sOpen.indexOf(".xml") > 0 || existsFile(sOpen = sFile + ".xml", false)) {
-                let xml = {_resolving: 0};
-                result = readXML(sOpen, xml, 'machine', null, 0, getFactory);
-            } else {
-                result = "unsupported machine file: " + sFile;
-            }
-        }
+        if (typeof result != "string") result = "";
     }
     return result;
 }
@@ -473,11 +609,11 @@ function loadMachine(sFile)
  * @param {function(Object, string)} done
  * @returns {string}
  */
-function readJSON(sFile, done)
+async function readJSON(sFile, done)
 {
     let result = "";
     try {
-        let sMachine = readFileSync(sFile);
+        let sMachine = await readFileAsync(sFile);
         /*
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
@@ -501,20 +637,29 @@ function readJSON(sFile, done)
  * @param {function(Object)} done
  * @returns {string}
  */
-function readXML(sFile, xml, sNode, aTags, iTag, done)
+async function readXML(sFile, xml, sNode, aTags, iTag, done)
 {
     let result = "";
     let idAttrs = '@';
     try {
         xml._resolving++;
-        let sXML = readFileSync(sFile);
+        let sXML = await readFileAsync(sFile);
         let parser = new xml2js.Parser({attrkey: idAttrs});
         parser.parseString(sXML, function parseXML(err, xmlNode) {
             if (!aTags) {
                 xml[sNode] = xmlNode[sNode];
             } else {
+                /*
+                 * Preserve any non-ref attributes in the tag we're updating.
+                 */
+                let attrs = aTags[iTag][idAttrs];
                 aTags[iTag] = xmlNode[sNode];
-            }
+                for (let attr in attrs) {
+                    if (attr != 'ref') {
+                        aTags[iTag][idAttrs][attr] = attrs[attr];
+                    }
+                }
+}
             if (err) {
                 printf("%s\n", err.message);
             }
@@ -528,7 +673,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
                         if (sFileXML) {
                             readXML(sFileXML, xml, sTag, aTagsXML, iTagXML, done);
                             /*
-                             * Any non-ref attributes in the tag override those in the referenced file.
+                             * Any non-ref attributes in the tag should override those in the referenced file.
                              */
                             for (let attr in attrs) {
                                 if (attr != 'ref') {
@@ -552,7 +697,44 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
 }
 
 /**
- * buildDrive(sCommand)
+ * checkCommand(sDir, sCommand)
+ *
+ * @param {string} sDir
+ * @param {string} sCommand
+ * @returns {string} (original command, or empty string if not a valid command or program name)
+ */
+function checkCommand(sDir, sCommand)
+{
+    if (sCommand) {
+        let aParts = sCommand.split(' ');
+        let sProgram = aParts[0].toUpperCase();
+        const aInternal = ["CD", "COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
+
+        if (aInternal.indexOf(sProgram) < 0) {
+            if (sProgram.indexOf('.') < 0) {
+                sProgram += ".{COM,EXE,BAT}";
+            }
+            if (sProgram.indexOf('/') < 0 && sProgram.indexOf('\\') < 0) {
+                sProgram = path.join("**", sProgram);
+            }
+            let aFiles = glob.sync(sProgram);
+            if (!aFiles.length) {
+                sCommand = "";
+            } else {
+                let sArguments = aParts.slice(1).join(' ');
+                sCommand = aFiles[0].replace(/\//g, '\\');
+                if (sCommand.indexOf(sDir) == 0) {
+                    sCommand = sCommand.slice(sDir.length);
+                }
+                sCommand = "C:" + (sCommand[0] != '\\'? '\\' : '') + sCommand + (sArguments? " " + sArguments : "");
+            }
+        }
+    }
+    return sCommand;
+}
+
+/**
+ * buildDrive(sDir, sCommand)
  *
  * Builds a bootable hard drive image containing all files in the current directory.
  *
@@ -573,10 +755,11 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
  *
  * NOTE: The list of allowed internal commands below is not intended to be exhaustive; it's just a start.
  *
- * @param {string} sCommand (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
- * @returns {Array|null} (drive manifest)
+ * @param {string} [sDir]
+ * @param {string} [sCommand] (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
+ * @returns {string} (error message, if any)
  */
-function buildDrive(sCommand)
+async function buildDrive(sDir = ".", sCommand = "")
 {
     const systemInfo = {
         "msdos": {
@@ -588,154 +771,134 @@ function buildDrive(sCommand)
             "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
         }
     };
-    const aInternalCommands = ["CD", "COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
 
-    let manifest = null;
-    let aParts = sCommand.split(' ');
-    let sProgram = aParts[0].toUpperCase();
-    let iCommand = aInternalCommands.indexOf(sProgram);
     let system = systemInfo[systemType];
     let version = +systemVersion;
     let majorVersion = version | 0;
+
     if (!system) {
-        printf("unsupported system type: %s\n", systemType);
-        return null;
+        return "unsupported system type: " + systemType;
     }
+
     if (majorVersion < 2) {
-        printf("minimum DOS version with hard disk support is 2.00\n");
-        return null;
+        return "minimum DOS version with hard disk support is 2.00";
     }
-    if (iCommand < 0) {
-        if (sProgram.indexOf('.') < 0) {
-            sProgram += ".{COM,EXE,BAT}";
+
+    let sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + systemVersion + "/";
+    sSystemDisk += systemType.toUpperCase() + systemVersion.replace('.', '') + "-DISK1.json";
+    let diSystem = await readDiskAsync(sSystemDisk);
+    if (!diSystem) {
+        return "missing system diskette: " + sSystemDisk;
+    }
+
+    let dbMBR = readFileSync(path.join(pcjsDir, "MSDOS" /*systemType.toUpperCase()*/ + ".mbr"), null);
+    if (diSystem && dbMBR) {
+        let aFileDescs = [];
+        for (let name of system.files) {
+            let desc = diSystem.findFile(name);
+            if (desc) {
+                desc.attr = +desc.attr;
+                /*
+                 * There may be situations where we must leave COMMAND.COM unhidden; we'll see.
+                 *
+                 *      if (name != "COMMAND.COM" || majorVersion != 2) ...
+                 */
+                desc.attr |= DiskInfo.ATTR.HIDDEN;
+                aFileDescs.push(desc);
+            }
         }
-        if (sProgram.indexOf('/') < 0 && sProgram.indexOf('\\') < 0) {
-            sProgram = path.join("**", sProgram);
+        /*
+         * In addition to the system files, we also add a hidden LOAD.COM in the root, which immediately
+         * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
+         * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
+         */
+        aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
+        /*
+         * We also add a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
+         * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDrive()
+         * to look for any changes and then terminate the machine.
+         */
+        aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
+        /*
+         * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
+         * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
+         * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
+         * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "return" to run
+         * our hidden "RETURN.COM" program regardless of the current directory.
+         */
+        let attr = DiskInfo.ATTR.ARCHIVE;
+        let data = readFileSync(path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
+        if (!data) {
+            data = "ECHO OFF\r\n";
+            attr |= DiskInfo.ATTR.HIDDEN;
         }
-        let aFiles = glob.sync(sProgram);
-        if (!aFiles.length) {
-            sProgram = null;
+        let matchPath = data.match(/^PATH\s*(.*)$/im);
+        if (matchPath) {
+            let matchPathRoot = matchPath[1].match(/(^|;|C:|)\\(;|$)/i);
+            if (!matchPathRoot) {
+                data = data.replace(/^PATH\s*(.*)$/im, "PATH C:\\;$1");
+            }
         } else {
-            let sArguments = aParts.slice(1).join(' ');
-            sCommand = aFiles[0].replace(/\//g, '\\');
-            sCommand = "C:" + (sCommand[0] != '\\'? '\\' : '') + sCommand + (sArguments? " " + sArguments : "");
+            data += "PATH C:\\\r\n";
         }
-    }
-    if (sProgram) {
-        let sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + systemVersion + "/";
-        sSystemDisk += systemType.toUpperCase() + systemVersion.replace('.', '') + "-DISK1.json";
-        let diSystem = readDiskSync(sSystemDisk);
-        if (!diSystem) {
-            printf("system diskette not found: %s\n", sSystemDisk);
-            return null;
+        if (sCommand) data += sCommand + "\r\n";
+        aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
+        /*
+         * Load the boot sector from the system diskette we read above, and use it to update the boot
+         * sector on the hard drive image.
+         *
+         * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register
+         * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk) even though the DOS
+         * MBR does appear to preserve and pass DL on to the boot sector.
+         */
+        let verBPB = 0;
+        let dbBoot = getDiskSector(diSystem, 0);
+        if (version >= 2.0 && version < 3.2) {
+            /*
+             * PC DOS 2.x requires the boot drive (AND drive head # -- go figure) to be stored in locations
+             * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
+             * part of the BPB unless we specify a BPB version number, so in this case, it must be 2.
+             */
+            verBPB = 2;
+            dbBoot.writeUInt8(0x80, DiskInfo.BPB.BOOTDRIVE);    // boot sector offset 0x001E
+            /*
+             * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
+             * drive image, we place the first (and only) partition immediately after the MBR.  Some systems
+             * reserve the entire first track for the MBR, in which case the first partition would not necessarily
+             * be located at head 0.
+             */
+            dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);     // boot sector offset 0x001F
         }
-        let dbMBR = readFileSync(path.join(pcjsDir, "MSDOS" /*systemType.toUpperCase()*/ + ".mbr"), null);
-        if (diSystem && dbMBR) {
-            let aFileDescs = [];
-            for (let name of system.files) {
-                let desc = diSystem.findFile(name);
-                if (desc) {
-                    desc.attr = +desc.attr;
-                    /*
-                     * There may be situations where we must leave COMMAND.COM unhidden; we'll see.
-                     *
-                     *      if (name != "COMMAND.COM" || majorVersion != 2) ...
-                     */
-                    desc.attr |= DiskInfo.ATTR.HIDDEN;
-                    aFileDescs.push(desc);
-                }
-            }
+        else if (version >= 3.2 && version < 4.0) {
             /*
-             * In addition to the system files, we also add a hidden LOAD.COM in the root, which immediately
-             * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
-             * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
-             */
-            aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
-            /*
-             * We also add a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
-             * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke checkDrive()
-             * to look for any changes and then terminate the machine.
-             */
-            aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
-            /*
-             * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
-             * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
-             * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
-             * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "return" to run
-             * our hidden "RETURN.COM" program regardless of the current directory.
-             */
-            let attr = DiskInfo.ATTR.ARCHIVE;
-            let data = readFileSync("AUTOEXEC.BAT", "utf8", true);
-            if (!data) {
-                data = "ECHO OFF\r\n";
-                attr |= DiskInfo.ATTR.HIDDEN;
-            }
-            let matchPath = data.match(/^PATH\s*(.*)$/im);
-            if (matchPath) {
-                let matchPathRoot = matchPath[1].match(/(^|;|C:|)\\(;|$)/i);
-                if (!matchPathRoot) {
-                    data = data.replace(/^PATH\s*(.*)$/im, "PATH C:\\;$1");
-                }
-            } else {
-                data += "PATH C:\\\r\n";
-            }
-            data += sCommand + "\r\n";
-            aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
-            /*
-             * Load the boot sector from the system diskette we read above, and use it to update the boot
-             * sector on the hard drive image.
-             *
-             * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register
-             * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk) even though the DOS
-             * MBR does appear to preserve and pass DL on to the boot sector.
-             *
-             * For example, when MS-DOS 3.20 writes the boot sector to the media, it inserts the boot drive
-             * at offset 0x1fd (just before the 0x55,0xAA signature).  So that's we do, too.
+             * When DOS 3.20 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
+             * (just before the 0x55,0xAA signature).
              *
              * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
              * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
-             *
-             * TODO: Obviously this code will have to be fully fleshed out for ALL supported versions of DOS.
              */
-            let verBPB = 0;
-            let dbBoot = getDiskSector(diSystem, 0);
-            if (systemType == "msdos") {
-                if (version >= 3.2 && version <= 3.31) {
-                    dbBoot.writeUInt8(0x80, 0x1fd);
-                }
-            } else if (systemType == "pcdos") {
-                if (majorVersion == 2) {
-                    /*
-                     * PC DOS 2.x requires the boot drive (AND drive head # -- go figure) to be stored in locations
-                     * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
-                     * part of the BPB unless we specify a BPB version number (which, in this case, must be 2).
-                     */
-                    verBPB = 2;
-                    dbBoot.writeUInt8(0x80, DiskInfo.BPB.BOOTDRIVE);
-                    /*
-                     * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
-                     * drive image, we place the first (and only) partition immediately after the MBR.  Some systems
-                     * reserve the entire first track for the MBR, in which case the first partition would not necessarily
-                     * be located at head 0, but that's not something we need to worry about for now.
-                     */
-                    dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);
-                }
-            }
-            let done = function(di) {
-                if (di) {
-                    manifest = di.getFileManifest(null, true);
-                    di.updateBootSector(dbMBR, -1);         // a volume of -1 indicates the master boot record
-                    di.updateBootSector(dbBoot, 0, verBPB);
-                    writeDiskSync(path.join(pcjsDir, "DOS.json"), di, false, 0, true, true);
-                }
-            }
-            let normalize = true;
-            readDir("./", 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);
+            dbBoot.writeUInt8(0x80, 0x1FD);                     // boot sector offset 0x01FD
         }
-    } else {
-        printf("command not found: %s\n", sCommand);
+        else if (version >= 4.0) {
+            dbBoot.writeUInt8(0x80, DiskInfo.BPB.DRIVE);        // boot sector offset 0x0024
+        }
+        let done = function(di) {
+            if (di) {
+                let fileName = path.join(pcjsDir, driveName);
+                let manifest = di.getFileManifest(null, true);
+                di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
+                di.updateBootSector(dbBoot, 0, verBPB);
+                if (writeDiskSync(fileName, di, false, 0, true, true)) {
+                    if (fDebug) printf("buildDrive(\"%s\",\"%s\"): %s\n", sDir, sCommand, fileName);
+                    driveManifest = manifest;
+                }
+            }
+        }
+        let normalize = true;
+        if (!sDir.endsWith('/')) sDir += '/';
+        readDir(sDir, 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);
     }
-    return manifest;
+    return driveManifest? "" : "unable to build drive";
 }
 
 /**
@@ -819,20 +982,20 @@ function buildFileIndex(diskIndex)
 }
 
 /**
- * checkDrive(oldManifest)
+ * saveDrive()
  *
- * If we built a drive on entry, this checks the drive on exit for any changes that need to be propagated.
+ * If we built a drive on entry, this checks the drive on exit for any changes that need to be saved.
  *
- * @param {Array} [oldManifest]
  * @returns {boolean}
  */
-function checkDrive(oldManifest)
+function saveDrive()
 {
-    if (hdc && oldManifest) {
-        let imageData = hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
+    if (driveManifest) {
+        let imageData = hdc && hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
         if (imageData) {
             let di = new DiskInfo(device, "DOS");
             if (di.buildDiskFromJSON(imageData)) {
+                let oldManifest = driveManifest;
                 let newManifest = di.getFileManifest(null, true);
                 /*
                  * We now have the old and new manifests, and both should be sorted, so all we have to do now
@@ -861,7 +1024,7 @@ function checkDrive(oldManifest)
                              * contents, so the compare will succeed and writeFileSync() will be bypassed.
                              */
                             if (!compareContents(oldItem, newItem)) {
-                                if (fDebug) printf("updating %s\n", newItem.path);
+                                if (fDebug) printf("updating: %s\n", newItem.path);
                                 writeFileSync(newItem.path.slice(1), newItem.contents, false, true);
                             }
                         } else {
@@ -869,10 +1032,18 @@ function checkDrive(oldManifest)
                              * Here's where things get complicated, because we could have scenarios like a directory removed
                              * and a file with the same name created in its place.
                              */
-                            fs.chmodSync(newItem.path.slice(1), (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666);
+                            try {
+                                fs.chmodSync(newItem.path.slice(1), (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666);
+                            } catch (err) {
+                                printf("%s\n", err);
+                            }
                         }
                         if (oldDate.getTime() != newDate.getTime()) {
-                            fs.utimesSync(newItem.path.slice(1), newDate, newDate);
+                            try {
+                                fs.utimesSync(newItem.path.slice(1), newDate, newDate);
+                            } catch (err) {
+                                printf("%s\n", err);
+                            }
                         }
                         iOld++;
                         iNew++;
@@ -884,38 +1055,59 @@ function checkDrive(oldManifest)
                          * risk *and* will cause all subsequent unlink() calls for any contained files to fail.
                          * So instead, we simply queue the directory for removal later.
                          */
+                        let sPath = oldItem.origin || oldItem.path;
                         if (oldAttr & DiskInfo.ATTR.SUBDIR) {
-                            removedDirs.push(oldItem.path);
+                            removedDirs.push(sPath);
                         } else {
-                            if (fDebug) printf("removing %s\n", oldItem.path);
-                            fs.unlinkSync(oldItem.path.slice(1));
+                            if (fDebug) printf("removing: %s\n", sPath);
+                            try {
+                                fs.unlinkSync(sPath.slice(1));
+                            } catch(err) {
+                                printf("%s\n", err.message);
+                            }
                         }
                         iOld++;
                     } else {
-                        if (fDebug) printf("creating %s\n", newItem.path);
+                        if (fDebug) printf("creating: %s\n", newItem.path);
                         if (newAttr & DiskInfo.ATTR.SUBDIR) {
-                            fs.mkdirSync(newItem.path.slice(1));
+                            try {
+                                fs.mkdirSync(newItem.path.slice(1));
+                            } catch(err) {
+                                printf("%s\n", err.message);
+                            }
                         } else {
                             writeFileSync(newItem.path.slice(1), newItem.contents, true, false);
                         }
                         fs.utimesSync(newItem.path.slice(1), newDate, newDate);
                         if (newAttr & DiskInfo.ATTR.READONLY) {
-                            fs.chmodSync(newItem.path.slice(1), 0o444);
+                            try {
+                                fs.chmodSync(newItem.path.slice(1), 0o444);
+                            } catch(err) {
+                                printf("%s\n", err.message);
+                            }
                         }
                         iNew++;
                     }
                 }
                 while (removedDirs.length) {
                     let dir = removedDirs.pop();
-                    if (fDebug) printf("removing %s\n", dir);
-                    fs.rmdirSync(dir.slice(1));
+                    if (fDebug) printf("removing: %s\n", dir);
+                    try {
+                        fs.rmdirSync(dir.slice(1));
+                    } catch(err) {
+                        printf("%s\n", err.message);
+                    }
                 }
                 if (fSave) {
-                    writeDiskSync(path.join(pcjsDir, "DOS.img"), di, false, 0, true, true);
+                    let fileName = path.join(pcjsDir, driveName.replace(".json", ".img"));
+                    if (writeDiskSync(fileName, di, false, 0, true, true)) {
+                        if (fDebug) printf("saveDrive(\"%s\")\n", fileName);
+                    }
                 }
                 return true;
             }
         }
+        driveManifest = null;
     }
     return false;
 }
@@ -1013,6 +1205,7 @@ function loadDiskette(sDrive, aTokens)
                      */
                     criteria = 'file';
                 }
+                token = token.replace(/([().\[\]])/g, '\\$1');
                 switch (criteria) {
                 case 'date':
                     dateParts.push(token);
@@ -1059,16 +1252,13 @@ function loadDiskette(sDrive, aTokens)
                 let searchNames = function(names, parts, index) {
                     let matches = [];
                     for (let name of names) {
-                        let i = 0;
-                        let match = true;
-                        let test = name.toUpperCase();
-                        for (let part of parts) {
-                            i = test.indexOf(part, i);
-                            if (i < 0) {
-                                match = false;
-                                break;
-                            }
-                            i += part.length;
+                        let match;
+                        try {
+                            let pattern = parts.join('.*');
+                            let re = new RegExp(parts.join('.*'), 'i');
+                            match = name.match(re);
+                        } catch (err) {
+                            if (fDebug) printf("search failure: %s\n", err);
                         }
                         if (match) {
                             if (!Array.isArray(index[name])) {
@@ -1127,39 +1317,82 @@ function loadDiskette(sDrive, aTokens)
 }
 
 /**
- * doCommand(s, argv)
+ * doCommand(s)
  *
  * @param {string} s
- * @param {Array} argv
  * @returns {string|null} (result of command, or null to quit)
  */
-function doCommand(s, argv)
+function doCommand(s)
 {
     let result = "";
     let aTokens = s.split(' ');
+    let cmd = aTokens[0].toLowerCase();
 
-    switch(aTokens[0].toLowerCase()) {
+    aTokens.splice(0, 1);
+    let sParms = aTokens.join(' '), sCommand, sFile;
+
+    let help = function() {
+        let result = "pc.js commands:\n" +
+                    "  cd [directory]\n" +
+                    "  build [command]\n" +
+                    "  load [machine] or [drive] [search terms]\n" +
+                    "  quit";
+        if (dbg) {
+            result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
+        } else if (cpu) {
+            result += "\nmachine commands:\n" +
+                    "  g (to continue running)\n" +
+                    "load a machine with a debugger for more machine commands";
+        }
+        return result;
+    };
+
+    switch(cmd) {
     case "help":
-        result = "pc.js commands:\n" +
-                    "  load [machine]\n" +
-                    "  load [drive] [search terms]\n" +
-                    "  quit\n" +
-                    "type \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
+        result = help();
         break;
-    case "argv":
-        printf("%2j\n", argv);
+    case "cd":
+        try {
+            if (sParms) {
+                process.chdir(sParms);
+            }
+            result = process.cwd();
+        } catch(err) {
+            result = err.message;
+        }
         break;
-    case "cwd":
-        printf("%s\n", process.cwd());
+    case "build":
+        if (cpu) {
+            result = "machine already running";
+            break;
+        }
+        sCommand = checkCommand(".", sParms);
+        if (!sCommand && sParms) {
+            result = "unknown command: " + sParms;
+            break;
+        }
+        printf("building drive%s\n", sCommand? " with command: " + sCommand : "");
+        result = buildDrive(".", sCommand);
+        if (typeof result != "string") result = "";
         break;
     case "load":
-        if (aTokens[1]) {
-            let matchDrive = aTokens[1].match(/^([a-z]:?)$/i);
+        sCommand = aTokens[0];
+        if (!sCommand && !cpu) {
+            sCommand = "compaq386";
+        }
+        if (sCommand) {
+            let matchDrive = sCommand.match(/^([a-z]:?)$/i);
             if (matchDrive) {
-                aTokens.splice(0, 2)
+                aTokens.splice(0, 1)
                 result = loadDiskette(matchDrive[1], aTokens);
             } else {
-                result = loadMachine(aTokens[1]);
+                sFile = checkMachine(sCommand);
+                if (sFile) {
+                    printf("loading machine: %s\n", sFile);
+                    result = loadMachine(sFile, driveManifest? 10 : 0);
+                } else {
+                    result = "unknown machine: " + sCommand;
+                }
             }
         } else {
             result = "missing " + (cpu? "drive letter" : "machine file");
@@ -1170,12 +1403,35 @@ function doCommand(s, argv)
         return null;
     default:
         if (s) {
-            try {
-                if (dbg && !dbg.doCommands(s, true, true)) {
-                    result = eval('(' + s + ')');
+            if (!dbg) {
+                /*
+                 * For machines without a debugger, provide some *very* limited machine control.
+                 */
+                switch(cmd) {
+                case "?":
+                    result = help();
+                    break;
+                case "g":
+                    if (cpu) {
+                        if (cpu.startCPU()) {
+                            setDebugMode(DbgLib.EVENTS.EXIT);
+                        }
+                    } else {
+                        result = "no machine loaded";
+                    }
+                    break;
+                default:
+                    result = "unknown command: " + s;
+                    break;
                 }
-            } catch(err) {
-                result = err.message;
+            } else {
+                try {
+                    if (!dbg.doCommands(s, true, true)) {
+                        result = eval('(' + s + ')');
+                    }
+                } catch(err) {
+                    result = err.message;
+                }
             }
         }
         break;
@@ -1185,44 +1441,69 @@ function doCommand(s, argv)
 }
 
 /**
- * readInput(argv, stdin, stdout)
+ * processArgs(argv)
+ *
+ * Arguments like "*.*" are problematic (since modern shells will expand them), so any arguments
+ * you want to pass along with the command to buildDrive() should be included as part of a single
+ * fully-quoted argument (eg, pc.js "dir *.* /s").
  *
  * @param {Array} argv
- * @param {Object} stdin
- * @param {Object} stdout
  */
-function readInput(argv, stdin, stdout)
+async function processArgs(argv)
 {
+    let result;
     let loading = false;
 
-    if (typeof argv['load'] == "string") {          // process --load argument, if any
-        printf(loadMachine(argv['load']));
-        loading = true;
+    let sFile = "";
+    if (typeof argv['load'] == "string") {              // process --load argument, if any
+        sFile = checkMachine(argv['load']);
     }
-    else if (argv[1]) {                             // alternatively, process first non-option argument
-        if (existsFile(argv[1]) || existsFile(argv[1] + ".json")) {
-            printf(loadMachine(argv[1]));           // and perform an implicit load
-            argv.splice(1, 1);
-            loading = true;
-        } else {
-            /*
-             * NOTE: Arguments like "*.*" are problematic (since modern shells will expand them), so
-             * any arguments you want to pass along with the command to buildDrive() should be included
-             * as part of a single fully-quoted argument (eg, pc.js "dir *.* /s").
-             */
-            driveManifest = buildDrive(argv[1]);
-            if (!driveManifest) {                   // the argument is presumably a DOS command or program name
-                return;                             // exit on error (buildDrive() should have explained)
+    else if (argv[1]) {                                 // alternatively, process first arg
+        sFile = checkMachine(argv[1]);
+        if (sFile) argv.splice(1, 1);
+    }
+    let sDir = argv['dir'];
+    if (typeof sDir == "string" && !existsDir(sDir, false)) {
+        result = "invalid directory: " + sDir;
+    } else {
+        if (typeof sDir != "string") sDir = ".";
+        if (argv[1]) {
+            let sParms = argv.slice(1).join(' ');
+            let sCommand = checkCommand(sDir, sParms);  // check for a DOS command or program name
+            if (!sCommand && sParms) {
+                result = "unknown command: " + sParms;
+            } else {
+                result = await buildDrive(sDir, sCommand);
+                if (!result) {
+                    result = loadMachine(sFile || checkMachine("compaq386"), 10);
+                    if (!result) {
+                        loading = true;
+                    }
+                }
             }
-            if (!argv['load']) {                    // and if it was, automatically load a machine to boot and run it
-                printf(loadMachine("compaq386"));
+        }
+        else if (sFile) {
+            result = loadMachine(sFile);
+            if (!result) {
                 loading = true;
             }
         }
     }
+    if (result) {
+        printf("%s\n", result);
+    }
 
     if (!loading) setDebugMode(DbgLib.EVENTS.READY);
+}
 
+/**
+ * readInput(stdin, stdout)
+ *
+ * @param {Object} stdin
+ * @param {Object} stdout
+ */
+function readInput(stdin, stdout)
+{
     stdin.resume();
     stdin.setEncoding("utf8");
     stdin.setRawMode(true);
@@ -1275,7 +1556,7 @@ function readInput(argv, stdin, stdout)
             if (i < 0) break;
             let s = command.slice(0, i);
             printf("\n");
-            let result = doCommand(s, argv);
+            let result = doCommand(s);
             if (result == null) {
                 exit();
                 return;
@@ -1295,7 +1576,7 @@ function readInput(argv, stdin, stdout)
  */
 function exit()
 {
-    checkDrive(driveManifest);
+    saveDrive();
     process.stdin.setRawMode(false);
     process.exit();
 }
@@ -1312,6 +1593,7 @@ function main(argc, argv)
         let optionsMain = {
             "--load=[machine file]":    "load machine configuration file",
             "--type=[machine type]":    "set machine type (default is " + machineType + ")",
+            "--dir=[directory]":        "set source directory for disk (default is \".\")",
             "--sys=[system type]":      "operating system type (default is " + systemType + ")",
             "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
         };
@@ -1319,13 +1601,14 @@ function main(argc, argv)
             "--debug (-d)\t":           "enable DEBUG messages",
             "--halt (-h)\t":            "halt machine on startup",
             "--help (-?)\t":            "display command-line usage",
-            "--save (-s)\t":            "save modified hard disk image on exit"
+            "--nofloppy (-n)\t":        "remove any diskette from drive A:",
+            "--save (-s)\t":            "save built disk image on return"
         };
         let optionGroups = {
             "main options:":            optionsMain,
             "other options:":           optionsOther
         }
-        printf("usage:\n\t[node] pc.js [options] [DOS command or program name]\n");
+        printf("usage:\n\t[node] pc.js [machine file] [DOS command or program name] [options]\n");
         for (let group in optionGroups) {
             printf("\n%s\n\n", group);
             for (let option in optionGroups[group]) {
@@ -1337,6 +1620,7 @@ function main(argc, argv)
 
     fDebug = argv['debug'] || fDebug;
     fHalt = argv['halt'] || fHalt;
+    fNoFloppy = argv['nofloppy'] || fNoFloppy;
     fSave = argv['save'] || fSave;
     machineType = argv['type'] || machineType;
     systemType = (typeof argv['sys'] == "string" && argv['sys'] || systemType).toLowerCase();
@@ -1349,7 +1633,7 @@ function main(argc, argv)
     let arg0 = argv[0].split(' ');
     rootDir = path.join(path.dirname(arg0[0]), "../..");
     pcjsDir = path.join(rootDir, "/tools/pc");
-    setRootDir(rootDir);
+    setRootDir(rootDir, argv['local']);
 
     if (!argv[1] || argv['debug']) {
         let options = arg0.slice(1).join(' ');
@@ -1358,11 +1642,15 @@ function main(argc, argv)
 
     machines = JSON.parse(readFileSync("/machines/machines.json"));
 
-    readInput(argv, process.stdin, process.stdout);
+    processArgs(argv);
+
+    readInput(process.stdin, process.stdout);
 }
 
 main(...pcjslib.getArgs({
     '?': "help",
     'd': "debug",
+    'h': "halt",
+    'n': "nofloppy",
     's': "save"
 }));

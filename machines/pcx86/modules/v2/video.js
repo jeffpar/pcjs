@@ -3491,7 +3491,7 @@ export default class VideoX86 extends Component {
                         }
                     }
                     card.nCyclesVertRetrace = video.cpu.getCycles();
-                    if (DEBUG) video.printf(Messages.VIDEO + Messages.INT, "vertical retrace timer fired (%d cycles)\n", card.nCyclesVertRetrace);
+                    if (DEBUG) video.printf(Messages.VIDEO + Messages.TIMER, "vertical retrace timer fired (%d cycles)\n", card.nCyclesVertRetrace);
                     if (video.nIRQ) {
                         if (!(card.regCRTData[Card.CRTC.EGA.VREND.INDX] & Card.CRTC.EGA.VREND.DISABLE_VRINT)) {
                             if (video.chipset) video.chipset.setIRR(video.nIRQ);
@@ -3538,7 +3538,7 @@ export default class VideoX86 extends Component {
                         video.msUpdatePrev = msUpdate - (msDelta >= video.msUpdateInterval? 0 : msDelta);
                     }
                     else if (DEBUG) {
-                        video.printf(Messages.VIDEO + Messages.INT, "skipping update (%dms too soon)\n", -msDelta);
+                        video.printf(Messages.VIDEO + Messages.TIMER, "skipping update (%dms too soon)\n", -msDelta);
                     }
                     video.latchStartAddress();
                 }, -this.cardActive.nCyclesVertPeriod);
@@ -3889,11 +3889,16 @@ export default class VideoX86 extends Component {
         /*
          * If we're still here, then we're ready!
          *
-         * UPDATE: Per issue #21, I'm issuing setReady() *only* if a valid contextScreen exists *or* a Debugger is attached.
+         * UPDATE: Per issue #21 (https://github.com/jeffpar/pcjs.v1/issues/21), I issued setReady() *only* if a valid
+         * contextScreen existed *or* a debugger was attached, and decided to consider a more general-purpose solution for
+         * whether or not the user wanted to run in a "headless" mode at a later date.
          *
-         * TODO: Consider a more general-purpose solution for deciding whether or not the user wants to run in a "headless" mode.
+         * Well, that later date is now, and since pc.js always runs machines in a "headless" mode, we're going to always
+         * mark ourselves ready.
+         *
+         *      if (this.contextScreen || this.dbg) this.setReady();
          */
-        if (this.contextScreen || this.dbg) this.setReady();
+        this.setReady();
     }
 
     /**

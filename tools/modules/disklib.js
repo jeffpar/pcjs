@@ -214,7 +214,7 @@ export function getLocalPath(sFile)
 export function getServerPath(diskFile, fRemote)
 {
     if (fRemote || !existsFile(getLocalPath(diskFile))) {
-        diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
+        diskFile = diskFile.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$2.pcjs.org/");
     }
     return diskFile;
 }
@@ -519,8 +519,9 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
          * And remember, of all the Date() constructor parameters, month is the oddball;
          * it's interpreted as the actual month - 1, so 8 corresponds to September.  Brilliant.
          */
+        let sPath = '/' + path.basename(sLabel);
         let dateLabel = new Date(1989, 8, 27, 3, 0, 0);
-        let file = {path: sDir, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel, size: 0};
+        let file = {path: sPath, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel, size: 0};
         aFileData.push(file);
     }
 
@@ -535,7 +536,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
         let sPath = asFiles[iFile];
         let sName = path.basename(sPath);
         if (sName.charAt(0) == '.') continue;
-        let file = {path: sPath, name: sName, nameEncoding: "utf8"};
+        let file = {path: '/' + sPath, name: sName, nameEncoding: "utf8"};
         let stats = fs.statSync(sPath);
         file.date = stats.mtime;
         if (stats.isDirectory()) {
@@ -769,12 +770,12 @@ export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors,
         di = new DiskInfo(device, diskName);
         if (StrLib.getExtension(diskName) == "json") {
             diskFile = getServerPath(diskFile);
+            if (Device.DEBUG) printf("readDiskAsync(\"%s\")\n", diskFile);
             if (diskFile.startsWith("http")) {
-                printf("fetching %s\n", diskFile);
                 let response = await got(diskFile);
                 db = response.body;
             } else {
-                db = await readFileAsync(diskFile, "utf8");
+                db = await readFile(diskFile);
             }
             if (!db) {
                 di = null;
@@ -784,12 +785,13 @@ export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors,
         }
         else {
             /*
-             * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
+             * Passing null for the encoding parameter tells readFile() to return a buffer instead of a string.
              */
-            db = await readFileAsync(diskFile, null);
+            db = await readFile(diskFile, null);
             if (!db) {
                 di = null;
             } else {
+                db = new DataBuffer(db);
                 if (StrLib.getExtension(diskName) == "psi") {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
@@ -859,20 +861,44 @@ export function readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
 }
 
 /**
+ * readFile(sFile, encoding)
+ *
+ * @param {string} sFile
+ * @param {string|null} [encoding]
+ */
+export async function readFile(sFile, encoding = "utf8")
+{
+    sFile = getLocalPath(sFile);
+    return new Promise((resolve, reject) => {
+        fs.readFile(sFile, encoding, (err, data) => {
+            if (err) reject(err);
+            resolve(data);
+        });
+    });
+}
+
+/**
  * readFileAsync(sFile, encoding)
  *
  * @param {string} sFile
  * @param {string|null} [encoding]
  */
-export function readFileAsync(sFile, encoding = "utf8")
+export async function readFileAsync(sFile, encoding = "utf8")
 {
-    sFile = getLocalPath(sFile);
-    return new Promise((resolve, reject) => {
-        fs.readFileSync(sFile, encoding, (err, data) => {
-            if (err) reject(err);
-            resolve(data);
-        });
-    });
+    let db;
+    sFile = getServerPath(sFile);
+    if (Device.DEBUG) printf("readFileAsync(\"%s\")\n", sFile);
+    if (sFile.startsWith("http")) {
+        try {
+            let response = await got(sFile);
+            db = response.body;
+        } catch(err) {
+            printError(err);
+        }
+    } else {
+        db = await readFile(sFile);
+    }
+    return db;
 }
 
 /**
@@ -926,6 +952,7 @@ export function readJSONSync(sFile)
  * @param {boolean} [fQuiet]
  * @param {boolean} [fWritable]
  * @param {string} [source]
+ * @returns {boolean}
  */
 export function writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fQuiet = false, fWritable = false, source = "")
 {
@@ -949,6 +976,7 @@ export function writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwr
                 if (fExists) fs.unlinkSync(diskFile);
                 fs.writeFileSync(diskFile, data);
                 if (diskFileLC.endsWith(".img") && !fWritable) fs.chmodSync(diskFile, 0o444);
+                return true;
             } else {
                 printf("%s not written, no data\n", diskName);
             }
@@ -959,6 +987,7 @@ export function writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwr
     catch(err) {
         printError(err);
     }
+    return false;
 }
 
 /**
@@ -1002,11 +1031,12 @@ export function writeFileSync(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQ
 }
 
 /**
- * setRootDir(sDir)
+ * setRootDir(sDir, fLocalDisks)
  *
  * @param {string} sDir
+ * @param {boolean} [fLocalDisks]
  */
-export function setRootDir(sDir)
+export function setRootDir(sDir, fLocalDisks = false)
 {
-    FileLib.setRootDir(sDir);
+    FileLib.setRootDir(sDir, fLocalDisks);
 }

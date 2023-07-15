@@ -461,9 +461,54 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ibm5150"
+        "ibm5150",
+        "-n"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js ibm5160",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml",
+        "--build"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js ibm5170",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "dir",
+        "--build",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/../test",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -519,7 +564,27 @@
       }
     },
     {
-      "name": "pc.js pcx86 machine.xml",
+      "name": "pc.js --load=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--load=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -560,7 +625,7 @@
       }
     },
     {
-      "name": "pc.js dir *.*",
+      "name": "pc.js --sys=msdos --ver=3.20 dir",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -582,18 +647,16 @@
       }
     },
     {
-      "name": "pc.js --sys=pcdos --ver=2.00 --debug dir",
+      "name": "pc.js chkdsk --sys=pcdos --ver=2.00",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "chkdsk",
         "--sys=pcdos",
-        "--ver=2.00",
-        "--debug",
-        "--save",
-        "dir"
+        "--ver=2.00"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200-C400",
+      "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1435,7 +1498,7 @@
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--disk",
-        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0798/DISK0798.json",
+        "https://harddisks.pcjs.org/pcx86/10mb/PCDOS200-C400.json",
         "--list"
       ],
       "cwd": "${workspaceFolder}",

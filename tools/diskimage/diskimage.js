@@ -21,7 +21,7 @@ import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, normalizeTextFile, printError, printf, readDir, readDiskAsync, readDiskSync, readFileSync, readJSONSync, replaceServerPrefix, setRootDir, sprintf, writeDiskSync, writeFileSync  } from "../modules/disklib.js";
 
-let rootDir, sFileIndexCache;
+let rootDir, sFileIndexCache, aHiddenDirs = [];
 
 /**
  * compareDisks(sDisk1, sDisk2)
@@ -195,6 +195,21 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
      */
     if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) {
         return true;
+    }
+
+    if (!argv['hidden']) {
+        if (attr & DiskInfo.ATTR.HIDDEN) {
+            if (attr & DiskInfo.ATTR.SUBDIR) {
+                aHiddenDirs.push(sPath + '/');
+            }
+            return false;
+        } else {
+            for (let i = 0; i < aHiddenDirs.length; i++) {
+                if (sPath.indexOf(aHiddenDirs[i]) == 0) {
+                    return false;
+                }
+            }
+        }
     }
 
     sPath = path.join(sDir, subDir, sPath);
@@ -455,6 +470,7 @@ function processDisk(di, diskFile, argv, diskette)
         } else {
             extractDir = extractDir.replace("%d", path.dirname(diskFile));
         }
+        aHiddenDirs = [];
         let manifest = di.getFileManifest(null);                // add true for sorted manifest
         manifest.forEach(function extractDiskFile(desc) {
             /*
@@ -531,7 +547,7 @@ function processDisk(di, diskFile, argv, diskette)
             if (typeof argv['checkdisk'] == "string" && diskFile.indexOf(argv['checkdisk']) < 0) return;
             createDisk(diskFile, diskette, argv, function(diTemp) {
                 if (diTemp) {
-                    let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
+                    let sTempJSON = path.join(rootDir, "disks", "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                     diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
                     writeDiskSync(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
                     let warning = false;
@@ -1268,7 +1284,7 @@ function main(argc, argv)
     let options = arg0.slice(1).join(' ');
 
     rootDir = path.join(path.dirname(arg0[0]), "../..");
-    setRootDir(rootDir);
+    setRootDir(rootDir, argv['local']);
 
     Device.DEBUG = !!argv['debug'];
 

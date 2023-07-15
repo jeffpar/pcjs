@@ -18,15 +18,15 @@ archival/demonstration purposes only.
 To learn more about what you can do with the repository, see the [PCjs Wiki](https://github.com/jeffpar/pcjs/wiki),
 which covers topics such as:
 
-  - [Running PCjs locally](https://github.com/jeffpar/pcjs/wiki/Running-PCjs-locally)
-  - [Compiling PCjs](https://github.com/jeffpar/pcjs/wiki/Compiling-PCjs)
-  - [Adding machines to pages](https://github.com/jeffpar/pcjs/wiki/Adding-machines-to-pages)
+  - [Using a local web server](https://github.com/jeffpar/pcjs/wiki/Using-a-Local-Web-Server)
+  - [Compiling PCjs source code](https://github.com/jeffpar/pcjs/wiki/Compiling-PCjs-Source-Code)
+  - [Adding machines to web pages](https://github.com/jeffpar/pcjs/wiki/Adding-Machines-to-Web-Pages)
 
 Topics covered in the repository itself include:
 
-  - [PCjs Disk Images](/tools/diskimage/)
-  - [PCjs File Images](/tools/fileimage/)
-  - [Running machines from the command-line with PC.js](/tools/pc/)
+  - [PCjs disk images](/tools/diskimage/)
+  - [PCjs file images](/tools/fileimage/)
+  - [Running machines from the command-line with pc.js](/tools/pc/)
 
 ### License
 
