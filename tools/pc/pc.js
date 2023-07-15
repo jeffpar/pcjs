@@ -697,12 +697,13 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
 }
 
 /**
- * checkCommand(sCommand)
+ * checkCommand(sDir, sCommand)
  *
+ * @param {string} sDir
  * @param {string} sCommand
  * @returns {string} (original command, or empty string if not a valid command or program name)
  */
-function checkCommand(sCommand)
+function checkCommand(sDir, sCommand)
 {
     if (sCommand) {
         let aParts = sCommand.split(' ');
@@ -722,6 +723,9 @@ function checkCommand(sCommand)
             } else {
                 let sArguments = aParts.slice(1).join(' ');
                 sCommand = aFiles[0].replace(/\//g, '\\');
+                if (sCommand.indexOf(sDir) == 0) {
+                    sCommand = sCommand.slice(sDir.length);
+                }
                 sCommand = "C:" + (sCommand[0] != '\\'? '\\' : '') + sCommand + (sArguments? " " + sArguments : "");
             }
         }
@@ -1201,6 +1205,7 @@ function loadDiskette(sDrive, aTokens)
                      */
                     criteria = 'file';
                 }
+                token = token.replace(/([().\[\]])/g, '\\$1');
                 switch (criteria) {
                 case 'date':
                     dateParts.push(token);
@@ -1247,16 +1252,13 @@ function loadDiskette(sDrive, aTokens)
                 let searchNames = function(names, parts, index) {
                     let matches = [];
                     for (let name of names) {
-                        let i = 0;
-                        let match = true;
-                        let test = name.toUpperCase();
-                        for (let part of parts) {
-                            i = test.indexOf(part, i);
-                            if (i < 0) {
-                                match = false;
-                                break;
-                            }
-                            i += part.length;
+                        let match;
+                        try {
+                            let pattern = parts.join('.*');
+                            let re = new RegExp(parts.join('.*'), 'i');
+                            match = name.match(re);
+                        } catch (err) {
+                            if (fDebug) printf("search failure: %s\n", err);
                         }
                         if (match) {
                             if (!Array.isArray(index[name])) {
@@ -1364,7 +1366,7 @@ function doCommand(s)
             result = "machine already running";
             break;
         }
-        sCommand = checkCommand(sParms);
+        sCommand = checkCommand(".", sParms);
         if (!sCommand && sParms) {
             result = "unknown command: " + sParms;
             break;
@@ -1453,10 +1455,10 @@ async function processArgs(argv)
     let loading = false;
 
     let sFile = "";
-    if (typeof argv['load'] == "string") {          // process --load argument, if any
+    if (typeof argv['load'] == "string") {              // process --load argument, if any
         sFile = checkMachine(argv['load']);
     }
-    else if (argv[1]) {                             // alternatively, process first arg
+    else if (argv[1]) {                                 // alternatively, process first arg
         sFile = checkMachine(argv[1]);
         if (sFile) argv.splice(1, 1);
     }
@@ -1467,7 +1469,7 @@ async function processArgs(argv)
         if (typeof sDir != "string") sDir = ".";
         if (argv[1]) {
             let sParms = argv.slice(1).join(' ');
-            let sCommand = checkCommand(sParms);    // check for a DOS command or program name
+            let sCommand = checkCommand(sDir, sParms);  // check for a DOS command or program name
             if (!sCommand && sParms) {
                 result = "unknown command: " + sParms;
             } else {
