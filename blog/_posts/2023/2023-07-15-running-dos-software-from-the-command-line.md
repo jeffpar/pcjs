@@ -250,9 +250,9 @@ Whenever you run `pc.js` with a DOS command or program name, it automatically bu
 
 ### Loading Diskettes
 
-`pc.js` includes another special program with the machine (`load`) which makes it easy for you to load any diskette image from the PCjs diskette library into your machine.  The syntax of the `load` command is:
+`pc.js` includes another special program with the machine, `load`, which makes it easy for you to load any diskette image from the PCjs diskette library into your machine.  The syntax of the `load` command is:
 
-    load [drive] [search terms]
+    load [drive] [search options]
 
 Let's say we want to load "PC-SIG Library Disk #1234" into the machine's A: drive.  Start `pc.js` with any DOS command to automatically build and start a machine (I used the DOS `ver` command this time) and then type `load a: pc-sig 1234` to load the matching diskette into drive A:
 
@@ -292,7 +292,7 @@ Let's say we want to load "PC-SIG Library Disk #1234" into the machine's A: driv
     VERSION          2246   9-16-89  11:15p
         19 File(s)     48128 bytes free
 
-If your search terms match more than one diskette in the library, a numbered list of matches is displayed, and then you can load the desired diskette by number:
+If your search criteria matches more than one diskette in the library, a numbered list of matches is displayed, and then you can load the desired diskette by number:
 
     C:\>load a: pc-sig #123
     1: PC-SIG Library Disk #1230
@@ -334,27 +334,125 @@ If your search terms match more than one diskette in the library, a numbered lis
     WORKUTIL BAT     5086   9-25-89   4:30p
         17 File(s)      1024 bytes free
 
-You can also search for files by *filename*.  For example, if you want load a diskette containing a file named `RATBAS`, you can use the `--file` search option to find diskettes containing such a file:
+You can also search for files by *filename*.  For example, if you want to find and load a diskette with a program containing `ARC` in the name, use the `--file` search option.  You can even use regular expressions, but you will need to quote them if you use any characters (such as `|`) that are also parsed by the DOS command interpreter:
 
-    C:\>load a: --file ratbas
-    1: RATBAS  213         0 2017-06-17  "RatBas (1982)"
-    2: RATBAS.LBR      68096 1984-11-23  "PC User Group Disk #3002"
-    3: RATBAS.TXT      30080 1982-08-13  "RatBas (1982)"
-    4: RATBAS.UM        9856 1982-08-09  "RatBas (1982)"
+    C:\>load a: -file "arc\.(com|exe)"
+      1: ARC.EXE         32128 1979-11-30  "PC-SIG Library Disk #4198"
+      2: ARC.EXE         29824 1985-08-22  "PC-SIG Library Disk #0539"
+      3: ARC.EXE         32051 1986-01-31  "PC-SIG Library Disk #0976"
+      4: ARC.EXE         32429 1986-02-05  "PC-SIG Library Disk #0685"
+      5: ARC.EXE         32256 1986-02-21  "PC-SIG Library Disk #0612"
+      6: ARC.EXE         32181 1986-03-05  "PC-SIG Library Disk #0417"
+      7: ARC.EXE         32512 1986-04-08  "PC-SIG Library Disk #0879"
+      8: ARC.EXE         32384 1986-06-15  "PC-SIG Library Disk #0666"
+      9: CONVARC.EXE      5056 1989-07-24  "PC-SIG Library Disk #1571"
+     10: DARC.EXE        34429 1990-06-09  "PC-SIG Library Disk #1861"
+     11: DEARC.COM       10240 1986-12-28  "PC-SIG Library Disk #0148"
+     12: EIGHTARC.COM    51968 1989-06-21  "PC-SIG Library Disk #1574"
+     13: ELECARC.EXE     97669 1990-05-15  "PC-SIG Library Disk #2219"
+     14: EPARC.COM       26316 1990-01-19  "PC-SIG Library Disk #1082"
+     15: HELPARC.EXE    267704 1991-08-05  "Norton Utilities 6.01 (Utility 4)"
+     16: ICONARC.EXE     16944 1991-08-05  "Norton Utilities 6.01 (Install)"
+     17: LHARC.EXE       27498 1989-03-04  "PC-SIG Library Disk #1550"
+     18: LHARC.EXE       30470 1989-05-04  "PC-SIG Library Disk #2018"
+     19: LHARC.EXE       31256 1989-05-31  "PC-SIG Library Disk #1948"
+     20: LHARC.EXE       30912 1990-03-28  "PC-SIG Library Disk #1927"
+     21: LHARC.EXE       20874 1990-06-15  "PC-SIG Library Disk #1145"
+     22: LHARC.EXE       30440 1990-07-28  "PC-SIG Library Disk #2729"
+     23: LHARC.EXE       20874 1990-08-07  "PC-SIG Library Disk #2322"
+     24: LHARC.EXE       20475 1990-08-08  "PC-SIG Library Disk #2597"
+     25: NDOSARC.EXE     39190 1991-08-05  "Norton Utilities 6.01 (Utility 5)"
+     26: OBJUNARC.EXE   125440 1993-08-13  "OBJASM 2.0 (Bin)"
+     27: PASARC.EXE     102889 1990-05-10  "PC-SIG Library Disk #2221"
+     28: PGMSARC.EXE    120567 1990-07-24  "PC-SIG Library Disk #1481"
+     29: PKARC.COM       16440 1986-10-23  "PC-SIG Library Disk #0386"
+     30: PKARC.COM       17456 1986-12-15  "PC-SIG Library Disk #1138"
+     31: PKXARC.COM       9984 1986-09-12  "PC-SIG Library Disk #0599"
+     32: PKXARC.COM      10318 1986-10-23  "PC-SIG Library Disk #0386"
+     33: PKXARC.COM      11482 1986-12-15  "PC-SIG Library Disk #0651"
+     34: PKXARC.COM      12242 1987-03-01  "PC-SIG Library Disk #1080"
+     35: PKXARC.COM      12242 1987-04-27  "PC-SIG Library Disk #1564"
+     36: PKXARC.COM      10368 1987-08-25  "PC-SIG Library Disk #2388"
+     37: PKXARC.COM      11648 1987-10-08  "PC-SIG Library Disk #1138"
+     38: PKXARC.COM      12288 1988-02-19  "PC-SIG Library Disk #1063"
+     39: PKXARC.COM       9296 1990-03-26  "PC-SIG Library Disk #2822"
+     40: PKXARC.EXE      15126 1988-06-01  "PC-SIG Library Disk #1206"
+     41: POSIARC.EXE    133618 1990-05-15  "PC-SIG Library Disk #2219"
+     42: QUOTARC.EXE    226289 1990-01-26  "PC-SIG Library Disk #1575"
+     43: RINGARC.EXE     84235 1989-12-29  "PC-SIG Library Disk #1293"
+     44: SANDARC.EXE    188632 1992-12-02  "PC-SIG Library Disk #3555"
+     45: SHZIPARC.EXE   256492 1990-12-26  "PC-SIG Library Disk #2614"
+     46: SMITHARC.EXE   305210 1992-06-28  "PC-SIG Library Disk #3125"
+     47: SPORTARC.EXE    36592 1992-09-30  "PC-SIG Library Disk #3454"
+     48: TD1ARC.EXE     247060 1989-12-31  "PC-SIG Library Disk #1353"
+     49: UNARC.COM       12242 1987-04-27  "PC-SIG Library Disk #3008"
+     50: XARC.COM        12242 1987-04-27  "PC-SIG Library Disk #2096"
+     51: XARC.COM        11482 1987-06-17  "PC-SIG Library Disk #3494"
+     52: XXSRARC.EXE    275219 1992-09-18  "PC-SIG Library Disk #3222"
     enter "load a: #" to load diskette by number
 
-    C:\>load a: 4
-    1: RATBAS.UM        9856 1982-08-09  "RatBas (1982)"
-    2: RATBAS.UM        9856 1982-08-10  "PC-SIG Library Disk #0003"
+To help you zero in on the particular `ARC` program you're interested in, `pc.js` initially lists only *unique* instances of each file.  Let's say you're only interested in files named `ARC.EXE`, and you want to load a diskette with the version of `ARC.EXE` dated `1985-08-22`, so you type `load a: 2`:
+
+    C:\>load a: 2
+      1: ARC.EXE         29824 1985-08-22  "PC-SIG Library Disk #0539"
+      2: ARC.EXE         29824 1985-08-22  "PC-SIG Library Disk #0420"
+      3: ARC.EXE         29824 1985-08-22  "PC-SIG Library Disk #0568"
     enter "load a: #" to load diskette by number
     multiple disks with identical file (use "load a: 1" to load original selection)
 
+At this point, `pc.js` shows you all the *other* disks (if any) with the same exact file.  The other files may not have the same date or even the same name, but they *will* all have the same contents.  Your original selection is always listed first.  In this example, we're going to load the second disk, named "PC-SIG Library Disk #0420":
+
     C:\>load a: 2
-    loading "PC-SIG Library Disk #0003" in drive A:
+    loading "PC-SIG Library Disk #0420" in drive A:
 
-In the above example, there were multiple diskettes with an *identical* version of the file `RATBAS.UM`, so only the first matching diskette was displayed in the first list, and then once we selected a diskette, a list of all the *other* diskettes containing that *same* version was displayed next.
+    C:\>dir a:
 
-Any files you're interested in can be copied to the C: drive, and when you type `return`, those files should be automatically transferred to your current directory.
+    Volume in drive A has no label
+    Directory of  A:\
+
+    BACKSTAT EXE    13312   1-17-85   2:20p
+    GCOPY2   EXE    14592   3-15-85   3:18p
+    GCOPY2   TXT     2048   3-15-85   3:18p
+    L6       COM     3072   4-09-85   9:41a
+    LC       COM     1280  12-07-84   1:10p
+    LF       COM      512   6-08-84   3:20p
+    LQTYPE   COM    12160   4-01-85  11:14a
+    UNDEL    COM     2176   3-19-85   6:57a
+    UNSQ     COM     8064   3-17-85   2:53p
+    FILTERS  LBR    41600   4-04-85  10:16a
+    FILTERS  TXT      507   4-04-85   6:03p
+    VIEWDISK EXE    16384   3-15-85   8:36a
+    VIEWDISK DOC     4736   3-15-85   8:38a
+    COPYPC   COM     1792   4-25-85   1:52p
+    COPYPC   DOC     1920   4-25-85   1:52p
+    SORT-IT  COM    17280   4-03-85  10:17a
+    SORT-IT  DOC     1024   4-03-85  10:18a
+    NIB      EXE    48412   5-02-85   4:42p
+    LOCK     COM      384   8-22-85  12:51a
+    UNLOCK   COM      384   8-22-85  12:51a
+    UN-LOCK  DOC     2432   8-22-85  12:52a
+    ARC      EXE    29824   8-22-85  12:50a
+    ARC      DOC    10880   5-06-85  10:14a
+    FCOMPARE EXE    12288   5-02-85  12:03a
+    FCOMPARE C      13056   5-02-85  12:03a
+    FCOMPARE DOC     2304   5-02-85  12:03a
+    SEARCH   COM      640   5-08-85   6:58p
+    SEARCH   DOC     2048   5-08-85   6:58p
+    READONLY COM      128   6-03-85  10:15p
+    READONLY DOC      256   6-03-85  10:15p
+    READWRIT COM      128   6-03-85  10:15p
+    READWRIT DOC      128   6-03-85  10:15p
+    DISKUNSQ COM     3712   6-04-85  12:19p
+    DISKSQ   COM     3584   6-04-85  12:20p
+    TREED    COM     1920   5-10-85   9:37p
+    TCOUNT   COM    17273   7-29-85   9:30a
+    TCOUNT   DOC     7168   7-28-85   8:05a
+    FILES420 TXT     2088   4-12-86   5:50p
+    LU       DOC     6144   3-25-84   1:50a
+    LU       EXE    22528   3-25-84   1:48a
+        40 File(s)     16384 bytes free
+
+Any files you're interested in can be copied to the machine's C: drive, and when you type `return`, those files should be automatically transferred to your current directory.
 
 ### More To Come
 
