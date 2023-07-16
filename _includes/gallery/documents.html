@@ -9,15 +9,21 @@
 {% assign doc_style = include.style | default: "center" %}
 {% assign doc_tag = include.tag | default: "" %}
 {%- assign docs_exist = false -%}
-{%- assign cur_path = "" -%}{%- assign parent = "" %}
+{%- assign cur_path = "" -%}{%- assign parent = "" %}{%- assign category = "" -%}
 {%- for part in path_parts -%}
   {%- if part == "" -%}{% continue %}{%- endif -%}
   {%- capture cur_path -%}{{ cur_path }}/{{ part }}{%- endcapture -%}
+  {%- if site.developer -%}
+    <!-- documents.html(0): category="{{ category }}", server="{{ server }}", folder="{{ part }}" -->
+  {%- endif -%}
   {%- if part == "hardware" or part == "machines" -%}
+    {%- assign category = "hardware" -%}
     {%- assign data = site.data.hardware -%}
   {%- elsif part == "software" -%}
+    {%- assign category = part -%}
     {%- assign data = site.data.software -%}
   {%- elsif part == "documents" -%}
+    {%- assign category = part -%}
     {%- assign data = site.data.documents -%}
   {%- else -%}
     {%- if part == "magazines" -%}{%- unless include.title -%}{%- assign title = "Issues" -%}{%- endunless -%}{%- endif -%}
@@ -31,9 +37,18 @@
         {%- endfor -%}
       {%- endfor -%}
     {%- else -%}
+      {%- if site.developer -%}
+        <!-- documents.html(1): checking folder='{{ part }}' -->
+      {%- endif -%}
       {%- if data[part] -%}
+        {%- if site.developer -%}
+          <!-- documents.html(2): data['{{ part }}'] exists -->
+        {%- endif -%}
         {%- assign parent = part %}
         {%- assign data = data[part] %}
+        {%- if data['@server'] %}
+          {%- assign server = data['@server'] | replace: "/disks/", "" %}
+        {%- endif %}
         {%- if data['']['@type'] -%}
           {%- assign type = data['']['@type'] -%}
           {%- assign data = site.data[part][type] -%}
@@ -42,28 +57,48 @@
           {%- assign data = site.data[part][type] -%}
         {%- endif -%}
       {%- elsif data['@products'] -%}
+        {%- if site.developer -%}
+          <!-- documents.html(3): data['@products'] exists -->
+        {%- endif -%}
         {%- assign data = data['@products'][part] -%}
       {%- elsif data['@versions'] -%}
+        {%- if site.developer -%}
+          <!-- documents.html(4): data['@versions'] exists -->
+        {%- endif -%}
         {%- assign tmp = data['@versions'][part] -%}
         {%- if tmp -%}
           {%- assign data = tmp -%}
         {%- else -%}
           {%- assign i = forloop.index -%}
           {%- capture tmp -%}{{ part }}/{{ path_parts[i] }}{%- endcapture -%}
+          {%- capture cur_path -%}{{ cur_path }}/{{ path_parts[i] }}{%- endcapture -%}
           {%- assign data = data['@versions'][tmp] -%}
         {%- endif -%}
       {%- else %}
         {%- assign data = data['@instances'][part] -%}
+        {%- if site.developer -%}
+          <!-- documents.html(5): data = data['@instances']['{{ part }}'] -->
+        {%- endif -%}
         {%- if data['@type'] -%}
           {%- assign type = data['@type'] -%}
           {%- assign data = site.data[part][type] -%}
-          {%- unless data %}
+          {%- if data %}
+            {%- if site.developer -%}
+              <!-- documents.html(6): data = site.data['{{ part }}']['{{ type }}'] -->
+            {%- endif -%}
+          {%- else %}
             {%- assign data = site.data[parent][part][type] -%}
-          {%- endunless %}
+            {%- if site.developer -%}
+              <!-- documents.html(7): data = site.data['{{ parent }}']['{{ part }}']['{{ type }}'] -->
+            {%- endif -%}
+          {%- endif %}
         {%- endif -%}
       {%- endif -%}
       {%- unless data -%}{%- break -%}{%- endunless %}
       {%- assign docs = data[group] -%}
+      {%- if site.developer and docs -%}
+        <!-- documents.html(8): docs=data['{{ group }}'] exists -->
+      {%- endif -%}
       {%- unless docs -%}
         {%- assign docs = data['@instances'][''][group] -%}
       {%- endunless -%}
@@ -85,19 +120,33 @@
           {%- assign doc_tags = doc['@tags'] | default: "" -%}
           {%- if doc_title and doc_title != "" and doc_tags contains doc_tag -%}
             {%- assign doc_file = doc['@file'] -%}
+            {%- capture doc_path -%}{{ cur_path }}/{{ doc_file }}{%- endcapture -%}
             {%- assign doc_id = doc_file | default: doc_title | slugify -%}
+            {%- assign doc_cover = doc['@cover'] -%}
+            {%- unless doc_cover %}
+              {%- if category == "software" and server != nil -%}
+                {%- if doc_file contains ".jpg" or doc_file contains ".png" -%}
+                  {%- comment -%}
+                    Document cover and document path are the same...
+                  {%- endcomment -%}
+                  {%- capture doc_cover -%}https://{{ server }}.pcjs.org{{ cur_path | replace: "/software/", "/" }}/{{ doc_file }}{%- endcapture -%}
+                  {%- capture doc_path -%}{{ doc_cover }}{%- endcapture -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endunless %}
+            {%- unless doc_cover %}
+              {%- assign doc_cover = "/documents/covers/default.jpg" -%}
+            {%- endunless %}
             {%- assign doc_note = "" %}
             {%- assign doc_source = doc['@source'] -%}
             {%- if doc_source contains "PCjs" or doc_source contains "pcjs" -%}
               {%- assign doc_source = "" -%}
               {%- assign doc_note = "From the PCjs Archives" -%}
             {%- endif -%}
-            {%- capture doc_path -%}{{ cur_path }}/{{ doc_file }}{%- endcapture -%}
             {%- assign doc_link = doc['@link'] | default: doc_source | default: doc_path -%}
             {%- if doc_link == doc_source %}
               {%- assign doc_source = "" %}
             {%- endif %}
-            {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}
             {%- if doc_cover == "gif" or doc_cover == "jpg" or doc_cover == "jpeg" or doc_cover == "png" -%}
               {%- assign doc_cover = "." | append: doc_cover -%}
             {%- endif %}

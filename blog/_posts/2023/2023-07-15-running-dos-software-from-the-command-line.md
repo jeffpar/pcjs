@@ -68,7 +68,7 @@ Getting back to the first example above, let's press CTRL-D for the `pc.js` comm
     pc.js commands:
       cd [directory]
       build [command]
-      load [machine] or [drive] [search terms]
+      load [machine] or [drive] [search options]
       quit
     type "?" for a list of debugger commands (eg, "g" to continue running)
     >> quit

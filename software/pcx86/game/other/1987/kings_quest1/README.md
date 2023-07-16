@@ -27,6 +27,39 @@ copy-protection test.  The IBM PC AT below has diskette `King's Quest (1987-05-0
 
 ![King's Quest Artwork]({{ site.software.gamedisks.server }}/pcx86/game/other/1987/kings_quest1/KINGS_QUEST1.jpg)
 
+### Directory of King's Quest (1987-05-05 #1)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    INSTALLH BAT      1214   5-05-87   1:01p
+    _INSTALL BAT       764   5-05-87   1:01p
+    MAKEPATH COM        74   4-22-87  12:05p
+    AGIDATA  OVL      7680   5-01-87   8:11a
+    CGA_GRAF OVL      1024   5-01-87   8:11a
+    EGA_GRAF OVL      1024   5-01-87   8:11a
+    JR_GRAF  OVL       512   5-01-87   8:11a
+    HGC_GRAF OVL      1536   5-01-87   8:11a
+    IBM_OBJS OVL       512   5-01-87   8:11a
+    HGC_OBJS OVL      1024   5-01-87   8:11a
+    CPC      COM*     8048   9-19-85   4:47p
+    AGI              38400   5-05-87   1:01p
+    SIERRA   COM      2944   5-05-87   1:01p
+    HGC_FONT          3072   1-26-87   3:47p
+    OBJECT             331   4-09-87  11:45p
+    WORDS    TOK      3144   3-27-87  11:15a
+    LOGDIR             315   5-05-87   9:02a
+    PICDIR             255   5-05-87   9:02a
+    SNDDIR             144   5-05-87   9:02a
+    VIEWDIR            432   5-05-87   9:02a
+    VOL      0       48472   5-05-87   9:01a
+    VOL      1      200630   5-05-87   9:01a
+    _KQ1     BAT        39   4-07-87   2:04p
+           23 file(s)     321590 bytes
+                           24576 bytes free
+
+[[Source](https://archive.org/details/kingsquestipc)]
+
 ### Directory of King's Quest (1987-05-05 #2)
 
      Volume in drive A has no label
