@@ -1205,7 +1205,27 @@ function loadDiskette(sDrive, aTokens)
                      */
                     criteria = 'file';
                 }
-                token = token.replace(/([().\[\]])/g, '\\$1');
+                /*
+                 * Instead of trying to prevent the user from using regex characters:
+                 *
+                 *      token = token.replace(/([().\[\]])/g, '\\$1');
+                 *
+                 * we now embrace them.  Unfortunately, when using our DOS "load" command, the DOS command interpreter
+                 * likes to chop commands up whenever it sees the "pipe" operator, so we have two options: allow the user
+                 * to put quotes around regex expressions containing pipes, or let them use commas instead of pipes.
+                 *
+                 * I prefer the latter but also allow the former.  So all these commands are equivalent:
+                 *
+                 *      load a: --file arc (com,exe)
+                 *      load a: --file arc "(com|exe)"
+                 *      load a: --file "arc.*(com|exe)"
+                 *
+                 * Note that if you want the base filename to end with "ARC", (eg, "ARC.EXE" or "LHARC.EXE" but not "SEARCH.EXE"
+                 * then use a period preceded by a backslash:
+                 *
+                 *      load a: --file "arc\.(com|exe"
+                 */
+                token = token.replace(/^"([^"]*)"$/, '$1').replace(/,/g, '|');
                 switch (criteria) {
                 case 'date':
                     dateParts.push(token);
@@ -1251,42 +1271,43 @@ function loadDiskette(sDrive, aTokens)
                 }
                 let searchNames = function(names, parts, index) {
                     let matches = [];
-                    for (let name of names) {
-                        let match;
-                        try {
-                            let pattern = parts.join('.*');
-                            let re = new RegExp(parts.join('.*'), 'i');
-                            match = name.match(re);
-                        } catch (err) {
-                            if (fDebug) printf("search failure: %s\n", err);
-                        }
-                        if (match) {
-                            if (!Array.isArray(index[name])) {
-                                matches.push({'disk': name});
-                            } else {
-                                let a = index[name];
-                                /*
-                                 * The items in this array are sorted by date, but we also want to eliminate duplicates
-                                 * based on the hash value, so we maintain a hash index here.  The key is the hash value,
-                                 * and each hash entry is an array of disk names.
-                                 */
-                                let hashIndex = {};
-                                for (let i = 0; i < a.length; i++) {
-                                    let item = a[i];
-                                    let diskItem = {'disk': item['disk'], 'file': name, 'size': item['size'], 'date': item['date']};
-                                    let prevItem = hashIndex[item['hash']];
-                                    if (prevItem) {
-                                        if (!prevItem['others']) {
-                                            prevItem['others'] = [];
+                    try {
+                        let pattern = parts.join('.*');
+                        if (fDebug) printf("searching for \"%s\"...\n", pattern);
+                        let re = new RegExp(pattern, 'i');
+                        for (let name of names) {
+                            let match = name.match(re);
+                            if (match) {
+                                if (!Array.isArray(index[name])) {
+                                    matches.push({'disk': name});
+                                } else {
+                                    let a = index[name];
+                                    /*
+                                    * The items in this array are sorted by date, but we also want to eliminate duplicates
+                                    * based on the hash value, so we maintain a hash index here.  The key is the hash value,
+                                    * and each hash entry is an array of disk names.
+                                    */
+                                    let hashIndex = {};
+                                    for (let i = 0; i < a.length; i++) {
+                                        let item = a[i];
+                                        let diskItem = {'disk': item['disk'], 'file': name, 'size': item['size'], 'date': item['date']};
+                                        let prevItem = hashIndex[item['hash']];
+                                        if (prevItem) {
+                                            if (!prevItem['others']) {
+                                                prevItem['others'] = [];
+                                            }
+                                            prevItem['others'].push(diskItem);
+                                            continue;
                                         }
-                                        prevItem['others'].push(diskItem);
-                                        continue;
+                                        hashIndex[item['hash']] = diskItem;
+                                        matches.push(diskItem);
                                     }
-                                    hashIndex[item['hash']] = diskItem;
-                                    matches.push(diskItem);
                                 }
                             }
                         }
+                    }
+                    catch (err) {
+                        printf("search error: %s\n", err);
                     }
                     return matches;
                 };
