@@ -437,7 +437,7 @@ function intLoad(addr)
                 printf("%s\n", loadDiskette(matchDrive[1], aTokens));
             } else {
                 if (!loadCommand) {
-                    printf("usage: load [drive] [search terms]\n");
+                    printf("usage: load [drive] [search options]\n");
                 } else {
                     printf("invalid load command: \"%s\"\n", loadCommand);
                 }
@@ -1356,7 +1356,7 @@ function doCommand(s)
         let result = "pc.js commands:\n" +
                     "  cd [directory]\n" +
                     "  build [command]\n" +
-                    "  load [machine] or [drive] [search terms]\n" +
+                    "  load [machine] or [drive] [search options]\n" +
                     "  quit";
         if (dbg) {
             result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";

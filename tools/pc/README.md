@@ -60,7 +60,7 @@ To destroy the machine, type `quit` (or press CTRL-C) at the debugger prompt.
 
 [pc.js](https://github.com/jeffpar/pcjs/tree/master/tools/pc) is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` and `pdp11` machines so far.
 
-This utility is very much a "work in progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
+This utility is very much a "work-in-progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
 
 ### Support for XML Machine Files
 
@@ -84,16 +84,7 @@ it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc` fol
 
 This allows you to run console-based DOS applications on your modern operating system (eg, macOS or Windows), with excellent IBM PC (or in this case, COMPAQ DeskPro 386) compatibility.  The experience currently comes with a number of caveats, and there are some important limitations to be aware of, such as limits on the size and number of files you can have in your current directory (the overall limit is currently 10Mb) and the fact that only console-based DOS applications are usable in this environment.
 
-One of the pre-requisites of this feature is having a copy of the [pcjs-diskettes](https://github.com/jeffpar/pcjs-diskettes) repository in the `/disks/diskettes` folder of your PCjs repository:
-
-    cd pcjs
-    mkdir disks
-    cd disks
-    git clone https://github.com/jeffpar/pcjs-diskettes.git diskettes
-
-This is because [pc.js](pc.js) automatically copies system files from MS-DOS diskettes (eg, [MSDOS320-DISK1](https://github.com/jeffpar/pcjs-diskettes/blob/master/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK1.json)) to build a bootable hard disk image.
-
-There are no plans to perform "dynamic" file system updates.  This means if you modify any files on your local file system, those modifications won't show up inside the machine until you restart `pc.js`.  Similarly, any file modifications inside the machine will not show up on your local file system until you terminate `pc.js`.
+If you modify any files on your local file system, those modifications won't show up inside the machine until you restart `pc.js`.  Similarly, any file modifications inside the machine will not show up on your local file system until you terminate `pc.js`.
 
 ### Loading Machines and Diskettes
 
