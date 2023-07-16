@@ -2,7 +2,7 @@
 layout: page
 title: Hero's Quest I (1989)
 permalink: /software/pcx86/game/other/1989/heros_quest/
-preview: https://gamedisks.pcjs.org/pcx86/game/other/1989/heros_quest/HEROS-QUEST1-360K-DISK01.jpg
+preview: https://gamedisks.pcjs.org/pcx86/game/other/1989/heros_quest/HEROS-QUEST1-BOX-FRONT.jpg
 machines:
   - id: ibm5170
     type: pcx86
