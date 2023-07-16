@@ -5275,34 +5275,164 @@
 					"@author": "Strategic Simulations, Inc."
 				},
 				"1989/heros_quest": {
-					"@title": "Hero's Quest (1989)",
+					"@title": "Hero's Quest I (1989)",
 					"@media": [
 						{
-							"@title": "Hero's Quest (1989) Disk 1",
-							"@diskette": "HEROS-QUEST-1989-DISK1.json",
+							"@title": "Hero's Quest I (360K Disk 01)",
+							"@diskette": "HEROS-QUEST1-360K-DISK01.json",
+							"@archive": ".img",
+							"@format": "PC360K",
+							"@photo": "jpg"
+						},
+						{
+							"@title": "Hero's Quest I (360K Disk 02)",
+							"@diskette": "HEROS-QUEST1-360K-DISK02.json",
+							"@archive": ".img",
+							"@format": "PC360K",
+							"@photo": "jpg"
+						},
+						{
+							"@title": "Hero's Quest I (360K Disk 03)",
+							"@diskette": "HEROS-QUEST1-360K-DISK03.json",
+							"@archive": ".img",
+							"@format": "PC360K",
+							"@photo": "jpg"
+						},
+						{
+							"@title": "Hero's Quest I (360K Disk 04)",
+							"@diskette": "HEROS-QUEST1-360K-DISK04.json",
+							"@archive": ".img",
+							"@format": "PC360K",
+							"@photo": "jpg"
+						},
+						{
+							"@title": "Hero's Quest I (360K Disk 05)",
+							"@diskette": "HEROS-QUEST1-360K-DISK05.json",
+							"@archive": ".img",
+							"@format": "PC360K",
+							"@photo": "jpg"
+						},
+						{
+							"@title": "Hero's Quest I (360K Disk 06)",
+							"@diskette": "HEROS-QUEST1-360K-DISK06.json",
+							"@archive": ".img",
+							"@format": "PC360K",
+							"@photo": "jpg"
+						},
+						{
+							"@title": "Hero's Quest I (360K Disk 07)",
+							"@diskette": "HEROS-QUEST1-360K-DISK07.json",
+							"@archive": ".img",
+							"@format": "PC360K",
+							"@photo": "jpg"
+						},
+						{
+							"@title": "Hero's Quest I (360K Disk 08)",
+							"@diskette": "HEROS-QUEST1-360K-DISK08.json",
+							"@archive": ".img",
+							"@format": "PC360K",
+							"@photo": "jpg"
+						},
+						{
+							"@title": "Hero's Quest I (360K Disk 09)",
+							"@diskette": "HEROS-QUEST1-360K-DISK09.json",
+							"@archive": ".img",
+							"@format": "PC360K",
+							"@photo": "jpg"
+						},
+						{
+							"@title": "Hero's Quest I (360K Disk 10)",
+							"@diskette": "HEROS-QUEST1-360K-DISK10.json",
+							"@archive": ".img",
+							"@format": "PC360K",
+							"@photo": "jpg"
+						},
+						{
+							"@title": "Hero's Quest I (720K Disk 1)",
+							"@diskette": "HEROS-QUEST1-720K-DISK1.json",
 							"@archive": ".img",
 							"@format": "PC720K"
 						},
 						{
-							"@title": "Hero's Quest (1989) Disk 2",
-							"@diskette": "HEROS-QUEST-1989-DISK2.json",
+							"@title": "Hero's Quest I (720K Disk 2)",
+							"@diskette": "HEROS-QUEST1-720K-DISK2.json",
 							"@archive": ".img",
 							"@format": "PC720K"
 						},
 						{
-							"@title": "Hero's Quest (1989) Disk 3",
-							"@diskette": "HEROS-QUEST-1989-DISK3.json",
+							"@title": "Hero's Quest I (720K Disk 3)",
+							"@diskette": "HEROS-QUEST1-720K-DISK3.json",
 							"@archive": ".img",
 							"@format": "PC720K"
 						},
 						{
-							"@title": "Hero's Quest (1989) Disk 4",
-							"@diskette": "HEROS-QUEST-1989-DISK4.json",
+							"@title": "Hero's Quest I (720K Disk 4)",
+							"@diskette": "HEROS-QUEST1-720K-DISK4.json",
 							"@archive": ".img",
-							"@format": "PC720K"
+							"@format": "PC720K",
+							"@photo": "jpg"
 						}
 					],
-					"@source": "https://archive.org/details/000757-HerosQuestSoYouWantToBeAHero"
+					"@documents": [
+						{
+							"@title": "Hero's Quest I Box (Front)",
+							"@file": "HEROS-QUEST1-BOX-FRONT.jpg"
+						},
+						{
+							"@title": "Hero's Quest I Box (Back)",
+							"@file": "HEROS-QUEST1-BOX-BACK.jpg"
+						},
+						{
+							"@title": "Hero's Quest I Box (Inner)",
+							"@file": "HEROS-QUEST1-BOX-INNER.jpg"
+						},
+						{
+							"@title": "Hero's Quest I Game Manual",
+							"@file": "HEROS-QUEST1-GAME-MANUAL.jpg",
+							"@link": "https://archive.org/details/heros-quest-1/HEROS-QUEST1-GAME-MANUAL/"
+						},
+						{
+							"@title": "Hero's Quest I Famous Adventurer's Correspondence School",
+							"@file": "HEROS-QUEST1-CORRESPONDENCE-SCHOOL.jpg",
+							"@link": "https://archive.org/details/heros-quest-1/HEROS-QUEST1-CORRESPONDENCE-SCHOOL/"
+						},
+						{
+							"@title": "Hero's Quest I Copy Protection",
+							"@file": "HEROS-QUEST1-COPY-PROTECTION.jpg",
+							"@link": "https://archive.org/details/heros-quest-1/HEROS-QUEST1-COPY-PROTECTION/"
+						},
+						{
+							"@title": "Hero's Quest I Letter from Ken Williams",
+							"@file": "HEROS-QUEST1-LETTER-FROM-KEN-WILLIAMS.jpg",
+							"@link": "https://archive.org/details/heros-quest-1/HEROS-QUEST1-LETTER-FROM-KEN-WILLIAMS/"
+						},
+						{
+							"@title": "Hero's Quest I PRODIGY Brochure",
+							"@file": "HEROS-QUEST1-PRODIGY.jpg",
+							"@link": "https://archive.org/details/heros-quest-1/HEROS-QUEST1-PRODIGY/"
+						},
+						{
+							"@title": "Hero's Quest I Reference Card",
+							"@file": "HEROS-QUEST1-REFERENCE-CARD.jpg",
+							"@link": "https://archive.org/details/heros-quest-1/HEROS-QUEST1-REFERENCE-CARD/"
+						},
+						{
+							"@title": "Hero's Quest I Reference Card for MS-DOS",
+							"@file": "HEROS-QUEST1-REFERENCE-CARD-MSDOS.jpg",
+							"@link": "https://archive.org/details/heros-quest-1/HEROS-QUEST1-REFERENCE-CARD-MSDOS/"
+						},
+						{
+							"@title": "Hero's Quest I Sound Products",
+							"@file": "HEROS-QUEST1-SOUND-PRODUCTS.jpg",
+							"@link": "https://archive.org/details/heros-quest-1/HEROS-QUEST1-SOUND-PRODUCTS/"
+						},
+						{
+							"@title": "Hero's Quest I Warranty Registration",
+							"@file": "HEROS-QUEST1-WARRANTY-REGISTRATION.jpg",
+							"@link": "https://archive.org/details/heros-quest-1/HEROS-QUEST1-WARRANTY-REGISTRATION/"
+						}
+					],
+					"@source": "PCjs"
 				},
 				"2019/invaders": {
 					"@title": "Invaders Boot Sector (2019)",
