@@ -31,7 +31,9 @@ let autoStart = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.20";
-let driveName = "DOS.json";
+let localDrive = "DOS.json";
+let localDir = ".";
+let maxLocalFiles = 1024;
 
 let rootDir, pcjsDir;
 let messagesFilter, machines, debugMode;
@@ -755,11 +757,11 @@ function checkCommand(sDir, sCommand)
  *
  * NOTE: The list of allowed internal commands below is not intended to be exhaustive; it's just a start.
  *
- * @param {string} [sDir]
+ * @param {string} sDir
  * @param {string} [sCommand] (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
  * @returns {string} (error message, if any)
  */
-async function buildDrive(sDir = ".", sCommand = "")
+async function buildDrive(sDir, sCommand = "")
 {
     const systemInfo = {
         "msdos": {
@@ -884,19 +886,19 @@ async function buildDrive(sDir = ".", sCommand = "")
         }
         let done = function(di) {
             if (di) {
-                let fileName = path.join(pcjsDir, driveName);
+                let drivePath = path.join(pcjsDir, localDrive);
                 let manifest = di.getFileManifest(null, true);
                 di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
                 di.updateBootSector(dbBoot, 0, verBPB);
-                if (writeDiskSync(fileName, di, false, 0, true, true)) {
-                    if (fDebug) printf("buildDrive(\"%s\",\"%s\"): %s\n", sDir, sCommand, fileName);
+                if (writeDiskSync(drivePath, di, false, 0, true, true)) {
+                    if (fDebug) printf("buildDrive(\"%s\",\"%s\"): success\n", sDir, sCommand);
                     driveManifest = manifest;
                 }
             }
         }
         let normalize = true;
         if (!sDir.endsWith('/')) sDir += '/';
-        readDir(sDir, 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);
+        readDir(sDir, 0, 0, "PCJS", null, normalize, 10240, maxLocalFiles, false, null, null, aFileDescs, done);
     }
     return driveManifest? "" : "unable to build drive";
 }
@@ -1099,9 +1101,9 @@ function saveDrive()
                     }
                 }
                 if (fSave) {
-                    let fileName = path.join(pcjsDir, driveName.replace(".json", ".img"));
-                    if (writeDiskSync(fileName, di, false, 0, true, true)) {
-                        if (fDebug) printf("saveDrive(\"%s\")\n", fileName);
+                    let drivePath = path.join(pcjsDir, localDrive.replace(".json", ".img"));
+                    if (writeDiskSync(drivePath, di, false, 0, true, true)) {
+                        if (fDebug) printf("saveDrive(\"%s\")\n", drivePath);
                     }
                 }
                 return true;
@@ -1377,7 +1379,7 @@ function doCommand(s)
             if (sParms) {
                 process.chdir(sParms);
             }
-            result = process.cwd();
+            result = localDir = process.cwd();
         } catch(err) {
             result = err.message;
         }
@@ -1387,13 +1389,13 @@ function doCommand(s)
             result = "machine already running";
             break;
         }
-        sCommand = checkCommand(".", sParms);
+        sCommand = checkCommand(localDir, sParms);
         if (!sCommand && sParms) {
             result = "unknown command: " + sParms;
             break;
         }
-        printf("building drive%s\n", sCommand? " with command: " + sCommand : "");
-        result = buildDrive(".", sCommand);
+        printf("building drive: %s\n", path.join(pcjsDir, localDrive));
+        result = buildDrive(localDir, sCommand);
         if (typeof result != "string") result = "";
         break;
     case "load":
@@ -1476,10 +1478,10 @@ async function processArgs(argv)
     let loading = false;
 
     let sFile = "";
-    if (typeof argv['load'] == "string") {              // process --load argument, if any
+    if (typeof argv['load'] == "string") {                      // process --load argument, if any
         sFile = checkMachine(argv['load']);
     }
-    else if (argv[1]) {                                 // alternatively, process first arg
+    else if (argv[1]) {                                         // alternatively, process first arg
         sFile = checkMachine(argv[1]);
         if (sFile) argv.splice(1, 1);
     }
@@ -1487,14 +1489,15 @@ async function processArgs(argv)
     if (typeof sDir == "string" && !existsDir(sDir, false)) {
         result = "invalid directory: " + sDir;
     } else {
-        if (typeof sDir != "string") sDir = ".";
+        if (typeof sDir == "string") localDir = sDir;
+        maxLocalFiles = +argv['maxfiles'] || maxLocalFiles;
         if (argv[1]) {
             let sParms = argv.slice(1).join(' ');
-            let sCommand = checkCommand(sDir, sParms);  // check for a DOS command or program name
+            let sCommand = checkCommand(localDir, sParms);      // check for a DOS command or program name
             if (!sCommand && sParms) {
                 result = "unknown command: " + sParms;
             } else {
-                result = await buildDrive(sDir, sCommand);
+                result = await buildDrive(localDir, sCommand);
                 if (!result) {
                     result = loadMachine(sFile || checkMachine("compaq386"), 10);
                     if (!result) {
@@ -1615,6 +1618,7 @@ function main(argc, argv)
             "--load=[machine file]":    "load machine configuration file",
             "--type=[machine type]":    "set machine type (default is " + machineType + ")",
             "--dir=[directory]":        "set source directory for disk (default is \".\")",
+            "--maxfiles=[number]":      "set maximum local files (default is " + maxLocalFiles + ")",
             "--sys=[system type]":      "operating system type (default is " + systemType + ")",
             "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
         };

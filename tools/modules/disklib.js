@@ -419,34 +419,36 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
     }
     sDir = getLocalPath(sDir);
     let readDone = function(aFileData) {
-        let db = new DataBuffer();
-        let di = new DiskInfo(device);
-        if (Array.isArray(suppData)) {
-            for (let i = suppData.length - 1; i >= 0; i--) {
-                let desc = suppData[i];
-                desc.attr = +desc[DiskInfo.FILEDESC.ATTR];
-                desc.data = new DataBuffer(desc[DiskInfo.FILEDESC.CONTENTS]);
-                desc.date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
-                delete desc[DiskInfo.FILEDESC.HASH];
-                delete desc[DiskInfo.FILEDESC.CONTENTS];
-                let j = aFileData.findIndex((file) => (file.name === desc.name));
-                if (j >= 0) {
-                    aFileData.splice(j, 1);
+        if (aFileData) {
+            let db = new DataBuffer();
+            let di = new DiskInfo(device);
+            if (Array.isArray(suppData)) {
+                for (let i = suppData.length - 1; i >= 0; i--) {
+                    let desc = suppData[i];
+                    desc.attr = +desc[DiskInfo.FILEDESC.ATTR];
+                    desc.data = new DataBuffer(desc[DiskInfo.FILEDESC.CONTENTS]);
+                    desc.date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
+                    delete desc[DiskInfo.FILEDESC.HASH];
+                    delete desc[DiskInfo.FILEDESC.CONTENTS];
+                    let j = aFileData.findIndex((file) => (file.name === desc.name));
+                    if (j >= 0) {
+                        aFileData.splice(j, 1);
+                    }
+                    aFileData.unshift(desc);
                 }
-                aFileData.unshift(desc);
+                suppData = null;
             }
-            suppData = null;
-        }
-        if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, sectorIDs, sectorErrors, suppData)) {
-            /*
-             * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
-             */
-            if (arcType) sDir = sDir.slice(0, -4);
-            for (let i = 0; i < aFileData.length; i++) {
-                addMetaData(di, sDir, aFileData[i].path, aFileData[i].files);
+            if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, sectorIDs, sectorErrors, suppData)) {
+                /*
+                * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
+                */
+                if (arcType) sDir = sDir.slice(0, -4);
+                for (let i = 0; i < aFileData.length; i++) {
+                    addMetaData(di, sDir, aFileData[i].path, aFileData[i].files);
+                }
+                done(di);
+                return;
             }
-            done(di);
-            return;
         }
         done();
     };
@@ -591,8 +593,11 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
         }
         aFileData.push(file);
     }
-    if (iFile < asFiles.length && nMaxCount <= 0) {
-        printf("warning: %d file limit reached, use --maxfiles # to increase\n", nMaxInit);
+    if (iFile < asFiles.length) {
+        if (nMaxCount >= 0) {
+            printf("warning: %d file limit reached, use --maxfiles # to increase\n", nMaxInit);
+            nMaxCount = -1;
+        }
     }
     if (done) {
         done(aFileData);
