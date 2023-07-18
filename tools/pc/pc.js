@@ -891,13 +891,13 @@ async function buildDrive(sDir, sCommand = "")
                 di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
                 di.updateBootSector(dbBoot, 0, verBPB);
                 if (writeDiskSync(drivePath, di, false, 0, true, true)) {
-                    if (fDebug) printf("buildDrive(\"%s\",\"%s\"): success\n", sDir, sCommand);
                     driveManifest = manifest;
                 }
             }
         }
         let normalize = true;
         if (!sDir.endsWith('/')) sDir += '/';
+        printf("reading files: %s\n", sDir);
         readDir(sDir, 0, 0, "PCJS", null, normalize, 10240, maxLocalFiles, false, null, null, aFileDescs, done);
     }
     return driveManifest? "" : "unable to build drive";
@@ -1102,8 +1102,8 @@ function saveDrive()
                 }
                 if (fSave) {
                     let drivePath = path.join(pcjsDir, localDrive.replace(".json", ".img"));
+                    printf("saving drive: %s\n", drivePath);
                     if (writeDiskSync(drivePath, di, false, 0, true, true)) {
-                        if (fDebug) printf("saveDrive(\"%s\")\n", drivePath);
                     }
                 }
                 return true;
@@ -1391,7 +1391,7 @@ function doCommand(s)
         }
         sCommand = checkCommand(localDir, sParms);
         if (!sCommand && sParms) {
-            result = "unknown command: " + sParms;
+            result = "bad command or file name: " + sParms;
             break;
         }
         printf("building drive: %s\n", path.join(pcjsDir, localDrive));
@@ -1490,12 +1490,13 @@ async function processArgs(argv)
         result = "invalid directory: " + sDir;
     } else {
         if (typeof sDir == "string") localDir = sDir;
+        localDir = path.resolve(localDir);
         maxLocalFiles = +argv['maxfiles'] || maxLocalFiles;
         if (argv[1]) {
             let sParms = argv.slice(1).join(' ');
             let sCommand = checkCommand(localDir, sParms);      // check for a DOS command or program name
             if (!sCommand && sParms) {
-                result = "unknown command: " + sParms;
+                result = "bad command or file name: " + sParms;
             } else {
                 result = await buildDrive(localDir, sCommand);
                 if (!result) {
@@ -1617,7 +1618,7 @@ function main(argc, argv)
         let optionsMain = {
             "--load=[machine file]":    "load machine configuration file",
             "--type=[machine type]":    "set machine type (default is " + machineType + ")",
-            "--dir=[directory]":        "set source directory for disk (default is \".\")",
+            "--dir=[directory]":        "set hard drive local directory (default is \".\")",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxLocalFiles + ")",
             "--sys=[system type]":      "operating system type (default is " + systemType + ")",
             "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
@@ -1627,7 +1628,7 @@ function main(argc, argv)
             "--halt (-h)\t":            "halt machine on startup",
             "--help (-?)\t":            "display command-line usage",
             "--nofloppy (-n)\t":        "remove any diskette from drive A:",
-            "--save (-s)\t":            "save built disk image on return"
+            "--save (-s)\t":            "save hard drive image on return"
         };
         let optionGroups = {
             "main options:":            optionsMain,
