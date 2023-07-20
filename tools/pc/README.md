@@ -25,7 +25,9 @@ or, if your operating system doesn't automatically associate `.js` files with [N
 > 
 >     "C:\Program Files\nodejs\node.exe" "%1" %*
 
-If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  You can also omit the `--load=` option if the name of the JSON file doesn't conflict with another command or program name.
+If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  You can also omit the `--load=` option if the name of the JSON file doesn't conflict with another command or program name:
+
+	pc.js ibm5150
 
 Loading [ibm5150.json](ibm5150.json) with the should produce the following output:
 
