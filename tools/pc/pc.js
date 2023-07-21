@@ -1375,14 +1375,14 @@ function loadDiskette(sDrive, aTokens)
                     diskItems = items;
                     result = displayItems(sDrive, diskItems);
                 } else {
-                    result = "no disk(s) found";
+                    result = "no diskette(s) found";
                 }
             }
             else {
-                result = "no disk(s) available";
+                result = "no diskette(s) available";
             }
         } else {
-            result = "missing disk criteria";
+            result = "missing diskette search options";
         }
     } else {
         result = "no floppy drives (load a machine first)";
