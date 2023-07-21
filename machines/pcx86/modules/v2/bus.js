@@ -1248,7 +1248,7 @@ export default class BusX86 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortInputNotify[port] !== undefined) {
-                    Component.warning("Input port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("input port " + Str.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
@@ -1390,7 +1390,7 @@ export default class BusX86 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortOutputNotify[port] !== undefined) {
-                    Component.warning("Output port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("output port " + Str.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];

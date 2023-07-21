@@ -165,6 +165,7 @@ export default class Web {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
+            Component.printf(Messages.LOG, "fetching: %s\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -178,9 +179,11 @@ export default class Web {
                 }
             })
             .then(resource => {
+                Component.printf(Messages.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
+                Component.printf(Messages.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
                 if (done) done(sURL, resource, nErrorCode);
             });
             return response;
@@ -1101,6 +1104,46 @@ export default class Web {
         }
         Web.fPageEventsEnabled = fEnable;
     }
+
+    /**
+     * doPageInit()
+     */
+    static doPageInit()
+    {
+        Web.fPageLoaded = true;
+        Web.doPageEvent('init', true);
+    }
+
+    /**
+     * doPageShow()
+     */
+    static doPageShow()
+    {
+        Web.fPageShowed = true;
+        Web.doPageEvent('show', true);
+    }
+
+    /**
+     * doPageExit()
+     */
+    static doPageExit()
+    {
+        Web.doPageEvent('exit', true);
+    }
+
+    /**
+     * doPageReset()
+     */
+    static doPageReset()
+    {
+        if (Web.fPageLoaded) {
+            Web.fPageLoaded = false;
+            Web.fPageShowed = false;
+            /*
+             * TODO: Anything else?
+             */
+        }
+    }
 }
 
 Web.parmsURL = null;            // initialized on first call to parseURLParms()
@@ -1133,20 +1176,6 @@ Web.fLocalStorage = null;
  * @const {string}
  */
 Web.sLocalStorageTest = "PCjs.localStorage";
-
-Web.doPageInit = function doPageInit() {
-    Web.fPageLoaded = true;
-    Web.doPageEvent('init', true);
-};
-
-Web.doPageShow = function doPageShow() {
-    Web.fPageShowed = true;
-    Web.doPageEvent('show', true);
-};
-
-Web.doPageExit = function doPageExit() {
-    Web.doPageEvent('exit', true);
-};
 
 Web.addPageEvent('onload', Web.doPageInit);
 Web.addPageEvent('onpageshow', Web.doPageShow);
