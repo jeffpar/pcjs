@@ -29,7 +29,7 @@ If you don't include a full path to the JSON file, `pc.js` will look for the JSO
 
 	pc.js ibm5150
 
-Loading [ibm5150.json](ibm5150.json) with the should produce the following output:
+Loading [ibm5150.json](ibm5150.json) should produce the following output:
 
     pc.js v3.00
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
