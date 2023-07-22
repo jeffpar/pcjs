@@ -1546,12 +1546,12 @@ export default class ComputerX80 extends Component {
                 computer.flags.unloading = false;
 
                 if (DEBUG) {
-                    computer.printf("onShow(%b,%b)\n", computer.fInitialized, computer.flags.powered);
+                    computer.printf("show(%b,%b)\n", computer.fInitialized, computer.flags.powered);
                 }
 
                 /*
-                 * Note that the FIRST 'onpageshow' event, and therefore the first show() callback, occurs
-                 * AFTER the the initial 'onload' event, and at that point in time, fInitialized will not be set yet.
+                 * Note that the FIRST 'pageshow' event, and therefore the first show() callback, occurs
+                 * AFTER the the initial 'load' event, and at that point in time, fInitialized will not be set yet.
                  * So, practically speaking, the first show() callback isn't all that useful.
                  */
                 if (computer.fInitialized && !computer.flags.powered) {

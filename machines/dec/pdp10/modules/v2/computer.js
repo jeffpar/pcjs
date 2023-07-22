@@ -91,8 +91,8 @@ export default class ComputerPDP10 extends Component {
         this.fAutoPower = this.getMachineParm('autoPower', parmsComputer, Str.TYPES.BOOLEAN);
 
         /*
-         * nPowerChange is 0 while the power state is stable, 1 while power is transitioning
-         * to "on", and -1 while power is transitioning to "off".
+         * nPowerChange is 0 while the power state is stable, 1 while power is transitioning to "on",
+         * and -1 while power is transitioning to "off".
          */
         this.nPowerChange = 0;
 
@@ -1509,7 +1509,7 @@ export default class ComputerPDP10 extends Component {
                 var computer = new ComputerPDP10(parmsComputer, parmsMachine, true);
 
                 if (DEBUG) {
-                    computer.printf("onInit(%b)\n", computer.flags.powered);
+                    computer.printf("init(%b)\n", computer.flags.powered);
                 }
 
                 /*
@@ -1530,7 +1530,7 @@ export default class ComputerPDP10 extends Component {
     /**
      * ComputerPDP10.show()
      *
-     * When exit() is using an "onbeforeunload" handler, this "onpageshow" handler allows us to repower everything,
+     * When exit() is using an 'beforeunload' handler, this 'pageshow' handler allows us to repower everything,
      * without either resetting or restoring.  We call powerOn() with a special resume value (RESUME_REPOWER) if the
      * computer is already marked as "ready", meaning the browser didn't change anything.  This "repower" process
      * should be very quick, essentially just marking all components as powered again (so that, for example, the Video
@@ -1548,12 +1548,12 @@ export default class ComputerPDP10 extends Component {
                 computer.flags.unloading = false;
 
                 if (DEBUG) {
-                    computer.printf("onShow(%b,%b)\n", computer.fInitialized, computer.flags.powered);
+                    computer.printf("show(%b,%b)\n", computer.fInitialized, computer.flags.powered);
                 }
 
                 /*
-                 * Note that the FIRST 'onpageshow' event, and therefore the first show() callback, occurs
-                 * AFTER the the initial 'onload' event, and at that point in time, fInitialized will not be set yet.
+                 * Note that the FIRST 'pageshow' event, and therefore the first show() callback, occurs
+                 * AFTER the the initial 'load' event, and at that point in time, fInitialized will not be set yet.
                  * So, practically speaking, the first show() callback isn't all that useful.
                  */
                 if (computer.fInitialized && !computer.flags.powered) {
@@ -1570,26 +1570,26 @@ export default class ComputerPDP10 extends Component {
      * ComputerPDP10.exit()
      *
      * The Computer is currently the only component that uses an "exit" handler, which Web.onExit() defines as
-     * either an "unload" or "onbeforeunload" handler.  This gives us the opportunity to save the machine state,
+     * either an 'load' or 'beforeunload' handler.  This gives us the opportunity to save the machine state,
      * using our powerOff() function, before the page goes away.
      *
-     * It's worth noting that "onbeforeunload" offers one nice feature when used instead of "onload": the entire
+     * It's worth noting that 'beforeunload' offers one nice feature when used instead of 'load': the entire
      * page (and therefore this entire application) is retained in its current state by the browser (well, some
      * browsers), so that if you go to a new URL, either by entering a new URL in the same window/tab, or by pressing
      * the FORWARD button, and then you press the BACK button, the page is immediately restored to its previous state.
      *
-     * In fact, that's how some browsers operate whether you have an "onbeforeunload" handler or not; in other words,
-     * an "onbeforeunload" handler doesn't change the page retention behavior of the browser.  By contrast, the mere
-     * presence of an "onunload" handler generally causes a browser to throw the page away once the handler returns.
+     * In fact, that's how some browsers operate whether you have an 'beforeunload' handler or not; in other words,
+     * an 'beforeunload' handler doesn't change the page retention behavior of the browser.  By contrast, the mere
+     * presence of an 'load' handler generally causes a browser to throw the page away once the handler returns.
      *
-     * However, in order to safely use "onbeforeunload", we must add yet another handler ("onpageshow") to repower
+     * However, in order to safely use 'beforeunload', we must add yet another handler ('pageshow') to repower
      * everything, without either resetting or restoring.  Hence, the ComputerPDP10.show() function, which calls powerOn()
      * with a special resume value (RESUME_REPOWER) if the computer is already marked as "ready", meaning the browser
      * didn't change anything.  This "repower" process should be very quick, essentially just marking all components as
      * powered again (so that, for example, the Video component will start drawing again) and firing the CPU up again.
      *
-     * Reportedly, some browsers (eg, Opera) don't support "onbeforeunload", in which case Component will have to use
-     * "unload" instead.  But even when the page must be rebuilt from scratch, the combination of browser cache and
+     * Reportedly, some browsers (eg, Opera) don't support 'beforeunload', in which case Component will have to use
+     * 'unload' instead.  But even when the page must be rebuilt from scratch, the combination of browser cache and
      * localStorage means the simulation should be restored and become operational almost immediately.
      */
     static exit()
@@ -1607,7 +1607,7 @@ export default class ComputerPDP10 extends Component {
                 computer.flags.unloading = true;
 
                 if (DEBUG) {
-                    computer.printf("onExit(%b)\n", computer.flags.powered);
+                    computer.printf("exit(%b)\n", computer.flags.powered);
                 }
 
                 if (computer.flags.powered) {

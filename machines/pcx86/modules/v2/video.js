@@ -7930,12 +7930,12 @@ export default class VideoX86 extends Component {
              * browsers don't actually support an 'onresize' handler on anything but the window object.
              */
             if (Web.getUserAgent().indexOf("MSIE") >= 0) {
-                element.onresize = function(eParent, eChild, cx, cy) {
+                element['onresize'] = function(eParent, eChild, cx, cy) {
                     return function onResizeVideo() {
                         eChild.style.height = (((eParent.clientWidth * cy) / cx) | 0) + "px";
                     };
                 }(element, canvas, parmsVideo['screenWidth'], parmsVideo['screenHeight']);
-                element.onresize(null);
+                element['onresize'](null);
             }
 
             /*
@@ -7951,7 +7951,7 @@ export default class VideoX86 extends Component {
              * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
              */
             if (aspect && aspect >= 0.3 && aspect <= 3.33) {
-                Web.addPageEvent('onresize', function(eParent, eChild, aspectRatio) {
+                Web.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
                     return function onResizeWindow() {
                         /*
                          * Since aspectRatio is the target width/height, we have:
@@ -8044,7 +8044,7 @@ export default class VideoX86 extends Component {
                     textarea.style.fontSize = ((textarea.clientWidth * 0.01875)|0) + "px";
                 };
                 onResizeTextArea();
-                Web.addPageEvent('onresize', onResizeTextArea);
+                Web.addPageEvent('resize', onResizeTextArea);
             }
 
             /*

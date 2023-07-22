@@ -328,8 +328,8 @@ function intVideo(addr)
     let AH = ((this.regEAX >> 8) & 0xff), AL = (this.regEAX & 0xff);
     let DH = ((this.regEDX >> 8) & 0xff), DL = (this.regEDX & 0xff);
 
-    if (machine.nestedVideo) {          // some BIOSes issue calls within the TTY function call
-        return true;                    // and we want to ignore those
+    if (machine.nestedVideo) {          // some BIOSes issue calls within the "write TTY" (0x0E)
+        return true;                    // function, and we want to ignore those
     }
 
     switch (AH) {
@@ -543,8 +543,8 @@ function checkMachine(sFile)
 /**
  * newMachine()
  *
- * Before allowing a machine to be interactively loaded, make sure any previously loaded machine
- * is destroyed and the fake "page" context is reset.
+ * Before allowing a machine to be loaded, make sure any previously loaded machine is destroyed
+ * and the fake "web page" context is reset.
  *
  * @returns {Object} (new machine object)
  */
@@ -664,12 +664,12 @@ async function readJSON(sFile, done)
 {
     let result = "";
     try {
-        let sMachine = await readFileAsync(sFile);
+        let sConfig = await readFileAsync(sFile);
         /*
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
-        let machine = eval('(' + sMachine + ')');
-        done(machine);
+        let config = eval('(' + sConfig + ')');
+        done(config);
     }
     catch(err) {
         result = err.message;
@@ -735,8 +735,8 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
                     }
                 }
                 if (!--xml._resolving) {
-                    let machine = convertXML(xml, idAttrs);
-                    done(machine);
+                    let config = convertXML(xml, idAttrs);
+                    done(config);
                 }
             }
         });

@@ -3182,45 +3182,24 @@ class Web {
     /**
      * addPageEvent(sEvent, fn)
      *
-     * For 'onload', 'onunload', and 'onpageshow' events, most callers should NOT use this function, but
-     * instead use Web.onInit(), Web.onShow(), and Web.onExit(), respectively.
+     * For 'load', 'unload', and 'pageshow' events, most callers should NOT use this function, but instead use
+     * Web.onInit(), Web.onShow(), and Web.onExit(), respectively.
      *
      * The only components that should still use addPageEvent() are THIS component (see the bottom of this file)
-     * and components that need to capture other events (eg, the 'onresize' event in the Video component).
-     *
-     * This function creates a chain of callbacks, allowing multiple JavaScript modules to define handlers
-     * for the same event, which wouldn't be possible if everyone modified window['onload'], window['onunload'],
-     * etc, themselves.  However, that's less of a concern now, because assuming everyone else is now using
-     * onInit(), onExit(), etc, then there really IS only one component setting the window callback: this one.
-     *
-     * NOTE: It's risky to refer to obscure event handlers with "dot" names, because the Closure Compiler may
-     * erroneously replace them (eg, window.onpageshow is a good example).
+     * and components that need to capture other events (eg, the 'resize' event in the Video component).
      *
      * @param {string} sEvent
      * @param {function()} fn
      */
     static addPageEvent(sEvent, fn)
     {
-        let fnPrev = globals.window[sEvent];
-        if (typeof fnPrev !== 'function') {
-            globals.window[sEvent] = fn;
-        } else {
-            /*
-             * TODO: Determine whether there's any value in receiving/sending the Event object that the
-             * browser provides when it generates the original event.
-             */
-            globals.window[sEvent] = function queuedPageEvent()
-            {
-                if (fnPrev) fnPrev();
-                fn();
-            };
-        }
+        globals.window.addEventListener(sEvent, fn);
     }
 
     /**
      * onInit(fn)
      *
-     * Use this instead of setting window.onload.  Allows multiple JavaScript modules to define their own 'onload' event handler.
+     * Use this instead of setting window.onload.  Allows multiple JavaScript modules to define their own 'load' event handler.
      *
      * @param {function()} fn
      */
@@ -3234,7 +3213,7 @@ class Web {
      *
      * @param {function()} fn
      *
-     * Use this instead of setting window.onpageshow.  Allows multiple JavaScript modules to define their own 'onpageshow' event handler.
+     * Use this instead of setting window.onpageshow.  Allows multiple JavaScript modules to define their own 'pageshow' event handler.
      */
     static onShow(fn)
     {
@@ -3256,7 +3235,7 @@ class Web {
      *
      * @param {function()} fn
      *
-     * Use this instead of setting window.onunload.  Allows multiple JavaScript modules to define their own 'onunload' event handler.
+     * Use this instead of setting window.onunload.  Allows multiple JavaScript modules to define their own 'unload' event handler.
      */
     static onExit(fn)
     {
@@ -3343,15 +3322,15 @@ class Web {
 Web.parmsURL = null;            // initialized on first call to parseURLParms()
 
 Web.aPageEventHandlers = {
-    'init': [],                 // list of 'onload' handlers
-    'show': [],                 // list of 'onpageshow' handlers
-    'exit': []                  // list of 'onunload' handlers (although we prefer to use 'onbeforeunload' if possible)
+    'init': [],                 // list of 'load' handlers
+    'show': [],                 // list of 'pageshow' handlers
+    'exit': []                  // list of 'unload' handlers (although we prefer to use 'beforeunload' if possible)
 };
 
 Web.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
 
-Web.fPageLoaded = false;        // set once the page's first 'onload' event has occurred
-Web.fPageShowed = false;        // set once the page's first 'onpageshow' event has occurred
+Web.fPageLoaded = false;        // set once the page's first 'load' event has occurred
+Web.fPageShowed = false;        // set once the page's first 'pageshow' event has occurred
 Web.fPageEventsEnabled = true;  // default is true, set to false (or true) by enablePageEvents()
 Web.fAdBlockerWarning = false;
 
@@ -3371,9 +3350,9 @@ Web.fLocalStorage = null;
  */
 Web.sLocalStorageTest = "PCjs.localStorage";
 
-Web.addPageEvent('onload', Web.doPageInit);
-Web.addPageEvent('onpageshow', Web.doPageShow);
-Web.addPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera")? 'onunload' : 'onbeforeunload'), Web.doPageExit);
+Web.addPageEvent('load', Web.doPageInit);
+Web.addPageEvent('pageshow', Web.doPageShow);
+Web.addPageEvent(Web.isUserAgent("iOS")? 'pagehide' : (Web.isUserAgent("Opera")? 'unload' : 'beforeunload'), Web.doPageExit);
 
 /*
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override DEBUG with a "debug=false" embedded in
@@ -17007,18 +16986,18 @@ class VideoX80 extends Component {
              * browsers don't actually support an 'onresize' handler on anything but the window object.
              */
             if (Web.getUserAgent().indexOf("MSIE") >= 0) {
-                element.onresize = function(eParent, eChild, cx, cy) {
+                element['onresize'] = function(eParent, eChild, cx, cy) {
                     return function onResizeVideo() {
                         eChild.style.height = (((eParent.clientWidth * cy) / cx) | 0) + "px";
                     };
                 }(element, canvas, parmsVideo['screenWidth'], parmsVideo['screenHeight']);
-                element.onresize();
+                element['onresize']();
             }
 
             /*
              * The following is a related hack that allows the user to force the screen to use a particular aspect
              * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
-             * until we figure out a better UI.  And note that we use our web.onPageEvent() helper function to make
+             * until we figure out a better UI.  And note that we use our Web.addPageEvent() helper function to make
              * sure we don't trample any other 'onresize' handler(s) attached to the window object.
              */
             var aspect = +(parmsVideo['aspect'] || Web.getURLParm('aspect'));
@@ -17028,7 +17007,7 @@ class VideoX80 extends Component {
              * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
              */
             if (aspect && aspect >= 0.3 && aspect <= 3.33) {
-                Web.addPageEvent('onresize', function(eParent, eChild, aspectRatio) {
+                Web.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
                     return function onResizeWindow() {
                         /*
                          * Since aspectRatio is the target width/height, we have:
@@ -25291,12 +25270,12 @@ class ComputerX80 extends Component {
                 computer.flags.unloading = false;
 
                 if (DEBUG) {
-                    computer.printf("onShow(%b,%b)\n", computer.fInitialized, computer.flags.powered);
+                    computer.printf("show(%b,%b)\n", computer.fInitialized, computer.flags.powered);
                 }
 
                 /*
-                 * Note that the FIRST 'onpageshow' event, and therefore the first show() callback, occurs
-                 * AFTER the the initial 'onload' event, and at that point in time, fInitialized will not be set yet.
+                 * Note that the FIRST 'pageshow' event, and therefore the first show() callback, occurs
+                 * AFTER the the initial 'load' event, and at that point in time, fInitialized will not be set yet.
                  * So, practically speaking, the first show() callback isn't all that useful.
                  */
                 if (computer.fInitialized && !computer.flags.powered) {
