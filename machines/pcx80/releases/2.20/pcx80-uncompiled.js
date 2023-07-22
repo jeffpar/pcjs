@@ -135,20 +135,12 @@ let globals = {
     node: (typeof window != "undefined")? {} : global,
     window: (typeof window != "undefined")? window : global,
     document: (typeof document != "undefined")? document : {},
-    pcjs: {}
+    pcjs: { 'machines': {}, 'components': [], 'commands': {} }
 };
 
-if (globals.window['PCjs']) {
-    globals.pcjs = globals.window['PCjs'];
-} else {
-    globals.window['PCjs'] = globals.pcjs;
-}
+globals.window['PCjs'] = globals.window['PCjs'] || globals.pcjs;
 
 globals.window['LOCALDISKS'] = LOCALDISKS;
-
-if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
-if (!globals.pcjs['components']) globals.pcjs['components'] = [];
-if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
 
 
@@ -23864,7 +23856,7 @@ class ComputerX80 extends Component {
          * Enumerate all Video components for future updateVideo() calls.
          */
         this.aVideo = [];
-        for (var video = null; (video = this.getMachineComponent("Video", video));) {
+        for (var video = false; (video = this.getMachineComponent("Video", video));) {
             this.aVideo.push(video);
         }
 

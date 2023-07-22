@@ -140,19 +140,11 @@ let globals = {
     node: (typeof window != "undefined")? {} : global,
     window: (typeof window != "undefined")? window : global,
     document: (typeof document != "undefined")? document : {},
-    pcjs: {}
+    pcjs: { 'machines': {}, 'components': [], 'commands': {} }
 };
 
-if (globals.window['PCjs']) {
-    globals.pcjs = globals.window['PCjs'];
-} else {
-    globals.window['PCjs'] = globals.pcjs;
-}
+globals.window['PCjs'] = globals.window['PCjs'] || globals.pcjs;
 
 globals.window['LOCALDISKS'] = LOCALDISKS;
-
-if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
-if (!globals.pcjs['components']) globals.pcjs['components'] = [];
-if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
 export { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, LOCALDISKS, MAXDEBUG, PRIVATE, RS232, SITEURL, globals }
