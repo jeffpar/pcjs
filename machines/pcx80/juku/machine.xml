@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/machines/pcx80/xsl/machine.xsl"?>
+<machine id="juku" type="pcx80" border="1" pos="center" background="default">
+	<name pos="center">Juku E5104</name>
+	<computer id="computer" busWidth="16"/>
+	<cpu id="cpu" model="8080" cycles="2000000"/>
+	<ram id="ram0" addr="0x0000" size="0x4000"/>
+	<rom id="rom0" addr="0x4000" size="0x2000" file="/machines/pcx80/juku/rom/e5104/jukurom0.json5"/>
+	<rom id="rom1" addr="0x6000" size="0x2000" file="/machines/pcx80/juku/rom/e5104/jukurom1.json5"/>
+	<rom id="bas0" addr="0x8000" size="0x0800" file="/machines/pcx80/juku/rom/e5104/jukubas0.json5"/>
+	<rom id="bas1" addr="0x8800" size="0x0800" file="/machines/pcx80/juku/rom/e5104/jukubas1.json5"/>
+	<rom id="bas2" addr="0x9000" size="0x0800" file="/machines/pcx80/juku/rom/e5104/jukubas2.json5"/>
+	<rom id="bas3" addr="0x9800" size="0x0800" file="/machines/pcx80/juku/rom/e5104/jukubas3.json5"/>
+	<panel ref="/machines/pcx80/panel/wide.xml"/>
+	<debugger id="debugger"/>
+</machine>
