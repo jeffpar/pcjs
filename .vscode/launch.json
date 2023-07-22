@@ -443,7 +443,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
       ],
-      "cwd": "${workspaceFolder}/tools/pc",
+      "cwd": "${workspaceFolder}/tools/pc/archive/MSDOS320",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -527,7 +527,6 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--load=compaq386",
-        "--halt",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -654,7 +653,8 @@
       "args": [
         "chkdsk",
         "--sys=pcdos",
-        "--ver=2.00"
+        "--ver=2.00",
+        "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200",
       "stopOnEntry": false,

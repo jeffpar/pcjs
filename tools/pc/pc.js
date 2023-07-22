@@ -31,14 +31,15 @@ let autoStart = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.20";
-let driveName = "DOS.json";
+let localDrive = "DOS.json";
+let localDir = ".";
+let maxLocalFiles = 1024;
 
 let rootDir, pcjsDir;
 let messagesFilter, machines, debugMode;
 let Component, Errors, Interrupts, Web, embedMachine;
-let cpu, dbg, fdc, hdc, kbd, serial, fnSendSerial;
 let prompt = ">", command = "", commandPrev = "";
-let rowCursor = 0, colCursor = 0, nestedVideo = 0;
+let machine = newMachine();
 
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
@@ -195,6 +196,27 @@ async function loadModules(factory, modules, done)
             break;
         case "component":
             Component = module.default;
+            /*
+             * We override Component.printf() in order to replace its DEBUG check with our own fDebug check.
+             */
+            Component.printf = function(format, ...args) {
+                let bitsMessage = 0;
+                if (typeof format == "number") {
+                    bitsMessage = format;
+                    format = args.shift();
+                }
+                if (bitsMessage == Messages.ERROR) {
+                    format = "error: " + format + "\n";
+                    bitsMessage = 0;
+                }
+                if (bitsMessage == Messages.WARNING) {
+                    format = "warning: " + format + "\n";
+                    bitsMessage = 0;
+                }
+                if (fDebug || !bitsMessage) {
+                    printf(format, ...args);
+                }
+            }
             break;
         case "errors":
             Errors = module.default;
@@ -218,18 +240,17 @@ async function loadModules(factory, modules, done)
 }
 
 /**
- * initMachine(idMachine, sParms)
+ * initMachine(sParms)
  *
- * @param {string} idMachine
  * @param {string} sParms
  */
-function initMachine(idMachine, sParms)
+function initMachine(sParms)
 {
     try {
         /*
-         * Simulate the page embedding and page initialization process now.
+         * Simulate the "web page" embedding and initialization process now.
          */
-        embedMachine(idMachine, null, null, sParms);
+        embedMachine(machine.id, null, null, sParms);
         Web.doPageInit();
 
         /*
@@ -237,12 +258,12 @@ function initMachine(idMachine, sParms)
          * a few interrupts (eg, INT 0x10).  Get the Debugger component so we can override
          * the debugger's print() function.
          */
-        cpu = Component.getComponentByType("CPU");
-        if (cpu && cpu.addIntNotify) {
+        machine.cpu = Component.getComponentByType("CPU");
+        if (machine.cpu && machine.cpu.addIntNotify) {
             if (Interrupts && Interrupts.VIDEO) {
-                cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
-                cpu.addIntNotify(Interrupts.BOOTSTRAP, intReboot.bind(cpu));
-                cpu.addIntNotify(Interrupts.DOS_EXIT, intLoad.bind(cpu));
+                machine.cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(machine.cpu));
+                machine.cpu.addIntNotify(Interrupts.BOOTSTRAP, intReboot.bind(machine.cpu));
+                machine.cpu.addIntNotify(Interrupts.DOS_EXIT, intLoad.bind(machine.cpu));
             }
         }
 
@@ -250,30 +271,30 @@ function initMachine(idMachine, sParms)
          * Get the FDC component so we can query its list of available diskettes,
          * and get the HDC component so we can get the state of its hard drive(s).
          */
-        fdc = Component.getComponentByType("FDC");
-        hdc = Component.getComponentByType("HDC");
+        machine.fdc = Component.getComponentByType("FDC");
+        machine.hdc = Component.getComponentByType("HDC");
 
         /*
          * Get the Debugger component so we can receive debugger events and send
          * debugger commands.
          */
-        dbg = Component.getComponentByType("Debugger");
-        if (dbg) dbg.onEvent(setDebugMode);
+        machine.dbg = Component.getComponentByType("Debugger");
+        if (machine.dbg) machine.dbg.onEvent(setDebugMode);
 
         /*
          * Get the Keyboard component to get access to injectKeys(), which simplifies the
          * injection of keystrokes into the machine.
          */
-        kbd = Component.getComponentByType("Keyboard");
+        machine.kbd = Component.getComponentByType("Keyboard");
 
-        serial = Component.getComponentByType("SerialPort");
-        if (serial) {
-            let exports = serial['exports'];
+        machine.serial = Component.getComponentByType("SerialPort");
+        if (machine.serial) {
+            let exports = machine.serial['exports'];
             if (exports) {
                 var fnSetConnection = exports['setConnection'];
                 if (fnSetConnection) {
-                    if (fnSetConnection.call(serial, null, receiveSerial)) {
-                        fnSendSerial = exports['receiveData'];
+                    if (fnSetConnection.call(machine.serial, null, receiveSerial)) {
+                        machine.fnSendSerial = exports['receiveData'];
                     }
                 }
             }
@@ -283,10 +304,10 @@ function initMachine(idMachine, sParms)
          * Since there may be no debugger (and even if there is, machines that are auto-started won't
          * trigger any debugger events), we simulate an appropriate event.
          *
-         * NOTE: The test here used to be "cpu && cpu.isRunning()", but if you're not using the --local
-         * option, the CPU may not up and running yet, so we rely on the autoStart setting instead.
+         * NOTE: The test here used to be "machine.cpu && machine.cpu.isRunning()", but if you're not using
+         * the --local option, the CPU may not up and running yet, so we rely on the autoStart setting instead.
          */
-        setDebugMode(cpu && autoStart? DbgLib.EVENTS.EXIT : DbgLib.EVENTS.READY);
+        setDebugMode(machine.cpu && autoStart? DbgLib.EVENTS.EXIT : DbgLib.EVENTS.READY);
     }
     catch(err) {
         printf("machine initialization error: %s\n", err.message);
@@ -307,8 +328,8 @@ function intVideo(addr)
     let AH = ((this.regEAX >> 8) & 0xff), AL = (this.regEAX & 0xff);
     let DH = ((this.regEDX >> 8) & 0xff), DL = (this.regEDX & 0xff);
 
-    if (nestedVideo) {                  // some BIOSes issue calls within the TTY function call
-        return true;                    // and we want to ignore those
+    if (machine.nestedVideo) {          // some BIOSes issue calls within the "write TTY" (0x0E)
+        return true;                    // function, and we want to ignore those
     }
 
     switch (AH) {
@@ -316,20 +337,20 @@ function intVideo(addr)
         if (DL >= maxCols || DH >= maxRows) {
             break;                      // ignore "off-screen" positions
         }
-        if (DL < colCursor) {
+        if (DL < machine.colCursor) {
             if (!DL) {
                 printf('\r');
             } else {
                 let s = "";
-                while (DL + s.length < colCursor) {
+                while (DL + s.length < machine.colCursor) {
                     s += '\b';
                 }
                 printf(s);
             }
         }
-        if (DH != rowCursor) {
+        if (DH != machine.rowCursor) {
             printf('\n');
-        } else if (DL > colCursor) {
+        } else if (DL > machine.colCursor) {
             /*
              * When BASIC/BASICA erases a character (in response to a BS/DEL key), it wants to redraw
              * the entire line (eg, with spaces if there was nothing past the character being deleted);
@@ -338,8 +359,8 @@ function intVideo(addr)
              */
             break;
         }
-        rowCursor = DH;
-        colCursor = DL;
+        machine.rowCursor = DH;
+        machine.colCursor = DL;
         break;
     case 0x06:                          // scroll up (AL lines)
         while (AL--) {                  // TODO: Should probably check the boundaries of the scroll
@@ -365,24 +386,24 @@ function intVideo(addr)
         if (AH == 0x0E || !CX) CX = 1;
         printf("%s", s.repeat(CX));
         if (AL == '\r') {
-            colCursor = 0;
+            machine.colCursor = 0;
         } else if (AL == '\n') {
-            while (rowCursor < maxRows && CX--) {
-                rowCursor++;
+            while (machine.rowCursor < maxRows && CX--) {
+                machine.rowCursor++;
             }
         } else if (AL == '\b') {
-            while (colCursor > 0 && CX--) {
-                colCursor--;
+            while (machine.colCursor > 0 && CX--) {
+                machine.colCursor--;
             }
         } else {
-            while (colCursor < maxCols && CX--) {
-                colCursor++;
+            while (machine.colCursor < maxCols && CX--) {
+                machine.colCursor++;
             }
         }
         if (AH == 0x0E) {
-            nestedVideo++;              // TTY function performs nested cursor control calls (eg, AH=0x02)
+            machine.nestedVideo++;      // TTY function performs nested cursor control calls (eg, AH=0x02)
             this.addIntReturn(addr, function onVideoReturn(nLevel) {
-                nestedVideo--;
+                machine.nestedVideo--;
             });
         }
         break;
@@ -473,8 +494,8 @@ function receiveSerial(b)
  */
 function sendSerial(b)
 {
-    if (serial && fnSendSerial) {
-        fnSendSerial.call(serial, b);
+    if (machine.serial && machine.fnSendSerial) {
+        machine.fnSendSerial.call(machine.serial, b);
     }
 }
 
@@ -520,6 +541,37 @@ function checkMachine(sFile)
 }
 
 /**
+ * newMachine()
+ *
+ * Before allowing a machine to be loaded, make sure any previously loaded machine is destroyed
+ * and the fake "web page" context is reset.
+ *
+ * @returns {Object} (new machine object)
+ */
+function newMachine()
+{
+    if (Component && machine.id) {
+        Component.destroyMachine(machine.id);
+    }
+    if (Web) {
+        Web.doPageReset();
+    }
+    return {
+        id:           "",
+        cpu:          null,
+        dbg:          null,
+        fdc:          null,
+        hdc:          null,
+        kbd:          null,
+        serial:       null,
+        fnSendSerial: null,
+        rowCursor:    0,
+        colCursor:    0,
+        nestedVideo:  0
+    };
+}
+
+/**
  * loadMachine(sFile, bootHD)
  *
  * If bootHD, then we want to 1) remove any boot floppy from drive A: and 2) make the sure the 'type'
@@ -535,26 +587,26 @@ function checkMachine(sFile)
 function loadMachine(sFile, bootHD = 0)
 {
     let result = "";
-    let getFactory = function(machine) {
-        let type = machine['type'] || (machine['machine'] && machine['machine']['type']) || machineType;
-        let idMachine = "";
-        if (machine['machine']) {
-            idMachine = machine['machine']['id'];
+    let getFactory = function(config) {
+        let type = config['type'] || (config['machine'] && config['machine']['type']) || machineType;
+        machine.id = "";
+        if (config['machine']) {
+            machine.id = config['machine']['id'];
         }
-        if (machine['cpu']) {
+        if (config['cpu']) {
             if (fHalt) {
-                machine['cpu']['autoStart'] = 0;
+                config['cpu']['autoStart'] = 0;
             }
-            autoStart = machine['cpu']['autoStart'];
+            autoStart = config['cpu']['autoStart'];
             if (autoStart == undefined) {
-                autoStart = !machine['debugger'];
+                autoStart = !config['debugger'];
             }
         }
         let removeFloppy = fNoFloppy;
         if (bootHD == 10) {
-            if (machine['hdc']) {
-                let type = machine['hdc']['type'];
-                let drives = machine['hdc']['drives'];
+            if (config['hdc']) {
+                let type = config['hdc']['type'];
+                let drives = config['hdc']['drives'];
                 if (typeof drives == "string") {
                     try {
                         drives = eval(drives);
@@ -567,22 +619,21 @@ function loadMachine(sFile, bootHD = 0)
                  * Set the *drive* type below based on the *controller* type obtained above.
                  */
                 drives[0] = {'name': "10Mb Hard Disk", 'type': type == "XT"? 3 : 1, 'path': "/tools/pc/DOS.json"};
-                machine['hdc']['drives'] = drives;
+                config['hdc']['drives'] = drives;
                 removeFloppy = true;
             }
         }
-        if (removeFloppy && machine['fdc']) {
-            machine['fdc']['autoMount'] = "{A: {name: \"None\"}}";
+        if (removeFloppy && config['fdc']) {
+            config['fdc']['autoMount'] = "{A: {name: \"None\"}}";
         }
-        let sParms = JSON.stringify(machine);
+        let sParms = JSON.stringify(config);
         loadModules(machines[type]['factory'], machines[type]['modules'], function() {
-            initMachine(idMachine, sParms);
+            initMachine(sParms);
         });
     };
-    if (cpu) {
+    if (machine.cpu) {
         /*
-         * TODO: To make way for another machine, we'd have to first destroy the previous one, and there's no
-         * support for that yet.  The simplest solution is forcing the user to restart pc.js.
+         * Safety check: if newMachine() was called, then this shouldn't happen.
          */
         result = "machine already loaded";
     }
@@ -613,12 +664,12 @@ async function readJSON(sFile, done)
 {
     let result = "";
     try {
-        let sMachine = await readFileAsync(sFile);
+        let sConfig = await readFileAsync(sFile);
         /*
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
-        let machine = eval('(' + sMachine + ')');
-        done(machine);
+        let config = eval('(' + sConfig + ')');
+        done(config);
     }
     catch(err) {
         result = err.message;
@@ -684,8 +735,8 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
                     }
                 }
                 if (!--xml._resolving) {
-                    let machine = convertXML(xml, idAttrs);
-                    done(machine);
+                    let config = convertXML(xml, idAttrs);
+                    done(config);
                 }
             }
         });
@@ -734,7 +785,7 @@ function checkCommand(sDir, sCommand)
 }
 
 /**
- * buildDrive(sDir, sCommand)
+ * buildDrive(sDir, sCommand, fVerbose)
  *
  * Builds a bootable hard drive image containing all files in the current directory.
  *
@@ -755,11 +806,12 @@ function checkCommand(sDir, sCommand)
  *
  * NOTE: The list of allowed internal commands below is not intended to be exhaustive; it's just a start.
  *
- * @param {string} [sDir]
+ * @param {string} sDir
  * @param {string} [sCommand] (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
+ * @param {boolean} [fVerbose]
  * @returns {string} (error message, if any)
  */
-async function buildDrive(sDir = ".", sCommand = "")
+async function buildDrive(sDir, sCommand = "", fVerbose = false)
 {
     const systemInfo = {
         "msdos": {
@@ -884,19 +936,20 @@ async function buildDrive(sDir = ".", sCommand = "")
         }
         let done = function(di) {
             if (di) {
-                let fileName = path.join(pcjsDir, driveName);
+                let drivePath = path.join(pcjsDir, localDrive);
                 let manifest = di.getFileManifest(null, true);
                 di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
                 di.updateBootSector(dbBoot, 0, verBPB);
-                if (writeDiskSync(fileName, di, false, 0, true, true)) {
-                    if (fDebug) printf("buildDrive(\"%s\",\"%s\"): %s\n", sDir, sCommand, fileName);
+                if (writeDiskSync(drivePath, di, false, 0, true, true)) {
+                    if (fVerbose) printf("build complete\n");
                     driveManifest = manifest;
                 }
             }
         }
         let normalize = true;
         if (!sDir.endsWith('/')) sDir += '/';
-        readDir(sDir, 0, 0, "PCJS", null, normalize, 10240, 1024, false, null, null, aFileDescs, done);
+        if (fVerbose) printf("reading files: %s\n", sDir);
+        readDir(sDir, 0, 0, "PCJS", null, normalize, 10240, maxLocalFiles, false, null, null, aFileDescs, done);
     }
     return driveManifest? "" : "unable to build drive";
 }
@@ -912,7 +965,7 @@ function buildDiskIndex()
 {
     let total = 0;
     let diskIndex = {};
-    let aDiskettes = fdc && fdc.aDiskettes;
+    let aDiskettes = machine.fdc && machine.fdc.aDiskettes;
     if (aDiskettes) {
         for (let i = 0; i < aDiskettes.length; i++) {
             let diskette = aDiskettes[i];
@@ -991,7 +1044,7 @@ function buildFileIndex(diskIndex)
 function saveDrive()
 {
     if (driveManifest) {
-        let imageData = hdc && hdc.aDrives && hdc.aDrives.length && hdc.aDrives[0].disk;
+        let imageData = machine.hdc && machine.hdc.aDrives && machine.hdc.aDrives.length && machine.hdc.aDrives[0].disk;
         if (imageData) {
             let di = new DiskInfo(device, "DOS");
             if (di.buildDiskFromJSON(imageData)) {
@@ -1099,9 +1152,9 @@ function saveDrive()
                     }
                 }
                 if (fSave) {
-                    let fileName = path.join(pcjsDir, driveName.replace(".json", ".img"));
-                    if (writeDiskSync(fileName, di, false, 0, true, true)) {
-                        if (fDebug) printf("saveDrive(\"%s\")\n", fileName);
+                    let drivePath = path.join(pcjsDir, localDrive.replace(".json", ".img"));
+                    printf("saving drive: %s\n", drivePath);
+                    if (writeDiskSync(drivePath, di, false, 0, true, true)) {
                     }
                 }
                 return true;
@@ -1155,7 +1208,7 @@ function loadDiskette(sDrive, aTokens)
             }
         };
         result = "loading \"" + diskName + "\" in drive " + sDrive;
-        fdc.loadDrive(iDrive, diskName, diskPath, false, null, done);
+        machine.fdc.loadDrive(iDrive, diskName, diskPath, false, null, done);
     };
     let displayItems = function(sDrive, items, message = "") {
         for (let i = 0; i < items.length; i++) {
@@ -1170,7 +1223,7 @@ function loadDiskette(sDrive, aTokens)
         result += "\nenter \"load " + sDrive + " #\" to load diskette by number" + (message? "\n" + message : "");
         return result;
     };
-    if (fdc) {
+    if (machine.fdc) {
         if (diskItems && aTokens.length == 1 && aTokens[0].match(/^\d+$/)) {
             let diskItem = diskItems[+aTokens[0] - 1];
             if (diskItem) {
@@ -1322,14 +1375,14 @@ function loadDiskette(sDrive, aTokens)
                     diskItems = items;
                     result = displayItems(sDrive, diskItems);
                 } else {
-                    result = "no disk(s) found";
+                    result = "no diskette(s) found";
                 }
             }
             else {
-                result = "no disk(s) available";
+                result = "no diskette(s) available";
             }
         } else {
-            result = "missing disk criteria";
+            result = "missing diskette search options";
         }
     } else {
         result = "no floppy drives (load a machine first)";
@@ -1358,9 +1411,9 @@ function doCommand(s)
                     "  build [command]\n" +
                     "  load [machine] or [drive] [search options]\n" +
                     "  quit";
-        if (dbg) {
+        if (machine.dbg) {
             result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
-        } else if (cpu) {
+        } else if (machine.cpu) {
             result += "\nmachine commands:\n" +
                     "  g (to continue running)\n" +
                     "load a machine with a debugger for more machine commands";
@@ -1377,28 +1430,28 @@ function doCommand(s)
             if (sParms) {
                 process.chdir(sParms);
             }
-            result = process.cwd();
+            result = localDir = process.cwd();
         } catch(err) {
             result = err.message;
         }
         break;
     case "build":
-        if (cpu) {
+        if (machine.cpu) {
             result = "machine already running";
             break;
         }
-        sCommand = checkCommand(".", sParms);
+        sCommand = checkCommand(localDir, sParms);
         if (!sCommand && sParms) {
-            result = "unknown command: " + sParms;
+            result = "bad command or file name: " + sParms;
             break;
         }
-        printf("building drive%s\n", sCommand? " with command: " + sCommand : "");
-        result = buildDrive(".", sCommand);
+        printf("building drive: %s\n", path.join(pcjsDir, localDrive));
+        result = buildDrive(localDir, sCommand, true);
         if (typeof result != "string") result = "";
         break;
     case "load":
         sCommand = aTokens[0];
-        if (!sCommand && !cpu) {
+        if (!sCommand && !machine.cpu) {
             sCommand = "compaq386";
         }
         if (sCommand) {
@@ -1409,6 +1462,7 @@ function doCommand(s)
             } else {
                 sFile = checkMachine(sCommand);
                 if (sFile) {
+                    machine = newMachine();
                     printf("loading machine: %s\n", sFile);
                     result = loadMachine(sFile, driveManifest? 10 : 0);
                 } else {
@@ -1416,7 +1470,7 @@ function doCommand(s)
                 }
             }
         } else {
-            result = "missing " + (cpu? "drive letter" : "machine file");
+            result = "missing " + (machine.cpu? "drive letter" : "machine file");
         }
         break;
     case "q":
@@ -1424,7 +1478,7 @@ function doCommand(s)
         return null;
     default:
         if (s) {
-            if (!dbg) {
+            if (!machine.dbg) {
                 /*
                  * For machines without a debugger, provide some *very* limited machine control.
                  */
@@ -1433,8 +1487,8 @@ function doCommand(s)
                     result = help();
                     break;
                 case "g":
-                    if (cpu) {
-                        if (cpu.startCPU()) {
+                    if (machine.cpu) {
+                        if (machine.cpu.startCPU()) {
                             setDebugMode(DbgLib.EVENTS.EXIT);
                         }
                     } else {
@@ -1447,7 +1501,7 @@ function doCommand(s)
                 }
             } else {
                 try {
-                    if (!dbg.doCommands(s, true, true)) {
+                    if (!machine.dbg.doCommands(s, true, true)) {
                         result = eval('(' + s + ')');
                     }
                 } catch(err) {
@@ -1476,10 +1530,10 @@ async function processArgs(argv)
     let loading = false;
 
     let sFile = "";
-    if (typeof argv['load'] == "string") {              // process --load argument, if any
+    if (typeof argv['load'] == "string") {                      // process --load argument, if any
         sFile = checkMachine(argv['load']);
     }
-    else if (argv[1]) {                                 // alternatively, process first arg
+    else if (argv[1]) {                                         // alternatively, process first arg
         sFile = checkMachine(argv[1]);
         if (sFile) argv.splice(1, 1);
     }
@@ -1487,14 +1541,16 @@ async function processArgs(argv)
     if (typeof sDir == "string" && !existsDir(sDir, false)) {
         result = "invalid directory: " + sDir;
     } else {
-        if (typeof sDir != "string") sDir = ".";
+        if (typeof sDir == "string") localDir = sDir;
+        localDir = path.resolve(localDir);
+        maxLocalFiles = +argv['maxfiles'] || maxLocalFiles;
         if (argv[1]) {
             let sParms = argv.slice(1).join(' ');
-            let sCommand = checkCommand(sDir, sParms);  // check for a DOS command or program name
+            let sCommand = checkCommand(localDir, sParms);      // check for a DOS command or program name
             if (!sCommand && sParms) {
-                result = "unknown command: " + sParms;
+                result = "bad command or file name: " + sParms;
             } else {
-                result = await buildDrive(sDir, sCommand);
+                result = await buildDrive(localDir, sCommand);
                 if (!result) {
                     result = loadMachine(sFile || checkMachine("compaq386"), 10);
                     if (!result) {
@@ -1535,7 +1591,7 @@ function readInput(stdin, stdout)
             printf("key(s): %j\n", data);
         }
         if (code == 0x04 && !debugMode) {           // check for CTRL-D when NOT in debug mode
-            if (cpu) cpu.stopCPU();
+            if (machine.cpu) machine.cpu.stopCPU();
             setDebugMode(DbgLib.EVENTS.READY);
             return;
         }
@@ -1547,11 +1603,11 @@ function readInput(stdin, stdout)
         if (!debugMode) {
             data = functionKeys[data] || data;
             data = data.replace(/\x7f/g, "\b");     // convert DEL to BS
-            if (kbd) {
+            if (machine.kbd) {
                 if (Defines.MAXDEBUG) {
                     printf("injecting key(s): %s\n", data);
                 }
-                kbd.injectKeys.call(kbd, data, 0);
+                machine.kbd.injectKeys.call(machine.kbd, data, 0);
             } else {
                 sendSerial(code);
             }
@@ -1583,7 +1639,7 @@ function readInput(stdin, stdout)
                 return;
             }
             printf(result);
-            if (cpu && cpu.isRunning()) {
+            if (machine.cpu && machine.cpu.isRunning()) {
                 break;
             }
             printf("%s> ", prompt);
@@ -1614,7 +1670,8 @@ function main(argc, argv)
         let optionsMain = {
             "--load=[machine file]":    "load machine configuration file",
             "--type=[machine type]":    "set machine type (default is " + machineType + ")",
-            "--dir=[directory]":        "set source directory for disk (default is \".\")",
+            "--dir=[directory]":        "set hard drive local directory (default is \".\")",
+            "--maxfiles=[number]":      "set maximum local files (default is " + maxLocalFiles + ")",
             "--sys=[system type]":      "operating system type (default is " + systemType + ")",
             "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
         };
@@ -1622,8 +1679,9 @@ function main(argc, argv)
             "--debug (-d)\t":           "enable DEBUG messages",
             "--halt (-h)\t":            "halt machine on startup",
             "--help (-?)\t":            "display command-line usage",
+            "--local (-l)\t":           "use local files (default is remote)",
             "--nofloppy (-n)\t":        "remove any diskette from drive A:",
-            "--save (-s)\t":            "save built disk image on return"
+            "--save (-s)\t":            "save hard drive image on return"
         };
         let optionGroups = {
             "main options:":            optionsMain,
@@ -1672,6 +1730,7 @@ main(...pcjslib.getArgs({
     '?': "help",
     'd': "debug",
     'h': "halt",
+    'l': "local",
     'n': "nofloppy",
     's': "save"
 }));

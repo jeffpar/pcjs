@@ -905,35 +905,16 @@ export default class WebIO extends StdIO {
     }
 
     /**
-     * onPageEvent(sName, fn)
-     *
-     * This function creates a chain of callbacks, allowing multiple JavaScript modules to define handlers
-     * for the same event, which wouldn't be possible if everyone modified window['onload'], window['onunload'],
-     * etc, themselves.
-     *
-     * NOTE: It's risky to refer to obscure event handlers with "dot" names, because the Closure Compiler may
-     * erroneously replace them (eg, window.onpageshow is a good example).
+     * onPageEvent(sEvent, fn)
      *
      * @this {WebIO}
-     * @param {string} sFunc
+     * @param {string} sEvent
      * @param {function()} fn
      */
-    onPageEvent(sFunc, fn)
+    onPageEvent(sEvent, fn)
     {
         if (window) {
-            let fnPrev = window[sFunc];
-            if (typeof fnPrev !== 'function') {
-                window[sFunc] = fn;
-            } else {
-                /**
-                 * TODO: Determine whether there's any value in receiving/sending the Event object that the
-                 * browser provides when it generates the original event.
-                 */
-                window[sFunc] = function onWindowEvent() {
-                    if (fnPrev) fnPrev();
-                    fn();
-                };
-            }
+            window.addEventListener(sEvent, fn);
         }
     }
 

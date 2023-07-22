@@ -97,7 +97,7 @@ There are many large software collections where the diskette contents have been 
 
 For example, I originally recreated all the [PC-SIG Library](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/0001/) diskette images from the "PC-SIG Library Eighth Edition" CD-ROM files stored at [cd.textfiles.com](http://cd.textfiles.com/pcsig08/).  Some of the diskettes on the CD-ROM had been completely archived as single ZIP files -- probably because the diskettes contained filenames that were not allowed on CD-ROM -- so I used `unzip` on macOS to extract those ZIP files to folders, and then recreated disk images from those folders.
 
-However, this process doesn't always work well.  [DISK0798](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/0501/#directory-of-pcsig08-disk0798) highlights a few issues that have already been [discussed](https://github.com/jeffpar/pcjs/commit/17e0a2f9e46140fce42f11de8f5fa678b2a3bfe5) on GitHub.
+However, this process doesn't always work well.  [DISK0798](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/0501/#directory-of-pc-sig-library-disk-0798) highlights a few issues that have already been [discussed](https://github.com/jeffpar/pcjs/commit/17e0a2f9e46140fce42f11de8f5fa678b2a3bfe5) on GitHub.
 
 First, the original order of the filenames was not preserved.  Modern operating systems (eg, macOS) list files alphabetically, and as a result, the files on the recreated diskettes were sorted alphabetically as well.
 

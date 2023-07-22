@@ -590,7 +590,7 @@ export default class C1PVideo extends Component {
 
             if (Web.getUserAgent().indexOf("MSIE") >= 0) {
                 eCanvas.style.height = (((eVideo.clientWidth * parmsVideo['screenHeight']) / parmsVideo['screenWidth']) | 0) + "px";
-                eVideo.onresize = function(eParent, eChild, cx, cy) {
+                eVideo['onresize'] = function(eParent, eChild, cx, cy) {
                     return function() {
                         eChild.style.height = (((eParent.clientWidth * cy) / cx) | 0) + "px";
                     };

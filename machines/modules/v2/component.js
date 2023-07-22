@@ -172,6 +172,28 @@ export default class Component {
     }
 
     /**
+     * Component.destroyMachine(idMachine)
+     *
+     * @param {string} idMachine
+     * @returns {boolean} true if the machine was destroyed, false if it didn't exist
+     */
+    static destroyMachine(idMachine)
+    {
+        if (globals.pcjs['machines'][idMachine]) {
+            let components = globals.pcjs['components'];
+            for (let i = 0; i < components.length; i++) {
+                let component = components[i];
+                if (component.id.indexOf(idMachine) == 0) {
+                    components.splice(i--, 1);
+                }
+            }
+            delete globals.pcjs['machines'][idMachine];
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Component.getMachines()
      *
      * @returns {Array.<string>}
@@ -233,21 +255,21 @@ export default class Component {
      */
     static printf(format, ...args)
     {
-        if (DEBUG || format >= Messages.LOG && format <= Messages.ERROR) {
+        let bitsMessage = 0;
+        if (typeof format == "number") {
+            bitsMessage = format;
+            format = args.shift();
+        }
+        if (DEBUG || bitsMessage >= Messages.LOG && bitsMessage <= Messages.ERROR) {
             let alert = false;
-            let bitsMessage = 0;
-            if (typeof format == "number") {
-                bitsMessage = format;
-                format = args.shift();
-                if (bitsMessage == Messages.ERROR) {
-                    alert = true;
-                    format = "Error: " + format;
-                } else if (bitsMessage == Messages.WARNING) {
-                    alert = true;
-                    format = "Warning: " + format;
-                } else if (bitsMessage == Messages.NOTICE) {
-                    alert = true;
-                }
+            if (bitsMessage == Messages.ERROR) {
+                alert = true;
+                format = "Error: " + format;
+            } else if (bitsMessage == Messages.WARNING) {
+                alert = true;
+                format = "Warning: " + format;
+            } else if (bitsMessage == Messages.NOTICE) {
+                alert = true;
             }
             let sMessage = Str.sprintf(format, ...args).trim();
             if (!alert) {
@@ -477,7 +499,7 @@ export default class Component {
      * We could store components as properties, using the component's ID, and change
      * this linear lookup into a property lookup, but some components may have no ID.
      *
-     * @param {string} [idRelated] of related component
+     * @param {string} [idRelated] of related component, if any
      * @returns {Array} of components
      */
     static getComponents(idRelated)
@@ -485,22 +507,17 @@ export default class Component {
         let i;
         let aComponents = [];
         /*
-         * getComponentByID(id, idRelated)
-         *
          * If idRelated is provided, we check it for a machine prefix, and use any
          * existing prefix to constrain matches to IDs with the same prefix, in order to
          * avoid matching components belonging to other machines.
          */
-        if (idRelated) {
-            if ((i = idRelated.indexOf('.')) > 0)
-                idRelated = idRelated.substr(0, i + 1);
-            else
-                idRelated = "";
+        if (idRelated && (i = idRelated.indexOf('.')) > 0) {
+            idRelated = idRelated.substr(0, i + 1);
         }
         let components = globals.pcjs['components'];
         for (i = 0; i < components.length; i++) {
             let component = components[i];
-            if (!idRelated || !component.id.indexOf(idRelated)) {
+            if (!idRelated || component.id.indexOf(idRelated) == 0) {
                 aComponents.push(component);
             }
         }
@@ -514,10 +531,10 @@ export default class Component {
      * this linear lookup into a property lookup, but some components may have no ID.
      *
      * @param {string} id of the desired component
-     * @param {string|boolean|null} [idRelated] of related component
+     * @param {string|boolean} [idRelated] of related component
      * @returns {Component|null}
      */
-    static getComponentByID(id, idRelated = null)
+    static getComponentByID(id, idRelated)
     {
         if (id !== undefined) {
             let i;

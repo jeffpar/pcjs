@@ -298,12 +298,12 @@ export default class Panel extends Component {
              * Employ the same gross onresize() hack for IE9/IE10 that we had to use for the Video canvas
              */
             if (Web.getUserAgent().indexOf("MSIE") >= 0) {
-                this.canvas.onresize = function(canvas, cx, cy) {
+                this.canvas['onresize'] = function(canvas, cx, cy) {
                     return function onResizeVideo() {
                         canvas.style.height = (((canvas.clientWidth * cy) / cx) | 0) + "px";
                     };
                 }(this.canvas, this.canvas.width, this.canvas.height);
-                this.canvas.onresize(null);
+                this.canvas['onresize'](null);
             }
 
             this.xMem = this.yMem = 0;

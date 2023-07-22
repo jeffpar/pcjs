@@ -134,17 +134,21 @@ let globals = {
     browser: (typeof window != "undefined")? {} : null,
     node: (typeof window != "undefined")? {} : global,
     window: (typeof window != "undefined")? window : global,
-    document: (typeof document != "undefined")? document : {}
+    document: (typeof document != "undefined")? document : {},
+    pcjs: {}
 };
 
-if (!globals.window['PCjs']) globals.window['PCjs'] = {};
+if (globals.window['PCjs']) {
+    globals.pcjs = globals.window['PCjs'];
+} else {
+    globals.window['PCjs'] = globals.pcjs;
+}
 
-globals.pcjs = globals.window['PCjs'];
+globals.window['LOCALDISKS'] = LOCALDISKS;
+
 if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
 if (!globals.pcjs['components']) globals.pcjs['components'] = [];
 if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
-
-globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 
@@ -2958,6 +2962,7 @@ class Web {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
+            Component.printf(Messages.LOG, "fetching: %s\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -2971,9 +2976,11 @@ class Web {
                 }
             })
             .then(resource => {
+                Component.printf(Messages.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
+                Component.printf(Messages.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
                 if (done) done(sURL, resource, nErrorCode);
             });
             return response;
@@ -3778,45 +3785,24 @@ class Web {
     /**
      * addPageEvent(sEvent, fn)
      *
-     * For 'onload', 'onunload', and 'onpageshow' events, most callers should NOT use this function, but
-     * instead use Web.onInit(), Web.onShow(), and Web.onExit(), respectively.
+     * For 'load', 'unload', and 'pageshow' events, most callers should NOT use this function, but instead use
+     * Web.onInit(), Web.onShow(), and Web.onExit(), respectively.
      *
      * The only components that should still use addPageEvent() are THIS component (see the bottom of this file)
-     * and components that need to capture other events (eg, the 'onresize' event in the Video component).
-     *
-     * This function creates a chain of callbacks, allowing multiple JavaScript modules to define handlers
-     * for the same event, which wouldn't be possible if everyone modified window['onload'], window['onunload'],
-     * etc, themselves.  However, that's less of a concern now, because assuming everyone else is now using
-     * onInit(), onExit(), etc, then there really IS only one component setting the window callback: this one.
-     *
-     * NOTE: It's risky to refer to obscure event handlers with "dot" names, because the Closure Compiler may
-     * erroneously replace them (eg, window.onpageshow is a good example).
+     * and components that need to capture other events (eg, the 'resize' event in the Video component).
      *
      * @param {string} sEvent
      * @param {function()} fn
      */
     static addPageEvent(sEvent, fn)
     {
-        let fnPrev = globals.window[sEvent];
-        if (typeof fnPrev !== 'function') {
-            globals.window[sEvent] = fn;
-        } else {
-            /*
-             * TODO: Determine whether there's any value in receiving/sending the Event object that the
-             * browser provides when it generates the original event.
-             */
-            globals.window[sEvent] = function queuedPageEvent()
-            {
-                if (fnPrev) fnPrev();
-                fn();
-            };
-        }
+        globals.window.addEventListener(sEvent, fn);
     }
 
     /**
      * onInit(fn)
      *
-     * Use this instead of setting window.onload.  Allows multiple JavaScript modules to define their own 'onload' event handler.
+     * Use this instead of setting window.onload.  Allows multiple JavaScript modules to define their own 'load' event handler.
      *
      * @param {function()} fn
      */
@@ -3830,7 +3816,7 @@ class Web {
      *
      * @param {function()} fn
      *
-     * Use this instead of setting window.onpageshow.  Allows multiple JavaScript modules to define their own 'onpageshow' event handler.
+     * Use this instead of setting window.onpageshow.  Allows multiple JavaScript modules to define their own 'pageshow' event handler.
      */
     static onShow(fn)
     {
@@ -3852,7 +3838,7 @@ class Web {
      *
      * @param {function()} fn
      *
-     * Use this instead of setting window.onunload.  Allows multiple JavaScript modules to define their own 'onunload' event handler.
+     * Use this instead of setting window.onunload.  Allows multiple JavaScript modules to define their own 'unload' event handler.
      */
     static onExit(fn)
     {
@@ -3894,20 +3880,60 @@ class Web {
         }
         Web.fPageEventsEnabled = fEnable;
     }
+
+    /**
+     * doPageInit()
+     */
+    static doPageInit()
+    {
+        Web.fPageLoaded = true;
+        Web.doPageEvent('init', true);
+    }
+
+    /**
+     * doPageShow()
+     */
+    static doPageShow()
+    {
+        Web.fPageShowed = true;
+        Web.doPageEvent('show', true);
+    }
+
+    /**
+     * doPageExit()
+     */
+    static doPageExit()
+    {
+        Web.doPageEvent('exit', true);
+    }
+
+    /**
+     * doPageReset()
+     */
+    static doPageReset()
+    {
+        if (Web.fPageLoaded) {
+            Web.fPageLoaded = false;
+            Web.fPageShowed = false;
+            /*
+             * TODO: Anything else?
+             */
+        }
+    }
 }
 
 Web.parmsURL = null;            // initialized on first call to parseURLParms()
 
 Web.aPageEventHandlers = {
-    'init': [],                 // list of 'onload' handlers
-    'show': [],                 // list of 'onpageshow' handlers
-    'exit': []                  // list of 'onunload' handlers (although we prefer to use 'onbeforeunload' if possible)
+    'init': [],                 // list of 'load' handlers
+    'show': [],                 // list of 'pageshow' handlers
+    'exit': []                  // list of 'unload' handlers (although we prefer to use 'beforeunload' if possible)
 };
 
 Web.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
 
-Web.fPageLoaded = false;        // set once the page's first 'onload' event has occurred
-Web.fPageShowed = false;        // set once the page's first 'onpageshow' event has occurred
+Web.fPageLoaded = false;        // set once the page's first 'load' event has occurred
+Web.fPageShowed = false;        // set once the page's first 'pageshow' event has occurred
 Web.fPageEventsEnabled = true;  // default is true, set to false (or true) by enablePageEvents()
 Web.fAdBlockerWarning = false;
 
@@ -3927,23 +3953,9 @@ Web.fLocalStorage = null;
  */
 Web.sLocalStorageTest = "PCjs.localStorage";
 
-Web.doPageInit = function doPageInit() {
-    Web.fPageLoaded = true;
-    Web.doPageEvent('init', true);
-};
-
-Web.doPageShow = function doPageShow() {
-    Web.fPageShowed = true;
-    Web.doPageEvent('show', true);
-};
-
-Web.doPageExit = function doPageExit() {
-    Web.doPageEvent('exit', true);
-};
-
-Web.addPageEvent('onload', Web.doPageInit);
-Web.addPageEvent('onpageshow', Web.doPageShow);
-Web.addPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera")? 'onunload' : 'onbeforeunload'), Web.doPageExit);
+Web.addPageEvent('load', Web.doPageInit);
+Web.addPageEvent('pageshow', Web.doPageShow);
+Web.addPageEvent(Web.isUserAgent("iOS")? 'pagehide' : (Web.isUserAgent("Opera")? 'unload' : 'beforeunload'), Web.doPageExit);
 
 /*
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override DEBUG with a "debug=false" embedded in
@@ -4129,6 +4141,28 @@ class Component {
     }
 
     /**
+     * Component.destroyMachine(idMachine)
+     *
+     * @param {string} idMachine
+     * @returns {boolean} true if the machine was destroyed, false if it didn't exist
+     */
+    static destroyMachine(idMachine)
+    {
+        if (globals.pcjs['machines'][idMachine]) {
+            let components = globals.pcjs['components'];
+            for (let i = 0; i < components.length; i++) {
+                let component = components[i];
+                if (component.id.indexOf(idMachine) == 0) {
+                    components.splice(i--, 1);
+                }
+            }
+            delete globals.pcjs['machines'][idMachine];
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Component.getMachines()
      *
      * @returns {Array.<string>}
@@ -4190,21 +4224,21 @@ class Component {
      */
     static printf(format, ...args)
     {
-        if (DEBUG || format >= Messages.LOG && format <= Messages.ERROR) {
+        let bitsMessage = 0;
+        if (typeof format == "number") {
+            bitsMessage = format;
+            format = args.shift();
+        }
+        if (DEBUG || bitsMessage >= Messages.LOG && bitsMessage <= Messages.ERROR) {
             let alert = false;
-            let bitsMessage = 0;
-            if (typeof format == "number") {
-                bitsMessage = format;
-                format = args.shift();
-                if (bitsMessage == Messages.ERROR) {
-                    alert = true;
-                    format = "Error: " + format;
-                } else if (bitsMessage == Messages.WARNING) {
-                    alert = true;
-                    format = "Warning: " + format;
-                } else if (bitsMessage == Messages.NOTICE) {
-                    alert = true;
-                }
+            if (bitsMessage == Messages.ERROR) {
+                alert = true;
+                format = "Error: " + format;
+            } else if (bitsMessage == Messages.WARNING) {
+                alert = true;
+                format = "Warning: " + format;
+            } else if (bitsMessage == Messages.NOTICE) {
+                alert = true;
             }
             let sMessage = Str.sprintf(format, ...args).trim();
             if (!alert) {
@@ -4434,7 +4468,7 @@ class Component {
      * We could store components as properties, using the component's ID, and change
      * this linear lookup into a property lookup, but some components may have no ID.
      *
-     * @param {string} [idRelated] of related component
+     * @param {string} [idRelated] of related component, if any
      * @returns {Array} of components
      */
     static getComponents(idRelated)
@@ -4442,22 +4476,17 @@ class Component {
         let i;
         let aComponents = [];
         /*
-         * getComponentByID(id, idRelated)
-         *
          * If idRelated is provided, we check it for a machine prefix, and use any
          * existing prefix to constrain matches to IDs with the same prefix, in order to
          * avoid matching components belonging to other machines.
          */
-        if (idRelated) {
-            if ((i = idRelated.indexOf('.')) > 0)
-                idRelated = idRelated.substr(0, i + 1);
-            else
-                idRelated = "";
+        if (idRelated && (i = idRelated.indexOf('.')) > 0) {
+            idRelated = idRelated.substr(0, i + 1);
         }
         let components = globals.pcjs['components'];
         for (i = 0; i < components.length; i++) {
             let component = components[i];
-            if (!idRelated || !component.id.indexOf(idRelated)) {
+            if (!idRelated || component.id.indexOf(idRelated) == 0) {
                 aComponents.push(component);
             }
         }
@@ -4471,10 +4500,10 @@ class Component {
      * this linear lookup into a property lookup, but some components may have no ID.
      *
      * @param {string} id of the desired component
-     * @param {string|boolean|null} [idRelated] of related component
+     * @param {string|boolean} [idRelated] of related component
      * @returns {Component|null}
      */
-    static getComponentByID(id, idRelated = null)
+    static getComponentByID(id, idRelated)
     {
         if (id !== undefined) {
             let i;
@@ -9239,12 +9268,12 @@ class Panel extends Component {
              * Employ the same gross onresize() hack for IE9/IE10 that we had to use for the Video canvas
              */
             if (Web.getUserAgent().indexOf("MSIE") >= 0) {
-                this.canvas.onresize = function(canvas, cx, cy) {
+                this.canvas['onresize'] = function(canvas, cx, cy) {
                     return function onResizeVideo() {
                         canvas.style.height = (((canvas.clientWidth * cy) / cx) | 0) + "px";
                     };
                 }(this.canvas, this.canvas.width, this.canvas.height);
-                this.canvas.onresize(null);
+                this.canvas['onresize'](null);
             }
 
             this.xMem = this.yMem = 0;
@@ -11277,7 +11306,7 @@ class BusX86 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortInputNotify[port] !== undefined) {
-                    Component.warning("Input port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("input port " + Str.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
@@ -11419,7 +11448,7 @@ class BusX86 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortOutputNotify[port] !== undefined) {
-                    Component.warning("Output port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("output port " + Str.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];
@@ -58051,12 +58080,12 @@ class VideoX86 extends Component {
              * browsers don't actually support an 'onresize' handler on anything but the window object.
              */
             if (Web.getUserAgent().indexOf("MSIE") >= 0) {
-                element.onresize = function(eParent, eChild, cx, cy) {
+                element['onresize'] = function(eParent, eChild, cx, cy) {
                     return function onResizeVideo() {
                         eChild.style.height = (((eParent.clientWidth * cy) / cx) | 0) + "px";
                     };
                 }(element, canvas, parmsVideo['screenWidth'], parmsVideo['screenHeight']);
-                element.onresize(null);
+                element['onresize'](null);
             }
 
             /*
@@ -58072,7 +58101,7 @@ class VideoX86 extends Component {
              * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
              */
             if (aspect && aspect >= 0.3 && aspect <= 3.33) {
-                Web.addPageEvent('onresize', function(eParent, eChild, aspectRatio) {
+                Web.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
                     return function onResizeWindow() {
                         /*
                          * Since aspectRatio is the target width/height, we have:
@@ -58165,7 +58194,7 @@ class VideoX86 extends Component {
                     textarea.style.fontSize = ((textarea.clientWidth * 0.01875)|0) + "px";
                 };
                 onResizeTextArea();
-                Web.addPageEvent('onresize', onResizeTextArea);
+                Web.addPageEvent('resize', onResizeTextArea);
             }
 
             /*

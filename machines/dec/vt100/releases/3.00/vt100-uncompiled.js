@@ -2391,35 +2391,16 @@ class WebIO extends StdIO {
     }
 
     /**
-     * onPageEvent(sName, fn)
-     *
-     * This function creates a chain of callbacks, allowing multiple JavaScript modules to define handlers
-     * for the same event, which wouldn't be possible if everyone modified window['onload'], window['onunload'],
-     * etc, themselves.
-     *
-     * NOTE: It's risky to refer to obscure event handlers with "dot" names, because the Closure Compiler may
-     * erroneously replace them (eg, window.onpageshow is a good example).
+     * onPageEvent(sEvent, fn)
      *
      * @this {WebIO}
-     * @param {string} sFunc
+     * @param {string} sEvent
      * @param {function()} fn
      */
-    onPageEvent(sFunc, fn)
+    onPageEvent(sEvent, fn)
     {
         if (window) {
-            let fnPrev = window[sFunc];
-            if (typeof fnPrev !== 'function') {
-                window[sFunc] = fn;
-            } else {
-                /**
-                 * TODO: Determine whether there's any value in receiving/sending the Event object that the
-                 * browser provides when it generates the original event.
-                 */
-                window[sFunc] = function onWindowEvent() {
-                    if (fnPrev) fnPrev();
-                    fn();
-                };
-            }
+            window.addEventListener(sEvent, fn);
         }
     }
 
@@ -6409,22 +6390,22 @@ class Monitor extends Device {
          * IE11 works without this hack, so we take advantage of the fact that IE11 doesn't identify as "MSIE".
          *
          * The other reason it's good to keep this particular hack limited to IE9/IE10 is that most other
-         * browsers don't actually support an 'onresize' handler on anything but the window object.
+         * browsers don't actually support an 'resize' handler on anything but the window object.
          */
         if (this.isUserAgent("MSIE")) {
-            this.monitor.onresize = function(parentElement, childElement, cx, cy) {
+            this.monitor['onresize'] = function(parentElement, childElement, cx, cy) {
                 return function onResizeScreen() {
                     childElement.style.height = (((parentElement.clientWidth * cy) / cx) | 0) + "px";
                 };
             }(this.monitor, canvas, this.config['monitorWidth'], this.config['monitorHeight']);
-            this.monitor.onresize();
+            this.monitor['onresize']();
         }
 
         /**
          * The following is a related hack that allows the user to force the monitor to use a particular aspect
          * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
          * until we figure out a better UI.  And note that we use our onPageEvent() helper function to make sure
-         * we don't trample any other 'onresize' handler(s) attached to the window object.
+         * we don't trample any other 'resize' handler(s) attached to the window object.
          */
         let aspect = +(this.config['aspect'] || this.getURLParms()['aspect']);
 
@@ -6433,7 +6414,7 @@ class Monitor extends Device {
          * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
          */
         if (aspect && aspect >= 0.3 && aspect <= 3.33) {
-            this.onPageEvent('onresize', function(parentElement, childElement, aspectRatio) {
+            this.onPageEvent('resize', function(parentElement, childElement, aspectRatio) {
                 return function onResizeWindow() {
                     /**
                      * Since aspectRatio is the target width/height, we have:
