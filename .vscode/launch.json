@@ -185,6 +185,18 @@
       }
     },
     {
+      "name": "DEC VT100 Terminal connected to IBM PC AT",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/dec/vt100/5170/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "hardware",
+        "order": 10
+      }
+    },
+    {
       "name": "DEC VT100 Terminal connected to IBM PC AT [Debugger]",
       "type": "chrome",
       "request": "launch",
@@ -309,6 +321,18 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx80/exerciser/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "hardware",
+        "order": 10
+      }
+    },
+    {
+      "name": "Juku E5104",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx80/juku/",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,

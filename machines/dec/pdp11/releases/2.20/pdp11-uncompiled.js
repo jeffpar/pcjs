@@ -138,7 +138,11 @@ let globals = {
     pcjs: { 'machines': {}, 'components': [], 'commands': {} }
 };
 
-globals.window['PCjs'] = globals.window['PCjs'] || globals.pcjs;
+if (globals.window['PCjs']) {
+    globals.pcjs = globals.window['PCjs'];
+} else {
+    globals.window['PCjs'] = globals.pcjs;
+}
 
 globals.window['LOCALDISKS'] = LOCALDISKS;
 
@@ -3424,7 +3428,9 @@ class Web {
      */
     static addPageEvent(sEvent, fn)
     {
-        globals.window.addEventListener(sEvent, fn);
+        if (globals.window.addEventListener) {
+            globals.window.addEventListener(sEvent, fn);
+        }
     }
 
     /**
