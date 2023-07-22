@@ -3424,7 +3424,9 @@ class Web {
      */
     static addPageEvent(sEvent, fn)
     {
-        globals.window.addEventListener(sEvent, fn);
+        if (globals.window.addEventListener) {
+            globals.window.addEventListener(sEvent, fn);
+        }
     }
 
     /**
