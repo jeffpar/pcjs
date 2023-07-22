@@ -140,7 +140,7 @@ export default class ComputerX80 extends Component {
          * Enumerate all Video components for future updateVideo() calls.
          */
         this.aVideo = [];
-        for (var video = null; (video = this.getMachineComponent("Video", video));) {
+        for (var video = false; (video = this.getMachineComponent("Video", video));) {
             this.aVideo.push(video);
         }
 
