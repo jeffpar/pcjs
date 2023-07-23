@@ -3,6 +3,7 @@
 <machine id="juku" type="pcx80" border="1" pos="center" background="default">
 	<name pos="center">Juku E5104</name>
 	<computer id="computer" busWidth="18"/>
+	<chipset id="chipset" model="Juku"/>
 	<cpu id="cpu" model="8080" cycles="2000000"/>
 	<ram id="ram0" addr="0x04000" size="0x0C000"/>
 	<rom id="rom0" addr="0x00000" size="0x02000" file="/machines/pcx80/juku/rom/e5104/jukurom0.json5"/>

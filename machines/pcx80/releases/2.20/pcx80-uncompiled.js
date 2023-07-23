@@ -12590,11 +12590,13 @@ class ChipSetX80 extends Component {
     save()
     {
         let state = new State(this);
-        switch(this.config.MODEL) {
-        case ChipSetX80.SI1978.MODEL:
+        switch(this.config.VERSION) {
+        case ChipSetX80.JUKU.VERSION:
+            break;
+        case ChipSetX80.SI1978.VERSION:
             state.set(0, [this.bStatus0, this.bStatus1, this.bStatus2, this.wShiftData, this.bShiftCount, this.bSound1, this.bSound2]);
             break;
-        case ChipSetX80.VT100.MODEL:
+        case ChipSetX80.VT100.VERSION:
             state.set(0, [this.bBrightness, this.bFlags]);
             state.set(1, [this.bDC011Cols, this.bDC011Rate]);
             state.set(2, [this.bDC012Scroll, this.bDC012Blink, this.bDC012Reverse, this.bDC012Attr]);
@@ -12617,8 +12619,10 @@ class ChipSetX80 extends Component {
     {
         let a;
         if (data && (a = data[0]) && a.length) {
-            switch(this.config.MODEL) {
-            case ChipSetX80.SI1978.MODEL:
+            switch(this.config.VERSION) {
+            case ChipSetX80.JUKU.VERSION:
+                return false;
+            case ChipSetX80.SI1978.VERSION:
                 this.bStatus0      = a[0];
                 this.bStatus1      = a[1];
                 this.bStatus2      = a[2];
@@ -12627,7 +12631,7 @@ class ChipSetX80 extends Component {
                 this.bSound1       = a[5];
                 this.bSound2       = a[6];
                 return true;
-            case ChipSetX80.VT100.MODEL:
+            case ChipSetX80.VT100.VERSION:
                 this.bBrightness   = a[0];
                 this.bFlags        = a[1];
                 a = data[1];
@@ -13114,6 +13118,10 @@ class ChipSetX80 extends Component {
     }
 }
 
+ChipSetX80.JUKU = {
+    VERSION:        5104
+};
+
 /*
  * NOTE: The STATUS1 port could have been handled entirely by the Keyboard component, but it was just as easy
  * to create a simple ChipSet interface, updateStatus1(), that the Keyboard calls whenever it wants to simulate a
@@ -13121,7 +13129,7 @@ class ChipSetX80 extends Component {
  * doesn't have a keyboard.
  */
 ChipSetX80.SI1978 = {
-    MODEL:          1978.1,
+    VERSION:        1978.1,
     STATUS0: {                          // NOTE: STATUS0 not used by the SI1978 ROMs; refer to STATUS1 instead
         PORT:       0,
         DIP4:       0x01,               // self-test request at power up?
@@ -13218,7 +13226,7 @@ ChipSetX80.SI1978 = {
  * so it's defined there instead of here.
  */
 ChipSetX80.VT100 = {
-    MODEL:          100.0,
+    VERSION:        100.0,
     FLAGS: {
         PORT:       0x42,               // read-only
         UART_XMIT:  0x01,               // PUSART transmit buffer empty if SET
@@ -13363,6 +13371,7 @@ ChipSetX80.VT100 = {
  * Supported models and their configurations
  */
 ChipSetX80.MODELS = {
+    "Juku":         ChipSetX80.JUKU,
     "SI1978":       ChipSetX80.SI1978,
     "VT100":        ChipSetX80.VT100
 };
