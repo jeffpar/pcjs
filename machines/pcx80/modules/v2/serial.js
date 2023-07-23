@@ -375,7 +375,7 @@ export default class SerialPortX80 extends Component {
                     var sSourceID = Str.trim(asParts[0]);
                     if (sSourceID != this.idComponent) return;  // this connection string is intended for another instance
                     var sTargetID = Str.trim(asParts[1]);
-                    this.connection = Component.getComponentByID(sTargetID);
+                    this.connection = Component.getComponentByID(sTargetID, false);
                     if (this.connection) {
                         var exports = this.connection['exports'];
                         if (exports) {
