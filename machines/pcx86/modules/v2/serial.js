@@ -378,7 +378,7 @@ export default class SerialPort extends Component {
                     let sSourceID = Str.trim(asParts[0]);
                     if (sSourceID != this.idComponent) return;  // this connection string is intended for another instance
                     let sTargetID = Str.trim(asParts[1]);
-                    this.connection = Component.getComponentByID(sTargetID);
+                    this.connection = Component.getComponentByID(sTargetID, false);
                     if (this.connection) {
                         let exports = this.connection['exports'];
                         if (exports) {

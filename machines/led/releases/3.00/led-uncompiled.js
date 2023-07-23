@@ -159,10 +159,8 @@ Defines.REPOSITORY      = REPOSITORY;
 Defines.RS232           = RS232;
 Defines.VERSION         = VERSION;
 
-if (typeof window != "undefined") {
-    if (!window['PCjs']) window['PCjs'] = {};
-    if (!window['PCjs']['machines']) window['PCjs']['machines'] = {};
-    if (!window['PCjs']['components']) window['PCjs']['components'] = [];
+if (typeof window != "undefined" && !window['PCjs']) {
+    window['PCjs'] = {'machines': {}, 'components': [], 'commands': {}};
 }
 
 /**
