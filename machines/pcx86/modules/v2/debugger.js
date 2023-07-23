@@ -13,7 +13,7 @@ import Messages from "./messages.js";
 import SegX86 from "./segx86.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
-import DbgLib from "../../../modules/v2/debugger.js";
+import DbgLib from "../../../modules/v2/dbglib.js";
 import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";

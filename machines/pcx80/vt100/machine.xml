@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/pcx80/xsl/machine.xsl"?>
 <machine id="vt100" type="pcx80" border="1" pos="center" background="default">
-	<name pos="center">VT100 Terminal</name>
+	<name>VT100 Terminal</name>
 	<computer id="computer" busWidth="16"/>
 	<rom id="rom" addr="0x0000" size="0x2000" file="/machines/dec/vt100/rom/VT100.json5"/>
 	<ram id="ram" addr="0x2000" size="0x0C00"/>

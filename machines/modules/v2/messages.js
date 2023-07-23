@@ -46,6 +46,7 @@ const Messages = {
  * something to be aware of).
  */
 Messages.Categories = {
+    "log":      Messages.LOG,
     "warn":     Messages.WARNING,
     /*
      * Now we turn to message actions rather than message types; for example, setting "halt"

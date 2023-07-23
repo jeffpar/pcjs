@@ -61,18 +61,18 @@ export default class RAMx80 extends Component {
         this.sFileName = Str.getBaseName(this.sFilePath);
 
         if (this.sFilePath) {
-            var sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
+            let sFileURL = this.sFilePath;
+            this.printf(Messages.DEBUG + Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side converter to return the file in a JSON-compatible format.
              */
-            var sFileExt = Str.getExtension(this.sFileName);
+            let sFileExt = Str.getExtension(this.sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
                 sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
-            var ram = this;
+            let ram = this;
             Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 ram.doneLoad(sURL, sResponse, nErrorCode);
             });
@@ -151,7 +151,7 @@ export default class RAMx80 extends Component {
 
         Component.addMachineResource(this.idMachine, sURL, sData);
 
-        var resource = Web.parseMemoryResource(sURL, sData);
+        let resource = Web.parseMemoryResource(sURL, sData);
         if (resource) {
             this.abInit = resource.aBytes;
             this.aSymbols = resource.aSymbols;
@@ -189,9 +189,9 @@ export default class RAMx80 extends Component {
                  */
                 if (!this.abInit || !this.bus) return;
 
-                var addr = this.addrRAM;
+                let addr = this.addrRAM;
                 if (this.addrLoad !== null) addr = this.addrLoad;
-                for (var i = 0; i < this.abInit.length; i++) {
+                for (let i = 0; i < this.abInit.length; i++) {
                     this.bus.setByteDirect(addr + i, this.abInit[i]);
                 }
 
@@ -203,10 +203,9 @@ export default class RAMx80 extends Component {
                      * then telling the CPU to call us whenever a HLT occurs, so we can check PC for one of these addresses.
                      */
                     if (this.addrExec == RAMx80.CPM.INIT) {
-                        for (i = 0; i < RAMx80.CPM.VECTORS.length; i++) {
+                        for (let i = 0; i < RAMx80.CPM.VECTORS.length; i++) {
                             this.bus.setByteDirect(RAMx80.CPM.VECTORS[i], CPUDefX80.OPCODE.HLT);
                         }
-
                         this.cpu.addHaltCheck(function(rom) {
                             return function(addr) {
                                 return rom.checkCPMVector(addr)
@@ -246,11 +245,11 @@ export default class RAMx80 extends Component {
      */
     checkCPMVector(addr)
     {
-        var i = RAMx80.CPM.VECTORS.indexOf(addr);
+        let i = RAMx80.CPM.VECTORS.indexOf(addr);
         if (i >= 0) {
-            var fCPM = false;
-            var cpu = this.cpu;
-            var dbg = this.dbg;
+            let fCPM = false;
+            let cpu = this.cpu;
+            let dbg = this.dbg;
             if (addr == RAMx80.CPM.BDOS.VECTOR) {
                 fCPM = true;
                 switch(cpu.regC) {
@@ -300,11 +299,11 @@ export default class RAMx80 extends Component {
      */
     getCPMString(addr, chEnd)
     {
-        var s = "";
-        var cchMax = 255;
-        var bEnd = chEnd && chEnd.length && chEnd.charCodeAt(0) || chEnd || 0;
+        let s = "";
+        let cchMax = 255;
+        let bEnd = chEnd && chEnd.length && chEnd.charCodeAt(0) || chEnd || 0;
         while (cchMax--) {
-            var b = this.cpu.getByte(addr++);
+            let b = this.cpu.getByte(addr++);
             if (b == bEnd) break;
             s += String.fromCharCode(b);
         }
@@ -332,11 +331,11 @@ export default class RAMx80 extends Component {
      */
     static init()
     {
-        var aeRAM = Component.getElementsByClass(APPCLASS, "ram");
-        for (var iRAM = 0; iRAM < aeRAM.length; iRAM++) {
-            var eRAM = aeRAM[iRAM];
-            var parmsRAM = Component.getComponentParms(eRAM);
-            var ram = new RAMx80(parmsRAM);
+        let aeRAM = Component.getElementsByClass(APPCLASS, "ram");
+        for (let iRAM = 0; iRAM < aeRAM.length; iRAM++) {
+            let eRAM = aeRAM[iRAM];
+            let parmsRAM = Component.getComponentParms(eRAM);
+            let ram = new RAMx80(parmsRAM);
             Component.bindComponentControls(ram, eRAM, APPCLASS);
         }
     }

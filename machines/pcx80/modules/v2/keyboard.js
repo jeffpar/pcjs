@@ -37,9 +37,9 @@ export default class KeyboardX80 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, Messages.KEYBOARD);
+        super("Keyboard", parmsKbd, Messages.KBD);
 
-        var model = parmsKbd['model'];
+        let model = parmsKbd['model'];
 
         if (model && !KeyboardX80.MODELS[model]) {
             Component.printf(Messages.NOTICE, "Unrecognized KeyboardX80 model: %s\n", model);
@@ -82,8 +82,8 @@ export default class KeyboardX80 extends Component {
          * still be enabled (there's currently no way to configure the Video component to not bind its screen,
          * but we could certainly add one if the need ever arose).
          */
-        var kbd = this;
-        var id = sHTMLType + '-' + sBinding;
+        let kbd = this;
+        let id = sHTMLType + '-' + sBinding;
 
         if (this.bindings[id] === undefined) {
 
@@ -176,7 +176,7 @@ export default class KeyboardX80 extends Component {
                              * to update the state of these on-screen controls, too (ie, not just when the controls are
                              * clicked).
                              */
-                            var fDown = true, bit = 0;
+                            let fDown = true, bit = 0;
                             if (keyCode == Keys.KEYCODE.CTRL) {
                                 bit = KeyboardX80.STATE.CTRL;
                             }
@@ -248,7 +248,7 @@ export default class KeyboardX80 extends Component {
         this.cpu = cpu;
         this.dbg = dbg;     // NOTE: The "dbg" property must be set for the message functions to work
 
-        var kbd = this;
+        let kbd = this;
         this.timerReleaseKeys = this.cpu.addTimer(this.id, function() {
             kbd.checkSoftKeysToRelease();
         });
@@ -335,7 +335,7 @@ export default class KeyboardX80 extends Component {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         switch(this.config.MODEL) {
         case KeyboardX80.SI1978.MODEL:
             break;
@@ -357,7 +357,7 @@ export default class KeyboardX80 extends Component {
      */
     restore(data)
     {
-        var a;
+        let a;
         if (data && (a = data[0]) && a.length) {
             switch(this.config.MODEL) {
             case KeyboardX80.SI1978.MODEL:
@@ -399,18 +399,18 @@ export default class KeyboardX80 extends Component {
      */
     updateLEDs(bLEDs)
     {
-        var id, control;
+        let id, control;
         if (bLEDs != null) {
             this.bLEDs = bLEDs;
         } else {
             bLEDs = this.bLEDs;
         }
-        for (var sBinding in this.config.LEDCODES) {
+        for (let sBinding in this.config.LEDCODES) {
             id = "led-" + sBinding;
             control = this.bindings[id];
             if (control) {
-                var bitLED = this.config.LEDCODES[sBinding];
-                var fOn = !!(bLEDs & bitLED);
+                let bitLED = this.config.LEDCODES[sBinding];
+                let fOn = !!(bLEDs & bitLED);
                 if (bitLED & (bitLED-1)) {
                     fOn = !(bLEDs & ~bitLED);
                 }
@@ -435,7 +435,7 @@ export default class KeyboardX80 extends Component {
      */
     checkModifierKeys(keyCode, fDown, fRight)
     {
-        var bit = 0;
+        let bit = 0;
         switch(keyCode) {
         case Keys.KEYCODE.SHIFT:
             bit = fRight? KeyboardX80.STATE.RSHIFT : KeyboardX80.STATE.SHIFT;
@@ -487,7 +487,7 @@ export default class KeyboardX80 extends Component {
         if (this.config.KEYMAP[keyCode]) {
             return keyCode;
         }
-        for (var sSoftCode in this.config.SOFTCODES) {
+        for (let sSoftCode in this.config.SOFTCODES) {
             if (this.config.SOFTCODES[sSoftCode] === keyCode) {
                 return sSoftCode;
             }
@@ -505,10 +505,10 @@ export default class KeyboardX80 extends Component {
      */
     onKeyDown(event, fDown)
     {
-        var fPass = true;
-        var keyCode = event.keyCode;
+        let fPass = true;
+        let keyCode = event.keyCode;
 
-        this.printf(Messages.KEYS, "onKey%s(%d)\n", (fDown? "Down" : "Up"), keyCode);
+        this.printf(Messages.KEY, "onKey%s(%d)\n", (fDown? "Down" : "Up"), keyCode);
 
         /*
          * A note about Firefox: it uses different keyCodes for certain keys; there's a logic to the differences
@@ -524,7 +524,7 @@ export default class KeyboardX80 extends Component {
          */
         fDown = this.checkModifierKeys(keyCode, fDown, event.location == Keys.LOCATION.RIGHT);
 
-        var softCode = this.getSoftCode(keyCode);
+        let softCode = this.getSoftCode(keyCode);
         if (softCode) {
             /*
              * Key combinations involving the "meta" key (ie, the Windows or Command key) are meaningless to
@@ -549,7 +549,7 @@ export default class KeyboardX80 extends Component {
                  * the risk of the remapped key being stuck "down".  Hence the new REMAPPED bit, which should
                  * remain set (as a "proxy" for the ALT bit) as long as a remapped key is down.
                  */
-                var fRemapped = false;
+                let fRemapped = false;
                 if (this.bitsState & (KeyboardX80.STATE.ALTS | KeyboardX80.STATE.REMAPPED)) {
                     if (softCode == Keys.KEYCODE.CR) {
                         softCode = Keys.KEYCODE.F7;
@@ -584,7 +584,7 @@ export default class KeyboardX80 extends Component {
                 }
             }
         }
-        this.printf(Messages.KEYS, "onKey%s(%d): softCode=%s, pass=%b\n", (fDown? "Down" : "Up"), keyCode, softCode, fPass);
+        this.printf(Messages.KEY, "onKey%s(%d): softCode=%s, pass=%b\n", (fDown? "Down" : "Up"), keyCode, softCode, fPass);
         return fPass;
     }
 
@@ -608,7 +608,7 @@ export default class KeyboardX80 extends Component {
          * not a number; for example; if the colon key is pressed, 'key' will be ":", whereas 'charCode' and 'which'
          * will be 58.
          */
-        var charCode = event.keyCode || event.charCode;
+        let charCode = event.keyCode || event.charCode;
 
         if (charCode >= Keys.ASCII.A && charCode <= Keys.ASCII.Z) {
             if (!(this.bitsState & (KeyboardX80.STATE.SHIFTS | KeyboardX80.STATE.CAPS_LOCK))) {
@@ -624,7 +624,7 @@ export default class KeyboardX80 extends Component {
                 this.updateLEDs();
             }
         }
-        this.printf(Messages.KEYS, "onKeyPress(%d)\n", charCode);
+        this.printf(Messages.KEY, "onKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -638,7 +638,7 @@ export default class KeyboardX80 extends Component {
      */
     oniOSKeyDown(event, fDown)
     {
-        var fPass = true;
+        let fPass = true;
         /*
          * Because keydown/keyup events on iOS are inherently "fake", they can be delivered so quickly that
          * if we generated matching down/up events, then the emulated machine might not see the key transition.
@@ -649,8 +649,8 @@ export default class KeyboardX80 extends Component {
          * keys with fAutoRelease set to true.
          */
         if (fDown) {
-            var keyCode = event.keyCode;
-            var bMapping = this.config.KEYMAP[keyCode];
+            let keyCode = event.keyCode;
+            let bMapping = this.config.KEYMAP[keyCode];
             if (bMapping) {
                 /*
                  * If this is a mappable key, but the mapping isn't in the CHARMAP table, then we have to process
@@ -659,7 +659,7 @@ export default class KeyboardX80 extends Component {
                 if (!this.indexOfCharMap(bMapping)) {
                     fPass = this.onSoftKeyDown(keyCode, fDown, true);
                     if (event.preventDefault) event.preventDefault();
-                    this.printf(Messages.KEYS, "oniOSKey%s(%d): pass=%b\n", (fDown ? "Down" : "Up"), keyCode, fPass);
+                    this.printf(Messages.KEY, "oniOSKey%s(%d): pass=%b\n", (fDown ? "Down" : "Up"), keyCode, fPass);
                 }
             }
         }
@@ -684,10 +684,10 @@ export default class KeyboardX80 extends Component {
          * not a number; for example; if the colon key is pressed, 'key' will be ":", whereas 'charCode' and 'which'
          * will be 58.
          */
-        var charCode = event.keyCode || event.charCode;
+        let charCode = event.keyCode || event.charCode;
 
-        var fShifted = false;
-        var bMapping = this.config.CHARMAP[charCode];
+        let fShifted = false;
+        let bMapping = this.config.CHARMAP[charCode];
         if (bMapping) {
             if (bMapping & 0x80) {
                 bMapping &= 0x7f;
@@ -698,7 +698,7 @@ export default class KeyboardX80 extends Component {
              * in the KEYMAP table to find a corresponding keyCode, and that's what we'll use to simulate the key
              * press/release.
              */
-            var softCode = this.indexOfKeyMap(bMapping);
+            let softCode = this.indexOfKeyMap(bMapping);
             if (softCode) {
                 if (!fShifted) {
                     this.onSoftKeyDown(Keys.KEYCODE.SHIFT, false);
@@ -708,7 +708,7 @@ export default class KeyboardX80 extends Component {
                 this.onSoftKeyDown(softCode, true, true);
             }
         }
-        this.printf(Messages.KEYS, "oniOSKeyPress(%d)\n", charCode);
+        this.printf(Messages.KEY, "oniOSKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -737,7 +737,7 @@ export default class KeyboardX80 extends Component {
         if (this.serial && this.serial.sendData) {
             if (event.stopPropagation) event.stopPropagation();
             if (event.preventDefault) event.preventDefault();
-            var clipboardData = event.clipboardData || globals.window.clipboardData;
+            let clipboardData = event.clipboardData || globals.window.clipboardData;
             if (clipboardData) {
                 this.serial.transmitData(clipboardData.getData('Text'));
                 return false;
@@ -755,7 +755,7 @@ export default class KeyboardX80 extends Component {
      */
     indexOfKeyMap(bMapping)
     {
-        for (var keyCode in this.config.KEYMAP) {
+        for (let keyCode in this.config.KEYMAP) {
             if (this.config.KEYMAP[keyCode] == bMapping) return +keyCode;
         }
         return 0;
@@ -770,7 +770,7 @@ export default class KeyboardX80 extends Component {
      */
     indexOfCharMap(bMapping)
     {
-        for (var charCode in this.config.CHARMAP) {
+        for (let charCode in this.config.CHARMAP) {
             if (this.config.CHARMAP[charCode] == bMapping) return +charCode;
         }
         return 0;
@@ -785,7 +785,7 @@ export default class KeyboardX80 extends Component {
      */
     indexOfSoftKey(softCode)
     {
-        for (var i = 0; i < this.aKeysActive.length; i++) {
+        for (let i = 0; i < this.aKeysActive.length; i++) {
             if (this.aKeysActive[i].softCode == softCode) return i;
         }
         return -1;
@@ -802,7 +802,7 @@ export default class KeyboardX80 extends Component {
      */
     onSoftKeyDown(softCode, fDown, fAutoRelease)
     {
-        var i = this.indexOfSoftKey(softCode);
+        let i = this.indexOfSoftKey(softCode);
         if (fDown) {
             // this.printf("%s down\n", softCode);
             if (i < 0) {
@@ -819,9 +819,9 @@ export default class KeyboardX80 extends Component {
         } else if (i >= 0) {
             // this.printf("%s up\n", softCode);
             if (!this.aKeysActive[i].fAutoRelease) {
-                var msDown = this.aKeysActive[i].msDown;
+                let msDown = this.aKeysActive[i].msDown;
                 if (msDown) {
-                    var msElapsed = Date.now() - msDown;
+                    let msElapsed = Date.now() - msDown;
                     if (msElapsed < KeyboardX80.MINPRESSTIME) {
                         // this.printf("%s released after only %dms\n", softCode, msElapsed);
                         this.aKeysActive[i].fAutoRelease = true;
@@ -836,7 +836,7 @@ export default class KeyboardX80 extends Component {
         }
 
         if (this.chipset) {
-            var bit = 0;
+            let bit = 0;
             switch(softCode) {
             case '1p':
                 bit = ChipSetX80.SI1978.STATUS1.P1;
@@ -871,14 +871,14 @@ export default class KeyboardX80 extends Component {
      */
     checkSoftKeysToRelease()
     {
-        var i = 0;
-        var msDelayMin = -1;
+        let i = 0;
+        let msDelayMin = -1;
         while (i < this.aKeysActive.length) {
             if (this.aKeysActive[i].fAutoRelease) {
-                var softCode = this.aKeysActive[i].softCode;
-                var msDown = this.aKeysActive[i].msDown;
-                var msElapsed = Date.now() - msDown;
-                var msDelay = KeyboardX80.MINPRESSTIME - msElapsed;
+                let softCode = this.aKeysActive[i].softCode;
+                let msDown = this.aKeysActive[i].msDown;
+                let msElapsed = Date.now() - msDown;
+                let msDelay = KeyboardX80.MINPRESSTIME - msElapsed;
                 if (msDelay > 0) {
                     if (msDelayMin < 0 || msDelayMin > msDelay) {
                         msDelayMin = msDelay;
@@ -972,10 +972,10 @@ export default class KeyboardX80 extends Component {
      */
     inVT100UARTAddress(port, addrFrom)
     {
-        var b = this.bVT100Address;
+        let b = this.bVT100Address;
         if (this.iKeyNext >= 0) {
             if (this.iKeyNext < this.aKeysActive.length) {
-                var key = this.aKeysActive[this.iKeyNext];
+                let key = this.aKeysActive[this.iKeyNext];
                 if (!MAXDEBUG) {
                     this.iKeyNext++;
                 } else {
@@ -1036,11 +1036,11 @@ export default class KeyboardX80 extends Component {
      */
     static init()
     {
-        var aeKbd = Component.getElementsByClass(APPCLASS, "keyboard");
-        for (var iKbd = 0; iKbd < aeKbd.length; iKbd++) {
-            var eKbd = aeKbd[iKbd];
-            var parmsKbd = Component.getComponentParms(eKbd);
-            var kbd = new KeyboardX80(parmsKbd);
+        let aeKbd = Component.getElementsByClass(APPCLASS, "keyboard");
+        for (let iKbd = 0; iKbd < aeKbd.length; iKbd++) {
+            let eKbd = aeKbd[iKbd];
+            let parmsKbd = Component.getComponentParms(eKbd);
+            let kbd = new KeyboardX80(parmsKbd);
             Component.bindComponentControls(kbd, eKbd, APPCLASS);
         }
     }

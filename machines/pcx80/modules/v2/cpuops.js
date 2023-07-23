@@ -94,7 +94,7 @@ CPUDefX80.opMVIB = function()
  */
 CPUDefX80.opRLC = function()
 {
-    var carry = this.regA << 1;
+    let carry = this.regA << 1;
     this.regA = (carry & 0xff) | (carry >> 8);
     this.updateCF(carry & 0x100);
     this.nStepCycles -= 4;
@@ -107,7 +107,7 @@ CPUDefX80.opRLC = function()
  */
 CPUDefX80.opDADB = function()
 {
-    var w;
+    let w;
     this.setHL(w = this.getHL() + this.getBC());
     this.updateCF((w >> 8) & 0x100);
     this.nStepCycles -= 10;
@@ -175,7 +175,7 @@ CPUDefX80.opMVIC = function()
  */
 CPUDefX80.opRRC = function()
 {
-    var carry = (this.regA << 8) & 0x100;
+    let carry = (this.regA << 8) & 0x100;
     this.regA = (carry | this.regA) >> 1;
     this.updateCF(carry);
     this.nStepCycles -= 4;
@@ -254,7 +254,7 @@ CPUDefX80.opMVID = function()
  */
 CPUDefX80.opRAL = function()
 {
-    var carry = this.regA << 1;
+    let carry = this.regA << 1;
     this.regA = (carry & 0xff) | this.getCF();
     this.updateCF(carry & 0x100);
     this.nStepCycles -= 4;
@@ -267,7 +267,7 @@ CPUDefX80.opRAL = function()
  */
 CPUDefX80.opDADD = function()
 {
-    var w;
+    let w;
     this.setHL(w = this.getHL() + this.getDE());
     this.updateCF((w >> 8) & 0x100);
     this.nStepCycles -= 10;
@@ -335,7 +335,7 @@ CPUDefX80.opMVIE = function()
  */
 CPUDefX80.opRAR = function()
 {
-    var carry = (this.regA << 8);
+    let carry = (this.regA << 8);
     this.regA = ((this.getCF() << 8) | this.regA) >> 1;
     this.updateCF(carry & 0x100);
     this.nStepCycles -= 4;
@@ -414,9 +414,9 @@ CPUDefX80.opMVIH = function()
  */
 CPUDefX80.opDAA = function()
 {
-    var src = 0;
-    var CF = this.getCF();
-    var AF = this.getAF();
+    let src = 0;
+    let CF = this.getCF();
+    let AF = this.getAF();
     if (AF || (this.regA & 0x0F) > 9) {
         src |= 0x06;
     }
@@ -436,7 +436,7 @@ CPUDefX80.opDAA = function()
  */
 CPUDefX80.opDADH = function()
 {
-    var w;
+    let w;
     this.setHL(w = this.getHL() + this.getHL());
     this.updateCF((w >> 8) & 0x100);
     this.nStepCycles -= 10;
@@ -548,7 +548,7 @@ CPUDefX80.opINXSP = function()
  */
 CPUDefX80.opINRM = function()
 {
-    var addr = this.getHL();
+    let addr = this.getHL();
     this.setByte(addr, this.incByte(this.getByte(addr)));
     this.nStepCycles -= 10;
 };
@@ -560,7 +560,7 @@ CPUDefX80.opINRM = function()
  */
 CPUDefX80.opDCRM = function()
 {
-    var addr = this.getHL();
+    let addr = this.getHL();
     this.setByte(addr, this.decByte(this.getByte(addr)));
     this.nStepCycles -= 10;
 };
@@ -594,7 +594,7 @@ CPUDefX80.opSTC = function()
  */
 CPUDefX80.opDADSP = function()
 {
-    var w;
+    let w;
     this.setHL(w = this.getHL() + this.getSP());
     this.updateCF((w >> 8) & 0x100);
     this.nStepCycles -= 10;
@@ -1261,14 +1261,14 @@ CPUDefX80.opMOVML = function()
  */
 CPUDefX80.opHLT = function()
 {
-    var addr = this.getPC() - 1;
+    let addr = this.getPC() - 1;
 
     /*
      * If any HLT check functions are installed, call them, and if any of them return true, then
      * immediately stop HLT processing.
      */
     if (this.afnHalt.length) {
-        for (var i = 0; i < this.afnHalt.length; i++) {
+        for (let i = 0; i < this.afnHalt.length; i++) {
             if (this.afnHalt[i](addr)) return;
         }
     }
@@ -2136,7 +2136,7 @@ CPUDefX80.opPOPB = function()
  */
 CPUDefX80.opJNZ = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getZF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -2159,7 +2159,7 @@ CPUDefX80.opJMP = function()
  */
 CPUDefX80.opCNZ = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getZF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -2234,7 +2234,7 @@ CPUDefX80.opRET = function()
  */
 CPUDefX80.opJZ = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getZF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -2246,7 +2246,7 @@ CPUDefX80.opJZ = function()
  */
 CPUDefX80.opCZ = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getZF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -2262,7 +2262,7 @@ CPUDefX80.opCZ = function()
  */
 CPUDefX80.opCALL = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     this.pushWord(this.getPC());
     this.setPC(w);
     this.nStepCycles -= 17;
@@ -2323,7 +2323,7 @@ CPUDefX80.opPOPD = function()
  */
 CPUDefX80.opJNC = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getCF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -2335,7 +2335,7 @@ CPUDefX80.opJNC = function()
  */
 CPUDefX80.opOUT = function()
 {
-    var port = this.getPCByte();
+    let port = this.getPCByte();
     this.bus.checkPortOutputNotify(port, 1, this.regA, this.offPC(-2));
     this.nStepCycles -= 10;
 };
@@ -2347,7 +2347,7 @@ CPUDefX80.opOUT = function()
  */
 CPUDefX80.opCNC = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getCF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -2411,7 +2411,7 @@ CPUDefX80.opRC = function()
  */
 CPUDefX80.opJC = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getCF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -2423,7 +2423,7 @@ CPUDefX80.opJC = function()
  */
 CPUDefX80.opIN = function()
 {
-    var port = this.getPCByte();
+    let port = this.getPCByte();
     this.regA = this.bus.checkPortInputNotify(port, 1, this.offPC(-2)) & 0xff;
     this.nStepCycles -= 10;
 };
@@ -2435,7 +2435,7 @@ CPUDefX80.opIN = function()
  */
 CPUDefX80.opCC = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getCF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -2499,7 +2499,7 @@ CPUDefX80.opPOPH = function()
  */
 CPUDefX80.opJPO = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getPF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -2511,7 +2511,7 @@ CPUDefX80.opJPO = function()
  */
 CPUDefX80.opXTHL = function()
 {
-    var w = this.popWord();
+    let w = this.popWord();
     this.pushWord(this.getHL());
     this.setHL(w);
     this.nStepCycles -= 18;
@@ -2524,7 +2524,7 @@ CPUDefX80.opXTHL = function()
  */
 CPUDefX80.opCPO = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getPF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -2599,7 +2599,7 @@ CPUDefX80.opPCHL = function()
  */
 CPUDefX80.opJPE = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getPF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -2611,7 +2611,7 @@ CPUDefX80.opJPE = function()
  */
 CPUDefX80.opXCHG = function()
 {
-    var w = this.getHL();
+    let w = this.getHL();
     this.setHL(this.getDE());
     this.setDE(w);
     this.nStepCycles -= 5;
@@ -2624,7 +2624,7 @@ CPUDefX80.opXCHG = function()
  */
 CPUDefX80.opCPE = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getPF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -2688,7 +2688,7 @@ CPUDefX80.opPOPSW = function()
  */
 CPUDefX80.opJP = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getSF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -2711,7 +2711,7 @@ CPUDefX80.opDI = function()
  */
 CPUDefX80.opCP = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getSF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -2786,7 +2786,7 @@ CPUDefX80.opSPHL = function()
  */
 CPUDefX80.opJM = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getSF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -2810,7 +2810,7 @@ CPUDefX80.opEI = function()
  */
 CPUDefX80.opCM = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getSF()) {
         this.pushWord(this.getPC());
         this.setPC(w);

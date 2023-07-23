@@ -111,7 +111,7 @@ export default class SerialPortX80 extends Component {
         this.fAutoStop = false;
         this.fNullModem = true;
 
-        var sBinding = parmsSerial['binding'];
+        let sBinding = parmsSerial['binding'];
         if (sBinding == "console") {
             this.consoleBuffer = "";
         } else {
@@ -159,7 +159,7 @@ export default class SerialPortX80 extends Component {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var serial = this;
+        let serial = this;
 
         if (!sHTMLType || sHTMLType == "textarea") {
 
@@ -182,7 +182,7 @@ export default class SerialPortX80 extends Component {
                  * event for one of those keys (probably the only event the browser generates for them).
                  */
                 event = event || globals.window.event;
-                var keyCode = event.keyCode;
+                let keyCode = event.keyCode;
                 if (keyCode === 0x08 || event.ctrlKey && keyCode >= 0x41 && keyCode <= 0x5A) {
                     if (event.preventDefault) event.preventDefault();
                     if (keyCode > 0x40) keyCode -= 0x40;
@@ -197,7 +197,7 @@ export default class SerialPortX80 extends Component {
                  * handlers in keyboard.js.
                  */
                 event = event || globals.window.event;
-                var keyCode = event.which || event.keyCode;
+                let keyCode = event.which || event.keyCode;
                 serial.receiveByte(keyCode);
                 /*
                  * Since we're going to remove the "readonly" attribute from the <textarea> control
@@ -268,7 +268,7 @@ export default class SerialPortX80 extends Component {
      */
     echoByte(b)
     {
-        var fEchoed = false;
+        let fEchoed = false;
 
         if (this.controlBuffer) {
             if (b == 0x08) {
@@ -279,10 +279,10 @@ export default class SerialPortX80 extends Component {
                 if (this.iLogicalCol > 0) this.iLogicalCol--;
             }
             else {
-                var s = Str.toASCIICode(b);
-                var nChars = s.length;
+                let s = Str.toASCIICode(b);
+                let nChars = s.length;
                 if (b == 0x09) {
-                    var tabSize = this.tabSize || 8;
+                    let tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
                     if (this.tabSize) s = Str.pad("", nChars);
                 }
@@ -327,7 +327,7 @@ export default class SerialPortX80 extends Component {
         this.cpu = cpu;
         this.dbg = dbg;
 
-        var serial = this;
+        let serial = this;
         this.timerReceiveNext = this.cpu.addTimer(this.id + ".receive", function() {
             serial.receiveData();
         });
@@ -368,18 +368,18 @@ export default class SerialPortX80 extends Component {
     initConnection(fNullModem)
     {
         if (!this.connection) {
-            var sConnection = this.cmp.getMachineParm("connection");
+            let sConnection = this.cmp.getMachineParm("connection");
             if (sConnection) {
-                var asParts = sConnection.split('->');
+                let asParts = sConnection.split('->');
                 if (asParts.length == 2) {
-                    var sSourceID = Str.trim(asParts[0]);
+                    let sSourceID = Str.trim(asParts[0]);
                     if (sSourceID != this.idComponent) return;  // this connection string is intended for another instance
-                    var sTargetID = Str.trim(asParts[1]);
+                    let sTargetID = Str.trim(asParts[1]);
                     this.connection = Component.getComponentByID(sTargetID, false);
                     if (this.connection) {
-                        var exports = this.connection['exports'];
+                        let exports = this.connection['exports'];
                         if (exports) {
-                            var fnConnect = /** @function */ (exports['connect']);
+                            let fnConnect = /** @function */ (exports['connect']);
                             if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
                             this.sendData = exports['receiveData'];
                             if (this.sendData) {
@@ -461,7 +461,7 @@ export default class SerialPortX80 extends Component {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         state.set(0, this.saveRegisters());
         return state.data();
     }
@@ -489,7 +489,7 @@ export default class SerialPortX80 extends Component {
      */
     initState(data)
     {
-        var i = 0;
+        let i = 0;
         if (data === undefined) {
             data = SerialPortX80.UART8251.INIT;
         }
@@ -511,8 +511,8 @@ export default class SerialPortX80 extends Component {
      */
     saveRegisters()
     {
-        var i = 0;
-        var data = [];
+        let i = 0;
+        let data = [];
         data[i++] = this.fReady;
         data[i++] = this.bDataIn;
         data[i++] = this.bDataOut;
@@ -532,13 +532,13 @@ export default class SerialPortX80 extends Component {
      */
     getBaudTimeout(maskRate)
     {
-        var indexRate = (this.bBaudRates & maskRate);
+        let indexRate = (this.bBaudRates & maskRate);
         if (!(maskRate & 0xf)) indexRate >>= 4;
-        var nBaud = SerialPortX80.UART8251.BAUDTABLE[indexRate];
-        var nBits = ((this.bMode & SerialPortX80.UART8251.MODE.DATA_BITS) >> 2) + 6;   // includes an extra +1 for start bit
+        let nBaud = SerialPortX80.UART8251.BAUDTABLE[indexRate];
+        let nBits = ((this.bMode & SerialPortX80.UART8251.MODE.DATA_BITS) >> 2) + 6;   // includes an extra +1 for start bit
         if (this.bMode & SerialPortX80.UART8251.MODE.PARITY_ENABLE) nBits++;
         nBits += ((((this.bMode & SerialPortX80.UART8251.MODE.STOP_BITS) >> 6) + 1) >> 1);
-        var nBytesPerSecond = nBaud / nBits;
+        let nBytesPerSecond = nBaud / nBits;
         return (1000 / nBytesPerSecond)|0;
     }
 
@@ -620,7 +620,7 @@ export default class SerialPortX80 extends Component {
      */
     transmitByte(b)
     {
-        var fTransmitted = false;
+        let fTransmitted = false;
 
         this.printf("transmitByte(%#04x)\n", b);
 
@@ -694,7 +694,7 @@ export default class SerialPortX80 extends Component {
      */
     inData(port, addrFrom)
     {
-        var b = this.bDataIn;
+        let b = this.bDataIn;
         this.printIO(port, undefined, addrFrom, "DATA", b);
         this.bStatus &= ~SerialPortX80.UART8251.STATUS.RECV_FULL;
         return b;
@@ -710,7 +710,7 @@ export default class SerialPortX80 extends Component {
      */
     inControl(port, addrFrom)
     {
-        var b = this.bStatus;
+        let b = this.bStatus;
         this.printIO(port, undefined, addrFrom, "STATUS", b);
         return b;
     }
@@ -769,9 +769,9 @@ export default class SerialPortX80 extends Component {
              * Whenever DTR or RTS changes, we also want to notify any connected machine, via updateStatus().
              */
             if (this.updateStatus) {
-                var delta = (bOut ^ this.bCommand);
+                let delta = (bOut ^ this.bCommand);
                 if (delta & (SerialPortX80.UART8251.COMMAND.RTS | SerialPortX80.UART8251.COMMAND.DTR)) {
-                    var pins = 0;
+                    let pins = 0;
                     if (this.fNullModem) {
                         pins |= (bOut & SerialPortX80.UART8251.COMMAND.RTS)? RS232.CTS.MASK : 0;
                         pins |= (bOut & SerialPortX80.UART8251.COMMAND.DTR)? (RS232.DSR.MASK | RS232.CD.MASK): 0;
@@ -813,11 +813,11 @@ export default class SerialPortX80 extends Component {
      */
     static init()
     {
-        var aeSerial = Component.getElementsByClass(APPCLASS, "serial");
-        for (var iSerial = 0; iSerial < aeSerial.length; iSerial++) {
-            var eSerial = aeSerial[iSerial];
-            var parmsSerial = Component.getComponentParms(eSerial);
-            var serial = new SerialPortX80(parmsSerial);
+        let aeSerial = Component.getElementsByClass(APPCLASS, "serial");
+        for (let iSerial = 0; iSerial < aeSerial.length; iSerial++) {
+            let eSerial = aeSerial[iSerial];
+            let parmsSerial = Component.getComponentParms(eSerial);
+            let serial = new SerialPortX80(parmsSerial);
             Component.bindComponentControls(serial, eSerial, APPCLASS);
         }
     }

@@ -11,7 +11,7 @@ import CPUDefX80 from "./cpudef.js";
 import MemoryX80 from "./memory.js";
 import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
-import DbgLib from "../../../modules/v2/debugger.js";
+import DbgLib from "../../../modules/v2/dbglib.js";
 import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -140,7 +140,7 @@ export default class DebuggerX80 extends DbgLib {
              *      pcX80('h')
              *      ...
              */
-            var dbg = this;
+            let dbg = this;
             if (globals.window[APPCLASS] === undefined) {
                 globals.window[APPCLASS] = function(s) { return dbg.doCommands(s); };
             }
@@ -166,7 +166,7 @@ export default class DebuggerX80 extends DbgLib {
         /*
          * Re-initialize Debugger message support if necessary
          */
-        var sMessages = cmp.getMachineParm('messages');
+        let sMessages = cmp.getMachineParm('messages');
         if (sMessages) this.messageInit(sMessages);
 
         this.aaOpDescs = DebuggerX80.aaOpDescs;
@@ -188,7 +188,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var dbg = this;
+        let dbg = this;
         switch (sBinding) {
 
         case "debugInput":
@@ -200,7 +200,7 @@ export default class DebuggerX80 extends DbgLib {
              *      control.focus();
              */
             control.onkeydown = function onKeyDownDebugInput(event) {
-                var sCmd;
+                let sCmd;
                 if (event.keyCode == Keys.KEYCODE.CR) {
                     sCmd = dbg.controlDebug.value;
                     dbg.controlDebug.value = "";
@@ -217,7 +217,7 @@ export default class DebuggerX80 extends DbgLib {
                         sCmd = dbg.getNextCommand();
                     }
                     if (sCmd != null) {
-                        var cch = sCmd.length;
+                        let cch = sCmd.length;
                         dbg.controlDebug.value = sCmd;
                         dbg.controlDebug.setSelectionRange(cch, cch);
                     }
@@ -233,12 +233,12 @@ export default class DebuggerX80 extends DbgLib {
                 500, 100,
                 function onClickDebugEnter(fRepeat) {
                     if (dbg.controlDebug) {
-                        var sCmds = dbg.controlDebug.value;
+                        let sCmds = dbg.controlDebug.value;
                         dbg.controlDebug.value = "";
                         dbg.doCommands(sCmds, true);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
+                    dbg.printf(Messages.DEBUG + Messages.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -250,7 +250,7 @@ export default class DebuggerX80 extends DbgLib {
                 control,
                 500, 100,
                 function onClickStep(fRepeat) {
-                    var fCompleted = false;
+                    let fCompleted = false;
                     if (!dbg.isBusy(true)) {
                         dbg.setBusy(true);
                         fCompleted = dbg.stepCPU(fRepeat? 1 : 0);
@@ -288,7 +288,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     getAddr(dbgAddr, fWrite, nb)
     {
-        var addr = dbgAddr && dbgAddr.addr;
+        let addr = dbgAddr && dbgAddr.addr;
         if (addr == null) {
             addr = CPUDefX80.ADDR_INVALID;
         }
@@ -307,8 +307,8 @@ export default class DebuggerX80 extends DbgLib {
      */
     getByte(dbgAddr, inc)
     {
-        var b = 0xff;
-        var addr = this.getAddr(dbgAddr, false, 1);
+        let b = 0xff;
+        let addr = this.getAddr(dbgAddr, false, 1);
         if (addr !== CPUDefX80.ADDR_INVALID) {
             b = this.bus.getByteDirect(addr);
             if (inc) this.incAddr(dbgAddr, inc);
@@ -339,8 +339,8 @@ export default class DebuggerX80 extends DbgLib {
      */
     getShort(dbgAddr, inc)
     {
-        var w = 0xffff;
-        var addr = this.getAddr(dbgAddr, false, 2);
+        let w = 0xffff;
+        let addr = this.getAddr(dbgAddr, false, 2);
         if (addr !== CPUDefX80.ADDR_INVALID) {
             w = this.bus.getShortDirect(addr);
             if (inc) this.incAddr(dbgAddr, inc);
@@ -358,7 +358,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     setByte(dbgAddr, b, inc)
     {
-        var addr = this.getAddr(dbgAddr, true, 1);
+        let addr = this.getAddr(dbgAddr, true, 1);
         if (addr !== CPUDefX80.ADDR_INVALID) {
             this.bus.setByteDirect(addr, b);
             if (inc) this.incAddr(dbgAddr, inc);
@@ -376,7 +376,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     setShort(dbgAddr, w, inc)
     {
-        var addr = this.getAddr(dbgAddr, true, 2);
+        let addr = this.getAddr(dbgAddr, true, 2);
         if (addr !== CPUDefX80.ADDR_INVALID) {
             this.bus.setShortDirect(addr, w);
             if (inc) this.incAddr(dbgAddr, inc);
@@ -461,9 +461,9 @@ export default class DebuggerX80 extends DbgLib {
      */
     parseAddr(sAddr, fCode, fNoChecks)
     {
-        var dbgAddr;
-        var dbgAddrNext = (fCode? this.dbgAddrNextCode : this.dbgAddrNextData);
-        var addr = dbgAddrNext.addr;
+        let dbgAddr;
+        let dbgAddrNext = (fCode? this.dbgAddrNextCode : this.dbgAddrNextData);
+        let addr = dbgAddrNext.addr;
         if (sAddr !== undefined) {
             sAddr = this.parseReference(sAddr) || sAddr;
             dbgAddr = this.findSymbolAddr(sAddr);
@@ -486,7 +486,7 @@ export default class DebuggerX80 extends DbgLib {
     parseAddrOptions(dbgAddr, sOptions)
     {
         if (sOptions) {
-            var a = sOptions.match(/(['"])(.*?)\1/);
+            let a = sOptions.match(/(['"])(.*?)\1/);
             if (a) {
                 dbgAddr.aCmds = this.parseCommand(dbgAddr.sCmd = a[2]);
             }
@@ -545,10 +545,10 @@ export default class DebuggerX80 extends DbgLib {
      */
     getSZ(dbgAddr, cchMax)
     {
-        var s = "";
+        let s = "";
         cchMax = cchMax || 256;
         while (s.length < cchMax) {
-            var b = this.getByte(dbgAddr, 1);
+            let b = this.getByte(dbgAddr, 1);
             if (!b || b == 0x24 || b >= 127) break;
             s += (b >= 32? String.fromCharCode(b) : '.');
         }
@@ -564,7 +564,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     dumpBlocks(aBlocks, sAddr)
     {
-        var addr = 0, i = 0, n = aBlocks.length;
+        let addr = 0, i = 0, n = aBlocks.length;
 
         if (sAddr) {
             addr = this.getAddr(this.parseAddr(sAddr));
@@ -579,14 +579,14 @@ export default class DebuggerX80 extends DbgLib {
         this.printf("blockid   physical   blockaddr   used    size    type\n");
         this.printf("--------  ---------  ----------  ------  ------  ----\n");
 
-        var typePrev = -1, cPrev = 0;
+        let typePrev = -1, cPrev = 0;
         while (n--) {
-            var block = aBlocks[i];
+            let block = aBlocks[i];
             if (block.type == typePrev) {
                 if (!cPrev++) this.printf("...\n");
             } else {
                 typePrev = block.type;
-                var sType = MemoryX80.TYPE.NAMES[typePrev];
+                let sType = MemoryX80.TYPE.NAMES[typePrev];
                 if (block) {
                     this.printf("%x  %%%x  %%%%%x  %#06x  %#06x  %s\n", block.id, i << this.bus.nBlockShift, block.addr, block.used, block.size, sType);
                 }
@@ -624,14 +624,14 @@ export default class DebuggerX80 extends DbgLib {
      */
     dumpHistory(sPrev, sLines)
     {
-        var sMore = "";
-        var cHistory = 0;
-        var iHistory = this.iOpcodeHistory;
-        var aHistory = this.aOpcodeHistory;
+        let sMore = "";
+        let cHistory = 0;
+        let iHistory = this.iOpcodeHistory;
+        let aHistory = this.aOpcodeHistory;
 
         if (aHistory.length) {
-            var nPrev = +sPrev || this.nextHistory;
-            var nLines = +sLines || 10;
+            let nPrev = +sPrev || this.nextHistory;
+            let nLines = +sLines || 10;
 
             if (isNaN(nPrev)) {
                 nPrev = nLines;
@@ -657,7 +657,7 @@ export default class DebuggerX80 extends DbgLib {
                 }
             }
 
-            var aFilters = [];
+            let aFilters = [];
             if (sLines == "call") {
                 nLines = 100000;
                 aFilters = ["CALL"];
@@ -679,26 +679,26 @@ export default class DebuggerX80 extends DbgLib {
              *
              * If you re-enable this protection, be sure to re-enable the decrement below, too.
              */
-            var sDump = "";
+            let sDump = "";
             while (nLines > 0 && iHistory != this.iOpcodeHistory) {
 
-                var dbgAddr = aHistory[iHistory++];
+                let dbgAddr = aHistory[iHistory++];
                 if (dbgAddr.addr == null) break;
 
                 /*
                  * We must create a new dbgAddr from the address in aHistory, because dbgAddr was
                  * a reference, not a copy, and we don't want getInstruction() modifying the original.
                  */
-                var dbgAddrNew = this.newAddr(dbgAddr.addr);
+                let dbgAddrNew = this.newAddr(dbgAddr.addr);
 
-                var sComment = "history";
-                var nSequence = nPrev--;
+                let sComment = "history";
+                let nSequence = nPrev--;
                 if (MAXDEBUG && dbgAddr.cycleCount != null) {
                     sComment = "cycles";
                     nSequence = dbgAddr.cycleCount;
                 }
 
-                var sInstruction = this.getInstruction(dbgAddrNew, sComment, nSequence);
+                let sInstruction = this.getInstruction(dbgAddrNew, sComment, nSequence);
 
                 if (!aFilters.length || sInstruction.indexOf(aFilters[0]) >= 0) {
                     sDump += sInstruction + "\n";
@@ -747,9 +747,9 @@ export default class DebuggerX80 extends DbgLib {
          * Internally, we use "key" instead of "keys", since the latter is a method on JavasScript objects,
          * but externally, we allow the user to specify "keys"; "kbd" is also allowed as shorthand for "keyboard".
          */
-        var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
+        let aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
         if (aEnable.length) {
-            for (var m in Messages.Categories) {
+            for (let m in Messages.Categories) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
                     this.bitsMessage |= Messages.Categories[m];
                     this.printf("%s messages enabled\n", m);
@@ -768,7 +768,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in Messages.Categories) {
+        for (let m in Messages.Categories) {
             if (bitMessage == Messages.Categories[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
@@ -787,7 +787,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     getRegIndex(sReg, off)
     {
-        var i;
+        let i;
         sReg = sReg.toUpperCase();
         if (off == null) {
             i = Usr.indexOf(DebuggerX80.REGS, sReg);
@@ -807,8 +807,8 @@ export default class DebuggerX80 extends DbgLib {
      */
     getRegString(iReg)
     {
-        var cch = 0;
-        var n = this.getRegValue(iReg);
+        let cch = 0;
+        let n = this.getRegValue(iReg);
         if (n !== undefined) {
             switch(iReg) {
             case DebuggerX80.REG_A:
@@ -844,9 +844,9 @@ export default class DebuggerX80 extends DbgLib {
      */
     getRegValue(iReg)
     {
-        var n;
+        let n;
         if (iReg >= 0) {
-            var cpu = this.cpu;
+            let cpu = this.cpu;
             switch(iReg) {
             case DebuggerX80.REG_A:
                 n = cpu.regA;
@@ -918,10 +918,10 @@ export default class DebuggerX80 extends DbgLib {
         /*
          * Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
          */
-        var i = 0;
-        var b, sChar, sAddr, dbgAddr, sReplace;
+        let i = 0;
+        let b, sChar, sAddr, dbgAddr, sReplace;
         while ((i = s.indexOf('@', i)) >= 0) {
-            var iReg = this.getRegIndex(s, i + 1);
+            let iReg = this.getRegIndex(s, i + 1);
             if (iReg >= 0) {
                 s = s.substr(0, i) + this.getRegString(iReg) + s.substr(i + 1 + DebuggerX80.REGS[iReg].length);
             }
@@ -977,7 +977,12 @@ export default class DebuggerX80 extends DbgLib {
     }
 
     /**
-     * message(sMessage, bitsAddress)
+     * message(sMessage, bitsMessage)
+     *
+     * When we are called, any filtering of bitsMessage (either the caller's implied message bit(s) or any
+     * explicitly provided message bits) has already been performed, so the focus here is dealing with other
+     * message bits that imply actions (eg, ADDRESS to append the current CPU address to the message, BUFFER
+     * to buffer the message instead of displaying it, HALT to also stop the CPU).
      *
      * @this {DebuggerX80}
      * @param {string} sMessage
@@ -1049,7 +1054,7 @@ export default class DebuggerX80 extends DbgLib {
         this.printf("Type ? for help with PCx80 Debugger commands\n");
         this.updateStatus();
         if (this.sInitCommands) {
-            var sCmds = this.sInitCommands;
+            let sCmds = this.sInitCommands;
             this.sInitCommands = null;
             this.doCommands(sCmds);
         }
@@ -1070,7 +1075,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     historyInit(fQuiet)
     {
-        var i;
+        let i;
         if (!this.checksEnabled()) {
             if (this.aOpcodeHistory && this.aOpcodeHistory.length && !fQuiet) {
                 this.printf("instruction history buffer freed\n");
@@ -1140,7 +1145,7 @@ export default class DebuggerX80 extends DbgLib {
             if (this.checksEnabled()) this.checkInstruction(this.cpu.getPC(), 0);
         }
         try {
-            var nCyclesStep = this.cpu.stepCPU(nCycles);
+            let nCyclesStep = this.cpu.stepCPU(nCycles);
             if (nCyclesStep > 0) {
                 this.nCycles += nCyclesStep;
                 this.cpu.addCycles(nCyclesStep, true);
@@ -1150,7 +1155,7 @@ export default class DebuggerX80 extends DbgLib {
         }
         catch(exception) {
             if (typeof exception != "number") {
-                var e = exception;
+                let e = exception;
                 this.nCycles = 0;
                 this.cpu.setError(e.stack || e.message);
             }
@@ -1298,7 +1303,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         state.set(0, this.packAddr(this.dbgAddrNextCode));
         state.set(1, this.packAddr(this.dbgAddrAssemble));
         state.set(2, [this.aPrevCmds, this.fAssemble, this.bitsMessage]);
@@ -1317,7 +1322,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     restore(data)
     {
-        var i = 0;
+        let i = 0;
         if (data[2] !== undefined) {
             this.dbgAddrNextCode = this.unpackAddr(data[i++]);
             this.dbgAddrAssemble = this.unpackAddr(data[i++]);
@@ -1362,10 +1367,10 @@ export default class DebuggerX80 extends DbgLib {
             this.flags.running = false;
             this.nCycles = nCycles - this.nCyclesStart;
             if (!this.nStep) {
-                var sStopped = "stopped";
+                let sStopped = "stopped";
                 if (this.nCycles) {
-                    var msTotal = ms - this.msStart;
-                    var nCyclesPerSecond = (msTotal > 0? Math.round(this.nCycles * 1000 / msTotal) : 0);
+                    let msTotal = ms - this.msStart;
+                    let nCyclesPerSecond = (msTotal > 0? Math.round(this.nCycles * 1000 / msTotal) : 0);
                     sStopped += " (";
                     if (this.checksEnabled()) {
                         sStopped += this.cOpcodes + " opcodes, ";
@@ -1428,7 +1433,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     checkInstruction(addr, nState)
     {
-        var cpu = this.cpu;
+        let cpu = this.cpu;
 
         if (nState > 0) {
             if (this.nBreakIns && !--this.nBreakIns) {
@@ -1447,10 +1452,10 @@ export default class DebuggerX80 extends DbgLib {
          */
         if (nState >= 0 && this.aaOpcodeCounts.length) {
             this.cOpcodes++;
-            var bOpcode = this.bus.getByteDirect(addr);
+            let bOpcode = this.bus.getByteDirect(addr);
             if (bOpcode != null) {
                 this.aaOpcodeCounts[bOpcode][1]++;
-                var dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];
+                let dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];
                 this.setAddr(dbgAddr, cpu.getPC());
                 if (DEBUG) dbgAddr.cycleCount = cpu.getCycles();
                 if (++this.iOpcodeHistory == this.aOpcodeHistory.length) this.iOpcodeHistory = 0;
@@ -1558,7 +1563,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     clearBreakpoints()
     {
-        var i, dbgAddr;
+        let i, dbgAddr;
         this.aBreakExec = ["bp"];
         if (this.aBreakRead !== undefined) {
             for (i = 1; i < this.aBreakRead.length; i++) {
@@ -1611,7 +1616,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     addBreakpoint(aBreak, dbgAddr, fTemporary)
     {
-        var fSuccess = true;
+        let fSuccess = true;
 
         // this.nSuppressBreaks++;
 
@@ -1628,7 +1633,7 @@ export default class DebuggerX80 extends DbgLib {
         }
 
         if (aBreak != this.aBreakExec) {
-            var addr = this.getAddr(dbgAddr);
+            let addr = this.getAddr(dbgAddr);
             if (addr === CPUDefX80.ADDR_INVALID) {
                 this.printf("invalid address: %s\n", this.toHexAddr(dbgAddr));
                 fSuccess = false;
@@ -1666,10 +1671,10 @@ export default class DebuggerX80 extends DbgLib {
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTemporary, fQuiet)
     {
-        var fFound = false;
-        var addr = this.getAddr(dbgAddr);
-        for (var i = 1; i < aBreak.length; i++) {
-            var dbgAddrBreak = aBreak[i];
+        let fFound = false;
+        let addr = this.getAddr(dbgAddr);
+        for (let i = 1; i < aBreak.length; i++) {
+            let dbgAddrBreak = aBreak[i];
             if (addr == this.getAddr(dbgAddrBreak)) {
                 if (!fTemporary || dbgAddrBreak.fTemporary) {
                     fFound = true;
@@ -1707,7 +1712,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     listBreakpoints(aBreak)
     {
-        for (var i = 1; i < aBreak.length; i++) {
+        for (let i = 1; i < aBreak.length; i++) {
             this.printBreakpoint(aBreak, i);
         }
         return aBreak.length - 1;
@@ -1723,7 +1728,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     printBreakpoint(aBreak, i, sAction)
     {
-        var dbgAddr = aBreak[i];
+        let dbgAddr = aBreak[i];
         this.printf("%s %s%s\n", aBreak[0], this.toHexAddr(dbgAddr), (sAction? (' ' + sAction) : (dbgAddr.sCmd? (' "' + dbgAddr.sCmd + '"') : '')));
     }
 
@@ -1750,8 +1755,8 @@ export default class DebuggerX80 extends DbgLib {
             this.checkBreakpoint(addr, 1, this.aBreakExec, true);
             this.nStep = 0;
         } else {
-            for (var i = 1; i < this.aBreakExec.length; i++) {
-                var dbgAddrBreak = this.aBreakExec[i];
+            for (let i = 1; i < this.aBreakExec.length; i++) {
+                let dbgAddrBreak = this.aBreakExec[i];
                 if (dbgAddrBreak.fTemporary) {
                     if (!this.findBreakpoint(this.aBreakExec, dbgAddrBreak, true, true)) break;
                     i = 0;
@@ -1776,13 +1781,13 @@ export default class DebuggerX80 extends DbgLib {
          * Time to check for execution breakpoints; note that this should be done BEFORE updating frequency
          * or history data (see checkInstruction), since we might not actually execute the current instruction.
          */
-        var fBreak = false;
+        let fBreak = false;
 
         if (!this.nSuppressBreaks++) {
 
-            for (var i = 1; !fBreak && i < aBreak.length; i++) {
+            for (let i = 1; !fBreak && i < aBreak.length; i++) {
 
-                var dbgAddrBreak = aBreak[i];
+                let dbgAddrBreak = aBreak[i];
 
                 if (fTemporary && !dbgAddrBreak.fTemporary) continue;
 
@@ -1797,10 +1802,10 @@ export default class DebuggerX80 extends DbgLib {
                  * If you want to create a real-mode breakpoint that will break regardless of mode,
                  * use the physical address of the real-mode memory location instead.
                  */
-                var addrBreak = this.getAddr(dbgAddrBreak);
-                for (var n = 0; n < nb; n++) {
+                let addrBreak = this.getAddr(dbgAddrBreak);
+                for (let n = 0; n < nb; n++) {
                     if (addr + n == addrBreak) {
-                        var a;
+                        let a;
                         fBreak = true;
                         if (dbgAddrBreak.fTemporary) {
                             this.findBreakpoint(aBreak, dbgAddrBreak, true, true);
@@ -1818,13 +1823,13 @@ export default class DebuggerX80 extends DbgLib {
                              * we abort.
                              */
                             fBreak = false;
-                            for (var j = 0; j < a.length; j++) {
+                            for (let j = 0; j < a.length; j++) {
                                 if (!this.doCommand(a[j], true)) {
                                     if (a[j].indexOf("if")) {
                                         fBreak = true;          // the failed command wasn't "if", so abort
                                         break;
                                     }
-                                    var k = j + 1;
+                                    let k = j + 1;
                                     for (; k < a.length; k++) {
                                         if (!a[k].indexOf("else")) break;
                                         j++;
@@ -1866,39 +1871,39 @@ export default class DebuggerX80 extends DbgLib {
      */
     getInstruction(dbgAddr, sComment, nSequence)
     {
-        var dbgAddrIns = this.newAddr(dbgAddr.addr);
+        let dbgAddrIns = this.newAddr(dbgAddr.addr);
 
-        var bOpcode = this.getByte(dbgAddr, 1);
+        let bOpcode = this.getByte(dbgAddr, 1);
 
-        var asOpcodes = this.style != DebuggerX80.STYLE_8086? DebuggerX80.INS_NAMES : DebuggerX80.INS_NAMES_8086;
-        var aOpDesc = this.aaOpDescs[bOpcode];
-        var iIns = aOpDesc[0];
+        let asOpcodes = this.style != DebuggerX80.STYLE_8086? DebuggerX80.INS_NAMES : DebuggerX80.INS_NAMES_8086;
+        let aOpDesc = this.aaOpDescs[bOpcode];
+        let iIns = aOpDesc[0];
 
-        var sOperands = "";
-        var sOpcode = asOpcodes[iIns];
-        var cOperands = aOpDesc.length - 1;
-        var typeSizeDefault = DebuggerX80.TYPE_NONE, type;
+        let sOperands = "";
+        let sOpcode = asOpcodes[iIns];
+        let cOperands = aOpDesc.length - 1;
+        let typeSizeDefault = DebuggerX80.TYPE_NONE, type;
 
-        for (var iOperand = 1; iOperand <= cOperands; iOperand++) {
+        for (let iOperand = 1; iOperand <= cOperands; iOperand++) {
 
-            var disp, off, cch;
-            var sOperand = "";
+            let disp, off, cch;
+            let sOperand = "";
 
             type = aOpDesc[iOperand];
             if (type === undefined) continue;
             if ((type & DebuggerX80.TYPE_OPT) && this.style == DebuggerX80.STYLE_8080) continue;
 
-            var typeMode = type & DebuggerX80.TYPE_MODE;
+            let typeMode = type & DebuggerX80.TYPE_MODE;
             if (!typeMode) continue;
 
-            var typeSize = type & DebuggerX80.TYPE_SIZE;
+            let typeSize = type & DebuggerX80.TYPE_SIZE;
             if (!typeSize) {
                 type |= typeSizeDefault;
             } else {
                 typeSizeDefault = typeSize;
             }
 
-            var typeOther = type & DebuggerX80.TYPE_OTHER;
+            let typeOther = type & DebuggerX80.TYPE_OTHER;
             if (!typeOther) {
                 type |= (iOperand == 1? DebuggerX80.TYPE_OUT : DebuggerX80.TYPE_IN);
             }
@@ -1921,8 +1926,8 @@ export default class DebuggerX80 extends DbgLib {
             sOperands += (sOperand || "???");
         }
 
-        var sBytes = "";
-        var sLine = this.toHexAddr(dbgAddrIns) + ' ';
+        let sBytes = "";
+        let sLine = this.toHexAddr(dbgAddrIns) + ' ';
         if (dbgAddrIns.addr !== CPUDefX80.ADDR_INVALID && dbgAddr.addr !== CPUDefX80.ADDR_INVALID) {
             do {
                 sBytes += Str.toHex(this.getByte(dbgAddrIns, 1), 2);
@@ -1940,7 +1945,7 @@ export default class DebuggerX80 extends DbgLib {
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
-                var nCycles = this.cpu.getCycles();
+                let nCycles = this.cpu.getCycles();
                 sLine += "cycles=" + nCycles.toString() + " cs=" + Str.toHex(this.cpu.nChecksum);
             }
         }
@@ -1957,8 +1962,8 @@ export default class DebuggerX80 extends DbgLib {
      */
     getImmOperand(type, dbgAddr)
     {
-        var sOperand = ' ';
-        var typeSize = type & DebuggerX80.TYPE_SIZE;
+        let sOperand = ' ';
+        let typeSize = type & DebuggerX80.TYPE_SIZE;
 
         switch (typeSize) {
         case DebuggerX80.TYPE_BYTE:
@@ -1997,7 +2002,7 @@ export default class DebuggerX80 extends DbgLib {
          * mnemonics; specifically, "[HL]" instead of "M".  This is also more in keeping with how getImmOperand()
          * displays memory references (ie, by enclosing them in brackets).
          */
-        var sOperand = DebuggerX80.REGS[iReg];
+        let sOperand = DebuggerX80.REGS[iReg];
         if (this.style == DebuggerX80.STYLE_8086 && (type & DebuggerX80.TYPE_MEM)) {
             if (iReg == DebuggerX80.REG_M) {
                 sOperand = "HL";
@@ -2020,7 +2025,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     parseInstruction(sOp, sOperand, dbgAddr)
     {
-        var aOpBytes = [];
+        let aOpBytes = [];
         this.printf("not supported yet\n");
         return aOpBytes;
     }
@@ -2034,7 +2039,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     getFlagOutput(sFlag)
     {
-        var b;
+        let b;
         switch (sFlag) {
         case "IF":
             b = this.cpu.getIF();
@@ -2070,7 +2075,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     getRegOutput(iReg)
     {
-        var sReg = DebuggerX80.REGS[iReg];
+        let sReg = DebuggerX80.REGS[iReg];
         return sReg + '=' + this.getRegString(iReg) + ' ';
     }
 
@@ -2087,7 +2092,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     getRegDump()
     {
-        var s;
+        let s;
         s = this.getRegOutput(DebuggerX80.REG_A) +
             this.getRegOutput(DebuggerX80.REG_BC) +
             this.getRegOutput(DebuggerX80.REG_DE) +
@@ -2190,21 +2195,21 @@ export default class DebuggerX80 extends DbgLib {
      */
     addSymbols(sModule, addr, len, aSymbols)
     {
-        var dbgAddr = {};
-        var aOffsets = [];
-        for (var sSymbol in aSymbols) {
-            var symbol = aSymbols[sSymbol];
+        let dbgAddr = {};
+        let aOffsets = [];
+        for (let sSymbol in aSymbols) {
+            let symbol = aSymbols[sSymbol];
             if (typeof symbol == "number") {
                 aSymbols[sSymbol] = symbol = {'o': symbol};
             }
-            var offSymbol = symbol['o'];
-            var sAnnotation = symbol['a'];
+            let offSymbol = symbol['o'];
+            let sAnnotation = symbol['a'];
             if (offSymbol !== undefined) {
                 Usr.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
             }
             if (sAnnotation) symbol['a'] = sAnnotation.replace(/''/g, "\"");
         }
-        var symbolTable = {
+        let symbolTable = {
             sModule: sModule,
             addr: addr,
             len: len,
@@ -2224,14 +2229,14 @@ export default class DebuggerX80 extends DbgLib {
      */
     dumpSymbols()
     {
-        for (var iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
-            var symbolTable = this.aSymbolTable[iTable];
-            for (var sSymbol in symbolTable.aSymbols) {
+        for (let iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
+            let symbolTable = this.aSymbolTable[iTable];
+            for (let sSymbol in symbolTable.aSymbols) {
                 if (sSymbol.charAt(0) == '.') continue;
-                var symbol = symbolTable.aSymbols[sSymbol];
-                var offSymbol = symbol['o'];
+                let symbol = symbolTable.aSymbols[sSymbol];
+                let offSymbol = symbol['o'];
                 if (offSymbol === undefined) continue;
-                var sSymbolOrig = symbolTable.aSymbols[sSymbol]['l'];
+                let sSymbolOrig = symbolTable.aSymbols[sSymbol]['l'];
                 if (sSymbolOrig) sSymbol = sSymbolOrig;
                 this.printf("%s %s\n", this.toHexOffset(offSymbol), sSymbol);
             }
@@ -2253,15 +2258,15 @@ export default class DebuggerX80 extends DbgLib {
      */
     findSymbol(dbgAddr, fNearest)
     {
-        var aSymbol = [];
-        var addrSymbol = this.getAddr(dbgAddr) >>> 0;
-        for (var iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
-            var symbolTable = this.aSymbolTable[iTable];
-            var addr = symbolTable.addr >>> 0;
-            var len = symbolTable.len;
+        let aSymbol = [];
+        let addrSymbol = this.getAddr(dbgAddr) >>> 0;
+        for (let iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
+            let symbolTable = this.aSymbolTable[iTable];
+            let addr = symbolTable.addr >>> 0;
+            let len = symbolTable.len;
             if (addrSymbol >= addr && addrSymbol < addr + len) {
-                var offSymbol = addrSymbol - addr;
-                var result = Usr.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
+                let offSymbol = addrSymbol - addr;
+                let result = Usr.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
                 if (result >= 0) {
                     this.returnSymbol(iTable, result, aSymbol);
                 }
@@ -2287,14 +2292,14 @@ export default class DebuggerX80 extends DbgLib {
      */
     findSymbolAddr(sSymbol)
     {
-        var dbgAddr;
+        let dbgAddr;
         if (sSymbol.match(/^[a-z_][a-z0-9_]*$/i)) {
-            var sUpperCase = sSymbol.toUpperCase();
-            for (var iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
-                var symbolTable = this.aSymbolTable[iTable];
-                var symbol = symbolTable.aSymbols[sUpperCase];
+            let sUpperCase = sSymbol.toUpperCase();
+            for (let iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
+                let symbolTable = this.aSymbolTable[iTable];
+                let symbol = symbolTable.aSymbols[sUpperCase];
                 if (symbol !== undefined) {
-                    var offSymbol = symbol['o'];
+                    let offSymbol = symbol['o'];
                     if (offSymbol !== undefined) {
                         /*
                          * We assume that every ROM is ORG'ed at 0x0000, and therefore unless the symbol has an
@@ -2326,9 +2331,9 @@ export default class DebuggerX80 extends DbgLib {
      */
     returnSymbol(iTable, iOffset, aSymbol)
     {
-        var symbol = {};
-        var aOffsets = this.aSymbolTable[iTable].aOffsets;
-        var offset = 0, sSymbol = null;
+        let symbol = {};
+        let aOffsets = this.aSymbolTable[iTable].aOffsets;
+        let offset = 0, sSymbol = null;
         if (iOffset >= 0 && iOffset < aOffsets.length) {
             offset = aOffsets[iOffset][0];
             sSymbol = aOffsets[iOffset][1];
@@ -2350,8 +2355,8 @@ export default class DebuggerX80 extends DbgLib {
      */
     doHelp()
     {
-        var s = "commands:";
-        for (var sCommand in DebuggerX80.COMMANDS) {
+        let s = "commands:";
+        for (let sCommand in DebuggerX80.COMMANDS) {
             s += '\n' + Str.pad(sCommand, 9) + DebuggerX80.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
@@ -2390,7 +2395,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     doAssemble(asArgs)
     {
-        var dbgAddr = this.parseAddr(asArgs[1], true);
+        let dbgAddr = this.parseAddr(asArgs[1], true);
         if (!dbgAddr) return;
 
         this.dbgAddrAssemble = dbgAddr;
@@ -2401,9 +2406,9 @@ export default class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var aOpBytes = this.parseInstruction(asArgs[2], asArgs[3], dbgAddr);
+        let aOpBytes = this.parseInstruction(asArgs[2], asArgs[3], dbgAddr);
         if (aOpBytes.length) {
-            for (var i = 0; i < aOpBytes.length; i++) {
+            for (let i = 0; i < aOpBytes.length; i++) {
                 this.setByte(dbgAddr, aOpBytes[i], 1);
             }
             /*
@@ -2458,9 +2463,9 @@ export default class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var sParm = sCmd.charAt(1);
+        let sParm = sCmd.charAt(1);
         if (sParm == 'l') {
-            var cBreaks = 0;
+            let cBreaks = 0;
             cBreaks += this.listBreakpoints(this.aBreakExec);
             cBreaks += this.listBreakpoints(this.aBreakRead);
             cBreaks += this.listBreakpoints(this.aBreakWrite);
@@ -2479,7 +2484,7 @@ export default class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var dbgAddr = this.newAddr();
+        let dbgAddr = this.newAddr();
         if (sAddr != '*') {
             dbgAddr = this.parseAddr(sAddr, true, true);
             if (!dbgAddr) return;
@@ -2555,14 +2560,14 @@ export default class DebuggerX80 extends DbgLib {
      */
     doDump(asArgs)
     {
-        var m;
-        var sCmd = asArgs[0];
-        var sAddr = asArgs[1];
-        var sLen = asArgs[2];
-        var sBytes = asArgs[3];
+        let m;
+        let sCmd = asArgs[0];
+        let sAddr = asArgs[1];
+        let sLen = asArgs[2];
+        let sBytes = asArgs[3];
 
         if (sAddr == '?') {
-            var sDumpers = "";
+            let sDumpers = "";
             for (m in Messages.Categories) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
@@ -2580,7 +2585,7 @@ export default class DebuggerX80 extends DbgLib {
         }
 
         if (sAddr == "state") {
-            var sState = this.cmp.powerOff(true);
+            let sState = this.cmp.powerOff(true);
             if (sLen == "console") {
                 /*
                  * Console buffers are notoriously small, and even the following code, which breaks the
@@ -2610,7 +2615,7 @@ export default class DebuggerX80 extends DbgLib {
         if (sCmd == "d") {
             for (m in Messages.Categories) {
                 if (asArgs[1] == m) {
-                    var fnDumper = this.afnDumpers[m];
+                    let fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
                         asArgs.shift();
                         asArgs.shift();
@@ -2631,10 +2636,10 @@ export default class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var dbgAddr = this.parseAddr(sAddr);
+        let dbgAddr = this.parseAddr(sAddr);
         if (!dbgAddr) return;
 
-        var len = 0;                            // 0 is not a default; it triggers the appropriate default below
+        let len = 0;                            // 0 is not a default; it triggers the appropriate default below
         if (sLen) {
             if (sLen.charAt(0) == 'l') {
                 sLen = sLen.substr(1) || sBytes;
@@ -2643,17 +2648,17 @@ export default class DebuggerX80 extends DbgLib {
             if (len > 0x10000) len = 0x10000;   // prevent bad user (or variable) input from producing excessive output
         }
 
-        var sDump = "";
-        var size = (sCmd == "dd"? 4 : (sCmd == "dw"? 2 : 1));
-        var cb = (size * len) || 128;
-        var cLines = ((cb + 15) >> 4) || 1;
+        let sDump = "";
+        let size = (sCmd == "dd"? 4 : (sCmd == "dw"? 2 : 1));
+        let cb = (size * len) || 128;
+        let cLines = ((cb + 15) >> 4) || 1;
 
         while (cLines-- && cb > 0) {
-            var data = 0, iByte = 0, i;
-            var sData = "", sChars = "";
+            let data = 0, iByte = 0, i;
+            let sData = "", sChars = "";
             sAddr = this.toHexAddr(dbgAddr);
             for (i = 16; i > 0 && cb > 0; i--) {
-                var b = this.getByte(dbgAddr, 1);
+                let b = this.getByte(dbgAddr, 1);
                 data |= (b << (iByte++ << 3));
                 if (iByte == size) {
                     sData += Str.toHex(data, size * 2);
@@ -2679,19 +2684,19 @@ export default class DebuggerX80 extends DbgLib {
      */
     doEdit(asArgs)
     {
-        var size = 1;
-        var mask = 0xff;
-        var fnGet = this.getByte;
-        var fnSet = this.setByte;
+        let size = 1;
+        let mask = 0xff;
+        let fnGet = this.getByte;
+        let fnSet = this.setByte;
         if (asArgs[0] == "ew") {
             size = 2;
             mask = 0xffff;
             fnGet = this.getShort;
             fnSet = this.setShort;
         }
-        var cch = size << 1;
+        let cch = size << 1;
 
-        var sAddr = asArgs[1];
+        let sAddr = asArgs[1];
         if (sAddr == null) {
             this.printf("edit memory commands:\n");
             this.printf("\teb [a] [...]  edit bytes at address a\n");
@@ -2699,11 +2704,11 @@ export default class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var dbgAddr = this.parseAddr(sAddr);
+        let dbgAddr = this.parseAddr(sAddr);
         if (!dbgAddr) return;
 
-        for (var i = 2; i < asArgs.length; i++) {
-            var vNew = this.parseExpression(asArgs[i]);
+        for (let i = 2; i < asArgs.length; i++) {
+            let vNew = this.parseExpression(asArgs[i]);
             if (vNew === undefined) {
                 this.printf("unrecognized value: %s\n", asArgs[i]);
                 break;
@@ -2711,7 +2716,7 @@ export default class DebuggerX80 extends DbgLib {
             if (vNew & ~mask) {
                 this.printf("warning: %x exceeds %s-byte value\n", vNew, size);
             }
-            var vOld = fnGet.call(this, dbgAddr);
+            let vOld = fnGet.call(this, dbgAddr);
             this.printf("changing %s from %#0*2x to %#0*2x\n", this.toHexAddr(dbgAddr), cch, vOld, cch, vNew);
             fnSet.call(this, dbgAddr, vNew, size);
         }
@@ -2730,11 +2735,10 @@ export default class DebuggerX80 extends DbgLib {
             this.printf("\tclear\tclear all frequency counts\n");
             return;
         }
-        var i;
-        var cData = 0;
+        let cData = 0;
         if (this.aaOpcodeCounts) {
             if (sParm == "clear") {
-                for (i = 0; i < this.aaOpcodeCounts.length; i++)
+                for (let i = 0; i < this.aaOpcodeCounts.length; i++)
                     this.aaOpcodeCounts[i] = [i, 0];
                 this.printf("frequency data cleared\n");
                 cData++;
@@ -2744,14 +2748,14 @@ export default class DebuggerX80 extends DbgLib {
                 cData++;
             }
             else {
-                var aaSortedOpcodeCounts = this.aaOpcodeCounts.slice();
+                let aaSortedOpcodeCounts = this.aaOpcodeCounts.slice();
                 aaSortedOpcodeCounts.sort(function(p, q) {
                     return q[1] - p[1];
                 });
-                var asOpcodes = this.style != DebuggerX80.STYLE_8086? DebuggerX80.INS_NAMES : DebuggerX80.INS_NAMES_8086;
-                for (i = 0; i < aaSortedOpcodeCounts.length; i++) {
-                    var bOpcode = aaSortedOpcodeCounts[i][0];
-                    var cFreq = aaSortedOpcodeCounts[i][1];
+                let asOpcodes = this.style != DebuggerX80.STYLE_8086? DebuggerX80.INS_NAMES : DebuggerX80.INS_NAMES_8086;
+                for (let i = 0; i < aaSortedOpcodeCounts.length; i++) {
+                    let bOpcode = aaSortedOpcodeCounts[i][0];
+                    let cFreq = aaSortedOpcodeCounts[i][1];
                     if (cFreq) {
                         this.printf("%s (%#04x): %d times\n", (asOpcodes[this.aaOpDescs[bOpcode][0]] + "  ").substr(0, 5), bOpcode, cFreq);
                         cData++;
@@ -2772,7 +2776,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     doHalt(fQuiet)
     {
-        var sMsg;
+        let sMsg;
         if (this.flags.running) {
             sMsg = "halting";
             this.stopCPU();
@@ -2818,12 +2822,8 @@ export default class DebuggerX80 extends DbgLib {
      */
     doInfo(asArgs)
     {
-        if (DEBUG) {
-            this.printf("msPerYield: %d\n", this.cpu.msPerYield);
-            this.printf("nCyclesPerYield: %d\n", this.cpu.nCyclesPerYield);
-            return true;
-        }
-        return false;
+        this.printf(Messages.DEBUG, "msPerYield: %d\nnCyclesPerYield: %d\n", this.cpu.msPerYield, this.cpu.nCyclesPerYield);
+        return DEBUG;
     }
 
     /**
@@ -2850,9 +2850,9 @@ export default class DebuggerX80 extends DbgLib {
             this.printf("warning: port accesses can affect hardware state\n");
             return;
         }
-        var port = this.parseValue(sPort);
+        let port = this.parseValue(sPort);
         if (port !== undefined) {
-            var bIn = this.bus.checkPortInputNotify(port, 1);
+            let bIn = this.bus.checkPortInputNotify(port, 1);
             this.printf("%#06x: %#04x\n", port, bIn);
         }
     }
@@ -2870,7 +2870,7 @@ export default class DebuggerX80 extends DbgLib {
             this.printf("interrupts disabled (use rif=1 to enable)\n");
             return false;
         }
-        var nLevel = this.parseExpression(sLevel);
+        let nLevel = this.parseExpression(sLevel);
         if (nLevel == null) return false;
         this.printf("requesting interrupt level %d\n", nLevel);
         this.cpu.requestINTR(nLevel);
@@ -2893,7 +2893,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     doVar(sCmd)
     {
-        var a = sCmd.match(/^\s*([A-Z_]?[A-Z0-9_]*)\s*(=?)\s*(.*)$/i);
+        let a = sCmd.match(/^\s*([A-Z_]?[A-Z0-9_]*)\s*(=?)\s*(.*)$/i);
         if (a) {
             if (!a[1]) {
                 if (!this.printVariable()) this.printf("no variables\n");
@@ -2906,7 +2906,7 @@ export default class DebuggerX80 extends DbgLib {
                 this.delVariable(a[1]);
                 return true;    // it's not considered an error to delete a variable that didn't exist
             }
-            var v = this.parseExpression(a[3]);
+            let v = this.parseExpression(a[3]);
             if (v !== undefined) {
                 this.setVariable(a[1], v);
                 return true;
@@ -2927,14 +2927,14 @@ export default class DebuggerX80 extends DbgLib {
      */
     doList(sAddr, fPrint)
     {
-        var sSymbol = null;
+        let sSymbol = null;
 
-        var dbgAddr = this.parseAddr(sAddr, true);
+        let dbgAddr = this.parseAddr(sAddr, true);
         if (dbgAddr) {
-            var addr = this.getAddr(dbgAddr);
-            var aSymbol = this.findSymbol(dbgAddr, true);
+            let addr = this.getAddr(dbgAddr);
+            let aSymbol = this.findSymbol(dbgAddr, true);
             if (aSymbol.length) {
-                var nDelta, sDelta, s;
+                let nDelta, sDelta, s;
                 if (aSymbol[0]) {
                     sDelta = "";
                     nDelta = dbgAddr.addr - aSymbol[1];
@@ -2961,20 +2961,23 @@ export default class DebuggerX80 extends DbgLib {
     /**
      * doMessages(asArgs)
      *
+     * TODO: This function is identical (or should be) to the PCx86 version of doMessages(); we should factor this out
+     * (and probably others) into the DbgLib class.
+     *
      * @this {DebuggerX80}
      * @param {Array.<string>} asArgs
      */
     doMessages(asArgs)
     {
-        var m;
-        var fCriteria = null;
-        var sCategory = asArgs[1];
+        let m;
+        let fCriteria = null;
+        let sCategory = asArgs[1];
         if (sCategory == '?') sCategory = undefined;
 
         if (sCategory !== undefined) {
-            var bitsMessage = 0;
+            let bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.BUFFER);
+                bitsMessage = Messages.ALL - Messages.HALT - Messages.BUFFER;
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -2983,16 +2986,10 @@ export default class DebuggerX80 extends DbgLib {
                 fCriteria = false;
                 sCategory = null;
             } else {
-                /*
-                 * Internally, we use "key" instead of "keys", since the latter is a method on JavasScript objects,
-                 * but externally, we allow the user to specify "keys"; "kbd" is also allowed as shorthand for "keyboard".
-                 */
-                if (sCategory == "keys") sCategory = "key";
-                if (sCategory == "kbd") sCategory = "keyboard";
                 for (m in Messages.Categories) {
                     if (sCategory == m) {
                         bitsMessage = Messages.Categories[m];
-                        fCriteria = !!(this.bitsMessage & bitsMessage);
+                        fCriteria = this.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
                 }
@@ -3003,16 +3000,14 @@ export default class DebuggerX80 extends DbgLib {
             }
             if (bitsMessage) {
                 if (asArgs[2] == "on") {
-                    this.bitsMessage |= bitsMessage;
+                    this.bitsMessage = this.setBits(this.bitsMessage, bitsMessage);
                     fCriteria = true;
                 }
                 else if (asArgs[2] == "off") {
-                    this.bitsMessage &= ~bitsMessage;
+                    this.bitsMessage = this.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
                     if (bitsMessage == Messages.BUFFER) {
-                        for (var i = 0; i < this.aMessageBuffer.length; i++) {
-                            this.printf("%s\n", this.aMessageBuffer[i]);
-                        }
+                        this.printf("%s\n", this.aMessageBuffer.join(""));
                         this.aMessageBuffer = [];
                     }
                 }
@@ -3022,20 +3017,15 @@ export default class DebuggerX80 extends DbgLib {
         /*
          * Display those message categories that match the current criteria (on or off)
          */
-        var n = 0;
-        var sCategories = "";
+        let n = 0;
+        let sCategories = "";
         for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = Messages.Categories[m];
-                var fEnabled = !!(this.bitsMessage & bitMessage);
+                let bitsMessage = Messages.Categories[m];
+                let fEnabled = this.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
                 if (!(++n % 10)) sCategories += "\n\t";
-                /*
-                 * Internally, we use "key" instead of "keys", since the latter is a method on JavasScript objects,
-                 * but externally, we allow the user to specify "keys".
-                 */
-                if (m == "key") m = "keys";
                 sCategories += m;
             }
         }
@@ -3067,7 +3057,7 @@ export default class DebuggerX80 extends DbgLib {
             break;
 
         case "cs":
-            var nCycles;
+            let nCycles;
             if (asArgs[3] !== undefined) nCycles = +asArgs[3];          // warning: decimal instead of hex conversion
             switch (asArgs[2]) {
                 case "int":
@@ -3143,8 +3133,8 @@ export default class DebuggerX80 extends DbgLib {
             this.printf("warning: port accesses can affect hardware state\n");
             return;
         }
-        var port = this.parseValue(sPort, "port #");
-        var bOut = this.parseValue(sByte);
+        let port = this.parseValue(sPort, "port #");
+        let bOut = this.parseValue(sByte);
         if (port !== undefined && bOut !== undefined) {
             this.bus.checkPortOutputNotify(port, 1, bOut);
             this.printf("%#06x: %#04x\n", port, bOut);
@@ -3167,13 +3157,13 @@ export default class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var cpu = this.cpu;
+        let cpu = this.cpu;
         if (fInstruction == null) fInstruction = true;
 
         if (asArgs != null && asArgs.length > 1) {
-            var sReg = asArgs[1];
-            var sValue = null;
-            var i = sReg.indexOf('=');
+            let sReg = asArgs[1];
+            let sValue = null;
+            let i = sReg.indexOf('=');
             if (i > 0) {
                 sValue = sReg.substr(i + 1);
                 sReg = sReg.substr(0, i);
@@ -3186,10 +3176,10 @@ export default class DebuggerX80 extends DbgLib {
                 return;
             }
 
-            var w = this.parseExpression(sValue);
+            let w = this.parseExpression(sValue);
             if (w === undefined) return;
 
-            var sRegMatch = sReg.toUpperCase();
+            let sRegMatch = sReg.toUpperCase();
             switch (sRegMatch) {
             case "A":
                 cpu.regA = w & 0xff;
@@ -3283,7 +3273,7 @@ export default class DebuggerX80 extends DbgLib {
             this.fIgnoreNextCheckFault = true;
         }
         if (sAddr !== undefined) {
-            var dbgAddr = this.parseAddr(sAddr, true);
+            let dbgAddr = this.parseAddr(sAddr, true);
             if (!dbgAddr) return;
             this.parseAddrOptions(dbgAddr, sOptions);
             this.setTempBreakpoint(dbgAddr);
@@ -3305,7 +3295,7 @@ export default class DebuggerX80 extends DbgLib {
     doPrint(sCmd)
     {
         sCmd = Str.trim(sCmd);
-        var a = sCmd.match(/^(['"])(.*?)\1$/);
+        let a = sCmd.match(/^(['"])(.*?)\1$/);
         if (!a) {
             this.parseExpression(sCmd, false);
         } else {
@@ -3321,16 +3311,16 @@ export default class DebuggerX80 extends DbgLib {
      */
     doStep(sCmd)
     {
-        var fCallStep = true;
-        var fRegs = (sCmd == "pr"? 1 : 0);
+        let fCallStep = true;
+        let fRegs = (sCmd == "pr"? 1 : 0);
         /*
          * Set up the value for this.nStep (ie, 1 or 2) depending on whether the user wants
          * a subsequent register dump ("pr") or not ("p").
          */
-        var nStep = 1 + fRegs;
+        let nStep = 1 + fRegs;
         if (!this.nStep) {
-            var dbgAddr = this.newAddr(this.cpu.getPC());
-            var bOpcode = this.getByte(dbgAddr);
+            let dbgAddr = this.newAddr(this.cpu.getPC());
+            let bOpcode = this.getByte(dbgAddr);
 
             switch (bOpcode) {
             case CPUDefX80.OPCODE.CALL:
@@ -3374,13 +3364,13 @@ export default class DebuggerX80 extends DbgLib {
      */
     getCall(dbgAddr)
     {
-        var sCall = null;
-        var addr = dbgAddr.addr;
-        var addrOrig = addr;
-        for (var n = 1; n <= 6 && !!addr; n++) {
+        let sCall = null;
+        let addr = dbgAddr.addr;
+        let addrOrig = addr;
+        for (let n = 1; n <= 6 && !!addr; n++) {
             if (n > 2) {
                 dbgAddr.addr = addr;
-                var s = this.getInstruction(dbgAddr);
+                let s = this.getInstruction(dbgAddr);
                 if (s.indexOf("CALL") >= 0) {
                     /*
                      * Verify that the length of this CALL (or INT), when added to the address of the CALL (or INT),
@@ -3388,8 +3378,8 @@ export default class DebuggerX80 extends DbgLib {
                      * subtracting that from the string index of the next space, and dividing that difference by two,
                      * to yield the length of the CALL (or INT) instruction, in bytes.
                      */
-                    var i = s.indexOf(' ');
-                    var j = s.indexOf(' ', i+1);
+                    let i = s.indexOf(' ');
+                    let j = s.indexOf(' ', i+1);
                     if (addr + (j - i - 1)/2 == addrOrig) {
                         sCall = s;
                         break;
@@ -3420,13 +3410,13 @@ export default class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var nFrames = 10, cFrames = 0;
-        var dbgAddrCall = this.newAddr();
-        var dbgAddrStack = this.newAddr(this.cpu.getSP());
+        let nFrames = 10, cFrames = 0;
+        let dbgAddrCall = this.newAddr();
+        let dbgAddrStack = this.newAddr(this.cpu.getSP());
         this.printf("stack trace for %s\n", this.toHexAddr(dbgAddrStack));
 
         while (cFrames < nFrames) {
-            var sCall = null, sCallPrev = null, cTests = 256;
+            let sCall = null, sCallPrev = null, cTests = 256;
             while ((dbgAddrStack.addr >>> 0) < 0x10000) {
                 dbgAddrCall.addr = this.getWord(dbgAddrStack, true);
                 /*
@@ -3444,9 +3434,9 @@ export default class DebuggerX80 extends DbgLib {
              * being one of them, but it's rare that we're debugging recursive code.
              */
             if (!sCall || sCall == sCallPrev) break;
-            var sSymbol = null;
+            let sSymbol = null;
             if (sCmd == "ks") {
-                var a = sCall.match(/[0-9A-F]+$/);
+                let a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
             sCall = Str.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
@@ -3479,10 +3469,10 @@ export default class DebuggerX80 extends DbgLib {
      */
     doTrace(sCmd, sCount)
     {
-        var dbg = this;
-        var fRegs = (sCmd != "t");
-        var nCount = this.parseValue(sCount, undefined, true) || 1;
-        var nCycles = (nCount == 1? 0 : 1);
+        let dbg = this;
+        let fRegs = (sCmd != "t");
+        let nCount = this.parseValue(sCount, undefined, true) || 1;
+        let nCycles = (nCount == 1? 0 : 1);
         if (sCmd == "tc") {
             nCycles = nCount;
             nCount = 1;
@@ -3514,15 +3504,15 @@ export default class DebuggerX80 extends DbgLib {
      */
     doUnassemble(sAddr, sAddrEnd, n)
     {
-        var dbgAddr = this.parseAddr(sAddr, true);
+        let dbgAddr = this.parseAddr(sAddr, true);
         if (!dbgAddr) return;
 
         if (n === undefined) n = 1;
 
-        var cb = 0x100;
+        let cb = 0x100;
         if (sAddrEnd !== undefined) {
 
-            var dbgAddrEnd = this.parseAddr(sAddrEnd, true);
+            let dbgAddrEnd = this.parseAddr(sAddrEnd, true);
             if (!dbgAddrEnd || dbgAddrEnd.addr < dbgAddr.addr) return;
 
             cb = dbgAddrEnd.addr - dbgAddr.addr;
@@ -3538,20 +3528,20 @@ export default class DebuggerX80 extends DbgLib {
             n = -1;
         }
 
-        var cLines = 0;
-        var sInstruction;
+        let cLines = 0;
+        let sInstruction;
 
         while (cb > 0 && n--) {
 
-            var nSequence = (this.isBusy(false) || this.nStep)? this.nCycles : null;
-            var sComment = (nSequence != null? "cycles" : null);
-            var aSymbol = this.findSymbol(dbgAddr);
+            let nSequence = (this.isBusy(false) || this.nStep)? this.nCycles : null;
+            let sComment = (nSequence != null? "cycles" : null);
+            let aSymbol = this.findSymbol(dbgAddr);
 
-            var addr = dbgAddr.addr;    // we snap dbgAddr.addr *after* calling findSymbol(), which re-evaluates it
+            let addr = dbgAddr.addr;    // we snap dbgAddr.addr *after* calling findSymbol(), which re-evaluates it
 
             if (aSymbol[0] && n) {
                 if (!cLines && n || aSymbol[0].indexOf('+') < 0) {
-                    var sLabel = aSymbol[0] + ':';
+                    let sLabel = aSymbol[0] + ':';
                     if (aSymbol[2]) sLabel += ' ' + aSymbol[2];
                     this.printf("%s\n", sLabel);
                 }
@@ -3600,14 +3590,14 @@ export default class DebuggerX80 extends DbgLib {
                 this.iPrevCmd--;
             }
         }
-        var a = [];
+        let a = [];
         if (sCmd) {
             /*
              * With the introduction of breakpoint commands (ie, quoted command sequences
              * associated with a breakpoint), we can no longer perform simplistic splitting.
              *
              *      a = sCmd.split(chSep || ';');
-             *      for (var i = 0; i < a.length; i++) a[i] = str.trim(a[i]);
+             *      for (let i = 0; i < a.length; i++) a[i] = str.trim(a[i]);
              *
              * We may now split on semi-colons ONLY if they are outside a quoted sequence.
              *
@@ -3616,8 +3606,8 @@ export default class DebuggerX80 extends DbgLib {
              */
             sCmd = sCmd.toLowerCase().replace(/""/g, "'");
 
-            var iPrev = 0;
-            var chQuote = null;
+            let iPrev = 0;
+            let chQuote = null;
             chSep = chSep || ';';
             /*
              * NOTE: Processing charAt() up to and INCLUDING length is not a typo; we're taking
@@ -3626,8 +3616,8 @@ export default class DebuggerX80 extends DbgLib {
              *
              * In a sense, it allows us to pretend that the string ends with a zero terminator.
              */
-            for (var i = 0; i <= sCmd.length; i++) {
-                var ch = sCmd.charAt(i);
+            for (let i = 0; i <= sCmd.length; i++) {
+                let ch = sCmd.charAt(i);
                 if (ch == '"' || ch == "'") {
                     if (!chQuote) {
                         chQuote = ch;
@@ -3660,10 +3650,10 @@ export default class DebuggerX80 extends DbgLib {
     shiftArgs(asArgs)
     {
         if (asArgs && asArgs.length) {
-            var s0 = asArgs[0];
-            var ch0 = s0.charAt(0);
-            for (var i = 1; i < s0.length; i++) {
-                var ch = s0.charAt(i);
+            let s0 = asArgs[0];
+            let ch0 = s0.charAt(0);
+            for (let i = 1; i < s0.length; i++) {
+                let ch = s0.charAt(i);
                 if (ch0 == '?' || ch0 == 'r' || ch < 'a' || ch > 'z') {
                     asArgs[0] = s0.substr(i);
                     asArgs.unshift(s0.substr(0, i));
@@ -3684,7 +3674,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     doCommand(sCmd, fQuiet)
     {
-        var result = true;
+        let result = true;
 
         try {
             if (!sCmd.length || sCmd == "end") {
@@ -3696,11 +3686,11 @@ export default class DebuggerX80 extends DbgLib {
                 sCmd = "";
             }
             else if (!fQuiet) {
-                var sPrompt = ">> ";
+                let sPrompt = ">> ";
                 this.printf("%s%s\n", sPrompt, sCmd);
             }
 
-            var ch = sCmd.charAt(0);
+            let ch = sCmd.charAt(0);
             if (ch == '"' || ch == "'") return true;
 
             /*
@@ -3717,7 +3707,7 @@ export default class DebuggerX80 extends DbgLib {
                     sCmd = "a " + this.toHexAddr(this.dbgAddrAssemble) + ' ' + sCmd;
                 }
 
-                var asArgs = this.shiftArgs(sCmd.replace(/ +/g, ' ').split(' '));
+                let asArgs = this.shiftArgs(sCmd.replace(/ +/g, ' ').split(' '));
 
                 switch (asArgs[0].charAt(0)) {
                 case 'a':
@@ -3851,8 +3841,8 @@ export default class DebuggerX80 extends DbgLib {
      */
     doCommands(sCmds, fSave)
     {
-        var a = this.parseCommand(sCmds, fSave);
-        for (var s in a) {
+        let a = this.parseCommand(sCmds, fSave);
+        for (let s in a) {
             if (!this.doCommand(a[+s])) return false;
         }
         return true;
@@ -3868,11 +3858,11 @@ export default class DebuggerX80 extends DbgLib {
      */
     static init()
     {
-        var aeDbg = Component.getElementsByClass(APPCLASS, "debugger");
-        for (var iDbg = 0; iDbg < aeDbg.length; iDbg++) {
-            var eDbg = aeDbg[iDbg];
-            var parmsDbg = Component.getComponentParms(eDbg);
-            var dbg = new DebuggerX80(parmsDbg);
+        let aeDbg = Component.getElementsByClass(APPCLASS, "debugger");
+        for (let iDbg = 0; iDbg < aeDbg.length; iDbg++) {
+            let eDbg = aeDbg[iDbg];
+            let parmsDbg = Component.getComponentParms(eDbg);
+            let dbg = new DebuggerX80(parmsDbg);
             Component.bindComponentControls(dbg, eDbg, APPCLASS);
         }
     }

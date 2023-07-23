@@ -191,6 +191,7 @@ const Messages = {
  * something to be aware of).
  */
 Messages.Categories = {
+    "log":      Messages.LOG,
     "warn":     Messages.WARNING,
     /*
      * Now we turn to message actions rather than message types; for example, setting "halt"
@@ -4646,7 +4647,7 @@ class Component {
      *
      * @param {number} num
      * @param {number} bits
-     * @returns {boolean}
+     * @returns {boolean} (true if ALL specified bits are set, false if not)
      */
     testBits(num, bits)
     {
@@ -4678,7 +4679,13 @@ class Component {
          * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
          */
         if (DEBUG || !this.testBits(bitsMessage, Messages.DEBUG)) {
-            if (this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+            /*
+             * The debugger has the ability to filter any messages listed in Messages.Categories, and that currently
+             * includes message types LOG and WARNING, so if the debugger is loaded, subtract those from the types we allow
+             * by default.
+             */
+            let allowedMessages = Messages.TYPES - (this.dbg? Messages.LOG + Messages.WARNING : 0);
+            if (this.testBits(allowedMessages, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
                 return true;
             }
         }
@@ -4706,10 +4713,10 @@ class Component {
         if (typeof format == "number") {
             bitsMessage = format || Messages.PROGRESS;
             format = args.shift();
-            if (bitsMessage == Messages.LOG) {
+            if (this.testBits(bitsMessage, Messages.LOG)) {
                 format = (this.id || this.type || "log") + ": " + format;
             }
-            else if (bitsMessage == Messages.STATUS) {
+            else if (this.testBits(bitsMessage, Messages.STATUS)) {
                 format = this.type + ": " + format;
             }
         }
@@ -4874,8 +4881,8 @@ Messages.MEM        = 0x00000008;
 Messages.PORT       = 0x00000010;
 Messages.NVR        = 0x00000020;
 Messages.CHIPSET    = 0x00000040;
-Messages.KEYBOARD   = 0x00000080;
-Messages.KEYS       = 0x00000100;
+Messages.KBD        = 0x00000080;
+Messages.KEY        = 0x00000100;
 Messages.VIDEO      = 0x00000200;
 Messages.FDC        = 0x00000400;
 Messages.DISK       = 0x00000800;
@@ -4903,8 +4910,8 @@ Messages.Categories["mem"]      = Messages.MEM;
 Messages.Categories["port"]     = Messages.PORT;
 Messages.Categories["nvr"]      = Messages.NVR;
 Messages.Categories["chipset"]  = Messages.CHIPSET;
-Messages.Categories["keyboard"] = Messages.KEYBOARD; // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
-Messages.Categories["key"]      = Messages.KEYS;     // using "key" instead of "keys", since the latter is a method on JavasScript objects
+Messages.Categories["kbd"]      = Messages.KBD;
+Messages.Categories["key"]      = Messages.KEY;
 Messages.Categories["video"]    = Messages.VIDEO;
 Messages.Categories["fdc"]      = Messages.FDC;
 Messages.Categories["disk"]     = Messages.DISK;
@@ -5144,12 +5151,12 @@ class PanelX80 extends Component {
      */
     static init()
     {
-        var fReady = false;
-        var aePanels = Component.getElementsByClass(APPCLASS, "panel");
-        for (var iPanel=0; iPanel < aePanels.length; iPanel++) {
-            var ePanel = aePanels[iPanel];
-            var parmsPanel = Component.getComponentParms(ePanel);
-            var panel = Component.getComponentByID(parmsPanel['id'], false);
+        let fReady = false;
+        let aePanels = Component.getElementsByClass(APPCLASS, "panel");
+        for (let iPanel=0; iPanel < aePanels.length; iPanel++) {
+            let ePanel = aePanels[iPanel];
+            let parmsPanel = Component.getComponentParms(ePanel);
+            let panel = Component.getComponentByID(parmsPanel['id'], false);
             if (!panel) {
                 fReady = true;
                 panel = new PanelX80(parmsPanel);
@@ -5293,10 +5300,10 @@ class BusX80 extends Component {
      */
     initMemory()
     {
-        var block = new MemoryX80();
+        let block = new MemoryX80();
         block.copyBreakpoints(this.dbg);
         this.aMemBlocks = new Array(this.nBlockTotal);
-        for (var iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
+        for (let iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
             this.aMemBlocks[iBlock] = block;
         }
     }
@@ -5364,15 +5371,15 @@ class BusX80 extends Component {
      */
     addMemory(addr, size, type)
     {
-        var addrNext = addr;
-        var sizeLeft = size;
-        var iBlock = addrNext >>> this.nBlockShift;
+        let addrNext = addr;
+        let sizeLeft = size;
+        let iBlock = addrNext >>> this.nBlockShift;
 
         while (sizeLeft > 0 && iBlock < this.aMemBlocks.length) {
 
-            var block = this.aMemBlocks[iBlock];
-            var addrBlock = iBlock * this.nBlockSize;
-            var sizeBlock = this.nBlockSize - (addrNext - addrBlock);
+            let block = this.aMemBlocks[iBlock];
+            let addrBlock = iBlock * this.nBlockSize;
+            let sizeBlock = this.nBlockSize - (addrNext - addrBlock);
             if (sizeBlock > sizeLeft) sizeBlock = sizeLeft;
 
             if (block && block.size) {
@@ -5389,7 +5396,7 @@ class BusX80 extends Component {
                         return true;
                     }
                     if (addrNext >= block.addr + block.used) {
-                        var sizeAvail = block.size - (addrNext - addrBlock);
+                        let sizeAvail = block.size - (addrNext - addrBlock);
                         if (sizeAvail > sizeLeft) sizeAvail = sizeLeft;
                         block.used = addrNext - block.addr + sizeAvail;
                         addrNext = addrBlock + this.nBlockSize;
@@ -5401,7 +5408,7 @@ class BusX80 extends Component {
                 return this.reportError(BusX80.ERROR.ADD_MEM_INUSE, addrNext, sizeLeft);
             }
 
-            var blockNew = new MemoryX80(addrNext, sizeBlock, this.nBlockSize, type);
+            let blockNew = new MemoryX80(addrNext, sizeBlock, this.nBlockSize, type);
             blockNew.copyBreakpoints(this.dbg, block);
             this.aMemBlocks[iBlock++] = blockNew;
 
@@ -5427,9 +5434,9 @@ class BusX80 extends Component {
      */
     cleanMemory(addr, size)
     {
-        var fClean = true;
-        var iBlock = addr >>> this.nBlockShift;
-        var sizeBlock = this.nBlockSize - (addr & this.nBlockLimit);
+        let fClean = true;
+        let iBlock = addr >>> this.nBlockShift;
+        let sizeBlock = this.nBlockSize - (addr & this.nBlockLimit);
         while (size > 0 && iBlock < this.aMemBlocks.length) {
             if (this.aMemBlocks[iBlock].fDirty) {
                 this.aMemBlocks[iBlock].fDirty = fClean = false;
@@ -5459,13 +5466,13 @@ class BusX80 extends Component {
         if (size == null) size = (this.addrTotal - addr) | 0;
         if (info == null) info = {cbTotal: 0, cBlocks: 0, aBlocks: []};
 
-        var iBlock = addr >>> this.nBlockShift;
-        var iBlockMax = ((addr + size - 1) >>> this.nBlockShift);
+        let iBlock = addr >>> this.nBlockShift;
+        let iBlockMax = ((addr + size - 1) >>> this.nBlockShift);
 
         info.cbTotal = 0;
         info.cBlocks = 0;
         while (iBlock <= iBlockMax) {
-            var block = this.aMemBlocks[iBlock];
+            let block = this.aMemBlocks[iBlock];
             info.cbTotal += block.size;
             if (block.size) {
                 info.aBlocks.push(Usr.initBitFields(BusX80.BlockInfo, iBlock, 0, 0, block.type));
@@ -5502,10 +5509,10 @@ class BusX80 extends Component {
     removeMemory(addr, size)
     {
         if (!(addr & this.nBlockLimit) && size && !(size & this.nBlockLimit)) {
-            var iBlock = addr >>> this.nBlockShift;
+            let iBlock = addr >>> this.nBlockShift;
             while (size > 0) {
-                var blockOld = this.aMemBlocks[iBlock];
-                var blockNew = new MemoryX80(addr);
+                let blockOld = this.aMemBlocks[iBlock];
+                let blockNew = new MemoryX80(addr);
                 blockNew.copyBreakpoints(this.dbg, blockOld);
                 this.aMemBlocks[iBlock++] = blockNew;
                 addr = iBlock * this.nBlockSize;
@@ -5526,8 +5533,8 @@ class BusX80 extends Component {
      */
     getMemoryBlocks(addr, size)
     {
-        var aBlocks = [];
-        var iBlock = addr >>> this.nBlockShift;
+        let aBlocks = [];
+        let iBlock = addr >>> this.nBlockShift;
         while (size > 0 && iBlock < this.aMemBlocks.length) {
             aBlocks.push(this.aMemBlocks[iBlock++]);
             size -= this.nBlockSize;
@@ -5552,14 +5559,14 @@ class BusX80 extends Component {
      */
     setMemoryBlocks(addr, size, aBlocks, type)
     {
-        var i = 0;
-        var iBlock = addr >>> this.nBlockShift;
+        let i = 0;
+        let iBlock = addr >>> this.nBlockShift;
         while (size > 0 && iBlock < this.aMemBlocks.length) {
-            var block = aBlocks[i++];
+            let block = aBlocks[i++];
 
             if (!block) break;
             if (type !== undefined) {
-                var blockNew = new MemoryX80(addr);
+                let blockNew = new MemoryX80(addr);
                 blockNew.clone(block, type, this.dbg);
                 block = blockNew;
             }
@@ -5603,8 +5610,8 @@ class BusX80 extends Component {
      */
     getShort(addr)
     {
-        var off = addr & this.nBlockLimit;
-        var iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
+        let off = addr & this.nBlockLimit;
+        let iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
         if (off != this.nBlockLimit) {
             return this.aMemBlocks[iBlock].readShort(off, addr);
         }
@@ -5622,8 +5629,8 @@ class BusX80 extends Component {
      */
     getShortDirect(addr)
     {
-        var off = addr & this.nBlockLimit;
-        var iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
+        let off = addr & this.nBlockLimit;
+        let iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
         if (off != this.nBlockLimit) {
             return this.aMemBlocks[iBlock].readShortDirect(off, addr);
         }
@@ -5666,8 +5673,8 @@ class BusX80 extends Component {
      */
     setShort(addr, w)
     {
-        var off = addr & this.nBlockLimit;
-        var iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
+        let off = addr & this.nBlockLimit;
+        let iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
         if (off != this.nBlockLimit) {
             this.aMemBlocks[iBlock].writeShort(off, w & 0xffff, addr);
             return;
@@ -5688,8 +5695,8 @@ class BusX80 extends Component {
      */
     setShortDirect(addr, w)
     {
-        var off = addr & this.nBlockLimit;
-        var iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
+        let off = addr & this.nBlockLimit;
+        let iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
         if (off != this.nBlockLimit) {
             this.aMemBlocks[iBlock].writeShortDirect(off, w & 0xffff, addr);
             return;
@@ -5708,7 +5715,7 @@ class BusX80 extends Component {
     addMemBreak(addr, fWrite)
     {
         if (DEBUGGER) {
-            var iBlock = addr >>> this.nBlockShift;
+            let iBlock = addr >>> this.nBlockShift;
             this.aMemBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
         }
     }
@@ -5723,7 +5730,7 @@ class BusX80 extends Component {
     removeMemBreak(addr, fWrite)
     {
         if (DEBUGGER) {
-            var iBlock = addr >>> this.nBlockShift;
+            let iBlock = addr >>> this.nBlockShift;
             this.aMemBlocks[iBlock].removeBreakpoint(addr & this.nBlockLimit, fWrite);
         }
     }
@@ -5759,11 +5766,11 @@ class BusX80 extends Component {
      */
     saveMemory(fAll)
     {
-        var i = 0;
-        var a = [];
+        let i = 0;
+        let a = [];
 
-        for (var iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
-            var block = this.aMemBlocks[iBlock];
+        for (let iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
+            let block = this.aMemBlocks[iBlock];
             /*
              * We have to check both fDirty and fDirtyEver, because we may have called cleanMemory() on some of
              * the memory blocks (eg, video memory), and while cleanMemory() will clear a dirty block's fDirty flag,
@@ -5797,14 +5804,13 @@ class BusX80 extends Component {
      */
     restoreMemory(a)
     {
-        var i;
-        for (i = 0; i < a.length - 1; i += 2) {
-            var iBlock = a[i];
-            var adw = a[i+1];
+        for (let i = 0; i < a.length - 1; i += 2) {
+            let iBlock = a[i];
+            let adw = a[i+1];
             if (adw && adw.length < this.nBlockLen) {
                 adw = State.decompress(adw, this.nBlockLen);
             }
-            var block = this.aMemBlocks[iBlock];
+            let block = this.aMemBlocks[iBlock];
             if (!block || !block.restore(adw)) {
                 /*
                  * Either the block to restore hasn't been allocated, indicating a change in the machine
@@ -5851,7 +5857,7 @@ class BusX80 extends Component {
     addPortInputNotify(start, end, fn)
     {
         if (fn !== undefined) {
-            for (var port = start; port <= end; port++) {
+            for (let port = start; port <= end; port++) {
                 if (this.aPortInputNotify[port] !== undefined) {
                     Component.warning("Input port " + Str.toHexWord(port) + " already registered");
                     continue;
@@ -5876,7 +5882,7 @@ class BusX80 extends Component {
     {
         if (offset === undefined) offset = 0;
         if (table) {
-            for (var port in table) {
+            for (let port in table) {
                 this.addPortInputNotify(+port + offset, +port + offset, table[port].bind(component));
             }
         }
@@ -5910,14 +5916,14 @@ class BusX80 extends Component {
      */
     checkPortInputNotify(port, size, addrIP)
     {
-        var data = 0, shift = 0;
+        let data = 0, shift = 0;
 
         while (size > 0) {
 
-            var aNotify = this.aPortInputNotify[port];
-            var sizePort = this.aPortInputWidth[port] || 1;
-            var maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
-            var dataPort = maskPort;
+            let aNotify = this.aPortInputNotify[port];
+            let sizePort = this.aPortInputWidth[port] || 1;
+            let maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
+            let dataPort = maskPort;
 
             /*
              * TODO: We need to decide what to do about 8-bit I/O to a 16-bit port (ditto for 16-bit I/O
@@ -5991,7 +5997,7 @@ class BusX80 extends Component {
     addPortOutputNotify(start, end, fn)
     {
         if (fn !== undefined) {
-            for (var port = start; port <= end; port++) {
+            for (let port = start; port <= end; port++) {
                 if (this.aPortOutputNotify[port] !== undefined) {
                     Component.warning("Output port " + Str.toHexWord(port) + " already registered");
                     continue;
@@ -6016,7 +6022,7 @@ class BusX80 extends Component {
     {
         if (offset === undefined) offset = 0;
         if (table) {
-            for (var port in table) {
+            for (let port in table) {
                 this.addPortOutputNotify(+port + offset, +port + offset, table[port].bind(component));
             }
         }
@@ -6047,14 +6053,14 @@ class BusX80 extends Component {
      */
     checkPortOutputNotify(port, size, data, addrIP)
     {
-        var shift = 0;
+        let shift = 0;
 
         while (size > 0) {
 
-            var aNotify = this.aPortOutputNotify[port];
-            var sizePort = this.aPortOutputWidth[port] || 1;
-            var maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
-            var dataPort = (data >>>= shift) & maskPort;
+            let aNotify = this.aPortOutputNotify[port];
+            let sizePort = this.aPortOutputWidth[port] || 1;
+            let maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
+            let dataPort = (data >>>= shift) & maskPort;
 
             /*
              * TODO: We need to decide what to do about 8-bit I/O to a 16-bit port (ditto for 16-bit I/O
@@ -6098,7 +6104,7 @@ class BusX80 extends Component {
      *
      removePortInputNotify(start, end)
      {
-         for (var port = start; port < end; port++) {
+         for (let port = start; port < end; port++) {
              if (this.aPortInputNotify[port]) {
                  delete this.aPortInputNotify[port];
              }
@@ -6117,7 +6123,7 @@ class BusX80 extends Component {
      *
      removePortOutputNotify(start, end)
      {
-         for (var port = start; port < end; port++) {
+         for (let port = start; port < end; port++) {
              if (this.aPortOutputNotify[port]) {
                  delete this.aPortOutputNotify[port];
              }
@@ -6200,7 +6206,7 @@ var BusInfoX80;
  */
 
 var littleEndian = (TYPEDARRAYS? (function() {
-    var buffer = new ArrayBuffer(2);
+    let buffer = new ArrayBuffer(2);
     new DataView(buffer).setUint16(0, 256, true);
     return new Uint16Array(buffer)[0] === 256;
 })() : false);
@@ -6255,7 +6261,7 @@ class MemoryX80 {
      */
     constructor(addr, used, size, type)
     {
-        var i;
+        let i;
         this.id = (MemoryX80.idBlock += 2);
         this.adw = null;
         this.offset = 0;
@@ -6394,10 +6400,10 @@ class MemoryX80 {
      */
     save()
     {
-        var adw, i;
+        let adw, i;
         if (BYTEARRAYS) {
             adw = new Array(this.size >> 2);
-            var off = 0;
+            let off = 0;
             for (i = 0; i < adw.length; i++) {
                 adw[i] = this.ab[off] | (this.ab[off + 1] << 8) | (this.ab[off + 2] << 16) | (this.ab[off + 3] << 24);
                 off += 4;
@@ -6449,9 +6455,9 @@ class MemoryX80 {
 
 
         if (adw && this.size == adw.length << 2) {
-            var i;
+            let i;
             if (BYTEARRAYS) {
-                var off = 0;
+                let off = 0;
                 for (i = 0; i < adw.length; i++) {
                     this.ab[off] = adw[i] & 0xff;
                     this.ab[off + 1] = (adw[i] >> 8) & 0xff;
@@ -6732,10 +6738,10 @@ class MemoryX80 {
         if (BYTEARRAYS) {
             return this.ab[off] | (this.ab[off + 1] << 8);
         }
-        var w;
-        var idw = off >> 2;
-        var nShift = (off & 0x3) << 3;
-        var dw = (this.adw[idw] >> nShift);
+        let w;
+        let idw = off >> 2;
+        let nShift = (off & 0x3) << 3;
+        let dw = (this.adw[idw] >> nShift);
         if (nShift < 24) {
             w = dw & 0xffff;
         } else {
@@ -6757,8 +6763,8 @@ class MemoryX80 {
         if (BYTEARRAYS) {
             this.ab[off] = b;
         } else {
-            var idw = off >> 2;
-            var nShift = (off & 0x3) << 3;
+            let idw = off >> 2;
+            let nShift = (off & 0x3) << 3;
             this.adw[idw] = (this.adw[idw] & ~(0xff << nShift)) | (b << nShift);
         }
         this.fDirty = true;
@@ -6778,8 +6784,8 @@ class MemoryX80 {
             this.ab[off] = (w & 0xff);
             this.ab[off + 1] = (w >> 8);
         } else {
-            var idw = off >> 2;
-            var nShift = (off & 0x3) << 3;
+            let idw = off >> 2;
+            let nShift = (off & 0x3) << 3;
             if (nShift < 24) {
                 this.adw[idw] = (this.adw[idw] & ~(0xffff << nShift)) | (w << nShift);
             } else {
@@ -7121,9 +7127,9 @@ class CPUx80 extends Component {
     {
         super("CPU", parmsCPU, Messages.CPU);
 
-        var nCycles = parmsCPU['cycles'] || nCyclesDefault;
+        let nCycles = parmsCPU['cycles'] || nCyclesDefault;
 
-        var nMultiplier = parmsCPU['multiplier'] || 1;
+        let nMultiplier = parmsCPU['multiplier'] || 1;
 
         this.nCyclesPerSecond = nCycles;
 
@@ -7191,8 +7197,8 @@ class CPUx80 extends Component {
         this.bus = bus;
         this.dbg = dbg;
 
-        for (var i = 0; i < CPUx80.BUTTONS.length; i++) {
-            var control = this.bindings[CPUx80.BUTTONS[i]];
+        for (let i = 0; i < CPUx80.BUTTONS.length; i++) {
+            let control = this.bindings[CPUx80.BUTTONS[i]];
             if (control) this.cmp.setBinding("", CPUx80.BUTTONS[i], control);
         }
 
@@ -7204,7 +7210,7 @@ class CPUx80 extends Component {
         /*
          * We've already saved the parmsCPU 'autoStart' setting, but there may be a machine (or URL) override.
          */
-        var sAutoStart = cmp.getMachineParm('autoStart');
+        let sAutoStart = cmp.getMachineParm('autoStart');
         if (sAutoStart != null) {
             this.flags.autoStart = (sAutoStart == "true"? true : (sAutoStart  == "false"? false : !!sAutoStart));
         }
@@ -7411,7 +7417,7 @@ class CPUx80 extends Component {
             /*
              * Get a 32-bit summation of the current CPU state and add it to our running 32-bit checksum
              */
-            var fDisplay = false;
+            let fDisplay = false;
             this.nChecksum = (this.nChecksum + this.getChecksum())|0;
             this.nCyclesChecksumNext -= nCycles;
             if (this.nCyclesChecksumNext <= 0) {
@@ -7462,7 +7468,7 @@ class CPUx80 extends Component {
                 this.setError("Value for " + sLabel + " is invalid");
                 this.stopCPU();
             }
-            var sVal;
+            let sVal;
             if (!this.flags.running || this.flags.displayLiveRegs) {
                 sVal = Str.toHex(nValue, cch);
             } else {
@@ -7490,8 +7496,8 @@ class CPUx80 extends Component {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var cpu = this;
-        var fBound = false;
+        let cpu = this;
+        let fBound = false;
 
         switch (sBinding) {
         case "power":
@@ -7559,7 +7565,7 @@ class CPUx80 extends Component {
     setBurstCycles(nCycles)
     {
         if (this.flags.running) {
-            var nDelta = this.nStepCycles - nCycles;
+            let nDelta = this.nStepCycles - nCycles;
             /*
              * NOTE: If nDelta is negative, we will actually be increasing nStepCycles and nBurstCycles.
              * Which is OK, but if we're also taking snapshots of the cycle counts, to make sure that instruction
@@ -7611,7 +7617,7 @@ class CPUx80 extends Component {
         /*
          * Calculate "per" yield values.
          */
-        var vMultiplier = 1;
+        let vMultiplier = 1;
         if (fRecalc) {
             if (this.nCyclesMultiplier > 1 && this.mhz) {
                 vMultiplier = (this.mhz / this.mhzDefault);
@@ -7649,7 +7655,7 @@ class CPUx80 extends Component {
      */
     getCycles(fScaled)
     {
-        var nCycles = this.nTotalCycles + this.nRunCycles + this.nBurstCycles - this.nStepCycles;
+        let nCycles = this.nTotalCycles + this.nRunCycles + this.nBurstCycles - this.nStepCycles;
         if (fScaled && this.nCyclesMultiplier > 1 && this.mhz > this.mhzDefault) {
             /*
              * We could scale the current cycle count by the current effective speed (this.mhz); eg:
@@ -7760,7 +7766,7 @@ class CPUx80 extends Component {
      */
     setSpeed(nMultiplier, fUpdateFocus)
     {
-        var fSuccess = false;
+        let fSuccess = false;
         if (nMultiplier !== undefined) {
             /*
              * If we haven't reached 80% (0.8) of the current target speed, revert to a multiplier of one (1).
@@ -7771,11 +7777,11 @@ class CPUx80 extends Component {
                 fSuccess = true;
             }
             this.nCyclesMultiplier = nMultiplier;
-            var mhz = this.mhzDefault * this.nCyclesMultiplier;
+            let mhz = this.mhzDefault * this.nCyclesMultiplier;
             if (this.mhzTarget != mhz) {
                 this.mhzTarget = mhz;
-                var sSpeed = this.getSpeedTarget();
-                var controlSpeed = this.bindings["setSpeed"];
+                let sSpeed = this.getSpeedTarget();
+                let controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
                 this.printf("target speed: %s\n", sSpeed);
             }
@@ -7846,7 +7852,7 @@ class CPUx80 extends Component {
          * EXTREMELY slow instruction.
          */
         if (this.msEndThisRun) {
-            var msDelta = this.msStartThisRun - this.msEndThisRun;
+            let msDelta = this.msStartThisRun - this.msEndThisRun;
             if (msDelta > this.msPerYield) {
                 if (MAXDEBUG) this.printf("large time delay: %dms\n", msDelta);
                 this.msStartRun += msDelta;
@@ -7873,7 +7879,7 @@ class CPUx80 extends Component {
     {
         this.msEndThisRun = Component.getTime();
 
-        var msYield = this.msPerYield;
+        let msYield = this.msPerYield;
         if (this.nCyclesThisRun) {
             /*
              * Normally, we would assume we executed a full quota of work over msPerYield, but since the CPU
@@ -7884,8 +7890,8 @@ class CPUx80 extends Component {
             msYield = Math.round(msYield * this.nCyclesThisRun / this.nCyclesPerYield);
         }
 
-        var msElapsedThisRun = this.msEndThisRun - this.msStartThisRun;
-        var msRemainsThisRun = msYield - msElapsedThisRun;
+        let msElapsedThisRun = this.msEndThisRun - this.msStartThisRun;
+        let msRemainsThisRun = msYield - msElapsedThisRun;
 
         /*
          * We could pass only "this run" results to calcSpeed():
@@ -7902,8 +7908,8 @@ class CPUx80 extends Component {
          *
          * to insure that we display a smooth, constant N Mhz.  But for now, I prefer seeing any fluctuations.
          */
-        var nCycles = this.nRunCycles;
-        var msElapsed = this.msEndThisRun - this.msStartRun;
+        let nCycles = this.nRunCycles;
+        let msElapsed = this.msEndThisRun - this.msStartRun;
 
         if (MAXDEBUG && msRemainsThisRun < 0 && this.nCyclesMultiplier > 1) {
             this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
@@ -7970,7 +7976,7 @@ class CPUx80 extends Component {
      */
     addTimer(id, callBack, ms = -1)
     {
-        var iTimer = this.aTimers.length;
+        let iTimer = this.aTimers.length;
         this.aTimers.push([id, -1, ms, callBack]);
         if (ms >= 0) this.setTimer(iTimer, ms);
         return iTimer;
@@ -7985,8 +7991,8 @@ class CPUx80 extends Component {
      */
     findTimer(id)
     {
-        for (var iTimer = 0; iTimer < this.aTimers.length; iTimer++) {
-            var timer = this.aTimers[iTimer];
+        for (let iTimer = 0; iTimer < this.aTimers.length; iTimer++) {
+            let timer = this.aTimers[iTimer];
             if (timer[0] == id) return timer;
         }
         return null;
@@ -8015,9 +8021,9 @@ class CPUx80 extends Component {
      */
     setTimer(iTimer, ms, fReset)
     {
-        var nCycles = -1;
+        let nCycles = -1;
         if (iTimer >= 0 && iTimer < this.aTimers.length) {
-            var timer = this.aTimers[iTimer];
+            let timer = this.aTimers[iTimer];
             if (fReset || timer[1] < 0) {
                 nCycles = this.getMSCycles(ms);
                 /*
@@ -8058,8 +8064,8 @@ class CPUx80 extends Component {
      */
     getBurstCycles(nCycles)
     {
-        for (var iTimer = this.aTimers.length - 1; iTimer >= 0; iTimer--) {
-            var timer = this.aTimers[iTimer];
+        for (let iTimer = this.aTimers.length - 1; iTimer >= 0; iTimer--) {
+            let timer = this.aTimers[iTimer];
 
             if (timer[1] < 0) continue;
             if (nCycles > timer[1]) {
@@ -8081,22 +8087,18 @@ class CPUx80 extends Component {
      */
     updateTimers(nCycles)
     {
-        for (var iTimer = this.aTimers.length - 1; iTimer >= 0; iTimer--) {
-            var timer = this.aTimers[iTimer];
+        for (let iTimer = this.aTimers.length - 1; iTimer >= 0; iTimer--) {
+            let timer = this.aTimers[iTimer];
 
             if (timer[1] < 0) continue;
             timer[1] -= nCycles;
             if (timer[1] <= 0) {
-                if (DEBUG) {
-                    this.printf(Messages.CPU, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
-                }
+
                 timer[1] = -1;      // zero is technically an "active" value, so ensure the timer is dormant now
                 timer[3]();         // safe to invoke the callback function now
                 if (timer[2] >= 0) {
                     this.setTimer(iTimer, timer[2]);
-                    if (DEBUG) {
-                        this.printf(Messages.CPU, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
-                    }
+
                 }
             }
         }
@@ -8111,7 +8113,7 @@ class CPUx80 extends Component {
      */
     endBurst(fReset)
     {
-        var nCycles = this.nBurstCycles -= this.nStepCycles;
+        let nCycles = this.nBurstCycles -= this.nStepCycles;
         this.nStepCycles = 0;
         if (fReset) this.nBurstCycles = 0;
         return nCycles;
@@ -8146,7 +8148,7 @@ class CPUx80 extends Component {
                  * HIGH as nCyclesPerYield, but it may be significantly less.  getBurstCycles() will adjust
                  * nCycles downward if any CPU timers need to fire during the next burst.
                  */
-                var nCycles = this.getBurstCycles(this.flags.checksum? 1 : this.nCyclesPerYield);
+                let nCycles = this.getBurstCycles(this.flags.checksum? 1 : this.nCyclesPerYield);
 
                 /*
                  * Execute the burst.
@@ -8214,7 +8216,7 @@ class CPUx80 extends Component {
             this.flags.running = true;
             this.flags.starting = true;
             if (this.chipset) this.chipset.start();
-            var controlRun = this.bindings["run"];
+            let controlRun = this.bindings["run"];
             if (controlRun) controlRun.textContent = "Halt";
             if (this.cmp) {
                 this.cmp.updateStatus(true);
@@ -8257,7 +8259,7 @@ class CPUx80 extends Component {
         if (this.flags.running) {
             this.flags.running = false;
             if (this.chipset) this.chipset.stop();
-            var controlRun = this.bindings["run"];
+            let controlRun = this.bindings["run"];
             if (controlRun) controlRun.textContent = "Run";
         }
         this.flags.complete = fComplete;
@@ -8355,8 +8357,8 @@ class CPUStateX80 extends CPUx80 {
      */
     constructor(parmsCPU)
     {
-        var nCyclesDefault = 0;
-        var model = +parmsCPU['model'] || CPUDefX80.MODEL_8080;
+        let nCyclesDefault = 0;
+        let model = +parmsCPU['model'] || CPUDefX80.MODEL_8080;
 
         switch(model) {
         case CPUDefX80.MODEL_8080:
@@ -8492,7 +8494,7 @@ class CPUStateX80 extends CPUx80 {
      */
     getChecksum()
     {
-        var sum = (this.regA + this.regB + this.regC + this.regD + this.regE + this.regH + this.regL)|0;
+        let sum = (this.regA + this.regB + this.regC + this.regD + this.regE + this.regH + this.regL)|0;
         sum = (sum + this.getSP() + this.getPC() + this.getPS())|0;
         return sum;
     }
@@ -8507,7 +8509,7 @@ class CPUStateX80 extends CPUx80 {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         state.set(0, [this.regA, this.regB, this.regC, this.regD, this.regE, this.regH, this.regL, this.getSP(), this.getPC(), this.getPS()]);
         state.set(1, [this.intFlags, this.nTotalCycles, this.getSpeed()]);
         state.set(2, this.bus.saveMemory());
@@ -8525,7 +8527,7 @@ class CPUStateX80 extends CPUx80 {
      */
     restore(data)
     {
-        var a = data[0];
+        let a = data[0];
         this.regA = a[0];
         this.regB = a[1];
         this.regC = a[2];
@@ -8555,7 +8557,7 @@ class CPUStateX80 extends CPUx80 {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var fBound = false;
+        let fBound = false;
         switch (sBinding) {
         case "A":
         case "B":
@@ -9179,7 +9181,7 @@ class CPUStateX80 extends CPUx80 {
      */
     getPCByte()
     {
-        var b = this.getByte(this.regPC);
+        let b = this.getByte(this.regPC);
         this.setPC(this.regPC + 1);
         return b;
     }
@@ -9192,7 +9194,7 @@ class CPUStateX80 extends CPUx80 {
      */
     getPCWord()
     {
-        var w = this.getWord(this.regPC);
+        let w = this.getWord(this.regPC);
         this.setPC(this.regPC + 2);
         return w;
     }
@@ -9205,7 +9207,7 @@ class CPUStateX80 extends CPUx80 {
      */
     popWord()
     {
-        var w = this.getWord(this.regSP);
+        let w = this.getWord(this.regSP);
         this.setSP(this.regSP + 2);
         return w;
     }
@@ -9237,7 +9239,8 @@ class CPUStateX80 extends CPUx80 {
          */
         if (this.nStepCycles) {
             if ((this.intFlags & CPUDefX80.INTFLAG.INTR) && this.getIF()) {
-                for (var nLevel = 0; nLevel < 8; nLevel++) {
+                let nLevel;
+                for (nLevel = 0; nLevel < 8; nLevel++) {
                     if (this.intFlags & (1 << nLevel)) break;
                 }
                 this.clearINTR(nLevel);
@@ -9272,7 +9275,7 @@ class CPUStateX80 extends CPUx80 {
      */
     clearINTR(nLevel)
     {
-        var bitsClear = nLevel < 0? 0xff : (1 << nLevel);
+        let bitsClear = nLevel < 0? 0xff : (1 << nLevel);
         this.intFlags &= ~bitsClear;
     }
 
@@ -9353,7 +9356,7 @@ class CPUStateX80 extends CPUx80 {
                 this.updateReg("HL", this.getHL(), 4);
                 this.updateReg("SP", this.getSP(), 4);
                 this.updateReg("PC", this.getPC(), 4);
-                var regPS = this.getPS();
+                let regPS = this.getPS();
                 this.updateReg("PS", regPS, 4);
                 this.updateReg("IF", (regPS & CPUDefX80.PS.IF)? 1 : 0, 1);
                 this.updateReg("SF", (regPS & CPUDefX80.PS.SF)? 1 : 0, 1);
@@ -9363,7 +9366,7 @@ class CPUStateX80 extends CPUx80 {
                 this.updateReg("CF", (regPS & CPUDefX80.PS.CF)? 1 : 0, 1);
             }
         }
-        var controlSpeed = this.bindings["speed"];
+        let controlSpeed = this.bindings["speed"];
         if (controlSpeed) controlSpeed.textContent = this.getSpeedCurrent();
     }
 
@@ -9399,7 +9402,7 @@ class CPUStateX80 extends CPUx80 {
         /*
          * fDebugCheck is true if we need to "check" every instruction with the Debugger.
          */
-        var fDebugCheck = this.flags.debugCheck = (DEBUGGER && this.dbg && this.dbg.checksEnabled());
+        let fDebugCheck = this.flags.debugCheck = (DEBUGGER && this.dbg && this.dbg.checksEnabled());
 
         /*
          * nDebugState is checked only when fDebugCheck is true, and its sole purpose is to tell the first call
@@ -9409,7 +9412,7 @@ class CPUStateX80 extends CPUx80 {
          * Once we snap fStarting, we clear it, because technically, we've moved beyond "starting" and have
          * officially "started" now.
          */
-        var nDebugState = (!nMinCycles)? -1 : (this.flags.starting? 0 : 1);
+        let nDebugState = (!nMinCycles)? -1 : (this.flags.starting? 0 : 1);
         this.flags.starting = false;
 
         /*
@@ -9450,11 +9453,11 @@ class CPUStateX80 extends CPUx80 {
      */
     static init()
     {
-        var aeCPUs = Component.getElementsByClass(APPCLASS, "cpu");
-        for (var iCPU = 0; iCPU < aeCPUs.length; iCPU++) {
-            var eCPU = aeCPUs[iCPU];
-            var parmsCPU = Component.getComponentParms(eCPU);
-            var cpu = new CPUStateX80(parmsCPU);
+        let aeCPUs = Component.getElementsByClass(APPCLASS, "cpu");
+        for (let iCPU = 0; iCPU < aeCPUs.length; iCPU++) {
+            let eCPU = aeCPUs[iCPU];
+            let parmsCPU = Component.getComponentParms(eCPU);
+            let cpu = new CPUStateX80(parmsCPU);
             Component.bindComponentControls(cpu, eCPU, APPCLASS);
         }
     }
@@ -9552,7 +9555,7 @@ CPUDefX80.opMVIB = function()
  */
 CPUDefX80.opRLC = function()
 {
-    var carry = this.regA << 1;
+    let carry = this.regA << 1;
     this.regA = (carry & 0xff) | (carry >> 8);
     this.updateCF(carry & 0x100);
     this.nStepCycles -= 4;
@@ -9565,7 +9568,7 @@ CPUDefX80.opRLC = function()
  */
 CPUDefX80.opDADB = function()
 {
-    var w;
+    let w;
     this.setHL(w = this.getHL() + this.getBC());
     this.updateCF((w >> 8) & 0x100);
     this.nStepCycles -= 10;
@@ -9633,7 +9636,7 @@ CPUDefX80.opMVIC = function()
  */
 CPUDefX80.opRRC = function()
 {
-    var carry = (this.regA << 8) & 0x100;
+    let carry = (this.regA << 8) & 0x100;
     this.regA = (carry | this.regA) >> 1;
     this.updateCF(carry);
     this.nStepCycles -= 4;
@@ -9712,7 +9715,7 @@ CPUDefX80.opMVID = function()
  */
 CPUDefX80.opRAL = function()
 {
-    var carry = this.regA << 1;
+    let carry = this.regA << 1;
     this.regA = (carry & 0xff) | this.getCF();
     this.updateCF(carry & 0x100);
     this.nStepCycles -= 4;
@@ -9725,7 +9728,7 @@ CPUDefX80.opRAL = function()
  */
 CPUDefX80.opDADD = function()
 {
-    var w;
+    let w;
     this.setHL(w = this.getHL() + this.getDE());
     this.updateCF((w >> 8) & 0x100);
     this.nStepCycles -= 10;
@@ -9793,7 +9796,7 @@ CPUDefX80.opMVIE = function()
  */
 CPUDefX80.opRAR = function()
 {
-    var carry = (this.regA << 8);
+    let carry = (this.regA << 8);
     this.regA = ((this.getCF() << 8) | this.regA) >> 1;
     this.updateCF(carry & 0x100);
     this.nStepCycles -= 4;
@@ -9872,9 +9875,9 @@ CPUDefX80.opMVIH = function()
  */
 CPUDefX80.opDAA = function()
 {
-    var src = 0;
-    var CF = this.getCF();
-    var AF = this.getAF();
+    let src = 0;
+    let CF = this.getCF();
+    let AF = this.getAF();
     if (AF || (this.regA & 0x0F) > 9) {
         src |= 0x06;
     }
@@ -9894,7 +9897,7 @@ CPUDefX80.opDAA = function()
  */
 CPUDefX80.opDADH = function()
 {
-    var w;
+    let w;
     this.setHL(w = this.getHL() + this.getHL());
     this.updateCF((w >> 8) & 0x100);
     this.nStepCycles -= 10;
@@ -10006,7 +10009,7 @@ CPUDefX80.opINXSP = function()
  */
 CPUDefX80.opINRM = function()
 {
-    var addr = this.getHL();
+    let addr = this.getHL();
     this.setByte(addr, this.incByte(this.getByte(addr)));
     this.nStepCycles -= 10;
 };
@@ -10018,7 +10021,7 @@ CPUDefX80.opINRM = function()
  */
 CPUDefX80.opDCRM = function()
 {
-    var addr = this.getHL();
+    let addr = this.getHL();
     this.setByte(addr, this.decByte(this.getByte(addr)));
     this.nStepCycles -= 10;
 };
@@ -10052,7 +10055,7 @@ CPUDefX80.opSTC = function()
  */
 CPUDefX80.opDADSP = function()
 {
-    var w;
+    let w;
     this.setHL(w = this.getHL() + this.getSP());
     this.updateCF((w >> 8) & 0x100);
     this.nStepCycles -= 10;
@@ -10719,14 +10722,14 @@ CPUDefX80.opMOVML = function()
  */
 CPUDefX80.opHLT = function()
 {
-    var addr = this.getPC() - 1;
+    let addr = this.getPC() - 1;
 
     /*
      * If any HLT check functions are installed, call them, and if any of them return true, then
      * immediately stop HLT processing.
      */
     if (this.afnHalt.length) {
-        for (var i = 0; i < this.afnHalt.length; i++) {
+        for (let i = 0; i < this.afnHalt.length; i++) {
             if (this.afnHalt[i](addr)) return;
         }
     }
@@ -11594,7 +11597,7 @@ CPUDefX80.opPOPB = function()
  */
 CPUDefX80.opJNZ = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getZF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -11617,7 +11620,7 @@ CPUDefX80.opJMP = function()
  */
 CPUDefX80.opCNZ = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getZF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -11692,7 +11695,7 @@ CPUDefX80.opRET = function()
  */
 CPUDefX80.opJZ = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getZF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -11704,7 +11707,7 @@ CPUDefX80.opJZ = function()
  */
 CPUDefX80.opCZ = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getZF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -11720,7 +11723,7 @@ CPUDefX80.opCZ = function()
  */
 CPUDefX80.opCALL = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     this.pushWord(this.getPC());
     this.setPC(w);
     this.nStepCycles -= 17;
@@ -11781,7 +11784,7 @@ CPUDefX80.opPOPD = function()
  */
 CPUDefX80.opJNC = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getCF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -11793,7 +11796,7 @@ CPUDefX80.opJNC = function()
  */
 CPUDefX80.opOUT = function()
 {
-    var port = this.getPCByte();
+    let port = this.getPCByte();
     this.bus.checkPortOutputNotify(port, 1, this.regA, this.offPC(-2));
     this.nStepCycles -= 10;
 };
@@ -11805,7 +11808,7 @@ CPUDefX80.opOUT = function()
  */
 CPUDefX80.opCNC = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getCF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -11869,7 +11872,7 @@ CPUDefX80.opRC = function()
  */
 CPUDefX80.opJC = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getCF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -11881,7 +11884,7 @@ CPUDefX80.opJC = function()
  */
 CPUDefX80.opIN = function()
 {
-    var port = this.getPCByte();
+    let port = this.getPCByte();
     this.regA = this.bus.checkPortInputNotify(port, 1, this.offPC(-2)) & 0xff;
     this.nStepCycles -= 10;
 };
@@ -11893,7 +11896,7 @@ CPUDefX80.opIN = function()
  */
 CPUDefX80.opCC = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getCF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -11957,7 +11960,7 @@ CPUDefX80.opPOPH = function()
  */
 CPUDefX80.opJPO = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getPF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -11969,7 +11972,7 @@ CPUDefX80.opJPO = function()
  */
 CPUDefX80.opXTHL = function()
 {
-    var w = this.popWord();
+    let w = this.popWord();
     this.pushWord(this.getHL());
     this.setHL(w);
     this.nStepCycles -= 18;
@@ -11982,7 +11985,7 @@ CPUDefX80.opXTHL = function()
  */
 CPUDefX80.opCPO = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getPF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -12057,7 +12060,7 @@ CPUDefX80.opPCHL = function()
  */
 CPUDefX80.opJPE = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getPF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -12069,7 +12072,7 @@ CPUDefX80.opJPE = function()
  */
 CPUDefX80.opXCHG = function()
 {
-    var w = this.getHL();
+    let w = this.getHL();
     this.setHL(this.getDE());
     this.setDE(w);
     this.nStepCycles -= 5;
@@ -12082,7 +12085,7 @@ CPUDefX80.opXCHG = function()
  */
 CPUDefX80.opCPE = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getPF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -12146,7 +12149,7 @@ CPUDefX80.opPOPSW = function()
  */
 CPUDefX80.opJP = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getSF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -12169,7 +12172,7 @@ CPUDefX80.opDI = function()
  */
 CPUDefX80.opCP = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (!this.getSF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -12244,7 +12247,7 @@ CPUDefX80.opSPHL = function()
  */
 CPUDefX80.opJM = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getSF()) this.setPC(w);
     this.nStepCycles -= 10;
 };
@@ -12268,7 +12271,7 @@ CPUDefX80.opEI = function()
  */
 CPUDefX80.opCM = function()
 {
-    var w = this.getPCWord();
+    let w = this.getPCWord();
     if (this.getSF()) {
         this.pushWord(this.getPC());
         this.setPC(w);
@@ -12402,7 +12405,7 @@ class ChipSetX80 extends Component {
     {
         super("ChipSet", parmsChipSet, Messages.CHIPSET);
 
-        var model = parmsChipSet['model'];
+        let model = parmsChipSet['model'];
 
         if (model && !ChipSetX80.MODELS[model]) {
             Component.printf(Messages.NOTICE, "Unrecognized ChipSet model: %s\n", model);
@@ -12434,7 +12437,7 @@ class ChipSetX80 extends Component {
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
-                if (DEBUG) this.printf(Messages.LOG, "AudioContext not available\n");
+
             }
         }
 
@@ -12451,14 +12454,14 @@ class ChipSetX80 extends Component {
      */
     parseDIPSwitches(sBits, bDefault)
     {
-        var b = bDefault;
+        let b = bDefault;
         if (sBits) {
             /*
              * NOTE: We can't use parseInt() with a base of 2, because both bit order and bit sense are reversed.
              */
             b = 0;
-            var bit = 0x1;
-            for (var i = 0; i < sBits.length; i++) {
+            let bit = 0x1;
+            for (let i = 0; i < sBits.length; i++) {
                 if (sBits.charAt(i) == "0") b |= bit;
                 bit <<= 1;
             }
@@ -12504,7 +12507,7 @@ class ChipSetX80 extends Component {
 
         if (DEBUGGER) {
             if (dbg) {
-                var chipset = this;
+                let chipset = this;
                 dbg.messageDump(Messages.NVR, function onDumpNVR() {
                     chipset.dumpNVR();
                 });
@@ -12553,8 +12556,8 @@ class ChipSetX80 extends Component {
     dumpNVR()
     {
         if (DEBUGGER) {
-            var sDump = "";
-            for (var iWord = 0; iWord < this.aNVRWords.length; iWord++) {
+            let sDump = "";
+            for (let iWord = 0; iWord < this.aNVRWords.length; iWord++) {
                 if (sDump) {
                     sDump += (iWord && (iWord % 10)? ", " : ",\n");
                 }
@@ -12586,7 +12589,7 @@ class ChipSetX80 extends Component {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         switch(this.config.MODEL) {
         case ChipSetX80.SI1978.MODEL:
             state.set(0, [this.bStatus0, this.bStatus1, this.bStatus2, this.wShiftData, this.bShiftCount, this.bSound1, this.bSound2]);
@@ -12612,7 +12615,7 @@ class ChipSetX80 extends Component {
      */
     restore(data)
     {
-        var a;
+        let a;
         if (data && (a = data[0]) && a.length) {
             switch(this.config.MODEL) {
             case ChipSetX80.SI1978.MODEL:
@@ -12724,7 +12727,7 @@ class ChipSetX80 extends Component {
      */
     inSIStatus0(port, addrFrom)
     {
-        var b = this.bStatus0;
+        let b = this.bStatus0;
         this.printIO(port, undefined, addrFrom, "STATUS0", b, true);
         return b;
     }
@@ -12739,7 +12742,7 @@ class ChipSetX80 extends Component {
      */
     inSIStatus1(port, addrFrom)
     {
-        var b = this.bStatus1;
+        let b = this.bStatus1;
         this.printIO(port, undefined, addrFrom, "STATUS1", b, true);
         return b;
     }
@@ -12754,7 +12757,7 @@ class ChipSetX80 extends Component {
      */
     inSIStatus2(port, addrFrom)
     {
-        var b = this.bStatus2;
+        let b = this.bStatus2;
         this.printIO(port, undefined, addrFrom, "STATUS2", b, true);
         return b;
     }
@@ -12769,7 +12772,7 @@ class ChipSetX80 extends Component {
      */
     inSIShiftResult(port, addrFrom)
     {
-        var b = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
+        let b = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
         this.printIO(port, undefined, addrFrom, "SHIFT.RESULT", b, true);
         return b;
     }
@@ -12868,9 +12871,9 @@ class ChipSetX80 extends Component {
      */
     getNVRAddr()
     {
-        var i;
-        var tens = 0, ones = 0;
-        var addr = ~this.dNVRAddr;
+        let i;
+        let tens = 0, ones = 0;
+        let addr = ~this.dNVRAddr;
         for (i = 0; i < 10; i++) {
             if (addr & 0x1) tens = 9-i;
             addr >>= 1;
@@ -12889,9 +12892,9 @@ class ChipSetX80 extends Component {
      */
     doNVRCommand()
     {
-        var addr, data;
-        var bit = this.bNVRLatch & 0x1;
-        var bCmd = (this.bNVRLatch >> 1) & 0x7;
+        let addr, data;
+        let bit = this.bNVRLatch & 0x1;
+        let bCmd = (this.bNVRLatch >> 1) & 0x7;
 
         switch(bCmd) {
         case ChipSetX80.VT100.NVR.CMD.STANDBY:
@@ -12953,7 +12956,7 @@ class ChipSetX80 extends Component {
      */
     inVT100Flags(port, addrFrom)
     {
-        var b = this.bFlags;
+        let b = this.bFlags;
 
         /*
          * The NVR_CLK bit is driven by LBA7 (ie, bit 7 from Line Buffer Address generation); see the DC011 discussion above.
@@ -13029,8 +13032,8 @@ class ChipSetX80 extends Component {
     {
         this.printIO(port, b, addrFrom, "DC012");
 
-        var bOpt = b & 0x3;
-        var bCmd = (b >> 2) & 0x3;
+        let bOpt = b & 0x3;
+        let bCmd = (b >> 2) & 0x3;
         switch(bCmd) {
         case 0x0:
             this.bDC012Scroll = (this.bDC012Scroll & ~0x3) | bOpt;
@@ -13083,8 +13086,8 @@ class ChipSetX80 extends Component {
             if (this.bDC011Cols != b) {
                 this.bDC011Cols = b;
                 if (this.video) {
-                    var nCols = (this.bDC011Cols == ChipSetX80.VT100.DC011.COLS132? 132 : 80);
-                    var nRows = (nCols > 80 && (this.bFlags & ChipSetX80.VT100.FLAGS.NO_AVO)? 14 : 24);
+                    let nCols = (this.bDC011Cols == ChipSetX80.VT100.DC011.COLS132? 132 : 80);
+                    let nRows = (nCols > 80 && (this.bFlags & ChipSetX80.VT100.FLAGS.NO_AVO)? 14 : 24);
                     this.video.updateDimensions(nCols, nRows);
                 }
             }
@@ -13101,11 +13104,11 @@ class ChipSetX80 extends Component {
      */
     static init()
     {
-        var aeChipSet = Component.getElementsByClass(APPCLASS, "chipset");
-        for (var iChip = 0; iChip < aeChipSet.length; iChip++) {
-            var eChipSet = aeChipSet[iChip];
-            var parmsChipSet = Component.getComponentParms(eChipSet);
-            var chipset = new ChipSetX80(parmsChipSet);
+        let aeChipSet = Component.getElementsByClass(APPCLASS, "chipset");
+        for (let iChip = 0; iChip < aeChipSet.length; iChip++) {
+            let eChipSet = aeChipSet[iChip];
+            let parmsChipSet = Component.getComponentParms(eChipSet);
+            let chipset = new ChipSetX80(parmsChipSet);
             Component.bindComponentControls(chipset, eChipSet, APPCLASS);
         }
     }
@@ -13533,7 +13536,7 @@ class ROMx80 extends Component {
 
         if (this.sFilePath) {
             let sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\"\n", sFileURL);
+
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -13781,9 +13784,7 @@ class ROMx80 extends Component {
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX80.TYPE.ROM)) {
-            if (DEBUG) {
-                this.printf(Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abROM.length);
-            }
+
             for (let i = 0; i < this.abROM.length; i++) {
                 this.bus.setByteDirect(addr + i, this.abROM[i]);
             }
@@ -13901,18 +13902,18 @@ class RAMx80 extends Component {
         this.sFileName = Str.getBaseName(this.sFilePath);
 
         if (this.sFilePath) {
-            var sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
+            let sFileURL = this.sFilePath;
+
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side converter to return the file in a JSON-compatible format.
              */
-            var sFileExt = Str.getExtension(this.sFileName);
+            let sFileExt = Str.getExtension(this.sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
                 sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
-            var ram = this;
+            let ram = this;
             Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 ram.doneLoad(sURL, sResponse, nErrorCode);
             });
@@ -13991,7 +13992,7 @@ class RAMx80 extends Component {
 
         Component.addMachineResource(this.idMachine, sURL, sData);
 
-        var resource = Web.parseMemoryResource(sURL, sData);
+        let resource = Web.parseMemoryResource(sURL, sData);
         if (resource) {
             this.abInit = resource.aBytes;
             this.aSymbols = resource.aSymbols;
@@ -14029,9 +14030,9 @@ class RAMx80 extends Component {
                  */
                 if (!this.abInit || !this.bus) return;
 
-                var addr = this.addrRAM;
+                let addr = this.addrRAM;
                 if (this.addrLoad !== null) addr = this.addrLoad;
-                for (var i = 0; i < this.abInit.length; i++) {
+                for (let i = 0; i < this.abInit.length; i++) {
                     this.bus.setByteDirect(addr + i, this.abInit[i]);
                 }
 
@@ -14043,10 +14044,9 @@ class RAMx80 extends Component {
                      * then telling the CPU to call us whenever a HLT occurs, so we can check PC for one of these addresses.
                      */
                     if (this.addrExec == RAMx80.CPM.INIT) {
-                        for (i = 0; i < RAMx80.CPM.VECTORS.length; i++) {
+                        for (let i = 0; i < RAMx80.CPM.VECTORS.length; i++) {
                             this.bus.setByteDirect(RAMx80.CPM.VECTORS[i], CPUDefX80.OPCODE.HLT);
                         }
-
                         this.cpu.addHaltCheck(function(rom) {
                             return function(addr) {
                                 return rom.checkCPMVector(addr)
@@ -14086,11 +14086,11 @@ class RAMx80 extends Component {
      */
     checkCPMVector(addr)
     {
-        var i = RAMx80.CPM.VECTORS.indexOf(addr);
+        let i = RAMx80.CPM.VECTORS.indexOf(addr);
         if (i >= 0) {
-            var fCPM = false;
-            var cpu = this.cpu;
-            var dbg = this.dbg;
+            let fCPM = false;
+            let cpu = this.cpu;
+            let dbg = this.dbg;
             if (addr == RAMx80.CPM.BDOS.VECTOR) {
                 fCPM = true;
                 switch(cpu.regC) {
@@ -14140,11 +14140,11 @@ class RAMx80 extends Component {
      */
     getCPMString(addr, chEnd)
     {
-        var s = "";
-        var cchMax = 255;
-        var bEnd = chEnd && chEnd.length && chEnd.charCodeAt(0) || chEnd || 0;
+        let s = "";
+        let cchMax = 255;
+        let bEnd = chEnd && chEnd.length && chEnd.charCodeAt(0) || chEnd || 0;
         while (cchMax--) {
-            var b = this.cpu.getByte(addr++);
+            let b = this.cpu.getByte(addr++);
             if (b == bEnd) break;
             s += String.fromCharCode(b);
         }
@@ -14172,11 +14172,11 @@ class RAMx80 extends Component {
      */
     static init()
     {
-        var aeRAM = Component.getElementsByClass(APPCLASS, "ram");
-        for (var iRAM = 0; iRAM < aeRAM.length; iRAM++) {
-            var eRAM = aeRAM[iRAM];
-            var parmsRAM = Component.getComponentParms(eRAM);
-            var ram = new RAMx80(parmsRAM);
+        let aeRAM = Component.getElementsByClass(APPCLASS, "ram");
+        for (let iRAM = 0; iRAM < aeRAM.length; iRAM++) {
+            let eRAM = aeRAM[iRAM];
+            let parmsRAM = Component.getComponentParms(eRAM);
+            let ram = new RAMx80(parmsRAM);
             Component.bindComponentControls(ram, eRAM, APPCLASS);
         }
     }
@@ -14237,9 +14237,9 @@ class KeyboardX80 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, Messages.KEYBOARD);
+        super("Keyboard", parmsKbd, Messages.KBD);
 
-        var model = parmsKbd['model'];
+        let model = parmsKbd['model'];
 
         if (model && !KeyboardX80.MODELS[model]) {
             Component.printf(Messages.NOTICE, "Unrecognized KeyboardX80 model: %s\n", model);
@@ -14282,8 +14282,8 @@ class KeyboardX80 extends Component {
          * still be enabled (there's currently no way to configure the Video component to not bind its screen,
          * but we could certainly add one if the need ever arose).
          */
-        var kbd = this;
-        var id = sHTMLType + '-' + sBinding;
+        let kbd = this;
+        let id = sHTMLType + '-' + sBinding;
 
         if (this.bindings[id] === undefined) {
 
@@ -14376,7 +14376,7 @@ class KeyboardX80 extends Component {
                              * to update the state of these on-screen controls, too (ie, not just when the controls are
                              * clicked).
                              */
-                            var fDown = true, bit = 0;
+                            let fDown = true, bit = 0;
                             if (keyCode == Keys.KEYCODE.CTRL) {
                                 bit = KeyboardX80.STATE.CTRL;
                             }
@@ -14448,7 +14448,7 @@ class KeyboardX80 extends Component {
         this.cpu = cpu;
         this.dbg = dbg;     // NOTE: The "dbg" property must be set for the message functions to work
 
-        var kbd = this;
+        let kbd = this;
         this.timerReleaseKeys = this.cpu.addTimer(this.id, function() {
             kbd.checkSoftKeysToRelease();
         });
@@ -14535,7 +14535,7 @@ class KeyboardX80 extends Component {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         switch(this.config.MODEL) {
         case KeyboardX80.SI1978.MODEL:
             break;
@@ -14557,7 +14557,7 @@ class KeyboardX80 extends Component {
      */
     restore(data)
     {
-        var a;
+        let a;
         if (data && (a = data[0]) && a.length) {
             switch(this.config.MODEL) {
             case KeyboardX80.SI1978.MODEL:
@@ -14599,18 +14599,18 @@ class KeyboardX80 extends Component {
      */
     updateLEDs(bLEDs)
     {
-        var id, control;
+        let id, control;
         if (bLEDs != null) {
             this.bLEDs = bLEDs;
         } else {
             bLEDs = this.bLEDs;
         }
-        for (var sBinding in this.config.LEDCODES) {
+        for (let sBinding in this.config.LEDCODES) {
             id = "led-" + sBinding;
             control = this.bindings[id];
             if (control) {
-                var bitLED = this.config.LEDCODES[sBinding];
-                var fOn = !!(bLEDs & bitLED);
+                let bitLED = this.config.LEDCODES[sBinding];
+                let fOn = !!(bLEDs & bitLED);
                 if (bitLED & (bitLED-1)) {
                     fOn = !(bLEDs & ~bitLED);
                 }
@@ -14635,7 +14635,7 @@ class KeyboardX80 extends Component {
      */
     checkModifierKeys(keyCode, fDown, fRight)
     {
-        var bit = 0;
+        let bit = 0;
         switch(keyCode) {
         case Keys.KEYCODE.SHIFT:
             bit = fRight? KeyboardX80.STATE.RSHIFT : KeyboardX80.STATE.SHIFT;
@@ -14687,7 +14687,7 @@ class KeyboardX80 extends Component {
         if (this.config.KEYMAP[keyCode]) {
             return keyCode;
         }
-        for (var sSoftCode in this.config.SOFTCODES) {
+        for (let sSoftCode in this.config.SOFTCODES) {
             if (this.config.SOFTCODES[sSoftCode] === keyCode) {
                 return sSoftCode;
             }
@@ -14705,10 +14705,10 @@ class KeyboardX80 extends Component {
      */
     onKeyDown(event, fDown)
     {
-        var fPass = true;
-        var keyCode = event.keyCode;
+        let fPass = true;
+        let keyCode = event.keyCode;
 
-        this.printf(Messages.KEYS, "onKey%s(%d)\n", (fDown? "Down" : "Up"), keyCode);
+        this.printf(Messages.KEY, "onKey%s(%d)\n", (fDown? "Down" : "Up"), keyCode);
 
         /*
          * A note about Firefox: it uses different keyCodes for certain keys; there's a logic to the differences
@@ -14724,7 +14724,7 @@ class KeyboardX80 extends Component {
          */
         fDown = this.checkModifierKeys(keyCode, fDown, event.location == Keys.LOCATION.RIGHT);
 
-        var softCode = this.getSoftCode(keyCode);
+        let softCode = this.getSoftCode(keyCode);
         if (softCode) {
             /*
              * Key combinations involving the "meta" key (ie, the Windows or Command key) are meaningless to
@@ -14749,7 +14749,7 @@ class KeyboardX80 extends Component {
                  * the risk of the remapped key being stuck "down".  Hence the new REMAPPED bit, which should
                  * remain set (as a "proxy" for the ALT bit) as long as a remapped key is down.
                  */
-                var fRemapped = false;
+                let fRemapped = false;
                 if (this.bitsState & (KeyboardX80.STATE.ALTS | KeyboardX80.STATE.REMAPPED)) {
                     if (softCode == Keys.KEYCODE.CR) {
                         softCode = Keys.KEYCODE.F7;
@@ -14784,7 +14784,7 @@ class KeyboardX80 extends Component {
                 }
             }
         }
-        this.printf(Messages.KEYS, "onKey%s(%d): softCode=%s, pass=%b\n", (fDown? "Down" : "Up"), keyCode, softCode, fPass);
+        this.printf(Messages.KEY, "onKey%s(%d): softCode=%s, pass=%b\n", (fDown? "Down" : "Up"), keyCode, softCode, fPass);
         return fPass;
     }
 
@@ -14808,7 +14808,7 @@ class KeyboardX80 extends Component {
          * not a number; for example; if the colon key is pressed, 'key' will be ":", whereas 'charCode' and 'which'
          * will be 58.
          */
-        var charCode = event.keyCode || event.charCode;
+        let charCode = event.keyCode || event.charCode;
 
         if (charCode >= Keys.ASCII.A && charCode <= Keys.ASCII.Z) {
             if (!(this.bitsState & (KeyboardX80.STATE.SHIFTS | KeyboardX80.STATE.CAPS_LOCK))) {
@@ -14824,7 +14824,7 @@ class KeyboardX80 extends Component {
                 this.updateLEDs();
             }
         }
-        this.printf(Messages.KEYS, "onKeyPress(%d)\n", charCode);
+        this.printf(Messages.KEY, "onKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -14838,7 +14838,7 @@ class KeyboardX80 extends Component {
      */
     oniOSKeyDown(event, fDown)
     {
-        var fPass = true;
+        let fPass = true;
         /*
          * Because keydown/keyup events on iOS are inherently "fake", they can be delivered so quickly that
          * if we generated matching down/up events, then the emulated machine might not see the key transition.
@@ -14849,8 +14849,8 @@ class KeyboardX80 extends Component {
          * keys with fAutoRelease set to true.
          */
         if (fDown) {
-            var keyCode = event.keyCode;
-            var bMapping = this.config.KEYMAP[keyCode];
+            let keyCode = event.keyCode;
+            let bMapping = this.config.KEYMAP[keyCode];
             if (bMapping) {
                 /*
                  * If this is a mappable key, but the mapping isn't in the CHARMAP table, then we have to process
@@ -14859,7 +14859,7 @@ class KeyboardX80 extends Component {
                 if (!this.indexOfCharMap(bMapping)) {
                     fPass = this.onSoftKeyDown(keyCode, fDown, true);
                     if (event.preventDefault) event.preventDefault();
-                    this.printf(Messages.KEYS, "oniOSKey%s(%d): pass=%b\n", (fDown ? "Down" : "Up"), keyCode, fPass);
+                    this.printf(Messages.KEY, "oniOSKey%s(%d): pass=%b\n", (fDown ? "Down" : "Up"), keyCode, fPass);
                 }
             }
         }
@@ -14884,10 +14884,10 @@ class KeyboardX80 extends Component {
          * not a number; for example; if the colon key is pressed, 'key' will be ":", whereas 'charCode' and 'which'
          * will be 58.
          */
-        var charCode = event.keyCode || event.charCode;
+        let charCode = event.keyCode || event.charCode;
 
-        var fShifted = false;
-        var bMapping = this.config.CHARMAP[charCode];
+        let fShifted = false;
+        let bMapping = this.config.CHARMAP[charCode];
         if (bMapping) {
             if (bMapping & 0x80) {
                 bMapping &= 0x7f;
@@ -14898,7 +14898,7 @@ class KeyboardX80 extends Component {
              * in the KEYMAP table to find a corresponding keyCode, and that's what we'll use to simulate the key
              * press/release.
              */
-            var softCode = this.indexOfKeyMap(bMapping);
+            let softCode = this.indexOfKeyMap(bMapping);
             if (softCode) {
                 if (!fShifted) {
                     this.onSoftKeyDown(Keys.KEYCODE.SHIFT, false);
@@ -14908,7 +14908,7 @@ class KeyboardX80 extends Component {
                 this.onSoftKeyDown(softCode, true, true);
             }
         }
-        this.printf(Messages.KEYS, "oniOSKeyPress(%d)\n", charCode);
+        this.printf(Messages.KEY, "oniOSKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -14937,7 +14937,7 @@ class KeyboardX80 extends Component {
         if (this.serial && this.serial.sendData) {
             if (event.stopPropagation) event.stopPropagation();
             if (event.preventDefault) event.preventDefault();
-            var clipboardData = event.clipboardData || globals.window.clipboardData;
+            let clipboardData = event.clipboardData || globals.window.clipboardData;
             if (clipboardData) {
                 this.serial.transmitData(clipboardData.getData('Text'));
                 return false;
@@ -14955,7 +14955,7 @@ class KeyboardX80 extends Component {
      */
     indexOfKeyMap(bMapping)
     {
-        for (var keyCode in this.config.KEYMAP) {
+        for (let keyCode in this.config.KEYMAP) {
             if (this.config.KEYMAP[keyCode] == bMapping) return +keyCode;
         }
         return 0;
@@ -14970,7 +14970,7 @@ class KeyboardX80 extends Component {
      */
     indexOfCharMap(bMapping)
     {
-        for (var charCode in this.config.CHARMAP) {
+        for (let charCode in this.config.CHARMAP) {
             if (this.config.CHARMAP[charCode] == bMapping) return +charCode;
         }
         return 0;
@@ -14985,7 +14985,7 @@ class KeyboardX80 extends Component {
      */
     indexOfSoftKey(softCode)
     {
-        for (var i = 0; i < this.aKeysActive.length; i++) {
+        for (let i = 0; i < this.aKeysActive.length; i++) {
             if (this.aKeysActive[i].softCode == softCode) return i;
         }
         return -1;
@@ -15002,7 +15002,7 @@ class KeyboardX80 extends Component {
      */
     onSoftKeyDown(softCode, fDown, fAutoRelease)
     {
-        var i = this.indexOfSoftKey(softCode);
+        let i = this.indexOfSoftKey(softCode);
         if (fDown) {
             // this.printf("%s down\n", softCode);
             if (i < 0) {
@@ -15019,9 +15019,9 @@ class KeyboardX80 extends Component {
         } else if (i >= 0) {
             // this.printf("%s up\n", softCode);
             if (!this.aKeysActive[i].fAutoRelease) {
-                var msDown = this.aKeysActive[i].msDown;
+                let msDown = this.aKeysActive[i].msDown;
                 if (msDown) {
-                    var msElapsed = Date.now() - msDown;
+                    let msElapsed = Date.now() - msDown;
                     if (msElapsed < KeyboardX80.MINPRESSTIME) {
                         // this.printf("%s released after only %dms\n", softCode, msElapsed);
                         this.aKeysActive[i].fAutoRelease = true;
@@ -15036,7 +15036,7 @@ class KeyboardX80 extends Component {
         }
 
         if (this.chipset) {
-            var bit = 0;
+            let bit = 0;
             switch(softCode) {
             case '1p':
                 bit = ChipSetX80.SI1978.STATUS1.P1;
@@ -15071,14 +15071,14 @@ class KeyboardX80 extends Component {
      */
     checkSoftKeysToRelease()
     {
-        var i = 0;
-        var msDelayMin = -1;
+        let i = 0;
+        let msDelayMin = -1;
         while (i < this.aKeysActive.length) {
             if (this.aKeysActive[i].fAutoRelease) {
-                var softCode = this.aKeysActive[i].softCode;
-                var msDown = this.aKeysActive[i].msDown;
-                var msElapsed = Date.now() - msDown;
-                var msDelay = KeyboardX80.MINPRESSTIME - msElapsed;
+                let softCode = this.aKeysActive[i].softCode;
+                let msDown = this.aKeysActive[i].msDown;
+                let msElapsed = Date.now() - msDown;
+                let msDelay = KeyboardX80.MINPRESSTIME - msElapsed;
                 if (msDelay > 0) {
                     if (msDelayMin < 0 || msDelayMin > msDelay) {
                         msDelayMin = msDelay;
@@ -15172,10 +15172,10 @@ class KeyboardX80 extends Component {
      */
     inVT100UARTAddress(port, addrFrom)
     {
-        var b = this.bVT100Address;
+        let b = this.bVT100Address;
         if (this.iKeyNext >= 0) {
             if (this.iKeyNext < this.aKeysActive.length) {
-                var key = this.aKeysActive[this.iKeyNext];
+                let key = this.aKeysActive[this.iKeyNext];
                 if (!MAXDEBUG) {
                     this.iKeyNext++;
                 } else {
@@ -15236,11 +15236,11 @@ class KeyboardX80 extends Component {
      */
     static init()
     {
-        var aeKbd = Component.getElementsByClass(APPCLASS, "keyboard");
-        for (var iKbd = 0; iKbd < aeKbd.length; iKbd++) {
-            var eKbd = aeKbd[iKbd];
-            var parmsKbd = Component.getComponentParms(eKbd);
-            var kbd = new KeyboardX80(parmsKbd);
+        let aeKbd = Component.getElementsByClass(APPCLASS, "keyboard");
+        for (let iKbd = 0; iKbd < aeKbd.length; iKbd++) {
+            let eKbd = aeKbd[iKbd];
+            let parmsKbd = Component.getComponentParms(eKbd);
+            let kbd = new KeyboardX80(parmsKbd);
             Component.bindComponentControls(kbd, eKbd, APPCLASS);
         }
     }
@@ -15697,7 +15697,7 @@ class VideoX80 extends Component {
     {
         super("Video", parmsVideo, Messages.VIDEO);
 
-        var video = this, sProp, sEvent;
+        let video = this, sProp, sEvent;
         this.fGecko = Web.isUserAgent("Gecko/");
 
         this.cxScreen = parmsVideo['screenWidth'];
@@ -15706,7 +15706,7 @@ class VideoX80 extends Component {
         this.addrBuffer = parmsVideo['bufferAddr'];
         this.fUseRAM = parmsVideo['bufferRAM'];
 
-        var sFormat = parmsVideo['bufferFormat'];
+        let sFormat = parmsVideo['bufferFormat'];
         this.nFormat = sFormat && VideoX80.FORMATS[sFormat.toUpperCase()] || VideoX80.FORMAT.UNKNOWN;
 
         this.nColsBuffer = parmsVideo['bufferCols'];
@@ -15765,8 +15765,8 @@ class VideoX80 extends Component {
          * on this.  I see other options emerging, like the CSS property "image-rendering: pixelated"
          * that's apparently been added to Chrome.  Sigh.
          */
-        var fSmoothing = parmsVideo['smoothing'];
-        var sSmoothing = Web.getURLParm('smoothing');
+        let fSmoothing = parmsVideo['smoothing'];
+        let sSmoothing = Web.getURLParm('smoothing');
         if (sSmoothing) fSmoothing = (sSmoothing == "true");
         this.fSmoothing = fSmoothing;
         this.sSmoothing = Web.findProperty(this.contextScreen, 'imageSmoothingEnabled');
@@ -15802,7 +15802,7 @@ class VideoX80 extends Component {
                 this.container.doFullScreen = container[sProp];
                 sEvent = Web.findProperty(document, 'on', 'fullscreenchange');
                 if (sEvent) {
-                    var sFullScreen = Web.findProperty(document, 'fullscreenElement') || Web.findProperty(document, 'fullScreenElement');
+                    let sFullScreen = Web.findProperty(document, 'fullscreenElement') || Web.findProperty(document, 'fullScreenElement');
                     document.addEventListener(sEvent, function onFullScreenChange() {
                         video.notifyFullScreen(document[sFullScreen] != null);
                     }, false);
@@ -15818,7 +15818,7 @@ class VideoX80 extends Component {
 
         this.sFontROM = parmsVideo['fontROM'];
         if (this.sFontROM) {
-            var sFileExt = Str.getExtension(this.sFontROM);
+            let sFileExt = Str.getExtension(this.sFontROM);
             if (sFileExt != "json") {
                 this.sFontROM = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFontROM + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
             }
@@ -15844,8 +15844,8 @@ class VideoX80 extends Component {
         this.cxBuffer = this.nColsBuffer * this.cxCell;
         this.cyBuffer = this.nRowsBuffer * this.cyCell;
 
-        var cxBuffer = this.cxBuffer;
-        var cyBuffer = this.cyBuffer;
+        let cxBuffer = this.cxBuffer;
+        let cyBuffer = this.cyBuffer;
         if (this.rotateBuffer) {
             cxBuffer = this.cyBuffer;
             cyBuffer = this.cxBuffer;
@@ -15952,7 +15952,7 @@ class VideoX80 extends Component {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var video = this;
+        let video = this;
 
         /*
          * TODO: A more general-purpose binding mechanism would be nice someday....
@@ -15967,11 +15967,11 @@ class VideoX80 extends Component {
             this.bindings[sBinding] = control;
             if (this.container && this.container.doFullScreen) {
                 control.onclick = function onClickFullScreen() {
-                    if (DEBUG) video.printf("fullScreen()\n");
+
                     video.doFullScreen();
                 };
             } else {
-                if (DEBUG) this.printf(Messages.LOG, "FullScreen API not available\n");
+
                 control.parentNode.removeChild(/** @type {Node} */ (control));
             }
             return true;
@@ -16009,7 +16009,7 @@ class VideoX80 extends Component {
          */
         this.kbd = /** @type {KeyboardX80} */ (cmp.getMachineComponent("Keyboard"));
         if (this.kbd) {
-            for (var s in this.ledBindings) {
+            for (let s in this.ledBindings) {
                 this.kbd.setBinding("led", s, this.ledBindings[s]);
             }
             if (this.canvasScreen) {
@@ -16017,7 +16017,7 @@ class VideoX80 extends Component {
             }
         }
 
-        var video = this;
+        let video = this;
         this.timerUpdateNext = this.cpu.addTimer(this.id, function() {
             video.updateScreen();
         });
@@ -16048,9 +16048,9 @@ class VideoX80 extends Component {
             /*
              * The most likely source of any exception will be here: parsing the JSON-encoded data.
              */
-            var ab = eval("(" + sFontData + ")");
+            let ab = eval("(" + sFontData + ")");
 
-            var abFontData = ab['bytes'] || ab;
+            let abFontData = ab['bytes'] || ab;
 
             if (!abFontData || !abFontData.length) {
                 Component.error("Empty font ROM: " + sURL);
@@ -16147,40 +16147,40 @@ class VideoX80 extends Component {
          * ensuring that it will accommodate 16x16 characters (for a maximum of 256).  Note that the VT100 font ROM
          * defines only 128 characters, so that canvas will contain only 16x8 entries.
          */
-        var nFontBytesPerChar = this.cxCellDefault <= 8? 8 : 16;
-        var nFontByteOffset = nFontBytesPerChar > 8? 15 : 0;
-        var nChars = this.abFontData.length / nFontBytesPerChar;
+        let nFontBytesPerChar = this.cxCellDefault <= 8? 8 : 16;
+        let nFontByteOffset = nFontBytesPerChar > 8? 15 : 0;
+        let nChars = this.abFontData.length / nFontBytesPerChar;
 
         /*
          * The absence of a boolean for fUnderline means that both fReverse and fUnderline are "falsey".  The presence
          * of a boolean means that fReverse will be true OR fUnderline will be true, but NOT both.
          */
-        var fReverse = (fUnderline === false);
+        let fReverse = (fUnderline === false);
 
-        var font = {cxCell: cxCell, cyCell: cyCell};
+        let font = {cxCell: cxCell, cyCell: cyCell};
         font.canvas = document.createElement("canvas");
         font.canvas.width = cxCell * 16;
         font.canvas.height = cyCell * (nChars / 16);
         font.context = font.canvas.getContext("2d");
 
-        var imageChar = font.context.createImageData(cxCell, cyCell);
+        let imageChar = font.context.createImageData(cxCell, cyCell);
 
-        for (var iChar = 0; iChar < nChars; iChar++) {
-            for (var y = 0, yDst = y; y < this.cyCell; y++) {
-                var offFontData = iChar * nFontBytesPerChar + ((nFontByteOffset + y) & (nFontBytesPerChar - 1));
-                var bits = (fUnderline && y == 8? 0xff : this.abFontData[offFontData]);
-                for (var nRows = 0; nRows < (cyCell / this.cyCell); nRows++) {
-                    var bitPrev = 0;
-                    for (var x = 0, xDst = x; x < this.cxCell; x++) {
+        for (let iChar = 0; iChar < nChars; iChar++) {
+            for (let y = 0, yDst = y; y < this.cyCell; y++) {
+                let offFontData = iChar * nFontBytesPerChar + ((nFontByteOffset + y) & (nFontBytesPerChar - 1));
+                let bits = (fUnderline && y == 8? 0xff : this.abFontData[offFontData]);
+                for (let nRows = 0; nRows < (cyCell / this.cyCell); nRows++) {
+                    let bitPrev = 0;
+                    for (let x = 0, xDst = x; x < this.cxCell; x++) {
                         /*
                          * While x goes from 0 to cxCell-1, obviously we will run out of bits after x is 7;
                          * since the final bit must be replicated all the way to the right edge of the cell
                          * (so that line-drawing characters seamlessly connect), we ensure that the effective
                          * shift count remains stuck at 7 once it reaches 7.
                          */
-                        var bitReal = bits & (0x80 >> (x > 7? 7 : x));
-                        var bit = (this.fDotStretcher && !bitReal && bitPrev)? bitPrev : bitReal;
-                        for (var nCols = 0; nCols < (cxCell / this.cxCell); nCols++) {
+                        let bitReal = bits & (0x80 >> (x > 7? 7 : x));
+                        let bit = (this.fDotStretcher && !bitReal && bitPrev)? bitPrev : bitReal;
+                        for (let nCols = 0; nCols < (cxCell / this.cxCell); nCols++) {
                             if (fReverse) bit = !bit;
                             this.setPixel(imageChar, xDst, yDst, bit? 1 : 0);
                             xDst++;
@@ -16229,20 +16229,20 @@ class VideoX80 extends Component {
              * and do not require a row entry.  If multiple strings are present for a given row, we invert the
              * default character attribute for subsequent strings.  An empty array ends the screen build process.
              */
-            var aLineData = {
+            let aLineData = {
                  0: [VideoX80.VT100.FONT.DHIGH, 'SET-UP A'],
                  2: [VideoX80.VT100.FONT.DWIDE, 'TO EXIT PRESS "SET-UP"'],
                 22: [VideoX80.VT100.FONT.NORML, '        T       T       T       T       T       T       T       T       T'],
                 23: [VideoX80.VT100.FONT.NORML, '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890'],
                 24: []
             };
-            var addr = this.addrBuffer;
-            var addrNext = -1, font = -1;
-            var b, nFill = (this.rateMonitor == 60? 2 : 5);
-            for (var iRow = -nFill; iRow < this.nRowsBuffer; iRow++) {
-                var lineData = aLineData[iRow];
+            let addr = this.addrBuffer;
+            let addrNext = -1, font = -1;
+            let b, nFill = (this.rateMonitor == 60? 2 : 5);
+            for (let iRow = -nFill; iRow < this.nRowsBuffer; iRow++) {
+                let lineData = aLineData[iRow];
                 if (addrNext >= 0) {
-                    var fBreak = false;
+                    let fBreak = false;
                     addrNext = addr + 2;
                     if (!lineData) {
                         if (font == VideoX80.VT100.FONT.DHIGH) {
@@ -16264,10 +16264,10 @@ class VideoX80 extends Component {
                     if (fBreak) break;
                 }
                 if (lineData) {
-                    var attr = 0;
-                    for (var j = 1; j < lineData.length; j++) {
-                        var s = lineData[j];
-                        for (var k = 0; k < s.length; k++) {
+                    let attr = 0;
+                    for (let j = 1; j < lineData.length; j++) {
+                        let s = lineData[j];
+                        for (let k = 0; k < s.length; k++) {
                             this.bus.setByteDirect(addr++, s.charCodeAt(k) | attr);
                         }
                         attr ^= 0x80;
@@ -16307,7 +16307,7 @@ class VideoX80 extends Component {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         state.set(0, []);
         return state.data();
     }
@@ -16411,7 +16411,7 @@ class VideoX80 extends Component {
      */
     doFullScreen()
     {
-        var fSuccess = false;
+        let fSuccess = false;
         if (this.container) {
             if (this.container.doFullScreen) {
                 /*
@@ -16428,11 +16428,11 @@ class VideoX80 extends Component {
                  * for height works equally well, so I'm sticking with it, because "auto" is also consistent with how I've
                  * implemented a responsive canvas when the browser window is being resized.
                  */
-                var sWidth = "100%";
-                var sHeight = "auto";
+                let sWidth = "100%";
+                let sHeight = "auto";
                 if (screen && screen.width && screen.height) {
-                    var aspectPhys = screen.width / screen.height;
-                    var aspectVirt = this.cxScreen / this.cyScreen;
+                    let aspectPhys = screen.width / screen.height;
+                    let aspectVirt = this.cxScreen / this.cyScreen;
                     if (aspectPhys > aspectVirt) {
                         sWidth = Math.round(aspectVirt / aspectPhys * 100) + '%';
                     }
@@ -16537,16 +16537,16 @@ class VideoX80 extends Component {
      */
     initColors()
     {
-        var rgbBlack  = [0x00, 0x00, 0x00, 0xff];
-        var rgbWhite  = [0xff, 0xff, 0xff, 0xff];
+        let rgbBlack  = [0x00, 0x00, 0x00, 0xff];
+        let rgbWhite  = [0xff, 0xff, 0xff, 0xff];
         this.nColors = (1 << this.nBitsPerPixel);
         this.aRGB = new Array(this.nColors + VideoX80.COLORS.OVERLAY_TOTAL);
         this.aRGB[0] = rgbBlack;
         this.aRGB[1] = rgbWhite;
         if (this.nFormat == VideoX80.FORMAT.SI1978) {
-            var rgbGreen  = [0x00, 0xff, 0x00, 0xff];
+            let rgbGreen  = [0x00, 0xff, 0x00, 0xff];
             //noinspection UnnecessaryLocalVariableJS
-            var rgbYellow = [0xff, 0xff, 0x00, 0xff];
+            let rgbYellow = [0xff, 0xff, 0x00, 0xff];
             this.aRGB[this.nColors + VideoX80.COLORS.OVERLAY_TOP] = rgbYellow;
             this.aRGB[this.nColors + VideoX80.COLORS.OVERLAY_BOTTOM] = rgbGreen;
         }
@@ -16563,7 +16563,7 @@ class VideoX80 extends Component {
      */
     setPixel(image, x, y, bPixel)
     {
-        var index;
+        let index;
         if (!this.rotateBuffer) {
             index = (x + y * image.width);
         } else {
@@ -16577,7 +16577,7 @@ class VideoX80 extends Component {
                 bPixel = this.nColors + VideoX80.COLORS.OVERLAY_BOTTOM;
             }
         }
-        var rgb = this.aRGB[bPixel];
+        let rgb = this.aRGB[bPixel];
         index *= rgb.length;
         image.data[index] = rgb[0];
         image.data[index+1] = rgb[1];
@@ -16599,17 +16599,17 @@ class VideoX80 extends Component {
      */
     updateChar(idFont, col, row, data, context)
     {
-        var bChar = data & 0x7f;
-        var font = this.aFonts[idFont][(data & 0x80)? 1 : 0];
+        let bChar = data & 0x7f;
+        let font = this.aFonts[idFont][(data & 0x80)? 1 : 0];
         if (!font) return;
 
-        var xSrc = (bChar & 0xf) * font.cxCell;
-        var ySrc = (bChar >> 4) * font.cyCell;
+        let xSrc = (bChar & 0xf) * font.cxCell;
+        let ySrc = (bChar >> 4) * font.cyCell;
 
-        var xDst, yDst, cxDst, cyDst;
+        let xDst, yDst, cxDst, cyDst;
 
-        var cxSrc = font.cxCell;
-        var cySrc = font.cyCell;
+        let cxSrc = font.cxCell;
+        let cySrc = font.cyCell;
 
         if (context) {
             xDst = col * this.cxCell;
@@ -16660,11 +16660,11 @@ class VideoX80 extends Component {
      */
     updateVT100(fForced)
     {
-        var addrNext = this.addrBuffer, fontNext = -1;
+        let addrNext = this.addrBuffer, fontNext = -1;
 
-        var nRows = 0;
-        var nFill = (this.rateMonitor == 60? 2 : 5);
-        var iCell = 0, cUpdated = 0, iCellUpdated = -1;
+        let font, nRows = 0;
+        let nFill = (this.rateMonitor == 60? 2 : 5);
+        let iCell = 0, cUpdated = 0, iCellUpdated = -1;
 
 
 
@@ -16672,15 +16672,15 @@ class VideoX80 extends Component {
             /*
              * Populate the line buffer
              */
-            var nCols = 0;
-            var addr = addrNext;
-            var font = fontNext;
-            var nColsVisible = this.nColsBuffer;
+            let nCols = 0;
+            let addr = addrNext;
+            let nColsVisible = this.nColsBuffer;
+            font = fontNext;
             if (font != VideoX80.VT100.FONT.NORML) nColsVisible >>= 1;
             while (true) {
-                var data = this.bus.getByteDirect(addr++);
+                let data = this.bus.getByteDirect(addr++);
                 if ((data & VideoX80.VT100.LINETERM) == VideoX80.VT100.LINETERM) {
-                    var b = this.bus.getByteDirect(addr++);
+                    let b = this.bus.getByteDirect(addr++);
                     fontNext = b & VideoX80.VT100.LINEATTR.FONTMASK;
                     addrNext = ((b & VideoX80.VT100.LINEATTR.ADDRMASK) << 8) | this.bus.getByteDirect(addr);
                     addrNext += (b & VideoX80.VT100.LINEATTR.ADDRBIAS)? VideoX80.VT100.ADDRBIAS_LO : VideoX80.VT100.ADDRBIAS_HI;
@@ -16718,10 +16718,10 @@ class VideoX80 extends Component {
                  * the next.  So we store the visible line length at the start of each row in the cache, which must match if
                  * the cache can be considered valid for the current line.
                  */
-                var fLineCacheValid = this.fCellCacheValid && (this.aCellCache[iCell] == nColsVisible);
+                let fLineCacheValid = this.fCellCacheValid && (this.aCellCache[iCell] == nColsVisible);
                 this.aCellCache[iCell++] = nColsVisible;
-                for (var iCol = 0; iCol < nCols; iCol++) {
-                    data = this.abLineBuffer[iCol];
+                for (let iCol = 0; iCol < nCols; iCol++) {
+                    let data = this.abLineBuffer[iCol];
                     if (!fLineCacheValid || data !== this.aCellCache[iCell]) {
                         this.aCellCache[iCellUpdated = iCell] = data;
                         this.updateChar(font, iCol, nRows, data, this.contextBuffer);
@@ -16798,7 +16798,7 @@ class VideoX80 extends Component {
      */
     updateScreen(fForced)
     {
-        var fUpdate = true;
+        let fUpdate = true;
 
         if (!fForced) {
             if (this.rateInterrupt) {
@@ -16872,36 +16872,36 @@ class VideoX80 extends Component {
      */
     updateScreenGraphics(fForced)
     {
-        var addr = this.addrBuffer;
-        var addrLimit = addr + this.sizeBuffer;
+        let addr = this.addrBuffer;
+        let addrLimit = addr + this.sizeBuffer;
 
-        var iCell = 0;
-        var nPixelShift = 1;
+        let iCell = 0;
+        let nPixelShift = 1;
 
-        var xBuffer = 0, yBuffer = 0;
-        var xDirty = this.cxBuffer, xMaxDirty = 0, yDirty = this.cyBuffer, yMaxDirty = 0;
+        let xBuffer = 0, yBuffer = 0;
+        let xDirty = this.cxBuffer, xMaxDirty = 0, yDirty = this.cyBuffer, yMaxDirty = 0;
 
-        var nShiftInit = 0;
-        var nShiftPixel = this.nBitsPerPixel;
-        var nMask = (1 << nShiftPixel) - 1;
+        let nShiftInit = 0;
+        let nShiftPixel = this.nBitsPerPixel;
+        let nMask = (1 << nShiftPixel) - 1;
         if (this.iBitFirstPixel) {
             nShiftPixel = -nShiftPixel;
             nShiftInit = 16 + nShiftPixel;
         }
 
         while (addr < addrLimit) {
-            var data = this.bus.getShortDirect(addr);
+            let data = this.bus.getShortDirect(addr);
 
             if (this.fCellCacheValid && data === this.aCellCache[iCell]) {
                 xBuffer += this.nPixelsPerCell;
             } else {
                 this.aCellCache[iCell] = data;
-                var nShift = nShiftInit;
+                let nShift = nShiftInit;
                 if (nShift) data = ((data >> 8) | ((data & 0xff) << 8));
                 if (xBuffer < xDirty) xDirty = xBuffer;
-                var cPixels = this.nPixelsPerCell;
+                let cPixels = this.nPixelsPerCell;
                 while (cPixels--) {
-                    var bPixel = (data >> nShift) & nMask;
+                    let bPixel = (data >> nShift) & nMask;
                     this.setPixel(this.imageBuffer, xBuffer++, yBuffer, bPixel);
                     nShift += nShiftPixel;
                 }
@@ -16924,8 +16924,8 @@ class VideoX80 extends Component {
          * the update (well, to the extent that the canvas APIs permit).
          */
         if (xDirty < this.cxBuffer) {
-            var cxDirty = xMaxDirty - xDirty;
-            var cyDirty = yMaxDirty - yDirty;
+            let cxDirty = xMaxDirty - xDirty;
+            let cyDirty = yMaxDirty - yDirty;
             if (this.rotateBuffer) {
                 /*
                  * If rotateBuffer is set, then it must be -90, so we must "rotate" the dirty coordinates as well,
@@ -16934,7 +16934,7 @@ class VideoX80 extends Component {
                  *
                  *      this.contextBuffer.putImageData(this.imageBuffer, 0, 0);
                  */
-                var xDirtyOrig = xDirty, cxDirtyOrig = cxDirty;
+                let xDirtyOrig = xDirty, cxDirtyOrig = cxDirty;
                 //noinspection JSSuspiciousNameCombination
                 xDirty = yDirty;
                 cxDirty = cyDirty;
@@ -16961,11 +16961,11 @@ class VideoX80 extends Component {
      */
     static init()
     {
-        var aeVideo = Component.getElementsByClass(APPCLASS, "video");
-        for (var iVideo = 0; iVideo < aeVideo.length; iVideo++) {
+        let aeVideo = Component.getElementsByClass(APPCLASS, "video");
+        for (let iVideo = 0; iVideo < aeVideo.length; iVideo++) {
 
-            var element = aeVideo[iVideo];
-            var parmsVideo = Component.getComponentParms(element);
+            let element = aeVideo[iVideo];
+            let parmsVideo = Component.getComponentParms(element);
 
             /*
              * We used to create the canvas element ourselves:
@@ -16982,8 +16982,8 @@ class VideoX80 extends Component {
              * we inject into the page is as fully-formed as possible, keeping disruption of page layout to a
              * minimum.
              */
-            var canvas, context;
-            var aCanvas = Component.getElementsByClass("pcjs-canvas", "", element);
+            let canvas, context;
+            let aCanvas = Component.getElementsByClass("pcjs-canvas", "", element);
             if (aCanvas && aCanvas.length && aCanvas[0].getContext) {
                 canvas = aCanvas[0];
                 canvas.style.backgroundColor = parmsVideo['screenColor'];
@@ -17022,7 +17022,7 @@ class VideoX80 extends Component {
              * until we figure out a better UI.  And note that we use our Web.addPageEvent() helper function to make
              * sure we don't trample any other 'onresize' handler(s) attached to the window object.
              */
-            var aspect = +(parmsVideo['aspect'] || Web.getURLParm('aspect'));
+            let aspect = +(parmsVideo['aspect'] || Web.getURLParm('aspect'));
 
             /*
              * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
@@ -17077,7 +17077,7 @@ class VideoX80 extends Component {
              *
              * See this Chromium issue for more information: https://code.google.com/p/chromium/issues/detail?id=118639
              */
-            var textarea;
+            let textarea;
             if (globals.browser) {
                 textarea = document.createElement("textarea");
                 /*
@@ -17104,7 +17104,7 @@ class VideoX80 extends Component {
             /*
              * Now we can create the Video object, record it, and wire it up to the associated document elements.
              */
-            var video = new VideoX80(parmsVideo, canvas, context, textarea /* || input */, element);
+            let video = new VideoX80(parmsVideo, canvas, context, textarea /* || input */, element);
 
             /*
              * Bind any video-specific controls (eg, the Refresh button). There are no essential controls, however;
@@ -17261,7 +17261,7 @@ class SerialPortX80 extends Component {
         this.fAutoStop = false;
         this.fNullModem = true;
 
-        var sBinding = parmsSerial['binding'];
+        let sBinding = parmsSerial['binding'];
         if (sBinding == "console") {
             this.consoleBuffer = "";
         } else {
@@ -17309,7 +17309,7 @@ class SerialPortX80 extends Component {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var serial = this;
+        let serial = this;
 
         if (!sHTMLType || sHTMLType == "textarea") {
 
@@ -17332,7 +17332,7 @@ class SerialPortX80 extends Component {
                  * event for one of those keys (probably the only event the browser generates for them).
                  */
                 event = event || globals.window.event;
-                var keyCode = event.keyCode;
+                let keyCode = event.keyCode;
                 if (keyCode === 0x08 || event.ctrlKey && keyCode >= 0x41 && keyCode <= 0x5A) {
                     if (event.preventDefault) event.preventDefault();
                     if (keyCode > 0x40) keyCode -= 0x40;
@@ -17347,7 +17347,7 @@ class SerialPortX80 extends Component {
                  * handlers in keyboard.js.
                  */
                 event = event || globals.window.event;
-                var keyCode = event.which || event.keyCode;
+                let keyCode = event.which || event.keyCode;
                 serial.receiveByte(keyCode);
                 /*
                  * Since we're going to remove the "readonly" attribute from the <textarea> control
@@ -17418,7 +17418,7 @@ class SerialPortX80 extends Component {
      */
     echoByte(b)
     {
-        var fEchoed = false;
+        let fEchoed = false;
 
         if (this.controlBuffer) {
             if (b == 0x08) {
@@ -17429,10 +17429,10 @@ class SerialPortX80 extends Component {
                 if (this.iLogicalCol > 0) this.iLogicalCol--;
             }
             else {
-                var s = Str.toASCIICode(b);
-                var nChars = s.length;
+                let s = Str.toASCIICode(b);
+                let nChars = s.length;
                 if (b == 0x09) {
-                    var tabSize = this.tabSize || 8;
+                    let tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
                     if (this.tabSize) s = Str.pad("", nChars);
                 }
@@ -17477,7 +17477,7 @@ class SerialPortX80 extends Component {
         this.cpu = cpu;
         this.dbg = dbg;
 
-        var serial = this;
+        let serial = this;
         this.timerReceiveNext = this.cpu.addTimer(this.id + ".receive", function() {
             serial.receiveData();
         });
@@ -17518,18 +17518,18 @@ class SerialPortX80 extends Component {
     initConnection(fNullModem)
     {
         if (!this.connection) {
-            var sConnection = this.cmp.getMachineParm("connection");
+            let sConnection = this.cmp.getMachineParm("connection");
             if (sConnection) {
-                var asParts = sConnection.split('->');
+                let asParts = sConnection.split('->');
                 if (asParts.length == 2) {
-                    var sSourceID = Str.trim(asParts[0]);
+                    let sSourceID = Str.trim(asParts[0]);
                     if (sSourceID != this.idComponent) return;  // this connection string is intended for another instance
-                    var sTargetID = Str.trim(asParts[1]);
+                    let sTargetID = Str.trim(asParts[1]);
                     this.connection = Component.getComponentByID(sTargetID, false);
                     if (this.connection) {
-                        var exports = this.connection['exports'];
+                        let exports = this.connection['exports'];
                         if (exports) {
-                            var fnConnect = /** @function */ (exports['connect']);
+                            let fnConnect = /** @function */ (exports['connect']);
                             if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
                             this.sendData = exports['receiveData'];
                             if (this.sendData) {
@@ -17611,7 +17611,7 @@ class SerialPortX80 extends Component {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         state.set(0, this.saveRegisters());
         return state.data();
     }
@@ -17639,7 +17639,7 @@ class SerialPortX80 extends Component {
      */
     initState(data)
     {
-        var i = 0;
+        let i = 0;
         if (data === undefined) {
             data = SerialPortX80.UART8251.INIT;
         }
@@ -17661,8 +17661,8 @@ class SerialPortX80 extends Component {
      */
     saveRegisters()
     {
-        var i = 0;
-        var data = [];
+        let i = 0;
+        let data = [];
         data[i++] = this.fReady;
         data[i++] = this.bDataIn;
         data[i++] = this.bDataOut;
@@ -17682,13 +17682,13 @@ class SerialPortX80 extends Component {
      */
     getBaudTimeout(maskRate)
     {
-        var indexRate = (this.bBaudRates & maskRate);
+        let indexRate = (this.bBaudRates & maskRate);
         if (!(maskRate & 0xf)) indexRate >>= 4;
-        var nBaud = SerialPortX80.UART8251.BAUDTABLE[indexRate];
-        var nBits = ((this.bMode & SerialPortX80.UART8251.MODE.DATA_BITS) >> 2) + 6;   // includes an extra +1 for start bit
+        let nBaud = SerialPortX80.UART8251.BAUDTABLE[indexRate];
+        let nBits = ((this.bMode & SerialPortX80.UART8251.MODE.DATA_BITS) >> 2) + 6;   // includes an extra +1 for start bit
         if (this.bMode & SerialPortX80.UART8251.MODE.PARITY_ENABLE) nBits++;
         nBits += ((((this.bMode & SerialPortX80.UART8251.MODE.STOP_BITS) >> 6) + 1) >> 1);
-        var nBytesPerSecond = nBaud / nBits;
+        let nBytesPerSecond = nBaud / nBits;
         return (1000 / nBytesPerSecond)|0;
     }
 
@@ -17770,7 +17770,7 @@ class SerialPortX80 extends Component {
      */
     transmitByte(b)
     {
-        var fTransmitted = false;
+        let fTransmitted = false;
 
         this.printf("transmitByte(%#04x)\n", b);
 
@@ -17844,7 +17844,7 @@ class SerialPortX80 extends Component {
      */
     inData(port, addrFrom)
     {
-        var b = this.bDataIn;
+        let b = this.bDataIn;
         this.printIO(port, undefined, addrFrom, "DATA", b);
         this.bStatus &= ~SerialPortX80.UART8251.STATUS.RECV_FULL;
         return b;
@@ -17860,7 +17860,7 @@ class SerialPortX80 extends Component {
      */
     inControl(port, addrFrom)
     {
-        var b = this.bStatus;
+        let b = this.bStatus;
         this.printIO(port, undefined, addrFrom, "STATUS", b);
         return b;
     }
@@ -17919,9 +17919,9 @@ class SerialPortX80 extends Component {
              * Whenever DTR or RTS changes, we also want to notify any connected machine, via updateStatus().
              */
             if (this.updateStatus) {
-                var delta = (bOut ^ this.bCommand);
+                let delta = (bOut ^ this.bCommand);
                 if (delta & (SerialPortX80.UART8251.COMMAND.RTS | SerialPortX80.UART8251.COMMAND.DTR)) {
-                    var pins = 0;
+                    let pins = 0;
                     if (this.fNullModem) {
                         pins |= (bOut & SerialPortX80.UART8251.COMMAND.RTS)? RS232.CTS.MASK : 0;
                         pins |= (bOut & SerialPortX80.UART8251.COMMAND.DTR)? (RS232.DSR.MASK | RS232.CD.MASK): 0;
@@ -17963,11 +17963,11 @@ class SerialPortX80 extends Component {
      */
     static init()
     {
-        var aeSerial = Component.getElementsByClass(APPCLASS, "serial");
-        for (var iSerial = 0; iSerial < aeSerial.length; iSerial++) {
-            var eSerial = aeSerial[iSerial];
-            var parmsSerial = Component.getComponentParms(eSerial);
-            var serial = new SerialPortX80(parmsSerial);
+        let aeSerial = Component.getElementsByClass(APPCLASS, "serial");
+        for (let iSerial = 0; iSerial < aeSerial.length; iSerial++) {
+            let eSerial = aeSerial[iSerial];
+            let parmsSerial = Component.getComponentParms(eSerial);
+            let serial = new SerialPortX80(parmsSerial);
             Component.bindComponentControls(serial, eSerial, APPCLASS);
         }
     }
@@ -18084,7 +18084,7 @@ SerialPortX80.aPortOutput = {
 Web.onInit(SerialPortX80.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
@@ -19561,7 +19561,7 @@ class DebuggerX80 extends DbgLib {
              *      pcX80('h')
              *      ...
              */
-            var dbg = this;
+            let dbg = this;
             if (globals.window[APPCLASS] === undefined) {
                 globals.window[APPCLASS] = function(s) { return dbg.doCommands(s); };
             }
@@ -19587,7 +19587,7 @@ class DebuggerX80 extends DbgLib {
         /*
          * Re-initialize Debugger message support if necessary
          */
-        var sMessages = cmp.getMachineParm('messages');
+        let sMessages = cmp.getMachineParm('messages');
         if (sMessages) this.messageInit(sMessages);
 
         this.aaOpDescs = DebuggerX80.aaOpDescs;
@@ -19609,7 +19609,7 @@ class DebuggerX80 extends DbgLib {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var dbg = this;
+        let dbg = this;
         switch (sBinding) {
 
         case "debugInput":
@@ -19621,7 +19621,7 @@ class DebuggerX80 extends DbgLib {
              *      control.focus();
              */
             control.onkeydown = function onKeyDownDebugInput(event) {
-                var sCmd;
+                let sCmd;
                 if (event.keyCode == Keys.KEYCODE.CR) {
                     sCmd = dbg.controlDebug.value;
                     dbg.controlDebug.value = "";
@@ -19638,7 +19638,7 @@ class DebuggerX80 extends DbgLib {
                         sCmd = dbg.getNextCommand();
                     }
                     if (sCmd != null) {
-                        var cch = sCmd.length;
+                        let cch = sCmd.length;
                         dbg.controlDebug.value = sCmd;
                         dbg.controlDebug.setSelectionRange(cch, cch);
                     }
@@ -19654,12 +19654,12 @@ class DebuggerX80 extends DbgLib {
                 500, 100,
                 function onClickDebugEnter(fRepeat) {
                     if (dbg.controlDebug) {
-                        var sCmds = dbg.controlDebug.value;
+                        let sCmds = dbg.controlDebug.value;
                         dbg.controlDebug.value = "";
                         dbg.doCommands(sCmds, true);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
+
                     return false;
                 }
             );
@@ -19671,7 +19671,7 @@ class DebuggerX80 extends DbgLib {
                 control,
                 500, 100,
                 function onClickStep(fRepeat) {
-                    var fCompleted = false;
+                    let fCompleted = false;
                     if (!dbg.isBusy(true)) {
                         dbg.setBusy(true);
                         fCompleted = dbg.stepCPU(fRepeat? 1 : 0);
@@ -19709,7 +19709,7 @@ class DebuggerX80 extends DbgLib {
      */
     getAddr(dbgAddr, fWrite, nb)
     {
-        var addr = dbgAddr && dbgAddr.addr;
+        let addr = dbgAddr && dbgAddr.addr;
         if (addr == null) {
             addr = CPUDefX80.ADDR_INVALID;
         }
@@ -19728,8 +19728,8 @@ class DebuggerX80 extends DbgLib {
      */
     getByte(dbgAddr, inc)
     {
-        var b = 0xff;
-        var addr = this.getAddr(dbgAddr, false, 1);
+        let b = 0xff;
+        let addr = this.getAddr(dbgAddr, false, 1);
         if (addr !== CPUDefX80.ADDR_INVALID) {
             b = this.bus.getByteDirect(addr);
             if (inc) this.incAddr(dbgAddr, inc);
@@ -19760,8 +19760,8 @@ class DebuggerX80 extends DbgLib {
      */
     getShort(dbgAddr, inc)
     {
-        var w = 0xffff;
-        var addr = this.getAddr(dbgAddr, false, 2);
+        let w = 0xffff;
+        let addr = this.getAddr(dbgAddr, false, 2);
         if (addr !== CPUDefX80.ADDR_INVALID) {
             w = this.bus.getShortDirect(addr);
             if (inc) this.incAddr(dbgAddr, inc);
@@ -19779,7 +19779,7 @@ class DebuggerX80 extends DbgLib {
      */
     setByte(dbgAddr, b, inc)
     {
-        var addr = this.getAddr(dbgAddr, true, 1);
+        let addr = this.getAddr(dbgAddr, true, 1);
         if (addr !== CPUDefX80.ADDR_INVALID) {
             this.bus.setByteDirect(addr, b);
             if (inc) this.incAddr(dbgAddr, inc);
@@ -19797,7 +19797,7 @@ class DebuggerX80 extends DbgLib {
      */
     setShort(dbgAddr, w, inc)
     {
-        var addr = this.getAddr(dbgAddr, true, 2);
+        let addr = this.getAddr(dbgAddr, true, 2);
         if (addr !== CPUDefX80.ADDR_INVALID) {
             this.bus.setShortDirect(addr, w);
             if (inc) this.incAddr(dbgAddr, inc);
@@ -19882,9 +19882,9 @@ class DebuggerX80 extends DbgLib {
      */
     parseAddr(sAddr, fCode, fNoChecks)
     {
-        var dbgAddr;
-        var dbgAddrNext = (fCode? this.dbgAddrNextCode : this.dbgAddrNextData);
-        var addr = dbgAddrNext.addr;
+        let dbgAddr;
+        let dbgAddrNext = (fCode? this.dbgAddrNextCode : this.dbgAddrNextData);
+        let addr = dbgAddrNext.addr;
         if (sAddr !== undefined) {
             sAddr = this.parseReference(sAddr) || sAddr;
             dbgAddr = this.findSymbolAddr(sAddr);
@@ -19907,7 +19907,7 @@ class DebuggerX80 extends DbgLib {
     parseAddrOptions(dbgAddr, sOptions)
     {
         if (sOptions) {
-            var a = sOptions.match(/(['"])(.*?)\1/);
+            let a = sOptions.match(/(['"])(.*?)\1/);
             if (a) {
                 dbgAddr.aCmds = this.parseCommand(dbgAddr.sCmd = a[2]);
             }
@@ -19966,10 +19966,10 @@ class DebuggerX80 extends DbgLib {
      */
     getSZ(dbgAddr, cchMax)
     {
-        var s = "";
+        let s = "";
         cchMax = cchMax || 256;
         while (s.length < cchMax) {
-            var b = this.getByte(dbgAddr, 1);
+            let b = this.getByte(dbgAddr, 1);
             if (!b || b == 0x24 || b >= 127) break;
             s += (b >= 32? String.fromCharCode(b) : '.');
         }
@@ -19985,7 +19985,7 @@ class DebuggerX80 extends DbgLib {
      */
     dumpBlocks(aBlocks, sAddr)
     {
-        var addr = 0, i = 0, n = aBlocks.length;
+        let addr = 0, i = 0, n = aBlocks.length;
 
         if (sAddr) {
             addr = this.getAddr(this.parseAddr(sAddr));
@@ -20000,14 +20000,14 @@ class DebuggerX80 extends DbgLib {
         this.printf("blockid   physical   blockaddr   used    size    type\n");
         this.printf("--------  ---------  ----------  ------  ------  ----\n");
 
-        var typePrev = -1, cPrev = 0;
+        let typePrev = -1, cPrev = 0;
         while (n--) {
-            var block = aBlocks[i];
+            let block = aBlocks[i];
             if (block.type == typePrev) {
                 if (!cPrev++) this.printf("...\n");
             } else {
                 typePrev = block.type;
-                var sType = MemoryX80.TYPE.NAMES[typePrev];
+                let sType = MemoryX80.TYPE.NAMES[typePrev];
                 if (block) {
                     this.printf("%x  %%%x  %%%%%x  %#06x  %#06x  %s\n", block.id, i << this.bus.nBlockShift, block.addr, block.used, block.size, sType);
                 }
@@ -20045,14 +20045,14 @@ class DebuggerX80 extends DbgLib {
      */
     dumpHistory(sPrev, sLines)
     {
-        var sMore = "";
-        var cHistory = 0;
-        var iHistory = this.iOpcodeHistory;
-        var aHistory = this.aOpcodeHistory;
+        let sMore = "";
+        let cHistory = 0;
+        let iHistory = this.iOpcodeHistory;
+        let aHistory = this.aOpcodeHistory;
 
         if (aHistory.length) {
-            var nPrev = +sPrev || this.nextHistory;
-            var nLines = +sLines || 10;
+            let nPrev = +sPrev || this.nextHistory;
+            let nLines = +sLines || 10;
 
             if (isNaN(nPrev)) {
                 nPrev = nLines;
@@ -20078,7 +20078,7 @@ class DebuggerX80 extends DbgLib {
                 }
             }
 
-            var aFilters = [];
+            let aFilters = [];
             if (sLines == "call") {
                 nLines = 100000;
                 aFilters = ["CALL"];
@@ -20100,26 +20100,26 @@ class DebuggerX80 extends DbgLib {
              *
              * If you re-enable this protection, be sure to re-enable the decrement below, too.
              */
-            var sDump = "";
+            let sDump = "";
             while (nLines > 0 && iHistory != this.iOpcodeHistory) {
 
-                var dbgAddr = aHistory[iHistory++];
+                let dbgAddr = aHistory[iHistory++];
                 if (dbgAddr.addr == null) break;
 
                 /*
                  * We must create a new dbgAddr from the address in aHistory, because dbgAddr was
                  * a reference, not a copy, and we don't want getInstruction() modifying the original.
                  */
-                var dbgAddrNew = this.newAddr(dbgAddr.addr);
+                let dbgAddrNew = this.newAddr(dbgAddr.addr);
 
-                var sComment = "history";
-                var nSequence = nPrev--;
+                let sComment = "history";
+                let nSequence = nPrev--;
                 if (MAXDEBUG && dbgAddr.cycleCount != null) {
                     sComment = "cycles";
                     nSequence = dbgAddr.cycleCount;
                 }
 
-                var sInstruction = this.getInstruction(dbgAddrNew, sComment, nSequence);
+                let sInstruction = this.getInstruction(dbgAddrNew, sComment, nSequence);
 
                 if (!aFilters.length || sInstruction.indexOf(aFilters[0]) >= 0) {
                     sDump += sInstruction + "\n";
@@ -20168,9 +20168,9 @@ class DebuggerX80 extends DbgLib {
          * Internally, we use "key" instead of "keys", since the latter is a method on JavasScript objects,
          * but externally, we allow the user to specify "keys"; "kbd" is also allowed as shorthand for "keyboard".
          */
-        var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
+        let aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
         if (aEnable.length) {
-            for (var m in Messages.Categories) {
+            for (let m in Messages.Categories) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
                     this.bitsMessage |= Messages.Categories[m];
                     this.printf("%s messages enabled\n", m);
@@ -20189,7 +20189,7 @@ class DebuggerX80 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in Messages.Categories) {
+        for (let m in Messages.Categories) {
             if (bitMessage == Messages.Categories[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
@@ -20208,7 +20208,7 @@ class DebuggerX80 extends DbgLib {
      */
     getRegIndex(sReg, off)
     {
-        var i;
+        let i;
         sReg = sReg.toUpperCase();
         if (off == null) {
             i = Usr.indexOf(DebuggerX80.REGS, sReg);
@@ -20228,8 +20228,8 @@ class DebuggerX80 extends DbgLib {
      */
     getRegString(iReg)
     {
-        var cch = 0;
-        var n = this.getRegValue(iReg);
+        let cch = 0;
+        let n = this.getRegValue(iReg);
         if (n !== undefined) {
             switch(iReg) {
             case DebuggerX80.REG_A:
@@ -20265,9 +20265,9 @@ class DebuggerX80 extends DbgLib {
      */
     getRegValue(iReg)
     {
-        var n;
+        let n;
         if (iReg >= 0) {
-            var cpu = this.cpu;
+            let cpu = this.cpu;
             switch(iReg) {
             case DebuggerX80.REG_A:
                 n = cpu.regA;
@@ -20339,10 +20339,10 @@ class DebuggerX80 extends DbgLib {
         /*
          * Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
          */
-        var i = 0;
-        var b, sChar, sAddr, dbgAddr, sReplace;
+        let i = 0;
+        let b, sChar, sAddr, dbgAddr, sReplace;
         while ((i = s.indexOf('@', i)) >= 0) {
-            var iReg = this.getRegIndex(s, i + 1);
+            let iReg = this.getRegIndex(s, i + 1);
             if (iReg >= 0) {
                 s = s.substr(0, i) + this.getRegString(iReg) + s.substr(i + 1 + DebuggerX80.REGS[iReg].length);
             }
@@ -20398,7 +20398,12 @@ class DebuggerX80 extends DbgLib {
     }
 
     /**
-     * message(sMessage, bitsAddress)
+     * message(sMessage, bitsMessage)
+     *
+     * When we are called, any filtering of bitsMessage (either the caller's implied message bit(s) or any
+     * explicitly provided message bits) has already been performed, so the focus here is dealing with other
+     * message bits that imply actions (eg, ADDRESS to append the current CPU address to the message, BUFFER
+     * to buffer the message instead of displaying it, HALT to also stop the CPU).
      *
      * @this {DebuggerX80}
      * @param {string} sMessage
@@ -20470,7 +20475,7 @@ class DebuggerX80 extends DbgLib {
         this.printf("Type ? for help with PCx80 Debugger commands\n");
         this.updateStatus();
         if (this.sInitCommands) {
-            var sCmds = this.sInitCommands;
+            let sCmds = this.sInitCommands;
             this.sInitCommands = null;
             this.doCommands(sCmds);
         }
@@ -20491,7 +20496,7 @@ class DebuggerX80 extends DbgLib {
      */
     historyInit(fQuiet)
     {
-        var i;
+        let i;
         if (!this.checksEnabled()) {
             if (this.aOpcodeHistory && this.aOpcodeHistory.length && !fQuiet) {
                 this.printf("instruction history buffer freed\n");
@@ -20561,7 +20566,7 @@ class DebuggerX80 extends DbgLib {
             if (this.checksEnabled()) this.checkInstruction(this.cpu.getPC(), 0);
         }
         try {
-            var nCyclesStep = this.cpu.stepCPU(nCycles);
+            let nCyclesStep = this.cpu.stepCPU(nCycles);
             if (nCyclesStep > 0) {
                 this.nCycles += nCyclesStep;
                 this.cpu.addCycles(nCyclesStep, true);
@@ -20571,7 +20576,7 @@ class DebuggerX80 extends DbgLib {
         }
         catch(exception) {
             if (typeof exception != "number") {
-                var e = exception;
+                let e = exception;
                 this.nCycles = 0;
                 this.cpu.setError(e.stack || e.message);
             }
@@ -20719,7 +20724,7 @@ class DebuggerX80 extends DbgLib {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         state.set(0, this.packAddr(this.dbgAddrNextCode));
         state.set(1, this.packAddr(this.dbgAddrAssemble));
         state.set(2, [this.aPrevCmds, this.fAssemble, this.bitsMessage]);
@@ -20738,7 +20743,7 @@ class DebuggerX80 extends DbgLib {
      */
     restore(data)
     {
-        var i = 0;
+        let i = 0;
         if (data[2] !== undefined) {
             this.dbgAddrNextCode = this.unpackAddr(data[i++]);
             this.dbgAddrAssemble = this.unpackAddr(data[i++]);
@@ -20783,10 +20788,10 @@ class DebuggerX80 extends DbgLib {
             this.flags.running = false;
             this.nCycles = nCycles - this.nCyclesStart;
             if (!this.nStep) {
-                var sStopped = "stopped";
+                let sStopped = "stopped";
                 if (this.nCycles) {
-                    var msTotal = ms - this.msStart;
-                    var nCyclesPerSecond = (msTotal > 0? Math.round(this.nCycles * 1000 / msTotal) : 0);
+                    let msTotal = ms - this.msStart;
+                    let nCyclesPerSecond = (msTotal > 0? Math.round(this.nCycles * 1000 / msTotal) : 0);
                     sStopped += " (";
                     if (this.checksEnabled()) {
                         sStopped += this.cOpcodes + " opcodes, ";
@@ -20849,7 +20854,7 @@ class DebuggerX80 extends DbgLib {
      */
     checkInstruction(addr, nState)
     {
-        var cpu = this.cpu;
+        let cpu = this.cpu;
 
         if (nState > 0) {
             if (this.nBreakIns && !--this.nBreakIns) {
@@ -20868,10 +20873,10 @@ class DebuggerX80 extends DbgLib {
          */
         if (nState >= 0 && this.aaOpcodeCounts.length) {
             this.cOpcodes++;
-            var bOpcode = this.bus.getByteDirect(addr);
+            let bOpcode = this.bus.getByteDirect(addr);
             if (bOpcode != null) {
                 this.aaOpcodeCounts[bOpcode][1]++;
-                var dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];
+                let dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];
                 this.setAddr(dbgAddr, cpu.getPC());
                 if (DEBUG) dbgAddr.cycleCount = cpu.getCycles();
                 if (++this.iOpcodeHistory == this.aOpcodeHistory.length) this.iOpcodeHistory = 0;
@@ -20979,7 +20984,7 @@ class DebuggerX80 extends DbgLib {
      */
     clearBreakpoints()
     {
-        var i, dbgAddr;
+        let i, dbgAddr;
         this.aBreakExec = ["bp"];
         if (this.aBreakRead !== undefined) {
             for (i = 1; i < this.aBreakRead.length; i++) {
@@ -21032,7 +21037,7 @@ class DebuggerX80 extends DbgLib {
      */
     addBreakpoint(aBreak, dbgAddr, fTemporary)
     {
-        var fSuccess = true;
+        let fSuccess = true;
 
         // this.nSuppressBreaks++;
 
@@ -21049,7 +21054,7 @@ class DebuggerX80 extends DbgLib {
         }
 
         if (aBreak != this.aBreakExec) {
-            var addr = this.getAddr(dbgAddr);
+            let addr = this.getAddr(dbgAddr);
             if (addr === CPUDefX80.ADDR_INVALID) {
                 this.printf("invalid address: %s\n", this.toHexAddr(dbgAddr));
                 fSuccess = false;
@@ -21087,10 +21092,10 @@ class DebuggerX80 extends DbgLib {
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTemporary, fQuiet)
     {
-        var fFound = false;
-        var addr = this.getAddr(dbgAddr);
-        for (var i = 1; i < aBreak.length; i++) {
-            var dbgAddrBreak = aBreak[i];
+        let fFound = false;
+        let addr = this.getAddr(dbgAddr);
+        for (let i = 1; i < aBreak.length; i++) {
+            let dbgAddrBreak = aBreak[i];
             if (addr == this.getAddr(dbgAddrBreak)) {
                 if (!fTemporary || dbgAddrBreak.fTemporary) {
                     fFound = true;
@@ -21128,7 +21133,7 @@ class DebuggerX80 extends DbgLib {
      */
     listBreakpoints(aBreak)
     {
-        for (var i = 1; i < aBreak.length; i++) {
+        for (let i = 1; i < aBreak.length; i++) {
             this.printBreakpoint(aBreak, i);
         }
         return aBreak.length - 1;
@@ -21144,7 +21149,7 @@ class DebuggerX80 extends DbgLib {
      */
     printBreakpoint(aBreak, i, sAction)
     {
-        var dbgAddr = aBreak[i];
+        let dbgAddr = aBreak[i];
         this.printf("%s %s%s\n", aBreak[0], this.toHexAddr(dbgAddr), (sAction? (' ' + sAction) : (dbgAddr.sCmd? (' "' + dbgAddr.sCmd + '"') : '')));
     }
 
@@ -21171,8 +21176,8 @@ class DebuggerX80 extends DbgLib {
             this.checkBreakpoint(addr, 1, this.aBreakExec, true);
             this.nStep = 0;
         } else {
-            for (var i = 1; i < this.aBreakExec.length; i++) {
-                var dbgAddrBreak = this.aBreakExec[i];
+            for (let i = 1; i < this.aBreakExec.length; i++) {
+                let dbgAddrBreak = this.aBreakExec[i];
                 if (dbgAddrBreak.fTemporary) {
                     if (!this.findBreakpoint(this.aBreakExec, dbgAddrBreak, true, true)) break;
                     i = 0;
@@ -21197,13 +21202,13 @@ class DebuggerX80 extends DbgLib {
          * Time to check for execution breakpoints; note that this should be done BEFORE updating frequency
          * or history data (see checkInstruction), since we might not actually execute the current instruction.
          */
-        var fBreak = false;
+        let fBreak = false;
 
         if (!this.nSuppressBreaks++) {
 
-            for (var i = 1; !fBreak && i < aBreak.length; i++) {
+            for (let i = 1; !fBreak && i < aBreak.length; i++) {
 
-                var dbgAddrBreak = aBreak[i];
+                let dbgAddrBreak = aBreak[i];
 
                 if (fTemporary && !dbgAddrBreak.fTemporary) continue;
 
@@ -21218,10 +21223,10 @@ class DebuggerX80 extends DbgLib {
                  * If you want to create a real-mode breakpoint that will break regardless of mode,
                  * use the physical address of the real-mode memory location instead.
                  */
-                var addrBreak = this.getAddr(dbgAddrBreak);
-                for (var n = 0; n < nb; n++) {
+                let addrBreak = this.getAddr(dbgAddrBreak);
+                for (let n = 0; n < nb; n++) {
                     if (addr + n == addrBreak) {
-                        var a;
+                        let a;
                         fBreak = true;
                         if (dbgAddrBreak.fTemporary) {
                             this.findBreakpoint(aBreak, dbgAddrBreak, true, true);
@@ -21239,13 +21244,13 @@ class DebuggerX80 extends DbgLib {
                              * we abort.
                              */
                             fBreak = false;
-                            for (var j = 0; j < a.length; j++) {
+                            for (let j = 0; j < a.length; j++) {
                                 if (!this.doCommand(a[j], true)) {
                                     if (a[j].indexOf("if")) {
                                         fBreak = true;          // the failed command wasn't "if", so abort
                                         break;
                                     }
-                                    var k = j + 1;
+                                    let k = j + 1;
                                     for (; k < a.length; k++) {
                                         if (!a[k].indexOf("else")) break;
                                         j++;
@@ -21287,39 +21292,39 @@ class DebuggerX80 extends DbgLib {
      */
     getInstruction(dbgAddr, sComment, nSequence)
     {
-        var dbgAddrIns = this.newAddr(dbgAddr.addr);
+        let dbgAddrIns = this.newAddr(dbgAddr.addr);
 
-        var bOpcode = this.getByte(dbgAddr, 1);
+        let bOpcode = this.getByte(dbgAddr, 1);
 
-        var asOpcodes = this.style != DebuggerX80.STYLE_8086? DebuggerX80.INS_NAMES : DebuggerX80.INS_NAMES_8086;
-        var aOpDesc = this.aaOpDescs[bOpcode];
-        var iIns = aOpDesc[0];
+        let asOpcodes = this.style != DebuggerX80.STYLE_8086? DebuggerX80.INS_NAMES : DebuggerX80.INS_NAMES_8086;
+        let aOpDesc = this.aaOpDescs[bOpcode];
+        let iIns = aOpDesc[0];
 
-        var sOperands = "";
-        var sOpcode = asOpcodes[iIns];
-        var cOperands = aOpDesc.length - 1;
-        var typeSizeDefault = DebuggerX80.TYPE_NONE, type;
+        let sOperands = "";
+        let sOpcode = asOpcodes[iIns];
+        let cOperands = aOpDesc.length - 1;
+        let typeSizeDefault = DebuggerX80.TYPE_NONE, type;
 
-        for (var iOperand = 1; iOperand <= cOperands; iOperand++) {
+        for (let iOperand = 1; iOperand <= cOperands; iOperand++) {
 
-            var disp, off, cch;
-            var sOperand = "";
+            let disp, off, cch;
+            let sOperand = "";
 
             type = aOpDesc[iOperand];
             if (type === undefined) continue;
             if ((type & DebuggerX80.TYPE_OPT) && this.style == DebuggerX80.STYLE_8080) continue;
 
-            var typeMode = type & DebuggerX80.TYPE_MODE;
+            let typeMode = type & DebuggerX80.TYPE_MODE;
             if (!typeMode) continue;
 
-            var typeSize = type & DebuggerX80.TYPE_SIZE;
+            let typeSize = type & DebuggerX80.TYPE_SIZE;
             if (!typeSize) {
                 type |= typeSizeDefault;
             } else {
                 typeSizeDefault = typeSize;
             }
 
-            var typeOther = type & DebuggerX80.TYPE_OTHER;
+            let typeOther = type & DebuggerX80.TYPE_OTHER;
             if (!typeOther) {
                 type |= (iOperand == 1? DebuggerX80.TYPE_OUT : DebuggerX80.TYPE_IN);
             }
@@ -21342,8 +21347,8 @@ class DebuggerX80 extends DbgLib {
             sOperands += (sOperand || "???");
         }
 
-        var sBytes = "";
-        var sLine = this.toHexAddr(dbgAddrIns) + ' ';
+        let sBytes = "";
+        let sLine = this.toHexAddr(dbgAddrIns) + ' ';
         if (dbgAddrIns.addr !== CPUDefX80.ADDR_INVALID && dbgAddr.addr !== CPUDefX80.ADDR_INVALID) {
             do {
                 sBytes += Str.toHex(this.getByte(dbgAddrIns, 1), 2);
@@ -21361,7 +21366,7 @@ class DebuggerX80 extends DbgLib {
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
-                var nCycles = this.cpu.getCycles();
+                let nCycles = this.cpu.getCycles();
                 sLine += "cycles=" + nCycles.toString() + " cs=" + Str.toHex(this.cpu.nChecksum);
             }
         }
@@ -21378,8 +21383,8 @@ class DebuggerX80 extends DbgLib {
      */
     getImmOperand(type, dbgAddr)
     {
-        var sOperand = ' ';
-        var typeSize = type & DebuggerX80.TYPE_SIZE;
+        let sOperand = ' ';
+        let typeSize = type & DebuggerX80.TYPE_SIZE;
 
         switch (typeSize) {
         case DebuggerX80.TYPE_BYTE:
@@ -21418,7 +21423,7 @@ class DebuggerX80 extends DbgLib {
          * mnemonics; specifically, "[HL]" instead of "M".  This is also more in keeping with how getImmOperand()
          * displays memory references (ie, by enclosing them in brackets).
          */
-        var sOperand = DebuggerX80.REGS[iReg];
+        let sOperand = DebuggerX80.REGS[iReg];
         if (this.style == DebuggerX80.STYLE_8086 && (type & DebuggerX80.TYPE_MEM)) {
             if (iReg == DebuggerX80.REG_M) {
                 sOperand = "HL";
@@ -21441,7 +21446,7 @@ class DebuggerX80 extends DbgLib {
      */
     parseInstruction(sOp, sOperand, dbgAddr)
     {
-        var aOpBytes = [];
+        let aOpBytes = [];
         this.printf("not supported yet\n");
         return aOpBytes;
     }
@@ -21455,7 +21460,7 @@ class DebuggerX80 extends DbgLib {
      */
     getFlagOutput(sFlag)
     {
-        var b;
+        let b;
         switch (sFlag) {
         case "IF":
             b = this.cpu.getIF();
@@ -21491,7 +21496,7 @@ class DebuggerX80 extends DbgLib {
      */
     getRegOutput(iReg)
     {
-        var sReg = DebuggerX80.REGS[iReg];
+        let sReg = DebuggerX80.REGS[iReg];
         return sReg + '=' + this.getRegString(iReg) + ' ';
     }
 
@@ -21508,7 +21513,7 @@ class DebuggerX80 extends DbgLib {
      */
     getRegDump()
     {
-        var s;
+        let s;
         s = this.getRegOutput(DebuggerX80.REG_A) +
             this.getRegOutput(DebuggerX80.REG_BC) +
             this.getRegOutput(DebuggerX80.REG_DE) +
@@ -21611,21 +21616,21 @@ class DebuggerX80 extends DbgLib {
      */
     addSymbols(sModule, addr, len, aSymbols)
     {
-        var dbgAddr = {};
-        var aOffsets = [];
-        for (var sSymbol in aSymbols) {
-            var symbol = aSymbols[sSymbol];
+        let dbgAddr = {};
+        let aOffsets = [];
+        for (let sSymbol in aSymbols) {
+            let symbol = aSymbols[sSymbol];
             if (typeof symbol == "number") {
                 aSymbols[sSymbol] = symbol = {'o': symbol};
             }
-            var offSymbol = symbol['o'];
-            var sAnnotation = symbol['a'];
+            let offSymbol = symbol['o'];
+            let sAnnotation = symbol['a'];
             if (offSymbol !== undefined) {
                 Usr.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
             }
             if (sAnnotation) symbol['a'] = sAnnotation.replace(/''/g, "\"");
         }
-        var symbolTable = {
+        let symbolTable = {
             sModule: sModule,
             addr: addr,
             len: len,
@@ -21645,14 +21650,14 @@ class DebuggerX80 extends DbgLib {
      */
     dumpSymbols()
     {
-        for (var iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
-            var symbolTable = this.aSymbolTable[iTable];
-            for (var sSymbol in symbolTable.aSymbols) {
+        for (let iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
+            let symbolTable = this.aSymbolTable[iTable];
+            for (let sSymbol in symbolTable.aSymbols) {
                 if (sSymbol.charAt(0) == '.') continue;
-                var symbol = symbolTable.aSymbols[sSymbol];
-                var offSymbol = symbol['o'];
+                let symbol = symbolTable.aSymbols[sSymbol];
+                let offSymbol = symbol['o'];
                 if (offSymbol === undefined) continue;
-                var sSymbolOrig = symbolTable.aSymbols[sSymbol]['l'];
+                let sSymbolOrig = symbolTable.aSymbols[sSymbol]['l'];
                 if (sSymbolOrig) sSymbol = sSymbolOrig;
                 this.printf("%s %s\n", this.toHexOffset(offSymbol), sSymbol);
             }
@@ -21674,15 +21679,15 @@ class DebuggerX80 extends DbgLib {
      */
     findSymbol(dbgAddr, fNearest)
     {
-        var aSymbol = [];
-        var addrSymbol = this.getAddr(dbgAddr) >>> 0;
-        for (var iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
-            var symbolTable = this.aSymbolTable[iTable];
-            var addr = symbolTable.addr >>> 0;
-            var len = symbolTable.len;
+        let aSymbol = [];
+        let addrSymbol = this.getAddr(dbgAddr) >>> 0;
+        for (let iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
+            let symbolTable = this.aSymbolTable[iTable];
+            let addr = symbolTable.addr >>> 0;
+            let len = symbolTable.len;
             if (addrSymbol >= addr && addrSymbol < addr + len) {
-                var offSymbol = addrSymbol - addr;
-                var result = Usr.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
+                let offSymbol = addrSymbol - addr;
+                let result = Usr.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
                 if (result >= 0) {
                     this.returnSymbol(iTable, result, aSymbol);
                 }
@@ -21708,14 +21713,14 @@ class DebuggerX80 extends DbgLib {
      */
     findSymbolAddr(sSymbol)
     {
-        var dbgAddr;
+        let dbgAddr;
         if (sSymbol.match(/^[a-z_][a-z0-9_]*$/i)) {
-            var sUpperCase = sSymbol.toUpperCase();
-            for (var iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
-                var symbolTable = this.aSymbolTable[iTable];
-                var symbol = symbolTable.aSymbols[sUpperCase];
+            let sUpperCase = sSymbol.toUpperCase();
+            for (let iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
+                let symbolTable = this.aSymbolTable[iTable];
+                let symbol = symbolTable.aSymbols[sUpperCase];
                 if (symbol !== undefined) {
-                    var offSymbol = symbol['o'];
+                    let offSymbol = symbol['o'];
                     if (offSymbol !== undefined) {
                         /*
                          * We assume that every ROM is ORG'ed at 0x0000, and therefore unless the symbol has an
@@ -21747,9 +21752,9 @@ class DebuggerX80 extends DbgLib {
      */
     returnSymbol(iTable, iOffset, aSymbol)
     {
-        var symbol = {};
-        var aOffsets = this.aSymbolTable[iTable].aOffsets;
-        var offset = 0, sSymbol = null;
+        let symbol = {};
+        let aOffsets = this.aSymbolTable[iTable].aOffsets;
+        let offset = 0, sSymbol = null;
         if (iOffset >= 0 && iOffset < aOffsets.length) {
             offset = aOffsets[iOffset][0];
             sSymbol = aOffsets[iOffset][1];
@@ -21771,8 +21776,8 @@ class DebuggerX80 extends DbgLib {
      */
     doHelp()
     {
-        var s = "commands:";
-        for (var sCommand in DebuggerX80.COMMANDS) {
+        let s = "commands:";
+        for (let sCommand in DebuggerX80.COMMANDS) {
             s += '\n' + Str.pad(sCommand, 9) + DebuggerX80.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
@@ -21811,7 +21816,7 @@ class DebuggerX80 extends DbgLib {
      */
     doAssemble(asArgs)
     {
-        var dbgAddr = this.parseAddr(asArgs[1], true);
+        let dbgAddr = this.parseAddr(asArgs[1], true);
         if (!dbgAddr) return;
 
         this.dbgAddrAssemble = dbgAddr;
@@ -21822,9 +21827,9 @@ class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var aOpBytes = this.parseInstruction(asArgs[2], asArgs[3], dbgAddr);
+        let aOpBytes = this.parseInstruction(asArgs[2], asArgs[3], dbgAddr);
         if (aOpBytes.length) {
-            for (var i = 0; i < aOpBytes.length; i++) {
+            for (let i = 0; i < aOpBytes.length; i++) {
                 this.setByte(dbgAddr, aOpBytes[i], 1);
             }
             /*
@@ -21879,9 +21884,9 @@ class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var sParm = sCmd.charAt(1);
+        let sParm = sCmd.charAt(1);
         if (sParm == 'l') {
-            var cBreaks = 0;
+            let cBreaks = 0;
             cBreaks += this.listBreakpoints(this.aBreakExec);
             cBreaks += this.listBreakpoints(this.aBreakRead);
             cBreaks += this.listBreakpoints(this.aBreakWrite);
@@ -21900,7 +21905,7 @@ class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var dbgAddr = this.newAddr();
+        let dbgAddr = this.newAddr();
         if (sAddr != '*') {
             dbgAddr = this.parseAddr(sAddr, true, true);
             if (!dbgAddr) return;
@@ -21976,14 +21981,14 @@ class DebuggerX80 extends DbgLib {
      */
     doDump(asArgs)
     {
-        var m;
-        var sCmd = asArgs[0];
-        var sAddr = asArgs[1];
-        var sLen = asArgs[2];
-        var sBytes = asArgs[3];
+        let m;
+        let sCmd = asArgs[0];
+        let sAddr = asArgs[1];
+        let sLen = asArgs[2];
+        let sBytes = asArgs[3];
 
         if (sAddr == '?') {
-            var sDumpers = "";
+            let sDumpers = "";
             for (m in Messages.Categories) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
@@ -22001,7 +22006,7 @@ class DebuggerX80 extends DbgLib {
         }
 
         if (sAddr == "state") {
-            var sState = this.cmp.powerOff(true);
+            let sState = this.cmp.powerOff(true);
             if (sLen == "console") {
                 /*
                  * Console buffers are notoriously small, and even the following code, which breaks the
@@ -22031,7 +22036,7 @@ class DebuggerX80 extends DbgLib {
         if (sCmd == "d") {
             for (m in Messages.Categories) {
                 if (asArgs[1] == m) {
-                    var fnDumper = this.afnDumpers[m];
+                    let fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
                         asArgs.shift();
                         asArgs.shift();
@@ -22052,10 +22057,10 @@ class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var dbgAddr = this.parseAddr(sAddr);
+        let dbgAddr = this.parseAddr(sAddr);
         if (!dbgAddr) return;
 
-        var len = 0;                            // 0 is not a default; it triggers the appropriate default below
+        let len = 0;                            // 0 is not a default; it triggers the appropriate default below
         if (sLen) {
             if (sLen.charAt(0) == 'l') {
                 sLen = sLen.substr(1) || sBytes;
@@ -22064,17 +22069,17 @@ class DebuggerX80 extends DbgLib {
             if (len > 0x10000) len = 0x10000;   // prevent bad user (or variable) input from producing excessive output
         }
 
-        var sDump = "";
-        var size = (sCmd == "dd"? 4 : (sCmd == "dw"? 2 : 1));
-        var cb = (size * len) || 128;
-        var cLines = ((cb + 15) >> 4) || 1;
+        let sDump = "";
+        let size = (sCmd == "dd"? 4 : (sCmd == "dw"? 2 : 1));
+        let cb = (size * len) || 128;
+        let cLines = ((cb + 15) >> 4) || 1;
 
         while (cLines-- && cb > 0) {
-            var data = 0, iByte = 0, i;
-            var sData = "", sChars = "";
+            let data = 0, iByte = 0, i;
+            let sData = "", sChars = "";
             sAddr = this.toHexAddr(dbgAddr);
             for (i = 16; i > 0 && cb > 0; i--) {
-                var b = this.getByte(dbgAddr, 1);
+                let b = this.getByte(dbgAddr, 1);
                 data |= (b << (iByte++ << 3));
                 if (iByte == size) {
                     sData += Str.toHex(data, size * 2);
@@ -22100,19 +22105,19 @@ class DebuggerX80 extends DbgLib {
      */
     doEdit(asArgs)
     {
-        var size = 1;
-        var mask = 0xff;
-        var fnGet = this.getByte;
-        var fnSet = this.setByte;
+        let size = 1;
+        let mask = 0xff;
+        let fnGet = this.getByte;
+        let fnSet = this.setByte;
         if (asArgs[0] == "ew") {
             size = 2;
             mask = 0xffff;
             fnGet = this.getShort;
             fnSet = this.setShort;
         }
-        var cch = size << 1;
+        let cch = size << 1;
 
-        var sAddr = asArgs[1];
+        let sAddr = asArgs[1];
         if (sAddr == null) {
             this.printf("edit memory commands:\n");
             this.printf("\teb [a] [...]  edit bytes at address a\n");
@@ -22120,11 +22125,11 @@ class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var dbgAddr = this.parseAddr(sAddr);
+        let dbgAddr = this.parseAddr(sAddr);
         if (!dbgAddr) return;
 
-        for (var i = 2; i < asArgs.length; i++) {
-            var vNew = this.parseExpression(asArgs[i]);
+        for (let i = 2; i < asArgs.length; i++) {
+            let vNew = this.parseExpression(asArgs[i]);
             if (vNew === undefined) {
                 this.printf("unrecognized value: %s\n", asArgs[i]);
                 break;
@@ -22132,7 +22137,7 @@ class DebuggerX80 extends DbgLib {
             if (vNew & ~mask) {
                 this.printf("warning: %x exceeds %s-byte value\n", vNew, size);
             }
-            var vOld = fnGet.call(this, dbgAddr);
+            let vOld = fnGet.call(this, dbgAddr);
             this.printf("changing %s from %#0*2x to %#0*2x\n", this.toHexAddr(dbgAddr), cch, vOld, cch, vNew);
             fnSet.call(this, dbgAddr, vNew, size);
         }
@@ -22151,11 +22156,10 @@ class DebuggerX80 extends DbgLib {
             this.printf("\tclear\tclear all frequency counts\n");
             return;
         }
-        var i;
-        var cData = 0;
+        let cData = 0;
         if (this.aaOpcodeCounts) {
             if (sParm == "clear") {
-                for (i = 0; i < this.aaOpcodeCounts.length; i++)
+                for (let i = 0; i < this.aaOpcodeCounts.length; i++)
                     this.aaOpcodeCounts[i] = [i, 0];
                 this.printf("frequency data cleared\n");
                 cData++;
@@ -22165,14 +22169,14 @@ class DebuggerX80 extends DbgLib {
                 cData++;
             }
             else {
-                var aaSortedOpcodeCounts = this.aaOpcodeCounts.slice();
+                let aaSortedOpcodeCounts = this.aaOpcodeCounts.slice();
                 aaSortedOpcodeCounts.sort(function(p, q) {
                     return q[1] - p[1];
                 });
-                var asOpcodes = this.style != DebuggerX80.STYLE_8086? DebuggerX80.INS_NAMES : DebuggerX80.INS_NAMES_8086;
-                for (i = 0; i < aaSortedOpcodeCounts.length; i++) {
-                    var bOpcode = aaSortedOpcodeCounts[i][0];
-                    var cFreq = aaSortedOpcodeCounts[i][1];
+                let asOpcodes = this.style != DebuggerX80.STYLE_8086? DebuggerX80.INS_NAMES : DebuggerX80.INS_NAMES_8086;
+                for (let i = 0; i < aaSortedOpcodeCounts.length; i++) {
+                    let bOpcode = aaSortedOpcodeCounts[i][0];
+                    let cFreq = aaSortedOpcodeCounts[i][1];
                     if (cFreq) {
                         this.printf("%s (%#04x): %d times\n", (asOpcodes[this.aaOpDescs[bOpcode][0]] + "  ").substr(0, 5), bOpcode, cFreq);
                         cData++;
@@ -22193,7 +22197,7 @@ class DebuggerX80 extends DbgLib {
      */
     doHalt(fQuiet)
     {
-        var sMsg;
+        let sMsg;
         if (this.flags.running) {
             sMsg = "halting";
             this.stopCPU();
@@ -22239,12 +22243,8 @@ class DebuggerX80 extends DbgLib {
      */
     doInfo(asArgs)
     {
-        if (DEBUG) {
-            this.printf("msPerYield: %d\n", this.cpu.msPerYield);
-            this.printf("nCyclesPerYield: %d\n", this.cpu.nCyclesPerYield);
-            return true;
-        }
-        return false;
+
+        return DEBUG;
     }
 
     /**
@@ -22271,9 +22271,9 @@ class DebuggerX80 extends DbgLib {
             this.printf("warning: port accesses can affect hardware state\n");
             return;
         }
-        var port = this.parseValue(sPort);
+        let port = this.parseValue(sPort);
         if (port !== undefined) {
-            var bIn = this.bus.checkPortInputNotify(port, 1);
+            let bIn = this.bus.checkPortInputNotify(port, 1);
             this.printf("%#06x: %#04x\n", port, bIn);
         }
     }
@@ -22291,7 +22291,7 @@ class DebuggerX80 extends DbgLib {
             this.printf("interrupts disabled (use rif=1 to enable)\n");
             return false;
         }
-        var nLevel = this.parseExpression(sLevel);
+        let nLevel = this.parseExpression(sLevel);
         if (nLevel == null) return false;
         this.printf("requesting interrupt level %d\n", nLevel);
         this.cpu.requestINTR(nLevel);
@@ -22314,7 +22314,7 @@ class DebuggerX80 extends DbgLib {
      */
     doVar(sCmd)
     {
-        var a = sCmd.match(/^\s*([A-Z_]?[A-Z0-9_]*)\s*(=?)\s*(.*)$/i);
+        let a = sCmd.match(/^\s*([A-Z_]?[A-Z0-9_]*)\s*(=?)\s*(.*)$/i);
         if (a) {
             if (!a[1]) {
                 if (!this.printVariable()) this.printf("no variables\n");
@@ -22327,7 +22327,7 @@ class DebuggerX80 extends DbgLib {
                 this.delVariable(a[1]);
                 return true;    // it's not considered an error to delete a variable that didn't exist
             }
-            var v = this.parseExpression(a[3]);
+            let v = this.parseExpression(a[3]);
             if (v !== undefined) {
                 this.setVariable(a[1], v);
                 return true;
@@ -22348,14 +22348,14 @@ class DebuggerX80 extends DbgLib {
      */
     doList(sAddr, fPrint)
     {
-        var sSymbol = null;
+        let sSymbol = null;
 
-        var dbgAddr = this.parseAddr(sAddr, true);
+        let dbgAddr = this.parseAddr(sAddr, true);
         if (dbgAddr) {
-            var addr = this.getAddr(dbgAddr);
-            var aSymbol = this.findSymbol(dbgAddr, true);
+            let addr = this.getAddr(dbgAddr);
+            let aSymbol = this.findSymbol(dbgAddr, true);
             if (aSymbol.length) {
-                var nDelta, sDelta, s;
+                let nDelta, sDelta, s;
                 if (aSymbol[0]) {
                     sDelta = "";
                     nDelta = dbgAddr.addr - aSymbol[1];
@@ -22382,20 +22382,23 @@ class DebuggerX80 extends DbgLib {
     /**
      * doMessages(asArgs)
      *
+     * TODO: This function is identical (or should be) to the PCx86 version of doMessages(); we should factor this out
+     * (and probably others) into the DbgLib class.
+     *
      * @this {DebuggerX80}
      * @param {Array.<string>} asArgs
      */
     doMessages(asArgs)
     {
-        var m;
-        var fCriteria = null;
-        var sCategory = asArgs[1];
+        let m;
+        let fCriteria = null;
+        let sCategory = asArgs[1];
         if (sCategory == '?') sCategory = undefined;
 
         if (sCategory !== undefined) {
-            var bitsMessage = 0;
+            let bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.BUFFER);
+                bitsMessage = Messages.ALL - Messages.HALT - Messages.BUFFER;
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -22404,16 +22407,10 @@ class DebuggerX80 extends DbgLib {
                 fCriteria = false;
                 sCategory = null;
             } else {
-                /*
-                 * Internally, we use "key" instead of "keys", since the latter is a method on JavasScript objects,
-                 * but externally, we allow the user to specify "keys"; "kbd" is also allowed as shorthand for "keyboard".
-                 */
-                if (sCategory == "keys") sCategory = "key";
-                if (sCategory == "kbd") sCategory = "keyboard";
                 for (m in Messages.Categories) {
                     if (sCategory == m) {
                         bitsMessage = Messages.Categories[m];
-                        fCriteria = !!(this.bitsMessage & bitsMessage);
+                        fCriteria = this.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
                 }
@@ -22424,16 +22421,14 @@ class DebuggerX80 extends DbgLib {
             }
             if (bitsMessage) {
                 if (asArgs[2] == "on") {
-                    this.bitsMessage |= bitsMessage;
+                    this.bitsMessage = this.setBits(this.bitsMessage, bitsMessage);
                     fCriteria = true;
                 }
                 else if (asArgs[2] == "off") {
-                    this.bitsMessage &= ~bitsMessage;
+                    this.bitsMessage = this.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
                     if (bitsMessage == Messages.BUFFER) {
-                        for (var i = 0; i < this.aMessageBuffer.length; i++) {
-                            this.printf("%s\n", this.aMessageBuffer[i]);
-                        }
+                        this.printf("%s\n", this.aMessageBuffer.join(""));
                         this.aMessageBuffer = [];
                     }
                 }
@@ -22443,20 +22438,15 @@ class DebuggerX80 extends DbgLib {
         /*
          * Display those message categories that match the current criteria (on or off)
          */
-        var n = 0;
-        var sCategories = "";
+        let n = 0;
+        let sCategories = "";
         for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = Messages.Categories[m];
-                var fEnabled = !!(this.bitsMessage & bitMessage);
+                let bitsMessage = Messages.Categories[m];
+                let fEnabled = this.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
                 if (!(++n % 10)) sCategories += "\n\t";
-                /*
-                 * Internally, we use "key" instead of "keys", since the latter is a method on JavasScript objects,
-                 * but externally, we allow the user to specify "keys".
-                 */
-                if (m == "key") m = "keys";
                 sCategories += m;
             }
         }
@@ -22488,7 +22478,7 @@ class DebuggerX80 extends DbgLib {
             break;
 
         case "cs":
-            var nCycles;
+            let nCycles;
             if (asArgs[3] !== undefined) nCycles = +asArgs[3];          // warning: decimal instead of hex conversion
             switch (asArgs[2]) {
                 case "int":
@@ -22564,8 +22554,8 @@ class DebuggerX80 extends DbgLib {
             this.printf("warning: port accesses can affect hardware state\n");
             return;
         }
-        var port = this.parseValue(sPort, "port #");
-        var bOut = this.parseValue(sByte);
+        let port = this.parseValue(sPort, "port #");
+        let bOut = this.parseValue(sByte);
         if (port !== undefined && bOut !== undefined) {
             this.bus.checkPortOutputNotify(port, 1, bOut);
             this.printf("%#06x: %#04x\n", port, bOut);
@@ -22588,13 +22578,13 @@ class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var cpu = this.cpu;
+        let cpu = this.cpu;
         if (fInstruction == null) fInstruction = true;
 
         if (asArgs != null && asArgs.length > 1) {
-            var sReg = asArgs[1];
-            var sValue = null;
-            var i = sReg.indexOf('=');
+            let sReg = asArgs[1];
+            let sValue = null;
+            let i = sReg.indexOf('=');
             if (i > 0) {
                 sValue = sReg.substr(i + 1);
                 sReg = sReg.substr(0, i);
@@ -22607,10 +22597,10 @@ class DebuggerX80 extends DbgLib {
                 return;
             }
 
-            var w = this.parseExpression(sValue);
+            let w = this.parseExpression(sValue);
             if (w === undefined) return;
 
-            var sRegMatch = sReg.toUpperCase();
+            let sRegMatch = sReg.toUpperCase();
             switch (sRegMatch) {
             case "A":
                 cpu.regA = w & 0xff;
@@ -22704,7 +22694,7 @@ class DebuggerX80 extends DbgLib {
             this.fIgnoreNextCheckFault = true;
         }
         if (sAddr !== undefined) {
-            var dbgAddr = this.parseAddr(sAddr, true);
+            let dbgAddr = this.parseAddr(sAddr, true);
             if (!dbgAddr) return;
             this.parseAddrOptions(dbgAddr, sOptions);
             this.setTempBreakpoint(dbgAddr);
@@ -22726,7 +22716,7 @@ class DebuggerX80 extends DbgLib {
     doPrint(sCmd)
     {
         sCmd = Str.trim(sCmd);
-        var a = sCmd.match(/^(['"])(.*?)\1$/);
+        let a = sCmd.match(/^(['"])(.*?)\1$/);
         if (!a) {
             this.parseExpression(sCmd, false);
         } else {
@@ -22742,16 +22732,16 @@ class DebuggerX80 extends DbgLib {
      */
     doStep(sCmd)
     {
-        var fCallStep = true;
-        var fRegs = (sCmd == "pr"? 1 : 0);
+        let fCallStep = true;
+        let fRegs = (sCmd == "pr"? 1 : 0);
         /*
          * Set up the value for this.nStep (ie, 1 or 2) depending on whether the user wants
          * a subsequent register dump ("pr") or not ("p").
          */
-        var nStep = 1 + fRegs;
+        let nStep = 1 + fRegs;
         if (!this.nStep) {
-            var dbgAddr = this.newAddr(this.cpu.getPC());
-            var bOpcode = this.getByte(dbgAddr);
+            let dbgAddr = this.newAddr(this.cpu.getPC());
+            let bOpcode = this.getByte(dbgAddr);
 
             switch (bOpcode) {
             case CPUDefX80.OPCODE.CALL:
@@ -22795,13 +22785,13 @@ class DebuggerX80 extends DbgLib {
      */
     getCall(dbgAddr)
     {
-        var sCall = null;
-        var addr = dbgAddr.addr;
-        var addrOrig = addr;
-        for (var n = 1; n <= 6 && !!addr; n++) {
+        let sCall = null;
+        let addr = dbgAddr.addr;
+        let addrOrig = addr;
+        for (let n = 1; n <= 6 && !!addr; n++) {
             if (n > 2) {
                 dbgAddr.addr = addr;
-                var s = this.getInstruction(dbgAddr);
+                let s = this.getInstruction(dbgAddr);
                 if (s.indexOf("CALL") >= 0) {
                     /*
                      * Verify that the length of this CALL (or INT), when added to the address of the CALL (or INT),
@@ -22809,8 +22799,8 @@ class DebuggerX80 extends DbgLib {
                      * subtracting that from the string index of the next space, and dividing that difference by two,
                      * to yield the length of the CALL (or INT) instruction, in bytes.
                      */
-                    var i = s.indexOf(' ');
-                    var j = s.indexOf(' ', i+1);
+                    let i = s.indexOf(' ');
+                    let j = s.indexOf(' ', i+1);
                     if (addr + (j - i - 1)/2 == addrOrig) {
                         sCall = s;
                         break;
@@ -22841,13 +22831,13 @@ class DebuggerX80 extends DbgLib {
             return;
         }
 
-        var nFrames = 10, cFrames = 0;
-        var dbgAddrCall = this.newAddr();
-        var dbgAddrStack = this.newAddr(this.cpu.getSP());
+        let nFrames = 10, cFrames = 0;
+        let dbgAddrCall = this.newAddr();
+        let dbgAddrStack = this.newAddr(this.cpu.getSP());
         this.printf("stack trace for %s\n", this.toHexAddr(dbgAddrStack));
 
         while (cFrames < nFrames) {
-            var sCall = null, sCallPrev = null, cTests = 256;
+            let sCall = null, sCallPrev = null, cTests = 256;
             while ((dbgAddrStack.addr >>> 0) < 0x10000) {
                 dbgAddrCall.addr = this.getWord(dbgAddrStack, true);
                 /*
@@ -22865,9 +22855,9 @@ class DebuggerX80 extends DbgLib {
              * being one of them, but it's rare that we're debugging recursive code.
              */
             if (!sCall || sCall == sCallPrev) break;
-            var sSymbol = null;
+            let sSymbol = null;
             if (sCmd == "ks") {
-                var a = sCall.match(/[0-9A-F]+$/);
+                let a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
             sCall = Str.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
@@ -22900,10 +22890,10 @@ class DebuggerX80 extends DbgLib {
      */
     doTrace(sCmd, sCount)
     {
-        var dbg = this;
-        var fRegs = (sCmd != "t");
-        var nCount = this.parseValue(sCount, undefined, true) || 1;
-        var nCycles = (nCount == 1? 0 : 1);
+        let dbg = this;
+        let fRegs = (sCmd != "t");
+        let nCount = this.parseValue(sCount, undefined, true) || 1;
+        let nCycles = (nCount == 1? 0 : 1);
         if (sCmd == "tc") {
             nCycles = nCount;
             nCount = 1;
@@ -22935,15 +22925,15 @@ class DebuggerX80 extends DbgLib {
      */
     doUnassemble(sAddr, sAddrEnd, n)
     {
-        var dbgAddr = this.parseAddr(sAddr, true);
+        let dbgAddr = this.parseAddr(sAddr, true);
         if (!dbgAddr) return;
 
         if (n === undefined) n = 1;
 
-        var cb = 0x100;
+        let cb = 0x100;
         if (sAddrEnd !== undefined) {
 
-            var dbgAddrEnd = this.parseAddr(sAddrEnd, true);
+            let dbgAddrEnd = this.parseAddr(sAddrEnd, true);
             if (!dbgAddrEnd || dbgAddrEnd.addr < dbgAddr.addr) return;
 
             cb = dbgAddrEnd.addr - dbgAddr.addr;
@@ -22959,20 +22949,20 @@ class DebuggerX80 extends DbgLib {
             n = -1;
         }
 
-        var cLines = 0;
-        var sInstruction;
+        let cLines = 0;
+        let sInstruction;
 
         while (cb > 0 && n--) {
 
-            var nSequence = (this.isBusy(false) || this.nStep)? this.nCycles : null;
-            var sComment = (nSequence != null? "cycles" : null);
-            var aSymbol = this.findSymbol(dbgAddr);
+            let nSequence = (this.isBusy(false) || this.nStep)? this.nCycles : null;
+            let sComment = (nSequence != null? "cycles" : null);
+            let aSymbol = this.findSymbol(dbgAddr);
 
-            var addr = dbgAddr.addr;    // we snap dbgAddr.addr *after* calling findSymbol(), which re-evaluates it
+            let addr = dbgAddr.addr;    // we snap dbgAddr.addr *after* calling findSymbol(), which re-evaluates it
 
             if (aSymbol[0] && n) {
                 if (!cLines && n || aSymbol[0].indexOf('+') < 0) {
-                    var sLabel = aSymbol[0] + ':';
+                    let sLabel = aSymbol[0] + ':';
                     if (aSymbol[2]) sLabel += ' ' + aSymbol[2];
                     this.printf("%s\n", sLabel);
                 }
@@ -23021,14 +23011,14 @@ class DebuggerX80 extends DbgLib {
                 this.iPrevCmd--;
             }
         }
-        var a = [];
+        let a = [];
         if (sCmd) {
             /*
              * With the introduction of breakpoint commands (ie, quoted command sequences
              * associated with a breakpoint), we can no longer perform simplistic splitting.
              *
              *      a = sCmd.split(chSep || ';');
-             *      for (var i = 0; i < a.length; i++) a[i] = str.trim(a[i]);
+             *      for (let i = 0; i < a.length; i++) a[i] = str.trim(a[i]);
              *
              * We may now split on semi-colons ONLY if they are outside a quoted sequence.
              *
@@ -23037,8 +23027,8 @@ class DebuggerX80 extends DbgLib {
              */
             sCmd = sCmd.toLowerCase().replace(/""/g, "'");
 
-            var iPrev = 0;
-            var chQuote = null;
+            let iPrev = 0;
+            let chQuote = null;
             chSep = chSep || ';';
             /*
              * NOTE: Processing charAt() up to and INCLUDING length is not a typo; we're taking
@@ -23047,8 +23037,8 @@ class DebuggerX80 extends DbgLib {
              *
              * In a sense, it allows us to pretend that the string ends with a zero terminator.
              */
-            for (var i = 0; i <= sCmd.length; i++) {
-                var ch = sCmd.charAt(i);
+            for (let i = 0; i <= sCmd.length; i++) {
+                let ch = sCmd.charAt(i);
                 if (ch == '"' || ch == "'") {
                     if (!chQuote) {
                         chQuote = ch;
@@ -23081,10 +23071,10 @@ class DebuggerX80 extends DbgLib {
     shiftArgs(asArgs)
     {
         if (asArgs && asArgs.length) {
-            var s0 = asArgs[0];
-            var ch0 = s0.charAt(0);
-            for (var i = 1; i < s0.length; i++) {
-                var ch = s0.charAt(i);
+            let s0 = asArgs[0];
+            let ch0 = s0.charAt(0);
+            for (let i = 1; i < s0.length; i++) {
+                let ch = s0.charAt(i);
                 if (ch0 == '?' || ch0 == 'r' || ch < 'a' || ch > 'z') {
                     asArgs[0] = s0.substr(i);
                     asArgs.unshift(s0.substr(0, i));
@@ -23105,7 +23095,7 @@ class DebuggerX80 extends DbgLib {
      */
     doCommand(sCmd, fQuiet)
     {
-        var result = true;
+        let result = true;
 
         try {
             if (!sCmd.length || sCmd == "end") {
@@ -23117,11 +23107,11 @@ class DebuggerX80 extends DbgLib {
                 sCmd = "";
             }
             else if (!fQuiet) {
-                var sPrompt = ">> ";
+                let sPrompt = ">> ";
                 this.printf("%s%s\n", sPrompt, sCmd);
             }
 
-            var ch = sCmd.charAt(0);
+            let ch = sCmd.charAt(0);
             if (ch == '"' || ch == "'") return true;
 
             /*
@@ -23138,7 +23128,7 @@ class DebuggerX80 extends DbgLib {
                     sCmd = "a " + this.toHexAddr(this.dbgAddrAssemble) + ' ' + sCmd;
                 }
 
-                var asArgs = this.shiftArgs(sCmd.replace(/ +/g, ' ').split(' '));
+                let asArgs = this.shiftArgs(sCmd.replace(/ +/g, ' ').split(' '));
 
                 switch (asArgs[0].charAt(0)) {
                 case 'a':
@@ -23272,8 +23262,8 @@ class DebuggerX80 extends DbgLib {
      */
     doCommands(sCmds, fSave)
     {
-        var a = this.parseCommand(sCmds, fSave);
-        for (var s in a) {
+        let a = this.parseCommand(sCmds, fSave);
+        for (let s in a) {
             if (!this.doCommand(a[+s])) return false;
         }
         return true;
@@ -23289,11 +23279,11 @@ class DebuggerX80 extends DbgLib {
      */
     static init()
     {
-        var aeDbg = Component.getElementsByClass(APPCLASS, "debugger");
-        for (var iDbg = 0; iDbg < aeDbg.length; iDbg++) {
-            var eDbg = aeDbg[iDbg];
-            var parmsDbg = Component.getComponentParms(eDbg);
-            var dbg = new DebuggerX80(parmsDbg);
+        let aeDbg = Component.getElementsByClass(APPCLASS, "debugger");
+        for (let iDbg = 0; iDbg < aeDbg.length; iDbg++) {
+            let eDbg = aeDbg[iDbg];
+            let parmsDbg = Component.getComponentParms(eDbg);
+            let dbg = new DebuggerX80(parmsDbg);
             Component.bindComponentControls(dbg, eDbg, APPCLASS);
         }
     }
@@ -23886,7 +23876,7 @@ class ComputerX80 extends Component {
          * Enumerate all Video components for future updateVideo() calls.
          */
         this.aVideo = [];
-        for (var video = false; (video = this.getMachineComponent("Video", video));) {
+        for (let video = false; (video = this.getMachineComponent("Video", video));) {
             this.aVideo.push(video);
         }
 
@@ -23898,8 +23888,8 @@ class ComputerX80 extends Component {
         /*
          * Iterate through all the components and connect them to the Control Panel, if any
          */
-        var iComponent, component;
-        var aComponents = Component.getComponents(this.id);
+        let iComponent, component;
+        let aComponents = Component.getComponents(this.id);
 
         this.panel = /** @type {PanelX80} */ (Component.getComponentByType("Panel", this.id));
         this.controlPrint = this.panel && this.panel.bindings['print'];
@@ -23928,8 +23918,8 @@ class ComputerX80 extends Component {
             if (component.initBus) component.initBus(this, this.bus, this.cpu, this.dbg);
         }
 
-        var sStatePath = null;
-        var sResume = this.getMachineParm('resume', parmsComputer);
+        let sStatePath = null;
+        let sResume = this.getMachineParm('resume', parmsComputer);
         if (sResume !== undefined) {
             /*
              * Decide whether the 'resume' property is a number or the path of a state file to resume.
@@ -23955,8 +23945,8 @@ class ComputerX80 extends Component {
          * OVERRIDES everything; it overrides any 'state' Computer parameter AND it disables resume of any saved state in
          * localStorage (in other words, it prevents fAllowResume from being true, and forcing resume off).
          */
-        var fAllowResume = false;
-        var sState = this.getMachineParm('state');
+        let fAllowResume = false;
+        let sState = this.getMachineParm('state');
         if (!sState) {
             fAllowResume = true;
             sState = parmsComputer['state'];
@@ -23990,7 +23980,7 @@ class ComputerX80 extends Component {
         if (!sStatePath) {
             this.setReady();
         } else {
-            var cmp = this;
+            let cmp = this;
             Web.getResource(/** @type {string} */ (sStatePath), null, true, function(sURL, sResource, nErrorCode) {
                 cmp.doneLoad(sURL, sResource, nErrorCode);
             });
@@ -24038,8 +24028,8 @@ class ComputerX80 extends Component {
     setMachineParms(parmsMachine)
     {
         if (!parmsMachine) {
-            var sParms;
-            var resources = globals.window['resources']
+            let sParms;
+            let resources = globals.window['resources']
             if (typeof resources == 'object' && (sParms = resources['parms'])) {
                 try {
                     parmsMachine = /** @type {Object} */ (eval("(" + sParms + ")"));
@@ -24074,9 +24064,9 @@ class ComputerX80 extends Component {
          * may also be sloppy and neglect to use correct case (eg, 'automount' instead of 'autoMount'),
          * but there are limits to my paranoia.
          */
-        var resources = globals.window['resources'];
-        var sParmLC = sParm.toLowerCase();
-        var value = Web.getURLParm(sParm) || Web.getURLParm(sParmLC);
+        let resources = globals.window['resources'];
+        let sParmLC = sParm.toLowerCase();
+        let value = Web.getURLParm(sParm) || Web.getURLParm(sParmLC);
 
         if (value === undefined && this.parmsMachine) {
             value = this.parmsMachine[sParm];
@@ -24125,9 +24115,7 @@ class ComputerX80 extends Component {
         if (!nErrorCode) {
             this.sStateData = sStateData;
             this.fStateData = true;
-            if (DEBUG) {
-                this.printf("loaded state file %s\n", sURL.replace(this.sUserID || "xxx", "xxx"));
-            }
+
         } else {
             this.sResumePath = null;
             this.fServerState = false;
@@ -24156,10 +24144,10 @@ class ComputerX80 extends Component {
      */
     wait(fn, parms)
     {
-        var computer = this;
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent <= aComponents.length; iComponent++) {
-            var component = (iComponent < aComponents.length ? aComponents[iComponent] : this);
+        let computer = this;
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent <= aComponents.length; iComponent++) {
+            let component = (iComponent < aComponents.length ? aComponents[iComponent] : this);
             if (!component.isReady()) {
                 component.isReady(function onComponentReady() {
                     computer.wait(fn, parms);
@@ -24167,7 +24155,7 @@ class ComputerX80 extends Component {
                 return;
             }
         }
-        if (DEBUG) this.printf("ComputerX80.wait(ready)\n");
+
         fn.call(this, parms);
     }
 
@@ -24182,19 +24170,17 @@ class ComputerX80 extends Component {
      */
     validateState(stateComputer)
     {
-        var fValid = true;
-        var stateValidate = new State(this, APPVERSION, ComputerX80.STATE_VALIDATE);
+        let fValid = true;
+        let stateValidate = new State(this, APPVERSION, ComputerX80.STATE_VALIDATE);
         if (stateValidate.load() && stateValidate.parse()) {
-            var sTimestampValidate = stateValidate.get(ComputerX80.STATE_TIMESTAMP);
-            var sTimestampComputer = stateComputer? stateComputer.get(ComputerX80.STATE_TIMESTAMP) : "unknown";
+            let sTimestampValidate = stateValidate.get(ComputerX80.STATE_TIMESTAMP);
+            let sTimestampComputer = stateComputer? stateComputer.get(ComputerX80.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
                 this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
-                if (DEBUG) {
-                    this.printf("Last state: %s (validate: %s)\n", sTimestampComputer, sTimestampValidate);
-                }
+
             }
         }
         return fValid;
@@ -24214,19 +24200,17 @@ class ComputerX80 extends Component {
             resume = this.resume || (this.sStateData? ComputerX80.RESUME_AUTO : ComputerX80.RESUME_NONE);
         }
 
-        if (DEBUG) {
-            this.printf("ComputerX80.powerOn(%s)\n", (resume == ComputerX80.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")));
-        }
+
 
         if (this.nPowerChange) {
             return;
         }
         this.nPowerChange++;
 
-        var fRepower = false;
-        var fRestore = false;
+        let fRepower = false;
+        let fRestore = false;
         this.fRestoreError = false;
-        var stateComputer = this.stateComputer || new State(this, APPVERSION);
+        let stateComputer = this.stateComputer || new State(this, APPVERSION);
 
         if (resume == ComputerX80.RESUME_REPOWER) {
             fRepower = true;
@@ -24258,12 +24242,12 @@ class ComputerX80 extends Component {
                 this.stateFailSafe.set(ComputerX80.STATE_TIMESTAMP, Usr.getTimestamp());
                 this.stateFailSafe.store();
 
-                var fValidate = this.resume && !this.fServerState;
+                let fValidate = this.resume && !this.fServerState;
                 if (resume == ComputerX80.RESUME_AUTO || Component.confirmUser("Click OK to restore the previous " + APPNAME + " machine state, or CANCEL to reset the machine.")) {
                     fRestore = stateComputer.parse();
                     if (fRestore) {
-                        var sCode = /** @type {string} */ (stateComputer.get(UserAPI.RES.CODE));
-                        var sData = /** @type {string} */ (stateComputer.get(UserAPI.RES.DATA));
+                        let sCode = /** @type {string} */ (stateComputer.get(UserAPI.RES.CODE));
+                        let sData = /** @type {string} */ (stateComputer.get(UserAPI.RES.DATA));
                         if (sCode) {
                             if (sCode == UserAPI.CODE.OK) {
                                 stateComputer.load(sData);
@@ -24319,9 +24303,9 @@ class ComputerX80 extends Component {
          * Start powering all components, including any data they may need to restore their state;
          * we restore power to the CPU last.
          */
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (component !== this && component != this.cpu) {
                 fRestore = this.powerRestore(component, stateComputer, fRepower, fRestore);
             }
@@ -24332,7 +24316,7 @@ class ComputerX80 extends Component {
          * have marked themselves as "not ready" again (eg, the FDC component, if the restore forced it
          * to mount one or more additional disk images).
          */
-        var aParms = [stateComputer, resume, fRestore];
+        let aParms = [stateComputer, resume, fRestore];
 
         if (resume != ComputerX80.RESUME_REPOWER) {
             this.wait(this.donePowerOn, aParms);
@@ -24359,7 +24343,7 @@ class ComputerX80 extends Component {
 
             if (component.powerUp) {
 
-                var data = null;
+                let data = null;
                 if (fRestore) {
                     data = stateComputer.get(component.id);
                     if (!data) {
@@ -24437,8 +24421,8 @@ class ComputerX80 extends Component {
             }
 
             if (!fRepower && component.comment) {
-                var asComments = component.comment.split("|");
-                for (var i = 0; i < asComments.length; i++) {
+                let asComments = component.comment.split("|");
+                for (let i = 0; i < asComments.length; i++) {
                     component.printf(Messages.STATUS, "%s\n", asComments[i]);
                 }
             }
@@ -24456,17 +24440,15 @@ class ComputerX80 extends Component {
      */
     donePowerOn(aParms)
     {
-        var stateComputer = aParms[0];
-        var fRepower = (aParms[1] < 0);
-        var fRestore = aParms[2];
+        let stateComputer = aParms[0];
+        let fRepower = (aParms[1] < 0);
+        let fRestore = aParms[2];
 
-        if (DEBUG && this.flags.powered) {
-            this.printf("ComputerX80.donePowerOn(): redundant\n");
-        }
+
 
         this.fInitialized = true;
         this.flags.powered = true;
-        var controlPower = this.bindings["power"];
+        let controlPower = this.bindings["power"];
         if (controlPower) controlPower.textContent = "Shutdown";
 
         /*
@@ -24508,8 +24490,8 @@ class ComputerX80 extends Component {
     {
         if (this.flags.powered) return true;
 
-        var component = null, iComponent;
-        var aComponents = Component.getComponents(this.id);
+        let component = null, iComponent;
+        let aComponents = Component.getComponents(this.id);
         for (iComponent = 0; iComponent < aComponents.length; iComponent++) {
             component = aComponents[iComponent];
             if (component !== this && !component.flags.ready) break;
@@ -24521,7 +24503,7 @@ class ComputerX80 extends Component {
             }
         }
         if (iComponent == aComponents.length) component = this;
-        var s = "The " + component.type + " component (" + component.id + ") is not " + (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet") + ".";
+        let s = "The " + component.type + " component (" + component.id + ") is not " + (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet") + ".";
         Component.alertUser(s);
         return false;
     }
@@ -24578,22 +24560,20 @@ class ComputerX80 extends Component {
      */
     powerOff(fSave, fShutdown)
     {
-        var data;
-        var sState = "none";
+        let data;
+        let sState = "none";
 
-        if (DEBUG) {
-            this.printf("ComputerX80.powerOff(%s%s)\n", (fSave ? "save" : "nosave"), (fShutdown ? ",shutdown" : ""));
-        }
+
 
         if (this.nPowerChange) {
             return null;
         }
         this.nPowerChange--;
 
-        var stateComputer = new State(this, APPVERSION);
-        var stateValidate = new State(this, APPVERSION, ComputerX80.STATE_VALIDATE);
+        let stateComputer = new State(this, APPVERSION);
+        let stateValidate = new State(this, APPVERSION, ComputerX80.STATE_VALIDATE);
 
-        var sTimestamp = Usr.getTimestamp();
+        let sTimestamp = Usr.getTimestamp();
         stateValidate.set(ComputerX80.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerX80.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerX80.STATE_VERSION, APPVERSION);
@@ -24614,9 +24594,9 @@ class ComputerX80 extends Component {
             }
         }
 
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (component.flags.powered) {
                 if (component.powerDown) {
                     data = component.powerDown(fSave, fShutdown);
@@ -24631,8 +24611,8 @@ class ComputerX80 extends Component {
 
         if (sState) {
             if (fShutdown) {
-                var fClear = false;
-                var fClearAll = false;
+                let fClear = false;
+                let fClearAll = false;
                 if (fSave) {
                     if (this.sUserID) {
                         this.saveServerState(this.sUserID, stateComputer.toString());
@@ -24677,7 +24657,7 @@ class ComputerX80 extends Component {
 
         if (fShutdown) {
             this.flags.powered = false;
-            var controlPower = this.bindings["power"];
+            let controlPower = this.bindings["power"];
             if (controlPower) controlPower.textContent = "Power";
         }
 
@@ -24707,9 +24687,9 @@ class ComputerX80 extends Component {
             this.printf("Resetting %s\n", this.bus.type);
             this.bus.reset();
         }
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (component !== this && component !== this.bus && component.reset) {
                 this.printf("Resetting %s\n", component.type);
                 component.reset();
@@ -24731,9 +24711,9 @@ class ComputerX80 extends Component {
      */
     start(ms, nCycles)
     {
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (component.type == "CPU" || component === this) continue;
             if (component.start) {
                 component.start(ms, nCycles);
@@ -24755,9 +24735,9 @@ class ComputerX80 extends Component {
      */
     stop(ms, nCycles)
     {
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (component.type == "CPU" || component === this) continue;
             if (component.stop) {
                 component.stop(ms, nCycles);
@@ -24777,7 +24757,7 @@ class ComputerX80 extends Component {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var computer = this;
+        let computer = this;
 
         switch (sBinding) {
         case "power":
@@ -24807,7 +24787,7 @@ class ComputerX80 extends Component {
              * particular host.
              */
             if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
+
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -24820,7 +24800,7 @@ class ComputerX80 extends Component {
             }
             this.bindings[sBinding] = control;
             control.onclick = function onClickSave() {
-                var sUserID = computer.queryUserID(true);
+                let sUserID = computer.queryUserID(true);
                 if (sUserID) {
                     /*
                      * I modified the test to include a check for sStatePath so that I could save new states
@@ -24829,8 +24809,8 @@ class ComputerX80 extends Component {
                      * one work-around, but it's not appropriate for some machines, as their state is simply
                      * too large (for localStorage anyway, which is the default storage solution).
                      */
-                    var fSave = !!(computer.resume && !computer.sResumePath || computer.sStatePath);
-                    var sState = computer.powerOff(fSave);
+                    let fSave = !!(computer.resume && !computer.sResumePath || computer.sStatePath);
+                    let sState = computer.powerOff(fSave);
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
@@ -24876,7 +24856,7 @@ class ComputerX80 extends Component {
      */
     queryUserID(fPrompt)
     {
-        var sUserID = this.sUserID;
+        let sUserID = this.sUserID;
         if (!sUserID) {
             sUserID = Web.getLocalStorageItem(ComputerX80.STATE_USERID);
             if (sUserID !== undefined) {
@@ -24909,12 +24889,12 @@ class ComputerX80 extends Component {
     verifyUserID(sUserID)
     {
         this.sUserID = null;
-        var fMessages = DEBUG && this.messageEnabled();
+        let fMessages = DEBUG && this.messageEnabled();
         if (fMessages) this.printf("verifyUserID(%s)\n", sUserID);
-        var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
-        var response = Web.getResource(sRequest);
-        var nErrorCode = response[0];
-        var sResponse = response[1];
+        let sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
+        let response = Web.getResource(sRequest);
+        let nErrorCode = response[0];
+        let sResponse = response[1];
         if (!nErrorCode && sResponse) {
             try {
                 response = eval("(" + sResponse + ")");
@@ -24942,16 +24922,12 @@ class ComputerX80 extends Component {
      */
     getServerStatePath()
     {
-        var sStatePath = null;
+        let sStatePath = null;
         if (this.sUserID) {
-            if (DEBUG) {
-                this.printf("%s for load: %s\n", ComputerX80.STATE_USERID, this.sUserID);
-            }
+
             sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
-            if (DEBUG) {
-                this.printf("%s unavailable\n", ComputerX80.STATE_USERID);
-            }
+
         }
         return sStatePath;
     }
@@ -24971,14 +24947,12 @@ class ComputerX80 extends Component {
          * tend to blow off alerts() and the like when closing down.
          */
         if (sState) {
-            if (DEBUG) {
-                this.printf("size of server state: %d bytes\n", sState.length);
-            }
-            var response = this.storeServerState(sUserID, sState, true);
+
+            let response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
                 this.printf(Messages.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
-                var sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
+                let sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
                     sError = "Error: " + sError;
                 } else {
@@ -24988,9 +24962,7 @@ class ComputerX80 extends Component {
                 this.resetUserID();
             }
         } else {
-            if (DEBUG) {
-                this.printf("no state to store\n");
-            }
+
         }
     }
 
@@ -25005,33 +24977,31 @@ class ComputerX80 extends Component {
      */
     storeServerState(sUserID, sState, fSync)
     {
-        if (DEBUG) {
-            this.printf("%s for store: %s\n", ComputerX80.STATE_USERID, sUserID);
-        }
+
         /*
          * TODO: Determine whether or not any browsers cancel our request if we're called during a browser "shutdown" event,
          * and whether or not it matters if we do an async request (currently, we're not, to try to ensure the request goes through).
          */
-        var dataPost = {};
+        let dataPost = {};
         dataPost[UserAPI.QUERY.REQ] = UserAPI.REQ.STORE;
         dataPost[UserAPI.QUERY.USER] = sUserID;
         dataPost[UserAPI.QUERY.STATE] = State.getKey(this, APPVERSION);
         dataPost[UserAPI.QUERY.DATA] = sState;
-        var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
+        let sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
         if (!fSync) {
             Web.getResource(sRequest, dataPost, true);
         } else {
-            var response = Web.getResource(sRequest, dataPost);
-            var sResponse = response[0];
+            let response = Web.getResource(sRequest, dataPost);
+            let sResponse = response[0];
             if (response[1]) {
                 if (sResponse) {
-                    var i = sResponse.indexOf('\n');
+                    let i = sResponse.indexOf('\n');
                     if (i > 0) sResponse = sResponse.substr(0, i);
                     if (!sResponse.indexOf("Error: ")) sResponse = sResponse.substr(7);
                 }
                 sResponse = '{"' + UserAPI.RES.CODE + '":' + response[1] + ',"' + UserAPI.RES.DATA + '":"' + sResponse + '"}';
             }
-            if (DEBUG) this.printf("%s\n", sResponse);
+
             return JSON.parse(sResponse);
         }
         return null;
@@ -25084,7 +25054,7 @@ class ComputerX80 extends Component {
              * I used to bypass the prompt if this.resume == ComputerX80.RESUME_AUTO, setting fSave to true automatically,
              * but that gives the user no means of resetting a resumable machine that contains errors in its resume state.
              */
-            var fSave = (/* this.resume == ComputerX80.RESUME_AUTO || */ Component.confirmUser("Click OK to save changes to this " + APPNAME + " machine.\n\nWARNING: If you CANCEL, all disk changes will be discarded."));
+            let fSave = (/* this.resume == ComputerX80.RESUME_AUTO || */ Component.confirmUser("Click OK to save changes to this " + APPNAME + " machine.\n\nWARNING: If you CANCEL, all disk changes will be discarded."));
             this.powerOff(fSave, true);
             /*
              * Forcing the page to reload is an expedient option, but ugly. It's preferable to call powerOn()
@@ -25121,10 +25091,10 @@ class ComputerX80 extends Component {
      */
     getMachineComponent(sType, componentPrev = null)
     {
-        var componentLast = componentPrev;
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let componentLast = componentPrev;
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (componentPrev) {
                 if (componentPrev == component) componentPrev = null;
                 continue;
@@ -25155,7 +25125,7 @@ class ComputerX80 extends Component {
              * into view.  The CPU is not a visual component, so when the CPU wants to set focus, the primary intent
              * is to ensure that keyboard input is fielded properly.
              */
-            var x = 0, y = 0;
+            let x = 0, y = 0;
             if (!fScroll && globals.browser) {
                 x = globals.window.scrollX;
                 y = globals.window.scrollY;
@@ -25217,7 +25187,7 @@ class ComputerX80 extends Component {
      */
     updateVideo(fForced)
     {
-        for (var i = 0; i < this.aVideo.length; i++) {
+        for (let i = 0; i < this.aVideo.length; i++) {
             this.aVideo[i].updateScreen(fForced);
         }
     }
@@ -25232,29 +25202,27 @@ class ComputerX80 extends Component {
      */
     static init()
     {
-        var aeMachines = Component.getElementsByClass(APPCLASS, "machine");
+        let aeMachines = Component.getElementsByClass(APPCLASS, "machine");
 
-        for (var iMachine = 0; iMachine < aeMachines.length; iMachine++) {
+        for (let iMachine = 0; iMachine < aeMachines.length; iMachine++) {
 
-            var eMachine = aeMachines[iMachine];
-            var parmsMachine = Component.getComponentParms(eMachine);
+            let eMachine = aeMachines[iMachine];
+            let parmsMachine = Component.getComponentParms(eMachine);
 
-            var aeComputers = Component.getElementsByClass(APPCLASS, "computer", eMachine);
+            let aeComputers = Component.getElementsByClass(APPCLASS, "computer", eMachine);
 
-            for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
+            for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
 
-                var eComputer = aeComputers[iComputer];
-                var parmsComputer = Component.getComponentParms(eComputer);
+                let eComputer = aeComputers[iComputer];
+                let parmsComputer = Component.getComponentParms(eComputer);
 
                 /*
                  * We set fSuspended in the Computer constructor because we want to "power up" the
                  * computer ourselves, after any/all bindings are in place.
                  */
-                var computer = new ComputerX80(parmsComputer, parmsMachine, true);
+                let computer = new ComputerX80(parmsComputer, parmsMachine, true);
 
-                if (DEBUG) {
-                    computer.printf("onInit(%b)\n", computer.flags.powered);
-                }
+
 
                 /*
                  * Bind any "power", "reset" and "save" buttons.  An "erase" button was also considered,
@@ -25282,18 +25250,13 @@ class ComputerX80 extends Component {
      */
     static show()
     {
-        var aeComputers = Component.getElementsByClass(APPCLASS, "computer");
-        for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
-            var eComputer = aeComputers[iComputer];
-            var parmsComputer = Component.getComponentParms(eComputer);
-            var computer = /** @type {ComputerX80} */ (Component.getComponentByType("Computer", parmsComputer['id']));
+        let aeComputers = Component.getElementsByClass(APPCLASS, "computer");
+        for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
+            let eComputer = aeComputers[iComputer];
+            let parmsComputer = Component.getComponentParms(eComputer);
+            let computer = /** @type {ComputerX80} */ (Component.getComponentByType("Computer", parmsComputer['id']));
             if (computer) {
-
                 computer.flags.unloading = false;
-
-                if (DEBUG) {
-                    computer.printf("show(%b,%b)\n", computer.fInitialized, computer.flags.powered);
-                }
 
                 /*
                  * Note that the FIRST 'pageshow' event, and therefore the first show() callback, occurs
@@ -25338,21 +25301,16 @@ class ComputerX80 extends Component {
      */
     static exit()
     {
-        var aeComputers = Component.getElementsByClass(APPCLASS, "computer");
-        for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
-            var eComputer = aeComputers[iComputer];
-            var parmsComputer = Component.getComponentParms(eComputer);
-            var computer = /** @type {ComputerX80} */ (Component.getComponentByType("Computer", parmsComputer['id']));
+        let aeComputers = Component.getElementsByClass(APPCLASS, "computer");
+        for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
+            let eComputer = aeComputers[iComputer];
+            let parmsComputer = Component.getComponentParms(eComputer);
+            let computer = /** @type {ComputerX80} */ (Component.getComponentByType("Computer", parmsComputer['id']));
             if (computer) {
-
                 /*
                  * Added a new flag that Component functions (eg, notice()) should check before alerting the user.
                  */
                 computer.flags.unloading = true;
-
-                if (DEBUG) {
-                    computer.printf("onExit(%b)\n", computer.flags.powered);
-                }
 
                 if (computer.flags.powered) {
                     /**

@@ -12,7 +12,7 @@ import Macro10 from "./macro10.js";
 import MemoryPDP10 from "./memory.js";
 import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
-import DbgLib from "../../../../modules/v2/debugger.js";
+import DbgLib from "../../../../modules/v2/dbglib.js";
 import Keys from "../../../../modules/v2/keys.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";

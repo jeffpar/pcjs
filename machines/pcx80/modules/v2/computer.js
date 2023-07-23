@@ -140,7 +140,7 @@ export default class ComputerX80 extends Component {
          * Enumerate all Video components for future updateVideo() calls.
          */
         this.aVideo = [];
-        for (var video = false; (video = this.getMachineComponent("Video", video));) {
+        for (let video = false; (video = this.getMachineComponent("Video", video));) {
             this.aVideo.push(video);
         }
 
@@ -152,8 +152,8 @@ export default class ComputerX80 extends Component {
         /*
          * Iterate through all the components and connect them to the Control Panel, if any
          */
-        var iComponent, component;
-        var aComponents = Component.getComponents(this.id);
+        let iComponent, component;
+        let aComponents = Component.getComponents(this.id);
 
         this.panel = /** @type {PanelX80} */ (Component.getComponentByType("Panel", this.id));
         this.controlPrint = this.panel && this.panel.bindings['print'];
@@ -182,8 +182,8 @@ export default class ComputerX80 extends Component {
             if (component.initBus) component.initBus(this, this.bus, this.cpu, this.dbg);
         }
 
-        var sStatePath = null;
-        var sResume = this.getMachineParm('resume', parmsComputer);
+        let sStatePath = null;
+        let sResume = this.getMachineParm('resume', parmsComputer);
         if (sResume !== undefined) {
             /*
              * Decide whether the 'resume' property is a number or the path of a state file to resume.
@@ -209,8 +209,8 @@ export default class ComputerX80 extends Component {
          * OVERRIDES everything; it overrides any 'state' Computer parameter AND it disables resume of any saved state in
          * localStorage (in other words, it prevents fAllowResume from being true, and forcing resume off).
          */
-        var fAllowResume = false;
-        var sState = this.getMachineParm('state');
+        let fAllowResume = false;
+        let sState = this.getMachineParm('state');
         if (!sState) {
             fAllowResume = true;
             sState = parmsComputer['state'];
@@ -244,7 +244,7 @@ export default class ComputerX80 extends Component {
         if (!sStatePath) {
             this.setReady();
         } else {
-            var cmp = this;
+            let cmp = this;
             Web.getResource(/** @type {string} */ (sStatePath), null, true, function(sURL, sResource, nErrorCode) {
                 cmp.doneLoad(sURL, sResource, nErrorCode);
             });
@@ -292,8 +292,8 @@ export default class ComputerX80 extends Component {
     setMachineParms(parmsMachine)
     {
         if (!parmsMachine) {
-            var sParms;
-            var resources = globals.window['resources']
+            let sParms;
+            let resources = globals.window['resources']
             if (typeof resources == 'object' && (sParms = resources['parms'])) {
                 try {
                     parmsMachine = /** @type {Object} */ (eval("(" + sParms + ")"));
@@ -328,9 +328,9 @@ export default class ComputerX80 extends Component {
          * may also be sloppy and neglect to use correct case (eg, 'automount' instead of 'autoMount'),
          * but there are limits to my paranoia.
          */
-        var resources = globals.window['resources'];
-        var sParmLC = sParm.toLowerCase();
-        var value = Web.getURLParm(sParm) || Web.getURLParm(sParmLC);
+        let resources = globals.window['resources'];
+        let sParmLC = sParm.toLowerCase();
+        let value = Web.getURLParm(sParm) || Web.getURLParm(sParmLC);
 
         if (value === undefined && this.parmsMachine) {
             value = this.parmsMachine[sParm];
@@ -379,9 +379,7 @@ export default class ComputerX80 extends Component {
         if (!nErrorCode) {
             this.sStateData = sStateData;
             this.fStateData = true;
-            if (DEBUG) {
-                this.printf("loaded state file %s\n", sURL.replace(this.sUserID || "xxx", "xxx"));
-            }
+            this.printf(Messages.DEBUG + Messages.LOG, "loaded state file %s\n", sURL.replace(this.sUserID || "xxx", "xxx"));
         } else {
             this.sResumePath = null;
             this.fServerState = false;
@@ -410,10 +408,10 @@ export default class ComputerX80 extends Component {
      */
     wait(fn, parms)
     {
-        var computer = this;
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent <= aComponents.length; iComponent++) {
-            var component = (iComponent < aComponents.length ? aComponents[iComponent] : this);
+        let computer = this;
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent <= aComponents.length; iComponent++) {
+            let component = (iComponent < aComponents.length ? aComponents[iComponent] : this);
             if (!component.isReady()) {
                 component.isReady(function onComponentReady() {
                     computer.wait(fn, parms);
@@ -421,7 +419,7 @@ export default class ComputerX80 extends Component {
                 return;
             }
         }
-        if (DEBUG) this.printf("ComputerX80.wait(ready)\n");
+        this.printf(Messages.DEBUG + Messages.LOG, "wait(ready)\n");
         fn.call(this, parms);
     }
 
@@ -436,19 +434,17 @@ export default class ComputerX80 extends Component {
      */
     validateState(stateComputer)
     {
-        var fValid = true;
-        var stateValidate = new State(this, APPVERSION, ComputerX80.STATE_VALIDATE);
+        let fValid = true;
+        let stateValidate = new State(this, APPVERSION, ComputerX80.STATE_VALIDATE);
         if (stateValidate.load() && stateValidate.parse()) {
-            var sTimestampValidate = stateValidate.get(ComputerX80.STATE_TIMESTAMP);
-            var sTimestampComputer = stateComputer? stateComputer.get(ComputerX80.STATE_TIMESTAMP) : "unknown";
+            let sTimestampValidate = stateValidate.get(ComputerX80.STATE_TIMESTAMP);
+            let sTimestampComputer = stateComputer? stateComputer.get(ComputerX80.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
                 this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
-                if (DEBUG) {
-                    this.printf("Last state: %s (validate: %s)\n", sTimestampComputer, sTimestampValidate);
-                }
+                this.printf(Messages.DEBUG + Messages.LOG, "last state: %s (validate: %s)\n", sTimestampComputer, sTimestampValidate);
             }
         }
         return fValid;
@@ -468,19 +464,17 @@ export default class ComputerX80 extends Component {
             resume = this.resume || (this.sStateData? ComputerX80.RESUME_AUTO : ComputerX80.RESUME_NONE);
         }
 
-        if (DEBUG) {
-            this.printf("ComputerX80.powerOn(%s)\n", (resume == ComputerX80.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")));
-        }
+        this.printf(Messages.DEBUG + Messages.LOG, "powerOn(%s)\n", (resume == ComputerX80.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")));
 
         if (this.nPowerChange) {
             return;
         }
         this.nPowerChange++;
 
-        var fRepower = false;
-        var fRestore = false;
+        let fRepower = false;
+        let fRestore = false;
         this.fRestoreError = false;
-        var stateComputer = this.stateComputer || new State(this, APPVERSION);
+        let stateComputer = this.stateComputer || new State(this, APPVERSION);
 
         if (resume == ComputerX80.RESUME_REPOWER) {
             fRepower = true;
@@ -512,12 +506,12 @@ export default class ComputerX80 extends Component {
                 this.stateFailSafe.set(ComputerX80.STATE_TIMESTAMP, Usr.getTimestamp());
                 this.stateFailSafe.store();
 
-                var fValidate = this.resume && !this.fServerState;
+                let fValidate = this.resume && !this.fServerState;
                 if (resume == ComputerX80.RESUME_AUTO || Component.confirmUser("Click OK to restore the previous " + APPNAME + " machine state, or CANCEL to reset the machine.")) {
                     fRestore = stateComputer.parse();
                     if (fRestore) {
-                        var sCode = /** @type {string} */ (stateComputer.get(UserAPI.RES.CODE));
-                        var sData = /** @type {string} */ (stateComputer.get(UserAPI.RES.DATA));
+                        let sCode = /** @type {string} */ (stateComputer.get(UserAPI.RES.CODE));
+                        let sData = /** @type {string} */ (stateComputer.get(UserAPI.RES.DATA));
                         if (sCode) {
                             if (sCode == UserAPI.CODE.OK) {
                                 stateComputer.load(sData);
@@ -573,9 +567,9 @@ export default class ComputerX80 extends Component {
          * Start powering all components, including any data they may need to restore their state;
          * we restore power to the CPU last.
          */
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (component !== this && component != this.cpu) {
                 fRestore = this.powerRestore(component, stateComputer, fRepower, fRestore);
             }
@@ -586,7 +580,7 @@ export default class ComputerX80 extends Component {
          * have marked themselves as "not ready" again (eg, the FDC component, if the restore forced it
          * to mount one or more additional disk images).
          */
-        var aParms = [stateComputer, resume, fRestore];
+        let aParms = [stateComputer, resume, fRestore];
 
         if (resume != ComputerX80.RESUME_REPOWER) {
             this.wait(this.donePowerOn, aParms);
@@ -613,7 +607,7 @@ export default class ComputerX80 extends Component {
 
             if (component.powerUp) {
 
-                var data = null;
+                let data = null;
                 if (fRestore) {
                     data = stateComputer.get(component.id);
                     if (!data) {
@@ -691,8 +685,8 @@ export default class ComputerX80 extends Component {
             }
 
             if (!fRepower && component.comment) {
-                var asComments = component.comment.split("|");
-                for (var i = 0; i < asComments.length; i++) {
+                let asComments = component.comment.split("|");
+                for (let i = 0; i < asComments.length; i++) {
                     component.printf(Messages.STATUS, "%s\n", asComments[i]);
                 }
             }
@@ -710,17 +704,15 @@ export default class ComputerX80 extends Component {
      */
     donePowerOn(aParms)
     {
-        var stateComputer = aParms[0];
-        var fRepower = (aParms[1] < 0);
-        var fRestore = aParms[2];
+        let stateComputer = aParms[0];
+        let fRepower = (aParms[1] < 0);
+        let fRestore = aParms[2];
 
-        if (DEBUG && this.flags.powered) {
-            this.printf("ComputerX80.donePowerOn(): redundant\n");
-        }
+        this.printf(Messages.DEBUG + Messages.LOG, "donePowerOn(%s)\n", this.flags.powered? "redundant" : "");
 
         this.fInitialized = true;
         this.flags.powered = true;
-        var controlPower = this.bindings["power"];
+        let controlPower = this.bindings["power"];
         if (controlPower) controlPower.textContent = "Shutdown";
 
         /*
@@ -762,8 +754,8 @@ export default class ComputerX80 extends Component {
     {
         if (this.flags.powered) return true;
 
-        var component = null, iComponent;
-        var aComponents = Component.getComponents(this.id);
+        let component = null, iComponent;
+        let aComponents = Component.getComponents(this.id);
         for (iComponent = 0; iComponent < aComponents.length; iComponent++) {
             component = aComponents[iComponent];
             if (component !== this && !component.flags.ready) break;
@@ -775,7 +767,7 @@ export default class ComputerX80 extends Component {
             }
         }
         if (iComponent == aComponents.length) component = this;
-        var s = "The " + component.type + " component (" + component.id + ") is not " + (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet") + ".";
+        let s = "The " + component.type + " component (" + component.id + ") is not " + (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet") + ".";
         Component.alertUser(s);
         return false;
     }
@@ -832,22 +824,20 @@ export default class ComputerX80 extends Component {
      */
     powerOff(fSave, fShutdown)
     {
-        var data;
-        var sState = "none";
+        let data;
+        let sState = "none";
 
-        if (DEBUG) {
-            this.printf("ComputerX80.powerOff(%s%s)\n", (fSave ? "save" : "nosave"), (fShutdown ? ",shutdown" : ""));
-        }
+        this.printf(Messages.DEBUG + Messages.LOG, "powerOff(%s%s)\n", (fSave ? "save" : "nosave"), (fShutdown ? ",shutdown" : ""));
 
         if (this.nPowerChange) {
             return null;
         }
         this.nPowerChange--;
 
-        var stateComputer = new State(this, APPVERSION);
-        var stateValidate = new State(this, APPVERSION, ComputerX80.STATE_VALIDATE);
+        let stateComputer = new State(this, APPVERSION);
+        let stateValidate = new State(this, APPVERSION, ComputerX80.STATE_VALIDATE);
 
-        var sTimestamp = Usr.getTimestamp();
+        let sTimestamp = Usr.getTimestamp();
         stateValidate.set(ComputerX80.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerX80.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerX80.STATE_VERSION, APPVERSION);
@@ -868,9 +858,9 @@ export default class ComputerX80 extends Component {
             }
         }
 
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (component.flags.powered) {
                 if (component.powerDown) {
                     data = component.powerDown(fSave, fShutdown);
@@ -885,8 +875,8 @@ export default class ComputerX80 extends Component {
 
         if (sState) {
             if (fShutdown) {
-                var fClear = false;
-                var fClearAll = false;
+                let fClear = false;
+                let fClearAll = false;
                 if (fSave) {
                     if (this.sUserID) {
                         this.saveServerState(this.sUserID, stateComputer.toString());
@@ -931,7 +921,7 @@ export default class ComputerX80 extends Component {
 
         if (fShutdown) {
             this.flags.powered = false;
-            var controlPower = this.bindings["power"];
+            let controlPower = this.bindings["power"];
             if (controlPower) controlPower.textContent = "Power";
         }
 
@@ -961,9 +951,9 @@ export default class ComputerX80 extends Component {
             this.printf("Resetting %s\n", this.bus.type);
             this.bus.reset();
         }
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (component !== this && component !== this.bus && component.reset) {
                 this.printf("Resetting %s\n", component.type);
                 component.reset();
@@ -985,9 +975,9 @@ export default class ComputerX80 extends Component {
      */
     start(ms, nCycles)
     {
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (component.type == "CPU" || component === this) continue;
             if (component.start) {
                 component.start(ms, nCycles);
@@ -1009,9 +999,9 @@ export default class ComputerX80 extends Component {
      */
     stop(ms, nCycles)
     {
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (component.type == "CPU" || component === this) continue;
             if (component.stop) {
                 component.stop(ms, nCycles);
@@ -1031,7 +1021,7 @@ export default class ComputerX80 extends Component {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var computer = this;
+        let computer = this;
 
         switch (sBinding) {
         case "power":
@@ -1061,7 +1051,7 @@ export default class ComputerX80 extends Component {
              * particular host.
              */
             if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
+                this.printf(Messages.DEBUG + Messages.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -1074,7 +1064,7 @@ export default class ComputerX80 extends Component {
             }
             this.bindings[sBinding] = control;
             control.onclick = function onClickSave() {
-                var sUserID = computer.queryUserID(true);
+                let sUserID = computer.queryUserID(true);
                 if (sUserID) {
                     /*
                      * I modified the test to include a check for sStatePath so that I could save new states
@@ -1083,8 +1073,8 @@ export default class ComputerX80 extends Component {
                      * one work-around, but it's not appropriate for some machines, as their state is simply
                      * too large (for localStorage anyway, which is the default storage solution).
                      */
-                    var fSave = !!(computer.resume && !computer.sResumePath || computer.sStatePath);
-                    var sState = computer.powerOff(fSave);
+                    let fSave = !!(computer.resume && !computer.sResumePath || computer.sStatePath);
+                    let sState = computer.powerOff(fSave);
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
@@ -1130,7 +1120,7 @@ export default class ComputerX80 extends Component {
      */
     queryUserID(fPrompt)
     {
-        var sUserID = this.sUserID;
+        let sUserID = this.sUserID;
         if (!sUserID) {
             sUserID = Web.getLocalStorageItem(ComputerX80.STATE_USERID);
             if (sUserID !== undefined) {
@@ -1163,12 +1153,12 @@ export default class ComputerX80 extends Component {
     verifyUserID(sUserID)
     {
         this.sUserID = null;
-        var fMessages = DEBUG && this.messageEnabled();
+        let fMessages = DEBUG && this.messageEnabled();
         if (fMessages) this.printf("verifyUserID(%s)\n", sUserID);
-        var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
-        var response = Web.getResource(sRequest);
-        var nErrorCode = response[0];
-        var sResponse = response[1];
+        let sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
+        let response = Web.getResource(sRequest);
+        let nErrorCode = response[0];
+        let sResponse = response[1];
         if (!nErrorCode && sResponse) {
             try {
                 response = eval("(" + sResponse + ")");
@@ -1196,16 +1186,12 @@ export default class ComputerX80 extends Component {
      */
     getServerStatePath()
     {
-        var sStatePath = null;
+        let sStatePath = null;
         if (this.sUserID) {
-            if (DEBUG) {
-                this.printf("%s for load: %s\n", ComputerX80.STATE_USERID, this.sUserID);
-            }
+            this.printf(Messages.DEBUG + Messages.LOG, "%s for load: %s\n", ComputerX80.STATE_USERID, this.sUserID);
             sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
-            if (DEBUG) {
-                this.printf("%s unavailable\n", ComputerX80.STATE_USERID);
-            }
+            this.printf(Messages.DEBUG + Messages.LOG, "%s unavailable\n", ComputerX80.STATE_USERID);
         }
         return sStatePath;
     }
@@ -1225,14 +1211,12 @@ export default class ComputerX80 extends Component {
          * tend to blow off alerts() and the like when closing down.
          */
         if (sState) {
-            if (DEBUG) {
-                this.printf("size of server state: %d bytes\n", sState.length);
-            }
-            var response = this.storeServerState(sUserID, sState, true);
+            this.printf(Messages.DEBUG + Messages.LOG, "size of server state: %d bytes\n", sState.length);
+            let response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
                 this.printf(Messages.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
-                var sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
+                let sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
                     sError = "Error: " + sError;
                 } else {
@@ -1242,9 +1226,7 @@ export default class ComputerX80 extends Component {
                 this.resetUserID();
             }
         } else {
-            if (DEBUG) {
-                this.printf("no state to store\n");
-            }
+            this.printf(Messages.DEBUG + Messages.LOG, "no state to store\n");
         }
     }
 
@@ -1259,33 +1241,31 @@ export default class ComputerX80 extends Component {
      */
     storeServerState(sUserID, sState, fSync)
     {
-        if (DEBUG) {
-            this.printf("%s for store: %s\n", ComputerX80.STATE_USERID, sUserID);
-        }
+        this.printf(Messages.DEBUG + Messages.LOG, "%s for store: %s\n", ComputerX80.STATE_USERID, sUserID);
         /*
          * TODO: Determine whether or not any browsers cancel our request if we're called during a browser "shutdown" event,
          * and whether or not it matters if we do an async request (currently, we're not, to try to ensure the request goes through).
          */
-        var dataPost = {};
+        let dataPost = {};
         dataPost[UserAPI.QUERY.REQ] = UserAPI.REQ.STORE;
         dataPost[UserAPI.QUERY.USER] = sUserID;
         dataPost[UserAPI.QUERY.STATE] = State.getKey(this, APPVERSION);
         dataPost[UserAPI.QUERY.DATA] = sState;
-        var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
+        let sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
         if (!fSync) {
             Web.getResource(sRequest, dataPost, true);
         } else {
-            var response = Web.getResource(sRequest, dataPost);
-            var sResponse = response[0];
+            let response = Web.getResource(sRequest, dataPost);
+            let sResponse = response[0];
             if (response[1]) {
                 if (sResponse) {
-                    var i = sResponse.indexOf('\n');
+                    let i = sResponse.indexOf('\n');
                     if (i > 0) sResponse = sResponse.substr(0, i);
                     if (!sResponse.indexOf("Error: ")) sResponse = sResponse.substr(7);
                 }
                 sResponse = '{"' + UserAPI.RES.CODE + '":' + response[1] + ',"' + UserAPI.RES.DATA + '":"' + sResponse + '"}';
             }
-            if (DEBUG) this.printf("%s\n", sResponse);
+            this.printf(Messages.DEBUG + Messages.LOG, "%s\n", sResponse);
             return JSON.parse(sResponse);
         }
         return null;
@@ -1338,7 +1318,7 @@ export default class ComputerX80 extends Component {
              * I used to bypass the prompt if this.resume == ComputerX80.RESUME_AUTO, setting fSave to true automatically,
              * but that gives the user no means of resetting a resumable machine that contains errors in its resume state.
              */
-            var fSave = (/* this.resume == ComputerX80.RESUME_AUTO || */ Component.confirmUser("Click OK to save changes to this " + APPNAME + " machine.\n\nWARNING: If you CANCEL, all disk changes will be discarded."));
+            let fSave = (/* this.resume == ComputerX80.RESUME_AUTO || */ Component.confirmUser("Click OK to save changes to this " + APPNAME + " machine.\n\nWARNING: If you CANCEL, all disk changes will be discarded."));
             this.powerOff(fSave, true);
             /*
              * Forcing the page to reload is an expedient option, but ugly. It's preferable to call powerOn()
@@ -1375,10 +1355,10 @@ export default class ComputerX80 extends Component {
      */
     getMachineComponent(sType, componentPrev = null)
     {
-        var componentLast = componentPrev;
-        var aComponents = Component.getComponents(this.id);
-        for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
-            var component = aComponents[iComponent];
+        let componentLast = componentPrev;
+        let aComponents = Component.getComponents(this.id);
+        for (let iComponent = 0; iComponent < aComponents.length; iComponent++) {
+            let component = aComponents[iComponent];
             if (componentPrev) {
                 if (componentPrev == component) componentPrev = null;
                 continue;
@@ -1409,7 +1389,7 @@ export default class ComputerX80 extends Component {
              * into view.  The CPU is not a visual component, so when the CPU wants to set focus, the primary intent
              * is to ensure that keyboard input is fielded properly.
              */
-            var x = 0, y = 0;
+            let x = 0, y = 0;
             if (!fScroll && globals.browser) {
                 x = globals.window.scrollX;
                 y = globals.window.scrollY;
@@ -1471,7 +1451,7 @@ export default class ComputerX80 extends Component {
      */
     updateVideo(fForced)
     {
-        for (var i = 0; i < this.aVideo.length; i++) {
+        for (let i = 0; i < this.aVideo.length; i++) {
             this.aVideo[i].updateScreen(fForced);
         }
     }
@@ -1486,29 +1466,27 @@ export default class ComputerX80 extends Component {
      */
     static init()
     {
-        var aeMachines = Component.getElementsByClass(APPCLASS, "machine");
+        let aeMachines = Component.getElementsByClass(APPCLASS, "machine");
 
-        for (var iMachine = 0; iMachine < aeMachines.length; iMachine++) {
+        for (let iMachine = 0; iMachine < aeMachines.length; iMachine++) {
 
-            var eMachine = aeMachines[iMachine];
-            var parmsMachine = Component.getComponentParms(eMachine);
+            let eMachine = aeMachines[iMachine];
+            let parmsMachine = Component.getComponentParms(eMachine);
 
-            var aeComputers = Component.getElementsByClass(APPCLASS, "computer", eMachine);
+            let aeComputers = Component.getElementsByClass(APPCLASS, "computer", eMachine);
 
-            for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
+            for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
 
-                var eComputer = aeComputers[iComputer];
-                var parmsComputer = Component.getComponentParms(eComputer);
+                let eComputer = aeComputers[iComputer];
+                let parmsComputer = Component.getComponentParms(eComputer);
 
                 /*
                  * We set fSuspended in the Computer constructor because we want to "power up" the
                  * computer ourselves, after any/all bindings are in place.
                  */
-                var computer = new ComputerX80(parmsComputer, parmsMachine, true);
+                let computer = new ComputerX80(parmsComputer, parmsMachine, true);
 
-                if (DEBUG) {
-                    computer.printf("onInit(%b)\n", computer.flags.powered);
-                }
+                computer.printf(Messages.DEBUG + Messages.LOG, "onInit(%b)\n", computer.flags.powered);
 
                 /*
                  * Bind any "power", "reset" and "save" buttons.  An "erase" button was also considered,
@@ -1536,19 +1514,14 @@ export default class ComputerX80 extends Component {
      */
     static show()
     {
-        var aeComputers = Component.getElementsByClass(APPCLASS, "computer");
-        for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
-            var eComputer = aeComputers[iComputer];
-            var parmsComputer = Component.getComponentParms(eComputer);
-            var computer = /** @type {ComputerX80} */ (Component.getComponentByType("Computer", parmsComputer['id']));
+        let aeComputers = Component.getElementsByClass(APPCLASS, "computer");
+        for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
+            let eComputer = aeComputers[iComputer];
+            let parmsComputer = Component.getComponentParms(eComputer);
+            let computer = /** @type {ComputerX80} */ (Component.getComponentByType("Computer", parmsComputer['id']));
             if (computer) {
-
                 computer.flags.unloading = false;
-
-                if (DEBUG) {
-                    computer.printf("show(%b,%b)\n", computer.fInitialized, computer.flags.powered);
-                }
-
+                computer.printf(Messages.DEBUG + Messages.LOG, "show(%b,%b)\n", computer.fInitialized, computer.flags.powered);
                 /*
                  * Note that the FIRST 'pageshow' event, and therefore the first show() callback, occurs
                  * AFTER the the initial 'load' event, and at that point in time, fInitialized will not be set yet.
@@ -1592,22 +1565,17 @@ export default class ComputerX80 extends Component {
      */
     static exit()
     {
-        var aeComputers = Component.getElementsByClass(APPCLASS, "computer");
-        for (var iComputer = 0; iComputer < aeComputers.length; iComputer++) {
-            var eComputer = aeComputers[iComputer];
-            var parmsComputer = Component.getComponentParms(eComputer);
-            var computer = /** @type {ComputerX80} */ (Component.getComponentByType("Computer", parmsComputer['id']));
+        let aeComputers = Component.getElementsByClass(APPCLASS, "computer");
+        for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
+            let eComputer = aeComputers[iComputer];
+            let parmsComputer = Component.getComponentParms(eComputer);
+            let computer = /** @type {ComputerX80} */ (Component.getComponentByType("Computer", parmsComputer['id']));
             if (computer) {
-
                 /*
                  * Added a new flag that Component functions (eg, notice()) should check before alerting the user.
                  */
                 computer.flags.unloading = true;
-
-                if (DEBUG) {
-                    computer.printf("onExit(%b)\n", computer.flags.powered);
-                }
-
+                computer.printf(Messages.DEBUG + Messages.LOG, "onExit(%b)\n", computer.flags.powered);
                 if (computer.flags.powered) {
                     /**
                      * Power off the computer, giving every component an opportunity to save its state,

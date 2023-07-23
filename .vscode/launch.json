@@ -185,7 +185,7 @@
       }
     },
     {
-      "name": "DEC VT100 Terminal connected to IBM PC AT",
+      "name": "DEC VT100 (v3) Terminal connected to IBM PC AT",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/vt100/5170/",
@@ -197,7 +197,7 @@
       }
     },
     {
-      "name": "DEC VT100 Terminal connected to IBM PC AT [Debugger]",
+      "name": "DEC VT100 Terminal (v2) connected to IBM PC AT [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/vt100/5170/debugger/",

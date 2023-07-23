@@ -38,7 +38,7 @@ export default class ChipSetX80 extends Component {
     {
         super("ChipSet", parmsChipSet, Messages.CHIPSET);
 
-        var model = parmsChipSet['model'];
+        let model = parmsChipSet['model'];
 
         if (model && !ChipSetX80.MODELS[model]) {
             Component.printf(Messages.NOTICE, "Unrecognized ChipSet model: %s\n", model);
@@ -70,7 +70,7 @@ export default class ChipSetX80 extends Component {
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
-                if (DEBUG) this.printf(Messages.LOG, "AudioContext not available\n");
+                this.printf(Messages.DEBUG + Messages.LOG, "AudioContext not available\n");
             }
         }
 
@@ -87,14 +87,14 @@ export default class ChipSetX80 extends Component {
      */
     parseDIPSwitches(sBits, bDefault)
     {
-        var b = bDefault;
+        let b = bDefault;
         if (sBits) {
             /*
              * NOTE: We can't use parseInt() with a base of 2, because both bit order and bit sense are reversed.
              */
             b = 0;
-            var bit = 0x1;
-            for (var i = 0; i < sBits.length; i++) {
+            let bit = 0x1;
+            for (let i = 0; i < sBits.length; i++) {
                 if (sBits.charAt(i) == "0") b |= bit;
                 bit <<= 1;
             }
@@ -140,7 +140,7 @@ export default class ChipSetX80 extends Component {
 
         if (DEBUGGER) {
             if (dbg) {
-                var chipset = this;
+                let chipset = this;
                 dbg.messageDump(Messages.NVR, function onDumpNVR() {
                     chipset.dumpNVR();
                 });
@@ -189,8 +189,8 @@ export default class ChipSetX80 extends Component {
     dumpNVR()
     {
         if (DEBUGGER) {
-            var sDump = "";
-            for (var iWord = 0; iWord < this.aNVRWords.length; iWord++) {
+            let sDump = "";
+            for (let iWord = 0; iWord < this.aNVRWords.length; iWord++) {
                 if (sDump) {
                     sDump += (iWord && (iWord % 10)? ", " : ",\n");
                 }
@@ -222,7 +222,7 @@ export default class ChipSetX80 extends Component {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         switch(this.config.MODEL) {
         case ChipSetX80.SI1978.MODEL:
             state.set(0, [this.bStatus0, this.bStatus1, this.bStatus2, this.wShiftData, this.bShiftCount, this.bSound1, this.bSound2]);
@@ -248,7 +248,7 @@ export default class ChipSetX80 extends Component {
      */
     restore(data)
     {
-        var a;
+        let a;
         if (data && (a = data[0]) && a.length) {
             switch(this.config.MODEL) {
             case ChipSetX80.SI1978.MODEL:
@@ -360,7 +360,7 @@ export default class ChipSetX80 extends Component {
      */
     inSIStatus0(port, addrFrom)
     {
-        var b = this.bStatus0;
+        let b = this.bStatus0;
         this.printIO(port, undefined, addrFrom, "STATUS0", b, true);
         return b;
     }
@@ -375,7 +375,7 @@ export default class ChipSetX80 extends Component {
      */
     inSIStatus1(port, addrFrom)
     {
-        var b = this.bStatus1;
+        let b = this.bStatus1;
         this.printIO(port, undefined, addrFrom, "STATUS1", b, true);
         return b;
     }
@@ -390,7 +390,7 @@ export default class ChipSetX80 extends Component {
      */
     inSIStatus2(port, addrFrom)
     {
-        var b = this.bStatus2;
+        let b = this.bStatus2;
         this.printIO(port, undefined, addrFrom, "STATUS2", b, true);
         return b;
     }
@@ -405,7 +405,7 @@ export default class ChipSetX80 extends Component {
      */
     inSIShiftResult(port, addrFrom)
     {
-        var b = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
+        let b = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
         this.printIO(port, undefined, addrFrom, "SHIFT.RESULT", b, true);
         return b;
     }
@@ -504,9 +504,9 @@ export default class ChipSetX80 extends Component {
      */
     getNVRAddr()
     {
-        var i;
-        var tens = 0, ones = 0;
-        var addr = ~this.dNVRAddr;
+        let i;
+        let tens = 0, ones = 0;
+        let addr = ~this.dNVRAddr;
         for (i = 0; i < 10; i++) {
             if (addr & 0x1) tens = 9-i;
             addr >>= 1;
@@ -525,9 +525,9 @@ export default class ChipSetX80 extends Component {
      */
     doNVRCommand()
     {
-        var addr, data;
-        var bit = this.bNVRLatch & 0x1;
-        var bCmd = (this.bNVRLatch >> 1) & 0x7;
+        let addr, data;
+        let bit = this.bNVRLatch & 0x1;
+        let bCmd = (this.bNVRLatch >> 1) & 0x7;
 
         switch(bCmd) {
         case ChipSetX80.VT100.NVR.CMD.STANDBY:
@@ -589,7 +589,7 @@ export default class ChipSetX80 extends Component {
      */
     inVT100Flags(port, addrFrom)
     {
-        var b = this.bFlags;
+        let b = this.bFlags;
 
         /*
          * The NVR_CLK bit is driven by LBA7 (ie, bit 7 from Line Buffer Address generation); see the DC011 discussion above.
@@ -665,8 +665,8 @@ export default class ChipSetX80 extends Component {
     {
         this.printIO(port, b, addrFrom, "DC012");
 
-        var bOpt = b & 0x3;
-        var bCmd = (b >> 2) & 0x3;
+        let bOpt = b & 0x3;
+        let bCmd = (b >> 2) & 0x3;
         switch(bCmd) {
         case 0x0:
             this.bDC012Scroll = (this.bDC012Scroll & ~0x3) | bOpt;
@@ -719,8 +719,8 @@ export default class ChipSetX80 extends Component {
             if (this.bDC011Cols != b) {
                 this.bDC011Cols = b;
                 if (this.video) {
-                    var nCols = (this.bDC011Cols == ChipSetX80.VT100.DC011.COLS132? 132 : 80);
-                    var nRows = (nCols > 80 && (this.bFlags & ChipSetX80.VT100.FLAGS.NO_AVO)? 14 : 24);
+                    let nCols = (this.bDC011Cols == ChipSetX80.VT100.DC011.COLS132? 132 : 80);
+                    let nRows = (nCols > 80 && (this.bFlags & ChipSetX80.VT100.FLAGS.NO_AVO)? 14 : 24);
                     this.video.updateDimensions(nCols, nRows);
                 }
             }
@@ -737,11 +737,11 @@ export default class ChipSetX80 extends Component {
      */
     static init()
     {
-        var aeChipSet = Component.getElementsByClass(APPCLASS, "chipset");
-        for (var iChip = 0; iChip < aeChipSet.length; iChip++) {
-            var eChipSet = aeChipSet[iChip];
-            var parmsChipSet = Component.getComponentParms(eChipSet);
-            var chipset = new ChipSetX80(parmsChipSet);
+        let aeChipSet = Component.getElementsByClass(APPCLASS, "chipset");
+        for (let iChip = 0; iChip < aeChipSet.length; iChip++) {
+            let eChipSet = aeChipSet[iChip];
+            let parmsChipSet = Component.getComponentParms(eChipSet);
+            let chipset = new ChipSetX80(parmsChipSet);
             Component.bindComponentControls(chipset, eChipSet, APPCLASS);
         }
     }

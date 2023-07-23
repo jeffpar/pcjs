@@ -139,10 +139,10 @@ export default class BusX80 extends Component {
      */
     initMemory()
     {
-        var block = new MemoryX80();
+        let block = new MemoryX80();
         block.copyBreakpoints(this.dbg);
         this.aMemBlocks = new Array(this.nBlockTotal);
-        for (var iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
+        for (let iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
             this.aMemBlocks[iBlock] = block;
         }
     }
@@ -210,15 +210,15 @@ export default class BusX80 extends Component {
      */
     addMemory(addr, size, type)
     {
-        var addrNext = addr;
-        var sizeLeft = size;
-        var iBlock = addrNext >>> this.nBlockShift;
+        let addrNext = addr;
+        let sizeLeft = size;
+        let iBlock = addrNext >>> this.nBlockShift;
 
         while (sizeLeft > 0 && iBlock < this.aMemBlocks.length) {
 
-            var block = this.aMemBlocks[iBlock];
-            var addrBlock = iBlock * this.nBlockSize;
-            var sizeBlock = this.nBlockSize - (addrNext - addrBlock);
+            let block = this.aMemBlocks[iBlock];
+            let addrBlock = iBlock * this.nBlockSize;
+            let sizeBlock = this.nBlockSize - (addrNext - addrBlock);
             if (sizeBlock > sizeLeft) sizeBlock = sizeLeft;
 
             if (block && block.size) {
@@ -235,7 +235,7 @@ export default class BusX80 extends Component {
                         return true;
                     }
                     if (addrNext >= block.addr + block.used) {
-                        var sizeAvail = block.size - (addrNext - addrBlock);
+                        let sizeAvail = block.size - (addrNext - addrBlock);
                         if (sizeAvail > sizeLeft) sizeAvail = sizeLeft;
                         block.used = addrNext - block.addr + sizeAvail;
                         addrNext = addrBlock + this.nBlockSize;
@@ -247,7 +247,7 @@ export default class BusX80 extends Component {
                 return this.reportError(BusX80.ERROR.ADD_MEM_INUSE, addrNext, sizeLeft);
             }
 
-            var blockNew = new MemoryX80(addrNext, sizeBlock, this.nBlockSize, type);
+            let blockNew = new MemoryX80(addrNext, sizeBlock, this.nBlockSize, type);
             blockNew.copyBreakpoints(this.dbg, block);
             this.aMemBlocks[iBlock++] = blockNew;
 
@@ -273,9 +273,9 @@ export default class BusX80 extends Component {
      */
     cleanMemory(addr, size)
     {
-        var fClean = true;
-        var iBlock = addr >>> this.nBlockShift;
-        var sizeBlock = this.nBlockSize - (addr & this.nBlockLimit);
+        let fClean = true;
+        let iBlock = addr >>> this.nBlockShift;
+        let sizeBlock = this.nBlockSize - (addr & this.nBlockLimit);
         while (size > 0 && iBlock < this.aMemBlocks.length) {
             if (this.aMemBlocks[iBlock].fDirty) {
                 this.aMemBlocks[iBlock].fDirty = fClean = false;
@@ -305,13 +305,13 @@ export default class BusX80 extends Component {
         if (size == null) size = (this.addrTotal - addr) | 0;
         if (info == null) info = {cbTotal: 0, cBlocks: 0, aBlocks: []};
 
-        var iBlock = addr >>> this.nBlockShift;
-        var iBlockMax = ((addr + size - 1) >>> this.nBlockShift);
+        let iBlock = addr >>> this.nBlockShift;
+        let iBlockMax = ((addr + size - 1) >>> this.nBlockShift);
 
         info.cbTotal = 0;
         info.cBlocks = 0;
         while (iBlock <= iBlockMax) {
-            var block = this.aMemBlocks[iBlock];
+            let block = this.aMemBlocks[iBlock];
             info.cbTotal += block.size;
             if (block.size) {
                 info.aBlocks.push(Usr.initBitFields(BusX80.BlockInfo, iBlock, 0, 0, block.type));
@@ -348,10 +348,10 @@ export default class BusX80 extends Component {
     removeMemory(addr, size)
     {
         if (!(addr & this.nBlockLimit) && size && !(size & this.nBlockLimit)) {
-            var iBlock = addr >>> this.nBlockShift;
+            let iBlock = addr >>> this.nBlockShift;
             while (size > 0) {
-                var blockOld = this.aMemBlocks[iBlock];
-                var blockNew = new MemoryX80(addr);
+                let blockOld = this.aMemBlocks[iBlock];
+                let blockNew = new MemoryX80(addr);
                 blockNew.copyBreakpoints(this.dbg, blockOld);
                 this.aMemBlocks[iBlock++] = blockNew;
                 addr = iBlock * this.nBlockSize;
@@ -372,8 +372,8 @@ export default class BusX80 extends Component {
      */
     getMemoryBlocks(addr, size)
     {
-        var aBlocks = [];
-        var iBlock = addr >>> this.nBlockShift;
+        let aBlocks = [];
+        let iBlock = addr >>> this.nBlockShift;
         while (size > 0 && iBlock < this.aMemBlocks.length) {
             aBlocks.push(this.aMemBlocks[iBlock++]);
             size -= this.nBlockSize;
@@ -398,14 +398,14 @@ export default class BusX80 extends Component {
      */
     setMemoryBlocks(addr, size, aBlocks, type)
     {
-        var i = 0;
-        var iBlock = addr >>> this.nBlockShift;
+        let i = 0;
+        let iBlock = addr >>> this.nBlockShift;
         while (size > 0 && iBlock < this.aMemBlocks.length) {
-            var block = aBlocks[i++];
+            let block = aBlocks[i++];
             this.assert(block);
             if (!block) break;
             if (type !== undefined) {
-                var blockNew = new MemoryX80(addr);
+                let blockNew = new MemoryX80(addr);
                 blockNew.clone(block, type, this.dbg);
                 block = blockNew;
             }
@@ -449,8 +449,8 @@ export default class BusX80 extends Component {
      */
     getShort(addr)
     {
-        var off = addr & this.nBlockLimit;
-        var iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
+        let off = addr & this.nBlockLimit;
+        let iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
         if (off != this.nBlockLimit) {
             return this.aMemBlocks[iBlock].readShort(off, addr);
         }
@@ -468,8 +468,8 @@ export default class BusX80 extends Component {
      */
     getShortDirect(addr)
     {
-        var off = addr & this.nBlockLimit;
-        var iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
+        let off = addr & this.nBlockLimit;
+        let iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
         if (off != this.nBlockLimit) {
             return this.aMemBlocks[iBlock].readShortDirect(off, addr);
         }
@@ -512,8 +512,8 @@ export default class BusX80 extends Component {
      */
     setShort(addr, w)
     {
-        var off = addr & this.nBlockLimit;
-        var iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
+        let off = addr & this.nBlockLimit;
+        let iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
         if (off != this.nBlockLimit) {
             this.aMemBlocks[iBlock].writeShort(off, w & 0xffff, addr);
             return;
@@ -534,8 +534,8 @@ export default class BusX80 extends Component {
      */
     setShortDirect(addr, w)
     {
-        var off = addr & this.nBlockLimit;
-        var iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
+        let off = addr & this.nBlockLimit;
+        let iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
         if (off != this.nBlockLimit) {
             this.aMemBlocks[iBlock].writeShortDirect(off, w & 0xffff, addr);
             return;
@@ -554,7 +554,7 @@ export default class BusX80 extends Component {
     addMemBreak(addr, fWrite)
     {
         if (DEBUGGER) {
-            var iBlock = addr >>> this.nBlockShift;
+            let iBlock = addr >>> this.nBlockShift;
             this.aMemBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
         }
     }
@@ -569,7 +569,7 @@ export default class BusX80 extends Component {
     removeMemBreak(addr, fWrite)
     {
         if (DEBUGGER) {
-            var iBlock = addr >>> this.nBlockShift;
+            let iBlock = addr >>> this.nBlockShift;
             this.aMemBlocks[iBlock].removeBreakpoint(addr & this.nBlockLimit, fWrite);
         }
     }
@@ -605,11 +605,11 @@ export default class BusX80 extends Component {
      */
     saveMemory(fAll)
     {
-        var i = 0;
-        var a = [];
+        let i = 0;
+        let a = [];
 
-        for (var iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
-            var block = this.aMemBlocks[iBlock];
+        for (let iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
+            let block = this.aMemBlocks[iBlock];
             /*
              * We have to check both fDirty and fDirtyEver, because we may have called cleanMemory() on some of
              * the memory blocks (eg, video memory), and while cleanMemory() will clear a dirty block's fDirty flag,
@@ -643,14 +643,13 @@ export default class BusX80 extends Component {
      */
     restoreMemory(a)
     {
-        var i;
-        for (i = 0; i < a.length - 1; i += 2) {
-            var iBlock = a[i];
-            var adw = a[i+1];
+        for (let i = 0; i < a.length - 1; i += 2) {
+            let iBlock = a[i];
+            let adw = a[i+1];
             if (adw && adw.length < this.nBlockLen) {
                 adw = State.decompress(adw, this.nBlockLen);
             }
-            var block = this.aMemBlocks[iBlock];
+            let block = this.aMemBlocks[iBlock];
             if (!block || !block.restore(adw)) {
                 /*
                  * Either the block to restore hasn't been allocated, indicating a change in the machine
@@ -697,7 +696,7 @@ export default class BusX80 extends Component {
     addPortInputNotify(start, end, fn)
     {
         if (fn !== undefined) {
-            for (var port = start; port <= end; port++) {
+            for (let port = start; port <= end; port++) {
                 if (this.aPortInputNotify[port] !== undefined) {
                     Component.warning("Input port " + Str.toHexWord(port) + " already registered");
                     continue;
@@ -722,7 +721,7 @@ export default class BusX80 extends Component {
     {
         if (offset === undefined) offset = 0;
         if (table) {
-            for (var port in table) {
+            for (let port in table) {
                 this.addPortInputNotify(+port + offset, +port + offset, table[port].bind(component));
             }
         }
@@ -756,14 +755,14 @@ export default class BusX80 extends Component {
      */
     checkPortInputNotify(port, size, addrIP)
     {
-        var data = 0, shift = 0;
+        let data = 0, shift = 0;
 
         while (size > 0) {
 
-            var aNotify = this.aPortInputNotify[port];
-            var sizePort = this.aPortInputWidth[port] || 1;
-            var maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
-            var dataPort = maskPort;
+            let aNotify = this.aPortInputNotify[port];
+            let sizePort = this.aPortInputWidth[port] || 1;
+            let maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
+            let dataPort = maskPort;
 
             /*
              * TODO: We need to decide what to do about 8-bit I/O to a 16-bit port (ditto for 16-bit I/O
@@ -837,7 +836,7 @@ export default class BusX80 extends Component {
     addPortOutputNotify(start, end, fn)
     {
         if (fn !== undefined) {
-            for (var port = start; port <= end; port++) {
+            for (let port = start; port <= end; port++) {
                 if (this.aPortOutputNotify[port] !== undefined) {
                     Component.warning("Output port " + Str.toHexWord(port) + " already registered");
                     continue;
@@ -862,7 +861,7 @@ export default class BusX80 extends Component {
     {
         if (offset === undefined) offset = 0;
         if (table) {
-            for (var port in table) {
+            for (let port in table) {
                 this.addPortOutputNotify(+port + offset, +port + offset, table[port].bind(component));
             }
         }
@@ -893,14 +892,14 @@ export default class BusX80 extends Component {
      */
     checkPortOutputNotify(port, size, data, addrIP)
     {
-        var shift = 0;
+        let shift = 0;
 
         while (size > 0) {
 
-            var aNotify = this.aPortOutputNotify[port];
-            var sizePort = this.aPortOutputWidth[port] || 1;
-            var maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
-            var dataPort = (data >>>= shift) & maskPort;
+            let aNotify = this.aPortOutputNotify[port];
+            let sizePort = this.aPortOutputWidth[port] || 1;
+            let maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
+            let dataPort = (data >>>= shift) & maskPort;
 
             /*
              * TODO: We need to decide what to do about 8-bit I/O to a 16-bit port (ditto for 16-bit I/O
@@ -944,7 +943,7 @@ export default class BusX80 extends Component {
      *
      removePortInputNotify(start, end)
      {
-         for (var port = start; port < end; port++) {
+         for (let port = start; port < end; port++) {
              if (this.aPortInputNotify[port]) {
                  delete this.aPortInputNotify[port];
              }
@@ -963,7 +962,7 @@ export default class BusX80 extends Component {
      *
      removePortOutputNotify(start, end)
      {
-         for (var port = start; port < end; port++) {
+         for (let port = start; port < end; port++) {
              if (this.aPortOutputNotify[port]) {
                  delete this.aPortOutputNotify[port];
              }
