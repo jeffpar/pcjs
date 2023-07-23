@@ -23,7 +23,7 @@ import { BYTEARRAYS, DEBUG, DEBUGGER, TYPEDARRAYS } from "./defines.js";
  */
 
 var littleEndian = (TYPEDARRAYS? (function() {
-    var buffer = new ArrayBuffer(2);
+    let buffer = new ArrayBuffer(2);
     new DataView(buffer).setUint16(0, 256, true);
     return new Uint16Array(buffer)[0] === 256;
 })() : false);
@@ -78,7 +78,7 @@ export default class MemoryX80 {
      */
     constructor(addr, used, size, type)
     {
-        var i;
+        let i;
         this.id = (MemoryX80.idBlock += 2);
         this.adw = null;
         this.offset = 0;
@@ -217,10 +217,10 @@ export default class MemoryX80 {
      */
     save()
     {
-        var adw, i;
+        let adw, i;
         if (BYTEARRAYS) {
             adw = new Array(this.size >> 2);
-            var off = 0;
+            let off = 0;
             for (i = 0; i < adw.length; i++) {
                 adw[i] = this.ab[off] | (this.ab[off + 1] << 8) | (this.ab[off + 2] << 16) | (this.ab[off + 3] << 24);
                 off += 4;
@@ -272,9 +272,9 @@ export default class MemoryX80 {
         Component.assert(adw != null);
 
         if (adw && this.size == adw.length << 2) {
-            var i;
+            let i;
             if (BYTEARRAYS) {
-                var off = 0;
+                let off = 0;
                 for (i = 0; i < adw.length; i++) {
                     this.ab[off] = adw[i] & 0xff;
                     this.ab[off + 1] = (adw[i] >> 8) & 0xff;
@@ -555,10 +555,10 @@ export default class MemoryX80 {
         if (BYTEARRAYS) {
             return this.ab[off] | (this.ab[off + 1] << 8);
         }
-        var w;
-        var idw = off >> 2;
-        var nShift = (off & 0x3) << 3;
-        var dw = (this.adw[idw] >> nShift);
+        let w;
+        let idw = off >> 2;
+        let nShift = (off & 0x3) << 3;
+        let dw = (this.adw[idw] >> nShift);
         if (nShift < 24) {
             w = dw & 0xffff;
         } else {
@@ -580,8 +580,8 @@ export default class MemoryX80 {
         if (BYTEARRAYS) {
             this.ab[off] = b;
         } else {
-            var idw = off >> 2;
-            var nShift = (off & 0x3) << 3;
+            let idw = off >> 2;
+            let nShift = (off & 0x3) << 3;
             this.adw[idw] = (this.adw[idw] & ~(0xff << nShift)) | (b << nShift);
         }
         this.fDirty = true;
@@ -601,8 +601,8 @@ export default class MemoryX80 {
             this.ab[off] = (w & 0xff);
             this.ab[off + 1] = (w >> 8);
         } else {
-            var idw = off >> 2;
-            var nShift = (off & 0x3) << 3;
+            let idw = off >> 2;
+            let nShift = (off & 0x3) << 3;
             if (nShift < 24) {
                 this.adw[idw] = (this.adw[idw] & ~(0xffff << nShift)) | (w << nShift);
             } else {

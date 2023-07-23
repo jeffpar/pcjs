@@ -191,6 +191,7 @@ const Messages = {
  * something to be aware of).
  */
 Messages.Categories = {
+    "log":      Messages.LOG,
     "warn":     Messages.WARNING,
     /*
      * Now we turn to message actions rather than message types; for example, setting "halt"
@@ -5249,7 +5250,7 @@ class Component {
      *
      * @param {number} num
      * @param {number} bits
-     * @returns {boolean}
+     * @returns {boolean} (true if ALL specified bits are set, false if not)
      */
     testBits(num, bits)
     {
@@ -5281,7 +5282,13 @@ class Component {
          * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
          */
         if (DEBUG || !this.testBits(bitsMessage, Messages.DEBUG)) {
-            if (this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+            /*
+             * The debugger has the ability to filter any messages listed in Messages.Categories, and that currently
+             * includes message types LOG and WARNING, so if the debugger is loaded, subtract those from the types we allow
+             * by default.
+             */
+            let allowedMessages = Messages.TYPES - (this.dbg? Messages.LOG + Messages.WARNING : 0);
+            if (this.testBits(allowedMessages, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
                 return true;
             }
         }
@@ -5309,10 +5316,10 @@ class Component {
         if (typeof format == "number") {
             bitsMessage = format || Messages.PROGRESS;
             format = args.shift();
-            if (bitsMessage == Messages.LOG) {
+            if (this.testBits(bitsMessage, Messages.LOG)) {
                 format = (this.id || this.type || "log") + ": " + format;
             }
-            else if (bitsMessage == Messages.STATUS) {
+            else if (this.testBits(bitsMessage, Messages.STATUS)) {
                 format = this.type + ": " + format;
             }
         }
@@ -71542,7 +71549,7 @@ HDC.aATCPortOutputSecondary = {
 Web.onInit(HDC.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */

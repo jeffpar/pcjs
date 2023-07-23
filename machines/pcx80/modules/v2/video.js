@@ -80,7 +80,7 @@ export default class VideoX80 extends Component {
     {
         super("Video", parmsVideo, Messages.VIDEO);
 
-        var video = this, sProp, sEvent;
+        let video = this, sProp, sEvent;
         this.fGecko = Web.isUserAgent("Gecko/");
 
         this.cxScreen = parmsVideo['screenWidth'];
@@ -89,7 +89,7 @@ export default class VideoX80 extends Component {
         this.addrBuffer = parmsVideo['bufferAddr'];
         this.fUseRAM = parmsVideo['bufferRAM'];
 
-        var sFormat = parmsVideo['bufferFormat'];
+        let sFormat = parmsVideo['bufferFormat'];
         this.nFormat = sFormat && VideoX80.FORMATS[sFormat.toUpperCase()] || VideoX80.FORMAT.UNKNOWN;
 
         this.nColsBuffer = parmsVideo['bufferCols'];
@@ -148,8 +148,8 @@ export default class VideoX80 extends Component {
          * on this.  I see other options emerging, like the CSS property "image-rendering: pixelated"
          * that's apparently been added to Chrome.  Sigh.
          */
-        var fSmoothing = parmsVideo['smoothing'];
-        var sSmoothing = Web.getURLParm('smoothing');
+        let fSmoothing = parmsVideo['smoothing'];
+        let sSmoothing = Web.getURLParm('smoothing');
         if (sSmoothing) fSmoothing = (sSmoothing == "true");
         this.fSmoothing = fSmoothing;
         this.sSmoothing = Web.findProperty(this.contextScreen, 'imageSmoothingEnabled');
@@ -185,7 +185,7 @@ export default class VideoX80 extends Component {
                 this.container.doFullScreen = container[sProp];
                 sEvent = Web.findProperty(document, 'on', 'fullscreenchange');
                 if (sEvent) {
-                    var sFullScreen = Web.findProperty(document, 'fullscreenElement') || Web.findProperty(document, 'fullScreenElement');
+                    let sFullScreen = Web.findProperty(document, 'fullscreenElement') || Web.findProperty(document, 'fullScreenElement');
                     document.addEventListener(sEvent, function onFullScreenChange() {
                         video.notifyFullScreen(document[sFullScreen] != null);
                     }, false);
@@ -201,7 +201,7 @@ export default class VideoX80 extends Component {
 
         this.sFontROM = parmsVideo['fontROM'];
         if (this.sFontROM) {
-            var sFileExt = Str.getExtension(this.sFontROM);
+            let sFileExt = Str.getExtension(this.sFontROM);
             if (sFileExt != "json") {
                 this.sFontROM = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFontROM + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
             }
@@ -227,8 +227,8 @@ export default class VideoX80 extends Component {
         this.cxBuffer = this.nColsBuffer * this.cxCell;
         this.cyBuffer = this.nRowsBuffer * this.cyCell;
 
-        var cxBuffer = this.cxBuffer;
-        var cyBuffer = this.cyBuffer;
+        let cxBuffer = this.cxBuffer;
+        let cyBuffer = this.cyBuffer;
         if (this.rotateBuffer) {
             cxBuffer = this.cyBuffer;
             cyBuffer = this.cxBuffer;
@@ -335,7 +335,7 @@ export default class VideoX80 extends Component {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var video = this;
+        let video = this;
 
         /*
          * TODO: A more general-purpose binding mechanism would be nice someday....
@@ -350,11 +350,11 @@ export default class VideoX80 extends Component {
             this.bindings[sBinding] = control;
             if (this.container && this.container.doFullScreen) {
                 control.onclick = function onClickFullScreen() {
-                    if (DEBUG) video.printf("fullScreen()\n");
+                    video.printf(Messages.DEBUG, "fullScreen()\n");
                     video.doFullScreen();
                 };
             } else {
-                if (DEBUG) this.printf(Messages.LOG, "FullScreen API not available\n");
+                this.printf(Messages.DEBUG + Messages.LOG, "FullScreen API not available\n");
                 control.parentNode.removeChild(/** @type {Node} */ (control));
             }
             return true;
@@ -392,7 +392,7 @@ export default class VideoX80 extends Component {
          */
         this.kbd = /** @type {KeyboardX80} */ (cmp.getMachineComponent("Keyboard"));
         if (this.kbd) {
-            for (var s in this.ledBindings) {
+            for (let s in this.ledBindings) {
                 this.kbd.setBinding("led", s, this.ledBindings[s]);
             }
             if (this.canvasScreen) {
@@ -400,7 +400,7 @@ export default class VideoX80 extends Component {
             }
         }
 
-        var video = this;
+        let video = this;
         this.timerUpdateNext = this.cpu.addTimer(this.id, function() {
             video.updateScreen();
         });
@@ -431,9 +431,9 @@ export default class VideoX80 extends Component {
             /*
              * The most likely source of any exception will be here: parsing the JSON-encoded data.
              */
-            var ab = eval("(" + sFontData + ")");
+            let ab = eval("(" + sFontData + ")");
 
-            var abFontData = ab['bytes'] || ab;
+            let abFontData = ab['bytes'] || ab;
 
             if (!abFontData || !abFontData.length) {
                 Component.error("Empty font ROM: " + sURL);
@@ -530,40 +530,40 @@ export default class VideoX80 extends Component {
          * ensuring that it will accommodate 16x16 characters (for a maximum of 256).  Note that the VT100 font ROM
          * defines only 128 characters, so that canvas will contain only 16x8 entries.
          */
-        var nFontBytesPerChar = this.cxCellDefault <= 8? 8 : 16;
-        var nFontByteOffset = nFontBytesPerChar > 8? 15 : 0;
-        var nChars = this.abFontData.length / nFontBytesPerChar;
+        let nFontBytesPerChar = this.cxCellDefault <= 8? 8 : 16;
+        let nFontByteOffset = nFontBytesPerChar > 8? 15 : 0;
+        let nChars = this.abFontData.length / nFontBytesPerChar;
 
         /*
          * The absence of a boolean for fUnderline means that both fReverse and fUnderline are "falsey".  The presence
          * of a boolean means that fReverse will be true OR fUnderline will be true, but NOT both.
          */
-        var fReverse = (fUnderline === false);
+        let fReverse = (fUnderline === false);
 
-        var font = {cxCell: cxCell, cyCell: cyCell};
+        let font = {cxCell: cxCell, cyCell: cyCell};
         font.canvas = document.createElement("canvas");
         font.canvas.width = cxCell * 16;
         font.canvas.height = cyCell * (nChars / 16);
         font.context = font.canvas.getContext("2d");
 
-        var imageChar = font.context.createImageData(cxCell, cyCell);
+        let imageChar = font.context.createImageData(cxCell, cyCell);
 
-        for (var iChar = 0; iChar < nChars; iChar++) {
-            for (var y = 0, yDst = y; y < this.cyCell; y++) {
-                var offFontData = iChar * nFontBytesPerChar + ((nFontByteOffset + y) & (nFontBytesPerChar - 1));
-                var bits = (fUnderline && y == 8? 0xff : this.abFontData[offFontData]);
-                for (var nRows = 0; nRows < (cyCell / this.cyCell); nRows++) {
-                    var bitPrev = 0;
-                    for (var x = 0, xDst = x; x < this.cxCell; x++) {
+        for (let iChar = 0; iChar < nChars; iChar++) {
+            for (let y = 0, yDst = y; y < this.cyCell; y++) {
+                let offFontData = iChar * nFontBytesPerChar + ((nFontByteOffset + y) & (nFontBytesPerChar - 1));
+                let bits = (fUnderline && y == 8? 0xff : this.abFontData[offFontData]);
+                for (let nRows = 0; nRows < (cyCell / this.cyCell); nRows++) {
+                    let bitPrev = 0;
+                    for (let x = 0, xDst = x; x < this.cxCell; x++) {
                         /*
                          * While x goes from 0 to cxCell-1, obviously we will run out of bits after x is 7;
                          * since the final bit must be replicated all the way to the right edge of the cell
                          * (so that line-drawing characters seamlessly connect), we ensure that the effective
                          * shift count remains stuck at 7 once it reaches 7.
                          */
-                        var bitReal = bits & (0x80 >> (x > 7? 7 : x));
-                        var bit = (this.fDotStretcher && !bitReal && bitPrev)? bitPrev : bitReal;
-                        for (var nCols = 0; nCols < (cxCell / this.cxCell); nCols++) {
+                        let bitReal = bits & (0x80 >> (x > 7? 7 : x));
+                        let bit = (this.fDotStretcher && !bitReal && bitPrev)? bitPrev : bitReal;
+                        for (let nCols = 0; nCols < (cxCell / this.cxCell); nCols++) {
                             if (fReverse) bit = !bit;
                             this.setPixel(imageChar, xDst, yDst, bit? 1 : 0);
                             xDst++;
@@ -612,20 +612,20 @@ export default class VideoX80 extends Component {
              * and do not require a row entry.  If multiple strings are present for a given row, we invert the
              * default character attribute for subsequent strings.  An empty array ends the screen build process.
              */
-            var aLineData = {
+            let aLineData = {
                  0: [VideoX80.VT100.FONT.DHIGH, 'SET-UP A'],
                  2: [VideoX80.VT100.FONT.DWIDE, 'TO EXIT PRESS "SET-UP"'],
                 22: [VideoX80.VT100.FONT.NORML, '        T       T       T       T       T       T       T       T       T'],
                 23: [VideoX80.VT100.FONT.NORML, '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890', '1234567890'],
                 24: []
             };
-            var addr = this.addrBuffer;
-            var addrNext = -1, font = -1;
-            var b, nFill = (this.rateMonitor == 60? 2 : 5);
-            for (var iRow = -nFill; iRow < this.nRowsBuffer; iRow++) {
-                var lineData = aLineData[iRow];
+            let addr = this.addrBuffer;
+            let addrNext = -1, font = -1;
+            let b, nFill = (this.rateMonitor == 60? 2 : 5);
+            for (let iRow = -nFill; iRow < this.nRowsBuffer; iRow++) {
+                let lineData = aLineData[iRow];
                 if (addrNext >= 0) {
-                    var fBreak = false;
+                    let fBreak = false;
                     addrNext = addr + 2;
                     if (!lineData) {
                         if (font == VideoX80.VT100.FONT.DHIGH) {
@@ -647,10 +647,10 @@ export default class VideoX80 extends Component {
                     if (fBreak) break;
                 }
                 if (lineData) {
-                    var attr = 0;
-                    for (var j = 1; j < lineData.length; j++) {
-                        var s = lineData[j];
-                        for (var k = 0; k < s.length; k++) {
+                    let attr = 0;
+                    for (let j = 1; j < lineData.length; j++) {
+                        let s = lineData[j];
+                        for (let k = 0; k < s.length; k++) {
                             this.bus.setByteDirect(addr++, s.charCodeAt(k) | attr);
                         }
                         attr ^= 0x80;
@@ -690,7 +690,7 @@ export default class VideoX80 extends Component {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         state.set(0, []);
         return state.data();
     }
@@ -794,7 +794,7 @@ export default class VideoX80 extends Component {
      */
     doFullScreen()
     {
-        var fSuccess = false;
+        let fSuccess = false;
         if (this.container) {
             if (this.container.doFullScreen) {
                 /*
@@ -811,11 +811,11 @@ export default class VideoX80 extends Component {
                  * for height works equally well, so I'm sticking with it, because "auto" is also consistent with how I've
                  * implemented a responsive canvas when the browser window is being resized.
                  */
-                var sWidth = "100%";
-                var sHeight = "auto";
+                let sWidth = "100%";
+                let sHeight = "auto";
                 if (screen && screen.width && screen.height) {
-                    var aspectPhys = screen.width / screen.height;
-                    var aspectVirt = this.cxScreen / this.cyScreen;
+                    let aspectPhys = screen.width / screen.height;
+                    let aspectVirt = this.cxScreen / this.cyScreen;
                     if (aspectPhys > aspectVirt) {
                         sWidth = Math.round(aspectVirt / aspectPhys * 100) + '%';
                     }
@@ -920,16 +920,16 @@ export default class VideoX80 extends Component {
      */
     initColors()
     {
-        var rgbBlack  = [0x00, 0x00, 0x00, 0xff];
-        var rgbWhite  = [0xff, 0xff, 0xff, 0xff];
+        let rgbBlack  = [0x00, 0x00, 0x00, 0xff];
+        let rgbWhite  = [0xff, 0xff, 0xff, 0xff];
         this.nColors = (1 << this.nBitsPerPixel);
         this.aRGB = new Array(this.nColors + VideoX80.COLORS.OVERLAY_TOTAL);
         this.aRGB[0] = rgbBlack;
         this.aRGB[1] = rgbWhite;
         if (this.nFormat == VideoX80.FORMAT.SI1978) {
-            var rgbGreen  = [0x00, 0xff, 0x00, 0xff];
+            let rgbGreen  = [0x00, 0xff, 0x00, 0xff];
             //noinspection UnnecessaryLocalVariableJS
-            var rgbYellow = [0xff, 0xff, 0x00, 0xff];
+            let rgbYellow = [0xff, 0xff, 0x00, 0xff];
             this.aRGB[this.nColors + VideoX80.COLORS.OVERLAY_TOP] = rgbYellow;
             this.aRGB[this.nColors + VideoX80.COLORS.OVERLAY_BOTTOM] = rgbGreen;
         }
@@ -946,7 +946,7 @@ export default class VideoX80 extends Component {
      */
     setPixel(image, x, y, bPixel)
     {
-        var index;
+        let index;
         if (!this.rotateBuffer) {
             index = (x + y * image.width);
         } else {
@@ -960,7 +960,7 @@ export default class VideoX80 extends Component {
                 bPixel = this.nColors + VideoX80.COLORS.OVERLAY_BOTTOM;
             }
         }
-        var rgb = this.aRGB[bPixel];
+        let rgb = this.aRGB[bPixel];
         index *= rgb.length;
         image.data[index] = rgb[0];
         image.data[index+1] = rgb[1];
@@ -982,17 +982,17 @@ export default class VideoX80 extends Component {
      */
     updateChar(idFont, col, row, data, context)
     {
-        var bChar = data & 0x7f;
-        var font = this.aFonts[idFont][(data & 0x80)? 1 : 0];
+        let bChar = data & 0x7f;
+        let font = this.aFonts[idFont][(data & 0x80)? 1 : 0];
         if (!font) return;
 
-        var xSrc = (bChar & 0xf) * font.cxCell;
-        var ySrc = (bChar >> 4) * font.cyCell;
+        let xSrc = (bChar & 0xf) * font.cxCell;
+        let ySrc = (bChar >> 4) * font.cyCell;
 
-        var xDst, yDst, cxDst, cyDst;
+        let xDst, yDst, cxDst, cyDst;
 
-        var cxSrc = font.cxCell;
-        var cySrc = font.cyCell;
+        let cxSrc = font.cxCell;
+        let cySrc = font.cyCell;
 
         if (context) {
             xDst = col * this.cxCell;
@@ -1043,11 +1043,11 @@ export default class VideoX80 extends Component {
      */
     updateVT100(fForced)
     {
-        var addrNext = this.addrBuffer, fontNext = -1;
+        let addrNext = this.addrBuffer, fontNext = -1;
 
-        var nRows = 0;
-        var nFill = (this.rateMonitor == 60? 2 : 5);
-        var iCell = 0, cUpdated = 0, iCellUpdated = -1;
+        let font, nRows = 0;
+        let nFill = (this.rateMonitor == 60? 2 : 5);
+        let iCell = 0, cUpdated = 0, iCellUpdated = -1;
 
         this.assert(this.abLineBuffer.length == this.nColsBuffer);
 
@@ -1055,15 +1055,15 @@ export default class VideoX80 extends Component {
             /*
              * Populate the line buffer
              */
-            var nCols = 0;
-            var addr = addrNext;
-            var font = fontNext;
-            var nColsVisible = this.nColsBuffer;
+            let nCols = 0;
+            let addr = addrNext;
+            let nColsVisible = this.nColsBuffer;
+            font = fontNext;
             if (font != VideoX80.VT100.FONT.NORML) nColsVisible >>= 1;
             while (true) {
-                var data = this.bus.getByteDirect(addr++);
+                let data = this.bus.getByteDirect(addr++);
                 if ((data & VideoX80.VT100.LINETERM) == VideoX80.VT100.LINETERM) {
-                    var b = this.bus.getByteDirect(addr++);
+                    let b = this.bus.getByteDirect(addr++);
                     fontNext = b & VideoX80.VT100.LINEATTR.FONTMASK;
                     addrNext = ((b & VideoX80.VT100.LINEATTR.ADDRMASK) << 8) | this.bus.getByteDirect(addr);
                     addrNext += (b & VideoX80.VT100.LINEATTR.ADDRBIAS)? VideoX80.VT100.ADDRBIAS_LO : VideoX80.VT100.ADDRBIAS_HI;
@@ -1101,10 +1101,10 @@ export default class VideoX80 extends Component {
                  * the next.  So we store the visible line length at the start of each row in the cache, which must match if
                  * the cache can be considered valid for the current line.
                  */
-                var fLineCacheValid = this.fCellCacheValid && (this.aCellCache[iCell] == nColsVisible);
+                let fLineCacheValid = this.fCellCacheValid && (this.aCellCache[iCell] == nColsVisible);
                 this.aCellCache[iCell++] = nColsVisible;
-                for (var iCol = 0; iCol < nCols; iCol++) {
-                    data = this.abLineBuffer[iCol];
+                for (let iCol = 0; iCol < nCols; iCol++) {
+                    let data = this.abLineBuffer[iCol];
                     if (!fLineCacheValid || data !== this.aCellCache[iCell]) {
                         this.aCellCache[iCellUpdated = iCell] = data;
                         this.updateChar(font, iCol, nRows, data, this.contextBuffer);
@@ -1181,7 +1181,7 @@ export default class VideoX80 extends Component {
      */
     updateScreen(fForced)
     {
-        var fUpdate = true;
+        let fUpdate = true;
 
         if (!fForced) {
             if (this.rateInterrupt) {
@@ -1255,36 +1255,36 @@ export default class VideoX80 extends Component {
      */
     updateScreenGraphics(fForced)
     {
-        var addr = this.addrBuffer;
-        var addrLimit = addr + this.sizeBuffer;
+        let addr = this.addrBuffer;
+        let addrLimit = addr + this.sizeBuffer;
 
-        var iCell = 0;
-        var nPixelShift = 1;
+        let iCell = 0;
+        let nPixelShift = 1;
 
-        var xBuffer = 0, yBuffer = 0;
-        var xDirty = this.cxBuffer, xMaxDirty = 0, yDirty = this.cyBuffer, yMaxDirty = 0;
+        let xBuffer = 0, yBuffer = 0;
+        let xDirty = this.cxBuffer, xMaxDirty = 0, yDirty = this.cyBuffer, yMaxDirty = 0;
 
-        var nShiftInit = 0;
-        var nShiftPixel = this.nBitsPerPixel;
-        var nMask = (1 << nShiftPixel) - 1;
+        let nShiftInit = 0;
+        let nShiftPixel = this.nBitsPerPixel;
+        let nMask = (1 << nShiftPixel) - 1;
         if (this.iBitFirstPixel) {
             nShiftPixel = -nShiftPixel;
             nShiftInit = 16 + nShiftPixel;
         }
 
         while (addr < addrLimit) {
-            var data = this.bus.getShortDirect(addr);
+            let data = this.bus.getShortDirect(addr);
             this.assert(iCell < this.aCellCache.length);
             if (this.fCellCacheValid && data === this.aCellCache[iCell]) {
                 xBuffer += this.nPixelsPerCell;
             } else {
                 this.aCellCache[iCell] = data;
-                var nShift = nShiftInit;
+                let nShift = nShiftInit;
                 if (nShift) data = ((data >> 8) | ((data & 0xff) << 8));
                 if (xBuffer < xDirty) xDirty = xBuffer;
-                var cPixels = this.nPixelsPerCell;
+                let cPixels = this.nPixelsPerCell;
                 while (cPixels--) {
-                    var bPixel = (data >> nShift) & nMask;
+                    let bPixel = (data >> nShift) & nMask;
                     this.setPixel(this.imageBuffer, xBuffer++, yBuffer, bPixel);
                     nShift += nShiftPixel;
                 }
@@ -1307,8 +1307,8 @@ export default class VideoX80 extends Component {
          * the update (well, to the extent that the canvas APIs permit).
          */
         if (xDirty < this.cxBuffer) {
-            var cxDirty = xMaxDirty - xDirty;
-            var cyDirty = yMaxDirty - yDirty;
+            let cxDirty = xMaxDirty - xDirty;
+            let cyDirty = yMaxDirty - yDirty;
             if (this.rotateBuffer) {
                 /*
                  * If rotateBuffer is set, then it must be -90, so we must "rotate" the dirty coordinates as well,
@@ -1317,7 +1317,7 @@ export default class VideoX80 extends Component {
                  *
                  *      this.contextBuffer.putImageData(this.imageBuffer, 0, 0);
                  */
-                var xDirtyOrig = xDirty, cxDirtyOrig = cxDirty;
+                let xDirtyOrig = xDirty, cxDirtyOrig = cxDirty;
                 //noinspection JSSuspiciousNameCombination
                 xDirty = yDirty;
                 cxDirty = cyDirty;
@@ -1344,11 +1344,11 @@ export default class VideoX80 extends Component {
      */
     static init()
     {
-        var aeVideo = Component.getElementsByClass(APPCLASS, "video");
-        for (var iVideo = 0; iVideo < aeVideo.length; iVideo++) {
+        let aeVideo = Component.getElementsByClass(APPCLASS, "video");
+        for (let iVideo = 0; iVideo < aeVideo.length; iVideo++) {
 
-            var element = aeVideo[iVideo];
-            var parmsVideo = Component.getComponentParms(element);
+            let element = aeVideo[iVideo];
+            let parmsVideo = Component.getComponentParms(element);
 
             /*
              * We used to create the canvas element ourselves:
@@ -1365,8 +1365,8 @@ export default class VideoX80 extends Component {
              * we inject into the page is as fully-formed as possible, keeping disruption of page layout to a
              * minimum.
              */
-            var canvas, context;
-            var aCanvas = Component.getElementsByClass("pcjs-canvas", "", element);
+            let canvas, context;
+            let aCanvas = Component.getElementsByClass("pcjs-canvas", "", element);
             if (aCanvas && aCanvas.length && aCanvas[0].getContext) {
                 canvas = aCanvas[0];
                 canvas.style.backgroundColor = parmsVideo['screenColor'];
@@ -1405,7 +1405,7 @@ export default class VideoX80 extends Component {
              * until we figure out a better UI.  And note that we use our Web.addPageEvent() helper function to make
              * sure we don't trample any other 'onresize' handler(s) attached to the window object.
              */
-            var aspect = +(parmsVideo['aspect'] || Web.getURLParm('aspect'));
+            let aspect = +(parmsVideo['aspect'] || Web.getURLParm('aspect'));
 
             /*
              * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
@@ -1460,7 +1460,7 @@ export default class VideoX80 extends Component {
              *
              * See this Chromium issue for more information: https://code.google.com/p/chromium/issues/detail?id=118639
              */
-            var textarea;
+            let textarea;
             if (globals.browser) {
                 textarea = document.createElement("textarea");
                 /*
@@ -1487,7 +1487,7 @@ export default class VideoX80 extends Component {
             /*
              * Now we can create the Video object, record it, and wire it up to the associated document elements.
              */
-            var video = new VideoX80(parmsVideo, canvas, context, textarea /* || input */, element);
+            let video = new VideoX80(parmsVideo, canvas, context, textarea /* || input */, element);
 
             /*
              * Bind any video-specific controls (eg, the Refresh button). There are no essential controls, however;

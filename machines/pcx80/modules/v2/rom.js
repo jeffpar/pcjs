@@ -69,7 +69,7 @@ export default class ROMx80 extends Component {
 
         if (this.sFilePath) {
             let sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\"\n", sFileURL);
+            this.printf(Messages.DEBUG + Messages.LOG, "load(\"%s\"\n", sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -317,9 +317,7 @@ export default class ROMx80 extends Component {
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX80.TYPE.ROM)) {
-            if (DEBUG) {
-                this.printf(Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abROM.length);
-            }
+            this.printf(Messages.DEBUG + Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abROM.length);
             for (let i = 0; i < this.abROM.length; i++) {
                 this.bus.setByteDirect(addr + i, this.abROM[i]);
             }

@@ -57,9 +57,9 @@ export default class CPUx80 extends Component {
     {
         super("CPU", parmsCPU, Messages.CPU);
 
-        var nCycles = parmsCPU['cycles'] || nCyclesDefault;
+        let nCycles = parmsCPU['cycles'] || nCyclesDefault;
 
-        var nMultiplier = parmsCPU['multiplier'] || 1;
+        let nMultiplier = parmsCPU['multiplier'] || 1;
 
         this.nCyclesPerSecond = nCycles;
 
@@ -127,8 +127,8 @@ export default class CPUx80 extends Component {
         this.bus = bus;
         this.dbg = dbg;
 
-        for (var i = 0; i < CPUx80.BUTTONS.length; i++) {
-            var control = this.bindings[CPUx80.BUTTONS[i]];
+        for (let i = 0; i < CPUx80.BUTTONS.length; i++) {
+            let control = this.bindings[CPUx80.BUTTONS[i]];
             if (control) this.cmp.setBinding("", CPUx80.BUTTONS[i], control);
         }
 
@@ -140,7 +140,7 @@ export default class CPUx80 extends Component {
         /*
          * We've already saved the parmsCPU 'autoStart' setting, but there may be a machine (or URL) override.
          */
-        var sAutoStart = cmp.getMachineParm('autoStart');
+        let sAutoStart = cmp.getMachineParm('autoStart');
         if (sAutoStart != null) {
             this.flags.autoStart = (sAutoStart == "true"? true : (sAutoStart  == "false"? false : !!sAutoStart));
         }
@@ -347,7 +347,7 @@ export default class CPUx80 extends Component {
             /*
              * Get a 32-bit summation of the current CPU state and add it to our running 32-bit checksum
              */
-            var fDisplay = false;
+            let fDisplay = false;
             this.nChecksum = (this.nChecksum + this.getChecksum())|0;
             this.nCyclesChecksumNext -= nCycles;
             if (this.nCyclesChecksumNext <= 0) {
@@ -398,7 +398,7 @@ export default class CPUx80 extends Component {
                 this.setError("Value for " + sLabel + " is invalid");
                 this.stopCPU();
             }
-            var sVal;
+            let sVal;
             if (!this.flags.running || this.flags.displayLiveRegs) {
                 sVal = Str.toHex(nValue, cch);
             } else {
@@ -426,8 +426,8 @@ export default class CPUx80 extends Component {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var cpu = this;
-        var fBound = false;
+        let cpu = this;
+        let fBound = false;
 
         switch (sBinding) {
         case "power":
@@ -495,7 +495,7 @@ export default class CPUx80 extends Component {
     setBurstCycles(nCycles)
     {
         if (this.flags.running) {
-            var nDelta = this.nStepCycles - nCycles;
+            let nDelta = this.nStepCycles - nCycles;
             /*
              * NOTE: If nDelta is negative, we will actually be increasing nStepCycles and nBurstCycles.
              * Which is OK, but if we're also taking snapshots of the cycle counts, to make sure that instruction
@@ -547,7 +547,7 @@ export default class CPUx80 extends Component {
         /*
          * Calculate "per" yield values.
          */
-        var vMultiplier = 1;
+        let vMultiplier = 1;
         if (fRecalc) {
             if (this.nCyclesMultiplier > 1 && this.mhz) {
                 vMultiplier = (this.mhz / this.mhzDefault);
@@ -585,7 +585,7 @@ export default class CPUx80 extends Component {
      */
     getCycles(fScaled)
     {
-        var nCycles = this.nTotalCycles + this.nRunCycles + this.nBurstCycles - this.nStepCycles;
+        let nCycles = this.nTotalCycles + this.nRunCycles + this.nBurstCycles - this.nStepCycles;
         if (fScaled && this.nCyclesMultiplier > 1 && this.mhz > this.mhzDefault) {
             /*
              * We could scale the current cycle count by the current effective speed (this.mhz); eg:
@@ -696,7 +696,7 @@ export default class CPUx80 extends Component {
      */
     setSpeed(nMultiplier, fUpdateFocus)
     {
-        var fSuccess = false;
+        let fSuccess = false;
         if (nMultiplier !== undefined) {
             /*
              * If we haven't reached 80% (0.8) of the current target speed, revert to a multiplier of one (1).
@@ -707,11 +707,11 @@ export default class CPUx80 extends Component {
                 fSuccess = true;
             }
             this.nCyclesMultiplier = nMultiplier;
-            var mhz = this.mhzDefault * this.nCyclesMultiplier;
+            let mhz = this.mhzDefault * this.nCyclesMultiplier;
             if (this.mhzTarget != mhz) {
                 this.mhzTarget = mhz;
-                var sSpeed = this.getSpeedTarget();
-                var controlSpeed = this.bindings["setSpeed"];
+                let sSpeed = this.getSpeedTarget();
+                let controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
                 this.printf("target speed: %s\n", sSpeed);
             }
@@ -782,7 +782,7 @@ export default class CPUx80 extends Component {
          * EXTREMELY slow instruction.
          */
         if (this.msEndThisRun) {
-            var msDelta = this.msStartThisRun - this.msEndThisRun;
+            let msDelta = this.msStartThisRun - this.msEndThisRun;
             if (msDelta > this.msPerYield) {
                 if (MAXDEBUG) this.printf("large time delay: %dms\n", msDelta);
                 this.msStartRun += msDelta;
@@ -809,7 +809,7 @@ export default class CPUx80 extends Component {
     {
         this.msEndThisRun = Component.getTime();
 
-        var msYield = this.msPerYield;
+        let msYield = this.msPerYield;
         if (this.nCyclesThisRun) {
             /*
              * Normally, we would assume we executed a full quota of work over msPerYield, but since the CPU
@@ -820,8 +820,8 @@ export default class CPUx80 extends Component {
             msYield = Math.round(msYield * this.nCyclesThisRun / this.nCyclesPerYield);
         }
 
-        var msElapsedThisRun = this.msEndThisRun - this.msStartThisRun;
-        var msRemainsThisRun = msYield - msElapsedThisRun;
+        let msElapsedThisRun = this.msEndThisRun - this.msStartThisRun;
+        let msRemainsThisRun = msYield - msElapsedThisRun;
 
         /*
          * We could pass only "this run" results to calcSpeed():
@@ -838,8 +838,8 @@ export default class CPUx80 extends Component {
          *
          * to insure that we display a smooth, constant N Mhz.  But for now, I prefer seeing any fluctuations.
          */
-        var nCycles = this.nRunCycles;
-        var msElapsed = this.msEndThisRun - this.msStartRun;
+        let nCycles = this.nRunCycles;
+        let msElapsed = this.msEndThisRun - this.msStartRun;
 
         if (MAXDEBUG && msRemainsThisRun < 0 && this.nCyclesMultiplier > 1) {
             this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
@@ -906,7 +906,7 @@ export default class CPUx80 extends Component {
      */
     addTimer(id, callBack, ms = -1)
     {
-        var iTimer = this.aTimers.length;
+        let iTimer = this.aTimers.length;
         this.aTimers.push([id, -1, ms, callBack]);
         if (ms >= 0) this.setTimer(iTimer, ms);
         return iTimer;
@@ -921,8 +921,8 @@ export default class CPUx80 extends Component {
      */
     findTimer(id)
     {
-        for (var iTimer = 0; iTimer < this.aTimers.length; iTimer++) {
-            var timer = this.aTimers[iTimer];
+        for (let iTimer = 0; iTimer < this.aTimers.length; iTimer++) {
+            let timer = this.aTimers[iTimer];
             if (timer[0] == id) return timer;
         }
         return null;
@@ -951,9 +951,9 @@ export default class CPUx80 extends Component {
      */
     setTimer(iTimer, ms, fReset)
     {
-        var nCycles = -1;
+        let nCycles = -1;
         if (iTimer >= 0 && iTimer < this.aTimers.length) {
-            var timer = this.aTimers[iTimer];
+            let timer = this.aTimers[iTimer];
             if (fReset || timer[1] < 0) {
                 nCycles = this.getMSCycles(ms);
                 /*
@@ -994,8 +994,8 @@ export default class CPUx80 extends Component {
      */
     getBurstCycles(nCycles)
     {
-        for (var iTimer = this.aTimers.length - 1; iTimer >= 0; iTimer--) {
-            var timer = this.aTimers[iTimer];
+        for (let iTimer = this.aTimers.length - 1; iTimer >= 0; iTimer--) {
+            let timer = this.aTimers[iTimer];
             this.assert(!isNaN(timer[1]));
             if (timer[1] < 0) continue;
             if (nCycles > timer[1]) {
@@ -1017,22 +1017,18 @@ export default class CPUx80 extends Component {
      */
     updateTimers(nCycles)
     {
-        for (var iTimer = this.aTimers.length - 1; iTimer >= 0; iTimer--) {
-            var timer = this.aTimers[iTimer];
+        for (let iTimer = this.aTimers.length - 1; iTimer >= 0; iTimer--) {
+            let timer = this.aTimers[iTimer];
             this.assert(!isNaN(timer[1]));
             if (timer[1] < 0) continue;
             timer[1] -= nCycles;
             if (timer[1] <= 0) {
-                if (DEBUG) {
-                    this.printf(Messages.CPU, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
-                }
+                this.printf(Messages.DEBUG + Messages.CPU, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
                 timer[1] = -1;      // zero is technically an "active" value, so ensure the timer is dormant now
                 timer[3]();         // safe to invoke the callback function now
                 if (timer[2] >= 0) {
                     this.setTimer(iTimer, timer[2]);
-                    if (DEBUG) {
-                        this.printf(Messages.CPU, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
-                    }
+                    this.printf(Messages.DEBUG + Messages.CPU, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
                 }
             }
         }
@@ -1047,7 +1043,7 @@ export default class CPUx80 extends Component {
      */
     endBurst(fReset)
     {
-        var nCycles = this.nBurstCycles -= this.nStepCycles;
+        let nCycles = this.nBurstCycles -= this.nStepCycles;
         this.nStepCycles = 0;
         if (fReset) this.nBurstCycles = 0;
         return nCycles;
@@ -1082,7 +1078,7 @@ export default class CPUx80 extends Component {
                  * HIGH as nCyclesPerYield, but it may be significantly less.  getBurstCycles() will adjust
                  * nCycles downward if any CPU timers need to fire during the next burst.
                  */
-                var nCycles = this.getBurstCycles(this.flags.checksum? 1 : this.nCyclesPerYield);
+                let nCycles = this.getBurstCycles(this.flags.checksum? 1 : this.nCyclesPerYield);
 
                 /*
                  * Execute the burst.
@@ -1150,7 +1146,7 @@ export default class CPUx80 extends Component {
             this.flags.running = true;
             this.flags.starting = true;
             if (this.chipset) this.chipset.start();
-            var controlRun = this.bindings["run"];
+            let controlRun = this.bindings["run"];
             if (controlRun) controlRun.textContent = "Halt";
             if (this.cmp) {
                 this.cmp.updateStatus(true);
@@ -1193,7 +1189,7 @@ export default class CPUx80 extends Component {
         if (this.flags.running) {
             this.flags.running = false;
             if (this.chipset) this.chipset.stop();
-            var controlRun = this.bindings["run"];
+            let controlRun = this.bindings["run"];
             if (controlRun) controlRun.textContent = "Run";
         }
         this.flags.complete = fComplete;

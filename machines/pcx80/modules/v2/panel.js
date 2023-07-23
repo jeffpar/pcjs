@@ -138,12 +138,12 @@ export default class PanelX80 extends Component {
      */
     static init()
     {
-        var fReady = false;
-        var aePanels = Component.getElementsByClass(APPCLASS, "panel");
-        for (var iPanel=0; iPanel < aePanels.length; iPanel++) {
-            var ePanel = aePanels[iPanel];
-            var parmsPanel = Component.getComponentParms(ePanel);
-            var panel = Component.getComponentByID(parmsPanel['id'], false);
+        let fReady = false;
+        let aePanels = Component.getElementsByClass(APPCLASS, "panel");
+        for (let iPanel=0; iPanel < aePanels.length; iPanel++) {
+            let ePanel = aePanels[iPanel];
+            let parmsPanel = Component.getComponentParms(ePanel);
+            let panel = Component.getComponentByID(parmsPanel['id'], false);
             if (!panel) {
                 fReady = true;
                 panel = new PanelX80(parmsPanel);

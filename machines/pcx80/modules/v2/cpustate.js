@@ -42,8 +42,8 @@ export default class CPUStateX80 extends CPUx80 {
      */
     constructor(parmsCPU)
     {
-        var nCyclesDefault = 0;
-        var model = +parmsCPU['model'] || CPUDefX80.MODEL_8080;
+        let nCyclesDefault = 0;
+        let model = +parmsCPU['model'] || CPUDefX80.MODEL_8080;
 
         switch(model) {
         case CPUDefX80.MODEL_8080:
@@ -179,7 +179,7 @@ export default class CPUStateX80 extends CPUx80 {
      */
     getChecksum()
     {
-        var sum = (this.regA + this.regB + this.regC + this.regD + this.regE + this.regH + this.regL)|0;
+        let sum = (this.regA + this.regB + this.regC + this.regD + this.regE + this.regH + this.regL)|0;
         sum = (sum + this.getSP() + this.getPC() + this.getPS())|0;
         return sum;
     }
@@ -194,7 +194,7 @@ export default class CPUStateX80 extends CPUx80 {
      */
     save()
     {
-        var state = new State(this);
+        let state = new State(this);
         state.set(0, [this.regA, this.regB, this.regC, this.regD, this.regE, this.regH, this.regL, this.getSP(), this.getPC(), this.getPS()]);
         state.set(1, [this.intFlags, this.nTotalCycles, this.getSpeed()]);
         state.set(2, this.bus.saveMemory());
@@ -212,7 +212,7 @@ export default class CPUStateX80 extends CPUx80 {
      */
     restore(data)
     {
-        var a = data[0];
+        let a = data[0];
         this.regA = a[0];
         this.regB = a[1];
         this.regC = a[2];
@@ -242,7 +242,7 @@ export default class CPUStateX80 extends CPUx80 {
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
-        var fBound = false;
+        let fBound = false;
         switch (sBinding) {
         case "A":
         case "B":
@@ -866,7 +866,7 @@ export default class CPUStateX80 extends CPUx80 {
      */
     getPCByte()
     {
-        var b = this.getByte(this.regPC);
+        let b = this.getByte(this.regPC);
         this.setPC(this.regPC + 1);
         return b;
     }
@@ -879,7 +879,7 @@ export default class CPUStateX80 extends CPUx80 {
      */
     getPCWord()
     {
-        var w = this.getWord(this.regPC);
+        let w = this.getWord(this.regPC);
         this.setPC(this.regPC + 2);
         return w;
     }
@@ -892,7 +892,7 @@ export default class CPUStateX80 extends CPUx80 {
      */
     popWord()
     {
-        var w = this.getWord(this.regSP);
+        let w = this.getWord(this.regSP);
         this.setSP(this.regSP + 2);
         return w;
     }
@@ -924,7 +924,8 @@ export default class CPUStateX80 extends CPUx80 {
          */
         if (this.nStepCycles) {
             if ((this.intFlags & CPUDefX80.INTFLAG.INTR) && this.getIF()) {
-                for (var nLevel = 0; nLevel < 8; nLevel++) {
+                let nLevel;
+                for (nLevel = 0; nLevel < 8; nLevel++) {
                     if (this.intFlags & (1 << nLevel)) break;
                 }
                 this.clearINTR(nLevel);
@@ -959,7 +960,7 @@ export default class CPUStateX80 extends CPUx80 {
      */
     clearINTR(nLevel)
     {
-        var bitsClear = nLevel < 0? 0xff : (1 << nLevel);
+        let bitsClear = nLevel < 0? 0xff : (1 << nLevel);
         this.intFlags &= ~bitsClear;
     }
 
@@ -1040,7 +1041,7 @@ export default class CPUStateX80 extends CPUx80 {
                 this.updateReg("HL", this.getHL(), 4);
                 this.updateReg("SP", this.getSP(), 4);
                 this.updateReg("PC", this.getPC(), 4);
-                var regPS = this.getPS();
+                let regPS = this.getPS();
                 this.updateReg("PS", regPS, 4);
                 this.updateReg("IF", (regPS & CPUDefX80.PS.IF)? 1 : 0, 1);
                 this.updateReg("SF", (regPS & CPUDefX80.PS.SF)? 1 : 0, 1);
@@ -1050,7 +1051,7 @@ export default class CPUStateX80 extends CPUx80 {
                 this.updateReg("CF", (regPS & CPUDefX80.PS.CF)? 1 : 0, 1);
             }
         }
-        var controlSpeed = this.bindings["speed"];
+        let controlSpeed = this.bindings["speed"];
         if (controlSpeed) controlSpeed.textContent = this.getSpeedCurrent();
     }
 
@@ -1086,7 +1087,7 @@ export default class CPUStateX80 extends CPUx80 {
         /*
          * fDebugCheck is true if we need to "check" every instruction with the Debugger.
          */
-        var fDebugCheck = this.flags.debugCheck = (DEBUGGER && this.dbg && this.dbg.checksEnabled());
+        let fDebugCheck = this.flags.debugCheck = (DEBUGGER && this.dbg && this.dbg.checksEnabled());
 
         /*
          * nDebugState is checked only when fDebugCheck is true, and its sole purpose is to tell the first call
@@ -1096,7 +1097,7 @@ export default class CPUStateX80 extends CPUx80 {
          * Once we snap fStarting, we clear it, because technically, we've moved beyond "starting" and have
          * officially "started" now.
          */
-        var nDebugState = (!nMinCycles)? -1 : (this.flags.starting? 0 : 1);
+        let nDebugState = (!nMinCycles)? -1 : (this.flags.starting? 0 : 1);
         this.flags.starting = false;
 
         /*
@@ -1137,11 +1138,11 @@ export default class CPUStateX80 extends CPUx80 {
      */
     static init()
     {
-        var aeCPUs = Component.getElementsByClass(APPCLASS, "cpu");
-        for (var iCPU = 0; iCPU < aeCPUs.length; iCPU++) {
-            var eCPU = aeCPUs[iCPU];
-            var parmsCPU = Component.getComponentParms(eCPU);
-            var cpu = new CPUStateX80(parmsCPU);
+        let aeCPUs = Component.getElementsByClass(APPCLASS, "cpu");
+        for (let iCPU = 0; iCPU < aeCPUs.length; iCPU++) {
+            let eCPU = aeCPUs[iCPU];
+            let parmsCPU = Component.getComponentParms(eCPU);
+            let cpu = new CPUStateX80(parmsCPU);
             Component.bindComponentControls(cpu, eCPU, APPCLASS);
         }
     }
