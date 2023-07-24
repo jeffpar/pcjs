@@ -2577,7 +2577,8 @@ class Web {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
-        if (globals.node.readFileSync) {
+        if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
+
             try {
                 resource = globals.node.readFileSync(sURL);
             } catch (err) {
@@ -2595,7 +2596,7 @@ class Web {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-            Component.printf(Messages.LOG, "fetching: %s\n", sURL);
+
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -2609,7 +2610,7 @@ class Web {
                 }
             })
             .then(resource => {
-                Component.printf(Messages.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
+
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
@@ -2659,7 +2660,7 @@ class Web {
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-                if (MAXDEBUG) Component.printf(Messages.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
+
             }
             else {
                 nErrorCode = request.status || -1;
@@ -2691,12 +2692,12 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            if (MAXDEBUG) Component.printf("Web.getResource(POST %s): %d bytes\n", sURL, sPost.length);
+
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            if (MAXDEBUG) Component.printf("Web.getResource(GET %s)\n", sURL);
+
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {

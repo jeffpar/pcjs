@@ -1196,19 +1196,23 @@ function saveDrive()
 function loadDiskette(sDrive, aTokens)
 {
     let result = "";
-    let doLoad = function(sDrive, diskName) {
+    let doLoad = function(sDrive, diskName, diskPath) {
         sDrive = sDrive.toUpperCase();
         let iDrive = sDrive.charCodeAt(0) - 'A'.charCodeAt(0);
-        let diskPath = diskIndexCache[diskName]['path'];
-        let done = function(disk, error) {
-            if (error == Errors.DOS.INVALID_DRIVE) {
-                result = "invalid drive (" + sDrive + ")";
-            } else {
-                result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error);
-            }
-        };
-        result = "loading \"" + diskName + "\" in drive " + sDrive;
-        machine.fdc.loadDrive(iDrive, diskName, diskPath, false, null, done);
+        diskPath = diskPath || diskIndexCache[diskName]['path'];
+        if (diskPath) {
+            let done = function(disk, error) {
+                if (error == Errors.DOS.INVALID_DRIVE) {
+                    result = "invalid drive (" + sDrive + ")";
+                } else {
+                    result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error);
+                }
+            };
+            result = "loading \"" + diskName + "\" in drive " + sDrive;
+            machine.fdc.loadDrive(iDrive, diskName, diskPath, false, null, done);
+        } else {
+            result = "unknown diskette: " + diskName;
+        }
     };
     let displayItems = function(sDrive, items, message = "") {
         for (let i = 0; i < items.length; i++) {
@@ -1224,6 +1228,11 @@ function loadDiskette(sDrive, aTokens)
         return result;
     };
     if (machine.fdc) {
+        let sPath;
+        if (aTokens[0] == "--path" && (sPath = aTokens[1]) || (sPath = aTokens[0]).indexOf("http") == 0) {
+            doLoad(sDrive, sPath, sPath);
+            return result;
+        }
         if (diskItems && aTokens.length == 1 && aTokens[0].match(/^\d+$/)) {
             let diskItem = diskItems[+aTokens[0] - 1];
             if (diskItem) {
@@ -1336,10 +1345,10 @@ function loadDiskette(sDrive, aTokens)
                                 } else {
                                     let a = index[name];
                                     /*
-                                    * The items in this array are sorted by date, but we also want to eliminate duplicates
-                                    * based on the hash value, so we maintain a hash index here.  The key is the hash value,
-                                    * and each hash entry is an array of disk names.
-                                    */
+                                     * The items in this array are sorted by date, but we also want to eliminate duplicates
+                                     * based on the hash value, so we maintain a hash index here.  The key is the hash value,
+                                     * and each hash entry is an array of disk names.
+                                     */
                                     let hashIndex = {};
                                     for (let i = 0; i < a.length; i++) {
                                         let item = a[i];
@@ -1518,9 +1527,10 @@ function doCommand(s)
 /**
  * processArgs(argv)
  *
- * Arguments like "*.*" are problematic (since modern shells will expand them), so any arguments
- * you want to pass along with the command to buildDrive() should be included as part of a single
- * fully-quoted argument (eg, pc.js "dir *.* /s").
+ * Arguments that either the shell consumes (like *.*) or that we consume (like --help) can be
+ * problematic if those are actually arguments you want to pass along with a command to buildDrive().
+ *
+ * So in those cases, you should simply put quotes around the entire command (eg, pc.js "dir *.* /p").
  *
  * @param {Array} argv
  */
@@ -1679,7 +1689,7 @@ function main(argc, argv)
             "--debug (-d)\t":           "enable DEBUG messages",
             "--halt (-h)\t":            "halt machine on startup",
             "--help (-?)\t":            "display command-line usage",
-            "--local (-l)\t":           "use local files (default is remote)",
+            "--local (-l)\t":           "use local diskette images (default is remote)",
             "--nofloppy (-n)\t":        "remove any diskette from drive A:",
             "--save (-s)\t":            "save hard drive image on return"
         };
@@ -1712,7 +1722,7 @@ function main(argc, argv)
     let arg0 = argv[0].split(' ');
     rootDir = path.join(path.dirname(arg0[0]), "../..");
     pcjsDir = path.join(rootDir, "/tools/pc");
-    setRootDir(rootDir, argv['local']);
+    setRootDir(rootDir, argv['local']? true : (argv['remote']? false : null));
 
     if (!argv[1] || argv['debug']) {
         let options = arg0.slice(1).join(' ');
