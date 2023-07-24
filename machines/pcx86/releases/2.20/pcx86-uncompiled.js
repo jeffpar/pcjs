@@ -62654,7 +62654,7 @@ class Disk extends Component {
         if (file) {
             let reader = new FileReader();
             reader.onload = function() {
-                disk.buildDisk(reader.result, true);
+                disk.buildDisk(/** @type {ArrayBuffer} */ (reader.result), true);
             };
             reader.onerror = function() {
                 disk.buildDisk(null, false, reader.error.message);
@@ -62731,7 +62731,7 @@ class Disk extends Component {
      * Builds a disk image from an ArrayBuffer (eg, from a FileReader object), rather than from JSON-encoded data.
      *
      * @this {Disk}
-     * @param {?} buffer (technically, this is always an ArrayBuffer, because we tell FileReader to use readAsArrayBuffer, but the Closure Compiler doesn't realize that)
+     * @param {ArrayBuffer|null} buffer
      * @param {boolean} [fModified] is true if we should mark the entire disk modified (to ensure that we save/restore it)
      * @param {string} [message] (usually only set if there was an error, and therefore buffer is null or undefined)
      */
