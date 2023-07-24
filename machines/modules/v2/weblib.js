@@ -150,7 +150,15 @@ export default class Web {
         if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
             Component.printf(Messages.DEBUG + Messages.LOG, "reading: %s\n", sURL);
             try {
-                resource = globals.node.readFileSync(sURL);
+                let encoding = (type == "arraybuffer"? null : "utf8");
+                resource = globals.node.readFileSync(sURL, encoding);
+                if (!encoding) {
+                    /*
+                     * For non-UTF8 data, readFileSync() returns a DataBuffer, which wraps a Node Buffer, which wraps an ArrayBuffer.
+                     */
+                    resource = resource.buffer;
+                    if (resource.buffer) resource = resource.buffer;
+                }
             } catch (err) {
                 nErrorCode = err['errno'];
             }

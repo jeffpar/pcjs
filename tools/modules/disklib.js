@@ -775,7 +775,7 @@ export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors,
         di = new DiskInfo(device, diskName);
         if (StrLib.getExtension(diskName) == "json") {
             diskFile = getServerPath(diskFile);
-            if (Device.DEBUG) printf("readDiskAsync(\"%s\")\n", diskFile);
+            if (Device.DEBUG) printf("reading: %s\n", diskFile);
             if (diskFile.startsWith("http")) {
                 let response = await got(diskFile);
                 db = response.body;
@@ -892,7 +892,7 @@ export async function readFileAsync(sFile, encoding = "utf8")
 {
     let db;
     sFile = getServerPath(sFile);
-    if (Device.DEBUG) printf("readFileAsync(\"%s\")\n", sFile);
+    if (Device.DEBUG) printf("reading: %s\n", sFile);
     if (sFile.startsWith("http")) {
         try {
             let response = await got(sFile);

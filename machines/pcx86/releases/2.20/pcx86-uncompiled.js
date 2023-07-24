@@ -2944,7 +2944,15 @@ class Web {
         if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
 
             try {
-                resource = globals.node.readFileSync(sURL);
+                let encoding = (type == "arraybuffer"? null : "utf8");
+                resource = globals.node.readFileSync(sURL, encoding);
+                if (!encoding) {
+                    /*
+                     * For non-UTF8 data, readFileSync() returns a DataBuffer, which wraps a Node Buffer, which wraps an ArrayBuffer.
+                     */
+                    resource = resource.buffer;
+                    if (resource.buffer) resource = resource.buffer;
+                }
             } catch (err) {
                 nErrorCode = err['errno'];
             }
@@ -62570,9 +62578,9 @@ class Disk extends Component {
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
-            if (DEBUG) {
-                this.printf("blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
-            }
+
+
+
             let aCylinders = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
                 let aHeads = new Array(this.nHeads);
@@ -62791,11 +62799,9 @@ class Disk extends Component {
 
         if (this.fOnDemand) {
             if (!nErrorCode) {
-                if (DEBUG) {
-                    this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
-                }
-                this.fRemote = true;
                 disk = this;
+
+                this.fRemote = true;
             } else {
                 this.printf(idMessage, "Unable to connect to disk \"%s\" (error %d: %s)\n", this.sDiskPath, nErrorCode, imageData);
             }
@@ -62810,9 +62816,7 @@ class Disk extends Component {
              */
             this.printf(idMessage, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
-            if (DEBUG) {
-                this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
-            }
+
 
             /*
              * If we received binary data instead of JSON, we can use the same buildDisk() function that
@@ -63343,9 +63347,7 @@ class Disk extends Component {
      */
     readRemoteSectors(iCylinder, iHead, iSector, nSectors, fAsync, done)
     {
-        if (DEBUG) {
-            this.printf("readRemoteSectors(CHS=%d:%d:%d,N=%d)\n", iCylinder, iHead, iSector, nSectors);
-        }
+
 
         if (this.fRemote) {
             let sParms = DiskAPI.QUERY.ACTION + '=' + DiskAPI.ACTION.READ;
@@ -63397,9 +63399,7 @@ class Disk extends Component {
                  */
                 let sector = this.seek(iCylinder, iHead, iSector, null, true);
                 if (!sector) {
-                    if (DEBUG) {
-                        this.printf("doneReadRemoteSectors(): seek(CHS=%d:%d:%d) failed\n", iCylinder, iHead, iSector);
-                    }
+
                     break;
                 }
                 this.fill(sector, abData, offData);
@@ -63412,9 +63412,7 @@ class Disk extends Component {
             }
             fAsync = aRequest[4];
         } else {
-            if (DEBUG) {
-                this.printf("doneReadRemoteSectors(CHS=%d:%d:%d,N=%d) returned error %d\n", iCylinder, iHead, iSector, nSectors, nErrorCode);
-            }
+
         }
         let done = aRequest[5];
         if (done) done(nErrorCode, fAsync);
@@ -63443,9 +63441,7 @@ class Disk extends Component {
      */
     writeRemoteSectors(iCylinder, iHead, iSector, nSectors, abSectors, fAsync)
     {
-        if (DEBUG) {
-            this.printf("writeRemoteSectors(CHS=%d:%d:%d,N=%d)\n", iCylinder, iHead, iSector, nSectors);
-        }
+
 
         if (this.fRemote) {
             let dataPost = {};
@@ -63493,9 +63489,7 @@ class Disk extends Component {
                         sector.iModify = sector.cModify = 0;
                     }
                 } else {
-                    if (DEBUG) {
-                        this.printf("doneWriteRemoteSectors(CHS=%d:%d:%d) returned error %d\n", iCylinder, iHead, sector[Disk.SECTOR.ID], nErrorCode);
-                    }
+
                     this.queueDirtySector(sector, false);
                 }
             }
@@ -63553,9 +63547,7 @@ class Disk extends Component {
         this.aDirtySectors.push(sector);
         this.aDirtyTimestamps.push(Component.getTime());
 
-        if (DEBUG) {
-            this.printf("queueDirtySector(CHS=%d:%d:%d): %d dirty\n", sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.aDirtySectors.length);
-        }
+
 
         return fAsync && this.updateWriteTimer();
     }
@@ -63626,9 +63618,7 @@ class Disk extends Component {
                 if (!sectorNext.fDirty) break;
                 let j = this.aDirtySectors.indexOf(sectorNext);
 
-                if (DEBUG) {
-                    this.printf("findDirtySectors(CHS=%d:%d:%d)\n", iCylinder, iHead, sectorNext[Disk.SECTOR.ID]);
-                }
+
                 this.aDirtySectors.splice(j, 1);
                 this.aDirtyTimestamps.splice(j, 1);
                 abSectors = abSectors.concat(this.toBytes(sectorNext));
@@ -63978,9 +63968,7 @@ class Disk extends Component {
                 }
             }
         }
-        if (DEBUG) {
-            this.printf("save(\"%s\"): saved %d change(s)\n", this.sDiskName, (deltas.length - 1));
-        }
+
         return deltas;
     }
 
@@ -64119,9 +64107,7 @@ class Disk extends Component {
                 this.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
-            if (DEBUG) {
-                this.printf("restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
-            }
+
             /*
              * Last but not least, rebuild the disk's file table if BACKTRACK or SYMBOLS support is enabled.
              */

@@ -638,7 +638,6 @@ function loadMachine(sFile, bootHD = 0)
         result = "machine already loaded";
     }
     else {
-        if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
         if (sFile.indexOf(".json") > 0) {
             result = readJSON(sFile, getFactory);
         }
@@ -1205,7 +1204,7 @@ function loadDiskette(sDrive, aTokens)
                 if (error == Errors.DOS.INVALID_DRIVE) {
                     result = "invalid drive (" + sDrive + ")";
                 } else {
-                    result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error);
+                    result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error || 0);
                 }
             };
             result = "loading \"" + diskName + "\" in drive " + sDrive;
@@ -1689,8 +1688,8 @@ function main(argc, argv)
             "--debug (-d)\t":           "enable DEBUG messages",
             "--halt (-h)\t":            "halt machine on startup",
             "--help (-?)\t":            "display command-line usage",
-            "--local (-l)\t":           "use local diskette images (default is remote)",
-            "--nofloppy (-n)\t":        "remove any diskette from drive A:",
+            "--local (-l)\t":           "use local diskette images",
+            "--nofloppy (-n)\t":        "remove any diskette from A:",
             "--save (-s)\t":            "save hard drive image on return"
         };
         let optionGroups = {

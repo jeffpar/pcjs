@@ -648,14 +648,15 @@
       }
     },
     {
-      "name": "pc.js --sys=msdos --ver=3.20 dir",
+      "name": "pc.js dir --sys=msdos --ver=3.20 --local",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--sys=msdos",
         "--ver=3.20",
-        "dir *.*"
+        "dir *.*",
+        "--local"
       ],
       "cwd": "${workspaceFolder}/tools/pc/archive/MSDOS320",
       "stopOnEntry": false,
@@ -670,7 +671,7 @@
       }
     },
     {
-      "name": "pc.js chkdsk --sys=pcdos --ver=2.00",
+      "name": "pc.js chkdsk --sys=pcdos --ver=2.00 --debug --remote",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -678,7 +679,8 @@
         "chkdsk",
         "--sys=pcdos",
         "--ver=2.00",
-        "--debug"
+        "--debug",
+        "--remote"
       ],
       "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200",
       "stopOnEntry": false,
