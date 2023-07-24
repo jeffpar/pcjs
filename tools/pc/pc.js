@@ -12,7 +12,7 @@ import fs         from "fs";
 import glob       from "glob";
 import path       from "path";
 import xml2js     from "xml2js";
-import DbgLib     from "../../machines/modules/v2/debugger.js";
+import DbgLib     from "../../machines/modules/v2/dbglib.js";
 import Messages   from "../../machines/modules/v2/messages.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
