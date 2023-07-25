@@ -1,0 +1,26 @@
+{
+  "defaults": {
+    "machine": "pcx86",
+    "system": "msdos",
+    "version": "3.20",
+    "maxfiles": 1024,
+    "directory": "."
+  },
+  "apps": [
+    {
+      "name": "ls"
+    }
+  ],
+  "systems": {
+    "msdos": {
+      "vendor": "microsoft",
+      "mbr": "MSDOS.mbr",
+      "files": ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"]
+    },
+    "pcdos": {
+        "vendor": "ibm",
+        "mbr": "MSDOS.mbr",
+        "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
+    }
+  }
+}

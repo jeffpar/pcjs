@@ -33,10 +33,11 @@ let systemType = "msdos";
 let systemVersion = "3.20";
 let localDrive = "DOS.json";
 let localDir = ".";
-let maxLocalFiles = 1024;
+let maxFiles = 1024;
+let configPCjs = {}, machinesPCjs = {};
 
 let rootDir, pcjsDir;
-let messagesFilter, machines, debugMode;
+let messagesFilter, debugMode;
 let Component, Errors, Interrupts, Web, embedMachine;
 let prompt = ">", command = "", commandPrev = "";
 let machine = newMachine();
@@ -518,7 +519,7 @@ function checkMachine(sFile)
         if (sFile.indexOf("http") == 0) {
             return sFile;
         }
-        if (existsFile(sFile, false)) {
+        if (existsFile(sFile, false) && !existsDir(sFile, false)) {
             return sFile;
         }
         const exts = [".json", ".json5", ".xml"];
@@ -627,7 +628,7 @@ function loadMachine(sFile, bootHD = 0)
             config['fdc']['autoMount'] = "{A: {name: \"None\"}}";
         }
         let sParms = JSON.stringify(config);
-        loadModules(machines[type]['factory'], machines[type]['modules'], function() {
+        loadModules(machinesPCjs[type]['factory'], machinesPCjs[type]['modules'], function() {
             initMachine(sParms);
         });
     };
@@ -812,24 +813,14 @@ function checkCommand(sDir, sCommand)
  */
 async function buildDrive(sDir, sCommand = "", fVerbose = false)
 {
-    const systemInfo = {
-        "msdos": {
-            "vendor": "microsoft",
-            "files": ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"],
-        },
-        "pcdos": {
-            "vendor": "ibm",
-            "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
-        }
-    };
-
-    let system = systemInfo[systemType];
-    let version = +systemVersion;
-    let majorVersion = version | 0;
+    let system = configPCjs['systems'] && configPCjs['systems'][systemType];
 
     if (!system) {
         return "unsupported system type: " + systemType;
     }
+
+    let version = +systemVersion;
+    let majorVersion = version | 0;
 
     if (majorVersion < 2) {
         return "minimum DOS version with hard disk support is 2.00";
@@ -838,118 +829,133 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     let sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + systemVersion + "/";
     sSystemDisk += systemType.toUpperCase() + systemVersion.replace('.', '') + "-DISK1.json";
     let diSystem = await readDiskAsync(sSystemDisk);
+
     if (!diSystem) {
         return "missing system diskette: " + sSystemDisk;
     }
 
-    let dbMBR = readFileSync(path.join(pcjsDir, "MSDOS" /*systemType.toUpperCase()*/ + ".mbr"), null);
-    if (diSystem && dbMBR) {
-        let aFileDescs = [];
-        for (let name of system.files) {
-            let desc = diSystem.findFile(name);
-            if (desc) {
-                desc.attr = +desc.attr;
-                /*
-                 * There may be situations where we must leave COMMAND.COM unhidden; we'll see.
-                 *
-                 *      if (name != "COMMAND.COM" || majorVersion != 2) ...
-                 */
-                desc.attr |= DiskInfo.ATTR.HIDDEN;
-                aFileDescs.push(desc);
-            }
-        }
-        /*
-         * In addition to the system files, we also add a hidden LOAD.COM in the root, which immediately
-         * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
-         * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
-         */
-        aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
-        /*
-         * We also add a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
-         * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDrive()
-         * to look for any changes and then terminate the machine.
-         */
-        aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
-        /*
-         * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
-         * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
-         * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
-         * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "return" to run
-         * our hidden "RETURN.COM" program regardless of the current directory.
-         */
-        let attr = DiskInfo.ATTR.ARCHIVE;
-        let data = readFileSync(path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
-        if (!data) {
-            data = "ECHO OFF\r\n";
-            attr |= DiskInfo.ATTR.HIDDEN;
-        }
-        let matchPath = data.match(/^PATH\s*(.*)$/im);
-        if (matchPath) {
-            let matchPathRoot = matchPath[1].match(/(^|;|C:|)\\(;|$)/i);
-            if (!matchPathRoot) {
-                data = data.replace(/^PATH\s*(.*)$/im, "PATH C:\\;$1");
-            }
-        } else {
-            data += "PATH C:\\\r\n";
-        }
-        if (sCommand) data += sCommand + "\r\n";
-        aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
-        /*
-         * Load the boot sector from the system diskette we read above, and use it to update the boot
-         * sector on the hard drive image.
-         *
-         * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register
-         * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk) even though the DOS
-         * MBR does appear to preserve and pass DL on to the boot sector.
-         */
-        let verBPB = 0;
-        let dbBoot = getDiskSector(diSystem, 0);
-        if (version >= 2.0 && version < 3.2) {
-            /*
-             * PC DOS 2.x requires the boot drive (AND drive head # -- go figure) to be stored in locations
-             * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
-             * part of the BPB unless we specify a BPB version number, so in this case, it must be 2.
-             */
-            verBPB = 2;
-            dbBoot.writeUInt8(0x80, DiskInfo.BPB.BOOTDRIVE);    // boot sector offset 0x001E
-            /*
-             * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
-             * drive image, we place the first (and only) partition immediately after the MBR.  Some systems
-             * reserve the entire first track for the MBR, in which case the first partition would not necessarily
-             * be located at head 0.
-             */
-            dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);     // boot sector offset 0x001F
-        }
-        else if (version >= 3.2 && version < 4.0) {
-            /*
-             * When DOS 3.20 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
-             * (just before the 0x55,0xAA signature).
-             *
-             * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
-             * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
-             */
-            dbBoot.writeUInt8(0x80, 0x1FD);                     // boot sector offset 0x01FD
-        }
-        else if (version >= 4.0) {
-            dbBoot.writeUInt8(0x80, DiskInfo.BPB.DRIVE);        // boot sector offset 0x0024
-        }
-        let done = function(di) {
-            if (di) {
-                let drivePath = path.join(pcjsDir, localDrive);
-                let manifest = di.getFileManifest(null, true);
-                di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
-                di.updateBootSector(dbBoot, 0, verBPB);
-                if (writeDiskSync(drivePath, di, false, 0, true, true)) {
-                    if (fVerbose) printf("build complete\n");
-                    driveManifest = manifest;
-                }
-            }
-        }
-        let normalize = true;
-        if (!sDir.endsWith('/')) sDir += '/';
-        if (fVerbose) printf("reading files: %s\n", sDir);
-        readDir(sDir, 0, 0, "PCJS", null, normalize, 10240, maxLocalFiles, false, null, null, aFileDescs, done);
+    let sSystemMBR = system.mbr || "MSDOS.mbr";
+    if (sSystemMBR.indexOf(path.sep) < 0) {
+        sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
+    let dbMBR = readFileSync(sSystemMBR, null);
+    if (!dbMBR) {
+        return "missing system MBR: " + sSystemMBR;
+    }
+
+    let aFileDescs = [];
+    for (let name of system.files) {
+        let desc = diSystem.findFile(name);
+        if (desc) {
+            desc.attr = +desc.attr;
+            /*
+                * There may be situations where we must leave COMMAND.COM unhidden; we'll see.
+                *
+                *      if (name != "COMMAND.COM" || majorVersion != 2) ...
+                */
+            desc.attr |= DiskInfo.ATTR.HIDDEN;
+            aFileDescs.push(desc);
+        }
+    }
+
+    /*
+     * In addition to the system files, we also create a hidden LOAD.COM in the root, which immediately
+     * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
+     * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
+     */
+    aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
+
+    /*
+     * We also create a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
+     * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDrive()
+     * to look for any changes and then terminate the machine.
+     */
+    aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
+
+    /*
+     * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
+     * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
+     * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
+     * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "return" to run
+     * our hidden "RETURN.COM" program regardless of the current directory.
+     */
+    let attr = DiskInfo.ATTR.ARCHIVE;
+    let data = readFileSync(path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
+    if (!data) {
+        data = "ECHO OFF\r\n";
+        attr |= DiskInfo.ATTR.HIDDEN;
+    }
+    let matchPath = data.match(/^PATH\s*(.*)$/im);
+    if (matchPath) {
+        let matchPathRoot = matchPath[1].match(/(^|;|C:|)\\(;|$)/i);
+        if (!matchPathRoot) {
+            data = data.replace(/^PATH\s*(.*)$/im, "PATH C:\\;$1");
+        }
+    } else {
+        data += "PATH C:\\\r\n";
+    }
+
+    if (sCommand) data += sCommand + "\r\n";
+    aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
+
+    /*
+     * Load the boot sector from the system diskette we read above, and use it to update the boot
+     * sector on the hard drive image.
+     *
+     * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register
+     * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk) even though the DOS
+     * MBR does appear to preserve and pass DL on to the boot sector.
+     */
+    let verBPB = 0;
+    let dbBoot = getDiskSector(diSystem, 0);
+    if (version >= 2.0 && version < 3.2) {
+        /*
+         * PC DOS 2.x requires the boot drive (AND drive head # -- go figure) to be stored in locations
+         * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
+         * part of the BPB unless we specify a BPB version number, so in this case, it must be 2.
+         */
+        verBPB = 2;
+        dbBoot.writeUInt8(0x80, DiskInfo.BPB.BOOTDRIVE);    // boot sector offset 0x001E
+        /*
+         * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
+         * drive image, we place the first (and only) partition immediately after the MBR.  Some systems
+         * reserve the entire first track for the MBR, in which case the first partition would not necessarily
+         * be located at head 0.
+         */
+        dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);     // boot sector offset 0x001F
+    }
+    else if (version >= 3.2 && version < 4.0) {
+        /*
+         * When DOS 3.20 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
+         * (just before the 0x55,0xAA signature).
+         *
+         * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
+         * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
+         */
+        dbBoot.writeUInt8(0x80, 0x1FD);                     // boot sector offset 0x01FD
+    }
+    else if (version >= 4.0) {
+        dbBoot.writeUInt8(0x80, DiskInfo.BPB.DRIVE);        // boot sector offset 0x0024
+    }
+
+    let done = function(di) {
+        if (di) {
+            let drivePath = path.join(pcjsDir, localDrive);
+            let manifest = di.getFileManifest(null, true);
+            di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
+            di.updateBootSector(dbBoot, 0, verBPB);
+            if (writeDiskSync(drivePath, di, false, 0, true, true)) {
+                if (fVerbose) printf("build complete\n");
+                driveManifest = manifest;
+            }
+        }
+    }
+
+    let normalize = true;
+    if (!sDir.endsWith('/')) sDir += '/';
+    if (fVerbose) printf("reading files: %s\n", sDir);
+    readDir(sDir, 0, 0, "PCJS", null, normalize, 10240, maxFiles, false, null, null, aFileDescs, done);
+
     return driveManifest? "" : "unable to build drive";
 }
 
@@ -1550,9 +1556,17 @@ async function processArgs(argv)
     if (typeof sDir == "string" && !existsDir(sDir, false)) {
         result = "invalid directory: " + sDir;
     } else {
-        if (typeof sDir == "string") localDir = sDir;
-        localDir = path.resolve(localDir);
-        maxLocalFiles = +argv['maxfiles'] || maxLocalFiles;
+        if (typeof sDir == "string") {
+            localDir = sDir;
+        } else if (argv[1] && existsDir(argv[1], false)) {      // for convenience, we also allow a bare directory name
+            localDir = argv[1];                                 // to set the local source directory
+            argv.splice(1, 1);
+        }
+        if (localDir[0] == '~') {
+            localDir = path.join(process.env.HOME, localDir.slice(1));
+        } else {
+            localDir = path.resolve(localDir);
+        }
         if (argv[1]) {
             let sParms = argv.slice(1).join(' ');
             let sCommand = checkCommand(localDir, sParms);      // check for a DOS command or program name
@@ -1675,44 +1689,10 @@ function exit()
  */
 function main(argc, argv)
 {
-    if (argv['help']) {
-        let optionsMain = {
-            "--load=[machine file]":    "load machine configuration file",
-            "--type=[machine type]":    "set machine type (default is " + machineType + ")",
-            "--dir=[directory]":        "set hard drive local directory (default is \".\")",
-            "--maxfiles=[number]":      "set maximum local files (default is " + maxLocalFiles + ")",
-            "--sys=[system type]":      "operating system type (default is " + systemType + ")",
-            "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
-        };
-        let optionsOther = {
-            "--debug (-d)\t":           "enable DEBUG messages",
-            "--halt (-h)\t":            "halt machine on startup",
-            "--help (-?)\t":            "display command-line usage",
-            "--local (-l)\t":           "use local diskette images",
-            "--nofloppy (-n)\t":        "remove any diskette from A:",
-            "--save (-s)\t":            "save hard drive image on return"
-        };
-        let optionGroups = {
-            "main options:":            optionsMain,
-            "other options:":           optionsOther
-        }
-        printf("usage:\n\t[node] pc.js [machine file] [DOS command or program name] [options]\n");
-        for (let group in optionGroups) {
-            printf("\n%s\n\n", group);
-            for (let option in optionGroups[group]) {
-                printf("\t%s\t%s\n", option, optionGroups[group][option]);
-            }
-        }
-        return;
-    }
-
     fDebug = argv['debug'] || fDebug;
     fHalt = argv['halt'] || fHalt;
     fNoFloppy = argv['nofloppy'] || fNoFloppy;
     fSave = argv['save'] || fSave;
-    machineType = argv['type'] || machineType;
-    systemType = (typeof argv['sys'] == "string" && argv['sys'] || systemType).toLowerCase();
-    systemVersion = (typeof argv['ver'] == "string" && argv['ver'] || systemVersion);
 
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (Defines.DEBUG? MESSAGE.DEBUG : 0), true);
@@ -1728,7 +1708,46 @@ function main(argc, argv)
         printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
     }
 
-    machines = JSON.parse(readFileSync("/machines/machines.json"));
+    machinesPCjs = JSON.parse(readFileSync("/machines/machines.json"));
+    configPCjs = JSON.parse(readFileSync(path.join(pcjsDir, "pc.json"))) || configPCjs;
+    let defaults = configPCjs && configPCjs['defaults'] || {};
+
+    machineType = argv['type'] || defaults['machine'] || machineType;
+    systemType = (typeof argv['sys'] == "string" && argv['sys'] || defaults['system'] || systemType).toLowerCase();
+    systemVersion = (typeof argv['ver'] == "string" && argv['ver'] || defaults['version'] || systemVersion);
+    maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
+    localDir = defaults['directory'] || localDir;
+
+    if (argv['help']) {
+        let optionsMain = {
+            "--load=[machine file]":    "load machine configuration file",
+            "--type=[machine type]":    "set machine type (default is " + machineType + ")",
+            "--dir=[directory]":        "set hard drive local directory (default is " + localDir + ")",
+            "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
+            "--sys=[system type]":      "operating system type (default is " + systemType + ")",
+            "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
+        };
+        let optionsOther = {
+            "--debug (-d)\t":           "enable DEBUG messages",
+            "--halt (-h)\t":            "halt machine on startup",
+            "--help (-?)\t":            "display command-line usage",
+            "--local (-l)\t":           "use local diskette images",
+            "--nofloppy (-n)\t":        "remove any diskette from A:",
+            "--save (-s)\t":            "save hard drive image on return"
+        };
+        let optionGroups = {
+            "main options:":            optionsMain,
+            "other options:":           optionsOther
+        }
+        printf("\nusage:\n\t[node] pc.js [machine file] [DOS command or program name] [options]\n");
+        for (let group in optionGroups) {
+            printf("\n%s\n\n", group);
+            for (let option in optionGroups[group]) {
+                printf("\t%s\t%s\n", option, optionGroups[group][option]);
+            }
+        }
+        return;
+    }
 
     processArgs(argv);
 
