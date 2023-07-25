@@ -743,6 +743,18 @@
       }
     },
     {
+      "name": "Hero's Quest I (1989)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/game/other/1989/heros_quest/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "other",
+        "order": 20
+      }
+    },
+    {
       "name": "King's Quest (1985)",
       "type": "chrome",
       "request": "launch",
