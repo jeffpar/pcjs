@@ -2989,7 +2989,7 @@ export default class DebuggerX80 extends DbgLib {
                 for (m in Messages.Categories) {
                     if (sCategory == m) {
                         bitsMessage = Messages.Categories[m];
-                        fCriteria = this.testBits(this.bitsMessage, bitsMessage);
+                        fCriteria = Component.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
                 }
@@ -3000,11 +3000,11 @@ export default class DebuggerX80 extends DbgLib {
             }
             if (bitsMessage) {
                 if (asArgs[2] == "on") {
-                    this.bitsMessage = this.setBits(this.bitsMessage, bitsMessage);
+                    this.bitsMessage = Component.setBits(this.bitsMessage, bitsMessage);
                     fCriteria = true;
                 }
                 else if (asArgs[2] == "off") {
-                    this.bitsMessage = this.clearBits(this.bitsMessage, bitsMessage);
+                    this.bitsMessage = Component.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
                     if (bitsMessage == Messages.BUFFER) {
                         this.printf("%s\n", this.aMessageBuffer.join(""));
@@ -3022,7 +3022,7 @@ export default class DebuggerX80 extends DbgLib {
         for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
                 let bitsMessage = Messages.Categories[m];
-                let fEnabled = this.testBits(this.bitsMessage, bitsMessage);
+                let fEnabled = Component.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
                 if (!(++n % 10)) sCategories += "\n\t";

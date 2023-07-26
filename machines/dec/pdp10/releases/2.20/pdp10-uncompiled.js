@@ -4607,7 +4607,7 @@ class Component {
      * @param {number} bits
      * @returns {number}
      */
-    clearBits(num, bits)
+    static clearBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -4624,7 +4624,7 @@ class Component {
      * @param {number} bits
      * @returns {number}
      */
-    maskBits(num, bits)
+    static maskBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -4641,7 +4641,7 @@ class Component {
      * @param {number} bits
      * @returns {number}
      */
-    setBits(num, bits)
+    static setBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -4658,7 +4658,7 @@ class Component {
      * @param {number} bits
      * @returns {boolean} (true if ALL specified bits are set, false if not)
      */
-    testBits(num, bits)
+    static testBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -4687,14 +4687,14 @@ class Component {
          * printf() calls that specify Messages.DEBUG should be stripped out of non-DEBUG builds, but just in case
          * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
          */
-        if (DEBUG || !this.testBits(bitsMessage, Messages.DEBUG)) {
+        if (DEBUG || !Component.testBits(bitsMessage, Messages.DEBUG)) {
             /*
              * The debugger has the ability to filter any messages listed in Messages.Categories, and that currently
              * includes message types LOG and WARNING, so if the debugger is loaded, subtract those from the types we allow
              * by default.
              */
             let allowedMessages = Messages.TYPES - (this.dbg? Messages.LOG + Messages.WARNING : 0);
-            if (this.testBits(allowedMessages, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+            if (Component.testBits(allowedMessages, bitsMessage) || this.dbg && Component.testBits(this.dbg.bitsMessage, bitsMessage)) {
                 return true;
             }
         }
@@ -4722,10 +4722,10 @@ class Component {
         if (typeof format == "number") {
             bitsMessage = format || Messages.PROGRESS;
             format = args.shift();
-            if (this.testBits(bitsMessage, Messages.LOG)) {
+            if (Component.testBits(bitsMessage, Messages.LOG)) {
                 format = (this.id || this.type || "log") + ": " + format;
             }
-            else if (this.testBits(bitsMessage, Messages.STATUS)) {
+            else if (Component.testBits(bitsMessage, Messages.STATUS)) {
                 format = this.type + ": " + format;
             }
         }

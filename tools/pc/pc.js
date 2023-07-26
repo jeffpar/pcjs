@@ -209,11 +209,11 @@ async function loadModules(factory, modules, done)
                     bitsMessage = format;
                     format = args.shift();
                 }
-                if (bitsMessage == Messages.ERROR) {
+                if (Component.testBits(bitsMessage, Messages.ERROR)) {
                     format = "error: " + format + "\n";
                     bitsMessage = 0;
                 }
-                if (bitsMessage == Messages.WARNING) {
+                if (Component.testBits(bitsMessage, Messages.WARNING)) {
                     format = "warning: " + format + "\n";
                     bitsMessage = 0;
                 }
@@ -234,7 +234,7 @@ async function loadModules(factory, modules, done)
          */
         if (module.default && module.default.prototype) {
             module.default.prototype.print = function print(s, bitsMessage) {
-                if ((debugMode || !autoStart) && !bitsMessage || (bitsMessage || fDebug) && this.testBits(messagesFilter, bitsMessage)) {
+                if ((debugMode || !autoStart) && !bitsMessage || (bitsMessage || fDebug) && Component.testBits(messagesFilter, bitsMessage)) {
                     printf(s);
                 }
             };
