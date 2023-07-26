@@ -538,7 +538,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
         let sPath = asFiles[iFile];
         let sName = path.basename(sPath);
         if (sName.charAt(0) == '.') continue;
-        let file = {path: '/' + sPath, name: sName, nameEncoding: "utf8"};
+        let file = {path: (sPath[0] != '/'? '/' : '') + sPath, name: sName, nameEncoding: "utf8"};
         let stats = fs.statSync(sPath);
         file.date = stats.mtime;
         if (stats.isDirectory()) {

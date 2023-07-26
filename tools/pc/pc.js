@@ -436,37 +436,46 @@ function intReboot(addr)
 /**
  * intLoad(addr)
  *
+ * If an INT 0x20 is followed by a RET and a "PCJS" signature, then it was issued by one
+ * of our own programs (eg, LOAD.COM).
+ *
  * @param {CPUx86} this
  * @param {number} addr
  * @returns {boolean} true to proceed with the INT 0x20 software interrupt, false to skip
  */
 function intLoad(addr)
 {
-    if (this.getIP() == 0x102) {
-        let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
-        if (sig == 0x534A4350) {        // "PCJS"
-            let cpu = this;             // INT 20h appears to have come from "LOAD.COM"
-            let getString = function(seg, off, len) {
-                let s = "";
-                while (len--) {
-                    s += CharSet.fromCP437(cpu.getSOByte(seg, off++))
-                }
-                return s;
-            };
-            let len = cpu.getSOByte(cpu.segDS, 0x80);
-            let loadCommand = getString(cpu.segDS, 0x81, len).trim();
-            let aTokens = loadCommand.split(' ');
+    let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
+    if (sig == 0x534A4350) {            // "PCJS"
+        let cpu = this;
+        let getString = function(seg, off, len) {
+            let s = "";
+            while (len--) {
+                s += CharSet.fromCP437(cpu.getSOByte(seg, off++))
+            }
+            return s;
+        };
+        let len = cpu.getSOByte(cpu.segDS, 0x80);
+        let command = getString(cpu.segDS, 0x81, len).trim();
+        if (this.getIP() == 0x102) {
+            let aTokens = command.split(' ');
             let matchDrive = aTokens[0].match(/^([a-z]:?)$/i);
             if (matchDrive) {
                 aTokens.splice(0, 1)
                 printf("%s\n", loadDiskette(matchDrive[1], aTokens));
             } else {
-                if (!loadCommand) {
+                if (!command) {
                     printf("usage: load [drive] [search options]\n");
                 } else {
-                    printf("invalid load command: \"%s\"\n", loadCommand);
+                    printf("invalid load command: \"%s\"\n", command);
                 }
             }
+        } else {
+            let off = cpu.getIP()+5;
+            let len = cpu.getSOByte(cpu.segDS, off++);
+            let appName = getString(cpu.segDS, off, len).trim();
+            command = appName + " " + command;
+            printf("exec %s\n", command);
         }
     }
     return true;
@@ -882,6 +891,18 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
      */
     aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
 
+    let apps = configPCjs['apps'] || [];
+    for (let i = 0; i < apps.length; i++) {
+        let appName = apps[i].name;
+        let appFile = appName.toUpperCase() + ".COM";
+        let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53];
+        appContents.push(appName.length);
+        for (let j = 0; j < appName.length; j++) {
+            appContents.push(appName.charCodeAt(j));
+        }
+        aFileDescs.push(makeFileDesc(appFile, appContents, DiskInfo.ATTR.HIDDEN));
+    }
+
     /*
      * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
      * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
@@ -1052,13 +1073,14 @@ function buildFileIndex(diskIndex)
 }
 
 /**
- * saveDrive()
+ * saveDrive(sDir)
  *
  * If we built a drive on entry, this checks the drive on exit for any changes that need to be saved.
  *
+ * @param {string} sDir
  * @returns {boolean}
  */
-function saveDrive()
+function saveDrive(sDir)
 {
     if (driveManifest) {
         let imageData = machine.hdc && machine.hdc.aDrives && machine.hdc.aDrives.length && machine.hdc.aDrives[0].disk;
@@ -1078,14 +1100,15 @@ function saveDrive()
                     let bContents = b.contents || [];
                     return aContents.length === bContents.length && aContents.every((element, i) => element === bContents[i]);
                 };
-                while (iOld < oldManifest.length && iNew < newManifest.length) {
+                while (iOld < oldManifest.length || iNew < newManifest.length) {
 
-                    let oldItem = oldManifest[iOld];
-                    let newItem = newManifest[iNew];
-                    let oldAttr = +oldItem.attr;
-                    let newAttr = +newItem.attr;
+                    let oldItem = oldManifest[iOld] || {};
+                    let newItem = newManifest[iNew] || {};
+                    let oldAttr = +oldItem.attr || 0;
+                    let newAttr = +newItem.attr || 0;
                     let oldDate = device.parseDate(oldItem.date, true);
                     let newDate = device.parseDate(newItem.date, true);
+                    let newItemPath = path.join(sDir, newItem.path.slice(1));
 
                     if (oldItem.path == newItem.path) {
                         if (oldAttr == newAttr) {
@@ -1094,8 +1117,10 @@ function saveDrive()
                              * contents, so the compare will succeed and writeFileSync() will be bypassed.
                              */
                             if (!compareContents(oldItem, newItem)) {
-                                if (fDebug) printf("updating: %s\n", newItem.path);
-                                writeFileSync(newItem.path.slice(1), newItem.contents, false, true);
+                                if (fDebug) printf("updating: %s\n", newItemPath);
+                                writeFileSync(newItemPath, newItem.contents, false, true);
+                            } else {
+                                if (fDebug) printf("skipping: %s\n", newItemPath);
                             }
                         } else {
                             /*
@@ -1103,14 +1128,14 @@ function saveDrive()
                              * and a file with the same name created in its place.
                              */
                             try {
-                                fs.chmodSync(newItem.path.slice(1), (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666);
+                                fs.chmodSync(newItemPath, (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666);
                             } catch (err) {
                                 printf("%s\n", err);
                             }
                         }
                         if (oldDate.getTime() != newDate.getTime()) {
                             try {
-                                fs.utimesSync(newItem.path.slice(1), newDate, newDate);
+                                fs.utimesSync(newItemPath, newDate, newDate);
                             } catch (err) {
                                 printf("%s\n", err);
                             }
@@ -1125,33 +1150,33 @@ function saveDrive()
                          * risk *and* will cause all subsequent unlink() calls for any contained files to fail.
                          * So instead, we simply queue the directory for removal later.
                          */
-                        let sPath = oldItem.origin || oldItem.path;
+                        let oldItemPath = oldItem.origin || path.join(sDir, oldItem.path.slice(1));
                         if (oldAttr & DiskInfo.ATTR.SUBDIR) {
-                            removedDirs.push(sPath);
+                            removedDirs.push(oldItemPath);
                         } else {
-                            if (fDebug) printf("removing: %s\n", sPath);
+                            if (fDebug) printf("removing: %s\n", oldItemPath);
                             try {
-                                fs.unlinkSync(sPath.slice(1));
+                                fs.unlinkSync(oldItemPath);
                             } catch(err) {
                                 printf("%s\n", err.message);
                             }
                         }
                         iOld++;
                     } else {
-                        if (fDebug) printf("creating: %s\n", newItem.path);
+                        if (fDebug) printf("creating: %s\n", newItemPath);
                         if (newAttr & DiskInfo.ATTR.SUBDIR) {
                             try {
-                                fs.mkdirSync(newItem.path.slice(1));
+                                fs.mkdirSync(newItemPath);
                             } catch(err) {
                                 printf("%s\n", err.message);
                             }
                         } else {
-                            writeFileSync(newItem.path.slice(1), newItem.contents, true, false);
+                            writeFileSync(newItemPath, newItem.contents, true, false);
                         }
-                        fs.utimesSync(newItem.path.slice(1), newDate, newDate);
+                        fs.utimesSync(newItemPath, newDate, newDate);
                         if (newAttr & DiskInfo.ATTR.READONLY) {
                             try {
-                                fs.chmodSync(newItem.path.slice(1), 0o444);
+                                fs.chmodSync(newItemPath, 0o444);
                             } catch(err) {
                                 printf("%s\n", err.message);
                             }
@@ -1163,7 +1188,7 @@ function saveDrive()
                     let dir = removedDirs.pop();
                     if (fDebug) printf("removing: %s\n", dir);
                     try {
-                        fs.rmdirSync(dir.slice(1));
+                        fs.rmdirSync(dir);
                     } catch(err) {
                         printf("%s\n", err.message);
                     }
@@ -1696,7 +1721,7 @@ function readInput(stdin, stdout)
  */
 function exit()
 {
-    saveDrive();
+    saveDrive(localDir);
     process.stdin.setRawMode(false);
     process.exit();
 }
