@@ -485,7 +485,7 @@ X86.helpINT = function(nIDT, nError, nCycles)
     /*
      * Support for INT 06h operation checks.  The only operation we consume is the one reserved for breakpoints,
      * and only if our debugger is running.  All these should only occur in DEBUG builds of the underlying operating
-     * system, which should clean up after itself.
+     * system (ie, BASIC-DOS), which should clean up after itself.  See https://github.com/jeffpar/basicdos.
      */
     if (nIDT == 0x06 && this.model <= X86.MODEL_8088) {
         let op = this.getSOWord(this.segCS, oldIP-2);

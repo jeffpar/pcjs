@@ -293,35 +293,45 @@ aMachines.forEach(function(machineID)
     });
 });
 
-gulp.task("combine", function() {
-    let baseDir = "./";
-    let mergeOptions = {
-        fileName: sDstDiskCollection,
-        edit: function(collection, file) {
-            /*
-             * Each parsed collection should have a '@server' property at the top level; the combined file
-             * obviously can't have multiple '@server' properties at the top level, so we propagate it to each
-             * of the top level objects and then remove it.
-             */
-            if (collection['@server']) {
-                let keys = Object.keys(collection);
-                for (let k = 0; k < keys.length; k++) {
-                    let key = keys[k];
-                    if (typeof collection[key] == "object") {
-                        collection[key]['@server'] = collection['@server'];
+var combineTask = true;
+for (let i = 0; i < aSrcDiskCollections.length; i++) {
+    if (!fs.existsSync(aSrcDiskCollections[i])) {
+        combineTask = false;
+        break;
+    }
+}
+if (combineTask) {
+    gulp.task("combine", function() {
+        if (!combineTask) return;
+        let baseDir = "./";
+        let mergeOptions = {
+            fileName: sDstDiskCollection,
+            edit: function(collection, file) {
+                /*
+                * Each parsed collection should have a '@server' property at the top level; the combined file
+                * obviously can't have multiple '@server' properties at the top level, so we propagate it to each
+                * of the top level objects and then remove it.
+                */
+                if (collection['@server']) {
+                    let keys = Object.keys(collection);
+                    for (let k = 0; k < keys.length; k++) {
+                        let key = keys[k];
+                        if (typeof collection[key] == "object") {
+                            collection[key]['@server'] = collection['@server'];
+                        }
                     }
+                    delete collection['@server'];
                 }
-                delete collection['@server'];
+                return collection;
             }
-            return collection;
-        }
-    };
-    fs.chmodSync(sDstDiskCollection, 0o644);
-    return gulp.src(aSrcDiskCollections)
-        .pipe(gulpNewer(sDstDiskCollection))
-        .pipe(gulpMergeJSON(mergeOptions))
-        .pipe(gulp.dest(baseDir, {'mode': 0o444}));
-});
+        };
+        fs.chmodSync(sDstDiskCollection, 0o644);
+        return gulp.src(aSrcDiskCollections)
+            .pipe(gulpNewer(sDstDiskCollection))
+            .pipe(gulpMergeJSON(mergeOptions))
+            .pipe(gulp.dest(baseDir, {'mode': 0o444}));
+    });
+}
 
 gulp.task("concat", gulp.parallel(...aConcatTasks));
 gulp.task("compile", gulp.parallel(...aCompileTasks));
@@ -360,7 +370,7 @@ gulp.task("copyright", function(done) {
         .pipe(gulp.dest(baseDir));
 });
 
-gulp.task("default", gulp.series("combine", "concat", "compile"));
+gulp.task("default", combineTask? gulp.series("combine", "concat", "compile") : gulp.series("concat", "compile"));
 
 gulp.task("watch", function() {
     return gulp.watch(aWatchedFiles, gulp.series("default"));
