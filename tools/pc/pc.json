@@ -9,9 +9,8 @@
     "state": "state386.json"
   },
   "apps": [
-    {
-      "name": "ls"
-    }
+    { "name": "ls" },
+    { "name": "vi" }
   ],
   "systems": {
     "msdos": {

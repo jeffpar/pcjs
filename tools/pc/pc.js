@@ -427,7 +427,7 @@ function intReboot(addr)
     if (this.getIP() == 0x102) {
         let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
         if (sig == 0x534A4350) {        // "PCJS"
-            exit();                     // INT 19h appears to have come from "RETURN.COM"
+            exit();                     // INT 19h appears to have come from RETURN.COM
         }
     }
     return true;
@@ -457,7 +457,7 @@ function intLoad(addr)
         };
         let len = cpu.getSOByte(cpu.segDS, 0x80);
         let command = getString(cpu.segDS, 0x81, len).trim();
-        if (this.getIP() == 0x102) {
+        if (this.getIP() == 0x102) {    // INT 20h appears to have come from LOAD.COM
             let aTokens = command.split(' ');
             let matchDrive = aTokens[0].match(/^([a-z]:?)$/i);
             if (matchDrive) {
@@ -470,7 +470,7 @@ function intLoad(addr)
                     printf("invalid load command: \"%s\"\n", command);
                 }
             }
-        } else {
+        } else {                        // INT 20h assumed to have come from a hidden PCJS command app (eg, LS.COM)
             let off = cpu.getIP()+5;
             let len = cpu.getSOByte(cpu.segDS, off++);
             let appName = getString(cpu.segDS, off, len).trim();
@@ -868,10 +868,10 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
         if (desc) {
             desc.attr = +desc.attr;
             /*
-                * There may be situations where we must leave COMMAND.COM unhidden; we'll see.
-                *
-                *      if (name != "COMMAND.COM" || majorVersion != 2) ...
-                */
+             * There may be situations where we must leave COMMAND.COM unhidden; we'll see.
+             *
+             *      if (name != "COMMAND.COM" || majorVersion != 2) ...
+             */
             desc.attr |= DiskInfo.ATTR.HIDDEN;
             aFileDescs.push(desc);
         }
@@ -891,9 +891,16 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
      */
     aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
 
+    /*
+     * For any apps listed in pc.json, create hidden command apps in the root, each of which will execute
+     * an "INT 20h" that will trigger an exec of the corresponding local command.  Note that 'apps' is an
+     * array of objects, each with a 'name' property, and while it could have been simplified to an array of
+     * strings, I eventually want to add the ability to map an app to any command on the local file system
+     * (eg, not necessarily with the same name), so expect additional properties in the future.
+     */
     let apps = configPCjs['apps'] || [];
     for (let i = 0; i < apps.length; i++) {
-        let appName = apps[i].name;
+        let appName = apps[i]['name'];
         let appFile = appName.toUpperCase() + ".COM";
         let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53];
         appContents.push(appName.length);
@@ -971,6 +978,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
         dbBoot.writeUInt8(0x80, DiskInfo.BPB.DRIVE);        // boot sector offset 0x0024
     }
 
+    driveManifest = null;
     let done = function(di) {
         if (di) {
             let drivePath = path.join(pcjsDir, localDrive);
@@ -1090,8 +1098,7 @@ function saveDrive(sDir)
                 let oldManifest = driveManifest;
                 let newManifest = di.getFileManifest(null, true);
                 /*
-                 * We now have the old and new manifests, and both should be sorted, so all we have to do now
-                 * is walk them, looking for differences.
+                 * We now have the old and new manifests, and both should be sorted; time to look for differences.
                  */
                 let removedDirs = [];
                 let iOld = 0, iNew = 0;
@@ -1201,7 +1208,6 @@ function saveDrive(sDir)
                 return true;
             }
         }
-        driveManifest = null;
     }
     return false;
 }
@@ -1214,12 +1220,20 @@ function saveDrive(sDir)
  * and subsequent loading.
  *
  * Tokens fall into two categories: dash tokens (eg, "--disk", "--file") and non-dash tokens.  Non-dash tokens simply
- * add to the search criteria of whichever dash token is in effect; initially, "--disk" is in effect; eg:
+ * add to the search criteria of whichever dash token is in effect; initially, "--disk" is in effect, which means that:
+ *
+ *      load a: pc dos
+ *
+ * is equivalent to:
+ *
+ *      load a: --disk pc dos
+ *
+ * You can also combine criteria to further narrow the list of matching diskettes:
  *
  *      load a: --disk pc dos --file chkdsk --date 1982
  *
- * The two primary criteria are disk and file.  Other criteria are secondary; for example, any date criteria will
- * be applied only after any file criteria.
+ * The two primary criteria are disk and file criteria.  Other criteria are secondary; for example, any date criteria
+ * will be applied only after any file criteria.
  *
  * If more than one disk matches the criteria, then a numbered list of diskettes will be displayed, and a subsequent
  * "load" command with a number, such as:
@@ -1228,7 +1242,16 @@ function saveDrive(sDir)
  *
  * will load the corresponding diskette.
  *
- * TODO: Date criteria are accepted but not yet acted upon; consider other criteria as well.
+ * Another option is to load a diskette image directly, using the "--path" option; it supports both PCjs (.json) disk
+ * images and raw (.img) disk images:
+ *
+ *      load a: --path /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+ *      load a: --path https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+ *
+ * Note that the "load" command is always available from pc.js "command mode", and it is also available from a DOS command
+ * prompt IF the machine was launched with a locally built hard drive containing our hidden LOAD.COM utility (see buildDrive()).
+ *
+ * TODO: Date criteria using "--date" are accepted but not yet acted upon; implement and consider other criteria as well.
  *
  * @param {string} sDrive ('A:' through 'Z:')
  * @param {Array.<string>} aTokens
