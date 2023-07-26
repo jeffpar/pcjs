@@ -785,6 +785,7 @@ export default class DiskInfo {
          * it's important to create a disk image that will work with PC DOS 1.0, which didn't understand 180Kb and 360Kb
          * disk images.
          */
+        let maxRoot = 0;
         for (iBPB = 0; iBPB < DiskInfo.aDefaultBPBs.length; iBPB++) {
             /*
              * Use slice() to copy the BPB, to ensure we don't alter the original.
@@ -795,6 +796,7 @@ export default class DiskInfo {
              */
             if ((abBoot[DiskInfo.BPB.MEDIA] == DiskInfo.FAT.MEDIA_FIXED) != (kbTarget >= 10000)) continue;
             cRootEntries = abBoot[DiskInfo.BPB.DIRENTS] | (abBoot[DiskInfo.BPB.DIRENTS + 1] << 8);
+            if (cRootEntries > maxRoot) maxRoot = cRootEntries;
             if (aFileData.length > cRootEntries) continue;
             cbSector = abBoot[DiskInfo.BPB.SECBYTES] | (abBoot[DiskInfo.BPB.SECBYTES + 1] << 8);
             cSectorsPerCluster = abBoot[DiskInfo.BPB.CLUSSECS];
@@ -822,7 +824,11 @@ export default class DiskInfo {
         }
 
         if (iBPB == DiskInfo.aDefaultBPBs.length) {
-            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "too many file(s) for disk image (%d files, %d bytes)\n", aFileData.length, cbTotal);
+            if (aFileData.length <= maxRoot) {
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "files exceed supported disk formats (%d bytes total)\n", cbTotal);
+            } else {
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%d files in root exceeds supported maximum of %d\n", aFileData.length, maxRoot);
+            }
             return false;
         }
 

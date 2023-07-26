@@ -1655,6 +1655,8 @@ async function processArgs(argv)
             if (!result) {
                 loading = true;
             }
+        } else {
+            result = "ready to build drive for " + localDir;
         }
     }
     if (result) {
