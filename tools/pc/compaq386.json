@@ -7,7 +7,6 @@
     "id": "computer",
     "name": "COMPAQ DeskPro 386",
     "resume": 0,
-    "state": "/tools/pc/state386.json",
     "busWidth": 32
   },
   "ram": [
@@ -78,19 +77,17 @@
   "fdc": {
     "id": "fdcNEC",
     "name": "Floppy Disk Controller",
+    "autoMount": {
+      "A": {
+        "name": "COMPAQ MS-DOS 3.31 (Disk 2)"
+      }
+    },
     "diskettes": "/machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json"
   },
   "hdc": {
     "id": "hdcAT",
     "name": "Hard Disk Controller",
-    "type": "AT",
-    "drives": [
-      {
-        "name": "10Mb Hard Disk",
-        "type": 1,
-        "path": "/tools/pc/DOS.json"
-      }
-    ]
+    "type": "AT"
   },
   "chipset": {
     "id": "chipset",

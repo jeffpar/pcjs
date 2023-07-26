@@ -8,20 +8,21 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import fs         from "fs";
-import glob       from "glob";
-import path       from "path";
-import xml2js     from "xml2js";
-import DbgLib     from "../../machines/modules/v2/dbglib.js";
-import Messages   from "../../machines/modules/v2/messages.js";
+import child_process from "child_process";
+import fs            from "fs";
+import glob          from "glob";
+import path          from "path";
+import xml2js        from "xml2js";
+import DbgLib        from "../../machines/modules/v2/dbglib.js";
+import Messages      from "../../machines/modules/v2/messages.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
-import StrLib     from "../../machines/modules/v2/strlib.js";
-import Device     from "../../machines/modules/v3/device.js";
-import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
-import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
+import StrLib        from "../../machines/modules/v2/strlib.js";
+import Device        from "../../machines/modules/v3/device.js";
+import CharSet       from "../../machines/pcx86/modules/v3/charset.js";
+import DiskInfo      from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
 import { device, existsDir, existsFile, getDiskSector, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
-import pcjslib    from "../modules/pcjslib.js";
+import pcjslib       from "../modules/pcjslib.js";
 
 let fDebug = false;
 let fHalt = false;
@@ -31,7 +32,9 @@ let autoStart = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.20";
-let localDrive = "DOS.json";
+let savedMachine = "compaq386.json";
+let savedState = "state386.json";
+let localDrive = "disks/C.json";
 let localDir = ".";
 let maxFiles = 1024;
 let configPCjs = {}, machinesPCjs = {};
@@ -164,13 +167,13 @@ async function loadModules(factory, modules, done)
          *
          *      .replace(/\\/g, '/')
          *
-         * "node pc.js" will fail on Windows operating systems with the following error:
+         * pc.js will fail on Windows operating systems with the following error:
          *
          *      TypeError [ERR_INVALID_MODULE_SPECIFIER]: Invalid module
          *      "..\..\..\machines\modules\v2\defines.js" is not a valid package name ....
          *
-         * which seems bizarre, since backslash is actually Windows' preferred path separator.
-         * ¯\_(ツ)_/¯
+         * which seems bizarre, since backslash is actually Windows' preferred path separator
+         * and is precisely what Node's path.sep returns on Windows. ¯\_(ツ)_/¯
          *
          * Moreover, we cannot join modulePath with rootDir, because rootDir will start with
          * a drive letter (eg, "C:") on Windows, which then fails with the following error:
@@ -178,7 +181,7 @@ async function loadModules(factory, modules, done)
          *      Only URLs with a scheme in: file and data are supported by the default ESM loader.
          *      On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:'
          *
-         * so we join it with a relative directory (ie, "../..").
+         * so we join it with a relative directory instead (ie, "../..").
          */
         modulePath = path.join("../..", modulePath).replace(/\\/g, '/');
         let name = path.basename(modulePath, ".js");
@@ -522,23 +525,26 @@ function checkMachine(sFile)
         if (existsFile(sFile, false) && !existsDir(sFile, false)) {
             return sFile;
         }
-        const exts = [".json", ".json5", ".xml"];
-        for (let ext of exts) {
-            if (existsFile(sFile + ext, false)) {
-                return sFile + ext;
+        if (sFile.indexOf('.') > 0) {
+            let s = path.join(pcjsDir, sFile);
+            if (existsFile(s, false)) {
+                return s;
             }
-        }
-        if (sFile.indexOf(path.sep) < 0) {
-            sFile = path.join(pcjsDir, sFile);
+        } else {
+            const exts = [".json", ".json5", ".xml"];
             for (let ext of exts) {
-                if (existsFile(sFile + ext, false)) {
-                    return sFile + ext;
+                let s = sFile + ext;
+                if (existsFile(s, false)) {
+                    return s;
+                }
+                s = path.join(pcjsDir, s);
+                if (existsFile(s, false)) {
+                    return s;
                 }
             }
         }
-        sFile = "";
     }
-    return sFile;
+    return "";
 }
 
 /**
@@ -604,7 +610,7 @@ function loadMachine(sFile, bootHD = 0)
             }
         }
         let removeFloppy = fNoFloppy;
-        if (bootHD == 10) {
+        if (bootHD) {
             if (config['hdc']) {
                 let type = config['hdc']['type'];
                 let drives = config['hdc']['drives'];
@@ -619,9 +625,12 @@ function loadMachine(sFile, bootHD = 0)
                 /*
                  * Set the *drive* type below based on the *controller* type obtained above.
                  */
-                drives[0] = {'name': "10Mb Hard Disk", 'type': type == "XT"? 3 : 1, 'path': "/tools/pc/DOS.json"};
+                drives[0] = {'name': bootHD + "Mb Hard Disk", 'type': type == "XT"? 3 : 1, 'path': path.join(pcjsDir, localDrive)};
                 config['hdc']['drives'] = drives;
                 removeFloppy = true;
+            }
+            if (sFile.endsWith(savedMachine) && config['computer']) {
+                config['computer']['state'] = path.join(pcjsDir, savedState);
             }
         }
         if (removeFloppy && config['fdc']) {
@@ -766,17 +775,18 @@ function checkCommand(sDir, sCommand)
                 sProgram += ".{COM,EXE,BAT}";
             }
             if (sProgram.indexOf('/') < 0 && sProgram.indexOf('\\') < 0) {
-                sProgram = path.join("**", sProgram);
+                sProgram = path.join(sDir, "**", sProgram);
             }
             let aFiles = glob.sync(sProgram);
             if (!aFiles.length) {
                 sCommand = "";
             } else {
                 let sArguments = aParts.slice(1).join(' ');
-                sCommand = aFiles[0].replace(/\//g, '\\');
+                sCommand = aFiles[0];
                 if (sCommand.indexOf(sDir) == 0) {
                     sCommand = sCommand.slice(sDir.length);
                 }
+                sCommand = sCommand.replace(/\//g, '\\');
                 sCommand = "C:" + (sCommand[0] != '\\'? '\\' : '') + sCommand + (sArguments? " " + sArguments : "");
             }
         }
@@ -877,7 +887,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
      * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
      * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
      * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "return" to run
-     * our hidden "RETURN.COM" program regardless of the current directory.
+     * our hidden "RETURN.COM" program in the root of the drive, regardless of the current directory.
      */
     let attr = DiskInfo.ATTR.ARCHIVE;
     let data = readFileSync(path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
@@ -902,9 +912,11 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
      * Load the boot sector from the system diskette we read above, and use it to update the boot
      * sector on the hard drive image.
      *
-     * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register
-     * containing the boot drive # (0x00 for floppy drive, 0x80 for hard disk) even though the DOS
-     * MBR does appear to preserve and pass DL on to the boot sector.
+     * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register to
+     * contain the boot drive # (0x00 for floppy drive, 0x80 for hard disk), even though the BIOS
+     * passes that information to the master boot record (MBR) and the DOS MBR preserves and passes
+     * it on to the boot sector.  And perhaps the key point is "DOS MBR", because DOS also had to
+     * work with third-party MBRs, some of which may have trashed DL.
      */
     let verBPB = 0;
     let dbBoot = getDiskSector(diSystem, 0);
@@ -1159,8 +1171,7 @@ function saveDrive()
                 if (fSave) {
                     let drivePath = path.join(pcjsDir, localDrive.replace(".json", ".img"));
                     printf("saving drive: %s\n", drivePath);
-                    if (writeDiskSync(drivePath, di, false, 0, true, true)) {
-                    }
+                    writeDiskSync(drivePath, di, false, 0, true, true);
                 }
                 return true;
             }
@@ -1412,7 +1423,7 @@ function loadDiskette(sDrive, aTokens)
  */
 function doCommand(s)
 {
-    let result = "";
+    let child, result = "";
     let aTokens = s.split(' ');
     let cmd = aTokens[0].toLowerCase();
 
@@ -1463,10 +1474,19 @@ function doCommand(s)
         result = buildDrive(localDir, sCommand, true);
         if (typeof result != "string") result = "";
         break;
+    case "exec":
+        child = child_process.execSync("vi pc.js", {
+            stdio: [
+              process.stdin,
+              process.stdout,
+              process.stderr
+            ]
+        });
+        break;
     case "load":
         sCommand = aTokens[0];
         if (!sCommand && !machine.cpu) {
-            sCommand = "compaq386";
+            sCommand = savedMachine;
         }
         if (sCommand) {
             let matchDrive = sCommand.match(/^([a-z]:?)$/i);
@@ -1575,7 +1595,7 @@ async function processArgs(argv)
             } else {
                 result = await buildDrive(localDir, sCommand);
                 if (!result) {
-                    result = loadMachine(sFile || checkMachine("compaq386"), 10);
+                    result = loadMachine(sFile || checkMachine(savedMachine), 10);
                     if (!result) {
                         loading = true;
                     }
@@ -1712,9 +1732,11 @@ function main(argc, argv)
     configPCjs = JSON.parse(readFileSync(path.join(pcjsDir, "pc.json"))) || configPCjs;
     let defaults = configPCjs && configPCjs['defaults'] || {};
 
-    machineType = argv['type'] || defaults['machine'] || machineType;
+    machineType = argv['type'] || defaults['type'] || machineType;
     systemType = (typeof argv['sys'] == "string" && argv['sys'] || defaults['system'] || systemType).toLowerCase();
     systemVersion = (typeof argv['ver'] == "string" && argv['ver'] || defaults['version'] || systemVersion);
+    savedMachine = defaults['machine'] || savedMachine;
+    savedState = defaults['state'] || savedState;
     maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
     localDir = defaults['directory'] || localDir;
 

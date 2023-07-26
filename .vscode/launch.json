@@ -467,7 +467,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
       ],
-      "cwd": "${workspaceFolder}/tools/pc/archive/MSDOS320",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
