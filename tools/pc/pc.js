@@ -940,8 +940,12 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
      */
     let attr = DiskInfo.ATTR.ARCHIVE;
     let data = readFileSync(path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
-    if (!data) {
-        data = "ECHO OFF\r\n";
+    if (data) {
+        if (version >= 3.30 && !data.indexOf("ECHO OFF")) {
+            data = '@' + data;
+        }
+    } else {
+        data = (version >= 3.30? '@' : '') + "ECHO OFF\r\n";
         attr |= DiskInfo.ATTR.HIDDEN;
     }
     let matchPath = data.match(/^PATH\s*(.*)$/im);

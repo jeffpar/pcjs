@@ -2,13 +2,14 @@
   "defaults": {
     "type": "pcx86",
     "system": "msdos",
-    "version": "3.20",
+    "version": "3.30",
     "maxfiles": 1024,
     "directory": ".",
     "machine": "compaq386.json",
     "state": "state386.json"
   },
   "apps": [
+    { "name": "cp" },
     { "name": "ls" },
     { "name": "vi" }
   ],
