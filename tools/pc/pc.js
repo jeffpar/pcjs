@@ -1486,6 +1486,13 @@ function loadDiskette(sDrive, aTokens)
 /**
  * doCommand(s)
  *
+ * The "exec" command is used internally whenever the machine signals the desire to execute a local command;
+ * in that case, if a local drive was built, we save its state to the local file system, then kill the machine,
+ * exec the local command, and then rebuild the local drive and reload the machine.
+ *
+ * It's a bit slow and clunky, but it ensures that the local command sees any file changes that the machine made,
+ * and conversely, the machine sees any file changes that the local command made.
+ *
  * @param {string} s
  * @returns {string|null} (result of command, or null to quit)
  */
