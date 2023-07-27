@@ -466,6 +466,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "dir /p"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,

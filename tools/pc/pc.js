@@ -34,8 +34,10 @@ let systemType = "msdos";
 let systemVersion = "3.20";
 let savedMachine = "compaq386.json";
 let savedState = "state386.json";
-let localDrive = "disks/C.json";
+let localMachine = "";
+let localCommand = "";
 let localDir = ".";
+let localDrive = "disks/C.json";
 let maxFiles = 1024;
 let configPCjs = {}, machinesPCjs = {};
 
@@ -244,17 +246,17 @@ async function loadModules(factory, modules, done)
 }
 
 /**
- * initMachine(sParms)
+ * initMachine(args)
  *
- * @param {string} sParms
+ * @param {string} args
  */
-function initMachine(sParms)
+function initMachine(args)
 {
     try {
         /*
          * Simulate the "web page" embedding and initialization process now.
          */
-        embedMachine(machine.id, null, null, sParms);
+        embedMachine(machine.id, null, null, args);
         Web.doPageInit();
 
         /*
@@ -456,26 +458,26 @@ function intLoad(addr)
             return s;
         };
         let len = cpu.getSOByte(cpu.segDS, 0x80);
-        let command = getString(cpu.segDS, 0x81, len).trim();
+        let args = getString(cpu.segDS, 0x81, len).trim();
         if (this.getIP() == 0x102) {    // INT 20h appears to have come from LOAD.COM
-            let aTokens = command.split(' ');
+            let aTokens = args.split(' ');
             let matchDrive = aTokens[0].match(/^([a-z]:?)$/i);
             if (matchDrive) {
                 aTokens.splice(0, 1)
                 printf("%s\n", loadDiskette(matchDrive[1], aTokens));
             } else {
-                if (!command) {
+                if (!args) {
                     printf("usage: load [drive] [search options]\n");
                 } else {
-                    printf("invalid load command: \"%s\"\n", command);
+                    printf("invalid load command: \"%s\"\n", args);
                 }
             }
         } else {                        // INT 20h assumed to have come from a hidden PCJS command app (eg, LS.COM)
             let off = cpu.getIP()+5;
             let len = cpu.getSOByte(cpu.segDS, off++);
             let appName = getString(cpu.segDS, off, len).trim();
-            command = appName + " " + command;
-            printf("exec %s\n", command);
+            localCommand = appName + " " + args;
+            setTimeout(function() { doCommand("exec " + localCommand); }, 0);
         }
     }
     return true;
@@ -523,9 +525,10 @@ function sendSerial(b)
  * If no file can be found, we return an empty string.
  *
  * @param {string} sFile
+ * @param {boolean} [fPreserve]
  * @returns {string} (sFile with a path prepended and/or an extension appended as needed, or empty string if not found)
  */
-function checkMachine(sFile)
+function checkMachine(sFile, fPreserve)
 {
     if (sFile) {
         if (sFile.indexOf("http") == 0) {
@@ -553,7 +556,7 @@ function checkMachine(sFile)
             }
         }
     }
-    return "";
+    return fPreserve? sFile : "";
 }
 
 /**
@@ -645,9 +648,9 @@ function loadMachine(sFile, bootHD = 0)
         if (removeFloppy && config['fdc']) {
             config['fdc']['autoMount'] = "{A: {name: \"None\"}}";
         }
-        let sParms = JSON.stringify(config);
+        let args = JSON.stringify(config);
         loadModules(machinesPCjs[type]['factory'], machinesPCjs[type]['modules'], function() {
-            initMachine(sParms);
+            initMachine(args);
         });
     };
     if (machine.cpu) {
@@ -656,7 +659,7 @@ function loadMachine(sFile, bootHD = 0)
          */
         result = "machine already loaded";
     }
-    else {
+    else if (sFile) {
         if (sFile.indexOf(".json") > 0) {
             result = readJSON(sFile, getFactory);
         }
@@ -667,6 +670,21 @@ function loadMachine(sFile, bootHD = 0)
             result = "unsupported machine file: " + sFile;
         }
         if (typeof result != "string") result = "";
+    }
+    return result;
+}
+
+/**
+ * reloadMachine()
+ */
+async function reloadMachine()
+{
+    let result = "";
+    if (driveManifest) {
+        result = await buildDrive(localDir);
+        if (!result) loadMachine(localMachine, 10);
+    } else {
+        result = loadMachine(localMachine);
     }
     return result;
 }
@@ -1476,11 +1494,10 @@ function doCommand(s)
     let cmd = aTokens[0].toLowerCase();
 
     aTokens.splice(0, 1);
-    let sParms = aTokens.join(' '), sCommand, sFile;
+    let arg, args = aTokens.join(' ');
 
     let help = function() {
         let result = "pc.js commands:\n" +
-                    "  cd [directory]\n" +
                     "  build [command]\n" +
                     "  load [machine] or [drive] [search options]\n" +
                     "  quit";
@@ -1498,57 +1515,53 @@ function doCommand(s)
     case "help":
         result = help();
         break;
-    case "cd":
-        try {
-            if (sParms) {
-                process.chdir(sParms);
-            }
-            result = localDir = process.cwd();
-        } catch(err) {
-            result = err.message;
-        }
-        break;
     case "build":
         if (machine.cpu) {
             result = "machine already running";
             break;
         }
-        sCommand = checkCommand(localDir, sParms);
-        if (!sCommand && sParms) {
-            result = "bad command or file name: " + sParms;
+        arg = checkCommand(localDir, args);
+        if (!arg && args) {
+            result = "bad command or file name: " + args;
             break;
         }
         printf("building drive: %s\n", path.join(pcjsDir, localDrive));
-        result = buildDrive(localDir, sCommand, true);
+        result = buildDrive(localDir, arg, true);
         if (typeof result != "string") result = "";
         break;
     case "exec":
-        child = child_process.execSync("vi pc.js", {
+        saveDrive(localDir);
+        machine = newMachine();
+        child = child_process.execSync(args, {
             stdio: [
               process.stdin,
               process.stdout,
               process.stderr
             ]
         });
+        result = reloadMachine();
         break;
     case "load":
-        sCommand = aTokens[0];
-        if (!sCommand && !machine.cpu) {
-            sCommand = savedMachine;
+        arg = aTokens[0];
+        if (!arg && !machine.cpu) {
+            arg = savedMachine;
         }
-        if (sCommand) {
-            let matchDrive = sCommand.match(/^([a-z]:?)$/i);
+        if (arg) {
+            let matchDrive = arg.match(/^([a-z]:?)$/i);
             if (matchDrive) {
                 aTokens.splice(0, 1)
                 result = loadDiskette(matchDrive[1], aTokens);
             } else {
-                sFile = checkMachine(sCommand);
+                let sFile = checkMachine(arg);
                 if (sFile) {
                     machine = newMachine();
                     printf("loading machine: %s\n", sFile);
                     result = loadMachine(sFile, driveManifest? 10 : 0);
+                    if (!result) {
+                        localMachine = sFile;
+                    }
                 } else {
-                    result = "unknown machine: " + sCommand;
+                    result = "unknown machine: " + arg;
                 }
             }
         } else {
@@ -1609,8 +1622,8 @@ function doCommand(s)
  */
 async function processArgs(argv)
 {
+    let result = "";
     let loading = false;
-    let result = "", localMachine = "";
 
     let splice = false;
     let sFile = argv['load'];
@@ -1622,52 +1635,59 @@ async function processArgs(argv)
         localMachine = checkMachine(sFile);
         if (localMachine) {
             if (splice) argv.splice(1, 1);
-        } else {
+        } else if (sFile.endsWith(".json") || !splice) {
             result = "unknown machine: " + sFile;
         }
     }
 
-    splice = false;
-    let sDir = argv['dir'];
-    if (typeof sDir != "string") {
-        sDir = argv[1];                             // for convenience, we also allow a bare directory name
-        if (sDir) {
-            splice = true;
+    if (!result) {
+        splice = false;
+        let sDir = argv['dir'];
+        if (typeof sDir != "string") {
+            sDir = argv[1];                         // for convenience, we also allow a bare directory name
+            if (sDir) {
+                splice = true;
+            } else {
+                sDir = localDir;
+            }
+        }
+        if (sDir[0] == '~') {
+            sDir = path.join(process.env.HOME, sDir.slice(1));
         } else {
-            sDir = localDir;
+            sDir = path.resolve(sDir);
+        }
+        if (existsDir(sDir, false)) {
+            localDir = sDir;
+            if (splice) argv.splice(1, 1);
+        } else if (!splice) {
+            result = "invalid directory: " + sDir;
         }
     }
-    if (sDir[0] == '~') {
-        sDir = path.join(process.env.HOME, sDir.slice(1));
-    } else {
-        sDir = path.resolve(sDir);
-    }
-    if (existsDir(sDir, false)) {
-        localDir = sDir;
-        if (splice) argv.splice(1, 1);
-    } else {
-        result = "invalid directory: " + sDir;
-    }
 
-    if (argv[1]) {                                  // last but not least, check for a DOS command or program name
-        let sParms = argv.slice(1).join(' ');
-        let sCommand = checkCommand(localDir, sParms);
-        if (!sCommand && sParms) {
-            result = "bad command or file name: " + sParms;
-        } else {
-            result = await buildDrive(localDir, sCommand);
-            if (!result) {
-                result = loadMachine(localMachine || checkMachine(savedMachine), 10);
+    if (!result) {
+        let bootHD = 0;
+        if (argv[1]) {                              // last but not least, check for a DOS command or program name
+            let args = argv.slice(1).join(' ');
+            let sCommand = checkCommand(localDir, args);
+            if (!sCommand && args) {
+                result = "command not found: " + args;
+            } else {
+                result = await buildDrive(localDir, sCommand);
                 if (!result) {
-                    loading = true;
+                    bootHD = 10;
+                    if (!localMachine) {
+                        localMachine = checkMachine(savedMachine, true);
+                    }
                 }
             }
         }
-    }
-    else if (localMachine) {
-        result = loadMachine(localMachine);
-        if (!result) {
-            loading = true;
+        if (localMachine) {
+            result = loadMachine(localMachine, bootHD);
+            if (!result) {
+                loading = true;
+            } else {
+                localMachine = "";
+            }
         }
     }
 
