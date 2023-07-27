@@ -1612,62 +1612,62 @@ async function processArgs(argv)
     let loading = false;
     let result = "", localMachine = "";
 
+    let splice = false;
     let sFile = argv['load'];
     if (typeof sFile != "string") {
         sFile = argv[1];                            // for convenience, we also allow a bare machine name
-        if (sFile) {
-            argv.splice(1, 1);
-        }
+        if (sFile) splice = true;
     }
     if (sFile) {
         localMachine = checkMachine(sFile);
-        if (!localMachine) {
+        if (localMachine) {
+            if (splice) argv.splice(1, 1);
+        } else {
             result = "unknown machine: " + sFile;
         }
     }
 
-    if (!result) {
-        let sDir = argv['dir'];
-        if (typeof sDir != "string") {
-            sDir = argv[1];                         // for convenience, we also allow a bare directory name
-            if (sDir) {
-                argv.splice(1, 1);
-            } else {
-                sDir = localDir;
-            }
-        }
-        if (sDir[0] == '~') {
-            localDir = path.join(process.env.HOME, sDir.slice(1));
+    splice = false;
+    let sDir = argv['dir'];
+    if (typeof sDir != "string") {
+        sDir = argv[1];                             // for convenience, we also allow a bare directory name
+        if (sDir) {
+            splice = true;
         } else {
-            localDir = path.resolve(sDir);
-        }
-        if (!existsDir(localDir, false)) {
-            result = "invalid directory: " + localDir;
-            localDir = ".";
+            sDir = localDir;
         }
     }
+    if (sDir[0] == '~') {
+        sDir = path.join(process.env.HOME, sDir.slice(1));
+    } else {
+        sDir = path.resolve(sDir);
+    }
+    if (existsDir(sDir, false)) {
+        localDir = sDir;
+        if (splice) argv.splice(1, 1);
+    } else {
+        result = "invalid directory: " + sDir;
+    }
 
-    if (!result) {
-        if (argv[1]) {                              // last but not least, check for a DOS command or program name
-            let sParms = argv.slice(1).join(' ');
-            let sCommand = checkCommand(localDir, sParms);
-            if (!sCommand && sParms) {
-                result = "bad command or file name: " + sParms;
-            } else {
-                result = await buildDrive(localDir, sCommand);
+    if (argv[1]) {                                  // last but not least, check for a DOS command or program name
+        let sParms = argv.slice(1).join(' ');
+        let sCommand = checkCommand(localDir, sParms);
+        if (!sCommand && sParms) {
+            result = "bad command or file name: " + sParms;
+        } else {
+            result = await buildDrive(localDir, sCommand);
+            if (!result) {
+                result = loadMachine(localMachine || checkMachine(savedMachine), 10);
                 if (!result) {
-                    result = loadMachine(localMachine || checkMachine(savedMachine), 10);
-                    if (!result) {
-                        loading = true;
-                    }
+                    loading = true;
                 }
             }
         }
-        else if (localMachine) {
-            result = loadMachine(localMachine);
-            if (!result) {
-                loading = true;
-            }
+    }
+    else if (localMachine) {
+        result = loadMachine(localMachine);
+        if (!result) {
+            loading = true;
         }
     }
 
