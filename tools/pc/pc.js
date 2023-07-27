@@ -682,7 +682,9 @@ async function reloadMachine()
     let result = "";
     if (driveManifest) {
         result = await buildDrive(localDir);
-        if (!result) loadMachine(localMachine, 10);
+        if (!result) {
+            loadMachine(localMachine, 10);
+        }
     } else {
         result = loadMachine(localMachine);
     }
@@ -1489,9 +1491,9 @@ function loadDiskette(sDrive, aTokens)
  */
 function doCommand(s)
 {
-    let child, result = "";
     let aTokens = s.split(' ');
     let cmd = aTokens[0].toLowerCase();
+    let child, result = "", reload = false;
 
     aTokens.splice(0, 1);
     let arg, args = aTokens.join(' ');
@@ -1530,16 +1532,28 @@ function doCommand(s)
         if (typeof result != "string") result = "";
         break;
     case "exec":
-        saveDrive(localDir);
-        machine = newMachine();
-        child = child_process.execSync(args, {
-            stdio: [
-              process.stdin,
-              process.stdout,
-              process.stderr
-            ]
-        });
-        result = reloadMachine();
+        if (driveManifest) {
+            saveDrive(localDir);
+            machine = newMachine();
+            reload = true;
+        }
+        try {
+            child = child_process.execSync(args, {
+                stdio: [
+                process.stdin,
+                process.stdout,
+                process.stderr
+                ]
+            });
+        } catch(err) {
+            result = err.message;
+        }
+        if (!result && reload) {
+            result = reloadMachine();
+            if (typeof result != "string") {
+                result = "";
+            }
+        }
         break;
     case "load":
         arg = aTokens[0];

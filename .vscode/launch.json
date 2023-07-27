@@ -486,8 +486,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ibm5150",
-        "-n"
+        "ibm5150"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -510,7 +509,7 @@
         "https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml",
         "--build"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200",
+      "cwd": "${workspaceFolder}/tools/pc/disks/PCDOS200",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -658,7 +657,7 @@
         "--ver=3.20",
         "dir *.*"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/archive/MSDOS320",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS320",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -682,7 +681,7 @@
         "--debug",
         "--remote"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/archive/PCDOS200",
+      "cwd": "${workspaceFolder}/tools/pc/disks/PCDOS200",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1818,7 +1817,7 @@
         "--length=512",
         "--output=MSDOS320-MBR-10M.bin"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/archive",
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
