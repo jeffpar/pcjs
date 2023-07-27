@@ -523,7 +523,7 @@ function sendSerial(b)
  * If no file can be found, we return an empty string.
  *
  * @param {string} sFile
- * @returns {string} (sFile with a path prepended and/or an extension appended as needed)
+ * @returns {string} (sFile with a path prepended and/or an extension appended as needed, or empty string if not found)
  */
 function checkMachine(sFile)
 {
@@ -1609,56 +1609,68 @@ function doCommand(s)
  */
 async function processArgs(argv)
 {
-    let result;
     let loading = false;
+    let result = "", localMachine = "";
 
-    let sFile = "";
-    if (typeof argv['load'] == "string") {                      // process --load argument, if any
-        sFile = checkMachine(argv['load']);
-    }
-    else if (argv[1]) {                                         // alternatively, process first arg
-        sFile = checkMachine(argv[1]);
-        if (sFile) argv.splice(1, 1);
-    }
-    let sDir = argv['dir'];
-    if (typeof sDir == "string" && !existsDir(sDir, false)) {
-        result = "invalid directory: " + sDir;
-    } else {
-        if (typeof sDir == "string") {
-            localDir = sDir;
-        } else if (argv[1] && existsDir(argv[1], false)) {      // for convenience, we also allow a bare directory name
-            localDir = argv[1];                                 // to set the local source directory
+    let sFile = argv['load'];
+    if (typeof sFile != "string") {
+        sFile = argv[1];                            // for convenience, we also allow a bare machine name
+        if (sFile) {
             argv.splice(1, 1);
         }
-        if (localDir[0] == '~') {
-            localDir = path.join(process.env.HOME, localDir.slice(1));
-        } else {
-            localDir = path.resolve(localDir);
+    }
+    if (sFile) {
+        localMachine = checkMachine(sFile);
+        if (!localMachine) {
+            result = "unknown machine: " + sFile;
         }
-        if (argv[1]) {
+    }
+
+    if (!result) {
+        let sDir = argv['dir'];
+        if (typeof sDir != "string") {
+            sDir = argv[1];                         // for convenience, we also allow a bare directory name
+            if (sDir) {
+                argv.splice(1, 1);
+            } else {
+                sDir = localDir;
+            }
+        }
+        if (sDir[0] == '~') {
+            localDir = path.join(process.env.HOME, sDir.slice(1));
+        } else {
+            localDir = path.resolve(sDir);
+        }
+        if (!existsDir(localDir, false)) {
+            result = "invalid directory: " + localDir;
+            localDir = ".";
+        }
+    }
+
+    if (!result) {
+        if (argv[1]) {                              // last but not least, check for a DOS command or program name
             let sParms = argv.slice(1).join(' ');
-            let sCommand = checkCommand(localDir, sParms);      // check for a DOS command or program name
+            let sCommand = checkCommand(localDir, sParms);
             if (!sCommand && sParms) {
                 result = "bad command or file name: " + sParms;
             } else {
                 result = await buildDrive(localDir, sCommand);
                 if (!result) {
-                    result = loadMachine(sFile || checkMachine(savedMachine), 10);
+                    result = loadMachine(localMachine || checkMachine(savedMachine), 10);
                     if (!result) {
                         loading = true;
                     }
                 }
             }
         }
-        else if (sFile) {
-            result = loadMachine(sFile);
+        else if (localMachine) {
+            result = loadMachine(localMachine);
             if (!result) {
                 loading = true;
             }
-        } else {
-            result = "ready to build drive for " + localDir;
         }
     }
+
     if (result) {
         printf("%s\n", result);
     }

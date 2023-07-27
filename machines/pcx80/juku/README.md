@@ -6,6 +6,7 @@ machines:
   - id: juku
     type: pcx80
     debugger: true
+    unbundled: true
     config: /machines/pcx80/juku/machine.xml
 ---
 
