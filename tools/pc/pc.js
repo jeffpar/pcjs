@@ -1135,7 +1135,7 @@ function saveDrive(sDir)
                     let newAttr = +newItem.attr || 0;
                     let oldDate = device.parseDate(oldItem.date, true);
                     let newDate = device.parseDate(newItem.date, true);
-                    let newItemPath = path.join(sDir, newItem.path.slice(1));
+                    let newItemPath = path.join(sDir, newItem.path && newItem.path.slice(1));
 
                     if (oldItem.path == newItem.path) {
                         if (oldAttr == newAttr) {
@@ -1169,7 +1169,7 @@ function saveDrive(sDir)
                         }
                         iOld++;
                         iNew++;
-                    } else if (oldItem.path < newItem.path) {
+                    } else if (iNew >= newManifest.length || oldItem.path < newItem.path) {
                         /*
                          * Unfortunately, whenever a directory has been removed, we see the directory first,
                          * followed by any files or other directories that it used to contain.  While we could
@@ -1177,15 +1177,17 @@ function saveDrive(sDir)
                          * risk *and* will cause all subsequent unlink() calls for any contained files to fail.
                          * So instead, we simply queue the directory for removal later.
                          */
-                        let oldItemPath = oldItem.origin || path.join(sDir, oldItem.path.slice(1));
-                        if (oldAttr & DiskInfo.ATTR.SUBDIR) {
-                            removedDirs.push(oldItemPath);
-                        } else {
-                            if (fDebug) printf("removing: %s\n", oldItemPath);
-                            try {
-                                fs.unlinkSync(oldItemPath);
-                            } catch(err) {
-                                printf("%s\n", err.message);
+                        if (!(oldAttr & (DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.VOLUME))) {
+                            let oldItemPath = (oldItem.origin || path.join(sDir, oldItem.path)).slice(1);
+                            if (oldAttr & DiskInfo.ATTR.SUBDIR) {
+                                removedDirs.push(oldItemPath);
+                            } else {
+                                if (fDebug) printf("removing: %s\n", oldItemPath);
+                                try {
+                                    fs.unlinkSync(oldItemPath);
+                                } catch(err) {
+                                    printf("%s\n", err.message);
+                                }
                             }
                         }
                         iOld++;
