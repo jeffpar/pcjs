@@ -427,7 +427,7 @@ function intVideo(addr)
 function intReboot(addr)
 {
     if (this.getIP() == 0x102) {
-        let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
+        let sig = this.getSOWord(this.segCS, this.getIP()+2) + (this.getSOWord(this.segCS, this.getIP()+4) << 16);
         if (sig == 0x534A4350) {        // "PCJS"
             exit();                     // INT 19h appears to have come from RETURN.COM
         }
@@ -447,7 +447,7 @@ function intReboot(addr)
  */
 function intLoad(addr)
 {
-    let sig = this.getSOWord(this.segCS, this.getIP()+1) + (this.getSOWord(this.segCS, this.getIP()+3) << 16);
+    let sig = this.getSOWord(this.segCS, this.getIP()+2) + (this.getSOWord(this.segCS, this.getIP()+4) << 16);
     if (sig == 0x534A4350) {            // "PCJS"
         let cpu = this;
         let getString = function(seg, off, len) {
@@ -473,12 +473,13 @@ function intLoad(addr)
                 }
             }
         } else {                        // INT 20h assumed to have come from a hidden PCJS command app (eg, LS.COM)
-            let off = cpu.getIP()+5;
+            let off = cpu.getIP()+6;
             let len = cpu.getSOByte(cpu.segDS, off++);
             let appName = getString(cpu.segDS, off, len).trim();
             localCommand = appName + " " + args;
             setTimeout(function() { doCommand("exec " + localCommand); }, 0);
-        }
+            return false;               // returning false should bypass the INT 20h and fall into the JMP $-2;
+        }                               // we want the machine to spin its wheels until it has been unloaded/reloaded
     }
     return true;
 }
@@ -902,14 +903,14 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
      * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
      * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
      */
-    aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
+    aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
 
     /*
      * We also create a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
      * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDrive()
      * to look for any changes and then terminate the machine.
      */
-    aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
+    aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
 
     /*
      * For any apps listed in pc.json, create hidden command apps in the root, each of which will execute
@@ -922,7 +923,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     for (let i = 0; i < apps.length; i++) {
         let appName = apps[i]['name'];
         let appFile = appName.toUpperCase() + ".COM";
-        let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xC3, 0x50, 0x43, 0x4A, 0x53];
+        let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53];
         appContents.push(appName.length);
         for (let j = 0; j < appName.length; j++) {
             appContents.push(appName.charCodeAt(j));
