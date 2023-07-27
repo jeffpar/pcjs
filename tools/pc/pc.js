@@ -1557,11 +1557,8 @@ function doCommand(s)
         } catch(err) {
             result = err.message;
         }
-        if (!result && reload) {
-            result = reloadMachine();
-            if (typeof result != "string") {
-                result = "";
-            }
+        if (reload) {
+            result = reloadMachine() || result;
         }
         break;
     case "load":
