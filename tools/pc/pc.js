@@ -38,8 +38,10 @@ let localMachine = "";
 let localCommand = "";
 let localDir = ".";
 let localDrive = "disks/C.json";
+let machineDir = "";
 let maxFiles = 1024;
-let configPCjs = {}, machinesPCjs = {};
+let maxCapacity = 10;   // built hard drive capacity in megabytes (Mb)
+let configJSON = {}, machines = {};
 
 let rootDir, pcjsDir;
 let messagesFilter, debugMode;
@@ -453,7 +455,9 @@ function intLoad(addr)
         let getString = function(seg, off, len) {
             let s = "";
             while (len--) {
-                s += CharSet.fromCP437(cpu.getSOByte(seg, off++))
+                let b = cpu.getSOByte(seg, off++);
+                if (!b) break;
+                s += CharSet.fromCP437(b);
             }
             return s;
         };
@@ -476,6 +480,7 @@ function intLoad(addr)
             let off = cpu.getIP()+6;
             let len = cpu.getSOByte(cpu.segDS, off++);
             let appName = getString(cpu.segDS, off, len).trim();
+            machineDir = getString(cpu.segDS, 0x120, -1);
             localCommand = appName + " " + args;
             setTimeout(function() { doCommand("exec " + localCommand); }, 0);
             return false;               // returning false should bypass the INT 20h and fall into the JMP $-2;
@@ -592,19 +597,17 @@ function newMachine()
 }
 
 /**
- * loadMachine(sFile, bootHD)
+ * loadMachine(sFile, hdCapacity)
  *
- * If bootHD, then we want to 1) remove any boot floppy from drive A: and 2) make the sure the 'type'
- * for the first hard drive is set correctly.  For example, if bootHD is 10, then the drive type should
+ * If hdCapacity, then we want to 1) remove any boot floppy from drive A: and 2) make the sure the 'type'
+ * for the first hard drive is set correctly.  For example, if hdCapacity is 10, then the drive type should
  * be 3 for XT controllers and 1 for AT controllers.
  *
- * NOTE: At present, the only supported bootHD value is, in fact, 10. ;-)
- *
  * @param {string} sFile
- * @param {number} [bootHD] (eg, 10 for a 10Mb drive)
+ * @param {number} [hdCapacity] (hard drive capacity in Mb, if any)
  * @returns {string}
  */
-function loadMachine(sFile, bootHD = 0)
+function loadMachine(sFile, hdCapacity = 0)
 {
     let result = "";
     let getFactory = function(config) {
@@ -623,7 +626,7 @@ function loadMachine(sFile, bootHD = 0)
             }
         }
         let removeFloppy = fNoFloppy;
-        if (bootHD) {
+        if (hdCapacity) {
             if (config['hdc']) {
                 let type = config['hdc']['type'];
                 let drives = config['hdc']['drives'];
@@ -638,7 +641,7 @@ function loadMachine(sFile, bootHD = 0)
                 /*
                  * Set the *drive* type below based on the *controller* type obtained above.
                  */
-                drives[0] = {'name': bootHD + "Mb Hard Disk", 'type': type == "XT"? 3 : 1, 'path': path.join(pcjsDir, localDrive)};
+                drives[0] = {'name': hdCapacity + "Mb Hard Disk", 'type': type == "XT"? 3 : 1, 'path': path.join(pcjsDir, localDrive)};
                 config['hdc']['drives'] = drives;
                 removeFloppy = true;
             }
@@ -650,7 +653,7 @@ function loadMachine(sFile, bootHD = 0)
             config['fdc']['autoMount'] = "{A: {name: \"None\"}}";
         }
         let args = JSON.stringify(config);
-        loadModules(machinesPCjs[type]['factory'], machinesPCjs[type]['modules'], function() {
+        loadModules(machines[type]['factory'], machines[type]['modules'], function() {
             initMachine(args);
         });
     };
@@ -684,7 +687,7 @@ async function reloadMachine()
     if (driveManifest) {
         result = await buildDrive(localDir);
         if (!result) {
-            loadMachine(localMachine, 10);
+            loadMachine(localMachine, maxCapacity);
         }
     } else {
         result = loadMachine(localMachine);
@@ -853,7 +856,8 @@ function checkCommand(sDir, sCommand)
  */
 async function buildDrive(sDir, sCommand = "", fVerbose = false)
 {
-    let system = configPCjs['systems'] && configPCjs['systems'][systemType];
+    let drives = configJSON['drives'] || {};
+    let system = configJSON['systems'] && configJSON['systems'][systemType];
 
     if (!system) {
         return "unsupported system type: " + systemType;
@@ -874,7 +878,8 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
         return "missing system diskette: " + sSystemDisk;
     }
 
-    let sSystemMBR = system.mbr || "MSDOS.mbr";
+    let driveType = maxCapacity + "mb";
+    let sSystemMBR = drives[driveType] && drives[driveType]['mbr'] || "MSDOS.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -914,14 +919,13 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
 
     /*
      * For any apps listed in pc.json, create hidden command apps in the root, each of which will execute
-     * an "INT 20h" that will trigger an exec of the corresponding local command.  Note that 'apps' is an
-     * array of objects, each with a 'name' property, and while it could have been simplified to an array of
-     * strings, I eventually want to add the ability to map an app to any command on the local file system
-     * (eg, not necessarily with the same name), so expect additional properties in the future.
+     * an "INT 20h" that will trigger an exec of the corresponding local command.  Note that 'apps' is a
+     * collection of objects, where the keys are the app names and object properties like 'exec' tell us
+     * what local program to execute.
      */
-    let apps = configPCjs['apps'] || [];
-    for (let i = 0; i < apps.length; i++) {
-        let appName = apps[i]['name'];
+    let apps = configJSON['apps'] || {};
+    let appNames = Object.keys(apps);
+    for (let appName of appNames) {
         let appFile = appName.toUpperCase() + ".COM";
         let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53];
         appContents.push(appName.length);
@@ -959,6 +963,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     }
 
     if (sCommand) data += sCommand + "\r\n";
+    if (machineDir) data += "CD " + machineDir + "\r\n";
     aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
 
     /*
@@ -1020,7 +1025,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     let normalize = true;
     if (!sDir.endsWith('/')) sDir += '/';
     if (fVerbose) printf("reading files: %s\n", sDir);
-    readDir(sDir, 0, 0, "PCJS", null, normalize, 10240, maxFiles, false, null, null, aFileDescs, done);
+    readDir(sDir, 0, 0, "PCJS", null, normalize, maxCapacity * 1024, maxFiles, false, null, null, aFileDescs, done);
 
     return driveManifest? "" : "unable to build drive";
 }
@@ -1507,7 +1512,7 @@ function doCommand(s)
 {
     let aTokens = s.split(' ');
     let cmd = aTokens[0].toLowerCase();
-    let child, result = "", reload = false;
+    let child, result = "", reload = false, curDir = "";
 
     aTokens.splice(0, 1);
     let arg, args = aTokens.join(' ');
@@ -1547,11 +1552,28 @@ function doCommand(s)
         break;
     case "exec":
         if (driveManifest) {
+            /*
+             * TODO: saveDrive() needs to update the driveManifest with any path changes made by the machine.
+             */
             saveDrive(localDir);
             machine = newMachine();
             reload = true;
         }
+        curDir = process.cwd();
         try {
+            /*
+             * TODO: This code needs to map machineDir to the appropriate local path stored in the driveManifest
+             * (normally the mapping is 1:1 unless the local path includes components that are not 8.3-compliant).
+             */
+            process.chdir(path.join(localDir, machineDir.replace(/\\/g, path.sep)));
+            let argv = args.split(' ');
+            let app = argv[0];
+            let appConfig = configJSON['apps'] && configJSON['apps'][app];
+            if (appConfig) {
+                if (appConfig['exec']) {
+                    args = appConfig['exec'].replace(/\$\*/, argv.slice(1).join(' '));
+                }
+            }
             child = child_process.execSync(args, {
                 stdio: [
                 process.stdin,
@@ -1562,6 +1584,7 @@ function doCommand(s)
         } catch(err) {
             result = err.message;
         }
+        process.chdir(curDir);
         if (reload) {
             result = reloadMachine() || result;
         }
@@ -1581,7 +1604,7 @@ function doCommand(s)
                 if (sFile) {
                     machine = newMachine();
                     printf("loading machine: %s\n", sFile);
-                    result = loadMachine(sFile, driveManifest? 10 : 0);
+                    result = loadMachine(sFile, driveManifest? maxCapacity : 0);
                     if (!result) {
                         localMachine = sFile;
                     }
@@ -1690,7 +1713,7 @@ async function processArgs(argv)
     }
 
     if (!result) {
-        let bootHD = 0;
+        let capacity = 0;
         if (argv[1]) {                              // last but not least, check for a DOS command or program name
             let args = argv.slice(1).join(' ');
             let sCommand = checkCommand(localDir, args);
@@ -1699,7 +1722,7 @@ async function processArgs(argv)
             } else {
                 result = await buildDrive(localDir, sCommand);
                 if (!result) {
-                    bootHD = 10;
+                    capacity = maxCapacity;
                     if (!localMachine) {
                         localMachine = checkMachine(savedMachine, true);
                     }
@@ -1707,7 +1730,7 @@ async function processArgs(argv)
             }
         }
         if (localMachine) {
-            result = loadMachine(localMachine, bootHD);
+            result = loadMachine(localMachine, capacity);
             if (!result) {
                 loading = true;
             } else {
@@ -1835,9 +1858,9 @@ function main(argc, argv)
         printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
     }
 
-    machinesPCjs = JSON.parse(readFileSync("/machines/machines.json"));
-    configPCjs = JSON.parse(readFileSync(path.join(pcjsDir, "pc.json"))) || configPCjs;
-    let defaults = configPCjs && configPCjs['defaults'] || {};
+    machines = JSON.parse(readFileSync("/machines/machines.json"));
+    configJSON = JSON.parse(readFileSync(path.join(pcjsDir, "pc.json"))) || configJSON;
+    let defaults = configJSON && configJSON['defaults'] || {};
 
     machineType = argv['type'] || defaults['type'] || machineType;
     systemType = (typeof argv['sys'] == "string" && argv['sys'] || defaults['system'] || systemType).toLowerCase();
@@ -1845,6 +1868,7 @@ function main(argc, argv)
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
     maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
+    maxCapacity = parseInt(defaults['capacity']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
 
     if (argv['help']) {

@@ -654,11 +654,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "disks/MSDOS320",
         "--sys=msdos",
         "--ver=3.20",
         "dir *.*"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS320",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

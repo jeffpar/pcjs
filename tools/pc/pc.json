@@ -4,24 +4,31 @@
     "system": "msdos",
     "version": "3.30",
     "maxfiles": 1024,
+    "capacity": "10mb",
     "directory": ".",
     "machine": "compaq386.json",
     "state": "state386.json"
   },
-  "apps": [
-    { "name": "cp" },
-    { "name": "ls" },
-    { "name": "vi" }
-  ],
+  "apps": {
+    "cp": {},
+    "ls": {},
+    "vi": {},
+    "edit": {
+      "exec": "vi $*"
+    }
+  },
+  "drives": {
+    "10mb": {
+      "mbr": "MSDOS.mbr"
+    }
+  },
   "systems": {
     "msdos": {
       "vendor": "microsoft",
-      "mbr": "MSDOS.mbr",
       "files": ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"]
     },
     "pcdos": {
         "vendor": "ibm",
-        "mbr": "MSDOS.mbr",
         "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
     }
   }
