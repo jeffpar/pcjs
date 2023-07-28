@@ -19,7 +19,7 @@
   },
   "drives": {
     "10mb": {
-      "mbr": "MSDOS.mbr"
+      "AT": 1, "XT": 3, "MBR": "MSDOS.mbr"
     }
   },
   "systems": {

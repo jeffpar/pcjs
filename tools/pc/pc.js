@@ -641,7 +641,8 @@ function loadMachine(sFile, hdCapacity = 0)
                 /*
                  * Set the *drive* type below based on the *controller* type obtained above.
                  */
-                drives[0] = {'name': hdCapacity + "Mb Hard Disk", 'type': type == "XT"? 3 : 1, 'path': path.join(pcjsDir, localDrive)};
+                let typeDrive = configJSON['drives']?.[hdCapacity + "mb"]?.[type] || 0;
+                drives[0] = {'name': hdCapacity + "Mb Hard Disk", 'type': typeDrive, 'path': path.join(pcjsDir, localDrive)};
                 config['hdc']['drives'] = drives;
                 removeFloppy = true;
             }
@@ -857,7 +858,7 @@ function checkCommand(sDir, sCommand)
 async function buildDrive(sDir, sCommand = "", fVerbose = false)
 {
     let drives = configJSON['drives'] || {};
-    let system = configJSON['systems'] && configJSON['systems'][systemType];
+    let system = configJSON['systems']?.systemType;
 
     if (!system) {
         return "unsupported system type: " + systemType;
@@ -879,7 +880,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     }
 
     let driveType = maxCapacity + "mb";
-    let sSystemMBR = drives[driveType] && drives[driveType]['mbr'] || "MSDOS.mbr";
+    let sSystemMBR = drives[driveType] && drives[driveType]['MBR'] || "MSDOS.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -1568,7 +1569,7 @@ function doCommand(s)
             process.chdir(path.join(localDir, machineDir.replace(/\\/g, path.sep)));
             let argv = args.split(' ');
             let app = argv[0];
-            let appConfig = configJSON['apps'] && configJSON['apps'][app];
+            let appConfig = configJSON['apps']?.[app];
             if (appConfig) {
                 if (appConfig['exec']) {
                     args = appConfig['exec'].replace(/\$\*/, argv.slice(1).join(' '));
@@ -1860,7 +1861,7 @@ function main(argc, argv)
 
     machines = JSON.parse(readFileSync("/machines/machines.json"));
     configJSON = JSON.parse(readFileSync(path.join(pcjsDir, "pc.json"))) || configJSON;
-    let defaults = configJSON && configJSON['defaults'] || {};
+    let defaults = configJSON['defaults'] || {};
 
     machineType = argv['type'] || defaults['type'] || machineType;
     systemType = (typeof argv['sys'] == "string" && argv['sys'] || defaults['system'] || systemType).toLowerCase();
