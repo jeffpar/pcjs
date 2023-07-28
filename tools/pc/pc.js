@@ -34,13 +34,13 @@ let systemType = "msdos";
 let systemVersion = "3.20";
 let savedMachine = "compaq386.json";
 let savedState = "state386.json";
-let localMachine = "";
-let localCommand = "";
-let localDir = ".";
+let localMachine = "";  // current machine config file
+let localCommand = "";  // current command issued from machine
+let localDir = ".";     // local directory used to build localDrive
 let localDrive = "disks/C.json";
-let machineDir = "";
-let maxFiles = 1024;
-let maxCapacity = 10;   // built hard drive capacity in megabytes (Mb)
+let machineDir = "";    // current directory *inside* the machine
+let maxFiles = 1024;    // default hard drive file limit
+let maxCapacity = 10;   // default hard drive capacity, in megabytes (Mb)
 let configJSON = {}, machines = {};
 
 let rootDir, pcjsDir;
@@ -858,7 +858,7 @@ function checkCommand(sDir, sCommand)
 async function buildDrive(sDir, sCommand = "", fVerbose = false)
 {
     let drives = configJSON['drives'] || {};
-    let system = configJSON['systems']?.systemType;
+    let system = configJSON['systems']?.[systemType];
 
     if (!system) {
         return "unsupported system type: " + systemType;
