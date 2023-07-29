@@ -1120,8 +1120,8 @@ function buildFileIndex(diskIndex)
  * Without a drive manifest, all we can do is append the machine directory to the local directory
  * of the drive's root and hope for the best.
  *
- * Note that machine directories (ie, DOS directories) always use backslashes, and our manifest
- * paths always use forward slashes, whereas the local directory separator is platform-dependent.  Fun, eh?
+ * Note that machine directories (ie, DOS directories) always use backslashes, manifest paths
+ * paths always use forward slashes, and manifest origins always use platform-dependent separators.
  *
  * @param {string} machineDir
  * @returns {string}
@@ -1136,7 +1136,7 @@ function mapDir(machineDir)
             let item = driveManifest[i];
             if (!(item.attr & DiskInfo.ATTR.SUBDIR)) continue;
             if (item.path == machineDir) {
-                newDir = item.origin.replace('/', path.sep);
+                newDir = item.origin;
                 break;
             }
         }
