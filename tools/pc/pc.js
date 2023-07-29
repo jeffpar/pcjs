@@ -1237,22 +1237,18 @@ function saveDrive(sDir)
                         iOld++;
                     } else {
                         if (fDebug) printf("creating: %s\n", newItemPath);
-                        if (newAttr & DiskInfo.ATTR.SUBDIR) {
-                            try {
+                        try {
+                            if (newAttr & DiskInfo.ATTR.SUBDIR) {
                                 fs.mkdirSync(newItemPath);
-                            } catch(err) {
-                                printf("%s\n", err.message);
+                            } else {
+                                writeFileSync(newItemPath, newItem.contents, true, false);
                             }
-                        } else {
-                            writeFileSync(newItemPath, newItem.contents, true, false);
-                        }
-                        fs.utimesSync(newItemPath, newDate, newDate);
-                        if (newAttr & DiskInfo.ATTR.READONLY) {
-                            try {
+                            fs.utimesSync(newItemPath, newDate, newDate);
+                            if (newAttr & DiskInfo.ATTR.READONLY) {
                                 fs.chmodSync(newItemPath, 0o444);
-                            } catch(err) {
-                                printf("%s\n", err.message);
                             }
+                        } catch(err) {
+                            printf("%s\n", err.message);
                         }
                         iNew++;
                     }

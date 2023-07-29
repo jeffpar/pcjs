@@ -1284,10 +1284,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "TEST0001.img",
-        "TEST0001.json"
       ],
-      "cwd": "${workspaceFolder}/disks/tmp",
+      "cwd": "${workspaceFolder}/tools/diskimage",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
