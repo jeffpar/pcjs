@@ -1112,6 +1112,39 @@ function buildFileIndex(diskIndex)
 }
 
 /**
+ * mapDir(machineDir)
+ *
+ * Maps the given machine directory to a local directory, using the 'origin' paths in the drive
+ * manifest created by buildDrive() and updated by saveDrive().
+ *
+ * Without a drive manifest, all we can do is append the machine directory to the local directory
+ * of the drive's root and hope for the best.
+ *
+ * Note that machine directories (ie, DOS directories) always use backslashes, and our manifest
+ * paths always use forward slashes, whereas the local directory separator is platform-dependent.  Fun, eh?
+ *
+ * @param {string} machineDir
+ * @returns {string}
+ */
+function mapDir(machineDir)
+{
+    let newDir = path.join(localDir, machineDir.replace(/\\/g, path.sep));
+    if (driveManifest) {
+        machineDir = machineDir.replace(/\\/g, '/');
+        if (machineDir[0] != '/') machineDir = '/' + machineDir;
+        for (let i = 0; i < driveManifest.length; i++) {
+            let item = driveManifest[i];
+            if (!(item.attr & DiskInfo.ATTR.SUBDIR)) continue;
+            if (item.path == machineDir) {
+                newDir = item.origin.replace('/', path.sep);
+                break;
+            }
+        }
+    }
+    return newDir;
+}
+
+/**
  * saveDrive(sDir)
  *
  * If we built a drive on entry, this checks the drive on exit for any changes that need to be saved.
@@ -1369,7 +1402,7 @@ function loadDiskette(sDrive, aTokens)
                  *
                  *      token = token.replace(/([().\[\]])/g, '\\$1');
                  *
-                 * we now embrace them.  Unfortunately, when using our DOS "load" command, the DOS command interpreter
+                 * we now embrace them.  Unfortunately, when using our DOS "LOAD" utility, the DOS command interpreter
                  * likes to chop commands up whenever it sees the "pipe" operator, so we have two options: allow the user
                  * to put quotes around regex expressions containing pipes, or let them use commas instead of pipes.
                  *
@@ -1379,7 +1412,7 @@ function loadDiskette(sDrive, aTokens)
                  *      load a: --file arc "(com|exe)"
                  *      load a: --file "arc.*(com|exe)"
                  *
-                 * Note that if you want the base filename to end with "ARC", (eg, "ARC.EXE" or "LHARC.EXE" but not "SEARCH.EXE"
+                 * NOTE: If you want the base filename to end with "ARC", (eg, "ARC.EXE" or "LHARC.EXE" but not "SEARCH.EXE"),
                  * then use a period preceded by a backslash:
                  *
                  *      load a: --file "arc\.(com|exe"
@@ -1513,7 +1546,7 @@ function doCommand(s)
 {
     let aTokens = s.split(' ');
     let cmd = aTokens[0].toLowerCase();
-    let child, result = "", reload = false, curDir = "";
+    let child, result = "", reload = false, curDir = "", newDir;
 
     aTokens.splice(0, 1);
     let arg, args = aTokens.join(' ');
@@ -1562,11 +1595,7 @@ function doCommand(s)
         }
         curDir = process.cwd();
         try {
-            /*
-             * TODO: This code needs to map machineDir to the appropriate local path stored in the driveManifest
-             * (normally the mapping is 1:1 unless the local path includes components that are not 8.3-compliant).
-             */
-            process.chdir(path.join(localDir, machineDir.replace(/\\/g, path.sep)));
+            process.chdir(mapDir(machineDir));
             let argv = args.split(' ');
             let app = argv[0];
             let appConfig = configJSON['apps']?.[app];
@@ -1583,11 +1612,12 @@ function doCommand(s)
                 ]
             });
         } catch(err) {
-            result = err.message;
+            printf("%s\n", err.message);
         }
         process.chdir(curDir);
         if (reload) {
-            result = reloadMachine() || result;
+            result = reloadMachine();
+            if (typeof result != "string") result = "";
         }
         break;
     case "load":
@@ -1677,7 +1707,7 @@ async function processArgs(argv)
     let splice = false;
     let sFile = argv['load'];
     if (typeof sFile != "string") {
-        sFile = argv[1];                            // for convenience, we also allow a bare machine name
+        sFile = argv[1];                        // for convenience, we also allow a bare machine name
         if (sFile) splice = true;
     }
     if (sFile) {
@@ -1689,33 +1719,41 @@ async function processArgs(argv)
         }
     }
 
+    let verifyDir = function(s) {
+        if (s[0] == '~') {
+            s = path.join(process.env.HOME, s.slice(1));
+        } else {
+            s = path.resolve(s);
+        }
+        return existsDir(s, false)? s : "";
+    };
+
+    let sDir = "";
     if (!result) {
         splice = false;
-        let sDir = argv['dir'];
+        sDir = argv['dir'];
         if (typeof sDir != "string") {
-            sDir = argv[1];                         // for convenience, we also allow a bare directory name
-            if (sDir) {
-                splice = true;
+            sDir = argv[1];                     // for convenience, we also allow a bare directory name
+            if (sDir) splice = true;
+        }
+        if (sDir) {
+            let newDir = verifyDir(sDir);
+            if (newDir) {
+                localDir = newDir;
+                if (splice) argv.splice(1, 1);
             } else {
-                sDir = localDir;
+                if (!splice) result = "invalid directory: " + sDir;
+                sDir = "";
             }
         }
-        if (sDir[0] == '~') {
-            sDir = path.join(process.env.HOME, sDir.slice(1));
-        } else {
-            sDir = path.resolve(sDir);
-        }
-        if (existsDir(sDir, false)) {
-            localDir = sDir;
-            if (splice) argv.splice(1, 1);
-        } else if (!splice) {
-            result = "invalid directory: " + sDir;
-        }
+    }
+    if (!sDir) {
+        localDir = verifyDir(localDir);
     }
 
     if (!result) {
         let capacity = 0;
-        if (argv[1]) {                              // last but not least, check for a DOS command or program name
+        if (argv[1]) {                          // last but not least, check for a DOS command or program name
             let args = argv.slice(1).join(' ');
             let sCommand = checkCommand(localDir, args);
             if (!sCommand && args) {

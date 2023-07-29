@@ -466,8 +466,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "dir",
-        "--debug"
+        "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS320",
       "stopOnEntry": false,
