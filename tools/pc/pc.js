@@ -1956,13 +1956,14 @@ function main(argc, argv)
             "main options:":            optionsMain,
             "other options:":           optionsOther
         }
-        printf("\nusage:\n\t[node] pc.js [machine file] [DOS command or program name] [options]\n");
+        printf("\nusage:\n\t[node] pc.js [machine file] [local directory] [DOS command] [options]\n");
         for (let group in optionGroups) {
             printf("\n%s\n\n", group);
             for (let option in optionGroups[group]) {
                 printf("\t%s\t%s\n", option, optionGroups[group][option]);
             }
         }
+        printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, "pc.json"));
         return;
     }
 
