@@ -19,7 +19,12 @@
   },
   "drives": {
     "10mb": {
-      "AT": 1, "XT": 3, "MBR": "MSDOS.mbr"
+      "AT": 1, "XT": 3, "MBR": "10mb.mbr",
+      "cylinders": 306, "heads": 4, "sectors": 17
+    },
+    "20mb": {
+      "AT": 2, "XT": 4, "MBR": "20mb.mbr",
+      "cylinders": 615, "heads": 4, "sectors": 17
     }
   },
   "systems": {

@@ -18,17 +18,19 @@ From the "Juku E5105 Microcomputer User Manual (1988)", p.10:
 
 > Juku's memory consists of 16K (expandable up to 64K bytes) of non-volatile memory and 64K bytes of random access memory.
 > 10K bytes of random access memory make up the so-called video memory, where a video image is formed on the TV screen based
-> on the stored information.  Since the used microprocessor (KP580NK80) allows directly addressing the memory only to the
-> extent of 64K bytes, 4 different memory addressing methods have been introduced for the sake of efficient use of the address
-> space and further expansion of the memory.  The choice of the pile mode is made with the two lowest bits of the system gate
-> (address 02H), according to the following table:
+> on the stored information.
+> 
+> Since the used microprocessor (KP580MK80) allows direct addressing of the memory only to the extent of 64K bytes,
+> 4 different memory addressing methods have been introduced for the sake of efficient use of the address space and further
+> expansion of the memory.  The necessary mode is selected with the two lowest bits of the system gate (address 02H),
+> according to the following table:
 > 
 > Mode 0
 > 
-> Apply computer when switching on right after RESET signal.  Within the first 16K bytes of the address space,
+> Applies when the computer is turned on immediately after the RESET signal.  Within the first 16K bytes of the address space,
 > variable and non-volatile memory are located in parallel.  With the read command, the data is read from the permanent
-> memory, with the write command the data is stored in the non-volatile memory.  The last 10K bytes of random access memory
-> (640 bytes less for Bigemini) are occupied by video memory.
+> memory; with the write command, the data is stored in non-volatile memory.  The last 10K bytes of random access memory
+> (or rather 640 bytes less) includes video memory.
 > 
 > Mode 1
 > 

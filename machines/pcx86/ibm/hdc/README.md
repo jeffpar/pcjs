@@ -34,16 +34,17 @@ Generally, our PC XT machines use 10Mb drives, configured as XT drive type 3.  S
 
 The IBM PC AT introduced a new drive controller and defined many new drive types.  You can find a listing of them in the PCjs [HDC](/machines/pcx86/modules/v2/hdc.js) component (see **aDriveTypes**).
 
-Generally, our PC AT machines use four common sizes, which correspond to the following AT drive types:
+Generally, our PC AT machines only use a few common sizes, corresponding to the following AT drive types:
 
   - Type 1: 306 cylinders, 4 heads, 17 sectors/track (10,653,696 bytes or [10Mb]({{ site.github.pages }}/machines/pcx86/ibm/hdc/10mb))
   - Type 2: 615 cylinders, 4 heads, 17 sectors/track (21,411,840 bytes or [20Mb]({{ site.github.pages }}/machines/pcx86/ibm/hdc/20mb))
+  - Type 3: 615 cylinders, 6 heads, 17 sectors/track (32,117,760 bytes or 30Mb)
   - Type 4: 940 cylinders, 8 heads, 17 sectors/track (65,454,080 bytes or 62Mb)
   - Type 5: 940 cylinders, 6 heads, 17 sectors/track (49,090,560 bytes or [47Mb]({{ site.github.pages }}/machines/pcx86/ibm/hdc/47mb))
 
 Note that PC XT drive type 3 and PC AT drive type 1 have identical [10Mb](10mb/) disk geometry, which is why you'll find both PC XT and PC AT machines here using the same 10Mb disk image.
 
-Similarly, PC AT drive types 1, 2, and 5 match the drive types defined by the COMPAQ DeskPro 386, so those machines can use the same [10Mb](10mb/), [20Mb](20mb/), and [47Mb](47mb/) disk images.
+Similarly, PC AT drive types 1, 2, 3, and 5 match the drive types defined by the COMPAQ DeskPro 386, so those machines can use the same [10Mb](10mb/), [20Mb](20mb/), 30Mb, and [47Mb](47mb/) disk images.
 
 ### COMPAQ DeskPro 386 Drive Types
 

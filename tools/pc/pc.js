@@ -37,7 +37,7 @@ let savedState = "state386.json";
 let localMachine = "";  // current machine config file
 let localCommand = "";  // current command issued from machine
 let localDir = ".";     // local directory used to build localDrive
-let localDrive = "disks/C.json";
+let localDrive = "disks/harddisk.json";
 let machineDir = "";    // current directory *inside* the machine
 let maxFiles = 1024;    // default hard drive file limit
 let maxCapacity = 10;   // default hard drive capacity, in megabytes (Mb)
@@ -597,17 +597,17 @@ function newMachine()
 }
 
 /**
- * loadMachine(sFile, hdCapacity)
+ * loadMachine(sFile, capacity)
  *
- * If hdCapacity, then we want to 1) remove any boot floppy from drive A: and 2) make the sure the 'type'
- * for the first hard drive is set correctly.  For example, if hdCapacity is 10, then the drive type should
+ * If capacity, then we want to 1) remove any boot floppy from drive A: and 2) make the sure the 'type'
+ * for the first hard drive is set correctly.  For example, if capacity is 10, then the drive type should
  * be 3 for XT controllers and 1 for AT controllers.
  *
  * @param {string} sFile
- * @param {number} [hdCapacity] (hard drive capacity in Mb, if any)
+ * @param {number} [capacity] (hard drive capacity in Mb, if any)
  * @returns {string}
  */
-function loadMachine(sFile, hdCapacity = 0)
+function loadMachine(sFile, capacity = 0)
 {
     let result = "";
     let getFactory = function(config) {
@@ -626,7 +626,7 @@ function loadMachine(sFile, hdCapacity = 0)
             }
         }
         let removeFloppy = fNoFloppy;
-        if (hdCapacity) {
+        if (capacity) {
             if (config['hdc']) {
                 let type = config['hdc']['type'];
                 let drives = config['hdc']['drives'];
@@ -641,10 +641,18 @@ function loadMachine(sFile, hdCapacity = 0)
                 /*
                  * Set the *drive* type below based on the *controller* type obtained above.
                  */
-                let typeDrive = configJSON['drives']?.[hdCapacity + "mb"]?.[type] || 0;
-                drives[0] = {'name': hdCapacity + "Mb Hard Disk", 'type': typeDrive, 'path': path.join(pcjsDir, localDrive)};
+                let typeDrive = configJSON['drives']?.[capacity + "mb"]?.[type];
+                if (typeDrive) {
+                    drives[0] = {
+                        'name': capacity + "Mb Hard Disk",
+                        'type': typeDrive
+                    };
+                    if (driveManifest) {
+                        drives[0]['path'] = path.join(pcjsDir, localDrive);
+                        removeFloppy = true;
+                    }
+                }
                 config['hdc']['drives'] = drives;
-                removeFloppy = true;
             }
             if (sFile.endsWith(savedMachine) && config['computer']) {
                 config['computer']['state'] = path.join(pcjsDir, savedState);
@@ -838,14 +846,14 @@ function checkCommand(sDir, sCommand)
  *
  * Builds a bootable hard drive image containing all files in the current directory.
  *
- * At present, the image size is hard-coded to 10Mb (which corresponds to an XT type 3 or AT type 1 drive)
+ * At present, the image size is defaults to 10Mb (which corresponds to an XT type 3 or AT type 1 drive)
  * and the operating system files default to MS-DOS 3.20.  Use --sys and --ver command-line options to
  * override those defaults.  The allowed systems are currently "msdos" and "pcdos", and the allowed versions
  * are any available in the PCjs diskette repo.
  *
  * Choice of hardware (ie, drives other than 10Mb) will be a bit trickier, because that also requires
  * tweaking the machine configuration file to specify a compatible drive type and customizing the master
- * boot record (currently we use a hard-coded ".mbr" file).  There are no plans to support more than one
+ * boot record (currently we use a prebuilt ".mbr" file).  There are no plans to support more than one
  * partition/one volume, and to support volumes larger than 32Mb, we'll have to make sure your choice
  * of operating system supports it (eg, COMPAQ MS-DOS 3.31).
  *
@@ -883,7 +891,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     }
 
     let driveType = maxCapacity + "mb";
-    let sSystemMBR = drives[driveType] && drives[driveType]['MBR'] || "MSDOS.mbr";
+    let sSystemMBR = drives[driveType] && drives[driveType]['MBR'] || (driveType + ".mbr");
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -1015,12 +1023,13 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     driveManifest = null;
     let done = function(di) {
         if (di) {
-            let drivePath = path.join(pcjsDir, localDrive);
             let manifest = di.getFileManifest(null, true);
             di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
             di.updateBootSector(dbBoot, 0, verBPB);
+            localDrive = localDrive.replace(/[^/]*$/, di.getName() + ".json");
+            let drivePath = path.join(pcjsDir, localDrive);
+            if (fVerbose) printf("building drive: %s\n", drivePath);
             if (writeDiskSync(drivePath, di, false, 0, true, true)) {
-                if (fVerbose) printf("build complete\n");
                 driveManifest = manifest;
             }
         }
@@ -1159,11 +1168,11 @@ function mapDir(machineDir)
  */
 function saveDrive(sDir)
 {
-    if (driveManifest) {
-        let imageData = machine.hdc && machine.hdc.aDrives && machine.hdc.aDrives.length && machine.hdc.aDrives[0].disk;
-        if (imageData) {
-            let di = new DiskInfo(device, "DOS");
-            if (di.buildDiskFromJSON(imageData)) {
+    let imageData = machine.hdc && machine.hdc.aDrives && machine.hdc.aDrives.length && machine.hdc.aDrives[0].disk;
+    if (imageData) {
+        let di = new DiskInfo(device, "PCJS");
+        if (di.buildDiskFromJSON(imageData)) {
+            if (driveManifest) {
                 let oldManifest = driveManifest;
                 let newManifest = di.getFileManifest(null, true);
                 /*
@@ -1291,13 +1300,13 @@ function saveDrive(sDir)
                         printf("%s\n", err.message);
                     }
                 }
-                if (fSave) {
-                    let drivePath = path.join(pcjsDir, localDrive.replace(".json", ".img"));
-                    printf("saving drive: %s\n", drivePath);
-                    writeDiskSync(drivePath, di, false, 0, true, true);
-                }
-                return true;
             }
+            if (fSave) {
+                let drivePath = path.join(pcjsDir, localDrive.replace(".json", ".img"));
+                printf("saving drive: %s\n", drivePath);
+                writeDiskSync(drivePath, di, false, 0, true, true);
+            }
+            return true;
         }
     }
     return false;
@@ -1605,7 +1614,6 @@ function doCommand(s)
             result = "bad command or file name: " + args;
             break;
         }
-        printf("building drive: %s\n", path.join(pcjsDir, localDrive));
         result = buildDrive(localDir, arg, true);
         if (typeof result != "string") result = "";
         break;
@@ -1660,7 +1668,7 @@ function doCommand(s)
                 if (sFile) {
                     machine = newMachine();
                     printf("loading machine: %s\n", sFile);
-                    result = loadMachine(sFile, driveManifest? maxCapacity : 0);
+                    result = loadMachine(sFile, maxCapacity);
                     if (!result) {
                         localMachine = sFile;
                     }
@@ -1777,7 +1785,6 @@ async function processArgs(argv)
     }
 
     if (!result) {
-        let capacity = 0;
         if (argv[1]) {                          // last but not least, check for a DOS command or program name
             let args = argv.slice(1).join(' ');
             let sCommand = checkCommand(localDir, args);
@@ -1786,7 +1793,6 @@ async function processArgs(argv)
             } else {
                 result = await buildDrive(localDir, sCommand);
                 if (!result) {
-                    capacity = maxCapacity;
                     if (!localMachine) {
                         localMachine = checkMachine(savedMachine, true);
                     }
@@ -1794,7 +1800,7 @@ async function processArgs(argv)
             }
         }
         if (localMachine) {
-            result = loadMachine(localMachine, capacity);
+            result = loadMachine(localMachine, maxCapacity);
             if (!result) {
                 loading = true;
             } else {
@@ -1932,13 +1938,14 @@ function main(argc, argv)
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
     maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
-    maxCapacity = parseInt(defaults['capacity']) || maxCapacity;
+    maxCapacity = parseInt(argv['capacity']) || parseInt(defaults['capacity']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
 
     if (argv['help']) {
         let optionsMain = {
             "--load=[machine file]":    "load machine configuration file",
             "--type=[machine type]":    "set machine type (default is " + machineType + ")",
+            "--capacity=[size]":        "set hard drive capacity (default is " + maxCapacity + "mb)",
             "--dir=[directory]":        "set hard drive local directory (default is " + localDir + ")",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--sys=[system type]":      "operating system type (default is " + systemType + ")",
