@@ -793,6 +793,11 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
 /**
  * checkCommand(sDir, sCommand)
  *
+ * An external DOS command is allowed if we can find a matching COM, EXE, or BAT file somewhere
+ * within the specified directory.  Internal DOS commands are allowed if they're on the list below.
+ *
+ * NOTE: The list of internal commands below is not intended to be exhaustive; it's just a start.
+ *
  * @param {string} sDir
  * @param {string} sCommand
  * @returns {string} (original command, or empty string if not a valid command or program name)
@@ -847,8 +852,6 @@ function checkCommand(sDir, sCommand)
  * The first three system files on the disk image will be those listed below (eg, IO.SYS, MSDOS.SYS, and
  * COMMAND.COM); if any of those files already exist in the current directory, ours will take precedence.
  * As for AUTOEXEC.BAT, we read any existing file (or create an empty file) and append the provided command.
- *
- * NOTE: The list of allowed internal commands below is not intended to be exhaustive; it's just a start.
  *
  * @param {string} sDir
  * @param {string} [sCommand] (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
@@ -1117,8 +1120,10 @@ function buildFileIndex(diskIndex)
  * Maps the given machine directory to a local directory, using the 'origin' paths in the drive
  * manifest created by buildDrive() and updated by saveDrive().
  *
- * Without a drive manifest, all we can do is append the machine directory to the local directory
- * of the drive's root and hope for the best.
+ * Without a drive manifest, all we can do is join the machine directory to the local directory
+ * of the drive's root and hope for the best.  If any part of the machine directory is an 8.3
+ * mapping to a non-8.3 local directory, the mapping will not be correct, so you really need an
+ * up-to-date drive manifest.
  *
  * Note that machine directories (ie, DOS directories) always use backslashes, manifest paths
  * paths always use forward slashes, and manifest origins always use platform-dependent separators.
@@ -1171,6 +1176,8 @@ function saveDrive(sDir)
                     let bContents = b.contents || [];
                     return aContents.length === bContents.length && aContents.every((element, i) => element === bContents[i]);
                 };
+
+                let curMappings = {"/": sDir};
                 while (iOld < oldManifest.length || iNew < newManifest.length) {
 
                     let oldItem = oldManifest[iOld] || {};
@@ -1179,7 +1186,29 @@ function saveDrive(sDir)
                     let newAttr = +newItem.attr || 0;
                     let oldDate = device.parseDate(oldItem.date, true);
                     let newDate = device.parseDate(newItem.date, true);
-                    let newItemPath = path.join(sDir, newItem.path && newItem.path.slice(1));
+
+                    if (oldAttr & DiskInfo.ATTR.SUBDIR) {
+                        curMappings[oldItem.path] = oldItem.origin;
+                    }
+
+                    let newItemPath = "";
+                    if (newItem.path) {
+                        let newItemDir, newItemName = "";
+                        let i = newItem.path.lastIndexOf("/");
+                        newItemDir = newItem.path.slice(0, i) || "/";
+                        newItemName = newItem.path.slice(i + 1);
+                        if (!curMappings[newItemDir]) {
+                            newItemPath = path.join(sDir, newItem.path);
+                            if (fDebug) printf("joining: %s => %s\n", newItem.path, newItemPath);
+                        } else {
+                            newItemPath = path.join(curMappings[newItemDir], newItemName);
+                            if (newItemDir == "/") newItemDir = "";
+                            if (fDebug) printf("mapping: %s/%s => %s\n", newItemDir, newItemName, newItemPath);
+                        }
+                        if ((newAttr & DiskInfo.ATTR.SUBDIR) && !curMappings[newItem.path]) {
+                            curMappings[newItem.path] = newItemPath;
+                        }
+                    }
 
                     if (oldItem.path == newItem.path) {
                         if (oldAttr == newAttr) {
@@ -1191,7 +1220,7 @@ function saveDrive(sDir)
                                 if (fDebug) printf("updating: %s\n", newItemPath);
                                 writeFileSync(newItemPath, newItem.contents, false, true);
                             } else {
-                                if (fDebug) printf("skipping: %s\n", newItemPath);
+                                // if (fDebug) printf("skipping: %s\n", newItemPath);
                             }
                         } else {
                             /*
@@ -1222,7 +1251,7 @@ function saveDrive(sDir)
                          * So instead, we simply queue the directory for removal later.
                          */
                         if (!(oldAttr & (DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.VOLUME))) {
-                            let oldItemPath = (oldItem.origin || path.join(sDir, oldItem.path)).slice(1);
+                            let oldItemPath = oldItem.origin || path.join(sDir, oldItem.path);
                             if (oldAttr & DiskInfo.ATTR.SUBDIR) {
                                 removedDirs.push(oldItemPath);
                             } else {

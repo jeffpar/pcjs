@@ -656,7 +656,8 @@
         "disks/MSDOS320",
         "--sys=msdos",
         "--ver=3.20",
-        "dir *.*"
+        "dir *.*",
+        "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
