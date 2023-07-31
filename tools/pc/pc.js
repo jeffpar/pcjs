@@ -531,38 +531,50 @@ function sendSerial(b)
  * If no file can be found, we return an empty string.
  *
  * @param {string} sFile
- * @param {boolean} [fPreserve]
  * @returns {string} (sFile with a path prepended and/or an extension appended as needed, or empty string if not found)
  */
-function checkMachine(sFile, fPreserve)
+function checkMachine(sFile)
 {
-    if (sFile) {
+    let sVerify = "";
+    while (sFile) {
         if (sFile.indexOf("http") == 0) {
-            return sFile;
+            break;
         }
         if (existsFile(sFile, false) && !existsDir(sFile, false)) {
-            return sFile;
+            sVerify = sFile;
+            break;
         }
         if (sFile.indexOf('.') > 0) {
             let s = path.join(pcjsDir, sFile);
-            if (existsFile(s, false)) {
-                return s;
-            }
+            sVerify = existsFile(s, false)? s: "";
+            break;
         } else {
             const exts = [".json", ".json5", ".xml"];
             for (let ext of exts) {
                 let s = sFile + ext;
                 if (existsFile(s, false)) {
-                    return s;
+                    sVerify = s;
+                    break;
                 }
                 s = path.join(pcjsDir, s);
                 if (existsFile(s, false)) {
-                    return s;
+                    sVerify = s;
+                    break;
                 }
             }
+            if (!sVerify) sFile = "";
+            break;
         }
     }
-    return fPreserve? sFile : "";
+    if (sVerify) {
+        if (sVerify.endsWith(".json")) {
+            let machine = JSON.parse(readFileSync(sVerify, "utf8", true) || "{}");
+            sFile = machine['machine']? sVerify : "";
+        } else {
+            sFile = sVerify;
+        }
+    }
+    return sFile;
 }
 
 /**
@@ -901,16 +913,16 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     }
 
     let aFileDescs = [];
+    /*
+     * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero
+     * for our added utilities (and for COMMAND.COM itself).
+     */
+    let attrHidden = majorVersion > 2? DiskInfo.ATTR.HIDDEN : 0;
     for (let name of system.files) {
         let desc = diSystem.findFile(name);
         if (desc) {
             desc.attr = +desc.attr;
-            /*
-             * There may be situations where we must leave COMMAND.COM unhidden; we'll see.
-             *
-             *      if (name != "COMMAND.COM" || majorVersion != 2) ...
-             */
-            desc.attr |= DiskInfo.ATTR.HIDDEN;
+            desc.attr |= attrHidden;
             aFileDescs.push(desc);
         }
     }
@@ -920,14 +932,14 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
      * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
      * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
      */
-    aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
+    aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
 
     /*
      * We also create a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
      * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDrive()
      * to look for any changes and then terminate the machine.
      */
-    aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], DiskInfo.ATTR.HIDDEN));
+    aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
 
     /*
      * For any apps listed in pc.json, create hidden command apps in the root, each of which will execute
@@ -944,7 +956,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
         for (let j = 0; j < appName.length; j++) {
             appContents.push(appName.charCodeAt(j));
         }
-        aFileDescs.push(makeFileDesc(appFile, appContents, DiskInfo.ATTR.HIDDEN));
+        aFileDescs.push(makeFileDesc(appFile, appContents, attrHidden));
     }
 
     /*
@@ -962,7 +974,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
         }
     } else {
         data = (version >= 3.30? '@' : '') + "ECHO OFF\r\n";
-        attr |= DiskInfo.ATTR.HIDDEN;
+        attr |= attrHidden;
     }
     let matchPath = data.match(/^PATH\s*(.*)$/im);
     if (matchPath) {
@@ -1159,14 +1171,15 @@ function mapDir(machineDir)
 }
 
 /**
- * saveDrive(sDir)
+ * saveDrive(sDir, fSaveImage)
  *
  * If we built a drive on entry, this checks the drive on exit for any changes that need to be saved.
  *
  * @param {string} sDir
+ * @param {boolean} [fSaveImage]
  * @returns {boolean}
  */
-function saveDrive(sDir)
+function saveDrive(sDir, fSaveImage)
 {
     let imageData = machine.hdc && machine.hdc.aDrives && machine.hdc.aDrives.length && machine.hdc.aDrives[0].disk;
     if (imageData) {
@@ -1301,7 +1314,7 @@ function saveDrive(sDir)
                     }
                 }
             }
-            if (fSave) {
+            if (fSaveImage) {
                 let drivePath = path.join(pcjsDir, localDrive.replace(".json", ".img"));
                 printf("saving drive: %s\n", drivePath);
                 writeDiskSync(drivePath, di, false, 0, true, true);
@@ -1680,6 +1693,9 @@ function doCommand(s)
             result = "missing " + (machine.cpu? "drive letter" : "machine file");
         }
         break;
+    case "save":
+        saveDrive(localDrive, true);
+        break;
     case "q":
     case "quit":
         return null;
@@ -1794,7 +1810,7 @@ async function processArgs(argv)
                 result = await buildDrive(localDir, sCommand);
                 if (!result) {
                     if (!localMachine) {
-                        localMachine = checkMachine(savedMachine, true);
+                        localMachine = checkMachine(savedMachine) || savedMachine;
                     }
                 }
             }
@@ -1896,7 +1912,7 @@ function readInput(stdin, stdout)
  */
 function exit()
 {
-    saveDrive(localDir);
+    saveDrive(localDir, fSave);
     process.stdin.setRawMode(false);
     process.exit();
 }

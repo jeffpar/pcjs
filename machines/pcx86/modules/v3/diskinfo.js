@@ -811,7 +811,7 @@ export default class DiskInfo {
             cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
             cbAvail = cDataSectors * cbSector;
             if (!nTargetSectors || cHiddenSectors) {
-                if (cbTotal <= cbAvail) {
+                if (cbTotal <= cbAvail && nTargetSectors <= cTotalSectors) {
                     let cb = this.calcFileSizes(aFileData, cSectorsPerCluster);
                     if (cb <= cbAvail) {
                         cbTotal = cb;
@@ -819,7 +819,7 @@ export default class DiskInfo {
                     }
                 }
             } else {
-                if (cTotalSectors == nTargetSectors) break;
+                if (nTargetSectors == cTotalSectors) break;
             }
         }
 
@@ -4133,8 +4133,32 @@ DiskInfo.aDefaultBPBs = [
     0x11, 0x00,                 // 0x18: sectors per track (17)
     0x04, 0x00,                 // 0x1A: number of heads (4)
       //
-      // PC DOS 2.0 actually stored 0x01, 0x00, 0x80, 0x00 here, so you can't rely on more than the first word.
-      // TODO: Investigate PC DOS 2.0 BPB behavior (ie, what did the 0x80 mean)?
+      // NOTE: PC DOS 2.0 stored BOOTDRIVE and BOOTHEAD in the 3rd and 4th bytes here (it used only 2 bytes for hidden sectors)
+      //
+    0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+  ],
+  [                             // define BPB for 20Mb hard drive
+    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+ // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (this is a real OEM signature)
+    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+    0x10,                       // 0x0D: sectors per cluster (8)
+    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+    0x02,                       // 0x10: FAT copies (2)
+    0x00, 0x04,                 // 0x11: root directory entries (0x400 or 1024)  0x400 * 0x20 = 0x8000 (1 sector is 0x200 bytes, total of 0x40 or 64 sectors)
+    0x17, 0xa3,                 // 0x13: number of sectors (0xa317 or 41751; * 512 bytes/sector = 21,376,512 bytes = 20,875.5Kb = 20Mb)
+    0xF8,                       // 0x15: media ID (eg, 0xF8: hard drive w/FAT12)
+    0x08, 0x00,                 // 0x16: sectors per FAT (8)
+      //
+      // Wikipedia (http://en.wikipedia.org/wiki/File_Allocation_Table#BIOS_Parameter_Block) implies everything past
+      // this point was introduced post-DOS 2.0.  However, DOS 2.0 merely said they were optional, and in fact, DOS 2.0
+      // FORMAT always initializes the next 3 words.  A 4th word, LARGESECS, was added in DOS 3.20 at offset 0x1E,
+      // and then in DOS 3.31, both HIDDENSECS and LARGESECS were widened from words to dwords.
+      //
+    0x11, 0x00,                 // 0x18: sectors per track (17)
+    0x04, 0x00,                 // 0x1A: number of heads (4)
+      //
+      // NOTE: PC DOS 2.0 stored BOOTDRIVE and BOOTHEAD in the 3rd and 4th bytes here (it used only 2 bytes for hidden sectors)
       //
     0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
   ],

@@ -654,7 +654,8 @@
         "--sys=msdos",
         "--ver=3.20",
         "dir *.*",
-        "--debug"
+        "--debug",
+        "--capacity=20mb"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -669,18 +670,17 @@
       }
     },
     {
-      "name": "pc.js chkdsk --sys=pcdos --ver=2.00 --debug --remote",
+      "name": "pc.js dir --sys=pcdos --ver=2.00",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "chkdsk",
         "--sys=pcdos",
         "--ver=2.00",
-        "--debug",
-        "--remote"
+        "disks/MSDOS320",
+        "dir"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/PCDOS200",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
