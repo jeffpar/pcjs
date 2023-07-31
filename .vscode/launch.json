@@ -645,17 +645,15 @@
       }
     },
     {
-      "name": "pc.js dir --sys=msdos --ver=3.20",
+      "name": "pc.js dir --sys=pcdos --ver=2.00",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "--sys=pcdos",
+        "--ver=2.00",
         "disks/MSDOS320",
-        "--sys=msdos",
-        "--ver=3.20",
-        "dir *.*",
-        "--debug",
-        "--capacity=20mb"
+        "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -670,15 +668,110 @@
       }
     },
     {
-      "name": "pc.js dir --sys=pcdos --ver=2.00",
+      "name": "pc.js dir --sys=pcdos --ver=2.00 --capacity=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--sys=pcdos",
         "--ver=2.00",
+        "--capacity=20mb",
         "disks/MSDOS320",
         "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js dir --sys=pcdos --ver=3.00 (crashes)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--sys=pcdos",
+        "--ver=3.00",
+        "disks/MSDOS320",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js dir --sys=msdos --ver=3.20",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--debug",
+        "--sys=msdos",
+        "--ver=3.20",
+        "disks/MSDOS320",
+        "dir *.*"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js dir --sys=msdos --ver=3.30",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "disks/MSDOS320",
+        "dir *.*",
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js dir --sys=msdos --ver=3.30 --capacity=20mb (crashes)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--debug",
+        "--sys=msdos",
+        "--ver=3.30",
+        "--capacity=20mb",
+        "--halt",
+        "disks/MSDOS320",
+        "dir *.*",
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
