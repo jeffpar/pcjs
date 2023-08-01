@@ -225,8 +225,8 @@ will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EX
 
 I later added support for 20Mb drives (with 615 cylinders instead of 306), even though only the PC AT (and Compaq DeskPro 386) natively supported such a drive.  To test 20mb support, I tried two scenarios:
 
- 1. Running FDISK on a PC AT running PC DOS 3.00
- 2. Running FDISK on a PC AT running PC DOS 2.00
+ 1. Running FDISK on a PC AT with PC DOS 3.00
+ 2. Running FDISK on a PC AT with PC DOS 2.00
 
 Here's scenario #1, using the new hard drive `--capacity` option:
 
@@ -394,7 +394,7 @@ So, PC DOS 2.00 was able to provide a bit more space by: 1) placing the partitio
 
 It was also nice to see that, even though PC DOS 2.00 was designed for the PC XT (which did *not* natively support a drive as large as 20mb), PC DOS 2.00 could run on a PC AT *and* successfully partition and format a 20mb drive -- even though it had to use a rather unwieldy cluster size (8K).  PC DOS 2.00 had other minor limitations, such as being unaware of the PC AT's real-time clock and current date.  But on the whole, it was quite usable.
 
-However, PC DOS 3.00 was obviously preferable.  Not only was it aware of the PC AT's real-time clock, it could also format the drive with much smaller clusters (2K instead of 8K), thanks to the "new" 16-bit FAT.  Since PC DOS 2.00 only supports 12-bit FATs, such a drive would not be readable by that operating system.
+However, PC DOS 3.00 was obviously preferable.  Not only was it aware of the PC AT's real-time clock, it could also format the drive with much smaller clusters (2K instead of 8K), thanks to the "new" 16-bit FAT.  Since PC DOS 2.00 only supports 12-bit FATs, such a drive would not be readable by that operating system.  PC DOS 3.00, on the other hand, has no problem reading drives with either 12-bit or 16-bit FATs.
 
 ### Historical Notes
 
