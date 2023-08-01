@@ -27,11 +27,11 @@ import pcjslib       from "../modules/pcjslib.js";
 let fDebug = false;
 let fHalt = false;
 let fNoFloppy = false;
-let fSave = false;
+let fWrite = false;
 let autoStart = false;
 let machineType = "pcx86";
 let systemType = "msdos";
-let systemVersion = "3.20";
+let systemVersion = "3.30";
 let savedMachine = "compaq386.json";
 let savedState = "state386.json";
 let localMachine = "";  // current machine config file
@@ -659,9 +659,9 @@ function loadMachine(sFile, capacity = 0)
                         'name': capacity + "Mb Hard Disk",
                         'type': typeDrive
                     };
-                    if (driveManifest) {
-                        drives[0]['path'] = path.join(pcjsDir, localDrive);
-                        removeFloppy = true;
+                    if (driveManifest || !localDir) {
+                        drives[0]['path'] = localDrive;
+                        if (driveManifest) removeFloppy = true;
                     }
                 }
                 config['hdc']['drives'] = drives;
@@ -880,6 +880,9 @@ function checkCommand(sDir, sCommand)
  */
 async function buildDrive(sDir, sCommand = "", fVerbose = false)
 {
+    if (!localDir) {
+        return "";      // an empty directory generally means a prebuilt drive has been supplied instead
+    }
     let drives = configJSON['drives'] || {};
     let system = configJSON['systems']?.[systemType];
 
@@ -1039,9 +1042,8 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
             di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
             di.updateBootSector(dbBoot, 0, verBPB);
             localDrive = localDrive.replace(/[^/]*$/, di.getName() + ".json");
-            let drivePath = path.join(pcjsDir, localDrive);
-            if (fVerbose) printf("building drive: %s\n", drivePath);
-            if (writeDiskSync(drivePath, di, false, 0, true, true)) {
+            if (fVerbose) printf("building drive: %s\n", localDrive);
+            if (writeDiskSync(localDrive, di, false, 0, true, true)) {
                 driveManifest = manifest;
             }
         }
@@ -1171,15 +1173,15 @@ function mapDir(machineDir)
 }
 
 /**
- * saveDrive(sDir, fSaveImage)
+ * saveDrive(sDir, fWriteImage)
  *
  * If we built a drive on entry, this checks the drive on exit for any changes that need to be saved.
  *
  * @param {string} sDir
- * @param {boolean} [fSaveImage]
+ * @param {boolean} [fWriteImage]
  * @returns {boolean}
  */
-function saveDrive(sDir, fSaveImage)
+function saveDrive(sDir, fWriteImage)
 {
     let imageData = machine.hdc && machine.hdc.aDrives && machine.hdc.aDrives.length && machine.hdc.aDrives[0].disk;
     if (imageData) {
@@ -1314,8 +1316,8 @@ function saveDrive(sDir, fSaveImage)
                     }
                 }
             }
-            if (fSaveImage) {
-                let drivePath = path.join(pcjsDir, localDrive.replace(".json", ".img"));
+            if (fWriteImage) {
+                let drivePath = localDrive.replace(".json", ".img");
                 printf("saving drive: %s\n", drivePath);
                 writeDiskSync(drivePath, di, false, 0, true, true);
             }
@@ -1694,7 +1696,7 @@ function doCommand(s)
         }
         break;
     case "save":
-        saveDrive(localDrive, true);
+        saveDrive(localDir, true);
         break;
     case "q":
     case "quit":
@@ -1777,27 +1779,29 @@ async function processArgs(argv)
         return existsDir(s, false)? s : "";
     };
 
-    let sDir = "";
-    if (!result) {
-        splice = false;
-        sDir = argv['dir'];
-        if (typeof sDir != "string") {
-            sDir = argv[1];                     // for convenience, we also allow a bare directory name
-            if (sDir) splice = true;
-        }
-        if (sDir) {
-            let newDir = verifyDir(sDir);
-            if (newDir) {
-                localDir = newDir;
-                if (splice) argv.splice(1, 1);
-            } else {
-                if (!splice) result = "invalid directory: " + sDir;
-                sDir = "";
+    if (localDir) {                             // --dir is allowed only if --disk has not been used
+        let sDir = "";
+        if (!result) {
+            splice = false;
+            sDir = argv['dir'];
+            if (typeof sDir != "string") {
+                sDir = argv[1];                 // for convenience, we also allow a bare directory name
+                if (sDir) splice = true;
+            }
+            if (sDir) {
+                let newDir = verifyDir(sDir);
+                if (newDir) {
+                    localDir = newDir;
+                    if (splice) argv.splice(1, 1);
+                } else {
+                    if (!splice) result = "invalid directory: " + sDir;
+                    sDir = "";
+                }
             }
         }
-    }
-    if (!sDir) {
-        localDir = verifyDir(localDir);
+        if (!sDir) {
+            localDir = verifyDir(localDir);
+        }
     }
 
     if (!result) {
@@ -1912,7 +1916,7 @@ function readInput(stdin, stdout)
  */
 function exit()
 {
-    saveDrive(localDir, fSave);
+    saveDrive(localDir, fWrite);
     process.stdin.setRawMode(false);
     process.exit();
 }
@@ -1926,13 +1930,9 @@ function exit()
 function main(argc, argv)
 {
     fDebug = argv['debug'] || fDebug;
-    fHalt = argv['halt'] || fHalt;
-    fNoFloppy = argv['nofloppy'] || fNoFloppy;
-    fSave = argv['save'] || fSave;
-
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (Defines.DEBUG? MESSAGE.DEBUG : 0), true);
-    messagesFilter = fDebug? Messages.TYPES : Messages.ALERTS;
+    messagesFilter = fDebug? Messages.ALL + Messages.TYPES + Messages.ADDRESS : Messages.ALERTS;
 
     let arg0 = argv[0].split(' ');
     rootDir = path.join(path.dirname(arg0[0]), "../..");
@@ -1957,12 +1957,36 @@ function main(argc, argv)
     maxCapacity = parseInt(argv['capacity']) || parseInt(defaults['capacity']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
 
+    fHalt = argv['halt'] || fHalt;
+    fNoFloppy = argv['nofloppy'] || fNoFloppy;
+    fWrite = argv['write'] || fWrite;
+    if (typeof argv['disk'] == "string") {
+        localDrive = argv['disk'];
+        if (localDrive[0] != '/' && localDrive[0] != '\\' && localDrive[1] != ':') {
+            localDrive = path.join(pcjsDir, localDrive);
+        }
+        if (existsFile(localDrive)) {
+            if (localDrive.toLowerCase().endsWith(".img")) {
+                let stats = fs.statSync(localDrive);
+                maxCapacity = Math.trunc(stats.size / 1024 / 1024);
+            }
+            else {
+                printf("error: %s does not exist\n", localDrive);
+                return;
+            }
+        }
+        localDir = "";                  // an empty localDir disables buildDrive()
+    } else {
+        localDrive = path.join(pcjsDir, localDrive);
+    }
+
     if (argv['help']) {
         let optionsMain = {
             "--load=[machine file]":    "load machine configuration file",
             "--type=[machine type]":    "set machine type (default is " + machineType + ")",
             "--capacity=[size]":        "set hard drive capacity (default is " + maxCapacity + "mb)",
             "--dir=[directory]":        "set hard drive local directory (default is " + localDir + ")",
+            "--disk=[disk image]":      "set hard drive disk image (instead of directory)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--sys=[system type]":      "operating system type (default is " + systemType + ")",
             "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
@@ -1973,7 +1997,7 @@ function main(argc, argv)
             "--help (-?)\t":            "display command-line usage",
             "--local (-l)\t":           "use local diskette images",
             "--nofloppy (-n)\t":        "remove any diskette from A:",
-            "--save (-s)\t":            "save hard drive image on return"
+            "--write (-w)\t":           "write hard drive image on return"
         };
         let optionGroups = {
             "main options:":            optionsMain,
@@ -2001,5 +2025,5 @@ main(...pcjslib.getArgs({
     'h': "halt",
     'l': "local",
     'n': "nofloppy",
-    's': "save"
+    'w': "write"
 }));

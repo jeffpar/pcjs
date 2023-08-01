@@ -1707,7 +1707,7 @@ export default class Disk extends Component {
         let b = -1;
         if (sector) {
             if (DEBUG && !iByte && !fCompare) {
-                this.printf("read(\"%s\",CHS=%d:%d:%d): %s\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.getFileInfo(sector));
+                this.printf(Messages.DISK + Messages.ADDRESS, "read(\"%s\",CHS=%d:%d:%d): %s\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.getFileInfo(sector));
             }
             if (iByte < sector[Disk.SECTOR.LENGTH]) {
                 let adw = sector[Disk.SECTOR.DATA];
@@ -1734,7 +1734,7 @@ export default class Disk extends Component {
             return false;
 
         if (DEBUG && !iByte) {
-            this.printf("write(\"%s\",CHS=%d:%d:%d)\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID]);
+            this.printf(Messages.DISK + Messages.ADDRESS, "write(\"%s\",CHS=%d:%d:%d)\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID]);
         }
 
         if (iByte < sector[Disk.SECTOR.LENGTH]) {

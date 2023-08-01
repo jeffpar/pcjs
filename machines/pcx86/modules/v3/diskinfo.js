@@ -4133,7 +4133,7 @@ DiskInfo.aDefaultBPBs = [
     0x11, 0x00,                 // 0x18: sectors per track (17)
     0x04, 0x00,                 // 0x1A: number of heads (4)
       //
-      // NOTE: PC DOS 2.0 stored BOOTDRIVE and BOOTHEAD in the 3rd and 4th bytes here (it used only 2 bytes for hidden sectors)
+      // NOTE: PC DOS 2.0 stored BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
       //
     0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
   ],
@@ -4142,7 +4142,7 @@ DiskInfo.aDefaultBPBs = [
     0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
  // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (this is a real OEM signature)
     0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x10,                       // 0x0D: sectors per cluster (8)
+    0x10,                       // 0x0D: sectors per cluster (16)
     0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
     0x02,                       // 0x10: FAT copies (2)
     0x00, 0x04,                 // 0x11: root directory entries (0x400 or 1024)  0x400 * 0x20 = 0x8000 (1 sector is 0x200 bytes, total of 0x40 or 64 sectors)
@@ -4158,7 +4158,7 @@ DiskInfo.aDefaultBPBs = [
     0x11, 0x00,                 // 0x18: sectors per track (17)
     0x04, 0x00,                 // 0x1A: number of heads (4)
       //
-      // NOTE: PC DOS 2.0 stored BOOTDRIVE and BOOTHEAD in the 3rd and 4th bytes here (it used only 2 bytes for hidden sectors)
+      // NOTE: PC DOS 2.0 stored BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
       //
     0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
   ],

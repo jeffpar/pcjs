@@ -1203,7 +1203,7 @@ export default class HDC extends Component {
                 hdc.assert(!fAsync);
                 if (BACKTRACK && obj) {
                     if (!off && obj.file) {
-                        hdc.printf(Messages.DISK, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
+                        hdc.printf(Messages.DISK + Messages.PORT + Messages.ADDRESS, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
                     }
                     /*
                      * TODO: We could define a cached BTO that's reset prior to a new ATC command, and then pass that
@@ -1706,7 +1706,7 @@ export default class HDC extends Component {
         this.regStatus = HDC.ATC.STATUS.READY | HDC.ATC.STATUS.SEEK_OK;
         let drive = this.aDrives[iDrive];
 
-        this.printf(Messages.HDC + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
+        this.printf(Messages.HDC + Messages.PORT + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
 
         if (!drive) return;
         this.iDrive = iDrive;
@@ -1756,7 +1756,7 @@ export default class HDC extends Component {
 
         case HDC.ATC.COMMAND.READ_DATA:             // 0x20 (ATA)
             if (!drive.useBuffer) {
-                this.printf(Messages.HDC, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
+                this.printf(Messages.HDC + Messages.PORT, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             /*
              * We're using a call to readData() that disables auto-increment, so that once we've got the first
@@ -1796,7 +1796,7 @@ export default class HDC extends Component {
 
         case HDC.ATC.COMMAND.WRITE_DATA:            // 0x30 (ATA)
             if (!drive.useBuffer) {
-                this.printf(Messages.HDC, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
+                this.printf(Messages.HDC + Messages.PORT, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             this.regStatus = HDC.ATC.STATUS.DATA_REQ;
             fProcessed = true;
