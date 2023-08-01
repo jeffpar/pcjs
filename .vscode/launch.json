@@ -588,6 +588,78 @@
       }
     },
     {
+      "name": "pc.js ibm5170 --system=pcdos --version=2.00 --disk=pcdos200-empty.img",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--system=pcdos",
+        "--version=2.00",
+        "--disk=pcdos200-empty.img",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js ibm5170 --system=pcdos --version=3.00 --disk=pcdos200-empty.img",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--system=pcdos",
+        "--version=3.00",
+        "--disk=pcdos200-empty.img",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js ibm5170 --system=pcdos --version=3.00 --disk=pcdos300-empty.img",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--system=pcdos",
+        "--version=3.00",
+        "--disk=pcdos300-empty.img",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
       "name": "pc.js compaq386",
       "type": "node",
       "request": "launch",
@@ -691,13 +763,13 @@
       }
     },
     {
-      "name": "pc.js dir --sys=pcdos --ver=2.00",
+      "name": "pc.js dir --system=pcdos --version=2.00",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys=pcdos",
-        "--ver=2.00",
+        "--system=pcdos",
+        "--version=2.00",
         "disks/MSDOS320",
         "dir"
       ],
@@ -714,13 +786,13 @@
       }
     },
     {
-      "name": "pc.js dir --sys=pcdos --ver=2.00 --capacity=20mb",
+      "name": "pc.js dir --system=pcdos --version=2.00 --capacity=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys=pcdos",
-        "--ver=2.00",
+        "--system=pcdos",
+        "--version=2.00",
         "--capacity=20mb",
         "disks/MSDOS320",
         "dir"
@@ -738,13 +810,13 @@
       }
     },
     {
-      "name": "pc.js dir --sys=pcdos --ver=3.00 (crashes)",
+      "name": "pc.js dir --system=pcdos --version=3.00 (crashes)",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys=pcdos",
-        "--ver=3.00",
+        "--system=pcdos",
+        "--version=3.00",
         "disks/MSDOS320",
         "dir"
       ],
@@ -761,14 +833,14 @@
       }
     },
     {
-      "name": "pc.js dir --sys=msdos --ver=3.20",
+      "name": "pc.js dir --system=msdos --version=3.20",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--debug",
-        "--sys=msdos",
-        "--ver=3.20",
+        "--system=msdos",
+        "--version=3.20",
         "disks/MSDOS320",
         "dir *.*"
       ],
@@ -785,7 +857,7 @@
       }
     },
     {
-      "name": "pc.js dir --sys=msdos --ver=3.30",
+      "name": "pc.js dir --system=msdos --version=3.30",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -809,14 +881,14 @@
       }
     },
     {
-      "name": "pc.js dir --sys=msdos --ver=3.30 --capacity=20mb (crashes)",
+      "name": "pc.js dir --system=msdos --version=3.30 --capacity=20mb (crashes)",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--debug",
-        "--sys=msdos",
-        "--ver=3.30",
+        "--system=msdos",
+        "--version=3.30",
         "--capacity=20mb",
         "--halt",
         "--save",

@@ -670,8 +670,16 @@ function loadMachine(sFile, capacity = 0)
                 config['computer']['state'] = path.join(pcjsDir, savedState);
             }
         }
-        if (removeFloppy && config['fdc']) {
-            config['fdc']['autoMount'] = "{A: {name: \"None\"}}";
+        if (config['fdc']) {
+            if (removeFloppy) {
+                config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
+            } else {
+                let name = systemType.toUpperCase() + ' ' + systemVersion;
+                let sSystemDisk = getSystemDisk(systemType, systemVersion);
+                if (sSystemDisk) {
+                    config['fdc']['autoMount'] = "{A:{name:\"" + name + "\",path:\"" + sSystemDisk + "\"}}";
+                }
+            }
         }
         let args = JSON.stringify(config);
         loadModules(machines[type]['factory'], machines[type]['modules'], function() {
@@ -854,6 +862,24 @@ function checkCommand(sDir, sCommand)
 }
 
 /**
+ * getSystemDisk(type, version)
+ *
+ * @param {string} type
+ * @param {string} version
+ * @returns {string}
+ */
+function getSystemDisk(type, version)
+{
+    let sSystemDisk = "";
+    let system = configJSON['systems']?.[type];
+    if (system) {
+        sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + version + "/";
+        sSystemDisk += type.toUpperCase() + version.replace('.', '') + "-DISK1.json";
+    }
+    return sSystemDisk;
+}
+
+/**
  * buildDrive(sDir, sCommand, fVerbose)
  *
  * Builds a bootable hard drive image containing all files in the current directory.
@@ -897,8 +923,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
         return "minimum DOS version with hard disk support is 2.00";
     }
 
-    let sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + systemVersion + "/";
-    sSystemDisk += systemType.toUpperCase() + systemVersion.replace('.', '') + "-DISK1.json";
+    let sSystemDisk = getSystemDisk(systemType, systemVersion);
     let diSystem = await readDiskAsync(sSystemDisk);
 
     if (!diSystem) {
@@ -1173,15 +1198,15 @@ function mapDir(machineDir)
 }
 
 /**
- * saveDrive(sDir, fWriteImage)
+ * saveDrive(sDir, sImage)
  *
  * If we built a drive on entry, this checks the drive on exit for any changes that need to be saved.
  *
  * @param {string} sDir
- * @param {boolean} [fWriteImage]
+ * @param {string|boolean} [sImage] (if true, save to localDrive; if string, save to that path)
  * @returns {boolean}
  */
-function saveDrive(sDir, fWriteImage)
+function saveDrive(sDir, sImage)
 {
     let imageData = machine.hdc && machine.hdc.aDrives && machine.hdc.aDrives.length && machine.hdc.aDrives[0].disk;
     if (imageData) {
@@ -1316,10 +1341,12 @@ function saveDrive(sDir, fWriteImage)
                     }
                 }
             }
-            if (fWriteImage) {
-                let drivePath = localDrive.replace(".json", ".img");
-                printf("saving drive: %s\n", drivePath);
-                writeDiskSync(drivePath, di, false, 0, true, true);
+            if (sImage) {
+                if (typeof sImage != "string") {
+                    sImage = localDrive.replace(".json", ".img");
+                }
+                printf("saving drive: %s\n", sImage);
+                writeDiskSync(sImage, di, false, 0, true, true);
             }
             return true;
         }
@@ -1696,7 +1723,7 @@ function doCommand(s)
         }
         break;
     case "save":
-        saveDrive(localDir, true);
+        saveDrive(localDir, aTokens[0] || true);
         break;
     case "q":
     case "quit":
@@ -1949,8 +1976,8 @@ function main(argc, argv)
     let defaults = configJSON['defaults'] || {};
 
     machineType = argv['type'] || defaults['type'] || machineType;
-    systemType = (typeof argv['sys'] == "string" && argv['sys'] || defaults['system'] || systemType).toLowerCase();
-    systemVersion = (typeof argv['ver'] == "string" && argv['ver'] || defaults['version'] || systemVersion);
+    systemType = (typeof argv['system'] == "string" && argv['system'] || defaults['system'] || systemType).toLowerCase();
+    systemVersion = (typeof argv['version'] == "string" && argv['version'] || defaults['version'] || systemVersion);
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
     maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
@@ -1960,9 +1987,12 @@ function main(argc, argv)
     fHalt = argv['halt'] || fHalt;
     fNoFloppy = argv['nofloppy'] || fNoFloppy;
     fWrite = argv['write'] || fWrite;
+
     if (typeof argv['disk'] == "string") {
         localDrive = argv['disk'];
-        if (localDrive[0] != '/' && localDrive[0] != '\\' && localDrive[1] != ':') {
+        if (existsFile(localDrive, false)) {
+            localDrive = path.resolve(localDrive);
+        } else {
             localDrive = path.join(pcjsDir, localDrive);
         }
         if (existsFile(localDrive)) {
@@ -1988,8 +2018,8 @@ function main(argc, argv)
             "--dir=[directory]":        "set hard drive local directory (default is " + localDir + ")",
             "--disk=[disk image]":      "set hard drive disk image (instead of directory)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
-            "--sys=[system type]":      "operating system type (default is " + systemType + ")",
-            "--ver=[system version]":   "operating system version (default is " + systemVersion + ")"
+            "--system=[sys type]":      "operating system type (default is " + systemType + ")",
+            "--version=[sys version]":  "operating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
             "--debug (-d)\t":           "enable DEBUG messages",
