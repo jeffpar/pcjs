@@ -1631,7 +1631,7 @@ function doCommand(s)
                     "  build [machine command]\n" +
                     "  exec [local command]\n" +
                     "  load [machine] or [drive] [search options]\n" +
-                    "  save [machine disk image]\n" +
+                    "  save [local disk image]\n" +
                     "  quit";
         if (machine.dbg) {
             result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";

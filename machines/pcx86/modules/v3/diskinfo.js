@@ -459,16 +459,16 @@ export default class DiskInfo {
 
         if (fBPBExists && dbDisk.readUInt16LE(offBootSector + DiskInfo.BOOT.SIG_OFFSET) == DiskInfo.BOOT.SIGNATURE || forceBPB) {
             /*
-             * Overwrite the OEM string with our own, so that people know how the image originated.  We do this
-             * only for disks with pre-existing BPBs; it's not safe for pre-2.0 disks (and non-DOS disks, obviously).
+             * Overwrite the OEM string with our own for boot sector consistency (this also eliminates variations due to
+             * Windows 95's and 98's volume tracking modifications).  We do this only for disks with pre-existing BPBs;
+             * it's not safe for pre-2.0 disks (and non-DOS disks, obviously).
              *
              * The signature check is another pre-2.0 disk check, to avoid misinterpreting any BPB that we might have
              * previously added ourselves as an original BPB.
              *
-             * UPDATE: We also avoid doing this for any hard drive image (ie, 3Mb or larger -- the same arbitrary threshold
-             * we used earlier), because it turns out that PC DOS 3.00 (and perhaps later versions) look for the "IBM  2.0"
-             * string as a discriminator between 12-bit and 16-bit FAT volumes.  Surely it could have relied on the partition
-             * type instead, but either that wasn't convenient or sufficient for some reason....
+             * UPDATE: We now avoid doing this for any hard drive image (ie, 3Mb or larger -- the same arbitrary threshold
+             * we used earlier), because it turns out that PC DOS 3.00 (and perhaps later versions) look for certain OEM
+             * strings (eg, "IBM  2.0") as a BPB validity check, or perhaps simply as a 12-bit vs. 16-bit FAT discriminator.
              */
             let dw = dbDisk.readInt32BE(DiskInfo.BPB.OEM + offBootSector);
             if (dw != DiskInfo.PCJS_VALUE && cbDiskData < 3000000) {
@@ -720,6 +720,8 @@ export default class DiskInfo {
 
     /**
      * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, fnHash, sectorIDs, sectorErrors, suppData)
+     *
+     * TODO: This function currently only knows how to build FAT12 disk images.  Add support for FAT16 and FAT32.
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbDisk

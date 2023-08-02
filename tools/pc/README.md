@@ -221,9 +221,11 @@ will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EX
 
 ### Hard Disk Examples
 
-`pc.js` initially supported only 10Mb hard disk images, because 10Mb drives (with 306 cylinders, 4 heads, and 17 sectors/track) were fully supported by the PC XT (as a type 3 drive) *and* the PC AT (as a type 1 drive).
+`pc.js` initially built only 10Mb hard disk images, because 10Mb drives (with 306 cylinders, 4 heads, and 17 sectors/track) were fully supported by both the PC XT (as a type 3 drive) *and* the PC AT (as a type 1 drive).
 
-I later added support for 20Mb drives (with 615 cylinders instead of 306), even though only the PC AT (and Compaq DeskPro 386) natively supported such a drive.  To test 20mb support, I tried two scenarios:
+However, I later decided to add support for 20Mb drives (with 615 cylinders instead of 306), even though only the PC AT and later machines natively supported such a drive.  Another minor issue with 20Mb drives is that our *buildDiskFromFiles()* function in [diskinfo.js](/machines/pcx86/modules/v3/diskinfo.js) only knows how to build FAT12 images (there's no support for building FAT16 or FAT32 images yet), which means that the resulting drive must use a rather large (8K) cluster size, instead of the more typical (2K) cluster size that PC DOS 3.x preferred.  But still, any 20Mb disk image that `pc.js` builds should work fine -- as long as you don't try to use it with a PC XT.
+
+To test 20Mb support, I tried two scenarios:
 
  1. Running FDISK on a PC AT with PC DOS 3.00
  2. Running FDISK on a PC AT with PC DOS 2.00
@@ -381,10 +383,10 @@ The main differences are:
   - Partition type: PC DOS 3.00 uses type 4 (16-bit FAT for drives with less than 65536 sectors); PC DOS 2.00 uses type 1 (12-bit FAT)
   - Partition placement: PC DOS 3.00 skips 16 sectors (17 hidden sectors); PC DOS 2.00 skips 0 sectors (1 hidden sector)
   - Cluster size: PC DOS 3.00 allocates 4 sectors (2K) per cluster; PC DOS 2.00 allocates 16 sectors (8K) per cluster
-  - Root directory size: PC DOS 3.00 allocates 0x200 (512) entries for a total of 32 sectors; PC DOS 2.00 allocates 0x400 (1024) entries for a total of 64 sectors
-  - FAT size: PC DOS 3.00 allocates 0x29 sectors per FAT (82 sectors total); PC DOS 2.00 allocates 0x08 sectors per FAT (16 sectors total)
+  - FAT size: PC DOS 3.00 allocates 41 (0x29) sectors per FAT (82 sectors total); PC DOS 2.00 allocates 8 sectors per FAT (16 sectors total)
+  - Root directory size: PC DOS 3.00 allocates 512 (0x200) entries for a total of 32 sectors; PC DOS 2.00 allocates 1024 (0x400) entries for a total of 64 sectors
 
-There are 0xA317 (41,751) total sectors, which is calculated as 614 cylinders (the 615th cylinder is reserved for diagnostic use and head parking) multiplied by 4 heads multiplied by 17 sectors/track, minus 1 for the boot sector.
+There are 41,751 (0xA317) total sectors, which is calculated as 614 cylinders (the 615th cylinder is reserved for diagnostic use and head parking) multiplied by 4 heads multiplied by 17 sectors/track, minus 1 for the boot sector.
 
 For PC DOS 2.00, available sectors are 41,751 - 1 - 64 - 16, or 41,670 sectors, or 2,604 total (8K) clusters, for a total of 21,331,968 bytes.
 
@@ -392,9 +394,9 @@ For PC DOS 3.00, available sectors are 41,751 - 17 - 32 - 82, or 41,620 sectors,
 
 So, PC DOS 2.00 was able to provide a bit more space by: 1) placing the partition on the first track instead of the second track, and 2) using a smaller FAT, thanks to fewer *and* smaller (12-bit) FAT entries, even while providing a larger root directory (1024 entries instead of 512).
 
-It was also nice to see that, even though PC DOS 2.00 was designed for the PC XT (which did *not* natively support a drive as large as 20mb), PC DOS 2.00 could run on a PC AT *and* successfully partition and format a 20mb drive -- even though it had to use a rather unwieldy cluster size (8K).  PC DOS 2.00 had other minor limitations, such as being unaware of the PC AT's real-time clock and current date.  But on the whole, it was quite usable.
+It was also nice to see that, even though PC DOS 2.00 was designed for the PC XT (which did *not* natively support a drive as large as 20Mb), PC DOS 2.00 could run on a PC AT *and* successfully partition and format a 20Mb drive -- even though it had to use a rather unwieldy cluster size (8K).  PC DOS 2.00 had other minor limitations, such as being unaware of the PC AT's real-time clock and current date.  But on the whole, it was usable.
 
-However, PC DOS 3.00 was obviously preferable.  Not only was it aware of the PC AT's real-time clock, it could also format the drive with much smaller clusters (2K instead of 8K), thanks to the "new" 16-bit FAT.  Since PC DOS 2.00 only supports 12-bit FATs, such a drive would not be readable by that operating system.  PC DOS 3.00, on the other hand, has no problem reading drives with either 12-bit or 16-bit FATs.
+However, PC DOS 3.00 was obviously preferable, since it supported PC AT features like 1.2M diskette drives and the real-time clock, and it could also format disks with much smaller (2K) clusters, thanks to the "new" 16-bit FAT.  PC DOS 3.00 still supported disks using a 12-bit FAT, as long as other criteria were met, such as an OEM signature of "**IBM  2.0**" in the disk's BPB.  That makes *some* sense, since nowhere else in the BPB is there any indication of FAT entry size, and PC DOS 2.x supported *only* 12-bit FAT entries.  But ideally, PC DOS probably should have just relied on the partition type (1) in the Master Boot Record (MBR) *or* defined some new field or value in the BPB.
 
 ### Historical Notes
 

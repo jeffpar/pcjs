@@ -66,9 +66,11 @@ Getting back to the first example above, let's press CTRL-D for the `pc.js` comm
     &F000:E850 74F3             JZ       E845 (romBIOS+0x0845)
     >> help
     pc.js commands:
-      build [command]
-      load [machine] or [drive] [search options]
-      quit
+    build [machine command]
+    exec [local command]
+    load [machine] or [drive] [search options]
+    save [local disk image]
+    quit
     type "?" for a list of debugger commands (eg, "g" to continue running)
     >> quit
     $
