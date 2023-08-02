@@ -544,122 +544,6 @@
       }
     },
     {
-      "name": "pc.js ibm5170 --disk=disks/msdos320-10mb.img",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5170",
-        "--disk=disks/msdos320-10mb.img",
-        "--debug"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "pc.js ibm5170 --disk=disks/msdos320-20mb.img",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5170",
-        "--disk=disks/msdos320-20mb.img",
-        "--debug"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "pc.js ibm5170 --system=pcdos --version=2.00 --disk=pcdos200-empty.img",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5170",
-        "--system=pcdos",
-        "--version=2.00",
-        "--disk=pcdos200-empty.img",
-        "--debug"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc/disks",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "pc.js ibm5170 --system=pcdos --version=3.00 --disk=pcdos200-empty.img",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5170",
-        "--system=pcdos",
-        "--version=3.00",
-        "--disk=pcdos200-empty.img",
-        "--debug"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc/disks",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "pc.js ibm5170 --system=pcdos --version=3.00 --disk=pcdos300-empty.img",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5170",
-        "--system=pcdos",
-        "--version=3.00",
-        "--disk=pcdos300-empty.img",
-        "--debug"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc/disks",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
       "name": "pc.js compaq386",
       "type": "node",
       "request": "launch",
@@ -810,13 +694,13 @@
       }
     },
     {
-      "name": "pc.js dir --system=pcdos --version=3.00 (crashes)",
+      "name": "pc.js dir --system=pcdos --version=3.10",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--system=pcdos",
-        "--version=3.00",
+        "--version=3.10",
         "disks/MSDOS320",
         "dir"
       ],
@@ -833,65 +717,15 @@
       }
     },
     {
-      "name": "pc.js dir --system=msdos --version=3.20",
+      "name": "pc.js dir --system=pcdos --version=3.10 --capacity=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--debug",
-        "--system=msdos",
-        "--version=3.20",
-        "disks/MSDOS320",
-        "dir *.*"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "pc.js dir --system=msdos --version=3.30",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--debug",
-        "--halt",
-        "--save",
-        "disks/MSDOS320",
-        "dir *.*",
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "pc.js dir --system=msdos --version=3.30 --capacity=20mb (crashes)",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--debug",
-        "--system=msdos",
-        "--version=3.30",
+        "--system=pcdos",
+        "--version=3.10",
         "--capacity=20mb",
-        "--halt",
-        "--save",
+        "ibm5170",
         "disks/MSDOS320",
         "dir *.*",
       ],

@@ -464,9 +464,14 @@ export default class DiskInfo {
              *
              * The signature check is another pre-2.0 disk check, to avoid misinterpreting any BPB that we might have
              * previously added ourselves as an original BPB.
+             *
+             * UPDATE: We also avoid doing this for any hard drive image (ie, 3Mb or larger -- the same arbitrary threshold
+             * we used earlier), because it turns out that PC DOS 3.00 (and perhaps later versions) look for the "IBM  2.0"
+             * string as a discriminator between 12-bit and 16-bit FAT volumes.  Surely it could have relied on the partition
+             * type instead, but either that wasn't convenient or sufficient for some reason....
              */
             let dw = dbDisk.readInt32BE(DiskInfo.BPB.OEM + offBootSector);
-            if (dw != 0x50434A53) {
+            if (dw != DiskInfo.PCJS_VALUE && cbDiskData < 3000000) {
                 dbDisk.write(DiskInfo.PCJS_OEM, DiskInfo.BPB.OEM + offBootSector, DiskInfo.PCJS_OEM.length);
                 this.printf(Device.MESSAGE.INFO, "OEM string has been updated\n");
                 if (fnHash) this.fBPBModified = true;
@@ -3880,7 +3885,7 @@ DiskInfo.MBR = {
  */
 DiskInfo.BOOT = {
     SIG_OFFSET:     0x1FE,
-    SIGNATURE:      0xAA55      // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
+    SIGNATURE:      0xAA55          // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
 };
 
 /*
@@ -3889,6 +3894,7 @@ DiskInfo.BOOT = {
  */
 DiskInfo.PCJS_LABEL = "PCJSDISK";
 DiskInfo.PCJS_OEM   = "PCJS.ORG";
+DiskInfo.PCJS_VALUE = 0x50434A53;   // "PCJS"
 
 /*
  * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
@@ -4114,8 +4120,7 @@ DiskInfo.aDefaultBPBs = [
      */
   [                             // define BPB for 10Mb hard drive
     0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (this is a real OEM signature)
+    0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (WARNING: this signature is REQUIRED for PC DOS 3.x to successfully read a partition using a 12-bit FAT with this BPB)
     0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
     0x08,                       // 0x0D: sectors per cluster (8)
     0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
@@ -4139,8 +4144,7 @@ DiskInfo.aDefaultBPBs = [
   ],
   [                             // define BPB for 20Mb hard drive
     0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (this is a real OEM signature)
+    0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (WARNING: this signature is REQUIRED for PC DOS 3.x to successfully read a partition using a 12-bit FAT with this BPB)
     0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
     0x10,                       // 0x0D: sectors per cluster (16)
     0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)

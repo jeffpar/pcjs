@@ -547,7 +547,6 @@ function checkMachine(sFile)
         if (sFile.indexOf('.') > 0) {
             let s = path.join(pcjsDir, sFile);
             sVerify = existsFile(s, false)? s: "";
-            break;
         } else {
             const exts = [".json", ".json5", ".xml"];
             for (let ext of exts) {
@@ -562,9 +561,9 @@ function checkMachine(sFile)
                     break;
                 }
             }
-            if (!sVerify) sFile = "";
-            break;
         }
+        if (!sVerify) sFile = "";
+        break;
     }
     if (sVerify) {
         if (sVerify.endsWith(".json")) {
@@ -1629,8 +1628,10 @@ function doCommand(s)
 
     let help = function() {
         let result = "pc.js commands:\n" +
-                    "  build [command]\n" +
+                    "  build [machine command]\n" +
+                    "  exec [local command]\n" +
                     "  load [machine] or [drive] [search options]\n" +
+                    "  save [machine disk image]\n" +
                     "  quit";
         if (machine.dbg) {
             result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
@@ -2000,8 +2001,16 @@ function main(argc, argv)
                 let stats = fs.statSync(localDrive);
                 maxCapacity = Math.trunc(stats.size / 1024 / 1024);
             }
+            else if (localDrive.toLowerCase().endsWith(".json")) {
+                let di = JSON.parse(readFileSync(localDrive));
+                if (di) {
+                    let imageInfo = di['imageInfo'] || {};
+                    let capacity = Math.trunc((imageInfo['cylinders'] * imageInfo['heads'] * imageInfo['trackDefault'] * imageInfo['sectorDefault']) / 1024 / 1024);
+                    if (capacity) maxCapacity = capacity;
+                }
+            }
             else {
-                printf("error: %s does not exist\n", localDrive);
+                printf("error: %s is not a supported disk image\n", localDrive);
                 return;
             }
         }
