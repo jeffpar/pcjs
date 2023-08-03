@@ -80,11 +80,14 @@ function createDisk(diskFile, diskette, argv, done)
          */
         sArchiveFile = sArchiveFile.replace(".img", path.sep);
     }
+
+    let options = {
+        sectorIDs: diskette.argv['sectorID'] || argv['sectorID'],
+        sectorErrors: diskette.argv['sectorError'] || argv['sectorError'],
+        suppData: readFileSync(diskette.argv['suppData'] || argv['suppData'])
+    };
+
     let name = path.basename(sArchiveFile);
-    let sectorIDs = diskette.argv['sectorID'] || argv['sectorID'];
-    let sectorErrors = diskette.argv['sectorError'] || argv['sectorError'];
-    let suppData = diskette.argv['suppData'] || argv['suppData'];
-    if (suppData) suppData = readFileSync(suppData);
     let fDir = false, arcType = 0, sExt = StrLib.getExtension(sArchiveFile);
     if (sArchiveFile.endsWith(path.sep)) {
         fDir = true;
@@ -101,8 +104,10 @@ function createDisk(diskFile, diskette, argv, done)
     else {
         diskette.command = "--disk=" + name;
     }
+
     diskette.archive = sArchiveFile;
     printf("checking archive: %s\n", sArchiveFile);
+
     if (fDir || arcType) {
         let arcOffset = +argv['offset'] || 0;
         let label = diskette.label || argv['label'];
@@ -110,9 +115,9 @@ function createDisk(diskFile, diskette, argv, done)
         let normalize = diskette.normalize || argv['normalize'];
         let target = getTargetValue(diskette.format);
         let verbose = argv['verbose'];
-        readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, null, undefined, verbose, sectorIDs, sectorErrors, suppData, done);
+        readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, options, done);
     } else {
-        done(readDiskSync(sArchiveFile, false, sectorIDs, sectorErrors, suppData));
+        done(readDiskSync(sArchiveFile, false, options));
     }
 }
 
@@ -1105,7 +1110,12 @@ function getArchiveOffset(sArchive, arcType, sOffset)
  */
 async function processDiskAsync(input, argv)
 {
-    let di = await readDiskAsync(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFileSync(argv['suppData']));
+    let options = {
+        sectorIDs: argv['sectorID'],
+        sectorErrors: argv['sectorError'],
+        suppData: readFileSync(argv['suppData'])
+    };
+    let di = await readDiskAsync(input, argv['forceBPB'], options);
     if (di) {
         processDisk(di, input, argv);
     }
@@ -1227,9 +1237,11 @@ function processArg(argv)
         }
     }
 
-    let sectorIDs = argv['sectorID'];
-    let sectorErrors = argv['sectorError'];
-    let suppData = readFileSync(argv['suppData']);
+    let options = {
+        sectorIDs: argv['sectorID'],
+        sectorErrors: argv['sectorError'],
+        suppData: readFileSync(argv['suppData'])
+    };
 
     if (fDir || arcType) {
         let offset = getArchiveOffset(input, arcType, argv['offset']);
@@ -1237,12 +1249,12 @@ function processArg(argv)
             printf("error: %s is not a supported archive file\n", input);
             return true;
         }
-        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), null, +argv['maxfiles'] || 0, argv['verbose'], sectorIDs, sectorErrors, suppData, done);
+        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], options, done);
         return true;
     }
 
     if (input) {
-        return done(readDiskSync(input, argv['forceBPB'], sectorIDs, sectorErrors, suppData));
+        return done(readDiskSync(input, argv['forceBPB'], options));
     }
 
     return false;

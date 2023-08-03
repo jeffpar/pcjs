@@ -269,7 +269,7 @@ export default class HDC extends Component {
          */
         this.chipset = cmp.getMachineComponent("ChipSet");
 
-        this.iDriveTable = 0;
+        this.iDeviceType = 0;
         this.iDriveTypeDefault = 3;
 
         if (!this.fATC) {
@@ -287,8 +287,8 @@ export default class HDC extends Component {
                 bus.addPortInputWidth(HDC.ATC.DATA.PORT2, 2);
                 bus.addPortOutputWidth(HDC.ATC.DATA.PORT2, 2);
             }
-            this.iDriveTable++;
-            if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.iDriveTable++;
+            this.iDeviceType++;
+            if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.iDeviceType++;
             this.iDriveTypeDefault = 2;
         }
 
@@ -655,9 +655,9 @@ export default class HDC extends Component {
         }
 
         drive.type = driveConfig['type'];
-        if (drive.type === undefined || HDC.aDriveTypes[this.iDriveTable][drive.type] === undefined) drive.type = this.iDriveTypeDefault;
+        if (drive.type === undefined || HDC.aDriveTypes[this.iDeviceType][drive.type] === undefined) drive.type = this.iDriveTypeDefault;
 
-        let driveType = HDC.aDriveTypes[this.iDriveTable][drive.type];
+        let driveType = HDC.aDriveTypes[this.iDeviceType][drive.type];
         drive.nSectors = driveType[2] || 17;                        // sectors/track
         drive.cbSector = drive.cbTransfer = driveType[3] || 512;    // bytes/sector (default is 512 if unspecified in the table)
 
@@ -803,8 +803,8 @@ export default class HDC extends Component {
                 }
             }
             if (type != null && !nHeads) {
-                nHeads = HDC.aDriveTypes[this.iDriveTable][type][1];
-                nCylinders = HDC.aDriveTypes[this.iDriveTable][type][0];
+                nHeads = HDC.aDriveTypes[this.iDeviceType][type][1];
+                nCylinders = HDC.aDriveTypes[this.iDeviceType][type][0];
             }
             if (nHeads) {
                 /*
@@ -814,7 +814,7 @@ export default class HDC extends Component {
                  *
                  * Do these values agree with those for the given drive type?  Even if they don't, all we do is warn.
                  */
-                let driveType = HDC.aDriveTypes[this.iDriveTable][drive.type];
+                let driveType = HDC.aDriveTypes[this.iDeviceType][drive.type];
                 if (driveType) {
                     if (nCylinders != driveType[0] && nHeads != driveType[1]) {
                         this.printf(Messages.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
@@ -1000,7 +1000,7 @@ export default class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], HDC.aDriveTables[this.iDriveTable], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], HDC.aDeviceTypes[this.iDeviceType], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
             }
         }
         if (drive.fAutoMount) {
@@ -3251,10 +3251,10 @@ HDC.DEFAULT_DRIVE_NAME = "Hard Drive";
 
 /*
  * Drive type tables differed across IBM controller models (XTC drive types don't match ATC drive types) and across OEMs
- * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDriveTable to index the correct table type
- * inside both aDriveTables and aDriveTypes.
+ * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDeviceType to index the correct table type
+ * inside both aDeviceTypes and aDriveTypes.
  */
-HDC.aDriveTables = ["XTC", "ATC", "COMPAQ"];
+HDC.aDeviceTypes = ["XTC", "ATC", "COMPAQ"];
 
 HDC.aDriveTypes = [
     /*

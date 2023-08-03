@@ -387,7 +387,7 @@ export function normalizeTextFile(db)
 }
 
 /**
- * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, custom, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
+ * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, options, done)
  *
  * @param {string} sDir (directory name)
  * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
@@ -396,18 +396,16 @@ export function normalizeTextFile(db)
  * @param {string} [sPassword] (password; for encrypted ARC files only at this point)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
- * @param {Object} [custom] (custom disk parameters, null if none)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
  * @param {boolean} [verbose] (true for verbose output)
- * @param {Array|string} [sectorIDs]
- * @param {Array|string} [sectorErrors]
- * @param {Array|string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
+ * @param {Object} [options] (custom disk parameters, if any)
  * @param {function(DiskInfo)} [done] (optional function to call on completion)
  */
-export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, custom, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
+export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, options, done)
 {
     let di;
     let diskName = path.basename(sDir);
+    if (!options) options = {};
     if (sDir.endsWith('/')) {
         if (!sLabel) {
             sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
@@ -423,9 +421,9 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
         if (aFileData) {
             let db = new DataBuffer();
             let di = new DiskInfo(device);
-            if (Array.isArray(suppData)) {
-                for (let i = suppData.length - 1; i >= 0; i--) {
-                    let desc = suppData[i];
+            if (options.files) {
+                for (let i = options.files.length - 1; i >= 0; i--) {
+                    let desc = options.files[i];
                     desc.attr = +desc[DiskInfo.FILEDESC.ATTR];
                     desc.data = new DataBuffer(desc[DiskInfo.FILEDESC.CONTENTS]);
                     desc.date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
@@ -437,9 +435,8 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
                     }
                     aFileData.unshift(desc);
                 }
-                suppData = null;
             }
-            if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, custom, getHash, sectorIDs, sectorErrors, suppData)) {
+            if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, options)) {
                 /*
                 * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
                 */
@@ -760,15 +757,13 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbo
 }
 
 /**
- * readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ * readDiskAsync(diskFile, forceBPB, options)
  *
  * @param {string} diskFile
  * @param {boolean} [forceBPB]
- * @param {Array|string} [sectorIDs]
- * @param {Array|string} [sectorErrors]
- * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
+ * @param {Object} [options]
  */
-export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+export async function readDiskAsync(diskFile, forceBPB, options)
 {
     let db, di
     try {
@@ -801,7 +796,7 @@ export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors,
                 if (StrLib.getExtension(diskName) == "psi") {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
-                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
+                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, options)) di = null;
                 }
             }
         }
@@ -813,16 +808,14 @@ export async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors,
 }
 
 /**
- * readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+ * readDiskSync(diskFile, forceBPB)
  *
  * @param {string} diskFile
  * @param {boolean} [forceBPB]
- * @param {Array|string} [sectorIDs]
- * @param {Array|string} [sectorErrors]
- * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
+ * @param {Object} [options]
  * @returns {DiskInfo|null}
  */
-export function readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
+export function readDiskSync(diskFile, forceBPB, options)
 {
     let db, di
     try {
@@ -847,7 +840,7 @@ export function readDiskSync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
                 if (StrLib.getExtension(diskName) == "psi") {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
-                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
+                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, options)) di = null;
                 }
             }
         }

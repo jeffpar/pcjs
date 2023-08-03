@@ -129,7 +129,7 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromBuffer(dbDisk, forceBPB, fnHash, sectorIDs, sectorErrors, suppData)
+     * buildDiskFromBuffer(dbDisk, forceBPB, fnHash, options)
      *
      * Build a disk image from a DataBuffer.
      *
@@ -165,12 +165,10 @@ export default class DiskInfo {
      * @param {DataBuffer} dbDisk
      * @param {fForceBPP} [forceBPB]
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @param {Array|string} [sectorIDs]
-     * @param {Array|string} [sectorErrors]
-     * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
+     * @param {Object} [options]
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromBuffer(dbDisk, forceBPB, fnHash, sectorIDs, sectorErrors, suppData)
+    buildDiskFromBuffer(dbDisk, forceBPB, fnHash, options)
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
@@ -188,6 +186,8 @@ export default class DiskInfo {
 
         let dbTrack, dbSector;
         let iTrack, cbTrack, offTrack, offSector;
+
+        if (!options) options = {};
 
         if (cbDiskData >= 3000000) {        // arbitrary threshold between diskette image sizes and hard drive image sizes
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
@@ -533,7 +533,7 @@ export default class DiskInfo {
              */
             iTrack = offTrack = 0;
             cbTrack = nSectorsPerTrack * cbSector;
-            let suppObj = this.parseSuppData(suppData);
+            let suppObj = this.parseSuppData(options.suppData);
             this.aDiskData = new Array(nCylinders);
             if (fnHash) this.hash = fnHash(dbDisk);
             this.nCylinders = nCylinders;
@@ -627,8 +627,8 @@ export default class DiskInfo {
                          * For example, when building the IBM Multiplan 1.00 Program disk, "--sectorID=11:0:8:61" must be specified.
                          */
                         let aParts, n;
-                        if (sectorIDs) {
-                            let aSectorIDs = (typeof sectorIDs == "string")? [sectorIDs] : sectorIDs;
+                        if (options.sectorIDs) {
+                            let aSectorIDs = (typeof options.sectorIDs == "string")? [options.sectorIDs] : options.sectorIDs;
                             for (let i = 0; i < aSectorIDs.length; i++) {
                                 aParts = aSectorIDs[i].split(":");
                                 if (+aParts[0] === iCylinder && +aParts[1] === iHead && +aParts[2] === sectorID) {
@@ -641,8 +641,8 @@ export default class DiskInfo {
                             }
                         }
                         let sectorError = 0;
-                        if (sectorErrors) {
-                            let aSectorErrors = (typeof sectorErrors == "string")? [sectorErrors] : sectorErrors;
+                        if (options.sectorErrors) {
+                            let aSectorErrors = (typeof options.sectorErrors == "string")? [options.sectorErrors] : options.sectorErrors;
                             for (let i = 0; i < aSectorErrors.length; i++) {
                                 aParts = aSectorErrors[i].split(":");
                                 if (+aParts[0] === iCylinder && +aParts[1] === iHead && +aParts[2] === sectorID) {
@@ -720,21 +720,26 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, custom, fnHash, sectorIDs, sectorErrors, suppData)
+     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, fnHash, options)
      *
      * If a total sector target is provided, we look for a predefined BPB that is an exact match; otherwise we
      * select the first BPB that can accommodate all the files.
      *
-     * To make this function more "customizable", a new 'custom' parameter supports the following properties:
+     * To make this function more "customizable", a new 'options' parameter supports the following properties:
      *
+     *      typeDevice: "XTC", "ATC", or "COMPAQ" (see HDC.aDeviceTypes)
+     *      typeDrive: drive type (see HDC.aDriveTypes)
      *      typeFAT: 12, 16, or 32
      *      clusSecs: 1 to 64 (512-byte to 32Kb clusters)
      *      rootEntries: 16 to 32768 entries (1 to 1024 sectors)
+     *      sectorIDs (sector ID edits that must be applied to the disk)
+     *      sectorErrors (sector errors that must be applied to the disk)
+     *      suppData (supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
      *
      * Custom disk images also have to work within the constraints of known drive types (ie, we must select a
      * number of cylinders, heads, and sectors per track that can accommodate the number of required sectors).
      *
-     * All of the custom properties should be optional; that is, default values should be selected based on our
+     * All of the options properties are, um, optional; that is, default values should be selected based on our
      * understanding of "what would DOS do".  For example, if a disk had 32680 or fewer sectors, supposedly DOS
      * would format it with a 12-bit FAT; otherwise, it would use a 16-bit FAT.
      *
@@ -745,18 +750,17 @@ export default class DiskInfo {
      * @param {string} diskName
      * @param {Array.<FileData>} aFileData
      * @param {number} [kbTarget]
-     * @param {Object} [custom] (custom disk parameters, null if none)
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @param {Array|string} [sectorIDs]
-     * @param {Array|string} [sectorErrors]
-     * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
+     * @param {Object} [options] (custom disk parameters, if any)
      * @returns {boolean} true if disk allocation successful, false if not
      */
-    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, custom, fnHash, sectorIDs, sectorErrors, suppData)
+    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, fnHash, options)
     {
         if (!aFileData || !aFileData.length) {
             return false;
         }
+
+        if (!options) options = {};
 
         this.diskName = diskName;
         this.abOrigBPB = [];
@@ -787,15 +791,18 @@ export default class DiskInfo {
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
         let driveType = 0, driveParms;
-        if (custom) {
-            let driveTypes = Object.keys(HDC.aDriveTypes[1]).slice(1);
-            for (let type of driveTypes) {
-                let parms = HDC.aDriveTypes[1][type];
-                let nSectors = parms[0] * parms[1] * (parms[2] || 17);
-                if (nTargetSectors && nTargetSectors <= nSectors || cbTotal * 1.10 < nSectors * 512) {
-                    driveType = type;
-                    driveParms = parms;
-                    break;
+        if (options.typeDevice) {
+            let iCtrl = HDC.aDeviceTypes.indexOf(options.typeDevice);
+            if (iCtrl >= 0) {
+                let driveTypes = Object.keys(HDC.aDriveTypes[iCtrl]).slice(1);
+                for (let type of driveTypes) {
+                    let parms = HDC.aDriveTypes[1][type];
+                    let nSectors = parms[0] * parms[1] * (parms[2] || 17);
+                    if (nTargetSectors && nTargetSectors <= nSectors || cbTotal * 1.10 < nSectors * 512) {
+                        driveType = type;
+                        driveParms = parms;
+                        break;
+                    }
                 }
             }
         }
@@ -977,7 +984,7 @@ export default class DiskInfo {
             return false;
         }
 
-        return this.buildDiskFromBuffer(dbDisk, undefined, fnHash, sectorIDs, sectorErrors, suppData);
+        return this.buildDiskFromBuffer(dbDisk, undefined, fnHash, options);
     }
 
     /**
