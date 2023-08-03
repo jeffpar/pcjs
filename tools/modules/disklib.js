@@ -387,7 +387,7 @@ export function normalizeTextFile(db)
 }
 
 /**
- * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
+ * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, custom, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
  *
  * @param {string} sDir (directory name)
  * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
@@ -396,6 +396,7 @@ export function normalizeTextFile(db)
  * @param {string} [sPassword] (password; for encrypted ARC files only at this point)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
+ * @param {Object} [custom] (custom disk parameters, null if none)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
  * @param {boolean} [verbose] (true for verbose output)
  * @param {Array|string} [sectorIDs]
@@ -403,7 +404,7 @@ export function normalizeTextFile(db)
  * @param {Array|string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/README.md)
  * @param {function(DiskInfo)} [done] (optional function to call on completion)
  */
-export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
+export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, custom, nMax, verbose, sectorIDs, sectorErrors, suppData, done)
 {
     let di;
     let diskName = path.basename(sDir);
@@ -438,7 +439,7 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
                 }
                 suppData = null;
             }
-            if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, sectorIDs, sectorErrors, suppData)) {
+            if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, custom, getHash, sectorIDs, sectorErrors, suppData)) {
                 /*
                 * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
                 */

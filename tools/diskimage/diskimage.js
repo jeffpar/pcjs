@@ -110,7 +110,7 @@ function createDisk(diskFile, diskette, argv, done)
         let normalize = diskette.normalize || argv['normalize'];
         let target = getTargetValue(diskette.format);
         let verbose = argv['verbose'];
-        readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, sectorIDs, sectorErrors, suppData, done);
+        readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, null, undefined, verbose, sectorIDs, sectorErrors, suppData, done);
     } else {
         done(readDiskSync(sArchiveFile, false, sectorIDs, sectorErrors, suppData));
     }
@@ -1237,7 +1237,7 @@ function processArg(argv)
             printf("error: %s is not a supported archive file\n", input);
             return true;
         }
-        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], sectorIDs, sectorErrors, suppData, done);
+        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), null, +argv['maxfiles'] || 0, argv['verbose'], sectorIDs, sectorErrors, suppData, done);
         return true;
     }
 

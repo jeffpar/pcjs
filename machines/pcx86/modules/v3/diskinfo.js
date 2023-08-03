@@ -10,6 +10,7 @@
 import CPUx86 from "./cpux86.js";
 import CharSet from "./charset.js";
 import Device from "../../../modules/v3/device.js";
+import HDC from "../v2/hdc.js";
 import FileInfo from "./fileinfo.js";
 
 /**
@@ -719,7 +720,23 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, fnHash, sectorIDs, sectorErrors, suppData)
+     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, custom, fnHash, sectorIDs, sectorErrors, suppData)
+     *
+     * If a total sector target is provided, we look for a predefined BPB that is an exact match; otherwise we
+     * select the first BPB that can accommodate all the files.
+     *
+     * To make this function more "customizable", a new 'custom' parameter supports the following properties:
+     *
+     *      typeFAT: 12, 16, or 32
+     *      clusSecs: 1 to 64 (512-byte to 32Kb clusters)
+     *      rootEntries: 16 to 32768 entries (1 to 1024 sectors)
+     *
+     * Custom disk images also have to work within the constraints of known drive types (ie, we must select a
+     * number of cylinders, heads, and sectors per track that can accommodate the number of required sectors).
+     *
+     * All of the custom properties should be optional; that is, default values should be selected based on our
+     * understanding of "what would DOS do".  For example, if a disk had 32680 or fewer sectors, supposedly DOS
+     * would format it with a 12-bit FAT; otherwise, it would use a 16-bit FAT.
      *
      * TODO: This function currently only knows how to build FAT12 disk images.  Add support for FAT16 and FAT32.
      *
@@ -728,13 +745,14 @@ export default class DiskInfo {
      * @param {string} diskName
      * @param {Array.<FileData>} aFileData
      * @param {number} [kbTarget]
+     * @param {Object} [custom] (custom disk parameters, null if none)
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
      * @param {Array|string} [sectorIDs]
      * @param {Array|string} [sectorErrors]
      * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
      * @returns {boolean} true if disk allocation successful, false if not
      */
-    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, fnHash, sectorIDs, sectorErrors, suppData)
+    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, custom, fnHash, sectorIDs, sectorErrors, suppData)
     {
         if (!aFileData || !aFileData.length) {
             return false;
@@ -762,6 +780,25 @@ export default class DiskInfo {
          * then we re-verify that that BPB will work.  If not, then we keep looking.
          */
         let cbTotal = this.calcFileSizes(aFileData);
+
+        /*
+         * If a custom build has been requested, then we scan for an appropriate AT drive type.  If no sector target
+         * has been provided, we fall back on total size of all files, but we must include a "slop factor" (eg, 10%) to
+         * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
+         */
+        let driveType = 0, driveParms;
+        if (custom) {
+            let driveTypes = Object.keys(HDC.aDriveTypes[1]).slice(1);
+            for (let type of driveTypes) {
+                let parms = HDC.aDriveTypes[1][type];
+                let nSectors = parms[0] * parms[1] * (parms[2] || 17);
+                if (nTargetSectors && nTargetSectors <= nSectors || cbTotal * 1.10 < nSectors * 512) {
+                    driveType = type;
+                    driveParms = parms;
+                    break;
+                }
+            }
+        }
 
         this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "calculated size for %d files: %d bytes (%#x)\n", aFileData.length, cbTotal);
 
@@ -3517,14 +3554,13 @@ export default class DiskInfo {
     /**
      * seek(iCylinder, iHead, idSector, sectorPrev, done)
      *
-     * TODO: There's some dodgy code in seek() that allows floppy images to be dynamically
-     * reconfigured with more heads and/or sectors/track, and it does so by peeking at more drive
-     * properties.  That code used to be in the FDC component, where it was perfectly reasonable
-     * to access those properties.  We need a cleaner interface back to the drive, similar to the
-     * info() interface we provide to the controller.
+     * TODO: There's some dodgy code in seek() that allows floppy images to be dynamically reconfigured
+     * with more heads and/or sectors/track, and it does so by peeking at more drive properties.  That code
+     * used to be in the FDC component, where it was perfectly reasonable to access those properties.  We
+     * need a cleaner interface back to the drive, similar to the info() interface we provide to the controller.
      *
-     * Whether or not the "dynamic reconfiguration" feature itself is perfectly reasonable is,
-     * of course, a separate question.
+     * Whether or not the "dynamic reconfiguration" feature itself is perfectly reasonable is, of course,
+     * a separate question.
      *
      * @this {DiskInfo}
      * @param {number} iCylinder
