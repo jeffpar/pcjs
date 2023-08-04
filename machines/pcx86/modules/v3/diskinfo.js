@@ -815,7 +815,27 @@ export default class DiskInfo {
             return false;
         }
 
-        let iBPB, abBoot, cbSector, cSectorsPerCluster, cbCluster, cFATs, cFATSectors;
+        /*
+         * Define abBoot (where we'll store the boot sector that we either build or select) along with some
+         * functions to get/set 1/2/4-byte values.
+         */
+        let abBoot;
+        let getBoot = function(off, len) {
+            let val = 0;
+            for (let i = 0; i < len; i++) {
+                val |= abBoot[off++] << (i * 8);
+            }
+            return val;
+        };
+        let setBoot = function(off, len, val) {
+            for (let i = 0; i < len; i++) {
+                abBoot[off++] = val & 0xff;
+                val >>>= 8;
+            }
+        };
+
+        let typeFAT = 12, cFATs, cFATSectors;
+        let iBPB, cbSector, cSectorsPerCluster, cbCluster;
         let cRootEntries, cRootSectors, cHiddenSectors, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
 
         if (driveType) {
@@ -824,12 +844,6 @@ export default class DiskInfo {
              * the other values we'll need, including total number of data sectors (cDataSectors).
              */
             let minDOSVer = 2.0;
-            let setBoot = function(off, val, len) {
-                for (let i = 0; i < len; i++) {
-                    abBoot[off++] = val & 0xff;
-                    val >>>= 8;
-                }
-            };
             abBoot = [                  // start with a BPB for a 10Mb hard drive
                 0xEB, 0xFE, 0x90,       // 0x00: JMP instruction, following by 8-byte OEM signature
                 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (WARNING: this signature is REQUIRED for PC DOS 3.x if using a 12-bit FAT)
@@ -848,11 +862,11 @@ export default class DiskInfo {
                 0x00                    // 0x1F: PC DOS 2.0 through 3.1 stores BOOTHEAD here
             ];
             if (cTotalSectors <= 0xffff) {
-                setBoot(DiskInfo.BPB.DISKSECS, cTotalSectors, 2);
+                setBoot(DiskInfo.BPB.DISKSECS, 2, cTotalSectors);
             } else {
                 minDOSVer = 3.31;
-                setBoot(DiskInfo.BPB.DISKSECS, 0, 2);
-                setBoot(DiskInfo.BPB.LARGESECS, cTotalSectors, 4);
+                setBoot(DiskInfo.BPB.DISKSECS, 2, 0);
+                setBoot(DiskInfo.BPB.LARGESECS, 4, cTotalSectors);
             }
         }
 
@@ -885,19 +899,19 @@ export default class DiskInfo {
              * If this BPB is for a hard drive but a disk size was not specified, skip it.
              */
             if ((abBoot[DiskInfo.BPB.MEDIA] == DiskInfo.FAT.MEDIA_FIXED) != (kbTarget >= 10000)) continue;
-            cRootEntries = abBoot[DiskInfo.BPB.DIRENTS] | (abBoot[DiskInfo.BPB.DIRENTS + 1] << 8);
+            cRootEntries = getBoot(DiskInfo.BPB.DIRENTS, 2);
             if (cRootEntries > maxRoot) maxRoot = cRootEntries;
             if (aFileData.length > cRootEntries) continue;
-            cbSector = abBoot[DiskInfo.BPB.SECBYTES] | (abBoot[DiskInfo.BPB.SECBYTES + 1] << 8);
+            cbSector = getBoot(DiskInfo.BPB.SECBYTES, 2);
             cSectorsPerCluster = abBoot[DiskInfo.BPB.CLUSSECS];
             cbCluster = cbSector * cSectorsPerCluster;
             cFATs = abBoot[DiskInfo.BPB.FATS];
-            cFATSectors = abBoot[DiskInfo.BPB.FATSECS] | (abBoot[DiskInfo.BPB.FATSECS + 1] << 8);
+            cFATSectors = getBoot(DiskInfo.BPB.FATSECS, 2);
             cRootSectors = (((cRootEntries * DiskInfo.DIRENT.LENGTH) + cbSector - 1) / cbSector) | 0;
-            cTotalSectors = abBoot[DiskInfo.BPB.DISKSECS] | (abBoot[DiskInfo.BPB.DISKSECS + 1] << 8);
-            cHiddenSectors = abBoot[DiskInfo.BPB.HIDDENSECS] | (abBoot[DiskInfo.BPB.HIDDENSECS + 1] << 8);
-            cSectorsPerTrack = abBoot[DiskInfo.BPB.TRACKSECS] | (abBoot[DiskInfo.BPB.TRACKSECS + 1] << 8);
-            cHeads = abBoot[DiskInfo.BPB.DRIVEHEADS] | (abBoot[DiskInfo.BPB.DRIVEHEADS + 1] << 8);
+            cTotalSectors = getBoot(DiskInfo.BPB.DISKSECS, 2);
+            cHiddenSectors = getBoot(DiskInfo.BPB.HIDDENSECS, 2);
+            cSectorsPerTrack = getBoot(DiskInfo.BPB.TRACKSECS, 2);
+            cHeads = getBoot(DiskInfo.BPB.DRIVEHEADS, 2);
             cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
             cbAvail = cDataSectors * cbSector;
             if (!nTargetSectors || cHiddenSectors) {
@@ -950,7 +964,7 @@ export default class DiskInfo {
          * Output a Master Boot Record (MBR) if this is a hard drive image.
          */
         if (cHiddenSectors) {
-            abSector = this.buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors);
+            abSector = this.buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors, typeFAT);
             offDisk += this.copyData(dbDisk, offDisk, abSector) * cHiddenSectors;
         }
 
@@ -969,9 +983,9 @@ export default class DiskInfo {
          * BPB at offset 0x15.  For old BPB-less diskettes, this is where you must look for the media ID.
          */
         let abFAT = [];
-        this.buildFATEntry(abFAT, 0, abBoot[DiskInfo.BPB.MEDIA] | 0xF00);
-        this.buildFATEntry(abFAT, 1, 0xFFF);
-        this.buildFAT(abFAT, aFileData, 2, cbCluster);
+        this.buildFATEntry(abFAT, 0, abBoot[DiskInfo.BPB.MEDIA] | 0xFF00, typeFAT);
+        this.buildFATEntry(abFAT, 1, 0xFFFF, typeFAT);
+        this.buildFAT(abFAT, aFileData, 2, cbCluster, typeFAT);
 
         /*
          * Output the FAT sectors; we simplify the logic a bit by writing each FAT table as if it
@@ -1293,16 +1307,17 @@ export default class DiskInfo {
     }
 
     /**
-     * buildFAT(abFAT, aFileData, iCluster, cbCluster)
+     * buildFAT(abFAT, aFileData, iCluster, cbCluster, typeFAT)
      *
      * @this {DiskInfo}
      * @param {Array.<number>} abFAT
      * @param {Array.<FileData>} aFileData
      * @param {number} iCluster
      * @param {number} cbCluster
+     * @param {number} [typeFAT] (ie, 12, 16, 32; default is 12)
      * @returns {number}
      */
-    buildFAT(abFAT, aFileData, iCluster, cbCluster)
+    buildFAT(abFAT, aFileData, iCluster, cbCluster, typeFAT = 12)
     {
         let cb;
         let cSubDirs = 0;
@@ -1319,9 +1334,9 @@ export default class DiskInfo {
                 aFileData[iFile].cluster = iCluster;
                 while (cFileClusters-- > 0) {
                     let iNextCluster = iCluster + 1;
-                    if (!cFileClusters) iNextCluster = 0xFFF;
+                    if (!cFileClusters) iNextCluster = (1 << typeFAT) - 1;
                     this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: setting cluster entry %d to %#0wx\n", aFileData[iFile].name, iCluster, iNextCluster);
-                    this.buildFATEntry(abFAT, iCluster++, iNextCluster);
+                    this.buildFATEntry(abFAT, iCluster++, iNextCluster, typeFAT);
                 }
             }
         }
@@ -1329,7 +1344,7 @@ export default class DiskInfo {
             for (let iFile = 0; iFile < aFileData.length; iFile++) {
                 cb = aFileData[iFile].size;
                 if (cb < 0) {
-                    iCluster = this.buildFAT(abFAT, aFileData[iFile].files, iCluster, cbCluster);
+                    iCluster = this.buildFAT(abFAT, aFileData[iFile].files, iCluster, cbCluster, typeFAT);
                 }
             }
         }
@@ -1337,18 +1352,24 @@ export default class DiskInfo {
     }
 
     /**
-     * buildFATEntry(abFat, iFat, v)
+     * buildFATEntry(abFat, iFat, v, typeFAT)
      *
      * @this {DiskInfo}
      * @param {Array.<number>} abFAT
      * @param {number} iFAT
      * @param {number} v
+     * @param {number} [typeFAT] (ie, 12, 16, 32; default is 12)
      */
-    buildFATEntry(abFAT, iFAT, v)
+    buildFATEntry(abFAT, iFAT, v, typeFAT = 12)
     {
-        let iBit = iFAT * 12;
+        let iBit = iFAT * typeFAT;
         let iByte = (iBit >> 3);
-        if ((iBit % 8) === 0) {
+        v &= ((1 << typeFAT) - 1);
+        if (typeFAT == 16) {
+            abFAT[iByte] = v & 0xff;
+            abFAT[iByte + 1] = (v >> 8);
+        }
+        else if ((iBit % 8) === 0) {
             abFAT[iByte] = v & 0xff;
             iByte++;
             if (abFAT[iByte] === undefined) abFAT[iByte] = 0;
@@ -1362,16 +1383,17 @@ export default class DiskInfo {
     }
 
     /**
-     * buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors)
+     * buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors, typeFAT)
      *
      * @this {DiskInfo}
      * @param {number} cHeads
      * @param {number} cSectorsPerTrack
      * @param {number} cbSector
      * @param {number} cTotalSectors
+     * @param {number} [typeFAT] (ie, 12, 16, 32; default is 12)
      * @returns {Array.<number>}
      */
-    buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors)
+    buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors, typeFAT = 12)
     {
         /*
          * There are four 16-byte partition entries in the MBR, starting at offset 0x1BE,
@@ -1395,7 +1417,8 @@ export default class DiskInfo {
         /*
          * Next 1 byte: partition ID
          */
-        abSector[offSector++] = 0x01;           // partition ID: 0x01 (FAT12)
+        let id = typeFAT == 12? DiskInfo.MBR.PARTITIONS.TYPE.FAT12_PRIMARY : DiskInfo.MBR.PARTITIONS.TYPE.FAT16_PRIMARY;
+        abSector[offSector++] = id;             // partition ID
 
         /*
          * Next 3 bytes: CHS (Cylinder/Head/Sector) of last partition sector
