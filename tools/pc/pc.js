@@ -1076,10 +1076,8 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     let normalize = true;
     if (!sDir.endsWith('/')) sDir += '/';
     if (fVerbose) printf("reading files: %s\n", sDir);
-    let options = {
-        files: aFileDescs,
-        typeDevice: "ATC"
-    };
+    let options = { files: aFileDescs };
+    // options.typeDevice = "ATC";
     readDir(sDir, 0, 0, "PCJS", null, normalize, maxCapacity * 1024, maxFiles, false, options, done);
 
     return driveManifest? "" : "unable to build drive";

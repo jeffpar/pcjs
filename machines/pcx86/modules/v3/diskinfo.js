@@ -799,7 +799,7 @@ export default class DiskInfo {
                     let parms = HDC.aDriveTypes[1][type];
                     let nSectors = parms[0] * parms[1] * (parms[2] || 17);
                     if (nTargetSectors && nTargetSectors <= nSectors || cbTotal * 1.10 < nSectors * 512) {
-                        driveType = type;
+                        driveType = +type;
                         driveParms = parms;
                         cTotalSectors = nSectors;
                         break;
@@ -819,7 +819,7 @@ export default class DiskInfo {
          * Define abBoot (where we'll store the boot sector that we either build or select) along with some
          * functions to get/set 1/2/4-byte values.
          */
-        let abBoot;
+        let abBoot, di = this;
         let getBoot = function(off, len) {
             let val = 0;
             for (let i = 0; i < len; i++) {
@@ -832,11 +832,12 @@ export default class DiskInfo {
                 abBoot[off++] = val & 0xff;
                 val >>>= 8;
             }
+            di.assert(!val);
         };
 
-        let typeFAT = 12, cFATs, cFATSectors;
-        let iBPB, cbSector, cSectorsPerCluster, cbCluster;
-        let cRootEntries, cRootSectors, cHiddenSectors, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
+        let typeFAT = 12, cFATs = 2, cFATSectors;
+        let iBPB, cbSector = 512, cSectorsPerCluster, cbCluster;
+        let cRootEntries = 0, cRootSectors, cHiddenSectors = 1, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
 
         if (driveType) {
             /*
@@ -851,8 +852,8 @@ export default class DiskInfo {
                 0x08,                   // 0x0D: sectors per cluster (eg, 8)
                 0x01, 0x00,             // 0x0E: reserved sectors (# sectors preceding the FAT--usually just the boot sector)
                 0x02,                   // 0x10: FAT copies (normally 2)
-                0x00, 0x02,             // 0x11: root directory entries
-                0x03, 0x51,             // 0x13: total sectors (less hidden sectors)
+                0x00, 0x02,             // 0x11: root directory entries (512)
+                0x03, 0x51,             // 0x13: total sectors, less hidden sectors (DISKSECS)
                 0xF8,                   // 0x15: media ID (eg, 0xF8: hard drive)
                 0x08, 0x00,             // 0x16: sectors per FAT (8)
                 0x11, 0x00,             // 0x18: sectors per track (17)
@@ -861,6 +862,7 @@ export default class DiskInfo {
                 0x00,                   // 0x1E: PC DOS 2.0 through 3.1 stores BOOTDRIVE here (0x00 for floppy, 0x80 for hard drive)
                 0x00                    // 0x1F: PC DOS 2.0 through 3.1 stores BOOTHEAD here
             ];
+            cTotalSectors -= cHiddenSectors;
             if (cTotalSectors <= 0xffff) {
                 setBoot(DiskInfo.BPB.DISKSECS, 2, cTotalSectors);
             } else {
@@ -868,6 +870,44 @@ export default class DiskInfo {
                 setBoot(DiskInfo.BPB.DISKSECS, 2, 0);
                 setBoot(DiskInfo.BPB.LARGESECS, 4, cTotalSectors);
             }
+            setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
+            /*
+             * If we were to go with clusters as large as 4K, would we still run out of clusters with a 12-bit FAT?
+             */
+            let maxClusters = DiskInfo.FAT12.MAX_CLUSTERS;
+            if (cTotalSectors / 8 > DiskInfo.FAT12.MAX_CLUSTERS) {
+                typeFAT = 16;
+                maxClusters = DiskInfo.FAT16.MAX_CLUSTERS;
+            }
+            /*
+             * For the given FAT type, maximize the FAT usage in order to minimize the cluster size.  That calculation
+             * must then be rounded up to the nearest power of 2 (eg, 1, 2, 4, 8, 16, 32, 64), because the FAT file system
+             * does not allow just *any* number of sectors per cluster.
+             */
+            cSectorsPerCluster = cTotalSectors / maxClusters;
+            let nearestPower = 1;
+            while (nearestPower < cSectorsPerCluster) {
+                nearestPower <<= 1;
+            }
+            cSectorsPerCluster = nearestPower;
+            cbCluster = cSectorsPerCluster * cbSector;
+            setBoot(DiskInfo.BPB.CLUSSECS, 1, cSectorsPerCluster);
+            cFATSectors = Math.ceil(((cTotalSectors / cSectorsPerCluster * typeFAT) / 8) / cbSector);
+            setBoot(DiskInfo.BPB.FATSECS, 2, cFATSectors);
+            cRootEntries = 512;
+            while (cRootEntries < aFileData.length) {
+                cRootEntries *= 2;
+            }
+            setBoot(DiskInfo.BPB.FATS, 1, cFATs);
+            setBoot(DiskInfo.BPB.DIRENTS, 2, cRootEntries);
+            cRootSectors = (cRootEntries * 0x20) / cbSector;
+            cSectorsPerTrack = driveParms[2] || 17;
+            setBoot(DiskInfo.BPB.TRACKSECS, 2, cSectorsPerTrack);
+            cHeads = driveParms[1];
+            setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
+            cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
+            cbAvail = cDataSectors * cbSector;
+            iBPB = DiskInfo.aDefaultBPBs.length;
         }
 
         /*
@@ -889,51 +929,52 @@ export default class DiskInfo {
          * it's important to create a disk image that will work with PC DOS 1.0, which didn't understand 180Kb and 360Kb
          * disk images.
          */
-        let maxRoot = 0;
-        for (iBPB = 0; iBPB < DiskInfo.aDefaultBPBs.length; iBPB++) {
-            /*
-             * Use slice() to copy the BPB, to ensure we don't alter the original.
-             */
-            abBoot = DiskInfo.aDefaultBPBs[iBPB].slice();
-            /*
-             * If this BPB is for a hard drive but a disk size was not specified, skip it.
-             */
-            if ((abBoot[DiskInfo.BPB.MEDIA] == DiskInfo.FAT.MEDIA_FIXED) != (kbTarget >= 10000)) continue;
-            cRootEntries = getBoot(DiskInfo.BPB.DIRENTS, 2);
-            if (cRootEntries > maxRoot) maxRoot = cRootEntries;
-            if (aFileData.length > cRootEntries) continue;
-            cbSector = getBoot(DiskInfo.BPB.SECBYTES, 2);
-            cSectorsPerCluster = abBoot[DiskInfo.BPB.CLUSSECS];
-            cbCluster = cbSector * cSectorsPerCluster;
-            cFATs = abBoot[DiskInfo.BPB.FATS];
-            cFATSectors = getBoot(DiskInfo.BPB.FATSECS, 2);
-            cRootSectors = (((cRootEntries * DiskInfo.DIRENT.LENGTH) + cbSector - 1) / cbSector) | 0;
-            cTotalSectors = getBoot(DiskInfo.BPB.DISKSECS, 2);
-            cHiddenSectors = getBoot(DiskInfo.BPB.HIDDENSECS, 2);
-            cSectorsPerTrack = getBoot(DiskInfo.BPB.TRACKSECS, 2);
-            cHeads = getBoot(DiskInfo.BPB.DRIVEHEADS, 2);
-            cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
-            cbAvail = cDataSectors * cbSector;
-            if (!nTargetSectors || cHiddenSectors) {
-                if (cbTotal <= cbAvail && nTargetSectors <= cTotalSectors) {
-                    let cb = this.calcFileSizes(aFileData, cSectorsPerCluster);
-                    if (cb <= cbAvail) {
-                        cbTotal = cb;
-                        break;
+        if (!cRootEntries) {
+            let maxRoot = 0;
+            for (iBPB = 0; iBPB < DiskInfo.aDefaultBPBs.length; iBPB++) {
+                /*
+                 * Use slice() to copy the BPB, to ensure we don't alter the original.
+                 */
+                abBoot = DiskInfo.aDefaultBPBs[iBPB].slice();
+                /*
+                 * If this BPB is for a hard drive but a disk size was not specified, skip it.
+                 */
+                if ((abBoot[DiskInfo.BPB.MEDIA] == DiskInfo.FAT.MEDIA_FIXED) != (kbTarget >= 10000)) continue;
+                cRootEntries = getBoot(DiskInfo.BPB.DIRENTS, 2);
+                if (cRootEntries > maxRoot) maxRoot = cRootEntries;
+                if (aFileData.length > cRootEntries) continue;
+                cbSector = getBoot(DiskInfo.BPB.SECBYTES, 2);
+                cSectorsPerCluster = abBoot[DiskInfo.BPB.CLUSSECS];
+                cbCluster = cbSector * cSectorsPerCluster;
+                cFATs = abBoot[DiskInfo.BPB.FATS];
+                cFATSectors = getBoot(DiskInfo.BPB.FATSECS, 2);
+                cRootSectors = (((cRootEntries * DiskInfo.DIRENT.LENGTH) + cbSector - 1) / cbSector) | 0;
+                cTotalSectors = getBoot(DiskInfo.BPB.DISKSECS, 2);
+                cHiddenSectors = getBoot(DiskInfo.BPB.HIDDENSECS, 2);
+                cSectorsPerTrack = getBoot(DiskInfo.BPB.TRACKSECS, 2);
+                cHeads = getBoot(DiskInfo.BPB.DRIVEHEADS, 2);
+                cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
+                cbAvail = cDataSectors * cbSector;
+                if (!nTargetSectors || cHiddenSectors) {
+                    if (cbTotal <= cbAvail && nTargetSectors <= cTotalSectors) {
+                        let cb = this.calcFileSizes(aFileData, cSectorsPerCluster);
+                        if (cb <= cbAvail) {
+                            cbTotal = cb;
+                            break;
+                        }
                     }
+                } else {
+                    if (nTargetSectors == cTotalSectors) break;
                 }
-            } else {
-                if (nTargetSectors == cTotalSectors) break;
             }
-        }
-
-        if (iBPB == DiskInfo.aDefaultBPBs.length) {
-            if (aFileData.length <= maxRoot) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "files exceed supported disk formats (%d bytes total)\n", cbTotal);
-            } else {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%d files in root exceeds supported maximum of %d\n", aFileData.length, maxRoot);
+            if (iBPB == DiskInfo.aDefaultBPBs.length) {
+                if (aFileData.length <= maxRoot) {
+                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "files exceed supported disk formats (%d bytes total)\n", cbTotal);
+                } else {
+                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%d files in root exceeds supported maximum of %d\n", aFileData.length, maxRoot);
+                }
+                return false;
             }
-            return false;
         }
 
         let abSector;
@@ -4006,8 +4047,8 @@ DiskInfo.PCJS_VALUE = 0x50434A53;   // "PCJS"
 /*
  * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
  *
- * Technically, OPCODE and OEM are not part of a BPB, but for simplicity's sake, this is where we're
- * recording those offsets.
+ * Technically, OPCODE and OEM are not part of a BPB, but some operating systems test one or both those fields as part
+ * of their disk verification logic, so for simplicity's sake, this is where we're recording those offsets.
  *
  * NOTE: DOS 2.x OEM documentation says that the words starting at offset 0x018 (TRACKSECS, DRIVEHEADS, and HIDDENSECS)
  * are optional, but even the DOS 2.0 FORMAT utility initializes all three of those words.  There may be some OEM media out
