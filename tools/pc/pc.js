@@ -1031,7 +1031,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     let dbBoot = getDiskSector(diSystem, 0);
     if (version >= 2.0 && version < 3.2) {
         /*
-         * PC DOS 2.x requires the boot drive (AND drive head # -- go figure) to be stored in locations
+         * PC DOS 2.0 to 3.1 requires the boot drive (AND drive head # -- go figure) to be in locations
          * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
          * part of the BPB unless we specify a BPB version number, so in this case, it must be 2.
          */
@@ -1047,7 +1047,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     }
     else if (version >= 3.2 && version < 4.0) {
         /*
-         * When DOS 3.20 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
+         * When DOS 3.2 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
          * (just before the 0x55,0xAA signature).
          *
          * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that

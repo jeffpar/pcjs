@@ -786,11 +786,11 @@ export default class DiskInfo {
         let cbTotal = this.calcFileSizes(aFileData);
 
         /*
-         * If a custom build has been requested, then we scan for an appropriate AT drive type.  If no sector target
-         * has been provided, we fall back on total size of all files, but we must include a "slop factor" (eg, 10%) to
+         * If a custom build has been requested, then we scan for an appropriate drive type.  If no sector target
+         * has been provided, we fall back on total size of all files, but we also include a "slop factor" (eg, 10%) to
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
-        let driveType = 0, driveParms;
+        let driveType = 0, driveParms, cTotalSectors;
         if (options.typeDevice) {
             let iCtrl = HDC.aDeviceTypes.indexOf(options.typeDevice);
             if (iCtrl >= 0) {
@@ -801,6 +801,7 @@ export default class DiskInfo {
                     if (nTargetSectors && nTargetSectors <= nSectors || cbTotal * 1.10 < nSectors * 512) {
                         driveType = type;
                         driveParms = parms;
+                        cTotalSectors = nSectors;
                         break;
                     }
                 }
@@ -815,10 +816,48 @@ export default class DiskInfo {
         }
 
         let iBPB, abBoot, cbSector, cSectorsPerCluster, cbCluster, cFATs, cFATSectors;
-        let cRootEntries, cRootSectors, cTotalSectors, cHiddenSectors, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
+        let cRootEntries, cRootSectors, cHiddenSectors, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
+
+        if (driveType) {
+            /*
+             * Build a BPB to accommodate the selected drive parameters and file requirements, and calculate all
+             * the other values we'll need, including total number of data sectors (cDataSectors).
+             */
+            let minDOSVer = 2.0;
+            let setBoot = function(off, val, len) {
+                for (let i = 0; i < len; i++) {
+                    abBoot[off++] = val & 0xff;
+                    val >>>= 8;
+                }
+            };
+            abBoot = [                  // start with a BPB for a 10Mb hard drive
+                0xEB, 0xFE, 0x90,       // 0x00: JMP instruction, following by 8-byte OEM signature
+                0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (WARNING: this signature is REQUIRED for PC DOS 3.x if using a 12-bit FAT)
+                0x00, 0x02,             // 0x0B: bytes per sector (eg, 0x200 or 512)
+                0x08,                   // 0x0D: sectors per cluster (eg, 8)
+                0x01, 0x00,             // 0x0E: reserved sectors (# sectors preceding the FAT--usually just the boot sector)
+                0x02,                   // 0x10: FAT copies (normally 2)
+                0x00, 0x02,             // 0x11: root directory entries
+                0x03, 0x51,             // 0x13: total sectors (less hidden sectors)
+                0xF8,                   // 0x15: media ID (eg, 0xF8: hard drive)
+                0x08, 0x00,             // 0x16: sectors per FAT (8)
+                0x11, 0x00,             // 0x18: sectors per track (17)
+                0x04, 0x00,             // 0x1A: number of heads (4)
+                0x01, 0x00,             // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+                0x00,                   // 0x1E: PC DOS 2.0 through 3.1 stores BOOTDRIVE here (0x00 for floppy, 0x80 for hard drive)
+                0x00                    // 0x1F: PC DOS 2.0 through 3.1 stores BOOTHEAD here
+            ];
+            if (cTotalSectors <= 0xffff) {
+                setBoot(DiskInfo.BPB.DISKSECS, cTotalSectors, 2);
+            } else {
+                minDOSVer = 3.31;
+                setBoot(DiskInfo.BPB.DISKSECS, 0, 2);
+                setBoot(DiskInfo.BPB.LARGESECS, cTotalSectors, 4);
+            }
+        }
 
         /*
-         * Find or build a BPB with enough capacity, and at the same time, calculate all the other values we'll need,
+         * Find a BPB with enough capacity, and at the same time, calculate all the other values we'll need,
          * including total number of data sectors (cDataSectors).
          *
          * TODO: For now, the code that chooses a default BPB starts with entry #3 instead of #0, because Windows 95
@@ -4172,7 +4211,7 @@ DiskInfo.aDefaultBPBs = [
     0x02,                       // 0x10: FAT copies (2)
     0x00, 0x02,                 // 0x11: root directory entries (0x200 or 512)  0x200 * 0x20 = 0x4000 (1 sector is 0x200 bytes, total of 0x20 or 32 sectors)
     0x03, 0x51,                 // 0x13: number of sectors (0x5103 or 20739; * 512 bytes/sector = 10,618,368 bytes = 10,369Kb = 10Mb)
-    0xF8,                       // 0x15: media ID (eg, 0xF8: hard drive w/FAT12)
+    0xF8,                       // 0x15: media ID (eg, 0xF8: hard drive)
     0x08, 0x00,                 // 0x16: sectors per FAT (8)
       //
       // Wikipedia (http://en.wikipedia.org/wiki/File_Allocation_Table#BIOS_Parameter_Block) implies everything past
@@ -4196,7 +4235,7 @@ DiskInfo.aDefaultBPBs = [
     0x02,                       // 0x10: FAT copies (2)
     0x00, 0x04,                 // 0x11: root directory entries (0x400 or 1024)  0x400 * 0x20 = 0x8000 (1 sector is 0x200 bytes, total of 0x40 or 64 sectors)
     0x17, 0xa3,                 // 0x13: number of sectors (0xa317 or 41751; * 512 bytes/sector = 21,376,512 bytes = 20,875.5Kb = 20Mb)
-    0xF8,                       // 0x15: media ID (eg, 0xF8: hard drive w/FAT12)
+    0xF8,                       // 0x15: media ID (eg, 0xF8: hard drive)
     0x08, 0x00,                 // 0x16: sectors per FAT (8)
       //
       // Wikipedia (http://en.wikipedia.org/wiki/File_Allocation_Table#BIOS_Parameter_Block) implies everything past
