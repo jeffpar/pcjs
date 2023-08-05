@@ -99,6 +99,9 @@ import FileInfo from "./fileinfo.js";
  * @property {number} cbSector
  * @property {Array.<VolInfo>|null} volTable
  * @property {Array.<FileInfo>|null} fileTable
+ * @property {string} typeDevice
+ * @property {number} typeDrive
+ * @property {Array.<number>} driveParms
  */
 export default class DiskInfo {
     /**
@@ -783,24 +786,30 @@ export default class DiskInfo {
          * we find a BPB that will support that size, we recalculate cbTotal using that BPB's cluster size, and
          * then we re-verify that that BPB will work.  If not, then we keep looking.
          */
-        let cbTotal = this.calcFileSizes(aFileData);
+        let cbTotal = this.calcFileSizes(aFileData), cTotalSectors = 0;
 
         /*
          * If a custom build has been requested, then we scan for an appropriate drive type.  If no sector target
          * has been provided, we fall back on total size of all files, but we also include a "slop factor" (eg, 10%) to
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
-        let driveType = 0, driveParms, cTotalSectors;
+        this.typeDevice = "";
+        this.typeDrive = 0;
+        this.driveParms = [];
+
         if (options.typeDevice) {
             let iCtrl = HDC.aDeviceTypes.indexOf(options.typeDevice);
             if (iCtrl >= 0) {
                 let driveTypes = Object.keys(HDC.aDriveTypes[iCtrl]).slice(1);
                 for (let type of driveTypes) {
                     let parms = HDC.aDriveTypes[1][type];
-                    let nSectors = parms[0] * parms[1] * (parms[2] || 17);
-                    if (nTargetSectors && nTargetSectors <= nSectors || cbTotal * 1.10 < nSectors * 512) {
-                        driveType = +type;
-                        driveParms = parms;
+                    let nSectors = (parms[0] - 1) * parms[1] * (parms[2] || 17);
+                    if (nTargetSectors && nTargetSectors <= nSectors || !nTargetSectors && cbTotal * 1.10 < nSectors * 512) {
+                        this.typeDevice = options.typeDevice;
+                        this.typeDrive = +type;
+                        this.driveParms = parms.slice();
+                        this.driveParms[0]--;
+                        if (!this.driveParms[2]) this.driveParms[2] = 17;
                         cTotalSectors = nSectors;
                         break;
                     }
@@ -839,7 +848,7 @@ export default class DiskInfo {
         let iBPB, cbSector = 512, cSectorsPerCluster, cbCluster;
         let cRootEntries = 0, cRootSectors, cHiddenSectors = 1, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
 
-        if (driveType) {
+        if (this.typeDrive) {
             /*
              * Build a BPB to accommodate the selected drive parameters and file requirements, and calculate all
              * the other values we'll need, including total number of data sectors (cDataSectors).
@@ -878,6 +887,7 @@ export default class DiskInfo {
             if (cTotalSectors / 8 > DiskInfo.FAT12.MAX_CLUSTERS) {
                 typeFAT = 16;
                 maxClusters = DiskInfo.FAT16.MAX_CLUSTERS;
+                setBoot(DiskInfo.BPB.OEM + 5, 1, 0x33);
             }
             /*
              * For the given FAT type, maximize the FAT usage in order to minimize the cluster size.  That calculation
@@ -885,6 +895,7 @@ export default class DiskInfo {
              * does not allow just *any* number of sectors per cluster.
              */
             cSectorsPerCluster = cTotalSectors / maxClusters;
+            if (cSectorsPerCluster <= 1) cSectorsPerCluster = 4;
             let nearestPower = 1;
             while (nearestPower < cSectorsPerCluster) {
                 nearestPower <<= 1;
@@ -901,9 +912,9 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.FATS, 1, cFATs);
             setBoot(DiskInfo.BPB.DIRENTS, 2, cRootEntries);
             cRootSectors = (cRootEntries * 0x20) / cbSector;
-            cSectorsPerTrack = driveParms[2] || 17;
+            cSectorsPerTrack = this.driveParms[2];
             setBoot(DiskInfo.BPB.TRACKSECS, 2, cSectorsPerTrack);
-            cHeads = driveParms[1];
+            cHeads = this.driveParms[1];
             setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
             cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
             cbAvail = cDataSectors * cbSector;
@@ -3449,6 +3460,17 @@ export default class DiskInfo {
     }
 
     /**
+     * getDriveType()
+     *
+     * @this {DiskInfo}
+     * @returns {number|undefined}
+     */
+    getDriveType()
+    {
+        return this.typeDrive;
+    }
+
+    /**
      * getFormat()
      *
      * For disks that match a standard "PC" disk geometry AND contain 1 or more FAT volumes,
@@ -3868,6 +3890,7 @@ export default class DiskInfo {
                         }
                     }
                     for (let ib = 0; ib < cb; ib++) {
+                        if (lbaBoot == 0 && ib >= DiskInfo.MBR.PARTITIONS.OFFSET) continue;
                         if (hasBPB) {
                             switch(verBPB) {
                             case 0:
@@ -4370,8 +4393,8 @@ DiskInfo.GEOMETRIES = {
      * The following are some common disk sizes and their CHS values, since missing or bogus MBR and/or BPB values
      * might mislead us when attempting to determine the exact disk geometry.
      */
-    10653696:[306,4,17],            // PC XT 10Mb hard drive (type 3)
-    21411840:[615,4,17],            // PC AT 20Mb hard drive (type 2)
+    10653696:[306, 4, 17],          // PC XT 10Mb hard drive (type 3)
+    21411840:[615, 4, 17],          // PC AT 20Mb hard drive (type 2)
     /*
      * Other assorted disk formats, used by DEC and others.
      * For example, the 256256-byte format was also used on early CP/M and SCP (Seattle Computer Products) systems

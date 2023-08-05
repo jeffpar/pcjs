@@ -32,6 +32,7 @@ let autoStart = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.30";
+let systemOverride = false;
 let savedMachine = "compaq386.json";
 let savedState = "state386.json";
 let localMachine = "";  // current machine config file
@@ -52,7 +53,7 @@ let machine = newMachine();
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
-let driveManifest = null;
+let driveManifest = null, driveType = 0, driveSize = 0;
 
 const functionKeys = {
     "\u001b[A":     "$up",
@@ -660,7 +661,16 @@ function loadMachine(sFile, capacity = 0)
                     };
                     if (driveManifest || !localDir) {
                         drives[0]['path'] = localDrive;
-                        if (driveManifest) removeFloppy = true;
+                        /*
+                         * If we built a drive, the build process could have chosen a different drive type.
+                         */
+                        if (driveManifest) {
+                            if (driveType) {
+                                drives[0]['type'] = driveType;
+                                drives[0]['name'] = driveSize + "Mb Hard Disk";
+                            }
+                            removeFloppy = true;
+                        }
                     }
                 }
                 config['hdc']['drives'] = drives;
@@ -672,7 +682,7 @@ function loadMachine(sFile, capacity = 0)
         if (config['fdc']) {
             if (removeFloppy) {
                 config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
-            } else {
+            } else if (systemOverride) {
                 let name = systemType.toUpperCase() + ' ' + systemVersion;
                 let sSystemDisk = getSystemDisk(systemType, systemVersion);
                 if (sSystemDisk) {
@@ -929,8 +939,8 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
         return "missing system diskette: " + sSystemDisk;
     }
 
-    let driveType = maxCapacity + "mb";
-    let sSystemMBR = drives[driveType] && drives[driveType]['MBR'] || (driveType + ".mbr");
+    let sizeDrive = maxCapacity + "mb";
+    let sSystemMBR = drives[sizeDrive] && drives[sizeDrive]['MBR'] || (sizeDrive + ".mbr");
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -1069,6 +1079,8 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
             if (fVerbose) printf("building drive: %s\n", localDrive);
             if (writeDiskSync(localDrive, di, false, 0, true, true)) {
                 driveManifest = manifest;
+                driveType = di.getDriveType();
+                driveSize = (di.getSize() / 1024 / 1024)|0;
             }
         }
     }
@@ -1077,7 +1089,11 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     if (!sDir.endsWith('/')) sDir += '/';
     if (fVerbose) printf("reading files: %s\n", sDir);
     let options = { files: aFileDescs };
-    // options.typeDevice = "ATC";
+    /*
+     * Setting options.typeDevice to "ATC" allows buildDiskFromFiles() to scan the supported set
+     * of ATC drive types and choose the best one to accommodate all the files we're adding to the drive.
+     */
+    options.typeDevice = "ATC";
     readDir(sDir, 0, 0, "PCJS", null, normalize, maxCapacity * 1024, maxFiles, false, options, done);
 
     return driveManifest? "" : "unable to build drive";
@@ -1981,6 +1997,7 @@ function main(argc, argv)
     machineType = argv['type'] || defaults['type'] || machineType;
     systemType = (typeof argv['system'] == "string" && argv['system'] || defaults['system'] || systemType).toLowerCase();
     systemVersion = (typeof argv['version'] == "string" && argv['version'] || defaults['version'] || systemVersion);
+    systemOverride = argv['system'] || argv['version'];
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
     maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
