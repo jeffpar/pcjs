@@ -53,7 +53,7 @@ let machine = newMachine();
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
-let driveManifest = null, deviceType = "COMPAQ", driveType = -1, driveSize = 0, driveOverrides = false;
+let driveManifest = null, deviceType = "COMPAQ", driveType = -1, driveSize = 0, deviceOverride = false;
 
 const functionKeys = {
     "\u001b[A":     "$up",
@@ -574,7 +574,7 @@ function checkMachine(sFile)
             sFile = sVerify;
         }
     }
-    if (sFile && !driveOverrides) {
+    if (sFile && !deviceOverride) {
         if (machine) {
             if (machine['hdc']) {
                 deviceType = machine['hdc']['type'];
@@ -627,25 +627,24 @@ function newMachine()
 }
 
 /**
- * loadMachine(sFile, capacity)
- *
- * If capacity, then we want to 1) remove any boot floppy from drive A: and 2) make the sure the 'type'
- * for the first hard drive is set correctly.  For example, if capacity is 10, then the drive type should
- * be 3 for XT controllers and 1 for AT controllers.
+ * loadMachine(sFile)
  *
  * @param {string} sFile
- * @param {number} [capacity] (hard drive capacity in Mb, if any)
  * @returns {string}
  */
-function loadMachine(sFile, capacity = 0)
+function loadMachine(sFile)
 {
     let result = "";
     let getFactory = function(config) {
+
+        let removeFloppy = fNoFloppy;
         let type = config['type'] || (config['machine'] && config['machine']['type']) || machineType;
+
         machine.id = "";
         if (config['machine']) {
             machine.id = config['machine']['id'];
         }
+
         if (config['cpu']) {
             if (fHalt) {
                 config['cpu']['autoStart'] = 0;
@@ -655,49 +654,40 @@ function loadMachine(sFile, capacity = 0)
                 autoStart = !config['debugger'];
             }
         }
-        let removeFloppy = fNoFloppy;
-        if (capacity) {
-            if (config['hdc']) {
-                let type = config['hdc']['type'];
-                let drives = config['hdc']['drives'];
-                if (typeof drives == "string") {
-                    try {
-                        drives = eval(drives);
-                    } catch(err) {
-                        drives = null;
+
+        if (config['hdc']) {
+            let type = config['hdc']['type'];
+            let drives = config['hdc']['drives'];
+            if (typeof drives == "string") {
+                try {
+                    drives = eval(drives);
+                } catch(err) {
+                    drives = null;
+                }
+            }
+            if (!drives) drives = [];
+            /*
+             * Set the *drive* type below based on the *controller* type obtained above.
+             */
+            if (driveType >= 0) {
+                drives[0] = {
+                    'type': driveType,
+                    'name': driveSize + "Mb Hard Disk"
+                };
+                if (driveManifest || !localDir) {
+                    drives[0]['path'] = localDrive;
+                    if (driveManifest || driveType >= 0) {
+                        removeFloppy = true;
                     }
                 }
-                if (!drives) drives = [];
-                /*
-                 * Set the *drive* type below based on the *controller* type obtained above.
-                 */
-                let typeDrive = configJSON['drives']?.[capacity + "mb"]?.[type];
-                if (typeDrive) {
-                    drives[0] = {
-                        'name': capacity + "Mb Hard Disk",
-                        'type': typeDrive
-                    };
-                    if (driveManifest || !localDir) {
-                        drives[0]['path'] = localDrive;
-                        /*
-                         * If we built a drive, the build process could have chosen a different drive type;
-                         * similarly, if the user specified a drive type, we include that in the drive specification.
-                         */
-                        if (driveType >= 0) {
-                            drives[0]['type'] = driveType;
-                            drives[0]['name'] = driveSize + "Mb Hard Disk";
-                        }
-                        if (driveManifest || driveType >= 0) {
-                            removeFloppy = true;
-                        }
-                    }
-                }
-                config['hdc']['drives'] = drives;
             }
-            if (sFile.endsWith(savedMachine) && config['computer']) {
-                config['computer']['state'] = path.join(pcjsDir, savedState);
-            }
+            config['hdc']['drives'] = drives;
         }
+
+        if (sFile.endsWith(savedMachine) && config['computer']) {
+            config['computer']['state'] = path.join(pcjsDir, savedState);
+        }
+
         if (config['fdc']) {
             if (removeFloppy) {
                 config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
@@ -709,6 +699,7 @@ function loadMachine(sFile, capacity = 0)
                 }
             }
         }
+
         let args = JSON.stringify(config);
         loadModules(machines[type]['factory'], machines[type]['modules'], function() {
             initMachine(args);
@@ -744,7 +735,7 @@ async function reloadMachine()
     if (driveManifest) {
         result = await buildDrive(localDir);
         if (!result) {
-            loadMachine(localMachine, maxCapacity);
+            loadMachine(localMachine);
         }
     } else {
         result = loadMachine(localMachine);
@@ -937,29 +928,25 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     if (!localDir) {
         return "";      // an empty directory generally means a prebuilt drive has been supplied instead
     }
-    let drives = configJSON['drives'] || {};
-    let system = configJSON['systems']?.[systemType];
 
+    let system = configJSON['systems']?.[systemType];
     if (!system) {
         return "unsupported system type: " + systemType;
     }
 
     let version = +systemVersion;
     let majorVersion = version | 0;
-
     if (majorVersion < 2) {
         return "minimum DOS version with hard disk support is 2.00";
     }
 
     let sSystemDisk = getSystemDisk(systemType, systemVersion);
     let diSystem = await readDiskAsync(sSystemDisk);
-
     if (!diSystem) {
         return "missing system diskette: " + sSystemDisk;
     }
 
-    let sizeDrive = maxCapacity + "mb";
-    let sSystemMBR = drives[sizeDrive] && drives[sizeDrive]['MBR'] || (sizeDrive + ".mbr");
+    let sSystemMBR = "DOS.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -968,11 +955,11 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
         return "missing system MBR: " + sSystemMBR;
     }
 
-    let aFileDescs = [];
     /*
      * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero
      * for our added utilities (and for COMMAND.COM itself).
      */
+    let aFileDescs = [];
     let attrHidden = majorVersion > 2? DiskInfo.ATTR.HIDDEN : 0;
     for (let name of system.files) {
         let desc = diSystem.findFile(name);
@@ -1098,7 +1085,9 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
             if (fVerbose) printf("building drive: %s\n", localDrive);
             if (writeDiskSync(localDrive, di, false, 0, true, true)) {
                 driveManifest = manifest;
-                driveType = di.getDriveType();
+                let dt = di.getDriveInfo();
+                deviceType = dt.typeDevice;
+                driveType = dt.typeDrive;
                 driveSize = (di.getSize() / 1024 / 1024)|0;
             }
         }
@@ -1751,7 +1740,7 @@ function doCommand(s)
                 if (sFile) {
                     machine = newMachine();
                     printf("loading machine: %s\n", sFile);
-                    result = loadMachine(sFile, maxCapacity);
+                    result = loadMachine(sFile);
                     if (!result) {
                         localMachine = sFile;
                     }
@@ -1888,11 +1877,12 @@ async function processArgs(argv)
             }
         }
         if (localMachine) {
-            result = loadMachine(localMachine, maxCapacity);
-            if (!result) {
+            let error = loadMachine(localMachine);
+            if (!error) {
                 loading = true;
             } else {
                 localMachine = "";
+                result = error;
             }
         }
     }
@@ -2029,11 +2019,10 @@ function main(argc, argv)
     let type = parseInt(argv['drivetype']);
     if (!isNaN(type)) {
         driveType = type;
-        driveOverrides = true;
     }
     if (typeof argv['devicetype'] == "string") {
         deviceType = argv['devicetype'];
-        driveOverrides = true;
+        deviceOverride = true;
     }
 
     fHalt = argv['halt'] || fHalt;

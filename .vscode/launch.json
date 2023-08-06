@@ -531,7 +531,8 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--capacity=20mb"
+        "disk/MSDOS320",
+        "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -551,8 +552,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=compaq386",
-        "--debug"
+        "disks/MSDOS320",
+        "--drivetype=3",
+        "--debug",
+        "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,

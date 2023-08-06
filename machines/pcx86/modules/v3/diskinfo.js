@@ -800,7 +800,8 @@ export default class DiskInfo {
             if (iDevice >= 0) {
                 let parms, typeDrive, nSectors;
                 if (options.typeDrive >= 0) {
-                    parms = HDC.aDriveTypes[iDevice][options.typeDrive];
+                    typeDrive = options.typeDrive;
+                    parms = HDC.aDriveTypes[iDevice][typeDrive];
                 } else {
                     let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
                     for (let type of driveTypes) {
@@ -820,7 +821,7 @@ export default class DiskInfo {
                     this.nSectors = parms[2] || 17;
                     this.typeDevice = options.typeDevice;
                     this.typeDrive = +typeDrive;
-                    cTotalSectors = nSectors;
+                    cTotalSectors = this.nCylinders * this.nHeads * this.nSectors;
                 }
             }
         }
@@ -3468,14 +3469,17 @@ export default class DiskInfo {
     }
 
     /**
-     * getDriveType()
+     * getDriveInfo()
      *
      * @this {DiskInfo}
-     * @returns {number|undefined}
+     * @returns {Object}
      */
-    getDriveType()
+    getDriveInfo()
     {
-        return this.typeDrive;
+        return {
+            typeDevice: this.typeDevice,
+            typeDrive: this.typeDrive
+        };
     }
 
     /**
