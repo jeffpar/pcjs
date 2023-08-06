@@ -46351,7 +46351,7 @@ class RAMx86 extends Component {
 
         this.addrRAM = +parmsRAM['addr'];       // we allow numbers or strings (JSON strings permit hex)
         this.sizeRAM = +parmsRAM['size'];       // we allow numbers or strings (JSON strings permit hex)
-        this.fTestRAM = parmsRAM['test'];
+        this.fTestRAM = parmsRAM['test'] && parmsRAM['test'] != "false";
         this.fInstalled = (!!this.sizeRAM);     // 0 is the default value for 'size' when none is specified
         this.sizeOverride = 0;
         this.fAllocated = false;

@@ -509,9 +509,10 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml",
-        "--build"
+        "disks/msdos320",
+        "dir"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/PCDOS200",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

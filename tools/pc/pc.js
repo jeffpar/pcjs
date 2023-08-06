@@ -536,7 +536,7 @@ function sendSerial(b)
  */
 function checkMachine(sFile)
 {
-    let sVerify = "";
+    let sVerify = "", machine;
     while (sFile) {
         if (sFile.indexOf("http") == 0) {
             break;
@@ -568,24 +568,27 @@ function checkMachine(sFile)
     }
     if (sVerify) {
         if (sVerify.endsWith(".json")) {
-            let machine = JSON.parse(readFileSync(sVerify, "utf8", true) || "{}");
+            machine = JSON.parse(readFileSync(sVerify, "utf8", true) || "{}");
             sFile = machine['machine']? sVerify : "";
-            if (!driveOverrides && sFile) {
-                if (machine['hdc']) {
-                    deviceType = machine['hdc']['type'];
-                }
-                if (machine['chipset'] && machine['chipset']['model'] == "deskpro386") {
-                    deviceType = "COMPAQ";
-                }
-            }
         } else {
             sFile = sVerify;
-            if (!driveOverrides) {
-                if (sFile.indexOf("5160") >= 0) {
-                    deviceType = "XT";
-                } else if (sFile.indexOf("5170") >= 0) {
-                    deviceType = "AT";
-                }
+        }
+    }
+    if (sFile && !driveOverrides) {
+        if (machine) {
+            if (machine['hdc']) {
+                deviceType = machine['hdc']['type'];
+            }
+            if (machine['chipset'] && machine['chipset']['model'] == "deskpro386") {
+                deviceType = "COMPAQ";
+            }
+        } else {
+            if (sFile.indexOf("5160") >= 0) {
+                deviceType = "XT";
+            } else if (sFile.indexOf("5170") >= 0) {
+                deviceType = "AT";
+            } else if (sFile.indexOf("compaq") >= 0) {
+                deviceType = "COMPAQ";
             }
         }
     }
@@ -2022,10 +2025,16 @@ function main(argc, argv)
     maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
     maxCapacity = parseInt(argv['capacity']) || parseInt(defaults['capacity']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
+
     let type = parseInt(argv['drivetype']);
-    if (!isNaN(type)) driveType = type;
-    deviceType = typeof argv['devicetype'] == "string" && argv['devicetype'] || deviceType;
-    if (deviceType || driveType >= 0) driveOverrides = true;
+    if (!isNaN(type)) {
+        driveType = type;
+        driveOverrides = true;
+    }
+    if (typeof argv['devicetype'] == "string") {
+        deviceType = argv['devicetype'];
+        driveOverrides = true;
+    }
 
     fHalt = argv['halt'] || fHalt;
     fNoFloppy = argv['nofloppy'] || fNoFloppy;
