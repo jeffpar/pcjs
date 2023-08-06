@@ -53,7 +53,7 @@ let machine = newMachine();
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
-let driveManifest = null, driveType = 0, driveSize = 0;
+let driveManifest = null, deviceType = "COMPAQ", driveType = -1, driveSize = 0, driveOverrides = false;
 
 const functionKeys = {
     "\u001b[A":     "$up",
@@ -570,8 +570,23 @@ function checkMachine(sFile)
         if (sVerify.endsWith(".json")) {
             let machine = JSON.parse(readFileSync(sVerify, "utf8", true) || "{}");
             sFile = machine['machine']? sVerify : "";
+            if (!driveOverrides && sFile) {
+                if (machine['hdc']) {
+                    deviceType = machine['hdc']['type'];
+                }
+                if (machine['chipset'] && machine['chipset']['model'] == "deskpro386") {
+                    deviceType = "COMPAQ";
+                }
+            }
         } else {
             sFile = sVerify;
+            if (!driveOverrides) {
+                if (sFile.indexOf("5160") >= 0) {
+                    deviceType = "XT";
+                } else if (sFile.indexOf("5170") >= 0) {
+                    deviceType = "AT";
+                }
+            }
         }
     }
     return sFile;
@@ -662,13 +677,14 @@ function loadMachine(sFile, capacity = 0)
                     if (driveManifest || !localDir) {
                         drives[0]['path'] = localDrive;
                         /*
-                         * If we built a drive, the build process could have chosen a different drive type.
+                         * If we built a drive, the build process could have chosen a different drive type;
+                         * similarly, if the user specified a drive type, we include that in the drive specification.
                          */
-                        if (driveManifest) {
-                            if (driveType) {
-                                drives[0]['type'] = driveType;
-                                drives[0]['name'] = driveSize + "Mb Hard Disk";
-                            }
+                        if (driveType >= 0) {
+                            drives[0]['type'] = driveType;
+                            drives[0]['name'] = driveSize + "Mb Hard Disk";
+                        }
+                        if (driveManifest || driveType >= 0) {
                             removeFloppy = true;
                         }
                     }
@@ -1090,10 +1106,13 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     if (fVerbose) printf("reading files: %s\n", sDir);
     let options = { files: aFileDescs };
     /*
-     * Setting options.typeDevice to "ATC" allows buildDiskFromFiles() to scan the supported set
-     * of ATC drive types and choose the best one to accommodate all the files we're adding to the drive.
+     * Setting options.typeDevice to "XT", "AT", or "COMPAQ" allows buildDiskFromFiles() to scan the set
+     * of supported drive types and choose the best one to accommodate all the files we're adding to the drive.
      */
-    options.typeDevice = "ATC";
+    if (deviceType) {
+        options.typeDevice = deviceType;
+        options.typeDrive = driveType;
+    }
     readDir(sDir, 0, 0, "PCJS", null, normalize, maxCapacity * 1024, maxFiles, false, options, done);
 
     return driveManifest? "" : "unable to build drive";
@@ -2003,6 +2022,10 @@ function main(argc, argv)
     maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
     maxCapacity = parseInt(argv['capacity']) || parseInt(defaults['capacity']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
+    let type = parseInt(argv['drivetype']);
+    if (!isNaN(type)) driveType = type;
+    deviceType = typeof argv['devicetype'] == "string" && argv['devicetype'] || deviceType;
+    if (deviceType || driveType >= 0) driveOverrides = true;
 
     fHalt = argv['halt'] || fHalt;
     fNoFloppy = argv['nofloppy'] || fNoFloppy;
@@ -2045,9 +2068,11 @@ function main(argc, argv)
             "--capacity=[size]":        "set hard drive capacity (default is " + maxCapacity + "mb)",
             "--dir=[directory]":        "set hard drive local directory (default is " + localDir + ")",
             "--disk=[disk image]":      "set hard drive disk image (instead of directory)",
+            "--devicetype=[type]":      "set controller type (eg, XT, AT, or COMPAQ)",
+            "--drivetype=[number]":     "set drive type (must be valid for controller type)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
-            "--system=[sys type]":      "operating system type (default is " + systemType + ")",
-            "--version=[sys version]":  "operating system version (default is " + systemVersion + ")"
+            "--system=[string]":        "operating system type (default is " + systemType + ")",
+            "--version=[#.##]":         "operating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
             "--debug (-d)\t":           "enable DEBUG messages",

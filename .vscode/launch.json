@@ -467,7 +467,8 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "disks/MSDOS320",
-        "dir"
+        "dir",
+        "--capacity=20"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,

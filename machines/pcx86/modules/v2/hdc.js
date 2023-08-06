@@ -3254,7 +3254,7 @@ HDC.DEFAULT_DRIVE_NAME = "Hard Drive";
  * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDeviceType to index the correct table type
  * inside both aDeviceTypes and aDriveTypes.
  */
-HDC.aDeviceTypes = ["XTC", "ATC", "COMPAQ"];
+HDC.aDeviceTypes = ["XT", "AT", "COMPAQ"];
 
 HDC.aDriveTypes = [
     /*

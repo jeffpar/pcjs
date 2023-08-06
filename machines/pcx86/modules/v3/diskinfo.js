@@ -94,14 +94,13 @@ import FileInfo from "./fileinfo.js";
  * @property {number} cbDiskData
  * @property {number} dwChecksum
  * @property {number} nCylinders
+ * @property {string} typeDevice
+ * @property {number} typeDrive
  * @property {number} nHeads
  * @property {number} nSectors
  * @property {number} cbSector
  * @property {Array.<VolInfo>|null} volTable
  * @property {Array.<FileInfo>|null} fileTable
- * @property {string} typeDevice
- * @property {number} typeDrive
- * @property {Array.<number>} driveParms
  */
 export default class DiskInfo {
     /**
@@ -730,7 +729,7 @@ export default class DiskInfo {
      *
      * To make this function more "customizable", a new 'options' parameter supports the following properties:
      *
-     *      typeDevice: "XTC", "ATC", or "COMPAQ" (see HDC.aDeviceTypes)
+     *      typeDevice: "XT", "AT", or "COMPAQ" (see HDC.aDeviceTypes)
      *      typeDrive: drive type (see HDC.aDriveTypes)
      *      typeFAT: 12, 16, or 32
      *      clusSecs: 1 to 64 (512-byte to 32Kb clusters)
@@ -794,25 +793,34 @@ export default class DiskInfo {
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
         this.typeDevice = "";
-        this.typeDrive = 0;
-        this.driveParms = [];
+        this.typeDrive = -1;
 
         if (options.typeDevice) {
-            let iCtrl = HDC.aDeviceTypes.indexOf(options.typeDevice);
-            if (iCtrl >= 0) {
-                let driveTypes = Object.keys(HDC.aDriveTypes[iCtrl]).slice(1);
-                for (let type of driveTypes) {
-                    let parms = HDC.aDriveTypes[1][type];
-                    let nSectors = (parms[0] - 1) * parms[1] * (parms[2] || 17);
-                    if (nTargetSectors && nTargetSectors <= nSectors || !nTargetSectors && cbTotal * 1.10 < nSectors * 512) {
-                        this.typeDevice = options.typeDevice;
-                        this.typeDrive = +type;
-                        this.driveParms = parms.slice();
-                        this.driveParms[0]--;
-                        if (!this.driveParms[2]) this.driveParms[2] = 17;
-                        cTotalSectors = nSectors;
-                        break;
+            let iDevice = HDC.aDeviceTypes.indexOf(options.typeDevice);
+            if (iDevice >= 0) {
+                let parms, typeDrive, nSectors;
+                if (options.typeDrive >= 0) {
+                    parms = HDC.aDriveTypes[iDevice][options.typeDrive];
+                } else {
+                    let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
+                    for (let type of driveTypes) {
+                        parms = HDC.aDriveTypes[iDevice][type];
+                        nSectors = (parms[0] - 1) * parms[1] * (parms[2] || 17);
+                        if (!parms[3] || parms[3] == 512) {
+                            if (nTargetSectors && nTargetSectors <= nSectors || !nTargetSectors && cbTotal * 1.10 < nSectors * 512) {
+                                typeDrive = type;
+                                break;
+                            }
+                        }
                     }
+                }
+                if (parms) {
+                    this.nCylinders = parms[0] - 1;
+                    this.nHeads = parms[1];
+                    this.nSectors = parms[2] || 17;
+                    this.typeDevice = options.typeDevice;
+                    this.typeDrive = +typeDrive;
+                    cTotalSectors = nSectors;
                 }
             }
         }
@@ -848,7 +856,7 @@ export default class DiskInfo {
         let iBPB, cbSector = 512, cSectorsPerCluster, cbCluster;
         let cRootEntries = 0, cRootSectors, cHiddenSectors = 1, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
 
-        if (this.typeDrive) {
+        if (this.typeDrive >= 0) {
             /*
              * Build a BPB to accommodate the selected drive parameters and file requirements, and calculate all
              * the other values we'll need, including total number of data sectors (cDataSectors).
@@ -912,9 +920,9 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.FATS, 1, cFATs);
             setBoot(DiskInfo.BPB.DIRENTS, 2, cRootEntries);
             cRootSectors = (cRootEntries * 0x20) / cbSector;
-            cSectorsPerTrack = this.driveParms[2];
+            cSectorsPerTrack = this.nSectors;
             setBoot(DiskInfo.BPB.TRACKSECS, 2, cSectorsPerTrack);
-            cHeads = this.driveParms[1];
+            cHeads = this.nHeads;
             setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
             cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
             cbAvail = cDataSectors * cbSector;
@@ -1957,7 +1965,7 @@ export default class DiskInfo {
      */
     buildVolume(iVolume, sectorBoot)
     {
-        let idFAT = 0;
+        let idMedia = 0;
         let cbDisk = this.nCylinders * this.nHeads * this.nSectors * this.cbSector;
         let vol = /** @type {VolInfo} */({iVolume, iPartition: -1, idMedia: 0, lbaStart: 0, lbaTotal: 0});
 
@@ -1982,19 +1990,19 @@ export default class DiskInfo {
                 vol.vbaFAT = 1;
                 vol.nFATBits = 12;
                 vol.cbSector == this.cbSector;
-                idFAT = this.getClusterEntry(vol, 0, 0);
+                idMedia = this.getClusterEntry(vol, 0, 0);
                 for (let i = 0; i < DiskInfo.aDefaultBPBs.length; i++) {
                     let bpb = DiskInfo.aDefaultBPBs[i];
-                    if (bpb[DiskInfo.BPB.MEDIA] == idFAT || !bpb[DiskInfo.BPB.MEDIA] && idFAT >= 0xF8) {
+                    if (bpb[DiskInfo.BPB.MEDIA] == idMedia || !bpb[DiskInfo.BPB.MEDIA] && idMedia >= 0xF8) {
                         let cbDiskBPB = (bpb[DiskInfo.BPB.DISKSECS] + (bpb[DiskInfo.BPB.DISKSECS + 1] * 0x100)) * this.cbSector;
                         /*
-                         * With such a heavy reliance on a single byte (idFAT) from the first FAT sector, we're going to
+                         * With such a heavy reliance on a single byte (idMedia) from the first FAT sector, we're going to
                          * believe this BPB match only for disks <= 360K.  I would have limited it to 320K (the largest
                          * that DOS 1.x supported), but there's the 360K Microsoft Chart 2.02 disk image (and a few others),
                          * which are a bit "off", so there you go.
                          */
                         if (cbDiskBPB == cbDisk && (cbDisk <= 360 * 1024 || !bpb[DiskInfo.BPB.MEDIA])) {
-                            vol.idMedia = idFAT;
+                            vol.idMedia = idMedia;
                             /*
                              * NOTE: Like DISKSECS, FATSECS and DIRENTS are 2-byte fields; but unlike DISKSECS,
                              * their upper byte is zero in all our default (diskette) BPBs, so there's no need to fetch them.
@@ -2014,7 +2022,7 @@ export default class DiskInfo {
         let iVolFound = 0;
         if (!vol.idMedia) {
 
-            idFAT = 0;
+            idMedia = 0;
             vol.cbSector = this.cbSector;
 
             /*
@@ -2112,10 +2120,10 @@ export default class DiskInfo {
         vol.nFATBits = (vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS? 12 : 16);
         vol.clusMax = (vol.nFATBits == 12? DiskInfo.FAT12.CLUSNUM_MAX : DiskInfo.FAT16.CLUSNUM_MAX);
 
-        if (!idFAT) idFAT = this.getClusterEntry(vol, 0, 0);
+        if (!idMedia) idMedia = this.getClusterEntry(vol, 0, 0);
 
-        if (idFAT != vol.idMedia) {
-            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d error: FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, iVolume, idFAT, vol.idMedia);
+        if (idMedia != vol.idMedia) {
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d error: FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, iVolume, idMedia, vol.idMedia);
             return null;
         }
 
