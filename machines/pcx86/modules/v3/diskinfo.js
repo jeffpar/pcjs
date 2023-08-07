@@ -797,29 +797,34 @@ export default class DiskInfo {
         if (options.deviceType) {
             let iDevice = HDC.aDeviceTypes.indexOf(options.deviceType);
             if (iDevice >= 0) {
-                let parms, driveType, nSectors;
-                if (options.driveType >= 0) {
-                    driveType = options.driveType;
-                    parms = HDC.aDriveTypes[iDevice][driveType];
-                } else {
-                    let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
-                    for (let type of driveTypes) {
-                        parms = HDC.aDriveTypes[iDevice][type];
-                        nSectors = (parms[0] - 1) * parms[1] * (parms[2] || 17);
-                        if (!parms[3] || parms[3] == 512) {
-                            if (nTargetSectors && nTargetSectors <= nSectors || !nTargetSectors && cbTotal * 1.10 < nSectors * 512) {
-                                driveType = type;
-                                break;
-                            }
+                let bestType = -1, bestDiff = 0, bestParms;
+                let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
+                for (let type of driveTypes) {
+                    let parms = HDC.aDriveTypes[iDevice][type].slice();
+                    parms[0]--; parms[2] = parms[2] || 17;
+                    let nSectors = parms[0] * parms[1] * parms[2], cbSector = parms[3] || 512;
+                    if (cbSector != 512) continue;
+                    let cbTotal = nSectors * cbSector, mbTotal = cbTotal / 1024 / 1024, diff;
+                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", options.deviceType, +type, parms[0], parms[1], parms[2], mbTotal.toFixed(1), options.driveType == +type? '*' : '');
+                    if (options.driveType >= 0) {
+                        if (options.driveType == +type) {
+                            bestType = +type;
+                            bestParms = parms;
                         }
                     }
+                    else if (nTargetSectors && (diff = nSectors - nTargetSectors) && diff >= 0 && (diff < bestDiff || bestType < 0) ||
+                            !nTargetSectors && (diff = nSectors * 512 - cbTotal * 1.10) && diff >= 0 && (diff < bestDiff || bestType < 0)) {
+                        bestDiff = diff;
+                        bestType = +type;
+                        bestParms = parms;
+                    }
                 }
-                if (parms) {
-                    this.nCylinders = parms[0] - 1;
-                    this.nHeads = parms[1];
-                    this.nSectors = parms[2] || 17;
+                if (bestType >= 0) {
                     this.deviceType = options.deviceType;
-                    this.driveType = +driveType;
+                    this.driveType = bestType;
+                    this.nCylinders = bestParms[0];
+                    this.nHeads = bestParms[1];
+                    this.nSectors = bestParms[2];
                     cTotalSectors = this.nCylinders * this.nHeads * this.nSectors;
                 }
             }
@@ -1193,7 +1198,7 @@ export default class DiskInfo {
             }
             if (cbData) {
                 dbData.copy(dbDisk, offDisk);
-                if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%#x: %#x bytes written for %s\n", offDisk, dbData.length, aFileData[iFile].path);
+                this.printf(Device.MESSAGE.DEBUG + Device.MESSAGE.DISK, "%#x: %#x bytes written for %s\n", offDisk, dbData.length, aFileData[iFile].path);
             }
             offDisk += cbData;
             cClusters += ((cbData / cbCluster) | 0);
@@ -1209,11 +1214,11 @@ export default class DiskInfo {
             for (let iFile = 0; iFile < aFileData.length; iFile++) {
                 let cb = aFileData[iFile].size;
                 if (cb < 0) {
-                    if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%#x: buildClusters()\n", offDisk);
+                    this.printf(Device.MESSAGE.DEBUG + Device.MESSAGE.DISK, "%#x: buildClusters()\n", offDisk);
                     let cSubClusters = this.buildClusters(dbDisk, aFileData[iFile].files, offDisk, cbCluster, aFileData[iFile].cluster, iLevel + 1);
                     cClusters += cSubClusters;
                     offDisk += cSubClusters * cbCluster;
-                    if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%#x: buildClusters() returned, writing %d clusters\n", offDisk, cSubClusters);
+                    this.printf(Device.MESSAGE.DEBUG + Device.MESSAGE.DISK, "%#x: buildClusters() returned, writing %d clusters\n", offDisk, cSubClusters);
                 }
             }
         }
@@ -1395,7 +1400,7 @@ export default class DiskInfo {
                 while (cFileClusters-- > 0) {
                     let iNextCluster = iCluster + 1;
                     if (!cFileClusters) iNextCluster = (1 << typeFAT) - 1;
-                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s: setting cluster entry %d to %#0wx\n", aFileData[iFile].name, iCluster, iNextCluster);
+                    this.printf(Device.MESSAGE.DEBUG + Device.MESSAGE.DISK, "%s: setting cluster entry %d to %#0wx\n", aFileData[iFile].name, iCluster, iNextCluster);
                     this.buildFATEntry(abFAT, iCluster++, iNextCluster, typeFAT);
                 }
             }
@@ -1754,7 +1759,7 @@ export default class DiskInfo {
                 };
                 sectorIndex = 0;
                 maxIndex = size >> 2;
-                this.printf(Device.MESSAGE.INFO, "SECT: %d:%d:%d %d bytes, flags 0x%x, pattern 0x%02x\n", cylinder, head, idSector, size, flags, pattern);
+                this.printf(Device.MESSAGE.DEBUG, "SECT: %d:%d:%d %d bytes, flags 0x%x, pattern 0x%02x\n", cylinder, head, idSector, size, flags, pattern);
                 while (data.length < cylinder + 1) {
                     data.push([]);
                 }
@@ -1775,7 +1780,7 @@ export default class DiskInfo {
                 break;
 
             case CHUNK_DATA:
-                this.printf(Device.MESSAGE.INFO, "DATA: %d bytes\n", dbChunk.length);
+                this.printf(Device.MESSAGE.DEBUG, "DATA: %d bytes\n", dbChunk.length);
                 if (!sector) {
                     this.printf(Device.MESSAGE.ERROR, "no sector defined, aborting\n");
                     chunkID = 0;
@@ -1797,15 +1802,15 @@ export default class DiskInfo {
                 break;
 
             case CHUNK_IBMM:
-                this.printf(Device.MESSAGE.INFO, "IBMM: at 0x%x\n", chunkOffset);
+                this.printf(Device.MESSAGE.DEBUG, "IBMM: at 0x%x\n", chunkOffset);
                 break;
 
             case CHUNK_OFFS:
-                this.printf(Device.MESSAGE.INFO, "OFFS: at 0x%x\n", chunkOffset);
+                this.printf(Device.MESSAGE.DEBUG, "OFFS: at 0x%x\n", chunkOffset);
                 break;
 
             case CHUNK_TEXT:
-                this.printf(Device.MESSAGE.INFO, "TEXT: at 0x%x\n", chunkOffset);
+                this.printf(Device.MESSAGE.DEBUG, "TEXT: at 0x%x\n", chunkOffset);
                 break;
 
             case CHUNK_END:
@@ -1842,9 +1847,9 @@ export default class DiskInfo {
                     let path = desc[DiskInfo.FILEDESC.PATH].replace(/\//g, '\\');
                     let attr = +desc[DiskInfo.FILEDESC.ATTR];
                     /*
-                    * parseDate() *must* return local time (the second parameter must be true), because we've changed
-                    * everything else to use local time (eg, getFileListing()).
-                    */
+                     * parseDate() *must* return local time (the second parameter must be true), because we've changed
+                     * everything else to use local time (eg, getFileListing()).
+                     */
                     let date = this.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
                     let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
                     let file = new FileInfo(this, iVolume, path, name, attr, date, size);
@@ -2127,7 +2132,7 @@ export default class DiskInfo {
             return null;
         }
 
-        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  lbaTotal: %d\n  clusSecs: %d\n  clusTotal: %d\n", this.diskName, vol.vbaFAT, vol.vbaRoot, vol.vbaData, vol.lbaTotal, vol.clusSecs, vol.clusTotal);
+        this.printf(Device.MESSAGE.DEBUG + Device.MESSAGE.DISK, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  lbaTotal: %d\n  clusSecs: %d\n  clusTotal: %d\n", this.diskName, vol.vbaFAT, vol.vbaRoot, vol.vbaData, vol.lbaTotal, vol.clusSecs, vol.clusTotal);
 
         /*
          * The following assertion is here only to catch anomalies; it is NOT a requirement that the number of data sectors
@@ -2657,7 +2662,7 @@ export default class DiskInfo {
 
         dir.path = path + "\\";
 
-        if (Device.DEBUG) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, 'getDir("%s","%s")\n', this.diskName, dir.path);
+        this.printf(Device.MESSAGE.DEBUG + Device.MESSAGE.DISK, 'getDir("%s","%s")\n', this.diskName, dir.path);
 
         for (let iSector = 0; iSector < aLBA.length; iSector++) {
             let lba = aLBA[iSector];
@@ -2730,7 +2735,7 @@ export default class DiskInfo {
         if (!vol.sectorDirCache || !vol.lbaDirCache || vol.lbaDirCache != lba) {
             vol.lbaDirCache = lba;
             vol.sectorDirCache = this.getSector(vol.lbaDirCache);
-            // if (Device.DEBUG) this.printf(Device.MESSAGE.DISK, this.dumpSector(vol.sectorDirCache, vol.lbaDirCache, dir.path));
+            // this.printf(Device.MESSAGE.DEBUG + Device.MESSAGE.DISK, this.dumpSector(vol.sectorDirCache, vol.lbaDirCache, dir.path));
         }
         if (vol.sectorDirCache) {
             let off = i * DiskInfo.DIRENT.LENGTH;
@@ -3493,7 +3498,10 @@ export default class DiskInfo {
         return {
             deviceType: deviceType,
             driveType: this.driveType,
-            driveSize: (this.cbDiskData / 1024 / 1024)|0
+            cylinders: this.nCylinders,
+            heads: this.nHeads,
+            sectors: this.nSectors,
+            driveSize: (this.cbDiskData / 1024 / 1024).toFixed(1) + "Mb"
         };
     }
 
@@ -3698,7 +3706,7 @@ export default class DiskInfo {
         let b = -1;
         if (sector) {
             if (Device.DEBUG && !iByte && !fCompare) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, 'read("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
+                this.printf(Device.MESSAGE.DEBUG + Device.MESSAGE.DISK, 'read("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
             }
             if (iByte < sector[DiskInfo.SECTOR.LENGTH]) {
                 let adw = sector[DiskInfo.SECTOR.DATA];
@@ -3819,7 +3827,7 @@ export default class DiskInfo {
         if (!fForce && !this.fWritable) return false;
 
         if (Device.DEBUG && !iByte) {
-            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, 'write("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
+            this.printf(Device.MESSAGE.DEBUG + Device.MESSAGE.DISK, 'write("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
         }
 
         if (iByte < sector[DiskInfo.SECTOR.LENGTH]) {

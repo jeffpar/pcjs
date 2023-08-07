@@ -466,9 +466,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "disks/MSDOS320",
-        "dir",
-        "--capacity=20"
+        "--disk=t.imf",
+        "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -531,7 +530,10 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "disk/MSDOS320",
+        "--capacity=20",
+        "--drivetype=6",
+        "--verbose",
+        "disks/MSDOS320",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",

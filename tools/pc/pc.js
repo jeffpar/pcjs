@@ -27,6 +27,7 @@ import pcjslib       from "../modules/pcjslib.js";
 let fDebug = false;
 let fHalt = false;
 let fNoFloppy = false;
+let fVerbose = false;
 let fWrite = false;
 let autoStart = false;
 let machineType = "pcx86";
@@ -674,13 +675,16 @@ function loadMachine(sFile)
             if (driveInfo.driveType >= 0) {
                 drives[0] = {
                     'type': driveInfo.driveType,
-                    'name': driveInfo.driveSize + "Mb Hard Disk"
+                    'name': driveInfo.driveSize + " Hard Disk"
                 };
                 if (driveManifest || !localDir) {
                     drives[0]['path'] = localDrive;
                     if (driveManifest || driveInfo.driveType >= 0) {
                         removeFloppy = true;
                     }
+                }
+                if (fVerbose) {
+                    printf("%2j\n", driveInfo);
                 }
             }
             config['hdc']['drives'] = drives;
@@ -901,7 +905,7 @@ function getSystemDisk(type, version)
 }
 
 /**
- * buildDrive(sDir, sCommand, fVerbose)
+ * buildDrive(sDir, sCommand, fLog)
  *
  * Builds a bootable hard drive image containing all files in the current directory.
  *
@@ -922,13 +926,13 @@ function getSystemDisk(type, version)
  *
  * @param {string} sDir
  * @param {string} [sCommand] (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
- * @param {boolean} [fVerbose]
+ * @param {boolean} [fLog]
  * @returns {string} (error message, if any)
  */
-async function buildDrive(sDir, sCommand = "", fVerbose = false)
+async function buildDrive(sDir, sCommand = "", fLog = false)
 {
     if (!localDir) {
-        return "";      // an empty directory generally means a prebuilt drive has been supplied instead
+        return "no directory";      // an empty directory generally means a prebuilt drive has been supplied instead
     }
 
     let system = configJSON['systems']?.[systemType];
@@ -1084,7 +1088,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
             di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
             di.updateBootSector(dbBoot, 0, verBPB);
             localDrive = localDrive.replace(/[^/]*$/, di.getName() + ".json");
-            if (fVerbose) printf("building drive: %s\n", localDrive);
+            if (fLog) printf("building drive: %s\n", localDrive);
             if (writeDiskSync(localDrive, di, false, 0, true, true)) {
                 driveManifest = manifest;
                 driveInfo = di.getDriveInfo();
@@ -1094,7 +1098,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
 
     let normalize = true;
     if (!sDir.endsWith('/')) sDir += '/';
-    if (fVerbose) printf("reading files: %s\n", sDir);
+    if (fLog) printf("reading files: %s\n", sDir);
     let options = { files: aFileDescs };
     /*
      * Setting options.deviceType to "XT", "AT", or "COMPAQ" allows buildDiskFromFiles() to scan the set
@@ -1685,8 +1689,9 @@ function doCommand(s)
             result = "bad command or file name: " + args;
             break;
         }
-        result = buildDrive(localDir, arg, true);
-        if (typeof result != "string") result = "";
+        buildDrive(localDir, arg, true).then(function(result) {
+            if (result) printf("%s\n", result);
+        });
         break;
     case "exec":
         if (driveManifest) {
@@ -1838,7 +1843,11 @@ async function processArgs(argv)
     if (typeof argv['disk'] == "string") {
         localDrive = argv['disk'];
         let di = await readDiskAsync(localDrive);
-        driveInfo = di.getDriveInfo(driveInfo.deviceType);
+        if (di) {
+            driveInfo = di.getDriveInfo(driveInfo.deviceType);
+        } else {
+            result = "invalid disk";
+        }
         localDir = "";                          // an empty localDir disables buildDrive()
     } else {
         localDrive = path.join(pcjsDir, localDrive);
@@ -1996,8 +2005,10 @@ function exit()
 function main(argc, argv)
 {
     fDebug = argv['debug'] || fDebug;
+    fVerbose = argv['verbose'] || fVerbose;
+
     device.setDebug(fDebug);
-    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (Defines.DEBUG? MESSAGE.DEBUG : 0), true);
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
     messagesFilter = fDebug? Messages.ALL + Messages.TYPES + Messages.ADDRESS : Messages.ALERTS;
 
     let arg0 = argv[0].split(' ');
@@ -2021,7 +2032,7 @@ function main(argc, argv)
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
     maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
-    maxCapacity = parseInt(argv['capacity']) || parseInt(defaults['capacity']) || maxCapacity;
+    maxCapacity = parseFloat(argv['capacity']) || parseFloat(defaults['capacity']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
 
     let type = parseInt(argv['drivetype']);
@@ -2056,6 +2067,7 @@ function main(argc, argv)
             "--help (-?)\t":            "display command-line usage",
             "--local (-l)\t":           "use local diskette images",
             "--nofloppy (-n)\t":        "remove any diskette from A:",
+            "--verbose (-v)\t":         "enable verbose mode",
             "--write (-w)\t":           "write hard drive image on return"
         };
         let optionGroups = {
@@ -2084,5 +2096,6 @@ main(...pcjslib.getArgs({
     'h': "halt",
     'l': "local",
     'n': "nofloppy",
+    'v': "verbose",
     'w': "write"
 }));
