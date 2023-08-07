@@ -58,7 +58,8 @@ let driveManifest = null, driveOverride = false;
 let driveInfo = {
     deviceType: "COMPAQ",
     driveType:  -1,
-    driveSize:  0
+    driveSize:  0,
+    typeFAT:    0
 };
 
 const functionKeys = {
@@ -672,14 +673,25 @@ function loadMachine(sFile)
                 }
             }
             if (!drives) drives = [];
+            /*
+             * If we don't have a drive type (eg, if no drive was built), we still want to try to match
+             * the target capacity with a drive.  Convert the capacity from Mb to sectors and then give it a go.
+             */
+            if (driveInfo.driveType < 0) {
+                let parms = DiskInfo.findDriveType(driveInfo.deviceType, driveInfo.driveType, maxCapacity * 1024 * 2, device);
+                if (parms) {
+                    driveInfo.driveType = parms[0];
+                    driveInfo.driveSize = parms[5];
+                }
+            }
             if (driveInfo.driveType >= 0) {
                 drives[0] = {
                     'type': driveInfo.driveType,
-                    'name': driveInfo.driveSize + " Hard Disk"
+                    'name': (driveInfo.driveSize|0) + "Mb Hard Disk"
                 };
                 if (driveManifest || !localDir) {
                     drives[0]['path'] = localDrive;
-                    if (driveManifest || driveInfo.driveType >= 0) {
+                    if (driveManifest) {
                         removeFloppy = true;
                     }
                 }
@@ -1099,15 +1111,17 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
     let normalize = true;
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
-    let options = { files: aFileDescs };
+
     /*
      * Setting options.deviceType to "XT", "AT", or "COMPAQ" allows buildDiskFromFiles() to scan the set
      * of supported drive types and choose the best one to accommodate all the files we're adding to the drive.
      */
-    if (driveInfo.deviceType) {
-        options.deviceType = driveInfo.deviceType;
-        options.driveType = driveInfo.driveType;
-    }
+    let options = {};
+    options.deviceType = driveInfo.deviceType;
+    options.driveType = driveInfo.driveType;
+    options.files = aFileDescs;
+    options.typeFAT = driveInfo.typeFAT;
+
     readDir(sDir, 0, 0, "PCJS", null, normalize, maxCapacity * 1024, maxFiles, false, options, done);
 
     return driveManifest? "" : "unable to build drive";
@@ -2043,6 +2057,9 @@ function main(argc, argv)
         driveInfo.deviceType = argv['devicetype'];
         driveOverride = true;
     }
+    if (typeof argv['fat'] == "string") {
+        driveInfo.typeFAT = +argv['fat'] || driveInfo.typeFAT;
+    }
 
     fHalt = argv['halt'] || fHalt;
     fNoFloppy = argv['nofloppy'] || fNoFloppy;
@@ -2057,6 +2074,7 @@ function main(argc, argv)
             "--disk=[disk image]":      "set hard drive disk image (instead of directory)",
             "--devicetype=[type]":      "set controller type (eg, XT, AT, or COMPAQ)",
             "--drivetype=[number]":     "set drive type (must be valid for controller type)",
+            "--fat=[number]":           "set FAT type (12 or 16; default is variable)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--system=[string]":        "operating system type (default is " + systemType + ")",
             "--version=[#.##]":         "operating system version (default is " + systemVersion + ")"

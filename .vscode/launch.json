@@ -466,7 +466,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--disk=t.imf",
+        "disks/msdos320",
+        "--fat=16",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",

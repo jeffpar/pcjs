@@ -165,6 +165,12 @@ export default class DiskInfo {
      *          return true;
      *      }
      *
+     * This function also supports a new 'options' parameter, which may contain any of the following properties:
+     *
+     *      sectorIDs (sector ID edits that must be applied to the disk)
+     *      sectorErrors (sector errors that must be applied to the disk)
+     *      suppData (supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
+     *
      * @this {DiskInfo}
      * @param {DataBuffer} dbDisk
      * @param {fForceBPP} [forceBPB]
@@ -729,13 +735,13 @@ export default class DiskInfo {
      * If a total sector target is provided, we look for a predefined BPB that is an exact match; otherwise we
      * select the first BPB that can accommodate all the files.
      *
-     * To make this function more "customizable", a new 'options' parameter supports the following properties:
+     * This function also supports a new 'options' parameter, which may contain any of the following properties:
      *
      *      deviceType: "XT", "AT", or "COMPAQ" (see HDC.aDeviceTypes)
      *      driveType: drive type (see HDC.aDriveTypes)
-     *      typeFAT: 12, 16, or 32
-     *      clusSecs: 1 to 64 (512-byte to 32Kb clusters)
-     *      rootEntries: 16 to 32768 entries (1 to 1024 sectors)
+     *      typeFAT: 12, 16, or 32 (advisory only; also, 32 is not supported yet)
+     *      clusSecs: 1 to 64 (512-byte to 32Kb clusters; advisory only)
+     *      rootEntries: 16 to 32768 entries (1 to 1024 sectors; advisory only)
      *      sectorIDs (sector ID edits that must be applied to the disk)
      *      sectorErrors (sector errors that must be applied to the disk)
      *      suppData (supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
@@ -790,44 +796,18 @@ export default class DiskInfo {
         let cbTotal = this.calcFileSizes(aFileData), cTotalSectors = 0;
 
         /*
-         * If a custom build has been requested, then we scan for an appropriate drive type.  If no sector target
+         * If a custom build has been requested, then we search for an appropriate drive type.  If no sector target
          * has been provided, we fall back on total size of all files, but we also include a "slop factor" (eg, 10%) to
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
-        if (options.deviceType) {
-            let iDevice = HDC.aDeviceTypes.indexOf(options.deviceType);
-            if (iDevice >= 0) {
-                let bestType = -1, bestDiff = 0, bestParms;
-                let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
-                for (let type of driveTypes) {
-                    let parms = HDC.aDriveTypes[iDevice][type].slice();
-                    parms[0]--; parms[2] = parms[2] || 17;
-                    let nSectors = parms[0] * parms[1] * parms[2], cbSector = parms[3] || 512;
-                    if (cbSector != 512) continue;
-                    let cbTotal = nSectors * cbSector, mbTotal = cbTotal / 1024 / 1024, diff;
-                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", options.deviceType, +type, parms[0], parms[1], parms[2], mbTotal.toFixed(1), options.driveType == +type? '*' : '');
-                    if (options.driveType >= 0) {
-                        if (options.driveType == +type) {
-                            bestType = +type;
-                            bestParms = parms;
-                        }
-                    }
-                    else if (nTargetSectors && (diff = nSectors - nTargetSectors) && diff >= 0 && (diff < bestDiff || bestType < 0) ||
-                            !nTargetSectors && (diff = nSectors * 512 - cbTotal * 1.10) && diff >= 0 && (diff < bestDiff || bestType < 0)) {
-                        bestDiff = diff;
-                        bestType = +type;
-                        bestParms = parms;
-                    }
-                }
-                if (bestType >= 0) {
-                    this.deviceType = options.deviceType;
-                    this.driveType = bestType;
-                    this.nCylinders = bestParms[0];
-                    this.nHeads = bestParms[1];
-                    this.nSectors = bestParms[2];
-                    cTotalSectors = this.nCylinders * this.nHeads * this.nSectors;
-                }
-            }
+        let parms = DiskInfo.findDriveType(options.deviceType, options.driveType, nTargetSectors, this);
+        if (parms) {
+            this.deviceType = options.deviceType;
+            this.driveType = parms[0];
+            this.nCylinders = parms[1];
+            this.nHeads = parms[2];
+            this.nSectors = parms[3];
+            cTotalSectors = this.nCylinders * this.nHeads * this.nSectors;
         }
 
         this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "calculated size for %d files: %d bytes (%#x)\n", aFileData.length, cbTotal);
@@ -841,7 +821,7 @@ export default class DiskInfo {
          * Define abBoot (where we'll store the boot sector that we either build or select) along with some
          * functions to get/set 1/2/4-byte values.
          */
-        let abBoot, di = this;
+        let abBoot, diskInfo = this;
         let getBoot = function(off, len) {
             let val = 0;
             for (let i = 0; i < len; i++) {
@@ -854,7 +834,7 @@ export default class DiskInfo {
                 abBoot[off++] = val & 0xff;
                 val >>>= 8;
             }
-            di.assert(!val);
+            diskInfo.assert(!val);
         };
 
         let typeFAT = 12, cFATs = 2, cFATSectors;
@@ -895,9 +875,13 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
             /*
              * If we were to go with clusters as large as 4K, would we still run out of clusters with a 12-bit FAT?
+             * That's the question we are about to ask, with some caveats: if the options parameter specifies a typeFAT
+             * of 12, then we'll try for clusters as large as 32K, and if a typeFAT of 16 is specified, we won't even
+             * ask the question (16 is always the answer).
              */
+            let maxClusSecs = options.typeFAT == 12? 64 : 8;
             let maxClusters = DiskInfo.FAT12.MAX_CLUSTERS;
-            if (cTotalSectors / 8 > DiskInfo.FAT12.MAX_CLUSTERS) {
+            if (options.typeFAT == 16 || cTotalSectors / maxClusSecs > DiskInfo.FAT12.MAX_CLUSTERS) {
                 typeFAT = 16;
                 maxClusters = DiskInfo.FAT16.MAX_CLUSTERS;
                 setBoot(DiskInfo.BPB.OEM + 5, 1, 0x33);
@@ -3473,6 +3457,64 @@ export default class DiskInfo {
     }
 
     /**
+     * findDriveType(deviceType, driveType, nTargetSectors)
+     *
+     * If a drive type matching the specified drive type or the requested (minimum) number of sectors is found,
+     * we return an array of drive parameters:
+     *
+     *      parms[0]:   drive type
+     *      parms[1]:   cylinders
+     *      parms[2]:   heads
+     *      parms[3]:   sectors/track
+     *      parms[4]:   bytes/sector
+     *      parms[5]:   total megabytes (Mb)
+     *
+     * @param {string} deviceType
+     * @param {number} driveType
+     * @param {number} nTargetSectors
+     * @param {Device} [device]
+     * @returns {Array|null}
+     */
+    static findDriveType(deviceType, driveType, nTargetSectors, device)
+    {
+        if (deviceType) {
+            let iDevice = HDC.aDeviceTypes.indexOf(deviceType);
+            if (iDevice >= 0) {
+                let bestType = -1, bestDiff = 0, bestParms;
+                let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
+                for (let type of driveTypes) {
+                    let parms = HDC.aDriveTypes[iDevice][type].slice();
+                    parms[0]--; parms[2] = parms[2] || 17; parms[3] = parms[3] || 512;
+                    let nSectors = parms[0] * parms[1] * parms[2], cbSector = parms[3], cbTotal, diff;
+                    if (cbSector != 512) continue;
+                    cbTotal = nSectors * cbSector;
+                    parms[4] = cbTotal / 1024 / 1024;
+                    if (device) {
+                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", deviceType, +type, parms[0], parms[1], parms[2], parms[4].toFixed(1), driveType == +type? '*' : '');
+                    }
+                    if (driveType >= 0) {
+                        if (driveType == +type) {
+                            bestType = +type;
+                            bestParms = parms;
+                        }
+                    }
+                    else if (nTargetSectors && (diff = nSectors - nTargetSectors) && diff >= 0 && (diff < bestDiff || bestType < 0) ||
+                            !nTargetSectors && (diff = nSectors * 512 - cbTotal * 1.10) && diff >= 0 && (diff < bestDiff || bestType < 0)) {
+                        bestDiff = diff;
+                        bestType = +type;
+                        bestParms = parms;
+                    }
+                }
+                if (bestType >= 0) {
+                    bestParms.unshift(bestType);
+                    return bestParms;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * getDriveInfo(deviceType)
      *
      * @this {DiskInfo}
@@ -3501,7 +3543,7 @@ export default class DiskInfo {
             cylinders: this.nCylinders,
             heads: this.nHeads,
             sectors: this.nSectors,
-            driveSize: (this.cbDiskData / 1024 / 1024).toFixed(1) + "Mb"
+            driveSize: this.cbDiskData / 1024 / 1024
         };
     }
 
