@@ -94,8 +94,8 @@ import FileInfo from "./fileinfo.js";
  * @property {number} cbDiskData
  * @property {number} dwChecksum
  * @property {number} nCylinders
- * @property {string} typeDevice
- * @property {number} typeDrive
+ * @property {string} deviceType
+ * @property {number} driveType
  * @property {number} nHeads
  * @property {number} nSectors
  * @property {number} cbSector
@@ -127,6 +127,8 @@ export default class DiskInfo {
         this.tablesBuilt = false;
         this.cbDiskData = 0;
         this.dwChecksum = 0;
+        this.deviceType = "";
+        this.driveType = -1;
         this.hash = "none";
     }
 
@@ -729,8 +731,8 @@ export default class DiskInfo {
      *
      * To make this function more "customizable", a new 'options' parameter supports the following properties:
      *
-     *      typeDevice: "XT", "AT", or "COMPAQ" (see HDC.aDeviceTypes)
-     *      typeDrive: drive type (see HDC.aDriveTypes)
+     *      deviceType: "XT", "AT", or "COMPAQ" (see HDC.aDeviceTypes)
+     *      driveType: drive type (see HDC.aDriveTypes)
      *      typeFAT: 12, 16, or 32
      *      clusSecs: 1 to 64 (512-byte to 32Kb clusters)
      *      rootEntries: 16 to 32768 entries (1 to 1024 sectors)
@@ -792,16 +794,13 @@ export default class DiskInfo {
          * has been provided, we fall back on total size of all files, but we also include a "slop factor" (eg, 10%) to
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
-        this.typeDevice = "";
-        this.typeDrive = -1;
-
-        if (options.typeDevice) {
-            let iDevice = HDC.aDeviceTypes.indexOf(options.typeDevice);
+        if (options.deviceType) {
+            let iDevice = HDC.aDeviceTypes.indexOf(options.deviceType);
             if (iDevice >= 0) {
-                let parms, typeDrive, nSectors;
-                if (options.typeDrive >= 0) {
-                    typeDrive = options.typeDrive;
-                    parms = HDC.aDriveTypes[iDevice][typeDrive];
+                let parms, driveType, nSectors;
+                if (options.driveType >= 0) {
+                    driveType = options.driveType;
+                    parms = HDC.aDriveTypes[iDevice][driveType];
                 } else {
                     let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
                     for (let type of driveTypes) {
@@ -809,7 +808,7 @@ export default class DiskInfo {
                         nSectors = (parms[0] - 1) * parms[1] * (parms[2] || 17);
                         if (!parms[3] || parms[3] == 512) {
                             if (nTargetSectors && nTargetSectors <= nSectors || !nTargetSectors && cbTotal * 1.10 < nSectors * 512) {
-                                typeDrive = type;
+                                driveType = type;
                                 break;
                             }
                         }
@@ -819,8 +818,8 @@ export default class DiskInfo {
                     this.nCylinders = parms[0] - 1;
                     this.nHeads = parms[1];
                     this.nSectors = parms[2] || 17;
-                    this.typeDevice = options.typeDevice;
-                    this.typeDrive = +typeDrive;
+                    this.deviceType = options.deviceType;
+                    this.driveType = +driveType;
                     cTotalSectors = this.nCylinders * this.nHeads * this.nSectors;
                 }
             }
@@ -857,7 +856,7 @@ export default class DiskInfo {
         let iBPB, cbSector = 512, cSectorsPerCluster, cbCluster;
         let cRootEntries = 0, cRootSectors, cHiddenSectors = 1, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
 
-        if (this.typeDrive >= 0) {
+        if (this.driveType >= 0) {
             /*
              * Build a BPB to accommodate the selected drive parameters and file requirements, and calculate all
              * the other values we'll need, including total number of data sectors (cDataSectors).
@@ -3469,16 +3468,32 @@ export default class DiskInfo {
     }
 
     /**
-     * getDriveInfo()
+     * getDriveInfo(deviceType)
      *
      * @this {DiskInfo}
+     * @param {string} [deviceType]
      * @returns {Object}
      */
-    getDriveInfo()
+    getDriveInfo(deviceType)
     {
+        deviceType = deviceType || this.deviceType;
+        if (this.driveType < 0) {
+            let iDevice = HDC.aDeviceTypes.indexOf(deviceType);
+            if (iDevice >= 0) {
+                let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
+                for (let type of driveTypes) {
+                    let parms = HDC.aDriveTypes[iDevice][type];
+                    if (this.nCylinders == parms[0] && this.nHeads == parms[1] && this.nSectors == (parms[2] || 17)) {
+                        this.driveType = +type;
+                        break;
+                    }
+                }
+            }
+        }
         return {
-            typeDevice: this.typeDevice,
-            typeDrive: this.typeDrive
+            deviceType: deviceType,
+            driveType: this.driveType,
+            driveSize: (this.cbDiskData / 1024 / 1024)|0
         };
     }
 

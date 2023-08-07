@@ -53,7 +53,12 @@ let machine = newMachine();
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
-let driveManifest = null, deviceType = "COMPAQ", driveType = -1, driveSize = 0, deviceOverride = false;
+let driveManifest = null, driveOverride = false;
+let driveInfo = {
+    deviceType: "COMPAQ",
+    driveType:  -1,
+    driveSize:  0
+};
 
 const functionKeys = {
     "\u001b[A":     "$up",
@@ -574,21 +579,21 @@ function checkMachine(sFile)
             sFile = sVerify;
         }
     }
-    if (sFile && !deviceOverride) {
+    if (sFile && !driveOverride) {
         if (machine) {
             if (machine['hdc']) {
-                deviceType = machine['hdc']['type'];
+                driveInfo.deviceType = machine['hdc']['type'];
             }
             if (machine['chipset'] && machine['chipset']['model'] == "deskpro386") {
-                deviceType = "COMPAQ";
+                driveInfo.deviceType = "COMPAQ";
             }
         } else {
             if (sFile.indexOf("5160") >= 0) {
-                deviceType = "XT";
+                driveInfo.deviceType = "XT";
             } else if (sFile.indexOf("5170") >= 0) {
-                deviceType = "AT";
+                driveInfo.deviceType = "AT";
             } else if (sFile.indexOf("compaq") >= 0) {
-                deviceType = "COMPAQ";
+                driveInfo.deviceType = "COMPAQ";
             }
         }
     }
@@ -666,17 +671,14 @@ function loadMachine(sFile)
                 }
             }
             if (!drives) drives = [];
-            /*
-             * Set the *drive* type below based on the *controller* type obtained above.
-             */
-            if (driveType >= 0) {
+            if (driveInfo.driveType >= 0) {
                 drives[0] = {
-                    'type': driveType,
-                    'name': driveSize + "Mb Hard Disk"
+                    'type': driveInfo.driveType,
+                    'name': driveInfo.driveSize + "Mb Hard Disk"
                 };
                 if (driveManifest || !localDir) {
                     drives[0]['path'] = localDrive;
-                    if (driveManifest || driveType >= 0) {
+                    if (driveManifest || driveInfo.driveType >= 0) {
                         removeFloppy = true;
                     }
                 }
@@ -1085,10 +1087,7 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
             if (fVerbose) printf("building drive: %s\n", localDrive);
             if (writeDiskSync(localDrive, di, false, 0, true, true)) {
                 driveManifest = manifest;
-                let dt = di.getDriveInfo();
-                deviceType = dt.typeDevice;
-                driveType = dt.typeDrive;
-                driveSize = (di.getSize() / 1024 / 1024)|0;
+                driveInfo = di.getDriveInfo();
             }
         }
     }
@@ -1098,12 +1097,12 @@ async function buildDrive(sDir, sCommand = "", fVerbose = false)
     if (fVerbose) printf("reading files: %s\n", sDir);
     let options = { files: aFileDescs };
     /*
-     * Setting options.typeDevice to "XT", "AT", or "COMPAQ" allows buildDiskFromFiles() to scan the set
+     * Setting options.deviceType to "XT", "AT", or "COMPAQ" allows buildDiskFromFiles() to scan the set
      * of supported drive types and choose the best one to accommodate all the files we're adding to the drive.
      */
-    if (deviceType) {
-        options.typeDevice = deviceType;
-        options.typeDrive = driveType;
+    if (driveInfo.deviceType) {
+        options.deviceType = driveInfo.deviceType;
+        options.driveType = driveInfo.driveType;
     }
     readDir(sDir, 0, 0, "PCJS", null, normalize, maxCapacity * 1024, maxFiles, false, options, done);
 
@@ -1836,6 +1835,15 @@ async function processArgs(argv)
         return existsDir(s, false)? s : "";
     };
 
+    if (typeof argv['disk'] == "string") {
+        localDrive = argv['disk'];
+        let di = await readDiskAsync(localDrive);
+        driveInfo = di.getDriveInfo(driveInfo.deviceType);
+        localDir = "";                          // an empty localDir disables buildDrive()
+    } else {
+        localDrive = path.join(pcjsDir, localDrive);
+    }
+
     if (localDir) {                             // --dir is allowed only if --disk has not been used
         let sDir = "";
         if (!result) {
@@ -2018,46 +2026,16 @@ function main(argc, argv)
 
     let type = parseInt(argv['drivetype']);
     if (!isNaN(type)) {
-        driveType = type;
+        driveInfo.driveType = type;
     }
     if (typeof argv['devicetype'] == "string") {
-        deviceType = argv['devicetype'];
-        deviceOverride = true;
+        driveInfo.deviceType = argv['devicetype'];
+        driveOverride = true;
     }
 
     fHalt = argv['halt'] || fHalt;
     fNoFloppy = argv['nofloppy'] || fNoFloppy;
     fWrite = argv['write'] || fWrite;
-
-    if (typeof argv['disk'] == "string") {
-        localDrive = argv['disk'];
-        if (existsFile(localDrive, false)) {
-            localDrive = path.resolve(localDrive);
-        } else {
-            localDrive = path.join(pcjsDir, localDrive);
-        }
-        if (existsFile(localDrive)) {
-            if (localDrive.toLowerCase().endsWith(".img")) {
-                let stats = fs.statSync(localDrive);
-                maxCapacity = Math.trunc(stats.size / 1024 / 1024);
-            }
-            else if (localDrive.toLowerCase().endsWith(".json")) {
-                let di = JSON.parse(readFileSync(localDrive));
-                if (di) {
-                    let imageInfo = di['imageInfo'] || {};
-                    let capacity = Math.trunc((imageInfo['cylinders'] * imageInfo['heads'] * imageInfo['trackDefault'] * imageInfo['sectorDefault']) / 1024 / 1024);
-                    if (capacity) maxCapacity = capacity;
-                }
-            }
-            else {
-                printf("error: %s is not a supported disk image\n", localDrive);
-                return;
-            }
-        }
-        localDir = "";                  // an empty localDir disables buildDrive()
-    } else {
-        localDrive = path.join(pcjsDir, localDrive);
-    }
 
     if (argv['help']) {
         let optionsMain = {
