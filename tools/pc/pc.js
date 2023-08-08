@@ -682,6 +682,9 @@ function loadMachine(sFile)
                 if (parms) {
                     driveInfo.driveType = parms[0];
                     driveInfo.driveSize = parms[5];
+                    if (fVerbose) {
+                        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.deviceType, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveType == parms[0]? '*' : '');
+                    }
                 }
             }
             if (driveInfo.driveType >= 0) {
@@ -694,9 +697,6 @@ function loadMachine(sFile)
                     if (driveManifest) {
                         removeFloppy = true;
                     }
-                }
-                if (fVerbose) {
-                    printf("%2j\n", driveInfo);
                 }
             }
             config['hdc']['drives'] = drives;
@@ -1103,7 +1103,12 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
             if (fLog) printf("building drive: %s\n", localDrive);
             if (writeDiskSync(localDrive, di, false, 0, true, true)) {
                 driveManifest = manifest;
-                driveInfo = di.getDriveInfo();
+                let parms = di.getDriveType(driveInfo.deviceType);
+                driveInfo.driveType = parms[0];
+                driveInfo.driveSize = parms[5];
+                if (fVerbose) {
+                    printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.deviceType, driveInfo.driveType, parms[1], parms[2], parms[3], driveInfo.driveSize.toFixed(1));
+                }
             }
         }
     }
@@ -1858,7 +1863,9 @@ async function processArgs(argv)
         localDrive = argv['disk'];
         let di = await readDiskAsync(localDrive);
         if (di) {
-            driveInfo = di.getDriveInfo(driveInfo.deviceType);
+            let parms = di.getDriveType(driveInfo.deviceType);
+            driveInfo.driveType = parms[0];
+            driveInfo.driveSize = parms[5];
         } else {
             result = "invalid disk";
         }
@@ -2022,7 +2029,7 @@ function main(argc, argv)
     fVerbose = argv['verbose'] || fVerbose;
 
     device.setDebug(fDebug);
-    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0), true);
     messagesFilter = fDebug? Messages.ALL + Messages.TYPES + Messages.ADDRESS : Messages.ALERTS;
 
     let arg0 = argv[0].split(' ');

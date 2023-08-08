@@ -3484,13 +3484,14 @@ export default class DiskInfo {
                 let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
                 for (let type of driveTypes) {
                     let parms = HDC.aDriveTypes[iDevice][type].slice();
-                    parms[0]--; parms[2] = parms[2] || 17; parms[3] = parms[3] || 512;
-                    let nSectors = parms[0] * parms[1] * parms[2], cbSector = parms[3], cbTotal, diff;
+                    parms.unshift(+type);
+                    parms[1]--; parms[3] = parms[3] || 17; parms[4] = parms[4] || 512;
+                    let nSectors = parms[1] * parms[2] * parms[3], cbSector = parms[4], cbTotal, diff;
                     if (cbSector != 512) continue;
                     cbTotal = nSectors * cbSector;
-                    parms[4] = cbTotal / 1024 / 1024;
+                    parms[5] = cbTotal / 1024 / 1024;
                     if (device) {
-                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", deviceType, +type, parms[0], parms[1], parms[2], parms[4].toFixed(1), driveType == +type? '*' : '');
+                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", deviceType, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveType == parms[0]? '*' : '');
                     }
                     if (driveType >= 0) {
                         if (driveType == +type) {
@@ -3506,7 +3507,6 @@ export default class DiskInfo {
                     }
                 }
                 if (bestType >= 0) {
-                    bestParms.unshift(bestType);
                     return bestParms;
                 }
             }
@@ -3515,13 +3515,22 @@ export default class DiskInfo {
     }
 
     /**
-     * getDriveInfo(deviceType)
+     * getDriveType(deviceType)
+     *
+     * Returns an array of drive parameters, including a drive type appropriate for the current disk:
+     *
+     *      parms[0]:   drive type
+     *      parms[1]:   cylinders
+     *      parms[2]:   heads
+     *      parms[3]:   sectors/track
+     *      parms[4]:   bytes/sector
+     *      parms[5]:   total megabytes (Mb)
      *
      * @this {DiskInfo}
      * @param {string} [deviceType]
-     * @returns {Object}
+     * @returns {Array}
      */
-    getDriveInfo(deviceType)
+    getDriveType(deviceType)
     {
         deviceType = deviceType || this.deviceType;
         if (this.driveType < 0) {
@@ -3537,14 +3546,7 @@ export default class DiskInfo {
                 }
             }
         }
-        return {
-            deviceType: deviceType,
-            driveType: this.driveType,
-            cylinders: this.nCylinders,
-            heads: this.nHeads,
-            sectors: this.nSectors,
-            driveSize: this.cbDiskData / 1024 / 1024
-        };
+        return [this.driveType, this.nCylinders, this.nHeads, this.nSectors, this.cbSector, this.cbDiskData / 1024 / 1024];
     }
 
     /**
