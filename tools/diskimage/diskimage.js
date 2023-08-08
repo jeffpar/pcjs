@@ -175,7 +175,7 @@ function getTargetValue(sTarget)
 }
 
 /**
- * extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
+ * extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
  *
  * @param {string} sDir
  * @param {string} subDir
@@ -184,10 +184,11 @@ function getTargetValue(sTarget)
  * @param {Date} date
  * @param {Buffer} db
  * @param {Object} argv
- * @param {boolean} [noExpand]
+ * @param {boolean} [allowExpand]
+ * @param {boolean} [allowHidden]
  * @param {Array.<fileData>} [files]
  */
-function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
+function extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
 {
     /*
      * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
@@ -202,7 +203,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
         return true;
     }
 
-    if (!argv['hidden']) {
+    if (!allowHidden) {
         if (attr & DiskInfo.ATTR.HIDDEN) {
             if (attr & DiskInfo.ATTR.SUBDIR) {
                 aHiddenDirs.push(sPath + '/');
@@ -228,7 +229,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
     } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
         let fPrinted = false;
         let fQuiet = argv['quiet'];
-        if (argv['expand'] && !noExpand) {
+        if (argv['expand'] && allowExpand) {
             let arcType = isArchiveFile(sFile);
             if (arcType) {
                 if (!fQuiet) printf("expanding: %s\n", sFile);
@@ -255,16 +256,16 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
                 }).on('ready', () => {
                     let aFileData = getArchiveFiles(zip, argv['verbose']);
                     for (let file of aFileData) {
-                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, false, file.files);
+                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
                     }
                     zip.close();
                 }).on('error', (err) => {
                     printError(err, sFile);
                     /*
                      * Since this implies a failure to extract anything from the archive, we'll call ourselves
-                     * back with noExpand set to true, so that we simply extract the archive without expanding it.
+                     * back with allowExpand not set, so that we simply extract the archive without expanding it.
                      */
-                    extractFile(sDir, subDir, sFile, attr, date, db, argv, true);
+                    extractFile(sDir, subDir, sFile, attr, date, db, argv);
                 });
                 zip.open();
                 /*
@@ -309,7 +310,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
         fs.utimesSync(getLocalPath(sPath), date, date);
         if (files) {
             for (let file of files) {
-                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, false, file.files)) {
+                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, true, false, file.files)) {
                     fSuccess = false;
                     break;
                 }
@@ -509,7 +510,7 @@ function processDisk(di, diskFile, argv, diskette)
                         extractFolder = extractFolder.replace("/disks/archive", "/archive");
                     }
                 }
-                extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv);
+                extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || !extractFolder);
             }
         });
     }
