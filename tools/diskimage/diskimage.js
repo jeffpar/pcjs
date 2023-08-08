@@ -487,7 +487,7 @@ function processDisk(di, diskFile, argv, diskette)
              */
             let sPath = desc[DiskInfo.FILEDESC.PATH];
             if (sPath[0] == '/') sPath = sPath.substr(1);       // PATH should ALWAYS start with a slash, but let's be safe
-            let name = path.basename(sPath);
+            let name = path.basename(sPath).toUpperCase();
             let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
             let attr = +desc[DiskInfo.FILEDESC.ATTR];
             /*
@@ -501,16 +501,20 @@ function processDisk(di, diskFile, argv, diskette)
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
             device.assert(size == db.length);
-            let extractFolder = (typeof argv['extract'] != "string")? di.getName() : "";
-            if (extractFolder || name == argv['extract']) {
-                let fSuccess = false;
+            let extractName = "", extractFolder = "";
+            if (typeof argv['extract'] != "string") {
+                extractFolder = di.getName();
+            } else {
+                extractName = argv['extract'].toUpperCase();
+            }
+            if (extractFolder || extractName == name) {
                 if (argv['collection'] && !extractDir) {
                     extractFolder = getLocalPath(path.join(path.dirname(diskFile), "archive", extractFolder));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
                         extractFolder = extractFolder.replace("/disks/archive", "/archive");
                     }
                 }
-                extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || !extractFolder);
+                extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || !!extractName);
             }
         });
     }

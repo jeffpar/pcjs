@@ -1635,11 +1635,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--arc=PK361.EXE",
-        "--verbose",
+        "--disk",
+        "https://harddisks.pcjs.org/pcx86/10mb/MSDOS320-C400.json",
         "--extract"
       ],
-      "cwd": "${workspaceFolder}/disks/tmp/arcs",
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
