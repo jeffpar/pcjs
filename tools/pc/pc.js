@@ -1102,13 +1102,8 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
             localDrive = localDrive.replace(/[^/]*$/, di.getName() + ".json");
             if (fLog) printf("building drive: %s\n", localDrive);
             if (writeDiskSync(localDrive, di, false, 0, true, true)) {
+                updateDriveInfo(di);
                 driveManifest = manifest;
-                let parms = di.getDriveType(driveInfo.deviceType);
-                driveInfo.driveType = parms[0];
-                driveInfo.driveSize = parms[5];
-                if (fVerbose) {
-                    printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.deviceType, driveInfo.driveType, parms[1], parms[2], parms[3], driveInfo.driveSize.toFixed(1));
-                }
             }
         }
     }
@@ -1210,6 +1205,21 @@ function buildFileIndex(diskIndex)
         fs.writeFileSync(pathIndex, JSON.stringify(fileIndex));
     }
     return fileIndex;
+}
+
+/**
+ * updateDriveInfo(di)
+ *
+ * @param {DiskInfo} di
+ */
+function updateDriveInfo(di)
+{
+    let parms = di.getDriveType(driveInfo.deviceType);
+    driveInfo.driveType = parms[0];
+    driveInfo.driveSize = parms[5];
+    if (fVerbose) {
+        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.deviceType, driveInfo.driveType, parms[1], parms[2], parms[3], driveInfo.driveSize.toFixed(1));
+    }
 }
 
 /**
@@ -1863,9 +1873,7 @@ async function processArgs(argv)
         localDrive = argv['disk'];
         let di = await readDiskAsync(localDrive);
         if (di) {
-            let parms = di.getDriveType(driveInfo.deviceType);
-            driveInfo.driveType = parms[0];
-            driveInfo.driveSize = parms[5];
+            updateDriveInfo(di);
         } else {
             error = "invalid disk";
         }

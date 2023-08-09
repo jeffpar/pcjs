@@ -5130,7 +5130,7 @@ export default class DebuggerX86 extends DbgLib {
             }
             let vOld = fnGet.call(this, dbgAddr);
             if (fASCII) vNew = (vOld & ~0xff) | (vNew & 0x7f);
-            this.printf("changing %s from %#0*2x to %#0*2x\n", this.toHexAddr(dbgAddr), cch, vOld, cch, vNew);
+            this.printf("changing %s from %#0*x to %#0*x\n", this.toHexAddr(dbgAddr), cch, vOld, cch, vNew);
             fnSet.call(this, dbgAddr, vNew, size);
         }
     }
