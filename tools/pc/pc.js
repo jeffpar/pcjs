@@ -1832,7 +1832,7 @@ function doCommand(s)
  */
 async function processArgs(argv)
 {
-    let result = "";
+    let error = "";
     let loading = false;
 
     let splice = false;
@@ -1846,7 +1846,7 @@ async function processArgs(argv)
         if (localMachine) {
             if (splice) argv.splice(1, 1);
         } else if (sFile.endsWith(".json") || !splice) {
-            result = "unknown machine: " + sFile;
+            error = "unknown machine: " + sFile;
         }
     }
 
@@ -1867,7 +1867,7 @@ async function processArgs(argv)
             driveInfo.driveType = parms[0];
             driveInfo.driveSize = parms[5];
         } else {
-            result = "invalid disk";
+            error = "invalid disk";
         }
         localDir = "";                          // an empty localDir disables buildDrive()
     } else {
@@ -1876,7 +1876,7 @@ async function processArgs(argv)
 
     if (localDir) {                             // --dir is allowed only if --disk has not been used
         let sDir = "";
-        if (!result) {
+        if (!error) {
             splice = false;
             sDir = argv['dir'];
             if (typeof sDir != "string") {
@@ -1889,7 +1889,7 @@ async function processArgs(argv)
                     localDir = newDir;
                     if (splice) argv.splice(1, 1);
                 } else {
-                    if (!splice) result = "invalid directory: " + sDir;
+                    if (!splice) error = "invalid directory: " + sDir;
                     sDir = "";
                 }
             }
@@ -1899,34 +1899,33 @@ async function processArgs(argv)
         }
     }
 
-    if (!result) {
+    if (!error) {
         if (argv[1]) {                          // last but not least, check for a DOS command or program name
             let args = argv.slice(1).join(' ');
             let sCommand = checkCommand(localDir, args);
             if (!sCommand && args) {
-                result = "command not found: " + args;
+                error = "command not found: " + args;
             } else {
-                result = await buildDrive(localDir, sCommand);
-                if (!result) {
+                error = await buildDrive(localDir, sCommand);
+                if (!error) {
                     if (!localMachine) {
                         localMachine = checkMachine(savedMachine) || savedMachine;
                     }
                 }
             }
         }
-        if (localMachine) {
-            let error = loadMachine(localMachine);
+        if (localMachine && !error) {
+            error = loadMachine(localMachine);
             if (!error) {
                 loading = true;
             } else {
                 localMachine = "";
-                result = error;
             }
         }
     }
 
-    if (result) {
-        printf("%s\n", result);
+    if (error) {
+        printf("%s\n", error);
     }
 
     if (!loading) setDebugMode(DbgLib.EVENTS.READY);

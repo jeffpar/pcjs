@@ -467,7 +467,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "disks/msdos320",
+        "disks/MSDOS320B",
         "--fat=16",
         "--verbose",
         "--halt",

@@ -839,7 +839,7 @@ export default class DiskInfo {
 
         let typeFAT = 12, cFATs = 2, cFATSectors;
         let iBPB, cbSector = 512, cSectorsPerCluster, cbCluster;
-        let cRootEntries = 0, cRootSectors, cHiddenSectors = 1, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
+        let cRootEntries = 0, cRootSectors, cHiddenSectors = 1, cReservedSectors = 1, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
 
         if (this.driveType >= 0) {
             /*
@@ -902,18 +902,60 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.CLUSSECS, 1, cSectorsPerCluster);
             cFATSectors = Math.ceil(((cTotalSectors / cSectorsPerCluster * typeFAT) / 8) / cbSector);
             setBoot(DiskInfo.BPB.FATSECS, 2, cFATSectors);
-            cRootEntries = 512;
-            while (cRootEntries < aFileData.length) {
-                cRootEntries *= 2;
-            }
             setBoot(DiskInfo.BPB.FATS, 1, cFATs);
-            setBoot(DiskInfo.BPB.DIRENTS, 2, cRootEntries);
-            cRootSectors = (cRootEntries * 0x20) / cbSector;
             cSectorsPerTrack = this.nSectors;
             setBoot(DiskInfo.BPB.TRACKSECS, 2, cSectorsPerTrack);
             cHeads = this.nHeads;
             setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
-            cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
+            /*
+             * We've saved the root directory size calculation for last, because tweaking it is the easiest way to
+             * ensure that the first data sector (ie, where DOS 2.x and 3.x expect IBMBIO.COM/IO.SYS to be located)
+             * is situated such that the final sectors of the first system file coincide with the end of a track.
+             *
+             * This weird requirement is due to how PC DOS and MS-DOS 2.x/3.x boot sectors read the first system file
+             * into memory: they read the file one track at a time; the first track read may be partial, because it
+             * starts with whatever the file's first sector is, but every subsequent read is a whole track, even if the
+             * file doesn't span that entire track.
+             *
+             * This would be OK if there was ample memory, but the boot sector didn't relocate itself from 0:7C00,
+             * and with its stack sitting just below that address, there's room for only about 29K of file data.  For
+             * reference, IO.SYS in MS-DOS 3.30 is about 22K, so there's enough room, but if the final sector is in
+             * the middle of a track, then the final full track read runs the risk of overwriting the stack and/or the
+             * boot sector itself.
+             *
+             * To make matters *slightly* worse, the affected boot sectors didn't accurately calculate the sector size
+             * of the system file correctly; in keeping with its overall "sloppy" approach, it simply divides the file
+             * size by the sector size and then *always* adds 1 (it should have added 1 only if there was a remainder).
+             *
+             * Having perfect hindsight, we can help the boot sector avoid running into trouble by performing the same
+             * off-by-one sector size calculation ourselves, dividing it by sectors per track, and ensuring that the
+             * remainder matches the number of free sectors in the first data track (and adjusting the number of root
+             * directory sectors until it does).  As a result, the system file will end at the end of a track, and the
+             * boot sector never risks reading too much data.
+             *
+             * This is why, instead of starting with 512 root directory entries (which is typically the minimum for a
+             * hard disk as small as 10Mb), we start even smaller, and then ratchet it up until all our criteria are met
+             * (starting with our requirement that it be a sufficiently large multiple of 128 to hold all the files in
+             * the "root" of aFileData).
+             */
+            cRootEntries = 128;
+            if (cRootEntries < aFileData.length) {
+                cRootEntries = Math.ceil(aFileData.length / cRootEntries) * cRootEntries;
+            }
+            cRootSectors = (cRootEntries * 32) / cbSector;
+            if (aFileData[0]) {
+                let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
+                let cInitFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
+                let cFileSectors = ((aFileData[0].size / cbSector)|0) + 1;
+                let cFilePartialSectors = (cFileSectors % cSectorsPerTrack) || cSectorsPerTrack;
+                while (cInitFreeSectors != cFilePartialSectors) {
+                    cRootSectors++;
+                    cRootEntries += (cbSector >> 5);
+                    if (!--cInitFreeSectors) cInitFreeSectors = cSectorsPerTrack;
+                }
+            }
+            setBoot(DiskInfo.BPB.DIRENTS, 2, cRootEntries);
+            cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + cReservedSectors);
             cbAvail = cDataSectors * cbSector;
             iBPB = DiskInfo.aDefaultBPBs.length;
         }
