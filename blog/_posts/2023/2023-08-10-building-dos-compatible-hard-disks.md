@@ -97,7 +97,9 @@ The `apps` section defines a set of local commands you can invoke from the DOS p
 
 This runs a hidden `VI.COM` DOS program that silently shuts down the `pc.js` virtual machine, executes `vi` with the name of the `AUTOEXEC.BAT` file in your local directory, and when you save and quit `vi`, the virtual machine's hard disk will be automatically rebuilt with any changes found in your local directory, the virtual machine will be restarted, and you should be back at the `C:\>` prompt within a few seconds.
 
-Aside from the commands listed in the `apps` section, two other programs are always included on the disk: `LOAD.COM`, which makes it easy to load PCjs diskette images into drive A: or B:, and `RETURN.COM`, which shuts down the machine and returns to your local prompt (alternatively, you can press `CTRL-D` and type `quit`).
+You can add or remove programs from the `apps` section, and the next time you run `pc.js`, it will automatically create matching hidden `.COM` files in the root of the virtual hard disk.  Make sure you stick to app names that are 8 characters or less; you can use the `exec` property to map a short filename to a longer or different local filename (see the `edit` example).
+
+Aside from the commands listed in the `apps` section, two other programs are always included on the virtual hard disk: `LOAD.COM`, which makes it easy to load PCjs diskette images into drive A: or B:, and `RETURN.COM`, which shuts down the machine and returns to your local prompt (alternatively, you can press `CTRL-D` and type `quit`).
 
 See [Loading Machines and Diskettes](/tools/pc/#loading-machines-and-diskettes) for more information and examples of the `LOAD` command (the internal `LOAD` command operates the same as the external `LOAD.COM` program).
 
@@ -118,7 +120,7 @@ You may have noticed the `defaults` section in the [pc.json](/tools/pc/pc.json) 
   }
 ```
 
-These settings control what happens whenever `pc.js` builds (or rebuilds) a hard disk image from a specified folder.  First and foremost, `pc.js` wants a *bootable* hard disk image, so it fetches the corresponding boot disk image from PCjs (eg, [MSDOS330-DISK1](https://diskettes.pcjs.org/pcx86/sys/dos/microsoft/3.30/MSDOS330-DISK1.json)), extracts the boot sector and system files (ie, `IO.SYS` and `MSDOS.SYS`) from the diskette, and then based on the `capacity`, `maxfiles`, and other settings, it builds a hard disk image.
+These settings control what happens whenever `pc.js` builds (or rebuilds) a hard disk image from a specified folder.  First and foremost, `pc.js` wants to create a *bootable* hard disk image, so it fetches the corresponding system diskette image from PCjs (eg, [MSDOS330-DISK1](https://diskettes.pcjs.org/pcx86/sys/dos/microsoft/3.30/MSDOS330-DISK1.json)), extracts the boot sector and system files (ie, `IO.SYS` and `MSDOS.SYS`) from the diskette, and then based on the `capacity`, `maxfiles`, and other settings, it builds a hard disk image, which is stored in the PCjs `/tools/pc/disks` folder by default.
 
 To change those defaults, you can either edit `pc.json` or pass command-line overrides; for example:
 
@@ -126,6 +128,10 @@ To change those defaults, you can either edit `pc.json` or pass command-line ove
     $ pc.js ibm5170 --capacity=20 --fat=12 --maxfiles=2048 dir
 
 This changes the default machine from a `compaq386` to an `ibm5170`, sets the disk capacity to 20Mb, forces the default FAT size to 12-bit (which would otherwise be 16-bit for a 20Mb disk), and allows up to 2048 local files to be included in the disk image.
+
+You can also use `--devicetype` and `--drivetype` for even more control of the virtual hard disk image, but make sure the values you specify are valid for the machine being used.  By default, `pc.js` loads a [compaq386](/tools/pc/compaq386.json) machine, which also uses a saved machine state (`state386.json`) that bypasses the system startup tests and floppy drive checks, so that it can start booting from the virtual hard disk immediately.  But the COMPAQ DeskPro 386 has a drive type table in ROM that differs significantly from the drive types defined by the IBM PC AT, so if you're using an AT-specific drive type (eg, `--drivetype=6`), then you should also specify an IBM 5170 machine configuration.  An [ibm5170.xml](/tools/pc/ibm5170.xml) file is included in the `pc.js` folder to make this easier:
+
+    $ pc.js ibm5170 --drivetype=6 MSDOS330-C400 dir
 
 ### Some Caveats Regarding Disk Formats
 
