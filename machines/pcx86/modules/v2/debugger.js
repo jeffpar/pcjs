@@ -2485,7 +2485,7 @@ export default class DebuggerX86 extends DbgLib {
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
-        if (this.testBits(this.bitsMessage, Messages.BUFFER)) {
+        if (Component.testBits(this.bitsMessage, Messages.BUFFER)) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
@@ -2493,7 +2493,7 @@ export default class DebuggerX86 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.testBits(this.bitsMessage, Messages.HALT)) {
+        if (Component.testBits(this.bitsMessage, Messages.HALT)) {
             sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -2613,13 +2613,13 @@ export default class DebuggerX86 extends DbgLib {
         /*
          * Add Messages.PORT to the set of required message flags.
          */
-        bitsMessage = this.setBits(bitsMessage || 0, Messages.PORT);
+        bitsMessage = Component.setBits(bitsMessage || 0, Messages.PORT);
         /*
          * We don't want to see "unknown" I/O messages unless WARNING is enabled.
          */
-        if (!name) bitsMessage = this.setBits(bitsMessage, Messages.WARNING);
+        if (!name) bitsMessage = Component.setBits(bitsMessage, Messages.WARNING);
 
-        if (addrFrom == undefined || this.testBits(this.bitsMessage, bitsMessage)) {
+        if (addrFrom == undefined || Component.testBits(this.bitsMessage, bitsMessage)) {
             let sFrom = "";
             if (addrFrom != undefined) {
                 let selFrom = this.cpu.getCS();
@@ -2898,7 +2898,7 @@ export default class DebuggerX86 extends DbgLib {
         state.set(0, this.packAddr(this.dbgAddrNextCode));
         state.set(1, this.packAddr(this.dbgAddrNextData));
         state.set(2, this.packAddr(this.dbgAddrAssemble));
-        state.set(3, [this.aPrevCmds, this.fAssemble, this.setBits(this.bitsMessage, Messages.BUFFER)]);
+        state.set(3, [this.aPrevCmds, this.fAssemble, Component.setBits(this.bitsMessage, Messages.BUFFER)]);
         state.set(4, this.aSymbolTable);
         state.set(5, [this.aBreakExec, this.aBreakRead, this.aBreakWrite]);
         return state.data();
@@ -2932,8 +2932,8 @@ export default class DebuggerX86 extends DbgLib {
              * function; if so, we clear Messages.BUFFER before restoring it (and yes, this means we'll never restore the BUFFER
              * setting, which is fine, and we'll also never restore any old Messages flags, which I doubt anyone will miss).
              */
-            if (this.testBits(bitsMessage, Messages.BUFFER)) {
-                this.bitsMessage = this.clearBits(bitsMessage, Messages.BUFFER);
+            if (Component.testBits(bitsMessage, Messages.BUFFER)) {
+                this.bitsMessage = Component.clearBits(bitsMessage, Messages.BUFFER);
             }
             i++;
         }
@@ -5130,7 +5130,7 @@ export default class DebuggerX86 extends DbgLib {
             }
             let vOld = fnGet.call(this, dbgAddr);
             if (fASCII) vNew = (vOld & ~0xff) | (vNew & 0x7f);
-            this.printf("changing %s from %#0*2x to %#0*2x\n", this.toHexAddr(dbgAddr), cch, vOld, cch, vNew);
+            this.printf("changing %s from %#0*x to %#0*x\n", this.toHexAddr(dbgAddr), cch, vOld, cch, vNew);
             fnSet.call(this, dbgAddr, vNew, size);
         }
     }
@@ -5522,7 +5522,7 @@ export default class DebuggerX86 extends DbgLib {
                 for (m in Messages.Categories) {
                     if (sCategory == m) {
                         bitsMessage = Messages.Categories[m];
-                        fCriteria = this.testBits(this.bitsMessage, bitsMessage);
+                        fCriteria = Component.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
                 }
@@ -5533,11 +5533,11 @@ export default class DebuggerX86 extends DbgLib {
             }
             if (bitsMessage) {
                 if (asArgs[2] == "on") {
-                    this.bitsMessage = this.setBits(this.bitsMessage, bitsMessage);
+                    this.bitsMessage = Component.setBits(this.bitsMessage, bitsMessage);
                     fCriteria = true;
                 }
                 else if (asArgs[2] == "off") {
-                    this.bitsMessage = this.clearBits(this.bitsMessage, bitsMessage);
+                    this.bitsMessage = Component.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
                     if (bitsMessage == Messages.BUFFER) {
                         this.printf("%s\n", this.aMessageBuffer.join(""));
@@ -5555,7 +5555,7 @@ export default class DebuggerX86 extends DbgLib {
         for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
                 let bitsMessage = Messages.Categories[m];
-                let fEnabled = this.testBits(this.bitsMessage, bitsMessage);
+                let fEnabled = Component.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
                 if (!(++n % 10)) sCategories += "\n\t";

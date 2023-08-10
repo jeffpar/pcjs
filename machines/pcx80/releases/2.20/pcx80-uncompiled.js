@@ -2338,9 +2338,18 @@ class Web {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
-        if (globals.node.readFileSync) {
+        if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
+
             try {
-                resource = globals.node.readFileSync(sURL);
+                let encoding = (type == "arraybuffer"? null : "utf8");
+                resource = globals.node.readFileSync(sURL, encoding);
+                if (!encoding) {
+                    /*
+                     * For non-UTF8 data, readFileSync() returns a DataBuffer, which wraps a Node Buffer, which wraps an ArrayBuffer.
+                     */
+                    resource = resource.buffer;
+                    if (resource.buffer) resource = resource.buffer;
+                }
             } catch (err) {
                 nErrorCode = err['errno'];
             }
@@ -2356,7 +2365,7 @@ class Web {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-            Component.printf(Messages.LOG, "fetching: %s\n", sURL);
+
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -2370,7 +2379,7 @@ class Web {
                 }
             })
             .then(resource => {
-                Component.printf(Messages.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
+
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
@@ -2420,7 +2429,7 @@ class Web {
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-                if (MAXDEBUG) Component.printf(Messages.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
+
             }
             else {
                 nErrorCode = request.status || -1;
@@ -2452,12 +2461,12 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            if (MAXDEBUG) Component.printf("Web.getResource(POST %s): %d bytes\n", sURL, sPost.length);
+
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            if (MAXDEBUG) Component.printf("Web.getResource(GET %s)\n", sURL);
+
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -4598,7 +4607,7 @@ class Component {
      * @param {number} bits
      * @returns {number}
      */
-    clearBits(num, bits)
+    static clearBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -4615,7 +4624,7 @@ class Component {
      * @param {number} bits
      * @returns {number}
      */
-    maskBits(num, bits)
+    static maskBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -4632,7 +4641,7 @@ class Component {
      * @param {number} bits
      * @returns {number}
      */
-    setBits(num, bits)
+    static setBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -4649,7 +4658,7 @@ class Component {
      * @param {number} bits
      * @returns {boolean} (true if ALL specified bits are set, false if not)
      */
-    testBits(num, bits)
+    static testBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -4678,14 +4687,14 @@ class Component {
          * printf() calls that specify Messages.DEBUG should be stripped out of non-DEBUG builds, but just in case
          * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
          */
-        if (DEBUG || !this.testBits(bitsMessage, Messages.DEBUG)) {
+        if (DEBUG || !Component.testBits(bitsMessage, Messages.DEBUG)) {
             /*
              * The debugger has the ability to filter any messages listed in Messages.Categories, and that currently
              * includes message types LOG and WARNING, so if the debugger is loaded, subtract those from the types we allow
              * by default.
              */
             let allowedMessages = Messages.TYPES - (this.dbg? Messages.LOG + Messages.WARNING : 0);
-            if (this.testBits(allowedMessages, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+            if (Component.testBits(allowedMessages, bitsMessage) || this.dbg && Component.testBits(this.dbg.bitsMessage, bitsMessage)) {
                 return true;
             }
         }
@@ -4713,10 +4722,10 @@ class Component {
         if (typeof format == "number") {
             bitsMessage = format || Messages.PROGRESS;
             format = args.shift();
-            if (this.testBits(bitsMessage, Messages.LOG)) {
+            if (Component.testBits(bitsMessage, Messages.LOG)) {
                 format = (this.id || this.type || "log") + ": " + format;
             }
-            else if (this.testBits(bitsMessage, Messages.STATUS)) {
+            else if (Component.testBits(bitsMessage, Messages.STATUS)) {
                 format = this.type + ": " + format;
             }
         }
@@ -12502,8 +12511,8 @@ class ChipSetX80 extends Component {
         this.kbd = /** @type {KeyboardX80} */ (cmp.getMachineComponent("Keyboard"));
         this.serial = /** @type {SerialPortX80} */ (cmp.getMachineComponent("SerialPort"));
         this.video = /** @type {VideoX80} */ (cmp.getMachineComponent("Video"));
-        bus.addPortInputTable(this, this.config.portsInput);
-        bus.addPortOutputTable(this, this.config.portsOutput);
+        bus.addPortInputTable(this, this.config.INPUT_PORTS);
+        bus.addPortOutputTable(this, this.config.OUTPUT_PORTS);
 
         if (DEBUGGER) {
             if (dbg) {
@@ -12592,6 +12601,10 @@ class ChipSetX80 extends Component {
         let state = new State(this);
         switch(this.config.VERSION) {
         case ChipSetX80.JUKU.VERSION:
+            state.set(0, [
+                this.bPPI1A, this.bPPI1B, this.bPPI1C, this.bPPI1Ctrl,
+                this.bPPI2A, this.bPPI2B, this.bPPI2C, this.bPPI2Ctrl
+            ]);
             break;
         case ChipSetX80.SI1978.VERSION:
             state.set(0, [this.bStatus0, this.bStatus1, this.bStatus2, this.wShiftData, this.bShiftCount, this.bSound1, this.bSound2]);
@@ -12617,37 +12630,28 @@ class ChipSetX80 extends Component {
      */
     restore(data)
     {
-        let a;
-        if (data && (a = data[0]) && a.length) {
+        if (data && data[0] && data[0].length) {
             switch(this.config.VERSION) {
             case ChipSetX80.JUKU.VERSION:
-                return false;
+                [
+                    this.bPPI1A, this.bPPI1B, this.bPPI1C, this.bPPI1Ctrl,
+                    this.bPPI2A, this.bPPI2B, this.bPPI2C, this.bPPI2Ctrl
+                ] = data[0];
+                return true;
             case ChipSetX80.SI1978.VERSION:
-                this.bStatus0      = a[0];
-                this.bStatus1      = a[1];
-                this.bStatus2      = a[2];
-                this.wShiftData    = a[3];
-                this.bShiftCount   = a[4];
-                this.bSound1       = a[5];
-                this.bSound2       = a[6];
+                [this.bStatus0, this.bStatus1, this.bStatus2, this.wShiftData, this.bShiftCount, this.bSound1, this.bSound2] = data[0];
                 return true;
             case ChipSetX80.VT100.VERSION:
-                this.bBrightness   = a[0];
-                this.bFlags        = a[1];
-                a = data[1];
-                this.bDC011Cols    = a[0];
-                this.bDC011Rate    = a[1];
-                a = data[2];
-                this.bDC012Scroll  = a[0];
-                this.bDC012Blink   = a[1];
-                this.bDC012Reverse = a[2];
-                this.bDC012Attr    = a[3];
-                a = data[3];
-                this.dNVRAddr      = a[0];          // 20-bit address
-                this.wNVRData      = a[1];          // 14-bit word
-                this.bNVRLatch     = a[2];          // 1 byte
-                this.bNVROut       = a[3];          // 1 bit
-                this.aNVRWords     = a[4];          // 100 14-bit words
+                [this.bBrightness, this.bFlags] = data[0];
+                [this.bDC011Cols, this.bDC011Rate] = data[1];
+                [this.bDC012Scroll, this.bDC012Blink, this.bDC012Reverse, this.bDC012Attr] = data[2];
+                [
+                    this.dNVRAddr,      // 20-bit address
+                    this.wNVRData,      // 14-bit word
+                    this.bNVRLatch,     // 1 byte
+                    this.bNVROut,       // 1 bit
+                    this.aNVRWords      // 100 14-bit words
+                ] = data[3];
                 return true;
             }
         }
@@ -12719,6 +12723,81 @@ class ChipSetX80 extends Component {
     {
         this.bStatus2 &= ~bit;
         if (fSet) this.bStatus2 |= bit;
+    }
+
+    /**
+     * outJukuPPI1A(port, b, addrFrom)
+     *
+     * @this {ChipSetX80}
+     * @param {number} port (0x04)
+     * @param {number} b
+     * @param {number} [addrFrom] (not defined if the Debugger is trying to write the specified port)
+     */
+    outJukuPPI1A(port, b, addrFrom)
+    {
+        this.printIO(port, b, addrFrom, "PPI1A", undefined, true);
+        this.bPPI1A = b;
+    }
+
+    /**
+     * inJukuPPI1B(port, addrFrom)
+     *
+     * @this {ChipSetX80}
+     * @param {number} port (0x05)
+     * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
+     * @returns {number} simulated port value
+     */
+    inJukuPPI1B(port, addrFrom)
+    {
+        let b = this.bPPI1B;
+        this.printIO(port, undefined, addrFrom, "PPI1B", b, true);
+        return b;
+    }
+
+    /**
+     * outJukuPPI1C(port, b, addrFrom)
+     *
+     * @this {ChipSetX80}
+     * @param {number} port (0x06)
+     * @param {number} b
+     * @param {number} [addrFrom] (not defined if the Debugger is trying to write the specified port)
+     */
+    outJukuPPI1C(port, b, addrFrom)
+    {
+        this.printIO(port, b, addrFrom, "PPI1C", undefined, true);
+        this.bPPI1C = b;
+    }
+
+    /**
+     * outJukuPPI1Ctrl(port, b, addrFrom)
+     *
+     * Initially, the Juku writes 0x82 to this port, which (I believe) configures PPI1 ports A and C for output and B for input.
+     *
+     * @this {ChipSetX80}
+     * @param {number} port (0x07)
+     * @param {number} b
+     * @param {number} [addrFrom] (not defined if the Debugger is trying to write the specified port)
+     */
+    outJukuPPI1Ctrl(port, b, addrFrom)
+    {
+        this.printIO(port, b, addrFrom, "PPI1CTRL", undefined, true);
+        this.bPPI1Ctrl = b;
+    }
+
+    /**
+     * outJukuPPI2Ctrl(port, b, addrFrom)
+     *
+     * Initially, the Juku writes 0x9b to this port, which (I believe) configures all PPI2 ports (A, B, and C) for input.
+     *
+     * @this {ChipSetX80}
+     * @param {number} port (0x0f)
+     * @param {number} b
+     * @param {number} [addrFrom] (not defined if the Debugger is trying to write the specified port)
+     */
+    outJukuPPI2Ctrl(port, b, addrFrom)
+    {
+        this.printIO(port, b, addrFrom, "PPI2CTRL", undefined, true);
+        this.bPPI2Ctrl = b;
     }
 
     /**
@@ -13119,7 +13198,42 @@ class ChipSetX80 extends Component {
 }
 
 ChipSetX80.JUKU = {
-    VERSION:        5104
+    VERSION:        5104,
+    /*
+     * 8255 #1 Programmable Peripheral Interface (PPI) I/O ports.
+     */
+    PPI1_A: {
+        PORT:       0x04
+    },
+    PPI1_B: {
+        PORT:       0x05
+    },
+    PPI1_C: {
+        PORT:       0x06
+    },
+    PPI1_CTRL: {
+        PORT:       0x07
+    },
+    /*
+     * 8255 #2 Programmable Peripheral Interface (PPI) I/O ports.
+     */
+    PPI2_A: {
+        PORT:       0x0c
+    },
+    PPI2_B: {
+        PORT:       0x0d
+    },
+    PPI2_C: {
+        PORT:       0x0e
+    },
+    PPI2_CTRL: {
+        PORT:       0x0f
+    },
+    INPUT_PORTS: {
+    },
+    OUTPUT_PORTS: {
+        0x0f: ChipSetX80.prototype.outJukuPPI2Ctrl
+    }
 };
 
 /*
@@ -13186,6 +13300,19 @@ ChipSetX80.SI1978 = {
         FLEET3:     0x04,
         FLEET4:     0x08,
         UFO_HIT:    0x10
+    },
+    INPUT_PORTS: {
+        0x00: ChipSetX80.prototype.inSIStatus0,
+        0x01: ChipSetX80.prototype.inSIStatus1,
+        0x02: ChipSetX80.prototype.inSIStatus2,
+        0x03: ChipSetX80.prototype.inSIShiftResult
+    },
+    OUTPUT_PORTS: {
+        0x02: ChipSetX80.prototype.outSIShiftCount,
+        0x03: ChipSetX80.prototype.outSISound1,
+        0x04: ChipSetX80.prototype.outSIShiftData,
+        0x05: ChipSetX80.prototype.outSISound2,
+        0x06: ChipSetX80.prototype.outSIWatchdog
     }
 };
 
@@ -13364,6 +13491,15 @@ ChipSetX80.VT100 = {
          * The Technical Manual, p. 4-18, also notes that "Early VT100s can disable the receiver interrupt by
          * programming D4 in the NVR latch. However, this is never used by the VT100."
          */
+    },
+    INPUT_PORTS: {
+        0x42: ChipSetX80.prototype.inVT100Flags
+    },
+    OUTPUT_PORTS: {
+        0x42: ChipSetX80.prototype.outVT100Brightness,
+        0x62: ChipSetX80.prototype.outVT100NVRLatch,
+        0xA2: ChipSetX80.prototype.outVT100DC012,
+        0xC2: ChipSetX80.prototype.outVT100DC011
     }
 };
 
@@ -13375,6 +13511,13 @@ ChipSetX80.MODELS = {
     "SI1978":       ChipSetX80.SI1978,
     "VT100":        ChipSetX80.VT100
 };
+
+ChipSetX80.JUKU.INIT = [
+    [
+        0, 0, 0, 0,                     // PPI1_A, PPI1_B, PPI1_C, PPI1_CTRL
+        0, 0, 0, 0                      // PPI2_A, PPI2_B, PPI2_C, PPI2_CTRL
+    ]
+];
 
 ChipSetX80.SI1978.INIT = [
     [
@@ -13452,35 +13595,6 @@ ChipSetX80.VT100.INIT = [
         ]
     ]
 ];
-
-/*
- * Port notification tables
- */
-ChipSetX80.SI1978.portsInput = {
-    0x00: ChipSetX80.prototype.inSIStatus0,
-    0x01: ChipSetX80.prototype.inSIStatus1,
-    0x02: ChipSetX80.prototype.inSIStatus2,
-    0x03: ChipSetX80.prototype.inSIShiftResult
-};
-
-ChipSetX80.SI1978.portsOutput = {
-    0x02: ChipSetX80.prototype.outSIShiftCount,
-    0x03: ChipSetX80.prototype.outSISound1,
-    0x04: ChipSetX80.prototype.outSIShiftData,
-    0x05: ChipSetX80.prototype.outSISound2,
-    0x06: ChipSetX80.prototype.outSIWatchdog
-};
-
-ChipSetX80.VT100.portsInput = {
-    0x42: ChipSetX80.prototype.inVT100Flags
-};
-
-ChipSetX80.VT100.portsOutput = {
-    0x42: ChipSetX80.prototype.outVT100Brightness,
-    0x62: ChipSetX80.prototype.outVT100NVRLatch,
-    0xA2: ChipSetX80.prototype.outVT100DC012,
-    0xC2: ChipSetX80.prototype.outVT100DC011
-};
 
 /*
  * Initialize every ChipSet module on the page.
@@ -22419,7 +22533,7 @@ class DebuggerX80 extends DbgLib {
                 for (m in Messages.Categories) {
                     if (sCategory == m) {
                         bitsMessage = Messages.Categories[m];
-                        fCriteria = this.testBits(this.bitsMessage, bitsMessage);
+                        fCriteria = Component.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
                 }
@@ -22430,11 +22544,11 @@ class DebuggerX80 extends DbgLib {
             }
             if (bitsMessage) {
                 if (asArgs[2] == "on") {
-                    this.bitsMessage = this.setBits(this.bitsMessage, bitsMessage);
+                    this.bitsMessage = Component.setBits(this.bitsMessage, bitsMessage);
                     fCriteria = true;
                 }
                 else if (asArgs[2] == "off") {
-                    this.bitsMessage = this.clearBits(this.bitsMessage, bitsMessage);
+                    this.bitsMessage = Component.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
                     if (bitsMessage == Messages.BUFFER) {
                         this.printf("%s\n", this.aMessageBuffer.join(""));
@@ -22452,7 +22566,7 @@ class DebuggerX80 extends DbgLib {
         for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
                 let bitsMessage = Messages.Categories[m];
-                let fEnabled = this.testBits(this.bitsMessage, bitsMessage);
+                let fEnabled = Component.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
                 if (!(++n % 10)) sCategories += "\n\t";

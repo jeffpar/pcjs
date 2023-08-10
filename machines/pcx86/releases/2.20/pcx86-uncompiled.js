@@ -2941,9 +2941,18 @@ class Web {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
-        if (globals.node.readFileSync) {
+        if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
+
             try {
-                resource = globals.node.readFileSync(sURL);
+                let encoding = (type == "arraybuffer"? null : "utf8");
+                resource = globals.node.readFileSync(sURL, encoding);
+                if (!encoding) {
+                    /*
+                     * For non-UTF8 data, readFileSync() returns a DataBuffer, which wraps a Node Buffer, which wraps an ArrayBuffer.
+                     */
+                    resource = resource.buffer;
+                    if (resource.buffer) resource = resource.buffer;
+                }
             } catch (err) {
                 nErrorCode = err['errno'];
             }
@@ -2959,7 +2968,7 @@ class Web {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-            Component.printf(Messages.LOG, "fetching: %s\n", sURL);
+
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -2973,7 +2982,7 @@ class Web {
                 }
             })
             .then(resource => {
-                Component.printf(Messages.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
+
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
@@ -3023,7 +3032,7 @@ class Web {
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-                if (MAXDEBUG) Component.printf(Messages.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
+
             }
             else {
                 nErrorCode = request.status || -1;
@@ -3055,12 +3064,12 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            if (MAXDEBUG) Component.printf("Web.getResource(POST %s): %d bytes\n", sURL, sPost.length);
+
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            if (MAXDEBUG) Component.printf("Web.getResource(GET %s)\n", sURL);
+
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -5201,7 +5210,7 @@ class Component {
      * @param {number} bits
      * @returns {number}
      */
-    clearBits(num, bits)
+    static clearBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -5218,7 +5227,7 @@ class Component {
      * @param {number} bits
      * @returns {number}
      */
-    maskBits(num, bits)
+    static maskBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -5235,7 +5244,7 @@ class Component {
      * @param {number} bits
      * @returns {number}
      */
-    setBits(num, bits)
+    static setBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -5252,7 +5261,7 @@ class Component {
      * @param {number} bits
      * @returns {boolean} (true if ALL specified bits are set, false if not)
      */
-    testBits(num, bits)
+    static testBits(num, bits)
     {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
@@ -5281,14 +5290,14 @@ class Component {
          * printf() calls that specify Messages.DEBUG should be stripped out of non-DEBUG builds, but just in case
          * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
          */
-        if (DEBUG || !this.testBits(bitsMessage, Messages.DEBUG)) {
+        if (DEBUG || !Component.testBits(bitsMessage, Messages.DEBUG)) {
             /*
              * The debugger has the ability to filter any messages listed in Messages.Categories, and that currently
              * includes message types LOG and WARNING, so if the debugger is loaded, subtract those from the types we allow
              * by default.
              */
             let allowedMessages = Messages.TYPES - (this.dbg? Messages.LOG + Messages.WARNING : 0);
-            if (this.testBits(allowedMessages, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+            if (Component.testBits(allowedMessages, bitsMessage) || this.dbg && Component.testBits(this.dbg.bitsMessage, bitsMessage)) {
                 return true;
             }
         }
@@ -5316,10 +5325,10 @@ class Component {
         if (typeof format == "number") {
             bitsMessage = format || Messages.PROGRESS;
             format = args.shift();
-            if (this.testBits(bitsMessage, Messages.LOG)) {
+            if (Component.testBits(bitsMessage, Messages.LOG)) {
                 format = (this.id || this.type || "log") + ": " + format;
             }
-            else if (this.testBits(bitsMessage, Messages.STATUS)) {
+            else if (Component.testBits(bitsMessage, Messages.STATUS)) {
                 format = this.type + ": " + format;
             }
         }
@@ -28403,7 +28412,7 @@ X86.helpINT = function(nIDT, nError, nCycles)
     /*
      * Support for INT 06h operation checks.  The only operation we consume is the one reserved for breakpoints,
      * and only if our debugger is running.  All these should only occur in DEBUG builds of the underlying operating
-     * system, which should clean up after itself.
+     * system (ie, BASIC-DOS), which should clean up after itself.  See https://github.com/jeffpar/basicdos.
      */
     if (nIDT == 0x06 && this.model <= X86.MODEL_8088) {
         let op = this.getSOWord(this.segCS, oldIP-2);
@@ -46342,7 +46351,7 @@ class RAMx86 extends Component {
 
         this.addrRAM = +parmsRAM['addr'];       // we allow numbers or strings (JSON strings permit hex)
         this.sizeRAM = +parmsRAM['size'];       // we allow numbers or strings (JSON strings permit hex)
-        this.fTestRAM = parmsRAM['test'];
+        this.fTestRAM = parmsRAM['test'] && parmsRAM['test'] != "false";
         this.fInstalled = (!!this.sizeRAM);     // 0 is the default value for 'size' when none is specified
         this.sizeOverride = 0;
         this.fAllocated = false;
@@ -62569,9 +62578,9 @@ class Disk extends Component {
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
-            if (DEBUG) {
-                this.printf("blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
-            }
+
+
+
             let aCylinders = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
                 let aHeads = new Array(this.nHeads);
@@ -62645,7 +62654,7 @@ class Disk extends Component {
         if (file) {
             let reader = new FileReader();
             reader.onload = function() {
-                disk.buildDisk(reader.result, true);
+                disk.buildDisk(/** @type {ArrayBuffer} */ (reader.result), true);
             };
             reader.onerror = function() {
                 disk.buildDisk(null, false, reader.error.message);
@@ -62666,7 +62675,9 @@ class Disk extends Component {
              */
             let sDiskExt = Str.getExtension(sDiskPath);
             if (sDiskExt == DumpAPI.FORMAT.JSON || sDiskExt == DumpAPI.FORMAT.JSON_GZ) {
-                sDiskURL = encodeURI(sDiskPath);
+                if (!sDiskPath.match(/^[A-Z]:/i)) {
+                    sDiskURL = encodeURI(sDiskPath);    // don't encode Windows paths (TODO: sufficient?)
+                }
             } else {
                 if (this.mode == DiskAPI.MODE.DEMANDRW || this.mode == DiskAPI.MODE.DEMANDRO) {
                     sDiskURL = this.connectRemoteDisk(sDiskPath);
@@ -62722,7 +62733,7 @@ class Disk extends Component {
      * Builds a disk image from an ArrayBuffer (eg, from a FileReader object), rather than from JSON-encoded data.
      *
      * @this {Disk}
-     * @param {?} buffer (technically, this is always an ArrayBuffer, because we tell FileReader to use readAsArrayBuffer, but the Closure Compiler doesn't realize that)
+     * @param {ArrayBuffer|null} buffer
      * @param {boolean} [fModified] is true if we should mark the entire disk modified (to ensure that we save/restore it)
      * @param {string} [message] (usually only set if there was an error, and therefore buffer is null or undefined)
      */
@@ -62790,11 +62801,9 @@ class Disk extends Component {
 
         if (this.fOnDemand) {
             if (!nErrorCode) {
-                if (DEBUG) {
-                    this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
-                }
-                this.fRemote = true;
                 disk = this;
+
+                this.fRemote = true;
             } else {
                 this.printf(idMessage, "Unable to connect to disk \"%s\" (error %d: %s)\n", this.sDiskPath, nErrorCode, imageData);
             }
@@ -62809,9 +62818,7 @@ class Disk extends Component {
              */
             this.printf(idMessage, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
-            if (DEBUG) {
-                this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
-            }
+
 
             /*
              * If we received binary data instead of JSON, we can use the same buildDisk() function that
@@ -63342,9 +63349,7 @@ class Disk extends Component {
      */
     readRemoteSectors(iCylinder, iHead, iSector, nSectors, fAsync, done)
     {
-        if (DEBUG) {
-            this.printf("readRemoteSectors(CHS=%d:%d:%d,N=%d)\n", iCylinder, iHead, iSector, nSectors);
-        }
+
 
         if (this.fRemote) {
             let sParms = DiskAPI.QUERY.ACTION + '=' + DiskAPI.ACTION.READ;
@@ -63396,9 +63401,7 @@ class Disk extends Component {
                  */
                 let sector = this.seek(iCylinder, iHead, iSector, null, true);
                 if (!sector) {
-                    if (DEBUG) {
-                        this.printf("doneReadRemoteSectors(): seek(CHS=%d:%d:%d) failed\n", iCylinder, iHead, iSector);
-                    }
+
                     break;
                 }
                 this.fill(sector, abData, offData);
@@ -63411,9 +63414,7 @@ class Disk extends Component {
             }
             fAsync = aRequest[4];
         } else {
-            if (DEBUG) {
-                this.printf("doneReadRemoteSectors(CHS=%d:%d:%d,N=%d) returned error %d\n", iCylinder, iHead, iSector, nSectors, nErrorCode);
-            }
+
         }
         let done = aRequest[5];
         if (done) done(nErrorCode, fAsync);
@@ -63442,9 +63443,7 @@ class Disk extends Component {
      */
     writeRemoteSectors(iCylinder, iHead, iSector, nSectors, abSectors, fAsync)
     {
-        if (DEBUG) {
-            this.printf("writeRemoteSectors(CHS=%d:%d:%d,N=%d)\n", iCylinder, iHead, iSector, nSectors);
-        }
+
 
         if (this.fRemote) {
             let dataPost = {};
@@ -63492,9 +63491,7 @@ class Disk extends Component {
                         sector.iModify = sector.cModify = 0;
                     }
                 } else {
-                    if (DEBUG) {
-                        this.printf("doneWriteRemoteSectors(CHS=%d:%d:%d) returned error %d\n", iCylinder, iHead, sector[Disk.SECTOR.ID], nErrorCode);
-                    }
+
                     this.queueDirtySector(sector, false);
                 }
             }
@@ -63552,9 +63549,7 @@ class Disk extends Component {
         this.aDirtySectors.push(sector);
         this.aDirtyTimestamps.push(Component.getTime());
 
-        if (DEBUG) {
-            this.printf("queueDirtySector(CHS=%d:%d:%d): %d dirty\n", sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.aDirtySectors.length);
-        }
+
 
         return fAsync && this.updateWriteTimer();
     }
@@ -63625,9 +63620,7 @@ class Disk extends Component {
                 if (!sectorNext.fDirty) break;
                 let j = this.aDirtySectors.indexOf(sectorNext);
 
-                if (DEBUG) {
-                    this.printf("findDirtySectors(CHS=%d:%d:%d)\n", iCylinder, iHead, sectorNext[Disk.SECTOR.ID]);
-                }
+
                 this.aDirtySectors.splice(j, 1);
                 this.aDirtyTimestamps.splice(j, 1);
                 abSectors = abSectors.concat(this.toBytes(sectorNext));
@@ -63842,7 +63835,7 @@ class Disk extends Component {
         let b = -1;
         if (sector) {
             if (DEBUG && !iByte && !fCompare) {
-                this.printf("read(\"%s\",CHS=%d:%d:%d): %s\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.getFileInfo(sector));
+                this.printf(Messages.DISK + Messages.ADDRESS, "read(\"%s\",CHS=%d:%d:%d): %s\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.getFileInfo(sector));
             }
             if (iByte < sector[Disk.SECTOR.LENGTH]) {
                 let adw = sector[Disk.SECTOR.DATA];
@@ -63869,7 +63862,7 @@ class Disk extends Component {
             return false;
 
         if (DEBUG && !iByte) {
-            this.printf("write(\"%s\",CHS=%d:%d:%d)\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID]);
+            this.printf(Messages.DISK + Messages.ADDRESS, "write(\"%s\",CHS=%d:%d:%d)\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID]);
         }
 
         if (iByte < sector[Disk.SECTOR.LENGTH]) {
@@ -63977,9 +63970,7 @@ class Disk extends Component {
                 }
             }
         }
-        if (DEBUG) {
-            this.printf("save(\"%s\"): saved %d change(s)\n", this.sDiskName, (deltas.length - 1));
-        }
+
         return deltas;
     }
 
@@ -64118,9 +64109,7 @@ class Disk extends Component {
                 this.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
-            if (DEBUG) {
-                this.printf("restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
-            }
+
             /*
              * Last but not least, rebuild the disk's file table if BACKTRACK or SYMBOLS support is enabled.
              */
@@ -67908,7 +67897,7 @@ class HDC extends Component {
          */
         this.chipset = cmp.getMachineComponent("ChipSet");
 
-        this.iDriveTable = 0;
+        this.iDeviceType = 0;
         this.iDriveTypeDefault = 3;
 
         if (!this.fATC) {
@@ -67926,8 +67915,8 @@ class HDC extends Component {
                 bus.addPortInputWidth(HDC.ATC.DATA.PORT2, 2);
                 bus.addPortOutputWidth(HDC.ATC.DATA.PORT2, 2);
             }
-            this.iDriveTable++;
-            if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.iDriveTable++;
+            this.iDeviceType++;
+            if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.iDeviceType++;
             this.iDriveTypeDefault = 2;
         }
 
@@ -68294,9 +68283,9 @@ class HDC extends Component {
         }
 
         drive.type = driveConfig['type'];
-        if (drive.type === undefined || HDC.aDriveTypes[this.iDriveTable][drive.type] === undefined) drive.type = this.iDriveTypeDefault;
+        if (drive.type === undefined || HDC.aDriveTypes[this.iDeviceType][drive.type] === undefined) drive.type = this.iDriveTypeDefault;
 
-        let driveType = HDC.aDriveTypes[this.iDriveTable][drive.type];
+        let driveType = HDC.aDriveTypes[this.iDeviceType][drive.type];
         drive.nSectors = driveType[2] || 17;                        // sectors/track
         drive.cbSector = drive.cbTransfer = driveType[3] || 512;    // bytes/sector (default is 512 if unspecified in the table)
 
@@ -68442,8 +68431,8 @@ class HDC extends Component {
                 }
             }
             if (type != null && !nHeads) {
-                nHeads = HDC.aDriveTypes[this.iDriveTable][type][1];
-                nCylinders = HDC.aDriveTypes[this.iDriveTable][type][0];
+                nHeads = HDC.aDriveTypes[this.iDeviceType][type][1];
+                nCylinders = HDC.aDriveTypes[this.iDeviceType][type][0];
             }
             if (nHeads) {
                 /*
@@ -68453,7 +68442,7 @@ class HDC extends Component {
                  *
                  * Do these values agree with those for the given drive type?  Even if they don't, all we do is warn.
                  */
-                let driveType = HDC.aDriveTypes[this.iDriveTable][drive.type];
+                let driveType = HDC.aDriveTypes[this.iDeviceType][drive.type];
                 if (driveType) {
                     if (nCylinders != driveType[0] && nHeads != driveType[1]) {
                         this.printf(Messages.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
@@ -68639,7 +68628,7 @@ class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], HDC.aDriveTables[this.iDriveTable], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], HDC.aDeviceTypes[this.iDeviceType], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
             }
         }
         if (drive.fAutoMount) {
@@ -68842,7 +68831,7 @@ class HDC extends Component {
 
                 if (BACKTRACK && obj) {
                     if (!off && obj.file) {
-                        hdc.printf(Messages.DISK, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
+                        hdc.printf(Messages.DISK + Messages.PORT + Messages.ADDRESS, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
                     }
                     /*
                      * TODO: We could define a cached BTO that's reset prior to a new ATC command, and then pass that
@@ -69345,7 +69334,7 @@ class HDC extends Component {
         this.regStatus = HDC.ATC.STATUS.READY | HDC.ATC.STATUS.SEEK_OK;
         let drive = this.aDrives[iDrive];
 
-        this.printf(Messages.HDC + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
+        this.printf(Messages.HDC + Messages.PORT + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
 
         if (!drive) return;
         this.iDrive = iDrive;
@@ -69395,7 +69384,7 @@ class HDC extends Component {
 
         case HDC.ATC.COMMAND.READ_DATA:             // 0x20 (ATA)
             if (!drive.useBuffer) {
-                this.printf(Messages.HDC, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
+                this.printf(Messages.HDC + Messages.PORT, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             /*
              * We're using a call to readData() that disables auto-increment, so that once we've got the first
@@ -69435,7 +69424,7 @@ class HDC extends Component {
 
         case HDC.ATC.COMMAND.WRITE_DATA:            // 0x30 (ATA)
             if (!drive.useBuffer) {
-                this.printf(Messages.HDC, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
+                this.printf(Messages.HDC + Messages.PORT, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             this.regStatus = HDC.ATC.STATUS.DATA_REQ;
             fProcessed = true;
@@ -70890,10 +70879,10 @@ HDC.DEFAULT_DRIVE_NAME = "Hard Drive";
 
 /*
  * Drive type tables differed across IBM controller models (XTC drive types don't match ATC drive types) and across OEMs
- * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDriveTable to index the correct table type
- * inside both aDriveTables and aDriveTypes.
+ * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDeviceType to index the correct table type
+ * inside both aDeviceTypes and aDriveTypes.
  */
-HDC.aDriveTables = ["XTC", "ATC", "COMPAQ"];
+HDC.aDeviceTypes = ["XT", "AT", "COMPAQ"];
 
 HDC.aDriveTypes = [
     /*
@@ -70985,43 +70974,43 @@ HDC.aDriveTypes = [
          9: [900, 15],          // same as IBM
         10: [980,  5],
         11: [925,  7],
-        12: [925,  9],          // 70Mb (69.10Mb: 925*9*17*512 or 72,460,800 bytes)
+        12: [925,  9],
         13: [612,  8],
         14: [980,  4],
         /*
          * Since the remaining drive types are > 14, they must be stored in either EXTHDRIVE0 or EXTHDRIVE1 CMOS bytes (0x19 or 0x1A)
          */
         16: [612,  4],          // same as IBM
-        17: [980,  5],          // 40Mb (40.67Mb: 980*5*17*512 or 42,649,600 bytes)
+        17: [980,  5],
         18: [966,  6],
         19: [1023, 8],
         20: [733,  5],          // same as IBM
         21: [733,  7],          // same as IBM
-        22: [524,  4, 40],
-        23: [924,  8],
+        22: [524,  4, 40],      // Sep 1986 DeskPro 386 TechRef: [768, 6]; May 1987 80286 TechRef: [805, 6]
+        23: [924,  8],          // Sep 1986 DeskPro 386 TechRef: [771, 6]
         24: [966, 14],
-        25: [966, 16],          // 130Mb (128.30Mb: 966*16*17*512 or 134,529,024 bytes)
+        25: [966, 16],
         26: [1023,14],
-        27: [832,  6, 33],
-        28: [1222,15, 34],
-        29: [1240, 7, 34],
+        27: [832,  6, 33],      // Sep 1986 DeskPro 386 TechRef and May 1987 80286 TechRef: [966, 10]
+        28: [1222,15, 34],      // Sep 1986 DeskPro 386 TechRef: [771, 3]; May 1987 80286 TechRef: [748, 16]
+        29: [1240, 7, 34],      // Sep 1986 DeskPro 386 TechRef: [578, 4]; May 1987 80286 TechRef: [805, 6, 26]
         30: [615,  4, 25],
         31: [615,  8, 25],
-        32: [905,  9, 25],
-        33: [832,  8, 33],      // 110Mb (107.25Mb: 832*8*33*512 or 112,459,776 bytes)
+        32: [905,  9, 25],      // Sep 1986 DeskPro 386 TechRef: [966, 3, 34]
+        33: [832,  8, 33],      // Sep 1986 DeskPro 386 TechRef: [966, 5, 34]; May 1987 80286 TechRef: [748, 8, 34]
         34: [966,  7, 34],
-        35: [966,  8, 34],      // 130Mb (128.30Mb: 966*8*34*512 or 134,529,024 bytes)
+        35: [966,  8, 34],
         36: [966,  9, 34],
         37: [966,  5, 34],
-        38: [612, 16, 63],      // 300Mb (301.22Mb: 612*16*63*512 or 315,850,752 bytes) (TODO: Cylinders is listed as 611 in the COMPAQ TechRef; confirm)
+        38: [612, 16, 63],      // Sep 1986 DeskPro 386 TechRef: [1023, 9, 33]; May 1987 80286 TechRef: [611, 16, 63]
         39: [1023,11, 33],
-        40: [1023,15, 34],
-        41: [1630,15, 52],
-        42: [1023,16, 63],
-        43: [805,  4, 26],
-        44: [805,  2, 26],
-        45: [748,  8, 33],
-        46: [748,  6, 33],
+        40: [1023,15, 34],      // Sep 1986 DeskPro 386 TechRef: [1023, 13, 33]
+        41: [1630,15, 52],      // Sep 1986 DeskPro 386 TechRef and May 1987 80286 TechRef: [1023, 15, 33]
+        42: [1023,16, 63],      // Sep 1986 DeskPro 386 TechRef: [1023, 16, 34]
+        43: [805,  4, 26],      // Sep 1986 DeskPro 386 TechRef: [756, 4, 26]
+        44: [805,  2, 26],      // Sep 1986 DeskPro 386 TechRef: [756, 2, 26]
+        45: [748,  8, 33],      // Sep 1986 DeskPro 386 TechRef: [768, 4, 26]
+        46: [748,  6, 33],      // Sep 1986 DeskPro 386 TechRef: [768, 2, 26]
         47: [966,  5, 25]
     }
 ];
@@ -75352,7 +75341,7 @@ class DebuggerX86 extends DbgLib {
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
-        if (this.testBits(this.bitsMessage, Messages.BUFFER)) {
+        if (Component.testBits(this.bitsMessage, Messages.BUFFER)) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
@@ -75360,7 +75349,7 @@ class DebuggerX86 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.testBits(this.bitsMessage, Messages.HALT)) {
+        if (Component.testBits(this.bitsMessage, Messages.HALT)) {
             sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -75480,13 +75469,13 @@ class DebuggerX86 extends DbgLib {
         /*
          * Add Messages.PORT to the set of required message flags.
          */
-        bitsMessage = this.setBits(bitsMessage || 0, Messages.PORT);
+        bitsMessage = Component.setBits(bitsMessage || 0, Messages.PORT);
         /*
          * We don't want to see "unknown" I/O messages unless WARNING is enabled.
          */
-        if (!name) bitsMessage = this.setBits(bitsMessage, Messages.WARNING);
+        if (!name) bitsMessage = Component.setBits(bitsMessage, Messages.WARNING);
 
-        if (addrFrom == undefined || this.testBits(this.bitsMessage, bitsMessage)) {
+        if (addrFrom == undefined || Component.testBits(this.bitsMessage, bitsMessage)) {
             let sFrom = "";
             if (addrFrom != undefined) {
                 let selFrom = this.cpu.getCS();
@@ -75765,7 +75754,7 @@ class DebuggerX86 extends DbgLib {
         state.set(0, this.packAddr(this.dbgAddrNextCode));
         state.set(1, this.packAddr(this.dbgAddrNextData));
         state.set(2, this.packAddr(this.dbgAddrAssemble));
-        state.set(3, [this.aPrevCmds, this.fAssemble, this.setBits(this.bitsMessage, Messages.BUFFER)]);
+        state.set(3, [this.aPrevCmds, this.fAssemble, Component.setBits(this.bitsMessage, Messages.BUFFER)]);
         state.set(4, this.aSymbolTable);
         state.set(5, [this.aBreakExec, this.aBreakRead, this.aBreakWrite]);
         return state.data();
@@ -75799,8 +75788,8 @@ class DebuggerX86 extends DbgLib {
              * function; if so, we clear Messages.BUFFER before restoring it (and yes, this means we'll never restore the BUFFER
              * setting, which is fine, and we'll also never restore any old Messages flags, which I doubt anyone will miss).
              */
-            if (this.testBits(bitsMessage, Messages.BUFFER)) {
-                this.bitsMessage = this.clearBits(bitsMessage, Messages.BUFFER);
+            if (Component.testBits(bitsMessage, Messages.BUFFER)) {
+                this.bitsMessage = Component.clearBits(bitsMessage, Messages.BUFFER);
             }
             i++;
         }
@@ -77997,7 +77986,7 @@ class DebuggerX86 extends DbgLib {
             }
             let vOld = fnGet.call(this, dbgAddr);
             if (fASCII) vNew = (vOld & ~0xff) | (vNew & 0x7f);
-            this.printf("changing %s from %#0*2x to %#0*2x\n", this.toHexAddr(dbgAddr), cch, vOld, cch, vNew);
+            this.printf("changing %s from %#0*x to %#0*x\n", this.toHexAddr(dbgAddr), cch, vOld, cch, vNew);
             fnSet.call(this, dbgAddr, vNew, size);
         }
     }
@@ -78389,7 +78378,7 @@ class DebuggerX86 extends DbgLib {
                 for (m in Messages.Categories) {
                     if (sCategory == m) {
                         bitsMessage = Messages.Categories[m];
-                        fCriteria = this.testBits(this.bitsMessage, bitsMessage);
+                        fCriteria = Component.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
                 }
@@ -78400,11 +78389,11 @@ class DebuggerX86 extends DbgLib {
             }
             if (bitsMessage) {
                 if (asArgs[2] == "on") {
-                    this.bitsMessage = this.setBits(this.bitsMessage, bitsMessage);
+                    this.bitsMessage = Component.setBits(this.bitsMessage, bitsMessage);
                     fCriteria = true;
                 }
                 else if (asArgs[2] == "off") {
-                    this.bitsMessage = this.clearBits(this.bitsMessage, bitsMessage);
+                    this.bitsMessage = Component.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
                     if (bitsMessage == Messages.BUFFER) {
                         this.printf("%s\n", this.aMessageBuffer.join(""));
@@ -78422,7 +78411,7 @@ class DebuggerX86 extends DbgLib {
         for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
                 let bitsMessage = Messages.Categories[m];
-                let fEnabled = this.testBits(this.bitsMessage, bitsMessage);
+                let fEnabled = Component.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
                 if (!(++n % 10)) sCategories += "\n\t";

@@ -10,7 +10,7 @@
 import Messages from "../v2/messages.js";
 import Component from "./component.js";
 import ReportAPI from "./reportapi.js";
-import { DEBUG, MAXDEBUG, SITEURL, globals } from "./defines.js";
+import { DEBUG, SITEURL, globals } from "./defines.js";
 
 /*
  * According to http://www.w3schools.com/jsref/jsref_obj_global.asp, these are the *global* properties
@@ -147,9 +147,18 @@ export default class Web {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
-        if (globals.node.readFileSync) {
+        if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
+            Component.printf(Messages.DEBUG + Messages.LOG, "reading: %s\n", sURL);
             try {
-                resource = globals.node.readFileSync(sURL);
+                let encoding = (type == "arraybuffer"? null : "utf8");
+                resource = globals.node.readFileSync(sURL, encoding);
+                if (!encoding) {
+                    /*
+                     * For non-UTF8 data, readFileSync() returns a DataBuffer, which wraps a Node Buffer, which wraps an ArrayBuffer.
+                     */
+                    resource = resource.buffer;
+                    if (resource.buffer) resource = resource.buffer;
+                }
             } catch (err) {
                 nErrorCode = err['errno'];
             }
@@ -165,7 +174,7 @@ export default class Web {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-            Component.printf(Messages.LOG, "fetching: %s\n", sURL);
+            Component.printf(Messages.DEBUG + Messages.LOG, "fetching: %s\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -179,7 +188,7 @@ export default class Web {
                 }
             })
             .then(resource => {
-                Component.printf(Messages.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
+                Component.printf(Messages.DEBUG + Messages.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
@@ -229,7 +238,7 @@ export default class Web {
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-                if (MAXDEBUG) Component.printf(Messages.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
+                Component.printf(Messages.DEBUG + Messages.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
@@ -261,12 +270,12 @@ export default class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            if (MAXDEBUG) Component.printf("Web.getResource(POST %s): %d bytes\n", sURL, sPost.length);
+            Component.printf(Messages.DEBUG + Messages.LOG, "posting: %s (%d bytes)\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            if (MAXDEBUG) Component.printf("Web.getResource(GET %s)\n", sURL);
+            Component.printf(Messages.DEBUG + Messages.LOG, "requesting: %s\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {

@@ -12,7 +12,7 @@ import path from "path";
 import { globals } from "./defines.js";
 import DataBuffer from "./databuffer.js";
 
-let rootDir = "";
+let rootDir = "", localDisks = null;
 
 /**
  * @class FileLib
@@ -32,7 +32,11 @@ export default class FileLib {
          */
         let match = sFile.match(/^\/(disks\/|)(machines|software|tools|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
         if (match) {
-            sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software" || match[2] == "tools"? "" : "disks"), match[2], match[3]);
+            let subDir = "";
+            if (match[2] != "machines" && match[2] != "software" && match[2] != "tools") {
+                if (localDisks !== false) subDir = "disks";
+            }
+            sFile = path.join(rootDir, subDir, match[2], match[3]);
         }
         return sFile;
     }
@@ -47,7 +51,7 @@ export default class FileLib {
     static readFileSync(sFile, encoding = "utf8")
     {
         let data;
-        if (sFile && sFile.indexOf("http") != 0) {
+        if (sFile) {
             sFile = FileLib.getLocalPath(sFile);
             data = fs.readFileSync(sFile, encoding);
             if (!encoding) data = new DataBuffer(data);
@@ -59,12 +63,12 @@ export default class FileLib {
      * setRootDir(sDir, fLocalDisks)
      *
      * @param {string} sDir
-     * @param {boolean} [fLocalDisks]
+     * @param {boolean} [fLocalDisks] (true for local disks, false for remote disks, and null for "don't care")
      */
-    static setRootDir(sDir, fLocalDisks = false)
+    static setRootDir(sDir, fLocalDisks)
     {
         rootDir = sDir;
-        globals.window['LOCALDISKS'] = fLocalDisks;
+        globals.window['LOCALDISKS'] = localDisks = fLocalDisks;
     }
 }
 

@@ -83,8 +83,12 @@ however, you can use `--label` to specify your own label (eg, `--label=VISICALC8
 the volume label.
 
 The smallest standard PC diskette format that can accommodate all the files will be automatically selected, but you can
-specify a different target size (in Kb) using `--target=N`, where N is 160, 180, 320, 360, 720, 1200, or 1440.  For
-example, if your diskette *must* work with PC DOS 1.0, use `--target=160`.
+specify a different target size using `--target=N`, where N is 160K, 180K, 320K, 360K, 720K, 1200K, or 1440K.  For example,
+if your diskette *must* work with PC DOS 1.0, use `--target=160K`.  Sizes are in kilobytes by default, so the `K` is optional.
+
+You can also create a hard disk image by specifying a capacity in megabytes (Mb) rather than kilobytes (Kb).  For example,
+to create a 10Mb hard disk image, use `--target=10M`.  `diskimage.js` should be able to *read* any DOS-formatted disk image,
+but its ability to *create* new hard disk images is currently limited to 10Mb (larger formats will be coming soon).
 
 Another useful option is `--normalize`, which will transform the line-endings in all recognized text files from LF to CR/LF;
 a recognized text file is any file ending with one of these extensions (.MD, .ME, .BAS, .BAT, .ASM, .LRF, .MAK, .TXT, OR .XML)

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+<!-- Documentation -->
+
 {% include gallery/documents.html %}
 
 ### Directory of Hero's Quest I (360K Disk 01)

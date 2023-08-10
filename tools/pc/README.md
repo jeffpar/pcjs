@@ -34,7 +34,7 @@ Loading [ibm5150.json](ibm5150.json) should produce the following output:
     pc.js v3.00
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
     Options: --load=ibm5150
-    Press CTRL-D to enter command mode, CTRL-C to terminate process
+    Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
 
 After the machine finishes booting (about 10 seconds), you should see the following output:
 
@@ -219,8 +219,187 @@ will match any file with `PKUNZIP` in the name (eg, `PKUNZIP.COM`, `PKUNZIP.EXE`
 
 will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EXE`, `PKUNZIP2.EXE`).  There is no support for wildcards, since multiple search terms provide largely the same capability.
 
+### Hard Disk Examples
+
+`pc.js` initially built only 10Mb hard disk images, because 10Mb drives (with 306 cylinders, 4 heads, and 17 sectors/track) were fully supported by both the PC XT (as a type 3 drive) *and* the PC AT (as a type 1 drive).
+
+However, I later decided to add support for 20Mb drives (with 615 cylinders instead of 306), even though only the PC AT and later machines natively supported such a drive.  Another minor issue with 20Mb drives is that our *buildDiskFromFiles()* function in [diskinfo.js](/machines/pcx86/modules/v3/diskinfo.js) only knows how to build FAT12 images (there's no support for building FAT16 or FAT32 images yet), which means that the resulting drive must use a rather large (8K) cluster size, instead of the more typical (2K) cluster size that PC DOS 3.x preferred.  But still, any 20Mb disk image that `pc.js` builds should work fine -- as long as you don't try to use it with a PC XT.
+
+To test 20Mb support, I tried two scenarios:
+
+ 1. Running FDISK on a PC AT with PC DOS 3.00
+ 2. Running FDISK on a PC AT with PC DOS 2.00
+
+Here's scenario #1, using the new hard drive `--capacity` option:
+
+    ~/pcjs/tools/pc/disks % pc.js ibm5170 --capacity=20
+    Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
+
+    Current date is Tue  8-01-2023
+    Enter new date (mm-dd-yy): 
+    Current time is 10:59:45.29
+    Enter new time: 
+
+    The IBM Personal Computer DOS
+    Version 3.00 (C)Copyright IBM Corp 1981, 1982, 1983, 1984
+
+    A>fdisk
+    IBM Personal Computer
+    Fixed Disk Setup Program Version 3.00
+    (C)Copyright IBM Corp. 1983,1984
+    FDISK Options
+    Choose one of the following:
+        1.  Create DOS partition
+        2.  Change Active Partition
+        3.  Delete DOS Partition
+        4.  Display Partition Data
+    Enter choice: []
+    Press Esc to return to DOS
+    
+    Create DOS Partition
+    Press Esc to return to FDISK Options
+    Do you wish to use the entire fixed
+    disk for DOS (Y/N).............?   y
+    System will now restart
+    Insert DOS diskette in drive A:
+    Press any key when ready . . .
+
+    Current date is Tue  8-01-2023
+    Enter new date (mm-dd-yy): 
+    Current time is 11:00:17.75
+    Enter new time: 
+
+    The IBM Personal Computer DOS
+    Version 3.00 (C)Copyright IBM Corp 1981, 1982, 1983, 1984
+
+    A>format c:
+    WARNING, ALL DATA ON NON-REMOVABLE DISK
+    DRIVE C: WILL BE LOST!
+    Proceed with Format (Y/N)?y
+
+    Formatting...Format complete
+
+    21309440 bytes total disk space
+    21309440 bytes available on disk
+
+    A>stopped (406730230 cycles, 50885 ms, 7993126 hz)
+    AX=0000 BX=0000 CX=0007 DX=007F SP=0D12 BP=0000 SI=0041 DI=0041 
+    SS=017D DS=017D ES=017D PS=0216 V0 D0 I1 T0 S0 Z0 A1 P1 C0 
+    &017D:6019 C3               RET     
+    >> save pcdos300-empty.img
+    saving drive: pcdos300-empty.img
+    >> quit
+
+Here's scenario #2.  Note that I used the `--halt` option to give me the opportunity to load "PC DOS 2.00 (Disk 1)" into drive A: before booting, but it's also possible to force that from the command-line, using the `--system=pcdos` and `--version=2.00` options:
+
+    ~/pcjs/tools/pc/disks % pc.js ibm5170 --capacity=20 --halt
+    fault messages enabled
+    >> Type ? for help with PCx86 Debugger commands
+    AX=0000 BX=0000 CX=0000 DX=0000 SP=0000 BP=0000 SI=0000 DI=0000 
+    SS=0000 DS=0000 ES=0000 PS=0002 V0 D0 I0 T0 S0 Z0 A0 P0 C0 
+    &F000:FFF0 EA5BE000F0       JMP      &F000:E05B (romBIOS+0xE05B)
+
+    >> load a: pc dos 2.00 disk 1
+    total diskettes available: 1480
+    loading "PC DOS 2.00 (Disk 1)" in drive A:
+    >> g
+    running
+    Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
+
+    Current date is Tue  1-01-1980
+    Enter new date: 
+    Current time is 11:34:03.19
+    Enter new time: 
+
+    The IBM Personal Computer DOS
+    Version 2.00 (C)Copyright IBM Corp 1981, 1982, 1983
+
+    A>fdisk
+    IBM Personal Computer
+    Fixed Disk Setup Program Version 1.00
+    (C)Copyright IBM Corp. 1983
+    FDISK Options
+    Choose one of the following:
+        1.  Create DOS Partition
+        2.  Change Active Partition
+        3.  Delete DOS Partition
+        4.  Display Partition Data
+    Enter choice: []
+    Press Esc to return to DOS
+    
+    IBM Personal Computer
+    Fixed Disk Setup Program Version 1.00
+    (C)Copyright IBM Corp. 1983
+    Create DOS Partition
+    Press Esc to return to FDISK Options
+    Do you wish to use the entire fixed
+    disk for DOS (Y/N)................?   y
+    Insert DOS diskette in drive A:
+    Press any key when ready . . .
+    Current date is Tue  1-01-1980
+    Enter new date: 
+    Current time is 11:34:19.28
+    Enter new time: 
+
+    The IBM Personal Computer DOS
+    Version 2.00 (C)Copyright IBM Corp 1981, 1982, 1983
+
+    A>format c:
+    Press any key to begin formatting C: 
+
+    Formatting...Format complete
+
+    21331968 bytes total disk space
+    21331968 bytes available on disk
+
+    A>stopped (287899220 cycles, 35999 ms, 7997423 hz)
+    AX=0001 BX=0000 CX=0007 DX=007F SP=0BB4 BP=0000 SI=004C DI=001B 
+    SS=00E3 DS=00E3 ES=00E3 PS=0213 V0 D0 I1 T0 S0 Z0 A1 P0 C1 
+    &00E3:3975 53               PUSH     BX
+    >> save pcdos200-empty.img
+    saving drive: pcdos200-empty.img
+    >> quit
+
+Now let's compare the partition tables and BPBs of the two disks.  Here are the relevant bytes from the PC DOS 3.00 disk image:
+
+    000001e0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 80 01  |................|
+    000001f0  01 00 04 03 91 65 11 00  00 00 07 a3 00 00 55 aa  |.....e........U.|
+    *
+    00002200  eb 2a 90 49 42 4d 20 20  33 2e 30 00 02 04 01 00  |.*.IBM  3.0.....|
+    00002210  02 00 02 07 a3 f8 29 00  11 00 04 00 11 00 80 00  |......).........|
+    00002220  14 00 00 00 00 0f 00 00  00 00 00 00 fa 33 c0 8e  |.............3..|
+
+And here are the same bytes from the PC DOS 2.00 disk image:
+
+    000001e0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 80 00  |................|
+    000001f0  02 00 01 03 91 65 01 00  00 00 17 a3 00 00 55 aa  |.....e........U.|
+    *
+    00000200  eb 2c 90 49 42 4d 20 20  32 2e 30 00 02 10 01 00  |.,.IBM  2.0.....|
+    00000210  02 00 04 17 a3 f8 08 00  11 00 04 00 01 00 80 00  |................|
+    00000220  0a df 02 25 02 09 2a ff  50 f6 00 02 cd 19 fa 33  |...%..*.P......3|
+
+The main differences are:
+
+  - Partition type: PC DOS 3.00 uses type 4 (16-bit FAT for drives with less than 65536 sectors); PC DOS 2.00 uses type 1 (12-bit FAT)
+  - Partition placement: PC DOS 3.00 skips 16 sectors (17 hidden sectors); PC DOS 2.00 skips 0 sectors (1 hidden sector)
+  - Cluster size: PC DOS 3.00 allocates 4 sectors (2K) per cluster; PC DOS 2.00 allocates 16 sectors (8K) per cluster
+  - FAT size: PC DOS 3.00 allocates 41 (0x29) sectors per FAT (82 sectors total); PC DOS 2.00 allocates 8 sectors per FAT (16 sectors total)
+  - Root directory size: PC DOS 3.00 allocates 512 (0x200) entries for a total of 32 sectors; PC DOS 2.00 allocates 1024 (0x400) entries for a total of 64 sectors
+
+There are 41,751 (0xA317) total sectors, which is calculated as 614 cylinders (the 615th cylinder is reserved for diagnostic use and head parking) multiplied by 4 heads multiplied by 17 sectors/track, minus 1 for the boot sector.
+
+For PC DOS 2.00, available sectors are 41,751 - 1 - 64 - 16, or 41,670 sectors, or 2,604 total (8K) clusters, for a total of 21,331,968 bytes.
+
+For PC DOS 3.00, available sectors are 41,751 - 17 - 32 - 82, or 41,620 sectors, or 10,405 total (2K) clusters, for a total of 21,309,440 bytes.
+
+So, PC DOS 2.00 was able to provide a bit more space by: 1) placing the partition on the first track instead of the second track, and 2) using a smaller FAT, thanks to fewer *and* smaller (12-bit) FAT entries, even while providing a larger root directory (1024 entries instead of 512).
+
+It was also nice to see that, even though PC DOS 2.00 was designed for the PC XT (which did *not* natively support a drive as large as 20Mb), PC DOS 2.00 could run on a PC AT *and* successfully partition and format a 20Mb drive -- even though it had to use a rather unwieldy cluster size (8K).  PC DOS 2.00 had other minor limitations, such as being unaware of the PC AT's real-time clock and current date.  But on the whole, it was usable.
+
+However, PC DOS 3.00 was obviously preferable, since it supported PC AT features like 1.2M diskette drives and the real-time clock, and it could also format larger disks with smaller (2K) clusters, thanks to the "new" 16-bit FAT.  PC DOS 3.00 still supported disks using a 12-bit FAT, even disks for which it would have preferred a 16-bit FAT, as long as other criteria were met, such as an OEM signature of "**IBM  2.0**" in the disk's BPB.  That makes *some* sense, since nowhere else in the BPB is there any indication of FAT entry size, and PC DOS 2.x supported *only* 12-bit FAT entries.  But ideally, PC DOS would have relied on the partition type (1) in the Master Boot Record (MBR) *or* defined some new field or value in the BPB to indicate the type of FAT.
+
 ### Historical Notes
 
-One early use of this utility was running a set of [80386 CPU Tests](https://github.com/jeffpar/pcjs/blob/master/software/pcx86/test/cpu/80386/test386.asm) as a custom ROM image inside an [80386 Test Machine](https://github.com/jeffpar/pcjs/blob/master/tools/pc/test386.json), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.
+One early use of the `pc.js` utility was running a set of [80386 CPU Tests](https://github.com/jeffpar/pcjs/blob/master/software/pcx86/test/cpu/80386/test386.asm) as a custom ROM image inside an [80386 Test Machine](https://github.com/jeffpar/pcjs/blob/master/tools/pc/test386.json), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.
 
 The test program ([test386.asm](/software/pcx86/test/cpu/80386/test386.asm)) was carefully designed to be built as a binary (`test386.com`) that could either be run as a DOS program *or* loaded as a ROM image.  See [PCx86 CPU Tests](/software/pcx86/test/cpu/) for more information.

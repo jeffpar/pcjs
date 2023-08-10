@@ -269,7 +269,7 @@ export default class HDC extends Component {
          */
         this.chipset = cmp.getMachineComponent("ChipSet");
 
-        this.iDriveTable = 0;
+        this.iDeviceType = 0;
         this.iDriveTypeDefault = 3;
 
         if (!this.fATC) {
@@ -287,8 +287,8 @@ export default class HDC extends Component {
                 bus.addPortInputWidth(HDC.ATC.DATA.PORT2, 2);
                 bus.addPortOutputWidth(HDC.ATC.DATA.PORT2, 2);
             }
-            this.iDriveTable++;
-            if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.iDriveTable++;
+            this.iDeviceType++;
+            if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.iDeviceType++;
             this.iDriveTypeDefault = 2;
         }
 
@@ -655,9 +655,9 @@ export default class HDC extends Component {
         }
 
         drive.type = driveConfig['type'];
-        if (drive.type === undefined || HDC.aDriveTypes[this.iDriveTable][drive.type] === undefined) drive.type = this.iDriveTypeDefault;
+        if (drive.type === undefined || HDC.aDriveTypes[this.iDeviceType][drive.type] === undefined) drive.type = this.iDriveTypeDefault;
 
-        let driveType = HDC.aDriveTypes[this.iDriveTable][drive.type];
+        let driveType = HDC.aDriveTypes[this.iDeviceType][drive.type];
         drive.nSectors = driveType[2] || 17;                        // sectors/track
         drive.cbSector = drive.cbTransfer = driveType[3] || 512;    // bytes/sector (default is 512 if unspecified in the table)
 
@@ -803,8 +803,8 @@ export default class HDC extends Component {
                 }
             }
             if (type != null && !nHeads) {
-                nHeads = HDC.aDriveTypes[this.iDriveTable][type][1];
-                nCylinders = HDC.aDriveTypes[this.iDriveTable][type][0];
+                nHeads = HDC.aDriveTypes[this.iDeviceType][type][1];
+                nCylinders = HDC.aDriveTypes[this.iDeviceType][type][0];
             }
             if (nHeads) {
                 /*
@@ -814,7 +814,7 @@ export default class HDC extends Component {
                  *
                  * Do these values agree with those for the given drive type?  Even if they don't, all we do is warn.
                  */
-                let driveType = HDC.aDriveTypes[this.iDriveTable][drive.type];
+                let driveType = HDC.aDriveTypes[this.iDeviceType][drive.type];
                 if (driveType) {
                     if (nCylinders != driveType[0] && nHeads != driveType[1]) {
                         this.printf(Messages.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
@@ -1000,7 +1000,7 @@ export default class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], HDC.aDriveTables[this.iDriveTable], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], HDC.aDeviceTypes[this.iDeviceType], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
             }
         }
         if (drive.fAutoMount) {
@@ -1203,7 +1203,7 @@ export default class HDC extends Component {
                 hdc.assert(!fAsync);
                 if (BACKTRACK && obj) {
                     if (!off && obj.file) {
-                        hdc.printf(Messages.DISK, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
+                        hdc.printf(Messages.DISK + Messages.PORT + Messages.ADDRESS, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
                     }
                     /*
                      * TODO: We could define a cached BTO that's reset prior to a new ATC command, and then pass that
@@ -1706,7 +1706,7 @@ export default class HDC extends Component {
         this.regStatus = HDC.ATC.STATUS.READY | HDC.ATC.STATUS.SEEK_OK;
         let drive = this.aDrives[iDrive];
 
-        this.printf(Messages.HDC + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
+        this.printf(Messages.HDC + Messages.PORT + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
 
         if (!drive) return;
         this.iDrive = iDrive;
@@ -1756,7 +1756,7 @@ export default class HDC extends Component {
 
         case HDC.ATC.COMMAND.READ_DATA:             // 0x20 (ATA)
             if (!drive.useBuffer) {
-                this.printf(Messages.HDC, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
+                this.printf(Messages.HDC + Messages.PORT, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             /*
              * We're using a call to readData() that disables auto-increment, so that once we've got the first
@@ -1796,7 +1796,7 @@ export default class HDC extends Component {
 
         case HDC.ATC.COMMAND.WRITE_DATA:            // 0x30 (ATA)
             if (!drive.useBuffer) {
-                this.printf(Messages.HDC, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
+                this.printf(Messages.HDC + Messages.PORT, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             this.regStatus = HDC.ATC.STATUS.DATA_REQ;
             fProcessed = true;
@@ -3251,10 +3251,10 @@ HDC.DEFAULT_DRIVE_NAME = "Hard Drive";
 
 /*
  * Drive type tables differed across IBM controller models (XTC drive types don't match ATC drive types) and across OEMs
- * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDriveTable to index the correct table type
- * inside both aDriveTables and aDriveTypes.
+ * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDeviceType to index the correct table type
+ * inside both aDeviceTypes and aDriveTypes.
  */
-HDC.aDriveTables = ["XTC", "ATC", "COMPAQ"];
+HDC.aDeviceTypes = ["XT", "AT", "COMPAQ"];
 
 HDC.aDriveTypes = [
     /*
@@ -3346,43 +3346,43 @@ HDC.aDriveTypes = [
          9: [900, 15],          // same as IBM
         10: [980,  5],
         11: [925,  7],
-        12: [925,  9],          // 70Mb (69.10Mb: 925*9*17*512 or 72,460,800 bytes)
+        12: [925,  9],
         13: [612,  8],
         14: [980,  4],
         /*
          * Since the remaining drive types are > 14, they must be stored in either EXTHDRIVE0 or EXTHDRIVE1 CMOS bytes (0x19 or 0x1A)
          */
         16: [612,  4],          // same as IBM
-        17: [980,  5],          // 40Mb (40.67Mb: 980*5*17*512 or 42,649,600 bytes)
+        17: [980,  5],
         18: [966,  6],
         19: [1023, 8],
         20: [733,  5],          // same as IBM
         21: [733,  7],          // same as IBM
-        22: [524,  4, 40],
-        23: [924,  8],
+        22: [524,  4, 40],      // Sep 1986 DeskPro 386 TechRef: [768, 6]; May 1987 80286 TechRef: [805, 6]
+        23: [924,  8],          // Sep 1986 DeskPro 386 TechRef: [771, 6]
         24: [966, 14],
-        25: [966, 16],          // 130Mb (128.30Mb: 966*16*17*512 or 134,529,024 bytes)
+        25: [966, 16],
         26: [1023,14],
-        27: [832,  6, 33],
-        28: [1222,15, 34],
-        29: [1240, 7, 34],
+        27: [832,  6, 33],      // Sep 1986 DeskPro 386 TechRef and May 1987 80286 TechRef: [966, 10]
+        28: [1222,15, 34],      // Sep 1986 DeskPro 386 TechRef: [771, 3]; May 1987 80286 TechRef: [748, 16]
+        29: [1240, 7, 34],      // Sep 1986 DeskPro 386 TechRef: [578, 4]; May 1987 80286 TechRef: [805, 6, 26]
         30: [615,  4, 25],
         31: [615,  8, 25],
-        32: [905,  9, 25],
-        33: [832,  8, 33],      // 110Mb (107.25Mb: 832*8*33*512 or 112,459,776 bytes)
+        32: [905,  9, 25],      // Sep 1986 DeskPro 386 TechRef: [966, 3, 34]
+        33: [832,  8, 33],      // Sep 1986 DeskPro 386 TechRef: [966, 5, 34]; May 1987 80286 TechRef: [748, 8, 34]
         34: [966,  7, 34],
-        35: [966,  8, 34],      // 130Mb (128.30Mb: 966*8*34*512 or 134,529,024 bytes)
+        35: [966,  8, 34],
         36: [966,  9, 34],
         37: [966,  5, 34],
-        38: [612, 16, 63],      // 300Mb (301.22Mb: 612*16*63*512 or 315,850,752 bytes) (TODO: Cylinders is listed as 611 in the COMPAQ TechRef; confirm)
+        38: [612, 16, 63],      // Sep 1986 DeskPro 386 TechRef: [1023, 9, 33]; May 1987 80286 TechRef: [611, 16, 63]
         39: [1023,11, 33],
-        40: [1023,15, 34],
-        41: [1630,15, 52],
-        42: [1023,16, 63],
-        43: [805,  4, 26],
-        44: [805,  2, 26],
-        45: [748,  8, 33],
-        46: [748,  6, 33],
+        40: [1023,15, 34],      // Sep 1986 DeskPro 386 TechRef: [1023, 13, 33]
+        41: [1630,15, 52],      // Sep 1986 DeskPro 386 TechRef and May 1987 80286 TechRef: [1023, 15, 33]
+        42: [1023,16, 63],      // Sep 1986 DeskPro 386 TechRef: [1023, 16, 34]
+        43: [805,  4, 26],      // Sep 1986 DeskPro 386 TechRef: [756, 4, 26]
+        44: [805,  2, 26],      // Sep 1986 DeskPro 386 TechRef: [756, 2, 26]
+        45: [748,  8, 33],      // Sep 1986 DeskPro 386 TechRef: [768, 4, 26]
+        46: [748,  6, 33],      // Sep 1986 DeskPro 386 TechRef: [768, 2, 26]
         47: [966,  5, 25]
     }
 ];

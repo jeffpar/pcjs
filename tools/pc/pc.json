@@ -1,0 +1,30 @@
+{
+  "defaults": {
+    "type": "pcx86",
+    "system": "msdos",
+    "version": "3.30",
+    "maxfiles": 1024,
+    "capacity": "10mb",
+    "directory": ".",
+    "machine": "compaq386.json",
+    "state": "state386.json"
+  },
+  "apps": {
+    "cp": {},
+    "ls": {},
+    "vi": {},
+    "edit": {
+      "exec": "vi $*"
+    }
+  },
+  "systems": {
+    "msdos": {
+      "vendor": "microsoft",
+      "files": ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"]
+    },
+    "pcdos": {
+        "vendor": "ibm",
+        "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
+    }
+  }
+}

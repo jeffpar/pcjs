@@ -80,11 +80,14 @@ function createDisk(diskFile, diskette, argv, done)
          */
         sArchiveFile = sArchiveFile.replace(".img", path.sep);
     }
+
+    let options = {
+        sectorIDs: diskette.argv['sectorID'] || argv['sectorID'],
+        sectorErrors: diskette.argv['sectorError'] || argv['sectorError'],
+        suppData: readFileSync(diskette.argv['suppData'] || argv['suppData'])
+    };
+
     let name = path.basename(sArchiveFile);
-    let sectorIDs = diskette.argv['sectorID'] || argv['sectorID'];
-    let sectorErrors = diskette.argv['sectorError'] || argv['sectorError'];
-    let suppData = diskette.argv['suppData'] || argv['suppData'];
-    if (suppData) suppData = readFileSync(suppData);
     let fDir = false, arcType = 0, sExt = StrLib.getExtension(sArchiveFile);
     if (sArchiveFile.endsWith(path.sep)) {
         fDir = true;
@@ -101,8 +104,10 @@ function createDisk(diskFile, diskette, argv, done)
     else {
         diskette.command = "--disk=" + name;
     }
+
     diskette.archive = sArchiveFile;
     printf("checking archive: %s\n", sArchiveFile);
+
     if (fDir || arcType) {
         let arcOffset = +argv['offset'] || 0;
         let label = diskette.label || argv['label'];
@@ -110,9 +115,9 @@ function createDisk(diskFile, diskette, argv, done)
         let normalize = diskette.normalize || argv['normalize'];
         let target = getTargetValue(diskette.format);
         let verbose = argv['verbose'];
-        readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, sectorIDs, sectorErrors, suppData, done);
+        readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, options, done);
     } else {
-        done(readDiskSync(sArchiveFile, false, sectorIDs, sectorErrors, suppData));
+        done(readDiskSync(sArchiveFile, false, options));
     }
 }
 
@@ -170,7 +175,7 @@ function getTargetValue(sTarget)
 }
 
 /**
- * extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
+ * extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
  *
  * @param {string} sDir
  * @param {string} subDir
@@ -179,10 +184,11 @@ function getTargetValue(sTarget)
  * @param {Date} date
  * @param {Buffer} db
  * @param {Object} argv
- * @param {boolean} [noExpand]
+ * @param {boolean} [allowExpand]
+ * @param {boolean} [allowHidden]
  * @param {Array.<fileData>} [files]
  */
-function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
+function extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
 {
     /*
      * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
@@ -197,7 +203,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
         return true;
     }
 
-    if (!argv['hidden']) {
+    if (!allowHidden) {
         if (attr & DiskInfo.ATTR.HIDDEN) {
             if (attr & DiskInfo.ATTR.SUBDIR) {
                 aHiddenDirs.push(sPath + '/');
@@ -223,7 +229,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
     } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
         let fPrinted = false;
         let fQuiet = argv['quiet'];
-        if (argv['expand'] && !noExpand) {
+        if (argv['expand'] && allowExpand) {
             let arcType = isArchiveFile(sFile);
             if (arcType) {
                 if (!fQuiet) printf("expanding: %s\n", sFile);
@@ -250,16 +256,16 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
                 }).on('ready', () => {
                     let aFileData = getArchiveFiles(zip, argv['verbose']);
                     for (let file of aFileData) {
-                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, false, file.files);
+                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
                     }
                     zip.close();
                 }).on('error', (err) => {
                     printError(err, sFile);
                     /*
                      * Since this implies a failure to extract anything from the archive, we'll call ourselves
-                     * back with noExpand set to true, so that we simply extract the archive without expanding it.
+                     * back with allowExpand not set, so that we simply extract the archive without expanding it.
                      */
-                    extractFile(sDir, subDir, sFile, attr, date, db, argv, true);
+                    extractFile(sDir, subDir, sFile, attr, date, db, argv);
                 });
                 zip.open();
                 /*
@@ -304,7 +310,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
         fs.utimesSync(getLocalPath(sPath), date, date);
         if (files) {
             for (let file of files) {
-                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, false, file.files)) {
+                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, true, false, file.files)) {
                     fSuccess = false;
                     break;
                 }
@@ -481,7 +487,7 @@ function processDisk(di, diskFile, argv, diskette)
              */
             let sPath = desc[DiskInfo.FILEDESC.PATH];
             if (sPath[0] == '/') sPath = sPath.substr(1);       // PATH should ALWAYS start with a slash, but let's be safe
-            let name = path.basename(sPath);
+            let name = path.basename(sPath).toUpperCase();
             let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
             let attr = +desc[DiskInfo.FILEDESC.ATTR];
             /*
@@ -495,16 +501,20 @@ function processDisk(di, diskFile, argv, diskette)
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
             device.assert(size == db.length);
-            let extractFolder = (typeof argv['extract'] != "string")? di.getName() : "";
-            if (extractFolder || name == argv['extract']) {
-                let fSuccess = false;
+            let extractName = "", extractFolder = "";
+            if (typeof argv['extract'] != "string") {
+                extractFolder = di.getName();
+            } else {
+                extractName = argv['extract'].toUpperCase();
+            }
+            if (extractFolder || extractName == name) {
                 if (argv['collection'] && !extractDir) {
                     extractFolder = getLocalPath(path.join(path.dirname(diskFile), "archive", extractFolder));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
                         extractFolder = extractFolder.replace("/disks/archive", "/archive");
                     }
                 }
-                extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv);
+                extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || !!extractName);
             }
         });
     }
@@ -1105,7 +1115,12 @@ function getArchiveOffset(sArchive, arcType, sOffset)
  */
 async function processDiskAsync(input, argv)
 {
-    let di = await readDiskAsync(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFileSync(argv['suppData']));
+    let options = {
+        sectorIDs: argv['sectorID'],
+        sectorErrors: argv['sectorError'],
+        suppData: readFileSync(argv['suppData'])
+    };
+    let di = await readDiskAsync(input, argv['forceBPB'], options);
     if (di) {
         processDisk(di, input, argv);
     }
@@ -1227,9 +1242,11 @@ function processArg(argv)
         }
     }
 
-    let sectorIDs = argv['sectorID'];
-    let sectorErrors = argv['sectorError'];
-    let suppData = readFileSync(argv['suppData']);
+    let options = {
+        sectorIDs: argv['sectorID'],
+        sectorErrors: argv['sectorError'],
+        suppData: readFileSync(argv['suppData'])
+    };
 
     if (fDir || arcType) {
         let offset = getArchiveOffset(input, arcType, argv['offset']);
@@ -1237,12 +1254,12 @@ function processArg(argv)
             printf("error: %s is not a supported archive file\n", input);
             return true;
         }
-        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], sectorIDs, sectorErrors, suppData, done);
+        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], options, done);
         return true;
     }
 
     if (input) {
-        return done(readDiskSync(input, argv['forceBPB'], sectorIDs, sectorErrors, suppData));
+        return done(readDiskSync(input, argv['forceBPB'], options));
     }
 
     return false;
@@ -1284,7 +1301,7 @@ function main(argc, argv)
     let options = arg0.slice(1).join(' ');
 
     rootDir = path.join(path.dirname(arg0[0]), "../..");
-    setRootDir(rootDir, argv['local']);
+    setRootDir(rootDir, argv['local']? true : (argv['remote']? false : null));
 
     Device.DEBUG = !!argv['debug'];
 
