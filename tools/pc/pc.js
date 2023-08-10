@@ -2088,7 +2088,7 @@ function main(argc, argv)
             "--disk=[disk image]":      "set hard drive disk image (instead of directory)",
             "--devicetype=[type]":      "set controller type (eg, XT, AT, or COMPAQ)",
             "--drivetype=[number]":     "set drive type (must be valid for controller type)",
-            "--fat=[number]":           "set FAT type (12 or 16; default is variable)",
+            "--fat=[number]":           "\tset FAT type (12 or 16; default is variable)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--system=[string]":        "operating system type (default is " + systemType + ")",
             "--version=[#.##]":         "operating system version (default is " + systemVersion + ")"
