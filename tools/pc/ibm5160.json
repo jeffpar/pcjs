@@ -1,12 +1,12 @@
 
 {
   "machine": {
-    "id": "ibm5150",
+    "id": "ibm5160",
     "type": "pcx86"
   },
   "computer": {
-    "id": "pc-mda-64k",
-    "name": "IBM PC"
+    "id": "xt-mda-256k",
+    "name": "IBM PC XT"
   },
   "ram": [
     {
@@ -22,13 +22,19 @@
       "id": "romBASIC",
       "addr": "0xf6000",
       "size": "0x08000",
-      "file": "/machines/pcx86/ibm/5150/rom/basic/BASIC100.json5"
+      "file": "/machines/pcx86/ibm/5160/rom/basic/BASIC110.json5"
     },
     {
       "id": "romBIOS",
       "addr": "0xfe000",
       "size": "0x02000",
-      "file": "/machines/pcx86/ibm/5150/rom/bios/1981-04-24/PCBIOS-REV1.json5"
+      "file": "/machines/pcx86/ibm/5160/rom/bios/1982-11-08/XTBIOS-REV1.json5"
+    },
+    {
+      "id": "romHDC",
+      "addr": "0xc8000",
+      "size": "0x02000",
+      "file": "/machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json5"
     }
   ],
   "video": [
@@ -68,18 +74,31 @@
     "name": "",
     "autoMount": {
       "A": {
-        "name": "PC DOS 1.00",
-        "path": "/diskettes/pcx86/sys/dos/ibm/1.00/PCDOS100.json"
+        "name": "PC DOS 2.00 (Disk 1)",
+        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
+      },
+      "B": {
+        "name": "PC DOS 2.00 (Disk 2)",
+        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK2.json"
       }
     }
+  },
+  "hdc": {
+    "id": "hdcXT",
+    "type": "XT",
+    "drives": [
+      {
+        "name": "10Mb Hard Disk",
+        "type": 3
+      }
+    ]
   },
   "chipset": {
     "id": "chipset",
     "name": "",
-    "model": 5150,
+    "model": 5160,
     "sw1": "01000001",
-    "sw2": "11110000",
-    "@note": "The above switch settings indicate '64K, No FPU, Monochrome Monitor, 2 Floppy Drives'",
+    "@note": "The above switch settings indicate '256K, No FPU, Monochrome Monitor, 2 Floppy Drives'",
     "sound": false
   },
   "debugger": {
@@ -87,5 +106,5 @@
     "name": "",
     "messages": ""
   },
-  "xml": "/machines/pcx86/ibm/5150/mda/64kb/machine.xml"
+  "xml": "/machines/pcx86/ibm/5160/mda/256kb/machine.xml"
 }
