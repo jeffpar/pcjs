@@ -506,7 +506,31 @@
       }
     },
     {
-      "name": "pc.js ibm5160",
+      "name": "pc.js ibm5160 (local)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5160",
+        "disks/msdos330",
+        "dir",
+        "--halt",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js ibm5160 (remote)",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",

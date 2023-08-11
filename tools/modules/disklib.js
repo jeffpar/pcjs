@@ -438,8 +438,8 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
             }
             if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, options)) {
                 /*
-                * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
-                */
+                 * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
+                 */
                 if (arcType) sDir = sDir.slice(0, -4);
                 for (let i = 0; i < aFileData.length; i++) {
                     addMetaData(di, sDir, aFileData[i].path, aFileData[i].files);

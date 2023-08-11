@@ -18,7 +18,7 @@
       "test": false
     },
     {
-	    "id": "ramCPQ",
+      "id": "ramCPQ",
       "name": "COMPAQ memory",
       "addr": "0xfa0000",
       "size": "0x60000",
@@ -97,7 +97,7 @@
     "sound": false,
     "monitor": "vga"
   },
-	"serial": {
+  "serial": {
     "id": "com2",
     "name": "COM2",
     "adapter": 2,

@@ -929,25 +929,30 @@ export default class DiskInfo {
              * file doesn't span that entire track.
              *
              * This would be OK if there was ample memory, but the boot sector didn't relocate itself from 0:7C00,
-             * and with its stack sitting just below that address, there's room for only about 29K of file data.  For
-             * reference, IO.SYS in MS-DOS 3.30 is about 22K, so there's enough room, but if the final sector is in
-             * the middle of a track, then the final full track read runs the risk of overwriting the stack and/or the
-             * boot sector itself.
+             * and with its stack sitting just below that address, there's room for only about 28K of file data.  For
+             * reference, IO.SYS in MS-DOS 3.30 is about 22K, so there's enough room, but if the final sector is near
+             * the start of a track, then the final full track read (8.5K for a track with 17 sectors) runs the risk
+             * of overwriting the stack and/or the boot sector itself.
+             *
+             * See https://www.os2museum.com/wp/hang-with-early-dos-boot-sector/ for more details; it's accurate except
+             * for the implication that a disk with 17 sectors per track was safe (it was not).
              *
              * To make matters *slightly* worse, the affected boot sectors didn't accurately calculate the sector size
              * of the system file correctly; in keeping with its overall "sloppy" approach, it simply divides the file
              * size by the sector size and then *always* adds 1 (it should have added 1 only if there was a remainder).
+             * However, since probably no version of IO.SYS or IBMBIO.COM was an *exact* multiple of 512, this calculation
+             * probably always ended up being inadvertently correct.
              *
              * Having perfect hindsight, we can help the boot sector avoid running into trouble by performing the same
-             * off-by-one sector size calculation ourselves, dividing it by sectors per track, and ensuring that the
-             * remainder matches the number of free sectors in the first data track (and adjusting the number of root
-             * directory sectors until it does).  As a result, the system file will end at the end of a track, and the
-             * boot sector never risks reading too much data.
+             * sloppy sector size calculation ourselves, dividing it by sectors per track, and ensuring that the remainder
+             * matches the number of free sectors in the first data track (and adjusting the number of root directory sectors
+             * until it does).  As a result, the system file will end at the end of a track, and the boot sector never risks
+             * reading too much data.
              *
              * This is why, instead of starting with 512 root directory entries (which is typically the minimum for a
              * hard disk as small as 10Mb), we start even smaller, and then ratchet it up until all our criteria are met
              * (starting with our requirement that it be a sufficiently large multiple of 128 to hold all the files in
-             * the "root" of aFileData).
+             * the "root" of our aFileData array).
              */
             cRootEntries = 128;
             if (cRootEntries < aFileData.length) {
@@ -1962,13 +1967,13 @@ export default class DiskInfo {
              * have saved the starting cluster number for each file in that list, so let's build a cluster lookup table
              * that will allow us to quickly associate each of the original file paths with the files on the disk.
              */
-            let clusterPaths = [];
+            let clusterInfo = [];
             if (this.aFileData) {
                 let scanFiles = function(files) {
                     for (let i = 0; i < files.length; i++) {
                         let file = files[i];
                         if (file.cluster) {
-                            clusterPaths[file.cluster] = file.path;
+                            clusterInfo[file.cluster] = {origin: file.path, contents: [...file.data.buffer]};
                         }
                         if (file.files) scanFiles(file.files);
                     }
@@ -1983,8 +1988,11 @@ export default class DiskInfo {
                 let file = this.fileTable[iFile], off = 0;
                 if (file.name == "." || file.name == "..") continue;
                 if (file.cluster) {
-                    let origin = clusterPaths[file.cluster];
-                    if (origin) file.origin = origin;
+                    let info = clusterInfo[file.cluster];
+                    if (info) {
+                        file.origin = info.origin;
+                        file.contents = info.contents;
+                    }
                 }
                 for (let iSector = 0; iSector < file.aLBA.length; iSector++) {
                     if (!this.updateSector(iFile, off, file.aLBA[iSector])) {
@@ -2296,11 +2304,15 @@ export default class DiskInfo {
         };
         if (file.size && !(file.attr & DiskInfo.ATTR.METADATA) && (fComplete || fnHash)) {
             this.assert(file.name[0] != '.');   // make sure we're not hashing "." and ".." DIRENTs
-            ab = new Array(file.size);
-            this.readSectorArray(file, ab);
+            if (file.contents) {
+                ab = file.contents;
+            } else {
+                ab = new Array(file.size);
+                this.readSectorArray(file, ab);
+            }
         }
         if (fComplete) {
-            if (ab) desc[DiskInfo.FILEDESC.CONTENTS] = ab;
+            desc[DiskInfo.FILEDESC.CONTENTS] = ab;
             if (file.origin) desc[DiskInfo.FILEDESC.ORIGIN] = file.origin;
         } else {
             delete desc[DiskInfo.FILEDESC.NAME];

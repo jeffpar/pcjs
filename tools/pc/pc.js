@@ -2036,7 +2036,7 @@ function main(argc, argv)
     fVerbose = argv['verbose'] || fVerbose;
 
     device.setDebug(fDebug);
-    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0), true);
+    device.setMessages(MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.DISK : 0), true);
     messagesFilter = fDebug? Messages.ALL + Messages.TYPES + Messages.ADDRESS : Messages.ALERTS;
 
     let arg0 = argv[0].split(' ');

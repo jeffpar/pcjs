@@ -1951,7 +1951,7 @@ export default class HDC extends Component {
         let i;
         switch (bCmd) {
 
-        case HDC.XTC.DATA.CMD.REQ_SENSE:        // 0x03
+        case HDC.XTC.DATA.CMD.REQ_SENSE:            // 0x03
             this.beginResult(drive? drive.errorCode : HDC.XTC.DATA.ERR.NOT_READY);
             this.pushResult(b1);
             this.pushResult(b2);
