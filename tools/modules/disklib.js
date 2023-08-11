@@ -398,7 +398,7 @@ export function normalizeTextFile(db)
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
  * @param {boolean} [verbose] (true for verbose output)
- * @param {Object} [options] (custom disk parameters, if any)
+ * @param {Object} [options] (custom drive parameters, if any)
  * @param {function(DiskInfo)} [done] (optional function to call on completion)
  */
 export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, options, done)

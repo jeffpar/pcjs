@@ -58,8 +58,13 @@ let driveManifest = null, driveOverride = false;
 let driveInfo = {
     deviceType: "COMPAQ",
     driveType:  -1,
+    nCylinders: 0,
+    nHeads:     0,
+    nSectors:   0,
+    cbSector:   0,
     driveSize:  0,
-    typeFAT:    0
+    typeFAT:    0,
+    files:      []
 };
 
 const functionKeys = {
@@ -678,12 +683,9 @@ function loadMachine(sFile)
              * the target capacity with a drive.  Convert the capacity from Mb to sectors and then give it a go.
              */
             if (driveInfo.driveType < 0) {
-                let parms = DiskInfo.findDriveType(driveInfo.deviceType, driveInfo.driveType, maxCapacity * 1024 * 2, device);
-                if (parms) {
-                    driveInfo.driveType = parms[0];
-                    driveInfo.driveSize = parms[5];
+                if (DiskInfo.findDriveType(driveInfo, maxCapacity * 1024 * 2, device)) {
                     if (fVerbose) {
-                        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.deviceType, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveType == parms[0]? '*' : '');
+                        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.deviceType, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
                     }
                 }
             }
@@ -944,7 +946,7 @@ function getSystemDisk(type, version)
 async function buildDrive(sDir, sCommand = "", fLog = false)
 {
     if (!localDir) {
-        return "no directory";      // an empty directory generally means a prebuilt drive has been supplied instead
+        return driveInfo.driveType >= 0? "" : "no directory";
     }
 
     let system = configJSON['systems']?.[systemType];
@@ -977,14 +979,14 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
      * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero
      * for our added utilities (and for COMMAND.COM itself).
      */
-    let aFileDescs = [];
+    driveInfo.files = [];
     let attrHidden = majorVersion > 2? DiskInfo.ATTR.HIDDEN : 0;
     for (let name of system.files) {
         let desc = diSystem.findFile(name);
         if (desc) {
             desc.attr = +desc.attr;
             desc.attr |= attrHidden;
-            aFileDescs.push(desc);
+            driveInfo.files.push(desc);
         }
     }
 
@@ -993,14 +995,14 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
      * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
      * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
      */
-    aFileDescs.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+    driveInfo.files.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
 
     /*
      * We also create a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
      * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDrive()
      * to look for any changes and then terminate the machine.
      */
-    aFileDescs.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+    driveInfo.files.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
 
     /*
      * For any apps listed in pc.json, create hidden command apps in the root, each of which will execute
@@ -1017,7 +1019,7 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
         for (let j = 0; j < appName.length; j++) {
             appContents.push(appName.charCodeAt(j));
         }
-        aFileDescs.push(makeFileDesc(appFile, appContents, attrHidden));
+        driveInfo.files.push(makeFileDesc(appFile, appContents, attrHidden));
     }
 
     /*
@@ -1049,7 +1051,7 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
 
     if (sCommand) data += sCommand + "\r\n";
     if (machineDir) data += "CD " + machineDir + "\r\n";
-    aFileDescs.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
+    driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
 
     /*
      * Load the boot sector from the system diskette we read above, and use it to update the boot
@@ -1112,17 +1114,7 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
 
-    /*
-     * Setting options.deviceType to "XT", "AT", or "COMPAQ" allows buildDiskFromFiles() to scan the set
-     * of supported drive types and choose the best one to accommodate all the files we're adding to the drive.
-     */
-    let options = {};
-    options.deviceType = driveInfo.deviceType;
-    options.driveType = driveInfo.driveType;
-    options.files = aFileDescs;
-    options.typeFAT = driveInfo.typeFAT;
-
-    readDir(sDir, 0, 0, "PCJS", null, normalize, maxCapacity * 1024, maxFiles, false, options, done);
+    readDir(sDir, 0, 0, "PCJS", null, normalize, maxCapacity * 1024, maxFiles, false, driveInfo, done);
 
     return driveManifest? "" : "unable to build drive";
 }
@@ -1214,11 +1206,10 @@ function buildFileIndex(diskIndex)
  */
 function updateDriveInfo(di)
 {
-    let parms = di.getDriveType(driveInfo.deviceType);
-    driveInfo.driveType = parms[0];
-    driveInfo.driveSize = parms[5];
-    if (fVerbose) {
-        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.deviceType, driveInfo.driveType, parms[1], parms[2], parms[3], driveInfo.driveSize.toFixed(1));
+    if (di.getDriveType(driveInfo)) {
+        if (fVerbose) {
+            printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.deviceType, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
+        }
     }
 }
 

@@ -87,6 +87,19 @@ import FileInfo from "./fileinfo.js";
  */
 
 /**
+ * @typedef {Object} DriveInfo
+ * @property {string} deviceType
+ * @property {number} driveType
+ * @property {number} nCylinders
+ * @property {number} nHeads
+ * @property {number} nSectors
+ * @property {number} cbSector
+ * @property {number} driveSize
+ * @property {number} typeFAT
+ * @property {Array} files
+ */
+
+/**
  * @class DiskInfo
  * @property {string} diskName
  * @property {boolean} fWritable
@@ -761,7 +774,7 @@ export default class DiskInfo {
      * @param {Array.<FileData>} aFileData
      * @param {number} [kbTarget]
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @param {Object} [options] (custom disk parameters, if any)
+     * @param {DriveInfo} [options] (custom drive parameters, if any)
      * @returns {boolean} true if disk allocation successful, false if not
      */
     buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, fnHash, options)
@@ -800,13 +813,12 @@ export default class DiskInfo {
          * has been provided, we fall back on total size of all files, but we also include a "slop factor" (eg, 10%) to
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
-        let parms = DiskInfo.findDriveType(options.deviceType, options.driveType, nTargetSectors, this);
-        if (parms) {
+        if (DiskInfo.findDriveType(options, nTargetSectors, this)) {
             this.deviceType = options.deviceType;
-            this.driveType = parms[0];
-            this.nCylinders = parms[1];
-            this.nHeads = parms[2];
-            this.nSectors = parms[3];
+            this.driveType = options.driveType;
+            this.nCylinders = options.nCylinders;
+            this.nHeads = options.nHeads;
+            this.nSectors = options.nSectors;
             cTotalSectors = this.nCylinders * this.nHeads * this.nSectors;
         }
 
@@ -1652,8 +1664,8 @@ export default class DiskInfo {
 
         if (imageData) {
             /*
-             * We must now differentiate between "legacy" JSON images (which were simply arrays of CHS data)
-             * and "extended" JSON images, which are objects with a CHS diskData property, among other things.
+             * We now differentiate between "legacy" JSON images (which were simply arrays of CHS data)
+             * and "v2" JSON images, which are objects with a CHS diskData property, among other things.
              */
             let imageInfo = imageData[DiskInfo.DESC.IMAGE];
             if (imageInfo) {
@@ -1924,9 +1936,9 @@ export default class DiskInfo {
      * "volume" sector numbers for volume-relative block addresses (aka VBAs or Volume Block Addresses), and
      * 0-based "logical" sector numbers for disk-relative block addresses (aka LBAs or Logical Block Addresses).
      *
-     * NOTE: It's now possible to reconstitute these tables from our newer "extended" JSON images, if that
-     * was the source of the image.  See buildDiskFromJSON(), which in turn calls buildFileTableFromJSON() when
-     * a new JSON disk image is loaded.
+     * NOTE: It's now possible to reconstitute these tables from our newer "v2" JSON images, if that was the
+     * source of the image.  See buildDiskFromJSON(), which in turn calls buildFileTableFromJSON() when a new
+     * JSON disk image is loaded.
      *
      * @this {DiskInfo}
      * @param {boolean} [fRebuild]
@@ -3376,12 +3388,12 @@ export default class DiskInfo {
     /**
      * getJSON(fnHash, fLegacy, indent, source)
      *
-     * If a disk image contains a recognized volume type (eg, FAT12, FAT16), we now prefer to produce an
-     * "extended" JSON image, which will include a volume table (of volume descriptors), a file table (of
-     * file descriptors), and sector-level "metadata" which, for every used sector, refers back to a file
+     * If a disk image contains a recognized volume type (eg, FAT12, FAT16), we now prefer to produce a
+     * "v2" JSON image, which will include a volume table (of volume descriptors), a file table (of file
+     * descriptors), and sector-level "metadata" which, for every used sector, refers back to a file
      * in the file table (along with a file offset).
      *
-     * To create a "legacy" JSON image, without any "extended" information, set fLegacy to true.
+     * To create a "legacy" JSON image, without any "v2" information, set fLegacy to true.
      *
      * @this {DiskInfo}
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
@@ -3522,28 +3534,20 @@ export default class DiskInfo {
     }
 
     /**
-     * findDriveType(deviceType, driveType, nTargetSectors)
+     * findDriveType(driveInfo, nTargetSectors, device)
      *
-     * If a drive type matching the specified drive type or the requested (minimum) number of sectors is found,
-     * we return an array of drive parameters:
+     * If a drive type appropriate for the specified device matches the specified drive type or the requested (minimum) number of sectors,
+     * update the DriveInfo and return true.
      *
-     *      parms[0]:   drive type
-     *      parms[1]:   cylinders
-     *      parms[2]:   heads
-     *      parms[3]:   sectors/track
-     *      parms[4]:   bytes/sector
-     *      parms[5]:   total megabytes (Mb)
-     *
-     * @param {string} deviceType
-     * @param {number} driveType
+     * @param {DriveInfo} driveInfo
      * @param {number} nTargetSectors
      * @param {Device} [device]
-     * @returns {Array|null}
+     * @returns {boolean}
      */
-    static findDriveType(deviceType, driveType, nTargetSectors, device)
+    static findDriveType(driveInfo, nTargetSectors, device)
     {
-        if (deviceType) {
-            let iDevice = HDC.aDeviceTypes.indexOf(deviceType);
+        if (driveInfo.deviceType) {
+            let iDevice = HDC.aDeviceTypes.indexOf(driveInfo.deviceType);
             if (iDevice >= 0) {
                 let bestType = -1, bestDiff = 0, bestParms;
                 let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
@@ -3551,53 +3555,52 @@ export default class DiskInfo {
                     let parms = HDC.aDriveTypes[iDevice][type].slice();
                     parms.unshift(+type);
                     parms[1]--; parms[3] = parms[3] || 17; parms[4] = parms[4] || 512;
-                    let nSectors = parms[1] * parms[2] * parms[3], cbSector = parms[4], cbTotal, diff;
+                    let nTotalSectors = parms[1] * parms[2] * parms[3], cbSector = parms[4], cbTotal, diff;
                     if (cbSector != 512) continue;
-                    cbTotal = nSectors * cbSector;
+                    cbTotal = nTotalSectors * cbSector;
                     parms[5] = cbTotal / 1024 / 1024;
                     if (device) {
-                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", deviceType, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveType == parms[0]? '*' : '');
+                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.deviceType, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveInfo.driveType == parms[0]? '*' : '');
                     }
-                    if (driveType >= 0) {
-                        if (driveType == +type) {
+                    if (driveInfo.driveType >= 0) {
+                        if (driveInfo.driveType == +type) {
                             bestType = +type;
                             bestParms = parms;
                         }
                     }
-                    else if (nTargetSectors && (diff = nSectors - nTargetSectors) && diff >= 0 && (diff < bestDiff || bestType < 0) ||
-                            !nTargetSectors && (diff = nSectors * 512 - cbTotal * 1.10) && diff >= 0 && (diff < bestDiff || bestType < 0)) {
+                    else if (nTargetSectors && (diff = nTotalSectors - nTargetSectors) && diff >= 0 && (diff < bestDiff || bestType < 0) ||
+                            !nTargetSectors && (diff = nTotalSectors * 512 - cbTotal * 1.10) && diff >= 0 && (diff < bestDiff || bestType < 0)) {
                         bestDiff = diff;
                         bestType = +type;
                         bestParms = parms;
                     }
                 }
                 if (bestType >= 0) {
-                    return bestParms;
+                    driveInfo.driveType = bestType;
+                    driveInfo.nCylinders = bestParms[1];
+                    driveInfo.nHeads = bestParms[2];
+                    driveInfo.nSectors = bestParms[3];
+                    driveInfo.cbSector = bestParms[4];
+                    driveInfo.driveSize = bestParms[5];
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
     }
 
     /**
-     * getDriveType(deviceType)
+     * getDriveType(driveInfo)
      *
-     * Returns an array of drive parameters, including a drive type appropriate for the current disk:
-     *
-     *      parms[0]:   drive type
-     *      parms[1]:   cylinders
-     *      parms[2]:   heads
-     *      parms[3]:   sectors/track
-     *      parms[4]:   bytes/sector
-     *      parms[5]:   total megabytes (Mb)
+     * Update the DriveInfo with a drive type appropriate for the current device and disk parameters.
      *
      * @this {DiskInfo}
-     * @param {string} [deviceType]
-     * @returns {Array}
+     * @param {DriveInfo} [driveInfo]
+     * @returns {boolean} (true if DriveInfo updated, false if no change)
      */
-    getDriveType(deviceType)
+    getDriveType(driveInfo)
     {
-        deviceType = deviceType || this.deviceType;
+        let deviceType = driveInfo.deviceType || this.deviceType;
         if (this.driveType < 0) {
             let iDevice = HDC.aDeviceTypes.indexOf(deviceType);
             if (iDevice >= 0) {
@@ -3605,13 +3608,18 @@ export default class DiskInfo {
                 for (let type of driveTypes) {
                     let parms = HDC.aDriveTypes[iDevice][type];
                     if (this.nCylinders == parms[0] && this.nHeads == parms[1] && this.nSectors == (parms[2] || 17)) {
-                        this.driveType = +type;
-                        break;
+                        driveInfo.driveType = +type;
+                        driveInfo.nCylinders = this.nCylinders;
+                        driveInfo.nHeads = this.nHeads;
+                        driveInfo.nSectors = this.nSectors;
+                        driveInfo.cbSector = this.cbSector || parms[3] || 512;
+                        driveInfo.driveSize = this.cbDiskData / 1024 / 1024;
+                        return true;
                     }
                 }
             }
         }
-        return [this.driveType, this.nCylinders, this.nHeads, this.nSectors, this.cbSector, this.cbDiskData / 1024 / 1024];
+        return false;
     }
 
     /**
@@ -4150,8 +4158,8 @@ DiskInfo.SECTOR = {
     ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
     LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
     DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
-    FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
-    FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
+    FILE_INDEX: 'f',                // "v2" JSON disk images only [formerly file]
+    FILE_OFFSET:'o',                // "v2" JSON disk images only [formerly offFile]
                                     // [no longer used: 'pattern']
     /*
      * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
