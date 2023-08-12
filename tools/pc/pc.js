@@ -56,7 +56,7 @@ let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
 let driveManifest = null, driveOverride = false;
 let driveInfo = {
-    deviceType: "COMPAQ",
+    driveCtrl:  "COMPAQ",
     driveType:  -1,
     nCylinders: 0,
     nHeads:     0,
@@ -201,6 +201,7 @@ async function loadModules(factory, modules, done)
          * so we join it with a relative directory instead (ie, "../..").
          */
         modulePath = path.join("../..", modulePath).replace(/\\/g, '/');
+        if (fDebug) printf("loading: %s\n", modulePath);
         let name = path.basename(modulePath, ".js");
         if (name == "embed") {
             let { [factory]: embed } = await import(modulePath);
@@ -589,18 +590,18 @@ function checkMachine(sFile)
     if (sFile && !driveOverride) {
         if (machine) {
             if (machine['hdc']) {
-                driveInfo.deviceType = machine['hdc']['type'];
+                driveInfo.driveCtrl = machine['hdc']['type'];
             }
             if (machine['chipset'] && machine['chipset']['model'] == "deskpro386") {
-                driveInfo.deviceType = "COMPAQ";
+                driveInfo.driveCtrl = "COMPAQ";
             }
         } else {
             if (sFile.indexOf("5160") >= 0) {
-                driveInfo.deviceType = "XT";
+                driveInfo.driveCtrl = "XT";
             } else if (sFile.indexOf("5170") >= 0) {
-                driveInfo.deviceType = "AT";
+                driveInfo.driveCtrl = "AT";
             } else if (sFile.indexOf("compaq") >= 0) {
-                driveInfo.deviceType = "COMPAQ";
+                driveInfo.driveCtrl = "COMPAQ";
             }
         }
     }
@@ -685,7 +686,7 @@ function loadMachine(sFile)
             if (driveInfo.driveType < 0) {
                 if (DiskInfo.findDriveType(driveInfo, maxCapacity * 1024 * 2, device)) {
                     if (fVerbose) {
-                        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.deviceType, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
+                        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
                     }
                 }
             }
@@ -945,10 +946,6 @@ function getSystemDisk(type, version)
  */
 async function buildDrive(sDir, sCommand = "", fLog = false)
 {
-    if (!localDir) {
-        return driveInfo.driveType >= 0? "" : "no directory";
-    }
-
     let system = configJSON['systems']?.[systemType];
     if (!system) {
         return "unsupported system type: " + systemType;
@@ -1208,7 +1205,7 @@ function updateDriveInfo(di)
 {
     if (di.getDriveType(driveInfo)) {
         if (fVerbose) {
-            printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.deviceType, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
+            printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
         }
     }
 }
@@ -1651,7 +1648,7 @@ function loadDiskette(sDrive, aTokens)
             result = "missing diskette search options";
         }
     } else {
-        result = "no floppy drives (load a machine first)";
+        result = "no diskette drives (start a machine first)";
     }
     return result;
 }
@@ -1680,17 +1677,18 @@ function doCommand(s)
 
     let help = function() {
         let result = "pc.js commands:\n" +
-                    "  build [machine command]\n" +
+                    "  build [command]\n" +
                     "  exec [local command]\n" +
-                    "  load [machine] or [drive] [search options]\n" +
+                    "  load [drive] [search options]\n" +
                     "  save [local disk image]\n" +
+                    "  start [machine]\n" +
                     "  quit";
         if (machine.dbg) {
             result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
         } else if (machine.cpu) {
             result += "\nmachine commands:\n" +
                     "  g (to continue running)\n" +
-                    "load a machine with a debugger for more machine commands";
+                    "start a machine with a debugger for more machine commands";
         }
         return result;
     };
@@ -1751,33 +1749,41 @@ function doCommand(s)
         break;
     case "load":
         arg = aTokens[0];
-        if (!arg && !machine.cpu) {
-            arg = savedMachine;
-        }
         if (arg) {
             let matchDrive = arg.match(/^([a-z]:?)$/i);
             if (matchDrive) {
                 aTokens.splice(0, 1)
                 result = loadDiskette(matchDrive[1], aTokens);
             } else {
-                let sFile = checkMachine(arg);
-                if (sFile) {
-                    machine = newMachine();
-                    printf("loading machine: %s\n", sFile);
-                    result = loadMachine(sFile);
-                    if (!result) {
-                        localMachine = sFile;
-                    }
-                } else {
-                    result = "unknown machine: " + arg;
-                }
+                result = "invalid diskette drive: " + arg;
             }
         } else {
-            result = "missing " + (machine.cpu? "drive letter" : "machine file");
+            result = "missing diskette drive (eg, A:)";
         }
         break;
     case "save":
         saveDrive(localDir, aTokens[0] || true);
+        break;
+    case "start":
+        arg = aTokens[0];
+        if (!arg && !machine.cpu) {
+            arg = savedMachine;
+        }
+        if (arg) {
+            let sFile = checkMachine(arg);
+            if (sFile) {
+                machine = newMachine();
+                printf("loading machine: %s\n", sFile);
+                result = loadMachine(sFile);
+                if (!result) {
+                    localMachine = sFile;
+                }
+            } else {
+                result = "unrecognized machine: " + arg;
+            }
+        } else {
+            result = "missing machine file";
+        }
         break;
     case "q":
     case "quit":
@@ -1833,11 +1839,11 @@ function doCommand(s)
  */
 async function processArgs(argv)
 {
-    let error = "";
     let loading = false;
+    let error = "", warning = "";
 
     let splice = false;
-    let sFile = argv['load'];
+    let sFile = argv['start'];
     if (typeof sFile != "string") {
         sFile = argv[1];                        // for convenience, we also allow a bare machine name
         if (sFile) splice = true;
@@ -1868,7 +1874,7 @@ async function processArgs(argv)
         } else {
             error = "invalid disk";
         }
-        localDir = "";                          // an empty localDir disables buildDrive()
+        localDir = "";
     } else {
         localDrive = path.join(pcjsDir, localDrive);
     }
@@ -1904,6 +1910,8 @@ async function processArgs(argv)
             let sCommand = checkCommand(localDir, args);
             if (!sCommand && args) {
                 error = "command not found: " + args;
+            } else if (driveInfo.driveType >= 0) {
+                warning = "unable to execute command '" + sCommand + "' with prebuilt drive";
             } else {
                 error = await buildDrive(localDir, sCommand);
                 if (!error) {
@@ -1923,8 +1931,8 @@ async function processArgs(argv)
         }
     }
 
-    if (error) {
-        printf("%s\n", error);
+    if (error || warning) {
+        printf("%s\n", error || warning);
     }
 
     if (!loading) setDebugMode(DbgLib.EVENTS.READY);
@@ -2051,15 +2059,15 @@ function main(argc, argv)
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
     maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
-    maxCapacity = parseFloat(argv['capacity']) || parseFloat(defaults['capacity']) || maxCapacity;
+    maxCapacity = parseFloat(argv['drivesize']) || parseFloat(defaults['drivesize']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
 
     let type = parseInt(argv['drivetype']);
     if (!isNaN(type)) {
         driveInfo.driveType = type;
     }
-    if (typeof argv['devicetype'] == "string") {
-        driveInfo.deviceType = argv['devicetype'];
+    if (typeof argv['drivectrl'] == "string") {
+        driveInfo.driveCtrl = argv['drivectrl'];
         driveOverride = true;
     }
     if (typeof argv['fat'] == "string") {
@@ -2072,13 +2080,14 @@ function main(argc, argv)
 
     if (argv['help']) {
         let optionsMain = {
-            "--load=[machine file]":    "load machine configuration file",
-            "--type=[machine type]":    "set machine type (default is " + machineType + ")",
-            "--capacity=[size]":        "set hard drive capacity (default is " + maxCapacity + "mb)",
-            "--dir=[directory]":        "set hard drive local directory (default is " + localDir + ")",
-            "--disk=[disk image]":      "set hard drive disk image (instead of directory)",
-            "--devicetype=[type]":      "set controller type (eg, XT, AT, or COMPAQ)",
-            "--drivetype=[number]":     "set drive type (must be valid for controller type)",
+            "--start=[machine file]":   "start machine configuration file",
+        };
+        let optionsHard = {
+            "--dir=[directory]":        "set drive local directory (default is " + localDir + ")",
+            "--disk=[disk image]":      "set drive disk image (instead of directory)",
+            "--drivectrl=[ctrl]":       "set drive controller (eg, XT, AT, or COMPAQ)",
+            "--drivesize=[size]":       "set drive capacity (default is " + maxCapacity + "mb)",
+            "--drivetype=[number]":     "set drive type (must be valid for controller)",
             "--fat=[number]":           "\tset FAT type (12 or 16; default is variable)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--system=[string]":        "operating system type (default is " + systemType + ")",
@@ -2094,7 +2103,8 @@ function main(argc, argv)
             "--write (-w)\t":           "write hard drive image on return"
         };
         let optionGroups = {
-            "main options:":            optionsMain,
+            "machine options:":         optionsMain,
+            "hard drive options:":      optionsHard,
             "other options:":           optionsOther
         }
         printf("\nusage:\n\t[node] pc.js [machine file] [local directory] [DOS command] [options]\n");

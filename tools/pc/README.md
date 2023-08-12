@@ -9,15 +9,15 @@ This directory contains the PCjs machine command-line utility [pc.js](pc.js), wh
 
 ### Starting Machines from the Command-Line
 
-Load a JSON machine configuration file, such as [ibm5150.json](ibm5150.json) or [compaq386.json](compaq386.json), with the utility's `load` command, either interactively or with the `--load` command-line argument.
+Start a JSON machine configuration file, such as [ibm5150.json](ibm5150.json) or [compaq386.json](compaq386.json), with the utility's `start` command, either interactively or with the `--start` command-line argument.
 
 For example:
 
-	pc.js --load=ibm5150
+	pc.js --start=ibm5150
 
 or, if your operating system doesn't automatically associate `.js` files with [Node](https://nodejs.org/en):
 
-	node pc.js --load=ibm5150
+	node pc.js --start=ibm5150
 
 > NOTE: On Windows, the first time you attempt to run a `.js` file from the command-line, Windows may prompt you to associate a program with it (eg, "C:\Program Files\nodejs\node.exe"), and while this will eliminate the need to type `node`, the association may not automatically pass along any command-line arguments.
 > 
@@ -25,15 +25,15 @@ or, if your operating system doesn't automatically associate `.js` files with [N
 > 
 >     "C:\Program Files\nodejs\node.exe" "%1" %*
 
-If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  You can also omit the `--load=` option if the name of the JSON file doesn't conflict with another command or program name:
+If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  You can also omit the `--start=` option if the name of the JSON file doesn't conflict with another command or program name:
 
 	pc.js ibm5150
 
-Loading [ibm5150.json](ibm5150.json) should produce the following output:
+Starting [ibm5150.json](ibm5150.json) should produce the following output:
 
     pc.js v3.00
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
-    Options: --load=ibm5150
+    Options: --start=ibm5150
     Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
 
 After the machine finishes booting (about 10 seconds), you should see the following output:
@@ -60,7 +60,7 @@ You can begin interacting with the machine OR you can press CTRL-D to enter the 
 
 To destroy the machine, type `quit` (or press CTRL-C) at the debugger prompt.
 
-[pc.js](https://github.com/jeffpar/pcjs/tree/master/tools/pc) is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` and `pdp11` machines so far.
+[pc.js](https://github.com/jeffpar/pcjs/tree/master/tools/pc) is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically start any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` and `pdp11` machines so far.
 
 This utility is very much a "work-in-progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
 
@@ -68,13 +68,13 @@ This utility is very much a "work-in-progress" and is intended for development w
 
 Limited support for XML-based machines now exists; eg:
 
-    pc.js --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
+    pc.js --start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
 
-loads and runs the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
+starts the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
 
 Here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/panel/debugger/machine.xml):
 
-    pc.js --load=/machines/dec/pdp11/1170/panel/debugger/machine.xml
+    pc.js --start=/machines/dec/pdp11/1170/panel/debugger/machine.xml
 
 ### Accessing Local Files from MS-DOS
 
@@ -88,15 +88,15 @@ This allows you to run console-based DOS applications on your modern operating s
 
 If you modify any files on your local file system, those modifications won't show up inside the machine until you restart `pc.js`.  Similarly, any file modifications inside the machine will not show up on your local file system until you terminate `pc.js`.
 
-### Loading Machines and Diskettes
+### Loading Diskettes Into Machines
 
-Normally, when you run `pc.js`, a machine is started, either explicitly via `--load`, or implicitly by typing the name of a DOS command or program name.  Otherwise, you can start a machine from the pc.js `>>` prompt, using the "load" internal command; eg:
+Normally, when you run `pc.js`, a machine is started, either explicitly via `--start`, or implicitly by typing the name of a DOS command or program name.  Otherwise, you can start a machine from the pc.js `>>` prompt, using the "start" internal command; eg:
 
-    >> load compaq386
+    >> start compaq386
 
 Once a machine is running, you can access the `>>` prompt by typing **CTRL-D**.  That will stop the machine until you enter the "g" command.  Any command not recognized by `pc.js` is passed to the machine's built-in debugger.  Type "?" to get a list of debugger commands.
 
-The "load" command is also used to load PCjs diskettes images into the machine's floppy drives, by including a drive letter, as in:
+The "load" command is used to load PCjs diskettes images into the machine's floppy drives, by including a drive letter, as in:
 
     >> load a: PC DOS
 

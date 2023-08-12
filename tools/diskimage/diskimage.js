@@ -81,7 +81,7 @@ function createDisk(diskFile, diskette, argv, done)
         sArchiveFile = sArchiveFile.replace(".img", path.sep);
     }
 
-    let options = {
+    let driveInfo = {
         sectorIDs: diskette.argv['sectorID'] || argv['sectorID'],
         sectorErrors: diskette.argv['sectorError'] || argv['sectorError'],
         suppData: readFileSync(diskette.argv['suppData'] || argv['suppData'])
@@ -115,9 +115,9 @@ function createDisk(diskFile, diskette, argv, done)
         let normalize = diskette.normalize || argv['normalize'];
         let target = getTargetValue(diskette.format);
         let verbose = argv['verbose'];
-        readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, options, done);
+        readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, driveInfo, done);
     } else {
-        done(readDiskSync(sArchiveFile, false, options));
+        done(readDiskSync(sArchiveFile, false, driveInfo));
     }
 }
 
@@ -1115,12 +1115,12 @@ function getArchiveOffset(sArchive, arcType, sOffset)
  */
 async function processDiskAsync(input, argv)
 {
-    let options = {
+    let driveInfo = {
         sectorIDs: argv['sectorID'],
         sectorErrors: argv['sectorError'],
         suppData: readFileSync(argv['suppData'])
     };
-    let di = await readDiskAsync(input, argv['forceBPB'], options);
+    let di = await readDiskAsync(input, argv['forceBPB'], driveInfo);
     if (di) {
         processDisk(di, input, argv);
     }
@@ -1242,7 +1242,7 @@ function processArg(argv)
         }
     }
 
-    let options = {
+    let driveInfo = {
         sectorIDs: argv['sectorID'],
         sectorErrors: argv['sectorError'],
         suppData: readFileSync(argv['suppData'])
@@ -1254,12 +1254,12 @@ function processArg(argv)
             printf("error: %s is not a supported archive file\n", input);
             return true;
         }
-        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], options, done);
+        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], driveInfo, done);
         return true;
     }
 
     if (input) {
-        return done(readDiskSync(input, argv['forceBPB'], options));
+        return done(readDiskSync(input, argv['forceBPB'], driveInfo));
     }
 
     return false;

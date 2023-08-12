@@ -10,8 +10,8 @@
 import CPUx86 from "./cpux86.js";
 import CharSet from "./charset.js";
 import Device from "../../../modules/v3/device.js";
-import HDC from "../v2/hdc.js";
 import FileInfo from "./fileinfo.js";
+import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
 
 /**
  * VolInfo describes a volume.  NOTE: this list of properties may not be
@@ -88,7 +88,7 @@ import FileInfo from "./fileinfo.js";
 
 /**
  * @typedef {Object} DriveInfo
- * @property {string} deviceType
+ * @property {string} driveCtrl
  * @property {number} driveType
  * @property {number} nCylinders
  * @property {number} nHeads
@@ -97,6 +97,9 @@ import FileInfo from "./fileinfo.js";
  * @property {number} driveSize
  * @property {number} typeFAT
  * @property {Array} files
+ * @property {Array|string} sectorIDs
+ * @property {Array|string} sectorErrors
+ * @property {string} suppData
  */
 
 /**
@@ -107,7 +110,7 @@ import FileInfo from "./fileinfo.js";
  * @property {number} cbDiskData
  * @property {number} dwChecksum
  * @property {number} nCylinders
- * @property {string} deviceType
+ * @property {string} driveCtrl
  * @property {number} driveType
  * @property {number} nHeads
  * @property {number} nSectors
@@ -140,13 +143,13 @@ export default class DiskInfo {
         this.tablesBuilt = false;
         this.cbDiskData = 0;
         this.dwChecksum = 0;
-        this.deviceType = "";
+        this.driveCtrl = "";
         this.driveType = -1;
         this.hash = "none";
     }
 
     /**
-     * buildDiskFromBuffer(dbDisk, forceBPB, fnHash, options)
+     * buildDiskFromBuffer(dbDisk, forceBPB, fnHash, driveInfo)
      *
      * Build a disk image from a DataBuffer.
      *
@@ -178,20 +181,14 @@ export default class DiskInfo {
      *          return true;
      *      }
      *
-     * This function also supports a new 'options' parameter, which may contain any of the following properties:
-     *
-     *      sectorIDs (sector ID edits that must be applied to the disk)
-     *      sectorErrors (sector errors that must be applied to the disk)
-     *      suppData (supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
-     *
      * @this {DiskInfo}
      * @param {DataBuffer} dbDisk
      * @param {fForceBPP} [forceBPB]
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @param {Object} [options]
+     * @param {DriveInfo} [driveInfo]
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromBuffer(dbDisk, forceBPB, fnHash, options)
+    buildDiskFromBuffer(dbDisk, forceBPB, fnHash, driveInfo = {})
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
@@ -209,8 +206,6 @@ export default class DiskInfo {
 
         let dbTrack, dbSector;
         let iTrack, cbTrack, offTrack, offSector;
-
-        if (!options) options = {};
 
         if (cbDiskData >= 3000000) {        // arbitrary threshold between diskette image sizes and hard drive image sizes
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
@@ -556,7 +551,7 @@ export default class DiskInfo {
              */
             iTrack = offTrack = 0;
             cbTrack = nSectorsPerTrack * cbSector;
-            let suppObj = this.parseSuppData(options.suppData);
+            let suppObj = this.parseSuppData(driveInfo.suppData);
             this.aDiskData = new Array(nCylinders);
             if (fnHash) this.hash = fnHash(dbDisk);
             this.nCylinders = nCylinders;
@@ -650,8 +645,8 @@ export default class DiskInfo {
                          * For example, when building the IBM Multiplan 1.00 Program disk, "--sectorID=11:0:8:61" must be specified.
                          */
                         let aParts, n;
-                        if (options.sectorIDs) {
-                            let aSectorIDs = (typeof options.sectorIDs == "string")? [options.sectorIDs] : options.sectorIDs;
+                        if (driveInfo.sectorIDs) {
+                            let aSectorIDs = (typeof driveInfo.sectorIDs == "string")? [driveInfo.sectorIDs] : driveInfo.sectorIDs;
                             for (let i = 0; i < aSectorIDs.length; i++) {
                                 aParts = aSectorIDs[i].split(":");
                                 if (+aParts[0] === iCylinder && +aParts[1] === iHead && +aParts[2] === sectorID) {
@@ -664,8 +659,8 @@ export default class DiskInfo {
                             }
                         }
                         let sectorError = 0;
-                        if (options.sectorErrors) {
-                            let aSectorErrors = (typeof options.sectorErrors == "string")? [options.sectorErrors] : options.sectorErrors;
+                        if (driveInfo.sectorErrors) {
+                            let aSectorErrors = (typeof driveInfo.sectorErrors == "string")? [driveInfo.sectorErrors] : driveInfo.sectorErrors;
                             for (let i = 0; i < aSectorErrors.length; i++) {
                                 aParts = aSectorErrors[i].split(":");
                                 if (+aParts[0] === iCylinder && +aParts[1] === iHead && +aParts[2] === sectorID) {
@@ -743,15 +738,15 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, fnHash, options)
+     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, fnHash, driveInfo)
      *
      * If a total sector target is provided, we look for a predefined BPB that is an exact match; otherwise we
      * select the first BPB that can accommodate all the files.
      *
-     * This function also supports a new 'options' parameter, which may contain any of the following properties:
+     * This function also supports a new driveInfo parameter, which may contain any of the following properties:
      *
-     *      deviceType: "XT", "AT", or "COMPAQ" (see HDC.aDeviceTypes)
-     *      driveType: drive type (see HDC.aDriveTypes)
+     *      driveCtrl: "XT", "AT", or "COMPAQ" (see DRIVE_CTRLS)
+     *      driveType: drive type (see DRIVE_TYPES)
      *      typeFAT: 12, 16, or 32 (advisory only; also, 32 is not supported yet)
      *      clusSecs: 1 to 64 (512-byte to 32Kb clusters; advisory only)
      *      rootEntries: 16 to 32768 entries (1 to 1024 sectors; advisory only)
@@ -762,7 +757,7 @@ export default class DiskInfo {
      * Custom disk images also have to work within the constraints of known drive types (ie, we must select a
      * number of cylinders, heads, and sectors per track that can accommodate the number of required sectors).
      *
-     * All of the options properties are, um, optional; that is, default values should be selected based on our
+     * All of the driveInfo properties are optional; that is, default values should be selected based on our
      * understanding of "what would DOS do".  For example, if a disk had 32680 or fewer sectors, supposedly DOS
      * would format it with a 12-bit FAT; otherwise, it would use a 16-bit FAT.
      *
@@ -774,16 +769,14 @@ export default class DiskInfo {
      * @param {Array.<FileData>} aFileData
      * @param {number} [kbTarget]
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @param {DriveInfo} [options] (custom drive parameters, if any)
+     * @param {DriveInfo} [driveInfo] (custom drive parameters, if any)
      * @returns {boolean} true if disk allocation successful, false if not
      */
-    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, fnHash, options)
+    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, fnHash, driveInfo = {})
     {
         if (!aFileData || !aFileData.length) {
             return false;
         }
-
-        if (!options) options = {};
 
         this.diskName = diskName;
         this.abOrigBPB = [];
@@ -813,12 +806,12 @@ export default class DiskInfo {
          * has been provided, we fall back on total size of all files, but we also include a "slop factor" (eg, 10%) to
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
-        if (DiskInfo.findDriveType(options, nTargetSectors, this)) {
-            this.deviceType = options.deviceType;
-            this.driveType = options.driveType;
-            this.nCylinders = options.nCylinders;
-            this.nHeads = options.nHeads;
-            this.nSectors = options.nSectors;
+        if (DiskInfo.findDriveType(driveInfo, nTargetSectors, this)) {
+            this.driveCtrl = driveInfo.driveCtrl;
+            this.driveType = driveInfo.driveType;
+            this.nCylinders = driveInfo.nCylinders;
+            this.nHeads = driveInfo.nHeads;
+            this.nSectors = driveInfo.nSectors;
             cTotalSectors = this.nCylinders * this.nHeads * this.nSectors;
         }
 
@@ -887,13 +880,13 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
             /*
              * If we were to go with clusters as large as 4K, would we still run out of clusters with a 12-bit FAT?
-             * That's the question we are about to ask, with some caveats: if the options parameter specifies a typeFAT
+             * That's the question we are about to ask, with some caveats: if the driveInfo parameter specifies a typeFAT
              * of 12, then we'll try for clusters as large as 32K, and if a typeFAT of 16 is specified, we won't even
              * ask the question (16 is always the answer).
              */
-            let maxClusSecs = options.typeFAT == 12? 64 : 8;
+            let maxClusSecs = driveInfo.typeFAT == 12? 64 : 8;
             let maxClusters = DiskInfo.FAT12.MAX_CLUSTERS;
-            if (options.typeFAT == 16 || cTotalSectors / maxClusSecs > DiskInfo.FAT12.MAX_CLUSTERS) {
+            if (driveInfo.typeFAT == 16 || cTotalSectors / maxClusSecs > DiskInfo.FAT12.MAX_CLUSTERS) {
                 typeFAT = 16;
                 maxClusters = DiskInfo.FAT16.MAX_CLUSTERS;
                 /*
@@ -1156,7 +1149,7 @@ export default class DiskInfo {
             return false;
         }
 
-        return this.buildDiskFromBuffer(dbDisk, undefined, fnHash, options);
+        return this.buildDiskFromBuffer(dbDisk, undefined, fnHash, driveInfo);
     }
 
     /**
@@ -3546,13 +3539,13 @@ export default class DiskInfo {
      */
     static findDriveType(driveInfo, nTargetSectors, device)
     {
-        if (driveInfo.deviceType) {
-            let iDevice = HDC.aDeviceTypes.indexOf(driveInfo.deviceType);
+        if (driveInfo.driveCtrl) {
+            let iDevice = DRIVE_CTRLS.indexOf(driveInfo.driveCtrl);
             if (iDevice >= 0) {
                 let bestType = -1, bestDiff = 0, bestParms;
-                let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
+                let driveTypes = Object.keys(DRIVE_TYPES[iDevice]);
                 for (let type of driveTypes) {
-                    let parms = HDC.aDriveTypes[iDevice][type].slice();
+                    let parms = DRIVE_TYPES[iDevice][type].slice();
                     parms.unshift(+type);
                     parms[1]--; parms[3] = parms[3] || 17; parms[4] = parms[4] || 512;
                     let nTotalSectors = parms[1] * parms[2] * parms[3], cbSector = parms[4], cbTotal, diff;
@@ -3560,7 +3553,7 @@ export default class DiskInfo {
                     cbTotal = nTotalSectors * cbSector;
                     parms[5] = cbTotal / 1024 / 1024;
                     if (device) {
-                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.deviceType, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveInfo.driveType == parms[0]? '*' : '');
+                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.driveCtrl, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveInfo.driveType == parms[0]? '*' : '');
                     }
                     if (driveInfo.driveType >= 0) {
                         if (driveInfo.driveType == +type) {
@@ -3600,13 +3593,13 @@ export default class DiskInfo {
      */
     getDriveType(driveInfo)
     {
-        let deviceType = driveInfo.deviceType || this.deviceType;
+        let driveCtrl = driveInfo.driveCtrl || this.driveCtrl;
         if (this.driveType < 0) {
-            let iDevice = HDC.aDeviceTypes.indexOf(deviceType);
+            let iDevice = DRIVE_CTRLS.indexOf(driveCtrl);
             if (iDevice >= 0) {
-                let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
+                let driveTypes = Object.keys(DRIVE_TYPES[iDevice]);
                 for (let type of driveTypes) {
-                    let parms = HDC.aDriveTypes[iDevice][type];
+                    let parms = DRIVE_TYPES[iDevice][type];
                     if (this.nCylinders == parms[0] && this.nHeads == parms[1] && this.nSectors == (parms[2] || 17)) {
                         driveInfo.driveType = +type;
                         driveInfo.nCylinders = this.nCylinders;
