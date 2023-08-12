@@ -506,7 +506,31 @@
       }
     },
     {
-      "name": "pc.js ibm5160",
+      "name": "pc.js ibm5160 (local)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5160",
+        "disks/msdos330",
+        "dir",
+        "--halt",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js ibm5160 (remote)",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -581,7 +605,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=test386",
+        "--start=test386",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -597,12 +621,12 @@
       }
     },
     {
-      "name": "pc.js --load=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
+      "name": "pc.js --start=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml"
+        "--start=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -617,12 +641,12 @@
       }
     },
     {
-      "name": "pc.js --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
+      "name": "pc.js --start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml"
+        "--start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -642,7 +666,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--load=/machines/dec/pdp11/1170/panel/debugger/machine",
+        "--start=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",

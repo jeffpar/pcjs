@@ -10,8 +10,8 @@
 import CPUx86 from "./cpux86.js";
 import CharSet from "./charset.js";
 import Device from "../../../modules/v3/device.js";
-import HDC from "../v2/hdc.js";
 import FileInfo from "./fileinfo.js";
+import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
 
 /**
  * VolInfo describes a volume.  NOTE: this list of properties may not be
@@ -87,6 +87,22 @@ import FileInfo from "./fileinfo.js";
  */
 
 /**
+ * @typedef {Object} DriveInfo
+ * @property {string} driveCtrl
+ * @property {number} driveType
+ * @property {number} nCylinders
+ * @property {number} nHeads
+ * @property {number} nSectors
+ * @property {number} cbSector
+ * @property {number} driveSize
+ * @property {number} typeFAT
+ * @property {Array} files
+ * @property {Array|string} sectorIDs
+ * @property {Array|string} sectorErrors
+ * @property {string} suppData
+ */
+
+/**
  * @class DiskInfo
  * @property {string} diskName
  * @property {boolean} fWritable
@@ -94,7 +110,7 @@ import FileInfo from "./fileinfo.js";
  * @property {number} cbDiskData
  * @property {number} dwChecksum
  * @property {number} nCylinders
- * @property {string} deviceType
+ * @property {string} driveCtrl
  * @property {number} driveType
  * @property {number} nHeads
  * @property {number} nSectors
@@ -127,13 +143,13 @@ export default class DiskInfo {
         this.tablesBuilt = false;
         this.cbDiskData = 0;
         this.dwChecksum = 0;
-        this.deviceType = "";
+        this.driveCtrl = "";
         this.driveType = -1;
         this.hash = "none";
     }
 
     /**
-     * buildDiskFromBuffer(dbDisk, forceBPB, fnHash, options)
+     * buildDiskFromBuffer(dbDisk, forceBPB, fnHash, driveInfo)
      *
      * Build a disk image from a DataBuffer.
      *
@@ -165,20 +181,14 @@ export default class DiskInfo {
      *          return true;
      *      }
      *
-     * This function also supports a new 'options' parameter, which may contain any of the following properties:
-     *
-     *      sectorIDs (sector ID edits that must be applied to the disk)
-     *      sectorErrors (sector errors that must be applied to the disk)
-     *      suppData (supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
-     *
      * @this {DiskInfo}
      * @param {DataBuffer} dbDisk
      * @param {fForceBPP} [forceBPB]
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @param {Object} [options]
+     * @param {DriveInfo} [driveInfo]
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromBuffer(dbDisk, forceBPB, fnHash, options)
+    buildDiskFromBuffer(dbDisk, forceBPB, fnHash, driveInfo = {})
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
@@ -196,8 +206,6 @@ export default class DiskInfo {
 
         let dbTrack, dbSector;
         let iTrack, cbTrack, offTrack, offSector;
-
-        if (!options) options = {};
 
         if (cbDiskData >= 3000000) {        // arbitrary threshold between diskette image sizes and hard drive image sizes
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
@@ -543,7 +551,7 @@ export default class DiskInfo {
              */
             iTrack = offTrack = 0;
             cbTrack = nSectorsPerTrack * cbSector;
-            let suppObj = this.parseSuppData(options.suppData);
+            let suppObj = this.parseSuppData(driveInfo.suppData);
             this.aDiskData = new Array(nCylinders);
             if (fnHash) this.hash = fnHash(dbDisk);
             this.nCylinders = nCylinders;
@@ -637,8 +645,8 @@ export default class DiskInfo {
                          * For example, when building the IBM Multiplan 1.00 Program disk, "--sectorID=11:0:8:61" must be specified.
                          */
                         let aParts, n;
-                        if (options.sectorIDs) {
-                            let aSectorIDs = (typeof options.sectorIDs == "string")? [options.sectorIDs] : options.sectorIDs;
+                        if (driveInfo.sectorIDs) {
+                            let aSectorIDs = (typeof driveInfo.sectorIDs == "string")? [driveInfo.sectorIDs] : driveInfo.sectorIDs;
                             for (let i = 0; i < aSectorIDs.length; i++) {
                                 aParts = aSectorIDs[i].split(":");
                                 if (+aParts[0] === iCylinder && +aParts[1] === iHead && +aParts[2] === sectorID) {
@@ -651,8 +659,8 @@ export default class DiskInfo {
                             }
                         }
                         let sectorError = 0;
-                        if (options.sectorErrors) {
-                            let aSectorErrors = (typeof options.sectorErrors == "string")? [options.sectorErrors] : options.sectorErrors;
+                        if (driveInfo.sectorErrors) {
+                            let aSectorErrors = (typeof driveInfo.sectorErrors == "string")? [driveInfo.sectorErrors] : driveInfo.sectorErrors;
                             for (let i = 0; i < aSectorErrors.length; i++) {
                                 aParts = aSectorErrors[i].split(":");
                                 if (+aParts[0] === iCylinder && +aParts[1] === iHead && +aParts[2] === sectorID) {
@@ -730,15 +738,15 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, fnHash, options)
+     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, fnHash, driveInfo)
      *
      * If a total sector target is provided, we look for a predefined BPB that is an exact match; otherwise we
      * select the first BPB that can accommodate all the files.
      *
-     * This function also supports a new 'options' parameter, which may contain any of the following properties:
+     * This function also supports a new driveInfo parameter, which may contain any of the following properties:
      *
-     *      deviceType: "XT", "AT", or "COMPAQ" (see HDC.aDeviceTypes)
-     *      driveType: drive type (see HDC.aDriveTypes)
+     *      driveCtrl: "XT", "AT", or "COMPAQ" (see DRIVE_CTRLS)
+     *      driveType: drive type (see DRIVE_TYPES)
      *      typeFAT: 12, 16, or 32 (advisory only; also, 32 is not supported yet)
      *      clusSecs: 1 to 64 (512-byte to 32Kb clusters; advisory only)
      *      rootEntries: 16 to 32768 entries (1 to 1024 sectors; advisory only)
@@ -749,7 +757,7 @@ export default class DiskInfo {
      * Custom disk images also have to work within the constraints of known drive types (ie, we must select a
      * number of cylinders, heads, and sectors per track that can accommodate the number of required sectors).
      *
-     * All of the options properties are, um, optional; that is, default values should be selected based on our
+     * All of the driveInfo properties are optional; that is, default values should be selected based on our
      * understanding of "what would DOS do".  For example, if a disk had 32680 or fewer sectors, supposedly DOS
      * would format it with a 12-bit FAT; otherwise, it would use a 16-bit FAT.
      *
@@ -761,16 +769,14 @@ export default class DiskInfo {
      * @param {Array.<FileData>} aFileData
      * @param {number} [kbTarget]
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @param {Object} [options] (custom disk parameters, if any)
+     * @param {DriveInfo} [driveInfo] (custom drive parameters, if any)
      * @returns {boolean} true if disk allocation successful, false if not
      */
-    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, fnHash, options)
+    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, fnHash, driveInfo = {})
     {
         if (!aFileData || !aFileData.length) {
             return false;
         }
-
-        if (!options) options = {};
 
         this.diskName = diskName;
         this.abOrigBPB = [];
@@ -800,13 +806,12 @@ export default class DiskInfo {
          * has been provided, we fall back on total size of all files, but we also include a "slop factor" (eg, 10%) to
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
-        let parms = DiskInfo.findDriveType(options.deviceType, options.driveType, nTargetSectors, this);
-        if (parms) {
-            this.deviceType = options.deviceType;
-            this.driveType = parms[0];
-            this.nCylinders = parms[1];
-            this.nHeads = parms[2];
-            this.nSectors = parms[3];
+        if (DiskInfo.findDriveType(driveInfo, nTargetSectors, this)) {
+            this.driveCtrl = driveInfo.driveCtrl;
+            this.driveType = driveInfo.driveType;
+            this.nCylinders = driveInfo.nCylinders;
+            this.nHeads = driveInfo.nHeads;
+            this.nSectors = driveInfo.nSectors;
             cTotalSectors = this.nCylinders * this.nHeads * this.nSectors;
         }
 
@@ -875,13 +880,13 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
             /*
              * If we were to go with clusters as large as 4K, would we still run out of clusters with a 12-bit FAT?
-             * That's the question we are about to ask, with some caveats: if the options parameter specifies a typeFAT
+             * That's the question we are about to ask, with some caveats: if the driveInfo parameter specifies a typeFAT
              * of 12, then we'll try for clusters as large as 32K, and if a typeFAT of 16 is specified, we won't even
              * ask the question (16 is always the answer).
              */
-            let maxClusSecs = options.typeFAT == 12? 64 : 8;
+            let maxClusSecs = driveInfo.typeFAT == 12? 64 : 8;
             let maxClusters = DiskInfo.FAT12.MAX_CLUSTERS;
-            if (options.typeFAT == 16 || cTotalSectors / maxClusSecs > DiskInfo.FAT12.MAX_CLUSTERS) {
+            if (driveInfo.typeFAT == 16 || cTotalSectors / maxClusSecs > DiskInfo.FAT12.MAX_CLUSTERS) {
                 typeFAT = 16;
                 maxClusters = DiskInfo.FAT16.MAX_CLUSTERS;
                 /*
@@ -929,25 +934,30 @@ export default class DiskInfo {
              * file doesn't span that entire track.
              *
              * This would be OK if there was ample memory, but the boot sector didn't relocate itself from 0:7C00,
-             * and with its stack sitting just below that address, there's room for only about 29K of file data.  For
-             * reference, IO.SYS in MS-DOS 3.30 is about 22K, so there's enough room, but if the final sector is in
-             * the middle of a track, then the final full track read runs the risk of overwriting the stack and/or the
-             * boot sector itself.
+             * and with its stack sitting just below that address, there's room for only about 28K of file data.  For
+             * reference, IO.SYS in MS-DOS 3.30 is about 22K, so there's enough room, but if the final sector is near
+             * the start of a track, then the final full track read (8.5K for a track with 17 sectors) runs the risk
+             * of overwriting the stack and/or the boot sector itself.
+             *
+             * See https://www.os2museum.com/wp/hang-with-early-dos-boot-sector/ for more details; it's accurate except
+             * for the implication that a disk with 17 sectors per track was safe (it was not).
              *
              * To make matters *slightly* worse, the affected boot sectors didn't accurately calculate the sector size
              * of the system file correctly; in keeping with its overall "sloppy" approach, it simply divides the file
              * size by the sector size and then *always* adds 1 (it should have added 1 only if there was a remainder).
+             * However, since probably no version of IO.SYS or IBMBIO.COM was an *exact* multiple of 512, this calculation
+             * probably always ended up being inadvertently correct.
              *
              * Having perfect hindsight, we can help the boot sector avoid running into trouble by performing the same
-             * off-by-one sector size calculation ourselves, dividing it by sectors per track, and ensuring that the
-             * remainder matches the number of free sectors in the first data track (and adjusting the number of root
-             * directory sectors until it does).  As a result, the system file will end at the end of a track, and the
-             * boot sector never risks reading too much data.
+             * sloppy sector size calculation ourselves, dividing it by sectors per track, and ensuring that the remainder
+             * matches the number of free sectors in the first data track (and adjusting the number of root directory sectors
+             * until it does).  As a result, the system file will end at the end of a track, and the boot sector never risks
+             * reading too much data.
              *
              * This is why, instead of starting with 512 root directory entries (which is typically the minimum for a
              * hard disk as small as 10Mb), we start even smaller, and then ratchet it up until all our criteria are met
              * (starting with our requirement that it be a sufficiently large multiple of 128 to hold all the files in
-             * the "root" of aFileData).
+             * the "root" of our aFileData array).
              */
             cRootEntries = 128;
             if (cRootEntries < aFileData.length) {
@@ -1139,7 +1149,7 @@ export default class DiskInfo {
             return false;
         }
 
-        return this.buildDiskFromBuffer(dbDisk, undefined, fnHash, options);
+        return this.buildDiskFromBuffer(dbDisk, undefined, fnHash, driveInfo);
     }
 
     /**
@@ -1647,8 +1657,8 @@ export default class DiskInfo {
 
         if (imageData) {
             /*
-             * We must now differentiate between "legacy" JSON images (which were simply arrays of CHS data)
-             * and "extended" JSON images, which are objects with a CHS diskData property, among other things.
+             * We now differentiate between "legacy" JSON images (which were simply arrays of CHS data)
+             * and "v2" JSON images, which are objects with a CHS diskData property, among other things.
              */
             let imageInfo = imageData[DiskInfo.DESC.IMAGE];
             if (imageInfo) {
@@ -1919,9 +1929,9 @@ export default class DiskInfo {
      * "volume" sector numbers for volume-relative block addresses (aka VBAs or Volume Block Addresses), and
      * 0-based "logical" sector numbers for disk-relative block addresses (aka LBAs or Logical Block Addresses).
      *
-     * NOTE: It's now possible to reconstitute these tables from our newer "extended" JSON images, if that
-     * was the source of the image.  See buildDiskFromJSON(), which in turn calls buildFileTableFromJSON() when
-     * a new JSON disk image is loaded.
+     * NOTE: It's now possible to reconstitute these tables from our newer "v2" JSON images, if that was the
+     * source of the image.  See buildDiskFromJSON(), which in turn calls buildFileTableFromJSON() when a new
+     * JSON disk image is loaded.
      *
      * @this {DiskInfo}
      * @param {boolean} [fRebuild]
@@ -1962,13 +1972,13 @@ export default class DiskInfo {
              * have saved the starting cluster number for each file in that list, so let's build a cluster lookup table
              * that will allow us to quickly associate each of the original file paths with the files on the disk.
              */
-            let clusterPaths = [];
+            let clusterInfo = [];
             if (this.aFileData) {
                 let scanFiles = function(files) {
                     for (let i = 0; i < files.length; i++) {
                         let file = files[i];
                         if (file.cluster) {
-                            clusterPaths[file.cluster] = file.path;
+                            clusterInfo[file.cluster] = {origin: file.path, contents: [...file.data.buffer]};
                         }
                         if (file.files) scanFiles(file.files);
                     }
@@ -1983,8 +1993,11 @@ export default class DiskInfo {
                 let file = this.fileTable[iFile], off = 0;
                 if (file.name == "." || file.name == "..") continue;
                 if (file.cluster) {
-                    let origin = clusterPaths[file.cluster];
-                    if (origin) file.origin = origin;
+                    let info = clusterInfo[file.cluster];
+                    if (info) {
+                        file.origin = info.origin;
+                        file.contents = info.contents;
+                    }
                 }
                 for (let iSector = 0; iSector < file.aLBA.length; iSector++) {
                     if (!this.updateSector(iFile, off, file.aLBA[iSector])) {
@@ -2296,11 +2309,15 @@ export default class DiskInfo {
         };
         if (file.size && !(file.attr & DiskInfo.ATTR.METADATA) && (fComplete || fnHash)) {
             this.assert(file.name[0] != '.');   // make sure we're not hashing "." and ".." DIRENTs
-            ab = new Array(file.size);
-            this.readSectorArray(file, ab);
+            if (file.contents) {
+                ab = file.contents;
+            } else {
+                ab = new Array(file.size);
+                this.readSectorArray(file, ab);
+            }
         }
         if (fComplete) {
-            if (ab) desc[DiskInfo.FILEDESC.CONTENTS] = ab;
+            desc[DiskInfo.FILEDESC.CONTENTS] = ab;
             if (file.origin) desc[DiskInfo.FILEDESC.ORIGIN] = file.origin;
         } else {
             delete desc[DiskInfo.FILEDESC.NAME];
@@ -3364,12 +3381,12 @@ export default class DiskInfo {
     /**
      * getJSON(fnHash, fLegacy, indent, source)
      *
-     * If a disk image contains a recognized volume type (eg, FAT12, FAT16), we now prefer to produce an
-     * "extended" JSON image, which will include a volume table (of volume descriptors), a file table (of
-     * file descriptors), and sector-level "metadata" which, for every used sector, refers back to a file
+     * If a disk image contains a recognized volume type (eg, FAT12, FAT16), we now prefer to produce a
+     * "v2" JSON image, which will include a volume table (of volume descriptors), a file table (of file
+     * descriptors), and sector-level "metadata" which, for every used sector, refers back to a file
      * in the file table (along with a file offset).
      *
-     * To create a "legacy" JSON image, without any "extended" information, set fLegacy to true.
+     * To create a "legacy" JSON image, without any "v2" information, set fLegacy to true.
      *
      * @this {DiskInfo}
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
@@ -3510,96 +3527,92 @@ export default class DiskInfo {
     }
 
     /**
-     * findDriveType(deviceType, driveType, nTargetSectors)
+     * findDriveType(driveInfo, nTargetSectors, device)
      *
-     * If a drive type matching the specified drive type or the requested (minimum) number of sectors is found,
-     * we return an array of drive parameters:
+     * If a drive type appropriate for the specified device matches the specified drive type or the requested (minimum) number of sectors,
+     * update the DriveInfo and return true.
      *
-     *      parms[0]:   drive type
-     *      parms[1]:   cylinders
-     *      parms[2]:   heads
-     *      parms[3]:   sectors/track
-     *      parms[4]:   bytes/sector
-     *      parms[5]:   total megabytes (Mb)
-     *
-     * @param {string} deviceType
-     * @param {number} driveType
+     * @param {DriveInfo} driveInfo
      * @param {number} nTargetSectors
      * @param {Device} [device]
-     * @returns {Array|null}
+     * @returns {boolean}
      */
-    static findDriveType(deviceType, driveType, nTargetSectors, device)
+    static findDriveType(driveInfo, nTargetSectors, device)
     {
-        if (deviceType) {
-            let iDevice = HDC.aDeviceTypes.indexOf(deviceType);
+        if (driveInfo.driveCtrl) {
+            let iDevice = DRIVE_CTRLS.indexOf(driveInfo.driveCtrl);
             if (iDevice >= 0) {
                 let bestType = -1, bestDiff = 0, bestParms;
-                let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
+                let driveTypes = Object.keys(DRIVE_TYPES[iDevice]);
                 for (let type of driveTypes) {
-                    let parms = HDC.aDriveTypes[iDevice][type].slice();
+                    let parms = DRIVE_TYPES[iDevice][type].slice();
                     parms.unshift(+type);
                     parms[1]--; parms[3] = parms[3] || 17; parms[4] = parms[4] || 512;
-                    let nSectors = parms[1] * parms[2] * parms[3], cbSector = parms[4], cbTotal, diff;
+                    let nTotalSectors = parms[1] * parms[2] * parms[3], cbSector = parms[4], cbTotal, diff;
                     if (cbSector != 512) continue;
-                    cbTotal = nSectors * cbSector;
+                    cbTotal = nTotalSectors * cbSector;
                     parms[5] = cbTotal / 1024 / 1024;
                     if (device) {
-                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", deviceType, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveType == parms[0]? '*' : '');
+                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.driveCtrl, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveInfo.driveType == parms[0]? '*' : '');
                     }
-                    if (driveType >= 0) {
-                        if (driveType == +type) {
+                    if (driveInfo.driveType >= 0) {
+                        if (driveInfo.driveType == +type) {
                             bestType = +type;
                             bestParms = parms;
                         }
                     }
-                    else if (nTargetSectors && (diff = nSectors - nTargetSectors) && diff >= 0 && (diff < bestDiff || bestType < 0) ||
-                            !nTargetSectors && (diff = nSectors * 512 - cbTotal * 1.10) && diff >= 0 && (diff < bestDiff || bestType < 0)) {
+                    else if (nTargetSectors && (diff = nTotalSectors - nTargetSectors) && diff >= 0 && (diff < bestDiff || bestType < 0) ||
+                            !nTargetSectors && (diff = nTotalSectors * 512 - cbTotal * 1.10) && diff >= 0 && (diff < bestDiff || bestType < 0)) {
                         bestDiff = diff;
                         bestType = +type;
                         bestParms = parms;
                     }
                 }
                 if (bestType >= 0) {
-                    return bestParms;
+                    driveInfo.driveType = bestType;
+                    driveInfo.nCylinders = bestParms[1];
+                    driveInfo.nHeads = bestParms[2];
+                    driveInfo.nSectors = bestParms[3];
+                    driveInfo.cbSector = bestParms[4];
+                    driveInfo.driveSize = bestParms[5];
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
     }
 
     /**
-     * getDriveType(deviceType)
+     * getDriveType(driveInfo)
      *
-     * Returns an array of drive parameters, including a drive type appropriate for the current disk:
-     *
-     *      parms[0]:   drive type
-     *      parms[1]:   cylinders
-     *      parms[2]:   heads
-     *      parms[3]:   sectors/track
-     *      parms[4]:   bytes/sector
-     *      parms[5]:   total megabytes (Mb)
+     * Update the DriveInfo with a drive type appropriate for the current device and disk parameters.
      *
      * @this {DiskInfo}
-     * @param {string} [deviceType]
-     * @returns {Array}
+     * @param {DriveInfo} [driveInfo]
+     * @returns {boolean} (true if DriveInfo updated, false if no change)
      */
-    getDriveType(deviceType)
+    getDriveType(driveInfo)
     {
-        deviceType = deviceType || this.deviceType;
+        let driveCtrl = driveInfo.driveCtrl || this.driveCtrl;
         if (this.driveType < 0) {
-            let iDevice = HDC.aDeviceTypes.indexOf(deviceType);
+            let iDevice = DRIVE_CTRLS.indexOf(driveCtrl);
             if (iDevice >= 0) {
-                let driveTypes = Object.keys(HDC.aDriveTypes[iDevice]);
+                let driveTypes = Object.keys(DRIVE_TYPES[iDevice]);
                 for (let type of driveTypes) {
-                    let parms = HDC.aDriveTypes[iDevice][type];
+                    let parms = DRIVE_TYPES[iDevice][type];
                     if (this.nCylinders == parms[0] && this.nHeads == parms[1] && this.nSectors == (parms[2] || 17)) {
-                        this.driveType = +type;
-                        break;
+                        driveInfo.driveType = +type;
+                        driveInfo.nCylinders = this.nCylinders;
+                        driveInfo.nHeads = this.nHeads;
+                        driveInfo.nSectors = this.nSectors;
+                        driveInfo.cbSector = this.cbSector || parms[3] || 512;
+                        driveInfo.driveSize = this.cbDiskData / 1024 / 1024;
+                        return true;
                     }
                 }
             }
         }
-        return [this.driveType, this.nCylinders, this.nHeads, this.nSectors, this.cbSector, this.cbDiskData / 1024 / 1024];
+        return false;
     }
 
     /**
@@ -4138,8 +4151,8 @@ DiskInfo.SECTOR = {
     ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
     LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
     DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
-    FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
-    FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
+    FILE_INDEX: 'f',                // "v2" JSON disk images only [formerly file]
+    FILE_OFFSET:'o',                // "v2" JSON disk images only [formerly offFile]
                                     // [no longer used: 'pattern']
     /*
      * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),

@@ -64,8 +64,8 @@ Next, let's look at [pc.json](/tools/pc/pc.json), the configuration file for `pc
     "type": "pcx86",
     "system": "msdos",
     "version": "3.30",
+    "drivesize": "10mb",
     "maxfiles": 1024,
-    "capacity": "10mb",
     "directory": ".",
     "machine": "compaq386.json",
     "state": "state386.json"
@@ -101,7 +101,7 @@ You can add or remove programs from the `apps` section, and the next time you ru
 
 Aside from the commands listed in the `apps` section, two other programs are always included on the virtual hard disk: `LOAD.COM`, which makes it easy to load PCjs diskette images into drive A: or B:, and `RETURN.COM`, which shuts down the machine and returns to your local prompt (alternatively, you can press `CTRL-D` and type `quit`).
 
-See [Loading Machines and Diskettes](/tools/pc/#loading-machines-and-diskettes) for more information and examples of the `LOAD` command (the internal `LOAD` command operates the same as the external `LOAD.COM` program).
+See [Loading Diskettes Into Machines](/tools/pc/#loading-diskettes-into-machines) for more information and examples of the `LOAD` command (the internal `LOAD` command operates the same as the external `LOAD.COM` program).
 
 ### Building Hard Disk Images
 
@@ -112,8 +112,8 @@ You may have noticed the `defaults` section in the [pc.json](/tools/pc/pc.json) 
     "type": "pcx86",
     "system": "msdos",
     "version": "3.30",
+    "drivesize": "10mb",
     "maxfiles": 1024,
-    "capacity": "10mb",
     "directory": ".",
     "machine": "compaq386.json",
     "state": "state386.json"
@@ -125,11 +125,11 @@ These settings control what happens whenever `pc.js` builds (or rebuilds) a hard
 To change those defaults, you can either edit `pc.json` or pass command-line overrides; for example:
 
     $ cd MSDOS330-C400
-    $ pc.js ibm5170 --capacity=20 --fat=12 --maxfiles=2048 dir
+    $ pc.js ibm5170 --drivesize=20 --fat=12 --maxfiles=2048 dir
 
-This changes the default machine from a `compaq386` to an `ibm5170`, sets the disk capacity to 20Mb, forces the default FAT size to 12-bit (which would otherwise be 16-bit for a 20Mb disk), and allows up to 2048 local files to be included in the disk image.
+This changes the default machine from a `compaq386` to an `ibm5170`, sets the drive size to 20Mb, forces the default FAT size to 12-bit (which would otherwise be 16-bit for a 20Mb disk), and allows up to 2048 local files to be included in the disk image.
 
-You can also use `--devicetype` and `--drivetype` for even more control of the virtual hard disk image, but make sure the values you specify are valid for the machine being used.  By default, `pc.js` loads a [compaq386](/tools/pc/compaq386.json) machine, which also uses a saved machine state (`state386.json`) that bypasses the system startup tests and floppy drive checks, so that it can start booting from the virtual hard disk immediately.  But the COMPAQ DeskPro 386 has a drive type table in ROM that differs significantly from the drive types defined by the IBM PC AT, so if you're using an AT-specific drive type (eg, `--drivetype=6`), then you should also specify an IBM 5170 machine configuration.  An [ibm5170.xml](/tools/pc/ibm5170.xml) file is included in the `pc.js` folder to make this easier:
+You can also use `--drivectrl` and `--drivetype` for even more control of the virtual hard disk image, but make sure the values you specify are valid for the machine being used.  By default, `pc.js` loads a [compaq386](/tools/pc/compaq386.json) machine, which also uses a saved machine state (`state386.json`) that bypasses the system startup tests and floppy drive checks, so that it can start booting from the virtual hard disk immediately.  But the COMPAQ DeskPro 386 has a drive type table in ROM that differs significantly from the drive types defined by the IBM PC AT, so if you're using an AT-specific drive type (eg, `--drivetype=6`), then you should also specify an IBM 5170 machine configuration.  An [ibm5170.xml](/tools/pc/ibm5170.xml) file is included in the `pc.js` folder to make this easier:
 
     $ pc.js ibm5170 --drivetype=6 MSDOS330-C400 dir
 
@@ -145,7 +145,7 @@ Stick with DOS versions 2.x or 3.x for now.  Support for other versions hasn't b
 
 `pc.js` also tries to detect and fix certain broken combinations.  For example, when I first tried to construct a 10Mb disk image with a 16-bit FAT running MS-DOS 3.30:
 
-    $ pc.js --capacity=10 --fat=16 dir
+    $ pc.js --drivesize=10 --fat=16 dir
 
 it failed to boot for several reasons.
 

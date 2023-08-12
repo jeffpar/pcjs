@@ -387,7 +387,7 @@ export function normalizeTextFile(db)
 }
 
 /**
- * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, options, done)
+ * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, driveInfo, done)
  *
  * @param {string} sDir (directory name)
  * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
@@ -398,14 +398,13 @@ export function normalizeTextFile(db)
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
  * @param {boolean} [verbose] (true for verbose output)
- * @param {Object} [options] (custom disk parameters, if any)
+ * @param {DriveInfo} [driveInfo] (custom drive parameters, if any)
  * @param {function(DiskInfo)} [done] (optional function to call on completion)
  */
-export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, options, done)
+export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, driveInfo = {}, done)
 {
     let di;
     let diskName = path.basename(sDir);
-    if (!options) options = {};
     if (sDir.endsWith('/')) {
         if (!sLabel) {
             sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
@@ -421,9 +420,9 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
         if (aFileData) {
             let db = new DataBuffer();
             let di = new DiskInfo(device);
-            if (options.files) {
-                for (let i = options.files.length - 1; i >= 0; i--) {
-                    let desc = options.files[i];
+            if (driveInfo.files) {
+                for (let i = driveInfo.files.length - 1; i >= 0; i--) {
+                    let desc = driveInfo.files[i];
                     desc.attr = +desc[DiskInfo.FILEDESC.ATTR];
                     desc.data = new DataBuffer(desc[DiskInfo.FILEDESC.CONTENTS]);
                     desc.date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
@@ -436,10 +435,10 @@ export function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize,
                     aFileData.unshift(desc);
                 }
             }
-            if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, options)) {
+            if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, driveInfo)) {
                 /*
-                * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
-                */
+                 * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
+                 */
                 if (arcType) sDir = sDir.slice(0, -4);
                 for (let i = 0; i < aFileData.length; i++) {
                     addMetaData(di, sDir, aFileData[i].path, aFileData[i].files);
@@ -757,13 +756,13 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbo
 }
 
 /**
- * readDiskAsync(diskFile, forceBPB, options)
+ * readDiskAsync(diskFile, forceBPB, driveInfo)
  *
  * @param {string} diskFile
  * @param {boolean} [forceBPB]
- * @param {Object} [options]
+ * @param {DriveInfo} [driveInfo]
  */
-export async function readDiskAsync(diskFile, forceBPB, options)
+export async function readDiskAsync(diskFile, forceBPB, driveInfo)
 {
     let db, di
     try {
@@ -796,7 +795,7 @@ export async function readDiskAsync(diskFile, forceBPB, options)
                 if (StrLib.getExtension(diskName) == "psi") {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
-                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, options)) di = null;
+                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, driveInfo)) di = null;
                 }
             }
         }
@@ -812,10 +811,10 @@ export async function readDiskAsync(diskFile, forceBPB, options)
  *
  * @param {string} diskFile
  * @param {boolean} [forceBPB]
- * @param {Object} [options]
+ * @param {DriveInfo} [driveInfo]
  * @returns {DiskInfo|null}
  */
-export function readDiskSync(diskFile, forceBPB, options)
+export function readDiskSync(diskFile, forceBPB, driveInfo)
 {
     let db, di
     try {
@@ -840,7 +839,7 @@ export function readDiskSync(diskFile, forceBPB, options)
                 if (StrLib.getExtension(diskName) == "psi") {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
-                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, options)) di = null;
+                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, driveInfo)) di = null;
                 }
             }
         }

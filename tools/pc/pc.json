@@ -3,8 +3,8 @@
     "type": "pcx86",
     "system": "msdos",
     "version": "3.30",
+    "drivesize": "10mb",
     "maxfiles": 1024,
-    "capacity": "10mb",
     "directory": ".",
     "machine": "compaq386.json",
     "state": "state386.json"
