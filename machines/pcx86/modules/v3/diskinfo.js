@@ -11,7 +11,7 @@ import CPUx86 from "./cpux86.js";
 import CharSet from "./charset.js";
 import Device from "../../../modules/v3/device.js";
 import FileInfo from "./fileinfo.js";
-import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
+import { DRIVE_CLASSES, DRIVE_TYPES } from "./driveinfo.js";
 
 /**
  * VolInfo describes a volume.  NOTE: this list of properties may not be
@@ -88,7 +88,7 @@ import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
 
 /**
  * @typedef {Object} DriveInfo
- * @property {string} driveCtrl
+ * @property {string} driveClass
  * @property {number} driveType
  * @property {number} nCylinders
  * @property {number} nHeads
@@ -109,9 +109,9 @@ import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
  * @property {Array} aDiskData
  * @property {number} cbDiskData
  * @property {number} dwChecksum
- * @property {number} nCylinders
- * @property {string} driveCtrl
+ * @property {string} driveClass
  * @property {number} driveType
+ * @property {number} nCylinders
  * @property {number} nHeads
  * @property {number} nSectors
  * @property {number} cbSector
@@ -143,7 +143,7 @@ export default class DiskInfo {
         this.tablesBuilt = false;
         this.cbDiskData = 0;
         this.dwChecksum = 0;
-        this.driveCtrl = "";
+        this.driveClass = "";
         this.driveType = -1;
         this.hash = "none";
     }
@@ -745,7 +745,7 @@ export default class DiskInfo {
      *
      * This function also supports a new driveInfo parameter, which may contain any of the following properties:
      *
-     *      driveCtrl: "XT", "AT", or "COMPAQ" (see DRIVE_CTRLS)
+     *      driveClass: "XT", "AT", or "COMPAQ" (see DRIVE_CLASSES)
      *      driveType: drive type (see DRIVE_TYPES)
      *      typeFAT: 12, 16, or 32 (advisory only; also, 32 is not supported yet)
      *      clusSecs: 1 to 64 (512-byte to 32Kb clusters; advisory only)
@@ -807,7 +807,7 @@ export default class DiskInfo {
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
         if (DiskInfo.findDriveType(driveInfo, nTargetSectors, this)) {
-            this.driveCtrl = driveInfo.driveCtrl;
+            this.driveClass = driveInfo.driveClass;
             this.driveType = driveInfo.driveType;
             this.nCylinders = driveInfo.nCylinders;
             this.nHeads = driveInfo.nHeads;
@@ -3539,13 +3539,13 @@ export default class DiskInfo {
      */
     static findDriveType(driveInfo, nTargetSectors, device)
     {
-        if (driveInfo.driveCtrl) {
-            let iDevice = DRIVE_CTRLS.indexOf(driveInfo.driveCtrl);
-            if (iDevice >= 0) {
+        if (driveInfo.driveClass) {
+            let iClass = DRIVE_CLASSES.indexOf(driveInfo.driveClass);
+            if (iClass >= 0) {
                 let bestType = -1, bestDiff = 0, bestParms;
-                let driveTypes = Object.keys(DRIVE_TYPES[iDevice]);
+                let driveTypes = Object.keys(DRIVE_TYPES[iClass]);
                 for (let type of driveTypes) {
-                    let parms = DRIVE_TYPES[iDevice][type].slice();
+                    let parms = DRIVE_TYPES[iClass][type].slice();
                     parms.unshift(+type);
                     parms[1]--; parms[3] = parms[3] || 17; parms[4] = parms[4] || 512;
                     let nTotalSectors = parms[1] * parms[2] * parms[3], cbSector = parms[4], cbTotal, diff;
@@ -3553,18 +3553,18 @@ export default class DiskInfo {
                     cbTotal = nTotalSectors * cbSector;
                     parms[5] = cbTotal / 1024 / 1024;
                     if (device) {
-                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.driveCtrl, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveInfo.driveType == parms[0]? '*' : '');
+                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.driveClass, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveInfo.driveType == parms[0]? '*' : '');
                     }
                     if (driveInfo.driveType >= 0) {
-                        if (driveInfo.driveType == +type) {
-                            bestType = +type;
+                        if (driveInfo.driveType == parms[0]) {
+                            bestType = parms[0];
                             bestParms = parms;
                         }
                     }
-                    else if (nTargetSectors && (diff = nTotalSectors - nTargetSectors) && diff >= 0 && (diff < bestDiff || bestType < 0) ||
-                            !nTargetSectors && (diff = nTotalSectors * 512 - cbTotal * 1.10) && diff >= 0 && (diff < bestDiff || bestType < 0)) {
+                    else if (nTargetSectors && (diff = Math.abs(nTotalSectors - nTargetSectors)) && (diff < bestDiff || bestType < 0) ||
+                            !nTargetSectors && (diff = Math.abs(nTotalSectors * 512 - cbTotal * 1.10)) && (diff < bestDiff || bestType < 0)) {
                         bestDiff = diff;
-                        bestType = +type;
+                        bestType = parms[0];
                         bestParms = parms;
                     }
                 }
@@ -3576,6 +3576,31 @@ export default class DiskInfo {
                     driveInfo.cbSector = bestParms[4];
                     driveInfo.driveSize = bestParms[5];
                     return true;
+                }
+            } else {
+                if (driveInfo.driveClass == "PCJS") {
+                    /*
+                     * The "PCJS" pseudo-class allows for any geometry.  If nTargetSectors is non-zero, then we
+                     * create a geometry that matches the number as closely as possible.  Working within the limits of
+                     * the CHS-based INT 13h interface, nCylinders must be <= 1024, nHeads must be <= 256, and nSectors
+                     * must be <= 63.
+                     */
+                    if (nTargetSectors) {
+                        let nSectors = 17;
+                        let nTracks = Math.ceil(nTargetSectors / nSectors);
+                        let nHeads = Math.ceil(nTracks / 1024);
+                        nHeads += nHeads & 1;
+                        let nCylinders = Math.ceil(nTracks / nHeads);
+                        let cbSector = 512;
+                        let cbTotal = nCylinders * nHeads * nSectors * cbSector;
+                        driveInfo.driveType = 0;
+                        driveInfo.nCylinders = nCylinders;
+                        driveInfo.nHeads = nHeads;
+                        driveInfo.nSectors = nSectors;
+                        driveInfo.cbSector = cbSector;
+                        driveInfo.driveSize = cbTotal / 1024 / 1024;
+                        return true;
+                    }
                 }
             }
         }
@@ -3593,13 +3618,13 @@ export default class DiskInfo {
      */
     getDriveType(driveInfo)
     {
-        let driveCtrl = driveInfo.driveCtrl || this.driveCtrl;
+        let driveClass = driveInfo.driveClass || this.driveClass;
         if (this.driveType < 0) {
-            let iDevice = DRIVE_CTRLS.indexOf(driveCtrl);
-            if (iDevice >= 0) {
-                let driveTypes = Object.keys(DRIVE_TYPES[iDevice]);
+            let iClass = DRIVE_CLASSES.indexOf(driveClass);
+            if (iClass >= 0) {
+                let driveTypes = Object.keys(DRIVE_TYPES[iClass]);
                 for (let type of driveTypes) {
-                    let parms = DRIVE_TYPES[iDevice][type];
+                    let parms = DRIVE_TYPES[iClass][type];
                     if (this.nCylinders == parms[0] && this.nHeads == parms[1] && this.nSectors == (parms[2] || 17)) {
                         driveInfo.driveType = +type;
                         driveInfo.nCylinders = this.nCylinders;
@@ -4034,22 +4059,41 @@ export default class DiskInfo {
                             db.writeUInt16LE(nLBAData, DiskInfo.BPB.LBADATA);
                         }
                     }
-                    for (let ib = 0; ib < cb; ib++) {
-                        if (lbaBoot == 0 && ib >= DiskInfo.MBR.PARTITIONS.OFFSET) continue;
+                    for (let off = 0; off < cb; off++) {
+                        let b = db.readUInt8(off);
                         if (hasBPB) {
                             switch(verBPB) {
                             case 0:
-                                if (ib >= DiskInfo.BPB.BEGIN && ib < DiskInfo.BPB.END) continue;
+                                if (off >= DiskInfo.BPB.BEGIN && off < DiskInfo.BPB.END) continue;
                                 break;
                             case 1:
                                 break;
                             case 2:
-                                if (ib >= DiskInfo.BPB.BEGIN && ib < DiskInfo.BPB.BOOTDRIVE) continue;
+                                if (off >= DiskInfo.BPB.BEGIN && off < DiskInfo.BPB.BOOTDRIVE) continue;
                                 break;
                             }
+                        } else {
+                            if (lbaBoot == 0) {
+                                if (off >= DiskInfo.MBR.PARTITIONS.OFFSET) continue;
+                                if (this.driveClass == "PCJS") {
+                                    switch(off) {
+                                    case DiskInfo.MBR.DRIVE0PARMS.CYLS:
+                                        b = this.nCylinders & 0xff;
+                                        break;
+                                    case DiskInfo.MBR.DRIVE0PARMS.CYLS + 1:
+                                        b = (this.nCylinders >> 8) & 0xff;
+                                        break;
+                                    case DiskInfo.MBR.DRIVE0PARMS.HEADS:
+                                        b = this.nHeads;
+                                        break;
+                                    case DiskInfo.MBR.DRIVE0PARMS.SECTORS:
+                                        b = this.nSectors;
+                                        break;
+                                    }
+                                }
+                            }
                         }
-                        let b = db.readUInt8(ib);
-                        if (!this.write(sectorBoot, ib, b, true)) {
+                        if (!this.write(sectorBoot, off, b, true)) {
                             fSuccess = false;
                             break;
                         }
@@ -4166,6 +4210,16 @@ DiskInfo.SECTOR = {
 };
 
 DiskInfo.MBR = {
+    DRIVE0PARMS: {
+        CYLS:       0x19E,          // 1 word
+        HEADS:      0x1A0,          // 1 byte
+        SECTORS:    0x1AC           // 1 byte
+    },
+    DRIVE1PARMS: {
+        CYLS:       0x1AE,          // 1 word
+        HEADS:      0x1B0,          // 1 byte
+        SECTORS:    0x1BC           // 1 byte
+    },
     PARTITIONS: {
         OFFSET:     0x1BE,
         ENTRY: {

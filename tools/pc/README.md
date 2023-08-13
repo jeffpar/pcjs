@@ -230,9 +230,9 @@ To test 20Mb support, I tried two scenarios:
  1. Running FDISK on a PC AT with PC DOS 3.00
  2. Running FDISK on a PC AT with PC DOS 2.00
 
-Here's scenario #1, using the new hard drive `--capacity` option:
+Here's scenario #1, using the new hard drive `--drivesize` option, which allows you to specify a drive capacity in *megabytes* (aka 1024 *kilobytes*, where 1 kilobyte is 1024 bytes):
 
-    ~/pcjs/tools/pc/disks % pc.js ibm5170 --capacity=20
+    ~/pcjs/tools/pc/disks % pc.js ibm5170 --drivesize=20
     Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
 
     Current date is Tue  8-01-2023
@@ -292,7 +292,7 @@ Here's scenario #1, using the new hard drive `--capacity` option:
 
 Here's scenario #2.  Note that I used the `--halt` option to give me the opportunity to load "PC DOS 2.00 (Disk 1)" into drive A: before booting, but it's also possible to force that from the command-line, using the `--system=pcdos` and `--version=2.00` options:
 
-    ~/pcjs/tools/pc/disks % pc.js ibm5170 --capacity=20 --halt
+    ~/pcjs/tools/pc/disks % pc.js ibm5170 --drivesize=20 --halt
     fault messages enabled
     >> Type ? for help with PCx86 Debugger commands
     AX=0000 BX=0000 CX=0000 DX=0000 SP=0000 BP=0000 SI=0000 DI=0000 

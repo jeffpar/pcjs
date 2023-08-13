@@ -6953,13 +6953,13 @@ CharSet.CP437 = [
 /*
  * Drive type tables differed across IBM controller models (XTC drive types don't match ATC drive types) and across OEMs
  * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDeviceType to index the correct table type
- * inside both aDeviceTypes and aDriveTypes.
+ * inside both DRIVE_CLASSES and DRIVE_TYPES.
  */
-const DRIVE_CTRLS = ["XT", "AT", "COMPAQ"];
+const DRIVE_CLASSES = ["XT", "AT", "COMPAQ"];
 
 const DRIVE_TYPES = [
     /*
-     * aDriveTypes[0] is for the IBM PC XT (XTC) controller.
+     * DRIVE_TYPES[0] is for the IBM PC XT (XTC) controller.
      */
     {
          0: [306, 2],           //  5Mb ( 5.08Mb: 306*2*17*512 or  5,326,848 bytes)
@@ -6968,7 +6968,7 @@ const DRIVE_TYPES = [
          3: [306, 4]            // 10Mb (10.16Mb: 306*4*17*512 or 10,653,696 bytes) (default XTC drive type: 3)
     },
     /*
-     * aDriveTypes[1] is for the IBM PC AT (ATC) controller.
+     * DRIVE_TYPES[1] is for the IBM PC AT (ATC) controller.
      *
      * The following is a more complete description of the drive types supported by the MODEL_5170, where C is
      * Cylinders, H is Heads, WP is Write Pre-Comp, and LZ is Landing Zone (in practice, we don't need WP or LZ).
@@ -7028,7 +7028,7 @@ const DRIVE_TYPES = [
         23: [306,  4]
     },
     /*
-     * aDriveTypes[2] is for the COMPAQ DeskPro (ATC) controller.
+     * DRIVE_TYPES[2] is for the COMPAQ DeskPro (ATC) controller.
      *
      * NOTE: According to COMPAQ, drive type 25 (0x19) must be used with their 130Mb drive when using MS-DOS 3.1
      * or earlier, or when using any [unspecified] application software that supports only 17 sectors per track;
@@ -67977,7 +67977,7 @@ class HDC extends Component {
          */
         this.fATC = this.fATAPI = false;
         this.sType = (parmsHDC['type'] || "XT").toUpperCase();
-        if (this.sType.slice(0, 2) == "AT") {
+        if (this.sType.slice(0, 2) != "XT") {
             this.fATC = true;
             this.fATAPI = (this.sType.slice(0, 5) == "ATAPI");
         }
@@ -68115,7 +68115,7 @@ class HDC extends Component {
          */
         this.chipset = cmp.getMachineComponent("ChipSet");
 
-        this.iDeviceType = 0;
+        this.iDriveClass = 0;
         this.iDriveTypeDefault = 3;
 
         if (!this.fATC) {
@@ -68133,8 +68133,8 @@ class HDC extends Component {
                 bus.addPortInputWidth(HDC.ATC.DATA.PORT2, 2);
                 bus.addPortOutputWidth(HDC.ATC.DATA.PORT2, 2);
             }
-            this.iDeviceType++;
-            if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.iDeviceType++;
+            this.iDriveClass++;
+            if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.iDriveClass++;
             this.iDriveTypeDefault = 2;
         }
 
@@ -68501,9 +68501,9 @@ class HDC extends Component {
         }
 
         drive.type = driveConfig['type'];
-        if (drive.type === undefined || DRIVE_TYPES[this.iDeviceType][drive.type] === undefined) drive.type = this.iDriveTypeDefault;
+        if (drive.type === undefined || DRIVE_TYPES[this.iDriveClass][drive.type] === undefined) drive.type = this.iDriveTypeDefault;
 
-        let driveType = DRIVE_TYPES[this.iDeviceType][drive.type];
+        let driveType = DRIVE_TYPES[this.iDriveClass][drive.type];
         drive.nSectors = driveType[2] || 17;                        // sectors/track
         drive.cbSector = drive.cbTransfer = driveType[3] || 512;    // bytes/sector (default is 512 if unspecified in the table)
 
@@ -68649,8 +68649,8 @@ class HDC extends Component {
                 }
             }
             if (type != null && !nHeads) {
-                nHeads = DRIVE_TYPES[this.iDeviceType][type][1];
-                nCylinders = DRIVE_TYPES[this.iDeviceType][type][0];
+                nHeads = DRIVE_TYPES[this.iDriveClass][type][1];
+                nCylinders = DRIVE_TYPES[this.iDriveClass][type][0];
             }
             if (nHeads) {
                 /*
@@ -68660,7 +68660,7 @@ class HDC extends Component {
                  *
                  * Do these values agree with those for the given drive type?  Even if they don't, all we do is warn.
                  */
-                let driveType = DRIVE_TYPES[this.iDeviceType][drive.type];
+                let driveType = DRIVE_TYPES[this.iDriveClass][drive.type];
                 if (driveType) {
                     if (nCylinders != driveType[0] && nHeads != driveType[1]) {
                         this.printf(Messages.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
@@ -68846,7 +68846,7 @@ class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDeviceType], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CLASSES[this.iDriveClass], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
             }
         }
         if (drive.fAutoMount) {
@@ -69685,8 +69685,9 @@ class HDC extends Component {
              * The importance of SECCNT (nSectors) and DRVHD (nHeads) is controlling how multi-sector operations
              * advance to the next sector; see advanceSector().
              */
-
-
+            //
+            //
+            // drive.nCylinders = nCylinder + 1;
             drive.nHeads = nHead + 1;
             drive.nSectors = nSectors;
             fInterrupt = fProcessed = true;

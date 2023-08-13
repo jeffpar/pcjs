@@ -561,7 +561,34 @@
         "--capacity=20",
         "--drivetype=6",
         "--verbose",
-        "disks/MSDOS320",
+        "--halt",
+        "disks/MSDOS330",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js ibm5170 --driveclass=pcjs --drivesize=44 dir",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--driveclass=pcjs",
+        "--drivesize=44",
+        "--debug",
+        "--halt",
+        "disks/msdos330",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -647,27 +674,6 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "pc.js pdp11 machine.xml",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--start=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
-        "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -785,6 +791,27 @@
         "ibm5170",
         "--disk=https://harddisks.pcjs.org/pcx86/10mb/PCDOS200-C400.json",
         "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js pdp11 machine.xml",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--start=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
+        "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,

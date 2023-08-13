@@ -56,7 +56,7 @@ let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
 let driveManifest = null, driveOverride = false;
 let driveInfo = {
-    driveCtrl:  "COMPAQ",
+    driveClass: "COMPAQ",
     driveType:  -1,
     nCylinders: 0,
     nHeads:     0,
@@ -590,18 +590,18 @@ function checkMachine(sFile)
     if (sFile && !driveOverride) {
         if (machine) {
             if (machine['hdc']) {
-                driveInfo.driveCtrl = machine['hdc']['type'];
+                driveInfo.driveClass = machine['hdc']['type'];
             }
             if (machine['chipset'] && machine['chipset']['model'] == "deskpro386") {
-                driveInfo.driveCtrl = "COMPAQ";
+                driveInfo.driveClass = "COMPAQ";
             }
         } else {
             if (sFile.indexOf("5160") >= 0) {
-                driveInfo.driveCtrl = "XT";
+                driveInfo.driveClass = "XT";
             } else if (sFile.indexOf("5170") >= 0) {
-                driveInfo.driveCtrl = "AT";
+                driveInfo.driveClass = "AT";
             } else if (sFile.indexOf("compaq") >= 0) {
-                driveInfo.driveCtrl = "COMPAQ";
+                driveInfo.driveClass = "COMPAQ";
             }
         }
     }
@@ -686,13 +686,17 @@ function loadMachine(sFile)
             if (driveInfo.driveType < 0) {
                 if (DiskInfo.findDriveType(driveInfo, maxCapacity * 1024 * 2, device)) {
                     if (fVerbose) {
-                        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
+                        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveClass, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
                     }
                 }
             }
             if (driveInfo.driveType >= 0) {
+                let driveType = driveInfo.driveType;
+                if (!driveType && driveInfo.driveClass == "PCJS") {
+                    driveType = 1;          // any drive type will do...
+                }
                 drives[0] = {
-                    'type': driveInfo.driveType,
+                    'type': driveType,
                     'name': (driveInfo.driveSize|0) + "Mb Hard Disk"
                 };
                 if (driveManifest || !localDir) {
@@ -700,6 +704,9 @@ function loadMachine(sFile)
                     if (driveManifest) {
                         removeFloppy = true;
                     }
+                }
+                if (driveOverride) {
+                    config['hdc']['type'] = driveInfo.driveClass;
                 }
             }
             config['hdc']['drives'] = drives;
@@ -963,14 +970,15 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
         return "missing system diskette: " + sSystemDisk;
     }
 
-    let sSystemMBR = "DOS.mbr";
+    let sSystemMBR = "pcjs.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
     let dbMBR = readFileSync(sSystemMBR, null);
-    if (!dbMBR) {
-        return "missing system MBR: " + sSystemMBR;
+    if (!dbMBR || dbMBR.length < 512) {
+        return "invalid system MBR: " + sSystemMBR;
     }
+    if (dbMBR.length > 512) dbMBR = dbMBR.slice(dbMBR.length - 512);
 
     /*
      * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero
@@ -1205,7 +1213,7 @@ function updateDriveInfo(di)
 {
     if (di.getDriveType(driveInfo)) {
         if (fVerbose) {
-            printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
+            printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveClass, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
         }
     }
 }
@@ -1910,8 +1918,8 @@ async function processArgs(argv)
             let sCommand = checkCommand(localDir, args);
             if (!sCommand && args) {
                 error = "command not found: " + args;
-            } else if (driveInfo.driveType >= 0) {
-                warning = "unable to execute command '" + sCommand + "' with prebuilt drive";
+            } else if (!localDir) {
+                warning = "unable to execute command '" + sCommand + "' with prebuilt disk";
             } else {
                 error = await buildDrive(localDir, sCommand);
                 if (!error) {
@@ -2066,8 +2074,8 @@ function main(argc, argv)
     if (!isNaN(type)) {
         driveInfo.driveType = type;
     }
-    if (typeof argv['drivectrl'] == "string") {
-        driveInfo.driveCtrl = argv['drivectrl'];
+    if (typeof argv['driveclass'] == "string") {
+        driveInfo.driveClass = argv['driveclass'].toUpperCase();
         driveOverride = true;
     }
     if (typeof argv['fat'] == "string") {
@@ -2085,7 +2093,7 @@ function main(argc, argv)
         let optionsHard = {
             "--dir=[directory]":        "set drive local directory (default is " + localDir + ")",
             "--disk=[disk image]":      "set drive disk image (instead of directory)",
-            "--drivectrl=[ctrl]":       "set drive controller (eg, XT, AT, or COMPAQ)",
+            "--driveclass=[class]":     "set drive controller class (eg, XT, AT, or COMPAQ)",
             "--drivesize=[size]":       "set drive capacity (default is " + maxCapacity + "mb)",
             "--drivetype=[number]":     "set drive type (must be valid for controller)",
             "--fat=[number]":           "\tset FAT type (12 or 16; default is variable)",

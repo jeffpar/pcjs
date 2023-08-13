@@ -10,6 +10,13 @@
   "editor.rulers": [127],
   "editor.tabSize": 8,
   "editor.insertSpaces": false,
+  "[asm][masm][plaintext]": {
+    "editor.quickSuggestions": {
+      "other": false,
+      "comments": false,
+      "strings": false
+    }
+  },
   "[javascript]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
@@ -1880,5 +1887,5 @@
     "zzznnn"
   ],
 "task.allowAutomaticTasks": "on",
-"explorer.sortOrder": "type"
+"explorer.sortOrder": "type",
 }
