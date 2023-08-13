@@ -970,7 +970,7 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
         return "missing system diskette: " + sSystemDisk;
     }
 
-    let sSystemMBR = "pcjs.mbr";
+    let sSystemMBR = (driveInfo.driveClass == "PCJS")? "pcjs.mbr" : "DOS.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -1103,6 +1103,9 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
     driveManifest = null;
     let done = function(di) {
         if (di) {
+            /*
+             * This is where I would normally perform the minimum version check (see below).
+             */
             let manifest = di.getFileManifest(null, true);
             di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
             di.updateBootSector(dbBoot, 0, verBPB);
@@ -1110,6 +1113,14 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
             if (fLog) printf("building drive: %s\n", localDrive);
             if (writeDiskSync(localDrive, di, false, 0, true, true)) {
                 updateDriveInfo(di);
+                /*
+                 * I've deferred the minimum version check until now, because even if we can't (well, shouldn't)
+                 * use the drive image, I'd still like to be able to inspect it.
+                 */
+                if (di.minDOSVersion && di.minDOSVersion > version) {
+                    printf("error: drive requires DOS %s or later\n", di.minDOSVersion.toFixed(2));
+                    return;
+                }
                 driveManifest = manifest;
             }
         }

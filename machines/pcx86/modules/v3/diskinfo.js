@@ -117,6 +117,7 @@ import { DRIVE_CLASSES, DRIVE_TYPES } from "./driveinfo.js";
  * @property {number} cbSector
  * @property {Array.<VolInfo>|null} volTable
  * @property {Array.<FileInfo>|null} fileTable
+ * @property {number} minDOSVersion
  */
 export default class DiskInfo {
     /**
@@ -781,6 +782,7 @@ export default class DiskInfo {
         this.diskName = diskName;
         this.abOrigBPB = [];
         this.fBPBModified = false;
+        this.minDOSVersion = 0;
 
         /*
          * Originally, we did not need to save a copy of the original file data, but now we do, so that we can
@@ -851,7 +853,7 @@ export default class DiskInfo {
              * Build a BPB to accommodate the selected drive parameters and file requirements, and calculate all
              * the other values we'll need, including total number of data sectors (cDataSectors).
              */
-            let minDOSVer = 2.0;
+            this.minDOSVersion = 2.0;
             abBoot = [                  // start with a BPB for a 10Mb hard drive
                 0xEB, 0xFE, 0x90,       // 0x00: JMP instruction, following by 8-byte OEM signature
                 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (WARNING: this signature is REQUIRED for PC DOS 3.x if using a 12-bit FAT)
@@ -873,7 +875,7 @@ export default class DiskInfo {
             if (cTotalSectors <= 0xffff) {
                 setBoot(DiskInfo.BPB.DISKSECS, 2, cTotalSectors);
             } else {
-                minDOSVer = 3.31;
+                this.minDOSVersion = 3.31;
                 setBoot(DiskInfo.BPB.DISKSECS, 2, 0);
                 setBoot(DiskInfo.BPB.LARGESECS, 4, cTotalSectors);
             }
@@ -901,6 +903,7 @@ export default class DiskInfo {
                  */
                 setBoot(DiskInfo.BPB.OEM + 5, 1, 0x33);
                 setBoot(DiskInfo.BPB.OEM + 7, 1, 0x31);
+                if (this.minDOSVersion < 3.0) this.minDOSVersion = 3.0;
             }
             /*
              * For the given FAT type, maximize the FAT usage in order to minimize the cluster size.  That calculation
@@ -918,7 +921,6 @@ export default class DiskInfo {
                 nearestPower <<= 1;
             }
             cSectorsPerCluster = nearestPower;
-            cbCluster = cSectorsPerCluster * cbSector;
             while ((cFATSectors = Math.ceil(((cTotalSectors / cSectorsPerCluster * typeFAT) / 8) / cbSector)) > 64) {
                 if (cSectorsPerCluster == 64) {
                     this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "cluster size (%d) at limit for FAT with %d sectors)\n", cSectorsPerCluster * cbSector, cFATSectors);
@@ -926,6 +928,7 @@ export default class DiskInfo {
                 }
                 cSectorsPerCluster *= 2;
             }
+            cbCluster = cSectorsPerCluster * cbSector;
             cHeads = this.nHeads;
             cSectorsPerTrack = this.nSectors;
             setBoot(DiskInfo.BPB.CLUSSECS, 1, cSectorsPerCluster);
