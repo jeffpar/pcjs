@@ -9,7 +9,7 @@
 ; This file is part of PCjs, a computer emulation software project at pcjs.org
 ;
 
-ACTIVE		equ	80h	; no coincidence this is also INT 13h drive #
+ACTIVE		equ	80h	; no coincidence this is also the drive #
 INACTIVE	equ	00h
 
 VEC_DRIVE0	equ	41h
@@ -74,37 +74,52 @@ start:	cli
 	mov	di,offset start
 	mov	cx,100h
 	rep	movsw
-	mov	bx,offset main
+	mov	bx,offset chk0
 	jmp	bx
-
-main:	mov	si,offset par0tbl
-	mov	al,4
+;
+; Now let's get to the whole reason for this MBR's existence: checking
+; for internal drive parameter table(s), and if they exist, copying them
+; to low memory and updating the corresponding interrupt vector.
+;
+chk0:	mov	bx,VEC_DRIVE0 * 4
+	mov	si,offset drv0tbl
+	mov	di,TBL_DRIVE0
+	cmp	[si].drv_cyls,cx
+	je	chk1
+	mov	dl,80h
+	call	inittbl
+chk1:	mov	bx,VEC_DRIVE1 * 4
+	mov	si,offset drv1tbl
+	mov	di,TBL_DRIVE1
+	cmp	[si].drv_cyls,cx
+	je	scan
+	mov	dl,81h
+	call	inittbl
+;
+; Now back to our regularly scheduled Master Boot Record: scan the partition
+; table, find the ACTIVE partition, ensure the rest are INACTIVE, then boot it.
+;
+scan:	mov	cl,4		; CX = count (CH is already zero)
+	xor	dx,dx
+	mov	si,offset par0tbl
 next:	cmp	[si].par_status,ACTIVE
 	je	load
 	cmp	[si].par_status,INACTIVE
 	jne	inv
-	add	si,size par_record
-	dec	ax
-	jnz	next
-	int	18h
-
-load:	mov	dx,word ptr [si].par_status
-	mov	cx,word ptr [si].par_chs_beg+1
-cont:	add	si,size par_record
-	dec	ax
-	jz	read
-	cmp	[si].par_status,INACTIVE
-	je	cont
-inv:	mov	si,offset inv_msg
-print:	lodsb
-	test	al,al
-hang:	jz	hang
-	mov	ah,0Eh
-	int	10h
-	jmp	print
+skip:	add	si,size par_record
+	loop	next
+	test	dx,dx		; did we find an ACTIVE partition?
+	jnz	read		; yes
+	int	18h		; no, so start ROM BASIC
+load:	test	dx,dx		; did we already find an ACTIVE partition?
+	jnz	inv		; yes
+	mov	dx,word ptr [si].par_status
+	mov	ax,word ptr [si].par_chs_beg+1
+	jmp	skip
 
 read:	mov	di,5		; retries
-	mov	bx,sp		; BX = 7C00h (we haven't pushed anything)
+	mov	bx,sp		; BX = 7C00h (nothing has been pushed)
+	xchg	cx,ax		; CX and DX contain cylinder/head/sector
 retry:	mov	ax,0201h	; AH = 02h, AL = 01h
 	int	13h
 	jnc	verify
@@ -113,32 +128,20 @@ retry:	mov	ax,0201h	; AH = 02h, AL = 01h
 	dec	di
 	jnz	retry
 	mov	si,offset err_msg
+
+print:	lodsb
+	test	al,al
+hang:	jz	hang
+	mov	ah,0Eh
+	int	10h
+	jmp	print
+
+inv:	mov	si,offset inv_msg
 	jmp	print
 
 verify:	mov	si,offset mis_msg
 	cmp	word ptr [bx+1FEh],0AA55h
 	jne	print
-;
-; Now we can finally get down to the whole reason for this MBR's existence:
-; checking for internal drive parameter table(s), and if they exist, copying
-; them to low memory and updating the corresponding interrupt vector.
-;
-	push	dx		; save original boot drive #
-	xor	ax,ax
-	mov	bx,VEC_DRIVE0 * 4
-	mov	si,offset drv0tbl
-	mov	di,TBL_DRIVE0
-	cmp	[si].drv_cyls,ax
-	je	chk1
-	mov	dl,80h
-	call	inittbl
-chk1:	mov	bx,VEC_DRIVE1 * 4
-	mov	si,offset drv1tbl
-	mov	di,TBL_DRIVE1
-	cmp	[si].drv_cyls,ax
-	je	boot
-	mov	dl,81h
-	call	inittbl
 ;
 ; NOTE: Before transferring control to the DOS boot record, the DOS MBR
 ; carefully restored SI to the offset of the active partition record, but
@@ -146,8 +149,7 @@ chk1:	mov	bx,VEC_DRIVE1 * 4
 ; be meaningful if the boot record ALSO knew where the MBR had relocated
 ; itself, which is also not documented....)
 ;
-boot:	pop	dx		; restore original boot drive #
-	jmp	sp
+boot:	jmp	sp
 
 inittbl	proc	near
 	mov	[bx],di		; update drive parms vector with AX:DI
@@ -163,9 +165,10 @@ inv_msg	db	"Invalid partition table",0
 err_msg	db	"Error loading operating system",0
 mis_msg	db	"Missing operating system",0
 
+	org	RELOC + 0199h
 	db	"PCJS",0
 
-	org	RELOC + 019Eh
+	.errnz	offset $ - (RELOC + 019Eh)
 drv0tbl	drv_parms	<>	; drive 0 parameter table
 drv1tbl	drv_parms	<>	; drive 1 parameter table
 

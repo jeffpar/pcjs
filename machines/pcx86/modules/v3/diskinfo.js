@@ -906,22 +906,32 @@ export default class DiskInfo {
              * For the given FAT type, maximize the FAT usage in order to minimize the cluster size.  That calculation
              * must then be rounded up to the nearest power of 2 (eg, 1, 2, 4, 8, 16, 32, 64), because the FAT file system
              * does not allow just *any* number of sectors per cluster.
+             *
+             * However, we must not "over-maximize" the FAT usage, because watching IO.SYS from MS-DOS 3.30 read the
+             * entire FAT into memory (at 0000:7DC6) reveals that it will happily read more than the 32K of data that it can
+             * accommodate and trash itself.  So we must limit cFATSectors to 64.
              */
             cSectorsPerCluster = cTotalSectors / maxClusters;
             if (cSectorsPerCluster <= 1) cSectorsPerCluster = 4;
             let nearestPower = 1;
-            while (nearestPower < cSectorsPerCluster) {
+            while (nearestPower < cSectorsPerCluster && nearestPower < 64) {
                 nearestPower <<= 1;
             }
             cSectorsPerCluster = nearestPower;
             cbCluster = cSectorsPerCluster * cbSector;
+            while ((cFATSectors = Math.ceil(((cTotalSectors / cSectorsPerCluster * typeFAT) / 8) / cbSector)) > 64) {
+                if (cSectorsPerCluster == 64) {
+                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "cluster size (%d) at limit for FAT with %d sectors)\n", cSectorsPerCluster * cbSector, cFATSectors);
+                    break;
+                }
+                cSectorsPerCluster *= 2;
+            }
+            cHeads = this.nHeads;
+            cSectorsPerTrack = this.nSectors;
             setBoot(DiskInfo.BPB.CLUSSECS, 1, cSectorsPerCluster);
-            cFATSectors = Math.ceil(((cTotalSectors / cSectorsPerCluster * typeFAT) / 8) / cbSector);
             setBoot(DiskInfo.BPB.FATSECS, 2, cFATSectors);
             setBoot(DiskInfo.BPB.FATS, 1, cFATs);
-            cSectorsPerTrack = this.nSectors;
             setBoot(DiskInfo.BPB.TRACKSECS, 2, cSectorsPerTrack);
-            cHeads = this.nHeads;
             setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
             /*
              * We've saved the root directory size calculation for last, because tweaking it is the easiest way to
