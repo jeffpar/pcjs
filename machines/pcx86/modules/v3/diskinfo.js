@@ -815,6 +815,7 @@ export default class DiskInfo {
             this.nHeads = driveInfo.nHeads;
             this.nSectors = driveInfo.nSectors;
             cTotalSectors = this.nCylinders * this.nHeads * this.nSectors;
+            cbMax = cTotalSectors * 512;
         }
 
         this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "calculated size for %d files: %d bytes (%#x)\n", aFileData.length, cbTotal);
@@ -3612,6 +3613,11 @@ export default class DiskInfo {
                         driveInfo.nSectors = nSectors;
                         driveInfo.cbSector = cbSector;
                         driveInfo.driveSize = cbTotal / 1024 / 1024;
+                        return true;
+                    }
+                    if (driveInfo.driveType == 0) {
+                        driveInfo.cbSector = 512;
+                        driveInfo.driveSize = driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector / 1024 / 1024;
                         return true;
                     }
                 }

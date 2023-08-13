@@ -578,16 +578,13 @@
       }
     },
     {
-      "name": "pc.js ibm5170 --driveclass=pcjs --drivesize=24 dir",
+      "name": "pc.js ibm5170 --drivetype=200:4:17 dir",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--driveclass=pcjs",
-        "--drivesize=24",
-        "--debug",
-        "--halt",
+        "--drivetype=200:4:17",
         "disks/msdos330",
         "dir"
       ],

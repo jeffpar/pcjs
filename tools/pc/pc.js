@@ -201,7 +201,7 @@ async function loadModules(factory, modules, done)
          * so we join it with a relative directory instead (ie, "../..").
          */
         modulePath = path.join("../..", modulePath).replace(/\\/g, '/');
-        if (fDebug) printf("loading: %s\n", modulePath);
+        if (fDebug) printf("loading: %s\n", modulePath.replace(/\.\.\/\.\.\//g, '/'));
         let name = path.basename(modulePath, ".js");
         if (name == "embed") {
             let { [factory]: embed } = await import(modulePath);
@@ -2054,7 +2054,7 @@ function main(argc, argv)
     fVerbose = argv['verbose'] || fVerbose;
 
     device.setDebug(fDebug);
-    device.setMessages(MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.DISK : 0), true);
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
     messagesFilter = fDebug? Messages.ALL + Messages.TYPES + Messages.ADDRESS : Messages.ALERTS;
 
     let arg0 = argv[0].split(' ');
@@ -2081,9 +2081,23 @@ function main(argc, argv)
     maxCapacity = parseFloat(argv['drivesize']) || parseFloat(defaults['drivesize']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
 
-    let type = parseInt(argv['drivetype']);
-    if (!isNaN(type)) {
-        driveInfo.driveType = type;
+    if (typeof argv['drivetype'] == "string") {
+        let type = argv['drivetype'];
+        let matchCHS = type.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
+        if (matchCHS) {
+            driveInfo.driveClass = "PCJS";      // this pseudo-drive class is required for custom drive geometries
+            driveInfo.driveType = 0;
+            driveInfo.nCylinders = +matchCHS[1];
+            driveInfo.nHeads = +matchCHS[2];
+            driveInfo.nSectors = +matchCHS[3];
+            maxCapacity = 0;
+            driveOverride = true;
+        } else {
+            type = parseInt(type);
+            if (!isNaN(type)) {
+                driveInfo.driveType = type;
+            }
+        }
     }
     if (typeof argv['driveclass'] == "string") {
         driveInfo.driveClass = argv['driveclass'].toUpperCase();
@@ -2104,9 +2118,9 @@ function main(argc, argv)
         let optionsHard = {
             "--dir=[directory]":        "set drive local directory (default is " + localDir + ")",
             "--disk=[disk image]":      "set drive disk image (instead of directory)",
-            "--driveclass=[class]":     "set drive controller class (eg, XT, AT, or COMPAQ)",
+            "--driveclass=[class]":     "set drive controller class (eg, XT, AT, COMPAQ)",
             "--drivesize=[size]":       "set drive capacity (default is " + maxCapacity + "mb)",
-            "--drivetype=[number]":     "set drive type (must be valid for controller)",
+            "--drivetype=[number]":     "set drive type # or C:H:S values (eg, 305:4:17)",
             "--fat=[number]":           "\tset FAT type (12 or 16; default is variable)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--system=[string]":        "operating system type (default is " + systemType + ")",
