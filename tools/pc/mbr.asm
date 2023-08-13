@@ -15,6 +15,13 @@ INACTIVE	equ	00h
 VEC_DRIVE0	equ	41h
 VEC_DRIVE1	equ	46h
 
+;
+; While I had considered shaving 1K off available RAM so that I could safely
+; stash a copy of these drive tables, that seemed rather wasteful, so I wondered
+; if I couldn't just use some unused interrupt vector space.  And while browsing
+; Ralf Brown's Interrupt List, I noticed that the AMI BIOS authors had apparently
+; come to the same conclusion and used vectors C0h-C7h for a similar purpose.
+;
 TBL_DRIVE0	equ	0C0h*4	; room for 1 drv_parms spanning vectors C0h-C3h
 TBL_DRIVE1	equ	0C4h*4	; room for 1 drv_parms spanning vectors C4h-C7h
 
@@ -31,7 +38,7 @@ drv_parms	struc
 drv_cyls	dw	?	; 0x19E, 0x1AE
 drv_heads	db	?	; 0x1A0, 0x1B0
 drv_unused1	dw	?
-drv_wprecomp	dw	?	; 0x1A3, 0x1B3
+drv_precomp	dw	?	; 0x1A3, 0x1B3
 drv_unused2	db	?
 drv_control	db	?	; 0x1A6, 0x1B6
 drv_unused3	db	3 dup(?)
@@ -87,14 +94,14 @@ chk0:	mov	bx,VEC_DRIVE0 * 4
 	cmp	[si].drv_cyls,cx
 	je	chk1
 	mov	dl,80h
-	call	inittbl
+	call	copy
 chk1:	mov	bx,VEC_DRIVE1 * 4
 	mov	si,offset drv1tbl
 	mov	di,TBL_DRIVE1
 	cmp	[si].drv_cyls,cx
 	je	scan
 	mov	dl,81h
-	call	inittbl
+	call	copy
 ;
 ; Now back to our regularly scheduled Master Boot Record: scan the partition
 ; table, find the ACTIVE partition, ensure the rest are INACTIVE, then boot it.
@@ -151,15 +158,19 @@ verify:	mov	si,offset mis_msg
 ;
 boot:	jmp	sp
 
-inittbl	proc	near
+;
+; Using the vector space at 0:DI, update the drive vector at 0:BX,
+; copy the drive parameters from DS:SI to ES:DI, then notify the BIOS.
+;
+copy	proc	near
 	mov	[bx],di		; update drive parms vector with AX:DI
-	mov	[bx+2],ax
+	mov	[bx+2],cx	; (CX is zero)
 	mov	cx,size drv_parms
 	rep	movsb
 	mov	ah,09h		; tell the BIOS about the new parameters
-	int	13h
+	int	13h		; DL = drive #
 	ret
-inittbl	endp
+copy	endp
 
 inv_msg	db	"Invalid partition table",0
 err_msg	db	"Error loading operating system",0
@@ -167,11 +178,17 @@ mis_msg	db	"Missing operating system",0
 
 	org	RELOC + 0199h
 	db	"PCJS",0
-
+;
+; When PCjs builds the MBR, if any drives are using a custom drive
+; geometry instead of a pre-configured drive type, then it will fill in
+; these drive tables at build time.  We just need to reserve the space.
+;
 	.errnz	offset $ - (RELOC + 019Eh)
 drv0tbl	drv_parms	<>	; drive 0 parameter table
 drv1tbl	drv_parms	<>	; drive 1 parameter table
-
+;
+; Ditto for the partition tables; we just need to reserve space for them.
+;
 	.errnz	offset $ - (RELOC + 01BEh)
 par0tbl	par_record	<>
 par1tbl	par_record	<>
@@ -179,7 +196,7 @@ par2tbl	par_record	<>
 par3tbl	par_record	<>
 
 	.errnz	offset $ - (RELOC + 01FEh)
-	dw	0AA55h
+	dw	0AA55h		; required signature word
 
 BOOTSEG	ends
 
