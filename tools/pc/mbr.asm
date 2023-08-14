@@ -152,11 +152,13 @@ verify:	mov	si,offset mis_msg
 ;
 ; NOTE: Before transferring control to the DOS boot record, the DOS MBR
 ; carefully restored SI to the offset of the active partition record, but
-; I am unaware of any reliance on that value (and it would presumably only
-; be meaningful if the boot record ALSO knew where the MBR had relocated
-; itself, which is also not documented....)
+; I am unaware of any reliance on that value.  In fact, when IO.SYS wants
+; to examine the MBR, it simply re-reads and re-scans it.  Perhaps there
+; was a plan to pass MBR information on to the boot sector, and from there
+; to IO.SYS, thereby eliminating a redundant read, but I don't think that
+; ever happened.
 ;
-boot:	jmp	sp
+boot:	jmp	sp		; jump to 7C00h
 
 ;
 ; Using the vector space at 0:DI, update the drive vector at 0:BX,

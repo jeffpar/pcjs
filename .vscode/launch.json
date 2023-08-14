@@ -558,11 +558,32 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--capacity=20",
-        "--drivetype=6",
-        "--verbose",
-        "--halt",
+        "--drivetype=10",
         "disks/MSDOS330",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js ibm5170 --drivesize=27 dir",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--driveclass=pcjs",
+        "--drivesize=27",
+        "disks/msdos330",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -708,14 +729,14 @@
       }
     },
     {
-      "name": "pc.js dir --system=pcdos --version=2.00 --capacity=20mb",
+      "name": "pc.js dir --system=pcdos --version=2.00 --drivesize=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--system=pcdos",
         "--version=2.00",
-        "--capacity=20mb",
+        "--drivesize=20mb",
         "disks/MSDOS320",
         "dir"
       ],
@@ -755,14 +776,14 @@
       }
     },
     {
-      "name": "pc.js dir --system=pcdos --version=3.10 --capacity=20mb",
+      "name": "pc.js dir --system=pcdos --version=3.10 --drivesize=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--system=pcdos",
         "--version=3.10",
-        "--capacity=20mb",
+        "--drivesize=20mb",
         "ibm5170",
         "disks/MSDOS320",
         "dir *.*",

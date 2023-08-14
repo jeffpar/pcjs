@@ -160,14 +160,14 @@ export default class DiskInfo {
      * Here's the initial (simplified) version of this function.  It got much more complicated over time
      * as more diskettes were processed and anomalies were discovered.
      *
-     *      let diskFormat = DiskInfo.GEOMETRIES[db.length];
-     *      if (diskFormat) {
+     *      let defaultGeometry = DiskInfo.GEOMETRIES[db.length];
+     *      if (defaultGeometry) {
      *          let ib = 0;
      *          this.cbDiskData = db.length;
-     *          this.nCylinders = diskFormat[0];
-     *          this.nHeads = diskFormat[1];
-     *          this.nSectors = diskFormat[2];
-     *          this.cbSector = (diskFormat[3] || 512);
+     *          this.nCylinders = defaultGeometry[0];
+     *          this.nHeads = defaultGeometry[1];
+     *          this.nSectors = defaultGeometry[2];
+     *          this.cbSector = (defaultGeometry[3] || 512);
      *          this.aDiskData = new Array(this.nCylinders);
      *          for (let iCylinder = 0; iCylinder < this.aDiskData.length; iCylinder++) {
      *              let cylinder = this.aDiskData[iCylinder] = new Array(this.nHeads);
@@ -207,6 +207,10 @@ export default class DiskInfo {
 
         let dbTrack, dbSector;
         let iTrack, cbTrack, offTrack, offSector;
+
+        if (driveInfo.driveType == undefined) {
+            driveInfo.driveType = -1;
+        }
 
         if (cbDiskData >= 3000000) {        // arbitrary threshold between diskette image sizes and hard drive image sizes
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
@@ -258,8 +262,8 @@ export default class DiskInfo {
          * image whose logical format doesn't agree with its physical structure.
          */
         let fXDFOutput = false;
-        let diskFormat = DiskInfo.GEOMETRIES[cbDiskData];
-        if (!diskFormat) {
+        let defaultGeometry = DiskInfo.GEOMETRIES[cbDiskData];
+        if (!defaultGeometry) {
             /*
              * I've come across some disk images that were .IMD files that I had converted to .IMG using HxC,
              * and everything was fine except that there was 128 bytes of extra "stuff" af the end of the image,
@@ -267,19 +271,20 @@ export default class DiskInfo {
              *
              * Example: Microsoft Macro Assembler 1.10 [Tandy 2000 (r01.00.00)] (5.25-360k)/t2kasm_imd.img
              */
-            diskFormat = DiskInfo.GEOMETRIES[cbDiskData - 0x80];
+            defaultGeometry = DiskInfo.GEOMETRIES[cbDiskData - 0x80];
         }
-        if (diskFormat) {
-            nCylinders = diskFormat[0];
-            nHeads = diskFormat[1];
-            nSectorsPerTrack = diskFormat[2];
-            cbSector = diskFormat[3] || cbSector;
-            bMediaID = diskFormat[4] || bMediaID;
+
+        if (defaultGeometry) {
+            nCylinders = defaultGeometry[0];
+            nHeads = defaultGeometry[1];
+            nSectorsPerTrack = defaultGeometry[2];
+            cbSector = defaultGeometry[3] || cbSector;
+            bMediaID = defaultGeometry[4] || bMediaID;
         }
 
         /*
-         * I used to do these BPB tests only if diskFormat was undefined, but now I always do them, because I
-         * want to make sure they're in agreement (and if not, then figure out why not).
+         * I used to do these BPB tests only if defaultGeometry was undefined, but now I always do them, because
+         * I want to make sure they're in agreement (and if not, then figure out why not).
          *
          * See if the first sector of the image contains a valid DOS BPB.  This is tricky, because there are lots
          * of variations.  For now, the checks are simplistic: the first byte is checked for an Intel JMP opcode
@@ -304,7 +309,7 @@ export default class DiskInfo {
                 let nSectorsHiddenBPB = dbDisk.readUInt16LE(offBootSector + DiskInfo.BPB.HIDDENSECS);
                 let nCylindersBPB = (nSectorsHiddenBPB + nSectorsTotalBPB) / nSectorsPerCylinderBPB;
 
-                if (diskFormat) {
+                if (defaultGeometry && driveInfo.driveType < 0) {
                     if (bMediaID && bMediaID != bMediaIDBPB) {
                         this.printf(Device.MESSAGE.WARN, "BPB media ID (%#0bx) does not match physical media ID (%#0bx)\n", bMediaIDBPB, bMediaID);
                     }
@@ -3543,8 +3548,8 @@ export default class DiskInfo {
     /**
      * findDriveType(driveInfo, nTargetSectors, device)
      *
-     * If a drive type appropriate for the specified device matches the specified drive type or the requested (minimum) number of sectors,
-     * update the DriveInfo and return true.
+     * If a drive type appropriate for the specified device matches the specified drive type or the requested (minimum)
+     * number of sectors, update the DriveInfo and return true.
      *
      * @param {DriveInfo} driveInfo
      * @param {number} nTargetSectors
@@ -3600,11 +3605,15 @@ export default class DiskInfo {
                      * must be <= 63.
                      */
                     if (nTargetSectors) {
-                        let nSectors = 17;
-                        let nTracks = Math.ceil(nTargetSectors / nSectors);
-                        let nHeads = Math.ceil(nTracks / 1024);
-                        nHeads += nHeads & 1;
-                        let nCylinders = Math.ceil(nTracks / nHeads);
+                        let nCylinders, nHeads, nTracks, nSectors = -6;
+                        do {
+                            nSectors += 23;         // start with 17, then 40, then 63
+                            if (nSectors > 63) return false;
+                            nTracks = Math.ceil(nTargetSectors / nSectors);
+                            nHeads = Math.ceil(nTracks / 1024);
+                            nHeads += nHeads & 1;   // an odd number of heads seems pretty, um, odd, so let's avoid it
+                            nCylinders = Math.ceil(nTracks / nHeads);
+                        } while (nHeads > 256 || nCylinders > 1024);
                         let cbSector = 512;
                         let cbTotal = nCylinders * nHeads * nSectors * cbSector;
                         driveInfo.driveType = 0;
@@ -3615,6 +3624,11 @@ export default class DiskInfo {
                         driveInfo.driveSize = cbTotal / 1024 / 1024;
                         return true;
                     }
+                    /*
+                     * If no target sectors were supplied, then if driveType is 0, we presume a user-defined geometry
+                     * was supplied.  Nothing much for us to do, other than select a default sector size and calculate
+                     * the drive size (in *megabytes*).
+                     */
                     if (driveInfo.driveType == 0) {
                         driveInfo.cbSector = 512;
                         driveInfo.driveSize = driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector / 1024 / 1024;
