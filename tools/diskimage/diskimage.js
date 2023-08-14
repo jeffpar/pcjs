@@ -131,13 +131,11 @@ function createDriveInfo(argv, diskette)
     if (typeof type == "string") {
         let match = type.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
         if (match) {
-            maxCapacity = 0;
             driveInfo.driveClass = "PCJS";      // this pseudo drive class is required for custom drive geometries
             driveInfo.driveType = 0;
             driveInfo.nCylinders = +match[1];
             driveInfo.nHeads = +match[2];
             driveInfo.nSectors = +match[3];
-            driveOverride = true;
         } else {
             match = type.match(/^([A-Z]+|):?([0-9]+)$/i)
             if (match) {
@@ -146,7 +144,6 @@ function createDriveInfo(argv, diskette)
                 if (DiskInfo.validateDriveType(driveClass, driveType)) {
                     driveInfo.driveClass = driveClass;
                     driveInfo.driveType = driveType;
-                    driveOverride = true;
                 } else {
                     match = null;
                 }
