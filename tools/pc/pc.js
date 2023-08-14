@@ -922,7 +922,7 @@ function getSystemDisk(type, version)
     let system = configJSON['systems']?.[type];
     if (system) {
         sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + version + "/";
-        sSystemDisk += type.toUpperCase() + version.replace('.', '') + "-DISK1.json";
+        sSystemDisk += (system.product || type).toUpperCase() + version.replace('.', '') + "-DISK1.json";
     }
     return sSystemDisk;
 }
@@ -1227,6 +1227,8 @@ function updateDriveInfo(di)
         if (fVerbose) {
             printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveClass, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
         }
+    } else {
+        delete driveInfo.volTable;
     }
 }
 
@@ -1698,6 +1700,7 @@ function doCommand(s)
     let help = function() {
         let result = "pc.js commands:\n" +
                     "  build [command]\n" +
+                    "  disk (displays info)\n" +
                     "  exec [local command]\n" +
                     "  load [drive] [search options]\n" +
                     "  save [local disk image]\n" +
@@ -1730,6 +1733,38 @@ function doCommand(s)
         buildDrive(localDir, arg, true).then(function(result) {
             if (result) printf("%s\n", result);
         });
+        break;
+    case "disk":
+        if (driveManifest || driveInfo.volTable) {
+            let info = {
+                class: driveInfo.driveClass,
+                type: driveInfo.driveType,
+                cylinders: driveInfo.nCylinders,
+                heads: driveInfo.nHeads,
+                sectorsPerTrack: driveInfo.nSectors,
+                size: driveInfo.driveSize.toFixed(1) + "mb",
+            };
+            if (driveInfo.volTable) {
+                let vol = driveInfo.volTable[0];
+                info.mediaID = sprintf("%#04x", vol.idMedia);
+                let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
+                info.typeFAT = vol.idFAT;
+                info.totalFATs = sectorsFAT / ((vol.clusTotal * vol.idFAT) / 8 / 512)|0;
+                info.sectorsHidden = vol.lbaStart;
+                info.sectorsReserved = vol.vbaFAT;
+                info.sectorsFAT = sectorsFAT;
+                info.sectorsRoot = vol.rootTotal / 16;
+                info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
+                info.sectorsPerCluster = vol.clusSecs;
+                info.clustersTotal = vol.clusTotal;
+                info.clustersFree = vol.clusFree;
+                info.bytesTotal = vol.clusTotal * vol.clusSecs * 512;
+                info.bytesFree = vol.clusFree * vol.clusSecs * 512;
+            }
+            result = sprintf("%2j", info);
+        } else {
+            result = "no built or prebuilt disk";
+        }
         break;
     case "exec":
         if (driveManifest) {

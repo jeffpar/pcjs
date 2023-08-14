@@ -3665,6 +3665,10 @@ export default class DiskInfo {
                         driveInfo.nSectors = this.nSectors;
                         driveInfo.cbSector = this.cbSector || parms[3] || 512;
                         driveInfo.driveSize = this.cbDiskData / 1024 / 1024;
+                        /*
+                         * Added bonus: return info about all the volume(s) on the drive as well, if any.
+                         */
+                        if (this.volTable) driveInfo.volTable = this.volTable;
                         return true;
                     }
                 }

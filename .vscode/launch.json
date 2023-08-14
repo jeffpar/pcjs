@@ -706,6 +706,29 @@
       }
     },
     {
+      "name": "pc.js dir --system=compaq --version=3.31",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--system=compaq",
+        "--version=3.31",
+        "disks/MSDOS320",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
       "name": "pc.js dir --system=pcdos --version=2.00",
       "type": "node",
       "request": "launch",
