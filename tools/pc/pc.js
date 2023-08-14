@@ -1227,9 +1227,8 @@ function updateDriveInfo(di)
         if (fVerbose) {
             printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveClass, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
         }
-    } else {
-        delete driveInfo.volTable;
     }
+    driveInfo.volTable = di.volTable;
 }
 
 /**
@@ -1748,12 +1747,12 @@ function doCommand(s)
                 let vol = driveInfo.volTable[0];
                 info.mediaID = sprintf("%#04x", vol.idMedia);
                 let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
-                info.typeFAT = vol.idFAT;
-                info.totalFATs = sectorsFAT / ((vol.clusTotal * vol.idFAT) / 8 / 512)|0;
+                info.typeFAT = vol.nFATBits || vol.idFAT;
+                info.totalFATs = sectorsFAT / ((vol.clusTotal * info.typeFAT) / 8 / 512)|0;
                 info.sectorsHidden = vol.lbaStart;
                 info.sectorsReserved = vol.vbaFAT;
                 info.sectorsFAT = sectorsFAT;
-                info.sectorsRoot = vol.rootTotal / 16;
+                info.sectorsRoot = (vol.nEntries || vol.rootTotal) / 16;
                 info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
                 info.sectorsPerCluster = vol.clusSecs;
                 info.clustersTotal = vol.clusTotal;

@@ -846,6 +846,29 @@
       }
     },
     {
+      "name": "pc.js dir --drivetype=80:2:18 --system=compaq --version=3.31",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "dir",
+        "--drivetype=80:2:18",
+        "--system=compaq",
+        "--version=3.31"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
       "name": "pc.js pdp11 machine.xml",
       "type": "node",
       "request": "launch",
@@ -1456,8 +1479,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
+        "--dir",
+        "MBR",
+        "t.json",
+        "--target=10M"
       ],
-      "cwd": "${workspaceFolder}/tools/diskimage",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

@@ -806,7 +806,8 @@ export default class DiskInfo {
          * we find a BPB that will support that size, we recalculate cbTotal using that BPB's cluster size, and
          * then we re-verify that that BPB will work.  If not, then we keep looking.
          */
-        let cbTotal = this.calcFileSizes(aFileData), cTotalSectors = 0;
+        let cTotalSectors = 0;
+        let cbTotal = this.calcFileSizes(aFileData);
 
         /*
          * If a custom build has been requested, then we search for an appropriate drive type.  If no sector target
@@ -852,7 +853,9 @@ export default class DiskInfo {
 
         let typeFAT = 12, cFATs = 2, cFATSectors;
         let iBPB, cbSector = 512, cSectorsPerCluster, cbCluster;
-        let cRootEntries = 0, cRootSectors, cHiddenSectors = 1, cReservedSectors = 1, cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
+        let cRootEntries = 0, cRootSectors;
+        let cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
+        let cHiddenSectors = 1, cReservedSectors = 1, cDiagnosticSectors = 0;
 
         if (this.driveType >= 0) {
             /*
@@ -877,7 +880,10 @@ export default class DiskInfo {
                 0x00,                   // 0x1E: PC DOS 2.0 through 3.1 stores BOOTDRIVE here (0x00 for floppy, 0x80 for hard drive)
                 0x00                    // 0x1F: PC DOS 2.0 through 3.1 stores BOOTHEAD here
             ];
-            cTotalSectors -= cHiddenSectors;
+            cHeads = this.nHeads;
+            cSectorsPerTrack = this.nSectors;
+            cDiagnosticSectors = cHeads * cSectorsPerTrack;
+            cTotalSectors -= cHiddenSectors + cDiagnosticSectors;
             if (cTotalSectors <= 0xffff) {
                 setBoot(DiskInfo.BPB.DISKSECS, 2, cTotalSectors);
             } else {
@@ -935,8 +941,6 @@ export default class DiskInfo {
                 cSectorsPerCluster *= 2;
             }
             cbCluster = cSectorsPerCluster * cbSector;
-            cHeads = this.nHeads;
-            cSectorsPerTrack = this.nSectors;
             setBoot(DiskInfo.BPB.CLUSSECS, 1, cSectorsPerCluster);
             setBoot(DiskInfo.BPB.FATSECS, 2, cFATSectors);
             setBoot(DiskInfo.BPB.FATS, 1, cFATs);
@@ -1019,7 +1023,7 @@ export default class DiskInfo {
          * it's important to create a disk image that will work with PC DOS 1.0, which didn't understand 180Kb and 360Kb
          * disk images.
          */
-        if (!cRootEntries) {
+        if (!cTotalSectors) {
             let maxRoot = 0;
             for (iBPB = 0; iBPB < DiskInfo.aDefaultBPBs.length; iBPB++) {
                 /*
@@ -1065,17 +1069,20 @@ export default class DiskInfo {
                 }
                 return false;
             }
+            if (cHiddenSectors) {
+                cDiagnosticSectors = cSectorsPerTrack * cHeads;
+            }
         }
 
-        let abSector;
-        let offDisk = 0;
+        let abSector, offDisk = 0;
         let cbDisk = cTotalSectors * cbSector;
 
         /*
-         * If the disk is actually a partition on a larger drive, calculate how much larger the image should be
-         * (ie, hidden sectors plus an entire cylinder reserved for diagnostics, head parking, etc).
+         * If the disk is actually a partition on a larger drive, calculate how much larger the drive data
+         * should be (ie, any hidden sectors preceding the volume, plus a final cylinder reserved for diagnostics,
+         * head parking, etc).
          */
-        let cbDrive = (cHiddenSectors? (cHiddenSectors + cSectorsPerTrack * cHeads) * cbSector : 0) + cbDisk;
+        let cbDrive = (cTotalSectors + cHiddenSectors + cDiagnosticSectors) * cbSector;
 
         /*
          * TODO: Consider doing what (the old) convertToIMG() did, which was deferring setting dbDisk until the
@@ -3566,7 +3573,8 @@ export default class DiskInfo {
                 for (let type of driveTypes) {
                     let parms = DRIVE_TYPES[iClass][type].slice();
                     parms.unshift(+type);
-                    parms[1]--; parms[3] = parms[3] || 17; parms[4] = parms[4] || 512;
+                    parms[3] = parms[3] || 17;
+                    parms[4] = parms[4] || 512;
                     let nTotalSectors = parms[1] * parms[2] * parms[3], cbSector = parms[4], cbTotal, diff;
                     if (cbSector != 512) continue;
                     cbTotal = nTotalSectors * cbSector;
@@ -3665,10 +3673,6 @@ export default class DiskInfo {
                         driveInfo.nSectors = this.nSectors;
                         driveInfo.cbSector = this.cbSector || parms[3] || 512;
                         driveInfo.driveSize = this.cbDiskData / 1024 / 1024;
-                        /*
-                         * Added bonus: return info about all the volume(s) on the drive as well, if any.
-                         */
-                        if (this.volTable) driveInfo.volTable = this.volTable;
                         return true;
                     }
                 }
