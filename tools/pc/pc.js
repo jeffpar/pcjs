@@ -95,11 +95,12 @@ function setDebugMode(nEvent)
 {
     let prevMode = debugMode;
     if (!nEvent && debugMode != nEvent) {
-        printf("Press CTRL-D to enter command mode, CTRL-C to terminate pc.js\n");
+        printf("[Press CTRL-D to enter command mode]\n");
     }
     debugMode = nEvent;
     if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
         command = "";
+        printf('[' + (commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
         printf("%s> ", prompt);
     }
 }
@@ -1974,19 +1975,19 @@ function readInput(stdin, stdout)
         if (Defines.MAXDEBUG) {
             printf("key(s): %j\n", data);
         }
-        if (code == 0x04 && !debugMode) {           // check for CTRL-D when NOT in debug mode
+        if (code == 0x04 && !debugMode) {               // check for CTRL-D when NOT in debug mode
             if (machine.cpu) machine.cpu.stopCPU();
             setDebugMode(DbgLib.EVENTS.READY);
             return;
         }
-        if (code == 0x03 && debugMode) {            // check for CTRL-C when in debug mode
+        if (code == 0x03 && debugMode) {                // check for CTRL-C when in debug mode
             printf("terminating...\n");
             exit();
             return;
         }
         if (!debugMode) {
             data = functionKeys[data] || data;
-            data = data.replace(/\x7f/g, "\b");     // convert DEL to BS
+            data = data.replace(/\x7f/g, "\b");         // convert DEL to BS
             if (machine.kbd) {
                 if (Defines.MAXDEBUG) {
                     printf("injecting key(s): %s\n", data);
@@ -1997,17 +1998,20 @@ function readInput(stdin, stdout)
             }
             return;
         }
-        if (data == "\x08" || data == "\x7f") {     // implement BS/DEL ourselves (since we're in "raw" mode)
-            if (command.length) {                   // (Windows generates BS, macOS generates DEL)
+        if (code == 0x08 || code == 0x7f) {             // implement BS/DEL ourselves (since we're in "raw" mode)
+            if (command.length) {                       // (Windows generates BS, macOS generates DEL)
                 command = command.slice(0, -1);
-                printf("\b \b");                    // by converting it to BS + SPACE + BS
+                printf("\b \b");                        // by converting it to BS + SPACE + BS
             }
             return;
         }
-        if (data == "\x1b[A" && !command.length) {  // implement UP ARROW ourselves (since we're in "raw" mode)
+        if (code == 0x01 && commandPrev) {              // implement CTRL-A as a command repeat action
+            data = commandPrev + '\r';
+        }
+        else if (data == "\x1b[A" && !command.length) { // implement UP ARROW ourselves (since we're in "raw" mode)
             data = commandPrev;
         }
-        else if (code < 0x20 && code != 0x0d) {     // anything else (including any ESC codes) is ignored
+        else if (code < 0x20 && code != 0x0d) {         // anything else (including any ESC codes) is ignored
             return;
         }
         printf("%s", data);
