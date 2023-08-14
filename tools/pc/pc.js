@@ -2081,28 +2081,41 @@ function main(argc, argv)
     maxCapacity = parseFloat(argv['drivesize']) || parseFloat(defaults['drivesize']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
 
-    if (typeof argv['drivetype'] == "string") {
-        let type = argv['drivetype'];
-        let matchCHS = type.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
-        if (matchCHS) {
-            driveInfo.driveClass = "PCJS";      // this pseudo-drive class is required for custom drive geometries
-            driveInfo.driveType = 0;
-            driveInfo.nCylinders = +matchCHS[1];
-            driveInfo.nHeads = +matchCHS[2];
-            driveInfo.nSectors = +matchCHS[3];
-            maxCapacity = 0;
-            driveOverride = true;
-        } else {
-            type = parseInt(type);
-            if (!isNaN(type)) {
-                driveInfo.driveType = type;
-            }
-        }
-    }
     if (typeof argv['driveclass'] == "string") {
         driveInfo.driveClass = argv['driveclass'].toUpperCase();
         driveOverride = true;
     }
+
+    if (typeof argv['drivetype'] == "string") {
+        let type = argv['drivetype'];
+        let match = type.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
+        if (match) {
+            maxCapacity = 0;
+            driveInfo.driveClass = "PCJS";      // this pseudo drive class is required for custom drive geometries
+            driveInfo.driveType = 0;
+            driveInfo.nCylinders = +match[1];
+            driveInfo.nHeads = +match[2];
+            driveInfo.nSectors = +match[3];
+            driveOverride = true;
+        } else {
+            match = type.match(/^([A-Z]+|):?([0-9]+)$/i)
+            if (match) {
+                let driveClass = match[1] || driveInfo.driveClass;
+                let driveType = +match[2];
+                if (DiskInfo.validateDriveType(driveClass, driveType)) {
+                    driveInfo.driveClass = driveClass;
+                    driveInfo.driveType = driveType;
+                    driveOverride = true;
+                } else {
+                    match = null;
+                }
+            }
+        }
+        if (!match) {
+            printf("unrecognized drive type: %s\n", type);
+        }
+    }
+
     if (typeof argv['fat'] == "string") {
         driveInfo.typeFAT = +argv['fat'] || driveInfo.typeFAT;
     }

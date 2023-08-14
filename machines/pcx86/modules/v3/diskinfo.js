@@ -212,7 +212,7 @@ export default class DiskInfo {
             driveInfo.driveType = -1;
         }
 
-        if (cbDiskData >= 3000000) {        // arbitrary threshold between diskette image sizes and hard drive image sizes
+        if (cbDiskData >= 3000000 || driveInfo.driveClass == "PCJS") {
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
             if (wSig == DiskInfo.BOOT.SIGNATURE) {
                 /*
@@ -492,11 +492,11 @@ export default class DiskInfo {
              * previously added ourselves as an original BPB.
              *
              * UPDATE: We now avoid doing this for any hard drive image (ie, 3Mb or larger -- the same arbitrary threshold
-             * we used earlier), because it turns out that PC DOS 3.00 (and perhaps later versions) look for certain OEM
-             * strings (eg, "IBM  2.0") as a BPB validity check, or perhaps simply as a 12-bit vs. 16-bit FAT discriminator.
+             * we used earlier), because it turns out that post 2.x versions of DOS (eg, PC DOS 3.00, MS-DOS 3.30) look for
+             * certain OEM strings (eg, "IBM  2.0", "IBM  3.1") as a for drive and FAT type determination.
              */
             let dw = dbDisk.readInt32BE(DiskInfo.BPB.OEM + offBootSector);
-            if (dw != DiskInfo.PCJS_VALUE && cbDiskData < 3000000) {
+            if (dw != DiskInfo.PCJS_VALUE && cbDiskData < 3000000 && driveInfo.driveClass != "PCJS") {
                 dbDisk.write(DiskInfo.PCJS_OEM, DiskInfo.BPB.OEM + offBootSector, DiskInfo.PCJS_OEM.length);
                 this.printf(Device.MESSAGE.INFO, "OEM string has been updated\n");
                 if (fnHash) this.fBPBModified = true;
@@ -3671,6 +3671,32 @@ export default class DiskInfo {
             }
         }
         return false;
+    }
+
+    /**
+     * validateDriveType(driveClass, driveType)
+     *
+     * @this {DiskInfo}
+     * @param {string} driveClass
+     * @param {number} driveType
+     * @returns {DriveInfo|null}
+     */
+    static validateDriveType(driveClass, driveType)
+    {
+        let driveInfo = null;
+        let iClass = DRIVE_CLASSES.indexOf(driveClass);
+        if (iClass >= 0) {
+            let parms = DRIVE_TYPES[iClass][driveType];
+            if (parms) {
+                let nCylinders = parms[0];
+                let nHeads = parms[1];
+                let nSectors = parms[2] || 17;
+                let cbSector = parms[3] || 512;
+                let driveSize = nCylinders * nHeads * nSectors * cbSector / 1024 / 1024;
+                driveInfo = {driveClass, driveType, nCylinders, nHeads, nSectors, cbSector, driveSize};
+            }
+        }
+        return driveInfo;
     }
 
     /**

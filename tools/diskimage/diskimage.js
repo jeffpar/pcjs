@@ -81,12 +81,6 @@ function createDisk(diskFile, diskette, argv, done)
         sArchiveFile = sArchiveFile.replace(".img", path.sep);
     }
 
-    let driveInfo = {
-        sectorIDs: diskette.argv['sectorID'] || argv['sectorID'],
-        sectorErrors: diskette.argv['sectorError'] || argv['sectorError'],
-        suppData: readFileSync(diskette.argv['suppData'] || argv['suppData'])
-    };
-
     let name = path.basename(sArchiveFile);
     let fDir = false, arcType = 0, sExt = StrLib.getExtension(sArchiveFile);
     if (sArchiveFile.endsWith(path.sep)) {
@@ -105,6 +99,8 @@ function createDisk(diskFile, diskette, argv, done)
         diskette.command = "--disk=" + name;
     }
 
+    let driveInfo = createDriveInfo(argv, diskette);
+
     diskette.archive = sArchiveFile;
     printf("checking archive: %s\n", sArchiveFile);
 
@@ -119,6 +115,51 @@ function createDisk(diskFile, diskette, argv, done)
     } else {
         done(readDiskSync(sArchiveFile, false, driveInfo));
     }
+}
+
+/**
+ * createDriveInfo(argv, diskette)
+ *
+ * @param {Object} argv
+ * @param {Object} [diskette]
+ * @returns {DiskInfo}
+ */
+function createDriveInfo(argv, diskette)
+{
+    let driveInfo = {};
+    let type = argv['drivetype'];
+    if (typeof type == "string") {
+        let match = type.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
+        if (match) {
+            maxCapacity = 0;
+            driveInfo.driveClass = "PCJS";      // this pseudo drive class is required for custom drive geometries
+            driveInfo.driveType = 0;
+            driveInfo.nCylinders = +match[1];
+            driveInfo.nHeads = +match[2];
+            driveInfo.nSectors = +match[3];
+            driveOverride = true;
+        } else {
+            match = type.match(/^([A-Z]+|):?([0-9]+)$/i)
+            if (match) {
+                let driveClass = match[1] || driveInfo.driveClass;
+                let driveType = +match[2];
+                if (DiskInfo.validateDriveType(driveClass, driveType)) {
+                    driveInfo.driveClass = driveClass;
+                    driveInfo.driveType = driveType;
+                    driveOverride = true;
+                } else {
+                    match = null;
+                }
+            }
+        }
+        if (!match) {
+            printf("unrecognized drive type: %s\n", type);
+        }
+    }
+    driveInfo.sectorIDs = diskette && diskette.argv['sectorID'] || argv['sectorID'];
+    driveInfo.sectorErrors = diskette && diskette.argv['sectorError'] || argv['sectorError'];
+    driveInfo.suppData = readFileSync(diskette && diskette.argv['suppData'] || argv['suppData']);
+    return driveInfo;
 }
 
 /**
@@ -1115,11 +1156,7 @@ function getArchiveOffset(sArchive, arcType, sOffset)
  */
 async function processDiskAsync(input, argv)
 {
-    let driveInfo = {
-        sectorIDs: argv['sectorID'],
-        sectorErrors: argv['sectorError'],
-        suppData: readFileSync(argv['suppData'])
-    };
+    let driveInfo = createDriveInfo(argv);
     let di = await readDiskAsync(input, argv['forceBPB'], driveInfo);
     if (di) {
         processDisk(di, input, argv);
@@ -1242,11 +1279,7 @@ function processArg(argv)
         }
     }
 
-    let driveInfo = {
-        sectorIDs: argv['sectorID'],
-        sectorErrors: argv['sectorError'],
-        suppData: readFileSync(argv['suppData'])
-    };
+    let driveInfo = createDriveInfo(argv);
 
     if (fDir || arcType) {
         let offset = getArchiveOffset(input, arcType, argv['offset']);

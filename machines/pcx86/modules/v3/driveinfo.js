@@ -101,35 +101,6 @@ const DRIVE_TYPES = [
     },
     /*
      * DRIVE_TYPES[1] is for the IBM PC AT (ATC) controller.
-     *
-     * The following is a more complete description of the drive types supported by the MODEL_5170, where C is
-     * Cylinders, H is Heads, WP is Write Pre-Comp, and LZ is Landing Zone (in practice, we don't need WP or LZ).
-     *
-     * Type    C    H   WP   LZ
-     * ----  ---   --  ---  ---
-     *   1   306    4  128  305
-     *   2   615    4  300  615
-     *   3   615    6  300  615
-     *   4   940    8  512  940
-     *   5   940    6  512  940
-     *   6   615    4   no  615
-     *   7   462    8  256  511
-     *   8   733    5   no  733
-     *   9   900   15   no  901
-     *  10   820    3   no  820
-     *  11   855    5   no  855
-     *  12   855    7   no  855
-     *  13   306    8  128  319
-     *  14   733    7   no  733
-     *  15  (reserved--all zeros)
-     *  16   612    4  all  663
-     *  17   977    5  300  977
-     *  18   977    7   no  977
-     *  19  1024    7  512 1023
-     *  20   733    5  300  732
-     *  21   733    7  300  732
-     *  22   733    5  300  733
-     *  23   306    4   no  336
      */
     {
          0: [1024,16,21,2048],  // arbitrary (reserved for CD-ROMs)
