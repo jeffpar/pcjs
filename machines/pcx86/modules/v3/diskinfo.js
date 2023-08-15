@@ -27,7 +27,7 @@ import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
  * @property {number} nFATBits
  * @property {number} vbaFAT
  * @property {number} vbaRoot
- * @property {number} nEntries
+ * @property {number} rootEntries
  * @property {number} vbaData
  * @property {number} clusSecs
  * @property {number} clusMax
@@ -853,7 +853,7 @@ export default class DiskInfo {
 
         let typeFAT = 12, cFATs = 2, cFATSectors;
         let iBPB, cbSector = 512, cSectorsPerCluster, cbCluster;
-        let cRootEntries = 0, cRootSectors;
+        let rootEntries = 0, cRootSectors;
         let cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
         let cHiddenSectors = 1, cReservedSectors = 1, cDiagnosticSectors = 0;
 
@@ -893,12 +893,13 @@ export default class DiskInfo {
             }
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
             /*
-             * If we were to go with clusters as large as 4K, would we still run out of clusters with a 12-bit FAT?
-             * That's the question we are about to ask, with some caveats: if the driveInfo parameter specifies a typeFAT
-             * of 12, then we'll try for clusters as large as 32K, and if a typeFAT of 16 is specified, we won't even
-             * ask the question (16 is always the answer).
+             * If we were to go with 2K clusters, would we run out of clusters with a 12-bit FAT?
+             *
+             * That's the question we are about to ask, with some caveats: if driveInfo explicitly requests
+             * a typeFAT of 12, then we'll try for clusters as large as 32K, and if a typeFAT of 16 is requested,
+             * we won't even ask the question (16 is always the answer).
              */
-            let maxClusSecs = driveInfo.typeFAT == 12? 64 : 8;
+            let maxClusSecs = driveInfo.typeFAT == 12? 64 : 4 /* (cTotalSectors > 5760? 4 : 8) */;
             let maxClusters = DiskInfo.FAT12.MAX_CLUSTERS;
             if (driveInfo.typeFAT == 16 || cTotalSectors / maxClusSecs > DiskInfo.FAT12.MAX_CLUSTERS) {
                 typeFAT = 16;
@@ -927,14 +928,12 @@ export default class DiskInfo {
              * accommodate and trash itself.  So we must limit cFATSectors to 64.
              */
             cSectorsPerCluster = Math.ceil(cTotalSectors / maxClusters);
-            if (cTotalSectors > 5760) {
-                cSectorsPerCluster = 4;
-            }
             let nearestPower = 1;
             while (nearestPower < cSectorsPerCluster && nearestPower < 64) {
                 nearestPower <<= 1;
             }
             cSectorsPerCluster = nearestPower;
+
             while ((cFATSectors = Math.ceil(((cTotalSectors / cSectorsPerCluster * typeFAT) / 8) / cbSector)) > 64) {
                 if (cSectorsPerCluster == 64) {
                     this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "cluster size (%d) at limit for FAT with %d sectors)\n", cSectorsPerCluster * cbSector, cFATSectors);
@@ -942,6 +941,8 @@ export default class DiskInfo {
                 }
                 cSectorsPerCluster *= 2;
             }
+            this.assert(cTotalSectors / cSectorsPerCluster <= maxClusters);
+
             cbCluster = cSectorsPerCluster * cbSector;
             setBoot(DiskInfo.BPB.CLUSSECS, 1, cSectorsPerCluster);
             setBoot(DiskInfo.BPB.FATSECS, 2, cFATSectors);
@@ -984,11 +985,11 @@ export default class DiskInfo {
              * (starting with our requirement that it be a sufficiently large multiple of 128 to hold all the files in
              * the "root" of our aFileData array).
              */
-            cRootEntries = 128;
-            if (cRootEntries < aFileData.length) {
-                cRootEntries = Math.ceil(aFileData.length / cRootEntries) * cRootEntries;
+            rootEntries = 128;
+            if (rootEntries < aFileData.length) {
+                rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
             }
-            cRootSectors = (cRootEntries * 32) / cbSector;
+            cRootSectors = (rootEntries * 32) / cbSector;
             if (aFileData[0]) {
                 let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
                 let cInitFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
@@ -996,11 +997,11 @@ export default class DiskInfo {
                 let cFilePartialSectors = (cFileSectors % cSectorsPerTrack) || cSectorsPerTrack;
                 while (cInitFreeSectors != cFilePartialSectors) {
                     cRootSectors++;
-                    cRootEntries += (cbSector >> 5);
+                    rootEntries += (cbSector >> 5);
                     if (!--cInitFreeSectors) cInitFreeSectors = cSectorsPerTrack;
                 }
             }
-            setBoot(DiskInfo.BPB.DIRENTS, 2, cRootEntries);
+            setBoot(DiskInfo.BPB.DIRENTS, 2, rootEntries);
             cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + cReservedSectors);
             cbAvail = cDataSectors * cbSector;
             iBPB = DiskInfo.aDefaultBPBs.length;
@@ -1036,15 +1037,15 @@ export default class DiskInfo {
                  * If this BPB is for a hard drive but a disk size was not specified, skip it.
                  */
                 if ((abBoot[DiskInfo.BPB.MEDIA] == DiskInfo.FAT.MEDIA_FIXED) != (kbTarget >= 10000)) continue;
-                cRootEntries = getBoot(DiskInfo.BPB.DIRENTS, 2);
-                if (cRootEntries > maxRoot) maxRoot = cRootEntries;
-                if (aFileData.length > cRootEntries) continue;
+                rootEntries = getBoot(DiskInfo.BPB.DIRENTS, 2);
+                if (rootEntries > maxRoot) maxRoot = rootEntries;
+                if (aFileData.length > rootEntries) continue;
                 cbSector = getBoot(DiskInfo.BPB.SECBYTES, 2);
                 cSectorsPerCluster = abBoot[DiskInfo.BPB.CLUSSECS];
                 cbCluster = cbSector * cSectorsPerCluster;
                 cFATs = abBoot[DiskInfo.BPB.FATS];
                 cFATSectors = getBoot(DiskInfo.BPB.FATSECS, 2);
-                cRootSectors = (((cRootEntries * DiskInfo.DIRENT.LENGTH) + cbSector - 1) / cbSector) | 0;
+                cRootSectors = (((rootEntries * DiskInfo.DIRENT.LENGTH) + cbSector - 1) / cbSector) | 0;
                 cTotalSectors = getBoot(DiskInfo.BPB.DISKSECS, 2);
                 cHiddenSectors = getBoot(DiskInfo.BPB.HIDDENSECS, 2);
                 cSectorsPerTrack = getBoot(DiskInfo.BPB.TRACKSECS, 2);
@@ -1151,7 +1152,7 @@ export default class DiskInfo {
          */
         if (iBPB < 2) {
             let offRoot = cEntries * DiskInfo.DIRENT.LENGTH;
-            while (cEntries++ < cRootEntries) {
+            while (cEntries++ < rootEntries) {
                 abRoot[offRoot] = DiskInfo.DIRENT.INVALID;         // 0xE5
                 offRoot += DiskInfo.DIRENT.LENGTH;                 // 0x20 (32)
             }
@@ -2093,7 +2094,7 @@ export default class DiskInfo {
                             vol.vbaRoot = vol.vbaFAT + bpb[DiskInfo.BPB.FATSECS] * bpb[DiskInfo.BPB.FATS];
                             vol.clusSecs = bpb[DiskInfo.BPB.CLUSSECS];
                             vol.lbaTotal = cbDiskBPB / this.cbSector;
-                            vol.nEntries = bpb[DiskInfo.BPB.DIRENTS];
+                            vol.rootEntries = bpb[DiskInfo.BPB.DIRENTS];
                             vol.cbSector = this.cbSector;
                             break;
                         }
@@ -2106,6 +2107,7 @@ export default class DiskInfo {
         if (!vol.idMedia) {
 
             idMedia = 0;
+            vol.nFATBits = 0;
             vol.cbSector = this.cbSector;
 
             /*
@@ -2141,6 +2143,7 @@ export default class DiskInfo {
                                 if (this.getSectorData(sectorBoot, DiskInfo.BPB.SECBYTES, 2) != this.cbSector) {
                                     sectorBoot = null;      // sectorBoot should have contained a DOS boot sector with BPB, but apparently not
                                 }
+                                vol.nFATBits = (bType == DiskInfo.MBR.PARTITIONS.TYPE.FAT12_PRIMARY)? 12 : 16;
                                 break;
                             }
                         }
@@ -2176,11 +2179,11 @@ export default class DiskInfo {
             vol.lbaTotal = this.getSectorData(sectorBoot, DiskInfo.BPB.DISKSECS, 2) || this.getSectorData(sectorBoot, DiskInfo.BPB.LARGESECS, 4);
             vol.vbaFAT = this.getSectorData(sectorBoot, DiskInfo.BPB.RESSECS, 2);
             vol.vbaRoot = vol.vbaFAT + this.getSectorData(sectorBoot, DiskInfo.BPB.FATSECS, 2) * this.getSectorData(sectorBoot, DiskInfo.BPB.FATS, 1);
-            vol.nEntries = this.getSectorData(sectorBoot, DiskInfo.BPB.DIRENTS, 2);
+            vol.rootEntries = this.getSectorData(sectorBoot, DiskInfo.BPB.DIRENTS, 2);
             vol.clusSecs = this.getSectorData(sectorBoot, DiskInfo.BPB.CLUSSECS, 1);
         }
 
-        vol.vbaData = vol.vbaRoot + (((vol.nEntries * DiskInfo.DIRENT.LENGTH + (vol.cbSector - 1)) / vol.cbSector) | 0);
+        vol.vbaData = vol.vbaRoot + (((vol.rootEntries * DiskInfo.DIRENT.LENGTH + (vol.cbSector - 1)) / vol.cbSector) | 0);
         vol.clusTotal = (((vol.lbaTotal - vol.vbaData) / vol.clusSecs) | 0);
 
         /*
@@ -2198,10 +2201,17 @@ export default class DiskInfo {
          * So, a FAT volume with 4084 or fewer clusters uses a 12-bit FAT, a FAT volume with 4085 to 65524 clusters uses
          * a 16-bit FAT, and a FAT volume with more than 65524 clusters uses a 32-bit FAT.
          *
+         * That being said, I've since updated the partition code above to set nFATBits based on the partition type, and
+         * assert below that it was actually set, while also keeping the old MAX_CLUSTERS check in place as a fallback.
+         *
          * TODO: Eventually add support for FAT32.
          */
-        vol.nFATBits = (vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS? 12 : 16);
-        vol.clusMax = (vol.nFATBits == 12? DiskInfo.FAT12.CLUSNUM_MAX : DiskInfo.FAT16.CLUSNUM_MAX);
+
+        this.assert(vol.nFATBits == 12 && vol.clusTotal < DiskInfo.FAT12.MAX_CLUSTERS || vol.nFATBits == 16 && vol.clusTotal < DiskInfo.FAT16.MAX_CLUSTERS);
+        if (!vol.nFATBits) {
+            vol.nFATBits = (vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS)? 12 : 16;
+        }
+        vol.clusMax = (vol.nFATBits == 12)? DiskInfo.FAT12.CLUSNUM_MAX : DiskInfo.FAT16.CLUSNUM_MAX;
 
         if (!idMedia) idMedia = this.getClusterEntry(vol, 0, 0);
 
@@ -2222,11 +2232,11 @@ export default class DiskInfo {
         /*
          * Similarly, it is NOT a requirement that the size of all root directory entries be a perfect multiple of the sector
          * size (cbSector), but it may indicate a problem if it's not.  Note that when it comes time to read the root directory,
-         * we treat it exactly like any other directory; that is, we ignore the nEntries value and scan the entire contents of
-         * every sector allocated to the directory.  TODO: Determine whether DOS reads all root sector contents or only nEntries
-         * (ie, create a test volume where nEntries * 32 is NOT a multiple of cbSector and watch what happens).
+         * we treat it exactly like any other directory; that is, we ignore the rootEntries value and scan the entire contents of
+         * every sector allocated to the directory.  TODO: Determine whether DOS reads all root sector contents or only rootEntries
+         * (ie, create a test volume where rootEntries * 32 is NOT a multiple of cbSector and watch what happens).
          */
-        this.assert(!((vol.nEntries * DiskInfo.DIRENT.LENGTH) % vol.cbSector));
+        this.assert(!((vol.rootEntries * DiskInfo.DIRENT.LENGTH) % vol.cbSector));
 
         this.volTable.push(vol);
 
@@ -2636,7 +2646,7 @@ export default class DiskInfo {
             [DiskInfo.VOLDESC.FAT_ID]:     vol.nFATBits,
             [DiskInfo.VOLDESC.VBA_FAT]:    vol.vbaFAT,
             [DiskInfo.VOLDESC.VBA_ROOT]:   vol.vbaRoot,
-            [DiskInfo.VOLDESC.ROOT_TOTAL]: vol.nEntries,
+            [DiskInfo.VOLDESC.ROOT_TOTAL]: vol.rootEntries,
             [DiskInfo.VOLDESC.VBA_DATA]:   vol.vbaData,
             [DiskInfo.VOLDESC.CLUS_SECS]:  vol.clusSecs,
             [DiskInfo.VOLDESC.CLUS_MAX]:   vol.clusMax,

@@ -56,15 +56,17 @@ let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
 let driveManifest = null, driveOverride = false, geometryOverride = false;
 let driveInfo = {
-    driveCtrl: "COMPAQ",
-    driveType:  -1,
-    nCylinders: 0,
-    nHeads:     0,
-    nSectors:   0,
-    cbSector:   0,
-    driveSize:  0,
-    typeFAT:    0,
-    files:      []
+    driveCtrl:   "COMPAQ",
+    driveType:   -1,
+    nCylinders:  0,
+    nHeads:      0,
+    nSectors:    0,
+    cbSector:    0,
+    driveSize:   0,
+    typeFAT:     0,     // set this to 12 or 16 to request a specific FAT type
+    clusSecs:    0,     // set this to a specific cluster size (in sectors) if desired
+    rootEntries: 0,     // set this to a specific number of root directory entries if desired
+    files:       []
 };
 
 const functionKeys = {
@@ -746,8 +748,12 @@ function loadMachine(sFile)
                 }
             }
             if (!drives) drives = [];
-            if (driveInfo.driveCtrl != typeCtrl && driveInfo.driveCtrl != "PCJS") {
-                printf("warning: default drive controller (%s) does not match actual controller (%s)\n", driveInfo.driveCtrl, typeCtrl);
+            if (driveInfo.driveCtrl != "PCJS") {
+                let driveCtrl = driveInfo.driveCtrl;
+                if (driveCtrl == "COMPAQ") driveCtrl = "AT";    // COMPAQ is AT-compatible, so suppress the warning
+                if (driveCtrl != typeCtrl) {
+                    printf("warning: drive controller (%s) does not match actual controller (%s)\n", driveCtrl, typeCtrl);
+                }
             }
             /*
              * If we don't have a drive type (eg, if no drive was built and no drive type was explicitly set),
@@ -1819,24 +1825,35 @@ function doCommand(s)
                 cylinders: driveInfo.nCylinders,
                 heads: driveInfo.nHeads,
                 sectorsPerTrack: driveInfo.nSectors,
-                size: driveInfo.driveSize.toFixed(1) + "mb",
+                sectorSize: driveInfo.cbSector || 512,
+                driveSize: driveInfo.driveSize.toFixed(1) + "mb",
             };
+            if (driveInfo.clusSecs) {
+                info.clusterSize = driveInfo.clusSecs * info.sectorSize;
+            }
+            if (driveInfo.typeFAT) {
+                info.typeFAT = driveInfo.typeFAT;
+            }
+            if (driveInfo.rootEntries) {
+                info.rootEntries = driveInfo.rootEntries;
+            }
             if (driveInfo.volTable) {
                 let vol = driveInfo.volTable[0];
                 info.mediaID = sprintf("%#04x", vol.idMedia);
                 let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
                 info.typeFAT = vol.nFATBits || vol.idFAT;
-                info.totalFATs = sectorsFAT / ((vol.clusTotal * info.typeFAT) / 8 / 512)|0;
+                info.totalFATs = sectorsFAT / ((vol.clusTotal * info.typeFAT) / 8 / info.sectorSize)|0;
+                info.rootEntries = vol.rootEntries || vol.rootTotal;
                 info.sectorsHidden = vol.lbaStart;
                 info.sectorsReserved = vol.vbaFAT;
                 info.sectorsFAT = sectorsFAT;
-                info.sectorsRoot = (vol.nEntries || vol.rootTotal) / 16;
+                info.sectorsRoot = info.rootEntries / 16;
                 info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
-                info.sectorsPerCluster = vol.clusSecs;
+                info.clusterSize = vol.clusSecs * info.sectorSize;
                 info.clustersTotal = vol.clusTotal;
                 info.clustersFree = vol.clusFree;
-                info.bytesTotal = vol.clusTotal * vol.clusSecs * 512;
-                info.bytesFree = vol.clusFree * vol.clusSecs * 512;
+                info.bytesTotal = vol.clusTotal * vol.clusSecs * info.sectorSize;
+                info.bytesFree = vol.clusFree * vol.clusSecs * info.sectorSize;
             }
             result = sprintf("%2j", info);
         } else {
@@ -2204,7 +2221,7 @@ function main(argc, argv)
 
     if (typeof argv['drivetype'] == "string") {
         let typeDrive = argv['drivetype'];
-        let match =typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
+        let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
         if (match) {
             maxCapacity = 0;
             driveInfo.driveCtrl = "PCJS";      // this pseudo drive controller is required for custom drive geometries
@@ -2214,7 +2231,7 @@ function main(argc, argv)
             driveInfo.nSectors = +match[3];
             driveOverride = true;
         } else {
-            match =typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
+            match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
             if (match) {
                 let driveCtrl = match[1] || driveInfo.driveCtrl;
                 let driveType = +match[2];
@@ -2233,7 +2250,13 @@ function main(argc, argv)
     }
 
     if (typeof argv['fat'] == "string") {
-        driveInfo.typeFAT = +argv['fat'] || driveInfo.typeFAT;
+        let typeFAT = argv['fat'];
+        let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
+        if (match) {
+            driveInfo.typeFAT = +match[1];
+            if (match[2]) driveInfo.clusSecs = +match[2];
+            if (match[3]) driveInfo.rootEntries = +match[3];
+        }
     }
 
     fHalt = argv['halt'] || fHalt;
