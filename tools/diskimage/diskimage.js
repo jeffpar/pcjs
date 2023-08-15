@@ -150,7 +150,13 @@ function createDriveInfo(argv, diskette)
                 }
             }
         }
-        if (!match) {
+        if (match) {
+            /*
+             * Setting driveCtrl triggers the custom drive build logic; otherwise, buildDiskFromFiles()
+             * will revert to its old logic, which revolves around predefined BPBs.
+             */
+            driveInfo.driveCtrl = "XT";
+        } else {
             printf("unrecognized drive type: %s\n", typeDrive);
         }
     }
@@ -159,6 +165,7 @@ function createDriveInfo(argv, diskette)
     if (typeof typeFAT == "string") {
         let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
         if (match) {
+            driveInfo.driveCtrl = "XT";
             driveInfo.typeFAT = +match[1];
             if (match[2]) driveInfo.clusSecs = +match[2];
             if (match[3]) driveInfo.rootEntries = +match[3];
