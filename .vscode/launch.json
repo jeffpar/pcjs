@@ -466,12 +466,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ibm5170",
-        "disks/MSDOS320B",
-        "--fat=16",
-        "--verbose",
-        "--halt",
-        "dir"
+        "ibm5160",
+        "--drivetype=20:3:11"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,

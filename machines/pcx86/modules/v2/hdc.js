@@ -16,7 +16,7 @@ import DiskAPI from "../../../modules/v2/diskapi.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { DRIVE_CLASSES, DRIVE_TYPES } from "../v3/driveinfo.js";
+import { DRIVE_CTRLS, DRIVE_TYPES } from "../v3/driveinfo.js";
 import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /**
@@ -132,9 +132,9 @@ export default class HDC extends Component {
          */
         this.fATC = this.fATAPI = false;
         this.sType = (parmsHDC['type'] || "XT").toUpperCase();
-        if (this.sType.slice(0, 2) != "XT") {
+        if (this.sType.indexOf("XT") < 0) {
             this.fATC = true;
-            this.fATAPI = (this.sType.slice(0, 5) == "ATAPI");
+            this.fATAPI = this.sType.indexOf("ATAPI") >= 0;
         }
         this.nInterface = (this.fATAPI? 1 : 0);     // default to the secondary interface if type is "ATAPI"
         let nInterface = this.sType.slice(-1);      // but if an interface is specified (e.g., "AT2", "ATAPI1"), honor it
@@ -270,7 +270,7 @@ export default class HDC extends Component {
          */
         this.chipset = cmp.getMachineComponent("ChipSet");
 
-        this.iDriveClass = 0;
+        this.iDriveCtrl = 0;
         this.iDriveTypeDefault = 3;
 
         if (!this.fATC) {
@@ -288,8 +288,8 @@ export default class HDC extends Component {
                 bus.addPortInputWidth(HDC.ATC.DATA.PORT2, 2);
                 bus.addPortOutputWidth(HDC.ATC.DATA.PORT2, 2);
             }
-            this.iDriveClass++;
-            if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.iDriveClass++;
+            this.iDriveCtrl++;
+            if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) this.iDriveCtrl++;
             this.iDriveTypeDefault = 2;
         }
 
@@ -656,9 +656,9 @@ export default class HDC extends Component {
         }
 
         drive.type = driveConfig['type'];
-        if (drive.type === undefined || DRIVE_TYPES[this.iDriveClass][drive.type] === undefined) drive.type = this.iDriveTypeDefault;
+        if (drive.type === undefined || DRIVE_TYPES[this.iDriveCtrl][drive.type] === undefined) drive.type = this.iDriveTypeDefault;
 
-        let driveType = DRIVE_TYPES[this.iDriveClass][drive.type];
+        let driveType = DRIVE_TYPES[this.iDriveCtrl][drive.type];
         drive.nSectors = driveType[2] || 17;                        // sectors/track
         drive.cbSector = drive.cbTransfer = driveType[3] || 512;    // bytes/sector (default is 512 if unspecified in the table)
 
@@ -804,8 +804,8 @@ export default class HDC extends Component {
                 }
             }
             if (type != null && !nHeads) {
-                nHeads = DRIVE_TYPES[this.iDriveClass][type][1];
-                nCylinders = DRIVE_TYPES[this.iDriveClass][type][0];
+                nHeads = DRIVE_TYPES[this.iDriveCtrl][type][1];
+                nCylinders = DRIVE_TYPES[this.iDriveCtrl][type][0];
             }
             if (nHeads) {
                 /*
@@ -815,7 +815,7 @@ export default class HDC extends Component {
                  *
                  * Do these values agree with those for the given drive type?  Even if they don't, all we do is warn.
                  */
-                let driveType = DRIVE_TYPES[this.iDriveClass][drive.type];
+                let driveType = DRIVE_TYPES[this.iDriveCtrl][drive.type];
                 if (driveType) {
                     if (nCylinders != driveType[0] && nHeads != driveType[1]) {
                         this.printf(Messages.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
@@ -1001,7 +1001,7 @@ export default class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CLASSES[this.iDriveClass], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDriveCtrl], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
             }
         }
         if (drive.fAutoMount) {

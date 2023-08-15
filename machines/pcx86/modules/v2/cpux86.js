@@ -1486,6 +1486,7 @@ export default class CPUx86 extends CPULib {
      */
     addIntNotify(nInt, fn)
     {
+        this.assert(nInt >= 0 && nInt < 256);
         if (this.aIntNotify[nInt] === undefined) {
             this.aIntNotify[nInt] = [];
         }

@@ -85,9 +85,9 @@
 /*
  * Drive type tables differed across IBM controller models (XTC drive types don't match ATC drive types) and across OEMs
  * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDeviceType to index the correct table type
- * inside both DRIVE_CLASSES and DRIVE_TYPES.
+ * inside both DRIVE_CTRLS and DRIVE_TYPES.
  */
-const DRIVE_CLASSES = ["XT", "AT", "COMPAQ"];
+const DRIVE_CTRLS = ["XT", "AT", "COMPAQ"];
 
 const DRIVE_TYPES = [
     /*
@@ -191,4 +191,4 @@ const DRIVE_TYPES = [
     }
 ];
 
-export { DRIVE_CLASSES, DRIVE_TYPES };
+export { DRIVE_CTRLS, DRIVE_TYPES };

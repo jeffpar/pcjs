@@ -54,9 +54,9 @@ let machine = newMachine();
 let diskItems = [];
 let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
-let driveManifest = null, driveOverride = false;
+let driveManifest = null, driveOverride = false, geometryOverride = false;
 let driveInfo = {
-    driveClass: "COMPAQ",
+    driveCtrl: "COMPAQ",
     driveType:  -1,
     nCylinders: 0,
     nHeads:     0,
@@ -282,12 +282,11 @@ function initMachine(args)
          * the debugger's print() function.
          */
         machine.cpu = Component.getComponentByType("CPU");
-        if (machine.cpu && machine.cpu.addIntNotify) {
-            if (Interrupts && Interrupts.VIDEO) {
-                machine.cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(machine.cpu));
-                machine.cpu.addIntNotify(Interrupts.BOOTSTRAP, intReboot.bind(machine.cpu));
-                machine.cpu.addIntNotify(Interrupts.DOS_EXIT, intLoad.bind(machine.cpu));
-            }
+        if (machine.cpu && machine.cpu.addIntNotify && Interrupts) {
+            machine.cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(machine.cpu));
+            machine.cpu.addIntNotify(Interrupts.DISK, intDisk.bind(machine.cpu));
+            machine.cpu.addIntNotify(Interrupts.BOOTSTRAP, intReboot.bind(machine.cpu));
+            machine.cpu.addIntNotify(Interrupts.DOS_EXIT, intLoad.bind(machine.cpu));
         }
 
         /*
@@ -435,6 +434,57 @@ function intVideo(addr)
 }
 
 /**
+ * intDisk(addr)
+ *
+ * @param {CPUx86} this
+ * @param {number} addr
+ * @returns {boolean} true to proceed with the INT 0x13 software interrupt, false to skip
+ */
+function intDisk(addr)
+{
+    if (geometryOverride) {
+        let cpu = this;
+        /*
+         * We do basically the same thing our custom MBR does: build a drive table in unused
+         * interrupt vector space (16 bytes spanning vectors 0xC0 to 0xC3) and then point the
+         * drive table vector at 0x41 to that space.
+         *
+         * Unlike our custom MBR (see MBR.ASM), we need only do this for the primary drive,
+         * because we don't currently support building or overriding additional drives.  Otherwise,
+         * we would also need to build a secondary drive table (eg, in the space spanning vectors
+         * 0xC4 to 0xC7) and update the secondary drive table vector at 0x46.
+         *
+         * I don't relish altering the machine state like this (using the custom MBR is much
+         * cleaner and should actually be compatible with real hardware), but in order to test the
+         * operating system's ability to initialize and format drives with custom geometries
+         * from scratch, this seems the best alternative.
+         */
+        for (let off = 0; off < 16; off++) {
+            let b = 0;
+            switch(off) {
+            case 0x00:
+                b = driveInfo.nCylinders & 0xff;
+                break;
+            case 0x01:
+                b = (driveInfo.nCylinders >> 8) & 0xff;
+                break;
+            case 0x02:
+                b = driveInfo.nHeads;
+                break;
+            case 0x0E:
+                b = driveInfo.nSectors;
+                break;
+            }
+            cpu.setByte(0xC0 * 4 + off, b);
+        }
+        cpu.setShort(0x41 * 4, 0xC0 * 4);
+        cpu.setShort(0x41 * 4 + 2, 0);
+        geometryOverride = false;
+    }
+    return true;
+}
+
+/**
  * intReboot(addr)
  *
  * @param {CPUx86} this
@@ -443,11 +493,27 @@ function intVideo(addr)
  */
 function intReboot(addr)
 {
+    /*
+     * An INT 19h issued from our own RETURN.COM is a signal to shut down.
+     */
     if (this.getIP() == 0x102) {
         let sig = this.getSOWord(this.segCS, this.getIP()+2) + (this.getSOWord(this.segCS, this.getIP()+4) << 16);
         if (sig == 0x534A4350) {        // "PCJS"
             exit();                     // INT 19h appears to have come from RETURN.COM
         }
+    }
+    /*
+     * Any other INT 19h should proceed normally; however, if the machine's hard drive(s) are using
+     * custom geometries AND we didn't build a drive image with our custom MBR, then the drive table(s)
+     * for those geometries will never get loaded into memory.  So we take this opportunity to install
+     * them before the boot process begins.
+     *
+     * Unfortunately, the default INT 19h behavior resets the drive table vectors, so if we tried to
+     * install our own drive tables now, they would immediately be replaced.  So instead we set a flag
+     * (geometryOverride) telling our intDisk() handler to install drive tables on the next INT 13h call.
+     */
+    if (!driveManifest && driveInfo.driveCtrl == "PCJS") {
+        geometryOverride = true;
     }
     return true;
 }
@@ -591,18 +657,18 @@ function checkMachine(sFile)
     if (sFile && !driveOverride) {
         if (machine) {
             if (machine['hdc']) {
-                driveInfo.driveClass = machine['hdc']['type'];
+                driveInfo.driveCtrl = machine['hdc']['type'];
             }
             if (machine['chipset'] && machine['chipset']['model'] == "deskpro386") {
-                driveInfo.driveClass = "COMPAQ";
+                driveInfo.driveCtrl = "COMPAQ";
             }
         } else {
             if (sFile.indexOf("5160") >= 0) {
-                driveInfo.driveClass = "XT";
+                driveInfo.driveCtrl = "XT";
             } else if (sFile.indexOf("5170") >= 0) {
-                driveInfo.driveClass = "AT";
+                driveInfo.driveCtrl = "AT";
             } else if (sFile.indexOf("compaq") >= 0) {
-                driveInfo.driveClass = "COMPAQ";
+                driveInfo.driveCtrl = "COMPAQ";
             }
         }
     }
@@ -652,7 +718,7 @@ function loadMachine(sFile)
     let getFactory = function(config) {
 
         let removeFloppy = fNoFloppy;
-        let type = config['type'] || (config['machine'] && config['machine']['type']) || machineType;
+        let typeMachine = config['type'] || (config['machine'] && config['machine']['type']) || machineType;
 
         machine.id = "";
         if (config['machine']) {
@@ -670,7 +736,7 @@ function loadMachine(sFile)
         }
 
         if (config['hdc']) {
-            let type = config['hdc']['type'];
+            let typeCtrl = config['hdc']['type'];
             let drives = config['hdc']['drives'];
             if (typeof drives == "string") {
                 try {
@@ -680,21 +746,29 @@ function loadMachine(sFile)
                 }
             }
             if (!drives) drives = [];
+            if (driveInfo.driveCtrl != typeCtrl && driveInfo.driveCtrl != "PCJS") {
+                printf("warning: default drive controller (%s) does not match actual controller (%s)\n", driveInfo.driveCtrl, typeCtrl);
+            }
             /*
-             * If we don't have a drive type (eg, if no drive was built), we still want to try to match
-             * the target capacity with a drive.  Convert the capacity from Mb to sectors and then give it a go.
+             * If we don't have a drive type (eg, if no drive was built and no drive type was explicitly set),
+             * we would still like to match the target capacity with a drive.  Convert the capacity from Mb to
+             * sectors and then give it a go.
+             *
+             * And even if we do have a drive type, findDriveType() should simply verify that the type is valid.
              */
-            if (driveInfo.driveType < 0) {
-                if (DiskInfo.findDriveType(driveInfo, maxCapacity * 1024 * 2, device)) {
-                    if (fVerbose) {
-                        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveClass, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
-                    }
+            if (DiskInfo.findDriveType(driveInfo, maxCapacity * 1024 * 2, device)) {
+                if (fVerbose) {
+                    printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
                 }
             }
             if (driveInfo.driveType >= 0) {
                 let driveType = driveInfo.driveType;
-                if (!driveType && driveInfo.driveClass == "PCJS") {
-                    driveType = 1;          // any drive type will do...
+                if (!driveType && driveInfo.driveCtrl == "PCJS") {
+                    /*
+                     * When a custom geometry is being used, we need to set the drive type to the FIRST type used
+                     * by the current drive controller (the PC XT started with type 0, while the PC AT started with 1).
+                     */
+                    driveType = (typeCtrl == "XT")? 0 : 1;
                 }
                 drives[0] = {
                     'type': driveType,
@@ -707,7 +781,11 @@ function loadMachine(sFile)
                     }
                 }
                 if (driveOverride) {
-                    config['hdc']['type'] = driveInfo.driveClass;
+                    let type = driveInfo.driveCtrl;
+                    if (driveInfo.driveCtrl == "PCJS") {
+                        type = driveInfo.driveCtrl + '-' + typeCtrl;
+                    }
+                    config['hdc']['type'] = type;
                 }
             }
             config['hdc']['drives'] = drives;
@@ -730,7 +808,7 @@ function loadMachine(sFile)
         }
 
         let args = JSON.stringify(config);
-        loadModules(machines[type]['factory'], machines[type]['modules'], function() {
+        loadModules(machines[typeMachine]['factory'], machines[typeMachine]['modules'], function() {
             initMachine(args);
         });
     };
@@ -971,7 +1049,7 @@ async function buildDrive(sDir, sCommand = "", fLog = false)
         return "missing system diskette: " + sSystemDisk;
     }
 
-    let sSystemMBR = (driveInfo.driveClass == "PCJS")? "pcjs.mbr" : "DOS.mbr";
+    let sSystemMBR = (driveInfo.driveCtrl == "PCJS")? "pcjs.mbr" : "DOS.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -1225,7 +1303,7 @@ function updateDriveInfo(di)
 {
     if (di.getDriveType(driveInfo)) {
         if (fVerbose) {
-            printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveClass, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
+            printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
         }
     }
     driveInfo.volTable = di.volTable;
@@ -1734,9 +1812,9 @@ function doCommand(s)
         });
         break;
     case "disk":
-        if (driveManifest || driveInfo.volTable) {
+        if (driveManifest || driveInfo.volTable || driveInfo.driveType >= 0) {
             let info = {
-                class: driveInfo.driveClass,
+                controller: driveInfo.driveCtrl,
                 type: driveInfo.driveType,
                 cylinders: driveInfo.nCylinders,
                 heads: driveInfo.nHeads,
@@ -2119,38 +2197,38 @@ function main(argc, argv)
     maxCapacity = parseFloat(argv['drivesize']) || parseFloat(defaults['drivesize']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
 
-    if (typeof argv['driveclass'] == "string") {
-        driveInfo.driveClass = argv['driveclass'].toUpperCase();
+    if (typeof argv['drivectrl'] == "string") {
+        driveInfo.driveCtrl = argv['drivectrl'].toUpperCase();
         driveOverride = true;
     }
 
     if (typeof argv['drivetype'] == "string") {
-        let type = argv['drivetype'];
-        let match = type.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
+        let typeDrive = argv['drivetype'];
+        let match =typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
         if (match) {
             maxCapacity = 0;
-            driveInfo.driveClass = "PCJS";      // this pseudo drive class is required for custom drive geometries
+            driveInfo.driveCtrl = "PCJS";      // this pseudo drive controller is required for custom drive geometries
             driveInfo.driveType = 0;
             driveInfo.nCylinders = +match[1];
             driveInfo.nHeads = +match[2];
             driveInfo.nSectors = +match[3];
             driveOverride = true;
         } else {
-            match = type.match(/^([A-Z]+|):?([0-9]+)$/i)
+            match =typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
             if (match) {
-                let driveClass = match[1] || driveInfo.driveClass;
+                let driveCtrl = match[1] || driveInfo.driveCtrl;
                 let driveType = +match[2];
-                if (DiskInfo.validateDriveType(driveClass, driveType)) {
-                    driveInfo.driveClass = driveClass;
+                if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
+                    driveInfo.driveCtrl = driveCtrl;
                     driveInfo.driveType = driveType;
-                    driveOverride = true;
+                    driveOverride = !!match[1];
                 } else {
                     match = null;
                 }
             }
         }
         if (!match) {
-            printf("unrecognized drive type: %s\n", type);
+            printf("unrecognized drive type: %s\n",typeDrive);
         }
     }
 
@@ -2169,9 +2247,9 @@ function main(argc, argv)
         let optionsHard = {
             "--dir=[directory]":        "set drive local directory (default is " + localDir + ")",
             "--disk=[disk image]":      "set drive disk image (instead of directory)",
-            "--driveclass=[class]":     "set drive controller class (eg, XT, AT, COMPAQ)",
+            "--drivectrl=[ctrl]":       "set drive controller (eg, XT, AT, COMPAQ)",
             "--drivesize=[size]":       "set drive capacity (default is " + maxCapacity + "mb)",
-            "--drivetype=[number]":     "set drive type # or C:H:S values (eg, 305:4:17)",
+            "--drivetype=[number]":     "set drive type # or C:H:S values (eg, 306:4:17)",
             "--fat=[number]":           "\tset FAT type (12 or 16; default is variable)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--system=[string]":        "operating system type (default is " + systemType + ")",

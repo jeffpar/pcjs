@@ -11,7 +11,7 @@ import CPUx86 from "./cpux86.js";
 import CharSet from "./charset.js";
 import Device from "../../../modules/v3/device.js";
 import FileInfo from "./fileinfo.js";
-import { DRIVE_CLASSES, DRIVE_TYPES } from "./driveinfo.js";
+import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
 
 /**
  * VolInfo describes a volume.  NOTE: this list of properties may not be
@@ -88,7 +88,7 @@ import { DRIVE_CLASSES, DRIVE_TYPES } from "./driveinfo.js";
 
 /**
  * @typedef {Object} DriveInfo
- * @property {string} driveClass
+ * @property {string} driveCtrl
  * @property {number} driveType
  * @property {number} nCylinders
  * @property {number} nHeads
@@ -109,7 +109,7 @@ import { DRIVE_CLASSES, DRIVE_TYPES } from "./driveinfo.js";
  * @property {Array} aDiskData
  * @property {number} cbDiskData
  * @property {number} dwChecksum
- * @property {string} driveClass
+ * @property {string} driveCtrl
  * @property {number} driveType
  * @property {number} nCylinders
  * @property {number} nHeads
@@ -144,7 +144,7 @@ export default class DiskInfo {
         this.tablesBuilt = false;
         this.cbDiskData = 0;
         this.dwChecksum = 0;
-        this.driveClass = "";
+        this.driveCtrl = "";
         this.driveType = -1;
         this.hash = "none";
     }
@@ -212,7 +212,7 @@ export default class DiskInfo {
             driveInfo.driveType = -1;
         }
 
-        if (cbDiskData >= 3000000 || driveInfo.driveClass == "PCJS") {
+        if (cbDiskData >= 3000000 || driveInfo.driveCtrl == "PCJS") {
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
             if (wSig == DiskInfo.BOOT.SIGNATURE) {
                 /*
@@ -496,7 +496,7 @@ export default class DiskInfo {
              * certain OEM strings (eg, "IBM  2.0", "IBM  3.1") as a for drive and FAT type determination.
              */
             let dw = dbDisk.readInt32BE(DiskInfo.BPB.OEM + offBootSector);
-            if (dw != DiskInfo.PCJS_VALUE && cbDiskData < 3000000 && driveInfo.driveClass != "PCJS") {
+            if (dw != DiskInfo.PCJS_VALUE && cbDiskData < 3000000 && driveInfo.driveCtrl != "PCJS") {
                 dbDisk.write(DiskInfo.PCJS_OEM, DiskInfo.BPB.OEM + offBootSector, DiskInfo.PCJS_OEM.length);
                 this.printf(Device.MESSAGE.INFO, "OEM string has been updated\n");
                 if (fnHash) this.fBPBModified = true;
@@ -751,7 +751,7 @@ export default class DiskInfo {
      *
      * This function also supports a new driveInfo parameter, which may contain any of the following properties:
      *
-     *      driveClass: "XT", "AT", or "COMPAQ" (see DRIVE_CLASSES)
+     *      driveCtrl: "XT", "AT", or "COMPAQ" (see DRIVE_CTRLS)
      *      driveType: drive type (see DRIVE_TYPES)
      *      typeFAT: 12, 16, or 32 (advisory only; also, 32 is not supported yet)
      *      clusSecs: 1 to 64 (512-byte to 32Kb clusters; advisory only)
@@ -815,7 +815,7 @@ export default class DiskInfo {
          * account for FAT overhead that we're not prepared to calculate yet (eg, size of the FAT, directories, etc).
          */
         if (DiskInfo.findDriveType(driveInfo, nTargetSectors, this)) {
-            this.driveClass = driveInfo.driveClass;
+            this.driveCtrl = driveInfo.driveCtrl;
             this.driveType = driveInfo.driveType;
             this.nCylinders = driveInfo.nCylinders;
             this.nHeads = driveInfo.nHeads;
@@ -926,8 +926,10 @@ export default class DiskInfo {
              * entire FAT into memory (at 0000:7DC6) reveals that it will happily read more than the 32K of data that it can
              * accommodate and trash itself.  So we must limit cFATSectors to 64.
              */
-            cSectorsPerCluster = cTotalSectors / maxClusters;
-            if (cSectorsPerCluster <= 1) cSectorsPerCluster = 4;
+            cSectorsPerCluster = Math.ceil(cTotalSectors / maxClusters);
+            if (cTotalSectors > 5760) {
+                cSectorsPerCluster = 4;
+            }
             let nearestPower = 1;
             while (nearestPower < cSectorsPerCluster && nearestPower < 64) {
                 nearestPower <<= 1;
@@ -956,20 +958,20 @@ export default class DiskInfo {
              * starts with whatever the file's first sector is, but every subsequent read is a whole track, even if the
              * file doesn't span that entire track.
              *
-             * This would be OK if there was ample memory, but the boot sector didn't relocate itself from 0:7C00,
+             * This would be OK if there was ample memory, but the boot sector doesn't relocate itself from 0:7C00,
              * and with its stack sitting just below that address, there's room for only about 28K of file data.  For
              * reference, IO.SYS in MS-DOS 3.30 is about 22K, so there's enough room, but if the final sector is near
              * the start of a track, then the final full track read (8.5K for a track with 17 sectors) runs the risk
              * of overwriting the stack and/or the boot sector itself.
              *
              * See https://www.os2museum.com/wp/hang-with-early-dos-boot-sector/ for more details; it's accurate except
-             * for the implication that a disk with 17 sectors per track was safe (it was not).
+             * for the implication that a contemporaneous disk using only 17 sectors per track was safe (it was not).
              *
              * To make matters *slightly* worse, the affected boot sectors didn't accurately calculate the sector size
-             * of the system file correctly; in keeping with its overall "sloppy" approach, it simply divides the file
+             * of the system file correctly; in keeping with the overall "sloppy" approach, it simply divides the file
              * size by the sector size and then *always* adds 1 (it should have added 1 only if there was a remainder).
-             * However, since probably no version of IO.SYS or IBMBIO.COM was an *exact* multiple of 512, this calculation
-             * probably always ended up being inadvertently correct.
+             * However, unless IO.SYS or IBMBIO.COM was an *exact* multiple of 512, this calculation would generally
+             * end up with the correct answer.
              *
              * Having perfect hindsight, we can help the boot sector avoid running into trouble by performing the same
              * sloppy sector size calculation ourselves, dividing it by sectors per track, and ensuring that the remainder
@@ -3565,13 +3567,13 @@ export default class DiskInfo {
      */
     static findDriveType(driveInfo, nTargetSectors, device)
     {
-        if (driveInfo.driveClass) {
-            let iClass = DRIVE_CLASSES.indexOf(driveInfo.driveClass);
-            if (iClass >= 0) {
+        if (driveInfo.driveCtrl) {
+            let iCtrl = DRIVE_CTRLS.indexOf(driveInfo.driveCtrl);
+            if (iCtrl >= 0) {
                 let bestType = -1, bestDiff = 0, bestParms;
-                let driveTypes = Object.keys(DRIVE_TYPES[iClass]);
+                let driveTypes = Object.keys(DRIVE_TYPES[iCtrl]);
                 for (let type of driveTypes) {
-                    let parms = DRIVE_TYPES[iClass][type].slice();
+                    let parms = DRIVE_TYPES[iCtrl][type].slice();
                     parms.unshift(+type);
                     parms[3] = parms[3] || 17;
                     parms[4] = parms[4] || 512;
@@ -3580,7 +3582,7 @@ export default class DiskInfo {
                     cbTotal = nTotalSectors * cbSector;
                     parms[5] = cbTotal / 1024 / 1024;
                     if (device) {
-                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.driveClass, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveInfo.driveType == parms[0]? '*' : '');
+                        device.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.driveCtrl, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveInfo.driveType == parms[0]? '*' : '');
                     }
                     if (driveInfo.driveType >= 0) {
                         if (driveInfo.driveType == parms[0]) {
@@ -3605,9 +3607,9 @@ export default class DiskInfo {
                     return true;
                 }
             } else {
-                if (driveInfo.driveClass == "PCJS") {
+                if (driveInfo.driveCtrl == "PCJS") {
                     /*
-                     * The "PCJS" pseudo-class allows for any geometry.  If nTargetSectors is non-zero, then we
+                     * The "PCJS" pseudo-controller allows for any geometry.  If nTargetSectors is non-zero, then we
                      * create a geometry that matches the number as closely as possible.  Working within the limits of
                      * the CHS-based INT 13h interface, nCylinders must be <= 1024, nHeads must be <= 256, and nSectors
                      * must be <= 63.
@@ -3659,13 +3661,13 @@ export default class DiskInfo {
      */
     getDriveType(driveInfo)
     {
-        let driveClass = driveInfo.driveClass || this.driveClass;
+        let driveCtrl = driveInfo.driveCtrl || this.driveCtrl;
         if (this.driveType < 0) {
-            let iClass = DRIVE_CLASSES.indexOf(driveClass);
-            if (iClass >= 0) {
-                let driveTypes = Object.keys(DRIVE_TYPES[iClass]);
+            let iCtrl = DRIVE_CTRLS.indexOf(driveCtrl);
+            if (iCtrl >= 0) {
+                let driveTypes = Object.keys(DRIVE_TYPES[iCtrl]);
                 for (let type of driveTypes) {
-                    let parms = DRIVE_TYPES[iClass][type];
+                    let parms = DRIVE_TYPES[iCtrl][type];
                     if (this.nCylinders == parms[0] && this.nHeads == parms[1] && this.nSectors == (parms[2] || 17)) {
                         driveInfo.driveType = +type;
                         driveInfo.nCylinders = this.nCylinders;
@@ -3682,26 +3684,26 @@ export default class DiskInfo {
     }
 
     /**
-     * validateDriveType(driveClass, driveType)
+     * validateDriveType(driveCtrl, driveType)
      *
      * @this {DiskInfo}
-     * @param {string} driveClass
+     * @param {string} driveCtrl
      * @param {number} driveType
      * @returns {DriveInfo|null}
      */
-    static validateDriveType(driveClass, driveType)
+    static validateDriveType(driveCtrl, driveType)
     {
         let driveInfo = null;
-        let iClass = DRIVE_CLASSES.indexOf(driveClass);
-        if (iClass >= 0) {
-            let parms = DRIVE_TYPES[iClass][driveType];
+        let iCtrl = DRIVE_CTRLS.indexOf(driveCtrl);
+        if (iCtrl >= 0) {
+            let parms = DRIVE_TYPES[iCtrl][driveType];
             if (parms) {
                 let nCylinders = parms[0];
                 let nHeads = parms[1];
                 let nSectors = parms[2] || 17;
                 let cbSector = parms[3] || 512;
                 let driveSize = nCylinders * nHeads * nSectors * cbSector / 1024 / 1024;
-                driveInfo = {driveClass, driveType, nCylinders, nHeads, nSectors, cbSector, driveSize};
+                driveInfo = {driveCtrl, driveType, nCylinders, nHeads, nSectors, cbSector, driveSize};
             }
         }
         return driveInfo;
@@ -4142,7 +4144,7 @@ export default class DiskInfo {
                         } else {
                             if (lbaBoot == 0) {
                                 if (off >= DiskInfo.MBR.PARTITIONS.OFFSET) continue;
-                                if (this.driveClass == "PCJS") {
+                                if (this.driveCtrl == "PCJS") {
                                     switch(off) {
                                     case DiskInfo.MBR.DRIVE0PARMS.CYLS:
                                         b = this.nCylinders & 0xff;
