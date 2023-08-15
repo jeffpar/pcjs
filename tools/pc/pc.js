@@ -457,9 +457,9 @@ function intDisk(addr)
          * 0xC4 to 0xC7) and update the secondary drive table vector at 0x46.
          *
          * I don't relish altering the machine state like this (using the custom MBR is much
-         * cleaner and should actually be compatible with real hardware), but in order to test the
-         * operating system's ability to initialize and format drives with custom geometries
-         * from scratch, this seems the best alternative.
+         * cleaner and should actually be compatible with real hardware), but in order to ALSO
+         * test the operating system's ability to initialize and format drives with custom
+         * geometries from scratch, this seems the best alternative.
          */
         for (let off = 0; off < 16; off++) {
             let b = 0;
@@ -1312,7 +1312,23 @@ function updateDriveInfo(di)
             printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
         }
     }
-    driveInfo.volTable = di.volTable;
+    let volume = di.volTable && di.volTable[0];
+    if (volume) {
+        driveInfo.volume = volume;
+        if (driveInfo.typeFAT && driveInfo.typeFAT != volume.nFATBits) {
+            printf("warning: %d-bit FAT replaced with %d-bit FAT\n", driveInfo.typeFAT, volume.nFATBits);
+        }
+        if (driveInfo.clusSecs && driveInfo.clusSecs != volume.clusSecs) {
+            printf("warning: %d-sector clusters replaced with %d-sector clusters\n", driveInfo.clusSecs, volume.clusSecs);
+        }
+        //
+        // We're going to let this warning slide, because the number of root entries will almost always
+        // be increased to work around a boot sector bug.  See buildDiskFromFiles() in diskinfo.js for details.
+        //
+        // if (driveInfo.rootEntries && driveInfo.rootEntries != volume.rootEntries) {
+        //     printf("%d root entries replaced with %d root entries\n", driveInfo.rootEntries, volume.rootEntries);
+        // }
+    }
 }
 
 /**
@@ -1818,7 +1834,7 @@ function doCommand(s)
         });
         break;
     case "disk":
-        if (driveManifest || driveInfo.volTable || driveInfo.driveType >= 0) {
+        if (driveManifest || driveInfo.volume || driveInfo.driveType >= 0) {
             let info = {
                 controller: driveInfo.driveCtrl,
                 type: driveInfo.driveType,
@@ -1837,8 +1853,8 @@ function doCommand(s)
             if (driveInfo.rootEntries) {
                 info.rootEntries = driveInfo.rootEntries;
             }
-            if (driveInfo.volTable) {
-                let vol = driveInfo.volTable[0];
+            if (driveInfo.volume) {
+                let vol = driveInfo.volume;
                 info.mediaID = sprintf("%#04x", vol.idMedia);
                 let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
                 info.typeFAT = vol.nFATBits || vol.idFAT;

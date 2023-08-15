@@ -157,8 +157,8 @@ export default class DiskInfo {
      * All callers are now required to convert their data to a DataBuffer first.  For example, if the caller
      * received an ArrayBuffer from a FileReader object, they must first create a DataBuffer from the ArrayBuffer.
      *
-     * Here's the initial (simplified) version of this function.  It got much more complicated over time
-     * as more diskettes were processed and anomalies were discovered.
+     * Here's the initial (simplified) version of this function.  It got much more complicated over time as support
+     * for more types of diskettes and hard disks were added:
      *
      *      let defaultGeometry = DiskInfo.GEOMETRIES[db.length];
      *      if (defaultGeometry) {
@@ -892,17 +892,25 @@ export default class DiskInfo {
                 setBoot(DiskInfo.BPB.LARGESECS, 4, cTotalSectors);
             }
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
+
             /*
-             * If we were to go with 2K clusters, would we run out of clusters with a 12-bit FAT?
-             *
-             * That's the question we are about to ask, with some caveats: if driveInfo explicitly requests
-             * a typeFAT of 12, then we'll try for clusters as large as 32K, and if a typeFAT of 16 is requested,
-             * we won't even ask the question (16 is always the answer).
+             * We now decide on the type of FAT and the cluster size.  The caller may have preferences
+             * for one or both of those values, which we will try to honor, but there are no guarantees.
              */
-            let maxClusSecs = driveInfo.typeFAT == 12? 64 : 4 /* (cTotalSectors > 5760? 4 : 8) */;
+            typeFAT = driveInfo.typeFAT || 12;
+            cSectorsPerCluster = DiskInfo.nearestPowerOfTwo(driveInfo.clusSecs || 1, 64);
+
+            while (typeFAT == 12 && cTotalSectors / cSectorsPerCluster > DiskInfo.FAT12.MAX_CLUSTERS) {
+                if (cSectorsPerCluster == 64) {
+                    typeFAT = 16;
+                    cSectorsPerCluster = DiskInfo.nearestPowerOfTwo(driveInfo.clusSecs || 1, 64);
+                    break;
+                }
+                cSectorsPerCluster *= 2;
+            }
+
             let maxClusters = DiskInfo.FAT12.MAX_CLUSTERS;
-            if (driveInfo.typeFAT == 16 || cTotalSectors / maxClusSecs > DiskInfo.FAT12.MAX_CLUSTERS) {
-                typeFAT = 16;
+            if (typeFAT == 16) {
                 maxClusters = DiskInfo.FAT16.MAX_CLUSTERS;
                 /*
                  * At a minimum, the OEM signature must be changed from "2.0" to "3.0" to indicate 16-bit FAT support,
@@ -918,6 +926,7 @@ export default class DiskInfo {
                 setBoot(DiskInfo.BPB.OEM + 7, 1, 0x31);
                 if (this.minDOSVersion < 3.0) this.minDOSVersion = 3.0;
             }
+
             /*
              * For the given FAT type, maximize the FAT usage in order to minimize the cluster size.  That calculation
              * must then be rounded up to the nearest power of 2 (eg, 1, 2, 4, 8, 16, 32, 64), because the FAT file system
@@ -927,12 +936,7 @@ export default class DiskInfo {
              * entire FAT into memory (at 0000:7DC6) reveals that it will happily read more than the 32K of data that it can
              * accommodate and trash itself.  So we must limit cFATSectors to 64.
              */
-            cSectorsPerCluster = Math.ceil(cTotalSectors / maxClusters);
-            let nearestPower = 1;
-            while (nearestPower < cSectorsPerCluster && nearestPower < 64) {
-                nearestPower <<= 1;
-            }
-            cSectorsPerCluster = nearestPower;
+            cSectorsPerCluster = DiskInfo.nearestPowerOfTwo(Math.ceil(cTotalSectors / maxClusters), 64);
 
             while ((cFATSectors = Math.ceil(((cTotalSectors / cSectorsPerCluster * typeFAT) / 8) / cbSector)) > 64) {
                 if (cSectorsPerCluster == 64) {
@@ -949,6 +953,7 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.FATS, 1, cFATs);
             setBoot(DiskInfo.BPB.TRACKSECS, 2, cSectorsPerTrack);
             setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
+
             /*
              * We've saved the root directory size calculation for last, because tweaking it is the easiest way to
              * ensure that the first data sector (ie, where DOS 2.x and 3.x expect IBMBIO.COM/IO.SYS to be located)
@@ -985,7 +990,8 @@ export default class DiskInfo {
              * (starting with our requirement that it be a sufficiently large multiple of 128 to hold all the files in
              * the "root" of our aFileData array).
              */
-            rootEntries = 128;
+            rootEntries = driveInfo.rootEntries || 128;
+            rootEntries = ((rootEntries + 15) >> 4) << 4;       // round up to nearest multiple of 16
             if (rootEntries < aFileData.length) {
                 rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
             }
@@ -4181,6 +4187,24 @@ export default class DiskInfo {
             }
         }
         return fSuccess;
+    }
+
+    /**
+     * nearestPowerOfTwo(n, limit)
+     *
+     * Returns the nearest power of two equal to or greater than the specified number (or limit, whichever occurs first).
+     *
+     * @param {number} n
+     * @param {number} [limit]
+     * @returns {number}
+     */
+    static nearestPowerOfTwo(n, limit = 0x40000000)
+    {
+        let nearestPower = 1;
+        while (nearestPower < n && nearestPower < limit) {
+            nearestPower <<= 1;
+        }
+        return nearestPower;
     }
 }
 
