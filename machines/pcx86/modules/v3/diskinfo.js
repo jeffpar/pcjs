@@ -2208,12 +2208,13 @@ export default class DiskInfo {
          * a 16-bit FAT, and a FAT volume with more than 65524 clusters uses a 32-bit FAT.
          *
          * That being said, I've since updated the partition code above to set nFATBits based on the partition type, and
-         * assert below that it was actually set, while also keeping the old MAX_CLUSTERS check in place as a fallback.
+         * assert below that it was actually set, while also keeping the old MAX_CLUSTERS check in place as the fallback
+         * for non-partitioned media.
          *
          * TODO: Eventually add support for FAT32.
          */
 
-        this.assert(vol.nFATBits == 12 && vol.clusTotal < DiskInfo.FAT12.MAX_CLUSTERS || vol.nFATBits == 16 && vol.clusTotal < DiskInfo.FAT16.MAX_CLUSTERS);
+        this.assert(!vol.nFATBits || vol.nFATBits == 12 && vol.clusTotal < DiskInfo.FAT12.MAX_CLUSTERS || vol.nFATBits == 16 && vol.clusTotal < DiskInfo.FAT16.MAX_CLUSTERS);
         if (!vol.nFATBits) {
             vol.nFATBits = (vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS)? 12 : 16;
         }

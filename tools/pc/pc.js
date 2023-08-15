@@ -2261,7 +2261,7 @@ function main(argc, argv)
             }
         }
         if (!match) {
-            printf("unrecognized drive type: %s\n",typeDrive);
+            printf("unrecognized drive type: %s\n", typeDrive);
         }
     }
 
@@ -2288,8 +2288,8 @@ function main(argc, argv)
             "--disk=[disk image]":      "set drive disk image (instead of directory)",
             "--drivectrl=[ctrl]":       "set drive controller (eg, XT, AT, COMPAQ)",
             "--drivesize=[size]":       "set drive capacity (default is " + maxCapacity + "mb)",
-            "--drivetype=[number]":     "set drive type # or C:H:S values (eg, 306:4:17)",
-            "--fat=[number]":           "\tset FAT type (12 or 16; default is variable)",
+            "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
+            "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--system=[string]":        "operating system type (default is " + systemType + ")",
             "--version=[#.##]":         "operating system version (default is " + systemVersion + ")"

@@ -1475,10 +1475,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--dir",
-        "MBR",
-        "t.json",
-        "--target=10M"
+        "MBR/",
+        "mbr.json"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
       "stopOnEntry": false,
