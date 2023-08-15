@@ -2070,7 +2070,7 @@ async function processArgs(argv)
     }
 
     if (!error) {
-        if (argv[1]) {                          // last but not least, check for a DOS command or program name
+        if (argv[1] || localDir) {              // last but not least, check for a DOS command or program name
             let args = argv.slice(1).join(' ');
             let sCommand = checkCommand(localDir, args);
             if (!sCommand && args) {
