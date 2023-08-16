@@ -1475,13 +1475,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "MSDOS330/",
-        "msdos330.json",
+        "MBR/",
+        "mbr.json",
         "--overwrite",
-        "--fat=16",
-        "--target=10M"
+        "--drivetype=10:3:12"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

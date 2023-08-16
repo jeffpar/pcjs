@@ -140,7 +140,7 @@ function createDriveInfo(argv, diskette)
         } else {
             match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
             if (match) {
-                let driveCtrl = match[1] || driveInfo.driveCtrl;
+                let driveCtrl = match[1] || driveInfo.driveCtrl || "XT";
                 let driveType = +match[2];
                 if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
                     driveInfo.driveCtrl = driveCtrl;
@@ -150,13 +150,7 @@ function createDriveInfo(argv, diskette)
                 }
             }
         }
-        if (match) {
-            /*
-             * Setting driveCtrl triggers the custom drive build logic; otherwise, buildDiskFromFiles()
-             * will revert to its old logic, which revolves around predefined BPBs.
-             */
-            driveInfo.driveCtrl = "XT";
-        } else {
+        if (!match) {
             printf("unrecognized drive type: %s\n", typeDrive);
         }
     }
@@ -165,7 +159,7 @@ function createDriveInfo(argv, diskette)
     if (typeof typeFAT == "string") {
         let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
         if (match) {
-            driveInfo.driveCtrl = "XT";
+            driveInfo.driveCtrl = driveInfo.driveCtrl || "XT";
             driveInfo.typeFAT = +match[1];
             if (match[2]) driveInfo.clusSecs = +match[2];
             if (match[3]) driveInfo.rootEntries = +match[3];

@@ -398,8 +398,16 @@ It was also nice to see that, even though PC DOS 2.00 was designed for the PC XT
 
 However, PC DOS 3.00 was obviously preferable, since it supported PC AT features like 1.2M diskette drives and the real-time clock, and it could also format larger disks with smaller (2K) clusters, thanks to the "new" 16-bit FAT.  PC DOS 3.00 still supported disks using a 12-bit FAT, even disks for which it would have preferred a 16-bit FAT, as long as other criteria were met, such as an OEM signature of "**IBM  2.0**" in the disk's BPB.  That makes *some* sense, since nowhere else in the BPB is there any indication of FAT entry size, and PC DOS 2.x supported *only* 12-bit FAT entries.  But ideally, PC DOS would have relied on the partition type (1) in the Master Boot Record (MBR) *or* defined some new field or value in the BPB to indicate the type of FAT.
 
-### Historical Notes
+### Test Cases
 
-One early use of the `pc.js` utility was running a set of [80386 CPU Tests](https://github.com/jeffpar/pcjs/blob/master/software/pcx86/test/cpu/80386/test386.asm) as a custom ROM image inside an [80386 Test Machine](https://github.com/jeffpar/pcjs/blob/master/tools/pc/test386.json), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.
+Custom PC240K hard disk image with 12-bit FAT: SUCCESS
 
-The test program ([test386.asm](/software/pcx86/test/cpu/80386/test386.asm)) was carefully designed to be built as a binary (`test386.com`) that could either be run as a DOS program *or* loaded as a ROM image.  See [PCx86 CPU Tests](/software/pcx86/test/cpu/) for more information.
+ 1. Boot custom disk image: `pc.js ibm5170 MBR dir --drivetype=10:4:12`
+ 2. Build separate disk image: `diskimage.js MBR/ mbr12.json --drivetype=10:4:12 --overwrite`
+ 3. Load separate disk image: `pc.js ibm5170 --disk=mbr12.json`
+
+Custom PC240K hard disk image with 16-bit FAT: FAILURE
+
+ 1. Boot custom disk image: `pc.js ibm5170 MBR dir --drivetype=10:4:12 --fat=16`
+ 2. Build separate disk image: `diskimage.js MBR/ mbr16.json --drivetype=10:4:12 --fat=16 --overwrite`
+ 3. Load separate disk image: `pc.js ibm5170 --disk=mbr16.json`

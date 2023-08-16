@@ -514,7 +514,7 @@ function intReboot(addr)
      * install our own drive tables now, they would immediately be replaced.  So instead we set a flag
      * (geometryOverride) telling our intDisk() handler to install drive tables on the next INT 13h call.
      */
-    if (!driveManifest && driveInfo.driveCtrl == "PCJS") {
+    if (driveInfo.driveCtrl == "PCJS" && driveInfo.driveType == 0) {
         geometryOverride = true;
     }
     return true;
@@ -2040,6 +2040,7 @@ async function processArgs(argv)
             error = "invalid disk";
         }
         localDir = "";
+        maxCapacity = 0;
     } else {
         localDrive = path.join(pcjsDir, localDrive);
     }

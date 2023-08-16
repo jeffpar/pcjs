@@ -3674,30 +3674,41 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {DriveInfo} [driveInfo]
-     * @returns {boolean} (true if DriveInfo updated, false if no change)
+     * @returns {boolean} (true if DriveInfo updated, false if no data available)
      */
     getDriveType(driveInfo)
     {
-        let driveCtrl = driveInfo.driveCtrl || this.driveCtrl;
-        if (this.driveType < 0) {
-            let iCtrl = DRIVE_CTRLS.indexOf(driveCtrl);
-            if (iCtrl >= 0) {
-                let driveTypes = Object.keys(DRIVE_TYPES[iCtrl]);
-                for (let type of driveTypes) {
-                    let parms = DRIVE_TYPES[iCtrl][type];
-                    if (this.nCylinders == parms[0] && this.nHeads == parms[1] && this.nSectors == (parms[2] || 17)) {
-                        driveInfo.driveType = +type;
-                        driveInfo.nCylinders = this.nCylinders;
-                        driveInfo.nHeads = this.nHeads;
-                        driveInfo.nSectors = this.nSectors;
-                        driveInfo.cbSector = this.cbSector || parms[3] || 512;
-                        driveInfo.driveSize = this.cbDiskData / 1024 / 1024;
-                        return true;
+        let success = false;
+        if (this.cbDiskData) {
+            let driveCtrl = this.driveCtrl || driveInfo.driveCtrl;;
+            let driveType = this.driveType;
+            if (driveType < 0) {
+                let iCtrl = DRIVE_CTRLS.indexOf(driveCtrl);
+                if (iCtrl >= 0) {
+                    let driveTypes = Object.keys(DRIVE_TYPES[iCtrl]);
+                    for (let type of driveTypes) {
+                        let parms = DRIVE_TYPES[iCtrl][type];
+                        if (this.nCylinders == parms[0] && this.nHeads == parms[1] && this.nSectors == (parms[2] || 17)) {
+                            driveType = +type;
+                            break;
+                        }
                     }
                 }
             }
+            if (driveType < 0) {
+                driveCtrl = "PCJS";
+                driveType = 0;
+            }
+            driveInfo.driveCtrl = driveCtrl;
+            driveInfo.driveType = driveType;
+            driveInfo.nCylinders = this.nCylinders;
+            driveInfo.nHeads = this.nHeads;
+            driveInfo.nSectors = this.nSectors;
+            driveInfo.cbSector = this.cbSector || 512;
+            driveInfo.driveSize = this.cbDiskData / 1024 / 1024;
+            success = true;
         }
-        return false;
+        return success;
     }
 
     /**
