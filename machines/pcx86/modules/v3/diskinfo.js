@@ -1027,14 +1027,20 @@ export default class DiskInfo {
              * hard disk as small as 10Mb), we start even smaller, and then ratchet it up until all our criteria are met
              * (starting with our requirement that it be a sufficiently large multiple of 128 to hold all the files in
              * the "root" of our aFileData array).
+             *
+             * NOTE: At the risk of creating a disk image that can't accommodate all the user-supplied files OR that DOS
+             * may fail to boot, we now honor any *explicitly* set number of root directory entries.
              */
             rootEntries = driveInfo.rootEntries || 128;
             rootEntries = ((rootEntries + 15) >> 4) << 4;       // round up to nearest multiple of 16
-            if (rootEntries < aFileData.length) {
+            if (!driveInfo.rootEntries && rootEntries < aFileData.length) {
                 rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
             }
             cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
-            if (aFileData[0]) {
+            /*
+             * At the risk of creating a disk image that DOS will fail to boot, we will honor leave
+             */
+            if (!driveInfo.rootEntries && aFileData[0]) {
                 let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
                 let cInitFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
                 let cFileSectors = ((aFileData[0].size / cbSector)|0) + 1;
