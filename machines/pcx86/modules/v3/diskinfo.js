@@ -851,10 +851,10 @@ export default class DiskInfo {
             diskInfo.assert(!val);
         };
 
-        let typeFAT = 12, cFATs = 2, cFATSectors;
-        let iBPB, cbSector = 512, cSectorsPerCluster, cbCluster;
-        let rootEntries = 0, cRootSectors;
+        let cbSector = 512, cFATs = 2, typeFAT = 12;
         let cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
+        let iBPB, cSectorsPerCluster, cbCluster, cFATSectors;
+        let rootEntries = 0, cRootSectors;
         let cHiddenSectors = 1, cReservedSectors = 1, cDiagnosticSectors = 0;
 
         if (this.driveType >= 0) {
@@ -880,10 +880,12 @@ export default class DiskInfo {
                 0x00,                   // 0x1E: PC DOS 2.0 through 3.1 stores BOOTDRIVE here (0x00 for floppy, 0x80 for hard drive)
                 0x00                    // 0x1F: PC DOS 2.0 through 3.1 stores BOOTHEAD here
             ];
+
             cHeads = this.nHeads;
             cSectorsPerTrack = this.nSectors;
             cDiagnosticSectors = cHeads * cSectorsPerTrack;
             cTotalSectors -= cHiddenSectors + cDiagnosticSectors;
+
             if (cTotalSectors <= 0xffff) {
                 setBoot(DiskInfo.BPB.DISKSECS, 2, cTotalSectors);
             } else {
@@ -891,27 +893,83 @@ export default class DiskInfo {
                 setBoot(DiskInfo.BPB.DISKSECS, 2, 0);
                 setBoot(DiskInfo.BPB.LARGESECS, 4, cTotalSectors);
             }
+
+            cbSector = driveInfo.cbSector || cbSector;
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
 
             /*
              * We now decide on the type of FAT and the cluster size.  The caller may have preferences
              * for one or both of those values, which we will try to honor, but there are no guarantees.
+             *
+             * Note that nearestPowerOfTwo() serves two purposes: it not only ensures a result that is
+             * always a power of 2, but it also ensures that the result is less than or equal the given
+             * limit (ie, 64).  Allegedly, sectors/cluster CAN be as large as 128 (the largest power of
+             * 2 that can fit in a byte), but the sector size would have to be 256 instead of the usual
+             * 512, because I don't think cluster sizes > 32K are supported by DOS.  However, I'm not
+             * even going to go down that rabbit hole....
+             *
+             * NOTE: Speaking of 256-byte sectors, the 1999 Microsoft FAT "White Paper" claims that only
+             * sector sizes of 512, 1024, 2048, and 4096 are supported.  I would have assumed that the 4
+             * supported values were actually 128, 256, 512, and 1024, based on historical IBM PC hardware
+             * limitations.  If I had to guess, I'd say that ALL powers of 2 from 128 through 4096 are
+             * allowed, but that not all values are supported by all operating systems.
              */
-            typeFAT = driveInfo.typeFAT || 12;
-            cSectorsPerCluster = DiskInfo.nearestPowerOfTwo(driveInfo.clusSecs || 1, 64);
+            cSectorsPerCluster = driveInfo.clusterSize && Math.ceil(driveInfo.clusterSize / cbSector) || 1;
+            let maxSectorsPerCluster = (32 * 1024 / cbSector)|0;
+            typeFAT = driveInfo.typeFAT || typeFAT;
+            cSectorsPerCluster = DiskInfo.nearestPowerOfTwo(cSectorsPerCluster, maxSectorsPerCluster);
 
-            while (typeFAT == 12 && cTotalSectors / cSectorsPerCluster > DiskInfo.FAT12.MAX_CLUSTERS) {
-                if (cSectorsPerCluster == 64) {
-                    typeFAT = 16;
-                    cSectorsPerCluster = DiskInfo.nearestPowerOfTwo(driveInfo.clusSecs || 1, 64);
+            /*
+             * Now we get to a thornier matter: when calculating how many clusters will fit on a disk, the
+             * calculation SHOULD begin with total DATA sectors, not total DISK sectors.  But that presents
+             * a chicken-and-egg problem, because we won't know the total DATA sectors until we've determined
+             * size of the FAT (in sectors) *and* the size of the ROOT directory (in sectors) *and* the size
+             * of a cluster entry (12-bit or 16-bit).  Hence the "gross" cluster calculation below.
+             *
+             * And there are trip-wires we have to be aware of: if total clusters is less than 4085 (0xFF5),
+             * then we MUST use a 12-bit FAT (just as a drive with at least 4085 clusters but less than 65525
+             * (0xFFF5) clusters MUST use a 16-bit FAT) *AND* total FAT space MUST not exceed 32K (eg, 64
+             * FAT sectors, assuming 512-byte sectors).
+             *
+             * I learned about the latter by watching IO.SYS from MS-DOS 3.30 read the entire FAT into memory
+             * (at 0000:7DC6): if it reads more than 32K of FAT data, it will start trashing memory.
+             */
+            let resets = 2;
+            let grossClusters, minClusters, maxClusters, initSectors = cSectorsPerCluster;
+            do {
+                minClusters = (typeFAT == 12)? 0 : DiskInfo.FAT12.MAX_CLUSTERS + 1;
+                maxClusters = (typeFAT == 12)? DiskInfo.FAT12.MAX_CLUSTERS : DiskInfo.FAT16.MAX_CLUSTERS;
+                grossClusters = Math.floor(cTotalSectors / cSectorsPerCluster);
+                cFATSectors = Math.ceil(grossClusters * typeFAT / 8 / cbSector);
+                if (grossClusters < minClusters) {
+                    if (!resets--) break;
+                    typeFAT = 12;
+                    cSectorsPerCluster = initSectors;
+                    initSectors = 1;
+                    continue;
+                }
+                if (grossClusters <= maxClusters) {
+                    if (cFATSectors * cbSector <= 32 * 1024) break;
+                }
+                if (cSectorsPerCluster == maxSectorsPerCluster) {
+                    if (typeFAT == 12) {
+                        if (!resets--) break;
+                        typeFAT = 16;
+                        cSectorsPerCluster = initSectors;
+                        initSectors = 1;
+                        continue;
+                    }
+                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "cluster size (%d) at limit for disk with %d sectors\n", cSectorsPerCluster * cbSector, cTotalSectors);
                     break;
                 }
                 cSectorsPerCluster *= 2;
+            } while (true);
+
+            if (resets < 0) {
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "unable to find suitable cluster size for %d sectors\n", cTotalSectors);
             }
 
-            let maxClusters = DiskInfo.FAT12.MAX_CLUSTERS;
             if (typeFAT == 16) {
-                maxClusters = DiskInfo.FAT16.MAX_CLUSTERS;
                 /*
                  * At a minimum, the OEM signature must be changed from "2.0" to "3.0" to indicate 16-bit FAT support,
                  * and moreover, for drives with DISKSECS <= 0x7FA8, DOS will still make certain hard-coded assumptions
@@ -926,26 +984,6 @@ export default class DiskInfo {
                 setBoot(DiskInfo.BPB.OEM + 7, 1, 0x31);
                 if (this.minDOSVersion < 3.0) this.minDOSVersion = 3.0;
             }
-
-            /*
-             * For the given FAT type, maximize the FAT usage in order to minimize the cluster size.  That calculation
-             * must then be rounded up to the nearest power of 2 (eg, 1, 2, 4, 8, 16, 32, 64), because the FAT file system
-             * does not allow just *any* number of sectors per cluster.
-             *
-             * However, we must not "over-maximize" the FAT usage, because watching IO.SYS from MS-DOS 3.30 read the
-             * entire FAT into memory (at 0000:7DC6) reveals that it will happily read more than the 32K of data that it can
-             * accommodate and trash itself.  So we must limit cFATSectors to 64.
-             */
-            cSectorsPerCluster = DiskInfo.nearestPowerOfTwo(Math.ceil(cTotalSectors / maxClusters), 64);
-
-            while ((cFATSectors = Math.ceil(((cTotalSectors / cSectorsPerCluster * typeFAT) / 8) / cbSector)) > 64) {
-                if (cSectorsPerCluster == 64) {
-                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "cluster size (%d) at limit for FAT with %d sectors)\n", cSectorsPerCluster * cbSector, cFATSectors);
-                    break;
-                }
-                cSectorsPerCluster *= 2;
-            }
-            this.assert(cTotalSectors / cSectorsPerCluster <= maxClusters);
 
             cbCluster = cSectorsPerCluster * cbSector;
             setBoot(DiskInfo.BPB.CLUSSECS, 1, cSectorsPerCluster);
@@ -995,7 +1033,7 @@ export default class DiskInfo {
             if (rootEntries < aFileData.length) {
                 rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
             }
-            cRootSectors = (rootEntries * 32) / cbSector;
+            cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
             if (aFileData[0]) {
                 let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
                 let cInitFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
@@ -2207,17 +2245,20 @@ export default class DiskInfo {
          * So, a FAT volume with 4084 or fewer clusters uses a 12-bit FAT, a FAT volume with 4085 to 65524 clusters uses
          * a 16-bit FAT, and a FAT volume with more than 65524 clusters uses a 32-bit FAT.
          *
-         * That being said, I've since updated the partition code above to set nFATBits based on the partition type, and
-         * assert below that it was actually set, while also keeping the old MAX_CLUSTERS check in place as the fallback
-         * for non-partitioned media.
+         * UPDATE: I've changed the partition code above to zero nFATBits and *provisionally* set it to a value based on
+         * partition type, but only because I want to catch inconsistencies between partition records and volumes; we still
+         * (re)set nFATBits below according to the number of clusters.
          *
          * TODO: Eventually add support for FAT32.
          */
 
-        this.assert(!vol.nFATBits || vol.nFATBits == 12 && vol.clusTotal < DiskInfo.FAT12.MAX_CLUSTERS || vol.nFATBits == 16 && vol.clusTotal < DiskInfo.FAT16.MAX_CLUSTERS);
-        if (!vol.nFATBits) {
-            vol.nFATBits = (vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS)? 12 : 16;
+        if (vol.nFATBits) {
+            if (vol.nFATBits == 12 && vol.clusTotal > DiskInfo.FAT12.MAX_CLUSTERS || vol.nFATBits == 16 && vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS) {
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d error: %d-bit FAT inconsistent with cluster total (%d)\n", this.diskName, iVolume, vol.nFATBits, vol.clusTotal);
+            }
         }
+
+        vol.nFATBits = (vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS)? 12 : 16;
         vol.clusMax = (vol.nFATBits == 12)? DiskInfo.FAT12.CLUSNUM_MAX : DiskInfo.FAT16.CLUSNUM_MAX;
 
         if (!idMedia) idMedia = this.getClusterEntry(vol, 0, 0);
@@ -3180,9 +3221,11 @@ export default class DiskInfo {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, idSector, sector[DiskInfo.SECTOR.ID], file.path);
             }
             if (sector[DiskInfo.SECTOR.FILE_INDEX] != undefined) {
-                let filePrev = this.fileTable[sector[DiskInfo.SECTOR.FILE_INDEX]];
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, 'warning: "%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskInfo.SECTOR.FILE_OFFSET], file.path, off);
-                return false;
+                if (sector[DiskInfo.SECTOR.FILE_INDEX] != iFile || sector[DiskInfo.SECTOR.FILE_OFFSET] != off) {
+                    let filePrev = this.fileTable[sector[DiskInfo.SECTOR.FILE_INDEX]];
+                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, 'warning: "%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskInfo.SECTOR.FILE_OFFSET], file.path, off);
+                    return false;
+                }
             }
             sector[DiskInfo.SECTOR.FILE_INDEX] = iFile;
             sector[DiskInfo.SECTOR.FILE_OFFSET] = off;

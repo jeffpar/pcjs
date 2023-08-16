@@ -466,10 +466,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ibm5160",
-        "--drivetype=20:3:11"
+        "ibm5170",
+        "MBR",
+        "dir",
+        "--drivetype=13:4:12",
+        "--fat=16:8192"
       ],
-      "cwd": "${workspaceFolder}/tools/pc",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

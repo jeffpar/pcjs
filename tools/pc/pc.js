@@ -28,7 +28,6 @@ let fDebug = false;
 let fHalt = false;
 let fNoFloppy = false;
 let fVerbose = false;
-let fWrite = false;
 let autoStart = false;
 let machineType = "pcx86";
 let systemType = "msdos";
@@ -64,7 +63,7 @@ let driveInfo = {
     cbSector:    0,
     driveSize:   0,
     typeFAT:     0,     // set this to 12 or 16 to request a specific FAT type
-    clusSecs:    0,     // set this to a specific cluster size (in sectors) if desired
+    clusterSize: 0,     // set this to a specific cluster size (in bytes) if desired
     rootEntries: 0,     // set this to a specific number of root directory entries if desired
     files:       []
 };
@@ -1318,8 +1317,8 @@ function updateDriveInfo(di)
         if (driveInfo.typeFAT && driveInfo.typeFAT != volume.nFATBits) {
             printf("warning: %d-bit FAT replaced with %d-bit FAT\n", driveInfo.typeFAT, volume.nFATBits);
         }
-        if (driveInfo.clusSecs && driveInfo.clusSecs != volume.clusSecs) {
-            printf("warning: %d-sector clusters replaced with %d-sector clusters\n", driveInfo.clusSecs, volume.clusSecs);
+        if (driveInfo.clusterSize && driveInfo.clusterSize != volume.clusSecs * volume.cbSector) {
+            printf("warning: %d-byte clusters replaced with %d-bytes clusters\n", driveInfo.clusterSize, volume.clusSecs * volume.cbSector);
         }
         //
         // We're going to let this warning slide, because the number of root entries will almost always
@@ -1367,21 +1366,20 @@ function mapDir(machineDir)
 }
 
 /**
- * saveDrive(sDir, sImage)
+ * saveDrive(sDir)
  *
  * If we built a drive on entry, this checks the drive on exit for any changes that need to be saved.
  *
  * @param {string} sDir
- * @param {string|boolean} [sImage] (if true, save to localDrive; if string, save to that path)
  * @returns {boolean}
  */
-function saveDrive(sDir, sImage)
+function saveDrive(sDir)
 {
     let imageData = machine.hdc && machine.hdc.aDrives && machine.hdc.aDrives.length && machine.hdc.aDrives[0].disk;
     if (imageData) {
         let di = new DiskInfo(device, "PCJS");
         if (di.buildDiskFromJSON(imageData)) {
-            if (driveManifest) {
+            if (driveManifest && sDir == localDir) {
                 let oldManifest = driveManifest;
                 let newManifest = di.getFileManifest(null, true);
                 /*
@@ -1510,12 +1508,10 @@ function saveDrive(sDir, sImage)
                     }
                 }
             }
-            if (sImage) {
-                if (typeof sImage != "string") {
-                    sImage = localDrive.replace(".json", ".img");
-                }
-                printf("saving drive: %s\n", sImage);
-                writeDiskSync(sImage, di, false, 0, true, true);
+            if (sDir != localDir) {
+                if (sDir.indexOf('.') < 0) sDir += ".img";
+                printf("saving drive as %s\n", sDir);
+                writeDiskSync(sDir, di, false, 0, true, true);
             }
             return true;
         }
@@ -1842,34 +1838,27 @@ function doCommand(s)
                 heads: driveInfo.nHeads,
                 sectorsPerTrack: driveInfo.nSectors,
                 sectorSize: driveInfo.cbSector || 512,
-                driveSize: driveInfo.driveSize.toFixed(1) + "mb",
+                clusterSize: driveInfo.clusterSize,
+                driveSize: driveInfo.driveSize.toFixed(1) + "mb"
             };
-            if (driveInfo.clusSecs) {
-                info.clusterSize = driveInfo.clusSecs * info.sectorSize;
-            }
-            if (driveInfo.typeFAT) {
-                info.typeFAT = driveInfo.typeFAT;
-            }
-            if (driveInfo.rootEntries) {
-                info.rootEntries = driveInfo.rootEntries;
-            }
             if (driveInfo.volume) {
                 let vol = driveInfo.volume;
+                info.sectorSize = vol.cbSector;
                 info.mediaID = sprintf("%#04x", vol.idMedia);
                 let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
                 info.typeFAT = vol.nFATBits || vol.idFAT;
-                info.totalFATs = sectorsFAT / ((vol.clusTotal * info.typeFAT) / 8 / info.sectorSize)|0;
+                info.totalFATs = (sectorsFAT / Math.ceil(vol.clusTotal * info.typeFAT / 8 / vol.cbSector))|0;
                 info.rootEntries = vol.rootEntries || vol.rootTotal;
                 info.sectorsHidden = vol.lbaStart;
                 info.sectorsReserved = vol.vbaFAT;
                 info.sectorsFAT = sectorsFAT;
-                info.sectorsRoot = info.rootEntries / 16;
+                info.sectorsRoot = Math.ceil((info.rootEntries * 32) / vol.cbSector);
                 info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
-                info.clusterSize = vol.clusSecs * info.sectorSize;
+                info.clusterSize = vol.clusSecs * vol.cbSector;
                 info.clustersTotal = vol.clusTotal;
                 info.clustersFree = vol.clusFree;
-                info.bytesTotal = vol.clusTotal * vol.clusSecs * info.sectorSize;
-                info.bytesFree = vol.clusFree * vol.clusSecs * info.sectorSize;
+                info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
+                info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
             }
             result = sprintf("%2j", info);
         } else {
@@ -1878,9 +1867,6 @@ function doCommand(s)
         break;
     case "exec":
         if (driveManifest) {
-            /*
-             * TODO: saveDrive() needs to update the driveManifest with any path changes made by the machine.
-             */
             saveDrive(localDir);
             machine = newMachine();
             reload = true;
@@ -1927,7 +1913,7 @@ function doCommand(s)
         }
         break;
     case "save":
-        saveDrive(localDir, aTokens[0] || true);
+        saveDrive(aTokens[0] || localDir);
         break;
     case "start":
         arg = aTokens[0];
@@ -2187,7 +2173,7 @@ function readInput(stdin, stdout)
  */
 function exit()
 {
-    saveDrive(localDir, fWrite);
+    saveDrive(localDir);
     process.stdin.setRawMode(false);
     process.exit();
 }
@@ -2271,14 +2257,13 @@ function main(argc, argv)
         let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
         if (match) {
             driveInfo.typeFAT = +match[1];
-            if (match[2]) driveInfo.clusSecs = +match[2];
+            if (match[2]) driveInfo.clusterSize = +match[2];
             if (match[3]) driveInfo.rootEntries = +match[3];
         }
     }
 
     fHalt = argv['halt'] || fHalt;
     fNoFloppy = argv['nofloppy'] || fNoFloppy;
-    fWrite = argv['write'] || fWrite;
 
     if (argv['help']) {
         let optionsMain = {
@@ -2301,8 +2286,7 @@ function main(argc, argv)
             "--help (-?)\t":            "display command-line usage",
             "--local (-l)\t":           "use local diskette images",
             "--nofloppy (-n)\t":        "remove any diskette from A:",
-            "--verbose (-v)\t":         "enable verbose mode",
-            "--write (-w)\t":           "write hard drive image on return"
+            "--verbose (-v)\t":         "enable verbose mode"
         };
         let optionGroups = {
             "machine options:":         optionsMain,

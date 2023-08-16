@@ -161,7 +161,7 @@ function createDriveInfo(argv, diskette)
         if (match) {
             driveInfo.driveCtrl = driveInfo.driveCtrl || "XT";
             driveInfo.typeFAT = +match[1];
-            if (match[2]) driveInfo.clusSecs = +match[2];
+            if (match[2]) driveInfo.clusterSize = +match[2];
             if (match[3]) driveInfo.rootEntries = +match[3];
         }
     }
