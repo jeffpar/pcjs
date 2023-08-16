@@ -2300,6 +2300,9 @@ function main(argc, argv)
                 printf("\t%s\t%s\n", option, optionGroups[group][option]);
             }
         }
+        printf("\nnotes:\n\t--drivetype can also specify a drive geometry (eg, --drivetype=306:4:17)\n");
+        printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
+        printf("\t--fat values should be considered advisory, as it may not be possible to honor them.\n");
         printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, "pc.json"));
         return;
     }
