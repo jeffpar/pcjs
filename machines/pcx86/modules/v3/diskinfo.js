@@ -853,7 +853,7 @@ export default class DiskInfo {
 
         let cbSector = 512, cFATs = 2, typeFAT = 12;
         let cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
-        let iBPB, cSectorsPerCluster, cbCluster, cFATSectors;
+        let iBPB = -1, cSectorsPerCluster, cbCluster, cFATSectors;
         let rootEntries = 0, cRootSectors;
         let cHiddenSectors = 1, cReservedSectors = 1, cDiagnosticSectors = 0;
 
@@ -1054,7 +1054,6 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.DIRENTS, 2, rootEntries);
             cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + cReservedSectors);
             cbAvail = cDataSectors * cbSector;
-            iBPB = DiskInfo.aDefaultBPBs.length;
         }
 
         /*
@@ -1101,6 +1100,7 @@ export default class DiskInfo {
                 cSectorsPerTrack = getBoot(DiskInfo.BPB.TRACKSECS, 2);
                 cHeads = getBoot(DiskInfo.BPB.DRIVEHEADS, 2);
                 cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
+                cDiagnosticSectors = cHiddenSectors? cSectorsPerTrack * cHeads : 0;
                 cbAvail = cDataSectors * cbSector;
                 if (!nTargetSectors || cHiddenSectors) {
                     if (cbTotal <= cbAvail && nTargetSectors <= cTotalSectors) {
@@ -1115,17 +1115,19 @@ export default class DiskInfo {
                 }
             }
             if (iBPB == DiskInfo.aDefaultBPBs.length) {
-                if (aFileData.length <= maxRoot) {
+                rootEntries = maxRoot;
+                if (aFileData.length <= rootEntries) {
                     this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "files exceed supported disk formats (%d bytes total)\n", cbTotal);
-                } else {
-                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%d files in root exceeds supported maximum of %d\n", aFileData.length, maxRoot);
+                    return false;
                 }
-                return false;
-            }
-            if (cHiddenSectors) {
-                cDiagnosticSectors = cSectorsPerTrack * cHeads;
             }
         }
+
+        if (aFileData.length > rootEntries) {
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%d files in root exceeds supported maximum of %d\n", aFileData.length, rootEntries);
+            return false;
+        }
+
 
         let abSector, offDisk = 0;
         let cbDisk = cTotalSectors * cbSector;
@@ -1200,7 +1202,7 @@ export default class DiskInfo {
          * However, we do this ONLY for the first two BPB types (160K and 320K diskettes), since those are
          * the only formats PC DOS 1.x understood.
          */
-        if (iBPB < 2) {
+        if (iBPB >= 0 && iBPB < 2) {
             let offRoot = cEntries * DiskInfo.DIRENT.LENGTH;
             while (cEntries++ < rootEntries) {
                 abRoot[offRoot] = DiskInfo.DIRENT.INVALID;         // 0xE5
