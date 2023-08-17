@@ -137,6 +137,32 @@ export default class PCJSLib
         argc = argv.length;
         return [argc, argv];
     }
+
+    /**
+     * removeArg(argv, arg, type)
+     *
+     * This provides a means of removing arguments as they are processed, so that we can look at
+     * what's left over and determine if any unrecognized arguments were passed.  Primarily, this
+     * is a means of catching command-line typos.
+     *
+     * @param {Array} argv
+     * @param {string} arg
+     * @param {string} [type]
+     * @returns {string|undefined}
+     */
+    static removeArg(argv, arg, type = "")
+    {
+        arg = arg.toLowerCase();
+        let value = argv[arg];
+        if (value != undefined) {
+            if (type && typeof value == type) {
+                delete argv[arg];
+            } else {
+                value = undefined;
+            }
+        }
+        return value;
+    }
 }
 
 [PCJSLib.argc, PCJSLib.argv] = PCJSLib.parseArgs(process.argv);

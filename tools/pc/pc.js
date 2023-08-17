@@ -1979,32 +1979,34 @@ function doCommand(s)
 }
 
 /**
- * processArgs(argv)
+ * processArgs(argv, sMachine, sDisk, sDirectory)
  *
  * Arguments that either the shell consumes (like *.*) or that we consume (like --help) can be
  * problematic if those are actually arguments you want to pass along with a command to buildDrive().
  *
  * So in those cases, you should simply put quotes around the entire command (eg, pc.js "dir *.* /p").
  *
- * @param {Array} argv
+ * @param {Array.<string>} argv
+ * @param {string|undefined} sMachine
+ * @param {string|undefined} sDisk
+ * @param {string|undefined} sDirectory
  */
-async function processArgs(argv)
+async function processArgs(argv, sMachine, sDisk, sDirectory)
 {
     let loading = false;
     let error = "", warning = "";
 
     let splice = false;
-    let sFile = argv['start'];
-    if (typeof sFile != "string") {
-        sFile = argv[1];                        // for convenience, we also allow a bare machine name
-        if (sFile) splice = true;
+    if (!sMachine) {
+        sMachine = argv[1];                     // for convenience, we also allow a bare machine name
+        if (sMachine) splice = true;
     }
-    if (sFile) {
-        localMachine = checkMachine(sFile);
+    if (sMachine) {
+        localMachine = checkMachine(sMachine);
         if (localMachine) {
             if (splice) argv.splice(1, 1);
-        } else if (sFile.endsWith(".json") || !splice) {
-            error = "unknown machine: " + sFile;
+        } else if (sMachine.endsWith(".json") || !splice) {
+            error = "unknown machine: " + sMachine;
         }
     }
 
@@ -2017,8 +2019,8 @@ async function processArgs(argv)
         return existsDir(s, false)? s : "";
     };
 
-    if (typeof argv['disk'] == "string") {
-        localDrive = argv['disk'];
+    if (sDisk) {
+        localDrive = sDisk;
         let di = await readDiskAsync(localDrive);
         if (di) {
             updateDriveInfo(di);
@@ -2035,8 +2037,8 @@ async function processArgs(argv)
         let sDir = "";
         if (!error) {
             splice = false;
-            sDir = argv['dir'];
-            if (typeof sDir != "string") {
+            sDir = sDirectory;
+            if (!sDir) {
                 sDir = argv[1];                 // for convenience, we also allow a bare directory name
                 if (sDir) splice = true;
             }
@@ -2186,8 +2188,16 @@ function exit()
  */
 function main(argc, argv)
 {
-    fDebug = argv['debug'] || fDebug;
-    fVerbose = argv['verbose'] || fVerbose;
+    let removeArg = function(arg) {
+        return pcjslib.removeArg(argv, arg, "string");
+    }
+
+    let removeFlag = function(arg) {
+        return pcjslib.removeArg(argv, arg, "boolean");
+    }
+
+    fDebug = removeFlag('debug') || fDebug;
+    fVerbose = removeFlag('verbose') || fVerbose;
 
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
@@ -2196,9 +2206,9 @@ function main(argc, argv)
     let arg0 = argv[0].split(' ');
     rootDir = path.join(path.dirname(arg0[0]), "../..");
     pcjsDir = path.join(rootDir, "/tools/pc");
-    setRootDir(rootDir, argv['local']? true : (argv['remote']? false : null));
+    setRootDir(rootDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
 
-    if (!argv[1] || argv['debug']) {
+    if (!argv[1] || removeFlag('debug')) {
         let options = arg0.slice(1).join(' ');
         printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
     }
@@ -2207,23 +2217,24 @@ function main(argc, argv)
     configJSON = JSON.parse(readFileSync(path.join(pcjsDir, "pc.json"))) || configJSON;
     let defaults = configJSON['defaults'] || {};
 
-    machineType = argv['type'] || defaults['type'] || machineType;
-    systemType = (typeof argv['system'] == "string" && argv['system'] || defaults['system'] || systemType).toLowerCase();
-    systemVersion = (typeof argv['version'] == "string" && argv['version'] || defaults['version'] || systemVersion);
+    machineType = removeArg('type') || defaults['type'] || machineType;
     systemOverride = argv['system'] || argv['version'];
+    systemType = (removeArg('system', 'string') || defaults['system'] || systemType).toLowerCase();
+    systemVersion = (removeArg('version', 'string') || defaults['version'] || systemVersion);
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
-    maxFiles = +argv['maxfiles'] || defaults['maxfiles'] || maxFiles;
-    maxCapacity = parseFloat(argv['drivesize']) || parseFloat(defaults['drivesize']) || maxCapacity;
+    maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || maxFiles;
+    maxCapacity = parseFloat(removeArg('drivesize')) || parseFloat(defaults['drivesize']) || maxCapacity;
     localDir = defaults['directory'] || localDir;
 
-    if (typeof argv['drivectrl'] == "string") {
-        driveInfo.driveCtrl = argv['drivectrl'].toUpperCase();
+    let driveCtrl = removeArg('driveCtrl');
+    if (driveCtrl) {
+        driveInfo.driveCtrl = driveCtrl;
         driveOverride = true;
     }
 
-    if (typeof argv['drivetype'] == "string") {
-        let typeDrive = argv['drivetype'];
+    let typeDrive = removeArg('driveType');
+    if (typeDrive) {
         let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
         if (match) {
             maxCapacity = 0;
@@ -2252,8 +2263,8 @@ function main(argc, argv)
         }
     }
 
-    if (typeof argv['fat'] == "string") {
-        let typeFAT = argv['fat'];
+    let typeFAT = removeArg('fat');
+    if (typeFAT) {
         let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
         if (match) {
             driveInfo.typeFAT = +match[1];
@@ -2262,10 +2273,10 @@ function main(argc, argv)
         }
     }
 
-    fHalt = argv['halt'] || fHalt;
-    fNoFloppy = argv['nofloppy'] || fNoFloppy;
+    fHalt = removeFlag('halt') || fHalt;
+    fNoFloppy = removeFlag('nofloppy') || fNoFloppy;
 
-    if (argv['help']) {
+    if (removeFlag('help')) {
         let optionsMain = {
             "--start=[machine file]":   "start machine configuration file",
         };
@@ -2307,7 +2318,20 @@ function main(argc, argv)
         return;
     }
 
-    processArgs(argv);
+    processArgs(argv, removeArg('start'), removeArg('disk'), removeArg('dir'));
+
+    let args = Object.keys(argv);
+    for (let arg of args) {
+        if (!arg.match(/^[0-9]*$/)) {
+            let value = argv[arg];
+            if (typeof value != "string") {
+                value = "";
+            } else {
+                value = "=" + value;
+            }
+            printf("unknown argument: --%s%s\n", arg, value);
+        }
+    }
 
     readInput(process.stdin, process.stdout);
 }
