@@ -3744,11 +3744,11 @@ export default class DiskInfo {
                             break;
                         }
                     }
+                    if (driveType < 0) {
+                        driveCtrl = "PCJS";
+                        driveType = 0;
+                    }
                 }
-            }
-            if (driveType < 0) {
-                driveCtrl = "PCJS";
-                driveType = 0;
             }
             driveInfo.driveCtrl = driveCtrl;
             driveInfo.driveType = driveType;

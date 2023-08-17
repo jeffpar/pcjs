@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler  Version 4.00                 8/13/23 12:03:20
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
 
                                                             Page     1-1
                                                             
@@ -57,7 +57,7 @@
                          ]      
                                 
  000C  ????                     drv_landing	dw	?	; 0x1AA, 0x1BA 
-Microsoft (R) Macro Assembler  Version 4.00                 8/13/23 12:03:20
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
 
                                                             Page     1-2
                                                             
@@ -116,7 +116,7 @@
  7E2C  E8 7E9C R                	call	copy 
  7E2F  BB 0118                  chk1:	mov	bx,VEC_DRIVE1 * 4 
  7E32  BE 7FAE R                	mov	si,offset drv1tbl 
-Microsoft (R) Macro Assembler  Version 4.00                 8/13/23 12:03:20
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
 
                                                             Page     1-3
                                                             
@@ -175,17 +175,19 @@
  7E98  75 E5                    	jne	print 
                                 ; 
                                 ; NOTE: Before transferring control to the DOS boot record, the DOS MBR 
-Microsoft (R) Macro Assembler  Version 4.00                 8/13/23 12:03:20
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
 
                                                             Page     1-4
                                                             
 
                                 ; carefully restored SI to the offset of the active partition record, but 
-                                ; I am unaware of any reliance on that value (and it would presumably only 
-                                ; be meaningful if the boot record ALSO knew where the MBR had relocated 
-                                ; itself, which is also not documented....) 
+                                ; I am unaware of any reliance on that value.  In fact, when IO.SYS wants 
+                                ; to examine the MBR, it simply re-reads and re-scans it.  Perhaps there 
+                                ; was a plan to pass MBR information on to the boot sector, and from there 
+                                ; to IO.SYS, thereby eliminating a redundant read, but I don't think that 
+                                ; ever happened. 
                                 ; 
- 7E9A  FF E4                    boot:	jmp	sp 
+ 7E9A  FF E4                    boot:	jmp	sp		; jump to 7C00h 
                                  
                                 ; 
                                 ; Using the vector space at 0:DI, update the drive vector at 0:BX, 
@@ -232,13 +234,13 @@
  7FA7  0003[                    
             ??                  
                          ]      
- 7FAA  ????                     
- 7FAC  ??                       
-Microsoft (R) Macro Assembler  Version 4.00                 8/13/23 12:03:20
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
 
                                                             Page     1-5
                                                             
 
+ 7FAA  ????                     
+ 7FAC  ??                       
  7FAD  ??                       
                                 
  7FAE  ????                     drv1tbl	drv_parms	<>	; drive 1 parameter table 
@@ -291,13 +293,13 @@
  7FE6  ????????                 
  7FEA  ????????                 
                                 
- 7FEE  ??                       par3tbl	par_record	<> 
- 7FEF  0003[                    
-Microsoft (R) Macro Assembler  Version 4.00                 8/13/23 12:03:20
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
 
                                                             Page     1-6
                                                             
 
+ 7FEE  ??                       par3tbl	par_record	<> 
+ 7FEF  0003[                    
             ??                  
                          ]      
  7FF2  ??                       
@@ -314,7 +316,7 @@
  8000                           BOOTSEG	ends 
                                  
                                 	end 
-Microsoft (R) Macro Assembler  Version 4.00                 8/13/23 12:03:20
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
 
                                                             Symbols-1
                                                              
@@ -373,7 +375,7 @@ INV  . . . . . . . . . . . . . .  	L NEAR	7E8A	BOOTSEG
 INV_MSG  . . . . . . . . . . . .  	L BYTE 	7EAB	BOOTSEG
 
 LOAD . . . . . . . . . . . . . .  	L NEAR	7E5D	BOOTSEG
-Microsoft (R) Macro Assembler  Version 4.00                 8/13/23 12:03:20
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
 
                                                             Symbols-2
                                                              
@@ -405,8 +407,8 @@ VEC_DRIVE1 . . . . . . . . . . .  	Number	0046
 VERIFY . . . . . . . . . . . . .  	L NEAR	7E8F	BOOTSEG
 
 
-    203 Source  Lines
-    203 Total   Lines
+    205 Source  Lines
+    205 Total   Lines
      72 Symbols
 
   47116 Bytes symbol space free

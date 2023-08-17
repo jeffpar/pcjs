@@ -466,11 +466,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        ".",
         "dir",
-        "--fat=12:512:16"
+        "-f"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/DOS",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

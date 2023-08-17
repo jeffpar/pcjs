@@ -35,6 +35,7 @@ export default class PCJSLib
                 if (s.hasOwnProperty(arg)) {
                     if (PCJSLib.argv[arg] !== undefined && PCJSLib.argv[s[arg]] === undefined) {
                         PCJSLib.argv[s[arg]] = PCJSLib.argv[arg];
+                        delete PCJSLib.argv[arg];
                     }
                 }
             }
