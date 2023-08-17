@@ -820,8 +820,9 @@ export default class DiskInfo {
             this.nCylinders = driveInfo.nCylinders;
             this.nHeads = driveInfo.nHeads;
             this.nSectors = driveInfo.nSectors;
+            this.cbSector = driveInfo.cbSector || 512;
             cTotalSectors = this.nCylinders * this.nHeads * this.nSectors;
-            cbMax = cTotalSectors * 512;
+            cbMax = cTotalSectors * this.cbSector;
         }
 
         this.printf(Device.MESSAGE.DISK + Device.MESSAGE.INFO, "calculated size for %d files: %d bytes (%#x)\n", aFileData.length, cbTotal);
@@ -851,11 +852,11 @@ export default class DiskInfo {
             diskInfo.assert(!val);
         };
 
-        let cbSector = 512, cFATs = 2, typeFAT = 12;
+        let cFATs = 2, typeFAT = 12, cbSector = 512;
         let cSectorsPerTrack, cHeads, cDataSectors, cbAvail;
         let iBPB = -1, cSectorsPerCluster, cbCluster, cFATSectors;
         let rootEntries = 0, cRootSectors;
-        let cHiddenSectors = 1, cReservedSectors = 1, cDiagnosticSectors = 0;
+        let cHiddenSectors = 0, cReservedSectors = 1, cDiagnosticSectors = 0;
 
         if (this.driveType >= 0) {
             /*
@@ -881,9 +882,15 @@ export default class DiskInfo {
                 0x00                    // 0x1F: PC DOS 2.0 through 3.1 stores BOOTHEAD here
             ];
 
+            let bMediaID = 0xF0;        // TODO: set this correctly (will be hard to do for non-traditional media)
             cHeads = this.nHeads;
             cSectorsPerTrack = this.nSectors;
-            cDiagnosticSectors = cHeads * cSectorsPerTrack;
+
+            if (driveInfo.driveCtrl != "FDC") {
+                bMediaID = 0xF8;
+                cHiddenSectors = 1;     // our hard disk images are always partitioned and always reserve a diagnostic cylinder
+                cDiagnosticSectors = cHeads * cSectorsPerTrack;
+            }
             cTotalSectors -= cHiddenSectors + cDiagnosticSectors;
 
             if (cTotalSectors <= 0xffff) {
@@ -987,10 +994,12 @@ export default class DiskInfo {
 
             cbCluster = cSectorsPerCluster * cbSector;
             setBoot(DiskInfo.BPB.CLUSSECS, 1, cSectorsPerCluster);
-            setBoot(DiskInfo.BPB.FATSECS, 2, cFATSectors);
             setBoot(DiskInfo.BPB.FATS, 1, cFATs);
+            setBoot(DiskInfo.BPB.MEDIA, 1, bMediaID);
+            setBoot(DiskInfo.BPB.FATSECS, 2, cFATSectors);
             setBoot(DiskInfo.BPB.TRACKSECS, 2, cSectorsPerTrack);
             setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
+            setBoot(DiskInfo.BPB.HIDDENSECS, 2, cHiddenSectors);
 
             /*
              * We've saved the root directory size calculation for last, because tweaking it is the easiest way to
@@ -1100,7 +1109,7 @@ export default class DiskInfo {
                 cSectorsPerTrack = getBoot(DiskInfo.BPB.TRACKSECS, 2);
                 cHeads = getBoot(DiskInfo.BPB.DRIVEHEADS, 2);
                 cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + 1);
-                cDiagnosticSectors = cHiddenSectors? cSectorsPerTrack * cHeads : 0;
+                cDiagnosticSectors = cHiddenSectors? cHeads * cSectorsPerTrack : 0;
                 cbAvail = cDataSectors * cbSector;
                 if (!nTargetSectors || cHiddenSectors) {
                     if (cbTotal <= cbAvail && nTargetSectors <= cTotalSectors) {
@@ -1127,7 +1136,6 @@ export default class DiskInfo {
             this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%d files in root exceeds supported maximum of %d\n", aFileData.length, rootEntries);
             return false;
         }
-
 
         let abSector, offDisk = 0;
         let cbDisk = cTotalSectors * cbSector;
@@ -3674,44 +3682,48 @@ export default class DiskInfo {
                     driveInfo.driveSize = bestParms[5];
                     return true;
                 }
-            } else {
-                if (driveInfo.driveCtrl == "PCJS") {
-                    /*
-                     * The "PCJS" pseudo-controller allows for any geometry.  If nTargetSectors is non-zero, then we
-                     * create a geometry that matches the number as closely as possible.  Working within the limits of
-                     * the CHS-based INT 13h interface, nCylinders must be <= 1024, nHeads must be <= 256, and nSectors
-                     * must be <= 63.
-                     */
-                    if (nTargetSectors) {
-                        let nCylinders, nHeads, nTracks, nSectors = -6;
-                        do {
-                            nSectors += 23;         // start with 17, then 40, then 63
-                            if (nSectors > 63) return false;
-                            nTracks = Math.ceil(nTargetSectors / nSectors);
-                            nHeads = Math.ceil(nTracks / 1024);
-                            nHeads += nHeads & 1;   // an odd number of heads seems pretty, um, odd, so let's avoid it
-                            nCylinders = Math.ceil(nTracks / nHeads);
-                        } while (nHeads > 256 || nCylinders > 1024);
-                        let cbSector = 512;
-                        let cbTotal = nCylinders * nHeads * nSectors * cbSector;
-                        driveInfo.driveType = 0;
-                        driveInfo.nCylinders = nCylinders;
-                        driveInfo.nHeads = nHeads;
-                        driveInfo.nSectors = nSectors;
-                        driveInfo.cbSector = cbSector;
-                        driveInfo.driveSize = cbTotal / 1024 / 1024;
-                        return true;
-                    }
-                    /*
-                     * If no target sectors were supplied, then if driveType is 0, we presume a user-defined geometry
-                     * was supplied.  Nothing much for us to do, other than select a default sector size and calculate
-                     * the drive size (in *megabytes*).
-                     */
-                    if (driveInfo.driveType == 0) {
-                        driveInfo.cbSector = 512;
-                        driveInfo.driveSize = driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector / 1024 / 1024;
-                        return true;
-                    }
+            }
+            else if (driveInfo.driveCtrl == "FDC") {
+                if (driveInfo.driveType >= 0) {
+                    return true;
+                }
+            }
+            else if (driveInfo.driveCtrl == "PCJS") {
+                /*
+                 * The "PCJS" pseudo-controller allows for any geometry.  If nTargetSectors is non-zero, then we
+                 * create a geometry that matches the number as closely as possible.  Working within the limits of
+                 * the CHS-based INT 13h interface, nCylinders must be <= 1024, nHeads must be <= 256, and nSectors
+                 * must be <= 63.
+                 */
+                if (nTargetSectors) {
+                    let nCylinders, nHeads, nTracks, nSectors = -6;
+                    do {
+                        nSectors += 23;         // start with 17, then 40, then 63
+                        if (nSectors > 63) return false;
+                        nTracks = Math.ceil(nTargetSectors / nSectors);
+                        nHeads = Math.ceil(nTracks / 1024);
+                        nHeads += nHeads & 1;   // an odd number of heads seems pretty, um, odd, so let's avoid it
+                        nCylinders = Math.ceil(nTracks / nHeads);
+                    } while (nHeads > 256 || nCylinders > 1024);
+                    let cbSector = 512;
+                    let cbTotal = nCylinders * nHeads * nSectors * cbSector;
+                    driveInfo.driveType = 0;
+                    driveInfo.nCylinders = nCylinders;
+                    driveInfo.nHeads = nHeads;
+                    driveInfo.nSectors = nSectors;
+                    driveInfo.cbSector = cbSector;
+                    driveInfo.driveSize = cbTotal / 1024 / 1024;
+                    return true;
+                }
+                /*
+                 * If no target sectors were supplied, then if driveType is 0, we presume a user-defined geometry
+                 * was supplied.  Nothing much for us to do, other than select a default sector size and calculate
+                 * the drive size (in *megabytes*).
+                 */
+                if (driveInfo.driveType == 0) {
+                    driveInfo.cbSector = 512;
+                    driveInfo.driveSize = driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector / 1024 / 1024;
+                    return true;
                 }
             }
         }
@@ -4207,7 +4219,7 @@ export default class DiskInfo {
                             db.writeUInt16LE(nLBAData, DiskInfo.BPB.LBADATA);
                         }
                     }
-                    for (let off = 0; off < cb; off++) {
+                    for (let off = 0; off < cb && off < db.length; off++) {
                         let b = db.readUInt8(off);
                         if (hasBPB) {
                             switch(verBPB) {

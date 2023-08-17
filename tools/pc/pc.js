@@ -187,7 +187,7 @@ async function loadModules(factory, modules, done)
          *
          *      .replace(/\\/g, '/')
          *
-         * pc.js will fail on Windows operating systems with the following error:
+         * Node will fail on Windows operating systems with the following error:
          *
          *      TypeError [ERR_INVALID_MODULE_SPECIFIER]: Invalid module
          *      "..\..\..\machines\modules\v2\defines.js" is not a valid package name ....
@@ -737,7 +737,7 @@ function loadMachine(sFile)
             }
         }
 
-        if (config['hdc']) {
+        if (config['hdc'] && driveInfo.driveCtrl != "FDC") {
             let typeCtrl = config['hdc']['type'];
             let drives = config['hdc']['drives'];
             if (typeof drives == "string") {
@@ -748,7 +748,7 @@ function loadMachine(sFile)
                 }
             }
             if (!drives) drives = [];
-            if (driveInfo.driveCtrl != "FDC" && driveInfo.driveCtrl != "PCJS") {
+            if (driveInfo.driveCtrl != "PCJS") {
                 let driveCtrl = driveInfo.driveCtrl;
                 if (driveCtrl == "COMPAQ") driveCtrl = "AT";    // COMPAQ is AT-compatible, so suppress the warning
                 if (driveCtrl != typeCtrl) {
@@ -762,7 +762,7 @@ function loadMachine(sFile)
              *
              * And even if we do have a drive type, findDriveType() should simply verify that the type is valid.
              */
-            if (DiskInfo.findDriveType(driveInfo, maxCapacity * 1024 * 2, device)) {
+            if (DiskInfo.findDriveType(driveInfo, (maxCapacity * 1024 * 1024 / (driveInfo.cbSector || 512))|0, device)) {
                 if (fVerbose) {
                     printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
                 }
@@ -2237,7 +2237,7 @@ function main(argc, argv)
     localDir = defaults['directory'] || localDir;
 
     /*
-     * When using --floppy, certain other options are not allowed (ie, maxfiles, drivesize, drivectrl, and drivetype).
+     * When using --floppy, certain other options are disallowed (eg, drivesize, drivectrl).
      */
     if (fFloppy) {
         savedMachine = "ibm5170";
@@ -2245,44 +2245,43 @@ function main(argc, argv)
         driveInfo.driveCtrl = "FDC";
         driveOverride = true;
     } else {
-        maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || maxFiles;
-        maxCapacity = fFloppy? 0 : (parseFloat(removeArg('drivesize')) || parseFloat(defaults['drivesize']) || maxCapacity);
-
         let driveCtrl = removeArg('drivectrl');
         if (driveCtrl) {
             driveInfo.driveCtrl = driveCtrl;
             driveOverride = true;
         }
+        maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || maxFiles;
+        maxCapacity = parseFloat(removeArg('drivesize')) || parseFloat(defaults['drivesize']) || maxCapacity;
+    }
 
-        let typeDrive = removeArg('drivetype');
-        if (typeDrive) {
-            let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
+    let typeDrive = removeArg('drivetype');
+    if (typeDrive) {
+        let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
+        if (match) {
+            maxCapacity = 0;
+            if (!fFloppy) driveInfo.driveCtrl = "PCJS"; // this pseudo drive controller is required for custom drive geometries
+            driveInfo.driveType = 0;
+            driveInfo.nCylinders = +match[1];
+            driveInfo.nHeads = +match[2];
+            driveInfo.nSectors = +match[3];
+            driveInfo.cbSector = +match[4] || 512;
+            driveOverride = true;
+        } else if (!fFloppy) {
+            match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
             if (match) {
-                maxCapacity = 0;
-                driveInfo.driveCtrl = "PCJS";      // this pseudo drive controller is required for custom drive geometries
-                driveInfo.driveType = 0;
-                driveInfo.nCylinders = +match[1];
-                driveInfo.nHeads = +match[2];
-                driveInfo.nSectors = +match[3];
-                driveInfo.cbSector = +match[4] || 512;
-                driveOverride = true;
-            } else {
-                match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
-                if (match) {
-                    let driveCtrl = match[1] || driveInfo.driveCtrl;
-                    let driveType = +match[2];
-                    if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
-                        driveInfo.driveCtrl = driveCtrl;
-                        driveInfo.driveType = driveType;
-                        driveOverride = !!match[1];
-                    } else {
-                        match = null;
-                    }
+                let driveCtrl = match[1] || driveInfo.driveCtrl;
+                let driveType = +match[2];
+                if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
+                    driveInfo.driveCtrl = driveCtrl;
+                    driveInfo.driveType = driveType;
+                    driveOverride = !!match[1];
+                } else {
+                    match = null;
                 }
             }
-            if (!match) {
-                printf("unrecognized drive type: %s\n", typeDrive);
-            }
+        }
+        if (!match) {
+            printf("invalid drive type: %s\n", typeDrive);
         }
     }
 

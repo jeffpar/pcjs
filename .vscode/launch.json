@@ -467,7 +467,9 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "dir",
-        "-f"
+        "--floppy",
+        "--drivetype=40:2:4:1024",
+        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
       "stopOnEntry": false,
