@@ -200,7 +200,7 @@ export default class DiskInfo {
         let nCylinders = 0;
         let nSectorsPerTrack = 0;
         let aTracks = [];                   // track array (used only for disk images with track tables)
-        let cbSector = 512;                 // default sector size
+        let cbSector = driveInfo.cbSector || 512;
         let bMediaID = 0;
         let offBootSector = 0;
         let cbDiskData = dbDisk.length, cbPartition = cbDiskData;

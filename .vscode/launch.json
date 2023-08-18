@@ -466,9 +466,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "chkdsk c:,quit"
+        "--drivetype=2:6:63",
+        "load a: ms-dos 3.30 disk 1;a:chkdsk;quit",
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

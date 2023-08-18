@@ -1044,9 +1044,10 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
  * within the specified directory.  Internal DOS commands are allowed if they're on the list below.
  *
  * Multiple commands are allowed, separated by commas, but only the first one will be checked
- * for validity; I had toyed with the idea of using semicolons instead of commas, but shells like
- * break commands apart at semicolon boundaries unless they're escaped, and that's a pain, so commas
- * it is.
+ * for validity; you can also use semicolons, but since most shells require those to be "escaped"
+ * with backslashes, commas make life easier.  You can also put quotes around your command(s) if
+ * you want to use semicolons without escaping them (and you may need to use semicolons if any
+ * of your commands must use commas).
  *
  * NOTE: The list of internal commands below is not intended to be exhaustive; it's just a start.
  *
@@ -1057,7 +1058,7 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
 function checkCommand(sDir, sCommand)
 {
     if (sCommand) {
-        let aParts = sCommand.split(/([ ,])/);
+        let aParts = sCommand.split(/([ ,;])/);
         let sProgram = aParts[0].toUpperCase();
         const aInternal = [
             "BREAK",
@@ -1074,12 +1075,12 @@ function checkCommand(sDir, sCommand)
             "FOR",
             "GOTO",
             "IF",
-            "LOAD",     // since we create LOAD.COM on the fly, it won't exist externally, so we treat like an internal command
+            "LOAD",     // since we create LOAD.COM on the fly, it won't exist externally, so we treat it like an internal command
             "MKDIR",
             "PATH",
             "PAUSE",
             "PROMPT",
-            "QUIT",     // since we create QUIT.COM on the fly, it won't exist externally, so we treat like an internal command
+            "QUIT",     // since we create QUIT.COM on the fly, it won't exist externally, so we treat it like an internal command
             "REM",
             "REN",
             "RENAME",
@@ -1155,7 +1156,7 @@ function getSystemDisk(type, version)
  * As for AUTOEXEC.BAT, we read any existing file (or create an empty file) and append the provided command.
  *
  * @param {string} sDir
- * @param {string} [sCommand] (eg, "COPY A:*.COM C:"; multiple commands can be separated by commas)
+ * @param {string} [sCommand] (eg, "COPY A:*.COM C:"; multiple commands can be separated by commas or semicolons)
  * @param {boolean} [fLog]
  * @returns {string} (error message, if any)
  */
@@ -1266,7 +1267,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     }
 
     if (sCommand) {
-        let aCommands = sCommand.split(',');
+        let aCommands = sCommand.split(sCommand.indexOf(';') >= 0? ';' : ',');
         for (let command of aCommands) {
             data += command + "\r\n";
         }
@@ -2387,14 +2388,28 @@ function main(argc, argv)
     if (typeDrive) {
         let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
         if (match) {
-            maxCapacity = 0;
-            if (!fFloppy) driveInfo.driveCtrl = "PCJS"; // this pseudo drive controller is required for custom drive geometries
-            driveInfo.driveType = 0;
-            driveInfo.nCylinders = +match[1];
-            driveInfo.nHeads = +match[2];
-            driveInfo.nSectors = +match[3];
-            driveInfo.cbSector = +match[4] || 512;
-            driveOverride = true;
+            let nCylinders = +match[1];
+            let nHeads = +match[2];
+            let nSectors = +match[3];
+            let cbSector = +match[4] || 512;
+            if (nCylinders < 1 || nCylinders > 1024 ||
+                nHeads < 1 || nHeads > 256 ||
+                nSectors < 1 || nSectors > 63 ||
+                cbSector < 128 || cbSector > 1024 || (cbSector & (cbSector - 1))) {
+                match = null;
+            } else {
+                maxCapacity = 0;
+                if (!fFloppy) driveInfo.driveCtrl = "PCJS"; // this pseudo drive controller is required for custom drive geometries
+                driveInfo.driveType = 0;
+                driveInfo.nCylinders = nCylinders;
+                driveInfo.nHeads = nHeads;
+                driveInfo.nSectors = nSectors;
+                driveInfo.cbSector = cbSector;
+                if (cbSector != 512) {
+                    printf("warning: %d-byte sectors are not known to work with any DOS operating system\n", cbSector);
+                }
+                driveOverride = true;
+            }
         } else if (!fFloppy) {
             match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
             if (match) {
