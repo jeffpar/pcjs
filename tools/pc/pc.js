@@ -511,17 +511,18 @@ function intReboot(addr)
      * for those geometries will never get loaded into memory.  So we take this opportunity to install
      * them before the boot process begins.
      *
-     * Unfortunately, the default INT 19h behavior resets the drive table vectors, so if we tried to
+     * Unfortunately, the default INT 19h behavior resets ALL drive table vectors, so if we tried to
      * install our own drive tables now, they would immediately be replaced.  So instead we set a flag
-     * (geometryOverride) telling our intDisk() handler to install drive tables on the next INT 13h call.
+     * (geometryOverride) telling our intDisk() handler to install new table(s) on the next INT 13h call.
      */
     if (driveInfo.driveCtrl == "PCJS" && driveInfo.driveType == 0) {
         geometryOverride = true;
     }
     /*
-     * Also, in order to test disk images with non-standard sector sizes, we take this opportunity to patch
-     * the Drive Parameter Table (DPT) for the diskette drive if we're booting a floppy with a non-standard
-     * sector size.  Since the table will generally be in ROM, we use bus.setByteDirect() instead of
+     * Also, in order to test floppy diskettes with non-standard sector sizes, we take this opportunity
+     * to patch the Diskette Parameter Table (DPT) if we're booting a floppy with a non-standard sector size.
+     * Since this table will generally be in ROM (well, at least on the first reboot, since no other code
+     * will have had an opportunity to copy it elsewhere yet), we must use bus.setByteDirect() instead of
      * cpu.setByte().
      *
      * TODO: The "correct" way to deal with this will be to make my own boot sector, similar to the MBR I
@@ -529,29 +530,81 @@ function intReboot(addr)
      * already copy the DPT to RAM in order tweak other non-geometric parameters (eg, stepping rate).
      */
     if (driveInfo.fRemovable && driveInfo.cbSector && driveInfo.cbSector != 512) {
-        let fpDPT = this.getLong(0x1E * 4);
-        let addrDPT = ((fpDPT >>> 16) << 4) + (fpDPT & 0xffff);
+        let fpDPT = this.getLong(0x1E * 4);                     // get the DPT address from interrupt vector 0x1E
+        let addrDPT = ((fpDPT >>> 16) << 4) + (fpDPT & 0xffff); // convert real-mode far pointer to physical address
         /*
          * The 4th byte in the DPT (at offset 3) indicates the # bytes/sector, and it is stored as a shift
          * count for the base sector size of 128 (128 << 0 = 128, 128 << 1 = 256, 128 << 2 == 512, etc).  So
          * the value to write is log2(cbSector) - log2(128).  We also update the EOT value in the 5th byte
-         * (at offset 4) but that appears to be less critical.
+         * (at offset 4), but that appears to be less critical.
          */
         this.bus.setByteDirect(addrDPT + 3, Math.log2(driveInfo.cbSector) - 7);
         this.bus.setByteDirect(addrDPT + 4, driveInfo.nSectors);
         /*
          * Unfortunately, this all seems to be for naught, because while stepping through the MS-DOS 3.30
-         * initialization code in IO.SYS, I could see that when it loads the entire FAT into the top of available
+         * initialization code in IO.SYS, I saw that when it loads the entire FAT into the top of available
          * memory, it calculates how many paragraphs all the FAT sectors will need, and it does so by shifting
          * the FAT sector count left 5 times.  Well, that only works for 512-byte sectors, because log2(512)
          * is 9 and log2(16) is 4, and 9 - 4 == 5.   This code begins at 70:2CA2 (look for the INT 12h memory
          * size call).
          *
          * When I tested MS-DOS 3.30 with a boot floppy formatted 40:2:5:1024, which contained only one FAT
-         * sector, IO.SYS tried to read that one 1K FAT sector into 9FE0.  At most, only 512 bytes could be
-         * returned, since there's no RAM at A000, and even if that was all that IO.SYS needed in order continue
-         * loading the operating system, there was a second problem, which is that the request spans a 64K DMA
-         * boundary, so that call will always return an error.  Sigh.
+         * sector, IO.SYS tried to read that one 1K FAT sector into segment 9FE0.  At most, only 512 bytes
+         * could be returned, since there's no RAM at A000, and even if 512 bytes of FAT was all IO.SYS needed
+         * in order continue loading the operating system, there was a second problem, which is that the
+         * request spans a 64K DMA boundary, so the call will always return an error.
+         *
+         * Well, let's see how far we get if we shave 1K off available RAM.  That should at least avoid the
+         * DMA boundary problem....
+         */
+        let kbRAM = this.getShort(0x413);
+        if (kbRAM % 64 == 0) {
+            this.setShort(0x413, --kbRAM);
+        }
+        /*
+         * So, no, MS-DOS 3.30 is totally broken for non-512-byte sectors, because after it got past reading
+         * the FAT (into segment 9FA0, thanks to the reduced memory size), it then proceeded to read MSDOS.SYS
+         * one track at a time, starting 5C9:0, then 5C9:A00, then 5C9:1400, etc.  Well, that's great if all 5
+         * sectors on each track are only 512 bytes, but not so great if they are all 1024 bytes.  The address
+         * for each successive track is calculated by this code (presumably part of the IO.SYS disk driver):
+         *
+         *      AX=001E BX=0000 CX=0005 DX=0100 SP=06F4 BP=0005 SI=0522 DI=0482
+         *      SS=0000 DS=0070 ES=05C9 PS=0296 V0 D0 I1 T0 S1 Z0 A1 P1 C0
+         *      &0070:0E2E 2BC1             SUB      AX,CX                    ;cycles=5
+         *      >> tr
+         *      AX=0019 BX=0000 CX=0005 DX=0100 SP=06F4 BP=0005 SI=0522 DI=0482
+         *      SS=0000 DS=0070 ES=05C9 PS=0202 V0 D0 I1 T0 S0 Z0 A0 P0 C0
+         *      &0070:0E30 D0E1             SHL      CL,1                     ;cycles=2
+         *      >> tr
+         *      AX=0019 BX=0000 CX=000A DX=0100 SP=06F4 BP=0005 SI=0522 DI=0482
+         *      SS=0000 DS=0070 ES=05C9 PS=0206 V0 D0 I1 T0 S0 Z0 A0 P1 C0
+         *      &0070:0E32 02F9             ADD      BH,CL                    ;cycles=2
+         *      >> tr
+         *      AX=0019 BX=0A00 CX=000A DX=0100 SP=06F4 BP=0005 SI=0522 DI=0482
+         *      SS=0000 DS=0070 ES=05C9 PS=0206 V0 D0 I1 T0 S0 Z0 A0 P1 C0
+         *      &0070:0E34 EBCC             JMP      0E02                     ;cycles=2
+         *
+         * After a track is read, this code reduces the remaining sector count (AX) by the number of sectors just
+         * read (CX == 5), then shifts CX left 1 bit (using a byte shift, so you better never have 128 or more sectors
+         * per track), and then adds that to the HIGH byte of the offset for the next read (BX).  So it is effectively
+         * adding CX * 256 to BX, or rather CX * 512 thanks to the earlier shift -- which of course only works for
+         * 512-byte sectors.
+         *
+         * At this point, it's clear this is a pointless exercise -- at least for MS-DOS 3.30.  If earlier versions
+         * were truly sector-size-agnostic, then the question becomes: had the developers forgotten about that "feature"
+         * or were they consciously blowing it off?  If the latter, they certainly weren't blowing it off in a very
+         * user-friendly manner.
+         *
+         * UPDATE: I took a quick look at PC DOS 2.0, and its boot sector immediately makes bad assumptions about sector
+         * size.  Here's how it calculates the number of directory sectors from the number of root directory entries:
+         *
+         *      (entries * 32 + 0x1FF) / 0x200
+         *
+         * Things go wrong almost immediately, since it has miscalculated where the first data sector (ie, IO.SYS) is
+         * located.  Kind of depressing, since DOS 2.0 *introduced* the BPB, which included a field for sector size....
+         *
+         * So did ANY version of DOS support non-standard sector sizes?  Since DOS 2.0 was the first version to support
+         * hard disks, which almost invariably used 512-byte sectors, perhaps only DOS 1.x did?
          */
     }
     return true;
@@ -1082,7 +1135,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
 
     let version = +systemVersion;
     let majorVersion = version | 0;
-    if (majorVersion < 2) {
+    if (majorVersion < 2 && !fFloppy) {
         return "minimum DOS version with hard disk support is 2.00";
     }
 

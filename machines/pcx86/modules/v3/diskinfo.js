@@ -4474,6 +4474,11 @@ DiskInfo.BPB = {
     HIDDENSECS:     0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (0 for non-partitioned media)
     BOOTDRIVE:      0x01E,      // 1 byte (DOS 2.x): BIOS boot drive # (eg, 0x00 or 0x80)
     BOOTHEAD:       0x01F,      // 1 byte (DOS 2.x): BIOS boot head # (0-based)
+    /*
+     * NOTE: DOS 2.0 also stores 0x0A at offset 0x020 (not yet sure what that's used for, if anything), but more importantly,
+     * it also contains a custom 11-byte Diskette Parameter Table (DPT) at offsets 0x021 through 0x0x2B, which it promptly
+     * points the DPT vector 0x1E (0:0078h) to.
+     */
     LARGESECS:      0x020,      // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
     END:            0x024,      // end of standard BPB
     /*
@@ -4639,7 +4644,7 @@ DiskInfo.aDefaultBPBs = [
   [                             // define BPB for 320Kb diskette
     0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
     0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x31, 0x2E, 0x30,     // "IBM  1.0" (this is a real OEM signature)
+ // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x31, 0x2E, 0x30,     // "IBM  1.0" (this is a fake OEM signature)
     0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
     0x02,                       // 0x0D: sectors per cluster (2)
     0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
@@ -4655,7 +4660,7 @@ DiskInfo.aDefaultBPBs = [
   [                             // define BPB for 180Kb diskette
     0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
     0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (this is a fake OEM signature)
+ // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (this is a real OEM signature)
     0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
     0x01,                       // 0x0D: sectors per cluster (1)
     0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
@@ -4687,7 +4692,7 @@ DiskInfo.aDefaultBPBs = [
   [                             // define BPB for 1.2Mb diskette
     0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
     0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x31, 0x30, 0x2E, 0x31,     // "10.0" (which I believe was used on IBM OS/2 1.0 diskettes)
+ // 0x49, 0x42, 0x4D, 0x20, 0x31, 0x30, 0x2E, 0x30,     // "IBM 10.0" (which I believe was used on IBM OS/2 1.0 diskettes)
     0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
     0x01,                       // 0x0D: sectors per cluster (1)
     0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
