@@ -468,9 +468,7 @@
       "args": [
         "dir",
         "--floppy",
-        "--drivetype=40:2:5:1024",
-        "--system=pcdos",
-        "--version=2.00",
+        "--drivetype=40:2:5",
         "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",

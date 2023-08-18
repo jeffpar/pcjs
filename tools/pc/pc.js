@@ -497,12 +497,12 @@ function intDisk(addr)
 function intReboot(addr)
 {
     /*
-     * An INT 19h issued from our own RETURN.COM is a signal to shut down.
+     * An INT 19h issued from our own QUIT.COM is a signal to shut down.
      */
     if (this.getIP() == 0x102) {
         let sig = this.getSOWord(this.segCS, this.getIP()+2) + (this.getSOWord(this.segCS, this.getIP()+4) << 16);
         if (sig == 0x534A4350) {        // "PCJS"
-            exit();                     // INT 19h appears to have come from RETURN.COM
+            exit();                     // INT 19h appears to have come from QUIT.COM
         }
     }
     /*
@@ -602,9 +602,6 @@ function intReboot(addr)
          *
          * Things go wrong almost immediately, since it has miscalculated where the first data sector (ie, IO.SYS) is
          * located.  Kind of depressing, since DOS 2.0 *introduced* the BPB, which included a field for sector size....
-         *
-         * So did ANY version of DOS support non-standard sector sizes?  Since DOS 2.0 was the first version to support
-         * hard disks, which almost invariably used 512-byte sectors, perhaps only DOS 1.x did?
          */
     }
     return true;
@@ -1055,7 +1052,7 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
 function checkCommand(sDir, sCommand)
 {
     if (sCommand) {
-        let aParts = sCommand.split(' ');
+        let aParts = sCommand.split(sCommand.indexOf(',') >= 0? ',' : ' ');
         let sProgram = aParts[0].toUpperCase();
         const aInternal = ["CD", "COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
 
@@ -1122,7 +1119,7 @@ function getSystemDisk(type, version)
  * As for AUTOEXEC.BAT, we read any existing file (or create an empty file) and append the provided command.
  *
  * @param {string} sDir
- * @param {string} [sCommand] (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc)
+ * @param {string} [sCommand] (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc; multiple commands can be separated by commas)
  * @param {boolean} [fLog]
  * @returns {string} (error message, if any)
  */
@@ -1181,11 +1178,11 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     driveInfo.files.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
 
     /*
-     * We also create a hidden RETURN.COM in the root, which executes an "INT 19h" to reboot the machine.
+     * We also create a hidden QUIT.COM in the root, which executes an "INT 19h" to reboot the machine.
      * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDisk()
      * to look for any changes and then terminate the machine.
      */
-    driveInfo.files.push(makeFileDesc("RETURN.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+    driveInfo.files.push(makeFileDesc("QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
 
     /*
      * For any apps listed in pc.json, create hidden command apps in the root, each of which will execute
@@ -1209,8 +1206,8 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
      * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
      * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
      * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
-     * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "return" to run
-     * our hidden "RETURN.COM" program in the root of the drive, regardless of the current directory.
+     * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "quit" to run
+     * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
      */
     let attr = DiskInfo.ATTR.ARCHIVE;
     let data = readFileSync(path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
@@ -1232,7 +1229,12 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         data += "PATH " + bootLetter + ":\\\r\n";
     }
 
-    if (sCommand) data += sCommand + "\r\n";
+    if (sCommand) {
+        let aCommands = sCommand.split(',');
+        for (let command of aCommands) {
+            data += command + "\r\n";
+        }
+    }
     if (machineDir) data += "CD " + machineDir + "\r\n";
     driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
 

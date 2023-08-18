@@ -234,10 +234,10 @@ This collection of files also includes a Microsoft C Compiler, so we can try com
     SIEVE    EXE    14662   7-15-23   9:50a
             8 File(s)   6053888 bytes free
 
-    C:\TOOLS\C4DEMO>return
+    C:\TOOLS\C4DEMO>quit
     $
 
-That last command, `return`, runs a special program that `pc.js` automatically includes with the machine, to gracefully return to your own operating system.
+That last command, `quit`, runs a special program that `pc.js` automatically includes with the machine, to gracefully return to your own operating system.
 
 And, if you take a peek inside the folder that corresponds to `C:\TOOLS\C4DEMO`, you'll see that all the files created by the Microsoft C Compiler, such as `DEMO.EXE` and `SIEVE.EXE` have been preserved:
 
@@ -456,7 +456,7 @@ At this point, `pc.js` shows you all the *other* disks (if any) with the same ex
     LU       EXE    22528   3-25-84   1:48a
         40 File(s)     16384 bytes free
 
-Any files you're interested in can be copied to the machine's C: drive, and when you type `return`, those files should be automatically transferred to your current directory.
+Any files you're interested in can be copied to the machine's C: drive, and when you type `quit`, those files should be automatically transferred to your current directory.
 
 ### More To Come
 

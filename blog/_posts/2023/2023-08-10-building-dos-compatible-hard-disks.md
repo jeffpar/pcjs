@@ -99,7 +99,7 @@ This runs a hidden `VI.COM` DOS program that silently shuts down the `pc.js` vir
 
 You can add or remove programs from the `apps` section, and the next time you run `pc.js`, it will automatically create matching hidden `.COM` files in the root of the virtual hard disk.  Make sure you stick to app names that are 8 characters or less; you can use the `exec` property to map a short filename to a longer or different local filename (see the `edit` example).
 
-Aside from the commands listed in the `apps` section, two other programs are always included on the virtual hard disk: `LOAD.COM`, which makes it easy to load PCjs diskette images into drive A: or B:, and `RETURN.COM`, which shuts down the machine and returns to your local prompt (alternatively, you can press `CTRL-D` and type `quit`).
+Aside from the commands listed in the `apps` section, two other programs are always included on the virtual hard disk: `LOAD.COM`, which makes it easy to load PCjs diskette images into drive A: or B:, and `QUIT.COM`, which shuts down the machine and returns to your local prompt (alternatively, you can press `CTRL-D` and type `quit`).
 
 See [Loading Diskettes Into Machines](/tools/pc/#loading-diskettes-into-machines) for more information and examples of the `LOAD` command (the internal `LOAD` command operates the same as the external `LOAD.COM` program).
 
