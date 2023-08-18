@@ -1043,6 +1043,11 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
  * An external DOS command is allowed if we can find a matching COM, EXE, or BAT file somewhere
  * within the specified directory.  Internal DOS commands are allowed if they're on the list below.
  *
+ * Multiple commands are allowed, separated by commas, but only the first one will be checked
+ * for validity; I had toyed with the idea of using semicolons instead of commas, but shells like
+ * break commands apart at semicolon boundaries unless they're escaped, and that's a pain, so commas
+ * it is.
+ *
  * NOTE: The list of internal commands below is not intended to be exhaustive; it's just a start.
  *
  * @param {string} sDir
@@ -1052,7 +1057,7 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
 function checkCommand(sDir, sCommand)
 {
     if (sCommand) {
-        let aParts = sCommand.split(sCommand.indexOf(',') >= 0? ',' : ' ');
+        let aParts = sCommand.split(/([ ,])/);
         let sProgram = aParts[0].toUpperCase();
         const aInternal = ["CD", "COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
 
@@ -1067,13 +1072,13 @@ function checkCommand(sDir, sCommand)
             if (!aFiles.length) {
                 sCommand = "";
             } else {
-                let sArguments = aParts.slice(1).join(' ');
+                let sArguments = sCommand.slice(aParts[0].length);
                 sCommand = aFiles[0];
                 if (sCommand.indexOf(sDir) == 0) {
                     sCommand = sCommand.slice(sDir.length);
                 }
                 sCommand = sCommand.replace(/\//g, '\\');
-                sCommand = (sCommand[0] != '\\'? '\\' : '') + sCommand + (sArguments? " " + sArguments : "");
+                sCommand = (sCommand[0] != '\\'? '\\' : '') + sCommand + sArguments;
             }
         }
     }
@@ -1119,7 +1124,7 @@ function getSystemDisk(type, version)
  * As for AUTOEXEC.BAT, we read any existing file (or create an empty file) and append the provided command.
  *
  * @param {string} sDir
- * @param {string} [sCommand] (eg, "COPY A:*.COM C:", "PKUNZIP DEMO.ZIP", etc; multiple commands can be separated by commas)
+ * @param {string} [sCommand] (eg, "COPY A:*.COM C:"; multiple commands can be separated by commas)
  * @param {boolean} [fLog]
  * @returns {string} (error message, if any)
  */

@@ -466,12 +466,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "dir",
-        "--floppy",
-        "--drivetype=40:2:5",
-        "--halt"
+        "chkdsk c:,quit"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
