@@ -18,13 +18,18 @@
     }
   },
   "systems": {
+    "compaq": {
+      "vendor": "compaq",
+      "product": "compaq-dos",
+      "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
+    },
     "msdos": {
       "vendor": "microsoft",
       "files": ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"]
     },
     "pcdos": {
-        "vendor": "ibm",
-        "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
+      "vendor": "ibm",
+      "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
     }
   }
 }

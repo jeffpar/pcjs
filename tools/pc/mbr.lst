@@ -1,0 +1,417 @@
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+
+                                                            Page     1-1
+                                                            
+
+                                	PAGE	,132 
+                                ; 
+                                ; PCjs Master Boot Record 
+                                ; 
+                                ; @author Jeff Parsons <Jeff@pcjs.org> 
+                                ; @copyright (c) 2020-2023 Jeff Parsons 
+                                ; @license MIT <https://www.pcjs.org/LICENSE.txt> 
+                                ; 
+                                ; This file is part of PCjs, a computer emulation software project at pcjs.org 
+                                ; 
+                                 
+ = 0080                         ACTIVE		equ	80h	; no coincidence this is also the drive # 
+ = 0000                         INACTIVE	equ	00h 
+                                 
+ = 0041                         VEC_DRIVE0	equ	41h 
+ = 0046                         VEC_DRIVE1	equ	46h 
+                                 
+                                ; 
+                                ; While I had considered shaving 1K off available RAM so that I could safely 
+                                ; stash a copy of these drive tables, that seemed rather wasteful, so I wondered 
+                                ; if I couldn't just use some unused interrupt vector space.  And while browsing 
+                                ; Ralf Brown's Interrupt List, I noticed that the AMI BIOS authors had apparently 
+                                ; come to the same conclusion and used vectors C0h-C7h for a similar purpose. 
+                                ; 
+ = 0300                         TBL_DRIVE0	equ	0C0h*4	; room for 1 drv_parms spanning vectors C0h-C3h 
+ = 0310                         TBL_DRIVE1	equ	0C4h*4	; room for 1 drv_parms spanning vectors C4h-C7h 
+                                 
+                                par_record	struc 
+ 0000  ??                       par_status	db	? 
+ 0001  0003[                    par_chs_beg	db	3 dup(?) 
+            ??                  
+                         ]      
+                                
+ 0004  ??                       par_type	db	? 
+ 0005  0003[                    par_chs_end	db	3 dup(?) 
+            ??                  
+                         ]      
+                                
+ 0008  ????????                 par_lba_beg	dd	? 
+ 000C  ????????                 par_lba_end	dd	? 
+ 0010                           par_record	ends 
+                                 
+                                drv_parms	struc 
+ 0000  ????                     drv_cyls	dw	?	; 0x19E, 0x1AE 
+ 0002  ??                       drv_heads	db	?	; 0x1A0, 0x1B0 
+ 0003  ????                     drv_unused1	dw	? 
+ 0005  ????                     drv_precomp	dw	?	; 0x1A3, 0x1B3 
+ 0007  ??                       drv_unused2	db	? 
+ 0008  ??                       drv_control	db	?	; 0x1A6, 0x1B6 
+ 0009  0003[                    drv_unused3	db	3 dup(?) 
+            ??                  
+                         ]      
+                                
+ 000C  ????                     drv_landing	dw	?	; 0x1AA, 0x1BA 
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+
+                                                            Page     1-2
+                                                            
+
+ 000E  ??                       drv_sectors	db	?	; 0x1AC, 0x1BC 
+ 000F  ??                       drv_reserved	db	? 
+ 0010                           drv_parms	ends 
+                                 
+ = 7E00                         RELOC		equ	7E00h 
+                                 
+ 0000                           BOOTSEG	segment word public 'CODE' 
+                                 
+ 7E00                           	org	RELOC 
+                                        ASSUME	CS:BOOTSEG, DS:NOTHING, ES:NOTHING, SS:NOTHING 
+                                ; 
+                                ; All we should assume on entry is: 
+                                ; 
+                                ;	CS = 0 
+                                ;	IP = 7C00h 
+                                ;	DL = drive # (eg, 00h or 80h) 
+                                ; 
+                                ; The original IBM PC had these additional inputs: 
+                                ; 
+                                ;	DS = ES = 0 
+                                ;	SS:SP = 30h:100h 
+                                ; 
+                                ; which apparently didn't become a standard, because if we rely on those 
+                                ; other assumptions, we can run into boot failures. 
+                                ; 
+ 7E00  FA                       start:	cli 
+ 7E01  33 C0                    	xor	ax,ax 
+ 7E03  8E D0                    	mov	ss,ax 
+ 7E05  BC 7C00                  	mov	sp,7C00h 
+ 7E08  8E D8                    	mov	ds,ax 
+ 7E0A  8E C0                    	mov	es,ax 
+                                	ASSUME	DS:BOOTSEG, ES:BOOTSEG 
+ 7E0C  FB                       	sti 
+ 7E0D  FC                       	cld 
+ 7E0E  8B F4                    	mov	si,sp 
+ 7E10  BF 7E00 R                	mov	di,offset start 
+ 7E13  B9 0100                  	mov	cx,100h 
+ 7E16  F3/ A5                   	rep	movsw 
+ 7E18  BB 7E1D R                	mov	bx,offset chk0 
+ 7E1B  FF E3                    	jmp	bx 
+                                ; 
+                                ; Now let's get to the whole reason for this MBR's existence: checking 
+                                ; for internal drive parameter table(s), and if they exist, copying them 
+                                ; to low memory and updating the corresponding interrupt vector. 
+                                ; 
+ 7E1D  BB 0104                  chk0:	mov	bx,VEC_DRIVE0 * 4 
+ 7E20  BE 7F9E R                	mov	si,offset drv0tbl 
+ 7E23  BF 0300                  	mov	di,TBL_DRIVE0 
+ 7E26  39 0C                    	cmp	[si].drv_cyls,cx 
+ 7E28  74 05                    	je	chk1 
+ 7E2A  B2 80                    	mov	dl,80h 
+ 7E2C  E8 7E9C R                	call	copy 
+ 7E2F  BB 0118                  chk1:	mov	bx,VEC_DRIVE1 * 4 
+ 7E32  BE 7FAE R                	mov	si,offset drv1tbl 
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+
+                                                            Page     1-3
+                                                            
+
+ 7E35  BF 0310                  	mov	di,TBL_DRIVE1 
+ 7E38  39 0C                    	cmp	[si].drv_cyls,cx 
+ 7E3A  74 05                    	je	scan 
+ 7E3C  B2 81                    	mov	dl,81h 
+ 7E3E  E8 7E9C R                	call	copy 
+                                ; 
+                                ; Now back to our regularly scheduled Master Boot Record: scan the partition 
+                                ; table, find the ACTIVE partition, ensure the rest are INACTIVE, then boot it. 
+                                ; 
+ 7E41  B1 04                    scan:	mov	cl,4		; CX = count (CH is already zero) 
+ 7E43  33 D2                    	xor	dx,dx 
+ 7E45  BE 7FBE R                	mov	si,offset par0tbl 
+ 7E48  80 3C 80                 next:	cmp	[si].par_status,ACTIVE 
+ 7E4B  74 10                    	je	load 
+ 7E4D  80 3C 00                 	cmp	[si].par_status,INACTIVE 
+ 7E50  75 38                    	jne	inv 
+ 7E52  83 C6 10                 skip:	add	si,size par_record 
+ 7E55  E2 F1                    	loop	next 
+ 7E57  85 D2                    	test	dx,dx		; did we find an ACTIVE partition? 
+ 7E59  75 0D                    	jnz	read		; yes 
+ 7E5B  CD 18                    	int	18h		; no, so start ROM BASIC 
+ 7E5D  85 D2                    load:	test	dx,dx		; did we already find an ACTIVE partition? 
+ 7E5F  75 29                    	jnz	inv		; yes 
+ 7E61  8B 14                    	mov	dx,word ptr [si].par_status 
+ 7E63  8B 44 02                 	mov	ax,word ptr [si].par_chs_beg+1 
+ 7E66  EB EA                    	jmp	skip 
+                                 
+ 7E68  BF 0005                  read:	mov	di,5		; retries 
+ 7E6B  8B DC                    	mov	bx,sp		; BX = 7C00h (nothing has been pushed) 
+ 7E6D  91                       	xchg	cx,ax		; CX and DX contain cylinder/head/sector 
+ 7E6E  B8 0201                  retry:	mov	ax,0201h	; AH = 02h, AL = 01h 
+ 7E71  CD 13                    	int	13h 
+ 7E73  73 1A                    	jnc	verify 
+ 7E75  33 C0                    	xor	ax,ax 
+ 7E77  CD 13                    	int	13h 
+ 7E79  4F                       	dec	di 
+ 7E7A  75 F2                    	jnz	retry 
+ 7E7C  BE 7EC3 R                	mov	si,offset err_msg 
+                                 
+ 7E7F  AC                       print:	lodsb 
+ 7E80  84 C0                    	test	al,al 
+ 7E82  74 FE                    hang:	jz	hang 
+ 7E84  B4 0E                    	mov	ah,0Eh 
+ 7E86  CD 10                    	int	10h 
+ 7E88  EB F5                    	jmp	print 
+                                 
+ 7E8A  BE 7EAB R                inv:	mov	si,offset inv_msg 
+ 7E8D  EB F0                    	jmp	print 
+                                 
+ 7E8F  BE 7EE2 R                verify:	mov	si,offset mis_msg 
+ 7E92  81 BF 01FE AA55          	cmp	word ptr [bx+1FEh],0AA55h 
+ 7E98  75 E5                    	jne	print 
+                                ; 
+                                ; NOTE: Before transferring control to the DOS boot record, the DOS MBR 
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+
+                                                            Page     1-4
+                                                            
+
+                                ; carefully restored SI to the offset of the active partition record, but 
+                                ; I am unaware of any reliance on that value.  In fact, when IO.SYS wants 
+                                ; to examine the MBR, it simply re-reads and re-scans it.  Perhaps there 
+                                ; was a plan to pass MBR information on to the boot sector, and from there 
+                                ; to IO.SYS, thereby eliminating a redundant read, but I don't think that 
+                                ; ever happened. 
+                                ; 
+ 7E9A  FF E4                    boot:	jmp	sp		; jump to 7C00h 
+                                 
+                                ; 
+                                ; Using the vector space at 0:DI, update the drive vector at 0:BX, 
+                                ; copy the drive parameters from DS:SI to ES:DI, then notify the BIOS. 
+                                ; 
+ 7E9C                           copy	proc	near 
+ 7E9C  89 3F                    	mov	[bx],di		; update drive parms vector with AX:DI 
+ 7E9E  89 4F 02                 	mov	[bx+2],cx	; (CX is zero) 
+ 7EA1  B9 0010                  	mov	cx,size drv_parms 
+ 7EA4  F3/ A4                   	rep	movsb 
+ 7EA6  B4 09                    	mov	ah,09h		; tell the BIOS about the new parameters 
+ 7EA8  CD 13                    	int	13h		; DL = drive # 
+ 7EAA  C3                       	ret 
+                                copy	endp 
+                                 
+ 7EAB  49 6E 76 61 6C 69 64     inv_msg	db	"Invalid partition table",0 
+       20 70 61 72 74 69 74     
+       69 6F 6E 20 74 61 62     
+       6C 65 00                 
+ 7EC3  45 72 72 6F 72 20 6C     err_msg	db	"Error loading operating system",0 
+       6F 61 64 69 6E 67 20     
+       6F 70 65 72 61 74 69     
+       6E 67 20 73 79 73 74     
+       65 6D 00                 
+ 7EE2  4D 69 73 73 69 6E 67     mis_msg	db	"Missing operating system",0 
+       20 6F 70 65 72 61 74     
+       69 6E 67 20 73 79 73     
+       74 65 6D 00              
+                                 
+ 7F99                           	org	RELOC + 0199h 
+ 7F99  50 43 4A 53 00           	db	"PCJS",0 
+                                ; 
+                                ; When PCjs builds the MBR, if any drives are using a custom drive 
+                                ; geometry instead of a pre-configured drive type, then it will fill in 
+                                ; these drive tables at build time.  We just need to reserve the space. 
+                                ; 
+                                	.errnz	offset $ - (RELOC + 019Eh) 
+ 7F9E  ????                     drv0tbl	drv_parms	<>	; drive 0 parameter table 
+ 7FA0  ??                       
+ 7FA1  ????                     
+ 7FA3  ????                     
+ 7FA5  ??                       
+ 7FA6  ??                       
+ 7FA7  0003[                    
+            ??                  
+                         ]      
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+
+                                                            Page     1-5
+                                                            
+
+ 7FAA  ????                     
+ 7FAC  ??                       
+ 7FAD  ??                       
+                                
+ 7FAE  ????                     drv1tbl	drv_parms	<>	; drive 1 parameter table 
+ 7FB0  ??                       
+ 7FB1  ????                     
+ 7FB3  ????                     
+ 7FB5  ??                       
+ 7FB6  ??                       
+ 7FB7  0003[                    
+            ??                  
+                         ]      
+ 7FBA  ????                     
+ 7FBC  ??                       
+ 7FBD  ??                       
+                                
+                                ; 
+                                ; Ditto for the partition tables; we just need to reserve space for them. 
+                                ; 
+                                	.errnz	offset $ - (RELOC + 01BEh) 
+ 7FBE  ??                       par0tbl	par_record	<> 
+ 7FBF  0003[                    
+            ??                  
+                         ]      
+ 7FC2  ??                       
+ 7FC3  0003[                    
+            ??                  
+                         ]      
+ 7FC6  ????????                 
+ 7FCA  ????????                 
+                                
+ 7FCE  ??                       par1tbl	par_record	<> 
+ 7FCF  0003[                    
+            ??                  
+                         ]      
+ 7FD2  ??                       
+ 7FD3  0003[                    
+            ??                  
+                         ]      
+ 7FD6  ????????                 
+ 7FDA  ????????                 
+                                
+ 7FDE  ??                       par2tbl	par_record	<> 
+ 7FDF  0003[                    
+            ??                  
+                         ]      
+ 7FE2  ??                       
+ 7FE3  0003[                    
+            ??                  
+                         ]      
+ 7FE6  ????????                 
+ 7FEA  ????????                 
+                                
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+
+                                                            Page     1-6
+                                                            
+
+ 7FEE  ??                       par3tbl	par_record	<> 
+ 7FEF  0003[                    
+            ??                  
+                         ]      
+ 7FF2  ??                       
+ 7FF3  0003[                    
+            ??                  
+                         ]      
+ 7FF6  ????????                 
+ 7FFA  ????????                 
+                                
+                                 
+                                	.errnz	offset $ - (RELOC + 01FEh) 
+ 7FFE  AA55                     	dw	0AA55h		; required signature word 
+                                 
+ 8000                           BOOTSEG	ends 
+                                 
+                                	end 
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+
+                                                            Symbols-1
+                                                             
+
+Structures and Records:
+
+                N a m e                 Width   # fields
+                                        Shift   Width   Mask    Initial
+
+DRV_PARMS  . . . . . . . . . . .  	0010	000A
+  DRV_CYLS . . . . . . . . . . .  	0000
+  DRV_HEADS  . . . . . . . . . .  	0002
+  DRV_UNUSED1  . . . . . . . . .  	0003
+  DRV_PRECOMP  . . . . . . . . .  	0005
+  DRV_UNUSED2  . . . . . . . . .  	0007
+  DRV_CONTROL  . . . . . . . . .  	0008
+  DRV_UNUSED3  . . . . . . . . .  	0009
+  DRV_LANDING  . . . . . . . . .  	000C
+  DRV_SECTORS  . . . . . . . . .  	000E
+  DRV_RESERVED . . . . . . . . .  	000F
+PAR_RECORD . . . . . . . . . . .  	0010	0006
+  PAR_STATUS . . . . . . . . . .  	0000
+  PAR_CHS_BEG  . . . . . . . . .  	0001
+  PAR_TYPE . . . . . . . . . . .  	0004
+  PAR_CHS_END  . . . . . . . . .  	0005
+  PAR_LBA_BEG  . . . . . . . . .  	0008
+  PAR_LBA_END  . . . . . . . . .  	000C
+
+Segments and Groups:
+
+                N a m e         	Size	Align	Combine Class
+
+BOOTSEG  . . . . . . . . . . . .  	8000	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	Value	Attr         
+
+ACTIVE . . . . . . . . . . . . .  	Number	0080	
+
+BOOT . . . . . . . . . . . . . .  	L NEAR	7E9A	BOOTSEG
+
+CHK0 . . . . . . . . . . . . . .  	L NEAR	7E1D	BOOTSEG
+CHK1 . . . . . . . . . . . . . .  	L NEAR	7E2F	BOOTSEG
+COPY . . . . . . . . . . . . . .  	N PROC	7E9C	BOOTSEG	Length = 000F
+
+DRV0TBL  . . . . . . . . . . . .  	L 0010	7F9E	BOOTSEG
+DRV1TBL  . . . . . . . . . . . .  	L 0010	7FAE	BOOTSEG
+
+ERR_MSG  . . . . . . . . . . . .  	L BYTE 	7EC3	BOOTSEG
+
+HANG . . . . . . . . . . . . . .  	L NEAR	7E82	BOOTSEG
+
+INACTIVE . . . . . . . . . . . .  	Number	0000	
+INV  . . . . . . . . . . . . . .  	L NEAR	7E8A	BOOTSEG
+INV_MSG  . . . . . . . . . . . .  	L BYTE 	7EAB	BOOTSEG
+
+LOAD . . . . . . . . . . . . . .  	L NEAR	7E5D	BOOTSEG
+Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+
+                                                            Symbols-2
+                                                             
+
+
+MIS_MSG  . . . . . . . . . . . .  	L BYTE 	7EE2	BOOTSEG
+
+NEXT . . . . . . . . . . . . . .  	L NEAR	7E48	BOOTSEG
+
+PAR0TBL  . . . . . . . . . . . .  	L 0010	7FBE	BOOTSEG
+PAR1TBL  . . . . . . . . . . . .  	L 0010	7FCE	BOOTSEG
+PAR2TBL  . . . . . . . . . . . .  	L 0010	7FDE	BOOTSEG
+PAR3TBL  . . . . . . . . . . . .  	L 0010	7FEE	BOOTSEG
+PRINT  . . . . . . . . . . . . .  	L NEAR	7E7F	BOOTSEG
+
+READ . . . . . . . . . . . . . .  	L NEAR	7E68	BOOTSEG
+RELOC  . . . . . . . . . . . . .  	Number	7E00	
+RETRY  . . . . . . . . . . . . .  	L NEAR	7E6E	BOOTSEG
+
+SCAN . . . . . . . . . . . . . .  	L NEAR	7E41	BOOTSEG
+SKIP . . . . . . . . . . . . . .  	L NEAR	7E52	BOOTSEG
+START  . . . . . . . . . . . . .  	L NEAR	7E00	BOOTSEG
+
+TBL_DRIVE0 . . . . . . . . . . .  	Number	0300	
+TBL_DRIVE1 . . . . . . . . . . .  	Number	0310	
+
+VEC_DRIVE0 . . . . . . . . . . .  	Number	0041	
+VEC_DRIVE1 . . . . . . . . . . .  	Number	0046	
+VERIFY . . . . . . . . . . . . .  	L NEAR	7E8F	BOOTSEG
+
+
+    205 Source  Lines
+    205 Total   Lines
+     72 Symbols
+
+  47116 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

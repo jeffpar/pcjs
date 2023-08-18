@@ -32,7 +32,7 @@ const APPNAME = "PCx86";                // this @define is the default applicati
  *
  * @define {boolean}
  */
-var BACKTRACK = DEBUG && DEBUGGER;
+var BACKTRACK = /* DEBUG && DEBUGGER */ false;
 
 /**
  * BUGS_8086 enables support for known 8086 bugs.  It's turned off by default, because 1) it adds overhead, and

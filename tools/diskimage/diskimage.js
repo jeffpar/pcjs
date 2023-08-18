@@ -81,12 +81,6 @@ function createDisk(diskFile, diskette, argv, done)
         sArchiveFile = sArchiveFile.replace(".img", path.sep);
     }
 
-    let driveInfo = {
-        sectorIDs: diskette.argv['sectorID'] || argv['sectorID'],
-        sectorErrors: diskette.argv['sectorError'] || argv['sectorError'],
-        suppData: readFileSync(diskette.argv['suppData'] || argv['suppData'])
-    };
-
     let name = path.basename(sArchiveFile);
     let fDir = false, arcType = 0, sExt = StrLib.getExtension(sArchiveFile);
     if (sArchiveFile.endsWith(path.sep)) {
@@ -105,6 +99,8 @@ function createDisk(diskFile, diskette, argv, done)
         diskette.command = "--disk=" + name;
     }
 
+    let driveInfo = createDriveInfo(argv, diskette);
+
     diskette.archive = sArchiveFile;
     printf("checking archive: %s\n", sArchiveFile);
 
@@ -119,6 +115,64 @@ function createDisk(diskFile, diskette, argv, done)
     } else {
         done(readDiskSync(sArchiveFile, false, driveInfo));
     }
+}
+
+/**
+ * createDriveInfo(argv, diskette)
+ *
+ * @param {Object} argv
+ * @param {Object} [diskette]
+ * @returns {DiskInfo}
+ */
+function createDriveInfo(argv, diskette)
+{
+    let driveInfo = {};
+
+    let typeDrive = argv['drivetype'];
+    if (typeof typeDrive == "string") {
+        let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
+        if (match) {
+            driveInfo.driveCtrl = "PCJS";      // this pseudo drive controller is required for custom drive geometries
+            driveInfo.driveType = 0;
+            driveInfo.nCylinders = +match[1];
+            driveInfo.nHeads = +match[2];
+            driveInfo.nSectors = +match[3];
+            driveInfo.cbSector = +match[4] || 512;
+            driveInfo.fRemovable = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector < 3000000);
+        } else {
+            match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
+            if (match) {
+                let driveCtrl = match[1] || driveInfo.driveCtrl || "XT";
+                let driveType = +match[2];
+                if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
+                    driveInfo.driveCtrl = driveCtrl;
+                    driveInfo.driveType = driveType;
+                } else {
+                    match = null;
+                }
+            }
+        }
+        if (!match) {
+            printf("unrecognized drive type: %s\n", typeDrive);
+        }
+    }
+
+    let typeFAT = argv['fat'];
+    if (typeof typeFAT == "string") {
+        let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
+        if (match) {
+            driveInfo.driveCtrl = driveInfo.driveCtrl || "XT";
+            driveInfo.typeFAT = +match[1];
+            if (match[2]) driveInfo.clusterSize = +match[2];
+            if (match[3]) driveInfo.rootEntries = +match[3];
+        }
+    }
+
+    driveInfo.sectorIDs = diskette && diskette.argv['sectorID'] || argv['sectorID'];
+    driveInfo.sectorErrors = diskette && diskette.argv['sectorError'] || argv['sectorError'];
+    driveInfo.suppData = readFileSync(diskette && diskette.argv['suppData'] || argv['suppData']);
+
+    return driveInfo;
 }
 
 /**
@@ -1115,11 +1169,7 @@ function getArchiveOffset(sArchive, arcType, sOffset)
  */
 async function processDiskAsync(input, argv)
 {
-    let driveInfo = {
-        sectorIDs: argv['sectorID'],
-        sectorErrors: argv['sectorError'],
-        suppData: readFileSync(argv['suppData'])
-    };
+    let driveInfo = createDriveInfo(argv);
     let di = await readDiskAsync(input, argv['forceBPB'], driveInfo);
     if (di) {
         processDisk(di, input, argv);
@@ -1242,11 +1292,7 @@ function processArg(argv)
         }
     }
 
-    let driveInfo = {
-        sectorIDs: argv['sectorID'],
-        sectorErrors: argv['sectorError'],
-        suppData: readFileSync(argv['suppData'])
-    };
+    let driveInfo = createDriveInfo(argv);
 
     if (fDir || arcType) {
         let offset = getArchiveOffset(input, arcType, argv['offset']);
@@ -1326,9 +1372,11 @@ function main(argc, argv)
             "--zip=[zipfile]\t":        "read all files in a ZIP archive"
         };
         let optionsOutput = {
+            "--drivetype=[value]":      "set hard drive type or C:H:S (eg, 306:4:17)",
             "--extdir=[directory]":     "write extracted files to directory",
             "--extract (-e)\t":         "extract all files in disks or archives",
             "--extract[=filename]":     "extract specified file in disks or archives",
+            "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
             "--output=[diskimage]":     "write disk image (.img or .json)",
             "--target=[nK|nM]":         "set target disk size to nK or nM (eg, \"360K\", \"10M\")"
         };

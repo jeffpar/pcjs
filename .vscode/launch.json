@@ -466,14 +466,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ibm5170",
-        "disks/MSDOS320B",
-        "--fat=16",
-        "--verbose",
-        "--halt",
-        "dir"
+        "chkdsk c:,quit"
       ],
-      "cwd": "${workspaceFolder}/tools/pc",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -558,10 +553,54 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--capacity=20",
-        "--drivetype=6",
-        "--verbose",
-        "disks/MSDOS320",
+        "MBR",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js ibm5170 --drivesize=27 dir",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--driveclass=pcjs",
+        "--drivesize=27",
+        "disks/msdos330",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js ibm5170 --drivetype=200:4:17 dir",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--drivetype=200:4:17",
+        "disks/msdos330",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -661,13 +700,15 @@
       }
     },
     {
-      "name": "pc.js pdp11 machine.xml",
+      "name": "pc.js dir --system=compaq --version=3.31",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
-        "--debug"
+        "--system=compaq",
+        "--version=3.31",
+        "disks/MSDOS320",
+        "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -705,14 +746,14 @@
       }
     },
     {
-      "name": "pc.js dir --system=pcdos --version=2.00 --capacity=20mb",
+      "name": "pc.js dir --system=pcdos --version=2.00 --drivesize=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--system=pcdos",
         "--version=2.00",
-        "--capacity=20mb",
+        "--drivesize=20mb",
         "disks/MSDOS320",
         "dir"
       ],
@@ -752,14 +793,14 @@
       }
     },
     {
-      "name": "pc.js dir --system=pcdos --version=3.10 --capacity=20mb",
+      "name": "pc.js dir --system=pcdos --version=3.10 --drivesize=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--system=pcdos",
         "--version=3.10",
-        "--capacity=20mb",
+        "--drivesize=20mb",
         "ibm5170",
         "disks/MSDOS320",
         "dir *.*",
@@ -785,6 +826,50 @@
         "ibm5170",
         "--disk=https://harddisks.pcjs.org/pcx86/10mb/PCDOS200-C400.json",
         "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js dir --drivetype=80:2:18 --system=compaq --version=3.31",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "dir",
+        "--drivetype=80:2:18",
+        "--system=compaq",
+        "--version=3.31"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js pdp11 machine.xml",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--start=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
+        "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -1388,8 +1473,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
+        "MBR/",
+        "mbr.img",
+        "--overwrite",
+        "--drivetype=40:2:5:1024"
       ],
-      "cwd": "${workspaceFolder}/tools/diskimage",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

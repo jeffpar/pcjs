@@ -10,6 +10,13 @@
   "editor.rulers": [127],
   "editor.tabSize": 8,
   "editor.insertSpaces": false,
+  "[asm][masm][plaintext]": {
+    "editor.quickSuggestions": {
+      "other": false,
+      "comments": false,
+      "strings": false
+    }
+  },
   "[javascript]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
@@ -192,6 +199,7 @@
     "bootfile",
     "BOOTHEAD",
     "BOOTMON",
+    "BOOTSEG",
     "borland",
     "BPB's",
     "BPBs",
@@ -562,6 +570,7 @@
     "EPROM",
     "eqeqeq",
     "ERRCODE",
+    "errnz",
     "ERRREC",
     "ESDI",
     "ESPUOZDI",
@@ -1034,6 +1043,7 @@
     "Mayes",
     "mbhd",
     "MBIT",
+    "MBR's",
     "mbsize",
     "Mbytes",
     "MCGA",
@@ -1314,6 +1324,7 @@
     "PPIB",
     "PPIC",
     "pppnnn",
+    "precomp",
     "precompensation",
     "PREFETCH",
     "preinstall",
@@ -1370,6 +1381,7 @@
     "QUICKPASCAL",
     "quux",
     "Raikes",
+    "Ralf",
     "RALT",
     "ramdisk",
     "RAMFS",
@@ -1403,6 +1415,7 @@
     "Reimagining",
     "reinitializer",
     "reinitializing",
+    "RELOC",
     "RELSEG",
     "remappings",
     "REMOVESEGS",
@@ -1607,6 +1620,7 @@
     "STRL",
     "strlib",
     "STRONGENC",
+    "struc",
     "struct",
     "suba",
     "SUBAX",
@@ -1880,5 +1894,5 @@
     "zzznnn"
   ],
 "task.allowAutomaticTasks": "on",
-"explorer.sortOrder": "type"
+"explorer.sortOrder": "type",
 }

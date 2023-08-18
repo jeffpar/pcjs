@@ -230,9 +230,9 @@ To test 20Mb support, I tried two scenarios:
  1. Running FDISK on a PC AT with PC DOS 3.00
  2. Running FDISK on a PC AT with PC DOS 2.00
 
-Here's scenario #1, using the new hard drive `--capacity` option:
+Here's scenario #1, using the new hard drive `--drivesize` option, which allows you to specify a drive capacity in *megabytes* (aka 1024 *kilobytes*, where 1 kilobyte is 1024 bytes):
 
-    ~/pcjs/tools/pc/disks % pc.js ibm5170 --capacity=20
+    ~/pcjs/tools/pc/disks % pc.js ibm5170 --drivesize=20
     Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
 
     Current date is Tue  8-01-2023
@@ -292,7 +292,7 @@ Here's scenario #1, using the new hard drive `--capacity` option:
 
 Here's scenario #2.  Note that I used the `--halt` option to give me the opportunity to load "PC DOS 2.00 (Disk 1)" into drive A: before booting, but it's also possible to force that from the command-line, using the `--system=pcdos` and `--version=2.00` options:
 
-    ~/pcjs/tools/pc/disks % pc.js ibm5170 --capacity=20 --halt
+    ~/pcjs/tools/pc/disks % pc.js ibm5170 --drivesize=20 --halt
     fault messages enabled
     >> Type ? for help with PCx86 Debugger commands
     AX=0000 BX=0000 CX=0000 DX=0000 SP=0000 BP=0000 SI=0000 DI=0000 
@@ -397,9 +397,3 @@ So, PC DOS 2.00 was able to provide a bit more space by: 1) placing the partitio
 It was also nice to see that, even though PC DOS 2.00 was designed for the PC XT (which did *not* natively support a drive as large as 20Mb), PC DOS 2.00 could run on a PC AT *and* successfully partition and format a 20Mb drive -- even though it had to use a rather unwieldy cluster size (8K).  PC DOS 2.00 had other minor limitations, such as being unaware of the PC AT's real-time clock and current date.  But on the whole, it was usable.
 
 However, PC DOS 3.00 was obviously preferable, since it supported PC AT features like 1.2M diskette drives and the real-time clock, and it could also format larger disks with smaller (2K) clusters, thanks to the "new" 16-bit FAT.  PC DOS 3.00 still supported disks using a 12-bit FAT, even disks for which it would have preferred a 16-bit FAT, as long as other criteria were met, such as an OEM signature of "**IBM  2.0**" in the disk's BPB.  That makes *some* sense, since nowhere else in the BPB is there any indication of FAT entry size, and PC DOS 2.x supported *only* 12-bit FAT entries.  But ideally, PC DOS would have relied on the partition type (1) in the Master Boot Record (MBR) *or* defined some new field or value in the BPB to indicate the type of FAT.
-
-### Historical Notes
-
-One early use of the `pc.js` utility was running a set of [80386 CPU Tests](https://github.com/jeffpar/pcjs/blob/master/software/pcx86/test/cpu/80386/test386.asm) as a custom ROM image inside an [80386 Test Machine](https://github.com/jeffpar/pcjs/blob/master/tools/pc/test386.json), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.
-
-The test program ([test386.asm](/software/pcx86/test/cpu/80386/test386.asm)) was carefully designed to be built as a binary (`test386.com`) that could either be run as a DOS program *or* loaded as a ROM image.  See [PCx86 CPU Tests](/software/pcx86/test/cpu/) for more information.
