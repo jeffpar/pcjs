@@ -62,6 +62,7 @@ let driveInfo = {
     nHeads:      0,
     nSectors:    0,
     cbSector:    0,
+    fRemovable:  false,
     driveSize:   0,
     typeFAT:     0,     // set this to 12 or 16 to request a specific FAT type
     clusterSize: 0,     // set this to a specific cluster size (in bytes) if desired
@@ -517,6 +518,42 @@ function intReboot(addr)
     if (driveInfo.driveCtrl == "PCJS" && driveInfo.driveType == 0) {
         geometryOverride = true;
     }
+    /*
+     * Also, in order to test disk images with non-standard sector sizes, we take this opportunity to patch
+     * the Drive Parameter Table (DPT) for the diskette drive if we're booting a floppy with a non-standard
+     * sector size.  Since the table will generally be in ROM, we use bus.setByteDirect() instead of
+     * cpu.setByte().
+     *
+     * TODO: The "correct" way to deal with this will be to make my own boot sector, similar to the MBR I
+     * wrote to deal with custom hard disk geometries.  It should be a trivial change, since DOS boot sectors
+     * already copy the DPT to RAM in order tweak other non-geometric parameters (eg, stepping rate).
+     */
+    if (driveInfo.fRemovable && driveInfo.cbSector && driveInfo.cbSector != 512) {
+        let fpDPT = this.getLong(0x1E * 4);
+        let addrDPT = ((fpDPT >>> 16) << 4) + (fpDPT & 0xffff);
+        /*
+         * The 4th byte in the DPT (at offset 3) indicates the # bytes/sector, and it is stored as a shift
+         * count for the base sector size of 128 (128 << 0 = 128, 128 << 1 = 256, 128 << 2 == 512, etc).  So
+         * the value to write is log2(cbSector) - log2(128).  We also update the EOT value in the 5th byte
+         * (at offset 4) but that appears to be less critical.
+         */
+        this.bus.setByteDirect(addrDPT + 3, Math.log2(driveInfo.cbSector) - 7);
+        this.bus.setByteDirect(addrDPT + 4, driveInfo.nSectors);
+        /*
+         * Unfortunately, this all seems to be for naught, because while stepping through the MS-DOS 3.30
+         * initialization code in IO.SYS, I could see that when it loads the entire FAT into the top of available
+         * memory, it calculates how many paragraphs all the FAT sectors will need, and it does so by shifting
+         * the FAT sector count left 5 times.  Well, that only works for 512-byte sectors, because log2(512)
+         * is 9 and log2(16) is 4, and 9 - 4 == 5.   This code begins at 70:2CA2 (look for the INT 12h memory
+         * size call).
+         *
+         * When I tested MS-DOS 3.30 with a boot floppy formatted 40:2:5:1024, which contained only one FAT
+         * sector, IO.SYS tried to read that one 1K FAT sector into 9FE0.  At most, only 512 bytes could be
+         * returned, since there's no RAM at A000, and even if that was all that IO.SYS needed in order continue
+         * loading the operating system, there was a second problem, which is that the request spans a 64K DMA
+         * boundary, so that call will always return an error.  Sigh.
+         */
+    }
     return true;
 }
 
@@ -737,7 +774,7 @@ function loadMachine(sFile)
             }
         }
 
-        if (config['hdc'] && driveInfo.driveCtrl != "FDC") {
+        if (config['hdc'] && !driveInfo.fRemovable) {
             let typeCtrl = config['hdc']['type'];
             let drives = config['hdc']['drives'];
             if (typeof drives == "string") {
@@ -2243,6 +2280,7 @@ function main(argc, argv)
         savedMachine = "ibm5170";
         maxCapacity = maxFiles = 0;
         driveInfo.driveCtrl = "FDC";
+        driveInfo.fRemovable = true;
         driveOverride = true;
     } else {
         let driveCtrl = removeArg('drivectrl');

@@ -130,13 +130,15 @@ function createDriveInfo(argv, diskette)
 
     let typeDrive = argv['drivetype'];
     if (typeof typeDrive == "string") {
-        let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+)$/i);
+        let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
         if (match) {
             driveInfo.driveCtrl = "PCJS";      // this pseudo drive controller is required for custom drive geometries
             driveInfo.driveType = 0;
             driveInfo.nCylinders = +match[1];
             driveInfo.nHeads = +match[2];
             driveInfo.nSectors = +match[3];
+            driveInfo.cbSector = +match[4] || 512;
+            driveInfo.fRemovable = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector < 3000000);
         } else {
             match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
             if (match) {

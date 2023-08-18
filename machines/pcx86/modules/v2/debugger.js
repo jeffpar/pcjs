@@ -5752,7 +5752,7 @@ export default class DebuggerX86 extends DbgLib {
 
                 let fUnknown, fValid = true;
                 let sRegMatch = sReg.toUpperCase();
-                if (sRegMatch.charAt(0) == 'E' && this.cchReg <= 4) {
+                if (sRegMatch[0] == 'E' && sRegMatch[1] != 'S' && this.cchReg <= 4) {
                     sRegMatch = null;
                 }
                 switch (sRegMatch) {

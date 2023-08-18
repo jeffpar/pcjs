@@ -212,7 +212,7 @@ export default class DiskInfo {
             driveInfo.driveType = -1;
         }
 
-        if (cbDiskData >= 3000000 || driveInfo.driveCtrl == "PCJS") {
+        if (cbDiskData >= 3000000 || !driveInfo.fRemovable) {
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
             if (wSig == DiskInfo.BOOT.SIGNATURE) {
                 /*
@@ -886,7 +886,7 @@ export default class DiskInfo {
             cHeads = this.nHeads;
             cSectorsPerTrack = this.nSectors;
 
-            if (driveInfo.driveCtrl != "FDC") {
+            if (!driveInfo.fRemovable) {
                 bMediaID = 0xF8;
                 cHiddenSectors = 1;     // our hard disk images are always partitioned and always reserve a diagnostic cylinder
                 cDiagnosticSectors = cHeads * cSectorsPerTrack;
@@ -3683,7 +3683,7 @@ export default class DiskInfo {
                     return true;
                 }
             }
-            else if (driveInfo.driveCtrl == "FDC") {
+            else if (driveInfo.fRemovable) {
                 if (driveInfo.driveType >= 0) {
                     return true;
                 }
@@ -3721,7 +3721,7 @@ export default class DiskInfo {
                  * the drive size (in *megabytes*).
                  */
                 if (driveInfo.driveType == 0) {
-                    driveInfo.cbSector = 512;
+                    if (!driveInfo.cbSector) driveInfo.cbSector = 512;
                     driveInfo.driveSize = driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector / 1024 / 1024;
                     return true;
                 }

@@ -5644,7 +5644,7 @@ const APPNAME = "PCx86";                // this @define is the default applicati
  *
  * @define {boolean}
  */
-var BACKTRACK = DEBUG && DEBUGGER;
+var BACKTRACK = /* DEBUG && DEBUGGER */ false;
 
 /**
  * BUGS_8086 enables support for known 8086 bugs.  It's turned off by default, because 1) it adds overhead, and
@@ -78586,7 +78586,7 @@ class DebuggerX86 extends DbgLib {
 
                 let fUnknown, fValid = true;
                 let sRegMatch = sReg.toUpperCase();
-                if (sRegMatch.charAt(0) == 'E' && this.cchReg <= 4) {
+                if (sRegMatch[0] == 'E' && sRegMatch[1] != 'S' && this.cchReg <= 4) {
                     sRegMatch = null;
                 }
                 switch (sRegMatch) {

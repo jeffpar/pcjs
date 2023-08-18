@@ -468,7 +468,7 @@
       "args": [
         "dir",
         "--floppy",
-        "--drivetype=40:2:4:1024",
+        "--drivetype=40:2:5:1024",
         "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
@@ -1477,9 +1477,9 @@
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "MBR/",
-        "mbr.json",
+        "mbr.img",
         "--overwrite",
-        "--drivetype=10:3:12"
+        "--drivetype=40:2:5:1024"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
       "stopOnEntry": false,
