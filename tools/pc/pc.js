@@ -1059,7 +1059,38 @@ function checkCommand(sDir, sCommand)
     if (sCommand) {
         let aParts = sCommand.split(/([ ,])/);
         let sProgram = aParts[0].toUpperCase();
-        const aInternal = ["CD", "COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
+        const aInternal = [
+            "BREAK",
+            "CD",
+            "CLS",      // this goes beyond the scope of our limited TTY support, so nothing will happen
+            "CHDIR",
+            "COPY",
+            "CTTY",
+            "DATE",
+            "DEL",
+            "DIR",
+            "ECHO",
+            "ERASE",
+            "FOR",
+            "GOTO",
+            "IF",
+            "LOAD",     // since we create LOAD.COM on the fly, it won't exist externally, so we treat like an internal command
+            "MKDIR",
+            "PATH",
+            "PAUSE",
+            "PROMPT",
+            "QUIT",     // since we create QUIT.COM on the fly, it won't exist externally, so we treat like an internal command
+            "REM",
+            "REN",
+            "RENAME",
+            "RMDIR",
+            "SET",
+            "SHIFT",
+            "TIME",
+            "TYPE",
+            "VER",
+            "VOL"
+        ];
 
         if (aInternal.indexOf(sProgram) < 0) {
             if (sProgram.indexOf('.') < 0) {
