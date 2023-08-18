@@ -1001,7 +1001,9 @@ export default class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDriveCtrl], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                if (this.sType.indexOf("PCJS") < 0) {   // skip the warning if pc.js custom-built this disk
+                    this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDriveCtrl], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                }
             }
         }
         if (drive.fAutoMount) {
