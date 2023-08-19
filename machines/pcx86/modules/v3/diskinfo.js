@@ -212,7 +212,7 @@ export default class DiskInfo {
             driveInfo.driveType = -1;
         }
 
-        if (driveInfo.fPartitioned || cbDiskData >= DiskInfo.MIN_PARTITION) {
+        if (driveInfo.fPartitioned || cbDiskData >= DiskInfo.MIN_PARTITION && driveInfo.fPartitioned !== false) {
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
             if (wSig == DiskInfo.BOOT.SIGNATURE) {
                 /*
