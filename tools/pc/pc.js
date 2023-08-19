@@ -947,7 +947,7 @@ function loadMachine(sFile)
             if (removeFloppy) {
                 config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
             } else if (fFloppy || systemOverride) {
-                let name = systemType.toUpperCase() + ' ' + systemVersion;
+                let name = systemType.toUpperCase() + ' ' + sprintf("%.2f", systemVersion);
                 let sSystemDisk = fFloppy? localDrive : getSystemDisk(systemType, systemVersion);
                 if (sSystemDisk) {
                     config['fdc']['autoMount'] = "{A:{name:\"" + name + "\",path:\"" + sSystemDisk + "\"}}";
@@ -1187,9 +1187,14 @@ function getSystemDisk(type, version)
 {
     let sSystemDisk = "";
     let system = configJSON['systems']?.[type];
+    let sVersion = sprintf("%.2f", version);
     if (system) {
-        sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + version + "/";
-        sSystemDisk += (system.product || type).toUpperCase() + version.replace('.', '') + "-DISK1.json";
+        sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + sVersion + "/";
+        if (system.disks && system.disks[sVersion]) {
+            sSystemDisk += system.disks[sVersion] + ".json";
+        } else {
+            sSystemDisk += (system.product || type).toUpperCase() + sVersion.replace('.', '') + "-DISK1.json";
+        }
     }
     return sSystemDisk;
 }
@@ -1349,7 +1354,10 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
      */
     let verBPB = 0;
     let dbBoot = getDiskSector(diSystem, 0);
-    if (version >= 2.0 && version < 3.2) {
+    if (version < 2.0) {
+        verBPB = 1;
+    }
+    else if (version >= 2.0 && version < 3.2) {
         /*
          * PC DOS 2.0 to 3.1 requires the boot drive (AND drive head # -- go figure) to be in locations
          * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any

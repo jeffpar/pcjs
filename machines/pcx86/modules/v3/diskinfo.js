@@ -4168,9 +4168,9 @@ export default class DiskInfo {
      *
      * The verBPB values are as follows:
      *
-     *      0: The BPB portion of the target boot sector is unchanged
-     *      1: The BPB portion of the target boot sector is replaced with dbBoot
-     *      2: Only DOS 2.x specific bytes in the boot sector are replaced; the rest is unchanged
+     *      0: The entire BPB of the target boot sector is preserved
+     *      1: A subset of the BPB (excluding OEM and bytes after BOOTDRIVE) of the target boot sector is preserved
+     *      2: A subset of the BPB (excluding bytes after BOOTDRIVE) of the target sector is preserved
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
@@ -4227,6 +4227,7 @@ export default class DiskInfo {
                                 if (off >= DiskInfo.BPB.BEGIN && off < DiskInfo.BPB.END) continue;
                                 break;
                             case 1:
+                                if (off >= DiskInfo.BPB.SECBYTES && off < DiskInfo.BPB.BOOTDRIVE) continue;
                                 break;
                             case 2:
                                 if (off >= DiskInfo.BPB.BEGIN && off < DiskInfo.BPB.BOOTDRIVE) continue;

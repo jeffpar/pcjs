@@ -466,8 +466,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--drivetype=2:1:63",
-        "load info;quit",
+        "--system=pcdos",
+        "--version=1",
+        "--floppy"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
       "stopOnEntry": false,

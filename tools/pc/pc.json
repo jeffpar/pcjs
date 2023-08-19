@@ -29,7 +29,12 @@
     },
     "pcdos": {
       "vendor": "ibm",
-      "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
+      "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"],
+      "disks": {
+        "1.00": "PCDOS100",
+        "1.10": "PCDOS110",
+        "comments": "this section allows version-specific boot disks to be specified in place of the default disk names that PCjs normally uses"
+      }
     }
   }
 }
