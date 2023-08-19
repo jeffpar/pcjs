@@ -1123,6 +1123,12 @@ export default class WebIO extends StdIO {
             format = args.shift();
         }
         if (this.isMessageOn(messages)) {
+            if (this.testBits(messages, WebIO.MESSAGE.ERROR)) {
+                format = "error: " + format;
+            }
+            if (this.testBits(messages, WebIO.MESSAGE.WARN)) {
+                format = "warning: " + format;
+            }
             return super.printf(format, ...args);
         }
         return 0;

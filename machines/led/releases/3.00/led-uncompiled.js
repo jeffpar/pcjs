@@ -99,6 +99,11 @@ const MESSAGE = {
     ALL:        0xffffffffffff,
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
+    HALT:       0x000008000000,
+    INFO:       0x000010000000,
+    WARN:       0x000020000000,
+    ERROR:      0x000040000000,
+    DEBUG:      0x000080000000,
     BUFFER:     0x800000000000,
 };
 
@@ -2607,6 +2612,12 @@ class WebIO extends StdIO {
             format = args.shift();
         }
         if (this.isMessageOn(messages)) {
+            if (this.testBits(messages, WebIO.MESSAGE.ERROR)) {
+                format = "error: " + format;
+            }
+            if (this.testBits(messages, WebIO.MESSAGE.WARN)) {
+                format = "warning: " + format;
+            }
             return super.printf(format, ...args);
         }
         return 0;
@@ -3694,11 +3705,6 @@ Device.MESSAGE.INPUT            = 0x000000200000;
 Device.MESSAGE.KEY              = 0x000000400000;
 Device.MESSAGE.MOUSE            = 0x000000800000;
 Device.MESSAGE.TOUCH            = 0x000001000000;
-Device.MESSAGE.INFO             = 0x000002000000;
-Device.MESSAGE.WARN             = 0x000004000000;
-Device.MESSAGE.ERROR            = 0x000008000000;
-Device.MESSAGE.DEBUG            = 0x000010000000;
-Device.MESSAGE.HALT             = 0x000020000000;
 Device.MESSAGE.CUSTOM           = 0x000100000000;       // all custom device messages must start here
 
 Device.MESSAGE_NAMES["addr"]    = Device.MESSAGE.ADDR;
@@ -3726,10 +3732,10 @@ Device.MESSAGE_NAMES["input"]   = Device.MESSAGE.INPUT;
 Device.MESSAGE_NAMES["key"]     = Device.MESSAGE.KEY;
 Device.MESSAGE_NAMES["mouse"]   = Device.MESSAGE.MOUSE;
 Device.MESSAGE_NAMES["touch"]   = Device.MESSAGE.TOUCH;
+Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
 Device.MESSAGE_NAMES["info"]    = Device.MESSAGE.INFO;
 Device.MESSAGE_NAMES["warn"]    = Device.MESSAGE.WARN;
 Device.MESSAGE_NAMES["error"]   = Device.MESSAGE.ERROR;
-Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
 
 Device.CLASSES["Device"] = Device;
 
@@ -8683,7 +8689,7 @@ class Time extends Device {
                      * reach 90% of our original target and revert back to the base multiplier.
                      */
                     this.nTargetMultiplier >>= 1;
-                    this.printf(Device.MESSAGE.WARN, "warning: frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
+                    this.printf(Device.MESSAGE.WARN, "frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
                 }
                 /**
                  * If we (potentially) took too long on this last run, we pass that time back as an adjustment,
@@ -9178,7 +9184,7 @@ class Time extends Device {
             let msDeltaRun = msStartThisRun - this.msStartThisRun - this.msFrameDefault;
             if (msDeltaRun > this.msFrameDefault) {
                 this.msStartRun += msDeltaRun;
-                this.printf(Device.MESSAGE.WARN, "warning: browser throttling detected, compensating by %5.3fms\n", msDeltaRun);
+                this.printf(Device.MESSAGE.WARN, "browser throttling detected, compensating by %5.3fms\n", msDeltaRun);
             }
         }
         this.msStartThisRun = msStartThisRun;

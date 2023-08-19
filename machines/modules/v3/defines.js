@@ -104,6 +104,11 @@ const MESSAGE = {
     ALL:        0xffffffffffff,
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
+    HALT:       0x000008000000,
+    INFO:       0x000010000000,
+    WARN:       0x000020000000,
+    ERROR:      0x000040000000,
+    DEBUG:      0x000080000000,
     BUFFER:     0x800000000000,
 };
 

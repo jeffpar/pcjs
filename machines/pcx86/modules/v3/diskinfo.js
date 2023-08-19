@@ -1739,7 +1739,7 @@ export default class DiskInfo {
                 try {
                     imageData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
                 } catch(err) {
-                    this.printf(Device.MESSAGE.ERROR, "error: %s\n", err.message);
+                    this.printf(Device.MESSAGE.ERROR, "%s\n", err.message);
                 }
             }
         }
@@ -1923,17 +1923,17 @@ export default class DiskInfo {
                     break;
                 }
                 if (sectorIndex) {
-                    this.printf(Device.MESSAGE.WARN, "warning: sector with data and pattern\n");
+                    this.printf(Device.MESSAGE.WARN, "sector with data and pattern\n");
                     sectorIndex = 0;
                 }
                 for (let off = 0; off < dbChunk.length; off += 4) {
                     if (sectorIndex >= maxIndex) {
-                        this.printf(Device.MESSAGE.WARN, "warning: data for sector offset %d exceeds sector length\n", sectorIndex * 4, size);
+                        this.printf(Device.MESSAGE.WARN, "data for sector offset %d exceeds sector length\n", sectorIndex * 4, size);
                     }
                     sector[DiskInfo.SECTOR.DATA][sectorIndex++] = dbChunk.readUInt8(off) | (dbChunk.readUInt8(off+1) << 8) | (dbChunk.readUInt8(off+2) << 16) | (dbChunk.readUInt8(off+3) << 24);
                 }
                 if (sectorIndex < maxIndex) {
-                    this.printf(Device.MESSAGE.WARN, "warning: sector data stops at offset %d instead of %d\n", sectorIndex * 4, size);
+                    this.printf(Device.MESSAGE.WARN, "sector data stops at offset %d instead of %d\n", sectorIndex * 4, size);
                 }
                 break;
 
@@ -2039,7 +2039,7 @@ export default class DiskInfo {
 
             let sectorBoot = this.getSector(0);
             if (!sectorBoot) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unable to read boot sector\n", this.diskName);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "unable to read %s boot sector\n", this.diskName);
                 return -1;
             }
 
@@ -2090,7 +2090,7 @@ export default class DiskInfo {
                 }
                 for (let iSector = 0; iSector < file.aLBA.length; iSector++) {
                     if (!this.updateSector(iFile, off, file.aLBA[iSector])) {
-                        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unable to map sector to offset %d\n", file.name, off);
+                        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "unable to map %s sector to offset %d\n", file.name, off);
                     }
                     off += this.cbSector;
                 }
@@ -2225,7 +2225,7 @@ export default class DiskInfo {
             }
 
             if (!sectorBoot || iEntry == 4) {
-                if (!iVolume) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %d-byte disk image contains unknown volume(s)\n", this.diskName, cbDisk);
+                if (!iVolume) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%d-byte %s disk image contains unknown volume(s)\n", cbDisk, this.diskName);
                 return null;
             }
 
@@ -2270,7 +2270,7 @@ export default class DiskInfo {
 
         if (vol.nFATBits) {
             if (vol.nFATBits == 12 && vol.clusTotal > DiskInfo.FAT12.MAX_CLUSTERS || vol.nFATBits == 16 && vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d error: %d-bit FAT inconsistent with cluster total (%d)\n", this.diskName, iVolume, vol.nFATBits, vol.clusTotal);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d %d-bit FAT inconsistent with cluster total (%d)\n", this.diskName, iVolume, vol.nFATBits, vol.clusTotal);
             }
         }
 
@@ -2280,7 +2280,7 @@ export default class DiskInfo {
         if (!idMedia) idMedia = this.getClusterEntry(vol, 0, 0);
 
         if (idMedia != vol.idMedia) {
-            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d error: FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, iVolume, idMedia, vol.idMedia);
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, iVolume, idMedia, vol.idMedia);
             return null;
         }
 
@@ -2440,7 +2440,7 @@ export default class DiskInfo {
         if (fnHash && ab) {
             let hash = fnHash(ab);
             if (desc[DiskInfo.FILEDESC.HASH] && hash != desc[DiskInfo.FILEDESC.HASH]) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: original hash (%s) does not match current hash (%s)\n", desc[DiskInfo.FILEDESC.PATH], desc[DiskInfo.FILEDESC.HASH], hash);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s original hash (%s) does not match current hash (%s)\n", desc[DiskInfo.FILEDESC.PATH], desc[DiskInfo.FILEDESC.HASH], hash);
             }
             desc[DiskInfo.FILEDESC.HASH] = hash;
         } else {
@@ -2782,7 +2782,7 @@ export default class DiskInfo {
             errors++;
         }
         if (errors) {
-            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: invalid timestamp: %04d-%02d-%02d %02d:%02d:%02d\n", sFile, year, month, day, hour, minute, second);
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s has invalid timestamp: %04d-%02d-%02d %02d:%02d:%02d\n", sFile, year, month, day, hour, minute, second);
         }
         /*
          * Previously, I used device.parseDate() to create a UTC date and then used "%#T" in getFileDesc() and
@@ -2950,7 +2950,7 @@ export default class DiskInfo {
                 cluster = this.getClusterEntry(vol, cluster, 0) | this.getClusterEntry(vol, cluster, 1);
             }
             if (cluster < DiskInfo.FAT12.CLUSNUM_MIN || cluster == vol.clusMax + 1 /* aka CLUSNUM_BAD */) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %s contains invalid cluster (%d)\n", this.diskName, dir.name, cluster);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s %s contains invalid cluster (%d)\n", this.diskName, dir.name, cluster);
             }
         }
         return aLBA;
@@ -3234,12 +3234,12 @@ export default class DiskInfo {
         if ((cylinder = this.aDiskData[iCylinder]) && (head = cylinder[iHead]) && (sector = head[idSector - 1])) {
             let file = this.fileTable[iFile];
             if (sector[DiskInfo.SECTOR.ID] != idSector) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, idSector, sector[DiskInfo.SECTOR.ID], file.path);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, idSector, sector[DiskInfo.SECTOR.ID], file.path);
             }
             if (sector[DiskInfo.SECTOR.FILE_INDEX] != undefined) {
                 if (sector[DiskInfo.SECTOR.FILE_INDEX] != iFile || sector[DiskInfo.SECTOR.FILE_OFFSET] != off) {
                     let filePrev = this.fileTable[sector[DiskInfo.SECTOR.FILE_INDEX]];
-                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, 'warning: "%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskInfo.SECTOR.FILE_OFFSET], file.path, off);
+                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, '"%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskInfo.SECTOR.FILE_OFFSET], file.path, off);
                     return false;
                 }
             }
@@ -3247,7 +3247,7 @@ export default class DiskInfo {
             sector[DiskInfo.SECTOR.FILE_OFFSET] = off;
             return true;
         }
-        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unable to map LBA %d to CHS\n", this.diskName, lba);
+        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "unable to map %s LBA %d to CHS\n", this.diskName, lba);
         return false;
     }
 
