@@ -642,9 +642,9 @@ function intLoad(addr)
                 if (args.toLowerCase() == "info") {
                     let info = getDriveInfo();
                     if (info) {
-                        printf("  Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
+                        printf("\n  Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
                         printf("  Media ID %s, %d-bit FAT, %d-byte clusters\n", info.mediaID, info.typeFAT, info.clusterSize);
-                        printf("  %d total clusters, %d total bytes", info.clustersTotal, info.bytesTotal);
+                        printf("  %d total clusters, %d total bytes\n", info.clustersTotal, info.bytesTotal);
                     }
                     else {
                         printf("no drive info\n");
