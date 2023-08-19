@@ -99,7 +99,7 @@ function setDebugMode(nEvent)
 {
     let prevMode = debugMode;
     if (!nEvent && debugMode != nEvent) {
-        printf("[Press CTRL-D to enter command mode]\n");
+        if (!fTest) printf("[Press CTRL-D to enter command mode]\n");
     }
     debugMode = nEvent;
     if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
@@ -1330,9 +1330,9 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         for (let command of aCommands) {
             data += command + "\r\n";
         }
-        if (fTest) {
-            data += "quit\r\n";
-        }
+    }
+    if (fTest) {
+        data += "quit\r\n";
     }
     if (machineDir) data += "CD " + machineDir + "\r\n";
     driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
@@ -2383,7 +2383,7 @@ function main(argc, argv)
 
     if (!argv[1] || fDebug || fTest) {
         let options = arg0.slice(1).join(' ');
-        printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
+        printf("\npc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
     }
 
     machines = JSON.parse(readFileSync("/machines/machines.json"));
@@ -2463,7 +2463,7 @@ function main(argc, argv)
             }
         }
         if (!match) {
-            printf("invalid drive type: %s\n", typeDrive);
+            printf("error: invalid drive type (%s)\n", typeDrive);
         }
     }
 
