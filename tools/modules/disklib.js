@@ -497,30 +497,26 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, done)
      *      "--label none" (for no volume label at all)
      *      "--label default" (for our default volume label; currently "PCJS")
      *
-     * Any other string following "--label" will be used as-is, and if no "--label" is specified
-     * at all, we build a volume label from the basename of the directory.
+     * Any other string following "--label" will be used as-is, and if no "--label" is specified at all,
+     * we build a volume label from the basename of the directory.
      */
+    let dateLabel;
     if (sLabel == "none") {
         sLabel = "";
     } else if (sLabel == "default") {
         sLabel = DiskInfo.PCJS_LABEL;
+        dateLabel = new Date();
     }
 
     /*
-     * The label, if any, will always be first in the list; this shouldn't be a concern since
-     * there is currently no support for building "bootable" disks from a set of files.
+     * The label, if any, will always be first in the list; this shouldn't be a concern since there is currently
+     * no support for building "bootable" disks from a set of files.
+     *
+     * By default, I prefer a hard-coded date/time, because it avoids creating different disk images every time this is run.
      */
     if (sLabel) {
-        /*
-         * I prefer a hard-coded date/time, because it avoids creating different disk images
-         * time this utility is run.
-         *
-         * And remember, of all the Date() constructor parameters, month is the oddball;
-         * it's interpreted as the actual month - 1, so 8 corresponds to September.  Brilliant.
-         */
         let sPath = '/' + path.basename(sLabel);
-        let dateLabel = new Date(1989, 8, 27, 3, 0, 0);
-        let file = {path: sPath, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel, size: 0};
+        let file = {path: sPath, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel || new Date(1989, 8, 27, 3, 0, 0), size: 0};
         aFileData.push(file);
     }
 

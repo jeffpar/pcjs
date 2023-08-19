@@ -1382,7 +1382,6 @@ function main(argc, argv)
             "--extract[=filename]":     "extract specified file in disks or archives",
             "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
             "--output=[diskimage]":     "write disk image (.img or .json)",
-            "--partitioned=[boolean]":  "create partitioned disk image (true or false)",
             "--target=[nK|nM]":         "set target disk size to nK or nM (eg, \"360K\", \"10M\")"
         };
         let optionsOther = {
@@ -1392,6 +1391,7 @@ function main(argc, argv)
             "--list (-l)\t":            "display directory listings of disk or archive",
             "--list=unused\t":          "display unused space in disk image (.json only)",
             "--normalize\t":            "convert line endings and character encoding of text files",
+            "--partitioned (-p)":       "force partitioned disk image",
             "--password=[string]":      "use password for decompression (ARC files only)",
             "--quiet (-q)\t":           "minimum messages",
             "--verbose (-v)\t":         "maximum messages (eg, display archive contents)"

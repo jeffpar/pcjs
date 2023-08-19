@@ -1794,7 +1794,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=miscdisks/pcx86/lang/borland/pascal/6.00/TURBO-PASCAL-600-DISK4",
+        "--collection=miscdisks/pcx86/app/other/visicalc/1981",
         "--checkdisk",
         "--rebuild"
       ],

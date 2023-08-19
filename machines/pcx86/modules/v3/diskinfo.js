@@ -4442,7 +4442,7 @@ DiskInfo.BOOT = {
  * PCJS_LABEL is our default label, used whenever a more suitable label (eg, the disk image's folder name)
  * is not available (or not supplied), and PCJS_OEM is inserted into any DiskInfo-generated diskette images.
  */
-DiskInfo.PCJS_LABEL = "PCJSDISK";
+DiskInfo.PCJS_LABEL = "PCJS";
 DiskInfo.PCJS_OEM   = "PCJS.ORG";
 DiskInfo.PCJS_VALUE = 0x50434A53;   // "PCJS"
 

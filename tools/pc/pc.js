@@ -643,7 +643,7 @@ function intLoad(addr)
                     let info = getDriveInfo();
                     if (info) {
                         printf("  Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
-                        printf("  Media ID %s, %d-bit FAT, %d cluster size\n", info.mediaID, info.typeFAT, info.clusterSize);
+                        printf("  Media ID %s, %d-bit FAT, %d-byte clusters\n", info.mediaID, info.typeFAT, info.clusterSize);
                         printf("  %d total clusters, %d total bytes", info.clustersTotal, info.bytesTotal);
                     }
                     else {
@@ -1406,7 +1406,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
 
-    readDir(sDir, 0, 0, "PCJS", null, normalize, maxCapacity * 1024, maxFiles, false, driveInfo, done);
+    readDir(sDir, 0, 0, "default", null, normalize, maxCapacity * 1024, maxFiles, false, driveInfo, done);
 
     return driveManifest? "" : "unable to build drive";
 }
