@@ -28,6 +28,7 @@ let fDebug = false;
 let fHalt = false;
 let fFloppy = false;
 let fNoFloppy = false;
+let fTest = false;
 let fVerbose = false;
 let autoStart = false;
 let machineType = "pcx86";
@@ -102,6 +103,7 @@ function setDebugMode(nEvent)
     }
     debugMode = nEvent;
     if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
+        if (fTest) exit();
         command = "";
         printf('[' + (commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
         printf("%s> ", prompt);
@@ -642,9 +644,9 @@ function intLoad(addr)
                 if (args.toLowerCase() == "info") {
                     let info = getDriveInfo();
                     if (info) {
-                        printf("\n  Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
-                        printf("  Media ID %s, %d-bit FAT, %d-byte clusters\n", info.mediaID, info.typeFAT, info.clusterSize);
-                        printf("  %d total clusters, %d total bytes\n", info.clustersTotal, info.bytesTotal);
+                        printf("\n Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
+                        printf(" Media ID %s, %d-bit FAT, %d-byte clusters\n", info.mediaID, info.typeFAT, info.clusterSize);
+                        printf(" %d total clusters, %d total bytes\n", info.clustersTotal, info.bytesTotal);
                     }
                     else {
                         printf("no drive info\n");
@@ -1327,6 +1329,9 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         let aCommands = sCommand.split(sCommand.indexOf(';') >= 0? ';' : ',');
         for (let command of aCommands) {
             data += command + "\r\n";
+        }
+        if (fTest) {
+            data += "quit\r\n";
         }
     }
     if (machineDir) data += "CD " + machineDir + "\r\n";
@@ -2365,6 +2370,7 @@ function main(argc, argv)
 
     fDebug = removeFlag('debug') || fDebug;
     fVerbose = removeFlag('verbose') || fVerbose;
+    fTest = removeFlag('test') || fTest;
 
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
@@ -2375,7 +2381,7 @@ function main(argc, argv)
     pcjsDir = path.join(rootDir, "/tools/pc");
     setRootDir(rootDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
 
-    if (!argv[1] || removeFlag('debug')) {
+    if (!argv[1] || fDebug || fTest) {
         let options = arg0.slice(1).join(' ');
         printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
     }
@@ -2488,11 +2494,12 @@ function main(argc, argv)
         };
         let optionsOther = {
             "--debug (-d)\t":           "enable DEBUG messages",
-            "--floppy (-f)\t":          "build non-partitioned disk",
+            "--floppy (-f)\t":          "build non-partitioned boot disk",
             "--halt (-h)\t":            "halt machine on startup",
             "--help (-?)\t":            "display command-line usage",
             "--local (-l)\t":           "use local diskette images",
             "--nofloppy (-n)\t":        "remove any diskette from drive A:",
+            "--test (-t)\t":            "enable test mode (non-interactive)",
             "--verbose (-v)\t":         "enable verbose mode"
         };
         let optionGroups = {
@@ -2509,7 +2516,7 @@ function main(argc, argv)
         }
         printf("\nnotes:\n\t--drivetype can also specify a drive geometry (eg, --drivetype=306:4:17)\n");
         printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
-        printf("\t--fat values should be considered advisory, as it may not be possible to honor them.\n");
+        printf("\t--fat values should be considered advisory, as it may not be possible to honor them\n");
         printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, "pc.json"));
         return;
     }
@@ -2539,6 +2546,7 @@ main(...pcjslib.getArgs({
     'h': "halt",
     'l': "local",
     'n': "nofloppy",
+    't': "test",
     'v': "verbose",
     'w': "write"
 }));
