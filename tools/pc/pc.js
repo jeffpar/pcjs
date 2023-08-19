@@ -56,18 +56,18 @@ let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
 let driveManifest = null, driveOverride = false, geometryOverride = false;
 let driveInfo = {
-    driveCtrl:   "COMPAQ",
+    driveCtrl:    "COMPAQ",
     driveType:   -1,
-    nCylinders:  0,
-    nHeads:      0,
-    nSectors:    0,
-    cbSector:    0,
-    fRemovable:  false,
-    driveSize:   0,
-    typeFAT:     0,     // set this to 12 or 16 to request a specific FAT type
-    clusterSize: 0,     // set this to a specific cluster size (in bytes) if desired
-    rootEntries: 0,     // set this to a specific number of root directory entries if desired
-    files:       []
+    nCylinders:   0,
+    nHeads:       0,
+    nSectors:     0,
+    cbSector:     0,
+    driveSize:    0,
+    typeFAT:      0,    // set this to 12 or 16 to request a specific FAT type
+    clusterSize:  0,    // set this to a specific cluster size (in bytes) if desired
+    rootEntries:  0,    // set this to a specific number of root directory entries if desired
+    fPartitioned: undefined,
+    files:        []
 };
 
 const functionKeys = {
@@ -526,10 +526,10 @@ function intReboot(addr)
      * cpu.setByte().
      *
      * TODO: The "correct" way to deal with this will be to make my own boot sector, similar to the MBR I
-     * wrote to deal with custom hard disk geometries.  It should be a trivial change, since DOS boot sectors
-     * already copy the DPT to RAM in order tweak other non-geometric parameters (eg, stepping rate).
+     * wrote to deal with custom hard disk geometries.  It should be a trivial change, since most DOS boot
+     * sectors already copy the DPT to RAM in order tweak other non-geometric parameters (eg, stepping rate).
      */
-    if (driveInfo.fRemovable && driveInfo.cbSector && driveInfo.cbSector != 512) {
+    if (!driveInfo.fPartitioned && driveInfo.cbSector && driveInfo.cbSector != 512) {
         let fpDPT = this.getLong(0x1E * 4);                     // get the DPT address from interrupt vector 0x1E
         let addrDPT = ((fpDPT >>> 16) << 4) + (fpDPT & 0xffff); // convert real-mode far pointer to physical address
         /*
@@ -585,10 +585,9 @@ function intReboot(addr)
          *      &0070:0E34 EBCC             JMP      0E02                     ;cycles=2
          *
          * After a track is read, this code reduces the remaining sector count (AX) by the number of sectors just
-         * read (CX == 5), then shifts CX left 1 bit (using a byte shift, so you better never have 128 or more sectors
-         * per track), and then adds that to the HIGH byte of the offset for the next read (BX).  So it is effectively
-         * adding CX * 256 to BX, or rather CX * 512 thanks to the earlier shift -- which of course only works for
-         * 512-byte sectors.
+         * read (CX == 5), then shifts CX left 1 bit (using a byte shift), and then adds that to the HIGH byte of the
+         * offset for the next read (BX).  So it is effectively adding CX * 256 to BX -- or rather # sectors * 512,
+         * thanks to the earlier shift -- which of course only works for 512-byte sectors.
          *
          * At this point, it's clear this is a pointless exercise -- at least for MS-DOS 3.30.  If earlier versions
          * were truly sector-size-agnostic, then the question becomes: had the developers forgotten about that "feature"
@@ -640,10 +639,21 @@ function intLoad(addr)
                 aTokens.splice(0, 1)
                 printf("%s\n", loadDiskette(matchDrive[1], aTokens));
             } else {
-                if (!args) {
-                    printf("usage: load [drive] [search options]\n");
-                } else {
+                if (args.toLowerCase() == "info") {
+                    let info = getDriveInfo();
+                    if (info) {
+                        printf("  Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
+                        printf("  Media ID %s, %d-bit FAT, %d cluster size\n", info.mediaID, info.typeFAT, info.clusterSize);
+                        printf("  %d total clusters, %d total bytes", info.clustersTotal, info.bytesTotal);
+                    }
+                    else {
+                        printf("no drive info\n");
+                    }
+                } else if (args) {
                     printf("invalid load command: \"%s\"\n", args);
+                }
+                else {
+                    printf("usage: load [drive] [search options]\n");
                 }
             }
         } else {                        // INT 20h assumed to have come from a hidden PCJS command app (eg, LS.COM)
@@ -657,6 +667,48 @@ function intLoad(addr)
         }                               // we want the machine to spin its wheels until it has been unloaded/reloaded
     }
     return true;
+}
+
+/**
+ * getDriveInfo()
+ *
+ * @returns {Object|null}
+ */
+function getDriveInfo()
+{
+    let info = null;
+    if (driveManifest || driveInfo.volume || driveInfo.driveType >= 0) {
+        info = {
+            controller: driveInfo.driveCtrl,
+            type: driveInfo.driveType,
+            cylinders: driveInfo.nCylinders,
+            heads: driveInfo.nHeads,
+            sectorsPerTrack: driveInfo.nSectors,
+            sectorSize: driveInfo.cbSector || 512,
+            clusterSize: driveInfo.clusterSize,
+            driveSize: driveInfo.driveSize.toFixed(1) + "mb"
+        };
+        if (driveInfo.volume) {
+            let vol = driveInfo.volume;
+            info.sectorSize = vol.cbSector;
+            info.mediaID = sprintf("%#04x", vol.idMedia);
+            let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
+            info.typeFAT = vol.nFATBits || vol.idFAT;
+            info.totalFATs = (sectorsFAT / Math.ceil(vol.clusTotal * info.typeFAT / 8 / vol.cbSector))|0;
+            info.rootEntries = vol.rootEntries || vol.rootTotal;
+            info.sectorsHidden = vol.lbaStart;
+            info.sectorsReserved = vol.vbaFAT;
+            info.sectorsFAT = sectorsFAT;
+            info.sectorsRoot = Math.ceil((info.rootEntries * 32) / vol.cbSector);
+            info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
+            info.clusterSize = vol.clusSecs * vol.cbSector;
+            info.clustersTotal = vol.clusTotal;
+            info.clustersFree = vol.clusFree;
+            info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
+            info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
+        }
+    }
+    return info;
 }
 
 /**
@@ -824,7 +876,7 @@ function loadMachine(sFile)
             }
         }
 
-        if (config['hdc'] && !driveInfo.fRemovable) {
+        if (config['hdc'] && driveInfo.fPartitioned) {
             let typeCtrl = config['hdc']['type'];
             let drives = config['hdc']['drives'];
             if (typeof drives == "string") {
@@ -869,6 +921,11 @@ function loadMachine(sFile)
                 };
                 if (driveManifest || !localDir) {
                     drives[0]['path'] = localDrive;
+                    /*
+                     * If we built a drive image, we worked hard to make it bootable, so we're going to boot from it
+                     * (ie, remove any boot floppy).  Whereas any prebuilt drive image may or may not be bootable, so
+                     * in that case, use --nofloppy if you any boot floppy removed.
+                     */
                     if (driveManifest) {
                         removeFloppy = true;
                     }
@@ -1736,25 +1793,27 @@ function loadDiskette(sDrive, aTokens)
     };
     if (machine.fdc) {
         let sPath;
-        if (aTokens[0] == "--path" && (sPath = aTokens[1]) || (sPath = aTokens[0]).indexOf("http") == 0) {
-            doLoad(sDrive, sPath, sPath);
-            return result;
-        }
-        if (diskItems && aTokens.length == 1 && aTokens[0].match(/^\d+$/)) {
-            let diskItem = diskItems[+aTokens[0] - 1];
-            if (diskItem) {
-                if (!diskItem['others']) {
-                    doLoad(sDrive, diskItem['disk']);
-                } else {
-                    diskItems = diskItem['others'];
-                    diskItems.unshift(diskItem);
-                    delete diskItem['others'];
-                    result = displayItems(sDrive, diskItems, "multiple disks with identical file (use \"load a: 1\" to load original selection)");
-                }
-            } else {
-                result = "invalid diskette number (" + aTokens[0] + ")";
+        if (aTokens.length) {
+            if (aTokens[0] == "--path" && (sPath = aTokens[1]) || (sPath = aTokens[0]).indexOf("http") == 0) {
+                doLoad(sDrive, sPath, sPath);
+                return result;
             }
-            return result;
+            if (diskItems && aTokens.length == 1 && aTokens[0].match(/^\d+$/)) {
+                let diskItem = diskItems[+aTokens[0] - 1];
+                if (diskItem) {
+                    if (!diskItem['others']) {
+                        doLoad(sDrive, diskItem['disk']);
+                    } else {
+                        diskItems = diskItem['others'];
+                        diskItems.unshift(diskItem);
+                        delete diskItem['others'];
+                        result = displayItems(sDrive, diskItems, "multiple disks with identical file (use \"load a: 1\" to load original selection)");
+                    }
+                } else {
+                    result = "invalid diskette number (" + aTokens[0] + ")";
+                }
+                return result;
+            }
         }
         diskItems = [];
         let criteria = 'disk';
@@ -1923,7 +1982,7 @@ function doCommand(s)
 {
     let aTokens = s.split(' ');
     let cmd = aTokens[0].toLowerCase();
-    let child, result = "", reload = false, curDir = "", newDir;
+    let info, result = "", reload = false, curDir = "", newDir;
 
     aTokens.splice(0, 1);
     let arg, args = aTokens.join(' ');
@@ -1931,8 +1990,8 @@ function doCommand(s)
     let help = function() {
         let result = "pc.js commands:\n" +
                     "  build [command]\n" +
-                    "  disk (displays info)\n" +
                     "  exec [local command]\n" +
+                    "  info (display disk info)\n" +
                     "  load [drive] [search options]\n" +
                     "  save [local disk image]\n" +
                     "  start [machine]\n" +
@@ -1965,42 +2024,6 @@ function doCommand(s)
             if (result) printf("%s\n", result);
         });
         break;
-    case "disk":
-        if (driveManifest || driveInfo.volume || driveInfo.driveType >= 0) {
-            let info = {
-                controller: driveInfo.driveCtrl,
-                type: driveInfo.driveType,
-                cylinders: driveInfo.nCylinders,
-                heads: driveInfo.nHeads,
-                sectorsPerTrack: driveInfo.nSectors,
-                sectorSize: driveInfo.cbSector || 512,
-                clusterSize: driveInfo.clusterSize,
-                driveSize: driveInfo.driveSize.toFixed(1) + "mb"
-            };
-            if (driveInfo.volume) {
-                let vol = driveInfo.volume;
-                info.sectorSize = vol.cbSector;
-                info.mediaID = sprintf("%#04x", vol.idMedia);
-                let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
-                info.typeFAT = vol.nFATBits || vol.idFAT;
-                info.totalFATs = (sectorsFAT / Math.ceil(vol.clusTotal * info.typeFAT / 8 / vol.cbSector))|0;
-                info.rootEntries = vol.rootEntries || vol.rootTotal;
-                info.sectorsHidden = vol.lbaStart;
-                info.sectorsReserved = vol.vbaFAT;
-                info.sectorsFAT = sectorsFAT;
-                info.sectorsRoot = Math.ceil((info.rootEntries * 32) / vol.cbSector);
-                info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
-                info.clusterSize = vol.clusSecs * vol.cbSector;
-                info.clustersTotal = vol.clusTotal;
-                info.clustersFree = vol.clusFree;
-                info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
-                info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
-            }
-            result = sprintf("%2j", info);
-        } else {
-            result = "no built or prebuilt disk";
-        }
-        break;
     case "exec":
         if (driveManifest) {
             saveDisk(localDir);
@@ -2018,7 +2041,7 @@ function doCommand(s)
                     args = appConfig['exec'].replace(/\$\*/, argv.slice(1).join(' '));
                 }
             }
-            child = child_process.execSync(args, {
+            let child = child_process.execSync(args, {
                 stdio: [
                 process.stdin,
                 process.stdout,
@@ -2032,6 +2055,14 @@ function doCommand(s)
         if (reload) {
             result = reloadMachine();
             if (typeof result != "string") result = "";
+        }
+        break;
+    case "info":
+        info = getDriveInfo();
+        if (info) {
+            result = sprintf("%2j", info);
+        } else {
+            result = "no built or prebuilt disk";
         }
         break;
     case "load":
@@ -2372,7 +2403,7 @@ function main(argc, argv)
         savedMachine = "ibm5170";
         maxCapacity = maxFiles = 0;
         driveInfo.driveCtrl = "FDC";
-        driveInfo.fRemovable = true;
+        driveInfo.fPartitioned = false;
         driveOverride = true;
     } else {
         let driveCtrl = removeArg('drivectrl');
@@ -2382,6 +2413,7 @@ function main(argc, argv)
         }
         maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || maxFiles;
         maxCapacity = parseFloat(removeArg('drivesize')) || parseFloat(defaults['drivesize']) || maxCapacity;
+        driveInfo.fPartitioned = true;
     }
 
     let typeDrive = removeArg('drivetype');
@@ -2456,7 +2488,7 @@ function main(argc, argv)
         };
         let optionsOther = {
             "--debug (-d)\t":           "enable DEBUG messages",
-            "--floppy (-f)\t":          "build floppy disk instead of hard disk",
+            "--floppy (-f)\t":          "build non-partitioned disk",
             "--halt (-h)\t":            "halt machine on startup",
             "--help (-?)\t":            "display command-line usage",
             "--local (-l)\t":           "use local diskette images",

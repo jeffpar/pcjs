@@ -138,7 +138,11 @@ function createDriveInfo(argv, diskette)
             driveInfo.nHeads = +match[2];
             driveInfo.nSectors = +match[3];
             driveInfo.cbSector = +match[4] || 512;
-            driveInfo.fRemovable = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector < 3000000);
+            if (argv['partitioned'] !== undefined) {
+                driveInfo.fPartitioned = !!argv['partitioned'];
+            } else {
+                driveInfo.fPartitioned = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector >= DiskInfo.MIN_PARTITION);
+            }
         } else {
             match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
             if (match) {
@@ -424,7 +428,7 @@ function processDisk(di, diskFile, argv, diskette)
         }
     }
 
-    if (!argv['quiet']) {
+    if (argv['collection'] || argv['verbose']) {
         printf("processing: %s (%d bytes, checksum %d, hash %s)\n", di.getName(), di.getSize(), di.getChecksum(), di.getHash());
     }
 
@@ -1378,6 +1382,7 @@ function main(argc, argv)
             "--extract[=filename]":     "extract specified file in disks or archives",
             "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
             "--output=[diskimage]":     "write disk image (.img or .json)",
+            "--partitioned=[boolean]":  "create partitioned disk image (true or false)",
             "--target=[nK|nM]":         "set target disk size to nK or nM (eg, \"360K\", \"10M\")"
         };
         let optionsOther = {
@@ -1433,6 +1438,7 @@ main(...pcjslib.getArgs({
     '?': "help",
     'e': "extract",
     'l': "list",
+    'p': "partitioned",
     'q': "quiet",
     'v': "verbose",
     'x': "expand"

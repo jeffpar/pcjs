@@ -212,7 +212,7 @@ export default class DiskInfo {
             driveInfo.driveType = -1;
         }
 
-        if (cbDiskData >= 3000000 || !driveInfo.fRemovable) {
+        if (driveInfo.fPartitioned || cbDiskData >= DiskInfo.MIN_PARTITION) {
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
             if (wSig == DiskInfo.BOOT.SIGNATURE) {
                 /*
@@ -496,7 +496,7 @@ export default class DiskInfo {
              * certain OEM strings (eg, "IBM  2.0", "IBM  3.1") as a for drive and FAT type determination.
              */
             let dw = dbDisk.readInt32BE(DiskInfo.BPB.OEM + offBootSector);
-            if (dw != DiskInfo.PCJS_VALUE && cbDiskData < 3000000 && driveInfo.driveCtrl != "PCJS") {
+            if (dw != DiskInfo.PCJS_VALUE && cbDiskData < DiskInfo.MIN_PARTITION && driveInfo.driveCtrl != "PCJS") {
                 dbDisk.write(DiskInfo.PCJS_OEM, DiskInfo.BPB.OEM + offBootSector, DiskInfo.PCJS_OEM.length);
                 this.printf(Device.MESSAGE.INFO, "OEM string has been updated\n");
                 if (fnHash) this.fBPBModified = true;
@@ -886,7 +886,7 @@ export default class DiskInfo {
             cHeads = this.nHeads;
             cSectorsPerTrack = this.nSectors;
 
-            if (!driveInfo.fRemovable) {
+            if (driveInfo.fPartitioned) {
                 bMediaID = 0xF8;
                 cHiddenSectors = 1;     // our hard disk images are always partitioned and always reserve a diagnostic cylinder
                 cDiagnosticSectors = cHeads * cSectorsPerTrack;
@@ -3683,7 +3683,7 @@ export default class DiskInfo {
                     return true;
                 }
             }
-            else if (driveInfo.fRemovable) {
+            else if (!driveInfo.fPartitioned) {
                 if (driveInfo.driveType >= 0) {
                     return true;
                 }
@@ -4282,6 +4282,8 @@ export default class DiskInfo {
         return nearestPower;
     }
 }
+
+DiskInfo.MIN_PARTITION = 3000000;   // ~3MB (used in lieu of any partitioned media indicator)
 
 /*
  * Top-level descriptors in "v2" JSON disk images.

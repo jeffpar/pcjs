@@ -467,7 +467,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--drivetype=2:6:63",
-        "load a: ms-dos 3.30 disk 1;a:chkdsk;quit",
+        "load info;quit",
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
       "stopOnEntry": false,
@@ -1474,12 +1474,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "MBR/",
-        "mbr.img",
-        "--overwrite",
-        "--drivetype=40:2:5:1024"
+        "tmp/",
+        "test.img",
+        "--target=360K",
+        "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
