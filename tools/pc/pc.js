@@ -1126,7 +1126,7 @@ function checkCommand(sDir, sCommand)
             "CHDIR",
             "COPY",
             "CTTY",
-            "DATE",
+            "DATE",     // NOTE: this was actually an external command in DOS 1.0 (became internal in DOS 1.1)
             "DEL",
             "DIR",
             "ECHO",
@@ -1146,7 +1146,7 @@ function checkCommand(sDir, sCommand)
             "RMDIR",
             "SET",
             "SHIFT",
-            "TIME",
+            "TIME",     // NOTE: this was actually an external command in DOS 1.0 (became internal in DOS 1.1)
             "TYPE",
             "VER",
             "VOL"
@@ -1226,6 +1226,7 @@ function getSystemDisk(type, version)
  */
 async function buildDisk(sDir, sCommand = "", fLog = false)
 {
+    let kbTarget = maxCapacity * 1024;
     let system = configJSON['systems']?.[systemType];
     if (!system) {
         return "unsupported system type: " + systemType;
@@ -1355,7 +1356,12 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let verBPB = 0;
     let dbBoot = getDiskSector(diSystem, 0);
     if (version < 2.0) {
+        /*
+         * So to get this far, fFloppy had to be true, so in addition to setting the correct
+         * BPB version, we should also set kbTarget to 160 for 1.0 or 320 for 1.1.
+         */
         verBPB = 1;
+        kbTarget = (version < 1.1)? 160 : 320;
     }
     else if (version >= 2.0 && version < 3.2) {
         /*
@@ -1364,6 +1370,16 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
          * part of the BPB unless we specify a BPB version number, so in this case, it must be 2.
          */
         verBPB = 2;
+        if (fFloppy) {
+            kbTarget = 360;
+        } else if (version < 3.0) {
+            /*
+             * An explicit value for rootEntries prevents buildDiskFromFiles() from adjusting the root
+             * directory size in an attempt to prevent an IO.SYS/IBMBIO.COM track load failure -- otherwise,
+             * PC DOS 2.x may fail to boot.  TODO: Determine why that happens....
+             */
+            driveInfo.rootEntries = 512;
+        }
         dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.BOOTDRIVE);   // boot sector offset 0x001E
         /*
          * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
@@ -1373,18 +1389,21 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
          */
         dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);         // boot sector offset 0x001F
     }
-    else if (version >= 3.2 && version < 4.0) {
-        /*
-         * When DOS 3.2 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
-         * (just before the 0x55,0xAA signature).
-         *
-         * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
-         * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
-         */
-        dbBoot.writeUInt8(bootDrive, 0x1FD);                    // boot sector offset 0x01FD
-    }
-    else if (version >= 4.0) {
-        dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.DRIVE);       // boot sector offset 0x0024
+    else {
+        if (fFloppy) kbTarget = (version < 3.3? 720 : 1440);
+        if (version >= 3.2 && version < 4.0) {
+            /*
+             * When DOS 3.2 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
+             * (just before the 0x55,0xAA signature).
+             *
+             * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
+             * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
+             */
+            dbBoot.writeUInt8(bootDrive, 0x1FD);                // boot sector offset 0x01FD
+        }
+        else if (version >= 4.0) {
+            dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.DRIVE);   // boot sector offset 0x0024
+        }
     }
 
     driveManifest = null;
@@ -1419,7 +1438,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
 
-    readDir(sDir, 0, 0, "default", null, normalize, maxCapacity * 1024, maxFiles, false, driveInfo, done);
+    readDir(sDir, 0, 0, "default", null, normalize, kbTarget, maxFiles, false, driveInfo, done);
 
     return driveManifest? "" : "unable to build drive";
 }

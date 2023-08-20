@@ -1047,7 +1047,8 @@ export default class DiskInfo {
             }
             cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
             /*
-             * At the risk of creating a disk image that DOS will fail to boot, we will honor leave
+             * At the risk of creating a disk image that DOS will fail to boot, we will honor any *explicitly* set number
+             * of root directory entries.
              */
             if (!driveInfo.rootEntries && aFileData[0]) {
                 let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;

@@ -467,10 +467,10 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--system=pcdos",
-        "--version=1",
-        "--floppy"
+        "--version=2",
+        "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
