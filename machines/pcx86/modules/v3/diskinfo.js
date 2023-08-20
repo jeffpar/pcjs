@@ -681,6 +681,12 @@ export default class DiskInfo {
 
                         dbSector = dbTrack.slice(offSector, offSector + cbSectorThisTrack);
 
+                        /*
+                         * NOTE: This code is broken if the disks's reserved sector count is anything other than 1, because
+                         * it assumes that the first FAT sector immediately follows the boot sector.  However, we never use
+                         * a value other than 1 anyway, because I've yet to find a version DOS (at least DOS 2.x or 3.x) that
+                         * actually honors the BPB's reserved sector count.  So there's ample brokenness to go around.
+                         */
                         if (bMediaID && !iCylinder && !iHead && iSector == ((offBootSector/cbSector)|0) + 2) {
                             let bFATID = dbSector.readUInt8(0);
                             if (bMediaID != bFATID) {
@@ -999,10 +1005,9 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.FATSECS, 2, cFATSectors);
             setBoot(DiskInfo.BPB.TRACKSECS, 2, cSectorsPerTrack);
             setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
-            setBoot(DiskInfo.BPB.HIDDENSECS, 2, cHiddenSectors);
 
             /*
-             * We've saved the root directory size calculation for last, because tweaking it is the easiest way to
+             * We've saved the root directory size calculation for last, because tweaking it seems the best way to
              * ensure that the first data sector (ie, where DOS 2.x and 3.x expect IBMBIO.COM/IO.SYS to be located)
              * is situated such that the final sectors of the first system file coincide with the end of a track.
              *
@@ -1046,22 +1051,40 @@ export default class DiskInfo {
                 rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
             }
             cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
-            /*
-             * At the risk of creating a disk image that DOS will fail to boot, we will honor any *explicitly* set number
-             * of root directory entries.
-             */
-            if (!driveInfo.rootEntries && aFileData[0]) {
-                let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
-                let cInitFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
-                let cFileSectors = ((aFileData[0].size / cbSector)|0) + 1;
-                let cFilePartialSectors = (cFileSectors % cSectorsPerTrack) || cSectorsPerTrack;
-                while (cInitFreeSectors != cFilePartialSectors) {
-                    cRootSectors++;
-                    rootEntries += (cbSector >> 5);
-                    if (!--cInitFreeSectors) cInitFreeSectors = cSectorsPerTrack;
-                }
+
+            if (aFileData[0]) {
+                /*
+                 * Do some preliminary calculations for the first file (presumably either IO.SYS or IBMBIO.COM).
+                 * If the file fits entirely inside the first track, we're good to go.  Otherwise, we need to push
+                 * either cRootSectors or cReservedSectors or cHiddenSectors up until EITHER the initial data track
+                 * can now hold the entire file OR the file's final sector coincides with the end of a data track.
+                 */
+                let maxAdjustments = cSectorsPerTrack;
+                do {
+                    let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
+                    let cInitFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
+                    let cFileSectors = Math.ceil(aFileData[0].size / cbSector);
+                    cFileSectors -= cInitFreeSectors;
+                    if (cFileSectors <= 0 || cFileSectors % cSectorsPerTrack == 0) break;
+                    /*
+                     * If we're allowed to tweak root directory sectors, then we'll do that first, because at least
+                     * it's not creating completely wasted space.  Next, I tried tweaking reserved sectors, but guess
+                     * what?  I've yet to find a version of DOS 2.x or 3.x that actually pays attention to reserved
+                     * sectors (they all assume it's 1).  So we're left with adjusting hidden sectors.
+                     */
+                    if (!driveInfo.rootEntries) {
+                        cRootSectors++;
+                        rootEntries += (cbSector >> 5);
+                    } else {
+                        cHiddenSectors++;
+                        cTotalSectors--;
+                    }
+                } while (maxAdjustments--);
             }
+
             setBoot(DiskInfo.BPB.DIRENTS, 2, rootEntries);
+            setBoot(DiskInfo.BPB.RESSECS, 2, cReservedSectors);
+            setBoot(DiskInfo.BPB.HIDDENSECS, 2, cHiddenSectors);
             cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + cReservedSectors);
             cbAvail = cDataSectors * cbSector;
         }
@@ -1131,6 +1154,14 @@ export default class DiskInfo {
                     return false;
                 }
             }
+
+            /*
+             * Update drive geometry properties so that functions like getCHS() work properly now.
+             */
+            this.nCylinders = (cTotalSectors + cHiddenSectors + cDiagnosticSectors) / (cHeads * cSectorsPerTrack);
+            this.nHeads = cHeads;
+            this.nSectors = cSectorsPerTrack;
+            this.cbSector = cbSector;
         }
 
         if (aFileData.length > rootEntries) {
@@ -1166,7 +1197,7 @@ export default class DiskInfo {
          * Output a Master Boot Record (MBR) if this is a hard drive image.
          */
         if (cHiddenSectors) {
-            abSector = this.buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors, typeFAT);
+            abSector = this.buildMBR(cHeads, cSectorsPerTrack, cbSector, cHiddenSectors, cTotalSectors, typeFAT);
             offDisk += this.copyData(dbDisk, offDisk, abSector) * cHiddenSectors;
         }
 
@@ -1176,7 +1207,7 @@ export default class DiskInfo {
         abBoot[DiskInfo.BOOT.SIG_OFFSET] = DiskInfo.BOOT.SIGNATURE & 0xff;            // 0x55
         abBoot[DiskInfo.BOOT.SIG_OFFSET + 1] = (DiskInfo.BOOT.SIGNATURE >> 8) & 0xff; // 0xAA
         abSector = this.buildData(cbSector, abBoot);
-        offDisk += this.copyData(dbDisk, offDisk, abSector);
+        offDisk += this.copyData(dbDisk, offDisk, abSector) * cReservedSectors;
 
         /*
          * Build the FAT, noting the starting cluster number that each file will use along the way.
@@ -1585,17 +1616,18 @@ export default class DiskInfo {
     }
 
     /**
-     * buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors, typeFAT)
+     * buildMBR(cHeads, cSectorsPerTrack, cbSector, cHiddenSectors, cTotalSectors, typeFAT)
      *
      * @this {DiskInfo}
      * @param {number} cHeads
      * @param {number} cSectorsPerTrack
      * @param {number} cbSector
+     * @param {number} cHiddenSectors
      * @param {number} cTotalSectors
      * @param {number} [typeFAT] (ie, 12, 16, 32; default is 12)
      * @returns {Array.<number>}
      */
-    buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors, typeFAT = 12)
+    buildMBR(cHeads, cSectorsPerTrack, cbSector, cHiddenSectors, cTotalSectors, typeFAT = 12)
     {
         /*
          * There are four 16-byte partition entries in the MBR, starting at offset 0x1BE,
@@ -1612,9 +1644,10 @@ export default class DiskInfo {
         /*
          * Next 3 bytes: CHS (Cylinder/Head/Sector) of first partition sector
          */
-        abSector[offSector++] = 0x00;           // head: 0
-        abSector[offSector++] = 0x02;           // sector: 1 (bits 0-5), cylinder bits 8-9: 0 (bits 6-7)
-        abSector[offSector++] = 0x00;           // cylinder bits 0-7: 0
+        let chs = this.getCHS(cHiddenSectors);
+        abSector[offSector++] = chs[1];                                 // head: 0
+        abSector[offSector++] = chs[2] | ((chs[0] & 0x300) >> 2);       // sector: 2 (bits 0-5), cylinder bits 8-9: 0 (bits 6-7)
+        abSector[offSector++] = chs[0] & 0xff                           // cylinder bits 0-7: 0
 
         /*
          * Next 1 byte: partition ID
@@ -1633,18 +1666,18 @@ export default class DiskInfo {
         /*
          * Next 4 bytes: LBA (Logical Block Address) of first partition sector
          */
-        abSector[offSector++] = 1;
-        abSector[offSector++] = 0x00;
-        abSector[offSector++] = 0x00;
-        abSector[offSector++] = 0x00;
+        abSector[offSector++] = cHiddenSectors & 0xff;
+        abSector[offSector++] = (cHiddenSectors >> 8) & 0xff;
+        abSector[offSector++] = (cHiddenSectors >> 16) & 0xff
+        abSector[offSector++] = (cHiddenSectors >> 24) & 0xff
 
         /*
          * Next 4 bytes: Number of sectors in partition
          */
-        abSector[offSector++] = (cTotalSectors & 0xff);
-        abSector[offSector++] = ((cTotalSectors >> 8) & 0xff);
-        abSector[offSector++] = ((cTotalSectors >> 16) & 0xff);
-        abSector[offSector++] = ((cTotalSectors >> 24) & 0xff);
+        abSector[offSector++] = cTotalSectors & 0xff;
+        abSector[offSector++] = (cTotalSectors >> 8) & 0xff;
+        abSector[offSector++] = (cTotalSectors >> 16) & 0xff;
+        abSector[offSector++] = (cTotalSectors >> 24) & 0xff;
 
         /*
          * Since we should be at offset 0x1FE now, store the MBR signature bytes

@@ -645,7 +645,7 @@ function intLoad(addr)
                     let info = getDriveInfo();
                     if (info) {
                         printf("\n Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
-                        printf(" Media ID %s, %d-bit FAT, %d-byte clusters\n", info.mediaID, info.typeFAT, info.clusterSize);
+                        printf(" %d root entries, %d-bit FAT, %d-byte clusters\n", info.rootEntries, info.typeFAT, info.clusterSize);
                         printf(" %d total clusters, %d total bytes\n", info.clustersTotal, info.bytesTotal);
                     }
                     else {
@@ -1376,9 +1376,10 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
             /*
              * An explicit value for rootEntries prevents buildDiskFromFiles() from adjusting the root
              * directory size in an attempt to prevent an IO.SYS/IBMBIO.COM track load failure -- otherwise,
-             * PC DOS 2.x may fail to boot.  TODO: Determine why this happens....
+             * PC DOS 2.x may fail to boot.  DOS 2.x makes hard-coded assumptions about the FAT format,
+             * based on total disk sectors, which we can't avoid (see the code in IBMBIO.COM at 70:923).
              */
-            if (!driveInfo.rootEntries) driveInfo.rootEntries = 512;
+            driveInfo.rootEntries = 512;
         }
         dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.BOOTDRIVE);   // boot sector offset 0x001E
         /*

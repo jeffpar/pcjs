@@ -468,7 +468,6 @@
       "args": [
         "--system=pcdos",
         "--version=2",
-        "--fat=12:4096:256",
         "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
@@ -1548,12 +1547,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--dir=DISK0001",
+        "--dir=MBR/",
         "--normalize",
-        "--output=TEST0001.img",
+        "--output=MBR.img",
+        "--target=10M",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/disks/tmp",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
