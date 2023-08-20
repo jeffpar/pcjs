@@ -1376,9 +1376,9 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
             /*
              * An explicit value for rootEntries prevents buildDiskFromFiles() from adjusting the root
              * directory size in an attempt to prevent an IO.SYS/IBMBIO.COM track load failure -- otherwise,
-             * PC DOS 2.x may fail to boot.  TODO: Determine why that happens....
+             * PC DOS 2.x may fail to boot.  TODO: Determine why this happens....
              */
-            driveInfo.rootEntries = 512;
+            if (!driveInfo.rootEntries) driveInfo.rootEntries = 512;
         }
         dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.BOOTDRIVE);   // boot sector offset 0x001E
         /*

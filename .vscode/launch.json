@@ -468,6 +468,7 @@
       "args": [
         "--system=pcdos",
         "--version=2",
+        "--fat=12:4096:256",
         "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
