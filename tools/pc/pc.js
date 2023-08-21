@@ -104,7 +104,10 @@ function setDebugMode(nEvent)
     }
     debugMode = nEvent;
     if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
-        if (fTest) exit();
+        if (fTest) {
+            printf("\n");
+            exit();
+        }
         command = "";
         printf('[' + (commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
         printf("%s> ", prompt);
@@ -1525,13 +1528,9 @@ function updateDriveInfo(di)
         if (driveInfo.clusterSize && driveInfo.clusterSize != volume.clusSecs * volume.cbSector) {
             printf("warning: %d-byte clusters replaced with %d-bytes clusters\n", driveInfo.clusterSize, volume.clusSecs * volume.cbSector);
         }
-        //
-        // We're going to let this warning slide, because the number of root entries will almost always
-        // be increased to work around a boot sector bug.  See buildDiskFromFiles() in diskinfo.js for details.
-        //
-        // if (driveInfo.rootEntries && driveInfo.rootEntries != volume.rootEntries) {
-        //     printf("%d root entries replaced with %d root entries\n", driveInfo.rootEntries, volume.rootEntries);
-        // }
+        if (driveInfo.rootEntries && driveInfo.rootEntries != volume.rootEntries) {
+            printf("%d root entries replaced with %d root entries\n", driveInfo.rootEntries, volume.rootEntries);
+        }
     }
 }
 
@@ -2391,7 +2390,7 @@ function main(argc, argv)
 
     if (!argv[1] || fDebug || fTest) {
         let options = arg0.slice(1).join(' ');
-        printf("\npc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
+        printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
     }
 
     machines = JSON.parse(readFileSync("/machines/machines.json"));
@@ -2480,8 +2479,8 @@ function main(argc, argv)
         let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
         if (match) {
             driveInfo.typeFAT = +match[1];
-            if (match[2]) driveInfo.clusterSize = +match[2];
-            if (match[3]) driveInfo.rootEntries = +match[3];
+            if (match[2]) driveInfo.clusterSize = +match[2] || 0;
+            if (match[3]) driveInfo.rootEntries = +match[3] || 0;
         }
     }
 

@@ -912,16 +912,6 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
 
             /*
-             * At the risk of creating a disk image that can't accommodate all the user-supplied files OR that DOS
-             * may fail to boot, we now honor any *explicitly* set number of root directory entries.
-             */
-            rootEntries = driveInfo.rootEntries || 512;
-            rootEntries = ((rootEntries + 15) >> 4) << 4;       // round up to nearest multiple of 16
-            if (!driveInfo.rootEntries && rootEntries < aFileData.length) {
-                rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
-            }
-
-            /*
              * We now decide on the type of FAT and the cluster size.  The caller may have preferences for one or both of
              * those values, which we will try to honor, but there are no guarantees.
              *
@@ -938,8 +928,20 @@ export default class DiskInfo {
              */
             cSectorsPerCluster = driveInfo.clusterSize && Math.ceil(driveInfo.clusterSize / cbSector) || 1;
             let maxSectorsPerCluster = (32 * 1024 / cbSector)|0;
-            typeFAT = driveInfo.typeFAT || typeFAT;
+            if (driveInfo.typeFAT == 12 || driveInfo.typeFAT == 16) {
+                typeFAT = driveInfo.typeFAT;
+            }
             cSectorsPerCluster = DiskInfo.nearestPowerOfTwo(cSectorsPerCluster, maxSectorsPerCluster);
+
+            /*
+             * At the risk of creating a disk image that can't accommodate all the user-supplied files OR that DOS
+             * may fail to boot, we now honor any *explicitly* set number of root directory entries.
+             */
+            rootEntries = driveInfo.rootEntries || 512;
+            rootEntries = ((rootEntries + 15) >> 4) << 4;       // round up to nearest multiple of 16
+            if (!driveInfo.rootEntries && rootEntries < aFileData.length) {
+                rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
+            }
 
             /*
              * Before we validate our numbers, we must first account for any requirements that the caller's DOS version
@@ -948,25 +950,31 @@ export default class DiskInfo {
              */
             let cRecalcs = 2;
             if (driveInfo.verDOS >= 2.0 && driveInfo.verDOS < 3.0) {
-                if (cTotalSectors <= 512) {         // 0x0200
-                    rootEntries = 64;               // 0x40
-                    cSectorsPerCluster = 1;
+                if (!driveInfo.clusterSize) {
+                    if (cTotalSectors <= 512) {             // 0x0200
+                        cSectorsPerCluster = 1;
+                    } else if (cTotalSectors <= 2048) {     // 0x0800
+                        cSectorsPerCluster = 2;
+                    } else if (cTotalSectors <= 8192) {     // 0x2000
+                        cSectorsPerCluster = 4;
+                    } else if (cTotalSectors <= 32680) {    // 0x7Af8
+                        cSectorsPerCluster = 8;
+                    } else {
+                        cSectorsPerCluster = 16;
+                    }
                 }
-                else if (cTotalSectors <= 2048) {   // 0x0800
-                    rootEntries = 112;              // 0x70
-                    cSectorsPerCluster = 2;
-                }
-                else if (cTotalSectors <= 8192) {   // 0x2000
-                    rootEntries = 256;              // 0x100
-                    cSectorsPerCluster = 4;
-                }
-                else if (cTotalSectors <= 32680) {  // 0x7Af8
-                    rootEntries = 512;              // 0x200
-                    cSectorsPerCluster = 8;
-                }
-                else {
-                    rootEntries = 1024;             // 0x400
-                    cSectorsPerCluster = 16;
+                if (!driveInfo.rootEntries) {
+                    if (cTotalSectors <= 512) {             // 0x0200
+                        rootEntries = 64;
+                    } else if (cTotalSectors <= 2048) {     // 0x0800
+                        rootEntries = 112;
+                    } else if (cTotalSectors <= 8192) {     // 0x2000
+                        rootEntries = 256;
+                    } else if (cTotalSectors <= 32680) {    // 0x7Af8
+                        rootEntries = 512;
+                    } else {
+                        rootEntries = 1024;
+                    }
                 }
             }
             cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
