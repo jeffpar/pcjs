@@ -467,7 +467,8 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--system=pcdos",
-        "--version=2",
+        "--version=2.0",
+        "--drivetype=306:2:34",
         "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",

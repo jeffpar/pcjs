@@ -67,6 +67,7 @@ let driveInfo = {
     typeFAT:      0,    // set this to 12 or 16 to request a specific FAT type
     clusterSize:  0,    // set this to a specific cluster size (in bytes) if desired
     rootEntries:  0,    // set this to a specific number of root directory entries if desired
+    verDOS:       0,
     fPartitioned: undefined,
     files:        []
 };
@@ -1232,9 +1233,9 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         return "unsupported system type: " + systemType;
     }
 
-    let version = +systemVersion;
-    let majorVersion = version | 0;
-    if (majorVersion < 2 && !fFloppy) {
+    let verDOS = +systemVersion;
+    let verDOSMajor = verDOS | 0;
+    if (verDOSMajor < 2 && !fFloppy) {
         return "minimum DOS version with hard disk support is 2.00";
     }
 
@@ -1262,7 +1263,9 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
      * for our added utilities (and for COMMAND.COM itself).
      */
     driveInfo.files = [];
-    let attrHidden = majorVersion > 2? DiskInfo.ATTR.HIDDEN : 0;
+    driveInfo.verDOS = verDOS;
+    driveInfo.bootDrive = bootDrive;
+    let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
     for (let name of system.files) {
         let desc = diSystem.findFile(name);
         if (desc) {
@@ -1314,11 +1317,11 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let attr = DiskInfo.ATTR.ARCHIVE;
     let data = readFileSync(path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
     if (data) {
-        if (version >= 3.30 && !data.indexOf("ECHO OFF")) {
+        if (verDOS >= 3.30 && !data.indexOf("ECHO OFF")) {
             data = '@' + data;
         }
     } else {
-        data = (version >= 3.30? '@' : '') + "ECHO OFF\r\n";
+        data = (verDOS >= 3.30? '@' : '') + "ECHO OFF\r\n";
         attr |= attrHidden;
     }
     let matchPath = data.match(/^PATH\s*(.*)$/im);
@@ -1355,44 +1358,21 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
      */
     let verBPB = 0;
     let dbBoot = getDiskSector(diSystem, 0);
-    if (version < 2.0) {
+    if (verDOS < 2.0) {
         /*
          * So to get this far, fFloppy had to be true, so in addition to setting the correct
          * BPB version, we should also set kbTarget to 160 for 1.0 or 320 for 1.1.
          */
         verBPB = 1;
-        kbTarget = (version < 1.1)? 160 : 320;
+        kbTarget = (verDOS < 1.1)? 160 : 320;
     }
-    else if (version >= 2.0 && version < 3.2) {
-        /*
-         * PC DOS 2.0 to 3.1 requires the boot drive (AND drive head # -- go figure) to be in locations
-         * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
-         * part of the BPB unless we specify a BPB version number, so in this case, it must be 2.
-         */
+    else if (verDOS >= 2.0 && verDOS < 3.2) {
         verBPB = 2;
-        if (fFloppy) {
-            kbTarget = 360;
-        } else if (version < 3.0) {
-            /*
-             * An explicit value for rootEntries prevents buildDiskFromFiles() from adjusting the root
-             * directory size in an attempt to prevent an IO.SYS/IBMBIO.COM track load failure -- otherwise,
-             * PC DOS 2.x may fail to boot.  DOS 2.x makes hard-coded assumptions about the FAT format,
-             * based on total disk sectors, which we can't avoid (see the code in IBMBIO.COM at 70:923).
-             */
-            driveInfo.rootEntries = 512;
-        }
-        dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.BOOTDRIVE);   // boot sector offset 0x001E
-        /*
-         * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
-         * drive image, we place the first (and only) partition immediately after the MBR.  Some systems
-         * reserve the entire first track for the MBR, in which case the first partition would not necessarily
-         * be located at head 0.
-         */
-        dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);         // boot sector offset 0x001F
+        if (fFloppy) kbTarget = 360;
     }
     else {
-        if (fFloppy) kbTarget = (version < 3.3? 720 : 1440);
-        if (version >= 3.2 && version < 4.0) {
+        if (fFloppy) kbTarget = (verDOS < 3.3? 720 : 1440);
+        if (verDOS >= 3.2 && verDOS < 4.0) {
             /*
              * When DOS 3.2 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
              * (just before the 0x55,0xAA signature).
@@ -1402,7 +1382,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
              */
             dbBoot.writeUInt8(bootDrive, 0x1FD);                // boot sector offset 0x01FD
         }
-        else if (version >= 4.0) {
+        else if (verDOS >= 4.0) {
             dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.DRIVE);   // boot sector offset 0x0024
         }
     }
@@ -1426,7 +1406,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
                  * I've deferred the minimum version check until now, because even if we can't (well, shouldn't)
                  * use the drive image, I'd still like to be able to inspect it.
                  */
-                if (di.minDOSVersion && di.minDOSVersion > version) {
+                if (di.minDOSVersion && di.minDOSVersion > verDOS) {
                     printf("error: drive requires DOS %s or later\n", di.minDOSVersion.toFixed(2));
                     return;
                 }

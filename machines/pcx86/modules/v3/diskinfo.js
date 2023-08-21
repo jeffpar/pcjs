@@ -839,8 +839,8 @@ export default class DiskInfo {
         }
 
         /*
-         * Define abBoot (where we'll store the boot sector that we either build or select) along with some
-         * functions to get/set 1/2/4-byte values.
+         * Define abBoot (where we'll store the boot sector that we either build or select) along with some functions to
+         * get/set 1/2/4-byte values in the boot sector.
          */
         let abBoot, diskInfo = this;
         let getBoot = function(off, len) {
@@ -885,7 +885,8 @@ export default class DiskInfo {
                 0x04, 0x00,             // 0x1A: number of heads (4)
                 0x01, 0x00,             // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
                 0x00,                   // 0x1E: PC DOS 2.0 through 3.1 stores BOOTDRIVE here (0x00 for floppy, 0x80 for hard drive)
-                0x00                    // 0x1F: PC DOS 2.0 through 3.1 stores BOOTHEAD here
+                0x00,                   // 0x1F: PC DOS 2.0 through 3.1 uses this space for BOOTHEAD calculations
+                0x00                    // 0x20: PC DOS 2.0 stores number of sectors in IO.SYS/IBMBIO.COM here (repurposed later as LARGESECS)
             ];
 
             let bMediaID = 0xF0;        // TODO: set this correctly (will be hard to do for non-traditional media)
@@ -911,21 +912,29 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
 
             /*
-             * We now decide on the type of FAT and the cluster size.  The caller may have preferences
-             * for one or both of those values, which we will try to honor, but there are no guarantees.
+             * At the risk of creating a disk image that can't accommodate all the user-supplied files OR that DOS
+             * may fail to boot, we now honor any *explicitly* set number of root directory entries.
+             */
+            rootEntries = driveInfo.rootEntries || 512;
+            rootEntries = ((rootEntries + 15) >> 4) << 4;       // round up to nearest multiple of 16
+            if (!driveInfo.rootEntries && rootEntries < aFileData.length) {
+                rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
+            }
+
+            /*
+             * We now decide on the type of FAT and the cluster size.  The caller may have preferences for one or both of
+             * those values, which we will try to honor, but there are no guarantees.
              *
-             * Note that nearestPowerOfTwo() serves two purposes: it not only ensures a result that is
-             * always a power of 2, but it also ensures that the result is less than or equal the given
-             * limit (ie, 64).  Allegedly, sectors/cluster CAN be as large as 128 (the largest power of
-             * 2 that can fit in a byte), but the sector size would have to be 256 instead of the usual
-             * 512, because I don't think cluster sizes > 32K are supported by DOS.  However, I'm not
-             * even going to go down that rabbit hole....
+             * Note that nearestPowerOfTwo() serves two purposes: it not only ensures a result that is always a power of 2,
+             * but it also ensures the result is less than or equal the given limit (ie, 64).  Allegedly, sectors/cluster
+             * CAN be as large as 128 (the largest power of 2 that can fit in a byte), but the sector size would have to be
+             * 256 instead of the usual 512, because I don't think cluster sizes > 32K are supported by DOS.  However, I'm
+             * not even going to go down that rabbit hole....
              *
-             * NOTE: Speaking of 256-byte sectors, the 1999 Microsoft FAT "White Paper" claims that only
-             * sector sizes of 512, 1024, 2048, and 4096 are supported.  I would have assumed that the 4
-             * supported values were actually 128, 256, 512, and 1024, based on historical IBM PC hardware
-             * limitations.  If I had to guess, I'd say that ALL powers of 2 from 128 through 4096 are
-             * allowed, but that not all values are supported by all operating systems.
+             * NOTE: Speaking of 256-byte sectors, the 1999 Microsoft FAT "White Paper" claims that only sector sizes of
+             * 512, 1024, 2048, and 4096 are supported.  I would have assumed that the 4 supported values were actually 128,
+             * 256, 512, and 1024, based on historical IBM PC hardware limitations.  If I had to guess, I'd say that ALL
+             * powers of 2 from 128 through 4096 are allowed, but that not all values are supported by all operating systems.
              */
             cSectorsPerCluster = driveInfo.clusterSize && Math.ceil(driveInfo.clusterSize / cbSector) || 1;
             let maxSectorsPerCluster = (32 * 1024 / cbSector)|0;
@@ -933,21 +942,49 @@ export default class DiskInfo {
             cSectorsPerCluster = DiskInfo.nearestPowerOfTwo(cSectorsPerCluster, maxSectorsPerCluster);
 
             /*
-             * Now we get to a thornier matter: when calculating how many clusters will fit on a disk, the
-             * calculation SHOULD begin with total DATA sectors, not total DISK sectors.  But that presents
-             * a chicken-and-egg problem, because we won't know the total DATA sectors until we've determined
-             * size of the FAT (in sectors) *and* the size of the ROOT directory (in sectors) *and* the size
-             * of a cluster entry (12-bit or 16-bit).  Hence the "gross" cluster calculation below.
-             *
-             * And there are trip-wires we have to be aware of: if total clusters is less than 4085 (0xFF5),
-             * then we MUST use a 12-bit FAT (just as a drive with at least 4085 clusters but less than 65525
-             * (0xFFF5) clusters MUST use a 16-bit FAT) *AND* total FAT space MUST not exceed 32K (eg, 64
-             * FAT sectors, assuming 512-byte sectors).
-             *
-             * I learned about the latter by watching IO.SYS from MS-DOS 3.30 read the entire FAT into memory
-             * (at 0000:7DC6): if it reads more than 32K of FAT data, it will start trashing memory.
+             * Before we validate our numbers, we must first account for any requirements that the caller's DOS version
+             * imposes on us.  For example, DOS 2.x has very specific drive size thresholds that control both cluster size
+             * and root directory size.
              */
-            let resets = 2;
+            let cRecalcs = 2;
+            if (driveInfo.verDOS >= 2.0 && driveInfo.verDOS < 3.0) {
+                if (cTotalSectors <= 512) {         // 0x0200
+                    rootEntries = 64;               // 0x40
+                    cSectorsPerCluster = 1;
+                }
+                else if (cTotalSectors <= 2048) {   // 0x0800
+                    rootEntries = 112;              // 0x70
+                    cSectorsPerCluster = 2;
+                }
+                else if (cTotalSectors <= 8192) {   // 0x2000
+                    rootEntries = 256;              // 0x100
+                    cSectorsPerCluster = 4;
+                }
+                else if (cTotalSectors <= 32680) {  // 0x7Af8
+                    rootEntries = 512;              // 0x200
+                    cSectorsPerCluster = 8;
+                }
+                else {
+                    rootEntries = 1024;             // 0x400
+                    cSectorsPerCluster = 16;
+                }
+            }
+            cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
+
+            /*
+             * Now we get to a thornier matter: when calculating how many clusters will fit on a disk, the calculation
+             * SHOULD begin with total DATA sectors, not total DISK sectors.  But that presents a chicken-and-egg problem,
+             * because we won't know the total DATA sectors until we've determined size of the FAT (in sectors) *and* the
+             * size of the ROOT directory (in sectors) *and* the size of a cluster entry (12-bit or 16-bit).  Hence the
+             * "gross" cluster calculation below.
+             *
+             * And there are trip-wires we have to be aware of: if total clusters is less than 4085 (0xFF5), then we MUST
+             * use a 12-bit FAT (just as a drive with at least 4085 clusters but less than 65525 (0xFFF5) clusters MUST use
+             * a 16-bit FAT) *AND* total FAT space MUST not exceed 32K (eg, 64 FAT sectors, assuming 512-byte sectors).
+             *
+             * I learned about the latter by watching IO.SYS from MS-DOS 3.30 read the entire FAT into memory (at 0000:7DC6):
+             * if it reads more than 32K of FAT data, it will start trashing memory.
+             */
             let grossClusters, minClusters, maxClusters, initSectors = cSectorsPerCluster;
             do {
                 minClusters = (typeFAT == 12)? 0 : DiskInfo.FAT12.MAX_CLUSTERS + 1;
@@ -955,7 +992,7 @@ export default class DiskInfo {
                 grossClusters = Math.floor(cTotalSectors / cSectorsPerCluster);
                 cFATSectors = Math.ceil(grossClusters * typeFAT / 8 / cbSector);
                 if (grossClusters < minClusters) {
-                    if (!resets--) break;
+                    if (!cRecalcs--) break;
                     typeFAT = 12;
                     cSectorsPerCluster = initSectors;
                     initSectors = 1;
@@ -966,7 +1003,7 @@ export default class DiskInfo {
                 }
                 if (cSectorsPerCluster == maxSectorsPerCluster) {
                     if (typeFAT == 12) {
-                        if (!resets--) break;
+                        if (!cRecalcs--) break;
                         typeFAT = 16;
                         cSectorsPerCluster = initSectors;
                         initSectors = 1;
@@ -978,7 +1015,7 @@ export default class DiskInfo {
                 cSectorsPerCluster *= 2;
             } while (true);
 
-            if (resets < 0) {
+            if (cRecalcs < 0) {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "unable to find suitable cluster size for %d sectors\n", cTotalSectors);
             }
 
@@ -1007,14 +1044,13 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
 
             /*
-             * We've saved the root directory size calculation for last, because tweaking it seems the best way to
-             * ensure that the first data sector (ie, where DOS 2.x and 3.x expect IBMBIO.COM/IO.SYS to be located)
-             * is situated such that the final sectors of the first system file coincide with the end of a track.
+             * We're now at the point where we ensure that the the last sector of the BIOS (IO.SYS or IBMBIO.COM)
+             * falls on the last sector of a track.
              *
              * This weird requirement is due to how PC DOS and MS-DOS 2.x/3.x boot sectors read the first system file
              * into memory: they read the file one track at a time; the first track read may be partial, because it
              * starts with whatever the file's first sector is, but every subsequent read is a whole track, even if the
-             * file doesn't span that entire track.
+             * file doesn't occupy the entire track.
              *
              * This would be OK if there was ample memory, but the boot sector doesn't relocate itself from 0:7C00,
              * and with its stack sitting just below that address, there's room for only about 28K of file data.  For
@@ -1033,65 +1069,59 @@ export default class DiskInfo {
              *
              * Having perfect hindsight, we can help the boot sector avoid running into trouble by performing the same
              * sloppy sector size calculation ourselves, dividing it by sectors per track, and ensuring that the remainder
-             * matches the number of free sectors in the first data track (and adjusting the number of root directory sectors
-             * until it does).  As a result, the system file will end at the end of a track, and the boot sector never risks
-             * reading too much data.
-             *
-             * This is why, instead of starting with 512 root directory entries (which is typically the minimum for a
-             * hard disk as small as 10Mb), we start even smaller, and then ratchet it up until all our criteria are met
-             * (starting with our requirement that it be a sufficiently large multiple of 128 to hold all the files in
-             * the "root" of our aFileData array).
-             *
-             * NOTE: At the risk of creating a disk image that can't accommodate all the user-supplied files OR that DOS
-             * may fail to boot, we now honor any *explicitly* set number of root directory entries.
+             * matches the number of free sectors in the first data track (and adjusting volume sector usage until it does).
+             * As a result, the system file will end at the end of a track, and the boot sector never risks reading too
+             * much data.
              */
-            rootEntries = driveInfo.rootEntries || 128;
-            rootEntries = ((rootEntries + 15) >> 4) << 4;       // round up to nearest multiple of 16
-            if (!driveInfo.rootEntries && rootEntries < aFileData.length) {
-                rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
-            }
-            cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
-
+            let cFileSectors = 0;
             if (aFileData[0]) {
-                /*
-                 * Do some preliminary calculations for the first file (presumably either IO.SYS or IBMBIO.COM).
-                 * If the file fits entirely inside the first track, we're good to go.  Otherwise, we need to push
-                 * either cRootSectors or cReservedSectors or cHiddenSectors up until EITHER the initial data track
-                 * can now hold the entire file OR the file's final sector coincides with the end of a data track.
-                 */
                 let maxAdjustments = cSectorsPerTrack;
+                cFileSectors = Math.ceil(aFileData[0].size / cbSector);
                 do {
                     let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
-                    let cInitFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
-                    let cFileSectors = Math.ceil(aFileData[0].size / cbSector);
-                    cFileSectors -= cInitFreeSectors;
-                    if (cFileSectors <= 0 || cFileSectors % cSectorsPerTrack == 0) break;
+                    let cFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
                     /*
-                     * If we're allowed to tweak root directory sectors, then we'll do that first, because at least
-                     * it's not creating completely wasted space.  Next, I tried tweaking reserved sectors, but guess
-                     * what?  I've yet to find a version of DOS 2.x or 3.x that actually pays attention to reserved
-                     * sectors (they all assume it's 1).  So we're left with adjusting hidden sectors.
+                     * I used to ALSO break whenever cFileSectors - cFreeSectors < 0, because that meant the file was
+                     * contained entirely within a single track, but that's not sufficient, because if the disk is using
+                     * a large number of sectors/track (eg, 63) AND the file happens to be at the start of the track,
+                     * then a full track (31.5K) will be read, which will trash the boot sector.  We REALLY need to push
+                     * the file to the END of the track, even if it's fully contained within the track.
                      */
-                    if (!driveInfo.rootEntries) {
-                        cRootSectors++;
-                        rootEntries += (cbSector >> 5);
-                    } else {
-                        cHiddenSectors++;
-                        cTotalSectors--;
-                    }
+                    if ((cFileSectors - cFreeSectors) % cSectorsPerTrack == 0) break;
+                    /*
+                     * I used to increase root directory sectors, since we were at least getting some benefit from the
+                     * adjustment:
+                     *
+                     *      cRootSectors++;
+                     *      rootEntries += (cbSector >> 5);
+                     *
+                     * However, that created compatibility issues (see the verDOS code above for specific thresholds we
+                     * need to honor).  Next, I tried tweaking reserved sectors, but guess what?  Few if any versions of DOS
+                     * actually honor reserved sectors (they assume it's 1 and crash if it isn't):
+                     *
+                     *      cReservedSectors++;
+                     *
+                     * So we're left with adjusting hidden sectors, which requires a corresponding adjustment to total sectors:
+                     */
+                    cHiddenSectors++;
+                    cTotalSectors--;
                 } while (maxAdjustments--);
             }
 
             setBoot(DiskInfo.BPB.DIRENTS, 2, rootEntries);
             setBoot(DiskInfo.BPB.RESSECS, 2, cReservedSectors);
             setBoot(DiskInfo.BPB.HIDDENSECS, 2, cHiddenSectors);
+            if (driveInfo.verDOS >= 2.0 && driveInfo.verDOS < 3.2) {
+                setBoot(DiskInfo.BPB.BOOTDRIVE, 1, driveInfo.fPartitioned === false? 0x00 : 0x80);
+                setBoot(DiskInfo.BPB.LARGESECS, 1, cFileSectors);       // TODO: only required for DOS 2.x?
+            }
             cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + cReservedSectors);
             cbAvail = cDataSectors * cbSector;
         }
 
         /*
-         * Find a BPB with enough capacity, and at the same time, calculate all the other values we'll need,
-         * including total number of data sectors (cDataSectors).
+         * If we didn't just construct a custom BPB, then find a default BPB with enough capacity, and at the same time,
+         * calculate all the other values we'll need, including total number of data sectors (cDataSectors).
          *
          * TODO: For now, the code that chooses a default BPB starts with entry #3 instead of #0, because Windows 95
          * (at least when running under VMware) fails to read the contents of such disks correctly.  Whether that's my
@@ -4203,8 +4233,8 @@ export default class DiskInfo {
      * The verBPB values are as follows:
      *
      *      0: The entire BPB of the target boot sector is preserved
-     *      1: A subset of the BPB (excluding OEM and bytes after BOOTDRIVE) of the target boot sector is preserved
-     *      2: A subset of the BPB (excluding bytes after BOOTDRIVE) of the target sector is preserved
+     *      1: Only a subset of the BPB that doesn't interfere with DOS 1.x is preserved
+     *      2: Only a subset of the BPB used by DOS 2.x is preserved
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
@@ -4264,7 +4294,7 @@ export default class DiskInfo {
                                 if (off >= DiskInfo.BPB.SECBYTES && off < DiskInfo.BPB.BOOTDRIVE) continue;
                                 break;
                             case 2:
-                                if (off >= DiskInfo.BPB.BEGIN && off < DiskInfo.BPB.BOOTDRIVE) continue;
+                                if (off >= DiskInfo.BPB.BEGIN && off <= DiskInfo.BPB.LARGESECS) continue;
                                 break;
                             }
                         } else {
@@ -4512,9 +4542,9 @@ DiskInfo.BPB = {
     BOOTDRIVE:      0x01E,      // 1 byte (DOS 2.x): BIOS boot drive # (eg, 0x00 or 0x80)
     BOOTHEAD:       0x01F,      // 1 byte (DOS 2.x): BIOS boot head # (0-based)
     /*
-     * NOTE: DOS 2.0 also stores 0x0A at offset 0x020 (not yet sure what that's used for, if anything), but more importantly,
-     * it also contains a custom 11-byte Diskette Parameter Table (DPT) at offsets 0x021 through 0x0x2B, which it promptly
-     * points the DPT vector 0x1E (0:0078h) to.
+     * NOTE: DOS 2.0 also stores the number of sectors in the BIOS file in the byte at offset 0x020 (LARGESECS), followed
+     * by a custom 11-byte Diskette Parameter Table (DPT) at offsets 0x021 through 0x0x2B, which it promptly points the DPT
+     * vector 0x1E (0:0078h) to.
      */
     LARGESECS:      0x020,      // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
     END:            0x024,      // end of standard BPB
@@ -4847,7 +4877,7 @@ DiskInfo.aDefaultBPBs = [
     0x11, 0x00,                 // 0x18: sectors per track (17)
     0x04, 0x00,                 // 0x1A: number of heads (4)
       //
-      // NOTE: PC DOS 2.0 stored BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
+      // NOTE: PC DOS 2.0 stores BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
       //
     0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
   ],
@@ -4871,7 +4901,7 @@ DiskInfo.aDefaultBPBs = [
     0x11, 0x00,                 // 0x18: sectors per track (17)
     0x04, 0x00,                 // 0x1A: number of heads (4)
       //
-      // NOTE: PC DOS 2.0 stored BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
+      // NOTE: PC DOS 2.0 stores BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
       //
     0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
   ],
