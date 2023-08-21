@@ -104,10 +104,7 @@ function setDebugMode(nEvent)
     }
     debugMode = nEvent;
     if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
-        if (fTest) {
-            printf("\n");
-            exit();
-        }
+        if (fTest) exit();
         command = "";
         printf('[' + (commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
         printf("%s> ", prompt);
@@ -2356,6 +2353,7 @@ function exit()
 {
     saveDisk(localDir);
     process.stdin.setRawMode(false);
+    if (fTest) printf("\n");
     process.exit();
 }
 
