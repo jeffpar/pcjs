@@ -4299,7 +4299,13 @@ export default class DiskInfo {
                                 if (off >= DiskInfo.BPB.BEGIN && off < DiskInfo.BPB.END) continue;
                                 break;
                             case 1:
-                                if (off >= DiskInfo.BPB.SECBYTES && off < DiskInfo.BPB.BOOTDRIVE) continue;
+                                /*
+                                 * NOTE: While PC DOS 1.x boot sectors tolerate a minimal BPB (excluding any OEM signature),
+                                 * the COMPAQ DOS 1.x boot sectors are a different story.  A BPB obviously isn't necessary for
+                                 * them, it just makes the disk readable by modern operating systems.
+                                 *
+                                 *      if (off >= DiskInfo.BPB.SECBYTES && off < DiskInfo.BPB.BOOTDRIVE) continue;
+                                 */
                                 break;
                             case 2:
                                 if (off >= DiskInfo.BPB.BEGIN && off <= DiskInfo.BPB.LARGESECS) continue;

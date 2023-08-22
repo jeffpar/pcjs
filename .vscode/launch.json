@@ -466,10 +466,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--system=pcdos",
-        "--version=2"
+        "ibm5150",
+        "--system=compaq",
+        "--version=1.10B",
+        "--floppy"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

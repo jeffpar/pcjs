@@ -646,7 +646,7 @@ function intLoad(addr)
                     let info = getDriveInfo();
                     if (info) {
                         printf("\n Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
-                        printf(" %d root entries, %d-bit FAT, %d-byte clusters\n", info.rootEntries, info.typeFAT, info.clusterSize);
+                        printf(" %d-bit FAT, %d-byte clusters, %d root entries\n", info.typeFAT, info.clusterSize, info.rootEntries);
                         printf(" %d total clusters, %d total bytes\n", info.clustersTotal, info.bytesTotal);
                     }
                     else {
@@ -1188,16 +1188,46 @@ function getSystemDisk(type, version)
 {
     let sSystemDisk = "";
     let system = configJSON['systems']?.[type];
-    let sVersion = sprintf("%.2f", version);
-    if (system) {
-        sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + sVersion + "/";
-        if (system.disks && system.disks[sVersion]) {
-            sSystemDisk += system.disks[sVersion] + ".json";
+    if (system && system.versions) {
+        let verNumber = sprintf("%.2f", +parseFloat(version));
+        let versionInfo = system.versions[version] || system.versions[verNumber];
+        if (versionInfo) {
+            let sSystemPath = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + verNumber + "/";
+            if (typeof versionInfo == "string") {
+                sSystemDisk += sSystemPath + versionInfo + ".json";
+            } else {
+                sSystemDisk = sSystemPath + versionInfo.disk + ".json";
+            }
         } else {
-            sSystemDisk += (system.product || type).toUpperCase() + sVersion.replace('.', '') + "-DISK1.json";
+            return Object.keys(system.versions);
         }
     }
     return sSystemDisk;
+}
+
+/**
+ * getSystemFiles(type, version)
+ *
+ * @param {string} type
+ * @param {string} version
+ * @returns {Array.<string>}
+ */
+function getSystemFiles(type, version)
+{
+    let aSystemFiles = [];
+    let system = configJSON['systems']?.[type];
+    if (system && system.versions) {
+        let verNumber = sprintf("%.2f", +parseFloat(version));
+        let versionInfo = system.versions[version] || system.versions[verNumber];
+        if (versionInfo) {
+            if (typeof versionInfo == "string") {
+                aSystemFiles = system.files;
+            } else {
+                aSystemFiles = versionInfo.files;
+            }
+        }
+    }
+    return aSystemFiles;
 }
 
 /**
@@ -1233,22 +1263,29 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         return "unsupported system type: " + systemType;
     }
 
-    let verDOS = +systemVersion;
+    let sSystemDisk = getSystemDisk(systemType, systemVersion);
+    if (!sSystemDisk) {
+        return "unknown " + systemType + " version: " + systemVersion;
+    } else if (typeof sSystemDisk != "string") {
+        return "available " + systemType + " versions: " + JSON.stringify(sSystemDisk);
+    }
+
+    let verDOS = +parseFloat(systemVersion);        // parseFloat() is forgiving of any non-numeric suffix, the "+" operator is not
     let verDOSMajor = verDOS | 0;
     if (verDOSMajor < 2 && !fFloppy) {
         return "minimum DOS version with hard disk support is 2.00";
     }
 
-    let sSystemDisk = getSystemDisk(systemType, systemVersion);
     let diSystem = await readDiskAsync(sSystemDisk);
     if (!diSystem) {
-        return "missing system diskette: " + sSystemDisk;
+        return "missing " + systemType + " system diskette: " + sSystemDisk;
     }
 
     let sSystemMBR = (driveInfo.driveCtrl == "PCJS")? "pcjs.mbr" : "DOS.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
+
     let dbMBR = readFileSync(sSystemMBR, null);
     if (!dbMBR || dbMBR.length < 512) {
         return "invalid system MBR: " + sSystemMBR;
@@ -1259,19 +1296,22 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let bootLetter = fFloppy? 'A' : 'C';
 
     /*
-     * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero
-     * for our added utilities (and for COMMAND.COM itself).
+     * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for our
+     * added utilities (and for COMMAND.COM itself).
      */
     driveInfo.files = [];
     driveInfo.verDOS = verDOS;
     driveInfo.bootDrive = bootDrive;
     let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
-    for (let name of system.files) {
+    let aSystemFiles = getSystemFiles(systemType, systemVersion);
+    for (let name of aSystemFiles) {
         let desc = diSystem.findFile(name);
         if (desc) {
             desc.attr = +desc.attr;
             desc.attr |= attrHidden;
             driveInfo.files.push(desc);
+        } else {
+            return "missing system file: " + name;
         }
     }
 
@@ -1321,7 +1361,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
             data = '@' + data;
         }
     } else {
-        data = (verDOS >= 3.30? '@' : '') + "ECHO OFF\r\n";
+        data = verDOSMajor < 2? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\r\n";
         attr |= attrHidden;
     }
     let matchPath = data.match(/^PATH\s*(.*)$/im);
@@ -1330,7 +1370,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         if (!matchPathRoot) {
             data = data.replace(/^PATH\s*(.*)$/im, "PATH " + bootLetter + ":\\;$1");
         }
-    } else {
+    } else if (verDOSMajor >= 2) {
         data += "PATH " + bootLetter + ":\\\r\n";
     }
 
@@ -1344,7 +1384,9 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         data += "quit\r\n";
     }
     if (machineDir) data += "CD " + machineDir + "\r\n";
-    driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
+    if (data.length) {
+        driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
+    }
 
     /*
      * Load the boot sector from the system diskette we read above, and use it to update the boot

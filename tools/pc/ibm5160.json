@@ -81,7 +81,8 @@
         "name": "PC DOS 2.00 (Disk 2)",
         "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK2.json"
       }
-    }
+    },
+    "diskettes": "/machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json"
   },
   "hdc": {
     "id": "hdcXT",

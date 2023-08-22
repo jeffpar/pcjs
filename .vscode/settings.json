@@ -872,6 +872,7 @@
     "IOPM",
     "IORD",
     "ioregs",
+    "IOSYS",
     "IOTABLE",
     "ipad",
     "IREG",
