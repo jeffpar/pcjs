@@ -466,10 +466,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ibm5150",
         "--system=compaq",
-        "--version=1.10B",
-        "--floppy"
+        "--version=3.31",
+        "--drivetype=13",
+        "--floppy",
+        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
       "stopOnEntry": false,

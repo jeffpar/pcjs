@@ -643,15 +643,7 @@ function intLoad(addr)
                 printf("%s\n", loadDiskette(matchDrive[1], aTokens));
             } else {
                 if (args.toLowerCase() == "info") {
-                    let info = getDriveInfo();
-                    if (info) {
-                        printf("\n Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
-                        printf(" %d-bit FAT, %d-byte clusters, %d root entries\n", info.typeFAT, info.clusterSize, info.rootEntries);
-                        printf(" %d total clusters, %d total bytes\n", info.clustersTotal, info.bytesTotal);
-                    }
-                    else {
-                        printf("no drive info\n");
-                    }
+                    printf(getDriveInfo(true));
                 } else if (args) {
                     printf("invalid load command: \"%s\"\n", args);
                 }
@@ -673,11 +665,12 @@ function intLoad(addr)
 }
 
 /**
- * getDriveInfo()
+ * getDriveInfo(fText)
  *
- * @returns {Object|null}
+ * @param {boolean} [fText]
+ * @returns {Object|null|string}
  */
-function getDriveInfo()
+function getDriveInfo(fText)
 {
     let info = null;
     if (driveManifest || driveInfo.volume || driveInfo.driveType >= 0) {
@@ -709,6 +702,15 @@ function getDriveInfo()
             info.clustersFree = vol.clusFree;
             info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
             info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
+        }
+    }
+    if (fText) {
+        if (info) {
+            info = sprintf("\n Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize) +
+                   sprintf(" %d-bit FAT, %d-byte clusters, %d root entries\n", info.typeFAT, info.clusterSize, info.rootEntries) +
+                   sprintf(" %d sectors, %d clusters, %d bytes\n", info.sectorsTotal, info.clustersTotal, info.bytesTotal);
+        } else {
+            info = "\nno drive info\n";
         }
     }
     return info;
@@ -948,7 +950,7 @@ function loadMachine(sFile)
             if (removeFloppy) {
                 config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
             } else if (fFloppy || systemOverride) {
-                let name = systemType.toUpperCase() + ' ' + sprintf("%.2f", systemVersion);
+                let name = systemType.toUpperCase() + ' ' + sprintf("%.2f", parseFloat(systemVersion));
                 let sSystemDisk = fFloppy? localDrive : getSystemDisk(systemType, systemVersion);
                 if (sSystemDisk) {
                     config['fdc']['autoMount'] = "{A:{name:\"" + name + "\",path:\"" + sSystemDisk + "\"}}";
@@ -2042,7 +2044,6 @@ function doCommand(s)
         let result = "pc.js commands:\n" +
                     "  build [command]\n" +
                     "  exec [local command]\n" +
-                    "  info (display disk info)\n" +
                     "  load [drive] [search options]\n" +
                     "  save [local disk image]\n" +
                     "  start [machine]\n" +
@@ -2108,23 +2109,19 @@ function doCommand(s)
             if (typeof result != "string") result = "";
         }
         break;
-    case "info":
-        info = getDriveInfo();
-        if (info) {
-            result = sprintf("%2j", info);
-        } else {
-            result = "no built or prebuilt disk";
-        }
-        break;
     case "load":
         arg = aTokens[0];
         if (arg) {
-            let matchDrive = arg.match(/^([a-z]:?)$/i);
-            if (matchDrive) {
-                aTokens.splice(0, 1)
-                result = loadDiskette(matchDrive[1], aTokens);
+            if (arg == "info") {
+                result = getDriveInfo(true);
             } else {
-                result = "invalid diskette drive: " + arg;
+                let matchDrive = arg.match(/^([a-z]:?)$/i);
+                if (matchDrive) {
+                    aTokens.splice(0, 1)
+                    result = loadDiskette(matchDrive[1], aTokens);
+                } else {
+                    result = "invalid diskette drive: " + arg;
+                }
             }
         } else {
             result = "missing diskette drive (eg, A:)";

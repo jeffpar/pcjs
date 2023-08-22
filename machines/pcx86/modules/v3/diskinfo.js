@@ -947,34 +947,52 @@ export default class DiskInfo {
              * Before we validate our numbers, we must first account for any requirements that the caller's DOS version
              * imposes on us.  For example, DOS 2.x has very specific drive size thresholds that control both cluster size
              * and root directory size.
+             *
+             * WARNING: The cTotalSectors value we are using here do NOT take into account any additional hidden sectors
+             * we may add below when adjusting the starting sector of IO.SYS/IBMBIO.COM, so if you're booting a version of
+             * DOS that performs these same tests using the total sectors value from the partition table, then it may be
+             * using a slightly different value and therefore arriving at different defaults.
              */
             let cRecalcs = 2;
-            if (driveInfo.verDOS >= 2.0 && driveInfo.verDOS < 3.0) {
-                if (!driveInfo.clusterSize) {
-                    if (cTotalSectors <= 512) {             // 0x0200
-                        cSectorsPerCluster = 1;
-                    } else if (cTotalSectors <= 2048) {     // 0x0800
-                        cSectorsPerCluster = 2;
-                    } else if (cTotalSectors <= 8192) {     // 0x2000
-                        cSectorsPerCluster = 4;
-                    } else if (cTotalSectors <= 32680) {    // 0x7Af8
-                        cSectorsPerCluster = 8;
+            if (!driveInfo.clusterSize) {
+                if (cTotalSectors <= 512) {             // 0x0200 (256Kb)
+                    cSectorsPerCluster = 1;
+                } else if (cTotalSectors <= 2048) {     // 0x0800 (1Mb)
+                    cSectorsPerCluster = 2;
+                } else if (cTotalSectors <= 8192) {     // 0x2000 (4Mb)
+                    cSectorsPerCluster = 4;
+                } else if (cTotalSectors <= 32680) {    // 0x7Af8 (16Mb)
+                    cSectorsPerCluster = 8;
+                } else {
+                    if (driveInfo.verDOS >= 3.0) {
+                        typeFAT = 16;
+                        if (cTotalSectors <= 262144) {                      // 0x40000 (128Mb)
+                            cSectorsPerCluster = 4;
+                        } else if (cSectorsPerCluster <= 524288) {          // 0x80000 (256Mb)
+                            cSectorsPerCluster = 8;
+                        } else if (cSectorsPerCluster <= 1048576) {         // 0x100000 (512Mb)
+                            cSectorsPerCluster = 16;
+                        } else if (cSectorsPerCluster <= 2097152) {         // 0x200000 (1Gb)
+                            cSectorsPerCluster = 32;
+                        } else /* if (cSectorsPerCluster <= 4194304) */ {   // 0x400000 (2Gb)
+                            cSectorsPerCluster = 64;
+                        }
                     } else {
                         cSectorsPerCluster = 16;
                     }
                 }
-                if (!driveInfo.rootEntries) {
-                    if (cTotalSectors <= 512) {             // 0x0200
-                        rootEntries = 64;
-                    } else if (cTotalSectors <= 2048) {     // 0x0800
-                        rootEntries = 112;
-                    } else if (cTotalSectors <= 8192) {     // 0x2000
-                        rootEntries = 256;
-                    } else if (cTotalSectors <= 32680) {    // 0x7Af8
-                        rootEntries = 512;
-                    } else {
-                        rootEntries = 1024;
-                    }
+            }
+            if (!driveInfo.rootEntries) {
+                if (cTotalSectors <= 512) {             // 0x0200
+                    rootEntries = 64;
+                } else if (cTotalSectors <= 2048) {     // 0x0800
+                    rootEntries = 112;
+                } else if (cTotalSectors <= 8192) {     // 0x2000
+                    rootEntries = 256;
+                } else if (cTotalSectors <= 32680) {    // 0x7Af8
+                    rootEntries = 512;
+                } else {
+                    rootEntries = 1024;                 // TBD: Check DOS 3.x and later root directory thresholds
                 }
             }
             cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
