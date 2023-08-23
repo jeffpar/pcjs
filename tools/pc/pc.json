@@ -1,9 +1,9 @@
 {
   "defaults": {
     "type": "pcx86",
-    "system": "msdos",
-    "version": "3.30",
-    "drivesize": "10mb",
+    "sys": "msdos",
+    "ver": "3.30",
+    "size": "10mb",
     "maxfiles": 1024,
     "directory": ".",
     "machine": "compaq386.json",

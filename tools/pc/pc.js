@@ -676,7 +676,7 @@ function getDriveInfo(fText)
     if (driveManifest || driveInfo.volume || driveInfo.driveType >= 0) {
         info = {
             controller: driveInfo.driveCtrl,
-            type: driveInfo.driveType,
+            type: driveInfo.driveType < 0? 0 : driveInfo.driveType,
             cylinders: driveInfo.nCylinders,
             heads: driveInfo.nHeads,
             sectorsPerTrack: driveInfo.nSectors,
@@ -706,7 +706,7 @@ function getDriveInfo(fText)
     }
     if (fText) {
         if (info) {
-            info = sprintf("\n Drive type %d, CHS %d:%d:%d, %s\n", info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize) +
+            info = sprintf("\n %s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize) +
                    sprintf(" %d-bit FAT, %d-byte clusters, %d root entries\n", info.typeFAT, info.clusterSize, info.rootEntries) +
                    sprintf(" %d sectors, %d clusters, %d bytes\n", info.sectorsTotal, info.clustersTotal, info.bytesTotal);
         } else {
@@ -1421,7 +1421,32 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
          * BPB version, we should also set kbTarget to 160 for 1.0 or 320 for 1.1.
          */
         verBPB = 1;
-        kbTarget = (verDOS < 1.1)? 160 : 320;
+        kbTarget = 160;
+        if (verDOS >= 1.1) {
+            /*
+             * Even though PC DOS 1.1 added support for 320K, the PC DOS 1.1 boot diskette was formatted
+             * as 160K, so that it could also boot on single-sided drives.  So, if we really want to boot
+             * from a 320K diskette, we have to make the same boot sector modifications that the PC DOS 1.1
+             * FORMAT utility would make: modify the starting sector # and head # of IBMBIO.COM that's
+             * embedded in the boot sector at offset 0x0003 (ie, from 0x08 and 0x00 to 0x03 and 0x01).
+             *
+             * The location of IBMBIO.COM differs between 160K and 320K diskettes because the latter used a
+             * larger root directory (7 sectors instead of 4).
+             *
+             * See /software/pcx86/sys/dos/ibm/1.10/debugger/README.md for more details.
+             */
+            if (dbBoot.readUInt16LE(0x0003) == 0x0008 && dbBoot.readUInt16LE(0x0005) == 0x0014) {
+                kbTarget = 320;
+                dbBoot.writeUInt16LE(0x0103, 0x0003);
+                /*
+                 * As an added precaution, zero the BPB region, since any BPB would have been for a 160K diskette,
+                 * not a 320K diskette.
+                 */
+                for (let off = DiskInfo.BPB.SECBYTES; off < DiskInfo.BPB.BOOTDRIVE; off++) {
+                    dbBoot.writeUInt8(0x00, off);
+                }
+            }
+        }
     }
     else if (verDOS >= 2.0 && verDOS < 3.2) {
         verBPB = 2;
@@ -2459,9 +2484,18 @@ function main(argc, argv)
     if (!fFloppy) fNoFloppy = removeFlag('nofloppy') || fNoFloppy;
 
     machineType = defaults['type'] || machineType;
-    systemOverride = argv['system'] || argv['version'];
-    systemType = (removeArg('system', 'string') || defaults['system'] || systemType).toLowerCase();
-    systemVersion = (removeArg('version', 'string') || defaults['version'] || systemVersion);
+    systemOverride = argv['sys'] || argv['ver'];
+    systemType = (removeArg('sys', 'string') || defaults['sys'] || systemType).toLowerCase();
+    let i = systemType.indexOf(':');
+    if (i > 0) {
+        /*
+         * We allow the version to be included with the system argument (eg, --sys=pcdos:2.0), for convenience.
+         */
+        systemVersion = systemType.slice(i+1);
+        systemType = systemType.slice(0, i);
+    } else {
+        systemVersion = (removeArg('ver', 'string') || defaults['ver'] || systemVersion);
+    }
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
     localDir = defaults['directory'] || localDir;

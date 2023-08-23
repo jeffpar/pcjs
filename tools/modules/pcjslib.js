@@ -84,6 +84,7 @@ export default class PCJSLib
                 sArg = sArg.substr(sSep.length);
                 let sValue = true;
                 j = sArg.indexOf("=");
+                if (j < 0) j = sArg.indexOf(":");   // allow ':' as an alternative to '=' (a common mistake)
                 if (j > 0) {
                     sValue = sArg.substr(j + 1);
                     sArg = sArg.substr(0, j);
@@ -96,7 +97,7 @@ export default class PCJSLib
                     }
                 }
                 if (typeof argv[sArg] == "number") {
-                    sArg = '#' + sArg;      // avoid conflict with the built-in 'length' property
+                    sArg = '#' + sArg;              // avoid conflict with the built-in 'length' property
                 }
                 lastOp = (j < 0? sArg : "");
                 if (!argv.hasOwnProperty(sArg)) {
