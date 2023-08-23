@@ -1708,7 +1708,7 @@ export default class DiskInfo {
         /*
          * Next 1 byte: partition ID
          */
-        let id = typeFAT == 12? DiskInfo.MBR.PARTITIONS.TYPE.FAT12_PRIMARY : DiskInfo.MBR.PARTITIONS.TYPE.FAT16_PRIMARY;
+        let id = typeFAT == 12? DiskInfo.MBR.PARTITIONS.TYPE.FAT12_PRIMARY : (cTotalSectors <= 0xffff? DiskInfo.MBR.PARTITIONS.TYPE.FAT16_PRIMARY : DiskInfo.MBR.PARTITIONS.TYPE.FAT16_BIG);
         abSector[offSector++] = id;             // partition ID
 
         /*

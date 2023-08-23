@@ -627,9 +627,7 @@
       "args": [
         "--system=compaq",
         "--version=3.31",
-        "--drivesize=40",
-        "--disk=none",
-        "--halt"
+        "--drivesize=40"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
       "stopOnEntry": false,
