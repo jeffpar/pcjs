@@ -468,8 +468,7 @@
       "args": [
         "--system=compaq",
         "--version=3.31",
-        "--drivetype=13",
-        "--floppy",
+        "--drivesize=40",
         "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
@@ -557,10 +556,11 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "MBR",
-        "dir"
+        "--disk=MBR.json",
+        "--nofloppy",
+        "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -625,12 +625,36 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "disks/MSDOS320",
-        "--drivetype=3",
-        "--debug",
-        "dir"
+        "--system=compaq",
+        "--version=3.31",
+        "--drivesize=40",
+        "--disk=none",
+        "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js compaq386 MBR331",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "compaq386",
+        "--disk=MBR331.img",
+        "--nofloppy",
+        "--halt"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

@@ -42,7 +42,7 @@
         "2.12": "COMPAQ-DOS212",
         "3.00": "COMPAQ-DOS300-DISK1",
         "3.10": "COMPAQ-DOS310-DISK1",
-        "3.31": "COMPAQ-DOS331-DISK1",
+        "3.31": "COMPAQ-DOS331-DISK2",
         "3.31G": "COMPAQ-DOS331-REVG-DISK1"
       },
       "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]

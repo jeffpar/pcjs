@@ -62931,18 +62931,23 @@ class Disk extends Component {
     {
         let disk;
         let cbDiskData = buffer? buffer.byteLength : 0;
+        /*
+         * This geometry lookup is primarily intended for diskette images, because there are a wide variety of diskette
+         * formats that all work within the drive's parameters;  I assert that the number of cylinders matches, because those
+         * should always match, but the rest can certainly vary.
+         */
         let diskFormat = DiskAPI.GEOMETRIES[cbDiskData];
-
         if (diskFormat) {
+
             this.nCylinders = diskFormat[0];
             this.nHeads = diskFormat[1];
             this.nSectors = diskFormat[2];
             this.cbSector = (diskFormat[3] || 512);
-
+        }
+        if (this.nCylinders) {          // if nCylinders was never set, then something is wrong...
             let ib = 0;
             let dv = new DataView(buffer, 0, cbDiskData);
             let cdw = this.cbSector >> 2, dwPattern = 0, dwChecksum = 0;
-
             this.diskData = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < this.diskData.length; iCylinder++) {
                 let cylinder = this.diskData[iCylinder] = new Array(this.nHeads);

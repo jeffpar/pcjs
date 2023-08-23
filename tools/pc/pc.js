@@ -924,7 +924,7 @@ function loadMachine(sFile)
                     'type': driveType,
                     'name': (driveInfo.driveSize|0) + "Mb Hard Disk"
                 };
-                if (driveManifest || !localDir) {
+                if (driveManifest || !localDir && localDrive) {
                     drives[0]['path'] = localDrive;
                     /*
                      * If we built a drive image, we worked hard to make it bootable, so we're going to boot from it
@@ -954,11 +954,12 @@ function loadMachine(sFile)
                 let sSystemDisk = fFloppy? localDrive : getSystemDisk(systemType, systemVersion);
                 if (sSystemDisk) {
                     config['fdc']['autoMount'] = "{A:{name:\"" + name + "\",path:\"" + sSystemDisk + "\"}}";
+                    savedState = "";
                 }
             }
         }
 
-        if (sFile.endsWith(savedMachine) && config['computer']) {
+        if (sFile.endsWith(savedMachine) && config['computer'] && savedState) {
             config['computer']['state'] = path.join(pcjsDir, savedState);
         }
 
@@ -1283,7 +1284,14 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         return "missing " + systemType + " system diskette: " + sSystemDisk;
     }
 
-    let sSystemMBR = (driveInfo.driveCtrl == "PCJS")? "pcjs.mbr" : "DOS.mbr";
+    /*
+     * For greater flexibility, I'm going to ALWAYS use the PCJS MBR now.  This then gives me the option
+     * of converting any machine's drive type to PCJS drive type 0 (XT) or 1 (AT) and having my MBR automatically
+     * set up the correct geometry.
+     *
+     *      let sSystemMBR = (driveInfo.driveCtrl == "PCJS")? "pcjs.mbr" : "DOS.mbr";
+     */
+    let sSystemMBR = "pcjs.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -1439,6 +1447,11 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
              */
             let manifest = di.getFileManifest(null, true);
             if (di.volTable[0] && di.volTable[0].iPartition >= 0) {
+                if (sSystemMBR.indexOf("pcjs.mbr") >= 0) {
+                    di.driveCtrl = "PCJS";
+                    driveInfo.driveCtrl = "PCJS";
+                    driveInfo.driveType = 0;
+                }
                 di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
             }
             di.updateBootSector(dbBoot, 0, verBPB);
@@ -2235,15 +2248,22 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
     };
 
     if (sDisk) {
-        localDrive = sDisk;
-        let di = await readDiskAsync(localDrive);
-        if (di) {
-            updateDriveInfo(di);
+        /*
+         * --disk=none is a special case to disable any prebuilt disk
+         */
+        if (sDisk.toLowerCase() == "none") {
+            localDrive = "";
         } else {
-            error = "invalid disk";
+            localDrive = sDisk;
+            let di = await readDiskAsync(localDrive);
+            if (di) {
+                updateDriveInfo(di);
+                maxCapacity = 0;
+            } else {
+                error = "invalid disk";
+            }
         }
         localDir = "";
-        maxCapacity = 0;
     } else {
         localDrive = path.join(pcjsDir, localDrive);
     }
@@ -2283,14 +2303,12 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
                 warning = "unable to execute command '" + sCommand + "' with prebuilt disk";
             } else {
                 error = await buildDisk(localDir, sCommand);
-                if (!error) {
-                    if (!localMachine) {
-                        localMachine = checkMachine(savedMachine) || savedMachine;
-                    }
-                }
             }
         }
-        if (localMachine && !error) {
+        if (!error) {
+            if (!localMachine) {
+                localMachine = checkMachine(savedMachine) || savedMachine;
+            }
             error = loadMachine(localMachine);
             if (!error) {
                 loading = true;

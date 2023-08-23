@@ -87,7 +87,8 @@
   "hdc": {
     "id": "hdcAT",
     "name": "Hard Disk Controller",
-    "type": "AT"
+    "type": "AT",
+    "drives": [{"name":"Hard Disk","type":1}]
   },
   "chipset": {
     "id": "chipset",
