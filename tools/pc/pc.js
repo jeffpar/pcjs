@@ -657,7 +657,7 @@ function intLoad(addr)
             let appName = getString(cpu.segDS, off, len).trim();
             machineDir = getString(cpu.segDS, 0x120, -1);
             localCommand = appName + " " + args;
-            setTimeout(function() { doCommand("exec " + localCommand); }, 0);
+            setTimeout(function() { doCommand("exec " + localCommand, !!driveManifest); }, 0);
             return false;               // returning false should bypass the INT 20h and fall into the JMP $-2;
         }                               // we want the machine to spin its wheels until it has been unloaded/reloaded
     }
@@ -2032,7 +2032,7 @@ function loadDiskette(sDrive, aTokens)
 }
 
 /**
- * doCommand(s)
+ * doCommand(s, reload)
  *
  * The "exec" command is used internally whenever the machine signals the desire to execute a local command;
  * in that case, if a local drive was built, we save its state to the local file system, then kill the machine,
@@ -2042,13 +2042,14 @@ function loadDiskette(sDrive, aTokens)
  * and conversely, the machine sees any file changes that the local command made.
  *
  * @param {string} s
+ * @param {boolean} [reload]
  * @returns {string|null} (result of command, or null to quit)
  */
-function doCommand(s)
+function doCommand(s, reload = false)
 {
     let aTokens = s.split(' ');
     let cmd = aTokens[0].toLowerCase();
-    let info, result = "", reload = false, curDir = "", newDir;
+    let result = "", curDir = "", newDir;
 
     aTokens.splice(0, 1);
     let arg, args = aTokens.join(' ');
@@ -2090,10 +2091,9 @@ function doCommand(s)
         });
         break;
     case "exec":
-        if (driveManifest) {
+        if (reload) {
             saveDisk(localDir);
             machine = newMachine();
-            reload = true;
         }
         curDir = process.cwd();
         try {
