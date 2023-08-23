@@ -885,6 +885,13 @@ function loadMachine(sFile)
             }
         }
 
+        if (config['debugger'] && fHalt) {
+            let messages = configJSON['defaults'] && configJSON['defaults']['messages'];
+            if (messages) {
+                config['debugger']['messages'] = messages;
+            }
+        }
+
         if (config['hdc'] && driveInfo.fPartitioned) {
             let typeCtrl = config['hdc']['type'];
             let drives = config['hdc']['drives'];

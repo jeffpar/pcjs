@@ -466,8 +466,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys:pcdos:1.1",
-        "--floppy"
+        "--sys:compaq:2.11",
+        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/TEST/SRC/MBR",
       "stopOnEntry": false,

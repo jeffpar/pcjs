@@ -107,7 +107,7 @@ chk1:	mov	bx,VEC_DRIVE1 * 4
 ; table, find the ACTIVE partition, ensure the rest are INACTIVE, then boot it.
 ;
 scan:	mov	cl,4		; CX = count (CH is already zero)
-	xor	dx,dx
+	xor	di,di
 	mov	si,offset par0tbl
 next:	cmp	[si].par_status,ACTIVE
 	je	load
@@ -115,16 +115,17 @@ next:	cmp	[si].par_status,ACTIVE
 	jne	inv
 skip:	add	si,size par_record
 	loop	next
-	test	dx,dx		; did we find an ACTIVE partition?
+	test	di,di		; did we find an ACTIVE partition?
 	jnz	read		; yes
 	int	18h		; no, so start ROM BASIC
-load:	test	dx,dx		; did we already find an ACTIVE partition?
+load:	test	di,di		; did we already find an ACTIVE partition?
 	jnz	inv		; yes
 	mov	dx,word ptr [si].par_status
 	mov	ax,word ptr [si].par_chs_beg+1
+	mov	di,si		; DI -> partition record
 	jmp	skip
 
-read:	mov	di,5		; retries
+read:	mov	bp,5		; BP = retries
 	mov	bx,sp		; BX = 7C00h (nothing has been pushed)
 	xchg	cx,ax		; CX and DX contain cylinder/head/sector
 retry:	mov	ax,0201h	; AH = 02h, AL = 01h
@@ -132,7 +133,7 @@ retry:	mov	ax,0201h	; AH = 02h, AL = 01h
 	jnc	verify
 	xor	ax,ax
 	int	13h
-	dec	di
+	dec	bp
 	jnz	retry
 	mov	si,offset err_msg
 
@@ -151,13 +152,11 @@ verify:	mov	si,offset mis_msg
 	jne	print
 ;
 ; NOTE: Before transferring control to the DOS boot record, the DOS MBR
-; carefully restored SI to the offset of the active partition record, but
-; I am unaware of any reliance on that value.  In fact, when IO.SYS wants
-; to examine the MBR, it simply re-reads and re-scans it.  Perhaps there
-; was a plan to pass MBR information on to the boot sector, and from there
-; to IO.SYS, thereby eliminating a redundant read, but I don't think that
-; ever happened.
+; carefully restores SI to the offset of the active partition record.  I
+; was unaware of any reliance on that value or any documentation to that
+; effect, but then I discovered that COMPAQ boot records depend on it....
 ;
+	mov	si,di		; SI -> partition record
 boot:	jmp	sp		; jump to 7C00h
 
 ;

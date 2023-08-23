@@ -7,7 +7,8 @@
     "maxfiles": 1024,
     "directory": ".",
     "machine": "compaq386.json",
-    "state": "state386.json"
+    "state": "state386.json",
+    "messages": "int|hdc"
   },
   "apps": {
     "ls": {},
