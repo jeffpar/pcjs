@@ -762,7 +762,7 @@ function sendSerial(b)
  */
 function checkMachine(sFile)
 {
-    let sVerify = "", machine;
+    let sVerify = "", config;
     while (sFile) {
         if (sFile.indexOf("http") == 0) {
             break;
@@ -794,18 +794,20 @@ function checkMachine(sFile)
     }
     if (sVerify) {
         if (sVerify.endsWith(".json")) {
-            machine = JSON.parse(readFileSync(sVerify, "utf8", true) || "{}");
-            sFile = machine['machine']? sVerify : "";
+            config = JSON.parse(readFileSync(sVerify, "utf8", true) || "{}");
+            let machine = config['machine'];
+            machineType = machine['type'] || machineType;
+            sFile = machine? sVerify : "";
         } else {
             sFile = sVerify;
         }
     }
     if (sFile && !driveOverride) {
-        if (machine) {
-            if (machine['hdc']) {
-                driveInfo.driveCtrl = machine['hdc']['type'];
+        if (config) {
+            if (config['hdc']) {
+                driveInfo.driveCtrl = config['hdc']['type'];
             }
-            if (machine['chipset'] && machine['chipset']['model'] == "deskpro386") {
+            if (config['chipset'] && config['chipset']['model'] == "deskpro386") {
                 driveInfo.driveCtrl = "COMPAQ";
             }
         } else {
@@ -815,6 +817,8 @@ function checkMachine(sFile)
                 driveInfo.driveCtrl = "AT";
             } else if (sFile.indexOf("compaq") >= 0) {
                 driveInfo.driveCtrl = "COMPAQ";
+            } else if (sFile.indexOf("pdp11") >= 0) {
+                machineType = "pdp11";
             }
         }
     }
@@ -1063,7 +1067,7 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
                         aTags[iTag][idAttrs][attr] = attrs[attr];
                     }
                 }
-}
+            }
             if (err) {
                 printf("%s\n", err.message);
             }
@@ -1348,6 +1352,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let apps = configJSON['apps'] || {};
     let appNames = Object.keys(apps);
     for (let appName of appNames) {
+        if (appName[0] == '.') continue;
         let appFile = appName.toUpperCase() + ".COM";
         let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53];
         appContents.push(appName.length);
@@ -2248,10 +2253,7 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
     };
 
     if (sDisk) {
-        /*
-         * --disk=none is a special case to disable any prebuilt disk
-         */
-        if (sDisk.toLowerCase() == "none") {
+        if (sDisk.toLowerCase() == "none") {    // --disk=none disables any prebuilt disk
             localDrive = "";
         } else {
             localDrive = sDisk;
@@ -2293,8 +2295,8 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
         }
     }
 
-    if (!error) {
-        if (argv[1] || localDir) {              // last but not least, check for a DOS command or program name
+    if (!error) {                               // last but not least, check for a DOS command or program name
+        if (machineType == "pcx86" && (argv[1] || localDir)) {
             let args = argv.slice(1).join(' ');
             let sCommand = checkCommand(localDir, args);
             if (!sCommand && args) {
@@ -2456,7 +2458,7 @@ function main(argc, argv)
     fFloppy = removeFlag('floppy') || fFloppy;
     if (!fFloppy) fNoFloppy = removeFlag('nofloppy') || fNoFloppy;
 
-    machineType = removeArg('type') || defaults['type'] || machineType;
+    machineType = defaults['type'] || machineType;
     systemOverride = argv['system'] || argv['version'];
     systemType = (removeArg('system', 'string') || defaults['system'] || systemType).toLowerCase();
     systemVersion = (removeArg('version', 'string') || defaults['version'] || systemVersion);
@@ -2474,17 +2476,17 @@ function main(argc, argv)
         driveInfo.fPartitioned = false;
         driveOverride = true;
     } else {
-        let driveCtrl = removeArg('drivectrl');
+        let driveCtrl = removeArg('ctrl');
         if (driveCtrl) {
             driveInfo.driveCtrl = driveCtrl;
             driveOverride = true;
         }
         maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || maxFiles;
-        maxCapacity = parseFloat(removeArg('drivesize')) || parseFloat(defaults['drivesize']) || maxCapacity;
+        maxCapacity = parseFloat(removeArg('size')) || parseFloat(defaults['size']) || maxCapacity;
         driveInfo.fPartitioned = true;
     }
 
-    let typeDrive = removeArg('drivetype');
+    let typeDrive = removeArg('type');
     if (typeDrive) {
         let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
         if (match) {
@@ -2541,28 +2543,28 @@ function main(argc, argv)
 
     if (removeFlag('help')) {
         let optionsMain = {
-            "--start=[machine file]":   "start machine configuration file",
+            "--start=[machine]":        "start machine configuration file",
         };
         let optionsDisk = {
             "--dir=[directory]":        "set drive local directory (default is " + localDir + ")",
-            "--disk=[disk image]":      "set drive disk image (instead of directory)",
-            "--drivectrl=[ctrl]":       "set drive controller (eg, XT, AT, COMPAQ)",
-            "--drivesize=[size]":       "set drive capacity (default is " + maxCapacity + "mb)",
-            "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
+            "--disk=[image]":           "\tset drive disk image (instead of directory)",
+            "--ctrl=[controller]":      "set drive controller (eg, XT, AT, COMPAQ)",
+            "--size=[number]":          "\tset drive capacity in Mb (default is " + maxCapacity + "Mb)",
+            "--type=[value]":           "\tset drive type or C:H:S (eg, 306:4:17)",
             "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
-            "--system=[string]":        "operating system type (default is " + systemType + ")",
-            "--version=[#.##]":         "operating system version (default is " + systemVersion + ")"
+            "--sys=[string]":           "\toperating system type (default is " + systemType + ")",
+            "--ver=[#.##]":             "\toperating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
-            "--debug (-d)\t":           "enable DEBUG messages",
-            "--floppy (-f)\t":          "build non-partitioned boot disk",
-            "--halt (-h)\t":            "halt machine on startup",
-            "--help (-?)\t":            "display command-line usage",
-            "--local (-l)\t":           "use local diskette images",
-            "--nofloppy (-n)\t":        "remove any diskette from drive A:",
-            "--test (-t)\t":            "enable test mode (non-interactive)",
-            "--verbose (-v)\t":         "enable verbose mode"
+            "--debug (-d)":             "\tenable DEBUG messages",
+            "--floppy (-f)":            "\tbuild non-partitioned boot disk",
+            "--halt (-h)":              "\thalt machine on startup",
+            "--help (-?)":              "\tdisplay command-line usage",
+            "--local (-l)":             "\tuse local diskette images",
+            "--nofloppy (-n)":          "\tremove any diskette from drive A:",
+            "--test (-t)":              "\tenable test mode (non-interactive)",
+            "--verbose (-v)":           "\tenable verbose mode"
         };
         let optionGroups = {
             "machine options:":         optionsMain,
@@ -2576,7 +2578,7 @@ function main(argc, argv)
                 printf("\t%s\t%s\n", option, optionGroups[group][option]);
             }
         }
-        printf("\nnotes:\n\t--drivetype can also specify a drive geometry (eg, --drivetype=306:4:17)\n");
+        printf("\nnotes:\n\t--type can also specify a drive geometry (eg, --type=306:4:17)\n");
         printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
         printf("\t--fat values should be considered advisory, as it may not be possible to honor them\n");
         printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, "pc.json"));

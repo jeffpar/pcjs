@@ -10,10 +10,9 @@
     "state": "state386.json"
   },
   "apps": {
-    "cp": {},
     "ls": {},
     "vi": {},
-    "edit": {
+    ".edit": {
       "exec": "vi $*"
     }
   },
