@@ -554,11 +554,10 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--disk=MBR.json",
-        "--nofloppy",
+        "--sys=pcdos:7",
         "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks",
+      "cwd": "${workspaceFolder}/tools/pc/disks/TEST",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

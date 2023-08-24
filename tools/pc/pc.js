@@ -376,7 +376,7 @@ function intVideo(addr)
                 printf(s);
             }
         }
-        if (DH != machine.rowCursor) {
+        if (DH > machine.rowCursor) {
             printf('\n');
         } else if (DL > machine.colCursor) {
             /*
@@ -413,13 +413,13 @@ function intVideo(addr)
          */
         if (AH == 0x0E || !CX) CX = 1;
         printf("%s", s.repeat(CX));
-        if (AL == '\r') {
+        if (s == '\r') {
             machine.colCursor = 0;
-        } else if (AL == '\n') {
+        } else if (s == '\n') {
             while (machine.rowCursor < maxRows && CX--) {
                 machine.rowCursor++;
             }
-        } else if (AL == '\b') {
+        } else if (s == '\b') {
             while (machine.colCursor > 0 && CX--) {
                 machine.colCursor--;
             }
