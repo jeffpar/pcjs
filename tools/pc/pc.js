@@ -379,6 +379,9 @@ function intVideo(addr)
     }
 
     switch (AH) {
+    case 0x00:
+        machine.rowCursor = machine.colCursor = 0;
+        break;
     case 0x02:                          // set cursor position (row=DH, col=DL)
         if (DL >= maxCols || DH >= maxRows) {
             break;                      // ignore "off-screen" positions
@@ -394,7 +397,7 @@ function intVideo(addr)
                 printf(s);
             }
         }
-        if (DH > machine.rowCursor) {
+        if (DH != machine.rowCursor) {
             printf('\n');
         } else if (DL > machine.colCursor) {
             /*
@@ -1310,7 +1313,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let verDOS = +parseFloat(systemVersion);        // parseFloat() is forgiving of any non-numeric suffix, the "+" operator is not
     let verDOSMajor = verDOS | 0;
     if (verDOSMajor < 2 && !fFloppy) {
-        return "minimum DOS version with hard disk support is 2.00";
+        return "DOS 2.0 or greater required for hard disk support (otherwise use --floppy)";
     }
 
     let diSystem = await readDiskAsync(sSystemDisk);
@@ -1319,13 +1322,13 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     }
 
     /*
-     * For greater flexibility, I'm going to ALWAYS use the PCJS MBR now.  This then gives me the option
-     * of converting any machine's drive type to PCJS drive type 0 (XT) or 1 (AT) and having my MBR automatically
-     * set up the correct geometry.
+     * For greater flexibility, I could ALWAYS use the PCJS MBR.  This would give me the option of converting
+     * any machine's drive type to PCJS drive type 0 (XT) or 1 (AT) and having my MBR automatically set up the correct
+     * geometry.  But doing that was causing me some grief with the IBM 5160 PC XT, so I've backed off that for now.
      *
-     *      let sSystemMBR = (driveInfo.driveCtrl == "PCJS")? "pcjs.mbr" : "DOS.mbr";
+     *      let sSystemMBR = "pcjs.mbr";
      */
-    let sSystemMBR = "pcjs.mbr";
+    let sSystemMBR = (driveInfo.driveCtrl == "PCJS" || verDOSMajor >= 3)? "pcjs.mbr" : "DOS.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -2581,6 +2584,12 @@ function main(argc, argv)
             if (match) {
                 let driveCtrl = match[1] || driveInfo.driveCtrl;
                 let driveType = +match[2];
+                /*
+                 * WARNING: This code may not validate the type correctly if you didn't specify a controller (eg, "XT:1"),
+                 * because the default controller is "COMPAQ" (because our default machine is a COMPAQ) and the code in
+                 * checkMachine() that attempts to detect/update the appropriate controller for your particular machine hasn't
+                 * run yet (this is too early).
+                 */
                 if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
                     driveInfo.driveCtrl = driveCtrl;
                     driveInfo.driveType = driveType;

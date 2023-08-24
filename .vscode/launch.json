@@ -466,8 +466,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys:pcdos:7",
-        "--halt"
+        "--sys:compaq:3.31",
+        "--size:40"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/TEST/SRC/MBR",
       "stopOnEntry": false,
@@ -508,12 +508,10 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5160",
-        "disks/msdos330",
-        "dir",
-        "--halt",
-        "--debug"
+        "--sys=pcdos:2",
+        "--type=XT:1"
       ],
-      "cwd": "${workspaceFolder}/tools/pc",
+      "cwd": "${workspaceFolder}/tools/pc/disks/TEST",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -554,7 +552,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--sys=pcdos:2"
+        "--sys=pcdos:7"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/TEST",
       "stopOnEntry": false,
