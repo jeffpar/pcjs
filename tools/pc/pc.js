@@ -508,6 +508,7 @@ function intReboot(addr)
             exit();                     // INT 19h appears to have come from QUIT.COM
         }
     }
+
     /*
      * Any other INT 19h should proceed normally; however, if the machine's hard drive(s) are using
      * custom geometries AND we didn't build a drive image with our custom MBR, then the drive table(s)
@@ -521,6 +522,7 @@ function intReboot(addr)
     if (driveInfo.driveCtrl == "PCJS" && driveInfo.driveType == 0) {
         geometryOverride = true;
     }
+
     /*
      * Also, in order to test floppy diskettes with non-standard sector sizes, we take this opportunity
      * to patch the Diskette Parameter Table (DPT) if we're booting a floppy with a non-standard sector size.
@@ -535,6 +537,7 @@ function intReboot(addr)
     if (!driveInfo.fPartitioned && driveInfo.cbSector && driveInfo.cbSector != 512) {
         let fpDPT = this.getLong(0x1E * 4);                     // get the DPT address from interrupt vector 0x1E
         let addrDPT = ((fpDPT >>> 16) << 4) + (fpDPT & 0xffff); // convert real-mode far pointer to physical address
+
         /*
          * The 4th byte in the DPT (at offset 3) indicates the # bytes/sector, and it is stored as a shift
          * count for the base sector size of 128 (128 << 0 = 128, 128 << 1 = 256, 128 << 2 == 512, etc).  So
@@ -543,6 +546,7 @@ function intReboot(addr)
          */
         this.bus.setByteDirect(addrDPT + 3, Math.log2(driveInfo.cbSector) - 7);
         this.bus.setByteDirect(addrDPT + 4, driveInfo.nSectors);
+
         /*
          * Unfortunately, this all seems to be for naught, because while stepping through the MS-DOS 3.30
          * initialization code in IO.SYS, I saw that when it loads the entire FAT into the top of available
@@ -564,6 +568,7 @@ function intReboot(addr)
         if (kbRAM % 64 == 0) {
             this.setShort(0x413, --kbRAM);
         }
+
         /*
          * So, no, MS-DOS 3.30 is totally broken for non-512-byte sectors, because after it got past reading
          * the FAT (into segment 9FA0, thanks to the reduced memory size), it then proceeded to read MSDOS.SYS

@@ -466,7 +466,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys:compaq:2.11",
+        "--sys:pcdos:7",
         "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/TEST/SRC/MBR",

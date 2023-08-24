@@ -587,6 +587,7 @@ export default class C1PVideo extends Component {
             eCanvas.setAttribute("contenteditable", "true");
             eCanvas.setAttribute("autocapitalize", "off");
             eCanvas.setAttribute("autocorrect", "off");
+            eCanvas.setAttribute("spellcheck", "false");
 
             if (Web.getUserAgent().indexOf("MSIE") >= 0) {
                 eCanvas.style.height = (((eVideo.clientWidth * parmsVideo['screenHeight']) / parmsVideo['screenWidth']) | 0) + "px";
