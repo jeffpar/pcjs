@@ -12,7 +12,7 @@
 	<xsl:variable name="MACHINECLASS">osi</xsl:variable>
 	<xsl:variable name="APPCLASS">c1p</xsl:variable>
 	<xsl:variable name="APPNAME">C1Pjs</xsl:variable>
-	<xsl:variable name="APPVERSION">2.20</xsl:variable>
+	<xsl:variable name="APPVERSION">2.21</xsl:variable>
 	<xsl:variable name="CSSCLASS">pcjs</xsl:variable>
 	<xsl:variable name="SITEURL">https://www.pcjs.org</xsl:variable>
 	<xsl:variable name="BGNDCOLOR">#fff8e7</xsl:variable>
@@ -289,7 +289,7 @@
 					<input class="{$APPCLASS}-binding" type="submit" style="{$border}{$fontsize}{$style}" data-value="{{{$type},{$binding}}}" value="{.}"/>
 				</xsl:when>
 				<xsl:when test="@type = 'textarea'">
-					<textarea class="{$APPCLASS}-binding" style="{$border}{$width}{$height}{$style}" data-value="{{{$type},{$binding}}}" readonly="readonly"> </textarea>
+					<textarea class="{$APPCLASS}-binding" style="{$border}{$width}{$height}{$style}" data-value="{{{$type},{$binding}}}" readonly="readonly" autocapitalize="off" autocorrect="off" spellcheck="false"> </textarea>
 				</xsl:when>
 				<xsl:when test="@type = 'heading'">
 					<div><xsl:value-of select="."/></div>

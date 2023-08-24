@@ -62931,18 +62931,23 @@ class Disk extends Component {
     {
         let disk;
         let cbDiskData = buffer? buffer.byteLength : 0;
+        /*
+         * This geometry lookup is primarily intended for diskette images, because there are a wide variety of diskette
+         * formats that all work within the drive's parameters;  I assert that the number of cylinders matches, because those
+         * should always match, but the rest can certainly vary.
+         */
         let diskFormat = DiskAPI.GEOMETRIES[cbDiskData];
-
         if (diskFormat) {
+
             this.nCylinders = diskFormat[0];
             this.nHeads = diskFormat[1];
             this.nSectors = diskFormat[2];
             this.cbSector = (diskFormat[3] || 512);
-
+        }
+        if (this.nCylinders) {          // if nCylinders was never set, then something is wrong...
             let ib = 0;
             let dv = new DataView(buffer, 0, cbDiskData);
             let cdw = this.cbSector >> 2, dwPattern = 0, dwChecksum = 0;
-
             this.diskData = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < this.diskData.length; iCylinder++) {
                 let cylinder = this.diskData[iCylinder] = new Array(this.nHeads);
@@ -68818,7 +68823,9 @@ class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDriveCtrl], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                if (this.sType.indexOf("PCJS") < 0) {   // skip the warning if pc.js custom-built this disk
+                    this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDriveCtrl], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                }
             }
         }
         if (drive.fAutoMount) {

@@ -8024,6 +8024,7 @@ export default class VideoX86 extends Component {
             if (textarea) {
                 textarea.setAttribute("autocapitalize", "off");
                 textarea.setAttribute("autocorrect", "off");
+                textarea.setAttribute("spellcheck", "false");
                 /*
                 * Another problem on iOS devices was that after a soft-key control was clicked, we needed to give
                 * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS could

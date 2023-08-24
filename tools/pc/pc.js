@@ -28,6 +28,7 @@ let fDebug = false;
 let fHalt = false;
 let fFloppy = false;
 let fNoFloppy = false;
+let fTest = false;
 let fVerbose = false;
 let autoStart = false;
 let machineType = "pcx86";
@@ -56,18 +57,19 @@ let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
 let driveManifest = null, driveOverride = false, geometryOverride = false;
 let driveInfo = {
-    driveCtrl:   "COMPAQ",
+    driveCtrl:    "COMPAQ",
     driveType:   -1,
-    nCylinders:  0,
-    nHeads:      0,
-    nSectors:    0,
-    cbSector:    0,
-    fRemovable:  false,
-    driveSize:   0,
-    typeFAT:     0,     // set this to 12 or 16 to request a specific FAT type
-    clusterSize: 0,     // set this to a specific cluster size (in bytes) if desired
-    rootEntries: 0,     // set this to a specific number of root directory entries if desired
-    files:       []
+    nCylinders:   0,
+    nHeads:       0,
+    nSectors:     0,
+    cbSector:     0,
+    driveSize:    0,
+    typeFAT:      0,    // set this to 12 or 16 to request a specific FAT type
+    clusterSize:  0,    // set this to a specific cluster size (in bytes) if desired
+    rootEntries:  0,    // set this to a specific number of root directory entries if desired
+    verDOS:       0,
+    fPartitioned: undefined,
+    files:        []
 };
 
 const functionKeys = {
@@ -98,10 +100,11 @@ function setDebugMode(nEvent)
 {
     let prevMode = debugMode;
     if (!nEvent && debugMode != nEvent) {
-        printf("[Press CTRL-D to enter command mode]\n");
+        if (!fTest) printf("[Press CTRL-D to enter command mode]\n");
     }
     debugMode = nEvent;
     if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
+        if (fTest) exit();
         command = "";
         printf('[' + (commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
         printf("%s> ", prompt);
@@ -505,6 +508,7 @@ function intReboot(addr)
             exit();                     // INT 19h appears to have come from QUIT.COM
         }
     }
+
     /*
      * Any other INT 19h should proceed normally; however, if the machine's hard drive(s) are using
      * custom geometries AND we didn't build a drive image with our custom MBR, then the drive table(s)
@@ -518,6 +522,7 @@ function intReboot(addr)
     if (driveInfo.driveCtrl == "PCJS" && driveInfo.driveType == 0) {
         geometryOverride = true;
     }
+
     /*
      * Also, in order to test floppy diskettes with non-standard sector sizes, we take this opportunity
      * to patch the Diskette Parameter Table (DPT) if we're booting a floppy with a non-standard sector size.
@@ -526,12 +531,13 @@ function intReboot(addr)
      * cpu.setByte().
      *
      * TODO: The "correct" way to deal with this will be to make my own boot sector, similar to the MBR I
-     * wrote to deal with custom hard disk geometries.  It should be a trivial change, since DOS boot sectors
-     * already copy the DPT to RAM in order tweak other non-geometric parameters (eg, stepping rate).
+     * wrote to deal with custom hard disk geometries.  It should be a trivial change, since most DOS boot
+     * sectors already copy the DPT to RAM in order tweak other non-geometric parameters (eg, stepping rate).
      */
-    if (driveInfo.fRemovable && driveInfo.cbSector && driveInfo.cbSector != 512) {
+    if (!driveInfo.fPartitioned && driveInfo.cbSector && driveInfo.cbSector != 512) {
         let fpDPT = this.getLong(0x1E * 4);                     // get the DPT address from interrupt vector 0x1E
         let addrDPT = ((fpDPT >>> 16) << 4) + (fpDPT & 0xffff); // convert real-mode far pointer to physical address
+
         /*
          * The 4th byte in the DPT (at offset 3) indicates the # bytes/sector, and it is stored as a shift
          * count for the base sector size of 128 (128 << 0 = 128, 128 << 1 = 256, 128 << 2 == 512, etc).  So
@@ -540,6 +546,7 @@ function intReboot(addr)
          */
         this.bus.setByteDirect(addrDPT + 3, Math.log2(driveInfo.cbSector) - 7);
         this.bus.setByteDirect(addrDPT + 4, driveInfo.nSectors);
+
         /*
          * Unfortunately, this all seems to be for naught, because while stepping through the MS-DOS 3.30
          * initialization code in IO.SYS, I saw that when it loads the entire FAT into the top of available
@@ -561,6 +568,7 @@ function intReboot(addr)
         if (kbRAM % 64 == 0) {
             this.setShort(0x413, --kbRAM);
         }
+
         /*
          * So, no, MS-DOS 3.30 is totally broken for non-512-byte sectors, because after it got past reading
          * the FAT (into segment 9FA0, thanks to the reduced memory size), it then proceeded to read MSDOS.SYS
@@ -585,10 +593,9 @@ function intReboot(addr)
          *      &0070:0E34 EBCC             JMP      0E02                     ;cycles=2
          *
          * After a track is read, this code reduces the remaining sector count (AX) by the number of sectors just
-         * read (CX == 5), then shifts CX left 1 bit (using a byte shift, so you better never have 128 or more sectors
-         * per track), and then adds that to the HIGH byte of the offset for the next read (BX).  So it is effectively
-         * adding CX * 256 to BX, or rather CX * 512 thanks to the earlier shift -- which of course only works for
-         * 512-byte sectors.
+         * read (CX == 5), then shifts CX left 1 bit (using a byte shift), and then adds that to the HIGH byte of the
+         * offset for the next read (BX).  So it is effectively adding CX * 256 to BX -- or rather # sectors * 512,
+         * thanks to the earlier shift -- which of course only works for 512-byte sectors.
          *
          * At this point, it's clear this is a pointless exercise -- at least for MS-DOS 3.30.  If earlier versions
          * were truly sector-size-agnostic, then the question becomes: had the developers forgotten about that "feature"
@@ -640,10 +647,13 @@ function intLoad(addr)
                 aTokens.splice(0, 1)
                 printf("%s\n", loadDiskette(matchDrive[1], aTokens));
             } else {
-                if (!args) {
-                    printf("usage: load [drive] [search options]\n");
-                } else {
+                if (args.toLowerCase() == "info") {
+                    printf(getDriveInfo(true));
+                } else if (args) {
                     printf("invalid load command: \"%s\"\n", args);
+                }
+                else {
+                    printf("usage: load [drive] [search options]\n");
                 }
             }
         } else {                        // INT 20h assumed to have come from a hidden PCJS command app (eg, LS.COM)
@@ -652,11 +662,63 @@ function intLoad(addr)
             let appName = getString(cpu.segDS, off, len).trim();
             machineDir = getString(cpu.segDS, 0x120, -1);
             localCommand = appName + " " + args;
-            setTimeout(function() { doCommand("exec " + localCommand); }, 0);
+            setTimeout(function() { doCommand("exec " + localCommand, !!driveManifest); }, 0);
             return false;               // returning false should bypass the INT 20h and fall into the JMP $-2;
         }                               // we want the machine to spin its wheels until it has been unloaded/reloaded
     }
     return true;
+}
+
+/**
+ * getDriveInfo(fText)
+ *
+ * @param {boolean} [fText]
+ * @returns {Object|null|string}
+ */
+function getDriveInfo(fText)
+{
+    let info = null;
+    if (driveManifest || driveInfo.volume || driveInfo.driveType >= 0) {
+        info = {
+            controller: driveInfo.driveCtrl,
+            type: driveInfo.driveType < 0? 0 : driveInfo.driveType,
+            cylinders: driveInfo.nCylinders,
+            heads: driveInfo.nHeads,
+            sectorsPerTrack: driveInfo.nSectors,
+            sectorSize: driveInfo.cbSector || 512,
+            clusterSize: driveInfo.clusterSize,
+            driveSize: driveInfo.driveSize.toFixed(1) + "mb"
+        };
+        if (driveInfo.volume) {
+            let vol = driveInfo.volume;
+            info.sectorSize = vol.cbSector;
+            info.mediaID = sprintf("%#04x", vol.idMedia);
+            let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
+            info.typeFAT = vol.nFATBits || vol.idFAT;
+            info.totalFATs = (sectorsFAT / Math.ceil(vol.clusTotal * info.typeFAT / 8 / vol.cbSector))|0;
+            info.rootEntries = vol.rootEntries || vol.rootTotal;
+            info.sectorsHidden = vol.lbaStart;
+            info.sectorsReserved = vol.vbaFAT;
+            info.sectorsFAT = sectorsFAT;
+            info.sectorsRoot = Math.ceil((info.rootEntries * 32) / vol.cbSector);
+            info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
+            info.clusterSize = vol.clusSecs * vol.cbSector;
+            info.clustersTotal = vol.clusTotal;
+            info.clustersFree = vol.clusFree;
+            info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
+            info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
+        }
+    }
+    if (fText) {
+        if (info) {
+            info = sprintf("\n %s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize) +
+                   sprintf(" %d-bit FAT, %d-byte clusters, %d root entries\n", info.typeFAT, info.clusterSize, info.rootEntries) +
+                   sprintf(" %d sectors, %d clusters, %d bytes\n", info.sectorsTotal, info.clustersTotal, info.bytesTotal);
+        } else {
+            info = "\nno drive info\n";
+        }
+    }
+    return info;
 }
 
 /**
@@ -705,7 +767,7 @@ function sendSerial(b)
  */
 function checkMachine(sFile)
 {
-    let sVerify = "", machine;
+    let sVerify = "", config;
     while (sFile) {
         if (sFile.indexOf("http") == 0) {
             break;
@@ -737,18 +799,20 @@ function checkMachine(sFile)
     }
     if (sVerify) {
         if (sVerify.endsWith(".json")) {
-            machine = JSON.parse(readFileSync(sVerify, "utf8", true) || "{}");
-            sFile = machine['machine']? sVerify : "";
+            config = JSON.parse(readFileSync(sVerify, "utf8", true) || "{}");
+            let machine = config['machine'];
+            machineType = machine['type'] || machineType;
+            sFile = machine? sVerify : "";
         } else {
             sFile = sVerify;
         }
     }
     if (sFile && !driveOverride) {
-        if (machine) {
-            if (machine['hdc']) {
-                driveInfo.driveCtrl = machine['hdc']['type'];
+        if (config) {
+            if (config['hdc']) {
+                driveInfo.driveCtrl = config['hdc']['type'];
             }
-            if (machine['chipset'] && machine['chipset']['model'] == "deskpro386") {
+            if (config['chipset'] && config['chipset']['model'] == "deskpro386") {
                 driveInfo.driveCtrl = "COMPAQ";
             }
         } else {
@@ -758,6 +822,8 @@ function checkMachine(sFile)
                 driveInfo.driveCtrl = "AT";
             } else if (sFile.indexOf("compaq") >= 0) {
                 driveInfo.driveCtrl = "COMPAQ";
+            } else if (sFile.indexOf("pdp11") >= 0) {
+                machineType = "pdp11";
             }
         }
     }
@@ -824,7 +890,14 @@ function loadMachine(sFile)
             }
         }
 
-        if (config['hdc'] && !driveInfo.fRemovable) {
+        if (config['debugger'] && fHalt) {
+            let messages = configJSON['defaults'] && configJSON['defaults']['messages'];
+            if (messages) {
+                config['debugger']['messages'] = messages;
+            }
+        }
+
+        if (config['hdc'] && driveInfo.fPartitioned) {
             let typeCtrl = config['hdc']['type'];
             let drives = config['hdc']['drives'];
             if (typeof drives == "string") {
@@ -867,8 +940,13 @@ function loadMachine(sFile)
                     'type': driveType,
                     'name': (driveInfo.driveSize|0) + "Mb Hard Disk"
                 };
-                if (driveManifest || !localDir) {
+                if (driveManifest || !localDir && localDrive) {
                     drives[0]['path'] = localDrive;
+                    /*
+                     * If we built a drive image, we worked hard to make it bootable, so we're going to boot from it
+                     * (ie, remove any boot floppy).  Whereas any prebuilt drive image may or may not be bootable, so
+                     * in that case, use --nofloppy if you any boot floppy removed.
+                     */
                     if (driveManifest) {
                         removeFloppy = true;
                     }
@@ -888,15 +966,16 @@ function loadMachine(sFile)
             if (removeFloppy) {
                 config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
             } else if (fFloppy || systemOverride) {
-                let name = systemType.toUpperCase() + ' ' + systemVersion;
+                let name = systemType.toUpperCase() + ' ' + sprintf("%.2f", parseFloat(systemVersion));
                 let sSystemDisk = fFloppy? localDrive : getSystemDisk(systemType, systemVersion);
                 if (sSystemDisk) {
                     config['fdc']['autoMount'] = "{A:{name:\"" + name + "\",path:\"" + sSystemDisk + "\"}}";
+                    savedState = "";
                 }
             }
         }
 
-        if (sFile.endsWith(savedMachine) && config['computer']) {
+        if (sFile.endsWith(savedMachine) && config['computer'] && savedState) {
             config['computer']['state'] = path.join(pcjsDir, savedState);
         }
 
@@ -1000,7 +1079,7 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
                         aTags[iTag][idAttrs][attr] = attrs[attr];
                     }
                 }
-}
+            }
             if (err) {
                 printf("%s\n", err.message);
             }
@@ -1044,9 +1123,10 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
  * within the specified directory.  Internal DOS commands are allowed if they're on the list below.
  *
  * Multiple commands are allowed, separated by commas, but only the first one will be checked
- * for validity; I had toyed with the idea of using semicolons instead of commas, but shells like
- * break commands apart at semicolon boundaries unless they're escaped, and that's a pain, so commas
- * it is.
+ * for validity; you can also use semicolons, but since most shells require those to be "escaped"
+ * with backslashes, commas make life easier.  You can also put quotes around your command(s) if
+ * you want to use semicolons without escaping them (and you may need to use semicolons if any
+ * of your commands must use commas).
  *
  * NOTE: The list of internal commands below is not intended to be exhaustive; it's just a start.
  *
@@ -1057,9 +1137,40 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
 function checkCommand(sDir, sCommand)
 {
     if (sCommand) {
-        let aParts = sCommand.split(/([ ,])/);
+        let aParts = sCommand.split(/([ ,;])/);
         let sProgram = aParts[0].toUpperCase();
-        const aInternal = ["CD", "COPY", "DEL", "DIR", "ECHO", "MKDIR", "PAUSE", "RMDIR", "SET", "TYPE", "VER"];
+        const aInternal = [
+            "BREAK",
+            "CD",
+            "CLS",      // this goes beyond the scope of our limited TTY support, so nothing will happen
+            "CHDIR",
+            "COPY",
+            "CTTY",
+            "DATE",     // NOTE: this was actually an external command in DOS 1.0 (became internal in DOS 1.1)
+            "DEL",
+            "DIR",
+            "ECHO",
+            "ERASE",
+            "FOR",
+            "GOTO",
+            "IF",
+            "LOAD",     // since we create LOAD.COM on the fly, it won't exist externally, so we treat it like an internal command
+            "MKDIR",
+            "PATH",
+            "PAUSE",
+            "PROMPT",
+            "QUIT",     // since we create QUIT.COM on the fly, it won't exist externally, so we treat it like an internal command
+            "REM",
+            "REN",
+            "RENAME",
+            "RMDIR",
+            "SET",
+            "SHIFT",
+            "TIME",     // NOTE: this was actually an external command in DOS 1.0 (became internal in DOS 1.1)
+            "TYPE",
+            "VER",
+            "VOL"
+        ];
 
         if (aInternal.indexOf(sProgram) < 0) {
             if (sProgram.indexOf('.') < 0) {
@@ -1096,11 +1207,46 @@ function getSystemDisk(type, version)
 {
     let sSystemDisk = "";
     let system = configJSON['systems']?.[type];
-    if (system) {
-        sSystemDisk = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + version + "/";
-        sSystemDisk += (system.product || type).toUpperCase() + version.replace('.', '') + "-DISK1.json";
+    if (system && system.versions) {
+        let verNumber = sprintf("%.2f", +parseFloat(version));
+        let versionInfo = system.versions[version] || system.versions[verNumber];
+        if (versionInfo) {
+            let sSystemPath = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + verNumber + "/";
+            if (typeof versionInfo == "string") {
+                sSystemDisk += sSystemPath + versionInfo + ".json";
+            } else {
+                sSystemDisk = sSystemPath + versionInfo.disk + ".json";
+            }
+        } else {
+            return Object.keys(system.versions);
+        }
     }
     return sSystemDisk;
+}
+
+/**
+ * getSystemFiles(type, version)
+ *
+ * @param {string} type
+ * @param {string} version
+ * @returns {Array.<string>}
+ */
+function getSystemFiles(type, version)
+{
+    let aSystemFiles = [];
+    let system = configJSON['systems']?.[type];
+    if (system && system.versions) {
+        let verNumber = sprintf("%.2f", +parseFloat(version));
+        let versionInfo = system.versions[version] || system.versions[verNumber];
+        if (versionInfo) {
+            if (typeof versionInfo == "string") {
+                aSystemFiles = system.files;
+            } else {
+                aSystemFiles = versionInfo.files;
+            }
+        }
+    }
+    return aSystemFiles;
 }
 
 /**
@@ -1124,33 +1270,48 @@ function getSystemDisk(type, version)
  * As for AUTOEXEC.BAT, we read any existing file (or create an empty file) and append the provided command.
  *
  * @param {string} sDir
- * @param {string} [sCommand] (eg, "COPY A:*.COM C:"; multiple commands can be separated by commas)
+ * @param {string} [sCommand] (eg, "COPY A:*.COM C:"; multiple commands can be separated by commas or semicolons)
  * @param {boolean} [fLog]
  * @returns {string} (error message, if any)
  */
 async function buildDisk(sDir, sCommand = "", fLog = false)
 {
+    let kbTarget = maxCapacity * 1024;
     let system = configJSON['systems']?.[systemType];
     if (!system) {
         return "unsupported system type: " + systemType;
     }
 
-    let version = +systemVersion;
-    let majorVersion = version | 0;
-    if (majorVersion < 2 && !fFloppy) {
+    let sSystemDisk = getSystemDisk(systemType, systemVersion);
+    if (!sSystemDisk) {
+        return "unknown " + systemType + " version: " + systemVersion;
+    } else if (typeof sSystemDisk != "string") {
+        return "available " + systemType + " versions: " + JSON.stringify(sSystemDisk);
+    }
+
+    let verDOS = +parseFloat(systemVersion);        // parseFloat() is forgiving of any non-numeric suffix, the "+" operator is not
+    let verDOSMajor = verDOS | 0;
+    if (verDOSMajor < 2 && !fFloppy) {
         return "minimum DOS version with hard disk support is 2.00";
     }
 
-    let sSystemDisk = getSystemDisk(systemType, systemVersion);
     let diSystem = await readDiskAsync(sSystemDisk);
     if (!diSystem) {
-        return "missing system diskette: " + sSystemDisk;
+        return "missing " + systemType + " system diskette: " + sSystemDisk;
     }
 
-    let sSystemMBR = (driveInfo.driveCtrl == "PCJS")? "pcjs.mbr" : "DOS.mbr";
+    /*
+     * For greater flexibility, I'm going to ALWAYS use the PCJS MBR now.  This then gives me the option
+     * of converting any machine's drive type to PCJS drive type 0 (XT) or 1 (AT) and having my MBR automatically
+     * set up the correct geometry.
+     *
+     *      let sSystemMBR = (driveInfo.driveCtrl == "PCJS")? "pcjs.mbr" : "DOS.mbr";
+     */
+    let sSystemMBR = "pcjs.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
+
     let dbMBR = readFileSync(sSystemMBR, null);
     if (!dbMBR || dbMBR.length < 512) {
         return "invalid system MBR: " + sSystemMBR;
@@ -1161,17 +1322,22 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let bootLetter = fFloppy? 'A' : 'C';
 
     /*
-     * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero
-     * for our added utilities (and for COMMAND.COM itself).
+     * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for our
+     * added utilities (and for COMMAND.COM itself).
      */
     driveInfo.files = [];
-    let attrHidden = majorVersion > 2? DiskInfo.ATTR.HIDDEN : 0;
-    for (let name of system.files) {
+    driveInfo.verDOS = verDOS;
+    driveInfo.bootDrive = bootDrive;
+    let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
+    let aSystemFiles = getSystemFiles(systemType, systemVersion);
+    for (let name of aSystemFiles) {
         let desc = diSystem.findFile(name);
         if (desc) {
             desc.attr = +desc.attr;
             desc.attr |= attrHidden;
             driveInfo.files.push(desc);
+        } else {
+            return "missing system file: " + name;
         }
     }
 
@@ -1198,6 +1364,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let apps = configJSON['apps'] || {};
     let appNames = Object.keys(apps);
     for (let appName of appNames) {
+        if (appName[0] == '.') continue;
         let appFile = appName.toUpperCase() + ".COM";
         let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53];
         appContents.push(appName.length);
@@ -1217,11 +1384,11 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let attr = DiskInfo.ATTR.ARCHIVE;
     let data = readFileSync(path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
     if (data) {
-        if (version >= 3.30 && !data.indexOf("ECHO OFF")) {
+        if (verDOS >= 3.30 && !data.indexOf("ECHO OFF")) {
             data = '@' + data;
         }
     } else {
-        data = (version >= 3.30? '@' : '') + "ECHO OFF\r\n";
+        data = verDOSMajor < 2? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\r\n";
         attr |= attrHidden;
     }
     let matchPath = data.match(/^PATH\s*(.*)$/im);
@@ -1230,18 +1397,23 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         if (!matchPathRoot) {
             data = data.replace(/^PATH\s*(.*)$/im, "PATH " + bootLetter + ":\\;$1");
         }
-    } else {
+    } else if (verDOSMajor >= 2) {
         data += "PATH " + bootLetter + ":\\\r\n";
     }
 
     if (sCommand) {
-        let aCommands = sCommand.split(',');
+        let aCommands = sCommand.split(sCommand.indexOf(';') >= 0? ';' : ',');
         for (let command of aCommands) {
             data += command + "\r\n";
         }
     }
+    if (fTest) {
+        data += "quit\r\n";
+    }
     if (machineDir) data += "CD " + machineDir + "\r\n";
-    driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
+    if (data.length) {
+        driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
+    }
 
     /*
      * Load the boot sector from the system diskette we read above, and use it to update the boot
@@ -1255,34 +1427,58 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
      */
     let verBPB = 0;
     let dbBoot = getDiskSector(diSystem, 0);
-    if (version >= 2.0 && version < 3.2) {
+    if (verDOS < 2.0) {
         /*
-         * PC DOS 2.0 to 3.1 requires the boot drive (AND drive head # -- go figure) to be in locations
-         * that later became part of the BPB, and by default, updateBootSector() doesn't let us change any
-         * part of the BPB unless we specify a BPB version number, so in this case, it must be 2.
+         * So to get this far, fFloppy had to be true, so in addition to setting the correct
+         * BPB version, we should also set kbTarget to 160 for 1.0 or 320 for 1.1.
          */
+        verBPB = 1;
+        kbTarget = 160;
+        if (verDOS >= 1.1) {
+            /*
+             * Even though PC DOS 1.1 added support for 320K, the PC DOS 1.1 boot diskette was formatted
+             * as 160K, so that it could also boot on single-sided drives.  So, if we really want to boot
+             * from a 320K diskette, we have to make the same boot sector modifications that the PC DOS 1.1
+             * FORMAT utility would make: modify the starting sector # and head # of IBMBIO.COM that's
+             * embedded in the boot sector at offset 0x0003 (ie, from 0x08 and 0x00 to 0x03 and 0x01).
+             *
+             * The location of IBMBIO.COM differs between 160K and 320K diskettes because the latter used a
+             * larger root directory (7 sectors instead of 4).
+             *
+             * See /software/pcx86/sys/dos/ibm/1.10/debugger/README.md for more details.
+             */
+            if (dbBoot.readUInt16LE(0x0003) == 0x0008 && dbBoot.readUInt16LE(0x0005) == 0x0014) {
+                kbTarget = 320;
+                dbBoot.writeUInt16LE(0x0103, 0x0003);
+                /*
+                 * As an added precaution, zero the BPB region, since any BPB would have been for a 160K diskette,
+                 * not a 320K diskette.
+                 */
+                for (let off = DiskInfo.BPB.SECBYTES; off < DiskInfo.BPB.BOOTDRIVE; off++) {
+                    dbBoot.writeUInt8(0x00, off);
+                }
+            }
+        }
+    }
+    else if (verDOS >= 2.0 && verDOS < 3.2) {
         verBPB = 2;
-        dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.BOOTDRIVE);   // boot sector offset 0x001E
-        /*
-         * NOTE: Hard-coding the boot drive head # to 0 is fine for our purposes, because when we build a
-         * drive image, we place the first (and only) partition immediately after the MBR.  Some systems
-         * reserve the entire first track for the MBR, in which case the first partition would not necessarily
-         * be located at head 0.
-         */
-        dbBoot.writeUInt8(0x00, DiskInfo.BPB.BOOTHEAD);         // boot sector offset 0x001F
+        if (fFloppy) kbTarget = 360;
     }
-    else if (version >= 3.2 && version < 4.0) {
-        /*
-         * When DOS 3.2 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
-         * (just before the 0x55,0xAA signature).
-         *
-         * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
-         * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
-         */
-        dbBoot.writeUInt8(bootDrive, 0x1FD);                    // boot sector offset 0x01FD
-    }
-    else if (version >= 4.0) {
-        dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.DRIVE);       // boot sector offset 0x0024
+    else {
+        if (fFloppy) kbTarget = (verDOS < 3.3? 720 : 1440);
+        if (verDOS >= 3.2 && verDOS < 4.0) {
+            /*
+             * When DOS 3.2 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
+             * (just before the 0x55,0xAA signature).
+             *
+             * Wikipedia claims that offset 0x1fd was used "only in DOS 3.2 to 3.31 boot sectors" and that
+             * in "OS/2 1.0 and DOS 4.0, this entry moved to sector offset 0x024 (at offset 0x19 in the EBPB)".
+             */
+            dbBoot.writeUInt8(bootDrive, 0x1FD);                // boot sector offset 0x01FD
+        }
+        else if (verDOS >= 4.0) {
+            dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.DRIVE);   // boot sector offset 0x0024
+        }
     }
 
     driveManifest = null;
@@ -1293,6 +1489,11 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
              */
             let manifest = di.getFileManifest(null, true);
             if (di.volTable[0] && di.volTable[0].iPartition >= 0) {
+                if (sSystemMBR.indexOf("pcjs.mbr") >= 0) {
+                    di.driveCtrl = "PCJS";
+                    driveInfo.driveCtrl = "PCJS";
+                    driveInfo.driveType = 0;
+                }
                 di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
             }
             di.updateBootSector(dbBoot, 0, verBPB);
@@ -1304,7 +1505,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
                  * I've deferred the minimum version check until now, because even if we can't (well, shouldn't)
                  * use the drive image, I'd still like to be able to inspect it.
                  */
-                if (di.minDOSVersion && di.minDOSVersion > version) {
+                if (di.minDOSVersion && di.minDOSVersion > verDOS) {
                     printf("error: drive requires DOS %s or later\n", di.minDOSVersion.toFixed(2));
                     return;
                 }
@@ -1317,7 +1518,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
 
-    readDir(sDir, 0, 0, "PCJS", null, normalize, maxCapacity * 1024, maxFiles, false, driveInfo, done);
+    readDir(sDir, 0, 0, "default", null, normalize, kbTarget, maxFiles, false, driveInfo, done);
 
     return driveManifest? "" : "unable to build drive";
 }
@@ -1423,13 +1624,9 @@ function updateDriveInfo(di)
         if (driveInfo.clusterSize && driveInfo.clusterSize != volume.clusSecs * volume.cbSector) {
             printf("warning: %d-byte clusters replaced with %d-bytes clusters\n", driveInfo.clusterSize, volume.clusSecs * volume.cbSector);
         }
-        //
-        // We're going to let this warning slide, because the number of root entries will almost always
-        // be increased to work around a boot sector bug.  See buildDiskFromFiles() in diskinfo.js for details.
-        //
-        // if (driveInfo.rootEntries && driveInfo.rootEntries != volume.rootEntries) {
-        //     printf("%d root entries replaced with %d root entries\n", driveInfo.rootEntries, volume.rootEntries);
-        // }
+        if (driveInfo.rootEntries && driveInfo.rootEntries != volume.rootEntries) {
+            printf("%d root entries replaced with %d root entries\n", driveInfo.rootEntries, volume.rootEntries);
+        }
     }
 }
 
@@ -1704,25 +1901,27 @@ function loadDiskette(sDrive, aTokens)
     };
     if (machine.fdc) {
         let sPath;
-        if (aTokens[0] == "--path" && (sPath = aTokens[1]) || (sPath = aTokens[0]).indexOf("http") == 0) {
-            doLoad(sDrive, sPath, sPath);
-            return result;
-        }
-        if (diskItems && aTokens.length == 1 && aTokens[0].match(/^\d+$/)) {
-            let diskItem = diskItems[+aTokens[0] - 1];
-            if (diskItem) {
-                if (!diskItem['others']) {
-                    doLoad(sDrive, diskItem['disk']);
-                } else {
-                    diskItems = diskItem['others'];
-                    diskItems.unshift(diskItem);
-                    delete diskItem['others'];
-                    result = displayItems(sDrive, diskItems, "multiple disks with identical file (use \"load a: 1\" to load original selection)");
-                }
-            } else {
-                result = "invalid diskette number (" + aTokens[0] + ")";
+        if (aTokens.length) {
+            if (aTokens[0] == "--path" && (sPath = aTokens[1]) || (sPath = aTokens[0]).indexOf("http") == 0) {
+                doLoad(sDrive, sPath, sPath);
+                return result;
             }
-            return result;
+            if (diskItems && aTokens.length == 1 && aTokens[0].match(/^\d+$/)) {
+                let diskItem = diskItems[+aTokens[0] - 1];
+                if (diskItem) {
+                    if (!diskItem['others']) {
+                        doLoad(sDrive, diskItem['disk']);
+                    } else {
+                        diskItems = diskItem['others'];
+                        diskItems.unshift(diskItem);
+                        delete diskItem['others'];
+                        result = displayItems(sDrive, diskItems, "multiple disks with identical file (use \"load a: 1\" to load original selection)");
+                    }
+                } else {
+                    result = "invalid diskette number (" + aTokens[0] + ")";
+                }
+                return result;
+            }
         }
         diskItems = [];
         let criteria = 'disk';
@@ -1875,7 +2074,7 @@ function loadDiskette(sDrive, aTokens)
 }
 
 /**
- * doCommand(s)
+ * doCommand(s, reload)
  *
  * The "exec" command is used internally whenever the machine signals the desire to execute a local command;
  * in that case, if a local drive was built, we save its state to the local file system, then kill the machine,
@@ -1885,13 +2084,14 @@ function loadDiskette(sDrive, aTokens)
  * and conversely, the machine sees any file changes that the local command made.
  *
  * @param {string} s
+ * @param {boolean} [reload]
  * @returns {string|null} (result of command, or null to quit)
  */
-function doCommand(s)
+function doCommand(s, reload = false)
 {
     let aTokens = s.split(' ');
     let cmd = aTokens[0].toLowerCase();
-    let child, result = "", reload = false, curDir = "", newDir;
+    let result = "", curDir = "", newDir;
 
     aTokens.splice(0, 1);
     let arg, args = aTokens.join(' ');
@@ -1899,7 +2099,6 @@ function doCommand(s)
     let help = function() {
         let result = "pc.js commands:\n" +
                     "  build [command]\n" +
-                    "  disk (displays info)\n" +
                     "  exec [local command]\n" +
                     "  load [drive] [search options]\n" +
                     "  save [local disk image]\n" +
@@ -1933,47 +2132,10 @@ function doCommand(s)
             if (result) printf("%s\n", result);
         });
         break;
-    case "disk":
-        if (driveManifest || driveInfo.volume || driveInfo.driveType >= 0) {
-            let info = {
-                controller: driveInfo.driveCtrl,
-                type: driveInfo.driveType,
-                cylinders: driveInfo.nCylinders,
-                heads: driveInfo.nHeads,
-                sectorsPerTrack: driveInfo.nSectors,
-                sectorSize: driveInfo.cbSector || 512,
-                clusterSize: driveInfo.clusterSize,
-                driveSize: driveInfo.driveSize.toFixed(1) + "mb"
-            };
-            if (driveInfo.volume) {
-                let vol = driveInfo.volume;
-                info.sectorSize = vol.cbSector;
-                info.mediaID = sprintf("%#04x", vol.idMedia);
-                let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
-                info.typeFAT = vol.nFATBits || vol.idFAT;
-                info.totalFATs = (sectorsFAT / Math.ceil(vol.clusTotal * info.typeFAT / 8 / vol.cbSector))|0;
-                info.rootEntries = vol.rootEntries || vol.rootTotal;
-                info.sectorsHidden = vol.lbaStart;
-                info.sectorsReserved = vol.vbaFAT;
-                info.sectorsFAT = sectorsFAT;
-                info.sectorsRoot = Math.ceil((info.rootEntries * 32) / vol.cbSector);
-                info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
-                info.clusterSize = vol.clusSecs * vol.cbSector;
-                info.clustersTotal = vol.clusTotal;
-                info.clustersFree = vol.clusFree;
-                info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
-                info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
-            }
-            result = sprintf("%2j", info);
-        } else {
-            result = "no built or prebuilt disk";
-        }
-        break;
     case "exec":
-        if (driveManifest) {
+        if (reload) {
             saveDisk(localDir);
             machine = newMachine();
-            reload = true;
         }
         curDir = process.cwd();
         try {
@@ -1986,7 +2148,7 @@ function doCommand(s)
                     args = appConfig['exec'].replace(/\$\*/, argv.slice(1).join(' '));
                 }
             }
-            child = child_process.execSync(args, {
+            let child = child_process.execSync(args, {
                 stdio: [
                 process.stdin,
                 process.stdout,
@@ -2005,12 +2167,16 @@ function doCommand(s)
     case "load":
         arg = aTokens[0];
         if (arg) {
-            let matchDrive = arg.match(/^([a-z]:?)$/i);
-            if (matchDrive) {
-                aTokens.splice(0, 1)
-                result = loadDiskette(matchDrive[1], aTokens);
+            if (arg == "info") {
+                result = getDriveInfo(true);
             } else {
-                result = "invalid diskette drive: " + arg;
+                let matchDrive = arg.match(/^([a-z]:?)$/i);
+                if (matchDrive) {
+                    aTokens.splice(0, 1)
+                    result = loadDiskette(matchDrive[1], aTokens);
+                } else {
+                    result = "invalid diskette drive: " + arg;
+                }
             }
         } else {
             result = "missing diskette drive (eg, A:)";
@@ -2124,15 +2290,19 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
     };
 
     if (sDisk) {
-        localDrive = sDisk;
-        let di = await readDiskAsync(localDrive);
-        if (di) {
-            updateDriveInfo(di);
+        if (sDisk.toLowerCase() == "none") {    // --disk=none disables any prebuilt disk
+            localDrive = "";
         } else {
-            error = "invalid disk";
+            localDrive = sDisk;
+            let di = await readDiskAsync(localDrive);
+            if (di) {
+                updateDriveInfo(di);
+                maxCapacity = 0;
+            } else {
+                error = "invalid disk";
+            }
         }
         localDir = "";
-        maxCapacity = 0;
     } else {
         localDrive = path.join(pcjsDir, localDrive);
     }
@@ -2162,8 +2332,8 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
         }
     }
 
-    if (!error) {
-        if (argv[1] || localDir) {              // last but not least, check for a DOS command or program name
+    if (!error) {                               // last but not least, check for a DOS command or program name
+        if (machineType == "pcx86" && (argv[1] || localDir)) {
             let args = argv.slice(1).join(' ');
             let sCommand = checkCommand(localDir, args);
             if (!sCommand && args) {
@@ -2172,14 +2342,12 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
                 warning = "unable to execute command '" + sCommand + "' with prebuilt disk";
             } else {
                 error = await buildDisk(localDir, sCommand);
-                if (!error) {
-                    if (!localMachine) {
-                        localMachine = checkMachine(savedMachine) || savedMachine;
-                    }
-                }
             }
         }
-        if (localMachine && !error) {
+        if (!error) {
+            if (!localMachine) {
+                localMachine = checkMachine(savedMachine) || savedMachine;
+            }
             error = loadMachine(localMachine);
             if (!error) {
                 loading = true;
@@ -2281,6 +2449,7 @@ function exit()
 {
     saveDisk(localDir);
     process.stdin.setRawMode(false);
+    if (fTest) printf("\n");
     process.exit();
 }
 
@@ -2302,6 +2471,7 @@ function main(argc, argv)
 
     fDebug = removeFlag('debug') || fDebug;
     fVerbose = removeFlag('verbose') || fVerbose;
+    fTest = removeFlag('test') || fTest;
 
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
@@ -2312,7 +2482,7 @@ function main(argc, argv)
     pcjsDir = path.join(rootDir, "/tools/pc");
     setRootDir(rootDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
 
-    if (!argv[1] || removeFlag('debug')) {
+    if (!argv[1] || fDebug || fTest) {
         let options = arg0.slice(1).join(' ');
         printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
     }
@@ -2325,10 +2495,19 @@ function main(argc, argv)
     fFloppy = removeFlag('floppy') || fFloppy;
     if (!fFloppy) fNoFloppy = removeFlag('nofloppy') || fNoFloppy;
 
-    machineType = removeArg('type') || defaults['type'] || machineType;
-    systemOverride = argv['system'] || argv['version'];
-    systemType = (removeArg('system', 'string') || defaults['system'] || systemType).toLowerCase();
-    systemVersion = (removeArg('version', 'string') || defaults['version'] || systemVersion);
+    machineType = defaults['type'] || machineType;
+    systemOverride = argv['sys'] || argv['ver'];
+    systemType = (removeArg('sys', 'string') || defaults['sys'] || systemType).toLowerCase();
+    let i = systemType.indexOf(':');
+    if (i > 0) {
+        /*
+         * We allow the version to be included with the system argument (eg, --sys=pcdos:2.0), for convenience.
+         */
+        systemVersion = systemType.slice(i+1);
+        systemType = systemType.slice(0, i);
+    } else {
+        systemVersion = (removeArg('ver', 'string') || defaults['ver'] || systemVersion);
+    }
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
     localDir = defaults['directory'] || localDir;
@@ -2340,30 +2519,45 @@ function main(argc, argv)
         savedMachine = "ibm5170";
         maxCapacity = maxFiles = 0;
         driveInfo.driveCtrl = "FDC";
-        driveInfo.fRemovable = true;
+        driveInfo.fPartitioned = false;
         driveOverride = true;
     } else {
-        let driveCtrl = removeArg('drivectrl');
+        let driveCtrl = removeArg('ctrl');
         if (driveCtrl) {
             driveInfo.driveCtrl = driveCtrl;
             driveOverride = true;
         }
         maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || maxFiles;
-        maxCapacity = parseFloat(removeArg('drivesize')) || parseFloat(defaults['drivesize']) || maxCapacity;
+        maxCapacity = parseFloat(removeArg('size')) || parseFloat(defaults['size']) || maxCapacity;
+        driveInfo.fPartitioned = true;
     }
 
-    let typeDrive = removeArg('drivetype');
+    let typeDrive = removeArg('type');
     if (typeDrive) {
         let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
         if (match) {
-            maxCapacity = 0;
-            if (!fFloppy) driveInfo.driveCtrl = "PCJS"; // this pseudo drive controller is required for custom drive geometries
-            driveInfo.driveType = 0;
-            driveInfo.nCylinders = +match[1];
-            driveInfo.nHeads = +match[2];
-            driveInfo.nSectors = +match[3];
-            driveInfo.cbSector = +match[4] || 512;
-            driveOverride = true;
+            let nCylinders = +match[1];
+            let nHeads = +match[2];
+            let nSectors = +match[3];
+            let cbSector = +match[4] || 512;
+            if (nCylinders < 1 || nCylinders > 1024 ||
+                nHeads < 1 || nHeads > 256 ||
+                nSectors < 1 || nSectors > 63 ||
+                cbSector < 128 || cbSector > 1024 || (cbSector & (cbSector - 1))) {
+                match = null;
+            } else {
+                maxCapacity = 0;
+                if (!fFloppy) driveInfo.driveCtrl = "PCJS"; // this pseudo drive controller is required for custom drive geometries
+                driveInfo.driveType = 0;
+                driveInfo.nCylinders = nCylinders;
+                driveInfo.nHeads = nHeads;
+                driveInfo.nSectors = nSectors;
+                driveInfo.cbSector = cbSector;
+                if (cbSector != 512) {
+                    printf("warning: %d-byte sectors are not known to work with any DOS operating system\n", cbSector);
+                }
+                driveOverride = true;
+            }
         } else if (!fFloppy) {
             match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
             if (match) {
@@ -2379,7 +2573,7 @@ function main(argc, argv)
             }
         }
         if (!match) {
-            printf("invalid drive type: %s\n", typeDrive);
+            printf("error: invalid drive type (%s)\n", typeDrive);
         }
     }
 
@@ -2388,34 +2582,35 @@ function main(argc, argv)
         let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
         if (match) {
             driveInfo.typeFAT = +match[1];
-            if (match[2]) driveInfo.clusterSize = +match[2];
-            if (match[3]) driveInfo.rootEntries = +match[3];
+            if (match[2]) driveInfo.clusterSize = +match[2] || 0;
+            if (match[3]) driveInfo.rootEntries = +match[3] || 0;
         }
     }
 
     if (removeFlag('help')) {
         let optionsMain = {
-            "--start=[machine file]":   "start machine configuration file",
+            "--start=[machine]":        "start machine configuration file",
         };
         let optionsDisk = {
             "--dir=[directory]":        "set drive local directory (default is " + localDir + ")",
-            "--disk=[disk image]":      "set drive disk image (instead of directory)",
-            "--drivectrl=[ctrl]":       "set drive controller (eg, XT, AT, COMPAQ)",
-            "--drivesize=[size]":       "set drive capacity (default is " + maxCapacity + "mb)",
-            "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
+            "--disk=[image]":           "\tset drive disk image (instead of directory)",
+            "--ctrl=[controller]":      "set drive controller (eg, XT, AT, COMPAQ)",
+            "--size=[number]":          "\tset drive capacity in Mb (default is " + maxCapacity + "Mb)",
+            "--type=[value]":           "\tset drive type or C:H:S (eg, 306:4:17)",
             "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
-            "--system=[string]":        "operating system type (default is " + systemType + ")",
-            "--version=[#.##]":         "operating system version (default is " + systemVersion + ")"
+            "--sys=[string]":           "\toperating system type (default is " + systemType + ")",
+            "--ver=[#.##]":             "\toperating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
-            "--debug (-d)\t":           "enable DEBUG messages",
-            "--floppy (-f)\t":          "build floppy disk instead of hard disk",
-            "--halt (-h)\t":            "halt machine on startup",
-            "--help (-?)\t":            "display command-line usage",
-            "--local (-l)\t":           "use local diskette images",
-            "--nofloppy (-n)\t":        "remove any diskette from drive A:",
-            "--verbose (-v)\t":         "enable verbose mode"
+            "--debug (-d)":             "\tenable DEBUG messages",
+            "--floppy (-f)":            "\tbuild non-partitioned boot disk",
+            "--halt (-h)":              "\thalt machine on startup",
+            "--help (-?)":              "\tdisplay command-line usage",
+            "--local (-l)":             "\tuse local diskette images",
+            "--nofloppy (-n)":          "\tremove any diskette from drive A:",
+            "--test (-t)":              "\tenable test mode (non-interactive)",
+            "--verbose (-v)":           "\tenable verbose mode"
         };
         let optionGroups = {
             "machine options:":         optionsMain,
@@ -2429,9 +2624,9 @@ function main(argc, argv)
                 printf("\t%s\t%s\n", option, optionGroups[group][option]);
             }
         }
-        printf("\nnotes:\n\t--drivetype can also specify a drive geometry (eg, --drivetype=306:4:17)\n");
+        printf("\nnotes:\n\t--type can also specify a drive geometry (eg, --type=306:4:17)\n");
         printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
-        printf("\t--fat values should be considered advisory, as it may not be possible to honor them.\n");
+        printf("\t--fat values should be considered advisory, as it may not be possible to honor them\n");
         printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, "pc.json"));
         return;
     }
@@ -2461,6 +2656,7 @@ main(...pcjslib.getArgs({
     'h': "halt",
     'l': "local",
     'n': "nofloppy",
+    't': "test",
     'v': "verbose",
     'w': "write"
 }));

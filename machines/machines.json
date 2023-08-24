@@ -24,7 +24,7 @@
   },
   "pcx86": {
     "name": "PCx86",
-    "version": "2.20",
+    "version": "2.21",
     "defines": [
       "APPVERSION",
       "DEBUGGER",
@@ -134,7 +134,7 @@
   },
   "c1p": {
     "name": "C1Pjs",
-    "version": "2.20",
+    "version": "2.21",
     "folder": "osi/c1p",
     "defines": [
       "APPVERSION",
@@ -180,7 +180,7 @@
   },
   "pcx80": {
     "name": "PCx80",
-    "version": "2.20",
+    "version": "2.21",
     "defines": [
       "APPVERSION",
       "DEBUGGER",
@@ -235,7 +235,7 @@
   },
   "pdp10": {
     "name": "PDPjs",
-    "version": "2.20",
+    "version": "2.21",
     "folder": "dec/pdp10",
     "defines": [
       "APPVERSION",
@@ -289,7 +289,7 @@
   },
   "pdp11": {
     "name": "PDPjs",
-    "version": "2.20",
+    "version": "2.21",
     "folder": "dec/pdp11",
     "defines": [
       "APPVERSION",
@@ -553,7 +553,7 @@
     ]
   },
   "shared": {
-    "version": "2.20",
+    "version": "2.21",
     "externs": [
       "./machines/modules/v2/externs.js"
     ]

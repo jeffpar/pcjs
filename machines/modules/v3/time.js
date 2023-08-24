@@ -329,7 +329,7 @@ export default class Time extends Device {
                      * reach 90% of our original target and revert back to the base multiplier.
                      */
                     this.nTargetMultiplier >>= 1;
-                    this.printf(Device.MESSAGE.WARN, "warning: frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
+                    this.printf(Device.MESSAGE.WARN, "frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
                 }
                 /**
                  * If we (potentially) took too long on this last run, we pass that time back as an adjustment,
@@ -824,7 +824,7 @@ export default class Time extends Device {
             let msDeltaRun = msStartThisRun - this.msStartThisRun - this.msFrameDefault;
             if (msDeltaRun > this.msFrameDefault) {
                 this.msStartRun += msDeltaRun;
-                this.printf(Device.MESSAGE.WARN, "warning: browser throttling detected, compensating by %5.3fms\n", msDeltaRun);
+                this.printf(Device.MESSAGE.WARN, "browser throttling detected, compensating by %5.3fms\n", msDeltaRun);
             }
         }
         this.msStartThisRun = msStartThisRun;

@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+Microsoft (R) Macro Assembler  Version 4.00                 8/23/23 16:15:00
 
                                                             Page     1-1
                                                             
@@ -57,7 +57,7 @@
                          ]      
                                 
  000C  ????                     drv_landing	dw	?	; 0x1AA, 0x1BA 
-Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+Microsoft (R) Macro Assembler  Version 4.00                 8/23/23 16:15:00
 
                                                             Page     1-2
                                                             
@@ -113,10 +113,10 @@
  7E26  39 0C                    	cmp	[si].drv_cyls,cx 
  7E28  74 05                    	je	chk1 
  7E2A  B2 80                    	mov	dl,80h 
- 7E2C  E8 7E9C R                	call	copy 
+ 7E2C  E8 7EA0 R                	call	copy 
  7E2F  BB 0118                  chk1:	mov	bx,VEC_DRIVE1 * 4 
  7E32  BE 7FAE R                	mov	si,offset drv1tbl 
-Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+Microsoft (R) Macro Assembler  Version 4.00                 8/23/23 16:15:00
 
                                                             Page     1-3
                                                             
@@ -125,94 +125,93 @@
  7E38  39 0C                    	cmp	[si].drv_cyls,cx 
  7E3A  74 05                    	je	scan 
  7E3C  B2 81                    	mov	dl,81h 
- 7E3E  E8 7E9C R                	call	copy 
+ 7E3E  E8 7EA0 R                	call	copy 
                                 ; 
                                 ; Now back to our regularly scheduled Master Boot Record: scan the partition 
                                 ; table, find the ACTIVE partition, ensure the rest are INACTIVE, then boot it. 
                                 ; 
  7E41  B1 04                    scan:	mov	cl,4		; CX = count (CH is already zero) 
- 7E43  33 D2                    	xor	dx,dx 
+ 7E43  33 FF                    	xor	di,di 
  7E45  BE 7FBE R                	mov	si,offset par0tbl 
  7E48  80 3C 80                 next:	cmp	[si].par_status,ACTIVE 
  7E4B  74 10                    	je	load 
  7E4D  80 3C 00                 	cmp	[si].par_status,INACTIVE 
- 7E50  75 38                    	jne	inv 
+ 7E50  75 3A                    	jne	inv 
  7E52  83 C6 10                 skip:	add	si,size par_record 
  7E55  E2 F1                    	loop	next 
- 7E57  85 D2                    	test	dx,dx		; did we find an ACTIVE partition? 
- 7E59  75 0D                    	jnz	read		; yes 
+ 7E57  85 FF                    	test	di,di		; did we find an ACTIVE partition? 
+ 7E59  75 0F                    	jnz	read		; yes 
  7E5B  CD 18                    	int	18h		; no, so start ROM BASIC 
- 7E5D  85 D2                    load:	test	dx,dx		; did we already find an ACTIVE partition? 
- 7E5F  75 29                    	jnz	inv		; yes 
+ 7E5D  85 FF                    load:	test	di,di		; did we already find an ACTIVE partition? 
+ 7E5F  75 2B                    	jnz	inv		; yes 
  7E61  8B 14                    	mov	dx,word ptr [si].par_status 
  7E63  8B 44 02                 	mov	ax,word ptr [si].par_chs_beg+1 
- 7E66  EB EA                    	jmp	skip 
+ 7E66  8B FE                    	mov	di,si		; DI -> partition record 
+ 7E68  EB E8                    	jmp	skip 
                                  
- 7E68  BF 0005                  read:	mov	di,5		; retries 
- 7E6B  8B DC                    	mov	bx,sp		; BX = 7C00h (nothing has been pushed) 
- 7E6D  91                       	xchg	cx,ax		; CX and DX contain cylinder/head/sector 
- 7E6E  B8 0201                  retry:	mov	ax,0201h	; AH = 02h, AL = 01h 
- 7E71  CD 13                    	int	13h 
- 7E73  73 1A                    	jnc	verify 
- 7E75  33 C0                    	xor	ax,ax 
- 7E77  CD 13                    	int	13h 
- 7E79  4F                       	dec	di 
- 7E7A  75 F2                    	jnz	retry 
- 7E7C  BE 7EC3 R                	mov	si,offset err_msg 
+ 7E6A  BD 0005                  read:	mov	bp,5		; BP = retries 
+ 7E6D  8B DC                    	mov	bx,sp		; BX = 7C00h (nothing has been pushed) 
+ 7E6F  91                       	xchg	cx,ax		; CX and DX contain cylinder/head/sector 
+ 7E70  B8 0201                  retry:	mov	ax,0201h	; AH = 02h, AL = 01h 
+ 7E73  CD 13                    	int	13h 
+ 7E75  73 1A                    	jnc	verify 
+ 7E77  33 C0                    	xor	ax,ax 
+ 7E79  CD 13                    	int	13h 
+ 7E7B  4D                       	dec	bp 
+ 7E7C  75 F2                    	jnz	retry 
+ 7E7E  BE 7EC7 R                	mov	si,offset err_msg 
                                  
- 7E7F  AC                       print:	lodsb 
- 7E80  84 C0                    	test	al,al 
- 7E82  74 FE                    hang:	jz	hang 
- 7E84  B4 0E                    	mov	ah,0Eh 
- 7E86  CD 10                    	int	10h 
- 7E88  EB F5                    	jmp	print 
+ 7E81  AC                       print:	lodsb 
+ 7E82  84 C0                    	test	al,al 
+ 7E84  74 FE                    hang:	jz	hang 
+ 7E86  B4 0E                    	mov	ah,0Eh 
+ 7E88  CD 10                    	int	10h 
+ 7E8A  EB F5                    	jmp	print 
                                  
- 7E8A  BE 7EAB R                inv:	mov	si,offset inv_msg 
- 7E8D  EB F0                    	jmp	print 
+ 7E8C  BE 7EAF R                inv:	mov	si,offset inv_msg 
+ 7E8F  EB F0                    	jmp	print 
                                  
- 7E8F  BE 7EE2 R                verify:	mov	si,offset mis_msg 
- 7E92  81 BF 01FE AA55          	cmp	word ptr [bx+1FEh],0AA55h 
- 7E98  75 E5                    	jne	print 
+ 7E91  BE 7EE6 R                verify:	mov	si,offset mis_msg 
+ 7E94  81 BF 01FE AA55          	cmp	word ptr [bx+1FEh],0AA55h 
+ 7E9A  75 E5                    	jne	print 
                                 ; 
-                                ; NOTE: Before transferring control to the DOS boot record, the DOS MBR 
-Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+Microsoft (R) Macro Assembler  Version 4.00                 8/23/23 16:15:00
 
                                                             Page     1-4
                                                             
 
-                                ; carefully restored SI to the offset of the active partition record, but 
-                                ; I am unaware of any reliance on that value.  In fact, when IO.SYS wants 
-                                ; to examine the MBR, it simply re-reads and re-scans it.  Perhaps there 
-                                ; was a plan to pass MBR information on to the boot sector, and from there 
-                                ; to IO.SYS, thereby eliminating a redundant read, but I don't think that 
-                                ; ever happened. 
+                                ; NOTE: Before transferring control to the DOS boot record, the DOS MBR 
+                                ; carefully restores SI to the offset of the active partition record.  I 
+                                ; was unaware of any reliance on that value or any documentation to that 
+                                ; effect, but then I discovered that COMPAQ boot records depend on it.... 
                                 ; 
- 7E9A  FF E4                    boot:	jmp	sp		; jump to 7C00h 
+ 7E9C  8B F7                    	mov	si,di		; SI -> partition record 
+ 7E9E  FF E4                    boot:	jmp	sp		; jump to 7C00h 
                                  
                                 ; 
                                 ; Using the vector space at 0:DI, update the drive vector at 0:BX, 
                                 ; copy the drive parameters from DS:SI to ES:DI, then notify the BIOS. 
                                 ; 
- 7E9C                           copy	proc	near 
- 7E9C  89 3F                    	mov	[bx],di		; update drive parms vector with AX:DI 
- 7E9E  89 4F 02                 	mov	[bx+2],cx	; (CX is zero) 
- 7EA1  B9 0010                  	mov	cx,size drv_parms 
- 7EA4  F3/ A4                   	rep	movsb 
- 7EA6  B4 09                    	mov	ah,09h		; tell the BIOS about the new parameters 
- 7EA8  CD 13                    	int	13h		; DL = drive # 
- 7EAA  C3                       	ret 
+ 7EA0                           copy	proc	near 
+ 7EA0  89 3F                    	mov	[bx],di		; update drive parms vector with AX:DI 
+ 7EA2  89 4F 02                 	mov	[bx+2],cx	; (CX is zero) 
+ 7EA5  B9 0010                  	mov	cx,size drv_parms 
+ 7EA8  F3/ A4                   	rep	movsb 
+ 7EAA  B4 09                    	mov	ah,09h		; tell the BIOS about the new parameters 
+ 7EAC  CD 13                    	int	13h		; DL = drive # 
+ 7EAE  C3                       	ret 
                                 copy	endp 
                                  
- 7EAB  49 6E 76 61 6C 69 64     inv_msg	db	"Invalid partition table",0 
+ 7EAF  49 6E 76 61 6C 69 64     inv_msg	db	"Invalid partition table",0 
        20 70 61 72 74 69 74     
        69 6F 6E 20 74 61 62     
        6C 65 00                 
- 7EC3  45 72 72 6F 72 20 6C     err_msg	db	"Error loading operating system",0 
+ 7EC7  45 72 72 6F 72 20 6C     err_msg	db	"Error loading operating system",0 
        6F 61 64 69 6E 67 20     
        6F 70 65 72 61 74 69     
        6E 67 20 73 79 73 74     
        65 6D 00                 
- 7EE2  4D 69 73 73 69 6E 67     mis_msg	db	"Missing operating system",0 
+ 7EE6  4D 69 73 73 69 6E 67     mis_msg	db	"Missing operating system",0 
        20 6F 70 65 72 61 74     
        69 6E 67 20 73 79 73     
        74 65 6D 00              
@@ -234,12 +233,12 @@
  7FA7  0003[                    
             ??                  
                          ]      
-Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+ 7FAA  ????                     
+Microsoft (R) Macro Assembler  Version 4.00                 8/23/23 16:15:00
 
                                                             Page     1-5
                                                             
 
- 7FAA  ????                     
  7FAC  ??                       
  7FAD  ??                       
                                 
@@ -293,12 +292,12 @@
  7FE6  ????????                 
  7FEA  ????????                 
                                 
-Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+ 7FEE  ??                       par3tbl	par_record	<> 
+Microsoft (R) Macro Assembler  Version 4.00                 8/23/23 16:15:00
 
                                                             Page     1-6
                                                             
 
- 7FEE  ??                       par3tbl	par_record	<> 
  7FEF  0003[                    
             ??                  
                          ]      
@@ -316,7 +315,7 @@
  8000                           BOOTSEG	ends 
                                  
                                 	end 
-Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+Microsoft (R) Macro Assembler  Version 4.00                 8/23/23 16:15:00
 
                                                             Symbols-1
                                                              
@@ -357,31 +356,31 @@ Symbols:
 
 ACTIVE . . . . . . . . . . . . .  	Number	0080	
 
-BOOT . . . . . . . . . . . . . .  	L NEAR	7E9A	BOOTSEG
+BOOT . . . . . . . . . . . . . .  	L NEAR	7E9E	BOOTSEG
 
 CHK0 . . . . . . . . . . . . . .  	L NEAR	7E1D	BOOTSEG
 CHK1 . . . . . . . . . . . . . .  	L NEAR	7E2F	BOOTSEG
-COPY . . . . . . . . . . . . . .  	N PROC	7E9C	BOOTSEG	Length = 000F
+COPY . . . . . . . . . . . . . .  	N PROC	7EA0	BOOTSEG	Length = 000F
 
 DRV0TBL  . . . . . . . . . . . .  	L 0010	7F9E	BOOTSEG
 DRV1TBL  . . . . . . . . . . . .  	L 0010	7FAE	BOOTSEG
 
-ERR_MSG  . . . . . . . . . . . .  	L BYTE 	7EC3	BOOTSEG
+ERR_MSG  . . . . . . . . . . . .  	L BYTE 	7EC7	BOOTSEG
 
-HANG . . . . . . . . . . . . . .  	L NEAR	7E82	BOOTSEG
+HANG . . . . . . . . . . . . . .  	L NEAR	7E84	BOOTSEG
 
 INACTIVE . . . . . . . . . . . .  	Number	0000	
-INV  . . . . . . . . . . . . . .  	L NEAR	7E8A	BOOTSEG
-INV_MSG  . . . . . . . . . . . .  	L BYTE 	7EAB	BOOTSEG
+INV  . . . . . . . . . . . . . .  	L NEAR	7E8C	BOOTSEG
+INV_MSG  . . . . . . . . . . . .  	L BYTE 	7EAF	BOOTSEG
 
 LOAD . . . . . . . . . . . . . .  	L NEAR	7E5D	BOOTSEG
-Microsoft (R) Macro Assembler  Version 4.00                 8/15/23 16:19:21
+Microsoft (R) Macro Assembler  Version 4.00                 8/23/23 16:15:00
 
                                                             Symbols-2
                                                              
 
 
-MIS_MSG  . . . . . . . . . . . .  	L BYTE 	7EE2	BOOTSEG
+MIS_MSG  . . . . . . . . . . . .  	L BYTE 	7EE6	BOOTSEG
 
 NEXT . . . . . . . . . . . . . .  	L NEAR	7E48	BOOTSEG
 
@@ -389,11 +388,11 @@ PAR0TBL  . . . . . . . . . . . .  	L 0010	7FBE	BOOTSEG
 PAR1TBL  . . . . . . . . . . . .  	L 0010	7FCE	BOOTSEG
 PAR2TBL  . . . . . . . . . . . .  	L 0010	7FDE	BOOTSEG
 PAR3TBL  . . . . . . . . . . . .  	L 0010	7FEE	BOOTSEG
-PRINT  . . . . . . . . . . . . .  	L NEAR	7E7F	BOOTSEG
+PRINT  . . . . . . . . . . . . .  	L NEAR	7E81	BOOTSEG
 
-READ . . . . . . . . . . . . . .  	L NEAR	7E68	BOOTSEG
+READ . . . . . . . . . . . . . .  	L NEAR	7E6A	BOOTSEG
 RELOC  . . . . . . . . . . . . .  	Number	7E00	
-RETRY  . . . . . . . . . . . . .  	L NEAR	7E6E	BOOTSEG
+RETRY  . . . . . . . . . . . . .  	L NEAR	7E70	BOOTSEG
 
 SCAN . . . . . . . . . . . . . .  	L NEAR	7E41	BOOTSEG
 SKIP . . . . . . . . . . . . . .  	L NEAR	7E52	BOOTSEG
@@ -404,11 +403,11 @@ TBL_DRIVE1 . . . . . . . . . . .  	Number	0310
 
 VEC_DRIVE0 . . . . . . . . . . .  	Number	0041	
 VEC_DRIVE1 . . . . . . . . . . .  	Number	0046	
-VERIFY . . . . . . . . . . . . .  	L NEAR	7E8F	BOOTSEG
+VERIFY . . . . . . . . . . . . .  	L NEAR	7E91	BOOTSEG
 
 
-    205 Source  Lines
-    205 Total   Lines
+    204 Source  Lines
+    204 Total   Lines
      72 Symbols
 
   47116 Bytes symbol space free

@@ -570,11 +570,6 @@ Device.MESSAGE.INPUT            = 0x000000200000;
 Device.MESSAGE.KEY              = 0x000000400000;
 Device.MESSAGE.MOUSE            = 0x000000800000;
 Device.MESSAGE.TOUCH            = 0x000001000000;
-Device.MESSAGE.INFO             = 0x000002000000;
-Device.MESSAGE.WARN             = 0x000004000000;
-Device.MESSAGE.ERROR            = 0x000008000000;
-Device.MESSAGE.DEBUG            = 0x000010000000;
-Device.MESSAGE.HALT             = 0x000020000000;
 Device.MESSAGE.CUSTOM           = 0x000100000000;       // all custom device messages must start here
 
 Device.MESSAGE_NAMES["addr"]    = Device.MESSAGE.ADDR;
@@ -602,9 +597,9 @@ Device.MESSAGE_NAMES["input"]   = Device.MESSAGE.INPUT;
 Device.MESSAGE_NAMES["key"]     = Device.MESSAGE.KEY;
 Device.MESSAGE_NAMES["mouse"]   = Device.MESSAGE.MOUSE;
 Device.MESSAGE_NAMES["touch"]   = Device.MESSAGE.TOUCH;
+Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
 Device.MESSAGE_NAMES["info"]    = Device.MESSAGE.INFO;
 Device.MESSAGE_NAMES["warn"]    = Device.MESSAGE.WARN;
 Device.MESSAGE_NAMES["error"]   = Device.MESSAGE.ERROR;
-Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
 
 Device.CLASSES["Device"] = Device;

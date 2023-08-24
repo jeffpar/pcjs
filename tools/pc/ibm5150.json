@@ -71,7 +71,8 @@
         "name": "PC DOS 1.00",
         "path": "/diskettes/pcx86/sys/dos/ibm/1.00/PCDOS100.json"
       }
-    }
+    },
+    "diskettes": "/machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json"
   },
   "chipset": {
     "id": "chipset",

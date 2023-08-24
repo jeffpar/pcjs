@@ -466,9 +466,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "chkdsk c:,quit"
+        "--sys:pcdos:7",
+        "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
+      "cwd": "${workspaceFolder}/tools/pc/disks/TEST/SRC/MBR",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -553,10 +554,11 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "MBR",
-        "dir"
+        "--disk=MBR.json",
+        "--nofloppy",
+        "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -621,12 +623,34 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "disks/MSDOS320",
-        "--drivetype=3",
-        "--debug",
-        "dir"
+        "--sys=compaq",
+        "--ver=3.31",
+        "--drivesize=40"
       ],
-      "cwd": "${workspaceFolder}/tools/pc",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "pc.js compaq386 MBR331",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "compaq386",
+        "--disk=MBR331.img",
+        "--nofloppy",
+        "--halt"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -700,13 +724,13 @@
       }
     },
     {
-      "name": "pc.js dir --system=compaq --version=3.31",
+      "name": "pc.js dir --sys=compaq --ver=3.31",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--system=compaq",
-        "--version=3.31",
+        "--sys=compaq",
+        "--ver=3.31",
         "disks/MSDOS320",
         "dir"
       ],
@@ -723,13 +747,13 @@
       }
     },
     {
-      "name": "pc.js dir --system=pcdos --version=2.00",
+      "name": "pc.js dir --sys=pcdos --ver=2.00",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--system=pcdos",
-        "--version=2.00",
+        "--sys=pcdos",
+        "--ver=2.00",
         "disks/MSDOS320",
         "dir"
       ],
@@ -746,13 +770,13 @@
       }
     },
     {
-      "name": "pc.js dir --system=pcdos --version=2.00 --drivesize=20mb",
+      "name": "pc.js dir --sys=pcdos --ver=2.00 --drivesize=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--system=pcdos",
-        "--version=2.00",
+        "--sys=pcdos",
+        "--ver=2.00",
         "--drivesize=20mb",
         "disks/MSDOS320",
         "dir"
@@ -770,13 +794,13 @@
       }
     },
     {
-      "name": "pc.js dir --system=pcdos --version=3.10",
+      "name": "pc.js dir --sys=pcdos --ver=3.10",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--system=pcdos",
-        "--version=3.10",
+        "--sys=pcdos",
+        "--ver=3.10",
         "disks/MSDOS320",
         "dir"
       ],
@@ -793,13 +817,13 @@
       }
     },
     {
-      "name": "pc.js dir --system=pcdos --version=3.10 --drivesize=20mb",
+      "name": "pc.js dir --sys=pcdos --ver=3.10 --drivesize=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--system=pcdos",
-        "--version=3.10",
+        "--sys=pcdos",
+        "--ver=3.10",
         "--drivesize=20mb",
         "ibm5170",
         "disks/MSDOS320",
@@ -840,15 +864,15 @@
       }
     },
     {
-      "name": "pc.js dir --drivetype=80:2:18 --system=compaq --version=3.31",
+      "name": "pc.js dir --drivetype=80:2:18 --sys=compaq --ver=3.31",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "dir",
         "--drivetype=80:2:18",
-        "--system=compaq",
-        "--version=3.31"
+        "--sys=compaq",
+        "--ver=3.31"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
       "stopOnEntry": false,
@@ -1474,9 +1498,10 @@
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "MBR/",
-        "mbr.img",
+        "MBR.img",
+        "--drivetype=305:4:17:1024",
         "--overwrite",
-        "--drivetype=40:2:5:1024"
+        "--partitioned=false"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
       "stopOnEntry": false,
@@ -1544,12 +1569,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--dir=DISK0001",
+        "--dir=MBR/",
         "--normalize",
-        "--output=TEST0001.img",
+        "--output=MBR.img",
+        "--target=10M",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/disks/tmp",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1793,7 +1819,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=miscdisks/pcx86/lang/borland/pascal/6.00/TURBO-PASCAL-600-DISK4",
+        "--collection=miscdisks/pcx86/app/other/visicalc/1981",
         "--checkdisk",
         "--rebuild"
       ],

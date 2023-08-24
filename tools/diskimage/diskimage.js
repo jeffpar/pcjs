@@ -138,7 +138,11 @@ function createDriveInfo(argv, diskette)
             driveInfo.nHeads = +match[2];
             driveInfo.nSectors = +match[3];
             driveInfo.cbSector = +match[4] || 512;
-            driveInfo.fRemovable = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector < 3000000);
+            if (argv['partitioned'] !== undefined) {
+                driveInfo.fPartitioned = !!argv['partitioned'];
+            } else {
+                driveInfo.fPartitioned = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector >= DiskInfo.MIN_PARTITION);
+            }
         } else {
             match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
             if (match) {
@@ -163,8 +167,8 @@ function createDriveInfo(argv, diskette)
         if (match) {
             driveInfo.driveCtrl = driveInfo.driveCtrl || "XT";
             driveInfo.typeFAT = +match[1];
-            if (match[2]) driveInfo.clusterSize = +match[2];
-            if (match[3]) driveInfo.rootEntries = +match[3];
+            if (match[2]) driveInfo.clusterSize = +match[2] || 0;
+            if (match[3]) driveInfo.rootEntries = +match[3] || 0;
         }
     }
 
@@ -424,7 +428,7 @@ function processDisk(di, diskFile, argv, diskette)
         }
     }
 
-    if (!argv['quiet']) {
+    if (argv['collection'] || argv['verbose']) {
         printf("processing: %s (%d bytes, checksum %d, hash %s)\n", di.getName(), di.getSize(), di.getChecksum(), di.getHash());
     }
 
@@ -1387,6 +1391,7 @@ function main(argc, argv)
             "--list (-l)\t":            "display directory listings of disk or archive",
             "--list=unused\t":          "display unused space in disk image (.json only)",
             "--normalize\t":            "convert line endings and character encoding of text files",
+            "--partitioned (-p)":       "force partitioned disk image",
             "--password=[string]":      "use password for decompression (ARC files only)",
             "--quiet (-q)\t":           "minimum messages",
             "--verbose (-v)\t":         "maximum messages (eg, display archive contents)"
@@ -1433,6 +1438,7 @@ main(...pcjslib.getArgs({
     '?': "help",
     'e': "extract",
     'l': "list",
+    'p': "partitioned",
     'q': "quiet",
     'v': "verbose",
     'x': "expand"

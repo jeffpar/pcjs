@@ -62,14 +62,13 @@ Here's some valuable information regarding DOS BPBs from [comp.os.msdos.programm
 
     Wally Bass
     Feb 14, 1994, 10:00:32 AM
-    to
-    In article <2jm5rt$2...@marlin.ssnet.com> pa...@marlin.ssnet.com
 
     (Pamela Kane) writes:
     >Does anyone know how DOS determines the cluster size when initializing a 
     >disk? Given a drive with x number of sectors (as reported by the BIOS) 
     >what is the formula for fixing the cluster size at 1, 2, 4, or 8 (or 
     >more) sectors per cluster as reported in the BPB?
+
     This is probably more information than you wanted, but the following are
     from some notes that I have on this topic from some time back.
 

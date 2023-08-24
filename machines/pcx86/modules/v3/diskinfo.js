@@ -200,7 +200,7 @@ export default class DiskInfo {
         let nCylinders = 0;
         let nSectorsPerTrack = 0;
         let aTracks = [];                   // track array (used only for disk images with track tables)
-        let cbSector = 512;                 // default sector size
+        let cbSector = driveInfo.cbSector || 512;
         let bMediaID = 0;
         let offBootSector = 0;
         let cbDiskData = dbDisk.length, cbPartition = cbDiskData;
@@ -212,7 +212,7 @@ export default class DiskInfo {
             driveInfo.driveType = -1;
         }
 
-        if (cbDiskData >= 3000000 || !driveInfo.fRemovable) {
+        if (driveInfo.fPartitioned || cbDiskData >= DiskInfo.MIN_PARTITION && driveInfo.fPartitioned !== false) {
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
             if (wSig == DiskInfo.BOOT.SIGNATURE) {
                 /*
@@ -496,7 +496,7 @@ export default class DiskInfo {
              * certain OEM strings (eg, "IBM  2.0", "IBM  3.1") as a for drive and FAT type determination.
              */
             let dw = dbDisk.readInt32BE(DiskInfo.BPB.OEM + offBootSector);
-            if (dw != DiskInfo.PCJS_VALUE && cbDiskData < 3000000 && driveInfo.driveCtrl != "PCJS") {
+            if (dw != DiskInfo.PCJS_VALUE && cbDiskData < DiskInfo.MIN_PARTITION && driveInfo.driveCtrl != "PCJS") {
                 dbDisk.write(DiskInfo.PCJS_OEM, DiskInfo.BPB.OEM + offBootSector, DiskInfo.PCJS_OEM.length);
                 this.printf(Device.MESSAGE.INFO, "OEM string has been updated\n");
                 if (fnHash) this.fBPBModified = true;
@@ -681,6 +681,12 @@ export default class DiskInfo {
 
                         dbSector = dbTrack.slice(offSector, offSector + cbSectorThisTrack);
 
+                        /*
+                         * NOTE: This code is broken if the disks's reserved sector count is anything other than 1, because
+                         * it assumes that the first FAT sector immediately follows the boot sector.  However, we never use
+                         * a value other than 1 anyway, because I've yet to find a version DOS (at least DOS 2.x or 3.x) that
+                         * actually honors the BPB's reserved sector count.  So there's ample brokenness to go around.
+                         */
                         if (bMediaID && !iCylinder && !iHead && iSector == ((offBootSector/cbSector)|0) + 2) {
                             let bFATID = dbSector.readUInt8(0);
                             if (bMediaID != bFATID) {
@@ -833,8 +839,8 @@ export default class DiskInfo {
         }
 
         /*
-         * Define abBoot (where we'll store the boot sector that we either build or select) along with some
-         * functions to get/set 1/2/4-byte values.
+         * Define abBoot (where we'll store the boot sector that we either build or select) along with some functions to
+         * get/set 1/2/4-byte values in the boot sector.
          */
         let abBoot, diskInfo = this;
         let getBoot = function(off, len) {
@@ -879,14 +885,15 @@ export default class DiskInfo {
                 0x04, 0x00,             // 0x1A: number of heads (4)
                 0x01, 0x00,             // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
                 0x00,                   // 0x1E: PC DOS 2.0 through 3.1 stores BOOTDRIVE here (0x00 for floppy, 0x80 for hard drive)
-                0x00                    // 0x1F: PC DOS 2.0 through 3.1 stores BOOTHEAD here
+                0x00,                   // 0x1F: PC DOS 2.0 through 3.1 uses this space for BOOTHEAD calculations
+                0x00                    // 0x20: PC DOS 2.0 stores number of sectors in IO.SYS/IBMBIO.COM here (repurposed later as LARGESECS)
             ];
 
             let bMediaID = 0xF0;        // TODO: set this correctly (will be hard to do for non-traditional media)
             cHeads = this.nHeads;
             cSectorsPerTrack = this.nSectors;
 
-            if (!driveInfo.fRemovable) {
+            if (driveInfo.fPartitioned) {
                 bMediaID = 0xF8;
                 cHiddenSectors = 1;     // our hard disk images are always partitioned and always reserve a diagnostic cylinder
                 cDiagnosticSectors = cHeads * cSectorsPerTrack;
@@ -905,43 +912,105 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
 
             /*
-             * We now decide on the type of FAT and the cluster size.  The caller may have preferences
-             * for one or both of those values, which we will try to honor, but there are no guarantees.
+             * We now decide on the type of FAT and the cluster size.  The caller may have preferences for one or both of
+             * those values, which we will try to honor, but there are no guarantees.
              *
-             * Note that nearestPowerOfTwo() serves two purposes: it not only ensures a result that is
-             * always a power of 2, but it also ensures that the result is less than or equal the given
-             * limit (ie, 64).  Allegedly, sectors/cluster CAN be as large as 128 (the largest power of
-             * 2 that can fit in a byte), but the sector size would have to be 256 instead of the usual
-             * 512, because I don't think cluster sizes > 32K are supported by DOS.  However, I'm not
-             * even going to go down that rabbit hole....
+             * Note that nearestPowerOfTwo() serves two purposes: it not only ensures a result that is always a power of 2,
+             * but it also ensures the result is less than or equal the given limit (ie, 64).  Allegedly, sectors/cluster
+             * CAN be as large as 128 (the largest power of 2 that can fit in a byte), but the sector size would have to be
+             * 256 instead of the usual 512, because I don't think cluster sizes > 32K are supported by DOS.  However, I'm
+             * not even going to go down that rabbit hole....
              *
-             * NOTE: Speaking of 256-byte sectors, the 1999 Microsoft FAT "White Paper" claims that only
-             * sector sizes of 512, 1024, 2048, and 4096 are supported.  I would have assumed that the 4
-             * supported values were actually 128, 256, 512, and 1024, based on historical IBM PC hardware
-             * limitations.  If I had to guess, I'd say that ALL powers of 2 from 128 through 4096 are
-             * allowed, but that not all values are supported by all operating systems.
+             * NOTE: Speaking of 256-byte sectors, the 1999 Microsoft FAT "White Paper" claims that only sector sizes of
+             * 512, 1024, 2048, and 4096 are supported.  I would have assumed that the 4 supported values were actually 128,
+             * 256, 512, and 1024, based on historical IBM PC hardware limitations.  If I had to guess, I'd say that ALL
+             * powers of 2 from 128 through 4096 are allowed, but that not all values are supported by all operating systems.
              */
             cSectorsPerCluster = driveInfo.clusterSize && Math.ceil(driveInfo.clusterSize / cbSector) || 1;
             let maxSectorsPerCluster = (32 * 1024 / cbSector)|0;
-            typeFAT = driveInfo.typeFAT || typeFAT;
+            if (driveInfo.typeFAT == 12 || driveInfo.typeFAT == 16) {
+                typeFAT = driveInfo.typeFAT;
+            }
             cSectorsPerCluster = DiskInfo.nearestPowerOfTwo(cSectorsPerCluster, maxSectorsPerCluster);
 
             /*
-             * Now we get to a thornier matter: when calculating how many clusters will fit on a disk, the
-             * calculation SHOULD begin with total DATA sectors, not total DISK sectors.  But that presents
-             * a chicken-and-egg problem, because we won't know the total DATA sectors until we've determined
-             * size of the FAT (in sectors) *and* the size of the ROOT directory (in sectors) *and* the size
-             * of a cluster entry (12-bit or 16-bit).  Hence the "gross" cluster calculation below.
-             *
-             * And there are trip-wires we have to be aware of: if total clusters is less than 4085 (0xFF5),
-             * then we MUST use a 12-bit FAT (just as a drive with at least 4085 clusters but less than 65525
-             * (0xFFF5) clusters MUST use a 16-bit FAT) *AND* total FAT space MUST not exceed 32K (eg, 64
-             * FAT sectors, assuming 512-byte sectors).
-             *
-             * I learned about the latter by watching IO.SYS from MS-DOS 3.30 read the entire FAT into memory
-             * (at 0000:7DC6): if it reads more than 32K of FAT data, it will start trashing memory.
+             * At the risk of creating a disk image that can't accommodate all the user-supplied files OR that DOS
+             * may fail to boot, we now honor any *explicitly* set number of root directory entries.
              */
-            let resets = 2;
+            rootEntries = driveInfo.rootEntries || 512;
+            rootEntries = ((rootEntries + 15) >> 4) << 4;       // round up to nearest multiple of 16
+            if (!driveInfo.rootEntries && rootEntries < aFileData.length) {
+                rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
+            }
+
+            /*
+             * Before we validate our numbers, we must first account for any requirements that the caller's DOS version
+             * imposes on us.  For example, DOS 2.x has very specific drive size thresholds that control both cluster size
+             * and root directory size.
+             *
+             * WARNING: The cTotalSectors value we are using here do NOT take into account any additional hidden sectors
+             * we may add below when adjusting the starting sector of IO.SYS/IBMBIO.COM, so if you're booting a version of
+             * DOS that performs these same tests using the total sectors value from the partition table, then it may be
+             * using a slightly different value and therefore arriving at different defaults.
+             */
+            let cRecalcs = 2;
+            if (!driveInfo.clusterSize) {
+                if (cTotalSectors <= 512) {             // 0x0200 (256Kb)
+                    cSectorsPerCluster = 1;
+                } else if (cTotalSectors <= 2048) {     // 0x0800 (1Mb)
+                    cSectorsPerCluster = 2;
+                } else if (cTotalSectors <= 8192) {     // 0x2000 (4Mb)
+                    cSectorsPerCluster = 4;
+                } else if (cTotalSectors <= 32680) {    // 0x7Af8 (16Mb)
+                    cSectorsPerCluster = 8;
+                } else {
+                    if (driveInfo.verDOS >= 3.0) {
+                        typeFAT = 16;
+                        if (cTotalSectors <= 262144) {                      // 0x40000 (128Mb)
+                            cSectorsPerCluster = 4;
+                        } else if (cSectorsPerCluster <= 524288) {          // 0x80000 (256Mb)
+                            cSectorsPerCluster = 8;
+                        } else if (cSectorsPerCluster <= 1048576) {         // 0x100000 (512Mb)
+                            cSectorsPerCluster = 16;
+                        } else if (cSectorsPerCluster <= 2097152) {         // 0x200000 (1Gb)
+                            cSectorsPerCluster = 32;
+                        } else /* if (cSectorsPerCluster <= 4194304) */ {   // 0x400000 (2Gb)
+                            cSectorsPerCluster = 64;
+                        }
+                    } else {
+                        cSectorsPerCluster = 16;
+                    }
+                }
+            }
+            if (!driveInfo.rootEntries) {
+                if (cTotalSectors <= 512) {             // 0x0200
+                    rootEntries = 64;
+                } else if (cTotalSectors <= 2048) {     // 0x0800
+                    rootEntries = 112;
+                } else if (cTotalSectors <= 8192) {     // 0x2000
+                    rootEntries = 256;
+                } else if (cTotalSectors <= 32680) {    // 0x7Af8
+                    rootEntries = 512;
+                } else {
+                    rootEntries = 1024;                 // TBD: Check DOS 3.x and later root directory thresholds
+                }
+            }
+            cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
+
+            /*
+             * Now we get to a thornier matter: when calculating how many clusters will fit on a disk, the calculation
+             * SHOULD begin with total DATA sectors, not total DISK sectors.  But that presents a chicken-and-egg problem,
+             * because we won't know the total DATA sectors until we've determined size of the FAT (in sectors) *and* the
+             * size of the ROOT directory (in sectors) *and* the size of a cluster entry (12-bit or 16-bit).  Hence the
+             * "gross" cluster calculation below.
+             *
+             * And there are trip-wires we have to be aware of: if total clusters is less than 4085 (0xFF5), then we MUST
+             * use a 12-bit FAT (just as a drive with at least 4085 clusters but less than 65525 (0xFFF5) clusters MUST use
+             * a 16-bit FAT) *AND* total FAT space MUST not exceed 32K (eg, 64 FAT sectors, assuming 512-byte sectors).
+             *
+             * I learned about the latter by watching IO.SYS from MS-DOS 3.30 read the entire FAT into memory (at 0000:7DC6):
+             * if it reads more than 32K of FAT data, it will start trashing memory.
+             */
             let grossClusters, minClusters, maxClusters, initSectors = cSectorsPerCluster;
             do {
                 minClusters = (typeFAT == 12)? 0 : DiskInfo.FAT12.MAX_CLUSTERS + 1;
@@ -949,7 +1018,7 @@ export default class DiskInfo {
                 grossClusters = Math.floor(cTotalSectors / cSectorsPerCluster);
                 cFATSectors = Math.ceil(grossClusters * typeFAT / 8 / cbSector);
                 if (grossClusters < minClusters) {
-                    if (!resets--) break;
+                    if (!cRecalcs--) break;
                     typeFAT = 12;
                     cSectorsPerCluster = initSectors;
                     initSectors = 1;
@@ -960,7 +1029,7 @@ export default class DiskInfo {
                 }
                 if (cSectorsPerCluster == maxSectorsPerCluster) {
                     if (typeFAT == 12) {
-                        if (!resets--) break;
+                        if (!cRecalcs--) break;
                         typeFAT = 16;
                         cSectorsPerCluster = initSectors;
                         initSectors = 1;
@@ -972,7 +1041,7 @@ export default class DiskInfo {
                 cSectorsPerCluster *= 2;
             } while (true);
 
-            if (resets < 0) {
+            if (cRecalcs < 0) {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "unable to find suitable cluster size for %d sectors\n", cTotalSectors);
             }
 
@@ -999,17 +1068,15 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.FATSECS, 2, cFATSectors);
             setBoot(DiskInfo.BPB.TRACKSECS, 2, cSectorsPerTrack);
             setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
-            setBoot(DiskInfo.BPB.HIDDENSECS, 2, cHiddenSectors);
 
             /*
-             * We've saved the root directory size calculation for last, because tweaking it is the easiest way to
-             * ensure that the first data sector (ie, where DOS 2.x and 3.x expect IBMBIO.COM/IO.SYS to be located)
-             * is situated such that the final sectors of the first system file coincide with the end of a track.
+             * We're now at the point where we ensure that the the last sector of the BIOS (IO.SYS or IBMBIO.COM)
+             * falls on the last sector of a track.
              *
              * This weird requirement is due to how PC DOS and MS-DOS 2.x/3.x boot sectors read the first system file
              * into memory: they read the file one track at a time; the first track read may be partial, because it
              * starts with whatever the file's first sector is, but every subsequent read is a whole track, even if the
-             * file doesn't span that entire track.
+             * file doesn't occupy the entire track.
              *
              * This would be OK if there was ample memory, but the boot sector doesn't relocate itself from 0:7C00,
              * and with its stack sitting just below that address, there's room for only about 28K of file data.  For
@@ -1028,46 +1095,59 @@ export default class DiskInfo {
              *
              * Having perfect hindsight, we can help the boot sector avoid running into trouble by performing the same
              * sloppy sector size calculation ourselves, dividing it by sectors per track, and ensuring that the remainder
-             * matches the number of free sectors in the first data track (and adjusting the number of root directory sectors
-             * until it does).  As a result, the system file will end at the end of a track, and the boot sector never risks
-             * reading too much data.
-             *
-             * This is why, instead of starting with 512 root directory entries (which is typically the minimum for a
-             * hard disk as small as 10Mb), we start even smaller, and then ratchet it up until all our criteria are met
-             * (starting with our requirement that it be a sufficiently large multiple of 128 to hold all the files in
-             * the "root" of our aFileData array).
-             *
-             * NOTE: At the risk of creating a disk image that can't accommodate all the user-supplied files OR that DOS
-             * may fail to boot, we now honor any *explicitly* set number of root directory entries.
+             * matches the number of free sectors in the first data track (and adjusting volume sector usage until it does).
+             * As a result, the system file will end at the end of a track, and the boot sector never risks reading too
+             * much data.
              */
-            rootEntries = driveInfo.rootEntries || 128;
-            rootEntries = ((rootEntries + 15) >> 4) << 4;       // round up to nearest multiple of 16
-            if (!driveInfo.rootEntries && rootEntries < aFileData.length) {
-                rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
+            let cFileSectors = 0;
+            if (aFileData[0]) {
+                let maxAdjustments = cSectorsPerTrack;
+                cFileSectors = Math.ceil(aFileData[0].size / cbSector);
+                do {
+                    let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
+                    let cFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
+                    /*
+                     * I used to ALSO break whenever cFileSectors - cFreeSectors < 0, because that meant the file was
+                     * contained entirely within a single track, but that's not sufficient, because if the disk is using
+                     * a large number of sectors/track (eg, 63) AND the file happens to be at the start of the track,
+                     * then a full track (31.5K) will be read, which will trash the boot sector.  We REALLY need to push
+                     * the file to the END of the track, even if it's fully contained within the track.
+                     */
+                    if ((cFileSectors - cFreeSectors) % cSectorsPerTrack == 0) break;
+                    /*
+                     * I used to increase root directory sectors, since we were at least getting some benefit from the
+                     * adjustment:
+                     *
+                     *      cRootSectors++;
+                     *      rootEntries += (cbSector >> 5);
+                     *
+                     * However, that created compatibility issues (see the verDOS code above for specific thresholds we
+                     * need to honor).  Next, I tried tweaking reserved sectors, but guess what?  Few if any versions of DOS
+                     * actually honor reserved sectors (they assume it's 1 and crash if it isn't):
+                     *
+                     *      cReservedSectors++;
+                     *
+                     * So we're left with adjusting hidden sectors, which requires a corresponding adjustment to total sectors:
+                     */
+                    cHiddenSectors++;
+                    cTotalSectors--;
+                } while (maxAdjustments--);
             }
-            cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
-            /*
-             * At the risk of creating a disk image that DOS will fail to boot, we will honor leave
-             */
-            if (!driveInfo.rootEntries && aFileData[0]) {
-                let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
-                let cInitFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
-                let cFileSectors = ((aFileData[0].size / cbSector)|0) + 1;
-                let cFilePartialSectors = (cFileSectors % cSectorsPerTrack) || cSectorsPerTrack;
-                while (cInitFreeSectors != cFilePartialSectors) {
-                    cRootSectors++;
-                    rootEntries += (cbSector >> 5);
-                    if (!--cInitFreeSectors) cInitFreeSectors = cSectorsPerTrack;
-                }
-            }
+
             setBoot(DiskInfo.BPB.DIRENTS, 2, rootEntries);
+            setBoot(DiskInfo.BPB.RESSECS, 2, cReservedSectors);
+            setBoot(DiskInfo.BPB.HIDDENSECS, 2, cHiddenSectors);
+            if (driveInfo.verDOS >= 2.0 && driveInfo.verDOS < 3.2) {
+                setBoot(DiskInfo.BPB.BOOTDRIVE, 1, driveInfo.fPartitioned === false? 0x00 : 0x80);
+                setBoot(DiskInfo.BPB.LARGESECS, 1, cFileSectors);       // TODO: only required for DOS 2.x?
+            }
             cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + cReservedSectors);
             cbAvail = cDataSectors * cbSector;
         }
 
         /*
-         * Find a BPB with enough capacity, and at the same time, calculate all the other values we'll need,
-         * including total number of data sectors (cDataSectors).
+         * If we didn't just construct a custom BPB, then find a default BPB with enough capacity, and at the same time,
+         * calculate all the other values we'll need, including total number of data sectors (cDataSectors).
          *
          * TODO: For now, the code that chooses a default BPB starts with entry #3 instead of #0, because Windows 95
          * (at least when running under VMware) fails to read the contents of such disks correctly.  Whether that's my
@@ -1130,6 +1210,14 @@ export default class DiskInfo {
                     return false;
                 }
             }
+
+            /*
+             * Update drive geometry properties so that functions like getCHS() work properly now.
+             */
+            this.nCylinders = (cTotalSectors + cHiddenSectors + cDiagnosticSectors) / (cHeads * cSectorsPerTrack);
+            this.nHeads = cHeads;
+            this.nSectors = cSectorsPerTrack;
+            this.cbSector = cbSector;
         }
 
         if (aFileData.length > rootEntries) {
@@ -1165,7 +1253,7 @@ export default class DiskInfo {
          * Output a Master Boot Record (MBR) if this is a hard drive image.
          */
         if (cHiddenSectors) {
-            abSector = this.buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors, typeFAT);
+            abSector = this.buildMBR(cHeads, cSectorsPerTrack, cbSector, cHiddenSectors, cTotalSectors, typeFAT);
             offDisk += this.copyData(dbDisk, offDisk, abSector) * cHiddenSectors;
         }
 
@@ -1175,7 +1263,7 @@ export default class DiskInfo {
         abBoot[DiskInfo.BOOT.SIG_OFFSET] = DiskInfo.BOOT.SIGNATURE & 0xff;            // 0x55
         abBoot[DiskInfo.BOOT.SIG_OFFSET + 1] = (DiskInfo.BOOT.SIGNATURE >> 8) & 0xff; // 0xAA
         abSector = this.buildData(cbSector, abBoot);
-        offDisk += this.copyData(dbDisk, offDisk, abSector);
+        offDisk += this.copyData(dbDisk, offDisk, abSector) * cReservedSectors;
 
         /*
          * Build the FAT, noting the starting cluster number that each file will use along the way.
@@ -1584,17 +1672,18 @@ export default class DiskInfo {
     }
 
     /**
-     * buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors, typeFAT)
+     * buildMBR(cHeads, cSectorsPerTrack, cbSector, cHiddenSectors, cTotalSectors, typeFAT)
      *
      * @this {DiskInfo}
      * @param {number} cHeads
      * @param {number} cSectorsPerTrack
      * @param {number} cbSector
+     * @param {number} cHiddenSectors
      * @param {number} cTotalSectors
      * @param {number} [typeFAT] (ie, 12, 16, 32; default is 12)
      * @returns {Array.<number>}
      */
-    buildMBR(cHeads, cSectorsPerTrack, cbSector, cTotalSectors, typeFAT = 12)
+    buildMBR(cHeads, cSectorsPerTrack, cbSector, cHiddenSectors, cTotalSectors, typeFAT = 12)
     {
         /*
          * There are four 16-byte partition entries in the MBR, starting at offset 0x1BE,
@@ -1611,14 +1700,15 @@ export default class DiskInfo {
         /*
          * Next 3 bytes: CHS (Cylinder/Head/Sector) of first partition sector
          */
-        abSector[offSector++] = 0x00;           // head: 0
-        abSector[offSector++] = 0x02;           // sector: 1 (bits 0-5), cylinder bits 8-9: 0 (bits 6-7)
-        abSector[offSector++] = 0x00;           // cylinder bits 0-7: 0
+        let chs = this.getCHS(cHiddenSectors);
+        abSector[offSector++] = chs[1];                                 // head: 0
+        abSector[offSector++] = chs[2] | ((chs[0] & 0x300) >> 2);       // sector: 2 (bits 0-5), cylinder bits 8-9: 0 (bits 6-7)
+        abSector[offSector++] = chs[0] & 0xff                           // cylinder bits 0-7: 0
 
         /*
          * Next 1 byte: partition ID
          */
-        let id = typeFAT == 12? DiskInfo.MBR.PARTITIONS.TYPE.FAT12_PRIMARY : DiskInfo.MBR.PARTITIONS.TYPE.FAT16_PRIMARY;
+        let id = typeFAT == 12? DiskInfo.MBR.PARTITIONS.TYPE.FAT12_PRIMARY : (cTotalSectors <= 0xffff? DiskInfo.MBR.PARTITIONS.TYPE.FAT16_PRIMARY : DiskInfo.MBR.PARTITIONS.TYPE.FAT16_BIG);
         abSector[offSector++] = id;             // partition ID
 
         /*
@@ -1632,18 +1722,18 @@ export default class DiskInfo {
         /*
          * Next 4 bytes: LBA (Logical Block Address) of first partition sector
          */
-        abSector[offSector++] = 1;
-        abSector[offSector++] = 0x00;
-        abSector[offSector++] = 0x00;
-        abSector[offSector++] = 0x00;
+        abSector[offSector++] = cHiddenSectors & 0xff;
+        abSector[offSector++] = (cHiddenSectors >> 8) & 0xff;
+        abSector[offSector++] = (cHiddenSectors >> 16) & 0xff
+        abSector[offSector++] = (cHiddenSectors >> 24) & 0xff
 
         /*
          * Next 4 bytes: Number of sectors in partition
          */
-        abSector[offSector++] = (cTotalSectors & 0xff);
-        abSector[offSector++] = ((cTotalSectors >> 8) & 0xff);
-        abSector[offSector++] = ((cTotalSectors >> 16) & 0xff);
-        abSector[offSector++] = ((cTotalSectors >> 24) & 0xff);
+        abSector[offSector++] = cTotalSectors & 0xff;
+        abSector[offSector++] = (cTotalSectors >> 8) & 0xff;
+        abSector[offSector++] = (cTotalSectors >> 16) & 0xff;
+        abSector[offSector++] = (cTotalSectors >> 24) & 0xff;
 
         /*
          * Since we should be at offset 0x1FE now, store the MBR signature bytes
@@ -1739,7 +1829,7 @@ export default class DiskInfo {
                 try {
                     imageData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
                 } catch(err) {
-                    this.printf(Device.MESSAGE.ERROR, "error: %s\n", err.message);
+                    this.printf(Device.MESSAGE.ERROR, "%s\n", err.message);
                 }
             }
         }
@@ -1923,17 +2013,17 @@ export default class DiskInfo {
                     break;
                 }
                 if (sectorIndex) {
-                    this.printf(Device.MESSAGE.WARN, "warning: sector with data and pattern\n");
+                    this.printf(Device.MESSAGE.WARN, "sector with data and pattern\n");
                     sectorIndex = 0;
                 }
                 for (let off = 0; off < dbChunk.length; off += 4) {
                     if (sectorIndex >= maxIndex) {
-                        this.printf(Device.MESSAGE.WARN, "warning: data for sector offset %d exceeds sector length\n", sectorIndex * 4, size);
+                        this.printf(Device.MESSAGE.WARN, "data for sector offset %d exceeds sector length\n", sectorIndex * 4, size);
                     }
                     sector[DiskInfo.SECTOR.DATA][sectorIndex++] = dbChunk.readUInt8(off) | (dbChunk.readUInt8(off+1) << 8) | (dbChunk.readUInt8(off+2) << 16) | (dbChunk.readUInt8(off+3) << 24);
                 }
                 if (sectorIndex < maxIndex) {
-                    this.printf(Device.MESSAGE.WARN, "warning: sector data stops at offset %d instead of %d\n", sectorIndex * 4, size);
+                    this.printf(Device.MESSAGE.WARN, "sector data stops at offset %d instead of %d\n", sectorIndex * 4, size);
                 }
                 break;
 
@@ -2039,7 +2129,7 @@ export default class DiskInfo {
 
             let sectorBoot = this.getSector(0);
             if (!sectorBoot) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unable to read boot sector\n", this.diskName);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "unable to read %s boot sector\n", this.diskName);
                 return -1;
             }
 
@@ -2090,7 +2180,7 @@ export default class DiskInfo {
                 }
                 for (let iSector = 0; iSector < file.aLBA.length; iSector++) {
                     if (!this.updateSector(iFile, off, file.aLBA[iSector])) {
-                        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unable to map sector to offset %d\n", file.name, off);
+                        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "unable to map %s sector to offset %d\n", file.name, off);
                     }
                     off += this.cbSector;
                 }
@@ -2225,7 +2315,7 @@ export default class DiskInfo {
             }
 
             if (!sectorBoot || iEntry == 4) {
-                if (!iVolume) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %d-byte disk image contains unknown volume(s)\n", this.diskName, cbDisk);
+                if (!iVolume) this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%d-byte %s disk image contains unknown volume(s)\n", cbDisk, this.diskName);
                 return null;
             }
 
@@ -2270,7 +2360,7 @@ export default class DiskInfo {
 
         if (vol.nFATBits) {
             if (vol.nFATBits == 12 && vol.clusTotal > DiskInfo.FAT12.MAX_CLUSTERS || vol.nFATBits == 16 && vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d error: %d-bit FAT inconsistent with cluster total (%d)\n", this.diskName, iVolume, vol.nFATBits, vol.clusTotal);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d %d-bit FAT inconsistent with cluster total (%d)\n", this.diskName, iVolume, vol.nFATBits, vol.clusTotal);
             }
         }
 
@@ -2280,7 +2370,7 @@ export default class DiskInfo {
         if (!idMedia) idMedia = this.getClusterEntry(vol, 0, 0);
 
         if (idMedia != vol.idMedia) {
-            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d error: FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, iVolume, idMedia, vol.idMedia);
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s volume %d FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, iVolume, idMedia, vol.idMedia);
             return null;
         }
 
@@ -2440,7 +2530,7 @@ export default class DiskInfo {
         if (fnHash && ab) {
             let hash = fnHash(ab);
             if (desc[DiskInfo.FILEDESC.HASH] && hash != desc[DiskInfo.FILEDESC.HASH]) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: original hash (%s) does not match current hash (%s)\n", desc[DiskInfo.FILEDESC.PATH], desc[DiskInfo.FILEDESC.HASH], hash);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s original hash (%s) does not match current hash (%s)\n", desc[DiskInfo.FILEDESC.PATH], desc[DiskInfo.FILEDESC.HASH], hash);
             }
             desc[DiskInfo.FILEDESC.HASH] = hash;
         } else {
@@ -2782,7 +2872,7 @@ export default class DiskInfo {
             errors++;
         }
         if (errors) {
-            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: invalid timestamp: %04d-%02d-%02d %02d:%02d:%02d\n", sFile, year, month, day, hour, minute, second);
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s has invalid timestamp: %04d-%02d-%02d %02d:%02d:%02d\n", sFile, year, month, day, hour, minute, second);
         }
         /*
          * Previously, I used device.parseDate() to create a UTC date and then used "%#T" in getFileDesc() and
@@ -2950,7 +3040,7 @@ export default class DiskInfo {
                 cluster = this.getClusterEntry(vol, cluster, 0) | this.getClusterEntry(vol, cluster, 1);
             }
             if (cluster < DiskInfo.FAT12.CLUSNUM_MIN || cluster == vol.clusMax + 1 /* aka CLUSNUM_BAD */) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: %s contains invalid cluster (%d)\n", this.diskName, dir.name, cluster);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s %s contains invalid cluster (%d)\n", this.diskName, dir.name, cluster);
             }
         }
         return aLBA;
@@ -3234,12 +3324,12 @@ export default class DiskInfo {
         if ((cylinder = this.aDiskData[iCylinder]) && (head = cylinder[iHead]) && (sector = head[idSector - 1])) {
             let file = this.fileTable[iFile];
             if (sector[DiskInfo.SECTOR.ID] != idSector) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "warning: %d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, idSector, sector[DiskInfo.SECTOR.ID], file.path);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, idSector, sector[DiskInfo.SECTOR.ID], file.path);
             }
             if (sector[DiskInfo.SECTOR.FILE_INDEX] != undefined) {
                 if (sector[DiskInfo.SECTOR.FILE_INDEX] != iFile || sector[DiskInfo.SECTOR.FILE_OFFSET] != off) {
                     let filePrev = this.fileTable[sector[DiskInfo.SECTOR.FILE_INDEX]];
-                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, 'warning: "%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskInfo.SECTOR.FILE_OFFSET], file.path, off);
+                    this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, '"%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskInfo.SECTOR.FILE_OFFSET], file.path, off);
                     return false;
                 }
             }
@@ -3247,7 +3337,7 @@ export default class DiskInfo {
             sector[DiskInfo.SECTOR.FILE_OFFSET] = off;
             return true;
         }
-        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unable to map LBA %d to CHS\n", this.diskName, lba);
+        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "unable to map %s LBA %d to CHS\n", this.diskName, lba);
         return false;
     }
 
@@ -3683,7 +3773,7 @@ export default class DiskInfo {
                     return true;
                 }
             }
-            else if (driveInfo.fRemovable) {
+            else if (!driveInfo.fPartitioned) {
                 if (driveInfo.driveType >= 0) {
                     return true;
                 }
@@ -4168,9 +4258,9 @@ export default class DiskInfo {
      *
      * The verBPB values are as follows:
      *
-     *      0: The BPB portion of the target boot sector is unchanged
-     *      1: The BPB portion of the target boot sector is replaced with dbBoot
-     *      2: Only DOS 2.x specific bytes in the boot sector are replaced; the rest is unchanged
+     *      0: The entire BPB of the target boot sector is preserved
+     *      1: Only a subset of the BPB that doesn't interfere with DOS 1.x is preserved
+     *      2: Only a subset of the BPB used by DOS 2.x is preserved
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
@@ -4227,9 +4317,16 @@ export default class DiskInfo {
                                 if (off >= DiskInfo.BPB.BEGIN && off < DiskInfo.BPB.END) continue;
                                 break;
                             case 1:
+                                /*
+                                 * NOTE: While PC DOS 1.x boot sectors tolerate a minimal BPB (excluding any OEM signature),
+                                 * the COMPAQ DOS 1.x boot sectors are a different story.  A BPB obviously isn't necessary for
+                                 * them, it just makes the disk readable by modern operating systems.
+                                 *
+                                 *      if (off >= DiskInfo.BPB.SECBYTES && off < DiskInfo.BPB.BOOTDRIVE) continue;
+                                 */
                                 break;
                             case 2:
-                                if (off >= DiskInfo.BPB.BEGIN && off < DiskInfo.BPB.BOOTDRIVE) continue;
+                                if (off >= DiskInfo.BPB.BEGIN && off <= DiskInfo.BPB.LARGESECS) continue;
                                 break;
                             }
                         } else {
@@ -4282,6 +4379,8 @@ export default class DiskInfo {
         return nearestPower;
     }
 }
+
+DiskInfo.MIN_PARTITION = 3000000;   // ~3MB (used in lieu of any partitioned media indicator)
 
 /*
  * Top-level descriptors in "v2" JSON disk images.
@@ -4440,7 +4539,7 @@ DiskInfo.BOOT = {
  * PCJS_LABEL is our default label, used whenever a more suitable label (eg, the disk image's folder name)
  * is not available (or not supplied), and PCJS_OEM is inserted into any DiskInfo-generated diskette images.
  */
-DiskInfo.PCJS_LABEL = "PCJSDISK";
+DiskInfo.PCJS_LABEL = "PCJS";
 DiskInfo.PCJS_OEM   = "PCJS.ORG";
 DiskInfo.PCJS_VALUE = 0x50434A53;   // "PCJS"
 
@@ -4475,9 +4574,9 @@ DiskInfo.BPB = {
     BOOTDRIVE:      0x01E,      // 1 byte (DOS 2.x): BIOS boot drive # (eg, 0x00 or 0x80)
     BOOTHEAD:       0x01F,      // 1 byte (DOS 2.x): BIOS boot head # (0-based)
     /*
-     * NOTE: DOS 2.0 also stores 0x0A at offset 0x020 (not yet sure what that's used for, if anything), but more importantly,
-     * it also contains a custom 11-byte Diskette Parameter Table (DPT) at offsets 0x021 through 0x0x2B, which it promptly
-     * points the DPT vector 0x1E (0:0078h) to.
+     * NOTE: DOS 2.0 also stores the number of sectors in the BIOS file in the byte at offset 0x020 (LARGESECS), followed
+     * by a custom 11-byte Diskette Parameter Table (DPT) at offsets 0x021 through 0x0x2B, which it promptly points the DPT
+     * vector 0x1E (0:0078h) to.
      */
     LARGESECS:      0x020,      // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
     END:            0x024,      // end of standard BPB
@@ -4810,7 +4909,7 @@ DiskInfo.aDefaultBPBs = [
     0x11, 0x00,                 // 0x18: sectors per track (17)
     0x04, 0x00,                 // 0x1A: number of heads (4)
       //
-      // NOTE: PC DOS 2.0 stored BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
+      // NOTE: PC DOS 2.0 stores BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
       //
     0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
   ],
@@ -4834,7 +4933,7 @@ DiskInfo.aDefaultBPBs = [
     0x11, 0x00,                 // 0x18: sectors per track (17)
     0x04, 0x00,                 // 0x1A: number of heads (4)
       //
-      // NOTE: PC DOS 2.0 stored BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
+      // NOTE: PC DOS 2.0 stores BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
       //
     0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
   ],

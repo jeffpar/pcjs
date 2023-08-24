@@ -1,19 +1,19 @@
 {
   "defaults": {
     "type": "pcx86",
-    "system": "msdos",
-    "version": "3.30",
-    "drivesize": "10mb",
+    "sys": "msdos",
+    "ver": "3.30",
+    "size": "10mb",
     "maxfiles": 1024,
     "directory": ".",
     "machine": "compaq386.json",
-    "state": "state386.json"
+    "state": "state386.json",
+    "messages": "int|hdc"
   },
   "apps": {
-    "cp": {},
     "ls": {},
     "vi": {},
-    "edit": {
+    ".edit": {
       "exec": "vi $*"
     }
   },
@@ -21,14 +21,67 @@
     "compaq": {
       "vendor": "compaq",
       "product": "compaq-dos",
+      "versions": {
+        "1.10B": {
+          "disk": "COMPAQ-DOS110B",
+          "files": ["IOSYS.COM", "MSDOS.COM", "COMMAND.COM"]
+        },
+        "1.10E": {
+          "disk": "COMPAQ-DOS110E",
+          "files": ["IOSYS.COM", "MSDOS.COM", "COMMAND.COM"]
+        },
+        "1.11": {
+          "disk": "COMPAQ-DOS111",
+          "files": ["IOSYS.COM", "MSDOS.COM", "COMMAND.COM"]
+        },
+        "1.12": {
+          "disk": "COMPAQ-DOS112",
+          "files": ["IOSYS.COM", "MSDOS.COM", "COMMAND.COM"]
+        },
+        "2.11": "COMPAQ-DOS211",
+        "2.12": "COMPAQ-DOS212",
+        "3.00": "COMPAQ-DOS300-DISK1",
+        "3.10": "COMPAQ-DOS310-DISK1",
+        "3.31": "COMPAQ-DOS331-DISK2",
+        "3.31G": "COMPAQ-DOS331-REVG-DISK1"
+      },
       "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
     },
     "msdos": {
       "vendor": "microsoft",
+      "versions": {
+        "3.20": "MSDOS320-DISK1",
+        "3.21": "MSDOS321-DISK1",
+        "3.30": "MSDOS330-DISK1",
+        "3.31": "MSDOS331-1440K",
+        "4.00": "MSDOS400-DISK1",
+        "4.01": "MSDOS401-360K-DISK1",
+        "5.00": "MSDOS500-360K-DISK1",
+        "6.00": "MSDOS600-1200K-DISK1",
+        "6.20": "MSDOS620-1200K-DISK1",
+        "6.22": "MSDOS622-1200K-DISK1"
+      },
       "files": ["IO.SYS", "MSDOS.SYS", "COMMAND.COM"]
     },
     "pcdos": {
       "vendor": "ibm",
+      "versions": {
+        "1.00": "PCDOS100",
+        "1.10": "PCDOS110",
+        "2.00": "PCDOS200-DISK1",
+        "2.10": "PCDOS210-DISK1",
+        "3.00": "PCDOS300-DISK1",
+        "3.10": "PCDOS310-DISK1",
+        "3.20": "PCDOS320-DISK1",
+        "3.30": "PCDOS330-DISK1",
+        "4.00": "PCDOS400-DISK1",
+        "4.01": "PCDOS401-DISK1",
+        "5.00": "PCDOS500-720K-DISK1",
+        "5.02": "PCDOS502-DISK1",
+        "6.10": "PCDOS610-1440K-DISK1",
+        "6.30": "PCDOS630-1440K-DISK1",
+        "7.00": "PCDOS700-DISK1"
+      },
       "files": ["IBMBIO.COM", "IBMDOS.COM", "COMMAND.COM"]
     }
   }
