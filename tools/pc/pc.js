@@ -21,9 +21,10 @@ import Device        from "../../machines/modules/v3/device.js";
 import CharSet       from "../../machines/pcx86/modules/v3/charset.js";
 import DiskInfo      from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
-import { device, existsDir, existsFile, getDiskSector, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
+import { device, existsDir, existsFile, getDiskSector, getTargetValue, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
 import pcjslib       from "../modules/pcjslib.js";
 
+let fBare = false;
 let fDebug = false;
 let fHalt = false;
 let fFloppy = false;
@@ -37,13 +38,13 @@ let systemVersion = "3.30";
 let systemOverride = false;
 let savedMachine = "compaq386.json";
 let savedState = "state386.json";
-let localMachine = "";  // current machine config file
-let localCommand = "";  // current command issued from machine
-let localDir = ".";     // local directory used to build localDrive
+let localMachine = "";          // current machine config file
+let localCommand = "";          // current command issued from machine
+let localDir = ".";             // local directory used to build localDrive
 let localDrive = "disks/harddisk.json";
-let machineDir = "";    // current directory *inside* the machine
-let maxFiles = 1024;    // default hard drive file limit
-let maxCapacity = 10;   // default hard drive capacity, in megabytes (Mb)
+let machineDir = "";            // current directory *inside* the machine
+let maxFiles = 1024;            // default disk file limit
+let kbTarget = 10 * 1024;       // default disk capacity, in kilobytes (Kb)
 let configJSON = {}, machines = {};
 
 let rootDir, pcjsDir;
@@ -290,6 +291,7 @@ function initMachine(args)
         machine.cpu = Component.getComponentByType("CPU");
         if (machine.cpu && machine.cpu.addIntNotify && Interrupts) {
             machine.cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(machine.cpu));
+            machine.cpu.addIntNotify(0x6D, intVideo.bind(machine.cpu));
             machine.cpu.addIntNotify(Interrupts.DISK, intDisk.bind(machine.cpu));
             machine.cpu.addIntNotify(Interrupts.BOOTSTRAP, intReboot.bind(machine.cpu));
             machine.cpu.addIntNotify(Interrupts.DOS_EXIT, intLoad.bind(machine.cpu));
@@ -345,6 +347,23 @@ function initMachine(args)
 /**
  * intVideo(addr)
  *
+ * This intercepts INT 10h *and* INT 6Dh, because newer versions of DOS (eg, PC DOS 6.x and 7.x)
+ * decided to use PUSHF/CALLF to call BIOS video functions instead of a normal INT 10h.  We can still
+ * see BIOS TTY activity with those versions as long as you're using an IBM machine, because the
+ * the IBM BIOS issues internal INT 10h calls that we also intercept, but on COMPAQ machines, their
+ * BIOS was a bit more optimized.
+ *
+ * However, the COMPAQ machine we typically use contains an IBM VGA, which re-vectors all its calls
+ * to INT 6Dh.  Not sure what the thinking was there -- apparently to provide another way for VGA BIOS
+ * functionality to be re-vectored, but for what purposes?  In any case, since we already detect nested
+ * video calls, we can handle both interrupts with this same function.
+ *
+ * Other more resilient ways to avoid the PUSHF/CALLF problem would be to patch the BIOS or install
+ * our own handler somewhere in the machine's memory, but obviously that's more work, whereas so far,
+ * I've managed to maintain a completely non-invasive solution.  The PCjs debugger also supports
+ * execution breakpoints that are non-invasive (similar to how the 80386 debug registers work), so I
+ * could tap into that functionality, but that's also a bit messy (and more work).
+ *
  * @param {CPUx86} this
  * @param {number} addr
  * @returns {boolean} true to proceed with the INT 0x10 software interrupt, false to skip
@@ -361,6 +380,9 @@ function intVideo(addr)
     }
 
     switch (AH) {
+    case 0x00:
+        machine.rowCursor = machine.colCursor = 0;
+        break;
     case 0x02:                          // set cursor position (row=DH, col=DL)
         if (DL >= maxCols || DH >= maxRows) {
             break;                      // ignore "off-screen" positions
@@ -413,13 +435,13 @@ function intVideo(addr)
          */
         if (AH == 0x0E || !CX) CX = 1;
         printf("%s", s.repeat(CX));
-        if (AL == '\r') {
+        if (s == '\r') {
             machine.colCursor = 0;
-        } else if (AL == '\n') {
+        } else if (s == '\n') {
             while (machine.rowCursor < maxRows && CX--) {
                 machine.rowCursor++;
             }
-        } else if (AL == '\b') {
+        } else if (s == '\b') {
             while (machine.colCursor > 0 && CX--) {
                 machine.colCursor--;
             }
@@ -922,7 +944,7 @@ function loadMachine(sFile)
              *
              * And even if we do have a drive type, findDriveType() should simply verify that the type is valid.
              */
-            if (DiskInfo.findDriveType(driveInfo, (maxCapacity * 1024 * 1024 / (driveInfo.cbSector || 512))|0, device)) {
+            if (DiskInfo.findDriveType(driveInfo, (kbTarget * 1024 / (driveInfo.cbSector || 512))|0, device)) {
                 if (fVerbose) {
                     printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
                 }
@@ -1276,7 +1298,7 @@ function getSystemFiles(type, version)
  */
 async function buildDisk(sDir, sCommand = "", fLog = false)
 {
-    let kbTarget = maxCapacity * 1024;
+    let kbCapacity = kbTarget;
     let system = configJSON['systems']?.[systemType];
     if (!system) {
         return "unsupported system type: " + systemType;
@@ -1292,7 +1314,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let verDOS = +parseFloat(systemVersion);        // parseFloat() is forgiving of any non-numeric suffix, the "+" operator is not
     let verDOSMajor = verDOS | 0;
     if (verDOSMajor < 2 && !fFloppy) {
-        return "minimum DOS version with hard disk support is 2.00";
+        return "DOS 2.0 or greater required for hard disk support (otherwise use --floppy)";
     }
 
     let diSystem = await readDiskAsync(sSystemDisk);
@@ -1301,13 +1323,13 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     }
 
     /*
-     * For greater flexibility, I'm going to ALWAYS use the PCJS MBR now.  This then gives me the option
-     * of converting any machine's drive type to PCJS drive type 0 (XT) or 1 (AT) and having my MBR automatically
-     * set up the correct geometry.
+     * For greater flexibility, I could ALWAYS use the PCJS MBR.  This would give me the option of converting
+     * any machine's drive type to PCJS drive type 0 (XT) or 1 (AT) and having my MBR automatically set up the correct
+     * geometry.  But doing that was causing me some grief with the IBM 5160 PC XT, so I've backed off that for now.
      *
-     *      let sSystemMBR = (driveInfo.driveCtrl == "PCJS")? "pcjs.mbr" : "DOS.mbr";
+     *      let sSystemMBR = "pcjs.mbr";
      */
-    let sSystemMBR = "pcjs.mbr";
+    let sSystemMBR = (driveInfo.driveCtrl == "PCJS" || verDOSMajor >= 3)? "pcjs.mbr" : "DOS.mbr";
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -1322,8 +1344,8 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let bootLetter = fFloppy? 'A' : 'C';
 
     /*
-     * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for our
-     * added utilities (and for COMMAND.COM itself).
+     * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for any
+     * "helper binaries" we add to the disk image (and for COMMAND.COM itself).
      */
     driveInfo.files = [];
     driveInfo.verDOS = verDOS;
@@ -1342,36 +1364,44 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     }
 
     /*
-     * In addition to the system files, we also create a hidden LOAD.COM in the root, which immediately
-     * exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it, determine
-     * if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
+     * In addition to the system files, we also create a hidden LOAD.COM "helper binary" in the root, which
+     * immediately exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it,
+     * determine if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
      */
-    driveInfo.files.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+    if (!fBare) {
+        driveInfo.files.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+    }
 
     /*
-     * We also create a hidden QUIT.COM in the root, which executes an "INT 19h" to reboot the machine.
-     * Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDisk()
+     * We also create a hidden QUIT.COM "helper binary" in the root, which executes an "INT 19h" to reboot the
+     * machine. Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDisk()
      * to look for any changes and then terminate the machine.
      */
-    driveInfo.files.push(makeFileDesc("QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+    if (!fBare) {
+        driveInfo.files.push(makeFileDesc("QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+    }
 
     /*
-     * For any apps listed in pc.json, create hidden command apps in the root, each of which will execute
-     * an "INT 20h" that will trigger an exec of the corresponding local command.  Note that 'apps' is a
+     * Finally, for any apps listed in pc.json, create hidden "helper binaries" in the root, each of which will
+     * execute an "INT 20h" that will trigger an exec of the corresponding local command.  Note that 'apps' is a
      * collection of objects, where the keys are the app names and object properties like 'exec' tell us
      * what local program to execute.
+     *
+     * NOTE: When I say these binaries will be hidden, well, that depends on the attrHidden setting (see above).
      */
-    let apps = configJSON['apps'] || {};
-    let appNames = Object.keys(apps);
-    for (let appName of appNames) {
-        if (appName[0] == '.') continue;
-        let appFile = appName.toUpperCase() + ".COM";
-        let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53];
-        appContents.push(appName.length);
-        for (let j = 0; j < appName.length; j++) {
-            appContents.push(appName.charCodeAt(j));
+    if (!fBare) {
+        let apps = configJSON['apps'] || {};
+        let appNames = Object.keys(apps);
+        for (let appName of appNames) {
+            if (appName[0] == '.') continue;
+            let appFile = appName.toUpperCase() + ".COM";
+            let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53];
+            appContents.push(appName.length);
+            for (let j = 0; j < appName.length; j++) {
+                appContents.push(appName.charCodeAt(j));
+            }
+            driveInfo.files.push(makeFileDesc(appFile, appContents, attrHidden));
         }
-        driveInfo.files.push(makeFileDesc(appFile, appContents, attrHidden));
     }
 
     /*
@@ -1388,7 +1418,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
             data = '@' + data;
         }
     } else {
-        data = verDOSMajor < 2? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\r\n";
+        data = verDOSMajor < 2? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\n";
         attr |= attrHidden;
     }
     let matchPath = data.match(/^PATH\s*(.*)$/im);
@@ -1398,21 +1428,25 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
             data = data.replace(/^PATH\s*(.*)$/im, "PATH " + bootLetter + ":\\;$1");
         }
     } else if (verDOSMajor >= 2) {
-        data += "PATH " + bootLetter + ":\\\r\n";
+        data += "PATH " + bootLetter + ":\\\n";
     }
 
     if (sCommand) {
         let aCommands = sCommand.split(sCommand.indexOf(';') >= 0? ';' : ',');
         for (let command of aCommands) {
-            data += command + "\r\n";
+            data += command + "\n";
         }
     }
     if (fTest) {
-        data += "quit\r\n";
+        data += "quit\n";
     }
-    if (machineDir) data += "CD " + machineDir + "\r\n";
+    if (machineDir) data += "CD " + machineDir + "\n";
     if (data.length) {
-        driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", data, attr));
+        /*
+         * Automatically normalize all line-endings in AUTOEXEC.BAT.
+         */
+        let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
+        driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", dataNew, attr));
     }
 
     /*
@@ -1430,10 +1464,10 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     if (verDOS < 2.0) {
         /*
          * So to get this far, fFloppy had to be true, so in addition to setting the correct
-         * BPB version, we should also set kbTarget to 160 for 1.0 or 320 for 1.1.
+         * BPB version, we should also set kbCapacity to 160 for 1.0 or 320 for 1.1.
          */
         verBPB = 1;
-        kbTarget = 160;
+        kbCapacity ||= 160;
         if (verDOS >= 1.1) {
             /*
              * Even though PC DOS 1.1 added support for 320K, the PC DOS 1.1 boot diskette was formatted
@@ -1448,7 +1482,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
              * See /software/pcx86/sys/dos/ibm/1.10/debugger/README.md for more details.
              */
             if (dbBoot.readUInt16LE(0x0003) == 0x0008 && dbBoot.readUInt16LE(0x0005) == 0x0014) {
-                kbTarget = 320;
+                kbCapacity ||= 320;
                 dbBoot.writeUInt16LE(0x0103, 0x0003);
                 /*
                  * As an added precaution, zero the BPB region, since any BPB would have been for a 160K diskette,
@@ -1462,10 +1496,10 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     }
     else if (verDOS >= 2.0 && verDOS < 3.2) {
         verBPB = 2;
-        if (fFloppy) kbTarget = 360;
+        if (fFloppy) kbCapacity ||= 360;
     }
     else {
-        if (fFloppy) kbTarget = (verDOS < 3.3? 720 : 1440);
+        if (fFloppy) kbCapacity ||= (verDOS < 3.3? 720 : 1440);
         if (verDOS >= 3.2 && verDOS < 4.0) {
             /*
              * When DOS 3.2 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
@@ -1518,7 +1552,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
 
-    readDir(sDir, 0, 0, "default", null, normalize, kbTarget, maxFiles, false, driveInfo, done);
+    readDir(sDir, 0, 0, "default", null, normalize, kbCapacity, maxFiles, false, driveInfo, done);
 
     return driveManifest? "" : "unable to build drive";
 }
@@ -2297,7 +2331,7 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
             let di = await readDiskAsync(localDrive);
             if (di) {
                 updateDriveInfo(di);
-                maxCapacity = 0;
+                kbTarget = 0;
             } else {
                 error = "invalid disk";
             }
@@ -2491,6 +2525,7 @@ function main(argc, argv)
     configJSON = JSON.parse(readFileSync(path.join(pcjsDir, "pc.json"))) || configJSON;
     let defaults = configJSON['defaults'] || {};
 
+    fBare = removeFlag('bare') || fBare;
     fHalt = removeFlag('halt') || fHalt;
     fFloppy = removeFlag('floppy') || fFloppy;
     if (!fFloppy) fNoFloppy = removeFlag('nofloppy') || fNoFloppy;
@@ -2513,26 +2548,28 @@ function main(argc, argv)
     localDir = defaults['directory'] || localDir;
 
     /*
-     * When using --floppy, certain other options are disallowed (eg, drivesize, drivectrl).
+     * When using --floppy, certain other options are disallowed (eg, drivectrl).
      */
     if (fFloppy) {
         savedMachine = "ibm5170";
-        maxCapacity = maxFiles = 0;
+        kbTarget = maxFiles = 0;
         driveInfo.driveCtrl = "FDC";
         driveInfo.fPartitioned = false;
         driveOverride = true;
     } else {
-        let driveCtrl = removeArg('ctrl');
+        let driveCtrl = removeArg('drive');
         if (driveCtrl) {
             driveInfo.driveCtrl = driveCtrl;
             driveOverride = true;
         }
+        kbTarget = getTargetValue(defaults['target']);
         maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || maxFiles;
-        maxCapacity = parseFloat(removeArg('size')) || parseFloat(defaults['size']) || maxCapacity;
         driveInfo.fPartitioned = true;
     }
 
-    let typeDrive = removeArg('type');
+    kbTarget = getTargetValue(removeArg('target')) || kbTarget;
+
+    let typeDrive = removeArg('drivetype');
     if (typeDrive) {
         let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
         if (match) {
@@ -2546,7 +2583,7 @@ function main(argc, argv)
                 cbSector < 128 || cbSector > 1024 || (cbSector & (cbSector - 1))) {
                 match = null;
             } else {
-                maxCapacity = 0;
+                kbTarget = 0;
                 if (!fFloppy) driveInfo.driveCtrl = "PCJS"; // this pseudo drive controller is required for custom drive geometries
                 driveInfo.driveType = 0;
                 driveInfo.nCylinders = nCylinders;
@@ -2563,6 +2600,12 @@ function main(argc, argv)
             if (match) {
                 let driveCtrl = match[1] || driveInfo.driveCtrl;
                 let driveType = +match[2];
+                /*
+                 * WARNING: This code may not validate the type correctly if you didn't specify a controller (eg, "XT:1"),
+                 * because the default controller is "COMPAQ" (because our default machine is a COMPAQ) and the code in
+                 * checkMachine() that attempts to detect/update the appropriate controller for your particular machine hasn't
+                 * run yet (this is too early).
+                 */
                 if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
                     driveInfo.driveCtrl = driveCtrl;
                     driveInfo.driveType = driveType;
@@ -2594,15 +2637,16 @@ function main(argc, argv)
         let optionsDisk = {
             "--dir=[directory]":        "set drive local directory (default is " + localDir + ")",
             "--disk=[image]":           "\tset drive disk image (instead of directory)",
-            "--ctrl=[controller]":      "set drive controller (eg, XT, AT, COMPAQ)",
-            "--size=[number]":          "\tset drive capacity in Mb (default is " + maxCapacity + "Mb)",
-            "--type=[value]":           "\tset drive type or C:H:S (eg, 306:4:17)",
+            "--drive=[controller]":     "set drive controller (eg, XT, AT, COMPAQ)",
+            "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
             "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--sys=[string]":           "\toperating system type (default is " + systemType + ")",
+            "--target=[nK|nM]":         "set target disk size (default is " + ((kbTarget / 1024)|0) + "M)",
             "--ver=[#.##]":             "\toperating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
+            "--bare (-b)":              "\tomit helper binaries from disk",
             "--debug (-d)":             "\tenable DEBUG messages",
             "--floppy (-f)":            "\tbuild non-partitioned boot disk",
             "--halt (-h)":              "\thalt machine on startup",
@@ -2651,12 +2695,12 @@ function main(argc, argv)
 
 main(...pcjslib.getArgs({
     '?': "help",
+    'b': "bare",
     'd': "debug",
     'f': "floppy",
     'h': "halt",
     'l': "local",
     'n': "nofloppy",
     't': "test",
-    'v': "verbose",
-    'w': "write"
+    'v': "verbose"
 }));

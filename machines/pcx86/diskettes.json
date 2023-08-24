@@ -6711,6 +6711,21 @@
 					}
 				}
 			},
+			"mac-series": {
+				"@title": "Mac Series",
+				"@versions": {
+					"1.0": {
+						"@title": "Mac Series 1.0",
+						"@media": [
+							{
+								"@title": "Mac Series Program Disk",
+								"@diskette": "MAC-SERIES-100.json",
+								"@format": "PC1200K"
+							}
+						]
+					}
+				}
+			},
 			"sc1": {
 				"@title": "SuperCalc",
 				"@versions": {

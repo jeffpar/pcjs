@@ -3,7 +3,7 @@
     "type": "pcx86",
     "sys": "msdos",
     "ver": "3.30",
-    "size": "10mb",
+    "target": "10M",
     "maxfiles": 1024,
     "directory": ".",
     "machine": "compaq386.json",

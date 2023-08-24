@@ -19,7 +19,7 @@ import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
-import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, normalizeTextFile, printError, printf, readDir, readDiskAsync, readDiskSync, readFileSync, readJSONSync, replaceServerPrefix, setRootDir, sprintf, writeDiskSync, writeFileSync  } from "../modules/disklib.js";
+import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getTargetValue, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, normalizeTextFile, printError, printf, readDir, readDiskAsync, readDiskSync, readFileSync, readJSONSync, replaceServerPrefix, setRootDir, sprintf, writeDiskSync, writeFileSync  } from "../modules/disklib.js";
 
 let rootDir, sFileIndexCache, aHiddenDirs = [];
 
@@ -205,31 +205,6 @@ function dumpSector(di, sector, offset = 0, limit = -1)
     }
     if (sBytes) sLines += sprintf("%-48s %-16s\n", sBytes, sChars);
     return sLines;
-}
-
-/**
- * getTargetValue(sTarget)
- *
- * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
- * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
- * equivalent to 10240K).
- *
- * @param {string} sTarget
- * @returns {number} (target Kb for disk image, 0 if no target)
- */
-function getTargetValue(sTarget)
-{
-    let target = 0;
-    if (sTarget) {
-        let match = sTarget.match(/^(PC|)([0-9]+)([KM]*)/i);
-        if (match) {
-            target = +match[2];
-            if (match[3].toUpperCase() == 'M') {
-                target *= 1024;
-            }
-        }
-    }
-    return target;
 }
 
 /**
@@ -1376,13 +1351,13 @@ function main(argc, argv)
             "--zip=[zipfile]\t":        "read all files in a ZIP archive"
         };
         let optionsOutput = {
-            "--drivetype=[value]":      "set hard drive type or C:H:S (eg, 306:4:17)",
+            "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
             "--extdir=[directory]":     "write extracted files to directory",
             "--extract (-e)\t":         "extract all files in disks or archives",
             "--extract[=filename]":     "extract specified file in disks or archives",
             "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
             "--output=[diskimage]":     "write disk image (.img or .json)",
-            "--target=[nK|nM]":         "set target disk size to nK or nM (eg, \"360K\", \"10M\")"
+            "--target=[nK|nM]":         "set target disk size (eg, \"360K\", \"10M\")"
         };
         let optionsOther = {
             "--dump=[C:H:S:N]":         "dump N sectors starting at sector C:H:S",
