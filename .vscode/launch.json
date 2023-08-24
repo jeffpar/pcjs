@@ -554,8 +554,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--sys=pcdos:7",
-        "--halt"
+        "--sys=pcdos:2"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/TEST",
       "stopOnEntry": false,

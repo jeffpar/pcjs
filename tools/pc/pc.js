@@ -290,6 +290,7 @@ function initMachine(args)
         machine.cpu = Component.getComponentByType("CPU");
         if (machine.cpu && machine.cpu.addIntNotify && Interrupts) {
             machine.cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(machine.cpu));
+            machine.cpu.addIntNotify(0x6D, intVideo.bind(machine.cpu));
             machine.cpu.addIntNotify(Interrupts.DISK, intDisk.bind(machine.cpu));
             machine.cpu.addIntNotify(Interrupts.BOOTSTRAP, intReboot.bind(machine.cpu));
             machine.cpu.addIntNotify(Interrupts.DOS_EXIT, intLoad.bind(machine.cpu));
@@ -344,6 +345,23 @@ function initMachine(args)
 
 /**
  * intVideo(addr)
+ *
+ * This intercepts INT 10h *and* INT 6Dh, because newer versions of DOS (eg, PC DOS 6.x and 7.x)
+ * decided to use PUSHF/CALLF to call BIOS video functions instead of a normal INT 10h.  We can still
+ * see BIOS TTY activity with those versions as long as you're using an IBM machine, because the
+ * the IBM BIOS issues internal INT 10h calls that we also intercept, but on COMPAQ machines, their
+ * BIOS was a bit more optimized.
+ *
+ * However, the COMPAQ machine we typically use contains an IBM VGA, which re-vectors all its calls
+ * to INT 6Dh.  Not sure what the thinking was there -- apparently to provide another way for VGA BIOS
+ * functionality to be re-vectored, but for what purposes?  In any case, since we already detect nested
+ * video calls, we can handle both interrupts with this same function.
+ *
+ * Other more resilient ways to avoid the PUSHF/CALLF problem would be to patch the BIOS or install
+ * our own handler somewhere in the machine's memory, but obviously that's more work, whereas so far,
+ * I've managed to maintain a completely non-invasive solution.  The PCjs debugger also supports
+ * execution breakpoints that are non-invasive (similar to how the 80386 debug registers work), so I
+ * could tap into that functionality, but that's also a bit messy (and more work).
  *
  * @param {CPUx86} this
  * @param {number} addr
