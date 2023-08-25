@@ -1534,7 +1534,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
                 di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
             }
             di.updateBootSector(dbBoot, 0, verBPB);
-            localDrive = localDrive.replace(/[^/]*$/, di.getName() + ".json");
+            localDrive = localDrive.replace(path.basename(localDrive), di.getName() + ".json");
             if (fLog) printf("building drive: %s\n", localDrive);
             if (writeDiskSync(localDrive, di, false, 0, true, true)) {
                 updateDriveInfo(di);
