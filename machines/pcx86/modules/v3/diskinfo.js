@@ -1804,15 +1804,16 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromJSON(imageData)
+     * buildDiskFromJSON(imageData, fCopyData)
      *
      * Build a disk image from a JSON object (parsed or unparsed).
      *
      * @this {DiskInfo}
      * @param {Object|string} imageData
+     * @param {boolean} [fCopyData]
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromJSON(imageData)
+    buildDiskFromJSON(imageData, fCopyData = false)
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
@@ -1855,6 +1856,35 @@ export default class DiskInfo {
             }
             let aDiskData = imageData[DiskInfo.DESC.DISKDATA] || imageData;
             if (aDiskData && aDiskData.length) {
+                /*
+                 * If fCopyData is false (the default), then we take aDiskData as-is (presumably it was freshly loaded);
+                 * otherwise, we copy all the sector objects, in case the data came from a running machine that added its
+                 * own properties to the sector objects.
+                 */
+                if (fCopyData) {
+                    let aCylinders = aDiskData;
+                    let aCopyData = new Array(aCylinders.length);
+                    for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
+                        let aHeads = aCylinders[iCylinder];
+                        aCopyData[iCylinder] = new Array(aHeads.length);
+                        for (let iHead = 0; iHead < aHeads.length; iHead++) {
+                            let aSectors = aHeads[iHead];
+                            aCopyData[iCylinder][iHead] = new Array(aSectors.length);
+                            for (let iSector = 0; iSector < aSectors.length; iSector++) {
+                                let sector = aSectors[iSector];
+                                aCopyData[iCylinder][iHead][iSector] = {
+                                    [DiskInfo.SECTOR.CYLINDER]: sector[DiskInfo.SECTOR.CYLINDER],
+                                    [DiskInfo.SECTOR.HEAD]: sector[DiskInfo.SECTOR.HEAD],
+                                    [DiskInfo.SECTOR.ID]: sector[DiskInfo.SECTOR.ID],
+                                    [DiskInfo.SECTOR.LENGTH]: sector[DiskInfo.SECTOR.LENGTH],
+                                    [DiskInfo.SECTOR.DATA]: sector[DiskInfo.SECTOR.DATA],
+                                    'pattern': sector['pattern']
+                                };
+                            }
+                        }
+                    }
+                    aDiskData = aCopyData;
+                }
                 let aCylinders = aDiskData;
                 this.aDiskData = aDiskData;
                 this.nCylinders = aCylinders.length;

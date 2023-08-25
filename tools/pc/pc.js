@@ -29,6 +29,7 @@ let fDebug = false;
 let fHalt = false;
 let fFloppy = false;
 let fNoFloppy = false;
+let fNormalize = true;
 let fTest = false;
 let fVerbose = false;
 let autoStart = false;
@@ -42,6 +43,7 @@ let localMachine = "";          // current machine config file
 let localCommand = "";          // current command issued from machine
 let localDir = ".";             // local directory used to build localDrive
 let localDrive = "disks/harddisk.json";
+let diskLabel = "default";
 let machineDir = "";            // current directory *inside* the machine
 let maxFiles = 1024;            // default disk file limit
 let kbTarget = 10 * 1024;       // default disk capacity, in kilobytes (Kb)
@@ -1369,7 +1371,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
      * determine if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
      */
     if (!fBare) {
-        driveInfo.files.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+        driveInfo.files.push(makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
     }
 
     /*
@@ -1378,7 +1380,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
      * to look for any changes and then terminate the machine.
      */
     if (!fBare) {
-        driveInfo.files.push(makeFileDesc("QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+        driveInfo.files.push(makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
     }
 
     /*
@@ -1396,11 +1398,12 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
             if (appName[0] == '.') continue;
             let appFile = appName.toUpperCase() + ".COM";
             let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53];
+            if (fFloppy) appContents[3] = 0x01;
             appContents.push(appName.length);
             for (let j = 0; j < appName.length; j++) {
                 appContents.push(appName.charCodeAt(j));
             }
-            driveInfo.files.push(makeFileDesc(appFile, appContents, attrHidden));
+            driveInfo.files.push(makeFileDesc(sDir, appFile, appContents, attrHidden));
         }
     }
 
@@ -1446,7 +1449,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
          * Automatically normalize all line-endings in AUTOEXEC.BAT.
          */
         let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
-        driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", dataNew, attr));
+        driveInfo.files.push(makeFileDesc(sDir, "AUTOEXEC.BAT", dataNew, attr));
     }
 
     /*
@@ -1548,11 +1551,11 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         }
     }
 
-    let normalize = true;
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
+    if (diskLabel == ".") diskLabel = path.basename(sDir);
 
-    readDir(sDir, 0, 0, "default", null, normalize, kbCapacity, maxFiles, false, driveInfo, done);
+    readDir(sDir, 0, 0, diskLabel, null, fNormalize, kbCapacity, maxFiles, false, driveInfo, done);
 
     return driveManifest? "" : "unable to build drive";
 }
@@ -1713,7 +1716,7 @@ function saveDisk(sDir)
     let imageData = controller && controller.aDrives && controller.aDrives.length && controller.aDrives[0].disk;
     if (imageData) {
         let di = new DiskInfo(device, "PCJS");
-        if (di.buildDiskFromJSON(imageData)) {
+        if (di.buildDiskFromJSON(imageData, true)) {
             if (driveManifest && sDir == localDir) {
                 let oldManifest = driveManifest;
                 let newManifest = di.getFileManifest(null, true);
@@ -1912,6 +1915,14 @@ function loadDiskette(sDrive, aTokens)
                     result = "invalid drive (" + sDrive + ")";
                 } else {
                     result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error || 0);
+                    if (disk && !error) {
+                        /*
+                         * We blow away the manifest if you just replaced the diskette that was built with that manifest,
+                         * because there is no longer a connection between that disk drive and your local files.  That's one
+                         * of the downsides of removable media.
+                         */
+                        if (fFloppy && !iDrive) driveManifest = null;
+                    }
                 }
             };
             result = "loading \"" + diskName + "\" in drive " + sDrive;
@@ -2508,7 +2519,7 @@ function main(argc, argv)
     fTest = removeFlag('test') || fTest;
 
     device.setDebug(fDebug);
-    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
     messagesFilter = fDebug? Messages.ALL + Messages.TYPES + Messages.ADDRESS : Messages.ALERTS;
 
     let arg0 = argv[0].split(' ');
@@ -2529,6 +2540,8 @@ function main(argc, argv)
     fHalt = removeFlag('halt') || fHalt;
     fFloppy = removeFlag('floppy') || fFloppy;
     if (!fFloppy) fNoFloppy = removeFlag('nofloppy') || fNoFloppy;
+    diskLabel = removeArg('label') || diskLabel;
+    fNormalize = removeFlag('normalize') || fNormalize;
 
     machineType = defaults['type'] || machineType;
     systemOverride = argv['sys'] || argv['ver'];
@@ -2640,7 +2653,9 @@ function main(argc, argv)
             "--drive=[controller]":     "set drive controller (eg, XT, AT, COMPAQ)",
             "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
             "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
+            "--label=[label]":          "\tset volume label of disk image",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
+            "--normalize=[boolean]":    "convert text file encoding (default is " + fNormalize + ")",
             "--sys=[string]":           "\toperating system type (default is " + systemType + ")",
             "--target=[nK|nM]":         "set target disk size (default is " + ((kbTarget / 1024)|0) + "M)",
             "--ver=[#.##]":             "\toperating system version (default is " + systemVersion + ")"

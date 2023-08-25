@@ -466,10 +466,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys:compaq:3.31",
-        "--size:40"
+        "dir",
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/TEST/SRC/MBR",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
