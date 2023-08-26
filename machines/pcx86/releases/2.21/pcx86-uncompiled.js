@@ -9584,6 +9584,12 @@ class Panel extends Component {
     powerUp(data, fRepower)
     {
         if (!fRepower) Panel.init();
+        /*
+         * TODO: Investigate what changed since the "visual" portion of the Panel module was originally written,
+         * because now, when updateAnimation() is first called, the machine's memory map hasn't been initialized yet,
+         * so no regions are displayed, and since no other code was setting fRedraw, no regions were ever displayed.
+         */
+        this.fRedraw = true;
         return true;
     }
 
