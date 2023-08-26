@@ -1,6 +1,6 @@
 ---
 layout: page
-title: IBM PC AT, 640Kb, 47Mb Hard Disk, IBM EGA (128Kb)
+title: IBM PC AT, 640Kb, 47Mb Hard Disk, IBM EGA (128Kb) with Debugger
 permalink: /machines/pcx86/ibm/5170/ega/640kb/rev1/debugger/
 machines:
   - id: ibm5170-ega
