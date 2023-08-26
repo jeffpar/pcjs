@@ -913,8 +913,9 @@ export default class HDC extends Component {
                      */
                     continue;
                 }
-                if (!this.loadDisk(iDrive, drive.name, drive.sDiskPath, true) && fRemount)
+                if (!this.loadDisk(iDrive, drive.name, drive.sDiskPath, true) && fRemount) {
                     this.setReady(false);
+                }
                 continue;
             }
             if (fRemount && drive.type !== undefined) {
@@ -938,7 +939,7 @@ export default class HDC extends Component {
     loadDisk(iDrive, sDiskName, sDiskPath, fAutoMount)
     {
         let drive = this.aDrives[iDrive];
-        if (!drive.type) return true;
+        if (drive.type === undefined) return true;
         if (drive.fBusy) {
             this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
             return true;

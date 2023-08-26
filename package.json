@@ -45,6 +45,7 @@
     "gulp-newer": "^1.4.0",
     "gulp-replace": "^1.1.4",
     "gulp-sourcemaps": "^3.0.0",
+    "json5": "^2.2.3",
     "mkdirp": "^2.1.5",
     "path": "^0.12.7",
     "pdf-parse": "^1.1.1",

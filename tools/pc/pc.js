@@ -11,6 +11,7 @@
 import child_process from "child_process";
 import fs            from "fs";
 import glob          from "glob";
+import JSON5         from 'json5';
 import path          from "path";
 import xml2js        from "xml2js";
 import DbgLib        from "../../machines/modules/v2/dbglib.js";
@@ -29,6 +30,7 @@ let fDebug = false;
 let fHalt = false;
 let fFloppy = false;
 let fNoFloppy = false;
+let fNormalize = true;
 let fTest = false;
 let fVerbose = false;
 let autoStart = false;
@@ -36,16 +38,18 @@ let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.30";
 let systemOverride = false;
+let systemMBR = "pcjs.mbr";
 let savedMachine = "compaq386.json";
 let savedState = "state386.json";
 let localMachine = "";          // current machine config file
 let localCommand = "";          // current command issued from machine
 let localDir = ".";             // local directory used to build localDrive
-let localDrive = "disks/harddisk.json";
+let localDrive = "disks/PCJS.json";
+let diskLabel = "default";
 let machineDir = "";            // current directory *inside* the machine
 let maxFiles = 1024;            // default disk file limit
 let kbTarget = 10 * 1024;       // default disk capacity, in kilobytes (Kb)
-let configJSON = {}, machines = {};
+let configFile = "pc.json5", configJSON = {}, machines = {};
 
 let rootDir, pcjsDir;
 let messagesFilter, debugMode;
@@ -957,6 +961,9 @@ function loadMachine(sFile)
                      * by the current drive controller (the PC XT started with type 0, while the PC AT started with 1).
                      */
                     driveType = (typeCtrl == "XT")? 0 : 1;
+                    if (typeCtrl == "XT" && driveInfo.nSectors != 17) {
+                        printf("warning: XT controller requires 17 sectors/track\n");
+                    }
                 }
                 drives[0] = {
                     'type': driveType,
@@ -1221,6 +1228,10 @@ function checkCommand(sDir, sCommand)
 /**
  * getSystemDisk(type, version)
  *
+ * If we don't recognized the system type (eg, "pcdos", "msdos"), or there is no version information,
+ * we return an empty string.  If we recognize the version, we return the name of the system diskette;
+ * otherwise, we return an array of available versions.
+ *
  * @param {string} type
  * @param {string} version
  * @returns {string}
@@ -1322,14 +1333,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         return "missing " + systemType + " system diskette: " + sSystemDisk;
     }
 
-    /*
-     * For greater flexibility, I could ALWAYS use the PCJS MBR.  This would give me the option of converting
-     * any machine's drive type to PCJS drive type 0 (XT) or 1 (AT) and having my MBR automatically set up the correct
-     * geometry.  But doing that was causing me some grief with the IBM 5160 PC XT, so I've backed off that for now.
-     *
-     *      let sSystemMBR = "pcjs.mbr";
-     */
-    let sSystemMBR = (driveInfo.driveCtrl == "PCJS" || verDOSMajor >= 3)? "pcjs.mbr" : "DOS.mbr";
+    let sSystemMBR = systemMBR;
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -1369,7 +1373,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
      * determine if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
      */
     if (!fBare) {
-        driveInfo.files.push(makeFileDesc("LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+        driveInfo.files.push(makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
     }
 
     /*
@@ -1378,11 +1382,11 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
      * to look for any changes and then terminate the machine.
      */
     if (!fBare) {
-        driveInfo.files.push(makeFileDesc("QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+        driveInfo.files.push(makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
     }
 
     /*
-     * Finally, for any apps listed in pc.json, create hidden "helper binaries" in the root, each of which will
+     * Finally, for any apps listed in configFile, create hidden "helper binaries" in the root, each of which will
      * execute an "INT 20h" that will trigger an exec of the corresponding local command.  Note that 'apps' is a
      * collection of objects, where the keys are the app names and object properties like 'exec' tell us
      * what local program to execute.
@@ -1396,11 +1400,12 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
             if (appName[0] == '.') continue;
             let appFile = appName.toUpperCase() + ".COM";
             let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53];
+            if (fFloppy) appContents[3] = 0x01;
             appContents.push(appName.length);
             for (let j = 0; j < appName.length; j++) {
                 appContents.push(appName.charCodeAt(j));
             }
-            driveInfo.files.push(makeFileDesc(appFile, appContents, attrHidden));
+            driveInfo.files.push(makeFileDesc(sDir, appFile, appContents, attrHidden));
         }
     }
 
@@ -1446,7 +1451,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
          * Automatically normalize all line-endings in AUTOEXEC.BAT.
          */
         let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
-        driveInfo.files.push(makeFileDesc("AUTOEXEC.BAT", dataNew, attr));
+        driveInfo.files.push(makeFileDesc(sDir, "AUTOEXEC.BAT", dataNew, attr));
     }
 
     /*
@@ -1523,15 +1528,10 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
              */
             let manifest = di.getFileManifest(null, true);
             if (di.volTable[0] && di.volTable[0].iPartition >= 0) {
-                if (sSystemMBR.indexOf("pcjs.mbr") >= 0) {
-                    di.driveCtrl = "PCJS";
-                    driveInfo.driveCtrl = "PCJS";
-                    driveInfo.driveType = 0;
-                }
-                di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
+                di.updateBootSector(dbMBR, sSystemMBR.indexOf("pcjs.mbr") < 0? -1 : -2);
             }
             di.updateBootSector(dbBoot, 0, verBPB);
-            localDrive = localDrive.replace(/[^/]*$/, di.getName() + ".json");
+            localDrive = localDrive.replace(path.basename(localDrive), di.getName() + ".json");
             if (fLog) printf("building drive: %s\n", localDrive);
             if (writeDiskSync(localDrive, di, false, 0, true, true)) {
                 updateDriveInfo(di);
@@ -1548,11 +1548,10 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         }
     }
 
-    let normalize = true;
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
 
-    readDir(sDir, 0, 0, "default", null, normalize, kbCapacity, maxFiles, false, driveInfo, done);
+    readDir(sDir, 0, 0, diskLabel == "."? path.basename(sDir) : diskLabel, null, fNormalize, kbCapacity, maxFiles, false, driveInfo, done);
 
     return driveManifest? "" : "unable to build drive";
 }
@@ -1713,7 +1712,7 @@ function saveDisk(sDir)
     let imageData = controller && controller.aDrives && controller.aDrives.length && controller.aDrives[0].disk;
     if (imageData) {
         let di = new DiskInfo(device, "PCJS");
-        if (di.buildDiskFromJSON(imageData)) {
+        if (di.buildDiskFromJSON(imageData, true)) {
             if (driveManifest && sDir == localDir) {
                 let oldManifest = driveManifest;
                 let newManifest = di.getFileManifest(null, true);
@@ -1912,6 +1911,14 @@ function loadDiskette(sDrive, aTokens)
                     result = "invalid drive (" + sDrive + ")";
                 } else {
                     result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error || 0);
+                    if (disk && !error) {
+                        /*
+                         * We blow away the manifest if you just replaced the diskette that was built with that manifest,
+                         * because there is no longer a connection between that disk drive and your local files.  That's one
+                         * of the downsides of removable media.
+                         */
+                        if (fFloppy && !iDrive) driveManifest = null;
+                    }
                 }
             };
             result = "loading \"" + diskName + "\" in drive " + sDrive;
@@ -2508,7 +2515,7 @@ function main(argc, argv)
     fTest = removeFlag('test') || fTest;
 
     device.setDebug(fDebug);
-    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
     messagesFilter = fDebug? Messages.ALL + Messages.TYPES + Messages.ADDRESS : Messages.ALERTS;
 
     let arg0 = argv[0].split(' ');
@@ -2522,13 +2529,15 @@ function main(argc, argv)
     }
 
     machines = JSON.parse(readFileSync("/machines/machines.json"));
-    configJSON = JSON.parse(readFileSync(path.join(pcjsDir, "pc.json"))) || configJSON;
+    configJSON = JSON5.parse(readFileSync(path.join(pcjsDir, configFile))) || configJSON;
     let defaults = configJSON['defaults'] || {};
 
     fBare = removeFlag('bare') || fBare;
     fHalt = removeFlag('halt') || fHalt;
     fFloppy = removeFlag('floppy') || fFloppy;
     if (!fFloppy) fNoFloppy = removeFlag('nofloppy') || fNoFloppy;
+    diskLabel = removeArg('label') || defaults['label'] || diskLabel;
+    fNormalize = removeFlag('normalize') || fNormalize;
 
     machineType = defaults['type'] || machineType;
     systemOverride = argv['sys'] || argv['ver'];
@@ -2543,6 +2552,7 @@ function main(argc, argv)
     } else {
         systemVersion = (removeArg('ver', 'string') || defaults['ver'] || systemVersion);
     }
+    systemMBR = removeArg('mbr') || defaults['mbr'] || systemMBR;
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
     localDir = defaults['directory'] || localDir;
@@ -2591,7 +2601,7 @@ function main(argc, argv)
                 driveInfo.nSectors = nSectors;
                 driveInfo.cbSector = cbSector;
                 if (cbSector != 512) {
-                    printf("warning: %d-byte sectors are not known to work with any DOS operating system\n", cbSector);
+                    printf("warning: %d-byte sectors are not known to work with any version of DOS\n", cbSector);
                 }
                 driveOverride = true;
             }
@@ -2640,7 +2650,9 @@ function main(argc, argv)
             "--drive=[controller]":     "set drive controller (eg, XT, AT, COMPAQ)",
             "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
             "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
+            "--label=[label]":          "\tset volume label of disk image",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
+            "--normalize=[boolean]":    "convert text file encoding (default is " + fNormalize + ")",
             "--sys=[string]":           "\toperating system type (default is " + systemType + ")",
             "--target=[nK|nM]":         "set target disk size (default is " + ((kbTarget / 1024)|0) + "M)",
             "--ver=[#.##]":             "\toperating system version (default is " + systemVersion + ")"
@@ -2671,7 +2683,7 @@ function main(argc, argv)
         printf("\nnotes:\n\t--type can also specify a drive geometry (eg, --type=306:4:17)\n");
         printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
         printf("\t--fat values should be considered advisory, as it may not be possible to honor them\n");
-        printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, "pc.json"));
+        printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, configFile));
         return;
     }
 

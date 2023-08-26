@@ -6897,6 +6897,10 @@ CharSet.CP437 = [
  *      E: reserved
  *      F: reserved
  *
+ * Notice that there is nothing in the PC XT table to indicate the number of sectors/track; this is because
+ * the XT BIOS assumed 17 sectors/track; in fact, the number 17 (0x11) is hard-coded in the BIOS function (0x08)
+ * that returns drive parameters.
+ *
  * Starting with the IBM PC AT, the ROM defined a "Fixed Disk Parameter Table" (FD_TBL) that contained 16 bytes
  * at the following offsets for each of 47 drive types (see IBM 5170 Tech Ref, March 1986, p. 5-185):
  *
@@ -6918,6 +6922,9 @@ CharSet.CP437 = [
  *
  * NOTE: While drive type 0 was a valid type in the PC XT, it was NOT a valid drive type in the PC AT; zero was used
  * to indicate that no hard drive was installed.
+ *
+ * All of the predefined PC AT drive types still used only 17 sectors/track -- but unlike the PC XT, user-defined drive
+ * parameter tables could now specify different values.
  *
  * Of the 47 PC AT drive types, the first 14 (1-E) could be selected by 4 bits in CMOS byte 0x12.  Drive type 15 was not
  * a valid type but rather an indicator that CMOS byte 0x19 (or 0x1A) contained the actual drive type, which technically
@@ -9577,6 +9584,12 @@ class Panel extends Component {
     powerUp(data, fRepower)
     {
         if (!fRepower) Panel.init();
+        /*
+         * TODO: Investigate what changed since the "visual" portion of the Panel module was originally written,
+         * because now, when updateAnimation() is first called, the machine's memory map hasn't been initialized yet,
+         * so no regions are displayed, and since no other code was setting fRedraw, no regions were ever displayed.
+         */
+        this.fRedraw = true;
         return true;
     }
 
@@ -68738,8 +68751,9 @@ class HDC extends Component {
                      */
                     continue;
                 }
-                if (!this.loadDisk(iDrive, drive.name, drive.sDiskPath, true) && fRemount)
+                if (!this.loadDisk(iDrive, drive.name, drive.sDiskPath, true) && fRemount) {
                     this.setReady(false);
+                }
                 continue;
             }
             if (fRemount && drive.type !== undefined) {
@@ -68763,7 +68777,7 @@ class HDC extends Component {
     loadDisk(iDrive, sDiskName, sDiskPath, fAutoMount)
     {
         let drive = this.aDrives[iDrive];
-        if (!drive.type) return true;
+        if (drive.type === undefined) return true;
         if (drive.fBusy) {
             this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
             return true;
@@ -72933,7 +72947,7 @@ class DebuggerX86 extends DbgLib {
      *      commands: string containing zero or more commands, separated by ';'
      *
      *      messages: string containing zero or more message categories to enable;
-     *      multiple categories must be separated by '|' or ';'.  Parsed by messageInit().
+     *      multiple categories must be separated by ',' or ';'.  Parsed by messageInit().
      *
      * @this {DebuggerX86}
      * @param {Object} parmsDbg
@@ -74975,7 +74989,7 @@ class DebuggerX86 extends DbgLib {
      * messageInit(sEnable)
      *
      * @this {DebuggerX86}
-     * @param {string|undefined} sEnable contains zero or more message categories to enable, separated by '|'
+     * @param {string|undefined} sEnable contains zero or more message categories to enable, separated by ','
      */
     messageInit(sEnable)
     {
@@ -74983,7 +74997,7 @@ class DebuggerX86 extends DbgLib {
         this.bitsMessage = Messages.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
-        let aEnable = this.parseCommand(sEnable, false, '|');
+        let aEnable = this.parseCommand(sEnable, false, ',');
         if (aEnable.length) {
             this.bitsMessage = Messages.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
             for (let m in Messages.Categories) {

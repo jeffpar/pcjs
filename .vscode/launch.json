@@ -317,6 +317,18 @@
       }
     },
     {
+      "name": "IBM PC AT with EGA [Visual Debugger]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/visual/machine.xml",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "hardware",
+        "order": 10
+      }
+    },
+    {
       "name": "Intel 8080 Exerciser Test Machine",
       "type": "chrome",
       "request": "launch",
@@ -461,15 +473,15 @@
       }
     },
     {
-      "name": "pc.js",
+      "name": "PC.js",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys:compaq:3.31",
-        "--size:40"
+        "dir",
+        "--target=360K"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/TEST/SRC/MBR",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -482,7 +494,7 @@
       }
     },
     {
-      "name": "pc.js ibm5150",
+      "name": "PC.js ibm5150",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -502,16 +514,15 @@
       }
     },
     {
-      "name": "pc.js ibm5160 (local)",
+      "name": "PC.js ibm5160",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5160",
-        "--sys=pcdos:2",
-        "--type=XT:1"
+        "dir"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/TEST",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -524,7 +535,7 @@
       }
     },
     {
-      "name": "pc.js ibm5160 (remote)",
+      "name": "PC.js ibm5160 (remote)",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -546,15 +557,16 @@
       }
     },
     {
-      "name": "pc.js ibm5170",
+      "name": "PC.js ibm5170",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--sys=pcdos:7"
+        "--sys=pcdos:7",
+        "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/TEST",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -567,7 +579,7 @@
       }
     },
     {
-      "name": "pc.js ibm5170 --drivesize=27 dir",
+      "name": "PC.js ibm5170 --drivesize=27 dir",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -591,7 +603,7 @@
       }
     },
     {
-      "name": "pc.js ibm5170 --drivetype=200:4:17 dir",
+      "name": "PC.js ibm5170 --drivetype=200:4:17 dir",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -614,7 +626,7 @@
       }
     },
     {
-      "name": "pc.js compaq386",
+      "name": "PC.js compaq386",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -636,7 +648,7 @@
       }
     },
     {
-      "name": "pc.js compaq386 MBR331",
+      "name": "PC.js compaq386 MBR331",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -659,7 +671,7 @@
       }
     },
     {
-      "name": "pc.js test386",
+      "name": "PC.js test386",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -680,7 +692,7 @@
       }
     },
     {
-      "name": "pc.js --start=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
+      "name": "PC.js --start=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -700,7 +712,7 @@
       }
     },
     {
-      "name": "pc.js --start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
+      "name": "PC.js --start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -720,7 +732,7 @@
       }
     },
     {
-      "name": "pc.js dir --sys=compaq --ver=3.31",
+      "name": "PC.js dir --sys=compaq --ver=3.31",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -743,7 +755,7 @@
       }
     },
     {
-      "name": "pc.js dir --sys=pcdos --ver=2.00",
+      "name": "PC.js dir --sys=pcdos --ver=2.00",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -766,7 +778,7 @@
       }
     },
     {
-      "name": "pc.js dir --sys=pcdos --ver=2.00 --drivesize=20mb",
+      "name": "PC.js dir --sys=pcdos --ver=2.00 --drivesize=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -790,7 +802,7 @@
       }
     },
     {
-      "name": "pc.js dir --sys=pcdos --ver=3.10",
+      "name": "PC.js dir --sys=pcdos --ver=3.10",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -813,7 +825,7 @@
       }
     },
     {
-      "name": "pc.js dir --sys=pcdos --ver=3.10 --drivesize=20mb",
+      "name": "PC.js dir --sys=pcdos --ver=3.10 --drivesize=20mb",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -838,7 +850,7 @@
       }
     },
     {
-      "name": "pc.js dir --disk=PCDOS200-C400.json",
+      "name": "PC.js dir --disk=PCDOS200-C400.json",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -860,7 +872,7 @@
       }
     },
     {
-      "name": "pc.js dir --drivetype=80:2:18 --sys=compaq --ver=3.31",
+      "name": "PC.js dir --drivetype=80:2:18 --sys=compaq --ver=3.31",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
@@ -883,7 +895,49 @@
       }
     },
     {
-      "name": "pc.js pdp11 machine.xml",
+      "name": "PC.js PDP-11/20",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--start=/machines/dec/pdp11/1120/basic/machine.xml",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "PC.js PDP-11/20 [Debugger]",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--start=/machines/dec/pdp11/1120/basic/debugger/machine.xml",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "PC.js PDP-11/70 [Debugger]",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",

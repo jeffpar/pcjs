@@ -1804,15 +1804,16 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromJSON(imageData)
+     * buildDiskFromJSON(imageData, fCopyData)
      *
      * Build a disk image from a JSON object (parsed or unparsed).
      *
      * @this {DiskInfo}
      * @param {Object|string} imageData
+     * @param {boolean} [fCopyData]
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromJSON(imageData)
+    buildDiskFromJSON(imageData, fCopyData = false)
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
@@ -1855,6 +1856,35 @@ export default class DiskInfo {
             }
             let aDiskData = imageData[DiskInfo.DESC.DISKDATA] || imageData;
             if (aDiskData && aDiskData.length) {
+                /*
+                 * If fCopyData is false (the default), then we take aDiskData as-is (presumably it was freshly loaded);
+                 * otherwise, we copy all the sector objects, in case the data came from a running machine that added its
+                 * own properties to the sector objects.
+                 */
+                if (fCopyData) {
+                    let aCylinders = aDiskData;
+                    let aCopyData = new Array(aCylinders.length);
+                    for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
+                        let aHeads = aCylinders[iCylinder];
+                        aCopyData[iCylinder] = new Array(aHeads.length);
+                        for (let iHead = 0; iHead < aHeads.length; iHead++) {
+                            let aSectors = aHeads[iHead];
+                            aCopyData[iCylinder][iHead] = new Array(aSectors.length);
+                            for (let iSector = 0; iSector < aSectors.length; iSector++) {
+                                let sector = aSectors[iSector];
+                                aCopyData[iCylinder][iHead][iSector] = {
+                                    [DiskInfo.SECTOR.CYLINDER]: sector[DiskInfo.SECTOR.CYLINDER],
+                                    [DiskInfo.SECTOR.HEAD]: sector[DiskInfo.SECTOR.HEAD],
+                                    [DiskInfo.SECTOR.ID]: sector[DiskInfo.SECTOR.ID],
+                                    [DiskInfo.SECTOR.LENGTH]: sector[DiskInfo.SECTOR.LENGTH],
+                                    [DiskInfo.SECTOR.DATA]: sector[DiskInfo.SECTOR.DATA],
+                                    'pattern': sector['pattern']
+                                };
+                            }
+                        }
+                    }
+                    aDiskData = aCopyData;
+                }
                 let aCylinders = aDiskData;
                 this.aDiskData = aDiskData;
                 this.nCylinders = aCylinders.length;
@@ -4264,7 +4294,7 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
-     * @param {number} [iVolume] (default is first volume; -1 for MBR, if any)
+     * @param {number} [iVolume] (default is first volume; -1 for MBR, -2 for PCJS MBR)
      * @param {number} [verBPB] (default is 0; see above)
      * @returns {boolean} (true if successful, false otherwise)
      */
@@ -4332,7 +4362,14 @@ export default class DiskInfo {
                         } else {
                             if (lbaBoot == 0) {
                                 if (off >= DiskInfo.MBR.PARTITIONS.OFFSET) continue;
-                                if (this.driveCtrl == "PCJS") {
+                                if (iVolume == -2) {
+                                    /*
+                                     * The caller has indicated we're using the PCJS MBR, which supports up to 2 drive
+                                     * parameter tables.  We only ever use the first table, although in the future, perhaps
+                                     * we'll allow iVolume == -3 to fill in the second table.
+                                     *
+                                     * TODO: It might also be wise to verify the "PCJS" signature at offset 0x199 of the MBR.
+                                     */
                                     switch(off) {
                                     case DiskInfo.MBR.DRIVE0PARMS.CYLS:
                                         b = this.nCylinders & 0xff;

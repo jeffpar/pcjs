@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
-<machine id="ibm5170rev3" type="pcx86" border="1" pos="center" background="default">
+<machine id="ibm5170rev3" type="pcx86" border="1" pos="center" uncompiled="true" background="default">
 	<name pos="center">IBM PC AT (8Mhz), 1Mb RAM, 20Mb Hard Disk (Formatted), IBM EGA (128Kb)</name>
 	<computer id="at-ega-1024k-rev3" name="IBM PC AT" buswidth="24"/>
 	<cpu id="cpu286" model="80286" cycles="8000000" autostart="false"/>
