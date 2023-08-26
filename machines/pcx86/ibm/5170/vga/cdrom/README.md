@@ -20,7 +20,7 @@ interface, and the second set was called the "secondary" interface.  Later, the 
 ("ATAPI") was defined, along with some additional ATA controller commands, which made it possible
 for an ATA controller to talk to SCSI-based CD-ROM drives.
 
-It's unclear whether any ATAPI controllers existed when IBM was manufacturing the PC AT,
+It's unclear whether any ATAPI controllers existed when IBM began manufacturing the PC AT,
 but there's no reason why an ATAPI controller for a 16-bit ISA bus would not have worked, as long
 as its "primary" interface was disabled (to avoid conflicting with the PC AT's existing ATA controller)
 and the ATAPI drive was connected to controller's "secondary" interface.

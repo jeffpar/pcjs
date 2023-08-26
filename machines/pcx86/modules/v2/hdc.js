@@ -904,7 +904,7 @@ export default class HDC extends Component {
         for (let iDrive = 0; iDrive < this.aDrives.length; iDrive++) {
             let drive = this.aDrives[iDrive];
             if (drive.name && drive.sDiskPath) {
-                if (fRemount && drive.disk && drive.disk.isRemote()) {
+                if (fRemount && drive.disk && drive.disk.isRemote() || this.fATAPI) {
                     /*
                      * The Disk component has its own logic for remounting remote disks, so skip this disk.
                      *
@@ -939,7 +939,6 @@ export default class HDC extends Component {
     loadDisk(iDrive, sDiskName, sDiskPath, fAutoMount)
     {
         let drive = this.aDrives[iDrive];
-        if (drive.type === undefined) return true;
         if (drive.fBusy) {
             this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
             return true;
