@@ -221,18 +221,16 @@ will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EX
 
 ### Hard Disk Examples
 
-`pc.js` initially built only 10Mb hard disk images, because 10Mb drives (with 306 cylinders, 4 heads, and 17 sectors/track) were fully supported by both the PC XT (as a type 3 drive) *and* the PC AT (as a type 1 drive).
-
-However, I later decided to add support for 20Mb drives (with 615 cylinders instead of 306), even though only the PC AT and later machines natively supported such a drive.  Another minor issue with 20Mb drives is that our *buildDiskFromFiles()* function in [diskinfo.js](/machines/pcx86/modules/v3/diskinfo.js) only knows how to build FAT12 images (there's no support for building FAT16 or FAT32 images yet), which means that the resulting drive must use a rather large (8K) cluster size, instead of the more typical (2K) cluster size that PC DOS 3.x preferred.  But still, any 20Mb disk image that `pc.js` builds should work fine -- as long as you don't try to use it with a PC XT.
+`pc.js` initially built only 10Mb hard disk images, because 10Mb drives (with 306 cylinders, 4 heads, and 17 sectors/track) were fully supported by both the PC XT (as a type 3 drive) *and* the PC AT (as a type 1 drive).  However, I eventually added support for larger drives (eg, 20Mb) as well.
 
 To test 20Mb support, I tried two scenarios:
 
  1. Running FDISK on a PC AT with PC DOS 3.00
  2. Running FDISK on a PC AT with PC DOS 2.00
 
-Here's scenario #1, using the new hard drive `--drivesize` option, which allows you to specify a drive capacity in *megabytes* (aka 1024 *kilobytes*, where 1 kilobyte is 1024 bytes):
+Here's scenario #1, using the new hard drive `--target` option, which allows you to specify a drive capacity in either *kilobytes* or *megabytes*:
 
-    ~/pcjs/tools/pc/disks % pc.js ibm5170 --drivesize=20
+    ~/pcjs/tools/pc/disks % pc.js ibm5170 --target=20M
     Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
 
     Current date is Tue  8-01-2023
@@ -292,7 +290,7 @@ Here's scenario #1, using the new hard drive `--drivesize` option, which allows 
 
 Here's scenario #2.  Note that I used the `--halt` option to give me the opportunity to load "PC DOS 2.00 (Disk 1)" into drive A: before booting, but it's also possible to force that from the command-line, using the `--system=pcdos` and `--version=2.00` options:
 
-    ~/pcjs/tools/pc/disks % pc.js ibm5170 --drivesize=20 --halt
+    ~/pcjs/tools/pc/disks % pc.js ibm5170 --target=20M --halt
     fault messages enabled
     >> Type ? for help with PCx86 Debugger commands
     AX=0000 BX=0000 CX=0000 DX=0000 SP=0000 BP=0000 SI=0000 DI=0000 
