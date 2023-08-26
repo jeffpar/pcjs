@@ -621,6 +621,7 @@
     "FDIVP",
     "FDIVR",
     "FDIVRP",
+    "FDPT",
     "FDRIVE",
     "fdrives",
     "FEARNOT",

@@ -6798,7 +6798,7 @@ if (DEBUGGER) {
      * note that some of these can still be enabled if you really want them (eg, RTC can be turned on
      * with RTC messages, ALT_TIMER with TIMER messages, etc).
      */
-    DebuggerX86.INT_ANNOYING = [Interrupts.TIMER, Interrupts.TMR_BREAK, Interrupts.DOS_IDLE, Interrupts.DOS_NETBIOS, Interrupts.ALT_VIDEO];
+    DebuggerX86.INT_ANNOYING = [Interrupts.TIMER, Interrupts.TMR_BREAK, Interrupts.DOS_IDLE, Interrupts.DOS_NETBIOS, Interrupts.VIDEO_VGA];
 
     DebuggerX86.COMMANDS = {
         '?':     "help/print",

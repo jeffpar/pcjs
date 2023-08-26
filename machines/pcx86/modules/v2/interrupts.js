@@ -25,7 +25,7 @@ const Interrupts = {
     KBD_BREAK:  0x1B,
     TMR_BREAK:  0x1C,               // invoked by the BIOS timer interrupt handler (normally vector 0x08)
     VID_PARMS:  0x1D,
-    DSK_PARMS:  0x1E,
+    DSK_PARMS:  0x1E,               // vector for Diskette Parameter Table (DPT)
     /*
      * For characters 0x00-0x7F, the original ROM BIOS used a built-in table at F000:FA6E (CRT_CHAR_GEN),
      * since the MDA/CGA font ROM was not CPU-addressable, but presumably there wasn't enough room in the
@@ -39,10 +39,10 @@ const Interrupts = {
     DOS_NETBIOS:0x2A,
     MOUSE:      0x33,
     ALT_DISK:   0x40,               // HDC ROM saves original FDC vector here
-    HD0_PARMS:  0x41,               // parameter table for hard drive 0
+    HD0_PARMS:  0x41,               // vector for Fixed Disk Parameter Table (FDPT) for hard drive 0
     VID_PLANAR: 0x42,               // EGA ROM saves original VIDEO ("planar ROM") vector here
     EGA_GRX:    0x43,               // EGA ROM provides a complete set of mode-appropriate font data here (0000:010C)
-    HD1_PARMS:  0x46,               // parameter table for hard drive 1
+    HD1_PARMS:  0x46,               // vector for Fixed Disk Parameter Table (FDPT) for hard drive 1
     HD_PARMS: {
         MAX_CYL:    0x00,           // maximum cylinders (2 bytes)
         MAX_HEADS:  0x02,           // maximum heads (1 byte)
@@ -52,7 +52,6 @@ const Interrupts = {
         PARK_CYL:   0x0C,           // landing zone cylinder (2 bytes)
         SEC_TRACK:  0x0E            // sectors per track (1 byte)
     },
-    ALT_VIDEO:  0x6D,               // VGA ROM saves original VIDEO vector here (one wonders what was wrong with VID_PLANAR)
     WINCB: {
         VECTOR:     0x30            // Windows PM call-back interface (aka Transfer Space Fault)
     },
@@ -96,6 +95,7 @@ const Interrupts = {
         LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI->D386_Device_Params)
         ENABLED:    false           // support for WINDBGRM interrupts can be disabled
     },
+    VIDEO_VGA:  0x6D,               // VGA ROM entry point (the default VGA INT 10h handler invokes this interrupt and IRETs)
     FUNCS: {}                       // filled in only if DEBUGGER is true
 };
 
