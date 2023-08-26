@@ -26000,7 +26000,7 @@ class DebuggerPDP11 extends DbgLib {
      *      commands: string containing zero or more commands, separated by ';'
      *
      *      messages: string containing zero or more message categories to enable;
-     *      multiple categories must be separated by '|' or ';'.  Parsed by messageInit().
+     *      multiple categories must be separated by ',' or ';'.  Parsed by messageInit().
      *
      * The DebuggerPDP11 component is an optional component that implements a variety of user
      * commands for controlling the CPU, dumping and editing memory, etc.
@@ -26762,7 +26762,7 @@ class DebuggerPDP11 extends DbgLib {
      * messageInit(sEnable)
      *
      * @this {DebuggerPDP11}
-     * @param {string|undefined} sEnable contains zero or more message categories to enable, separated by '|'
+     * @param {string|undefined} sEnable contains zero or more message categories to enable, separated by ','
      */
     messageInit(sEnable)
     {
@@ -26774,7 +26774,7 @@ class DebuggerPDP11 extends DbgLib {
          * Internally, we use "key" instead of "keys", since the latter is a method on JavasScript objects,
          * but externally, we allow the user to specify "keys"; "kbd" is also allowed as shorthand for "keyboard".
          */
-        var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
+        var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, ',');
         if (aEnable.length) {
             for (var m in Messages.Categories) {
                 if (Usr.indexOf(aEnable, m) >= 0) {

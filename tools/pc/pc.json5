@@ -1,14 +1,16 @@
 {
   "defaults": {
-    "type": "pcx86",
-    "sys": "msdos",
-    "ver": "3.30",
-    "target": "10M",
+    "type": "pcx86",            // alternatives: "pdp11"
+    "sys": "msdos",             // alternatives: "pcdos", "compaq" (see "systems" below)
+    "ver": "3.30",              // alternatives: (see "versions" below)
+    "mbr": "pcjs.mbr",          // alternatives: "DOS.mbr"
+    "target": "10M",            // alternatives: "160K", "320K", "180K", "360K", "1200K", "1440K", "20M", "30M", "40M", etc.
+    "label": ".",               // alternatives: "default"
     "maxfiles": 1024,
     "directory": ".",
     "machine": "compaq386.json",
     "state": "state386.json",
-    "messages": "int|hdc"
+    "messages": "int,hdc"
   },
   "apps": {
     "ls": {},

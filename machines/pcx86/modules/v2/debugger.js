@@ -89,7 +89,7 @@ export default class DebuggerX86 extends DbgLib {
      *      commands: string containing zero or more commands, separated by ';'
      *
      *      messages: string containing zero or more message categories to enable;
-     *      multiple categories must be separated by '|' or ';'.  Parsed by messageInit().
+     *      multiple categories must be separated by ',' or ';'.  Parsed by messageInit().
      *
      * @this {DebuggerX86}
      * @param {Object} parmsDbg
@@ -2131,7 +2131,7 @@ export default class DebuggerX86 extends DbgLib {
      * messageInit(sEnable)
      *
      * @this {DebuggerX86}
-     * @param {string|undefined} sEnable contains zero or more message categories to enable, separated by '|'
+     * @param {string|undefined} sEnable contains zero or more message categories to enable, separated by ','
      */
     messageInit(sEnable)
     {
@@ -2139,7 +2139,7 @@ export default class DebuggerX86 extends DbgLib {
         this.bitsMessage = Messages.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
-        let aEnable = this.parseCommand(sEnable, false, '|');
+        let aEnable = this.parseCommand(sEnable, false, ',');
         if (aEnable.length) {
             this.bitsMessage = Messages.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
             for (let m in Messages.Categories) {

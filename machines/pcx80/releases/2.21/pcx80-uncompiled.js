@@ -19598,7 +19598,7 @@ class DebuggerX80 extends DbgLib {
      *      commands: string containing zero or more commands, separated by ';'
      *
      *      messages: string containing zero or more message categories to enable;
-     *      multiple categories must be separated by '|' or ';'.  Parsed by messageInit().
+     *      multiple categories must be separated by ',' or ';'.  Parsed by messageInit().
      *
      * The DebuggerX80 component is an optional component that implements a variety of user
      * commands for controlling the CPU, dumping and editing memory, etc.
@@ -20280,7 +20280,7 @@ class DebuggerX80 extends DbgLib {
      * messageInit(sEnable)
      *
      * @this {DebuggerX80}
-     * @param {string|undefined} sEnable contains zero or more message categories to enable, separated by '|'
+     * @param {string|undefined} sEnable contains zero or more message categories to enable, separated by ','
      */
     messageInit(sEnable)
     {
@@ -20292,7 +20292,7 @@ class DebuggerX80 extends DbgLib {
          * Internally, we use "key" instead of "keys", since the latter is a method on JavasScript objects,
          * but externally, we allow the user to specify "keys"; "kbd" is also allowed as shorthand for "keyboard".
          */
-        let aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
+        let aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, ',');
         if (aEnable.length) {
             for (let m in Messages.Categories) {
                 if (Usr.indexOf(aEnable, m) >= 0) {

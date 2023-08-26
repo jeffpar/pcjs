@@ -19,7 +19,7 @@
 	<video ref="/machines/pcx86/compaq/video/vga/109360-001/256kb-autolock.xml"/>
 	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A: {name: "COMPAQ MS-DOS 3.31 (Disk 2)"}, B: {name: "COMPAQ MS-DOS 3.31 (Disk 3)"}}'/>
 	<keyboard ref="/machines/pcx86/ibm/keyboard/us84-softkeys.xml"/>
-	<debugger id="debugger" messages="fault|port" commands=""/>
+	<debugger id="debugger" messages="fault,port" commands=""/>
 	<panel ref="/machines/pcx86/panel/visual.xml"/>
 	<hdc ref="/machines/pcx86/ibm/hdc/47mb/unformatted-at5.xml"/>
 	<chipset id="chipset" model="deskpro386" floppies="[1200,1200]"/>

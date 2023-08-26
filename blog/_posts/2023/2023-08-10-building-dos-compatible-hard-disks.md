@@ -56,7 +56,7 @@ This should create a folder named `MSDOS330-C400` containing a variety of DOS ut
             6 File(s)   5828608 bytes free
     C:\>
 
-Next, let's look at [pc.json](/tools/pc/pc.json), the configuration file for `pc.js`:
+Next, let's look at [pc.json5](https://github.com/jeffpar/pcjs/blob/master/tools/pc/pc.json5), the configuration file for `pc.js`:
 
 ```
 {
@@ -104,7 +104,7 @@ See [Loading Diskettes Into Machines](/tools/pc/#loading-diskettes-into-machines
 
 ### Building Hard Disk Images
 
-You may have noticed the `defaults` section in the [pc.json](/tools/pc/pc.json) configuration file:
+You may have noticed the `defaults` section in the [pc.json5](https://github.com/jeffpar/pcjs/blob/master/tools/pc/pc.json5) configuration file:
 
 ```
   "defaults": {
@@ -121,7 +121,7 @@ You may have noticed the `defaults` section in the [pc.json](/tools/pc/pc.json) 
 
 These settings control what happens whenever `pc.js` builds (or rebuilds) a hard disk image from a specified folder.  First and foremost, `pc.js` wants to create a *bootable* hard disk image, so it fetches the corresponding system diskette image from PCjs (eg, [MSDOS330-DISK1](https://diskettes.pcjs.org/pcx86/sys/dos/microsoft/3.30/MSDOS330-DISK1.json)), extracts the boot sector and system files (ie, `IO.SYS` and `MSDOS.SYS`) from the diskette, and then based on the `capacity`, `maxfiles`, and other settings, it builds a hard disk image, which is stored in the PCjs `/tools/pc/disks` folder by default.
 
-To change those defaults, you can either edit `pc.json` or pass command-line overrides; for example:
+To change those defaults, you can either edit `pc.json5` or pass command-line overrides; for example:
 
     $ cd MSDOS330-C400
     $ pc.js ibm5170 --target=20M --fat=12 --maxfiles=2048 dir

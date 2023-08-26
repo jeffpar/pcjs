@@ -4294,7 +4294,7 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
-     * @param {number} [iVolume] (default is first volume; -1 for MBR, if any)
+     * @param {number} [iVolume] (default is first volume; -1 for MBR, -2 for PCJS MBR)
      * @param {number} [verBPB] (default is 0; see above)
      * @returns {boolean} (true if successful, false otherwise)
      */
@@ -4362,7 +4362,14 @@ export default class DiskInfo {
                         } else {
                             if (lbaBoot == 0) {
                                 if (off >= DiskInfo.MBR.PARTITIONS.OFFSET) continue;
-                                if (this.driveCtrl == "PCJS") {
+                                if (iVolume == -2) {
+                                    /*
+                                     * The caller has indicated we're using the PCJS MBR, which supports up to 2 drive
+                                     * parameter tables.  We only ever use the first table, although in the future, perhaps
+                                     * we'll allow iVolume == -3 to fill in the second table.
+                                     *
+                                     * TODO: It might also be wise to verify the "PCJS" signature at offset 0x199 of the MBR.
+                                     */
                                     switch(off) {
                                     case DiskInfo.MBR.DRIVE0PARMS.CYLS:
                                         b = this.nCylinders & 0xff;

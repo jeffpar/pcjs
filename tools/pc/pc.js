@@ -11,6 +11,7 @@
 import child_process from "child_process";
 import fs            from "fs";
 import glob          from "glob";
+import JSON5         from 'json5';
 import path          from "path";
 import xml2js        from "xml2js";
 import DbgLib        from "../../machines/modules/v2/dbglib.js";
@@ -37,17 +38,18 @@ let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.30";
 let systemOverride = false;
+let systemMBR = "pcjs.mbr";
 let savedMachine = "compaq386.json";
 let savedState = "state386.json";
 let localMachine = "";          // current machine config file
 let localCommand = "";          // current command issued from machine
 let localDir = ".";             // local directory used to build localDrive
-let localDrive = "disks/harddisk.json";
+let localDrive = "disks/PCJS.json";
 let diskLabel = "default";
 let machineDir = "";            // current directory *inside* the machine
 let maxFiles = 1024;            // default disk file limit
 let kbTarget = 10 * 1024;       // default disk capacity, in kilobytes (Kb)
-let configJSON = {}, machines = {};
+let configFile = "pc.json5", configJSON = {}, machines = {};
 
 let rootDir, pcjsDir;
 let messagesFilter, debugMode;
@@ -959,6 +961,9 @@ function loadMachine(sFile)
                      * by the current drive controller (the PC XT started with type 0, while the PC AT started with 1).
                      */
                     driveType = (typeCtrl == "XT")? 0 : 1;
+                    if (typeCtrl == "XT" && driveInfo.nSectors != 17) {
+                        printf("warning: XT controller requires 17 sectors/track\n");
+                    }
                 }
                 drives[0] = {
                     'type': driveType,
@@ -1223,6 +1228,10 @@ function checkCommand(sDir, sCommand)
 /**
  * getSystemDisk(type, version)
  *
+ * If we don't recognized the system type (eg, "pcdos", "msdos"), or there is no version information,
+ * we return an empty string.  If we recognize the version, we return the name of the system diskette;
+ * otherwise, we return an array of available versions.
+ *
  * @param {string} type
  * @param {string} version
  * @returns {string}
@@ -1324,14 +1333,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         return "missing " + systemType + " system diskette: " + sSystemDisk;
     }
 
-    /*
-     * For greater flexibility, I could ALWAYS use the PCJS MBR.  This would give me the option of converting
-     * any machine's drive type to PCJS drive type 0 (XT) or 1 (AT) and having my MBR automatically set up the correct
-     * geometry.  But doing that was causing me some grief with the IBM 5160 PC XT, so I've backed off that for now.
-     *
-     *      let sSystemMBR = "pcjs.mbr";
-     */
-    let sSystemMBR = (driveInfo.driveCtrl == "PCJS" || verDOSMajor >= 3)? "pcjs.mbr" : "DOS.mbr";
+    let sSystemMBR = systemMBR;
     if (sSystemMBR.indexOf(path.sep) < 0) {
         sSystemMBR = path.join(pcjsDir, sSystemMBR);
     }
@@ -1384,7 +1386,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     }
 
     /*
-     * Finally, for any apps listed in pc.json, create hidden "helper binaries" in the root, each of which will
+     * Finally, for any apps listed in configFile, create hidden "helper binaries" in the root, each of which will
      * execute an "INT 20h" that will trigger an exec of the corresponding local command.  Note that 'apps' is a
      * collection of objects, where the keys are the app names and object properties like 'exec' tell us
      * what local program to execute.
@@ -1526,12 +1528,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
              */
             let manifest = di.getFileManifest(null, true);
             if (di.volTable[0] && di.volTable[0].iPartition >= 0) {
-                if (sSystemMBR.indexOf("pcjs.mbr") >= 0) {
-                    di.driveCtrl = "PCJS";
-                    driveInfo.driveCtrl = "PCJS";
-                    driveInfo.driveType = 0;
-                }
-                di.updateBootSector(dbMBR, -1);                 // a volume of -1 indicates the master boot record
+                di.updateBootSector(dbMBR, sSystemMBR.indexOf("pcjs.mbr") < 0? -1 : -2);
             }
             di.updateBootSector(dbBoot, 0, verBPB);
             localDrive = localDrive.replace(path.basename(localDrive), di.getName() + ".json");
@@ -1553,9 +1550,8 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
 
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
-    if (diskLabel == ".") diskLabel = path.basename(sDir);
 
-    readDir(sDir, 0, 0, diskLabel, null, fNormalize, kbCapacity, maxFiles, false, driveInfo, done);
+    readDir(sDir, 0, 0, diskLabel == "."? path.basename(sDir) : diskLabel, null, fNormalize, kbCapacity, maxFiles, false, driveInfo, done);
 
     return driveManifest? "" : "unable to build drive";
 }
@@ -2533,14 +2529,14 @@ function main(argc, argv)
     }
 
     machines = JSON.parse(readFileSync("/machines/machines.json"));
-    configJSON = JSON.parse(readFileSync(path.join(pcjsDir, "pc.json"))) || configJSON;
+    configJSON = JSON5.parse(readFileSync(path.join(pcjsDir, configFile))) || configJSON;
     let defaults = configJSON['defaults'] || {};
 
     fBare = removeFlag('bare') || fBare;
     fHalt = removeFlag('halt') || fHalt;
     fFloppy = removeFlag('floppy') || fFloppy;
     if (!fFloppy) fNoFloppy = removeFlag('nofloppy') || fNoFloppy;
-    diskLabel = removeArg('label') || diskLabel;
+    diskLabel = removeArg('label') || defaults['label'] || diskLabel;
     fNormalize = removeFlag('normalize') || fNormalize;
 
     machineType = defaults['type'] || machineType;
@@ -2556,6 +2552,7 @@ function main(argc, argv)
     } else {
         systemVersion = (removeArg('ver', 'string') || defaults['ver'] || systemVersion);
     }
+    systemMBR = removeArg('mbr') || defaults['mbr'] || systemMBR;
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
     localDir = defaults['directory'] || localDir;
@@ -2604,7 +2601,7 @@ function main(argc, argv)
                 driveInfo.nSectors = nSectors;
                 driveInfo.cbSector = cbSector;
                 if (cbSector != 512) {
-                    printf("warning: %d-byte sectors are not known to work with any DOS operating system\n", cbSector);
+                    printf("warning: %d-byte sectors are not known to work with any version of DOS\n", cbSector);
                 }
                 driveOverride = true;
             }
@@ -2686,7 +2683,7 @@ function main(argc, argv)
         printf("\nnotes:\n\t--type can also specify a drive geometry (eg, --type=306:4:17)\n");
         printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
         printf("\t--fat values should be considered advisory, as it may not be possible to honor them\n");
-        printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, "pc.json"));
+        printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, configFile));
         return;
     }
 

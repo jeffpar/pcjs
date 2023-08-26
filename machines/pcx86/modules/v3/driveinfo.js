@@ -29,6 +29,10 @@
  *      E: reserved
  *      F: reserved
  *
+ * Notice that there is nothing in the PC XT table to indicate the number of sectors/track; this is because
+ * the XT BIOS assumed 17 sectors/track; in fact, the number 17 (0x11) is hard-coded in the BIOS function (0x08)
+ * that returns drive parameters.
+ *
  * Starting with the IBM PC AT, the ROM defined a "Fixed Disk Parameter Table" (FD_TBL) that contained 16 bytes
  * at the following offsets for each of 47 drive types (see IBM 5170 Tech Ref, March 1986, p. 5-185):
  *
@@ -50,6 +54,9 @@
  *
  * NOTE: While drive type 0 was a valid type in the PC XT, it was NOT a valid drive type in the PC AT; zero was used
  * to indicate that no hard drive was installed.
+ *
+ * All of the predefined PC AT drive types still used only 17 sectors/track -- but unlike the PC XT, user-defined drive
+ * parameter tables could now specify different values.
  *
  * Of the 47 PC AT drive types, the first 14 (1-E) could be selected by 4 bits in CMOS byte 0x12.  Drive type 15 was not
  * a valid type but rather an indicator that CMOS byte 0x19 (or 0x1A) contained the actual drive type, which technically

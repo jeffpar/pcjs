@@ -507,7 +507,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, driveInfo, d
         sLabel = "";
     } else if (sLabel == "default") {
         sLabel = DiskInfo.PCJS_LABEL;
-        dateLabel = new Date();
+        dateLabel = new Date(1989, 8, 27, 3, 0, 0);
     }
 
     /*
@@ -518,7 +518,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, driveInfo, d
      */
     if (sLabel && (!driveInfo || driveInfo.verDOS >= 2)) {
         let sPath = '/' + path.basename(sLabel);
-        let file = {path: sPath, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel || new Date(1989, 8, 27, 3, 0, 0), size: 0};
+        let file = {path: sPath, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel || new Date(), size: 0};
         aFileData.push(file);
     }
 
@@ -1001,9 +1001,8 @@ export function writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwr
                 fs.writeFileSync(diskFile, data);
                 if (diskFileLC.endsWith(".img") && !fWritable) fs.chmodSync(diskFile, 0o444);
                 return true;
-            } else {
-                printf("%s not written, no data\n", diskName);
             }
+            printf("%s not written, no data\n", diskName);
         } else {
             if (!fQuiet) printf("warning: %s exists, use --overwrite to replace\n", diskFile);
         }
