@@ -690,7 +690,7 @@ function intLoad(addr)
                 printf("%s\n", loadDiskette(matchDrive[1], aTokens));
             } else {
                 if (args.toLowerCase() == "info") {
-                    printf(getDriveInfo(true));
+                    printf(getDriveInfo());
                 } else if (args) {
                     printf("invalid load command: \"%s\"\n", args);
                 }
@@ -712,16 +712,15 @@ function intLoad(addr)
 }
 
 /**
- * getDriveInfo(fText)
+ * getDriveInfo()
  *
- * @param {boolean} [fText]
- * @returns {Object|null|string}
+ * @returns {string}
  */
-function getDriveInfo(fText)
+function getDriveInfo()
 {
-    let info = null;
-    if (driveManifest || driveInfo.volume || driveInfo.driveType >= 0) {
-        info = {
+    let text = "\nno drive info\n";
+    if (driveManifest || driveInfo.driveType >= 0) {
+        let info = {
             controller: driveInfo.driveCtrl,
             type: driveInfo.driveType < 0? 0 : driveInfo.driveType,
             cylinders: driveInfo.nCylinders,
@@ -731,8 +730,9 @@ function getDriveInfo(fText)
             clusterSize: driveInfo.clusterSize,
             driveSize: driveInfo.driveSize.toFixed(1) + "mb"
         };
-        if (driveInfo.volume) {
-            let vol = driveInfo.volume;
+        text = sprintf("\n %s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
+        let vol = driveInfo.volume;
+        if (vol) {
             info.sectorSize = vol.cbSector;
             info.mediaID = sprintf("%#04x", vol.idMedia);
             let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
@@ -749,22 +749,11 @@ function getDriveInfo(fText)
             info.clustersFree = vol.clusFree;
             info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
             info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
+            text += sprintf(" %d-bit FAT, %d-byte clusters, %d root entries\n", info.typeFAT, info.clusterSize, info.rootEntries);
+            text += sprintf(" %d sectors, %d clusters, %d bytes\n", info.sectorsTotal, info.clustersTotal, info.bytesTotal);
         }
     }
-    if (fText) {
-        if (info) {
-            info = sprintf("\n %s drive type %d, CHS %d:%d:%d, %s", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
-            if (driveInfo.volume) {
-                info += sprintf("\n %d-bit FAT, %d-byte clusters, %d root entries\n", info.typeFAT, info.clusterSize, info.rootEntries);
-                info += sprintf(" %d sectors, %d clusters, %d bytes\n", info.sectorsTotal, info.clustersTotal, info.bytesTotal);
-            } else {
-                info += " (unformatted)\n";
-            }
-        } else {
-            info = "\nno drive info\n";
-        }
-    }
-    return info;
+    return text;
 }
 
 /**
@@ -994,7 +983,7 @@ function loadMachine(sFile)
                     /*
                      * If we built a drive image, we worked hard to make it bootable, so we're going to boot from it
                      * (ie, remove any boot floppy).  Whereas any prebuilt drive image may or may not be bootable, so
-                     * in that case, use --nofloppy if you any boot floppy removed.
+                     * in that case, use --nofloppy if you want any boot floppy removed.
                      */
                     if (driveManifest) {
                         removeFloppy = true;
@@ -1548,7 +1537,17 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
              */
             let manifest = di.getFileManifest(null, true);
             if (di.volTable[0] && di.volTable[0].iPartition >= 0) {
-                di.updateBootSector(dbMBR, sSystemMBR.indexOf("pcjs.mbr") < 0? -1 : -2);
+                let iVolume = -1;
+                /*
+                 * Since the disk is partitioned, we need to update the Master Boot Record (MBR),
+                 * hence the special volume number (-1).  However, if the MBR is ours AND a custom
+                 * geometry has been specified, then we need to use an *extra* special volume number
+                 * (-2) to ensure that our MBR's drive parameter table is updated.
+                 */
+                if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && driveInfo.driveCtrl == "PCJS") {
+                    iVolume = -2;
+                }
+                di.updateBootSector(dbMBR, iVolume);
             }
             di.updateBootSector(dbBoot, 0, verBPB);
             localDrive = localDrive.replace(path.basename(localDrive), di.getName() + ".json");
@@ -2230,7 +2229,7 @@ function doCommand(s, reload = false)
         arg = aTokens[0];
         if (arg) {
             if (arg == "info") {
-                result = getDriveInfo(true);
+                result = getDriveInfo();
             } else {
                 let matchDrive = arg.match(/^([a-z]:?)$/i);
                 if (matchDrive) {
@@ -2355,6 +2354,9 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
         if (sDisk.toLowerCase() == "none") {    // --disk=none disables any prebuilt disk
             localDrive = "";
         } else {
+            if (sDisk.indexOf(path.sep) < 0 && !existsFile(sDisk, false)) {
+                sDisk = path.join(pcjsDir, "disks", sDisk);
+            }
             localDrive = sDisk;
             let di = await readDiskAsync(localDrive);
             if (di) {
@@ -2363,6 +2365,9 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
             } else {
                 error = "invalid disk";
             }
+        }
+        if (driveInfo.driveCtrl == "PCJS") {
+            error = "custom drive parameters will not work with prebuilt disks";
         }
         localDir = "";
     } else {
@@ -2419,9 +2424,8 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
         }
     }
 
-    if (error || warning) {
-        printf("%s\n", error || warning);
-    }
+    if (warning) printf("warning: %s\n", warning);
+    if (error) printf("error: %s\n", error);
 
     if (!loading) setDebugMode(DbgLib.EVENTS.READY);
 }

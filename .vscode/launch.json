@@ -478,7 +478,6 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--disk=none",
         "--drivetype=300:3:30",
         "--sys=msdos:3.3"
       ],
