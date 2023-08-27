@@ -753,9 +753,13 @@ function getDriveInfo(fText)
     }
     if (fText) {
         if (info) {
-            info = sprintf("\n %s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize) +
-                   sprintf(" %d-bit FAT, %d-byte clusters, %d root entries\n", info.typeFAT, info.clusterSize, info.rootEntries) +
-                   sprintf(" %d sectors, %d clusters, %d bytes\n", info.sectorsTotal, info.clustersTotal, info.bytesTotal);
+            info = sprintf("\n %s drive type %d, CHS %d:%d:%d, %s", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
+            if (driveInfo.volume) {
+                info += sprintf("\n %d-bit FAT, %d-byte clusters, %d root entries\n", info.typeFAT, info.clusterSize, info.rootEntries);
+                info += sprintf(" %d sectors, %d clusters, %d bytes\n", info.sectorsTotal, info.clustersTotal, info.bytesTotal);
+            } else {
+                info += " (unformatted)\n";
+            }
         } else {
             info = "\nno drive info\n";
         }
@@ -1860,6 +1864,7 @@ function saveDisk(sDir)
             }
             if (sDir != localDir) {
                 if (sDir.indexOf('.') < 0) sDir += ".img";
+                if (sDir.indexOf(path.sep) < 0) sDir = path.join(pcjsDir, "disks", sDir);
                 printf("saving drive as %s\n", sDir);
                 writeDiskSync(sDir, di, false, 0, true, true);
             }
@@ -2556,7 +2561,7 @@ function main(argc, argv)
     fNormalize = removeFlag('normalize') || fNormalize;
 
     machineType = defaults['type'] || machineType;
-    systemOverride = argv['sys'] || argv['ver'];
+    systemOverride = argv['sys'] || argv['ver'] || argv['disk'];
     systemType = (removeArg('sys', 'string') || defaults['sys'] || systemType).toLowerCase();
     let i = systemType.indexOf(':');
     if (i > 0) {
@@ -2571,13 +2576,13 @@ function main(argc, argv)
     systemMBR = removeArg('mbr') || defaults['mbr'] || systemMBR;
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
-    localDir = defaults['directory'] || localDir;
+    localDir = defaults['dir'] || localDir;
 
     /*
      * When using --floppy, certain other options are disallowed (eg, drivectrl).
      */
     if (fFloppy) {
-        savedMachine = "ibm5170";
+        savedState = "";
         kbTarget = maxFiles = 0;
         driveInfo.driveCtrl = "FDC";
         driveInfo.fPartitioned = false;

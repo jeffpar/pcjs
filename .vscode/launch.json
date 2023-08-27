@@ -478,7 +478,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "dir"
+        "--disk=none",
+        "--drivetype=300:3:30",
+        "--sys=msdos:3.3"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
       "stopOnEntry": false,
