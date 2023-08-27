@@ -1547,13 +1547,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "MBR/",
-        "MBR.img",
-        "--drivetype=305:4:17:1024",
-        "--overwrite",
-        "--partitioned=false"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
+      "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

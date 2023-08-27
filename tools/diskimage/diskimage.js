@@ -502,13 +502,40 @@ function processDisk(di, diskFile, argv, diskette)
         printf("%s\n", sLines);
     }
 
-    if (argv['extract']) {
+    /*
+     * Similar to --extract, I've added --type as another form of extraction (ie, to extract file(s) to the console).
+     */
+    let sExtraction, fExtractToFile;
+    if (argv['type']) {
+        fExtractToFile = false;
+        sExtraction = argv['type'];
+    } else if (argv['extract']) {
+        fExtractToFile = true;
+        sExtraction = argv['extract'];
+    }
+    let fExtractAll = (typeof sExtraction != "string");
+
+    if (sExtraction) {
         let extractDir = argv['extdir'];
         if (typeof extractDir != "string") {
             extractDir = "";
         } else {
             extractDir = extractDir.replace("%d", path.dirname(diskFile));
         }
+
+        let extractName = "", extractFolder = "";
+        if (fExtractAll) {
+            extractFolder = di.getName();
+        } else {
+            extractName = sExtraction.toUpperCase();
+        }
+        if (argv['collection'] && !extractDir) {
+            extractFolder = getLocalPath(path.join(path.dirname(diskFile), "archive", extractFolder));
+            if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
+                extractFolder = extractFolder.replace("/disks/archive", "/archive");
+            }
+        }
+
         aHiddenDirs = [];
         let manifest = di.getFileManifest(null);                // add true for sorted manifest
         manifest.forEach(function extractDiskFile(desc) {
@@ -523,6 +550,7 @@ function processDisk(di, diskFile, argv, diskette)
             let name = path.basename(sPath).toUpperCase();
             let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
             let attr = +desc[DiskInfo.FILEDESC.ATTR];
+
             /*
              * We call parseDate() requesting a *local* date from the timestamp, because that's exactly how we're going
              * to use it: as a local file modification time.  We used to deal exclusively in UTC dates, unpolluted
@@ -534,20 +562,15 @@ function processDisk(di, diskFile, argv, diskette)
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
             device.assert(size == db.length);
-            let extractName = "", extractFolder = "";
-            if (typeof argv['extract'] != "string") {
-                extractFolder = di.getName();
-            } else {
-                extractName = argv['extract'].toUpperCase();
-            }
-            if (extractFolder || extractName == name) {
-                if (argv['collection'] && !extractDir) {
-                    extractFolder = getLocalPath(path.join(path.dirname(diskFile), "archive", extractFolder));
-                    if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
-                        extractFolder = extractFolder.replace("/disks/archive", "/archive");
+
+            if (fExtractAll || extractName == name) {
+                if (!fExtractToFile) {
+                    if (!fExtractAll || isTextFile(sPath)) {
+                        printf("\n%s:\n%s\n", sPath, CharSet.fromCP437(db.buffer));
                     }
+                } else {
+                    extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || fExtractAll);
                 }
-                extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || !!extractName);
             }
         });
     }
@@ -1357,7 +1380,8 @@ function main(argc, argv)
             "--extract[=filename]":     "extract specified file in disks or archives",
             "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
             "--output=[diskimage]":     "write disk image (.img or .json)",
-            "--target=[nK|nM]":         "set target disk size (eg, \"360K\", \"10M\")"
+            "--target=[nK|nM]":         "set target disk size (eg, \"360K\", \"10M\")",
+            "--type[=filename]":        "extract text file(s) to console",
         };
         let optionsOther = {
             "--dump=[C:H:S:N]":         "dump N sectors starting at sector C:H:S",
