@@ -82,9 +82,9 @@ If you run [pc.js](pc.js) with the name of a DOS command or executable in your c
 
     pc.js pkunzip.exe
 
-it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc` folder with copies of all the files/folders in your current local directory, automatically start a [COMPAQ DeskPro 386](compaq386.json) machine with that disk image mounted as drive C, and then run the specified DOS command or executable.
+it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc/disks` folder with copies of all the files/folders in your current local directory, then start a [COMPAQ DeskPro 386](compaq386.json) machine with that disk image mounted as drive C, and then run the specified DOS command or executable.
 
-This allows you to run console-based DOS applications on your modern operating system (eg, macOS or Windows), with excellent IBM PC (or in this case, COMPAQ DeskPro 386) compatibility.  The experience currently comes with a number of caveats, and there are some important limitations to be aware of, such as limits on the size and number of files you can have in your current directory (the overall limit is currently 10Mb) and the fact that only console-based DOS applications are usable in this environment.
+This allows you to run console-based DOS applications on your modern operating system (eg, macOS or Windows), with IBM PC (or in this case, COMPAQ DeskPro 386) compatibility.  The experience currently comes with a number of caveats, and there are some important limitations to be aware of, such as limits on the size and number of files you can have in your current directory (the overall limit is currently 10Mb) and the fact that only console-based DOS applications are usable in this environment.
 
 If you modify any files on your local file system, those modifications won't show up inside the machine until you restart `pc.js`.  Similarly, any file modifications inside the machine will not show up on your local file system until you terminate `pc.js`.
 

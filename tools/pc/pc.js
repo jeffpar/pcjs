@@ -1542,9 +1542,15 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
                  * Since the disk is partitioned, we need to update the Master Boot Record (MBR),
                  * hence the special volume number (-1).  However, if the MBR is ours AND a custom
                  * geometry has been specified, then we need to use an *extra* special volume number
-                 * (-2) to ensure that our MBR's drive parameter table is updated.
+                 * (-2) to ensure that our MBR's drive parameter table is updated, too.
+                 *
+                 * TODO: I've eliminated the requirement that driveCtrl be "PCJS", because (for example)
+                 * "--sys=compaq:3.31 --target=40M" fails, even though we're supposedly using standard
+                 * COMPAQ drive type 13 and *not* a custom geometry.  One possible explanation is that my
+                 * HDC component is not setting the drive type in CMOS in the way that the COMPAQ BIOS
+                 * expects.
                  */
-                if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && driveInfo.driveCtrl == "PCJS") {
+                if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && (driveInfo.driveCtrl == "PCJS" || driveInfo.driveCtrl == "COMPAQ")) {
                     iVolume = -2;
                 }
                 di.updateBootSector(dbMBR, iVolume);

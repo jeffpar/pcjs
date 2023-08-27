@@ -989,7 +989,8 @@ export default class DiskInfo {
                     rootEntries = 112;
                 } else if (cTotalSectors <= 8192) {     // 0x2000
                     rootEntries = 256;
-                } else if (cTotalSectors <= 32680) {    // 0x7Af8
+                } else if (cTotalSectors <= 32680 ||    // 0x7Af8
+                            driveInfo.verDOS == 3) {    // PC DOS 3.0 seems to have a hard-coded preference for 512 entries
                     rootEntries = 512;
                 } else {
                     rootEntries = 1024;                 // TBD: Check DOS 3.x and later root directory thresholds
@@ -1057,7 +1058,9 @@ export default class DiskInfo {
                  * 10Mb drive's BPB unless the OEM string contains something greater than "3.0".
                  */
                 setBoot(DiskInfo.BPB.OEM + 5, 1, 0x33);
-                setBoot(DiskInfo.BPB.OEM + 7, 1, 0x31);
+                if (driveInfo.verDOS >= 3.1) {
+                    setBoot(DiskInfo.BPB.OEM + 7, 1, 0x31);
+                }
                 if (this.minDOSVersion < 3.0) this.minDOSVersion = 3.0;
             }
 
