@@ -1537,25 +1537,37 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
              */
             let manifest = di.getFileManifest(null, true);
             if (di.volTable[0] && di.volTable[0].iPartition >= 0) {
-                let iVolume = -1;
                 /*
                  * Since the disk is partitioned, we need to update the Master Boot Record (MBR),
                  * hence the special volume number (-1).  However, if the MBR is ours AND a custom
                  * geometry has been specified, then we need to use an *extra* special volume number
                  * (-2) to ensure that our MBR's drive parameter table is updated, too.
                  *
-                 * TODO: I've eliminated the requirement that driveCtrl be "PCJS", because (for example)
-                 * "--sys=compaq:3.31 --target=40M" fails, even though we're supposedly using standard
-                 * COMPAQ drive type 13 and *not* a custom geometry.  One possible explanation is that my
-                 * HDC component is not setting the drive type in CMOS in the way that the COMPAQ BIOS
-                 * expects.
+                 * TODO: I used to update the MBR drive parameter table ONLY when driveCtrl is "PCJS",
+                 * but for some reason, it's also needed for some "COMPAQ" configurations.  For example:
+                 *
+                 *      pc.js --sys=compaq:3.31 --target=40M
+                 *
+                 * will fail even though we're supposedly using a standard COMPAQ drive type (13) and
+                 * not a custom geometry.  One possible explanation is that my HDC component is not
+                 * setting the drive type in CMOS in the manner that the COMPAQ BIOS expects.
                  */
+                let iVolume = -1;
                 if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && (driveInfo.driveCtrl == "PCJS" || driveInfo.driveCtrl == "COMPAQ")) {
                     iVolume = -2;
                 }
                 di.updateBootSector(dbMBR, iVolume);
             }
+            /*
+             * Now update the volume boot record (VBR) for the boot drive; for that, the volume number
+             * is always zero because pc.js only builds one volume per drive.
+             */
             di.updateBootSector(dbBoot, 0, verBPB);
+            /*
+             * Time to write the disk to localDrive.  We have to create a physical file (preferably JSON, since
+             * that tells us more about the disk, its layout, and its contents) because currently that's the only
+             * way to to pass a disk image to the HDC component.
+             */
             localDrive = localDrive.replace(path.basename(localDrive), di.getName() + ".json");
             if (fLog) printf("building drive: %s\n", localDrive);
             if (writeDiskSync(localDrive, di, false, 0, true, true)) {
