@@ -2442,8 +2442,14 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
         }
     }
 
-    if (warning) printf("warning: %s\n", warning);
-    if (error) printf("error: %s\n", error);
+    if (warning) {
+        printf("warning: %s\n", warning);
+    }
+
+    if (error) {
+        printf("error: %s\n", error);
+        exit(1);
+    }
 
     if (!loading) setDebugMode(DbgLib.EVENTS.READY);
 }
@@ -2471,8 +2477,7 @@ function readInput(stdin, stdout)
             return;
         }
         if (code == 0x03 && debugMode) {                // check for CTRL-C when in debug mode
-            printf("terminating...\n");
-            exit();
+            exit(3);
             return;
         }
         if (!debugMode) {
@@ -2514,7 +2519,6 @@ function readInput(stdin, stdout)
             let result = doCommand(s);
             if (result == null) {
                 exit();
-                return;
             }
             printf(result);
             if (machine.cpu && machine.cpu.isRunning()) {
@@ -2527,14 +2531,19 @@ function readInput(stdin, stdout)
 }
 
 /**
- * exit()
+ * exit(code)
+ *
+ * @param {number} code (return code)
  */
-function exit()
+function exit(code = 0)
 {
+    if (code == 3) {
+        printf("terminating...\n");
+    }
     saveDisk(localDir);
     process.stdin.setRawMode(false);
     if (fTest) printf("\n");
-    process.exit();
+    process.exit(code);
 }
 
 /**

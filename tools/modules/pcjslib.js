@@ -133,6 +133,7 @@ export default class PCJSLib
                     argv[lastOp].push(sArg);
                 }
                 lastOp = "";
+                continue;
             }
             argv.push(sArg);
         }
