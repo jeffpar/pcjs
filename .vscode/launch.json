@@ -478,13 +478,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ibm5150",
-        "--dir=empty",
-        "--floppy",
-        "--sys=pcdos:2",
-        "--halt"
+        "--dir=empty"
       ],
-      "cwd": "${workspaceFolder}/tools/pc",
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

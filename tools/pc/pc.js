@@ -2206,7 +2206,7 @@ function doCommand(s, reload = false)
 {
     let aTokens = s.split(' ');
     let cmd = aTokens[0].toLowerCase();
-    let result = "", curDir = "", sDrive = "";
+    let result = "", curDir = "", sDir = localDir, sDrive = "";
 
     aTokens.splice(0, 1);
     let arg, args = aTokens.join(' ');
@@ -2249,7 +2249,7 @@ function doCommand(s, reload = false)
         break;
     case "exec":
         if (reload) {
-            saveDisk(localDir);
+            saveDisk(sDir);
             machine = newMachine();
         }
         curDir = process.cwd();
@@ -2299,17 +2299,21 @@ function doCommand(s, reload = false)
         break;
     case "save":
         if (aTokens[0]) {
+            sDir = aTokens[0];
             let matchDrive = aTokens[0].match(/^([a-z]):?$/i);
             if (matchDrive) {
                 sDrive = matchDrive[1].toUpperCase() + ':';
                 aTokens.splice(0, 1);
-                if (!aTokens[0]) {
+                sDir = aTokens[0];
+                if (!sDir) {
                     result = "specify a disk image for drive " + sDrive;
                     break;
                 }
             }
         }
-        saveDisk(aTokens[0] || localDir, sDrive);
+        if (!saveDisk(sDir, sDrive)) {
+            result = "no diskette in drive " + sDrive;
+        }
         break;
     case "start":
         arg = aTokens[0];
@@ -2418,6 +2422,7 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
     if (sDisk) {
         if (sDisk.toLowerCase() == "none") {    // --disk=none disables any prebuilt disk
             localDrive = "";
+            savedState = "";
         } else {
             if (sDisk.indexOf(path.sep) < 0 && !existsFile(sDisk, false)) {
                 sDisk = path.join(pcjsDir, "disks", sDisk);
@@ -2441,6 +2446,7 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
 
     if (sDirectory == "none") {
         localDir = localDrive = "";             // --dir=none is synonymous with --disk=none
+        savedState = "";
     }
 
     if (localDir) {                             // --dir is allowed only if --disk has not been used
@@ -2763,7 +2769,7 @@ function main(argc, argv)
         let optionsOther = {
             "--bare (-b)":              "\tomit helper binaries from disk",
             "--debug (-d)":             "\tenable DEBUG messages",
-            "--floppy (-f)":            "\tbuild non-partitioned boot disk",
+            "--floppy (-f)":            "\tbuild floppy instead of hard disk",
             "--halt (-h)":              "\thalt machine on startup",
             "--help (-?)":              "\tdisplay command-line usage",
             "--local (-l)":             "\tuse local diskette images",
@@ -2785,7 +2791,7 @@ function main(argc, argv)
         }
         printf("\nnotes:\n\t--type can also specify a drive geometry (eg, --type=306:4:17)\n");
         printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
-        printf("\t--fat values should be considered advisory, as it may not be possible to honor them\n");
+        printf("\tAll values should be considered advisory, as it may not be possible to honor them.\n");
         printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, configFile));
         return;
     }
