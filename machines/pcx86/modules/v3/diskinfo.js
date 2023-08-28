@@ -4359,7 +4359,7 @@ export default class DiskInfo {
                                  */
                                 break;
                             case 2:
-                                if (off >= DiskInfo.BPB.BEGIN && off <= DiskInfo.BPB.LARGESECS) continue;
+                                if (off >= DiskInfo.BPB.BEGIN && off < DiskInfo.BPB.LARGESECS) continue;
                                 break;
                             }
                         } else {

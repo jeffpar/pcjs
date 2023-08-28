@@ -13,6 +13,7 @@
     "messages": "int,hdc"
   },
   "apps": {
+    "cp": {},
     "ls": {},
     "vi": {},
     ".edit": {

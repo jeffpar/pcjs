@@ -577,7 +577,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                         printf("\n%s:\n%s\n", sPath, CharSet.fromCP437(db.buffer));
                     }
                 } else {
-                    extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || fExtractAll);
+                    extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || !fExtractAll);
                 }
             }
         });

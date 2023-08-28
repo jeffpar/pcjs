@@ -547,7 +547,25 @@ function intReboot(addr)
     if (this.getIP() == 0x102) {
         let sig = this.getSOWord(this.segCS, this.getIP()+2) + (this.getSOWord(this.segCS, this.getIP()+4) << 16);
         if (sig == 0x534A4350) {        // "PCJS"
-            exit();                     // INT 19h appears to have come from QUIT.COM
+            let cpu = this;             // INT 19h appears to have come from QUIT.COM
+            let getString = function(seg, off, len) {
+                let s = "";
+                while (len--) {
+                    let b = cpu.getSOByte(seg, off++);
+                    if (!b) break;
+                    s += CharSet.fromCP437(b);
+                }
+                return s;
+            };
+            let len = cpu.getSOByte(cpu.segDS, 0x80);
+            let args = getString(cpu.segDS, 0x81, len).trim();
+            if (!args) {                // if there were no arguments, then simply "quit"
+                exit();
+            }
+            if (args.toLowerCase() != "/r") {
+                printf("unrecognized option: %s\n", args);
+                return false;           // for any unrecognized option, returning false will skip the INT 19h
+            }                           // otherwise, for "QUIT /R", we simply reboot
         }
     }
 
@@ -718,7 +736,7 @@ function intLoad(addr)
  */
 function getDriveInfo()
 {
-    let text = "\nno drive info\n";
+    let text = sprintf("\n %s machine ID: %s\n", machine.type, machine.id);
     if (driveManifest || driveInfo.driveType >= 0) {
         let info = {
             controller: driveInfo.driveCtrl,
@@ -730,7 +748,7 @@ function getDriveInfo()
             clusterSize: driveInfo.clusterSize,
             driveSize: driveInfo.driveSize.toFixed(1) + "mb"
         };
-        text = sprintf("\n %s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
+        text += sprintf(" %s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
         let vol = driveInfo.volume;
         if (vol) {
             info.sectorSize = vol.cbSector;
@@ -883,6 +901,7 @@ function newMachine()
     }
     return {
         id:           "",
+        type:         "",
         cpu:          null,
         dbg:          null,
         fdc:          null,
@@ -913,6 +932,7 @@ function loadMachine(sFile)
         machine.id = "";
         if (config['machine']) {
             machine.id = config['machine']['id'];
+            machine.type = config['machine']['type'];
         }
 
         if (config['cpu']) {
@@ -1005,7 +1025,7 @@ function loadMachine(sFile)
                 config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
             } else if (fFloppy || systemOverride) {
                 let name = systemType.toUpperCase() + ' ' + sprintf("%.2f", parseFloat(systemVersion));
-                let sSystemDisk = fFloppy? localDrive : getSystemDisk(systemType, systemVersion);
+                let sSystemDisk = fFloppy && localDrive? localDrive : getSystemDisk(systemType, systemVersion);
                 if (sSystemDisk) {
                     config['fdc']['autoMount'] = "{A:{name:\"" + name + "\",path:\"" + sSystemDisk + "\"}}";
                     savedState = "";
@@ -1510,7 +1530,9 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     }
     else if (verDOS >= 2.0 && verDOS < 3.2) {
         verBPB = 2;
-        if (fFloppy) kbCapacity ||= 360;
+        if (fFloppy) {
+            kbCapacity ||= 360;
+        }
     }
     else {
         if (fFloppy) kbCapacity ||= (verDOS < 3.3? 720 : 1440);
@@ -1736,17 +1758,31 @@ function mapDir(machineDir)
 }
 
 /**
- * saveDisk(sDir)
+ * saveDisk(sDir, sDrive)
  *
  * If we built a drive on entry, this checks the drive on exit for any changes that need to be saved.
  *
  * @param {string} sDir
+ * @param {string} [sDrive]
  * @returns {boolean}
  */
-function saveDisk(sDir)
+function saveDisk(sDir, sDrive)
 {
-    let controller = fFloppy? machine.fdc : machine.hdc;
-    let imageData = controller && controller.aDrives && controller.aDrives.length && controller.aDrives[0].disk;
+    let controller, iDrive = 0;
+    if (sDrive) {
+        controller = machine.fdc;
+        iDrive = sDrive.charCodeAt(0) - 'A'.charCodeAt(0);
+        if (iDrive > 1) {
+            if (iDrive != 2) {
+                return false;
+            }
+            controller = machine.hdc;
+            iDrive = 0;
+        }
+    } else {
+        controller = fFloppy? machine.fdc : machine.hdc;
+    }
+    let imageData = controller && controller.aDrives && controller.aDrives.length && controller.aDrives[iDrive].disk;
     if (imageData) {
         let di = new DiskInfo(device, "PCJS");
         if (di.buildDiskFromJSON(imageData, true)) {
@@ -2170,7 +2206,7 @@ function doCommand(s, reload = false)
 {
     let aTokens = s.split(' ');
     let cmd = aTokens[0].toLowerCase();
-    let result = "", curDir = "", newDir;
+    let result = "", curDir = "", sDrive = "";
 
     aTokens.splice(0, 1);
     let arg, args = aTokens.join(' ');
@@ -2262,7 +2298,18 @@ function doCommand(s, reload = false)
         }
         break;
     case "save":
-        saveDisk(aTokens[0] || localDir);
+        if (aTokens[0]) {
+            let matchDrive = aTokens[0].match(/^([a-z]):?$/i);
+            if (matchDrive) {
+                sDrive = matchDrive[1].toUpperCase() + ':';
+                aTokens.splice(0, 1);
+                if (!aTokens[0]) {
+                    result = "specify a disk image for drive " + sDrive;
+                    break;
+                }
+            }
+        }
+        saveDisk(aTokens[0] || localDir, sDrive);
         break;
     case "start":
         arg = aTokens[0];
@@ -2385,11 +2432,15 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
             }
         }
         if (driveInfo.driveCtrl == "PCJS") {
-            error = "custom drive parameters will not work with prebuilt disks";
+            error = "custom drive parameters not supported for prebuilt disks";
         }
         localDir = "";
     } else {
         localDrive = path.join(pcjsDir, localDrive);
+    }
+
+    if (sDirectory == "none") {
+        localDir = localDrive = "";             // --dir=none is synonymous with --disk=none
     }
 
     if (localDir) {                             // --dir is allowed only if --disk has not been used
@@ -2590,6 +2641,7 @@ function main(argc, argv)
     if (!fFloppy) fNoFloppy = removeFlag('nofloppy') || fNoFloppy;
     diskLabel = removeArg('label') || defaults['label'] || diskLabel;
     fNormalize = removeFlag('normalize') || fNormalize;
+    localDir = defaults['dir'] || localDir;
 
     machineType = defaults['type'] || machineType;
     systemOverride = argv['sys'] || argv['ver'] || argv['disk'];
@@ -2607,7 +2659,6 @@ function main(argc, argv)
     systemMBR = removeArg('mbr') || defaults['mbr'] || systemMBR;
     savedMachine = defaults['machine'] || savedMachine;
     savedState = defaults['state'] || savedState;
-    localDir = defaults['dir'] || localDir;
 
     /*
      * When using --floppy, certain other options are disallowed (eg, drivectrl).

@@ -478,11 +478,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys=pcdos:2.0",
-        "--target=20M",
+        "ibm5150",
+        "--dir=empty",
+        "--floppy",
+        "--sys=pcdos:2",
         "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1548,10 +1550,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json",
-        "--extract",
-        "--extdir",
-        "pcjs"
+        "empty.json",
+        "--extract=ibmdos.com"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
