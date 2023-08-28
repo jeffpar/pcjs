@@ -529,7 +529,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             /*
              * Normally, we want every disk to be extracted into its own folder, but if you're just
              * extracting a single disk AND you've already specified an extraction dir, then we don't need
-             * to ALSO put the files inside their own diskName-based folder.
+             * to ALSO put the files inside their own disk-based folder name.
              */
             if (!fSingle || !extractDir) {
                 extractFolder = di.getName();
@@ -1172,17 +1172,18 @@ function getArchiveOffset(sArchive, arcType, sOffset)
 }
 
 /**
- * processDiskAsync(input, argv)
+ * processDiskAsync(input, argv, fSingle)
  *
  * @param {string} input
  * @param {Array} argv
+ * @param {boolean} [fSingle]
  */
-async function processDiskAsync(input, argv)
+async function processDiskAsync(input, argv, fSingle = false)
 {
     let driveInfo = createDriveInfo(argv);
     let di = await readDiskAsync(input, argv['forceBPB'], driveInfo);
     if (di) {
-        processDisk(di, input, argv, null, true);
+        processDisk(di, input, argv, null, fSingle);
     }
 }
 
@@ -1224,14 +1225,15 @@ function processAll(all, argv)
 }
 
 /**
- * processArg(argv)
+ * processArg(argv, fSingle)
  *
  * Formerly part of main(), but factored out so that it can also be called for a list of files ("--all").
  *
  * @param {Array} argv
+ * @param {boolean} [fSingle]
  * @returns {boolean} true if something was processed, false if not
  */
-function processArg(argv)
+function processArg(argv, fSingle = false)
 {
     let input;
     let fDir = false, fFiles = false, arcType = 0;
@@ -1260,7 +1262,7 @@ function processArg(argv)
                     di.setName(path.basename(name));
                 }
             }
-            processDisk(di, input, argv);
+            processDisk(di, input, argv, null, fSingle);
             return true;
         }
         if (input) printf("warning: %s is not a supported disk image\n", input);
@@ -1439,11 +1441,11 @@ function main(argc, argv)
         /*
          * If you used --disk to specify a disk image (or you specified a remote image), call the experimental async function.
          */
-        processDiskAsync(input, argv);
+        processDiskAsync(input, argv, true);
         return;
     }
 
-    if (processAll(argv['all'], argv) || processArg(argv)) {
+    if (processAll(argv['all'], argv) || processArg(argv, true)) {
         return;
     }
 
