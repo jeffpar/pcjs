@@ -62954,7 +62954,7 @@ class Disk extends Component {
          */
         let diskFormat = DiskAPI.GEOMETRIES[cbDiskData];
         if (diskFormat) {
-
+            //
             this.nCylinders = diskFormat[0];
             this.nHeads = diskFormat[1];
             this.nSectors = diskFormat[2];

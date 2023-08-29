@@ -1024,10 +1024,16 @@ function loadMachine(sFile)
             if (removeFloppy) {
                 config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
             } else if (fFloppy || systemOverride) {
-                let name = systemType.toUpperCase() + ' ' + sprintf("%.2f", parseFloat(systemVersion));
-                let sSystemDisk = fFloppy && localDrive? localDrive : getSystemDisk(systemType, systemVersion);
-                if (sSystemDisk) {
-                    config['fdc']['autoMount'] = "{A:{name:\"" + name + "\",path:\"" + sSystemDisk + "\"}}";
+                let disk, name;
+                if (localDrive) {
+                    disk = localDrive;
+                    name = (path.basename(localDir) || "User-defined") + " Diskette";
+                } else {
+                    disk = getSystemDisk(systemType, systemVersion);
+                    name = systemType.toUpperCase() + ' ' + sprintf("%.2f", parseFloat(systemVersion));
+                }
+                if (disk) {
+                    config['fdc']['autoMount'] = "{A:{name:\"" + name + "\",path:\"" + disk + "\"}}";
                     savedState = "";
                 }
             }
@@ -1501,8 +1507,10 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
          * BPB version, we should also set kbCapacity to 160 for 1.0 or 320 for 1.1.
          */
         verBPB = 1;
-        kbCapacity ||= 160;
-        if (verDOS >= 1.1) {
+        if (verDOS < 1.1) {
+            kbCapacity ||= 160;
+        }
+        else {
             /*
              * Even though PC DOS 1.1 added support for 320K, the PC DOS 1.1 boot diskette was formatted
              * as 160K, so that it could also boot on single-sided drives.  So, if we really want to boot
@@ -1515,8 +1523,8 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
              *
              * See /software/pcx86/sys/dos/ibm/1.10/debugger/README.md for more details.
              */
-            if (dbBoot.readUInt16LE(0x0003) == 0x0008 && dbBoot.readUInt16LE(0x0005) == 0x0014) {
-                kbCapacity ||= 320;
+            kbCapacity ||= 320;
+            if (kbCapacity == 320 && dbBoot.readUInt16LE(0x0003) == 0x0008 && dbBoot.readUInt16LE(0x0005) == 0x0014) {
                 dbBoot.writeUInt16LE(0x0103, 0x0003);
                 /*
                  * As an added precaution, zero the BPB region, since any BPB would have been for a 160K diskette,
@@ -1535,7 +1543,9 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
         }
     }
     else {
-        if (fFloppy) kbCapacity ||= (verDOS < 3.3? 720 : 1440);
+        if (fFloppy) {
+            kbCapacity ||= (verDOS < 3.3? 720 : 1440);
+        }
         if (verDOS >= 3.2 && verDOS < 4.0) {
             /*
              * When DOS 3.2 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd

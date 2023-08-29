@@ -478,9 +478,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--dir=empty"
+        "ibm5170",
+        "--sys=pcdos:1.1",
+        "--floppy",
+        "--target=160K"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks",
+      "cwd": "${workspaceFolder}/tools/pc/disks/test/src",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
