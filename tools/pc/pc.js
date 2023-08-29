@@ -1360,7 +1360,7 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
     let verDOS = +parseFloat(systemVersion);        // parseFloat() is forgiving of any non-numeric suffix, the "+" operator is not
     let verDOSMajor = verDOS | 0;
     if (verDOSMajor < 2 && !fFloppy) {
-        return "DOS 2.0 or greater required for hard disk support (otherwise use --floppy)";
+        return "DOS 2.0 or greater required (otherwise use --floppy)";
     }
 
     let diSystem = await readDiskAsync(sSystemDisk);
