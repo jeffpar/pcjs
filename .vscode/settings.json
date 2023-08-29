@@ -11,6 +11,7 @@
   "editor.tabSize": 8,
   "editor.insertSpaces": false,
   "[asm][masm][plaintext]": {
+    "editor.rulers": [80],
     "editor.quickSuggestions": {
       "other": false,
       "comments": false,
