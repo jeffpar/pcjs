@@ -478,12 +478,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ibm5170",
-        "--sys=pcdos:1.1",
-        "--floppy",
-        "--target=160K"
+        "--disk=test.img",
+        "--sys:pcdos:3.0"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/test/src",
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

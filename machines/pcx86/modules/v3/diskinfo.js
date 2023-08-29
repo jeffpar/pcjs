@@ -305,6 +305,9 @@ export default class DiskInfo {
                 bMediaIDBPB = dbDisk.readUInt8(offBootSector + DiskInfo.BPB.MEDIA);
 
                 let nSectorsTotalBPB = dbDisk.readUInt16LE(offBootSector + DiskInfo.BPB.DISKSECS);
+                if (!nSectorsTotalBPB) {
+                    nSectorsTotalBPB = dbDisk.readUInt32LE(offBootSector + DiskInfo.BPB.LARGESECS);
+                }
                 let nSectorsPerCylinderBPB = nSectorsPerTrackBPB * nHeadsBPB;
                 let nSectorsHiddenBPB = dbDisk.readUInt16LE(offBootSector + DiskInfo.BPB.HIDDENSECS);
                 let nCylindersBPB = (nSectorsHiddenBPB + nSectorsTotalBPB) / nSectorsPerCylinderBPB;
@@ -317,7 +320,7 @@ export default class DiskInfo {
                         let message = (nCylinders - nCylindersBPB == 1)? Device.MESSAGE.INFO : Device.MESSAGE.WARN;
                         this.printf(message, "BPB cylinders (%d) do not match physical cylinders (%d)\n", nCylindersBPB, nCylinders);
                         if (message == Device.MESSAGE.INFO) {
-                            this.printf(message, "BIOS may have reserved the last cylinder for diagnostics and/or head-parking\n");
+                            this.printf(message, "last cylinder may have been reserved for diagnostics and/or head-parking\n");
                         }
                     }
                     if (nHeads != nHeadsBPB) {
@@ -900,14 +903,6 @@ export default class DiskInfo {
             }
             cTotalSectors -= cHiddenSectors + cDiagnosticSectors;
 
-            if (cTotalSectors <= 0xffff) {
-                setBoot(DiskInfo.BPB.DISKSECS, 2, cTotalSectors);
-            } else {
-                this.minDOSVersion = 3.31;
-                setBoot(DiskInfo.BPB.DISKSECS, 2, 0);
-                setBoot(DiskInfo.BPB.LARGESECS, 4, cTotalSectors);
-            }
-
             cbSector = driveInfo.cbSector || cbSector;
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
 
@@ -1137,10 +1132,17 @@ export default class DiskInfo {
                 } while (maxAdjustments--);
             }
 
+            if (cTotalSectors <= 0xffff) {
+                setBoot(DiskInfo.BPB.DISKSECS, 2, cTotalSectors);
+            } else {
+                setBoot(DiskInfo.BPB.DISKSECS, 2, 0);
+                setBoot(DiskInfo.BPB.LARGESECS, 4, cTotalSectors);
+                this.minDOSVersion = 3.31;
+            }
             setBoot(DiskInfo.BPB.DIRENTS, 2, rootEntries);
             setBoot(DiskInfo.BPB.RESSECS, 2, cReservedSectors);
             setBoot(DiskInfo.BPB.HIDDENSECS, 2, cHiddenSectors);
-            if (driveInfo.verDOS >= 2.0 && driveInfo.verDOS < 3.2) {
+            if (driveInfo.verDOS >= 2.0 && driveInfo.verDOS < 3.2 && driveInfo.verDOS >= this.minDOSVersion) {
                 setBoot(DiskInfo.BPB.BOOTDRIVE, 1, driveInfo.fPartitioned === false? 0x00 : 0x80);
                 setBoot(DiskInfo.BPB.LARGESECS, 1, cFileSectors);       // TODO: only required for DOS 2.x?
             }

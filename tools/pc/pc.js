@@ -1025,7 +1025,7 @@ function loadMachine(sFile)
                 config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
             } else if (fFloppy || systemOverride) {
                 let disk, name;
-                if (localDrive) {
+                if (fFloppy) {
                     disk = localDrive;
                     name = (path.basename(localDir) || "User-defined") + " Diskette";
                 } else {
@@ -2660,7 +2660,7 @@ function main(argc, argv)
     localDir = defaults['dir'] || localDir;
 
     machineType = defaults['type'] || machineType;
-    systemOverride = argv['sys'] || argv['ver'] || argv['disk'];
+    systemOverride = !!(argv['sys'] || argv['ver']);
     systemType = (removeArg('sys', 'string') || defaults['sys'] || systemType).toLowerCase();
     let i = systemType.indexOf(':');
     if (i > 0) {
