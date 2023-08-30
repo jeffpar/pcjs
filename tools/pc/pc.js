@@ -746,7 +746,7 @@ function getDriveInfo()
             sectorsPerTrack: driveInfo.nSectors,
             sectorSize: driveInfo.cbSector || 512,
             clusterSize: driveInfo.clusterSize,
-            driveSize: driveInfo.driveSize.toFixed(1) + "mb"
+            driveSize: driveInfo.driveSize.toFixed(1) + "Mb"
         };
         text += sprintf(" %s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
         let vol = driveInfo.volume;
