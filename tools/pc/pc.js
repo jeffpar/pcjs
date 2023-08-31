@@ -43,8 +43,8 @@ let savedMachine = "compaq386.json";
 let savedState = "state386.json";
 let localMachine = "";          // current machine config file
 let localCommand = "";          // current command issued from machine
-let localDir = ".";             // local directory used to build localDrive
-let localDrive = "disks/PCJS.json";
+let localDir = ".";             // local directory used to build localDisk
+let localDisk = "disks/PCJS.json";
 let diskLabel = "default";
 let machineDir = "";            // current directory *inside* the machine
 let maxFiles = 1024;            // default disk file limit
@@ -998,8 +998,8 @@ function loadMachine(sFile)
                     'type': driveType,
                     'name': (driveInfo.driveSize|0) + "Mb Hard Disk"
                 };
-                if (driveManifest || !localDir && localDrive) {
-                    drives[0]['path'] = localDrive;
+                if (driveManifest || !localDir && localDisk) {
+                    drives[0]['path'] = localDisk;
                     /*
                      * If we built a drive image, we worked hard to make it bootable, so we're going to boot from it
                      * (ie, remove any boot floppy).  Whereas any prebuilt drive image may or may not be bootable, so
@@ -1026,7 +1026,7 @@ function loadMachine(sFile)
             } else if (fFloppy || systemOverride) {
                 let disk, name;
                 if (fFloppy) {
-                    disk = localDrive;
+                    disk = localDisk;
                     name = (path.basename(localDir) || "User-defined") + " Diskette";
                 } else {
                     disk = getSystemDisk(systemType, systemVersion);
@@ -1318,7 +1318,7 @@ function getSystemFiles(type, version)
 }
 
 /**
- * buildDisk(sDir, sCommand, fLog)
+ * buildDisk(sDir, sCommand, sDisk, fLog)
  *
  * Builds a bootable floppy or hard disk image containing all files in the current directory.
  *
@@ -1339,10 +1339,11 @@ function getSystemFiles(type, version)
  *
  * @param {string} sDir
  * @param {string} [sCommand] (eg, "COPY A:*.COM C:"; multiple commands can be separated by commas or semicolons)
+ * @param {string} [sDisk]
  * @param {boolean} [fLog]
  * @returns {string} (error message, if any)
  */
-async function buildDisk(sDir, sCommand = "", fLog = false)
+async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
 {
     let kbCapacity = kbTarget;
     let system = configJSON['systems']?.[systemType];
@@ -1596,13 +1597,18 @@ async function buildDisk(sDir, sCommand = "", fLog = false)
              */
             di.updateBootSector(dbBoot, 0, verBPB);
             /*
-             * Time to write the disk to localDrive.  We have to create a physical file (preferably JSON, since
-             * that tells us more about the disk, its layout, and its contents) because currently that's the only
-             * way to to pass a disk image to the HDC component.
+             * Time to update the name of localDisk and then write the disk.  We must create a physical file
+             * (preferably JSON, since that tells us more about the disk, its layout, and its contents) because
+             * currently that's the only way to to pass a disk image to the HDC component.
              */
-            localDrive = localDrive.replace(path.basename(localDrive), di.getName() + ".json");
-            if (fLog) printf("building drive: %s\n", localDrive);
-            if (writeDiskSync(localDrive, di, false, 0, true, true)) {
+            if (!sDisk) {
+                localDisk = localDisk.replace(path.basename(localDisk), di.getName() + ".json");
+            } else {
+                localDisk = sDisk.indexOf(path.sep) < 0? path.join(pcjsDir, "disks", sDisk) : sDisk;
+                //
+            }
+            if (sDisk || fLog) printf("building drive: %s\n", localDisk);
+            if (writeDiskSync(localDisk, di, false, 0, true, true)) {
                 updateDriveInfo(di);
                 /*
                  * I've deferred the minimum version check until now, because even if we can't (well, shouldn't)
@@ -2253,7 +2259,7 @@ function doCommand(s, reload = false)
             result = "bad command or file name: " + args;
             break;
         }
-        buildDisk(localDir, arg, true).then(function(result) {
+        buildDisk(localDir, arg, "", true).then(function(result) {
             if (result) printf("%s\n", result);
         });
         break;
@@ -2389,7 +2395,7 @@ function doCommand(s, reload = false)
 }
 
 /**
- * processArgs(argv, sMachine, sDisk, sDirectory)
+ * processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
  *
  * Arguments that either the shell consumes (like *.*) or that we consume (like --help) can be
  * problematic if those are actually arguments you want to pass along with a command to buildDisk().
@@ -2397,11 +2403,12 @@ function doCommand(s, reload = false)
  * So in those cases, you should simply put quotes around the entire command (eg, pc.js "dir *.* /p").
  *
  * @param {Array.<string>} argv
- * @param {string|undefined} sMachine
- * @param {string|undefined} sDisk
- * @param {string|undefined} sDirectory
+ * @param {string} [sMachine]
+ * @param {string} [sDisk]
+ * @param {string} [sDirectory]
+ * @param {string} [sLocalDisk]
  */
-async function processArgs(argv, sMachine, sDisk, sDirectory)
+async function processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
 {
     let loading = false;
     let error = "", warning = "";
@@ -2431,14 +2438,14 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
 
     if (sDisk) {
         if (sDisk.toLowerCase() == "none") {    // --disk=none disables any prebuilt disk
-            localDrive = "";
+            localDisk = "";
             savedState = "";
         } else {
             if (sDisk.indexOf(path.sep) < 0 && !existsFile(sDisk, false)) {
                 sDisk = path.join(pcjsDir, "disks", sDisk);
             }
-            localDrive = sDisk;
-            let di = await readDiskAsync(localDrive);
+            localDisk = sDisk;
+            let di = await readDiskAsync(localDisk);
             if (di) {
                 updateDriveInfo(di);
                 kbTarget = 0;
@@ -2451,11 +2458,11 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
         }
         localDir = "";
     } else {
-        localDrive = path.join(pcjsDir, localDrive);
+        localDisk = path.join(pcjsDir, localDisk);
     }
 
     if (sDirectory == "none") {
-        localDir = localDrive = "";             // --dir=none is synonymous with --disk=none
+        localDir = localDisk = "";              // --dir=none is synonymous with --disk=none
         savedState = "";
     }
 
@@ -2493,7 +2500,10 @@ async function processArgs(argv, sMachine, sDisk, sDirectory)
             } else if (!localDir) {
                 warning = "unable to execute command '" + sCommand + "' with prebuilt disk";
             } else {
-                error = await buildDisk(localDir, sCommand);
+                error = await buildDisk(localDir, sCommand, sLocalDisk);
+                if (!error && sLocalDisk) {
+                    exit();
+                }
             }
         }
         if (!error) {
@@ -2772,6 +2782,7 @@ function main(argc, argv)
             "--label=[label]":          "\tset volume label of disk image",
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--normalize=[boolean]":    "convert text file encoding (default is " + fNormalize + ")",
+            "--save=[image]":           "\tsave drive disk image and exit",
             "--sys=[string]":           "\toperating system type (default is " + systemType + ")",
             "--target=[nK|nM]":         "set target disk size (default is " + ((kbTarget / 1024)|0) + "M)",
             "--ver=[#.##]":             "\toperating system version (default is " + systemVersion + ")"
@@ -2806,7 +2817,7 @@ function main(argc, argv)
         return;
     }
 
-    processArgs(argv, removeArg('start'), removeArg('disk'), removeArg('dir'));
+    processArgs(argv, removeArg('start'), removeArg('disk'), removeArg('dir'), removeArg('save'));
 
     let args = Object.keys(argv);
     for (let arg of args) {
