@@ -736,7 +736,7 @@ function intLoad(addr)
  */
 function getDriveInfo()
 {
-    let text = sprintf("\n %s machine ID: %s\n", machine.type, machine.id);
+    let text = sprintf("\n %s machine ID %s\n", machine.type, machine.id);
     if (driveManifest || driveInfo.driveType >= 0) {
         let info = {
             controller: driveInfo.driveCtrl,
@@ -755,20 +755,24 @@ function getDriveInfo()
             info.mediaID = sprintf("%#04x", vol.idMedia);
             let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
             info.typeFAT = vol.nFATBits || vol.idFAT;
-            info.totalFATs = (sectorsFAT / Math.ceil(vol.clusTotal * info.typeFAT / 8 / vol.cbSector))|0;
-            info.rootEntries = vol.rootEntries || vol.rootTotal;
+            info.totalFATs = (sectorsFAT / Math.ceil(Math.ceil(vol.clusTotal * info.typeFAT / 8) / vol.cbSector))|0;
+            info.sizeRoot = vol.rootEntries || vol.rootTotal;
             info.sectorsHidden = vol.lbaStart;
             info.sectorsReserved = vol.vbaFAT;
             info.sectorsFAT = sectorsFAT;
-            info.sectorsRoot = Math.ceil((info.rootEntries * 32) / vol.cbSector);
+            info.sectorsRoot = Math.ceil((info.sizeRoot * 32) / vol.cbSector);
             info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
+            info.sectorsData = info.sectorsTotal - info.sectorsReserved - info.sectorsFAT * info.totalFATs - info.sectorsRoot;
             info.clusterSize = vol.clusSecs * vol.cbSector;
             info.clustersTotal = vol.clusTotal;
             info.clustersFree = vol.clusFree;
             info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
             info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
-            text += sprintf(" %d-bit FAT, %d-byte clusters, %d root entries\n", info.typeFAT, info.clusterSize, info.rootEntries);
-            text += sprintf(" %d sectors, %d clusters, %d bytes\n", info.sectorsTotal, info.clustersTotal, info.bytesTotal);
+            text += sprintf(" %d-bit FAT, %d-byte clusters, %d clusters\n", info.typeFAT, info.clusterSize, info.clustersTotal);
+            text += sprintf(" %d FAT sectors (x%d), %d root sectors (%d entries)\n", info.sectorsFAT, info.totalFATs, info.sectorsRoot, info.sizeRoot);
+            text += sprintf(" %d total sectors, %d data sectors, %d data bytes\n", info.sectorsTotal, info.sectorsData, info.bytesTotal);
+            // info.usageFinalFAT = (vol.cbSector - (Math.ceil(vol.clusTotal * info.typeFAT / 8) % vol.cbSector)) / vol.cbSector * 100;
+            // text += sprintf(" %3.2f usage of final FAT sector\n", info.usageFinalFAT);
         }
     }
     return text;
@@ -2229,7 +2233,7 @@ function doCommand(s, reload = false)
 
     let help = function() {
         let result = "pc.js commands:\n" +
-                    "  build [command]\n" +
+                    "  build [DOS command(s)]\n" +
                     "  exec [local command]\n" +
                     "  load [drive] [search options]\n" +
                     "  save [local disk image]\n" +
@@ -2328,7 +2332,7 @@ function doCommand(s, reload = false)
             }
         }
         if (!saveDisk(sDir, sDrive)) {
-            result = "no diskette in drive " + sDrive;
+            result = "no disk in drive " + sDrive;
         }
         break;
     case "start":
@@ -2614,9 +2618,7 @@ function readInput(stdin, stdout)
  */
 function exit(code = 0)
 {
-    if (code == 3) {
-        printf("terminating...\n");
-    }
+    if (code == 3) printf("terminating...\n");
     saveDisk(localDir);
     process.stdin.setRawMode(false);
     if (fTest) printf("\n");
