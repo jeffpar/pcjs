@@ -315,9 +315,9 @@ export default class DiskInfo {
         BOOTDRIVE:      0x01E,      // 1 byte (DOS 2.x): BIOS boot drive # (eg, 0x00 or 0x80)
         BOOTHEAD:       0x01F,      // 1 byte (DOS 2.x): BIOS boot head # (0-based)
         /*
-         * NOTE: DOS 2.0 also stores the number of sectors in the BIOS file in the byte at offset 0x020 (LARGESECS), followed
-         * by a custom 11-byte Diskette Parameter Table (DPT) at offsets 0x021 through 0x0x2B, which it promptly points the DPT
-         * vector 0x1E (0:0078h) to.
+         * NOTE: DOS 2.0 also stores the number of sectors in the BIOS file (eg, IO.SYS, IBMBIO.COM) in the byte at offset
+         * 0x020 (LARGESECS), followed by a custom 11-byte Diskette Parameter Table (DPT) at offsets 0x021 through 0x0x2B, which
+         * it promptly points the DPT vector 0x1E (0:0078h) to.
          */
         LARGESECS:      0x020,      // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
         END:            0x024,      // end of standard BPB
