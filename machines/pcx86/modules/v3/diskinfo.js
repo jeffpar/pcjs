@@ -1770,7 +1770,7 @@ export default class DiskInfo {
             let cActualClusters = Math.trunc(cDataSectors / cSectorsPerCluster);
             let cActualFATSectors = Math.ceil(Math.ceil((cActualClusters + 2) * typeFAT / 8) / cbSector);
             if (cActualFATSectors != cFATSectors) {
-                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "actual FAT sectors (%d) do not match estimated FAT sectors (%d)\n", cActualFATSectors, cFATSectors);
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%d FAT sectors allocated, but only %d are required\n", cFATSectors, cActualFATSectors);
             }
         }
 
