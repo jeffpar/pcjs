@@ -96,6 +96,11 @@ import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
  * @property {number} cbSector
  * @property {number} driveSize
  * @property {number} typeFAT
+ * @property {number} clusterSize
+ * @property {number} rootEntries
+ * @property {number} verDOS
+ * @property {boolean} trimFAT
+ * @property {boolean} partitioned
  * @property {Array} files
  * @property {Array|string} sectorIDs
  * @property {Array|string} sectorErrors
@@ -228,6 +233,7 @@ export default class DiskInfo {
     };
 
     static MBR = {
+        PCJS_SIG:       0x199,          // PCJS_VALUE
         DRIVE0PARMS: {
             CYLS:       0x19E,          // 1 word
             HEADS:      0x1A0,          // 1 byte
@@ -282,7 +288,7 @@ export default class DiskInfo {
      */
     static PCJS_LABEL = "PCJS";
     static PCJS_OEM   = "PCJS.ORG";
-    static PCJS_VALUE = 0x50434A53;     // "PCJS"
+    static PCJS_VALUE = 0x534a4350;     // "PCJS"
 
     /*
      * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
@@ -802,7 +808,7 @@ export default class DiskInfo {
             driveInfo.driveType = -1;
         }
 
-        if (driveInfo.fPartitioned || cbDiskData >= DiskInfo.MIN_PARTITION && driveInfo.fPartitioned !== false) {
+        if (driveInfo.partitioned || cbDiskData >= DiskInfo.MIN_PARTITION && driveInfo.partitioned !== false) {
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
             if (wSig == DiskInfo.BOOT.SIGNATURE) {
                 /*
@@ -1088,7 +1094,7 @@ export default class DiskInfo {
              * we used earlier), because it turns out that post 2.x versions of DOS (eg, PC DOS 3.00, MS-DOS 3.30) look for
              * certain OEM strings (eg, "IBM  2.0", "IBM  3.1") as a for drive and FAT type determination.
              */
-            let dw = dbDisk.readInt32BE(DiskInfo.BPB.OEM + offBootSector);
+            let dw = dbDisk.readInt32LE(DiskInfo.BPB.OEM + offBootSector);
             if (dw != DiskInfo.PCJS_VALUE && cbDiskData < DiskInfo.MIN_PARTITION && driveInfo.driveCtrl != "PCJS") {
                 dbDisk.write(DiskInfo.PCJS_OEM, DiskInfo.BPB.OEM + offBootSector, DiskInfo.PCJS_OEM.length);
                 this.printf(Device.MESSAGE.INFO, "OEM string has been updated\n");
@@ -1486,7 +1492,7 @@ export default class DiskInfo {
             cHeads = this.nHeads;
             cSectorsPerTrack = this.nSectors;
 
-            if (driveInfo.fPartitioned) {
+            if (driveInfo.partitioned) {
                 bMediaID = 0xF8;
                 cHiddenSectors = 1;     // our hard disk images are always partitioned and always reserve a diagnostic cylinder
                 cDiagnosticSectors = cHeads * cSectorsPerTrack;
@@ -1603,23 +1609,23 @@ export default class DiskInfo {
                 maxClusters = (typeFAT == 12)? DiskInfo.FAT12.MAX_CLUSTERS : DiskInfo.FAT16.MAX_CLUSTERS;
                 grossClusters = Math.floor(cTotalSectors / cSectorsPerCluster);
                 cFATSectors = Math.ceil(Math.ceil(grossClusters * typeFAT / 8) / cbSector);
-                //
-                // This code was an experiment, because it turns out that a disk with 21895 sectors and 4K sectors only
-                // needs 8 sectors/FAT, not 9.  But since DOS 2.00 calculates it as 9, we must follow suit, otherwise we
-                // end up with a disk that DOS 2.00 fails to correctly read.
-                //
-                //      if (cTotalSectors == 21895 && cSectorsPerCluster == 8 && cFATSectors == 9) {
-                //          cFATSectors = 8;
-                //      }
-                //
-                // Note that fsck_msdos will complain that such a disk has 2732 "entries", but I believe that complaint is
-                // bogus; it's probably including the first two FAT entries in its count, which don't represent clusters.
-                // There are only 2730 usable clusters on this particular disk.
-                //
-                // This is one of many such corner cases, and there's a warning below (see cActualClusters) that will
-                // appear whenever you encounter them.  Again, it's moot, because DOS (or at least DOS 2.x) requires that
-                // we waste the same amount of space that it wasted (ie, it doesn't actually honor FATSECS in the BPB).
-                //
+                /*
+                 * This next bit is an experiment, because it turns out a disk with 10948 total sectors and 4K
+                 * clusters only needs 4 sectors per FAT, not 5.
+                 *
+                 * This is one of many such corner cases, and there's a warning below (see cActualClusters) that will
+                 * appear whenever we encounter them.  Calculating all those cases here (rather than hard-coding one
+                 * particular disk size) is really what's required, but it's a tricky calculation to do at this point,
+                 * and since it's moot, why bother?  DOS (or at least DOS 2.x) requires that we waste the same amount
+                 * of space that it wasted, because it doesn't actually honor FATSECS in the BPB.
+                 *
+                 * So, set trimFAT only if you *really* want to see this failure.  ;-)
+                 */
+                if (driveInfo.trimFAT) {
+                    if (cTotalSectors == 10947 && cSectorsPerCluster == 8 && cFATSectors == 5) {
+                        cFATSectors = 4;
+                    }
+                }
                 if (grossClusters < minClusters) {
                     if (!cRecalcs--) break;
                     typeFAT = 12;
@@ -1706,9 +1712,9 @@ export default class DiskInfo {
              */
             let cFileSectors = 0;
             if (aFileData[0]) {
-                let maxAdjustments = cSectorsPerTrack;
+                let maxAdjustments = driveInfo.trimFAT? 0 : cSectorsPerTrack;
                 cFileSectors = Math.ceil(aFileData[0].size / cbSector);
-                do {
+                while (maxAdjustments--) {
                     let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
                     let cFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
                     /*
@@ -1736,7 +1742,7 @@ export default class DiskInfo {
                      */
                     cHiddenSectors++;
                     cTotalSectors--;
-                } while (maxAdjustments--);
+                }
             }
 
             if (cTotalSectors <= 0xffff) {
@@ -1750,7 +1756,7 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.RESSECS, 2, cReservedSectors);
             setBoot(DiskInfo.BPB.HIDDENSECS, 2, cHiddenSectors);
             if (driveInfo.verDOS >= 2.0 && driveInfo.verDOS < 3.2 && driveInfo.verDOS >= this.minDOSVersion) {
-                setBoot(DiskInfo.BPB.BOOTDRIVE, 1, driveInfo.fPartitioned === false? 0x00 : 0x80);
+                setBoot(DiskInfo.BPB.BOOTDRIVE, 1, driveInfo.partitioned === false? 0x00 : 0x80);
                 setBoot(DiskInfo.BPB.LARGESECS, 1, cFileSectors);       // TODO: only required for DOS 2.x?
             }
 
@@ -1759,10 +1765,10 @@ export default class DiskInfo {
 
             /*
              * While it's important to calculate cFATSectors the same way that DOS did it, I'm still curious how
-             * often this resulted in wasted FAT sectors.
+             * often this results in wasted FAT sectors.
              */
             let cActualClusters = Math.trunc(cDataSectors / cSectorsPerCluster);
-            let cActualFATSectors = Math.ceil(Math.ceil(cActualClusters * typeFAT / 8) / cbSector);
+            let cActualFATSectors = Math.ceil(Math.ceil((cActualClusters + 2) * typeFAT / 8) / cbSector);
             if (cActualFATSectors != cFATSectors) {
                 this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "actual FAT sectors (%d) do not match estimated FAT sectors (%d)\n", cActualFATSectors, cFATSectors);
             }
@@ -4426,7 +4432,7 @@ export default class DiskInfo {
                     return true;
                 }
             }
-            else if (!driveInfo.fPartitioned) {
+            else if (!driveInfo.partitioned) {
                 if (driveInfo.driveType >= 0) {
                     return true;
                 }
@@ -4499,10 +4505,10 @@ export default class DiskInfo {
                             break;
                         }
                     }
-                    if (driveType < 0) {
-                        driveCtrl = "PCJS";
-                        driveType = 0;
-                    }
+                }
+                if (driveType < 0) {
+                    driveCtrl = "PCJS";
+                    driveType = 0;
                 }
             }
             driveInfo.driveCtrl = driveCtrl;

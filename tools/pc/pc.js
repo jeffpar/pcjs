@@ -62,19 +62,20 @@ let diskIndexCache = null, diskIndexKeys = [];
 let fileIndexCache = null, fileIndexKeys = [];
 let driveManifest = null, driveOverride = false, geometryOverride = false;
 let driveInfo = {
-    driveCtrl:    "COMPAQ",
-    driveType:   -1,
-    nCylinders:   0,
-    nHeads:       0,
-    nSectors:     0,
-    cbSector:     0,
-    driveSize:    0,
-    typeFAT:      0,    // set this to 12 or 16 to request a specific FAT type
-    clusterSize:  0,    // set this to a specific cluster size (in bytes) if desired
-    rootEntries:  0,    // set this to a specific number of root directory entries if desired
-    verDOS:       0,
-    fPartitioned: undefined,
-    files:        []
+    driveCtrl:      "COMPAQ",
+    driveType:      -1,
+    nCylinders:     0,
+    nHeads:         0,
+    nSectors:       0,
+    cbSector:       0,
+    driveSize:      0,
+    typeFAT:        0,          // set this to 12 or 16 to request a specific FAT type
+    clusterSize:    0,          // set this to a specific cluster size (in bytes) if desired
+    rootEntries:    0,          // set this to a specific number of root directory entries if desired
+    verDOS:         0,
+    trimFAT:        false,
+    partitioned:    undefined,
+    files:          []
 };
 
 const functionKeys = {
@@ -594,7 +595,7 @@ function intReboot(addr)
      * wrote to deal with custom hard disk geometries.  It should be a trivial change, since most DOS boot
      * sectors already copy the DPT to RAM in order tweak other non-geometric parameters (eg, stepping rate).
      */
-    if (!driveInfo.fPartitioned && driveInfo.cbSector && driveInfo.cbSector != 512) {
+    if (!driveInfo.partitioned && driveInfo.cbSector && driveInfo.cbSector != 512) {
         let fpDPT = this.getLong(0x1E * 4);                     // get the DPT address from interrupt vector 0x1E
         let addrDPT = ((fpDPT >>> 16) << 4) + (fpDPT & 0xffff); // convert real-mode far pointer to physical address
 
@@ -736,7 +737,10 @@ function intLoad(addr)
  */
 function getDriveInfo()
 {
-    let text = sprintf("\n %s machine ID %s\n", machine.type, machine.id);
+    let text = "\n";
+    if (machine.id) {
+        text += sprintf(" %s machine ID %s\n", machine.type, machine.id);
+    }
     if (driveManifest || driveInfo.driveType >= 0) {
         let info = {
             controller: driveInfo.driveCtrl,
@@ -768,11 +772,13 @@ function getDriveInfo()
             info.clustersFree = vol.clusFree;
             info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
             info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
+            info.usageFinalFAT = (vol.cbSector - (Math.ceil(vol.clusTotal * info.typeFAT / 8) % vol.cbSector)) / vol.cbSector * 100;
             text += sprintf(" %d-bit FAT, %d-byte clusters, %d clusters\n", info.typeFAT, info.clusterSize, info.clustersTotal);
             text += sprintf(" %d FAT sectors (x%d), %d root sectors (%d entries)\n", info.sectorsFAT, info.totalFATs, info.sectorsRoot, info.sizeRoot);
             text += sprintf(" %d total sectors, %d data sectors, %d data bytes\n", info.sectorsTotal, info.sectorsData, info.bytesTotal);
-            // info.usageFinalFAT = (vol.cbSector - (Math.ceil(vol.clusTotal * info.typeFAT / 8) % vol.cbSector)) / vol.cbSector * 100;
-            // text += sprintf(" %3.2f usage of final FAT sector\n", info.usageFinalFAT);
+            if (fTest) {
+                text += sprintf(" %3.2f usage of final FAT sector\n", info.usageFinalFAT);
+            }
         }
     }
     return text;
@@ -956,7 +962,7 @@ function loadMachine(sFile)
             }
         }
 
-        if (config['hdc'] && driveInfo.fPartitioned) {
+        if (config['hdc'] && driveInfo.partitioned) {
             let typeCtrl = config['hdc']['type'];
             let drives = config['hdc']['drives'];
             if (typeof drives == "string") {
@@ -1609,7 +1615,6 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
                 localDisk = localDisk.replace(path.basename(localDisk), di.getName() + ".json");
             } else {
                 localDisk = sDisk.indexOf(path.sep) < 0? path.join(pcjsDir, "disks", sDisk) : sDisk;
-                //
             }
             if (sDisk || fLog) printf("building drive: %s\n", localDisk);
             if (writeDiskSync(localDisk, di, false, 0, true, true)) {
@@ -2452,13 +2457,11 @@ async function processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
             let di = await readDiskAsync(localDisk);
             if (di) {
                 updateDriveInfo(di);
+                driveOverride = true;
                 kbTarget = 0;
             } else {
                 error = "invalid disk";
             }
-        }
-        if (driveInfo.driveCtrl == "PCJS") {
-            error = "custom drive parameters not supported for prebuilt disks";
         }
         localDir = "";
     } else {
@@ -2506,6 +2509,7 @@ async function processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
             } else {
                 error = await buildDisk(localDir, sCommand, sLocalDisk);
                 if (!error && sLocalDisk) {
+                    if (fTest) printf(getDriveInfo());
                     exit();
                 }
             }
@@ -2644,6 +2648,7 @@ function main(argc, argv)
     fDebug = removeFlag('debug') || fDebug;
     fVerbose = removeFlag('verbose') || fVerbose;
     fTest = removeFlag('test') || fTest;
+    if (fTest) driveInfo.trimFAT = true;
 
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
@@ -2695,17 +2700,17 @@ function main(argc, argv)
         savedState = "";
         kbTarget = maxFiles = 0;
         driveInfo.driveCtrl = "FDC";
-        driveInfo.fPartitioned = false;
+        driveInfo.partitioned = false;
         driveOverride = true;
     } else {
         let driveCtrl = removeArg('drive');
         if (driveCtrl) {
-            driveInfo.driveCtrl = driveCtrl;
+            driveInfo.driveCtrl = driveCtrl.toUpperCase();
             driveOverride = true;
         }
         kbTarget = getTargetValue(defaults['target']);
         maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || maxFiles;
-        driveInfo.fPartitioned = true;
+        driveInfo.partitioned = true;
     }
 
     kbTarget = getTargetValue(removeArg('target')) || kbTarget;

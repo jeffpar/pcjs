@@ -611,8 +611,11 @@ export default class Disk extends Component {
      */
     buildDisk(buffer, fModified, message)
     {
-        let disk;
-        let cbDiskData = buffer? buffer.byteLength : 0;
+        let cbDiskData = 0, dv = null, disk;
+        if (buffer) {
+            cbDiskData = buffer.byteLength;
+            dv = new DataView(buffer, 0, cbDiskData);
+        }
         /*
          * This geometry lookup is primarily intended for diskette images, because there are a wide variety of diskette
          * formats that all work within the drive's parameters;  I assert that the number of cylinders matches, because those
@@ -627,10 +630,17 @@ export default class Disk extends Component {
             this.nHeads = diskFormat[1];
             this.nSectors = diskFormat[2];
             this.cbSector = (diskFormat[3] || 512);
+        } else if (dv) {
+            let sig = dv.getUint32(0x199, true);                // DiskInfo.MBR.PCJS_SIG
+            if (sig == 0x534a4350) {                            // PCJS_VALUE
+                this.nCylinders = dv.getUint16(0x19E, true);    // DiskInfo.MBR.DRIVE0PARMS.CYLS
+                this.nHeads = dv.getUint8(0x1A0);               // DiskInfo.MBR.DRIVE0PARMS.HEADS
+                this.nSectors = dv.getUint8(0x1AC);             // DiskInfo.MBR.DRIVE0PARMS.SECTORS
+                this.cbSector = 512;
+            }
         }
-        if (this.nCylinders) {          // if nCylinders was never set, then something is wrong...
+        if (dv && this.nCylinders) {                            // if nCylinders was never set, then something is wrong...
             let ib = 0;
-            let dv = new DataView(buffer, 0, cbDiskData);
             let cdw = this.cbSector >> 2, dwPattern = 0, dwChecksum = 0;
             this.diskData = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < this.diskData.length; iCylinder++) {
