@@ -763,10 +763,10 @@ function getDriveInfo()
             info.sizeRoot = vol.rootEntries || vol.rootTotal;
             info.sectorsHidden = vol.lbaStart;
             info.sectorsReserved = vol.vbaFAT;
-            info.sectorsFAT = sectorsFAT;
+            info.sectorsFAT = (sectorsFAT / info.totalFATs)|0;
             info.sectorsRoot = Math.ceil((info.sizeRoot * 32) / vol.cbSector);
             info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
-            info.sectorsData = info.sectorsTotal - info.sectorsReserved - info.sectorsFAT * info.totalFATs - info.sectorsRoot;
+            info.sectorsData = info.sectorsTotal - info.sectorsReserved - sectorsFAT - info.sectorsRoot;
             info.clusterSize = vol.clusSecs * vol.cbSector;
             info.clustersTotal = vol.clusTotal;
             info.clustersFree = vol.clusFree;
@@ -2225,7 +2225,7 @@ function loadDiskette(sDrive, aTokens)
  *
  * @param {string} s
  * @param {boolean} [reload]
- * @returns {string|null} (result of command, or null to quit)
+ * @returns {string} (result of command)
  */
 function doCommand(s, reload = false)
 {
@@ -2255,6 +2255,9 @@ function doCommand(s, reload = false)
     };
 
     switch(cmd) {
+    case "abort":
+        exit(1);
+        break;
     case "help":
         result = help();
         break;
@@ -2363,7 +2366,8 @@ function doCommand(s, reload = false)
         break;
     case "q":
     case "quit":
-        return null;
+        exit();
+        break;
     default:
         if (s) {
             if (!machine.dbg) {
@@ -2602,9 +2606,6 @@ function readInput(stdin, stdout)
             let s = command.slice(0, i);
             printf("\n");
             let result = doCommand(s);
-            if (result == null) {
-                exit();
-            }
             printf(result);
             if (machine.cpu && machine.cpu.isRunning()) {
                 break;
@@ -2618,12 +2619,14 @@ function readInput(stdin, stdout)
 /**
  * exit(code)
  *
- * @param {number} code (return code)
+ * Code 1 is used to abort without saving the disk, and code 3 is when terminating from debug mode; default code is 0.
+ *
+ * @param {number} code (exit code)
  */
 function exit(code = 0)
 {
     if (code == 3) printf("terminating...\n");
-    saveDisk(localDir);
+    if (code != 1) saveDisk(localDir);
     process.stdin.setRawMode(false);
     if (fTest) printf("\n");
     process.exit(code);

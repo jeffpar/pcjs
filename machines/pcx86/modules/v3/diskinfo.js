@@ -1608,10 +1608,26 @@ export default class DiskInfo {
                 minClusters = (typeFAT == 12)? 0 : DiskInfo.FAT12.MAX_CLUSTERS + 1;
                 maxClusters = (typeFAT == 12)? DiskInfo.FAT12.MAX_CLUSTERS : DiskInfo.FAT16.MAX_CLUSTERS;
                 grossClusters = Math.floor(cTotalSectors / cSectorsPerCluster);
-                cFATSectors = Math.ceil(Math.ceil(grossClusters * typeFAT / 8) / cbSector);
+                if (driveInfo.verDOS == 3.0 && typeFAT == 16) {
+                    /*
+                     * Mimic the somewhat bizarre calculations that DOS 3.0 performs when calculating how many
+                     * sectors a 16-bit FAT should consume.  Heaven forbid that DOS 3.0 should simply honor the
+                     * FATSECS value in the BPB.  You can watch the code starting near 70:14AE (where it's checking
+                     * the BPB OEM signature) and confirm the "sectors per FAT" result near 70:1587.
+                     *
+                     * Without this, "pc.js --sys=pcdos:3.0 --drivetype=484:4:17" will fail (later versions work,
+                     * probably because they're actually honoring our BPB).
+                     */
+                    let divisor = (cSectorsPerCluster * 256 + 2);
+                    cFATSectors = Math.trunc((cTotalSectors - cReservedSectors - (cRootSectors * 2 - 1) + (divisor - 1)) / divisor);
+                } else {
+                    cFATSectors = Math.ceil(Math.ceil(grossClusters * typeFAT / 8) / cbSector);
+                }
                 /*
-                 * This next bit is an experiment, because it turns out a disk with 10948 total sectors and 4K
-                 * clusters only needs 4 sectors per FAT, not 5.
+                 * This next bit is an experiment, because it turns out a disk with 10948 total sectors (162:4:17)
+                 * and 4K clusters only needs 4 sectors per FAT, not 5.  And yes, that drive geometry actually has
+                 * 11016 sectors, but don't forget that we generally don't use the last cylinder (remember, we are
+                 * pretending it's the 1980s, when the last cylinder was reserved for diagnostics and head-parking).
                  *
                  * This is one of many such corner cases, and there's a warning below (see cActualClusters) that will
                  * appear whenever we encounter them.  Calculating all those cases here (rather than hard-coding one
@@ -1619,7 +1635,7 @@ export default class DiskInfo {
                  * and since it's moot, why bother?  DOS (or at least DOS 2.x) requires that we waste the same amount
                  * of space that it wasted, because it doesn't actually honor FATSECS in the BPB.
                  *
-                 * So, set trimFAT only if you *really* want to see this failure.  ;-)
+                 * So, set trimFAT only if you *really* want to see this failure in DOS 2.x.  ;-)
                  */
                 if (driveInfo.trimFAT) {
                     if (cTotalSectors == 10947 && cSectorsPerCluster == 8 && cFATSectors == 5) {
