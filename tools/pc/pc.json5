@@ -10,7 +10,7 @@
     "maxfiles": 1024,
     "machine": "compaq386.json",
     "state": "state386.json",
-    "messages": "int,hdc"
+    "messages": "int,hdc",       // a list of debugger message categories to enable when --halt is used
   },
   "apps": {
     "cp": {},

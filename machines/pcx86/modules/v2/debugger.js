@@ -2933,7 +2933,8 @@ export default class DebuggerX86 extends DbgLib {
              * setting, which is fine, and we'll also never restore any old Messages flags, which I doubt anyone will miss).
              */
             if (Component.testBits(bitsMessage, Messages.BUFFER)) {
-                this.bitsMessage = Component.clearBits(bitsMessage, Messages.BUFFER);
+                bitsMessage = Component.clearBits(bitsMessage, Messages.BUFFER);
+                this.bitsMessage = Component.setBits(this.bitsMessage, bitsMessage);
             }
             i++;
         }
