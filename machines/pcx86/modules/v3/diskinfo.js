@@ -1552,7 +1552,7 @@ export default class DiskInfo {
                     cSectorsPerCluster = 2;
                 } else if (cTotalSectors <= 8192) {     // 0x2000 (4Mb)
                     cSectorsPerCluster = 4;
-                } else if (cTotalSectors <= 32680) {    // 0x7Af8 (16Mb)
+                } else if (cTotalSectors <= 32680) {    // 0x7FA8 (16Mb)
                     cSectorsPerCluster = 8;
                 } else {
                     if (driveInfo.verDOS >= 3.0) {
@@ -1580,7 +1580,7 @@ export default class DiskInfo {
                     rootEntries = 112;
                 } else if (cTotalSectors <= 8192) {     // 0x2000
                     rootEntries = 256;
-                } else if (cTotalSectors <= 32680 ||    // 0x7Af8
+                } else if (cTotalSectors <= 32680 ||    // 0x7FA8
                             driveInfo.verDOS == 3) {    // PC DOS 3.0 seems to have a hard-coded preference for 512 entries
                     rootEntries = 512;
                 } else {
@@ -1672,16 +1672,24 @@ export default class DiskInfo {
 
             if (typeFAT == 16) {
                 /*
-                 * At a minimum, the OEM signature must be changed from "2.0" to "3.0" to indicate 16-bit FAT support,
-                 * and moreover, for drives with DISKSECS <= 0x7FA8, DOS will still make certain hard-coded assumptions
-                 * about the formatting (ie, 12-bit FAT, 4K clusters, 512 directory entries, etc) UNLESS the OEM string
-                 * has been bumped even higher (eg, "3.1").  Only then it will honor the values in the MBR and BPB.
+                 * In general, the OEM signature should be changed from "2.0" to "3.0" to indicate 16-bit FAT support,
+                 * with one exception: PC DOS 3.00 will still assume FAT12 if total sectors are <= 0x7FA8; in that case,
+                 * the signature should remain "2.0", which will have the beneficial side-effect of PC DOS 3.00 honoring
+                 * the BPB, after which it will calculate that there are too many clusters to fit on a FAT12 volume, so
+                 * it will set a FAT16 flag.  The relevant code begin at 70:14AE.
                  *
-                 * That, at least, is how MS-DOS 3.30 behaves.  Set a breakpoint at 70:0FB9, watch it read the MBR,
-                 * examine the partition table, read the boot sector, and examine the OEM string.  It will NOT honor a
-                 * 10Mb drive's BPB unless the OEM string contains something greater than "3.0".
+                 * MS-DOS 3.30 changes the rules again.  For drives with DISKSECS <= 0x7FA8, DOS will still make
+                 * certain hard-coded assumptions about the formatting (ie, 12-bit FAT, 4K clusters, 512 directory entries,
+                 * etc) UNLESS the OEM string has been bumped even higher (eg, "3.1").  Only then it will honor the values
+                 * in the MBR and BPB.
+                 *
+                 * To debug MS-DOS 3.30, set a breakpoint at 70:0FB9, watch it read the MBR, examine the partition table,
+                 * read the boot sector, and examine the OEM string.  It will NOT honor a 10Mb drive's BPB unless the OEM
+                 * string contains something greater than "3.0".
                  */
-                setBoot(DiskInfo.BPB.OEM + 5, 1, 0x33);
+                if (driveInfo.verDOS >= 3.1 || cTotalSectors > 0x7FA8) {
+                    setBoot(DiskInfo.BPB.OEM + 5, 1, 0x33);
+                }
                 if (driveInfo.verDOS >= 3.1) {
                     setBoot(DiskInfo.BPB.OEM + 7, 1, 0x31);
                 }
