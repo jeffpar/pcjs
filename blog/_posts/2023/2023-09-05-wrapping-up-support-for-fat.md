@@ -570,6 +570,6 @@ Unfortunately, rather than dispelling misconceptions, the document actually adde
 
 `pc.js`, and the [diskinfo.js](https://github.com/jeffpar/pcjs/blob/master/machines/pcx86/modules/v3/diskinfo.js) module in particular, works hard to make sure the custom disk images it builds will work with the selected version of DOS.  But I'm sure there are still combinations of drive geometries, FAT sizes, cluster sizes, DOS versions -- and OEM signatures -- that I haven't tested and will fail to boot.  Hopefully the volumes themselves, at least, will always be valid.
 
-Fortunately, `pc.js` makes it easy to debug those situations.  Just add `--halt` to the `pc.js` command-line and you'll be dropped into the PCjs debugger before machine begins booting.
+Fortunately, `pc.js` makes it easy to debug those situations.  Just add `--halt` to the `pc.js` command-line and you'll be dropped into the PCjs debugger before the machine starts booting.
 
 Have fun!
