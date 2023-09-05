@@ -409,7 +409,7 @@ export default class Panel extends Component {
          * because now, when updateAnimation() is first called, the machine's memory map hasn't been initialized yet,
          * so no regions are displayed, and since no other code was setting fRedraw, no regions were ever displayed.
          */
-        this.fRedraw = true;
+        if (this.canvas) this.fRedraw = true;
         return true;
     }
 

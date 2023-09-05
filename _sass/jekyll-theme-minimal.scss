@@ -92,6 +92,14 @@ pre {
   overflow-x: auto;
 }
 
+.framed-image {
+  background: #f8f8f8;
+  border-radius: 5px;
+  border: 1px solid #e5e5e5;
+  margin: 0 0 20px;
+  width: 100%;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
