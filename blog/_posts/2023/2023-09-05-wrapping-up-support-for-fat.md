@@ -42,7 +42,7 @@ And while working on `pc.js`, I ran into the perfect example.  I needed to creat
 
 Here's how I was able to do that using `pc.js`:
 
-![PC.js Building an MBR](/blog/images/pcjs-building-mbr.gif)
+<img class="framed-image" src="/blog/images/pcjs-building-mbr.gif" alt="PC.js Building an MBR">
 
 In the screen capture above, I start by using my `diskimage.js` utility to download and extract a complete DOS dev environment from an existing PCjs hard disk image into a directory named `test`.
 
@@ -56,7 +56,7 @@ The `--sys` and `--ver` options control the version of DOS used to the build its
 
 By default, `pc.js` will build a 10Mb hard disk -- or the largest floppy disk that your chosen version of DOS supports.  If you want something bigger or smaller, use the `--target` option; it supports either *kilobytes* (eg, `--target=160K`) or *megabytes* (eg, `--target=20M`).
 
-![PC.js Booting DOS Versions](/blog/images/pcjs-booting-dos.gif)
+<img class="framed-image" src="/blog/images/pcjs-booting-dos.gif" alt="PC.js Booting DOS Versions">
 
 `pc.js` will "auto-build" only one disk for a machine: either a single-partition hard disk (C:) or a floppy disk (A:).  If you want your machine to automatically load other disks into other drives, you'll have to create a custom machine configuration file that uses prebuilt disk images.
 
@@ -318,7 +318,7 @@ I can't read any of those passages without smiling.
 
 There isn't much about Aaron online, although I did find a nice tribute to him from [Charles Wright Academy](https://ties.charleswright.org/2021/02/25/aaron-reynolds-73/).  I'll end my own tiny tribute with a short clip of Aaron from July 14, 1995, as he was looking forward to the imminent release of Windows 95 and talking about "harsh email" (I don't know who taped this, but I'm hopeful they won't mind it being shared here).
 
-<video controls autoplay loop muted><source src="/blog/images/1995-07-14-Friday with ARR.mp4" type="video/mp4"></video>
+<video class="framed-image" controls autoplay loop muted><source src="/blog/images/1995-07-14-Friday with ARR.mp4" type="video/mp4"></video>
 
 ### More Fun with DOS and FAT Volumes
 
