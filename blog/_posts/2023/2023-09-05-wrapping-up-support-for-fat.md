@@ -318,7 +318,7 @@ I can't read any of those passages without smiling.
 
 There isn't much about Aaron online, although I did find a nice tribute to him from [Charles Wright Academy](https://ties.charleswright.org/2021/02/25/aaron-reynolds-73/).  I'll end my own tiny tribute with a short clip of Aaron from July 14, 1995, as he was looking forward to the imminent release of Windows 95 and talking about "harsh email" (I don't know who taped this, but I'm hopeful they won't mind it being shared here).
 
-<video class="framed-image" controls autoplay loop muted><source src="/blog/images/1995-07-14-Friday with ARR.mp4" type="video/mp4"></video>
+<p><video class="framed-image" controls autoplay loop muted><source src="/blog/images/1995-07-14-Friday with ARR.mp4" type="video/mp4"></video></p>
 
 ### More Fun with DOS and FAT Volumes
 
@@ -326,7 +326,7 @@ I've already beaten PC DOS 2.00 to death, so let's move on to PC DOS 3.00.  I'd 
 
 > A 10Mb disk formatted with FAT16 (ie, with more than 4084 clusters *and* clearly marked with partition type 04h) will *still* be treated by DOS 3.x as a FAT12 volume by default.
 
-To test this, I ran `pc.js` in a directory with a small number of files, where it automatically builds a 10Mb disk image with whatever version of DOS *and* FAT file system is specified:
+To test this, I ran `pc.js` in a directory with a small number of files, requesting a drive with PC DOS 3.00 and a 16-bit FAT:
 
     % pc.js ibm5170 --sys=pcdos --ver=3.00 --fat=16
     warning: 16-bit FAT replaced with 12-bit FAT
@@ -340,7 +340,7 @@ To test this, I ran `pc.js` in a directory with a small number of files, where i
      8 FAT sectors (x2), 32 root sectors (512 entries)
      20740 total sectors, 20691 data sectors, 10592256 data bytes
 
-So, you can see we successfully booted to a `C:\>` prompt, and `load info` tell us that the disk was built as FAT12 instead of FAT16.  This is because `pc.js` tries to stick to historical defaults, and 10Mb disks were "historically" formatted as FAT12.
+You can see we successfully booted to a `C:\>` prompt, but `load info` told us that the disk was built as FAT12 instead of FAT16.  This was because `pc.js` tries to stick to historical defaults, and 10Mb disks were "historically" formatted as FAT12.
 
 You may recall that the [FAT: General Overview of On-Disk Format](/documents/papers/microsoft/MS_FAT_OVERVIEW_103-2000-12-06.pdf) said:
 
