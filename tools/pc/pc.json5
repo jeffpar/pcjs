@@ -6,13 +6,14 @@
     "mbr": "pcjs.mbr",          // alternatives: "DOS.mbr"
     "target": "10M",            // alternatives: "160K", "320K", "180K", "360K", "1200K", "1440K", "20M", "30M", "40M", etc.
     "label": ".",               // alternatives: "default"
+    "dir": ".",
     "maxfiles": 1024,
-    "directory": ".",
     "machine": "compaq386.json",
     "state": "state386.json",
-    "messages": "int,hdc"
+    "messages": "int,hdc",       // a list of debugger message categories to enable when --halt is used
   },
   "apps": {
+    "cp": {},
     "ls": {},
     "vi": {},
     ".edit": {

@@ -611,26 +611,52 @@ export default class Disk extends Component {
      */
     buildDisk(buffer, fModified, message)
     {
-        let disk;
-        let cbDiskData = buffer? buffer.byteLength : 0;
-        /*
-         * This geometry lookup is primarily intended for diskette images, because there are a wide variety of diskette
-         * formats that all work within the drive's parameters;  I assert that the number of cylinders matches, because those
-         * should always match, but the rest can certainly vary.
-         *
-         * TODO: For hard drives, considering bypassing this lookup; we should already have their geometry, and it should be fixed.
-         */
-        let diskFormat = DiskAPI.GEOMETRIES[cbDiskData];
-        if (diskFormat) {
-            this.assert(this.nCylinders == diskFormat[0]);
-            this.nCylinders = diskFormat[0];
-            this.nHeads = diskFormat[1];
-            this.nSectors = diskFormat[2];
-            this.cbSector = (diskFormat[3] || 512);
+        let cbDiskData = 0, dv = null, disk;
+        if (buffer) {
+            cbDiskData = buffer.byteLength;
+            dv = new DataView(buffer, 0, cbDiskData);
         }
-        if (this.nCylinders) {          // if nCylinders was never set, then something is wrong...
+        /*
+         * Hard drive images using the PCJS MBR will have a special signature, and if that MBR also contains
+         * a non-zero DiskInfo.MBR.DRIVE0PARMS.CYLS value, then we'll use the geometry stored in the MBR.
+         */
+        let nCylinders = 0;
+        if (dv && dv.getUint32(0x199, true) == 0x534a4350) {    // if DiskInfo.MBR.PCJS_SIG == PCJS_VALUE
+            nCylinders = dv.getUint16(0x19E, true);             // DiskInfo.MBR.DRIVE0PARMS.CYLS
+        }
+        if (nCylinders) {
+            this.nCylinders = nCylinders;
+            this.nHeads = dv.getUint8(0x1A0);                   // DiskInfo.MBR.DRIVE0PARMS.HEADS
+            this.nSectors = dv.getUint8(0x1AC);                 // DiskInfo.MBR.DRIVE0PARMS.SECTORS
+            this.cbSector = 512;
+        }
+        else {
+            let diskFormat = DiskAPI.GEOMETRIES[cbDiskData];
+            if (diskFormat) {
+                /*
+                 * This geometry lookup is primarily intended for diskette images, because there are a wide variety
+                 * of diskette formats that can work within a drive's parameters.  So, I used to assert the number
+                 * of cylinders match, but the assertion has been relaxed (we require only that the image have no
+                 * MORE than the number of cylinders and heads than the drive can handle).
+                 *
+                 * For example, a 40-cylinder diskette image should be fine with an 80-cylinder high-capacity drive.
+                 *
+                 * There are also a couple of standard hard drive formats that PCjs likes to use (10Mb and 20Mb), which
+                 * I could treat specially (based on diskFormat[4]), but since PCjs can use its own MBR for non-standard
+                 * hard disk images now, I'd rather not do that.
+                 */
+                if (diskFormat[0] <= this.nCylinders && diskFormat[1] <= this.nHeads /* || !diskFormat[4] */) {
+                    this.nCylinders = diskFormat[0];
+                    this.nHeads = diskFormat[1];
+                    this.nSectors = diskFormat[2];
+                    this.cbSector = (diskFormat[3] || 512);
+                } else {
+                    this.nCylinders = 0;                        // we don't know what's going on here...
+                }
+            }
+        }
+        if (dv && this.nCylinders) {
             let ib = 0;
-            let dv = new DataView(buffer, 0, cbDiskData);
             let cdw = this.cbSector >> 2, dwPattern = 0, dwChecksum = 0;
             this.diskData = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < this.diskData.length; iCylinder++) {

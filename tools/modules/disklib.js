@@ -737,7 +737,7 @@ export function getTargetValue(sTarget)
 {
     let target = 0;
     if (sTarget) {
-        let match = sTarget.match(/^(PC|)([0-9]+)([KM]*)/i);
+        let match = sTarget.match(/^(PC|)([0-9.]+)([KM]*)/i);
         if (match) {
             target = +match[2];
             if (match[3].toUpperCase() == 'M') {

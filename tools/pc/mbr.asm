@@ -17,9 +17,9 @@ VEC_DRIVE1	equ	46h
 
 ;
 ; While I had considered shaving 1K off available RAM so that I could safely
-; stash a copy of these drive tables, that seemed rather wasteful, so I wondered
-; if I couldn't just use some unused interrupt vector space.  And while browsing
-; Ralf Brown's Interrupt List, I noticed that the AMI BIOS authors had apparently
+; stash a copy of the drive tables, that seemed rather wasteful, so I wondered
+; if I could just use some unused interrupt vector space.  And while browsing
+; Ralf Brown's Interrupt List, I noticed that AMI BIOS authors had apparently
 ; come to the same conclusion and used vectors C0h-C7h for a similar purpose.
 ;
 TBL_DRIVE0	equ	0C0h*4	; room for 1 drv_parms spanning vectors C0h-C3h

@@ -380,14 +380,15 @@ function printManifest(diskFile, diskName, manifest)
 }
 
 /**
- * processDisk(di, diskFile, argv, diskette)
+ * processDisk(di, diskFile, argv, diskette, fSingle)
  *
  * @param {DiskInfo} di
  * @param {string} diskFile
  * @param {Array} argv
  * @param {Object} [diskette] (if present, then we were invoked by readCollection(), so any --output option should be ignored)
+ * @param {boolean} [fSingle]
  */
-function processDisk(di, diskFile, argv, diskette)
+function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
 {
     di.setArgs(argv.slice(1).join(' '));
 
@@ -502,13 +503,47 @@ function processDisk(di, diskFile, argv, diskette)
         printf("%s\n", sLines);
     }
 
-    if (argv['extract']) {
+    /*
+     * Similar to --extract, I've added --type as another form of extraction (ie, to extract file(s) to the console).
+     */
+    let sExtraction, fExtractToFile;
+    if (argv['type']) {
+        fExtractToFile = false;
+        sExtraction = argv['type'];
+    } else if (argv['extract']) {
+        fExtractToFile = true;
+        sExtraction = argv['extract'];
+    }
+    let fExtractAll = (typeof sExtraction != "string");
+
+    if (sExtraction) {
         let extractDir = argv['extdir'];
         if (typeof extractDir != "string") {
             extractDir = "";
-        } else {
+        } else if (diskFile.indexOf("http") != 0) {
             extractDir = extractDir.replace("%d", path.dirname(diskFile));
         }
+
+        let extractName = "", extractFolder = "";
+        if (fExtractAll) {
+            /*
+             * Normally, we want every disk to be extracted into its own folder, but if you're just
+             * extracting a single disk AND you've already specified an extraction dir, then we don't need
+             * to ALSO put the files inside their own disk-based folder name.
+             */
+            if (!fSingle || !extractDir) {
+                extractFolder = di.getName();
+            }
+        } else {
+            extractName = sExtraction.toUpperCase();
+        }
+        if (argv['collection'] && !extractDir) {
+            extractFolder = getLocalPath(path.join(path.dirname(diskFile), "archive", extractFolder));
+            if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
+                extractFolder = extractFolder.replace("/disks/archive", "/archive");
+            }
+        }
+
         aHiddenDirs = [];
         let manifest = di.getFileManifest(null);                // add true for sorted manifest
         manifest.forEach(function extractDiskFile(desc) {
@@ -523,6 +558,7 @@ function processDisk(di, diskFile, argv, diskette)
             let name = path.basename(sPath).toUpperCase();
             let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
             let attr = +desc[DiskInfo.FILEDESC.ATTR];
+
             /*
              * We call parseDate() requesting a *local* date from the timestamp, because that's exactly how we're going
              * to use it: as a local file modification time.  We used to deal exclusively in UTC dates, unpolluted
@@ -534,20 +570,15 @@ function processDisk(di, diskFile, argv, diskette)
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
             device.assert(size == db.length);
-            let extractName = "", extractFolder = "";
-            if (typeof argv['extract'] != "string") {
-                extractFolder = di.getName();
-            } else {
-                extractName = argv['extract'].toUpperCase();
-            }
-            if (extractFolder || extractName == name) {
-                if (argv['collection'] && !extractDir) {
-                    extractFolder = getLocalPath(path.join(path.dirname(diskFile), "archive", extractFolder));
-                    if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
-                        extractFolder = extractFolder.replace("/disks/archive", "/archive");
+
+            if (fExtractAll || extractName == name) {
+                if (!fExtractToFile) {
+                    if (!fExtractAll || isTextFile(sPath)) {
+                        printf("\n%s:\n%s\n", sPath, CharSet.fromCP437(db.buffer));
                     }
+                } else {
+                    extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || !fExtractAll);
                 }
-                extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || !!extractName);
             }
         });
     }
@@ -985,7 +1016,7 @@ function processDisk(di, diskFile, argv, diskette)
         }
         let output = argv['output'];
         if (!output || typeof output == "boolean") {
-            output = argv[2];
+            output = argv[1];
         }
         if (output) {
             if (typeof output == "string") output = [output];
@@ -1141,17 +1172,18 @@ function getArchiveOffset(sArchive, arcType, sOffset)
 }
 
 /**
- * processDiskAsync(input, argv)
+ * processDiskAsync(input, argv, fSingle)
  *
  * @param {string} input
  * @param {Array} argv
+ * @param {boolean} [fSingle]
  */
-async function processDiskAsync(input, argv)
+async function processDiskAsync(input, argv, fSingle = false)
 {
     let driveInfo = createDriveInfo(argv);
     let di = await readDiskAsync(input, argv['forceBPB'], driveInfo);
     if (di) {
-        processDisk(di, input, argv);
+        processDisk(di, input, argv, null, fSingle);
     }
 }
 
@@ -1193,14 +1225,15 @@ function processAll(all, argv)
 }
 
 /**
- * processArg(argv)
+ * processArg(argv, fSingle)
  *
  * Formerly part of main(), but factored out so that it can also be called for a list of files ("--all").
  *
  * @param {Array} argv
+ * @param {boolean} [fSingle]
  * @returns {boolean} true if something was processed, false if not
  */
-function processArg(argv)
+function processArg(argv, fSingle = false)
 {
     let input;
     let fDir = false, fFiles = false, arcType = 0;
@@ -1229,7 +1262,7 @@ function processArg(argv)
                     di.setName(path.basename(name));
                 }
             }
-            processDisk(di, input, argv);
+            processDisk(di, input, argv, null, fSingle);
             return true;
         }
         if (input) printf("warning: %s is not a supported disk image\n", input);
@@ -1257,6 +1290,7 @@ function processArg(argv)
             if (!input || typeof input == "boolean") {
                 input = argv[1];
                 if (input) {
+                    argv.shift();
                     if (!arcType) {
                         if (input.endsWith('/')) {
                             fDir = true;
@@ -1357,7 +1391,8 @@ function main(argc, argv)
             "--extract[=filename]":     "extract specified file in disks or archives",
             "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
             "--output=[diskimage]":     "write disk image (.img or .json)",
-            "--target=[nK|nM]":         "set target disk size (eg, \"360K\", \"10M\")"
+            "--target=[nK|nM]":         "set target disk size (eg, \"360K\", \"10M\")",
+            "--type[=filename]":        "extract text file(s) to console",
         };
         let optionsOther = {
             "--dump=[C:H:S:N]":         "dump N sectors starting at sector C:H:S",
@@ -1394,15 +1429,23 @@ function main(argc, argv)
     }
 
     let input = argv['disk'];
-    if (input && typeof input == "string") {
+    if (typeof input != "string") {
+        input = argv[1];
+        if (input && input.indexOf("http") == 0) {
+            argv.shift();
+        } else {
+            input = null;
+        }
+    }
+    if (input) {
         /*
-         * If you use --disk to specify a disk image, then I call the experimental async function.
+         * If you used --disk to specify a disk image (or you specified a remote image), call the experimental async function.
          */
-        processDiskAsync(input, argv);
+        processDiskAsync(input, argv, true);
         return;
     }
 
-    if (processAll(argv['all'], argv) || processArg(argv)) {
+    if (processAll(argv['all'], argv) || processArg(argv, true)) {
         return;
     }
 

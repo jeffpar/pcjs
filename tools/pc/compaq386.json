@@ -80,6 +80,9 @@
     "autoMount": {
       "A": {
         "name": "COMPAQ MS-DOS 3.31 (Disk 2)"
+      },
+      "B": {
+        "name": "COMPAQ MS-DOS 3.31 (Disk 3)"
       }
     },
     "diskettes": "/machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json"

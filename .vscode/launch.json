@@ -478,9 +478,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "dir"
+        "ver",
+        "--sys=pcdos:3.0",
+        "--drive=pcjs",
+        "--target=1M",
+        "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
+      "cwd": "${workspaceFolder}/tools/pc/disks/test",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -562,7 +566,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--sys=pcdos:7",
+        "--target=30M",
         "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
@@ -1546,13 +1550,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "MBR/",
-        "MBR.img",
-        "--drivetype=305:4:17:1024",
-        "--overwrite",
-        "--partitioned=false"
+        "empty.json",
+        "--extract=ibmdos.com"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

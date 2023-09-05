@@ -96,6 +96,11 @@ import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
  * @property {number} cbSector
  * @property {number} driveSize
  * @property {number} typeFAT
+ * @property {number} clusterSize
+ * @property {number} rootEntries
+ * @property {number} verDOS
+ * @property {boolean} trimFAT
+ * @property {boolean} partitioned
  * @property {Array} files
  * @property {Array|string} sectorIDs
  * @property {Array|string} sectorErrors
@@ -120,6 +125,597 @@ import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
  * @property {number} minDOSVersion
  */
 export default class DiskInfo {
+
+    static MIN_PARTITION = 3000000;     // ~3MB (used in lieu of any partitioned media indicator)
+
+    /*
+     * Top-level descriptors in "v2" JSON disk images.
+     */
+    static DESC = {
+        IMAGE:      'imageInfo',
+        VOLUMES:    'volTable',
+        FILES:      'fileTable',
+        DISKDATA:   'diskData'
+    };
+
+    /*
+     * Supported image types.
+     */
+    static TYPE = {
+        CHS:        'CHS'
+    };
+
+    /*
+     * Image descriptor properties.
+     */
+    static IMAGE = {
+        TYPE:       'type',
+        NAME:       'name',
+        FORMAT:     'format',
+        HASH:       'hash',
+        CHECKSUM:   'checksum',
+        CYLINDERS:  'cylinders',
+        HEADS:      'heads',
+        TRACKDEF:   'trackDefault',
+        SECTORDEF:  'sectorDefault',
+        DISKSIZE:   'diskSize',
+        ORIGBPB:    'bootSector',
+        VERSION:    'version',
+        REPOSITORY: 'repository',
+        GENERATED:  'generated',
+        SOURCE:     'source',           // the source of the data (eg, archive.org, pcjs.org, etc)
+        COMMAND:    'diskimage.js'
+    };
+
+    /*
+     * Volume descriptor properties.
+     */
+    static VOLDESC = {
+        PARTITION:  'iPartition',       // partition (if applicable)
+        MEDIA_ID:   'idMedia',          // media ID
+        LBA_VOL:    'lbaStart',         // LBA of volume
+        LBA_TOTAL:  'lbaTotal',         // total blocks in volume
+        FAT_ID:     'idFAT',            // type of FAT (ie, 12 or 16)
+        VBA_FAT:    'vbaFAT',           // VBA of first block of (first) FAT
+        VBA_ROOT:   'vbaRoot',          // VBA of root directory
+        ROOT_TOTAL: 'rootTotal',        // total entries in root directory
+        VBA_DATA:   'vbaData',          // VBA of data area
+        CLUS_SECS:  'clusSecs',         // number of sectors per cluster
+        CLUS_MAX:   'clusMax',          // maximum valid cluster number
+        CLUS_BAD:   'clusBad',          // total bad clusters
+        CLUS_FREE:  'clusFree',         // total free clusters
+        CLUS_TOTAL: 'clusTotal'         // total clusters
+    };
+
+    /*
+     * File descriptor properties.
+     *
+     * getFileDesc() is the mechanism for callers to obtain a FILEDESC, and there are two flavors: abbreviated and complete.
+     * Only the "complete" form includes NAME, SIZE and VOL (regardless if zero), and CONTENTS (if any).
+     */
+    static FILEDESC = {
+        VOL:        'vol',
+        PATH:       'path',
+        NAME:       'name',
+        ATTR:       'attr',
+        DATE:       'date',
+        SIZE:       'size',
+        HASH:       'hash',
+        MODULE:     'module',
+        MODNAME:    'name',
+        MODDESC:    'description',
+        MODSEGS:    'segments',
+        CONTENTS:   'contents',
+        ORIGIN:     'origin'            // path of original file (if the file originated from non-DOS media)
+    };
+
+    /*
+     * Sector object "public" properties.
+     */
+    static SECTOR = {
+        CYLINDER:   'c',                // cylinder number (0-based) [formerly iCylinder]
+        HEAD:       'h',                // head number (0-based) [formerly iHead]
+        ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
+        LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
+        DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
+        FILE_INDEX: 'f',                // "v2" JSON disk images only [formerly file]
+        FILE_OFFSET:'o',                // "v2" JSON disk images only [formerly offFile]
+                                        // [no longer used: 'pattern']
+        /*
+         * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
+         * hence the longer, more meaningful IDs.
+         */
+        DATA_CRC:   'dataCRC',
+        DATA_ERROR: 'dataError',
+        DATA_MARK:  'dataMark',
+        HEAD_CRC:   'headCRC',
+        HEAD_ERROR: 'headError'
+    };
+
+    static MBR = {
+        PCJS_SIG:       0x199,          // PCJS_VALUE
+        DRIVE0PARMS: {
+            CYLS:       0x19E,          // 1 word
+            HEADS:      0x1A0,          // 1 byte
+            SECTORS:    0x1AC           // 1 byte
+        },
+        DRIVE1PARMS: {
+            CYLS:       0x1AE,          // 1 word
+            HEADS:      0x1B0,          // 1 byte
+            SECTORS:    0x1BC           // 1 byte
+        },
+        PARTITIONS: {
+            OFFSET:     0x1BE,
+            ENTRY: {
+                STATUS:         0x00,   // 1-byte (0x80 if active)
+                CHS_FIRST:      0x01,   // 3-byte CHS specifier of first partition sector
+                TYPE:           0x04,   // 1-byte TYPE (see below)
+                CHS_LAST:       0x05,   // 3-byte CHS specifier of last partition sector
+                VBA_FIRST:      0x08,   // 4-byte Volume Block Address
+                VBA_TOTAL:      0x0C,   // 4-byte Volume Block Address
+            },
+            ENTRY_LENGTH:       0x10,
+            STATUS: {
+                ACTIVE:         0x80,   // ie, bootable
+                INACTIVE:       0x00
+            },
+            TYPE: {
+                EMPTY:          0x00,
+                FAT12_PRIMARY:  0x01,   // DOS 2.0 and up (12-bit FAT)
+                FAT16_PRIMARY:  0x04,   // DOS 3.0 and up (16-bit FAT with less than 65536 sectors (< 32Mb))
+                EXTENDED:       0x05,   // DOS 3.3 and up (must reside within the first 8Gb)
+                FAT16_BIG:      0x06    // DOS 3.31 and up (16-bit FAT with 65536 or more sectors (>= 32Mb and < 8Gb))
+            }
+        },
+        SIG_OFFSET:     0x1FE,
+        SIGNATURE:      0xAA55          // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
+    };
+
+    /*
+     * Boot sector offsets (and assorted constants) in DOS-compatible boot sectors (DOS 2.0 and up)
+     *
+     * WARNING: I've heard apocryphal stories about SIGNATURE being improperly reversed on some systems
+     * (ie, 0x55AA instead 0xAA55) -- perhaps by a dyslexic programmer -- so be careful out there.
+     */
+    static BOOT = {
+        SIG_OFFSET:     0x1FE,
+        SIGNATURE:      0xAA55          // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
+    };
+
+    /*
+     * PCJS_LABEL is our default label, used whenever a more suitable label (eg, the disk image's folder name)
+     * is not available (or not supplied), and PCJS_OEM is inserted into any DiskInfo-generated diskette images.
+     */
+    static PCJS_LABEL = "PCJS";
+    static PCJS_OEM   = "PCJS.ORG";
+    static PCJS_VALUE = 0x534a4350;     // "PCJS"
+
+    /*
+     * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
+     *
+     * Technically, OPCODE and OEM are not part of a BPB, but some operating systems test one or both those fields as part
+     * of their disk verification logic, so for simplicity's sake, this is where we're recording those offsets.
+     *
+     * NOTE: DOS 2.x OEM documentation says that the words starting at offset 0x018 (TRACKSECS, DRIVEHEADS, and HIDDENSECS)
+     * are optional, but even the DOS 2.0 FORMAT utility initializes all three of those words.  There may be some OEM media out
+     * there with BPBs that are only valid up to offset 0x018, but I've not run across any media like that.
+     *
+     * DOS 3.20 added LARGESECS, but unfortunately, it was added as a 2-byte value at offset 0x01E.  DOS 3.31 decided
+     * to make both HIDDENSECS and LARGESECS 4-byte values, which meant that LARGESECS had to move from 0x01E to 0x020.
+     */
+    static BPB = {
+        OPCODE:         0x000,      // 1 byte for an x86 JMP opcode, followed by a 1 or 2-byte offset (or CPUx86.OPCODE.CLD for BASIC-DOS boot sectors)
+        BEGIN:          0x003,      //
+        OEM:            0x003,      // 8 bytes (eg, "IBM  2.0")
+        SECBYTES:       0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
+        CLUSSECS:       0x00D,      // 1 byte: sectors per cluster (eg, 1)
+        RESSECS:        0x00E,      // 2 bytes: reserved sectors; ie, # sectors preceding the first FAT, usually just the boot sector (eg, 1)
+        FATS:           0x010,      // 1 byte: FAT copies (eg, 2)
+        DIRENTS:        0x011,      // 2 bytes: root directory entries (eg, 0x40 or 64)
+        DISKSECS:       0x013,      // 2 bytes: number of sectors (eg, 0x140 or 320); if zero, refer to LARGESECS
+        MEDIA:          0x015,      // 1 byte: media ID (see DiskInfo.FAT.MEDIA_*); should also match the first byte of the FAT (aka FAT ID)
+        FATSECS:        0x016,      // 2 bytes: sectors per FAT (eg, 1)
+        TRACKSECS:      0x018,      // 2 bytes: sectors per track (eg, 8)
+        DRIVEHEADS:     0x01A,      // 2 bytes: number of heads (eg, 1)
+        HIDDENSECS:     0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (0 for non-partitioned media)
+        BOOTDRIVE:      0x01E,      // 1 byte (DOS 2.x): BIOS boot drive # (eg, 0x00 or 0x80)
+        BOOTHEAD:       0x01F,      // 1 byte (DOS 2.x): BIOS boot head # (0-based)
+        /*
+         * NOTE: DOS 2.0 also stores the number of sectors in the BIOS file (eg, IO.SYS, IBMBIO.COM) in the byte at offset
+         * 0x020 (LARGESECS), followed by a custom 11-byte Diskette Parameter Table (DPT) at offsets 0x021 through 0x0x2B, which
+         * it promptly points the DPT vector 0x1E (0:0078h) to.
+         */
+        LARGESECS:      0x020,      // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
+        END:            0x024,      // end of standard BPB
+        /*
+         * The rest of these definitions are part of our extended (BASIC-DOS) BPB.  They are not part of a standard DOS BPB.
+         *
+         * Although, coincidentally, DOS 4.x DID begin storing the boot drive in the same location as our DRIVE field.  It seems
+         * DOS couldn't make up its mind what to do with that byte: DOS 2.x through 3.1 stored it at 0x01E (BOOTDRIVE), DOS 3.2 and
+         * 3.3 stored it at 0x1FD, and DOS 4.x stored it at 0x024).
+         */
+        DRIVE:          0x24,       // 1 byte: drive # (eg, 0x00 or 0x80)
+        CYLSECS:        0x25,       // 2 bytes: sectors per cylinder
+        LBAROOT:        0x27,       // 2 bytes: LBA of 1st root dir sector
+        LBADATA:        0x29,       // 2 bytes: LBA of 1st data sector
+        ENDEX:          0x2B        // end of extended BPB
+    };
+
+    /*
+     * Common (supported) diskette geometries.
+     *
+     * Each entry in GEOMETRIES is an array of values in "CHS" order:
+     *
+     *      [# cylinders, # heads, # sectors/track, # bytes/sector, media ID]
+     *
+     * If the 4th value is omitted, the sector size is assumed to be 512.  The order of these "geometric" values mirrors
+     * the structure of our JSON-encoded disk images, which consist of an array of cylinders, each of which is an array of
+     * heads, each of which is an array of sector objects.
+     */
+    static GEOMETRIES = {
+        163840:  [40,1, 8,512,0xFE],    // media ID 0xFE: 40 cylinders, 1 head (single-sided),   8 sectors/track, ( 320 total sectors x 512 bytes/sector ==  163840)
+        184320:  [40,1, 9,512,0xFC],    // media ID 0xFC: 40 cylinders, 1 head (single-sided),   9 sectors/track, ( 360 total sectors x 512 bytes/sector ==  184320)
+        327680:  [40,2, 8,512,0xFF],    // media ID 0xFF: 40 cylinders, 2 heads (double-sided),  8 sectors/track, ( 640 total sectors x 512 bytes/sector ==  327680)
+        368640:  [40,2, 9,512,0xFD],    // media ID 0xFD: 40 cylinders, 2 heads (double-sided),  9 sectors/track, ( 720 total sectors x 512 bytes/sector ==  368640)
+        737280:  [80,2, 9,512,0xF9],    // media ID 0xF9: 80 cylinders, 2 heads (double-sided),  9 sectors/track, (1440 total sectors x 512 bytes/sector ==  737280)
+        1228800: [80,2,15,512,0xF9],    // media ID 0xF9: 80 cylinders, 2 heads (double-sided), 15 sectors/track, (2400 total sectors x 512 bytes/sector == 1228800)
+        1474560: [80,2,18,512,0xF0],    // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 18 sectors/track, (2880 total sectors x 512 bytes/sector == 1474560)
+        2949120: [80,2,36,512,0xF0],    // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 36 sectors/track, (5760 total sectors x 512 bytes/sector == 2949120)
+        /*
+         * The following are some common disk sizes and their CHS values, since missing or bogus MBR and/or BPB values
+         * might mislead us when attempting to determine the exact disk geometry.
+         */
+        10653696:[306, 4, 17],          // PC XT 10Mb hard drive (type 3)
+        21411840:[615, 4, 17],          // PC AT 20Mb hard drive (type 2)
+        /*
+         * Other assorted disk formats, used by DEC and others.
+         * For example, the 256256-byte format was also used on early CP/M and SCP (Seattle Computer Products) systems
+         */
+        256256:  [77,  1, 26, 128],     // RX01 single-platter diskette: 77 tracks, 1 head, 26 sectors/track, 128 bytes/sector, for a total of 256256 bytes
+        1261568: [77,  2, 8, 1024],     // SCP(?) single-platter diskette: 77 tracks, 2 heads, 8 sectors/track, 1024-byte sectors, for a total of 1261568 bytes
+        2494464: [203, 2, 12, 512],     // RK03 single-platter disk cartridge: 203 tracks, 2 heads, 12 sectors/track, 512 bytes/sector, for a total of 2494464 bytes
+        5242880: [256, 2, 40, 256],     // RL01K single-platter disk cartridge: 256 tracks, 2 heads, 40 sectors/track, 256 bytes/sector, for a total of 5242880 bytes
+        10485760:[512, 2, 40, 256]      // RL02K single-platter disk cartridge: 512 tracks, 2 heads, 40 sectors/track, 256 bytes/sector, for a total of 10485760 bytes
+    };
+
+    /*
+     * Media ID (descriptor) bytes for DOS-compatible FAT-formatted disks (stored in the first byte of the FAT)
+     */
+    static FAT = {
+        MEDIA_160KB:    0xFE,       // 5.25-inch, 1-sided,  8-sector, 40-track
+        MEDIA_180KB:    0xFC,       // 5.25-inch, 1-sided,  9-sector, 40-track
+        MEDIA_320KB:    0xFF,       // 5.25-inch, 2-sided,  8-sector, 40-track
+        MEDIA_360KB:    0xFD,       // 5.25-inch, 2-sided,  9-sector, 40-track
+        MEDIA_720KB:    0xF9,       //  3.5-inch, 2-sided,  9-sector, 80-track
+        MEDIA_1200KB:   0xF9,       //  3.5-inch, 2-sided, 15-sector, 80-track
+        MEDIA_FIXED:    0xF8,       // fixed disk (aka hard drive)
+        MEDIA_1440KB:   0xF0,       //  3.5-inch, 2-sided, 18-sector, 80-track
+        MEDIA_2880KB:   0xF0        //  3.5-inch, 2-sided, 36-sector, 80-track
+    };
+
+    /*
+     * Cluster constants for 12-bit FATs (CLUSNUM_FREE, CLUSNUM_RES and CLUSNUM_MIN are the same for all FATs)
+     */
+    static FAT12 = {
+        MAX_CLUSTERS:   4084,
+        CLUSNUM_FREE:   0,          // this should NEVER appear in cluster chain (except at the start of an empty chain)
+        CLUSNUM_RES:    1,          // reserved; this should NEVER appear in cluster chain
+        CLUSNUM_MIN:    2,          // smallest valid cluster number
+        CLUSNUM_MAX:    0xFF6,      // largest valid cluster number
+        CLUSNUM_BAD:    0xFF7,      // bad cluster; this should NEVER appear in cluster chain
+        CLUSNUM_EOC:    0xFF8       // end of chain (actually, anything from 0xFF8-0xFFF indicates EOC)
+    };
+
+    /*
+     * Cluster constants for 16-bit FATs (CLUSNUM_FREE, CLUSNUM_RES and CLUSNUM_MIN are the same for all FATs)
+     */
+    static FAT16 = {
+        MAX_CLUSTERS:   65524,
+        CLUSNUM_FREE:   0,          // this should NEVER appear in cluster chain (except at the start of an empty chain)
+        CLUSNUM_RES:    1,          // reserved; this should NEVER appear in cluster chain
+        CLUSNUM_MIN:    2,          // smallest valid cluster number
+        CLUSNUM_MAX:    0xFFF6,     // largest valid cluster number
+        CLUSNUM_BAD:    0xFFF7,     // bad cluster; this should NEVER appear in cluster chain
+        CLUSNUM_EOC:    0xFFF8      // end of chain (actually, anything from 0xFFF8-0xFFFF indicates EOC)
+    };
+
+    /*
+     * Directory Entry offsets (and assorted constants) in FAT disk images
+     *
+     * NOTE: Versions of DOS prior to 2.0 used INVALID exclusively to mark available directory entries; any entry marked
+     * UNUSED was actually considered USED.  In DOS 2.0 and up, UNUSED was added to indicate that all remaining entries were
+     * unused, relieving it from having to initialize the rest of the sectors in the directory cluster(s).  And in fact,
+     * you will likely encounter garbage in subsequent directory sectors if you read beyond the first UNUSED entry.
+     *
+     * For more details on MODTIME and MODDATE, see buildDateTime().
+     */
+    static DIRENT = {
+        NAME:           0x00,       // 8 bytes
+        EXT:            0x08,       // 3 bytes
+        ATTR:           0x0B,       // 1 byte
+        MODTIME:        0x16,       // 2 bytes: bits 15-11 is hour (0-31), bits 10-5 is minute (0-63), bits 4-0 is second/2 (0-31)
+        MODDATE:        0x18,       // 2 bytes: bits 15-9 is year (0 for 1980, 127 for 2107), bits 8-5 is month (1-12), bits 4-0 is day (1-31)
+        CLUSTER:        0x1A,       // 2 bytes
+        SIZE:           0x1C,       // 4 bytes (typically zero for subdirectories)
+        LENGTH:         0x20,       // 32 bytes total
+        UNUSED:         0x00,       // indicates this and all subsequent directory entries are unused
+        INVALID:        0xE5        // indicates this directory entry is unused
+    };
+
+    /*
+     * Possible values for DIRENT.ATTR
+     */
+    static ATTR = {
+        READONLY:       0x01,       // PC DOS 2.0 and up
+        HIDDEN:         0x02,
+        SYSTEM:         0x04,
+        VOLUME:         0x08,       // PC DOS 2.0 and up
+        LFN:            0x0f,       // combination used by Windows 95 (MS-DOS 7.0) and up, indicating a long filename (LFN) DIRENT
+        SUBDIR:         0x10,       // PC DOS 2.0 and up
+        ARCHIVE:        0x20,       // PC DOS 2.0 and up
+        METADATA:     0x0100        // for internal use only (used to mark "pseudo" file table entries that list compressed archive contents)
+    };
+
+    /*
+     * The BPBs that buildDiskFromBuffer() currently supports; these BPBs should be in order of smallest/oldest to largest/newest
+     * capacity, to help ensure we don't select a disk format larger (or newer) than necessary.
+     *
+     * The first two entries MUST be the first two diskette formats (160K and 320K) defined by PC DOS 1.0 and 1.1, respectively,
+     * and the next two entries MUST be the corresponding extensions defined by PC DOS 2.0 (ie, 180K and 360K), as there's code above
+     * that assumes that order when trying to resolve discrepancies between a disk image's actual size and its "formatted" size.
+     *
+     * Even though original 160K and 320K diskettes did not include any BPBs, any images we generate with those formats DO include
+     * BPBs, because 1) it doesn't hurt anything, and 2) it makes the images mountable on modern operating systems.
+     *
+     * Finally, we've started adding some non-standard BPBs to the end of the table, with the intention of supporting older DOS-like
+     * disk images (eg, SCP diskettes created by Seattle Computer Products).  These are distinguished by a ZERO media ID.
+     */
+    static aDefaultBPBs = [
+      [                             // define BPB for 160Kb diskette
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+     // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x31, 0x2E, 0x30,     // "IBM  1.0" (this is a fake OEM signature)
+        0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+        0x01,                       // 0x0D: sectors per cluster (1)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0x40, 0x00,                 // 0x11: root directory entries (0x40 or 64)  0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
+        0x40, 0x01,                 // 0x13: number of sectors (0x140 or 320)
+        0xFE,                       // 0x15: media ID (eg, 0xFF: 320Kb, 0xFE: 160Kb, 0xFD: 360Kb, 0xFC: 180Kb)
+        0x01, 0x00,                 // 0x16: sectors per FAT (1)
+        0x08, 0x00,                 // 0x18: sectors per track (8)
+        0x01, 0x00,                 // 0x1A: number of heads (1)
+        0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+      [                             // define BPB for 320Kb diskette
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+     // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x31, 0x2E, 0x30,     // "IBM  1.0" (this is a fake OEM signature)
+        0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+        0x02,                       // 0x0D: sectors per cluster (2)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0x70, 0x00,                 // 0x11: root directory entries (0x70 or 112)  0x70 * 0x20 = 0xE00 (1 sector is 0x200 bytes, total of 7 sectors)
+        0x80, 0x02,                 // 0x13: number of sectors (0x280 or 640)
+        0xFF,                       // 0x15: media ID (eg, 0xFF: 320Kb, 0xFE: 160Kb, 0xFD: 360Kb, 0xFC: 180Kb)
+        0x01, 0x00,                 // 0x16: sectors per FAT (1)
+        0x08, 0x00,                 // 0x18: sectors per track (8)
+        0x02, 0x00,                 // 0x1A: number of heads (2)
+        0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+      [                             // define BPB for 180Kb diskette
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+     // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (this is a real OEM signature)
+        0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+        0x01,                       // 0x0D: sectors per cluster (1)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0x40, 0x00,                 // 0x11: root directory entries (0x40 or 64)  0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
+        0x68, 0x01,                 // 0x13: number of sectors (0x168 or 360)
+        0xFC,                       // 0x15: media ID (eg, 0xFF: 320Kb, 0xFE: 160Kb, 0xFD: 360Kb, 0xFC: 180Kb)
+        0x02, 0x00,                 // 0x16: sectors per FAT (2)
+        0x09, 0x00,                 // 0x18: sectors per track (9)
+        0x01, 0x00,                 // 0x1A: number of heads (1)
+        0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+      [                             // define BPB for 360Kb diskette
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+     // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (this is a real OEM signature)
+        0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+        0x02,                       // 0x0D: sectors per cluster (2)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0x70, 0x00,                 // 0x11: root directory entries (0x70 or 112)  0x70 * 0x20 = 0xE00 (1 sector is 0x200 bytes, total of 7 sectors)
+        0xD0, 0x02,                 // 0x13: number of sectors (0x2D0 or 720)
+        0xFD,                       // 0x15: media ID (eg, 0xFF: 320Kb, 0xFE: 160Kb, 0xFD: 360Kb, 0xFC: 180Kb)
+        0x02, 0x00,                 // 0x16: sectors per FAT (2)
+        0x09, 0x00,                 // 0x18: sectors per track (9)
+        0x02, 0x00,                 // 0x1A: number of heads (2)
+        0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+      [                             // define BPB for 1.2Mb diskette
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+     // 0x49, 0x42, 0x4D, 0x20, 0x31, 0x30, 0x2E, 0x30,     // "IBM 10.0" (which I believe was used on IBM OS/2 1.0 diskettes)
+        0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+        0x01,                       // 0x0D: sectors per cluster (1)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0xE0, 0x00,                 // 0x11: root directory entries (0xe0 or 224)  0xe0 * 0x20 = 0x1c00 (1 sector is 0x200 bytes, total of 14 sectors)
+        0x60, 0x09,                 // 0x13: number of sectors (0x960 or 2400)
+        0xF9,                       // 0x15: media ID (0xF9 was used for 1228800-byte diskettes, and later for 737280-byte diskettes)
+        0x07, 0x00,                 // 0x16: sectors per FAT (7)
+        0x0f, 0x00,                 // 0x18: sectors per track (15)
+        0x02, 0x00,                 // 0x1A: number of heads (2)
+        0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+      [                             // define BPB for 720Kb diskette (2 sector/cluster format more commonly used)
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+     // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x35, 0x2E, 0x30,     // "IBM  5.0" (this is a real OEM signature)
+        0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+        0x02,                       // 0x0D: sectors per cluster (2)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0x70, 0x00,                 // 0x11: root directory entries (0x70 or 112)  0x70 * 0x20 = 0xE00 (1 sector is 0x200 bytes, total of 7 sectors)
+        0xA0, 0x05,                 // 0x13: number of sectors (0x5A0 or 1440)
+        0xF9,                       // 0x15: media ID
+        0x03, 0x00,                 // 0x16: sectors per FAT (3)
+        0x09, 0x00,                 // 0x18: sectors per track (9)
+        0x02, 0x00,                 // 0x1A: number of heads (2)
+        0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+      [                             // define BPB for 720Kb diskette (1 sector/cluster format used by PC DOS 4.01)
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+     // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x34, 0x2E, 0x30,     // "IBM  4.0" (this is a real OEM signature)
+        0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+        0x01,                       // 0x0D: sectors per cluster (1)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0x70, 0x00,                 // 0x11: root directory entries (0x70 or 112)  0x70 * 0x20 = 0xE00 (1 sector is 0x200 bytes, total of 7 sectors)
+        0xA0, 0x05,                 // 0x13: number of sectors (0x5A0 or 1440)
+        0xF9,                       // 0x15: media ID
+        0x05, 0x00,                 // 0x16: sectors per FAT (5)
+        0x09, 0x00,                 // 0x18: sectors per track (9)
+        0x02, 0x00,                 // 0x1A: number of heads (2)
+        0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+      [                             // define BPB for 1.44Mb diskette
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+     // 0x4d, 0x53, 0x44, 0x4F, 0x53, 0x35, 0x2E, 0x30,     // "MSDOS5.0" (an actual OEM signature, arbitrarily chosen for use here)
+        0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+        0x01,                       // 0x0D: sectors per cluster (1)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0xE0, 0x00,                 // 0x11: root directory entries (0xe0 or 224)  0xe0 * 0x20 = 0x1c00 (1 sector is 0x200 bytes, total of 14 sectors)
+        0x40, 0x0B,                 // 0x13: number of sectors (0xb40 or 2880)
+        0xF0,                       // 0x15: media ID (0xF0 was used for 1474560-byte diskettes)
+        0x09, 0x00,                 // 0x16: sectors per FAT (9)
+        0x12, 0x00,                 // 0x18: sectors per track (18)
+        0x02, 0x00,                 // 0x1A: number of heads (2)
+        0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+        /*
+         * Here's some useful background information on a 10Mb PC XT fixed disk, partitioned with a single DOS partition.
+         *
+         * The BPB for a 10Mb "type 3" PC XT hard disk specifies 0x5103 or 20739 for DISKSECS, which is the partition
+         * size in sectors (10,618,368 bytes), whereas total disk size is 20808 sectors (10,653,696 bytes).  The partition
+         * is 69 sectors smaller than the disk because the first sector is reserved for the MBR and 68 sectors (the entire
+         * last cylinder) are reserved for diagnostics, head parking, etc.  This cylinder usage is confirmed by FDISK,
+         * which reports that 305 cylinders (not 306) are assigned to the DOS partition.
+         *
+         * That 69-sector overhead is NOT overhead incurred by the FAT file system.  The FAT overhead is the boot sector
+         * (1), FAT sectors (2 * 8), and root directory sectors (32), for a total of 49 sectors, leaving 20739 - 49 or
+         * 20690 sectors.  Moreover, free space is measured in clusters, not sectors, and the partition uses 8 sectors/cluster,
+         * leaving room for 2586.25 clusters.  Since a fractional cluster is not allowed, another 2 sectors are lost, for
+         * a total of 51 sectors of FAT overhead.  So actual free space is (20739 - 51) * 512, or 10,592,256 bytes -- which
+         * is exactly what is reported as the available space on a freshly formatted 10Mb PC XT fixed disk.
+         *
+         * Some sources on the internet (eg, http://www.wikiwand.com/en/Timeline_of_DOS_operating_systems) claim that the
+         * file system overhead for the XT's 10Mb disk is "50 sectors".  As they explain:
+         *
+         *      "The fixed disk has 10,618,880 bytes of raw space: 305 cylinders (the equivalent of tracks) × 2 platters
+         *      × 2 sides or heads per platter × 17 sectors per track = 20,740 sectors × 512 bytes per sector = 10,618,880
+         *      bytes...."
+         *
+         * and:
+         *
+         *      "With DOS the only partition, the combined overhead is 50 sectors leaving 10,592,256 bytes for user data:
+         *      DOS's FAT is eight sectors (16 sectors for two copies) + 32 sectors for the root directory, room for 512
+         *      directory entries + 2 sectors (one master and one DOS boot sector) = 50 sectors...."
+         *
+         * However, that's incorrect.  First, the disk has 306 cylinders, not 305.  Second, there are TWO overhead values:
+         * the overhead OUTSIDE the partition (69 sectors) and the overhead INSIDE the partition (51 sectors).  They failed
+         * to account for the reserved cylinder in the first calculation and the fractional cluster in the second calculation,
+         * and then they conflated the two values to produce a single (incorrect) result.
+         *
+         * Even if one were to assume that the disk had only 305 cylinders, that would only change the partitioning overhead
+         * to 1 sector; the FAT file system overhead would still be 51 sectors.
+         */
+      [                             // define BPB for 10Mb hard drive
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (WARNING: this signature is REQUIRED for PC DOS 3.x to successfully read a partition using a 12-bit FAT with this BPB)
+        0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+        0x08,                       // 0x0D: sectors per cluster (8)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0x00, 0x02,                 // 0x11: root directory entries (0x200 or 512)  0x200 * 0x20 = 0x4000 (1 sector is 0x200 bytes, total of 0x20 or 32 sectors)
+        0x03, 0x51,                 // 0x13: number of sectors (0x5103 or 20739; * 512 bytes/sector = 10,618,368 bytes = 10,369Kb = 10Mb)
+        0xF8,                       // 0x15: media ID (eg, 0xF8: hard drive)
+        0x08, 0x00,                 // 0x16: sectors per FAT (8)
+          //
+          // Wikipedia (http://en.wikipedia.org/wiki/File_Allocation_Table#BIOS_Parameter_Block) implies everything past
+          // this point was introduced post-DOS 2.0.  However, DOS 2.0 merely said they were optional, and in fact, DOS 2.0
+          // FORMAT always initializes the next 3 words.  A 4th word, LARGESECS, was added in DOS 3.20 at offset 0x1E,
+          // and then in DOS 3.31, both HIDDENSECS and LARGESECS were widened from words to dwords.
+          //
+        0x11, 0x00,                 // 0x18: sectors per track (17)
+        0x04, 0x00,                 // 0x1A: number of heads (4)
+          //
+          // NOTE: PC DOS 2.0 stores BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
+          //
+        0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+      [                             // define BPB for 20Mb hard drive
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (WARNING: this signature is REQUIRED for PC DOS 3.x to successfully read a partition using a 12-bit FAT with this BPB)
+        0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
+        0x10,                       // 0x0D: sectors per cluster (16)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0x00, 0x04,                 // 0x11: root directory entries (0x400 or 1024)  0x400 * 0x20 = 0x8000 (1 sector is 0x200 bytes, total of 0x40 or 64 sectors)
+        0x17, 0xa3,                 // 0x13: number of sectors (0xa317 or 41751; * 512 bytes/sector = 21,376,512 bytes = 20,875.5Kb = 20Mb)
+        0xF8,                       // 0x15: media ID (eg, 0xF8: hard drive)
+        0x08, 0x00,                 // 0x16: sectors per FAT (8)
+          //
+          // Wikipedia (http://en.wikipedia.org/wiki/File_Allocation_Table#BIOS_Parameter_Block) implies everything past
+          // this point was introduced post-DOS 2.0.  However, DOS 2.0 merely said they were optional, and in fact, DOS 2.0
+          // FORMAT always initializes the next 3 words.  A 4th word, LARGESECS, was added in DOS 3.20 at offset 0x1E,
+          // and then in DOS 3.31, both HIDDENSECS and LARGESECS were widened from words to dwords.
+          //
+        0x11, 0x00,                 // 0x18: sectors per track (17)
+        0x04, 0x00,                 // 0x1A: number of heads (4)
+          //
+          // NOTE: PC DOS 2.0 stores BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
+          //
+        0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+      [                             // define BPB for 256Kb diskette (single-sided, 77 tracks, 26 sectors/track, 128-byte sectors, 256256 total bytes)
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+        0x80, 0x00,                 // 0x0B: bytes per sector (0x80 or 128)
+        0x04,                       // 0x0D: sectors per cluster (4)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0x44, 0x00,                 // 0x11: root directory entries (0x44 or 68)  0x44 * 0x20 = 0x880 (1 sector is 0x80 bytes, total of 0x11 sectors)
+        0xD2, 0x07,                 // 0x13: number of sectors (0x7D2 or 2002; ie, 77 * 26)
+        0x00,                       // 0x15: media ID (0x00 indicates this is a non-standard format)
+        0x06, 0x00,                 // 0x16: sectors per FAT (6)
+        0x1A, 0x00,                 // 0x18: sectors per track (26)
+        0x01, 0x00,                 // 0x1A: number of heads (1)
+        0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ],
+      [                             // define BPB for 1232Kb diskette (double-sided, 77 tracks, 8 sectors/track, 1024-byte sectors, 1261568 total bytes)
+        0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
+        0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
+        0x00, 0x04,                 // 0x0B: bytes per sector (0x400 or 1024)
+        0x01,                       // 0x0D: sectors per cluster (1)
+        0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
+        0x02,                       // 0x10: FAT copies (2)
+        0xC0, 0x00,                 // 0x11: root directory entries (0xC0 or 192)  0xC0 * 0x20 = 0x1800 (1 sector is 1024 bytes, total of 6 sectors)
+        0xD0, 0x04,                 // 0x13: number of sectors (0x4D0 or 1232; ie, 2 * 77 * 8)
+        0x00,                       // 0x15: media ID (0x00 indicates this is a non-standard format)
+        0x02, 0x00,                 // 0x16: sectors per FAT (2)
+        0x08, 0x00,                 // 0x18: sectors per track (8)
+        0x02, 0x00,                 // 0x1A: number of heads (2)
+        0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
+      ]
+    ];
+
     /**
      * DiskInfo(device, diskName, fWritable)
      *
@@ -212,7 +808,7 @@ export default class DiskInfo {
             driveInfo.driveType = -1;
         }
 
-        if (driveInfo.fPartitioned || cbDiskData >= DiskInfo.MIN_PARTITION && driveInfo.fPartitioned !== false) {
+        if (driveInfo.partitioned || cbDiskData >= DiskInfo.MIN_PARTITION && driveInfo.partitioned !== false) {
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
             if (wSig == DiskInfo.BOOT.SIGNATURE) {
                 /*
@@ -305,6 +901,9 @@ export default class DiskInfo {
                 bMediaIDBPB = dbDisk.readUInt8(offBootSector + DiskInfo.BPB.MEDIA);
 
                 let nSectorsTotalBPB = dbDisk.readUInt16LE(offBootSector + DiskInfo.BPB.DISKSECS);
+                if (!nSectorsTotalBPB) {
+                    nSectorsTotalBPB = dbDisk.readUInt32LE(offBootSector + DiskInfo.BPB.LARGESECS);
+                }
                 let nSectorsPerCylinderBPB = nSectorsPerTrackBPB * nHeadsBPB;
                 let nSectorsHiddenBPB = dbDisk.readUInt16LE(offBootSector + DiskInfo.BPB.HIDDENSECS);
                 let nCylindersBPB = (nSectorsHiddenBPB + nSectorsTotalBPB) / nSectorsPerCylinderBPB;
@@ -317,7 +916,7 @@ export default class DiskInfo {
                         let message = (nCylinders - nCylindersBPB == 1)? Device.MESSAGE.INFO : Device.MESSAGE.WARN;
                         this.printf(message, "BPB cylinders (%d) do not match physical cylinders (%d)\n", nCylindersBPB, nCylinders);
                         if (message == Device.MESSAGE.INFO) {
-                            this.printf(message, "BIOS may have reserved the last cylinder for diagnostics and/or head-parking\n");
+                            this.printf(message, "last cylinder may have been reserved for diagnostics and/or head-parking\n");
                         }
                     }
                     if (nHeads != nHeadsBPB) {
@@ -495,7 +1094,7 @@ export default class DiskInfo {
              * we used earlier), because it turns out that post 2.x versions of DOS (eg, PC DOS 3.00, MS-DOS 3.30) look for
              * certain OEM strings (eg, "IBM  2.0", "IBM  3.1") as a for drive and FAT type determination.
              */
-            let dw = dbDisk.readInt32BE(DiskInfo.BPB.OEM + offBootSector);
+            let dw = dbDisk.readInt32LE(DiskInfo.BPB.OEM + offBootSector);
             if (dw != DiskInfo.PCJS_VALUE && cbDiskData < DiskInfo.MIN_PARTITION && driveInfo.driveCtrl != "PCJS") {
                 dbDisk.write(DiskInfo.PCJS_OEM, DiskInfo.BPB.OEM + offBootSector, DiskInfo.PCJS_OEM.length);
                 this.printf(Device.MESSAGE.INFO, "OEM string has been updated\n");
@@ -893,20 +1492,12 @@ export default class DiskInfo {
             cHeads = this.nHeads;
             cSectorsPerTrack = this.nSectors;
 
-            if (driveInfo.fPartitioned) {
+            if (driveInfo.partitioned) {
                 bMediaID = 0xF8;
                 cHiddenSectors = 1;     // our hard disk images are always partitioned and always reserve a diagnostic cylinder
                 cDiagnosticSectors = cHeads * cSectorsPerTrack;
             }
             cTotalSectors -= cHiddenSectors + cDiagnosticSectors;
-
-            if (cTotalSectors <= 0xffff) {
-                setBoot(DiskInfo.BPB.DISKSECS, 2, cTotalSectors);
-            } else {
-                this.minDOSVersion = 3.31;
-                setBoot(DiskInfo.BPB.DISKSECS, 2, 0);
-                setBoot(DiskInfo.BPB.LARGESECS, 4, cTotalSectors);
-            }
 
             cbSector = driveInfo.cbSector || cbSector;
             setBoot(DiskInfo.BPB.SECBYTES, 2, cbSector);
@@ -961,7 +1552,7 @@ export default class DiskInfo {
                     cSectorsPerCluster = 2;
                 } else if (cTotalSectors <= 8192) {     // 0x2000 (4Mb)
                     cSectorsPerCluster = 4;
-                } else if (cTotalSectors <= 32680) {    // 0x7Af8 (16Mb)
+                } else if (cTotalSectors <= 32680) {    // 0x7FA8 (16Mb)
                     cSectorsPerCluster = 8;
                 } else {
                     if (driveInfo.verDOS >= 3.0) {
@@ -989,7 +1580,8 @@ export default class DiskInfo {
                     rootEntries = 112;
                 } else if (cTotalSectors <= 8192) {     // 0x2000
                     rootEntries = 256;
-                } else if (cTotalSectors <= 32680) {    // 0x7Af8
+                } else if (cTotalSectors <= 32680 ||    // 0x7FA8
+                            driveInfo.verDOS == 3) {    // PC DOS 3.0 seems to have a hard-coded preference for 512 entries
                     rootEntries = 512;
                 } else {
                     rootEntries = 1024;                 // TBD: Check DOS 3.x and later root directory thresholds
@@ -1016,7 +1608,58 @@ export default class DiskInfo {
                 minClusters = (typeFAT == 12)? 0 : DiskInfo.FAT12.MAX_CLUSTERS + 1;
                 maxClusters = (typeFAT == 12)? DiskInfo.FAT12.MAX_CLUSTERS : DiskInfo.FAT16.MAX_CLUSTERS;
                 grossClusters = Math.floor(cTotalSectors / cSectorsPerCluster);
-                cFATSectors = Math.ceil(grossClusters * typeFAT / 8 / cbSector);
+                /*
+                 * We start with the basic estimate of sectors per FAT that DOS 2.x used for FAT12.
+                 */
+                cFATSectors = Math.ceil(Math.ceil(grossClusters * typeFAT / 8) / cbSector);
+                if (driveInfo.verDOS == 3.0 && typeFAT == 16) {
+                    /*
+                     * Mimic the somewhat unusual calculations that DOS 3.0 introduced when calculating how many
+                     * sectors a 16-bit FAT should consume (instead of simply honoring FATSECS in the BPB).  You
+                     * can watch the code starting near 70:14AE (where it's checking the BPB OEM signature) and
+                     * confirm the "sectors per FAT" result near 70:1587.
+                     *
+                     * Although they look odd at first glance, these calculations aren't really that fundamentally
+                     * different from the DOS 2.x calculation, which becomes clearer when you substitute 16 for
+                     * typeFAT and 512 for cbSector:
+                     *
+                     *      cFATSectors = ((cTotalSectors / cSectorsPerCluster) * 16 / 8) / 512
+                     *  or:
+                     *      cFATSectors = (cTotalSectors / cSectorsPerCluster) / 256
+                     *  or:
+                     *      cFATSectors = cTotalSectors / (cSectorsPerCluster * 256)
+                     *
+                     * the main differences being that the DOS 3.x code shaves reserved and root directory sectors
+                     * from total sectors first, and slightly increases the final divisor by the number of FATs.  No
+                     * doubt that slight divisor increase compensates for the fact this calculation does not account
+                     * for sectors that the FATs themselves consume (and which should have also been deducted from
+                     * total sectors).
+                     *
+                     * Without this, "pc.js --sys=pcdos:3.0 --drivetype=484:4:17" will fail (later versions work,
+                     * presumably because they're actually honoring our BPB).
+                     */
+                    let divisor = cSectorsPerCluster * 256 + cFATs;
+                    cFATSectors = Math.ceil((cTotalSectors - cReservedSectors - cRootSectors) / divisor);
+                }
+                /*
+                 * This next bit is an experiment, because it turns out a disk with 10948 total sectors (162:4:17)
+                 * and 4K clusters only needs 4 sectors per FAT, not 5.  And yes, that drive geometry actually has
+                 * 11016 sectors, but don't forget that we generally don't use the last cylinder (remember, we are
+                 * pretending it's the 1980s, when the last cylinder was reserved for diagnostics and head-parking).
+                 *
+                 * This is one of many such corner cases, and there's a warning below (see cActualClusters) that will
+                 * appear whenever we encounter them.  Calculating all those cases here (rather than hard-coding one
+                 * particular disk size) is really what's required, but it's a tricky calculation to do at this point,
+                 * and since it's moot, why bother?  DOS (or at least DOS 2.x) requires that we waste the same amount
+                 * of space that it wasted, because it doesn't actually honor FATSECS in the BPB.
+                 *
+                 * So, set trimFAT only if you *really* want to see this failure in DOS 2.x.  ;-)
+                 */
+                if (driveInfo.trimFAT) {
+                    if (cTotalSectors == 10947 && cSectorsPerCluster == 8 && cFATSectors == 5) {
+                        cFATSectors = 4;
+                    }
+                }
                 if (grossClusters < minClusters) {
                     if (!cRecalcs--) break;
                     typeFAT = 12;
@@ -1047,17 +1690,27 @@ export default class DiskInfo {
 
             if (typeFAT == 16) {
                 /*
-                 * At a minimum, the OEM signature must be changed from "2.0" to "3.0" to indicate 16-bit FAT support,
-                 * and moreover, for drives with DISKSECS <= 0x7FA8, DOS will still make certain hard-coded assumptions
-                 * about the formatting (ie, 12-bit FAT, 4K clusters, 512 directory entries, etc) UNLESS the OEM string
-                 * has been bumped even higher (eg, "3.1").  Only then it will honor the values in the MBR and BPB.
+                 * In general, the OEM signature should be changed from "2.0" to "3.0" to indicate 16-bit FAT support,
+                 * with one exception: PC DOS 3.00 will still assume FAT12 if total sectors are <= 0x7FA8; in that case,
+                 * the signature should remain "2.0", which will have the beneficial side-effect of PC DOS 3.00 honoring
+                 * the BPB, after which it will calculate that there are too many clusters to fit on a FAT12 volume, so
+                 * it will set a FAT16 flag.  The relevant code begin at 70:14AE.
                  *
-                 * That, at least, is how MS-DOS 3.30 behaves.  Set a breakpoint at 70:0FB9, watch it read the MBR,
-                 * examine the partition table, read the boot sector, and examine the OEM string.  It will NOT honor a
-                 * 10Mb drive's BPB unless the OEM string contains something greater than "3.0".
+                 * DOS versions 3.10 and higher change the rules again.  For drives with DISKSECS <= 0x7FA8, DOS will
+                 * still make certain hard-coded assumptions about the formatting (ie, 12-bit FAT, 4K clusters, 512 directory
+                 * entries, etc) UNLESS the OEM string has been bumped even higher (eg, "3.1").  Only then it will honor
+                 * the values in the MBR and BPB.
+                 *
+                 * To debug MS-DOS 3.30, set a breakpoint at 70:0FB9, watch it read the MBR, examine the partition table,
+                 * read the boot sector, and examine the OEM string.  It will NOT honor a 10Mb drive's BPB unless the OEM
+                 * string contains something greater than "3.0".
                  */
-                setBoot(DiskInfo.BPB.OEM + 5, 1, 0x33);
-                setBoot(DiskInfo.BPB.OEM + 7, 1, 0x31);
+                if (driveInfo.verDOS >= 3.1 || cTotalSectors > 0x7FA8) {
+                    let verMajor = (driveInfo.verDOS|0) || 2;
+                    let verMinor = (driveInfo.verDOS * 10 % 10) || 0;
+                    setBoot(DiskInfo.BPB.OEM + 5, 1, 0x30 + verMajor);
+                    setBoot(DiskInfo.BPB.OEM + 7, 1, 0x30 + verMinor);
+                }
                 if (this.minDOSVersion < 3.0) this.minDOSVersion = 3.0;
             }
 
@@ -1101,9 +1754,9 @@ export default class DiskInfo {
              */
             let cFileSectors = 0;
             if (aFileData[0]) {
-                let maxAdjustments = cSectorsPerTrack;
+                let maxAdjustments = driveInfo.trimFAT? 0 : cSectorsPerTrack;
                 cFileSectors = Math.ceil(aFileData[0].size / cbSector);
-                do {
+                while (maxAdjustments--) {
                     let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
                     let cFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
                     /*
@@ -1131,18 +1784,36 @@ export default class DiskInfo {
                      */
                     cHiddenSectors++;
                     cTotalSectors--;
-                } while (maxAdjustments--);
+                }
             }
 
+            if (cTotalSectors <= 0xffff) {
+                setBoot(DiskInfo.BPB.DISKSECS, 2, cTotalSectors);
+            } else {
+                setBoot(DiskInfo.BPB.DISKSECS, 2, 0);
+                setBoot(DiskInfo.BPB.LARGESECS, 4, cTotalSectors);
+                this.minDOSVersion = 3.31;
+            }
             setBoot(DiskInfo.BPB.DIRENTS, 2, rootEntries);
             setBoot(DiskInfo.BPB.RESSECS, 2, cReservedSectors);
             setBoot(DiskInfo.BPB.HIDDENSECS, 2, cHiddenSectors);
-            if (driveInfo.verDOS >= 2.0 && driveInfo.verDOS < 3.2) {
-                setBoot(DiskInfo.BPB.BOOTDRIVE, 1, driveInfo.fPartitioned === false? 0x00 : 0x80);
+            if (driveInfo.verDOS >= 2.0 && driveInfo.verDOS < 3.2 && driveInfo.verDOS >= this.minDOSVersion) {
+                setBoot(DiskInfo.BPB.BOOTDRIVE, 1, driveInfo.partitioned === false? 0x00 : 0x80);
                 setBoot(DiskInfo.BPB.LARGESECS, 1, cFileSectors);       // TODO: only required for DOS 2.x?
             }
+
             cDataSectors = cTotalSectors - (cRootSectors + cFATs * cFATSectors + cReservedSectors);
             cbAvail = cDataSectors * cbSector;
+
+            /*
+             * While it's important to calculate cFATSectors the same way that DOS did it, I'm still curious how
+             * often this results in wasted FAT sectors.
+             */
+            let cActualClusters = Math.trunc(cDataSectors / cSectorsPerCluster);
+            let cActualFATSectors = Math.ceil(Math.ceil((cActualClusters + 2) * typeFAT / 8) / cbSector);
+            if (cActualFATSectors != cFATSectors) {
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%d FAT sectors allocated, but only %d are required\n", cFATSectors, cActualFATSectors);
+            }
         }
 
         /*
@@ -3803,7 +4474,7 @@ export default class DiskInfo {
                     return true;
                 }
             }
-            else if (!driveInfo.fPartitioned) {
+            else if (!driveInfo.partitioned) {
                 if (driveInfo.driveType >= 0) {
                     return true;
                 }
@@ -3876,10 +4547,10 @@ export default class DiskInfo {
                             break;
                         }
                     }
-                    if (driveType < 0) {
-                        driveCtrl = "PCJS";
-                        driveType = 0;
-                    }
+                }
+                if (driveType < 0) {
+                    driveCtrl = "PCJS";
+                    driveType = 0;
                 }
             }
             driveInfo.driveCtrl = driveCtrl;
@@ -4356,7 +5027,7 @@ export default class DiskInfo {
                                  */
                                 break;
                             case 2:
-                                if (off >= DiskInfo.BPB.BEGIN && off <= DiskInfo.BPB.LARGESECS) continue;
+                                if (off >= DiskInfo.BPB.BEGIN && off < DiskInfo.BPB.LARGESECS) continue;
                                 break;
                             }
                         } else {
@@ -4416,592 +5087,3 @@ export default class DiskInfo {
         return nearestPower;
     }
 }
-
-DiskInfo.MIN_PARTITION = 3000000;   // ~3MB (used in lieu of any partitioned media indicator)
-
-/*
- * Top-level descriptors in "v2" JSON disk images.
- */
-DiskInfo.DESC = {
-    IMAGE:      'imageInfo',
-    VOLUMES:    'volTable',
-    FILES:      'fileTable',
-    DISKDATA:   'diskData'
-};
-
-/*
- * Supported image types.
- */
-DiskInfo.TYPE = {
-    CHS:        'CHS'
-};
-
-/*
- * Image descriptor properties.
- */
-DiskInfo.IMAGE = {
-    TYPE:       'type',
-    NAME:       'name',
-    FORMAT:     'format',
-    HASH:       'hash',
-    CHECKSUM:   'checksum',
-    CYLINDERS:  'cylinders',
-    HEADS:      'heads',
-    TRACKDEF:   'trackDefault',
-    SECTORDEF:  'sectorDefault',
-    DISKSIZE:   'diskSize',
-    ORIGBPB:    'bootSector',
-    VERSION:    'version',
-    REPOSITORY: 'repository',
-    GENERATED:  'generated',
-    SOURCE:     'source',           // the source of the data (eg, archive.org, pcjs.org, etc)
-    COMMAND:    'diskimage.js'
-};
-
-/*
- * Volume descriptor properties.
- */
-DiskInfo.VOLDESC = {
-    PARTITION:  'iPartition',       // partition (if applicable)
-    MEDIA_ID:   'idMedia',          // media ID
-    LBA_VOL:    'lbaStart',         // LBA of volume
-    LBA_TOTAL:  'lbaTotal',         // total blocks in volume
-    FAT_ID:     'idFAT',            // type of FAT (ie, 12 or 16)
-    VBA_FAT:    'vbaFAT',           // VBA of first block of (first) FAT
-    VBA_ROOT:   'vbaRoot',          // VBA of root directory
-    ROOT_TOTAL: 'rootTotal',        // total entries in root directory
-    VBA_DATA:   'vbaData',          // VBA of data area
-    CLUS_SECS:  'clusSecs',         // number of sectors per cluster
-    CLUS_MAX:   'clusMax',          // maximum valid cluster number
-    CLUS_BAD:   'clusBad',          // total bad clusters
-    CLUS_FREE:  'clusFree',         // total free clusters
-    CLUS_TOTAL: 'clusTotal'         // total clusters
-};
-
-/*
- * File descriptor properties.
- *
- * getFileDesc() is the mechanism for callers to obtain a FILEDESC, and there are two flavors: abbreviated and complete.
- * Only the "complete" form includes NAME, SIZE and VOL (regardless if zero), and CONTENTS (if any).
- */
-DiskInfo.FILEDESC = {
-    VOL:        'vol',
-    PATH:       'path',
-    NAME:       'name',
-    ATTR:       'attr',
-    DATE:       'date',
-    SIZE:       'size',
-    HASH:       'hash',
-    MODULE:     'module',
-    MODNAME:    'name',
-    MODDESC:    'description',
-    MODSEGS:    'segments',
-    CONTENTS:   'contents',
-    ORIGIN:     'origin'            // path of original file (if the file originated from non-DOS media)
-};
-
-/*
- * Sector object "public" properties.
- */
-DiskInfo.SECTOR = {
-    CYLINDER:   'c',                // cylinder number (0-based) [formerly iCylinder]
-    HEAD:       'h',                // head number (0-based) [formerly iHead]
-    ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
-    LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
-    DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
-    FILE_INDEX: 'f',                // "v2" JSON disk images only [formerly file]
-    FILE_OFFSET:'o',                // "v2" JSON disk images only [formerly offFile]
-                                    // [no longer used: 'pattern']
-    /*
-     * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
-     * hence the longer, more meaningful IDs.
-     */
-    DATA_CRC:   'dataCRC',
-    DATA_ERROR: 'dataError',
-    DATA_MARK:  'dataMark',
-    HEAD_CRC:   'headCRC',
-    HEAD_ERROR: 'headError'
-};
-
-DiskInfo.MBR = {
-    DRIVE0PARMS: {
-        CYLS:       0x19E,          // 1 word
-        HEADS:      0x1A0,          // 1 byte
-        SECTORS:    0x1AC           // 1 byte
-    },
-    DRIVE1PARMS: {
-        CYLS:       0x1AE,          // 1 word
-        HEADS:      0x1B0,          // 1 byte
-        SECTORS:    0x1BC           // 1 byte
-    },
-    PARTITIONS: {
-        OFFSET:     0x1BE,
-        ENTRY: {
-            STATUS:         0x00,   // 1-byte (0x80 if active)
-            CHS_FIRST:      0x01,   // 3-byte CHS specifier of first partition sector
-            TYPE:           0x04,   // 1-byte TYPE (see below)
-            CHS_LAST:       0x05,   // 3-byte CHS specifier of last partition sector
-            VBA_FIRST:      0x08,   // 4-byte Volume Block Address
-            VBA_TOTAL:      0x0C,   // 4-byte Volume Block Address
-        },
-        ENTRY_LENGTH:       0x10,
-        STATUS: {
-            ACTIVE:         0x80,   // ie, bootable
-            INACTIVE:       0x00
-        },
-        TYPE: {
-            EMPTY:          0x00,
-            FAT12_PRIMARY:  0x01,   // DOS 2.0 and up (12-bit FAT)
-            FAT16_PRIMARY:  0x04,   // DOS 3.0 and up (16-bit FAT with less than 65536 sectors (< 32Mb))
-            EXTENDED:       0x05,   // DOS 3.3 and up (must reside within the first 8Gb)
-            FAT16_BIG:      0x06    // DOS 3.31 and up (16-bit FAT with 65536 or more sectors (>= 32Mb and < 8Gb))
-        }
-    },
-    SIG_OFFSET:     0x1FE,
-    SIGNATURE:      0xAA55          // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
-};
-
-/*
- * Boot sector offsets (and assorted constants) in DOS-compatible boot sectors (DOS 2.0 and up)
- *
- * WARNING: I've heard apocryphal stories about SIGNATURE being improperly reversed on some systems
- * (ie, 0x55AA instead 0xAA55) -- perhaps by a dyslexic programmer -- so be careful out there.
- */
-DiskInfo.BOOT = {
-    SIG_OFFSET:     0x1FE,
-    SIGNATURE:      0xAA55          // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
-};
-
-/*
- * PCJS_LABEL is our default label, used whenever a more suitable label (eg, the disk image's folder name)
- * is not available (or not supplied), and PCJS_OEM is inserted into any DiskInfo-generated diskette images.
- */
-DiskInfo.PCJS_LABEL = "PCJS";
-DiskInfo.PCJS_OEM   = "PCJS.ORG";
-DiskInfo.PCJS_VALUE = 0x50434A53;   // "PCJS"
-
-/*
- * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
- *
- * Technically, OPCODE and OEM are not part of a BPB, but some operating systems test one or both those fields as part
- * of their disk verification logic, so for simplicity's sake, this is where we're recording those offsets.
- *
- * NOTE: DOS 2.x OEM documentation says that the words starting at offset 0x018 (TRACKSECS, DRIVEHEADS, and HIDDENSECS)
- * are optional, but even the DOS 2.0 FORMAT utility initializes all three of those words.  There may be some OEM media out
- * there with BPBs that are only valid up to offset 0x018, but I've not run across any media like that.
- *
- * DOS 3.20 added LARGESECS, but unfortunately, it was added as a 2-byte value at offset 0x01E.  DOS 3.31 decided
- * to make both HIDDENSECS and LARGESECS 4-byte values, which meant that LARGESECS had to move from 0x01E to 0x020.
- */
-DiskInfo.BPB = {
-    OPCODE:         0x000,      // 1 byte for a JMP opcode, followed by a 1 or 2-byte offset (or CPUx86.OPCODE.CLD for BASIC-DOS boot sector)
-    BEGIN:          0x003,      //
-    OEM:            0x003,      // 8 bytes
-    SECBYTES:       0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
-    CLUSSECS:       0x00D,      // 1 byte: sectors per cluster (eg, 1)
-    RESSECS:        0x00E,      // 2 bytes: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (eg, 1)
-    FATS:           0x010,      // 1 byte: FAT copies (eg, 2)
-    DIRENTS:        0x011,      // 2 bytes: root directory entries (eg, 0x40 or 64) 0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
-    DISKSECS:       0x013,      // 2 bytes: number of sectors (eg, 0x140 or 320); if zero, refer to LARGESECS
-    MEDIA:          0x015,      // 1 byte: media ID (see DiskInfo.FAT.MEDIA_*); should also match the first byte of the FAT (aka FAT ID)
-    FATSECS:        0x016,      // 2 bytes: sectors per FAT (eg, 1)
-    TRACKSECS:      0x018,      // 2 bytes: sectors per track (eg, 8)
-    DRIVEHEADS:     0x01A,      // 2 bytes: number of heads (eg, 1)
-    HIDDENSECS:     0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (0 for non-partitioned media)
-    BOOTDRIVE:      0x01E,      // 1 byte (DOS 2.x): BIOS boot drive # (eg, 0x00 or 0x80)
-    BOOTHEAD:       0x01F,      // 1 byte (DOS 2.x): BIOS boot head # (0-based)
-    /*
-     * NOTE: DOS 2.0 also stores the number of sectors in the BIOS file in the byte at offset 0x020 (LARGESECS), followed
-     * by a custom 11-byte Diskette Parameter Table (DPT) at offsets 0x021 through 0x0x2B, which it promptly points the DPT
-     * vector 0x1E (0:0078h) to.
-     */
-    LARGESECS:      0x020,      // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
-    END:            0x024,      // end of standard BPB
-    /*
-     * The rest of these definitions are part of our extended (BASIC-DOS) BPB.  They are not part of a standard DOS BPB.
-     *
-     * Although, coincidentally, DOS 4.x DID begin storing the boot drive in the same location as our DRIVE field.  It seems
-     * DOS couldn't make up its mind what to do with that byte: DOS 2.x through 3.1 stored it at 0x01E (BOOTDRIVE), DOS 3.2 and
-     * 3.3 stored it at 0x1FD, and DOS 4.x stored it at 0x024).
-     */
-    DRIVE:          0x24,       // 1 byte: drive # (eg, 0x00 or 0x80)
-    CYLSECS:        0x25,       // 2 bytes: sectors per cylinder
-    LBAROOT:        0x27,       // 2 bytes: LBA of 1st root dir sector
-    LBADATA:        0x29,       // 2 bytes: LBA of 1st data sector
-    ENDEX:          0x2B        // end of extended BPB
-};
-
-/*
- * Common (supported) diskette geometries.
- *
- * Each entry in GEOMETRIES is an array of values in "CHS" order:
- *
- *      [# cylinders, # heads, # sectors/track, # bytes/sector, media ID]
- *
- * If the 4th value is omitted, the sector size is assumed to be 512.  The order of these "geometric" values mirrors
- * the structure of our JSON-encoded disk images, which consist of an array of cylinders, each of which is an array of
- * heads, each of which is an array of sector objects.
- */
-DiskInfo.GEOMETRIES = {
-    163840:  [40,1, 8,512,0xFE],    // media ID 0xFE: 40 cylinders, 1 head (single-sided),   8 sectors/track, ( 320 total sectors x 512 bytes/sector ==  163840)
-    184320:  [40,1, 9,512,0xFC],    // media ID 0xFC: 40 cylinders, 1 head (single-sided),   9 sectors/track, ( 360 total sectors x 512 bytes/sector ==  184320)
-    327680:  [40,2, 8,512,0xFF],    // media ID 0xFF: 40 cylinders, 2 heads (double-sided),  8 sectors/track, ( 640 total sectors x 512 bytes/sector ==  327680)
-    368640:  [40,2, 9,512,0xFD],    // media ID 0xFD: 40 cylinders, 2 heads (double-sided),  9 sectors/track, ( 720 total sectors x 512 bytes/sector ==  368640)
-    737280:  [80,2, 9,512,0xF9],    // media ID 0xF9: 80 cylinders, 2 heads (double-sided),  9 sectors/track, (1440 total sectors x 512 bytes/sector ==  737280)
-    1228800: [80,2,15,512,0xF9],    // media ID 0xF9: 80 cylinders, 2 heads (double-sided), 15 sectors/track, (2400 total sectors x 512 bytes/sector == 1228800)
-    1474560: [80,2,18,512,0xF0],    // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 18 sectors/track, (2880 total sectors x 512 bytes/sector == 1474560)
-    2949120: [80,2,36,512,0xF0],    // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 36 sectors/track, (5760 total sectors x 512 bytes/sector == 2949120)
-    /*
-     * The following are some common disk sizes and their CHS values, since missing or bogus MBR and/or BPB values
-     * might mislead us when attempting to determine the exact disk geometry.
-     */
-    10653696:[306, 4, 17],          // PC XT 10Mb hard drive (type 3)
-    21411840:[615, 4, 17],          // PC AT 20Mb hard drive (type 2)
-    /*
-     * Other assorted disk formats, used by DEC and others.
-     * For example, the 256256-byte format was also used on early CP/M and SCP (Seattle Computer Products) systems
-     */
-    256256:  [77,  1, 26, 128],     // RX01 single-platter diskette: 77 tracks, 1 head, 26 sectors/track, 128 bytes/sector, for a total of 256256 bytes
-    1261568: [77,  2, 8, 1024],     // SCP(?) single-platter diskette: 77 tracks, 2 heads, 8 sectors/track, 1024-byte sectors, for a total of 1261568 bytes
-    2494464: [203, 2, 12, 512],     // RK03 single-platter disk cartridge: 203 tracks, 2 heads, 12 sectors/track, 512 bytes/sector, for a total of 2494464 bytes
-    5242880: [256, 2, 40, 256],     // RL01K single-platter disk cartridge: 256 tracks, 2 heads, 40 sectors/track, 256 bytes/sector, for a total of 5242880 bytes
-    10485760:[512, 2, 40, 256]      // RL02K single-platter disk cartridge: 512 tracks, 2 heads, 40 sectors/track, 256 bytes/sector, for a total of 10485760 bytes
-};
-
-/*
- * Media ID (descriptor) bytes for DOS-compatible FAT-formatted disks (stored in the first byte of the FAT)
- */
-DiskInfo.FAT = {
-    MEDIA_160KB:    0xFE,       // 5.25-inch, 1-sided,  8-sector, 40-track
-    MEDIA_180KB:    0xFC,       // 5.25-inch, 1-sided,  9-sector, 40-track
-    MEDIA_320KB:    0xFF,       // 5.25-inch, 2-sided,  8-sector, 40-track
-    MEDIA_360KB:    0xFD,       // 5.25-inch, 2-sided,  9-sector, 40-track
-    MEDIA_720KB:    0xF9,       //  3.5-inch, 2-sided,  9-sector, 80-track
-    MEDIA_1200KB:   0xF9,       //  3.5-inch, 2-sided, 15-sector, 80-track
-    MEDIA_FIXED:    0xF8,       // fixed disk (aka hard drive)
-    MEDIA_1440KB:   0xF0,       //  3.5-inch, 2-sided, 18-sector, 80-track
-    MEDIA_2880KB:   0xF0        //  3.5-inch, 2-sided, 36-sector, 80-track
-};
-
-/*
- * Cluster constants for 12-bit FATs (CLUSNUM_FREE, CLUSNUM_RES and CLUSNUM_MIN are the same for all FATs)
- */
-DiskInfo.FAT12 = {
-    MAX_CLUSTERS:   4084,
-    CLUSNUM_FREE:   0,          // this should NEVER appear in cluster chain (except at the start of an empty chain)
-    CLUSNUM_RES:    1,          // reserved; this should NEVER appear in cluster chain
-    CLUSNUM_MIN:    2,          // smallest valid cluster number
-    CLUSNUM_MAX:    0xFF6,      // largest valid cluster number
-    CLUSNUM_BAD:    0xFF7,      // bad cluster; this should NEVER appear in cluster chain
-    CLUSNUM_EOC:    0xFF8       // end of chain (actually, anything from 0xFF8-0xFFF indicates EOC)
-};
-
-/*
- * Cluster constants for 16-bit FATs (CLUSNUM_FREE, CLUSNUM_RES and CLUSNUM_MIN are the same for all FATs)
- */
-DiskInfo.FAT16 = {
-    MAX_CLUSTERS:   65524,
-    CLUSNUM_FREE:   0,          // this should NEVER appear in cluster chain (except at the start of an empty chain)
-    CLUSNUM_RES:    1,          // reserved; this should NEVER appear in cluster chain
-    CLUSNUM_MIN:    2,          // smallest valid cluster number
-    CLUSNUM_MAX:    0xFFF6,     // largest valid cluster number
-    CLUSNUM_BAD:    0xFFF7,     // bad cluster; this should NEVER appear in cluster chain
-    CLUSNUM_EOC:    0xFFF8      // end of chain (actually, anything from 0xFFF8-0xFFFF indicates EOC)
-};
-
-/*
- * Directory Entry offsets (and assorted constants) in FAT disk images
- *
- * NOTE: Versions of DOS prior to 2.0 used INVALID exclusively to mark available directory entries; any entry marked
- * UNUSED was actually considered USED.  In DOS 2.0 and up, UNUSED was added to indicate that all remaining entries were
- * unused, relieving it from having to initialize the rest of the sectors in the directory cluster(s).  And in fact,
- * you will likely encounter garbage in subsequent directory sectors if you read beyond the first UNUSED entry.
- *
- * For more details on MODTIME and MODDATE, see buildDateTime().
- */
-DiskInfo.DIRENT = {
-    NAME:           0x00,       // 8 bytes
-    EXT:            0x08,       // 3 bytes
-    ATTR:           0x0B,       // 1 byte
-    MODTIME:        0x16,       // 2 bytes: bits 15-11 is hour (0-31), bits 10-5 is minute (0-63), bits 4-0 is second/2 (0-31)
-    MODDATE:        0x18,       // 2 bytes: bits 15-9 is year (0 for 1980, 127 for 2107), bits 8-5 is month (1-12), bits 4-0 is day (1-31)
-    CLUSTER:        0x1A,       // 2 bytes
-    SIZE:           0x1C,       // 4 bytes (typically zero for subdirectories)
-    LENGTH:         0x20,       // 32 bytes total
-    UNUSED:         0x00,       // indicates this and all subsequent directory entries are unused
-    INVALID:        0xE5        // indicates this directory entry is unused
-};
-
-/*
- * Possible values for DIRENT.ATTR
- */
-DiskInfo.ATTR = {
-    READONLY:       0x01,       // PC DOS 2.0 and up
-    HIDDEN:         0x02,
-    SYSTEM:         0x04,
-    VOLUME:         0x08,       // PC DOS 2.0 and up
-    LFN:            0x0f,       // combination used by Windows 95 (MS-DOS 7.0) and up, indicating a long filename (LFN) DIRENT
-    SUBDIR:         0x10,       // PC DOS 2.0 and up
-    ARCHIVE:        0x20,       // PC DOS 2.0 and up
-    METADATA:     0x0100        // for internal use only (used to mark "pseudo" file table entries that list compressed archive contents)
-};
-
-/*
- * The BPBs that buildDiskFromBuffer() currently supports; these BPBs should be in order of smallest/oldest to largest/newest
- * capacity, to help ensure we don't select a disk format larger (or newer) than necessary.
- *
- * The first two entries MUST be the first two diskette formats (160K and 320K) defined by PC DOS 1.0 and 1.1, respectively,
- * and the next two entries MUST be the corresponding extensions defined by PC DOS 2.0 (ie, 180K and 360K), as there's code above
- * that assumes that order when trying to resolve discrepancies between a disk image's actual size and its "formatted" size.
- *
- * Even though original 160K and 320K diskettes did not include any BPBs, any images we generate with those formats DO include
- * BPBs, because 1) it doesn't hurt anything, and 2) it makes the images mountable on modern operating systems.
- *
- * Finally, we've started adding some non-standard BPBs to the end of the table, with the intention of supporting older DOS-like
- * disk images (eg, SCP diskettes created by Seattle Computer Products).  These are distinguished by a ZERO media ID.
- */
-DiskInfo.aDefaultBPBs = [
-  [                             // define BPB for 160Kb diskette
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x31, 0x2E, 0x30,     // "IBM  1.0" (this is a fake OEM signature)
-    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x01,                       // 0x0D: sectors per cluster (1)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0x40, 0x00,                 // 0x11: root directory entries (0x40 or 64)  0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
-    0x40, 0x01,                 // 0x13: number of sectors (0x140 or 320)
-    0xFE,                       // 0x15: media ID (eg, 0xFF: 320Kb, 0xFE: 160Kb, 0xFD: 360Kb, 0xFC: 180Kb)
-    0x01, 0x00,                 // 0x16: sectors per FAT (1)
-    0x08, 0x00,                 // 0x18: sectors per track (8)
-    0x01, 0x00,                 // 0x1A: number of heads (1)
-    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-  [                             // define BPB for 320Kb diskette
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x31, 0x2E, 0x30,     // "IBM  1.0" (this is a fake OEM signature)
-    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x02,                       // 0x0D: sectors per cluster (2)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0x70, 0x00,                 // 0x11: root directory entries (0x70 or 112)  0x70 * 0x20 = 0xE00 (1 sector is 0x200 bytes, total of 7 sectors)
-    0x80, 0x02,                 // 0x13: number of sectors (0x280 or 640)
-    0xFF,                       // 0x15: media ID (eg, 0xFF: 320Kb, 0xFE: 160Kb, 0xFD: 360Kb, 0xFC: 180Kb)
-    0x01, 0x00,                 // 0x16: sectors per FAT (1)
-    0x08, 0x00,                 // 0x18: sectors per track (8)
-    0x02, 0x00,                 // 0x1A: number of heads (2)
-    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-  [                             // define BPB for 180Kb diskette
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (this is a real OEM signature)
-    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x01,                       // 0x0D: sectors per cluster (1)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0x40, 0x00,                 // 0x11: root directory entries (0x40 or 64)  0x40 * 0x20 = 0x800 (1 sector is 0x200 bytes, total of 4 sectors)
-    0x68, 0x01,                 // 0x13: number of sectors (0x168 or 360)
-    0xFC,                       // 0x15: media ID (eg, 0xFF: 320Kb, 0xFE: 160Kb, 0xFD: 360Kb, 0xFC: 180Kb)
-    0x02, 0x00,                 // 0x16: sectors per FAT (2)
-    0x09, 0x00,                 // 0x18: sectors per track (9)
-    0x01, 0x00,                 // 0x1A: number of heads (1)
-    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-  [                             // define BPB for 360Kb diskette
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (this is a real OEM signature)
-    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x02,                       // 0x0D: sectors per cluster (2)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0x70, 0x00,                 // 0x11: root directory entries (0x70 or 112)  0x70 * 0x20 = 0xE00 (1 sector is 0x200 bytes, total of 7 sectors)
-    0xD0, 0x02,                 // 0x13: number of sectors (0x2D0 or 720)
-    0xFD,                       // 0x15: media ID (eg, 0xFF: 320Kb, 0xFE: 160Kb, 0xFD: 360Kb, 0xFC: 180Kb)
-    0x02, 0x00,                 // 0x16: sectors per FAT (2)
-    0x09, 0x00,                 // 0x18: sectors per track (9)
-    0x02, 0x00,                 // 0x1A: number of heads (2)
-    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-  [                             // define BPB for 1.2Mb diskette
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x31, 0x30, 0x2E, 0x30,     // "IBM 10.0" (which I believe was used on IBM OS/2 1.0 diskettes)
-    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x01,                       // 0x0D: sectors per cluster (1)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0xE0, 0x00,                 // 0x11: root directory entries (0xe0 or 224)  0xe0 * 0x20 = 0x1c00 (1 sector is 0x200 bytes, total of 14 sectors)
-    0x60, 0x09,                 // 0x13: number of sectors (0x960 or 2400)
-    0xF9,                       // 0x15: media ID (0xF9 was used for 1228800-byte diskettes, and later for 737280-byte diskettes)
-    0x07, 0x00,                 // 0x16: sectors per FAT (7)
-    0x0f, 0x00,                 // 0x18: sectors per track (15)
-    0x02, 0x00,                 // 0x1A: number of heads (2)
-    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-  [                             // define BPB for 720Kb diskette (2 sector/cluster format more commonly used)
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x35, 0x2E, 0x30,     // "IBM  5.0" (this is a real OEM signature)
-    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x02,                       // 0x0D: sectors per cluster (2)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0x70, 0x00,                 // 0x11: root directory entries (0x70 or 112)  0x70 * 0x20 = 0xE00 (1 sector is 0x200 bytes, total of 7 sectors)
-    0xA0, 0x05,                 // 0x13: number of sectors (0x5A0 or 1440)
-    0xF9,                       // 0x15: media ID
-    0x03, 0x00,                 // 0x16: sectors per FAT (3)
-    0x09, 0x00,                 // 0x18: sectors per track (9)
-    0x02, 0x00,                 // 0x1A: number of heads (2)
-    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-  [                             // define BPB for 720Kb diskette (1 sector/cluster format used by PC DOS 4.01)
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x49, 0x42, 0x4D, 0x20, 0x20, 0x34, 0x2E, 0x30,     // "IBM  4.0" (this is a real OEM signature)
-    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x01,                       // 0x0D: sectors per cluster (1)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0x70, 0x00,                 // 0x11: root directory entries (0x70 or 112)  0x70 * 0x20 = 0xE00 (1 sector is 0x200 bytes, total of 7 sectors)
-    0xA0, 0x05,                 // 0x13: number of sectors (0x5A0 or 1440)
-    0xF9,                       // 0x15: media ID
-    0x05, 0x00,                 // 0x16: sectors per FAT (5)
-    0x09, 0x00,                 // 0x18: sectors per track (9)
-    0x02, 0x00,                 // 0x1A: number of heads (2)
-    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-  [                             // define BPB for 1.44Mb diskette
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
- // 0x4d, 0x53, 0x44, 0x4F, 0x53, 0x35, 0x2E, 0x30,     // "MSDOS5.0" (an actual OEM signature, arbitrarily chosen for use here)
-    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x01,                       // 0x0D: sectors per cluster (1)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0xE0, 0x00,                 // 0x11: root directory entries (0xe0 or 224)  0xe0 * 0x20 = 0x1c00 (1 sector is 0x200 bytes, total of 14 sectors)
-    0x40, 0x0B,                 // 0x13: number of sectors (0xb40 or 2880)
-    0xF0,                       // 0x15: media ID (0xF0 was used for 1474560-byte diskettes)
-    0x09, 0x00,                 // 0x16: sectors per FAT (9)
-    0x12, 0x00,                 // 0x18: sectors per track (18)
-    0x02, 0x00,                 // 0x1A: number of heads (2)
-    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-    /*
-     * Here's some useful background information on a 10Mb PC XT fixed disk, partitioned with a single DOS partition.
-     *
-     * The BPB for a 10Mb "type 3" PC XT hard disk specifies 0x5103 or 20739 for DISKSECS, which is the partition
-     * size in sectors (10,618,368 bytes), whereas total disk size is 20808 sectors (10,653,696 bytes).  The partition
-     * is 69 sectors smaller than the disk because the first sector is reserved for the MBR and 68 sectors (the entire
-     * last cylinder) are reserved for diagnostics, head parking, etc.  This cylinder usage is confirmed by FDISK,
-     * which reports that 305 cylinders (not 306) are assigned to the DOS partition.
-     *
-     * That 69-sector overhead is NOT overhead incurred by the FAT file system.  The FAT overhead is the boot sector
-     * (1), FAT sectors (2 * 8), and root directory sectors (32), for a total of 49 sectors, leaving 20739 - 49 or
-     * 20690 sectors.  Moreover, free space is measured in clusters, not sectors, and the partition uses 8 sectors/cluster,
-     * leaving room for 2586.25 clusters.  Since a fractional cluster is not allowed, another 2 sectors are lost, for
-     * a total of 51 sectors of FAT overhead.  So actual free space is (20739 - 51) * 512, or 10,592,256 bytes -- which
-     * is exactly what is reported as the available space on a freshly formatted 10Mb PC XT fixed disk.
-     *
-     * Some sources on the internet (eg, http://www.wikiwand.com/en/Timeline_of_DOS_operating_systems) claim that the
-     * file system overhead for the XT's 10Mb disk is "50 sectors".  As they explain:
-     *
-     *      "The fixed disk has 10,618,880 bytes of raw space: 305 cylinders (the equivalent of tracks) × 2 platters
-     *      × 2 sides or heads per platter × 17 sectors per track = 20,740 sectors × 512 bytes per sector = 10,618,880
-     *      bytes...."
-     *
-     * and:
-     *
-     *      "With DOS the only partition, the combined overhead is 50 sectors leaving 10,592,256 bytes for user data:
-     *      DOS's FAT is eight sectors (16 sectors for two copies) + 32 sectors for the root directory, room for 512
-     *      directory entries + 2 sectors (one master and one DOS boot sector) = 50 sectors...."
-     *
-     * However, that's incorrect.  First, the disk has 306 cylinders, not 305.  Second, there are TWO overhead values:
-     * the overhead OUTSIDE the partition (69 sectors) and the overhead INSIDE the partition (51 sectors).  They failed
-     * to account for the reserved cylinder in the first calculation and the fractional cluster in the second calculation,
-     * and then they conflated the two values to produce a single (incorrect) result.
-     *
-     * Even if one were to assume that the disk had only 305 cylinders, that would only change the partitioning overhead
-     * to 1 sector; the FAT file system overhead would still be 51 sectors.
-     */
-  [                             // define BPB for 10Mb hard drive
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (WARNING: this signature is REQUIRED for PC DOS 3.x to successfully read a partition using a 12-bit FAT with this BPB)
-    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x08,                       // 0x0D: sectors per cluster (8)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0x00, 0x02,                 // 0x11: root directory entries (0x200 or 512)  0x200 * 0x20 = 0x4000 (1 sector is 0x200 bytes, total of 0x20 or 32 sectors)
-    0x03, 0x51,                 // 0x13: number of sectors (0x5103 or 20739; * 512 bytes/sector = 10,618,368 bytes = 10,369Kb = 10Mb)
-    0xF8,                       // 0x15: media ID (eg, 0xF8: hard drive)
-    0x08, 0x00,                 // 0x16: sectors per FAT (8)
-      //
-      // Wikipedia (http://en.wikipedia.org/wiki/File_Allocation_Table#BIOS_Parameter_Block) implies everything past
-      // this point was introduced post-DOS 2.0.  However, DOS 2.0 merely said they were optional, and in fact, DOS 2.0
-      // FORMAT always initializes the next 3 words.  A 4th word, LARGESECS, was added in DOS 3.20 at offset 0x1E,
-      // and then in DOS 3.31, both HIDDENSECS and LARGESECS were widened from words to dwords.
-      //
-    0x11, 0x00,                 // 0x18: sectors per track (17)
-    0x04, 0x00,                 // 0x1A: number of heads (4)
-      //
-      // NOTE: PC DOS 2.0 stores BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
-      //
-    0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-  [                             // define BPB for 20Mb hard drive
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x49, 0x42, 0x4D, 0x20, 0x20, 0x32, 0x2E, 0x30,     // "IBM  2.0" (WARNING: this signature is REQUIRED for PC DOS 3.x to successfully read a partition using a 12-bit FAT with this BPB)
-    0x00, 0x02,                 // 0x0B: bytes per sector (0x200 or 512)
-    0x10,                       // 0x0D: sectors per cluster (16)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0x00, 0x04,                 // 0x11: root directory entries (0x400 or 1024)  0x400 * 0x20 = 0x8000 (1 sector is 0x200 bytes, total of 0x40 or 64 sectors)
-    0x17, 0xa3,                 // 0x13: number of sectors (0xa317 or 41751; * 512 bytes/sector = 21,376,512 bytes = 20,875.5Kb = 20Mb)
-    0xF8,                       // 0x15: media ID (eg, 0xF8: hard drive)
-    0x08, 0x00,                 // 0x16: sectors per FAT (8)
-      //
-      // Wikipedia (http://en.wikipedia.org/wiki/File_Allocation_Table#BIOS_Parameter_Block) implies everything past
-      // this point was introduced post-DOS 2.0.  However, DOS 2.0 merely said they were optional, and in fact, DOS 2.0
-      // FORMAT always initializes the next 3 words.  A 4th word, LARGESECS, was added in DOS 3.20 at offset 0x1E,
-      // and then in DOS 3.31, both HIDDENSECS and LARGESECS were widened from words to dwords.
-      //
-    0x11, 0x00,                 // 0x18: sectors per track (17)
-    0x04, 0x00,                 // 0x1A: number of heads (4)
-      //
-      // NOTE: PC DOS 2.0 stores BOOTDRIVE and BOOTHEAD at offsets 0x1E and 0x1F (it used only 2 bytes for hidden sectors)
-      //
-    0x01, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-  [                             // define BPB for 256Kb diskette (single-sided, 77 tracks, 26 sectors/track, 128-byte sectors, 256256 total bytes)
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
-    0x80, 0x00,                 // 0x0B: bytes per sector (0x80 or 128)
-    0x04,                       // 0x0D: sectors per cluster (4)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0x44, 0x00,                 // 0x11: root directory entries (0x44 or 68)  0x44 * 0x20 = 0x880 (1 sector is 0x80 bytes, total of 0x11 sectors)
-    0xD2, 0x07,                 // 0x13: number of sectors (0x7D2 or 2002; ie, 77 * 26)
-    0x00,                       // 0x15: media ID (0x00 indicates this is a non-standard format)
-    0x06, 0x00,                 // 0x16: sectors per FAT (6)
-    0x1A, 0x00,                 // 0x18: sectors per track (26)
-    0x01, 0x00,                 // 0x1A: number of heads (1)
-    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ],
-  [                             // define BPB for 1232Kb diskette (double-sided, 77 tracks, 8 sectors/track, 1024-byte sectors, 1261568 total bytes)
-    0xEB, 0xFE, 0x90,           // 0x00: JMP instruction, following by 8-byte OEM signature
-    0x50, 0x43, 0x4A, 0x53, 0x2E, 0x4F, 0x52, 0x47,     // PCJS_OEM
-    0x00, 0x04,                 // 0x0B: bytes per sector (0x400 or 1024)
-    0x01,                       // 0x0D: sectors per cluster (1)
-    0x01, 0x00,                 // 0x0E: reserved sectors; ie, # sectors preceding the first FAT--usually just the boot sector (1)
-    0x02,                       // 0x10: FAT copies (2)
-    0xC0, 0x00,                 // 0x11: root directory entries (0xC0 or 192)  0xC0 * 0x20 = 0x1800 (1 sector is 1024 bytes, total of 6 sectors)
-    0xD0, 0x04,                 // 0x13: number of sectors (0x4D0 or 1232; ie, 2 * 77 * 8)
-    0x00,                       // 0x15: media ID (0x00 indicates this is a non-standard format)
-    0x02, 0x00,                 // 0x16: sectors per FAT (2)
-    0x08, 0x00,                 // 0x18: sectors per track (8)
-    0x02, 0x00,                 // 0x1A: number of heads (2)
-    0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
-  ]
-];
