@@ -1608,20 +1608,38 @@ export default class DiskInfo {
                 minClusters = (typeFAT == 12)? 0 : DiskInfo.FAT12.MAX_CLUSTERS + 1;
                 maxClusters = (typeFAT == 12)? DiskInfo.FAT12.MAX_CLUSTERS : DiskInfo.FAT16.MAX_CLUSTERS;
                 grossClusters = Math.floor(cTotalSectors / cSectorsPerCluster);
+                /*
+                 * We start with the basic estimate of sectors per FAT that DOS 2.x used for FAT12.
+                 */
+                cFATSectors = Math.ceil(Math.ceil(grossClusters * typeFAT / 8) / cbSector);
                 if (driveInfo.verDOS == 3.0 && typeFAT == 16) {
                     /*
-                     * Mimic the somewhat bizarre calculations that DOS 3.0 performs when calculating how many
-                     * sectors a 16-bit FAT should consume.  Heaven forbid that DOS 3.0 should simply honor the
-                     * FATSECS value in the BPB.  You can watch the code starting near 70:14AE (where it's checking
-                     * the BPB OEM signature) and confirm the "sectors per FAT" result near 70:1587.
+                     * Mimic the somewhat unusual calculations that DOS 3.0 introduced when calculating how many
+                     * sectors a 16-bit FAT should consume (instead of simply honoring FATSECS in the BPB).  You
+                     * can watch the code starting near 70:14AE (where it's checking the BPB OEM signature) and
+                     * confirm the "sectors per FAT" result near 70:1587.
+                     *
+                     * Although they look odd at first glance, these calculations aren't really that fundamentally
+                     * different from the DOS 2.x calculation, which becomes clearer when you substitute 16 for
+                     * typeFAT and 512 for cbSector:
+                     *
+                     *      cFATSectors = ((cTotalSectors / cSectorsPerCluster) * 16 / 8) / 512
+                     *  or:
+                     *      cFATSectors = (cTotalSectors / cSectorsPerCluster) / 256
+                     *  or:
+                     *      cFATSectors = cTotalSectors / (cSectorsPerCluster * 256)
+                     *
+                     * the main differences being that the DOS 3.x code shaves reserved and root directory sectors
+                     * from total sectors first, and slightly increases the final divisor by the number of FATs.  No
+                     * doubt that slight divisor increase compensates for the fact this calculation does not account
+                     * for sectors that the FATs themselves consume (and which should have also been deducted from
+                     * total sectors).
                      *
                      * Without this, "pc.js --sys=pcdos:3.0 --drivetype=484:4:17" will fail (later versions work,
-                     * probably because they're actually honoring our BPB).
+                     * presumably because they're actually honoring our BPB).
                      */
-                    let divisor = (cSectorsPerCluster * 256 + 2);
-                    cFATSectors = Math.trunc((cTotalSectors - cReservedSectors - (cRootSectors * 2 - 1) + (divisor - 1)) / divisor);
-                } else {
-                    cFATSectors = Math.ceil(Math.ceil(grossClusters * typeFAT / 8) / cbSector);
+                    let divisor = cSectorsPerCluster * 256 + cFATs;
+                    cFATSectors = Math.ceil((cTotalSectors - cReservedSectors - cRootSectors) / divisor);
                 }
                 /*
                  * This next bit is an experiment, because it turns out a disk with 10948 total sectors (162:4:17)
@@ -1688,10 +1706,10 @@ export default class DiskInfo {
                  * string contains something greater than "3.0".
                  */
                 if (driveInfo.verDOS >= 3.1 || cTotalSectors > 0x7FA8) {
-                    setBoot(DiskInfo.BPB.OEM + 5, 1, 0x33);
-                }
-                if (driveInfo.verDOS >= 3.1) {
-                    setBoot(DiskInfo.BPB.OEM + 7, 1, 0x31);
+                    let verMajor = (driveInfo.verDOS|0) || 2;
+                    let verMinor = (driveInfo.verDOS * 10 % 10) || 0;
+                    setBoot(DiskInfo.BPB.OEM + 5, 1, 0x30 + verMajor);
+                    setBoot(DiskInfo.BPB.OEM + 7, 1, 0x30 + verMinor);
                 }
                 if (this.minDOSVersion < 3.0) this.minDOSVersion = 3.0;
             }
