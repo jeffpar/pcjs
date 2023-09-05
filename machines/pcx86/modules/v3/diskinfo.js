@@ -1696,10 +1696,10 @@ export default class DiskInfo {
                  * the BPB, after which it will calculate that there are too many clusters to fit on a FAT12 volume, so
                  * it will set a FAT16 flag.  The relevant code begin at 70:14AE.
                  *
-                 * MS-DOS 3.30 changes the rules again.  For drives with DISKSECS <= 0x7FA8, DOS will still make
-                 * certain hard-coded assumptions about the formatting (ie, 12-bit FAT, 4K clusters, 512 directory entries,
-                 * etc) UNLESS the OEM string has been bumped even higher (eg, "3.1").  Only then it will honor the values
-                 * in the MBR and BPB.
+                 * DOS versions 3.10 and higher change the rules again.  For drives with DISKSECS <= 0x7FA8, DOS will
+                 * still make certain hard-coded assumptions about the formatting (ie, 12-bit FAT, 4K clusters, 512 directory
+                 * entries, etc) UNLESS the OEM string has been bumped even higher (eg, "3.1").  Only then it will honor
+                 * the values in the MBR and BPB.
                  *
                  * To debug MS-DOS 3.30, set a breakpoint at 70:0FB9, watch it read the MBR, examine the partition table,
                  * read the boot sector, and examine the OEM string.  It will NOT honor a 10Mb drive's BPB unless the OEM

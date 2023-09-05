@@ -150,7 +150,7 @@ it failed to boot for several reasons.
 
 The first problem was one described in this OS/2 Museum [blog post](http://www.os2museum.com/wp/hang-with-early-dos-boot-sector/) from 2011: the boot sector would read `IO.SYS` a track at a time, and if the final sector(s) of `IO.SYS` were located near the beginning of a track instead of the end of that track, the boot sector might read too much data and trash itself.  This problem cropped up more often on disks with large tracks, but clearly it could also occur on disks with only 17 sectors/track.  And even though I was using MS-DOS 3.30, which contained a [fix](https://www.os2museum.com/wp/dos-boot-hang-update/), that fix was only present in the `FORMAT.COM` and `SYS.COM` utilities, *not* in the diskettes' actual boot sector--which is what `pc.js` relies on.
 
-`pc.js` now works around this bug by carefully adjusting the disk image's root directory size, making it large enough to always push the final sectors of `IO.SYS` to the end of a track.
+`pc.js` now works around this bug by carefully adjusting the start of the partition, pushing the final sectors of `IO.SYS` to the end of a track.
 
 However, that wasn't the end of the story.  A second problem occurred when `IO.SYS` examined the Master Boot Record (MBR) and DOS boot sector.  The code would honor the MBR partition type *and* boot sector BPB values *only* if the OEM signature in the BPB contained the string "3.1" or greater.  Otherwise, it would fall back to the assumption that *any* disk with only 32680 (0x7FA8) or fewer sectors *must* be using a 12-bit FAT, 4K clusters, 512 directory entries, etc.
 
