@@ -1560,23 +1560,21 @@ export default class DiskInfo {
                     cSectorsPerCluster = 4;
                 } else if (cTotalSectors <= 32680) {    // 0x7FA8 (16Mb)
                     cSectorsPerCluster = 8;
-                } else {
-                    if (driveInfo.verDOS >= 3.0) {
-                        typeFAT = 16;
-                        if (cTotalSectors <= 262144) {                      // 0x40000 (128Mb)
-                            cSectorsPerCluster = 4;
-                        } else if (cSectorsPerCluster <= 524288) {          // 0x80000 (256Mb)
-                            cSectorsPerCluster = 8;
-                        } else if (cSectorsPerCluster <= 1048576) {         // 0x100000 (512Mb)
-                            cSectorsPerCluster = 16;
-                        } else if (cSectorsPerCluster <= 2097152) {         // 0x200000 (1Gb)
-                            cSectorsPerCluster = 32;
-                        } else /* if (cSectorsPerCluster <= 4194304) */ {   // 0x400000 (2Gb)
-                            cSectorsPerCluster = 64;
-                        }
+                } else if (driveInfo.verDOS >= 3.0) {
+                    typeFAT = 16;
+                    if (cTotalSectors <= 262144) {
+                        cSectorsPerCluster = 4;         // 0x40000 (128Mb)
+                    }else if (cTotalSectors <= 524288) {
+                        cSectorsPerCluster = 8;         // 0x80000 (256Mb)
+                    } else if (cTotalSectors <= 1048576) {
+                        cSectorsPerCluster = 16;        // 0x100000 (512Mb)
+                    } else if (cTotalSectors <= 2097152) {
+                        cSectorsPerCluster = 32;        // 0x200000 (1Gb)
                     } else {
-                        cSectorsPerCluster = 16;
+                        cSectorsPerCluster = 64;        // 0x400000 (2Gb)
                     }
+                } else {
+                    cSectorsPerCluster = 16;
                 }
             }
             if (!driveInfo.rootEntries) {
@@ -1614,6 +1612,7 @@ export default class DiskInfo {
                 minClusters = (typeFAT == 12)? 0 : DiskInfo.FAT12.MAX_CLUSTERS + 1;
                 maxClusters = (typeFAT == 12)? DiskInfo.FAT12.MAX_CLUSTERS : DiskInfo.FAT16.MAX_CLUSTERS;
                 grossClusters = Math.floor(cTotalSectors / cSectorsPerCluster);
+
                 /*
                  * We start with the basic estimate of sectors per FAT that DOS 2.x used for FAT12.
                  */
@@ -1647,6 +1646,7 @@ export default class DiskInfo {
                     let divisor = cSectorsPerCluster * 256 + cFATs;
                     cFATSectors = Math.ceil((cTotalSectors - cReservedSectors - cRootSectors) / divisor);
                 }
+
                 /*
                  * This next bit is an experiment, because it turns out a disk with 10948 total sectors (162:4:17)
                  * and 4K clusters only needs 4 sectors per FAT, not 5.  And yes, that drive geometry actually has
