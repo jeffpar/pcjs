@@ -478,13 +478,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ver",
-        "--sys=pcdos:3.0",
+        "load info",
+        "--sys=pcdos:2.0",
         "--drive=pcjs",
         "--target=1M",
-        "--halt"
+        "--hidden=1948"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/test",
+      "cwd": "${workspaceFolder}/tools/pc/disks/empty",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

@@ -72,6 +72,7 @@ let driveInfo = {
     typeFAT:        0,          // set this to 12 or 16 to request a specific FAT type
     clusterSize:    0,          // set this to a specific cluster size (in bytes) if desired
     rootEntries:    0,          // set this to a specific number of root directory entries if desired
+    hiddenSectors:  0,          // set this to a specific number of hidden sectors if desired
     verDOS:         0,
     trimFAT:        false,
     partitioned:    undefined,
@@ -765,7 +766,7 @@ function getDriveInfo()
             info.sectorsReserved = vol.vbaFAT;
             info.sectorsFAT = (sectorsFAT / info.totalFATs)|0;
             info.sectorsRoot = Math.ceil((info.sizeRoot * 32) / vol.cbSector);
-            info.sectorsTotal = vol.lbaTotal + vol.lbaStart;
+            info.sectorsTotal = vol.lbaTotal;
             info.sectorsData = info.sectorsTotal - info.sectorsReserved - sectorsFAT - info.sectorsRoot;
             info.clusterSize = vol.clusSecs * vol.cbSector;
             info.clustersTotal = vol.clusTotal;
@@ -777,7 +778,7 @@ function getDriveInfo()
             text += sprintf(" %d FAT sectors (x%d), %d root sectors (%d entries)\n", info.sectorsFAT, info.totalFATs, info.sectorsRoot, info.sizeRoot);
             text += sprintf(" %d total sectors, %d data sectors, %d data bytes\n", info.sectorsTotal, info.sectorsData, info.bytesTotal);
             if (fTest) {
-                text += sprintf(" %3.2f usage of final FAT sector\n", info.usageFinalFAT);
+                text += sprintf(" %3.2f% usage of final FAT sector\n", info.usageFinalFAT);
             }
         }
     }
@@ -2779,22 +2780,28 @@ function main(argc, argv)
         }
     }
 
+    let hiddenSectors = removeArg('hidden');
+    if (hiddenSectors) {
+        driveInfo.hiddenSectors = +hiddenSectors || 0;
+    }
+
     if (removeFlag('help')) {
         let optionsMain = {
             "--start=[machine]":        "start machine configuration file",
         };
         let optionsDisk = {
-            "--dir=[directory]":        "set drive local directory (default is " + localDir + ")",
-            "--disk=[image]":           "\tset drive disk image (instead of directory)",
-            "--drive=[controller]":     "set drive controller (eg, XT, AT, COMPAQ)",
-            "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
-            "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
-            "--label=[label]":          "\tset volume label of disk image",
-            "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
+            "--dir=[directory]":        "drive directory (default is " + localDir + ")",
+            "--disk=[image]":           "\tdrive disk image (instead of directory)",
+            "--drive=[controller]":     "drive controller (XT, AT, COMPAQ, or PCJS)",
+            "--drivetype=[value]":      "drive type or C:H:S (eg, 306:4:17)",
+            "--fat=[number]":           "\thard disk FAT type (12 or 16)",
+            "--hidden=[number]":        "additional hidden sectors (default is 0)",
+            "--label=[label]":          "\tvolume label of disk image",
+            "--maxfiles=[number]":      "maximum local files (default is " + maxFiles + ")",
             "--normalize=[boolean]":    "convert text file encoding (default is " + fNormalize + ")",
             "--save=[image]":           "\tsave drive disk image and exit",
             "--sys=[string]":           "\toperating system type (default is " + systemType + ")",
-            "--target=[nK|nM]":         "set target disk size (default is " + ((kbTarget / 1024)|0) + "M)",
+            "--target=[nK|nM]":         "target disk size (default is " + ((kbTarget / 1024)|0) + "M)",
             "--ver=[#.##]":             "\toperating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
@@ -2820,7 +2827,7 @@ function main(argc, argv)
                 printf("\t%s\t%s\n", option, optionGroups[group][option]);
             }
         }
-        printf("\nnotes:\n\t--type can also specify a drive geometry (eg, --type=306:4:17)\n");
+        printf("\nnotes:\n\t--drivetype can also specify a drive geometry (eg, --drivetype=306:4:17)\n");
         printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
         printf("\tAll values should be considered advisory, as it may not be possible to honor them.\n");
         printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, configFile));

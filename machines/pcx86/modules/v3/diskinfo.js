@@ -98,6 +98,7 @@ import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
  * @property {number} typeFAT
  * @property {number} clusterSize
  * @property {number} rootEntries
+ * @property {number} hiddenSectors
  * @property {number} verDOS
  * @property {boolean} trimFAT
  * @property {boolean} partitioned
@@ -1494,8 +1495,13 @@ export default class DiskInfo {
 
             if (driveInfo.partitioned) {
                 bMediaID = 0xF8;
-                cHiddenSectors = 1;     // our hard disk images are always partitioned and always reserve a diagnostic cylinder
+                cHiddenSectors = 1 + (driveInfo.hiddenSectors || 0);
                 cDiagnosticSectors = cHeads * cSectorsPerTrack;
+            }
+
+            if (cTotalSectors <= cHiddenSectors + cDiagnosticSectors) {
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "insufficient sectors (%d total, %d unusable)\n", cTotalSectors, cHiddenSectors + cDiagnosticSectors);
+                return false;
             }
             cTotalSectors -= cHiddenSectors + cDiagnosticSectors;
 
@@ -1754,7 +1760,7 @@ export default class DiskInfo {
              */
             let cFileSectors = 0;
             if (aFileData[0]) {
-                let maxAdjustments = driveInfo.trimFAT? 0 : cSectorsPerTrack;
+                let maxAdjustments = driveInfo.hiddenSectors? 0 : cSectorsPerTrack;
                 cFileSectors = Math.ceil(aFileData[0].size / cbSector);
                 while (maxAdjustments--) {
                     let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
@@ -1896,8 +1902,13 @@ export default class DiskInfo {
             return false;
         }
 
+        if (cbTotal > cbAvail) {
+            this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "file(s) too large (%d bytes total, %d bytes available)\n", cbTotal, cbAvail);
+            return false;
+        }
+
         let abSector, offDisk = 0;
-        let cbDisk = cTotalSectors * cbSector;
+        let cbDisk = (cTotalSectors + cHiddenSectors) * cbSector;
 
         /*
          * If the disk is actually a partition on a larger drive, calculate how much larger the drive data
