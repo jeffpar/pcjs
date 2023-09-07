@@ -23,8 +23,7 @@ Released in 1983 by COMPAQ Computer Corp, this version of MS-DOS reports itself 
 	(C) Copyright COMPAQ Computer Corp. 1982, 83
 	(C) Copyright Microsoft 1981, 82
 
-To learn more about this double-sided 320Kb diskette, see the
-[Directory Listing](#directory-of-compaq-ms-dos-112) and [Boot Sector](#compaq-ms-dos-112-boot-sector) below.
+To learn more about this double-sided 320Kb diskette, see the [Directory Listing](#directory-of-compaq-ms-dos-112) and [Boot Sector](#compaq-ms-dos-112-boot-sector) below.
 
 {% include machine.html id="ibm5150-compaq112" %}
 
@@ -101,5 +100,4 @@ The boot sector of the COMPAQ MS-DOS 1.12 disk image contains the following byte
 	000001e0  00 00 00 00 00 00 00 e7  01 00 00 00 00 00 00 00  |................|
 	000001f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 
-It is identical to the [COMPAQ MS-DOS 1.10 Boot Sector](../1.10/#compaq-ms-dos-110-boot-sector),
-so refer to that page for more information.
+It is identical to the [COMPAQ MS-DOS 1.10 Boot Sector](../1.10/#compaq-ms-dos-110-boot-sector), so refer to that page for more information.

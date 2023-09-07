@@ -18,7 +18,6 @@ Released in 1983 by COMPAQ Computer Corp, this version of MS-DOS reports itself 
 	The COMPAQ Personal Computer DOS
 	Version 1.10
 	
-	
 	(C) Copyright COMPAQ Computer Corp. 1982
 	(C) Copyright Microsoft 1981, 82
 
@@ -374,9 +373,9 @@ mounting it), mount the image as `/Volumes/Untitled`, and then copy the contents
 	open archive/COMPAQ-DOS110B.img
 	cp -pr /Volumes/Untitled Disk
 
-{% include gallery/documents.html %}
+### COMPAQ MS-DOS 1.10 Rev E
 
-### Directory of COMPAQ MS-DOS 1.10 Rev E
+I also had a disk labeled "COMPAQ Personal Computer DOS Version 1.10 Rev E", but the entire disk was identical to [Version 1.11](../1.11/), so either the label was a misprint or (more likely) whoever owned the disk before me overwrote it with version 1.11.  So I have removed the "1.10 Rev E" disk image from the PCjs library until a genuine copy turns up.
 
      Volume in drive A has no label
      Directory of A:\

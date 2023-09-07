@@ -24,8 +24,7 @@ Released in 1985 by COMPAQ Computer Corp, this version of MS-DOS displays the fo
 	(C) Copyright COMPAQ Computer Corp. 1982, 1983, 1984, 1985
 	(C) Copyright Microsoft Corp. 1981, 1982, 1983, 1984, 1985
 
-[Directory Listings](#directory-of-compaq-ms-dos-300-disk-1) of the distribution diskettes are provided below.
-Thanks (again) to the [OS/2 Museum](http://www.os2museum.com/) for sharing these disks with us.
+[Directory Listings](#directory-of-compaq-ms-dos-300-disk-1) of the distribution diskettes are provided below.  Thanks (again) to the [OS/2 Museum](http://www.os2museum.com/) for sharing these disks with us.
 
 {% include machine.html id="ibm5170-compaq300" %}
 

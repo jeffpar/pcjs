@@ -25,12 +25,8 @@
       "vendor": "compaq",
       "product": "compaq-dos",
       "versions": {
-        "1.10B": {
+        "1.10": {
           "disk": "COMPAQ-DOS110B",
-          "files": ["IOSYS.COM", "MSDOS.COM", "COMMAND.COM"]
-        },
-        "1.10E": {
-          "disk": "COMPAQ-DOS110E",
           "files": ["IOSYS.COM", "MSDOS.COM", "COMMAND.COM"]
         },
         "1.11": {
@@ -44,7 +40,11 @@
         "2.11": "COMPAQ-DOS211",
         "2.12": "COMPAQ-DOS212",
         "3.00": "COMPAQ-DOS300-DISK1",
-        "3.10": "COMPAQ-DOS310-DISK1",
+        "3.10": "COMPAQ-DOS310-19850930-DISK1",
+        "3.10B": "COMPAQ-DOS310-PERSONAL",
+        "3.10C": "COMPAQ-DOS310-19860327-DISK1",
+        "3.10D": "COMPAQ-DOS310-19861031-DISK1",
+        "3.20": "COMPAQ-DOS320A-DISK1",
         "3.31": "COMPAQ-DOS331-DISK2",
         "3.31G": "COMPAQ-DOS331-REVG-DISK1"
       },
