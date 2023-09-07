@@ -7,17 +7,19 @@ redirect_from: /machines/pcx86/modules/bin/
 
 This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
 
-### Starting Machines from the Command-Line
+### Basic Usage
 
-Start a JSON machine configuration file, such as [ibm5150.json](ibm5150.json) or [compaq386.json](compaq386.json), with the utility's `start` command, either interactively or with the `--start` command-line argument.
+The format of a `pc.js` command (as `--help` will also tell you) is:
 
-For example:
+    [node] pc.js [machine file] [local directory] [DOS command] [options]
 
-	pc.js --start=ibm5150
+The first argument is the name of PCjs machine configuration files, such as [ibm5160.json](ibm5160.json) or [ibm5170.xml](ibm5170.xml), and the second is the name of a folder (eg, `empty`) containing files to copy to the machine's hard disk:
+
+	% pc.js ibm5150 empty
 
 or, if your operating system doesn't automatically associate `.js` files with [Node](https://nodejs.org/en):
 
-	node pc.js --start=ibm5150
+	% node pc.js ibm5150 empty
 
 > NOTE: On Windows, the first time you attempt to run a `.js` file from the command-line, Windows may prompt you to associate a program with it (eg, "C:\Program Files\nodejs\node.exe"), and while this will eliminate the need to type `node`, the association may not automatically pass along any command-line arguments.
 > 
@@ -25,56 +27,21 @@ or, if your operating system doesn't automatically associate `.js` files with [N
 > 
 >     "C:\Program Files\nodejs\node.exe" "%1" %*
 
-If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  You can also omit the `--start=` option if the name of the JSON file doesn't conflict with another command or program name:
+For "bare" machine names, `pc.js` looks for a JSON or XML file in its own `/tools/pc` folder; otherwise, you can provide a full path or even the name of a file on the PCjs server; eg:
 
-	pc.js ibm5150
+	% pc.js https://www.pcjs.org/machines/dec/pdp11/1120/basic/debugger/machine.xml
 
-Starting [ibm5150.json](ibm5150.json) should produce the following output:
+Alternatively, you use `--start` anywhere on the command-line to specify a machine, as in:
 
-    pc.js v3.00
-    Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
-    Options: --start=ibm5150
-    Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
+    % pc.js empty --start=ibm5160
+    [Press CTRL-D to enter command mode]
+    C>
 
-After the machine finishes booting (about 10 seconds), you should see the following output:
+After the machine finishes booting (about 5 seconds), you should see the familiar DOS "C>" prompt.
 
-    Current date is Tue  1-01-1980
-    Enter new date: 
-
-You can begin interacting with the machine OR you can press CTRL-D to enter the PCjs debugger.  For example, if you'd like to dump the machine's video buffer, press CTRL-D and type `D B000:0`:
-
-    Enter new date: stopped (326282712 cycles, 68534 ms, 4760888 hz)
-    AX=0091 BX=0165 CX=0586 DX=007F SP=0BAA BP=0535 SI=0140 DI=01AA 
-    SS=00DB DS=0070 ES=00DB PS=F246 V0 D0 I1 T0 S0 Z1 A0 P1 C0 
-    &0070:0125 CB               RETF    
-    >> D B000:0  
-    &B000:0000  43 07 75 07 72 07 72 07-65 07 6E 07 74 07 20 07  C.u.r.r.e.n.t. .
-    &B000:0010  64 07 61 07 74 07 65 07-20 07 69 07 73 07 20 07  d.a.t.e. .i.s. .
-    &B000:0020  54 07 75 07 65 07 20 07-20 07 31 07 2D 07 30 07  T.u.e. . .1.-.0.
-    &B000:0030  31 07 2D 07 31 07 39 07-38 07 30 07 20 07 20 07  1.-.1.9.8.0. . .
-    &B000:0040  20 07 20 07 20 07 20 07-20 07 20 07 20 07 20 07   . . . . . . . .
-    &B000:0050  20 07 20 07 20 07 20 07-20 07 20 07 20 07 20 07   . . . . . . . .
-    &B000:0060  20 07 20 07 20 07 20 07-20 07 20 07 20 07 20 07   . . . . . . . .
-    &B000:0070  20 07 20 07 20 07 20 07-20 07 20 07 20 07 20 07   . . . . . . . .
-    >> 
-
-To destroy the machine, type `quit` (or press CTRL-C) at the debugger prompt.
-
-[pc.js](https://github.com/jeffpar/pcjs/tree/master/tools/pc) is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically start any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` and `pdp11` machines so far.
+To destroy the machine, type `quit` at the DOS prompt, or press CTRL-D to enter the PCjs debugger.  From there, you can inspect the machine with a variety of debugger commands ("?" will give you a list), or you can press CTRL-C to terminate `pc.js`.
 
 This utility is very much a "work-in-progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
-
-### Support for XML Machine Files
-
-Limited support for XML-based machines now exists; eg:
-
-    pc.js --start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
-
-starts the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
-
-Here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/panel/debugger/machine.xml):
-
-    pc.js --start=/machines/dec/pdp11/1170/panel/debugger/machine.xml
 
 ### Accessing Local Files from MS-DOS
 

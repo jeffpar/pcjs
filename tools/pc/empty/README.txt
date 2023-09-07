@@ -1,0 +1,1 @@
+A conveniently empty folder.

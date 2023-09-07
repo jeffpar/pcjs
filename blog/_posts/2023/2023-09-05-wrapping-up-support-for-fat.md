@@ -370,7 +370,7 @@ And the machine "crashes" (well, it executes a suspicious instruction at 17D:415
 
 It turns out this happened because I put "IBM  3.0" in the BPB, which seemed logical, since "IBM  2.0" would imply that PC DOS 2.x formatted the disk, but since the disk was using FAT16, it couldn't have.  And yet, ironically, by putting the "old" OEM signature in the BPB, PC DOS 3.00 honors the BPB values, and then later notices that "total clusters" is greater than 4085, so it marks the volume as FAT16 after all, and life is good.
 
-Here's the code where PC DOS 3.00 inspects the MBR and then BPB in the boot sector.  It appears that the code originally intended to honor a BPB with an "IBM  3.0" signature, but a mistake in the code made that impossible.  Again, I've sprinkled my own comments throughout the disassembled code to help make it more readable:
+Here's the code where PC DOS 3.00 inspects the MBR and then the BPB in the boot sector.  It appears that the code originally intended to honor a BPB with an "IBM  3.0" signature, but a mistake in the code made that impossible.  Again, I've sprinkled my own comments throughout the disassembled code to help make it more readable:
 
     &0070:1438 BBC203           MOV      BX,03C2            ; BX -> partition table entry + 4
     &0070:143B 26803F01         CMP      ES:[BX],01         ; type 1? (FAT12)
@@ -457,7 +457,7 @@ Here's the code where PC DOS 3.00 inspects the MBR and then BPB in the boot sect
     ; This code is executed ONLY if the OEM signature contained "IBM  2.0" (well, technically, the
     ; previous code didn't care what came before the "2"; normally it's a space but it could be anything).
     ;
-    ; Anyway, this is the only code here honors the BPB values.
+    ; Anyway, this is the only code that actually honors the BPB values.
     ;
     &0070:14E7 26A11300         MOV      AX,ES:[0013]       ; AX = total sectors
     &0070:14EB 48               DEC      AX                 ; subtract 1 (assumes reserved sectors == 1?)
