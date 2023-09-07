@@ -1288,7 +1288,7 @@ function getSystemDisk(type, version)
     let system = configJSON['systems']?.[type];
     if (system && system.versions) {
         let verNumber = sprintf("%.2f", +parseFloat(version));
-        let versionInfo = system.versions[version] || system.versions[verNumber];
+        let versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
         if (versionInfo) {
             let sSystemPath = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + verNumber + "/";
             if (typeof versionInfo == "string") {
@@ -1316,7 +1316,7 @@ function getSystemFiles(type, version)
     let system = configJSON['systems']?.[type];
     if (system && system.versions) {
         let verNumber = sprintf("%.2f", +parseFloat(version));
-        let versionInfo = system.versions[version] || system.versions[verNumber];
+        let versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
         if (versionInfo) {
             if (typeof versionInfo == "string") {
                 aSystemFiles = system.files;
@@ -1401,7 +1401,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
     driveInfo.files = [];
     driveInfo.verDOS = verDOS;
     driveInfo.bootDrive = bootDrive;
-    let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
+    let attrHidden = verDOSMajor > 2 && !fBare? DiskInfo.ATTR.HIDDEN : 0;
     let aSystemFiles = getSystemFiles(systemType, systemVersion);
     for (let name of aSystemFiles) {
         let desc = diSystem.findFile(name);
@@ -2100,7 +2100,7 @@ function loadDiskette(sDrive, aTokens)
                  * NOTE: If you want the base filename to end with "ARC", (eg, "ARC.EXE" or "LHARC.EXE" but not "SEARCH.EXE"),
                  * then use a period preceded by a backslash:
                  *
-                 *      load a: --file "arc\.(com|exe"
+                 *      load a: --file "arc\.(com|exe)"
                  */
                 token = token.replace(/^"([^"]*)"$/, '$1').replace(/,/g, '|');
                 switch (criteria) {

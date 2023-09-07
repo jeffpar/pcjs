@@ -470,6 +470,7 @@
     "discontiguous",
     "DISHRQ",
     "diskapi",
+    "DISKCOMP",
     "DISKCOPY",
     "DISKDATA",
     "diskdump",

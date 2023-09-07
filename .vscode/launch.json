@@ -478,11 +478,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "load info",
-        "--sys=pcdos:2.0",
-        "--drive=pcjs",
-        "--target=1M",
-        "--hidden=1948"
+        "--sys=compaq",
+        "--ver=3.10e"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/empty",
       "stopOnEntry": false,

@@ -11,28 +11,30 @@ machines:
     config: /machines/pcx86/compaq/deskpro386/ega/2048kb/machine.xml
     autoMount:
       A:
-        name: COMPAQ MS-DOS 3.10 (Disk 1)
+        name: COMPAQ MS-DOS 3.10 (1985-09 Disk 1)
       B:
-        name: COMPAQ MS-DOS 3.10 (Disk 2)
+        name: COMPAQ MS-DOS 3.10 (1985-09 Disk 2)
     autoStart: true
+    autoType: \r\r
 ---
 
-This directory contains two different releases of COMPAQ MS-DOS 3.10:
+This directory contains *four* different variations of COMPAQ MS-DOS 3.10:
 
-  - [COMPAQ MS-DOS 3.10 (dated 10-31-86)](#compaq-ms-dos-310-10-31-86)
-  - [COMPAQ MS-DOS 3.10 (dated 12-17-85)](#compaq-ms-dos-310-12-17-85)
+  - [COMPAQ MS-DOS 3.10 (1985-09)](#directory-of-compaq-ms-dos-310-1985-09-disk-1)
+  - [COMPAQ MS-DOS 3.10 (1986-03)](#directory-of-compaq-ms-dos-310-1986-03-disk-1)
+  - [COMPAQ MS-DOS 3.10 (1986-10)](#directory-of-compaq-ms-dos-310-1986-10-disk-1)
 
-However, the older release is not a distribution copy.  It is provided for historical interest only.
+including a December 1985 disk image from the PCjs library (it is not a distribution copy and is provided for historical interest only):
 
-All COMPAQ Supplemental User Programs, as well as diagnostics and setup utilities, are now filed under
-`COMPAQ Diagnostics`.  The earliest known version of `CEMM` can be found on the
-[COMPAQ DeskPro 386 (1986)](/software/pcx86/diag/compaq/1986/) diskette.
+  - [COMPAQ MS-DOS 3.10 (1985-12)](#compaq-ms-dos-310-1985-12)
+
+All COMPAQ Supplemental User Programs, as well as diagnostics and setup utilities, are now filed under `COMPAQ Diagnostics`.  The earliest known version of `CEMM` can be found on the [COMPAQ DeskPro 386 (1986)](/software/pcx86/diag/compaq/1986/) diskette.
 
 {% include machine.html id="deskpro386" %}
 
-### COMPAQ MS-DOS 3.10 (10-31-86)
+### COMPAQ MS-DOS 3.10
 
-Released in 1986 by COMPAQ Computer Corp, this version of MS-DOS displays the following messages on boot:
+Released in 1985 by COMPAQ Computer Corp, this version of MS-DOS displays the following messages on boot:
 
 	The COMPAQ Personal Computer MS-DOS
 	Version 3.10
@@ -40,9 +42,134 @@ Released in 1986 by COMPAQ Computer Corp, this version of MS-DOS displays the fo
 	(C) Copyright COMPAQ Computer Corp. 1982,83,84,85
 	(C) Copyright Microsoft Corp. 1982,82,83,84,85
 
-Directory listings of the two 360Kb distribution diskettes are provided below.
+Directory listings of the distribution diskettes are provided below.
 
-### Directory of COMPAQ MS-DOS 3.10 (Disk 1)
+### Directory of COMPAQ MS-DOS 3.10 (1985-09 Disk 1)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    IBMBIO   COM*     9728   9-30-85  12:00p
+    IBMDOS   COM*    27760   9-30-85  12:00p
+    COMMAND  COM     23210   9-30-85  12:00p
+    VDISK    SYS      2926   9-30-85  12:00p
+    ANSI     SYS      1593   9-30-85  12:00p
+    ENHDISK  SYS      1569   9-30-85  12:00p
+    CLOCK    SYS      1458   9-30-85  12:00p
+    FORMAT   COM      8987   9-30-85  12:00p
+    CHKDSK   COM      9435   9-30-85  12:00p
+    SYS      COM      3823   9-30-85  12:00p
+    DISKCOMP COM      2897   9-30-85  12:00p
+    DISKCOPY COM      3006   9-30-85  12:00p
+    COMP     COM      2470   9-30-85  12:00p
+    MODE     COM      4180   9-30-85  12:00p
+    FDISK    COM      7200   9-30-85  12:00p
+    BACKUP   COM      5465   9-30-85  12:00p
+    RESTORE  COM      5247   9-30-85  12:00p
+    ASSIGN   COM      1509   9-30-85  12:00p
+    SORT     EXE      1664   9-30-85  12:00p
+    FIND     EXE      6403   9-30-85  12:00p
+    MORE     COM       282   9-30-85  12:00p
+    PRINT    COM      8291   9-30-85  12:00p
+    TREE     COM      1756   9-30-85  12:00p
+    LABEL    COM      1239   9-30-85  12:00p
+    BASIC    COM      1175   9-30-85  12:00p
+    BASICA   COM      1173   9-30-85  12:00p
+    BASICA   EXE     66576   9-30-85  12:00p
+    GRAPHICS COM      3048   9-30-85  12:00p
+    EDLIN    COM      7261   9-30-85  12:00p
+    SHARE    EXE      8304   9-30-85  12:00p
+    ATTRIB   EXE     15091   9-30-85  12:00p
+    SELECT   COM      1714   9-30-85  12:00p
+    KEYBGR   COM      8085   9-30-85  12:00p
+    KEYBFR   COM      8157   9-30-85  12:00p
+    KEYBUK   COM      7551   9-30-85  12:00p
+    KEYBIT   COM      7770   9-30-85  12:00p
+    KEYBSP   COM      8149   9-30-85  12:00p
+    GRAFTABL COM      1130   9-30-85  12:00p
+    DISKINIT COM      9168   9-30-85  12:00p
+           39 file(s)     296450 bytes
+                           45056 bytes free
+
+### Directory of COMPAQ MS-DOS 3.10 (1985-09 Disk 2)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    SETCLOCK COM      2771   9-30-85  12:00p
+    TAPE     EXE     27992   9-30-85  12:00p
+    BASICA   COM      1173   9-30-85  12:00p
+    SUBST    EXE     16611   9-30-85  12:00p
+    JOIN     EXE     15971   9-30-85  12:00p
+    EXE2BIN  EXE      2816   9-30-85  12:00p
+    LINK     EXE     38144   9-30-85  12:00p
+    DEBUG    COM     15552   9-30-85  12:00p
+    RECOVER  COM      4226   9-30-85  12:00p
+    CMPQADAP COM     21940   9-30-85  12:00p
+    GRAFTABL COM      1130   9-30-85  12:00p
+    DEMO     BAT        14   9-30-85  12:00p
+    DEMO     BAS      6146   9-30-85  12:00p
+    DEMO1    BAS     15611   9-30-85  12:00p
+    DEMO2    BAS     15629   9-30-85  12:00p
+    DEMO3    BAS     25625   9-30-85  12:00p
+    USA      DAT     16128   9-30-85  12:00p
+    EUROPE   DAT     16008   9-30-85  12:00p
+    INTEREST BAS       384   9-30-85  12:00p
+    WORDS             1306   9-30-85  12:00p
+           20 file(s)     245177 bytes
+                          103424 bytes free
+
+### Directory of COMPAQ MS-DOS 3.10 (1986-03 Disk 1)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    IBMBIO   COM*     9728   3-27-86  12:00p
+    IBMDOS   COM*    27760   3-27-86  12:00p
+    COMMAND  COM     23210   3-27-86  12:00p
+    VDISK    SYS      2926   3-27-86  12:00p
+    ANSI     SYS      1631   3-27-86  12:00p
+    ENHDISK  SYS      1569   3-27-86  12:00p
+    CLOCK    SYS      1462   3-27-86  12:00p
+    FORMAT   COM      8987   3-27-86  12:00p
+    CHKDSK   COM      9435   3-27-86  12:00p
+    SYS      COM      3823   3-27-86  12:00p
+    DISKCOMP COM      2897   3-27-86  12:00p
+    DISKCOPY COM      3006   3-27-86  12:00p
+    COMP     COM      2470   3-27-86  12:00p
+    MODE     COM      4180   3-27-86  12:00p
+    FDISK    COM      7200   3-27-86  12:00p
+    BACKUP   COM      5465   3-27-86  12:00p
+    RESTORE  COM      5247   3-27-86  12:00p
+    ASSIGN   COM      1509   3-27-86  12:00p
+    SORT     EXE      1664   3-27-86  12:00p
+    FIND     EXE      6403   3-27-86  12:00p
+    MORE     COM       282   3-27-86  12:00p
+    PRINT    COM      8291   3-27-86  12:00p
+    TREE     COM      1756   3-27-86  12:00p
+    LABEL    COM      1239   3-27-86  12:00p
+    BASIC    COM      1424   3-27-86  12:00p
+    BASICA   COM      1422   3-27-86  12:00p
+    BASICA   EXE     66544   3-27-86  12:00p
+    GRAPHICS COM      3048   3-27-86  12:00p
+    EDLIN    COM      7261   3-27-86  12:00p
+    SHARE    EXE      8304   3-27-86  12:00p
+    SELECT   COM      1714   3-27-86  12:00p
+    KEYBGR   COM      8085   3-27-86  12:00p
+    KEYBFR   COM      8157   3-27-86  12:00p
+    KEYBUK   COM      7551   3-27-86  12:00p
+    KEYBIT   COM      7770   3-27-86  12:00p
+    KEYBSP   COM      8149   3-27-86  12:00p
+    KEYBDA   COM      8613   3-27-86  12:00p
+    KEYBNO   COM      8613   3-27-86  12:00p
+    KEYBSV   COM      8623   3-27-86  12:00p
+    KEYBSU   COM      8623   3-27-86  12:00p
+    GRAFTABL COM      1130   3-27-86  12:00p
+    DISKINIT COM      9179   3-27-86  12:00p
+           42 file(s)     316350 bytes
+                           24576 bytes free
+
+### Directory of COMPAQ MS-DOS 3.10 (1986-10 Disk 1)
 
      Volume in drive A has no label
      Directory of A:\
@@ -88,7 +215,7 @@ Directory listings of the two 360Kb distribution diskettes are provided below.
            38 file(s)     311931 bytes
                            27648 bytes free
 
-### Directory of COMPAQ MS-DOS 3.10 (Disk 2)
+### Directory of COMPAQ MS-DOS 3.10 (1986-10 Disk 2)
 
      Volume in drive A has no label
      Directory of A:\
@@ -148,14 +275,9 @@ Directory listings of the two 360Kb distribution diskettes are provided below.
            18 file(s)     106289 bytes
                           245760 bytes free
 
----
+### COMPAQ MS-DOS 3.10 (1985-12)
 
-COMPAQ MS-DOS 3.10 (12-17-85)
------------------------------
-
-This older 1985 release of COMPAQ MS-DOS 3.10 is from a 1.2Mb disk in our private collection.  Since this disk
-was created for personal use, it also contains files unrelated to COMPAQ MS-DOS 3.10.  A directory listing is provided
-[below](#directory-of-compaq-ms-dos-310-12-17-85).
+This December 1985 release of COMPAQ MS-DOS 3.10 is from a 1.2Mb disk in our private collection.  Since this disk was created for personal use, it also contains files unrelated to COMPAQ MS-DOS 3.10.  A directory listing is provided [below](#directory-of-compaq-ms-dos-310-1985-12m).
 
 This release displays the following messages on boot:
 
@@ -165,8 +287,7 @@ This release displays the following messages on boot:
 	(C) Copyright COMPAQ Computer Corp. 1982,83,84,85
 	(C) Copyright Microsoft Corp. 1982,82,83,84,85
 
-which is *identical* to the newer 1986 release.  And most of the files are identical, so from a MS-DOS functionality
-standpoint, there was no difference between these releases.
+which is *identical* to all the other 3.10 releases.  And most of the files are identical, so from a MS-DOS functionality standpoint, there was no difference between these releases.
 
 Also of interest, this disk contains two COMPAQ ENHDISK drivers:
 
@@ -180,7 +301,7 @@ However, even though the drivers are different, they both display the same messa
 
 The ENHDISK.SYS file dated 08-14-86 is identical to ENHDISK.SYS dated 10-31-86 on the 3.10 distribution disks above.
 
-### Directory of COMPAQ MS-DOS 3.10 (12-17-85)
+### Directory of COMPAQ MS-DOS 3.10 (1985 1.2M)
 
      Volume in drive A has no label
      Directory of A:\
