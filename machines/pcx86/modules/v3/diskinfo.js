@@ -1495,7 +1495,7 @@ export default class DiskInfo {
 
             if (driveInfo.partitioned) {
                 bMediaID = 0xF8;
-                cHiddenSectors = 1 + (driveInfo.hiddenSectors || 0);
+                cHiddenSectors = driveInfo.hiddenSectors || 1;
                 cDiagnosticSectors = cHeads * cSectorsPerTrack;
             }
 
@@ -1747,32 +1747,44 @@ export default class DiskInfo {
              * for the implication that a contemporaneous disk using only 17 sectors per track was safe (it was not).
              *
              * To make matters *slightly* worse, the affected boot sectors didn't accurately calculate the sector size
-             * of the system file correctly; in keeping with the overall "sloppy" approach, it simply divides the file
-             * size by the sector size and then *always* adds 1 (it should have added 1 only if there was a remainder).
-             * However, unless IO.SYS or IBMBIO.COM was an *exact* multiple of 512, this calculation would generally
-             * end up with the correct answer.
+             * of the system file correctly; in keeping with the overall "sloppy" approach, they simply divide the file
+             * size by the sector size and then *always* adds 1 (they should have added 1 only if there was a remainder).
+             * This affects any version of IO.SYS or IBMBIO.COM that is an exact multiple of 512 (such as IBMBIO.COM
+             * from PC DOS 2.00, which is 4608 bytes or 9 sectors; the boot sector will read 10 sectors instead).
              *
              * Having perfect hindsight, we can help the boot sector avoid running into trouble by performing the same
              * sloppy sector size calculation ourselves, dividing it by sectors per track, and ensuring that the remainder
              * matches the number of free sectors in the first data track (and adjusting volume sector usage until it does).
              * As a result, the system file will end at the end of a track, and the boot sector never risks reading too
              * much data.
+             *
+             * Finally, a note about disks with a cluster size of 2 or more sectors: on such disks, the final *cluster*
+             * of IO.SYS/IBMBIO.COM may not end on a track boundary, but that's OK, because the boot sector is only
+             * reading sectors, not clusters.  Any "overhang" is merely wasted cluster space and does not affect us here.
              */
             let cFileSectors = 0;
             if (aFileData[0]) {
                 let maxAdjustments = driveInfo.hiddenSectors? 0 : cSectorsPerTrack;
-                cFileSectors = Math.ceil(aFileData[0].size / cbSector);
+                /*
+                 * This next calculation should have just used Math.ceil(), but we have to be as "broken" as DOS.
+                 */
+                cFileSectors = Math.trunc(aFileData[0].size / cbSector) + 1;
                 while (maxAdjustments--) {
                     let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
-                    let cFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
                     /*
-                     * I used to ALSO break whenever cFileSectors - cFreeSectors < 0, because that meant the file was
-                     * contained entirely within a single track, but that's not sufficient, because if the disk is using
-                     * a large number of sectors/track (eg, 63) AND the file happens to be at the start of the track,
-                     * then a full track (31.5K) will be read, which will trash the boot sector.  We REALLY need to push
-                     * the file to the END of the track, even if it's fully contained within the track.
+                     * I used to calculate the number of free sectors in the first track with free sectors:
+                     *
+                     *      let cFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
+                     *
+                     * and break when cFreeSectors >= cFileSectors, because that meant the file was contained
+                     * entirely within that track, but that's not sufficient, because if the disk is using a large
+                     * number of sectors/track (eg, 63) AND the file happens to be at the start of the track, then
+                     * a full track (31.5K) will be read, which will trash the boot sector.  We REALLY need to push
+                     * the file to the END of the track, even if it's already fully contained within the track.
                      */
-                    if ((cFileSectors - cFreeSectors) % cSectorsPerTrack == 0) break;
+                    if ((cInitSectors + cFileSectors) % cSectorsPerTrack == 0) {
+                        break;
+                    }
                     /*
                      * I used to increase root directory sectors, since we were at least getting some benefit from the
                      * adjustment:
