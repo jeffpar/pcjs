@@ -5,7 +5,7 @@ permalink: /tools/pc/
 redirect_from: /machines/pcx86/modules/bin/
 ---
 
-This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
+This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console, along with an automatically generated hard disk containing all the files in your current (or other specified) directory.
 
 ### Basic Usage
 
@@ -67,25 +67,88 @@ If you omit the machine name, it defaults to `compaq386` (a machine which also s
 
 because all the files in the `/tools/pc` folder won't fit on the 10Mb disk image that `pc.js` builds by default.  Specify a folder (or `cd` to a folder) that contains files you actually want to access from DOS.
 
-To destroy the machine, type `QUIT` at the DOS prompt, or press CTRL-D to enter command mode and access the PCjs debugger.  From there, you can inspect the machine with a variety of debugger commands ("?" will give you a list), or you can press CTRL-C to terminate `pc.js`.
+To destroy the machine, type `quit` at the DOS prompt, or press CTRL-D to enter command mode and access the PCjs debugger.  From there, you can inspect the machine with a variety of debugger commands ("?" will give you a list), or you can press CTRL-C to terminate `pc.js`.
 
 This utility is very much a "work-in-progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
 
-### Accessing Local Files from MS-DOS
+### Customizing the Drive Type
 
-If you run [pc.js](pc.js) with the name of a DOS command or executable in your current directory; eg:
+The IBM PC XT, IBM PC AT, and COMPAQ DeskPro 386 are three examples of machines that supported hard disks, and PCjs includes built-in support for all their respective [Hard Drive Types](/machines/pcx86/ibm/hdc/).  For example, if you want your machine to be an PC AT with a Type 2 hard disk, run:
 
-    % pc.js pkunzip.exe
+    % pc.js ibm5170 --drivetype=2 
+    [Press CTRL-D to enter command mode]
 
-it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc/disks` folder with copies of all the files/folders in your current local directory, then start a [COMPAQ DeskPro 386](compaq386.json) machine with that disk image mounted as drive C, and then run the specified DOS command or executable.
+    C:\>load info
 
-This allows you to run console-based DOS applications on your modern operating system (eg, macOS or Windows), with IBM PC (or in this case, COMPAQ DeskPro 386) compatibility.
+     pcx86 machine ID ibm5170
+     AT drive type 2, CHS 615:4:17, 20.4Mb
+     16-bit FAT, 2048-byte clusters, 10398 clusters
+     82 FAT sectors (x2), 64 root sectors (1024 entries)
+     41752 total sectors, 41523 data sectors, 21295104 data bytes
 
-The experience currently comes with a number of caveats, and there are some important limitations to be aware of, such as limits on the size and number of files you can have in your current directory (the default limit is 10Mb) and the fact that only console-based DOS applications are usable in this environment.
+NOTE: `load info` is a variation of the `load` command (see "Loading Diskettes from the DOS Prompt" below) that displays information about the built-in disk image.
 
-If you modify any files on your local file system, those modifications won't show up inside the machine until you restart `pc.js`.  Similarly, any file modifications inside the machine will not show up on your local file system until you terminate `pc.js`.
+If you don't remember your favorite PC AT drive type, you can just give `pc.js` a target size and let it search the machine's drive table for the closest match:
 
-### Loading Diskettes Into Machines
+    % pc.js ibm5170 --target=30.6M
+    warning: 62 FAT sectors allocated, but only 61 are required
+    [Press CTRL-D to enter command mode]
+
+    C:\>load info
+
+     pcx86 machine ID ibm5170
+     AT drive type 3, CHS 615:6:17, 30.6Mb
+     16-bit FAT, 2048-byte clusters, 15608 clusters
+     124 FAT sectors (x2), 64 root sectors (1024 entries)
+     62628 total sectors, 62315 data sectors, 31965184 data bytes
+
+Note that the drive tables of AT-class machines usually didn't define any drives smaller than 10Mb, and the smallest drive type the PC XT defined was 5Mb, so using `--target` with smaller sizes won't give you smaller drives on those machines.  To do that, you must bypass the machine's drive table by adding `--drive=pcjs` to the command-line.  For example:
+
+    % pc.js "load info" --sys=pcdos --ver=3.0 --drive=pcjs --target=1M
+    [Press CTRL-D to enter command mode]
+
+    C>ECHO OFF
+
+    pcx86 machine ID compaq386
+    PCJS drive type 0, CHS 61:2:17, 1.0Mb
+    12-bit FAT, 1024-byte clusters, 1012 clusters
+    3 FAT sectors (x2), 7 root sectors (112 entries)
+    2040 total sectors, 2026 data sectors, 1036288 data bytes
+
+`pc.js` will calculate a drive geometry that matches your target size as closely as possible (1Mb in this case), and then set up a custom `PCJS` drive type.
+
+Finally, for complete control of a custom drive type, you can choose any drive geometry you want by passing a "cylinders:heads:sectors" (CHS) triplet to the `--drivetype` parameter, and since that implies using a `PCJS` drive, you don't need to include `--drive=pcjs`.
+
+For example:
+
+    % pc.js ibm5170 --drivetype=615:5:17
+    [Press CTRL-D to enter command mode]
+    
+    C:\>load info
+    
+     pcx86 machine ID ibm5170
+     PCJS drive type 0, CHS 615:5:17, 25.5Mb
+     16-bit FAT, 2048-byte clusters, 13003 clusters
+     102 FAT sectors (x2), 64 root sectors (1024 entries)
+     52190 total sectors, 51921 data sectors, 26630144 data bytes
+
+    C:\>chkdsk
+    Volume TEST        created Aug 30, 2023 11:10a
+    
+     26630144 bytes total disk space
+        90112 bytes in 9 hidden files
+        45056 bytes in 22 directories
+      4306944 bytes in 257 user files
+     22188032 bytes available on disk
+    
+       655360 bytes total memory
+       586256 bytes free
+
+Custom drive types work thanks to the [Master Boot Record](https://github.com/jeffpar/pcjs/blob/master/tools/pc/mbr.asm) that I [created](https://www.pcjs.org/blog/2023/09/05/#retro-software-development) specifically for `pc.js`.  It operates exactly like a normal DOS MBR, with the additional ability to install custom drive tables.  And since this is a fully PC-compatible solution, it should work in the "real world" as well -- as long as you don't select a drive geometry that doesn't work with your actual hardware.
+
+One example of a broken machine/drive combination would be any IBM PC XT machine attempting to boot from a drive using something other than 17 sectors/track.  The XT BIOS *does* support custom drive tables, but that support is hard-coded to disks with *only* 17 sectors/track.
+
+### Loading Diskettes from the DOS Prompt
 
 `pc.js` also includes a few special utilities on every disk image it builds, one of which is `LOAD.COM`, which can load PCjs diskettes images into the specified floppy drive:
 
@@ -212,15 +275,15 @@ will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EX
 
 Note that the `load` command is also available from `pc.js` command mode, which you access by pressing CTRL-D.  Type "help" at the `>>` command mode prompt for list of all available commands.
 
-See "[Loading Disks](https://www.pcjs.org/blog/2023/07/15/#loading-disks)" for more examples of the `load` command.
+See "[Loading Diskettes](https://www.pcjs.org/blog/2023/07/15/#loading-diskettes)" in this [blog post](https://www.pcjs.org/blog/2023/07/15/) for more examples of the `load` command.
 
 ### Shutting Down
 
-Another utility that `pc.js` provides is `QUIT.COM`, which makes it easy to shut down the machine.  `QUIT` also supports a switch (`/R`) to reboot the machine instead of shutting it down.
+Another utility that `pc.js` provides is `QUIT.COM`, which makes it easy to shut down the machine.  `QUIT.COM` also supports a switch (`/R`) to reboot the machine instead of shutting it down.
 
 ### More Information
 
-For more discussion and examples of how to use `pc.js`, check out these blog posts:
+For more discussion and examples of how to use `pc.js`, check out these other blog posts:
 
   - [Running DOS Software from the Command-Line](https://www.pcjs.org/blog/2023/07/15/)
   - [Building DOS-Compatible Hard Disks](https://www.pcjs.org/blog/2023/08/10)
