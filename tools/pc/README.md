@@ -210,9 +210,9 @@ will match any file with `PKUNZIP` in the name (eg, `PKUNZIP.COM`, `PKUNZIP.EXE`
 
 will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EXE`, `PKUNZIP2.EXE`).  There is no support for wildcards, since multiple search terms provide largely the same capability.
 
-Note that the `LOAD` command is also available from `pc.js` command mode, which you access by pressing CTRL-D.  Type "help" at the `>>` command mode prompt for list of all available commands.
+Note that the `load` command is also available from `pc.js` command mode, which you access by pressing CTRL-D.  Type "help" at the `>>` command mode prompt for list of all available commands.
 
-See "[Loading Disks](/blog/2023/07/15/#loading-disks)" for more examples of the `LOAD` command.
+See "[Loading Disks](https://www.pcjs.org/blog/2023/07/15/#loading-disks)" for more examples of the `load` command.
 
 ### Shutting Down
 
@@ -222,6 +222,6 @@ Another utility that `pc.js` provides is `QUIT.COM`, which makes it easy to shut
 
 For more discussion and examples of how to use `pc.js`, check out these blog posts:
 
-  - [Running DOS Software from the Command-Line](/blog/2023/07/15/)
-  - [Building DOS-Compatible Hard Disks](/blog/2023/08/10)
-  - [Wrapping Up Support for FAT](/blog/2023/09/05/)
+  - [Running DOS Software from the Command-Line](https://www.pcjs.org/blog/2023/07/15/)
+  - [Building DOS-Compatible Hard Disks](https://www.pcjs.org/blog/2023/08/10)
+  - [Wrapping Up Support for FAT](https://www.pcjs.org/blog/2023/09/05/)
