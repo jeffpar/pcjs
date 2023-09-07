@@ -871,24 +871,41 @@ function checkMachine(sFile)
             sFile = sVerify;
         }
     }
-    if (sFile && !driveOverride) {
+    if (sFile) {
+        let driveCtrl;
+        if (sFile.indexOf("pdp11") >= 0) {
+            machineType = "pdp11";
+        }
         if (config) {
             if (config['hdc']) {
-                driveInfo.driveCtrl = config['hdc']['type'];
+                driveCtrl = config['hdc']['type'];
             }
             if (config['chipset'] && config['chipset']['model'] == "deskpro386") {
-                driveInfo.driveCtrl = "COMPAQ";
+                driveCtrl = "COMPAQ";
             }
         } else {
+            /*
+             * If we can't crack open the config, we'll have to make inferences from the machine filename.
+             */
             if (sFile.indexOf("5160") >= 0) {
-                driveInfo.driveCtrl = "XT";
+                driveCtrl = "XT";
             } else if (sFile.indexOf("5170") >= 0) {
-                driveInfo.driveCtrl = "AT";
+                driveCtrl = "AT";
             } else if (sFile.indexOf("compaq") >= 0) {
-                driveInfo.driveCtrl = "COMPAQ";
-            } else if (sFile.indexOf("pdp11") >= 0) {
-                machineType = "pdp11";
+                driveCtrl = "COMPAQ";
             }
+        }
+        if (fFloppy) {
+            /*
+             * And even if we *can* crack open the config, our configs don't currently tell us the maximum diskette
+             * capacity, so we have to infer that as well.
+             */
+            if (sFile.indexOf("5150") >= 0 || sFile.indexOf("5160") >= 0) {
+                kbTarget = 360;
+            }
+        }
+        if (driveCtrl && !driveOverride) {
+            driveInfo.driveCtrl = driveCtrl;
         }
     }
     return sFile;
@@ -1038,7 +1055,7 @@ function loadMachine(sFile)
                 let disk, name;
                 if (fFloppy) {
                     disk = localDisk;
-                    name = (path.basename(localDir) || "User-defined") + " Diskette";
+                    name = (path.basename(localDir).toUpperCase() || "User-defined") + " Diskette";
                 } else {
                     disk = getSystemDisk(systemType, systemVersion);
                     name = systemType.toUpperCase() + ' ' + sprintf("%.2f", parseFloat(systemVersion));

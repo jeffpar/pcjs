@@ -7,17 +7,19 @@ redirect_from: /machines/pcx86/modules/bin/
 
 This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
 
-### Starting Machines from the Command-Line
+### Basic Usage
 
-Start a JSON machine configuration file, such as [ibm5150.json](ibm5150.json) or [compaq386.json](compaq386.json), with the utility's `start` command, either interactively or with the `--start` command-line argument.
+The format of a `pc.js` command (as `--help` will also tell you) is:
 
-For example:
+    [node] pc.js [machine file] [local directory] [DOS command] [options]
 
-	pc.js --start=ibm5150
+The first argument is the name of a PCjs machine configuration files, such as [ibm5160.json](ibm5160.json) or [ibm5170.xml](ibm5170.xml), and the second is the name of a folder (eg, `empty`) containing files to copy to the machine's hard disk:
 
-or, if your operating system doesn't automatically associate `.js` files with [Node](https://nodejs.org/en):
+	% pc.js ibm5156 empty
 
-	node pc.js --start=ibm5150
+If your operating system doesn't automatically associate `.js` files with [Node](https://nodejs.org/en), then use:
+
+	% node pc.js ibm5160 empty
 
 > NOTE: On Windows, the first time you attempt to run a `.js` file from the command-line, Windows may prompt you to associate a program with it (eg, "C:\Program Files\nodejs\node.exe"), and while this will eliminate the need to type `node`, the association may not automatically pass along any command-line arguments.
 > 
@@ -25,82 +27,71 @@ or, if your operating system doesn't automatically associate `.js` files with [N
 > 
 >     "C:\Program Files\nodejs\node.exe" "%1" %*
 
-If you don't include a full path to the JSON file, `pc.js` will look for the JSON file in the `/tools/pc` folder.  You can also omit the `--start=` option if the name of the JSON file doesn't conflict with another command or program name:
+For "bare" machine names, `pc.js` looks for a JSON or XML file in its own `/tools/pc` folder; otherwise, you can provide a full path or even the name of a file on the PCjs web server, such as:
 
-	pc.js ibm5150
+	% pc.js https://www.pcjs.org/machines/dec/pdp11/1120/basic/debugger/machine.xml
 
-Starting [ibm5150.json](ibm5150.json) should produce the following output:
+Alternatively, you can use `--start` anywhere on the command-line to specify a machine, as in:
 
+    % pc.js empty --start=ibm5160
+    [Press CTRL-D to enter command mode]
+    C>
+
+After the machine finishes booting (about 5 seconds), you should see the familiar DOS "C>" prompt.
+
+Besides a machine name and a directory name, you can also specify a third argument, which is an initial DOS command or program to run:
+
+    % pc.js ibm5160 empty "dir *.*"
+    [Press CTRL-D to enter command mode]
+
+    Volume in drive C is EMPTY      
+    Directory of  C:\
+
+    README   TXT       30   9-07-23   9:24a
+            1 File(s)  10473472 bytes free
+    C>type readme.txt
+    A conveniently empty folder.
+
+    C>type autoexec.bat
+    @ECHO OFF
+    PATH C:\
+    dir *.*
+
+If you omit the machine name, it defaults to `compaq386` (a machine which also starts up faster because it includes a state file that bypasses the power-on tests and floppy boot sequence).  And if you omit the directory name, it defaults to the current directory -- which is why, if you run `pc.js` from the `/tools/pc` folder, you will likely see this error message:
+
+    % pc.js
     pc.js v3.00
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
-    Options: --start=ibm5150
-    Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
+    error: file(s) too large (32536576 bytes total, 10653696 bytes maximum)
+    error: unable to build drive
 
-After the machine finishes booting (about 10 seconds), you should see the following output:
+because all the files in the `/tools/pc` folder won't fit on the 10Mb disk image that `pc.js` builds by default.  Specify a folder (or `cd` to a folder) that contains files you actually want to access from DOS.
 
-    Current date is Tue  1-01-1980
-    Enter new date: 
-
-You can begin interacting with the machine OR you can press CTRL-D to enter the PCjs debugger.  For example, if you'd like to dump the machine's video buffer, press CTRL-D and type `D B000:0`:
-
-    Enter new date: stopped (326282712 cycles, 68534 ms, 4760888 hz)
-    AX=0091 BX=0165 CX=0586 DX=007F SP=0BAA BP=0535 SI=0140 DI=01AA 
-    SS=00DB DS=0070 ES=00DB PS=F246 V0 D0 I1 T0 S0 Z1 A0 P1 C0 
-    &0070:0125 CB               RETF    
-    >> D B000:0  
-    &B000:0000  43 07 75 07 72 07 72 07-65 07 6E 07 74 07 20 07  C.u.r.r.e.n.t. .
-    &B000:0010  64 07 61 07 74 07 65 07-20 07 69 07 73 07 20 07  d.a.t.e. .i.s. .
-    &B000:0020  54 07 75 07 65 07 20 07-20 07 31 07 2D 07 30 07  T.u.e. . .1.-.0.
-    &B000:0030  31 07 2D 07 31 07 39 07-38 07 30 07 20 07 20 07  1.-.1.9.8.0. . .
-    &B000:0040  20 07 20 07 20 07 20 07-20 07 20 07 20 07 20 07   . . . . . . . .
-    &B000:0050  20 07 20 07 20 07 20 07-20 07 20 07 20 07 20 07   . . . . . . . .
-    &B000:0060  20 07 20 07 20 07 20 07-20 07 20 07 20 07 20 07   . . . . . . . .
-    &B000:0070  20 07 20 07 20 07 20 07-20 07 20 07 20 07 20 07   . . . . . . . .
-    >> 
-
-To destroy the machine, type `quit` (or press CTRL-C) at the debugger prompt.
-
-[pc.js](https://github.com/jeffpar/pcjs/tree/master/tools/pc) is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically start any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` and `pdp11` machines so far.
+To destroy the machine, type `QUIT` at the DOS prompt, or press CTRL-D to enter command mode and access the PCjs debugger.  From there, you can inspect the machine with a variety of debugger commands ("?" will give you a list), or you can press CTRL-C to terminate `pc.js`.
 
 This utility is very much a "work-in-progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
-
-### Support for XML Machine Files
-
-Limited support for XML-based machines now exists; eg:
-
-    pc.js --start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
-
-starts the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
-
-Here's another example using a `pdp11` [machine.xml](/machines/dec/pdp11/1170/panel/debugger/machine.xml):
-
-    pc.js --start=/machines/dec/pdp11/1170/panel/debugger/machine.xml
 
 ### Accessing Local Files from MS-DOS
 
 If you run [pc.js](pc.js) with the name of a DOS command or executable in your current directory; eg:
 
-    pc.js pkunzip.exe
+    % pc.js pkunzip.exe
 
 it will automatically build a 10Mb MS-DOS hard disk image in the `/tools/pc/disks` folder with copies of all the files/folders in your current local directory, then start a [COMPAQ DeskPro 386](compaq386.json) machine with that disk image mounted as drive C, and then run the specified DOS command or executable.
 
-This allows you to run console-based DOS applications on your modern operating system (eg, macOS or Windows), with IBM PC (or in this case, COMPAQ DeskPro 386) compatibility.  The experience currently comes with a number of caveats, and there are some important limitations to be aware of, such as limits on the size and number of files you can have in your current directory (the overall limit is currently 10Mb) and the fact that only console-based DOS applications are usable in this environment.
+This allows you to run console-based DOS applications on your modern operating system (eg, macOS or Windows), with IBM PC (or in this case, COMPAQ DeskPro 386) compatibility.
+
+The experience currently comes with a number of caveats, and there are some important limitations to be aware of, such as limits on the size and number of files you can have in your current directory (the default limit is 10Mb) and the fact that only console-based DOS applications are usable in this environment.
 
 If you modify any files on your local file system, those modifications won't show up inside the machine until you restart `pc.js`.  Similarly, any file modifications inside the machine will not show up on your local file system until you terminate `pc.js`.
 
 ### Loading Diskettes Into Machines
 
-Normally, when you run `pc.js`, a machine is started, either explicitly via `--start`, or implicitly by typing the name of a DOS command or program name.  Otherwise, you can start a machine from the pc.js `>>` prompt, using the "start" internal command; eg:
+`pc.js` also includes a few special utilities on every disk image it builds, one of which is `LOAD.COM`, which can load PCjs diskettes images into the specified floppy drive:
 
-    >> start compaq386
+    load a: PC DOS
 
-Once a machine is running, you can access the `>>` prompt by typing **CTRL-D**.  That will stop the machine until you enter the "g" command.  Any command not recognized by `pc.js` is passed to the machine's built-in debugger.  Type "?" to get a list of debugger commands.
-
-The "load" command is used to load PCjs diskettes images into the machine's floppy drives, by including a drive letter, as in:
-
-    >> load a: PC DOS
-
-That command will search for all PCjs diskettes with "PC" and "DOS" in the diskette name and list them by number:
+That command searches for all PCjs diskettes with "PC" and "DOS" in the diskette name and lists them by number:
 
       1: COMPAQ PC DOS 3.20 Support
       2: Jeff's PC DOS 1.00 with MASM
@@ -156,11 +147,11 @@ That command will search for all PCjs diskettes with "PC" and "DOS" in the diske
 
 You can then use a second "load" command to load a diskette by number.  For example, to load "PC DOS 2.00 (Disk 1)":
 
-    >> load a: 6
+    load a: 6
 
 You can also search for disks containing a specific file name:
 
-    >> load a: --file pkunzip.exe
+    load a: --file pkunzip.exe
 
 That command will display the following diskettes:
 
@@ -187,7 +178,7 @@ which represent 18 different copies of PKUNZIP.EXE.  Differences are based on th
 
 Again, to load one of the diskettes listed, specify it by number.  For example, to load the diskette named ""Undocumented Windows", use:
 
-    >> load a: 6
+    load a: 6
 
 If there were other diskettes with an identical copy of that file that weren't initially listed, they will be listed next:
 
@@ -201,20 +192,36 @@ If there were other diskettes with an identical copy of that file that weren't i
 
 If you still want your original selection, use "load a: 1".  You can always give the full diskette name as well:
 
-    >> load a: undocumented windows
+    load a: undocumented windows
 
 The comparison is case-insensitive and the given string need only be a subset of the desired diskette name; however, if the name is not unique, you'll be presented with another list of diskettes to choose from.
 
 Use `--disk` and `--file` to enter a mix of search criteria.  `--disk` is assumed if there are no other criteria, and `--file` is assumed if the string looks like a filename *and* no other criteria has been specified.  For example:
 
-    >> load a: pkunzip.exe
+    load a: pkunzip.exe
 
 is equivalent to `load a: --file pkunzip.exe`, but `--file` can also be useful for casting a wider search net.  For example:
 
-    >> load a: --file pkunzip
+    load a: --file pkunzip
 
 will match any file with `PKUNZIP` in the name (eg, `PKUNZIP.COM`, `PKUNZIP.EXE`), and:
 
-    >> load a: --file pkunzip exe
+    load a: --file pkunzip exe
 
 will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EXE`, `PKUNZIP2.EXE`).  There is no support for wildcards, since multiple search terms provide largely the same capability.
+
+Note that the `load` command is also available from `pc.js` command mode, which you access by pressing CTRL-D.  Type "help" at the `>>` command mode prompt for list of all available commands.
+
+See "[Loading Disks](https://www.pcjs.org/blog/2023/07/15/#loading-disks)" for more examples of the `load` command.
+
+### Shutting Down
+
+Another utility that `pc.js` provides is `QUIT.COM`, which makes it easy to shut down the machine.  `QUIT` also supports a switch (`/R`) to reboot the machine instead of shutting it down.
+
+### More Information
+
+For more discussion and examples of how to use `pc.js`, check out these blog posts:
+
+  - [Running DOS Software from the Command-Line](https://www.pcjs.org/blog/2023/07/15/)
+  - [Building DOS-Compatible Hard Disks](https://www.pcjs.org/blog/2023/08/10)
+  - [Wrapping Up Support for FAT](https://www.pcjs.org/blog/2023/09/05/)
