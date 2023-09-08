@@ -29,7 +29,7 @@ let fBare = false;
 let fDebug = false;
 let fHalt = false;
 let fFloppy = false;
-let fNoFloppy = false;
+let bootSelect = "";
 let fNormalize = true;
 let fTest = false;
 let fVerbose = false;
@@ -37,7 +37,6 @@ let autoStart = false;
 let machineType = "pcx86";
 let systemType = "msdos";
 let systemVersion = "3.30";
-let systemOverride = false;
 let systemMBR = "pcjs.mbr";
 let savedMachine = "compaq386.json";
 let savedState = "state386.json";
@@ -773,10 +772,8 @@ function getDriveInfo()
             info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
             info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
             info.usageFinalFAT = (vol.cbSector - (Math.ceil(vol.clusTotal * info.typeFAT / 8) % vol.cbSector)) / vol.cbSector * 100;
+            text += sprintf(" %d hidden sectors, %d reserved sectors\n", info.sectorsHidden, info.sectorsReserved);
             text += sprintf(" %d-bit FAT, %d-byte clusters, %d clusters\n", info.typeFAT, info.clusterSize, info.clustersTotal);
-            if (fTest) {
-                text += sprintf(" %d hidden sectors, %d reserved sectors\n", info.sectorsHidden, info.sectorsReserved);
-            }
             text += sprintf(" %d FAT sectors (x%d), %d root sectors (%d entries)\n", info.sectorsFAT, info.totalFATs, info.sectorsRoot, info.sizeRoot);
             text += sprintf(" %d total sectors, %d data sectors, %d data bytes\n", info.sectorsTotal, info.sectorsData, info.bytesTotal);
         }
@@ -953,7 +950,6 @@ function loadMachine(sFile)
     let result = "";
     let getFactory = function(config) {
 
-        let removeFloppy = fNoFloppy;
         let typeMachine = config['type'] || (config['machine'] && config['machine']['type']) || machineType;
 
         machine.id = "";
@@ -1027,14 +1023,6 @@ function loadMachine(sFile)
                 };
                 if (driveManifest || !localDir && localDisk) {
                     drives[0]['path'] = localDisk;
-                    /*
-                     * If we built a drive image, we worked hard to make it bootable, so we're going to boot from it
-                     * (ie, remove any boot floppy).  Whereas any prebuilt drive image may or may not be bootable, so
-                     * in that case, use --nofloppy if you want any boot floppy removed.
-                     */
-                    if (driveManifest) {
-                        removeFloppy = true;
-                    }
                 }
                 if (driveOverride) {
                     let type = driveInfo.driveCtrl;
@@ -1048,9 +1036,9 @@ function loadMachine(sFile)
         }
 
         if (config['fdc']) {
-            if (removeFloppy) {
+            if (bootSelect != 'A') {
                 config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
-            } else if (fFloppy || systemOverride) {
+            } else {
                 let disk, name;
                 if (fFloppy) {
                     disk = localDisk;
@@ -1350,7 +1338,7 @@ function getSystemFiles(type, version)
  * Builds a bootable floppy or hard disk image containing all files in the current directory.
  *
  * At present, the image size is defaults to 10Mb (which corresponds to an XT type 3 or AT type 1 drive)
- * and the operating system files default to MS-DOS 3.20.  Use --sys and --ver command-line options to
+ * and the operating system files default to MS-DOS 3.30.  Use --sys and --ver command-line options to
  * override those defaults.  The allowed systems are currently "msdos" and "pcdos", and the allowed versions
  * are any available in the PCjs diskette repo.
  *
@@ -2691,13 +2679,11 @@ function main(argc, argv)
     fBare = removeFlag('bare') || fBare;
     fHalt = removeFlag('halt') || fHalt;
     fFloppy = removeFlag('floppy') || fFloppy;
-    if (!fFloppy) fNoFloppy = removeFlag('nofloppy') || fNoFloppy;
     diskLabel = removeArg('label') || defaults['label'] || diskLabel;
     fNormalize = removeFlag('normalize') || fNormalize;
     localDir = defaults['dir'] || localDir;
 
     machineType = defaults['type'] || machineType;
-    systemOverride = !!(argv['sys'] || argv['ver']);
     systemType = (removeArg('sys', 'string') || defaults['sys'] || systemType).toLowerCase();
     let i = systemType.indexOf(':');
     if (i > 0) {
@@ -2722,6 +2708,7 @@ function main(argc, argv)
         driveInfo.driveCtrl = "FDC";
         driveInfo.partitioned = false;
         driveOverride = true;
+        bootSelect = 'A';
     } else {
         let driveCtrl = removeArg('drive');
         if (driveCtrl) {
@@ -2731,6 +2718,7 @@ function main(argc, argv)
         kbTarget = getTargetValue(defaults['target']);
         maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || maxFiles;
         driveInfo.partitioned = true;
+        bootSelect = (removeArg('boot') || defaults['boot'] || bootSelect).toUpperCase();
     }
 
     kbTarget = getTargetValue(removeArg('target')) || kbTarget;
@@ -2806,6 +2794,7 @@ function main(argc, argv)
             "--start=[machine]":        "start machine configuration file",
         };
         let optionsDisk = {
+            "--boot=[drive]":           "\tselect boot drive (A or C, default is C)",
             "--dir=[directory]":        "use drive directory (default is " + localDir + ")",
             "--disk=[image]":           "\tuse drive disk image (instead of directory)",
             "--drive=[controller]":     "set drive controller (XT, AT, COMPAQ, or PCJS)",
@@ -2827,7 +2816,6 @@ function main(argc, argv)
             "--halt (-h)":              "\thalt machine on startup",
             "--help (-?)":              "\tdisplay command-line usage",
             "--local (-l)":             "\tuse local diskette images",
-            "--nofloppy (-n)":          "\tremove any diskette from drive A:",
             "--test (-t)":              "\tenable test mode (non-interactive)",
             "--verbose (-v)":           "\tenable verbose mode"
         };
@@ -2875,7 +2863,6 @@ main(...pcjslib.getArgs({
     'f': "floppy",
     'h': "halt",
     'l': "local",
-    'n': "nofloppy",
     't': "test",
     'v': "verbose"
 }));
