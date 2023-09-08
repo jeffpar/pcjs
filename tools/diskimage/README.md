@@ -230,6 +230,10 @@ To extract a specific file from a disk image:
 
     diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract=COMMAND.COM
 
+To display the contents of a specific file in a disk image:
+
+    diskimage.js /diskettes/pcx86/sys/dos/ibm/3.00/PCDOS300-DISK2.json --type=VDISK.LST
+
 To extract files from a disk image into a specific directory (eg, tmp):
 
     diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract --extdir=tmp

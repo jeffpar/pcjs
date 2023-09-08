@@ -242,9 +242,9 @@ To confirm this, I tested a drive configuration (162 cylinders, 4 heads, and 17 
 
 Here's how I built it using `pc.js`:
 
-    % pc.js --sys=pcdos --ver=2.00 --drivetype=162:4:17 --test --save=test.img
+    % pc.js --sys=pcdos --ver=2.00 --drivetype=162:4:17 --trim --save=test.img
 
-The undocumented `--test` flag tells `pc.js` to bypass its normal DOS-compatibility rules and build/format the disk with an "optimized" 12-bit FAT, and the `--save` option saves the disk image without starting a machine.  And although DOS 2.00 didn't like it, `test.img` was an otherwise perfectly valid and usable disk image, and `fsck_msdos` on macOS reported no problems.
+The undocumented `--trim` flag tells `pc.js` to bypass its normal DOS-compatibility rules and build/format the disk with an "optimized" 12-bit FAT, and the `--save` option saves the disk image without starting a machine.  And although DOS 2.00 didn't like it, `test.img` was an otherwise perfectly valid and usable disk image, and `fsck_msdos` on macOS reported no problems.
 
 It's understandable that DOS 2.00 would be skeptical of its own BPBs, in part because BPBs were a new feature that probably evolved during the development of DOS 2.00, so they would have been dealing with disks with no BPBs, out-dated BPBs, or even invalid BPBs.  However, perhaps the biggest problem was FDISK, because whenever FDISK created a DOS partition, it would simply update the partition table in the Master Boot Record and then reboot, leaving the partition's boot sector and any BPB it previously contained in place.  And that old BPB might be completely inappropriate.
 

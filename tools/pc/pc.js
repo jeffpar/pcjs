@@ -111,7 +111,6 @@ function setDebugMode(nEvent)
     }
     debugMode = nEvent;
     if (debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
-        if (fTest) exit();
         command = "";
         printf('[' + (commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
         printf("%s> ", prompt);
@@ -775,11 +774,11 @@ function getDriveInfo()
             info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
             info.usageFinalFAT = (vol.cbSector - (Math.ceil(vol.clusTotal * info.typeFAT / 8) % vol.cbSector)) / vol.cbSector * 100;
             text += sprintf(" %d-bit FAT, %d-byte clusters, %d clusters\n", info.typeFAT, info.clusterSize, info.clustersTotal);
+            if (fTest) {
+                text += sprintf(" %d hidden sectors, %d reserved sectors\n", info.sectorsHidden, info.sectorsReserved);
+            }
             text += sprintf(" %d FAT sectors (x%d), %d root sectors (%d entries)\n", info.sectorsFAT, info.totalFATs, info.sectorsRoot, info.sizeRoot);
             text += sprintf(" %d total sectors, %d data sectors, %d data bytes\n", info.sectorsTotal, info.sectorsData, info.bytesTotal);
-            if (fTest) {
-                text += sprintf(" %3.2f% usage of final FAT sector\n", info.usageFinalFAT);
-            }
         }
     }
     return text;
@@ -819,8 +818,8 @@ function sendSerial(b)
 /**
  * checkMachine(sFile)
  *
- * We now allow a machine file to be specified with or without the --load option, with or without a path, and
- * with or without an extension.  If you don't use --load, then it must be the first non-option argument.  If you
+ * We now allow a machine file to be specified with or without the --start option, with or without a path, and
+ * with or without an extension.  If you don't use --start, then it must be the first non-option argument.  If you
  * don't specify a path, then it must either be in the current directory or the pc.js directory (ie, /tools/pc),
  * and if you don't specify an extension, we'll try ".json", ".json5", and ".xml", in that order.
  *
@@ -2669,7 +2668,7 @@ function main(argc, argv)
     fDebug = removeFlag('debug') || fDebug;
     fVerbose = removeFlag('verbose') || fVerbose;
     fTest = removeFlag('test') || fTest;
-    if (fTest) driveInfo.trimFAT = true;
+    if (removeFlag('trim')) driveInfo.trimFAT = true;
 
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
@@ -2807,19 +2806,19 @@ function main(argc, argv)
             "--start=[machine]":        "start machine configuration file",
         };
         let optionsDisk = {
-            "--dir=[directory]":        "drive directory (default is " + localDir + ")",
-            "--disk=[image]":           "\tdrive disk image (instead of directory)",
-            "--drive=[controller]":     "drive controller (XT, AT, COMPAQ, or PCJS)",
-            "--drivetype=[value]":      "drive type or C:H:S (eg, 306:4:17)",
-            "--fat=[number]":           "\thard disk FAT type (12 or 16)",
-            "--hidden=[number]":        "additional hidden sectors (default is 0)",
-            "--label=[label]":          "\tvolume label of disk image",
-            "--maxfiles=[number]":      "maximum local files (default is " + maxFiles + ")",
+            "--dir=[directory]":        "use drive directory (default is " + localDir + ")",
+            "--disk=[image]":           "\tuse drive disk image (instead of directory)",
+            "--drive=[controller]":     "set drive controller (XT, AT, COMPAQ, or PCJS)",
+            "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
+            "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
+            "--hidden=[number]":        "set hidden sectors (default is 1)",
+            "--label=[label]":          "\tset volume label of disk image",
+            "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--normalize=[boolean]":    "convert text file encoding (default is " + fNormalize + ")",
             "--save=[image]":           "\tsave drive disk image and exit",
-            "--sys=[string]":           "\toperating system type (default is " + systemType + ")",
-            "--target=[nK|nM]":         "target disk size (default is " + ((kbTarget / 1024)|0) + "M)",
-            "--ver=[#.##]":             "\toperating system version (default is " + systemVersion + ")"
+            "--sys=[string]":           "\tset operating system type (default is " + systemType + ")",
+            "--target=[nK|nM]":         "set target disk size (default is " + ((kbTarget / 1024)|0) + "M)",
+            "--ver=[#.##]":             "\tset operating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
             "--bare (-b)":              "\tomit helper binaries from disk",
