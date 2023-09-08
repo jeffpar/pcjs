@@ -1550,7 +1550,6 @@ export default class DiskInfo {
              * DOS that performs these same tests using the total sectors value from the partition table, then it may be
              * using a slightly different value and therefore arriving at different defaults.
              */
-            let cRecalcs = 2;
             if (!driveInfo.clusterSize) {
                 if (cTotalSectors <= 512) {             // 0x0200 (256Kb)
                     cSectorsPerCluster = 1;
@@ -1594,6 +1593,88 @@ export default class DiskInfo {
             cRootSectors = Math.ceil((rootEntries * 32) / cbSector);
 
             /*
+             * This is our code to ensure that the the last sector of the BIOS (IO.SYS or IBMBIO.COM) falls on the
+             * last sector of a track.
+             *
+             * This weird requirement is due to how PC DOS and MS-DOS 2.x/3.x boot sectors read the first system file
+             * into memory: they read the file one track at a time; the first track read may be partial, because it
+             * starts with whatever the file's first sector is, but every subsequent read is a whole track, even if the
+             * file doesn't occupy the entire track.
+             *
+             * This would be OK if there was ample memory, but the boot sector doesn't relocate itself from 0:7C00,
+             * and with its stack sitting just below that address, there's room for only about 28K of file data.  For
+             * reference, IO.SYS in MS-DOS 3.30 is about 22K, so there's enough room, but if the final sector is near
+             * the start of a track, then the final full track read (8.5K for a track with 17 sectors) runs the risk
+             * of overwriting the stack and/or the boot sector itself.
+             *
+             * See https://www.os2museum.com/wp/hang-with-early-dos-boot-sector/ for more details; it's accurate except
+             * for the implication that a contemporaneous disk using only 17 sectors per track was safe (it was not).
+             *
+             * To make matters *slightly* worse, the affected boot sectors didn't accurately calculate the sector size
+             * of the system file correctly; in keeping with the overall "sloppy" approach, they simply divided the file
+             * size by the sector size and then *always* added 1 (they should have added 1 only if there was a remainder).
+             *
+             * This affects any version of IO.SYS or IBMBIO.COM that is an exact multiple of 512 (such as IBMBIO.COM
+             * from PC DOS 2.00, which is 4608 bytes or 9 sectors; the boot sector will read 10 sectors instead).  Although
+             * interestingly, DOS 2.x "precalculates" that number and stores it in the BPB at offset 0x20, whereas DOS 3.x
+             * actually reads the file size from the directory entry and performs the calculation at runtime.  In both
+             * cases though, the calculation is "sloppy".
+             *
+             * Having perfect hindsight, we can help the boot sector avoid running into trouble by performing the same
+             * sloppy sector size calculation ourselves, dividing it by sectors per track, and ensuring that the remainder
+             * matches the number of free sectors in the first data track (and adjusting volume sector usage until it does).
+             * As a result, the system file will end at the end of a track, and the boot sector never risks reading too
+             * much data.
+             *
+             * Finally, a note about disks with a cluster size of 2 or more sectors: on such disks, the final *cluster*
+             * of IO.SYS/IBMBIO.COM may not end on a track boundary, but that's OK, because the boot sector is only
+             * reading sectors, not clusters.  Any "overhang" is merely wasted cluster space and does not affect us here.
+             */
+            let cFileSectors = aFileData[0]? Math.trunc(aFileData[0].size / cbSector) + 1 : 0;
+            let adjustTotalSectors = function() {
+                let fAdjusted = false;
+                if (cFileSectors) {
+                    let maxAdjustments = driveInfo.hiddenSectors? 0 : cSectorsPerTrack;
+                    while (maxAdjustments--) {
+                        let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
+                        /*
+                         * I used to calculate the number of free sectors in the first track with free sectors:
+                         *
+                         *      let cFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
+                         *
+                         * and break when cFreeSectors >= cFileSectors, because that meant the file was contained
+                         * entirely within that track, but that's not sufficient, because if the disk is using a large
+                         * number of sectors/track (eg, 63) AND the file happens to be at the start of the track, then
+                         * a full track (31.5K) will be read, which will trash the boot sector.  We REALLY need to push
+                         * the file to the END of the track, even if it's already fully contained within the track.
+                         */
+                        if ((cInitSectors + cFileSectors) % cSectorsPerTrack == 0) {
+                            break;
+                        }
+                        /*
+                         * I used to increase root directory sectors, since we were at least getting some benefit from the
+                         * adjustment:
+                         *
+                         *      cRootSectors++;
+                         *      rootEntries += (cbSector >> 5);
+                         *
+                         * However, that created compatibility issues (see the verDOS code above for specific thresholds we
+                         * need to honor).  Next, I tried tweaking reserved sectors, but guess what?  Few if any versions of DOS
+                         * actually honor reserved sectors (they assume it's 1 and crash if it isn't):
+                         *
+                         *      cReservedSectors++;
+                         *
+                         * So we're left with adjusting hidden sectors, which requires a corresponding adjustment to total sectors:
+                         */
+                        cHiddenSectors++;
+                        cTotalSectors--;
+                        fAdjusted = true;
+                    }
+                }
+                return fAdjusted;
+            };
+
+            /*
              * Now we get to a thornier matter: when calculating how many clusters will fit on a disk, the calculation
              * SHOULD begin with total DATA sectors, not total DISK sectors.  But that presents a chicken-and-egg problem,
              * because we won't know the total DATA sectors until we've determined size of the FAT (in sectors) *and* the
@@ -1607,6 +1688,7 @@ export default class DiskInfo {
              * I learned about the latter by watching IO.SYS from MS-DOS 3.30 read the entire FAT into memory (at 0000:7DC6):
              * if it reads more than 32K of FAT data, it will start trashing memory.
              */
+            let cRecalcs = 4;
             let grossClusters, minClusters, maxClusters, initSectors = cSectorsPerCluster;
             do {
                 minClusters = (typeFAT == 12)? 0 : DiskInfo.FAT12.MAX_CLUSTERS + 1;
@@ -1674,7 +1756,13 @@ export default class DiskInfo {
                     continue;
                 }
                 if (grossClusters <= maxClusters) {
-                    if (cFATSectors * cbSector <= 32 * 1024) break;
+                    if (cFATSectors * cbSector <= 32 * 1024) {
+                        if (adjustTotalSectors()) {
+                            if (!cRecalcs--) break;
+                            continue;
+                        }
+                        break;
+                    }
                 }
                 if (cSectorsPerCluster == maxSectorsPerCluster) {
                     if (typeFAT == 12) {
@@ -1727,87 +1815,6 @@ export default class DiskInfo {
             setBoot(DiskInfo.BPB.FATSECS, 2, cFATSectors);
             setBoot(DiskInfo.BPB.TRACKSECS, 2, cSectorsPerTrack);
             setBoot(DiskInfo.BPB.DRIVEHEADS, 2, cHeads);
-
-            /*
-             * We're now at the point where we ensure that the the last sector of the BIOS (IO.SYS or IBMBIO.COM)
-             * falls on the last sector of a track.
-             *
-             * This weird requirement is due to how PC DOS and MS-DOS 2.x/3.x boot sectors read the first system file
-             * into memory: they read the file one track at a time; the first track read may be partial, because it
-             * starts with whatever the file's first sector is, but every subsequent read is a whole track, even if the
-             * file doesn't occupy the entire track.
-             *
-             * This would be OK if there was ample memory, but the boot sector doesn't relocate itself from 0:7C00,
-             * and with its stack sitting just below that address, there's room for only about 28K of file data.  For
-             * reference, IO.SYS in MS-DOS 3.30 is about 22K, so there's enough room, but if the final sector is near
-             * the start of a track, then the final full track read (8.5K for a track with 17 sectors) runs the risk
-             * of overwriting the stack and/or the boot sector itself.
-             *
-             * See https://www.os2museum.com/wp/hang-with-early-dos-boot-sector/ for more details; it's accurate except
-             * for the implication that a contemporaneous disk using only 17 sectors per track was safe (it was not).
-             *
-             * To make matters *slightly* worse, the affected boot sectors didn't accurately calculate the sector size
-             * of the system file correctly; in keeping with the overall "sloppy" approach, they simply divided the file
-             * size by the sector size and then *always* added 1 (they should have added 1 only if there was a remainder).
-             *
-             * This affects any version of IO.SYS or IBMBIO.COM that is an exact multiple of 512 (such as IBMBIO.COM
-             * from PC DOS 2.00, which is 4608 bytes or 9 sectors; the boot sector will read 10 sectors instead).  Although
-             * interestingly, DOS 2.x "precalculates" that number and stores it in the BPB at offset 0x20, whereas DOS 3.x
-             * actually reads the file size from the directory entry and performs the calculation at runtime.  In both
-             * cases though, the calculation is "sloppy".
-             *
-             * Having perfect hindsight, we can help the boot sector avoid running into trouble by performing the same
-             * sloppy sector size calculation ourselves, dividing it by sectors per track, and ensuring that the remainder
-             * matches the number of free sectors in the first data track (and adjusting volume sector usage until it does).
-             * As a result, the system file will end at the end of a track, and the boot sector never risks reading too
-             * much data.
-             *
-             * Finally, a note about disks with a cluster size of 2 or more sectors: on such disks, the final *cluster*
-             * of IO.SYS/IBMBIO.COM may not end on a track boundary, but that's OK, because the boot sector is only
-             * reading sectors, not clusters.  Any "overhang" is merely wasted cluster space and does not affect us here.
-             */
-            let cFileSectors = 0;
-            if (aFileData[0]) {
-                let maxAdjustments = driveInfo.hiddenSectors? 0 : cSectorsPerTrack;
-                /*
-                 * This next calculation should have just used Math.ceil(), but we have to be as "broken" as DOS.
-                 */
-                cFileSectors = Math.trunc(aFileData[0].size / cbSector) + 1;
-                while (maxAdjustments--) {
-                    let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
-                    /*
-                     * I used to calculate the number of free sectors in the first track with free sectors:
-                     *
-                     *      let cFreeSectors = cSectorsPerTrack - (cInitSectors % cSectorsPerTrack);
-                     *
-                     * and break when cFreeSectors >= cFileSectors, because that meant the file was contained
-                     * entirely within that track, but that's not sufficient, because if the disk is using a large
-                     * number of sectors/track (eg, 63) AND the file happens to be at the start of the track, then
-                     * a full track (31.5K) will be read, which will trash the boot sector.  We REALLY need to push
-                     * the file to the END of the track, even if it's already fully contained within the track.
-                     */
-                    if ((cInitSectors + cFileSectors) % cSectorsPerTrack == 0) {
-                        break;
-                    }
-                    /*
-                     * I used to increase root directory sectors, since we were at least getting some benefit from the
-                     * adjustment:
-                     *
-                     *      cRootSectors++;
-                     *      rootEntries += (cbSector >> 5);
-                     *
-                     * However, that created compatibility issues (see the verDOS code above for specific thresholds we
-                     * need to honor).  Next, I tried tweaking reserved sectors, but guess what?  Few if any versions of DOS
-                     * actually honor reserved sectors (they assume it's 1 and crash if it isn't):
-                     *
-                     *      cReservedSectors++;
-                     *
-                     * So we're left with adjusting hidden sectors, which requires a corresponding adjustment to total sectors:
-                     */
-                    cHiddenSectors++;
-                    cTotalSectors--;
-                }
-            }
 
             if (cTotalSectors <= 0xffff) {
                 setBoot(DiskInfo.BPB.DISKSECS, 2, cTotalSectors);

@@ -478,7 +478,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "load info",
         "--sys=pcdos:2",
+        "--drivetype=100:3:23",
+        "--test",
         "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/empty",
