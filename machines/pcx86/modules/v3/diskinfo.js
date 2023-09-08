@@ -1747,10 +1747,14 @@ export default class DiskInfo {
              * for the implication that a contemporaneous disk using only 17 sectors per track was safe (it was not).
              *
              * To make matters *slightly* worse, the affected boot sectors didn't accurately calculate the sector size
-             * of the system file correctly; in keeping with the overall "sloppy" approach, they simply divide the file
-             * size by the sector size and then *always* adds 1 (they should have added 1 only if there was a remainder).
+             * of the system file correctly; in keeping with the overall "sloppy" approach, they simply divided the file
+             * size by the sector size and then *always* added 1 (they should have added 1 only if there was a remainder).
+             *
              * This affects any version of IO.SYS or IBMBIO.COM that is an exact multiple of 512 (such as IBMBIO.COM
-             * from PC DOS 2.00, which is 4608 bytes or 9 sectors; the boot sector will read 10 sectors instead).
+             * from PC DOS 2.00, which is 4608 bytes or 9 sectors; the boot sector will read 10 sectors instead).  Although
+             * interestingly, DOS 2.x "precalculates" that number and stores it in the BPB at offset 0x20, whereas DOS 3.x
+             * actually reads the file size from the directory entry and performs the calculation at runtime.  In both
+             * cases though, the calculation is "sloppy".
              *
              * Having perfect hindsight, we can help the boot sector avoid running into trouble by performing the same
              * sloppy sector size calculation ourselves, dividing it by sectors per track, and ensuring that the remainder
