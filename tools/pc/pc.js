@@ -2668,7 +2668,7 @@ function main(argc, argv)
     fDebug = removeFlag('debug') || fDebug;
     fVerbose = removeFlag('verbose') || fVerbose;
     fTest = removeFlag('test') || fTest;
-    if (fTest) driveInfo.trimFAT = true;
+    if (removeFlag('trim')) driveInfo.trimFAT = true;
 
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
