@@ -78,7 +78,7 @@ The IBM PC XT, IBM PC AT, and COMPAQ DeskPro 386 are three examples of machines 
     % pc.js ibm5170 --drivetype=2 
     [Press CTRL-D to enter command mode]
 
-    C:\>load info
+    C:\>load/i
 
      pcx86 machine ID ibm5170
      AT drive type 2, CHS 615:4:17, 20.4Mb
@@ -86,7 +86,7 @@ The IBM PC XT, IBM PC AT, and COMPAQ DeskPro 386 are three examples of machines 
      82 FAT sectors (x2), 64 root sectors (1024 entries)
      41752 total sectors, 41523 data sectors, 21295104 data bytes
 
-NOTE: `load info` is a variation of the `load` command (see "Loading Diskettes from the DOS Prompt" below) that displays information about the built-in disk image.
+NOTE: `load/i` is a variation of the `load` command (see "Loading Diskettes from the DOS Prompt" below) that displays information about the built-in disk image.
 
 If you don't remember your favorite PC AT drive type, you can just give `pc.js` a target size and let it search the machine's drive table for the closest match:
 
@@ -94,7 +94,7 @@ If you don't remember your favorite PC AT drive type, you can just give `pc.js` 
     warning: 62 FAT sectors allocated, but only 61 are required
     [Press CTRL-D to enter command mode]
 
-    C:\>load info
+    C:\>load/i
 
      pcx86 machine ID ibm5170
      AT drive type 3, CHS 615:6:17, 30.6Mb
@@ -104,7 +104,7 @@ If you don't remember your favorite PC AT drive type, you can just give `pc.js` 
 
 Note that the drive tables of AT-class machines usually didn't define any drives smaller than 10Mb, and the smallest drive type the PC XT defined was 5Mb, so using `--target` with smaller sizes won't give you smaller drives on those machines.  To do that, you must bypass the machine's drive table by adding `--drive=pcjs` to the command-line.  For example:
 
-    % pc.js "load info" --sys=pcdos --ver=3.0 --drive=pcjs --target=1M
+    % pc.js "load/i" --sys=pcdos --ver=3.0 --drive=pcjs --target=1M
     [Press CTRL-D to enter command mode]
 
     C>ECHO OFF
@@ -124,7 +124,7 @@ For example:
     % pc.js ibm5170 --drivetype=615:5:17
     [Press CTRL-D to enter command mode]
     
-    C:\>load info
+    C:\>load/i
     
      pcx86 machine ID ibm5170
      PCJS drive type 0, CHS 615:5:17, 25.5Mb

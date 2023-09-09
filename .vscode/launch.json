@@ -478,13 +478,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "load info",
-        "--sys=pcdos:2",
-        "--drivetype=100:3:23",
-        "--test",
+        "--target=32M",
+        "--sys=msdos:3.30",
         "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/empty",
+      "cwd": "${workspaceFolder}/tools/pc/disks/bad",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
