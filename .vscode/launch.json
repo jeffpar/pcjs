@@ -478,9 +478,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys=compaq:3.31",
-        "--drivetype=924:16:18",
-        "--boot=A",
+        "--target=32M",
+        "--sys=msdos:3.30",
         "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/bad",

@@ -214,13 +214,13 @@ export default class DiskInfo {
      * Sector object "public" properties.
      */
     static SECTOR = {
-        CYLINDER:   'c',                // cylinder number (0-based) [formerly iCylinder]
-        HEAD:       'h',                // head number (0-based) [formerly iHead]
+        CYLINDER:   'c',                // cylinder number (0-based) [formerly 'iCylinder']
+        HEAD:       'h',                // head number (0-based) [formerly 'iHead']
         ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
         LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
         DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
-        FILE_INDEX: 'f',                // "v2" JSON disk images only [formerly file]
-        FILE_OFFSET:'o',                // "v2" JSON disk images only [formerly offFile]
+        FILE_INDEX: 'f',                // "v2" JSON disk images only [formerly 'file']
+        FILE_OFFSET:'o',                // "v2" JSON disk images only [formerly 'offFile' or 'offset']
                                         // [no longer used: 'pattern']
         /*
          * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
@@ -1683,10 +1683,7 @@ export default class DiskInfo {
              *
              * And there are trip-wires we have to be aware of: if total clusters is less than 4085 (0xFF5), then we MUST
              * use a 12-bit FAT (just as a drive with at least 4085 clusters but less than 65525 (0xFFF5) clusters MUST use
-             * a 16-bit FAT) *AND* total FAT space MUST not exceed 32K (eg, 64 FAT sectors, assuming 512-byte sectors).
-             *
-             * I learned about the latter by watching IO.SYS from MS-DOS 3.30 read the entire FAT into memory (at 0000:7DC6):
-             * if it reads more than 32K of FAT data, it will start trashing memory.
+             * a 16-bit FAT).
              */
             let cRecalcs = 4;
             let grossClusters, minClusters, maxClusters, initSectors = cSectorsPerCluster;
@@ -1756,7 +1753,23 @@ export default class DiskInfo {
                     continue;
                 }
                 if (grossClusters <= maxClusters) {
-                    if (cFATSectors * cbSector <= 32 * 1024) {
+                    /*
+                     * At this point, one would presume we're in good shape as far as basic FAT criteria are concerned,
+                     * but there are few other things we want to verify, too.
+                     *
+                     * IO.SYS in MS-DOS 3.30 cannot safely load a FAT larger than 32K (eg, 64 512-byte FAT sectors);
+                     * (see 0000:7DC6).  Presumably disks it formats itself will never break that rule, but we want to
+                     * make sure.  Versions 3.31 and up are presumed safe (but I have not confirmed that).
+                     *
+                     * SIDE NOTE: Who thought it was a good idea to read the *entire* FAT into memory in the first place?
+                     * I imagine that 99% of the time, only the first FAT sector will actually be used during boot.
+                     */
+                    if (cFATSectors * cbSector <= 32 * 1024 || driveInfo.verDOS >= 3.31) {
+                        /*
+                         * Make sure total sectors doesn't need to be adjusted to avoid a bug (see adjustTotalSectors()
+                         * for details).  If it does, then take another pass through this loop, initially continuing without
+                         * adjusting the cluster size.
+                         */
                         if (adjustTotalSectors()) {
                             if (!cRecalcs--) break;
                             continue;
@@ -4519,16 +4532,20 @@ export default class DiskInfo {
                  * create a geometry that matches the number as closely as possible.  Working within the limits of
                  * the CHS-based INT 13h interface, nCylinders must be <= 1024, nHeads must be <= 256, and nSectors
                  * must be <= 63.
+                 *
+                 * We now use trunc() instead of ceil() for our calculations, so that you get a drive slightly smaller
+                 * than requested rather than slightly larger; otherwise, you could be puzzled why a request for a 32Mb
+                 * disk fails 32Mb limit tests later (since we were actually creating a 32.01Mb disk).
                  */
                 if (nTargetSectors) {
                     let nCylinders, nHeads, nTracks, nSectors = -6;
                     do {
                         nSectors += 23;         // start with 17, then 40, then 63
                         if (nSectors > 63) return false;
-                        nTracks = Math.ceil(nTargetSectors / nSectors);
-                        nHeads = Math.ceil(nTracks / 1024);
+                        nTracks = Math.trunc(nTargetSectors / nSectors);
+                        nHeads = Math.trunc(nTracks / 1024);
                         nHeads += nHeads & 1;   // an odd number of heads seems pretty, um, odd, so let's avoid it
-                        nCylinders = Math.ceil(nTracks / nHeads);
+                        nCylinders = Math.trunc(nTracks / nHeads);
                     } while (nHeads > 256 || nCylinders > 1024);
                     let cbSector = 512;
                     let cbTotal = nCylinders * nHeads * nSectors * cbSector;

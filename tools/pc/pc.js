@@ -1631,7 +1631,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
                  * use the drive image, I'd still like to be able to inspect it.
                  */
                 if (di.minDOSVersion && di.minDOSVersion > verDOS) {
-                    printf("error: drive requires DOS %s or later\n", di.minDOSVersion.toFixed(2));
+                    printf("error: %s drive type %d (%.2fMb) requires DOS %s or later\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.driveSize, di.minDOSVersion.toFixed(2));
                     return;
                 }
                 driveManifest = manifest;
@@ -2335,7 +2335,7 @@ function doCommand(s, reload = false)
                 }
             }
         } else {
-            result = "missing diskette drive (eg, A:)";
+            result = "usage: load [drive] [search options]";
         }
         break;
     case "save":
