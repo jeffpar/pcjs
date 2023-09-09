@@ -480,7 +480,8 @@
       "args": [
         "--sys=compaq:3.31",
         "--drivetype=924:16:18",
-        "--boot=A"
+        "--boot=A",
+        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/bad",
       "stopOnEntry": false,

@@ -566,6 +566,7 @@ function intReboot(addr)
                 printf("unrecognized option: %s\n", args);
                 return false;           // for any unrecognized option, returning false will skip the INT 19h
             }                           // otherwise, for "QUIT /R", we simply reboot
+            printf("rebooting...\n");
         }
     }
 
@@ -707,7 +708,8 @@ function intLoad(addr)
                 aTokens.splice(0, 1)
                 printf("%s\n", loadDiskette(matchDrive[1], aTokens));
             } else {
-                if (args.toLowerCase() == "info") {
+                let arg = aTokens[0].toLowerCase();
+                if (arg == "/i" || arg == "info") {
                     printf(getDriveInfo());
                 } else if (args) {
                     printf("invalid load command: \"%s\"\n", args);
@@ -1216,7 +1218,7 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
 function checkCommand(sDir, sCommand)
 {
     if (sCommand) {
-        let aParts = sCommand.split(/([ ,;])/);
+        let aParts = sCommand.split(/([ ,;\/])/);
         let sProgram = aParts[0].toUpperCase();
         const aInternal = [
             "BREAK",
@@ -2236,10 +2238,16 @@ function doCommand(s, reload = false)
 {
     let aTokens = s.split(' ');
     let cmd = aTokens[0].toLowerCase();
-    let result = "", curDir = "", sDir = localDir, sDrive = "";
 
     aTokens.splice(0, 1);
+    let i = cmd.indexOf('/');
+    if (i > 0) {
+        aTokens.unshift(cmd.slice(i));
+        cmd = cmd.slice(0, i);
+    }
+
     let arg, args = aTokens.join(' ');
+    let result = "", curDir = "", sDir = localDir, sDrive = "";
 
     let help = function() {
         let result = "pc.js commands:\n" +
@@ -2315,7 +2323,7 @@ function doCommand(s, reload = false)
     case "load":
         arg = aTokens[0];
         if (arg) {
-            if (arg == "info") {
+            if (arg == "/i" || arg == "info") {
                 result = getDriveInfo();
             } else {
                 let matchDrive = arg.match(/^([a-z]:?)$/i);
@@ -2371,6 +2379,10 @@ function doCommand(s, reload = false)
         break;
     case "q":
     case "quit":
+        if (aTokens[0]) {
+            printf("unsupported option: %s\n", args);
+            break;
+        }
         exit();
         break;
     default:
