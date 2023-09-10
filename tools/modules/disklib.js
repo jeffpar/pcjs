@@ -10,7 +10,6 @@
 import crypto     from "crypto";
 import fs         from "fs";
 import glob       from "glob";
-import got        from "got";
 import os         from "os";
 import path       from "path";
 import BASFile    from "../modules/basfile.js";
@@ -798,8 +797,8 @@ export async function readDiskAsync(diskFile, forceBPB, driveInfo)
             diskFile = getServerPath(diskFile);
             if (Device.DEBUG) printf("reading: %s\n", diskFile);
             if (diskFile.startsWith("http")) {
-                let response = await got(diskFile);
-                db = response.body;
+                let response = await fetch(diskFile);
+                db = await response.text();
             } else {
                 db = await readFile(diskFile);
             }
@@ -914,8 +913,8 @@ export async function readFileAsync(sFile, encoding = "utf8")
     if (Device.DEBUG) printf("reading: %s\n", sFile);
     if (sFile.startsWith("http")) {
         try {
-            let response = await got(sFile);
-            db = response.body;
+            let response = await fetch(sFile);
+            db = await response.text();
         } catch(err) {
             printError(err);
         }
