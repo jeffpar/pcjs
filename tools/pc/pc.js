@@ -2246,17 +2246,18 @@ function doCommand(s, reload = false)
         cmd = cmd.slice(0, i);
     }
 
-    let arg, args = aTokens.join(' ');
+    let arg, args = aTokens.join(' ').trim();
     let result = "", curDir = "", sDir = localDir, sDrive = "";
 
     let help = function() {
-        let result = "pc.js commands:\n" +
-                    "  build [DOS command(s)]\n" +
-                    "  exec [local command]\n" +
-                    "  load [drive] [search options]\n" +
-                    "  save [local disk image]\n" +
-                    "  start [machine]\n" +
-                    "  quit";
+        let result = "pc.js internal commands:\n\n" +
+                    "abort\tterminate without saving\n" +
+                    "build\tbuild disk to run specified command(s)\n" +
+                    "exec\texecute a local command\n" +
+                    "load\tload drive with the specified diskette\n" +
+                    "save\tsave disk as a local disk image\n" +
+                    "start\tstart a new machine\n" +
+                    "quit\tsave all changed files and terminate\n";
         if (machine.dbg) {
             result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
         } else if (machine.cpu) {
@@ -2295,20 +2296,24 @@ function doCommand(s, reload = false)
         }
         curDir = process.cwd();
         try {
+            let app, argv, appConfig, child;
             process.chdir(mapDir(machineDir));
-            let argv = args.split(' ');
-            let app = argv[0];
-            let appConfig = configJSON['apps']?.[app];
-            if (appConfig) {
-                if (appConfig['exec']) {
-                    args = appConfig['exec'].replace(/\$\*/, argv.slice(1).join(' '));
-                }
+            argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
+            appConfig = configJSON['apps']?.[app];
+            if (appConfig && appConfig['exec']) {
+                args = argv.join(' ').trim();
+                args = appConfig['exec'].replace(/\$\*/, args);
+                argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
             }
-            let child = child_process.execSync(args, {
+            /*
+             * I've tweaked execSync() a bit to make it work with both Node and Bun....  I've also tried
+             * spawnSync(app, argv, ...), but that doesn't work as well.
+             */
+            child = child_process.execSync(args, {
                 stdio: [
-                process.stdin,
-                process.stdout,
-                process.stderr
+                    "inherit", // process.stdin,
+                    "inherit", // process.stdout,
+                    "inherit"  // process.stderr
                 ]
             });
         } catch(err) {
