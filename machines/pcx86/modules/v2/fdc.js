@@ -2754,8 +2754,9 @@ export default class FDC extends Component {
      */
     doDMAWrite(drive, b)
     {
-        if (b !== undefined && b >= 0)
+        if (b !== undefined && b >= 0) {
             return this.writeData(drive, b);
+        }
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
@@ -2773,8 +2774,9 @@ export default class FDC extends Component {
      */
     doDMAFormat(drive, b)
     {
-        if (b !== undefined && b >= 0)
+        if (b !== undefined && b >= 0) {
             return this.writeFormat(drive, b);
+        }
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */

@@ -227,9 +227,9 @@ export default class Debugger extends Device {
         this.aBreakBuses[Debugger.BREAKTYPE.OUTPUT] = this.busIO;
         this.aBreakChecks = [];
         this.aBreakChecks[Debugger.BREAKTYPE.READ] = this.checkRead.bind(this);
-        this.aBreakChecks[Debugger.BREAKTYPE.WRITE] = this.checkWrite.bind(this)
-        this.aBreakChecks[Debugger.BREAKTYPE.INPUT] = this.checkInput.bind(this)
-        this.aBreakChecks[Debugger.BREAKTYPE.OUTPUT] = this.checkOutput.bind(this)
+        this.aBreakChecks[Debugger.BREAKTYPE.WRITE] = this.checkWrite.bind(this);
+        this.aBreakChecks[Debugger.BREAKTYPE.INPUT] = this.checkInput.bind(this);
+        this.aBreakChecks[Debugger.BREAKTYPE.OUTPUT] = this.checkOutput.bind(this);
         this.aBreakIndexes = [];
         this.fStepQuietly = undefined;          // when stepping, this informs onUpdate() how "quiet" to be
         this.tempBreak = null;                  // temporary auto-cleared break address managed by setTemp() and clearTemp()
@@ -1108,7 +1108,7 @@ export default class Debugger extends Device {
             if (sOp == ' ') {
                 if (iValue < asValues.length - 1 && !asValues[iValue]) {
                     iValue++;
-                    sOp = asValues[iValue++]
+                    sOp = asValues[iValue++];
                 } else {
                     fError = true;
                     break;

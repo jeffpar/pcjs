@@ -250,7 +250,7 @@ async function loadModules(factory, modules, done)
                 if (fDebug || !bitsMessage) {
                     printf(format, ...args);
                 }
-            }
+            };
             break;
         case "errors":
             Errors = module.default;
@@ -705,7 +705,7 @@ function intLoad(addr)
             let aTokens = args.split(' ');
             let matchDrive = aTokens[0].match(/^([a-z]:?)$/i);
             if (matchDrive) {
-                aTokens.splice(0, 1)
+                aTokens.splice(0, 1);
                 printf("%s\n", loadDiskette(matchDrive[1], aTokens));
             } else {
                 let arg = aTokens[0].toLowerCase();
@@ -1637,7 +1637,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
                 driveManifest = manifest;
             }
         }
-    }
+    };
 
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
@@ -2333,7 +2333,7 @@ function doCommand(s, reload = false)
             } else {
                 let matchDrive = arg.match(/^([a-z]:?)$/i);
                 if (matchDrive) {
-                    aTokens.splice(0, 1)
+                    aTokens.splice(0, 1);
                     result = loadDiskette(matchDrive[1], aTokens);
                 } else {
                     result = "invalid diskette drive: " + arg;
@@ -2765,7 +2765,7 @@ function checkArgs(argv, removeArg, removeFlag)
                 driveOverride = true;
             }
         } else if (!fFloppy) {
-            match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
+            match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i);
             if (match) {
                 let driveCtrl = match[1] || driveInfo.driveCtrl;
                 let driveType = +match[2];
@@ -2816,11 +2816,11 @@ function main(argc, argv)
 {
     let removeArg = function(arg) {
         return pcjslib.removeArg(argv, arg, "string");
-    }
+    };
 
     let removeFlag = function(arg) {
         return pcjslib.removeArg(argv, arg, "boolean");
-    }
+    };
 
     if (!checkArgs(argv, removeArg, removeFlag)) {
         let optionsMain = {
@@ -2856,7 +2856,7 @@ function main(argc, argv)
             "machine options:":         optionsMain,
             "disk options:":            optionsDisk,
             "other options:":           optionsOther
-        }
+        };
         printf("\nusage:\n\t[node] pc.js [machine file] [local directory] [DOS command] [options]\n");
         for (let group in optionGroups) {
             printf("\n%s\n\n", group);

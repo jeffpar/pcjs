@@ -2151,8 +2151,9 @@ export default class HDC extends Component {
      */
     doDMAWrite(drive, b)
     {
-        if (b !== undefined && b >= 0)
+        if (b !== undefined && b >= 0) {
             return this.writeData(drive, b);
+        }
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
@@ -2170,8 +2171,9 @@ export default class HDC extends Component {
      */
     doDMAWriteBuffer(drive, b)
     {
-        if (b !== undefined && b >= 0)
+        if (b !== undefined && b >= 0) {
             return this.writeBuffer(drive, b);
+        }
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
@@ -2189,8 +2191,9 @@ export default class HDC extends Component {
      */
     doDMAWriteFormat(drive, b)
     {
-        if (b !== undefined && b >= 0)
+        if (b !== undefined && b >= 0) {
             return this.writeFormat(drive, b);
+        }
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
@@ -2453,8 +2456,7 @@ export default class HDC extends Component {
                 return -1;
             }
             if (drive.sector) {
-                if (drive.disk.write(drive.sector, drive.iByte++, b))
-                    break;
+                if (drive.disk.write(drive.sector, drive.iByte++, b)) break;
             }
             /*
              * Locate the next sector, and then try writing again.

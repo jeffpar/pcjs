@@ -25,7 +25,7 @@ let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 
-export { device, printf, sprintf }
+export { device, printf, sprintf };
 
 export function printError(err, filename)
 {
@@ -239,7 +239,7 @@ export function getServerPrefix(diskFile)
  */
 export function replaceServerPrefix(diskFile, sReplace)
 {
-    return diskFile.replace(/\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|pcsigdisks|pcsig[0-9a-z-]*-disks|private)\//, sReplace)
+    return diskFile.replace(/\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|pcsigdisks|pcsig[0-9a-z-]*-disks|private)\//, sReplace);
 }
 
 /**
@@ -795,7 +795,7 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbo
  */
 export async function readDiskAsync(diskFile, forceBPB, driveInfo)
 {
-    let db, di
+    let db, di;
     try {
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);
@@ -847,7 +847,7 @@ export async function readDiskAsync(diskFile, forceBPB, driveInfo)
  */
 export function readDiskSync(diskFile, forceBPB, driveInfo)
 {
-    let db, di
+    let db, di;
     try {
         let diskName = path.basename(diskFile);
         di = new DiskInfo(device, diskName);

@@ -147,7 +147,6 @@ if (globals.window['PCjs']) {
 globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
@@ -489,7 +488,7 @@ class Format {
 
             case 'S':
                 arg = hash? date.getUTCSeconds() : date.getSeconds();
-                type = 'd'
+                type = 'd';
                 break;
 
             case 'T':
@@ -4808,7 +4807,7 @@ class Component {
                 fnCallReady = function processNextCommand() {
                     return function() {
                         Component.processCommands(idMachine);
-                    }
+                    };
                 }();
             }
 
@@ -4932,8 +4931,9 @@ class Component {
         let nMachine = 1;
         if (this.idMachine) {
             let aDigits = this.idMachine.match(/\d+/);
-            if (aDigits !== null)
+            if (aDigits !== null) {
                 nMachine = parseInt(aDigits[0], 10);
+            }
         }
         return nMachine;
     }
@@ -5232,7 +5232,7 @@ class Component {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
         let bitsHi = (bits / shift)|0;
-        return (num & bits) + (numHi & bitsHi) * shift
+        return (num & bits) + (numHi & bitsHi) * shift;
     }
 
     /**
@@ -5416,7 +5416,7 @@ if (!Array.prototype.indexOf) {
             if (this[i] === obj) { return i; }
         }
         return -1;
-    }
+    };
 }
 
 /*
@@ -5742,7 +5742,6 @@ if (DEBUG) {
         globals.window['BACKTRACK'] = false;
     }
 }
-
 
 
 /**
@@ -10671,7 +10670,7 @@ class BusX86 extends Component {
             if (block.size) {
                 let btmod = (BACKTRACK && block.modBackTrack(false)? 1 : 0);
                 info.aBlocks.push(Usr.initBitFields(BusX86.BlockInfo, iBlock, 0, btmod, block.type));
-                info.cBlocks++
+                info.cBlocks++;
             }
             iBlock++;
         }
@@ -13621,7 +13620,7 @@ class MemoryX86 {
  * memory (or a memory-mapped device).
  *
  * Unallocated regions of the address space contain a special memory block of type NONE that contains
- * no storage.  Mapping every addressible location to a memory block allows all accesses to be routed in
+ * no storage.  Mapping every addressable location to a memory block allows all accesses to be routed in
  * exactly the same manner, without resorting to any range or processor checks.
  *
  * Originally, the Debugger always went through the Bus interfaces, and could therefore modify ROMs as well,
@@ -42355,10 +42354,12 @@ class ChipSet extends Component {
         }
         if (pic.nICW < pic.aICW.length) {
             pic.aICW[pic.nICW++] = bOut;
-            if (pic.nICW == 2 && (pic.aICW[0] & ChipSet.PIC_LO.ICW1_SNGL))
+            if (pic.nICW == 2 && (pic.aICW[0] & ChipSet.PIC_LO.ICW1_SNGL)) {
                 pic.nICW++;
-            if (pic.nICW == 3 && !(pic.aICW[0] & ChipSet.PIC_LO.ICW1_ICW4))
+            }
+            if (pic.nICW == 3 && !(pic.aICW[0] & ChipSet.PIC_LO.ICW1_ICW4)) {
                 pic.nICW++;
+            }
         }
         else {
             /*
@@ -42650,7 +42651,7 @@ class ChipSet extends Component {
             if (timer.fCountLatched) {
                 b = timer.countLatched[timer.countIndex++];
                 if (timer.countIndex == timer.countBytes) {
-                    timer.fCountLatched = false
+                    timer.fCountLatched = false;
                 }
             }
             else {
@@ -43406,10 +43407,11 @@ class ChipSet extends Component {
         if (this.bPPIB & ChipSet.PPI_B.CLK_TIMER2) {
             let timer = this.updateTimer(ChipSet.PIT0.TIMER2);
             if (timer.fOUT) {
-                if (this.bPPIB & ChipSet.PPI_B.SPK_TIMER2)
+                if (this.bPPIB & ChipSet.PPI_B.SPK_TIMER2) {
                     b |= ChipSet.PPI_C.TIMER2_OUT;
-                else
+                } else {
                     b |= ChipSet.PPI_C.CASS_DATA_IN;
+                }
             }
         }
 
@@ -49403,10 +49405,11 @@ class KbdX86 extends Component {
                     }
                 }
                 if (bitsFake) {
-                    if (fDown)
+                    if (fDown) {
                         abScanCodes.unshift(bScan);
-                    else
+                    } else {
                         abScanCodes.push(bScan | KbdX86.SCANCODE.BREAK);
+                    }
                 }
             }
 
@@ -55137,8 +55140,9 @@ class VideoX86 extends Component {
 
         let card = this.cardActive;
         for (let i = Card.CRTC.CURSCAN; i <= Card.CRTC.CURSORLO; i++) {
-            if (card.regCRTData[i] == null)
+            if (card.regCRTData[i] == null) {
                 return false;
+            }
         }
 
         let bCursorFlags = card.regCRTData[Card.CRTC.CURSCAN];
@@ -55266,8 +55270,10 @@ class VideoX86 extends Component {
          * cyCursor values are relative to when it's time to scale them.
          */
         if (this.yCursor !== bCursorStart || this.cyCursor !== bCursorSize || this.cyCursorWrap !== bCursorWrap) {
-            if (DEBUG) this.printf("checkCursor(): cursor shape changed from %d,%d to %d,%d (%#04X-%#04X)\n",
-                                    this.yCursor, this.cyCursor, bCursorStart, bCursorSize, oCursorStart, oCursorEnd);
+            if (DEBUG) {
+                this.printf("checkCursor(): cursor shape changed from %d,%d to %d,%d (%#04X-%#04X)\n",
+                            this.yCursor, this.cyCursor, bCursorStart, bCursorSize, oCursorStart, oCursorEnd);
+            }
             this.yCursor = bCursorStart;
             this.cyCursor = bCursorSize;
             this.cyCursorWrap = bCursorWrap;
@@ -56710,8 +56716,7 @@ class VideoX86 extends Component {
             if (x >= this.nCols) {
                 x = 0;
                 y += 2;
-                if (y > this.nRows)
-                    break;
+                if (y > this.nRows) break;
                 if (y == this.nRows) {
                     y = 1;
                     addr = addrScreen + this.cbSplit;
@@ -64105,8 +64110,9 @@ class Disk extends Component {
      */
     write(sector, iByte, b)
     {
-        if (this.fWriteProtected)
+        if (this.fWriteProtected) {
             return false;
+        }
 
         if (DEBUG && !iByte) {
             this.printf(Messages.DISK + Messages.ADDRESS, "write(\"%s\",CHS=%d:%d:%d)\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID]);
@@ -67310,8 +67316,9 @@ class FDC extends Component {
      */
     doDMAWrite(drive, b)
     {
-        if (b !== undefined && b >= 0)
+        if (b !== undefined && b >= 0) {
             return this.writeData(drive, b);
+        }
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
@@ -67329,8 +67336,9 @@ class FDC extends Component {
      */
     doDMAFormat(drive, b)
     {
-        if (b !== undefined && b >= 0)
+        if (b !== undefined && b >= 0) {
             return this.writeFormat(drive, b);
+        }
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
@@ -70025,8 +70033,9 @@ class HDC extends Component {
      */
     doDMAWrite(drive, b)
     {
-        if (b !== undefined && b >= 0)
+        if (b !== undefined && b >= 0) {
             return this.writeData(drive, b);
+        }
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
@@ -70044,8 +70053,9 @@ class HDC extends Component {
      */
     doDMAWriteBuffer(drive, b)
     {
-        if (b !== undefined && b >= 0)
+        if (b !== undefined && b >= 0) {
             return this.writeBuffer(drive, b);
+        }
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
@@ -70063,8 +70073,9 @@ class HDC extends Component {
      */
     doDMAWriteFormat(drive, b)
     {
-        if (b !== undefined && b >= 0)
+        if (b !== undefined && b >= 0) {
             return this.writeFormat(drive, b);
+        }
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
@@ -70327,8 +70338,7 @@ class HDC extends Component {
                 return -1;
             }
             if (drive.sector) {
-                if (drive.disk.write(drive.sector, drive.iByte++, b))
-                    break;
+                if (drive.disk.write(drive.sector, drive.iByte++, b)) break;
             }
             /*
              * Locate the next sector, and then try writing again.
@@ -72279,7 +72289,7 @@ class DbgLib extends Component {
             if (sOp == ' ') {
                 if (iValue < asValues.length - 1 && !asValues[iValue]) {
                     iValue++;
-                    sOp = asValues[iValue++]
+                    sOp = asValues[iValue++];
                 } else {
                     fError = true;
                     break;
@@ -75690,9 +75700,9 @@ class DebuggerX86 extends DbgLib {
          * if inactive, 1 if stepping over an instruction without a register dump, or 2
          * if stepping over an instruction with a register dump.
          */
-        if (!fRegs || this.nStep == 1)
+        if (!fRegs || this.nStep == 1) {
             this.doUnassemble();
-        else {
+        } else {
             this.doRegisters();
         }
     }
@@ -77666,12 +77676,9 @@ class DebuggerX86 extends DbgLib {
                 this.printf("all breakpoints cleared\n");
                 return;
             }
-            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true))
-                return;
+            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true)) return;
             this.printf("breakpoint missing: %s\n", this.toHexAddr(dbgAddr));
             return;
         }
@@ -78046,8 +78053,9 @@ class DebuggerX86 extends DbgLib {
         let cData = 0;
         if (this.aaOpcodeCounts) {
             if (sParm == "clear") {
-                for (i = 0; i < this.aaOpcodeCounts.length; i++)
+                for (i = 0; i < this.aaOpcodeCounts.length; i++) {
                     this.aaOpcodeCounts[i] = [i, 0];
+                }
                 this.printf("frequency data cleared\n");
                 cData++;
             }
@@ -81898,7 +81906,7 @@ class Computer extends Component {
             }
         }
         if (iComponent == aComponents.length) component = this;
-        let status = (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet")
+        let status = (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet");
         Component.printf(Messages.NOTICE, "The %s component (%s) is not %s\n", component.type, component.id, status);
         return false;
     }
@@ -83896,7 +83904,7 @@ function savePC(idMachine, sPCJSFile, callback)
         let sParms = cmp.saveMachineParms();
         if (!sPCJSFile) {
             if (DEBUG) {
-                sPCJSFile = "/machines/pcx86/releases/" + APPVERSION + "/pcx86-uncompiled.js"
+                sPCJSFile = "/machines/pcx86/releases/" + APPVERSION + "/pcx86-uncompiled.js";
             } else {
                 sPCJSFile = "/machines/pcx86/releases/" + APPVERSION + "/pcx86" + (dbg? "-dbg" : "") + ".js";
             }

@@ -147,7 +147,6 @@ if (globals.window['PCjs']) {
 globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
@@ -489,7 +488,7 @@ class Format {
 
             case 'S':
                 arg = hash? date.getUTCSeconds() : date.getSeconds();
-                type = 'd'
+                type = 'd';
                 break;
 
             case 'T':
@@ -3846,7 +3845,7 @@ class Component {
                 fnCallReady = function processNextCommand() {
                     return function() {
                         Component.processCommands(idMachine);
-                    }
+                    };
                 }();
             }
 
@@ -3970,8 +3969,9 @@ class Component {
         let nMachine = 1;
         if (this.idMachine) {
             let aDigits = this.idMachine.match(/\d+/);
-            if (aDigits !== null)
+            if (aDigits !== null) {
                 nMachine = parseInt(aDigits[0], 10);
+            }
         }
         return nMachine;
     }
@@ -4270,7 +4270,7 @@ class Component {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
         let bitsHi = (bits / shift)|0;
-        return (num & bits) + (numHi & bitsHi) * shift
+        return (num & bits) + (numHi & bitsHi) * shift;
     }
 
     /**
@@ -4454,7 +4454,7 @@ if (!Array.prototype.indexOf) {
             if (this[i] === obj) { return i; }
         }
         return -1;
-    }
+    };
 }
 
 /*

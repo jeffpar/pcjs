@@ -831,7 +831,7 @@ export default class Component {
                 fnCallReady = function processNextCommand() {
                     return function() {
                         Component.processCommands(idMachine);
-                    }
+                    };
                 }();
             }
 
@@ -955,8 +955,9 @@ export default class Component {
         let nMachine = 1;
         if (this.idMachine) {
             let aDigits = this.idMachine.match(/\d+/);
-            if (aDigits !== null)
+            if (aDigits !== null) {
                 nMachine = parseInt(aDigits[0], 10);
+            }
         }
         return nMachine;
     }
@@ -1255,7 +1256,7 @@ export default class Component {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
         let bitsHi = (bits / shift)|0;
-        return (num & bits) + (numHi & bitsHi) * shift
+        return (num & bits) + (numHi & bitsHi) * shift;
     }
 
     /**
@@ -1439,7 +1440,7 @@ if (!Array.prototype.indexOf) {
             if (this[i] === obj) { return i; }
         }
         return -1;
-    }
+    };
 }
 
 /*

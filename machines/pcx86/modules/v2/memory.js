@@ -1640,7 +1640,7 @@ export default class MemoryX86 {
  * memory (or a memory-mapped device).
  *
  * Unallocated regions of the address space contain a special memory block of type NONE that contains
- * no storage.  Mapping every addressible location to a memory block allows all accesses to be routed in
+ * no storage.  Mapping every addressable location to a memory block allows all accesses to be routed in
  * exactly the same manner, without resorting to any range or processor checks.
  *
  * Originally, the Debugger always went through the Bus interfaces, and could therefore modify ROMs as well,

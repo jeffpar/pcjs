@@ -470,7 +470,7 @@ class Format {
 
             case 'S':
                 arg = hash? date.getUTCSeconds() : date.getSeconds();
-                type = 'd'
+                type = 'd';
                 break;
 
             case 'T':
@@ -5701,7 +5701,7 @@ class LED extends Device {
         let segments = LED.SYMBOL_SEGMENTS[symbol];
         if (segments) {
             for (let i = 0; i < segments.length; i++) {
-                this.drawGridSegment(segments[i], col, row)
+                this.drawGridSegment(segments[i], col, row);
             }
         }
     }
