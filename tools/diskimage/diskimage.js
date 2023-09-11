@@ -1213,7 +1213,7 @@ function processAll(all, argv)
                 for (let arg of ['list', 'expand', 'extract', 'extdir', 'normalize', 'overwrite', 'quiet', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }
-                processArg(args);
+                processArgs(args);
                 if (!--max) break;
             }
         } else {
@@ -1225,7 +1225,7 @@ function processAll(all, argv)
 }
 
 /**
- * processArg(argv, fSingle)
+ * processArgs(argv, fSingle)
  *
  * Formerly part of main(), but factored out so that it can also be called for a list of files ("--all").
  *
@@ -1233,7 +1233,7 @@ function processAll(all, argv)
  * @param {boolean} [fSingle]
  * @returns {boolean} true if something was processed, false if not
  */
-function processArg(argv, fSingle = false)
+function processArgs(argv, fSingle = false)
 {
     let input;
     let fDir = false, fFiles = false, arcType = 0;
@@ -1445,7 +1445,7 @@ function main(argc, argv)
         return;
     }
 
-    if (processAll(argv['all'], argv) || processArg(argv, true)) {
+    if (processAll(argv['all'], argv) || processArgs(argv, true)) {
         return;
     }
 

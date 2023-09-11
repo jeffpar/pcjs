@@ -2655,25 +2655,18 @@ function exit(code = 0)
 }
 
 /**
- * main(argc, argv)
+ * checkArgs(argv, removeArg, removeFlag)
  *
- * @param {number} argc
- * @param {Array} argv
+ * @param {Object} argv
+ * @param {function()} removeArg
+ * @param {function()} removeFlag
+ * @returns {boolean} (true if we should continue, false if we should exit)
  */
-function main(argc, argv)
+function checkArgs(argv, removeArg, removeFlag)
 {
-    let removeArg = function(arg) {
-        return pcjslib.removeArg(argv, arg, "string");
-    }
-
-    let removeFlag = function(arg) {
-        return pcjslib.removeArg(argv, arg, "boolean");
-    }
-
     fDebug = removeFlag('debug') || fDebug;
     fVerbose = removeFlag('verbose') || fVerbose;
     fTest = removeFlag('test') || fTest;
-    if (removeFlag('trim')) driveInfo.trimFAT = true;
 
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
@@ -2689,8 +2682,12 @@ function main(argc, argv)
         printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
     }
 
-    machines = JSON.parse(readFileSync("/machines/machines.json"));
-    configJSON = JSON5.parse(readFileSync(path.join(pcjsDir, configFile))) || configJSON;
+    if (removeFlag('help')) {
+        return false;
+    }
+
+    machines = JSON.parse(readFileSync("/machines/machines.json") || "{}");
+    configJSON = JSON5.parse(readFileSync(path.join(pcjsDir, configFile) || {}));
     let defaults = configJSON['defaults'] || {};
 
     fBare = removeFlag('bare') || fBare;
@@ -2739,6 +2736,7 @@ function main(argc, argv)
     }
 
     kbTarget = getTargetValue(removeArg('target')) || kbTarget;
+    if (removeFlag('trim')) driveInfo.trimFAT = true;
 
     let typeDrive = removeArg('drivetype');
     if (typeDrive) {
@@ -2805,8 +2803,26 @@ function main(argc, argv)
     if (hiddenSectors) {
         driveInfo.hiddenSectors = +hiddenSectors || 0;
     }
+    return true;
+}
 
-    if (removeFlag('help')) {
+/**
+ * main(argc, argv)
+ *
+ * @param {number} argc
+ * @param {Array} argv
+ */
+function main(argc, argv)
+{
+    let removeArg = function(arg) {
+        return pcjslib.removeArg(argv, arg, "string");
+    }
+
+    let removeFlag = function(arg) {
+        return pcjslib.removeArg(argv, arg, "boolean");
+    }
+
+    if (!checkArgs(argv, removeArg, removeFlag)) {
         let optionsMain = {
             "--start=[machine]":        "start machine configuration file",
         };
