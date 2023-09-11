@@ -479,6 +479,12 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, driveInfo, d
     let asFiles;
     if (sDir.endsWith('/')) {
         asFiles = fs.readdirSync(sDir);
+        /*
+         * Node typically returns directory entries in sorted order (at least on macOS, perhaps not on Windows);
+         * however, I have noticed that other runtimes (eg, Bun) don't necessarily return sorted results, so for
+         * consistency across all operating systems *and* runtimes, we always sort them ourselves.
+         */
+        asFiles.sort();
         for (let i = 0; i < asFiles.length; i++) {
             asFiles[i] = path.join(sDir, asFiles[i]);
         }
