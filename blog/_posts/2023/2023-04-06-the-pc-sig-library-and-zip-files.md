@@ -196,7 +196,7 @@ Here's a list of the new JavaScript modules:
       - Reduced files (ZIP compression formats #2, #3, #4, and #5)
       - Imploded files (ZIP compression format #6)
       - Deflated files (ZIP compression format #8)
-  - [BASFile.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js), a BASIC file de-tokenizer that also performs [PC character conversion](https://github.com/jeffpar/pcjs/tree/master/machines/pcx86/modules/v3/charset.js)
+  - [BASFile.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js), a BASIC file de-tokenizer that also performs [PC character conversion](https://github.com/jeffpar/pcjs/tree/master/machines/pcx86/modules/v2/charset.js)
 
 The combination of `StreamZip` with `LegacyZip` should be able to decompress *any* old ARC or ZIP archive, so test it out with the new `--arc` and `--zip` options in the [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools/diskimage) utility, and if you find one that doesn't work, [let me know](mailto:Jeff@pcjs.org).
 

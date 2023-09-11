@@ -16,7 +16,7 @@ import DiskAPI from "../../../modules/v2/diskapi.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { DRIVE_CTRLS, DRIVE_TYPES } from "../v3/driveinfo.js";
+import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
 import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /**

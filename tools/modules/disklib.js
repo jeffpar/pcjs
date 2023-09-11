@@ -10,7 +10,6 @@
 import crypto     from "crypto";
 import fs         from "fs";
 import glob       from "glob";
-import got        from "got";
 import os         from "os";
 import path       from "path";
 import BASFile    from "../modules/basfile.js";
@@ -19,8 +18,8 @@ import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import FileLib    from "../../machines/modules/v2/filelib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
+import CharSet    from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
-import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
@@ -798,8 +797,8 @@ export async function readDiskAsync(diskFile, forceBPB, driveInfo)
             diskFile = getServerPath(diskFile);
             if (Device.DEBUG) printf("reading: %s\n", diskFile);
             if (diskFile.startsWith("http")) {
-                let response = await got(diskFile);
-                db = response.body;
+                let response = await fetch(diskFile);
+                db = await response.text();
             } else {
                 db = await readFile(diskFile);
             }
@@ -914,8 +913,8 @@ export async function readFileAsync(sFile, encoding = "utf8")
     if (Device.DEBUG) printf("reading: %s\n", sFile);
     if (sFile.startsWith("http")) {
         try {
-            let response = await got(sFile);
-            db = response.body;
+            let response = await fetch(sFile);
+            db = await response.text();
         } catch(err) {
             printError(err);
         }

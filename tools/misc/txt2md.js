@@ -9,7 +9,7 @@
  */
 
 import fs from "fs";
-import CharSet from "../../machines/pcx86/modules/v3/charset.js";
+import CharSet from "../../machines/pcx86/modules/v2/charset.js";
 
 /**
  * processFile(sInputFile, sOutputFile)

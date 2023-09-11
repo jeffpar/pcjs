@@ -19,7 +19,7 @@ import Messages      from "../../machines/modules/v2/messages.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib        from "../../machines/modules/v2/strlib.js";
 import Device        from "../../machines/modules/v3/device.js";
-import CharSet       from "../../machines/pcx86/modules/v3/charset.js";
+import CharSet       from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo      from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
 import { device, existsDir, existsFile, getDiskSector, getTargetValue, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
@@ -2246,17 +2246,18 @@ function doCommand(s, reload = false)
         cmd = cmd.slice(0, i);
     }
 
-    let arg, args = aTokens.join(' ');
+    let arg, args = aTokens.join(' ').trim();
     let result = "", curDir = "", sDir = localDir, sDrive = "";
 
     let help = function() {
-        let result = "pc.js commands:\n" +
-                    "  build [DOS command(s)]\n" +
-                    "  exec [local command]\n" +
-                    "  load [drive] [search options]\n" +
-                    "  save [local disk image]\n" +
-                    "  start [machine]\n" +
-                    "  quit";
+        let result = "pc.js internal commands:\n\n" +
+                    "abort\tterminate without saving\n" +
+                    "build\tbuild disk to run specified command(s)\n" +
+                    "exec\texecute a local command\n" +
+                    "load\tload drive with the specified diskette\n" +
+                    "save\tsave disk as a local disk image\n" +
+                    "start\tstart a new machine\n" +
+                    "quit\tsave all changed files and terminate\n";
         if (machine.dbg) {
             result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
         } else if (machine.cpu) {
@@ -2295,20 +2296,24 @@ function doCommand(s, reload = false)
         }
         curDir = process.cwd();
         try {
+            let app, argv, appConfig, child;
             process.chdir(mapDir(machineDir));
-            let argv = args.split(' ');
-            let app = argv[0];
-            let appConfig = configJSON['apps']?.[app];
-            if (appConfig) {
-                if (appConfig['exec']) {
-                    args = appConfig['exec'].replace(/\$\*/, argv.slice(1).join(' '));
-                }
+            argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
+            appConfig = configJSON['apps']?.[app];
+            if (appConfig && appConfig['exec']) {
+                args = argv.join(' ').trim();
+                args = appConfig['exec'].replace(/\$\*/, args);
+                argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
             }
-            let child = child_process.execSync(args, {
+            /*
+             * I've tweaked execSync() a bit to make it work with both Node and Bun....  I've also tried
+             * spawnSync(app, argv, ...), but that doesn't work as well.
+             */
+            child = child_process.execSync(args, {
                 stdio: [
-                process.stdin,
-                process.stdout,
-                process.stderr
+                    "inherit", // process.stdin,
+                    "inherit", // process.stdout,
+                    "inherit"  // process.stderr
                 ]
             });
         } catch(err) {
@@ -2650,25 +2655,18 @@ function exit(code = 0)
 }
 
 /**
- * main(argc, argv)
+ * checkArgs(argv, removeArg, removeFlag)
  *
- * @param {number} argc
- * @param {Array} argv
+ * @param {Object} argv
+ * @param {function()} removeArg
+ * @param {function()} removeFlag
+ * @returns {boolean} (true if we should continue, false if we should exit)
  */
-function main(argc, argv)
+function checkArgs(argv, removeArg, removeFlag)
 {
-    let removeArg = function(arg) {
-        return pcjslib.removeArg(argv, arg, "string");
-    }
-
-    let removeFlag = function(arg) {
-        return pcjslib.removeArg(argv, arg, "boolean");
-    }
-
     fDebug = removeFlag('debug') || fDebug;
     fVerbose = removeFlag('verbose') || fVerbose;
     fTest = removeFlag('test') || fTest;
-    if (removeFlag('trim')) driveInfo.trimFAT = true;
 
     device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
@@ -2684,8 +2682,12 @@ function main(argc, argv)
         printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
     }
 
-    machines = JSON.parse(readFileSync("/machines/machines.json"));
-    configJSON = JSON5.parse(readFileSync(path.join(pcjsDir, configFile))) || configJSON;
+    if (removeFlag('help')) {
+        return false;
+    }
+
+    machines = JSON.parse(readFileSync("/machines/machines.json") || "{}");
+    configJSON = JSON5.parse(readFileSync(path.join(pcjsDir, configFile) || {}));
     let defaults = configJSON['defaults'] || {};
 
     fBare = removeFlag('bare') || fBare;
@@ -2734,6 +2736,7 @@ function main(argc, argv)
     }
 
     kbTarget = getTargetValue(removeArg('target')) || kbTarget;
+    if (removeFlag('trim')) driveInfo.trimFAT = true;
 
     let typeDrive = removeArg('drivetype');
     if (typeDrive) {
@@ -2800,8 +2803,26 @@ function main(argc, argv)
     if (hiddenSectors) {
         driveInfo.hiddenSectors = +hiddenSectors || 0;
     }
+    return true;
+}
 
-    if (removeFlag('help')) {
+/**
+ * main(argc, argv)
+ *
+ * @param {number} argc
+ * @param {Array} argv
+ */
+function main(argc, argv)
+{
+    let removeArg = function(arg) {
+        return pcjslib.removeArg(argv, arg, "string");
+    }
+
+    let removeFlag = function(arg) {
+        return pcjslib.removeArg(argv, arg, "boolean");
+    }
+
+    if (!checkArgs(argv, removeArg, removeFlag)) {
         let optionsMain = {
             "--start=[machine]":        "start machine configuration file",
         };

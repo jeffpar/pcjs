@@ -100,20 +100,20 @@ export default class DataBuffer {
      *
      * @this {DataBuffer}
      * @param {DataBuffer} dbTarget
-     * @param {number} offTarget
+     * @param {number} [offTarget]
      * @param {number} [offSource]
      * @param {number} [offSourceEnd]
      */
-    copy(dbTarget, offTarget, offSource, offSourceEnd)
+    copy(dbTarget, offTarget = 0, offSource = 0, offSourceEnd = this.length)
     {
         if (this.node) {
             this.buffer.copy(dbTarget.buffer, offTarget, offSource, offSourceEnd);
         } else {
-            let offMax = this.length;
+            let cbCopy = offSourceEnd - offSource;
             let cbMax = dbTarget.length - offTarget;
-            if (offMax > cbMax) offMax = cbMax;
-            for (let off = 0; off < offMax; off++) {
-                dbTarget.writeUInt8(this.readUInt8(off), offTarget + off);
+            if (cbCopy > cbMax) cbCopy = cbMax;
+            while (cbCopy-- > 0) {
+                dbTarget.writeUInt8(this.readUInt8(offSource++), offTarget++);
             }
         }
     }

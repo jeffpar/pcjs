@@ -525,13 +525,23 @@ export default class Disk extends Component {
 
         if (file) {
             let reader = new FileReader();
-            reader.onload = function() {
-                disk.buildDisk(/** @type {ArrayBuffer} */ (reader.result), true);
-            };
-            reader.onerror = function() {
-                disk.buildDisk(null, false, reader.error.message);
-            };
-            reader.readAsArrayBuffer(file);
+            if (file.type == "application/json") {
+                reader.onload = function() {
+                    disk.doneLoad(sDiskURL, /** @type {string} */ (reader.result), 0);
+                };
+                reader.onerror = function() {
+                    disk.buildDisk(null, false, reader.error.message);
+                };
+                reader.readAsText(file);
+            } else {
+                reader.onload = function() {
+                    disk.buildDisk(/** @type {ArrayBuffer} */ (reader.result), true);
+                };
+                reader.onerror = function() {
+                    disk.buildDisk(null, false, reader.error.message);
+                };
+                reader.readAsArrayBuffer(file);
+            }
             return true;
         }
 

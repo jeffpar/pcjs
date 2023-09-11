@@ -860,20 +860,20 @@ class DataBuffer {
      *
      * @this {DataBuffer}
      * @param {DataBuffer} dbTarget
-     * @param {number} offTarget
+     * @param {number} [offTarget]
      * @param {number} [offSource]
      * @param {number} [offSourceEnd]
      */
-    copy(dbTarget, offTarget, offSource, offSourceEnd)
+    copy(dbTarget, offTarget = 0, offSource = 0, offSourceEnd = this.length)
     {
         if (this.node) {
             this.buffer.copy(dbTarget.buffer, offTarget, offSource, offSourceEnd);
         } else {
-            let offMax = this.length;
+            let cbCopy = offSourceEnd - offSource;
             let cbMax = dbTarget.length - offTarget;
-            if (offMax > cbMax) offMax = cbMax;
-            for (let off = 0; off < offMax; off++) {
-                dbTarget.writeUInt8(this.readUInt8(off), offTarget + off);
+            if (cbCopy > cbMax) cbCopy = cbMax;
+            while (cbCopy-- > 0) {
+                dbTarget.writeUInt8(this.readUInt8(offSource++), offTarget++);
             }
         }
     }
@@ -6701,7 +6701,7 @@ X86.OPFLAG_PREFIXES = (X86.OPFLAG.SEG | X86.OPFLAG.LOCK | X86.OPFLAG.REPZ | X86.
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v3/charset.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/charset.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -6872,7 +6872,7 @@ CharSet.CP437 = [
 // ];
 
 /**
- * @copyright https://www.pcjs.org/modules/v3/driveinfo.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/driveinfo.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -62857,13 +62857,23 @@ class Disk extends Component {
 
         if (file) {
             let reader = new FileReader();
-            reader.onload = function() {
-                disk.buildDisk(/** @type {ArrayBuffer} */ (reader.result), true);
-            };
-            reader.onerror = function() {
-                disk.buildDisk(null, false, reader.error.message);
-            };
-            reader.readAsArrayBuffer(file);
+            if (file.type == "application/json") {
+                reader.onload = function() {
+                    disk.doneLoad(sDiskURL, /** @type {string} */ (reader.result), 0);
+                };
+                reader.onerror = function() {
+                    disk.buildDisk(null, false, reader.error.message);
+                };
+                reader.readAsText(file);
+            } else {
+                reader.onload = function() {
+                    disk.buildDisk(/** @type {ArrayBuffer} */ (reader.result), true);
+                };
+                reader.onerror = function() {
+                    disk.buildDisk(null, false, reader.error.message);
+                };
+                reader.readAsArrayBuffer(file);
+            }
             return true;
         }
 

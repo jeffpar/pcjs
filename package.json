@@ -35,7 +35,6 @@
     "eslint": "^8.36.0",
     "glob": "^7.1.6",
     "google-closure-compiler": "^20230206.0.0",
-    "got": "^12.6.0",
     "gulp": "^4.0.2",
     "gulp-chmod": "^3.0.0",
     "gulp-concat": "^2.6.1",

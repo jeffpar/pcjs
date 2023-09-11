@@ -478,16 +478,50 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--target=32M",
-        "--sys=msdos:3.30",
-        "--halt"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/bad",
+      "cwd": "${workspaceFolder}/tools/pc/disks/test",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "PC.js with Bun",
+      "type": "bun",
+      "request": "launch",
+      // The path to a JavaScript or TypeScript file to run.
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      // The arguments to pass to the program, if any.
+      "args": [
+        "--target=32M",
+        "--sys=msdos:3.30",
+        "--halt"
+      ],
+      // The working directory of the program.
+      "cwd": "${workspaceFolder}/tools/pc/disks/test",
+      // The environment variables to pass to the program.
+      "env": {},
+      // If the environment variables should not be inherited from the parent process.
+      "strictEnv": false,
+      // If the program should be run in watch mode.
+      // This is equivalent to passing `--watch` to the `bun` executable.
+      // You can also set this to "hot" to enable hot reloading using `--hot`.
+      "watchMode": false,
+      // If the debugger should stop on the first line of the program.
+      "stopOnEntry": false,
+      // If the debugger should be disabled. (for example, breakpoints will not be hit)
+      "noDebug": false,
+      // The path to the `bun` executable, defaults to your `PATH` environment variable.
+      "runtime": "bun",
+      // The arguments to pass to the `bun` executable, if any.
+      // Unlike `args`, these are passed to the executable itself, not the program.
+      "runtimeArgs": [],
       "presentation": {
         "hidden": false,
         "group": "machines",
@@ -1548,8 +1582,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "empty.json",
-        "--extract=ibmdos.com"
+        "https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json",
+        "--extract",
+        "--extdir",
+        "foo"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
@@ -1557,6 +1593,44 @@
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "diskimage.js with Bun",
+      "type": "bun",
+      "request": "launch",
+      // The path to a JavaScript or TypeScript file to run.
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      // The arguments to pass to the program, if any.
+      "args": [
+        "https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json",
+        "--extract",
+        "--extdir",
+        "foo"
+      ],
+      // The working directory of the program.
+      "cwd": "${workspaceFolder}/tools/pc/disks",
+      // The environment variables to pass to the program.
+      "env": {},
+      // If the environment variables should not be inherited from the parent process.
+      "strictEnv": false,
+      // If the program should be run in watch mode.
+      // This is equivalent to passing `--watch` to the `bun` executable.
+      // You can also set this to "hot" to enable hot reloading using `--hot`.
+      "watchMode": false,
+      // If the debugger should stop on the first line of the program.
+      "stopOnEntry": false,
+      // If the debugger should be disabled. (for example, breakpoints will not be hit)
+      "noDebug": false,
+      // The path to the `bun` executable, defaults to your `PATH` environment variable.
+      "runtime": "bun",
+      // The arguments to pass to the `bun` executable, if any.
+      // Unlike `args`, these are passed to the executable itself, not the program.
+      "runtimeArgs": [],
       "presentation": {
         "hidden": false,
         "group": "utilities",
