@@ -19,7 +19,7 @@ import Messages      from "../../machines/modules/v2/messages.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib        from "../../machines/modules/v2/strlib.js";
 import Device        from "../../machines/modules/v3/device.js";
-import CharSet       from "../../machines/pcx86/modules/v3/charset.js";
+import CharSet       from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo      from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
 import { device, existsDir, existsFile, getDiskSector, getTargetValue, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";

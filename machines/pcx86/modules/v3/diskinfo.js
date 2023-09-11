@@ -8,10 +8,10 @@
  */
 
 import CPUx86 from "./cpux86.js";
-import CharSet from "./charset.js";
+import CharSet from "../v2/charset.js";
 import Device from "../../../modules/v3/device.js";
 import FileInfo from "./fileinfo.js";
-import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
+import { DRIVE_CTRLS, DRIVE_TYPES } from "../v2/driveinfo.js";
 
 /**
  * VolInfo describes a volume.  NOTE: this list of properties may not be

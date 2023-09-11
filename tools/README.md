@@ -32,7 +32,7 @@ Here are a few other JavaScript modules I've written for the project:
       - Reduced files (ZIP compression formats #2, #3, #4, and #5)
       - Imploded files (ZIP compression format #6)
       - Deflated files (ZIP compression format #8)
-  - [BASFile.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js), a BASIC file de-tokenizer that also performs [PC character conversion](https://github.com/jeffpar/pcjs/tree/master/machines/pcx86/modules/v3/charset.js)
+  - [BASFile.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js), a BASIC file de-tokenizer that also performs [PC character conversion](https://github.com/jeffpar/pcjs/tree/master/machines/pcx86/modules/v2/charset.js)
 
 The [DiskImage.js](diskimage/) `--arc` and `--zip` options use **StreamZip** along with **LegacyZip** to decompress old ARC or ZIP archives, and the `--normalize` option uses **BASFile** to convert old IBM PC BASIC files to plain-text during the extraction/decompression process.
 

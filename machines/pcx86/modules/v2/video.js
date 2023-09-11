@@ -13,7 +13,7 @@ import KbdX86 from "./keyboard.js";
 import MemoryX86 from "./memory.js";
 import Messages from "./messages.js";
 import Mouse from "./mouse.js";
-import CharSet from "../v3/charset.js";
+import CharSet from "./charset.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import State from "../../../modules/v2/state.js";

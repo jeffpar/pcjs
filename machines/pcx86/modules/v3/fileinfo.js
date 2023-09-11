@@ -35,6 +35,104 @@ import DiskInfo from "./diskinfo.js";
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class FileInfo {
+
+    static ENTRY = {
+        OFFSET: "o",
+        SYMBOL: "s"
+    };
+
+    /*
+     * Original (aka "Old") Executable MS-DOS File Format
+     *
+     * Relocation entries are pairs of 16-bit words:
+     *
+     *      wOffset
+     *      wSegment
+     *
+     * I've noticed that a "PKLITE" EXE may have a oeRelocOffset of 0x52, where the word at 0x001C is 0x210F and the
+     * bytes from 0x001E through 0x0051 are:
+     *
+     *      "PKLITE Copr. 1990-92 PKWARE Inc. All Rights Reserved"
+     *
+     * Other EXEs have a oeRelocOffset of 0x1E, which begs the question: what is the word at 0x001C typically used for?
+     *
+     * It was not uncommon for there to be wasted space in the header; even an EXE with, say, 20 (0x14) entries would
+     * likely have a wHeaderParas value of 0x20, which is 512 (0x200) bytes.  The desire, no doubt, was to align the
+     * start of the EXE segment(s) to a traditional sector boundary.
+     */
+    static OE = {
+        SIG:            0x5A4D,
+        oeSignature:    [0x0000, 2],        // "MZ" (0x4D,0x5A)
+        oeLastBytes:    [0x0002, 2],        // 0-511 (0 means the entire last block is used)
+        oeBlocks:       [0x0004, 2],        // number of blocks in the file
+        oeRelocEntries: [0x0006, 2],        // number of relocation entries in the header
+        oeHeaderParas:  [0x0008, 2],        // number of (16-byte) paragraphs in the header
+        oeExtraParas:   [0x000A, 2],        // minimum number of additional paragraphs required at load-time
+        oeMaxParas:     [0x000C, 2],        // maximum number of additional paragraphs required at load-time
+        oeSSRel:        [0x000E, 2],        // relative value of SS
+        oeSPInit:       [0x0010, 2],        // initial value of SP
+        oeChecksum:     [0x0012, 2],        // checksum if non-zero (sum of all words, including this, should be zero)
+        oeIPInit:       [0x0014, 2],        // initial value of IP
+        oeCSRel:        [0x0016, 2],        // relative value of CS
+        oeRelocOffset:  [0x0018, 2],        // offset of first relocation item
+        oeOverlay:      [0x001A, 2],        // overlay number (normally zero, implying main program)
+        /*
+         * The following fields are accommodated by the NE format, but they were actually defined by "the DOS 4.0 group"
+         * as extensions to the OE format.
+         */
+        oeDOS40Bits:    [0x0020, 2],        // DOS 4.0 behavior bits
+        oeUnusedBits:   [0x0022, 2],        // unused behavior bits
+        /*
+         * If oeRelocOffset (0x0018) is 0x40, then the file is considered an NE (New Executable) MS-DOS file, and
+         * the offset of the NE header (from the start of the file) is a 32-bit value stored at 0x003C.  Note that early
+         * versions of Windows (aka "DOS 2.0 Windows") originally defined the NE header offset as a 16-bit value stored
+         * at 0x003E.  And before that, it may have been a 16-bit value stored at 0x0024, which would have been immediately
+         * after the "behavior bits" fields shown above).
+         */
+        oeNEHeader:     [0x003C, 4],        // offset from start of file to NE header
+        NE_SIG:         0x40
+    };
+
+    /*
+     * New Executable MS-DOS File Format
+     *
+     * Unless otherwise specified, all *Offset fields are relative to the start of the NE header, and all *Size fields
+     * are in bytes.
+     */
+    static NE = {
+        SIG:            0x454E,
+        neSignature:    [0x0000, 2],        // "NE" (0x4E,0x45)
+        neLinkerVer:    [0x0002, 2],        // (low byte is version, high byte is revision)
+        neETOffset:     [0x0004, 2],        // Entry Table offset
+        neETSize:       [0x0006, 2],        // Entry Table size
+        neChecksum:     [0x0008, 4],        // checksum (sum of all DWORDs in the file, excluding this one)
+        neFlags:        [0x000C, 2],
+        neDataSeg:      [0x000E, 2],
+        neHeapSize:     [0x0010, 2],
+        neStackSize:    [0x0012, 2],
+        neCSIP:         [0x0014, 4],
+        neSSSP:         [0x0018, 4],
+        neSTEntries:    [0x001C, 2],        // Segment Table entries
+        neMRTEntries:   [0x001E, 2],        // Module Reference Table entries
+        neNRNTSize:     [0x0020, 2],        // Non-Resident Name Table size
+        neSTOffset:     [0x0022, 2],        // Segment Table offset
+        neRTOffset:     [0x0024, 2],        // Resource Table offset
+        neRNTOffset:    [0x0026, 2],        // Resident Name Table offset
+        neMRTOffset:    [0x0028, 2],        // Module Reference Table offset
+        neINTOffset:    [0x002A, 2],        // Imported Names Table offset
+        neNRNTOffset:   [0x002C, 4],        // Non-Resident Name Table offset (relative to start of file)
+        neETMovable:    [0x0030, 2],        // number of movable entries in the Entry Table
+        neSegOffShift:  [0x0032, 2],        // logical sector alignment shift count, log(base 2) of the segment sector size (default 9)
+        /*
+         * Fields after this point are post "DOS 2.0 Windows"...
+         */
+        neRTEntries:    [0x0034, 2],        // Resource Table entries
+        neEXEType:      [0x0036, 1]         // executable type (0x02 for Windows)
+        /*
+         * 0x37 through 0x3F is reserved.
+         */
+    };
+
     /**
      * FileInfo(disk, iVolume, path, name, attr, size, cluster, aLBA)
      *
@@ -472,100 +570,3 @@ export default class FileInfo {
         return sSymbol || this.name + '+' + this.device.sprintf("%#0x", off);
     }
 }
-
-FileInfo.ENTRY = {
-    OFFSET: "o",
-    SYMBOL: "s"
-};
-
-/*
- * Original (aka "Old") Executable MS-DOS File Format
- *
- * Relocation entries are pairs of 16-bit words:
- *
- *      wOffset
- *      wSegment
- *
- * I've noticed that a "PKLITE" EXE may have a oeRelocOffset of 0x52, where the word at 0x001C is 0x210F and the
- * bytes from 0x001E through 0x0051 are:
- *
- *      "PKLITE Copr. 1990-92 PKWARE Inc. All Rights Reserved"
- *
- * Other EXEs have a oeRelocOffset of 0x1E, which begs the question: what is the word at 0x001C typically used for?
- *
- * It was not uncommon for there to be wasted space in the header; even an EXE with, say, 20 (0x14) entries would
- * likely have a wHeaderParas value of 0x20, which is 512 (0x200) bytes.  The desire, no doubt, was to align the
- * start of the EXE segment(s) to a traditional sector boundary.
- */
-FileInfo.OE = {
-    SIG:            0x5A4D,
-    oeSignature:    [0x0000, 2],        // "MZ" (0x4D,0x5A)
-    oeLastBytes:    [0x0002, 2],        // 0-511 (0 means the entire last block is used)
-    oeBlocks:       [0x0004, 2],        // number of blocks in the file
-    oeRelocEntries: [0x0006, 2],        // number of relocation entries in the header
-    oeHeaderParas:  [0x0008, 2],        // number of (16-byte) paragraphs in the header
-    oeExtraParas:   [0x000A, 2],        // minimum number of additional paragraphs required at load-time
-    oeMaxParas:     [0x000C, 2],        // maximum number of additional paragraphs required at load-time
-    oeSSRel:        [0x000E, 2],        // relative value of SS
-    oeSPInit:       [0x0010, 2],        // initial value of SP
-    oeChecksum:     [0x0012, 2],        // checksum if non-zero (sum of all words, including this, should be zero)
-    oeIPInit:       [0x0014, 2],        // initial value of IP
-    oeCSRel:        [0x0016, 2],        // relative value of CS
-    oeRelocOffset:  [0x0018, 2],        // offset of first relocation item
-    oeOverlay:      [0x001A, 2],        // overlay number (normally zero, implying main program)
-    /*
-     * The following fields are accommodated by the NE format, but they were actually defined by "the DOS 4.0 group"
-     * as extensions to the OE format.
-     */
-    oeDOS40Bits:    [0x0020, 2],        // DOS 4.0 behavior bits
-    oeUnusedBits:   [0x0022, 2],        // unused behavior bits
-    /*
-     * If oeRelocOffset (0x0018) is 0x40, then the file is considered an NE (New Executable) MS-DOS file, and
-     * the offset of the NE header (from the start of the file) is a 32-bit value stored at 0x003C.  Note that early
-     * versions of Windows (aka "DOS 2.0 Windows") originally defined the NE header offset as a 16-bit value stored
-     * at 0x003E.  And before that, it may have been a 16-bit value stored at 0x0024, which would have been immediately
-     * after the "behavior bits" fields shown above).
-     */
-    oeNEHeader:     [0x003C, 4],        // offset from start of file to NE header
-    NE_SIG:         0x40
-};
-
-/*
- * New Executable MS-DOS File Format
- *
- * Unless otherwise specified, all *Offset fields are relative to the start of the NE header, and all *Size fields
- * are in bytes.
- */
-FileInfo.NE = {
-    SIG:            0x454E,
-    neSignature:    [0x0000, 2],        // "NE" (0x4E,0x45)
-    neLinkerVer:    [0x0002, 2],        // (low byte is version, high byte is revision)
-    neETOffset:     [0x0004, 2],        // Entry Table offset
-    neETSize:       [0x0006, 2],        // Entry Table size
-    neChecksum:     [0x0008, 4],        // checksum (sum of all DWORDs in the file, excluding this one)
-    neFlags:        [0x000C, 2],
-    neDataSeg:      [0x000E, 2],
-    neHeapSize:     [0x0010, 2],
-    neStackSize:    [0x0012, 2],
-    neCSIP:         [0x0014, 4],
-    neSSSP:         [0x0018, 4],
-    neSTEntries:    [0x001C, 2],        // Segment Table entries
-    neMRTEntries:   [0x001E, 2],        // Module Reference Table entries
-    neNRNTSize:     [0x0020, 2],        // Non-Resident Name Table size
-    neSTOffset:     [0x0022, 2],        // Segment Table offset
-    neRTOffset:     [0x0024, 2],        // Resource Table offset
-    neRNTOffset:    [0x0026, 2],        // Resident Name Table offset
-    neMRTOffset:    [0x0028, 2],        // Module Reference Table offset
-    neINTOffset:    [0x002A, 2],        // Imported Names Table offset
-    neNRNTOffset:   [0x002C, 4],        // Non-Resident Name Table offset (relative to start of file)
-    neETMovable:    [0x0030, 2],        // number of movable entries in the Entry Table
-    neSegOffShift:  [0x0032, 2],        // logical sector alignment shift count, log(base 2) of the segment sector size (default 9)
-    /*
-     * Fields after this point are post "DOS 2.0 Windows"...
-     */
-    neRTEntries:    [0x0034, 2],        // Resource Table entries
-    neEXEType:      [0x0036, 1]         // executable type (0x02 for Windows)
-    /*
-     * 0x37 through 0x3F is reserved.
-     */
-};

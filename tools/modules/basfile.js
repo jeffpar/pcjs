@@ -8,7 +8,7 @@
  */
 
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
-import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
+import CharSet    from "../../machines/pcx86/modules/v2/charset.js";
 
 /**
  * BASIC File Conversion Library

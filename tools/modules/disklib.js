@@ -18,8 +18,8 @@ import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import FileLib    from "../../machines/modules/v2/filelib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
+import CharSet    from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
-import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
