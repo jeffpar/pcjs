@@ -22,7 +22,7 @@ See "[A digital legacy for the Mac series of medical, educational computer simul
     IO       SYS*    22398   2-02-88  12:00a
     MSDOS    SYS*    30128   2-02-88  12:00a
     COMMAND  COM*    25308   2-02-88  12:00a
-    AUTOEXEC BAT*       21   8-24-23   2:11p
+    AUTOEXEC BAT        39   8-24-23   3:14p
     DOPE     BAT        27   8-24-23  12:35p
     DPXDRG   DAT     78720   8-24-23  12:35p
     MACDOPE  EXE    152315   8-24-23  12:35p
@@ -48,5 +48,5 @@ See "[A digital legacy for the Mac series of medical, educational computer simul
     SYSTEM35 FNT      9620   8-24-23  12:35p
     SYSTEM48 FNT      5476   8-24-23  12:35p
     SYSTEM72 FNT      3196   8-24-23  12:35p
-           29 file(s)     901307 bytes
+           29 file(s)     901325 bytes
                           304128 bytes free
