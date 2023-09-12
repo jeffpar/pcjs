@@ -11,6 +11,9 @@
  * @class DiskSearch
  * @property {string} url
  * @property {Object} diskettes
+ * @property {Element} input
+ * @property {Element} output
+ * @property {string} idMachine
  */
 export default class DiskSearch {
     /**
@@ -20,8 +23,9 @@ export default class DiskSearch {
      * @param {string} [url]
      * @param {string} [idInput]
      * @param {string} [idOutput]
+     * @param {string} [idMachine]
      */
-    constructor(url, idInput, idOutput)
+    constructor(url, idInput, idOutput, idMachine)
     {
         if (url) {
             this.loadDiskettes(url);
@@ -36,6 +40,7 @@ export default class DiskSearch {
         if (idOutput) {
             this.output = document.querySelector('#' + idOutput);
         }
+        this.idMachine = idMachine;
     }
 
     /**
@@ -209,12 +214,16 @@ export default class DiskSearch {
                             item.setAttribute("title", summary);
                             summary = summary.slice(0, j) + "...";
                         }
+                        let onclick = "";
                         let pathDisk = media['@path'];
                         let matchDisk = pathDisk.match(/[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]\/DISK([0-9]+)$/);
                         if (matchDisk) {
                             pathDisk = "?automount={A:\"None\",B:\"PC-SIG%20Library%20Disk%20%23" + matchDisk[1] + "\"}";
+                            if (this.idMachine) {
+                                onclick = "return !commandMachine(this, false, '" + this.idMachine + "', '', 'script', 'select FDC listDrives &quot;B:&quot;; select FDC listDisks &quot;PC-SIG Library Disk #" + matchDisk[1] + "&quot;; loadDisk FDC scroll')";
+                            }
                         }
-                        item.innerHTML = "<a href='" + pathDisk + "' target='_blank'>" + title + "</a>: " + summary;
+                        item.innerHTML = "<a href='" + pathDisk + "' target=\"_blank\"" + (onclick? " onclick=\"" + onclick + "\"" : "") + ">" + title + "</a>: " + summary;
                         list.appendChild(item);
                      }
                      this.output.appendChild(list);

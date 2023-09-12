@@ -4863,7 +4863,7 @@ class Component {
         }
 
         if (commands && !commands.length) {
-            delete commands[idMachine];
+            delete globals.pcjs['commands'][idMachine];
         }
 
         return fSuccess;
