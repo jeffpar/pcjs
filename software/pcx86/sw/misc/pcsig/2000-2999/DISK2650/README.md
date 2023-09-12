@@ -19,7 +19,6 @@ machines:
 
 ## FILE2650.TXT
 
-{% raw %}
 ```
 Disk No: 2650                                                           
 Disk Title: BLANK-IT, PIK, and BOTHSIDES                                
@@ -88,11 +87,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║        <<<<  PC-SIG Disk #2650  BLANK-IT, PIK, & BOTHSIDES  >>>>        ║
@@ -138,7 +135,6 @@ Sunnyvale  Ca. 94086
 ║                                           Copyright 1991, PC-SIG, Inc.  ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -35,7 +35,6 @@ machines:
 
 ## CRC.TXT
 
-{% raw %}
 ```
 PC-SIG Disk No. #147, version v1 
 
@@ -140,7 +139,6 @@ PC Software Interest Group
 Sunnyvale, CA 94086
 (408) 730-9291
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -46,7 +46,6 @@ machines:
 
 ## FILE1933.TXT
 
-{% raw %}
 ```
 Disk No: 1933                                                           
 Disk Title: OLV312                                                      
@@ -84,11 +83,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║                   <<<<  Disk #1933  OVL312  >>>>                        ║
@@ -98,11 +95,9 @@ Sunnyvale  Ca. 94086
 ║ To print documentation, type: COPY OVL.DOC PRN                          ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 ## BNEST1.BAS
 
-{% raw %}
 ```bas
 sub nest1(i) static
 	print:print"in nest1";i;
@@ -111,11 +106,9 @@ sub nest1(i) static
 	next j
 end sub
 ```
-{% endraw %}
 
 ## BNEST2.BAS
 
-{% raw %}
 ```bas
 sub nest2(i) static
 	print:print"in nest2";i;
@@ -124,11 +117,9 @@ sub nest2(i) static
 	next j
 end sub
 ```
-{% endraw %}
 
 ## BNEST3.BAS
 
-{% raw %}
 ```bas
 sub nest3(i) static
 	print:print"in nest3";i;
@@ -137,11 +128,9 @@ sub nest3(i) static
 	next j
 end sub
 ```
-{% endraw %}
 
 ## BNEST4.BAS
 
-{% raw %}
 ```bas
 common shared b
 
@@ -151,11 +140,9 @@ sub nest4(i) static
 	b=b+1
 end sub
 ```
-{% endraw %}
 
 ## DOGGEREL.TXT
 
-{% raw %}
 ```
 ***************************************************************************
 *                                                                         *
@@ -166,11 +153,9 @@ end sub
 *                                                                         *
 ***************************************************************************
 ```
-{% endraw %}
 
 ## MASMTEST.ASM
 
-{% raw %}
 ```
 ;DOSSEG
 .MODEL	large
@@ -210,11 +195,9 @@ mainproc	ENDP
 
 	END		start
 ```
-{% endraw %}
 
 ## MULTA.ASM
 
-{% raw %}
 ```
 .MODEL	large
 
@@ -246,11 +229,9 @@ temp	endp
 
 	END
 ```
-{% endraw %}
 
 ## MULTB.ASM
 
-{% raw %}
 ```
 .MODEL	large
 
@@ -282,11 +263,9 @@ temp	endp
 
 	END
 ```
-{% endraw %}
 
 ## MULTC.ASM
 
-{% raw %}
 ```
 .MODEL	large
 
@@ -318,11 +297,9 @@ temp	endp
 
 	END
 ```
-{% endraw %}
 
 ## MULTD.ASM
 
-{% raw %}
 ```
 .MODEL	large
 
@@ -354,11 +331,9 @@ temp	endp
 
 	END
 ```
-{% endraw %}
 
 ## MULTEST.ASM
 
-{% raw %}
 ```
 DOSSEG
 .MODEL	large
@@ -412,11 +387,9 @@ notd:
 
 	END		start
 ```
-{% endraw %}
 
 ## OV1.ASM
 
-{% raw %}
 ```
 .MODEL	large
 
@@ -438,11 +411,9 @@ ov1	ENDP
 	
 	END
 ```
-{% endraw %}
 
 ## OV2.ASM
 
-{% raw %}
 ```
 .MODEL	large
 
@@ -463,11 +434,9 @@ ov2	ENDP
 	
 	END
 ```
-{% endraw %}
 
 ## OV3.ASM
 
-{% raw %}
 ```
 .MODEL	large
 
@@ -488,11 +457,9 @@ ov3	ENDP
 	
 	END
 ```
-{% endraw %}
 
 ## OVL.DOC
 
-{% raw %}
 ```
 
 
@@ -2447,11 +2414,9 @@ ov3	ENDP
 
 
 ```
-{% endraw %}
 
 ## PRTEST.ASM
 
-{% raw %}
 ```
 DOSSEG
 .MODEL	large
@@ -2609,11 +2574,9 @@ jmp_address	dd	0
 
 	END		start
 ```
-{% endraw %}
 
 ## PTEST2.ASM
 
-{% raw %}
 ```
 .MODEL	large
 
@@ -2634,11 +2597,9 @@ p2	ENDP
 
 	END
 ```
-{% endraw %}
 
 ## PTEST3.ASM
 
-{% raw %}
 ```
 .MODEL	large
 
@@ -2659,11 +2620,9 @@ p3	ENDP
 
 	END
 ```
-{% endraw %}
 
 ## QBNEST.BAS
 
-{% raw %}
 ```bas
 common shared b
 
@@ -2677,7 +2636,6 @@ for i=0 to 1
 next
 print:print fre(""),fre(0),fre(-1),fre(-2)
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

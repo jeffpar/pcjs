@@ -69,7 +69,6 @@ machines:
 
 ## FILE1287.TXT
 
-{% raw %}
 ```
 Disk No: 1287
 Program Title:  ZOOMRACKS
@@ -151,13 +150,10 @@ PC-SIG
 1030D E. Duane Avenue
 Sunnyvale, CA 94086
 (c) Copyright 1989 PC-SIG, Inc.
-
 ```
-{% endraw %}
 
 ## HELP.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║                       Most-Used Zoomrack Keys                           ║
@@ -223,11 +219,9 @@ Sunnyvale, CA 94086
 ║                                                                         ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 ## LICENSE.TXT
 
-{% raw %}
 ```
 License Agreement
 
@@ -277,7 +271,6 @@ INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES RESULTING FROM ANY
 DEFECT IN THE SOFTWARE.  IF THE SOFTWARE PROVES TO HAVE DEFECTS,
 YOU ASSUME THE COST OF ANY NECESSARY SERVICING OR REPAIRS.
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

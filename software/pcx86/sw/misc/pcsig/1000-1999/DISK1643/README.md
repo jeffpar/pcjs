@@ -41,7 +41,6 @@ machines:
 
 ## FILE1643.TXT
 
-{% raw %}
 ```
 Disk No: 1643                                                           
 Disk Title: KEDITOR (1665 also)                                         
@@ -90,11 +89,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1988 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║         <<<<  Disk #1643  KEDITOR disk 1 of 2 (1665)  >>>>              ║
@@ -104,7 +101,6 @@ Sunnyvale  Ca. 94086
 ║ To print documentation, type:  COPY README.1ST PRN                      ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

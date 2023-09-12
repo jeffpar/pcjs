@@ -19,7 +19,6 @@ machines:
 
 ## FILE2537.TXT
 
-{% raw %}
 ```
 Disk No: 2537                                                           
 Disk Title: Peruse                                                      
@@ -48,7 +47,6 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

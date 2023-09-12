@@ -19,7 +19,6 @@ machines:
 
 ## FILE2565.TXT
 
-{% raw %}
 ```
 Disk No: 2565                                                           
 Disk Title: Dan Buerg Utilities                                         
@@ -67,11 +66,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
     ╔═══════════════════════════════════════════════════════════════╗
     ║           <<<<  DISK #2565  DAN BUERG UTILITIES  >>>>         ║
@@ -89,7 +86,6 @@ Sunnyvale  Ca. 94086
     ║                              (c) Copyright 1991, PC-SIG Inc.  ║
     ╚═══════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

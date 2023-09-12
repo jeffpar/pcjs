@@ -19,7 +19,6 @@ machines:
 
 ## FILE2672.TXT
 
-{% raw %}
 ```
 Disk No: 2672                                                           
 Disk Title: File Express 4/4 (287, 288, 2555 also)                      
@@ -94,7 +93,6 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

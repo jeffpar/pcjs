@@ -46,7 +46,6 @@ machines:
 
 ## 2LZH.DOC
 
-{% raw %}
 ```
 2LZH is a small program that takes care of converting ZIP, ARC,
 or PAK files to lzarc format.
@@ -99,11 +98,9 @@ Enjoy and I hope Lharc will save you a TON of diskspace.
 
 M. Bryeans, Micro TECH Systems (CBIS Number 1-314-334-6359)
 ```
-{% endraw %}
 
 ## 2LZH.DOC
 
-{% raw %}
 ```
 2LZH is a small program that takes care of converting ZIP, ARC,
 or PAK files to lzarc format.
@@ -156,11 +153,9 @@ Enjoy and I hope Lharc will save you a TON of diskspace.
 
 M. Bryeans, Micro TECH Systems (CBIS Number 1-314-334-6359)
 ```
-{% endraw %}
 
 ## FILE2018.TXT
 
-{% raw %}
 ```
 Disk No: 2018                                                           
 Disk Title: LHarc and Utilities                                         
@@ -199,11 +194,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║              <<<<  Disk #2018  LHARC AND UTILITIES  >>>>                ║
@@ -224,11 +217,9 @@ Sunnyvale  Ca. 94086
 ║ To print documentation, type: COPY ZIPNOTE\ZIPNOTE.DOC PRN              ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 ## LHDIR.DOC
 
-{% raw %}
 ```
 LHdir Version 1.3    5/89
 Copyright 1989 D & D Software Inc.
@@ -272,11 +263,9 @@ expressed or implied.
 Dennis Vallianos
 Compuserve ID 70406,1163
 ```
-{% endraw %}
 
 ## LHDIR.DOC
 
-{% raw %}
 ```
 LHdir Version 1.3    5/89
 Copyright 1989 D & D Software Inc.
@@ -320,11 +309,9 @@ expressed or implied.
 Dennis Vallianos
 Compuserve ID 70406,1163
 ```
-{% endraw %}
 
 ## ZIPNOTE.DOC
 
-{% raw %}
 ```
 ZipNote v1.0, Copyright 1989 by MJP Enterprises
 
@@ -420,11 +407,9 @@ To try the DEMO.SET type:
 
          ----------------end-of-author's-documentation--------------
 ```
-{% endraw %}
 
 ## ZIPNOTE.DOC
 
-{% raw %}
 ```
 ZipNote v1.0, Copyright 1989 by MJP Enterprises
 
@@ -520,7 +505,6 @@ To try the DEMO.SET type:
 
          ----------------end-of-author's-documentation--------------
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

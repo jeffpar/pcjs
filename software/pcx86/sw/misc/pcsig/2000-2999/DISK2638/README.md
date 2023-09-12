@@ -19,7 +19,6 @@ machines:
 
 ## FILE2638.TXT
 
-{% raw %}
 ```
 Disk No: 2638                                                           
 Disk Title: MARXMENU                                                    
@@ -46,11 +45,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║                <<<<  PC-SIG Disk #2638  MARXMENU  >>>>                  ║
@@ -63,11 +60,9 @@ Sunnyvale  Ca. 94086
 ║                                           Copyright 1991, PC-SIG, Inc.  ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 ## ORDER.TXT
 
-{% raw %}
 ```
 
    Other Computer Tyme Software:
@@ -190,9 +185,8 @@ Sunnyvale  Ca. 94086
 
                     * We do not take American Express *
 
-        =============================================================
+        =============================================================
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

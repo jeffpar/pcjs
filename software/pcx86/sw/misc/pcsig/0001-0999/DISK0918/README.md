@@ -36,7 +36,6 @@ machines:
 
 ## FILE0918.TXT
 
-{% raw %}
 ```
 Disk No:  918                                                           
 Disk Title: Cambridge Thoroughbred Handicapper                          
@@ -64,11 +63,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## FILES918.TXT
 
-{% raw %}
 ```
 Disk No  918
 Program Title: CAMBRIDGE HANDICAPPER SERIES version 3.0
@@ -110,13 +107,10 @@ PC-SIG
 Sunnyvale Ca. 94086
 (408) 730-9291
 (c) Copyright 1987,88 PC-SIG, Inc.
-
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║            <<<<  Disk #918 CAMBRIDGE HANDICAPPER SERIES  >>>>           ║
@@ -136,11 +130,9 @@ Sunnyvale Ca. 94086
 ║                                   (c) COPYRIGHT 1991, PC-SIG INC.       ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 ## HARNESS.DOC
 
-{% raw %}
 ```
 
 
@@ -1212,13 +1204,10 @@ Sunnyvale Ca. 94086
 
 
                                         Cambridge Harness Handicapper - 17
-
 ```
-{% endraw %}
 
 ## HOUNDS.DOC
 
-{% raw %}
 ```
 
 
@@ -2226,13 +2215,10 @@ Sunnyvale Ca. 94086
 
 
                                       Cambridge Greyhound Handicapper - 16
-
 ```
-{% endraw %}
 
 ## THISDISK.DOC
 
-{% raw %}
 ```
                           The Cambridge Handicappers
                 (C)1987 by Leonard Hyre and Michael J. Himowitz
@@ -2258,13 +2244,10 @@ Sunnyvale Ca. 94086
        Himowitz at the number above or leave messages to Mike Himowitz
        on Compuserve (71655,1327). We hope you like our programs.
 
-
 ```
-{% endraw %}
 
 ## THORO.DOC
 
-{% raw %}
 ```
 
 
@@ -3525,13 +3508,10 @@ Sunnyvale Ca. 94086
 
 
                                    Cambridge Thoroughbred Handicapper - 20
-
 ```
-{% endraw %}
 
 ## THORO4SW.DOC
 
-{% raw %}
 ```
 
 
@@ -4685,9 +4665,7 @@ Sunnyvale Ca. 94086
 
           Note: We Accept Checks, Money Orders, Visa and Mastercard.
           Foreign orders should be made payable in U.S. funds.
-
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

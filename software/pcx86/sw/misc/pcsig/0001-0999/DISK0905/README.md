@@ -47,7 +47,6 @@ machines:
 
 ## ABOUTPC.DOC
 
-{% raw %}
 ```
 
 
@@ -280,11 +279,9 @@ In LEARNSYM.DOC we will start the step by step production of a sample piece
 of artwork for a two sided plated through board. 
 
 ```
-{% endraw %}
 
 ## COMMANDS.DOC
 
-{% raw %}
 ```
           
 COMMANDS.DOC
@@ -1173,11 +1170,9 @@ Nothing implemented.  Provision for direct output to a plotter.
 
 
 ```
-{% endraw %}
 
 ## DEMO.DOC
 
-{% raw %}
 ```
 
 
@@ -1439,11 +1434,9 @@ symbols.
 
 
 ```
-{% endraw %}
 
 ## ERRORS.DOC
 
-{% raw %}
 ```
 
 ERRORS.DOC
@@ -1645,11 +1638,9 @@ take up a lot of list positions - but you can't do this if they are used.
 
 
 ```
-{% endraw %}
 
 ## FILES905.TXT
 
-{% raw %}
 ```
 Disk No  905
 Program Title: DROEGE version 1.86 (Disk 2 of 2)
@@ -1703,13 +1694,10 @@ PC-SIG
 Sunnyvale Ca. 94086
 (408) 730-9291
 (c) Copyright 1987,88 PC-SIG Inc.
-
 ```
-{% endraw %}
 
 ## FIRST.DOC
 
-{% raw %}
 ```
 
 
@@ -1967,11 +1955,9 @@ that you cannot find, perhaps it was there once.
                             
 
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║                   Disk No 905  DROEGE (Disk 2 of 2)                     ║
@@ -1985,11 +1971,9 @@ that you cannot find, perhaps it was there once.
 ║                                                                         ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 ## HOWTO.DOC
 
-{% raw %}
 ```
 
 HOWTO.DOC
@@ -2221,11 +2205,9 @@ you by doing exactly what you tell them to do.
 
 
 ```
-{% endraw %}
 
 ## INTRO.DOC
 
-{% raw %}
 ```
 
 INTRO.DOC
@@ -2385,11 +2367,9 @@ which serious users will want.  We hope to get desperate letters asking us to
 rush the larger version as users run out of memory.  Plan ahead and buy now. 
 
 ```
-{% endraw %}
 
 ## KEYTREE.DOC
 
-{% raw %}
 ```
 
 KEYTREE.DOC
@@ -2577,11 +2557,9 @@ posting near your terminal as a guide to the DROEGE system.
 
 
 ```
-{% endraw %}
 
 ## LEARNSYM.DOC
 
-{% raw %}
 ```
 
 LEARNSYM.DOC
@@ -3504,11 +3482,9 @@ by step operations as you pick up on the general idea of this system.  The
 detail is here to help those that are lost . 
 
 ```
-{% endraw %}
 
 ## ORDER.DOC
 
-{% raw %}
 ```
 
 ORDER.DOC
@@ -3560,11 +3536,9 @@ __________     __________     __________     __________     __________
 
 
 ```
-{% endraw %}
 
 ## PHOTOOL.DOC
 
-{% raw %}
 ```
 PHOTOOL.DOC
 
@@ -3657,11 +3631,9 @@ returned with the reservation.
 
 
 ```
-{% endraw %}
 
 ## PLOTOUT.DOC
 
-{% raw %}
 ```
 
 PLOTOUT.DOC
@@ -3766,11 +3738,9 @@ H
 
 
 ```
-{% endraw %}
 
 ## PRICE.DOC
 
-{% raw %}
 ```
 
 PRICE.DOC
@@ -3840,11 +3810,9 @@ notice.  Write for latest rates.  The date of this price list is 3 August
 1988. 
 
 ```
-{% endraw %}
 
 ## PROD.DOC
 
-{% raw %}
 ```
 
 
@@ -4075,11 +4043,9 @@ your plot format.
 
 
 ```
-{% endraw %}
 
 ## QUICK.DOC
 
-{% raw %}
 ```
 
 QUICK.DOC
@@ -4173,11 +4139,9 @@ SYMBOL, MAKE INTO A LIBRARY                     (1,3,3,5,N,3,3,2,N)
 
 
 ```
-{% endraw %}
 
 ## REGISTER.DOC
 
-{% raw %}
 ```
 REGISTER.DOC
 
@@ -4224,11 +4188,9 @@ Address:____________________________________________
 Version____________  Serial Number__________________
                      (From sign on screen)
 ```
-{% endraw %}
 
 ## ROLAND.BAS
 
-{% raw %}
 ```bas
 100 REM
 200 REM   October 20, 1986.
@@ -4387,11 +4349,9 @@ Version____________  Serial Number__________________
 15500 IF ERR=24 THEN RESUME 0
 15600 ON ERROR GOTO 0
 ```
-{% endraw %}
 
 ## STANDARD.DOC
 
-{% raw %}
 ```
 
 STANDARD.DOC
@@ -4457,11 +4417,9 @@ version.  Note that you can switch between the two IBM color choices (1,1,3,5).
 
 
 ```
-{% endraw %}
 
 ## TUTOR.DOC
 
-{% raw %}
 ```
 
 
@@ -4891,11 +4849,9 @@ a bus.
 ***F9   enough times until we are asked if we want to exit.  Then Y to end the 
 session.
 ```
-{% endraw %}
 
 ## UPDATE.DOC
 
-{% raw %}
 ```
 
 UPDATE.DOC
@@ -5155,11 +5111,9 @@ their diagnostic functions Caps lock must be on, Num lock must be on, and
 Scroll lock off.  
 
 ```
-{% endraw %}
 
 ## USERS.DOC
 
-{% raw %}
 ```
  
 
@@ -5201,7 +5155,6 @@ Address:  _____________________________________
 
 
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

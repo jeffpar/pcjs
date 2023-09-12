@@ -63,7 +63,6 @@ machines:
 
 ## FILE2151.TXT
 
-{% raw %}
 ```
 Disk No: 2151                                                           
 Disk Title: TurboDraw                                                   
@@ -121,11 +120,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║                   <<<<  Disk #2151 TURBODRAW  >>>>                      ║
@@ -135,7 +132,6 @@ Sunnyvale  Ca. 94086
 ║ To print documentation, type:  COPY TBDRAW.DOC PRN                      ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 
