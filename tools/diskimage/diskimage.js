@@ -667,8 +667,22 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
          * images at pcsig8a-disks.pcjs.org and pcsig8b-disks.pcjs.org, and the pages themselves are now
          * deprecated in favor of the more complete set of pages at /software/pcx86/sw/misc/pcsig/, so the
          * "pcsig8" exception below is a bit moot now.
+         *
+         * 2023-09-12 UPDATE: GitHub Pages has started giving me deployment errors, due to the large number
+         * of pages the website contains when a page for every PC-SIG diskette is added to the site.  Even
+         * though the pcjs repository itself is well under the 1Gb "soft" limit that GitHib recommends, there
+         * is apparently also a "soft" (undocumented?) 1Gb limit on the amount of data GitHub Pages can deploy
+         * as well, and since the web pages are significantly larger than the README files in the repo, we
+         * were trying to deploy over 1.5Gb.  The size itself only generated a warning in their logs, but
+         * the process of deploying that much data was timing out after about 10 minutes.  None of this is
+         * explained very well by GitHub (or their email notifications), but at least their logs hinted at
+         * the problem.
+         *
+         * So, for now, only PC-SIG pages for diskettes that we have original copies of are being retained,
+         * and the rest are no longer being automatically generated.  Hence the "/pcsig" exception below
+         * (formerly "/pcsig8").
          */
-        if (diskFile.indexOf("/private") >= 0 || diskFile.indexOf("/pcsig8") >= 0) return;
+        if (diskFile.indexOf("/private") >= 0 || diskFile.indexOf("/pcsig") >= 0) return;
 
         if (typeof argv['checkpage'] == "string") {
             if (argv['verbose']) printf("checking %s for '%s'...\n", diskFile, argv['checkpage']);

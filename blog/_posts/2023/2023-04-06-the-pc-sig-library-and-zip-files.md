@@ -71,7 +71,7 @@ As PC-SIG explained, ZIP files were initially used on a case-by-case basis to pr
 
 [More details about the PC-SIG CD-ROM can be found in the [CD-ROM Booklet](https://ia902602.us.archive.org/20/items/pc-sig-library-cd-rom-8th-edition-1990-04/PC-SIG%20Library%20CD-ROM%20%288th%20Edition%29%20%281990-04%29.pdf) that I included with my upload].
 
-It turns out there was another good for reason using for using ZIP files: on a CD-ROM, all files in a directory are stored in ascending (alphabetical) order, which would ruin the "DIR" listing order that some diskette authors depended on.  For example, [Disk #798](/software/pcx86/sw/misc/pcsig/0001-0999/DISK0798/) used filenames with line-drawing characters unique to the IBM PC:
+It turns out there was another good for reason using for using ZIP files: on a CD-ROM, all files in a directory are stored in ascending (alphabetical) order, which would ruin the "DIR" listing order that some diskette authors depended on.  For example, [Disk #798](/software/pcx86/sw/misc/pcsig/?automount={A:"None",B:"PC-SIG%20Library%20Disk%20%230798"}) used filenames with line-drawing characters unique to the IBM PC:
 
     A:\>DIR
     
@@ -156,7 +156,7 @@ These "de-tokenization" and "de-protection" processes seemed straight-forward at
 
 For example, some programmers liked to include PC graphics characters inside their strings, comments, and DATA statements -- which BASIC was perfectly fine with.  However, all the de-tokenization code and pseudo-code I saw would misidentify those characters as BASIC tokens.  There were also a few other tricky details, like rendering floating-point constants with the correct precision, appending '#' to double-precision constants, etc.
 
-Here's just one example of the use of non-ASCII characters inside strings and comments, from PC-SIG [Disk #241](/software/pcx86/sw/misc/pcsig/0001-0999/DISK0241/):
+Here's just one example of the use of non-ASCII characters inside strings and comments, from PC-SIG [Disk #241](/software/pcx86/sw/misc/pcsig/?automount={A:"None",B:"PC-SIG%20Library%20Disk%20%230241"}):
 
 ```bas
 3300 REM ▬ OTHER OTHELLO BOARD
