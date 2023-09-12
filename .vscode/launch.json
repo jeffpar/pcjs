@@ -1437,18 +1437,6 @@
       }
     },
     {
-      "name": "PC-SIG Diskette Library (Disk #1)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/software/pcx86/sw/misc/pcsig/0001-0999/DISK0001/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "software",
-        "order": 30
-      }
-    },
-    {
       "name": "PC-SIG Library 8th Edition CD-ROM (April 1990)",
       "type": "chrome",
       "request": "launch",

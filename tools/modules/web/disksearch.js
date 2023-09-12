@@ -209,7 +209,12 @@ export default class DiskSearch {
                             item.setAttribute("title", summary);
                             summary = summary.slice(0, j) + "...";
                         }
-                        item.innerHTML = '<a href="' + media['@path'] + '" target="_blank">' + title + '</a>: ' + summary;
+                        let pathDisk = media['@path'];
+                        let matchDisk = pathDisk.match(/[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]\/DISK([0-9]+)$/);
+                        if (matchDisk) {
+                            pathDisk = "?automount={A:\"None\",B:\"PC-SIG%20Library%20Disk%20%23" + matchDisk[1] + "\"}";
+                        }
+                        item.innerHTML = "<a href='" + pathDisk + "' target='_blank'>" + title + "</a>: " + summary;
                         list.appendChild(item);
                      }
                      this.output.appendChild(list);

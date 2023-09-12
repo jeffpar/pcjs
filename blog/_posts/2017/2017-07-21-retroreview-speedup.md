@@ -67,7 +67,7 @@ zero milliseconds, which is the Tandon minimum rating (IBM's conservative defaul
 
 Fortunately, we don't have to type the program in.  If you browse our
 [PC-SIG Diskette Library](/software/pcx86/sw/misc/pcsig/) and search for `SPEEDUP.BAS`,
-you'll find it on [Disk #11](/software/pcx86/sw/misc/pcsig/0001-0999/DISK0011/?autoMount=%7BA:%22PC%20DOS%201.00%22,B:%22PC-SIG%20Library%20Disk%20%230011%22%7D&autoStart=true&autoType=$date%5Cr&debugger=true).
+you'll find it on [Disk #11](/software/pcx86/sw/misc/pcsig/?autoMount=%7BA:%22PC%20DOS%201.00%22,B:%22PC-SIG%20Library%20Disk%20%230011%22%7D&autoStart=true&autoType=$date%5CrDIR B:%5Cr&debugger=true).
 
 Alternatively, the machine below has conveniently pre-loaded "PC DOS 1.00" in drive A and "PC-SIG Library Disk #0011"
 in drive B.  At the DOS prompt, run `BASIC` and type `LOAD "B:SPEEDUP.BAS"`.
