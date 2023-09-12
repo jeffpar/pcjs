@@ -166,7 +166,9 @@ export default class C1PComputer extends Component {
     }
 
     /**
-     * @param {C1PComputer}
+     * power(computer)
+     *
+     * @param {C1PComputer} computer
      */
     static power(computer)
     {
@@ -217,7 +219,7 @@ export default class C1PComputer extends Component {
     }
 
     /**
-     * C1PComputer.init()
+     * init()
      *
      * This function operates on every HTML element of class "c1pjs-computer", extracting the
      * JSON-encoded parameters for the C1PComputer constructor from the element's "data-value"
