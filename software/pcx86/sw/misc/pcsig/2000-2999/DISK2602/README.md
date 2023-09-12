@@ -19,7 +19,6 @@ machines:
 
 ## FILE2602.TXT
 
-{% raw %}
 ```
 Disk No: 2602                                                           
 Disk Title: DAN (Data Analysis) 1 of 2 (#2603 also)                     
@@ -48,11 +47,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 
 ╔═════════════════════════════════════════════════════════════════════════╗
@@ -71,7 +68,6 @@ Sunnyvale  Ca. 94086
 ║                                       (c) Copyright 1991, PC-SIG Inc.   ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

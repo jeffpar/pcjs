@@ -47,7 +47,6 @@ machines:
 
 ## FILES904.TXT
 
-{% raw %}
 ```
 Disk No  904
 Program Title: DROEGE version 1.86 (Disk 1 of 2)
@@ -106,13 +105,10 @@ PC-SIG
 Sunnyvale Ca. 94086
 (408) 730-9291
 (c) Copyright 1987,88 PC-SIG Inc.
-
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║              <<<<  Disk No 904 DROEGE (Disk 1 of 2)  >>>>               ║
@@ -124,7 +120,6 @@ Sunnyvale Ca. 94086
 ║ documentation.                                                          ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

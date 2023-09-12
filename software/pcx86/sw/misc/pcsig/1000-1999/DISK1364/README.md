@@ -50,7 +50,6 @@ machines:
 
 ## ADDENDUM.DOC
 
-{% raw %}
 ```
 
 
@@ -611,14 +610,10 @@ machines:
 
 
      PKWARE Version 1.1  Addendum         10
-
-
 ```
-{% endraw %}
 
 ## APPNOTE.TXT
 
-{% raw %}
 ```
 
 Disclaimer
@@ -1371,13 +1366,10 @@ References:
     Held, Gilbert  "Data Compression, Techniques and Applications,
 		    Hardware and Software Considerations"
        John Wiley & Sons, 1987
-
 ```
-{% endraw %}
 
 ## DEDICATE.DOC
 
-{% raw %}
 ```
 Dedication
 ----------
@@ -1392,14 +1384,10 @@ else for their exclusive use, but rather that it will be used to refer to
 data compression and librarying software in general, of a class or type 
 which creates files having a format generally compatible with this 
 software.
-
-
 ```
-{% endraw %}
 
 ## FILE1364.TXT
 
-{% raw %}
 ```
 Disk No: 1364                                                           
 Disk Title: PKZIP, PKUNZIP, and PKSFX                                   
@@ -1441,11 +1429,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## LICENSE.DOC
 
-{% raw %}
 ```
 
 Information on Site & Distribution Licenses and Custom Versions
@@ -1681,14 +1667,10 @@ PLEASE COMPLETE AS BEST AS POSSIBLE.
 
 
 6)  Incorporated in what state/country ______________________.
-
-
 ```
-{% endraw %}
 
 ## MANUAL.DOC
 
-{% raw %}
 ```
 
 
@@ -5737,13 +5719,10 @@ PLEASE COMPLETE AS BEST AS POSSIBLE.
 
 
      PKWARE                           -68-
-
 ```
-{% endraw %}
 
 ## ORDER.DOC
 
-{% raw %}
 ```
 
 You can order or register PKWARE products by MasterCard or Visa!
@@ -5854,14 +5833,10 @@ Terms:
   available.
 
 PKWARE,PKZIP,PKUNZIP & PKSFX  Registered U.S. Patent and Trademark Office
-
-
 ```
-{% endraw %}
 
 ## README.DOC
 
-{% raw %}
 ```
 
 
@@ -5892,10 +5867,7 @@ This software contains data encryption technology.  Do not export
 this software outside of the United States or Canada.  Export versions
 of PKZIP, PKUNZIP, and PKSFX without encryption are available.  Call
 or write PKWARE for more information.
-
-
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

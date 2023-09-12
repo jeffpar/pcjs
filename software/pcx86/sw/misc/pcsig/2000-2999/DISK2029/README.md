@@ -51,7 +51,6 @@ machines:
 
 ## COPYCON.DOC
 
-{% raw %}
 ```
 
 
@@ -591,13 +590,10 @@ machines:
 
 
 
-
 ```
-{% endraw %}
 
 ## FD.DOC
 
-{% raw %}
 ```
 
 
@@ -845,13 +841,10 @@ machines:
                     Data Acquistion Inc.
                     1701 Broadway #156
                     Vancouver, Wa. 98663
-
 ```
-{% endraw %}
 
 ## FILE2029.TXT
 
-{% raw %}
 ```
 Disk No: 2029                                                           
 Disk Title: Find Duplicates/CopyCon/GBLINK                              
@@ -908,11 +901,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GBLINK.DOC
 
-{% raw %}
 ```
 
  gBLINK.COM Version 1.4 Copyright (c) 1989  g. Osborne
@@ -991,13 +982,10 @@ Sunnyvale  Ca. 94086
 
  02/21/90.
 
-
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║          <<<<  Disk #2029  FIND DUPLICATES/COPYCON/GBLINK  >>>>         ║
@@ -1014,7 +1002,6 @@ Sunnyvale  Ca. 94086
 ║ To print documentation, type: COPY COPYCON.DOC PRN                      ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

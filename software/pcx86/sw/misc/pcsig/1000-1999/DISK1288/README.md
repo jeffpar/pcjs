@@ -69,7 +69,6 @@ machines:
 
 ## FILE1288.TXT
 
-{% raw %}
 ```
 Disk No: 1288                                                           
 Disk Title: ZoomRacks Tutorial Disk 2 of 2 (1287)  (Disk 2 of 2)        
@@ -135,11 +134,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║           <<<< Disk #1288  Zoomracks (Disk #2 of 2)  >>>>               ║
@@ -164,7 +161,6 @@ Sunnyvale  Ca. 94086
 ║ above.                                                                  ║
 ╚═════════════════════════════════════════════════════════════════════════╝
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

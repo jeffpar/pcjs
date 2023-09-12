@@ -39,7 +39,6 @@ machines:
 
 ## FILE0825.TXT
 
-{% raw %}
 ```
 Disk No:  825
 Disk Title: Time Traker
@@ -71,11 +70,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291
 (c) Copyright 1989 PC-SIG, Inc.
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
  The following instructions enable you to print the Time Traker documentation
  and install the system for immediate use:
@@ -102,11 +99,9 @@ Sunnyvale  Ca. 94086
 
  REMEMBER: Always use a copy of program disks and backup data often!
 ```
-{% endraw %}
 
 ## TIMETRAK.TXT
 
-{% raw %}
 ```
 
 
@@ -767,7 +762,6 @@ DISC_AMT    Numeric        9      2  Amount discounted
 DATE_PAID   Date           8         Last date of payment
 COMMENT     Character     35         Miscellaneous comments
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

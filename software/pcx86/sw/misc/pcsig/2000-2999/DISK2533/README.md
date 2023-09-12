@@ -19,7 +19,6 @@ machines:
 
 ## FILE2533.TXT
 
-{% raw %}
 ```
 Disk No: 2533                                                           
 Disk Title: Earthwatch                                                  
@@ -63,7 +62,6 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

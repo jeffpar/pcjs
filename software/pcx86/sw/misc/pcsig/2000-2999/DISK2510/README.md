@@ -19,7 +19,6 @@ machines:
 
 ## FILE2510.TXT
 
-{% raw %}
 ```
 Disk No: 2510                                                           
 Disk Title: PCBreeze II                                                 
@@ -56,11 +55,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291                                                          
 (c) Copyright 1989-1991 PC-SIG, Inc.                                         
 ```
-{% endraw %}
 
 ## GO.TXT
 
-{% raw %}
 ```
 ╔═════════════════════════════════════════════════════════════════════════╗
 ║                 <<<<  DISK #2510 PCBBREEZE II  >>>>                     ║
@@ -75,11 +72,9 @@ Sunnyvale  Ca. 94086
 ╚═════════════════════════════════════════════════════════════════════════╝
 (c) Copyright 1990-1991, PC-SIG Inc.
 ```
-{% endraw %}
 
 ## PCBREEZE.TXT
 
-{% raw %}
 ```
                          PCBreeze II
                                
@@ -160,11 +155,9 @@ PCBreeze is a sophisticated tool for use in the design process
 of Printed  Circuit Boards.  It allows  a board to be created,
 viewed and  modified on  an IBM  personal computer.
 ```
-{% endraw %}
 
 ## README.TXT
 
-{% raw %}
 ```
                    Welcome to PCBreeze II
                               
@@ -207,7 +200,6 @@ PCBreeze and it's documentation in C:\PCB :
 
 A:> EXPAND C:\PCB
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

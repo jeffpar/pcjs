@@ -40,7 +40,6 @@ machines:
 
 ## FILE0288.TXT
 
-{% raw %}
 ```
 Disk No:  288
 Disk Title: File Express 2/4 (287, 2555, 2672 also)
@@ -115,11 +114,9 @@ Sunnyvale  Ca. 94086
 (408) 730-9291
 (c) Copyright 1989 PC-SIG, Inc.
 ```
-{% endraw %}
 
 ## FILES288.TXT
 
-{% raw %}
 ```
 Disk No:  288
 Program Title: FILE EXPRESS version 4.28 (Disk 2 of 2)
@@ -148,13 +145,10 @@ PC-SIG
 Sunnyvale Ca. 94086
 (408) 730-9291
 (c) Copyright 1985,86,87,88,89 PC-SIG, Inc.
-
 ```
-{% endraw %}
 
 ## README.DOC
 
-{% raw %}
 ```
 
 
@@ -203,10 +197,7 @@ must be expanded using the File Express Installation program.  To do
 this, insert the diskette labelled "Program Disk" into drive A and at
 the DOS prompt A>, type INSTALL and press <Enter>.  Then follow the
 instructions on the screen.
-
-
 ```
-{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 
