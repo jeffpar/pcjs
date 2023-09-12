@@ -20,7 +20,7 @@ import { device, getLocalPath, printError, printf, sprintf, setRootDir } from ".
  * @class FileImage
  */
 class FileImage {
-    /*
+    /**
      * @this {FileImage}
      * @param {string} [sFormat] should be one of "json"|"longs"|"hex"|"bytes"|"rom" (see the FORMAT constants)
      * @param {boolean|string} [fComments] enables comments and other readability enhancements in the JSON output

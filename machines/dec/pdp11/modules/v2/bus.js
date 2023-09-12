@@ -51,6 +51,10 @@ var BlockInfoPDP11 = /** @type {BlockInfo} */ (Usr.defineBitFields({num:20, coun
   */
 var BusInfoPDP11;
 
+/**
+ * @class BusPDP11
+ * @unrestricted
+ */
 export default class BusPDP11 extends Component {
     /**
      * BusPDP11(parmsBus, cpu, dbg)
@@ -513,7 +517,7 @@ export default class BusPDP11 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 info.aBlocks.push(/** @type {BlockInfo} */ (Usr.initBitFields(BlockInfoPDP11, iBlock, 0, 0, block.type)));
-                info.cBlocks++
+                info.cBlocks++;
             }
             iBlock++;
         }
@@ -1249,7 +1253,7 @@ BusPDP11.IOController = {
                      * access using a BYTE handler registered for EVEN bytes.  But if that's all we've got,
                      * then presumably the handler is prepared for it (certainly, readROMByte() is).
                      */
-                    b = afn[BusPDP11.IOHANDLER.READ_BYTE](addrMasked)
+                    b = afn[BusPDP11.IOHANDLER.READ_BYTE](addrMasked);
                 }
             }
         }

@@ -182,10 +182,11 @@ export default class Dbg68K extends Debugger {
                         eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
                         sDst = eaModeDst.getString(nnn);
                     }
-                    else if ((op1 & 0x00c0) == 0x0000)
+                    else if ((op1 & 0x00c0) == 0x0000) {
                         sDst = "CCR";
-                    else if ((op1 & 0x00c0) == 0x0040)
+                    } else if ((op1 & 0x00c0) == 0x0040) {
                         sDst = "SR";
+                    }
                     break stage1;
 
                 case 0x2:
@@ -199,10 +200,11 @@ export default class Dbg68K extends Debugger {
                         eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
                         sDst = eaModeDst.getString(nnn);
                     }
-                    else if ((op1 & 0x00c0) == 0x0000)
+                    else if ((op1 & 0x00c0) == 0x0000) {
                         sDst = "CCR";
-                    else if ((op1 & 0x00c0) == 0x0040)
+                    } else if ((op1 & 0x00c0) == 0x0040) {
                         sDst = "SR";
+                    }
                     break stage1;
 
                 case 0x4:
@@ -243,10 +245,12 @@ export default class Dbg68K extends Debugger {
                         eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
                         sDst = eaModeDst.getString(nnn);
                     }
-                    else if ((op1 & 0x00c0) == 0x0000)
+                    else if ((op1 & 0x00c0) == 0x0000) {
                         sDst = "CCR";
-                    else if ((op1 & 0x00c0) == 0x0040)
+                    }
+                    else if ((op1 & 0x00c0) == 0x0040) {
                         sDst = "SR";
+                    }
                     break stage1;
 
                 case 0xc:
@@ -317,10 +321,11 @@ export default class Dbg68K extends Debugger {
                     }
                     else {
                         //dataSrc = (1 << (dataSrc & 7));
-                        if ((op1 & 0x00c0) == 0)
+                        if ((op1 & 0x00c0) == 0) {
                             eaModeDst = this.aEAModes[this.cpu.abModes401[op1 & 0x3f]];
-                        else
+                        } else {
                             eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0x3f]];
+                        }
                         sDst = eaModeDst.getString(nnn);
                     }
                     switch ((op1 >> 6) & 0x3) {
@@ -506,8 +511,9 @@ export default class Dbg68K extends Debugger {
                             sOp = "PEA";
                             eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];    // +(ssLONG << 6)
                             sSrc = eaModeSrc.getString(nnn);
-                            if (sSrc.endsWith(".l"))
+                            if (sSrc.endsWith(".l")) {
                                 sSrc = sSrc.substring(0, sSrc.length-2);
+                            }
                         }
                         break stage1;
 
@@ -626,9 +632,9 @@ export default class Dbg68K extends Debugger {
                         //  case 0x4e40:   trap     [........0100vvvv, format none]
                         sOp = "TRAP";
                         op2 = (op1 & 0xf);
-                        if (op2 != 0xf)
+                        if (op2 != 0xf) {
                             sSrc = this.sprintf("%x", op2);
-                        else {
+                        } else {
                             op2 = this.cpu.getWord(this.curPC);
                             this.curPC += 2;
                             sSrc = "API"; // TODO: PalmOSTypes.getAPIName(op2);
@@ -712,8 +718,9 @@ export default class Dbg68K extends Debugger {
                         sOp = "JSR";
                         eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];        // +(ssLONG << 6)
                         sSrc = eaModeSrc.getString(nnn);
-                        if (sSrc.endsWith(".l"))
+                        if (sSrc.endsWith(".l")) {
                             sSrc = sSrc.substring(0, sSrc.length-2);
+                        }
                         break stage1;
 
                     case 0xc:
@@ -724,8 +731,9 @@ export default class Dbg68K extends Debugger {
                         sOp = "JMP";
                         eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];        // +(ssLONG << 6)
                         sSrc = eaModeSrc.getString(nnn);
-                        if (sSrc.endsWith(".l"))
+                        if (sSrc.endsWith(".l")) {
                             sSrc = sSrc.substring(0, sSrc.length-2);
+                        }
                         break stage1;
                     }
                     break stage1;
@@ -770,8 +778,9 @@ export default class Dbg68K extends Debugger {
                     sOp = "CHK";
                     eaModeSrc = this.aEAModes[this.cpu.abModes400[(op1 & 0x3f)+0x40]];            // +(ssWORD << 6)
                     sSrc = eaModeSrc.getString(nnn);
-                    if (sSrc.endsWith(".w"))
+                    if (sSrc.endsWith(".w")) {
                         sSrc = sSrc.substring(0, sSrc.length-2);
+                    }
                     sDst = "D" + rrr;
                 }
                 else {
@@ -779,8 +788,9 @@ export default class Dbg68K extends Debugger {
                     sOp = "LEA";
                     eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];            // +(ssLONG << 6)
                     sSrc = eaModeSrc.getString(nnn);
-                    if (sSrc.endsWith(".l"))
+                    if (sSrc.endsWith(".l")) {
                         sSrc = sSrc.substring(0, sSrc.length-2);
+                    }
                     sDst = "A" + rrr;
                 }
                 break stage1;
@@ -1334,9 +1344,9 @@ export default class Dbg68K extends Debugger {
 
             }   // End stage1
 
-
-            if (sOp == null)
+            if (sOp == null) {
                 sOp = "???";
+            }
 
             if (sSrc != null && sDst != null) {
                 // If there are both src and dst operands, collapse any common ".b", ".w" or ".l" suffixes
@@ -1368,8 +1378,9 @@ export default class Dbg68K extends Debugger {
                 sSrc = sSrc + "," + sDst;
             }
             else {
-                if (sSrc == null)
+                if (sSrc == null) {
                     sSrc = sDst;
+                }
                 if (sSrc != null) {
                     let iSrc = sSrc.length;
                     if (iSrc >= 2 && sSrc.charAt(iSrc-2) == '.') {
@@ -1426,8 +1437,9 @@ export default class Dbg68K extends Debugger {
             // for in the emulator as well.  -JP
 
             let eaMode = eaModeSrc;
-            if (eaMode == null || eaMode.sPrefix.startsWith("#"))
+            if (eaMode == null || eaMode.sPrefix.startsWith("#")) {
                 eaMode = eaModeDst;
+            }
             if (eaMode != null && !eaMode.sPrefix.startsWith("#")) {
 
                 // Check "eaMode.ea" for belonging to a debugger symbol group
@@ -1459,10 +1471,11 @@ export default class Dbg68K extends Debugger {
     getSignedHexString(i)
     {
         let s = i.toString(16);         // use toString() instead of sprintf() for signed conversion
-        if (s.charAt(0) != '-')
+        if (s.charAt(0) != '-') {
             return "0x" + s;
-        else
+        } else {
             return "-0x" + s.substring(1);
+        }
     }
 
     /**
@@ -1530,6 +1543,8 @@ export default class Dbg68K extends Debugger {
  *  getString: get effective address (ea) string
  *  getData: get data at effective address
  */
+
+/* eslint-disable require-jsdoc */
 
 class DbgMode
 {

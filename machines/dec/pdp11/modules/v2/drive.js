@@ -615,7 +615,7 @@ export default class DriveController extends Component {
             drive.fLocal,
             drive.sDiskName,
             drive.sDiskPath
-        ]
+        ];
     }
 
     /**

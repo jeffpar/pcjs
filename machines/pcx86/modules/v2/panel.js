@@ -26,6 +26,10 @@ import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
  * @property {number} type      (type of all blocks in the region (see MemoryX86.TYPE.*))
  */
 
+/**
+ * @class Color
+ * @unrestricted
+ */
 class Color {
     /**
      * Color(r, g, b, a)
@@ -78,6 +82,10 @@ class Color {
     }
 }
 
+/**
+ * @class Rectangle
+ * @unrestricted
+ */
 class Rectangle {
     /**
      * Rectangle(x, y, cx, cy)
@@ -160,6 +168,10 @@ class Rectangle {
     }
 }
 
+/**
+ * @class HTMLLED
+ * @unrestricted
+ */
 class HTMLLED {
     /**
      * HTMLLED(control, color)

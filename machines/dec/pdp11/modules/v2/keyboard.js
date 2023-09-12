@@ -12,6 +12,10 @@ import Component from "../../../../modules/v2/component.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS } from "./defines.js";
 
+/**
+ * @class KeyboardPDP11
+ * @unrestricted
+ */
 export default class KeyboardPDP11 extends Component {
     /**
      * KeyboardPDP11(parmsKbd)

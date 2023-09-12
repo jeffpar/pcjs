@@ -12,6 +12,10 @@ import Web from "./weblib.js";
 import Component from "./component.js";
 import { DEBUG } from "./defines.js";
 
+/**
+ * @class State
+ * @unrestricted
+ */
 export default class State {
     /**
      * State(component, sVersion, sSuffix)

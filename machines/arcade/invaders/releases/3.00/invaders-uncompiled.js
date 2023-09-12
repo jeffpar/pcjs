@@ -7499,7 +7499,7 @@ class Time extends Device {
          * If there was no interruption between the last run and this run (ie, msEndRun wasn't zeroed by
          * intervening setSpeed() or stop()/start() calls), and there was an unusual delay between the two
          * runs, then we assume that "browser throttling" is occurring due to visibility or redraw issues
-         * (eg, the browser window moved off-screen, the window is being actively reized, the user switched
+         * (eg, the browser window moved off-screen, the window is being actively resized, the user switched
          * tabs, etc).
          *
          * While that's good for overall system performance, it screws up our effective speed calculations,
@@ -8713,7 +8713,7 @@ class Memory extends Device {
 
         this.fDirty = this.fUseArrayBuffer = false;
         this.littleEndian = this.bus.littleEndian !== false;
-        this.buffer = this.dataView = null
+        this.buffer = this.dataView = null;
         this.values = this.valuePairs = this.valueQuads = null;
 
         let readValue = this.readValue;
@@ -9592,7 +9592,7 @@ class Memory extends Device {
         }
         if (this.writeTrap == func) {
             this.nWriteTraps++;
-            return true
+            return true;
         }
         return false;
     }
@@ -13125,7 +13125,7 @@ class CPUx80 extends CPU {
      */
     initCPU()
     {
-        this.resetRegs()
+        this.resetRegs();
 
         this.defineRegister("A", () => this.regA, (value) => this.regA = value & 0xff);
         this.defineRegister("B", () => this.regB, (value) => this.regB = value & 0xff);
@@ -13134,12 +13134,12 @@ class CPUx80 extends CPU {
         this.defineRegister("E", () => this.regE, (value) => this.regE = value & 0xff);
         this.defineRegister("H", () => this.regH, (value) => this.regH = value & 0xff);
         this.defineRegister("L", () => this.regL, (value) => this.regL = value & 0xff);
-        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF()});
-        this.defineRegister("PF", () => (this.getPF()? 1 : 0), (value) => {value? this.setPF() : this.clearPF()});
-        this.defineRegister("AF", () => (this.getAF()? 1 : 0), (value) => {value? this.setAF() : this.clearAF()});
-        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF()});
-        this.defineRegister("SF", () => (this.getSF()? 1 : 0), (value) => {value? this.setSF() : this.clearSF()});
-        this.defineRegister("IF", () => (this.getIF()? 1 : 0), (value) => {value? this.setIF() : this.clearIF()});
+        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF();});
+        this.defineRegister("PF", () => (this.getPF()? 1 : 0), (value) => {value? this.setPF() : this.clearPF();});
+        this.defineRegister("AF", () => (this.getAF()? 1 : 0), (value) => {value? this.setAF() : this.clearAF();});
+        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF();});
+        this.defineRegister("SF", () => (this.getSF()? 1 : 0), (value) => {value? this.setSF() : this.clearSF();});
+        this.defineRegister("IF", () => (this.getIF()? 1 : 0), (value) => {value? this.setIF() : this.clearIF();});
         this.defineRegister("BC", this.getBC, this.setBC);
         this.defineRegister("DE", this.getDE, this.setDE);
         this.defineRegister("HL", this.getHL, this.setHL);

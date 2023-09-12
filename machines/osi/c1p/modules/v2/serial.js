@@ -350,8 +350,9 @@ export default class C1PSerialPort extends Component {
                  * An EVEN address implies they're looking, so if we have a fresh buffer,
                  * then prime the pump.
                  */
-                if (this.sInput && !this.iInput)
+                if (this.sInput && !this.iInput) {
                     this.advanceInput();
+                }
             } else {
                 /*
                  * An ODD address implies they just grabbed a data byte, so prep the next data byte.

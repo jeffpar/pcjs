@@ -916,10 +916,12 @@ export default class C1PDiskController extends Component {
          * PIA port range (0x00-0x0F) to 0x00-0x03, and the ACIA port range (0x10-0x1F) to 0x10-0x11.
          * The rest of the masked range (0x20-0x3F) is unmapped, so we map it to our global unknown register.
          */
-        if (port < 0x10)
+        if (port < 0x10) {
             port &= 0x03;
-        else if (port < 0x20)
+        }
+        else if (port < 0x20) {
             port &= 0x11;
+        }
         switch(port) {
         case this.PORT_PDA:
             reg = (this.regCRA.bits & this.CR_PD_SEL)? this.regPDA : this.regDDA;
@@ -1007,10 +1009,12 @@ export default class C1PDiskController extends Component {
         var iDriveSelect = -1;
         if (bPDA !== undefined && bPDB !== undefined) {
             iDriveSelect = 0;
-            if (!(bPDB & this.PDB_SD1))
+            if (!(bPDB & this.PDB_SD1)) {
                 iDriveSelect |= 0x02;
-            if (!(this.regPDA.bits & this.PDA_SD2))
+            }
+            if (!(this.regPDA.bits & this.PDA_SD2)) {
                 iDriveSelect |= 0x01;
+            }
         }
         if (this.iDriveSelect != iDriveSelect) {
             this.iDriveSelect = iDriveSelect;
@@ -1078,10 +1082,11 @@ export default class C1PDiskController extends Component {
      */
     updatePDA(bPDA)
     {
-        if (bPDA === undefined)
+        if (bPDA === undefined) {
             bPDA = this.regPDA.bits;
-        else
+        } else {
             this.setSelectedDrive(bPDA, this.regPDB.bits);
+        }
 
         /*
          * We start by turning ON most bits, except for PDA_RDY1, which we always leave
@@ -1137,10 +1142,11 @@ export default class C1PDiskController extends Component {
      */
     updatePDB(bPDB)
     {
-        if (bPDB === undefined)
+        if (bPDB === undefined) {
             bPDB = this.regPDB.bits;
-        else
+        } else {
             this.setSelectedDrive(this.regPDA.bits, bPDB);
+        }
 
         if (this.iDriveSelect >= 0 && this.iDriveSelect < this.aDrives.length) {
 
@@ -1154,20 +1160,23 @@ export default class C1PDiskController extends Component {
                     /*
                      *  PDB_STI == 0? step toward track 39 : step toward track 0
                      */
-                    if (bPDB & this.PDB_STI)
+                    if (bPDB & this.PDB_STI) {
                         drive.iTrackSelect--;
-                    else
+                    } else {
                         drive.iTrackSelect++;
+                    }
 
                     if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_DISK)) {
                         this.dbg.printf("stepping %s to track %d\n", (bPDB & this.PDB_STI)? "down" : "up", drive.iTrackSelect);
                     }
 
-                    if (drive.iTrackSelect >= drive.nTracks)
+                    if (drive.iTrackSelect >= drive.nTracks) {
                         drive.iTrackSelect = drive.nTracks;
+                    }
 
-                    if (drive.iTrackSelect < 0)
+                    if (drive.iTrackSelect < 0) {
                         drive.iTrackSelect = 0;
+                    }
 
                     drive.nIndexPulse = 20;
 
@@ -1191,11 +1200,13 @@ export default class C1PDiskController extends Component {
      */
     updateSTAT(bSTAT)
     {
-        if (bSTAT === undefined)
+        if (bSTAT === undefined) {
             bSTAT = this.regSTAT.bits;
+        }
         bSTAT &= ~this.STAT_RDRF;
-        if (this.iDriveSelect >= 0 && this.aDrives[this.iDriveSelect].iTrackOffset >= 0)
+        if (this.iDriveSelect >= 0 && this.aDrives[this.iDriveSelect].iTrackOffset >= 0) {
             bSTAT |= this.STAT_RDRF;
+        }
         return bSTAT;
     }
 

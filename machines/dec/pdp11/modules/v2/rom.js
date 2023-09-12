@@ -16,6 +16,10 @@ import Str from "../../../../modules/v2/strlib.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG } from "./defines.js";
 
+/**
+ * @class ROMPDP11
+ * @unrestricted
+ */
 export default class ROMPDP11 extends Component {
     /**
      * ROMPDP11(parmsROM)

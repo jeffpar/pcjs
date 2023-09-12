@@ -17,6 +17,10 @@ import Usr from "../../../../modules/v2/usrlib.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG, LICENSE, globals } from "./defines.js";
 
+/**
+ * @class ComputerPDP10
+ * @unrestricted
+ */
 export default class ComputerPDP10 extends Component {
     /**
      * ComputerPDP10(parmsComputer, parmsMachine, fSuspended)

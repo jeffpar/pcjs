@@ -15,6 +15,10 @@ import Messages from "./messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import { DEBUG, PDP11 } from "./defines.js";
 
+/**
+ * @class RL11
+ * @unrestricted
+ */
 export default class RL11 extends DriveController {
     /**
      * RL11(parms)

@@ -19,4 +19,4 @@ const APPCLASS = "c1p";         // this @define is the default application class
  */
 const APPNAME = "C1Pjs";        // this @define is the default application name (eg, "PCx86", "C1Pjs")
 
-export { APPCLASS, APPNAME, APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL, globals }
+export { APPCLASS, APPNAME, APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL, globals };

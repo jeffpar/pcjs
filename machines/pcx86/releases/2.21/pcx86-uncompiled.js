@@ -1811,6 +1811,10 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
  * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class Str
+ * @unrestricted
+ */
 class Str {
     /**
      * isValidInt(s, base)
@@ -2568,6 +2572,10 @@ let BitField;
 /** @typedef {Object.<BitField>} */
 let BitFields;
 
+/**
+ * @class Usr
+ * @unrestricted
+ */
 class Usr {
     /**
      * binarySearch(a, v, fnCompare)
@@ -2889,6 +2897,10 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * stop()               Stops the window from loading
  */
 
+/**
+ * @class Web
+ * @unrestricted
+ */
 class Web {
     /**
      * getResource(sURL, type, fAsync, done, progress)
@@ -9205,6 +9217,10 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
 /** @typedef {{ iBlock: number, cBlocks: number, type: number }} */
 let Region;
 
+/**
+ * @class Color
+ * @unrestricted
+ */
 class Color {
     /**
      * Color(r, g, b, a)
@@ -9257,6 +9273,10 @@ class Color {
     }
 }
 
+/**
+ * @class Rectangle
+ * @unrestricted
+ */
 class Rectangle {
     /**
      * Rectangle(x, y, cx, cy)
@@ -9339,6 +9359,10 @@ class Rectangle {
     }
 }
 
+/**
+ * @class HTMLLED
+ * @unrestricted
+ */
 class HTMLLED {
     /**
      * HTMLLED(control, color)
@@ -82781,6 +82805,10 @@ Web.onExit(Computer.exit);
  * @copyright https://www.pcjs.org/modules/v2/state.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class State
+ * @unrestricted
+ */
 class State {
     /**
      * State(component, sVersion, sSuffix)

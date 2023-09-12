@@ -584,8 +584,9 @@ export default class C1PCPU extends Component {
              */
             if (DEBUGGER) {
                 this.dbg = cmp.getComponentByType("debugger");
-                if (this.dbg)
+                if (this.dbg) {
                     this.dbg.init();
+                }
             }
             /*
              * Attach the Video device to the CPU, so that the CPU can periodically update
@@ -622,10 +623,12 @@ export default class C1PCPU extends Component {
     addReadNotify(start, end, component, fn)
     {
         if (this.findNotify(this.aReadNotify, start, end, component, fn) < 0) {
-            if (this.addrReadLower > start)
+            if (this.addrReadLower > start) {
                 this.addrReadLower = start;
-            if (this.addrReadUpper < end)
+            }
+            if (this.addrReadUpper < end) {
                 this.addrReadUpper = end;
+            }
             this.aReadNotify.push([start, end, component, fn]);
             if (DEBUG) {
                 this.printf(Messages.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
@@ -685,10 +688,12 @@ export default class C1PCPU extends Component {
     addWriteNotify(start, end, component, fn)
     {
         if (this.findNotify(this.aWriteNotify, start, end, component, fn) < 0) {
-            if (this.addrWriteLower > start)
+            if (this.addrWriteLower > start) {
                 this.addrWriteLower = start;
-            if (this.addrWriteUpper < end)
+            }
+            if (this.addrWriteUpper < end) {
                 this.addrWriteUpper = end;
+            }
             this.aWriteNotify.push([start, end, component, fn]);
             if (DEBUG) {
                 this.printf(Messages.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
@@ -778,10 +783,12 @@ export default class C1PCPU extends Component {
             aNotify.splice(i, 1);
             var addrLower = 0x10000, addrUpper = 0x0;
             for (i=0; i < aNotify.length; i++) {
-                if (addrLower > aNotify[i][0])
+                if (addrLower > aNotify[i][0]) {
                     addrLower = aNotify[i][0];
-                if (addrUpper < aNotify[i][1])
+                }
+                if (addrUpper < aNotify[i][1]) {
                     addrUpper = aNotify[i][1];
+                }
             }
             aBounds.push(addrLower);
             aBounds.push(addrUpper);
@@ -801,8 +808,9 @@ export default class C1PCPU extends Component {
     {
         if (speed !== undefined) {
             this.speed = speed;
-            if (this.bindings["setSpeed"])
+            if (this.bindings["setSpeed"]) {
                 this.bindings["setSpeed"].innerHTML = this.aSpeeds[speed >= 2? 0 : speed+1];
+            }
             this.printf("running at %s speed %s\n", this.aSpeeds[speed].toLowerCase(), this.aSpeedDescs[speed]);
             if (fOnClick) this.setFocus();
         }
@@ -820,8 +828,9 @@ export default class C1PCPU extends Component {
     {
         if (msElapsed) {
             this.mhz = Math.round(nCycles / ( msElapsed * 100)) / 10;
-            if (msElapsed >= 86400000)
+            if (msElapsed >= 86400000) {
                 this.setSpeed();        // reset all our counters once per day so that we never have to worry about overflow
+            }
         }
     }
 
@@ -1024,8 +1033,9 @@ export default class C1PCPU extends Component {
                  * keystrokes at higher speeds. Perhaps with future improvements to the keyboard
                  * component, this limit can be lifted.
                  */
-                if (this.mhz <= this.mhzFast)
+                if (this.mhz <= this.mhzFast) {
                     msRemainsThisRun = 0;
+                }
             }
             else
             if (this.speed == this.SPEED_MAX) {

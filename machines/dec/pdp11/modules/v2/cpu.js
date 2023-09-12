@@ -12,6 +12,10 @@ import Component from "../../../../modules/v2/component.js";
 import Str from "../../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
+/**
+ * @class CPUPDP11
+ * @unrestricted
+ */
 export default class CPUPDP11 extends Component {
     /**
      * CPUPDP11(parmsCPU, nCyclesDefault)
@@ -407,10 +411,11 @@ export default class CPUPDP11 extends Component {
                  * control is visible, then the computer is probably sufficiently visible as well; the problem
                  * with setting fUpdateFocus to true is that it can jerk the web page around in annoying ways.
                  */
-                if (!cpu.flags.running)
+                if (!cpu.flags.running) {
                     cpu.startCPU();
-                else
+                } else {
                     cpu.stopCPU();
+                }
             };
             return true;
 

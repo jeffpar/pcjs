@@ -8,6 +8,15 @@
     "curly": ["error", "multi-line"],
     "sort-imports": "off",
     "lines-between-class-members": "off",
-    "no-useless-constructor": "off"
+    "no-useless-constructor": "off",
+    "require-jsdoc": ["error", {
+      "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": true,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": false
+      }
+    }]
   }
 }

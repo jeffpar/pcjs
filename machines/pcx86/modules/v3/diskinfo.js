@@ -2421,7 +2421,7 @@ export default class DiskInfo {
         let chs = this.getCHS(cHiddenSectors);
         abSector[offSector++] = chs[1];                                 // head: 0
         abSector[offSector++] = chs[2] | ((chs[0] & 0x300) >> 2);       // sector: 2 (bits 0-5), cylinder bits 8-9: 0 (bits 6-7)
-        abSector[offSector++] = chs[0] & 0xff                           // cylinder bits 0-7: 0
+        abSector[offSector++] = chs[0] & 0xff;                           // cylinder bits 0-7: 0
 
         /*
          * Next 1 byte: partition ID
@@ -2442,8 +2442,8 @@ export default class DiskInfo {
          */
         abSector[offSector++] = cHiddenSectors & 0xff;
         abSector[offSector++] = (cHiddenSectors >> 8) & 0xff;
-        abSector[offSector++] = (cHiddenSectors >> 16) & 0xff
-        abSector[offSector++] = (cHiddenSectors >> 24) & 0xff
+        abSector[offSector++] = (cHiddenSectors >> 16) & 0xff;
+        abSector[offSector++] = (cHiddenSectors >> 24) & 0xff;
 
         /*
          * Next 4 bytes: Number of sectors in partition
@@ -2609,7 +2609,7 @@ export default class DiskInfo {
                 this.nSectors = this.cbSector = 0;
                 for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
                     let aHeads = aCylinders[iCylinder];
-                    this.nHeads = aHeads.length
+                    this.nHeads = aHeads.length;
                     for (let iHead = 0; iHead < aHeads.length; iHead++) {
                         let aSectors = aHeads[iHead];
                         let nSectors = aSectors.length;
@@ -3273,7 +3273,7 @@ export default class DiskInfo {
                 [DiskInfo.FILEDESC.MODNAME]: file.module,
                 [DiskInfo.FILEDESC.MODDESC]: file.modDesc,
                 [DiskInfo.FILEDESC.MODSEGS]: file.segments
-            }
+            };
         }
         if (fnHash && ab) {
             let hash = fnHash(ab);
@@ -4803,7 +4803,7 @@ export default class DiskInfo {
                     let dataMark = parseInt(metaData[5], 16);
                     let headCRC = parseInt(metaData[6], 16);
                     let headError = (metaData[7] != "Ok");
-                    let dataCRC = parseInt(metaData[8], 16)
+                    let dataCRC = parseInt(metaData[8], 16);
                     let dataError = (metaData[9] != "BAD CRC!"? 0 : -1);
                     let matchData, reData = /([0-9A-F]+)\|([^|]*)\|/g;
                     while ((matchData = reData.exec(aSuppData[i]))) {

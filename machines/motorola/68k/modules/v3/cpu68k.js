@@ -332,10 +332,11 @@ export default class CPU68K extends CPU
                     }
                     else {
                         this.dataSrc = (1 << (this.dataSrc & 7));
-                        if ((op1 & 0x00c0) == 0)
+                        if ((op1 & 0x00c0) == 0) {
                             eaModeDst = aEAModes[this.abModes401[op1 & 0x3f]];  // +(ssBYTE << 6)
-                        else
+                        } else {
                             eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];  // +(ssBYTE << 6)
+                        }
                         this.dataDst = eaModeDst.getEAData(nnn);
                     }
                     switch ((op1 >> 6) & 0x3) {
@@ -650,12 +651,13 @@ export default class CPU68K extends CPU
                     reg = this.regA[nnn];
                     eaModeSrc.getEA(nnn);
                     iMask = 0x1;
-                    for (let i = 0; i <= 7; i++, iMask <<= 1)
+                    for (let i = 0; i <= 7; i++, iMask <<= 1) {
                         if ((iModeDst & iMask) != 0) {
                             if (cRegs++ != 0) eaModeSrc.advanceEA(nnn);
                             this.regD[i] = eaModeSrc.getData();
                         }
-                    for (let i = 0; i <= 7; i++, iMask <<= 1)
+                    }
+                    for (let i = 0; i <= 7; i++, iMask <<= 1) {
                         if ((iModeDst & iMask) != 0) {
                             if (cRegs++ != 0) eaModeSrc.advanceEA(nnn);
                             op2 = eaModeSrc.getData();
@@ -663,6 +665,7 @@ export default class CPU68K extends CPU
                                 this.regA[i] = op2;
                             }
                         }
+                    }
                     if (cRegs == 0) this.regA[nnn] = reg;
                     this.addCycles(4 + (4+eaModeDst.cycle4l)*cRegs);
                     break stage1;
@@ -891,8 +894,9 @@ export default class CPU68K extends CPU
                         this.genException(CPU68K.EXCEPTION_CHK_INSTRUCTION);
                         this.addCycles(40);
                     }
-                    else
+                    else {
                         this.addCycles(10);
+                    }
                 }
                 else {
                     //  case 0x41c0:   lea      [....rrr111pppnnn, format ??????????pppnnn, p.215]
@@ -1159,8 +1163,9 @@ export default class CPU68K extends CPU
                 if ((op1 & 0x01f0) == 0x0100) {
                     //  case 0x8100:   sbcd     [1000rrr10000knnn, format ????rrr?bbkkknnn, p.275]
                     this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
-                    if ((op1 & 0x8) == 0)
+                    if ((op1 & 0x8) == 0) {
                         this.addCycles(6);
+                    }
                     break stage1;
                 }
                 if ((op1 & 0x01c0) == 0x00c0) {
@@ -1201,9 +1206,9 @@ export default class CPU68K extends CPU
                         this.dataDst = eaModeDst.getEAData(rrr);
                         dataNew = (this.dataDst / this.dataSrc)|0;
                         dataTmp = (this.dataDst % this.dataSrc)|0;
-                        if ((dataNew & 0xffff0000) != 0 && (dataNew & 0xffff0000) != 0xffff0000)
+                        if ((dataNew & 0xffff0000) != 0 && (dataNew & 0xffff0000) != 0xffff0000) {
                             this.setFlagV(-1);
-                        else {                                  // flags are based on quotient (dataNew), not the quotient+remainder combo
+                        } else {                                // flags are based on quotient (dataNew), not the quotient+remainder combo
                             eaModeDst.setData((dataNew & 0xffff) | (dataTmp << 16));
                             eaModeDst.updateFlagsZNClearCV(dataNew);
                         }
@@ -1274,8 +1279,9 @@ export default class CPU68K extends CPU
                     if (this.flagZNew == 0) {
                         this.flagZNew = this.flagZTmp;
                     }
-                    if ((op1 & 0x8) == 0)
+                    if ((op1 & 0x8) == 0) {
                         this.addCycles(4 + eaModeDst.cycle4l);
+                    }
                 }
                 break stage1;
 
@@ -1398,8 +1404,9 @@ export default class CPU68K extends CPU
                         this.flagVSrc = this.dataSrc << 24 >> 24;
                         this.flagVDst = this.dataDst << 24 >> 24;
                         this.flagNNew = this.flagVNew = dataNew << 24 >> 24;
-                        if ((op1 & 0x8) == 0)
+                        if ((op1 & 0x8) == 0) {
                             this.addCycles(6);
+                        }
                         break stage1;
 
                     case 0x5:

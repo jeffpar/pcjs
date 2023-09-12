@@ -597,8 +597,9 @@ export default class C1PKeyboard extends Component {
             /*
              * I could require all callers to supply CRs instead of LFs, but this is friendlier.
              */
-            if (ch == 0x0a)
+            if (ch == 0x0a) {
                 ch = 0x0d;
+            }
             /*
              * Also, if upper-case characters are being injected, convert them to lower-case, and rely
              * on the virtual SHIFT-LOCK remaining locked for the duration; otherwise, we'd have to simulate
@@ -608,8 +609,9 @@ export default class C1PKeyboard extends Component {
              * it's really intended as a work-around for a SHIFT-related problem on iOS devices only, so
              * we can't rely on that in the general case.
              */
-            if (ch >= 0x41 && ch <= 0x5A)
+            if (ch >= 0x41 && ch <= 0x5A) {
                 ch += 0x20;
+            }
             this.sInjectBuffer = this.sInjectBuffer.substr(1);
             this.keyPressSimulate(ch);
         }
@@ -776,10 +778,11 @@ export default class C1PKeyboard extends Component {
          */
         this.sInjectBuffer = "";
 
-        if (this.bitsShift & this.BIT_COMMAND)
+        if (this.bitsShift & this.BIT_COMMAND) {
             this.bitsShift &= ~this.BIT_COMMAND;
-        else
+        } else {
             fPass = !this.keyPressSimulate(charCode);
+        }
 
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
             this.dbg.printf("keyPress(%#04x): %s\n", charCode, fPass? "pass" : "consume");
@@ -818,8 +821,9 @@ export default class C1PKeyboard extends Component {
              * to use those special key combos.
              */
             if (this.fMobile) {
-                if (charCode >= 0x41 && charCode <= 0x5A)
+                if (charCode >= 0x41 && charCode <= 0x5A) {
                     charCode += 0x20;
+                }
             }
 
             /*
@@ -903,16 +907,18 @@ export default class C1PKeyboard extends Component {
             if (!bShift) bShift = bCode & 0xff;
             if (fDown) {
                 this.abKbdCols[iRow] |= 1 << iCol;
-                if (bShift == this.CHARCODE_CTRL)
+                if (bShift == this.CHARCODE_CTRL) {
                     this.abKbdCols[0] |= this.BIT_CTRL;
-                else
-                if (bShift == this.CHARCODE_LSHIFT)
+                }
+                else if (bShift == this.CHARCODE_LSHIFT) {
                     this.abKbdCols[0] |= this.BIT_LSHIFT;
-                else
-                if (bShift == this.CHARCODE_RSHIFT)
+                }
+                else if (bShift == this.CHARCODE_RSHIFT) {
                     this.abKbdCols[0] |= this.BIT_RSHIFT;
-                else
+                }
+                else {
                     this.abKbdCols[0] &= ~this.BITS_SIMULATE;
+                }
             }
             else {
                 this.abKbdCols[iRow] &= ~(1 << iCol);
@@ -999,8 +1005,9 @@ export default class C1PKeyboard extends Component {
          * that works well across the board.
          */
         if (!fPropagate) {
-            if (this.cpu.speed == this.cpu.SPEED_MAX)
+            if (this.cpu.speed == this.cpu.SPEED_MAX) {
                 fPropagate = (addr !== undefined && this.nWritesSinceLastEvent >= 32);
+            }
             else {
                 /*
                  * We have to handle the delta being less than zero, in case the user changed the speed, thereby
@@ -1029,8 +1036,9 @@ export default class C1PKeyboard extends Component {
          */
         var b = 0;
         for (var iRow=0; iRow < 8; iRow++) {
-            if (!(this.bKbdRows & (1 << iRow)))
+            if (!(this.bKbdRows & (1 << iRow))) {
                 continue;
+            }
             b |= this.abKbdColsLast[iRow];
         }
         /*
@@ -1045,8 +1053,9 @@ export default class C1PKeyboard extends Component {
         else {
             addr = this.offKbd;
             if (b != this.bWriteLast) {
-                for (var offset=addr; offset < this.offKbdLimit; offset++)
+                for (var offset=addr; offset < this.offKbdLimit; offset++) {
                     this.abMem[offset] = b;
+                }
             }
         }
         this.bWriteLast = b;

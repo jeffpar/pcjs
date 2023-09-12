@@ -65,6 +65,10 @@ import { DEBUG } from "./defines.js";
  */
 var SectorInfo;
 
+/**
+ * @class DiskPDP11
+ * @unrestricted
+ */
 export default class DiskPDP11 extends Component {
     /**
      * DiskPDP11(controller, drive, mode)
@@ -792,8 +796,9 @@ export default class DiskPDP11 extends Component {
      */
     write(sector, ibSector, b)
     {
-        if (this.fWriteProtected)
+        if (this.fWriteProtected) {
             return false;
+        }
 
         if (DEBUG) {
             this.printf("write(\"%s\",CHS=%d:%d:%d,index=%d,value=%#04x)\n", this.sDiskFile, sector.iCylinder, sector.iHead, sector['sector'], ibSector, b);

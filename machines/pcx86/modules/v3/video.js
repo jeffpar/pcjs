@@ -54,7 +54,7 @@ export default class PCx86Video extends Monitor {
     {
         super(idMachine, idDevice, config);
 
-        let video = this
+        let video = this;
         this.addrBuffer = this.config['bufferAddr'];
 
         this.nColsBuffer = this.config['bufferWidth'];

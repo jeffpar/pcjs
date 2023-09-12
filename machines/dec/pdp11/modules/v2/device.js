@@ -23,6 +23,10 @@ import Str from "../../../../modules/v2/strlib.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUGGER, PDP11 } from "./defines.js";
 
+/**
+ * @class DevicePDP11
+ * @unrestricted
+ */
 export default class DevicePDP11 extends Component {
     /**
      * DevicePDP11(parmsDevice)

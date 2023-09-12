@@ -81,7 +81,7 @@ export default class CPUx80 extends CPU {
      */
     initCPU()
     {
-        this.resetRegs()
+        this.resetRegs();
 
         this.defineRegister("A", () => this.regA, (value) => this.regA = value & 0xff);
         this.defineRegister("B", () => this.regB, (value) => this.regB = value & 0xff);
@@ -90,12 +90,12 @@ export default class CPUx80 extends CPU {
         this.defineRegister("E", () => this.regE, (value) => this.regE = value & 0xff);
         this.defineRegister("H", () => this.regH, (value) => this.regH = value & 0xff);
         this.defineRegister("L", () => this.regL, (value) => this.regL = value & 0xff);
-        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF()});
-        this.defineRegister("PF", () => (this.getPF()? 1 : 0), (value) => {value? this.setPF() : this.clearPF()});
-        this.defineRegister("AF", () => (this.getAF()? 1 : 0), (value) => {value? this.setAF() : this.clearAF()});
-        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF()});
-        this.defineRegister("SF", () => (this.getSF()? 1 : 0), (value) => {value? this.setSF() : this.clearSF()});
-        this.defineRegister("IF", () => (this.getIF()? 1 : 0), (value) => {value? this.setIF() : this.clearIF()});
+        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF();});
+        this.defineRegister("PF", () => (this.getPF()? 1 : 0), (value) => {value? this.setPF() : this.clearPF();});
+        this.defineRegister("AF", () => (this.getAF()? 1 : 0), (value) => {value? this.setAF() : this.clearAF();});
+        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF();});
+        this.defineRegister("SF", () => (this.getSF()? 1 : 0), (value) => {value? this.setSF() : this.clearSF();});
+        this.defineRegister("IF", () => (this.getIF()? 1 : 0), (value) => {value? this.setIF() : this.clearIF();});
         this.defineRegister("BC", this.getBC, this.setBC);
         this.defineRegister("DE", this.getDE, this.setDE);
         this.defineRegister("HL", this.getHL, this.setHL);

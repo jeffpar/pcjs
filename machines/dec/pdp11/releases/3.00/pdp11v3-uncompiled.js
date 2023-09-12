@@ -7035,7 +7035,7 @@ class Time extends Device {
          * If there was no interruption between the last run and this run (ie, msEndRun wasn't zeroed by
          * intervening setSpeed() or stop()/start() calls), and there was an unusual delay between the two
          * runs, then we assume that "browser throttling" is occurring due to visibility or redraw issues
-         * (eg, the browser window moved off-screen, the window is being actively reized, the user switched
+         * (eg, the browser window moved off-screen, the window is being actively resized, the user switched
          * tabs, etc).
          *
          * While that's good for overall system performance, it screws up our effective speed calculations,
@@ -8249,7 +8249,7 @@ class Memory extends Device {
 
         this.fDirty = this.fUseArrayBuffer = false;
         this.littleEndian = this.bus.littleEndian !== false;
-        this.buffer = this.dataView = null
+        this.buffer = this.dataView = null;
         this.values = this.valuePairs = this.valueQuads = null;
 
         let readValue = this.readValue;
@@ -9128,7 +9128,7 @@ class Memory extends Device {
         }
         if (this.writeTrap == func) {
             this.nWriteTraps++;
-            return true
+            return true;
         }
         return false;
     }
@@ -14393,7 +14393,7 @@ class PDP11Ops extends CPU {
      *
      *     Description:
      *          Subtracts the source operand from the destination operand and leaves the result at the destination address.
-     *          The orignial [sic] contents of the destination are lost. The contents of the source are not affected.
+     *          The original contents of the destination are lost. The contents of the source are not affected.
      *          In double-precision arithmetic the C-bit, when set, indicates a "borrow".
      *
      *     Example:
@@ -15333,10 +15333,10 @@ class PDP11 extends PDP11Ops {
         }
         this.defineRegisterAlias("R6", "SP");
         this.defineRegisterAlias("R7", Debugger.REGISTER.PC);
-        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF()});
-        this.defineRegister("NF", () => (this.getNF()? 1 : 0), (value) => {value? this.setNF() : this.clearNF()});
-        this.defineRegister("VF", () => (this.getVF()? 1 : 0), (value) => {value? this.setVF() : this.clearVF()});
-        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF()});
+        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF();});
+        this.defineRegister("NF", () => (this.getNF()? 1 : 0), (value) => {value? this.setNF() : this.clearNF();});
+        this.defineRegister("VF", () => (this.getVF()? 1 : 0), (value) => {value? this.setVF() : this.clearVF();});
+        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF();});
         this.defineRegister("PS", () => this.getPSW(), (value) => this.setPSW(value));
         this.defineRegister("PI", () => this.getPIR(), (value) => this.setPIR(value));
         this.defineRegister("ER", () => this.regErr);
@@ -19395,14 +19395,14 @@ class IOPage extends Ports {
                     inData = function(readPair) {
                         return function(port) {
                             return readPair(port) & 0xff;
-                        }
+                        };
                     }(inPair);
                 }
                 if (!outData && outPair) {
                     outData = function(writePair) {
                         return function(port, value) {
                             return writePair(port, value);
-                        }
+                        };
                     }(outPair);
                 }
             }

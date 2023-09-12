@@ -208,7 +208,7 @@ export default class RAMx80 extends Component {
                         }
                         this.cpu.addHaltCheck(function(rom) {
                             return function(addr) {
-                                return rom.checkCPMVector(addr)
+                                return rom.checkCPMVector(addr);
                             };
                         }(this));
                     }

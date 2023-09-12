@@ -45,14 +45,14 @@ export default class IOPage extends Ports {
                     inData = function(readPair) {
                         return function(port) {
                             return readPair(port) & 0xff;
-                        }
+                        };
                     }(inPair);
                 }
                 if (!outData && outPair) {
                     outData = function(writePair) {
                         return function(port, value) {
                             return writePair(port, value);
-                        }
+                        };
                     }(outPair);
                 }
             }

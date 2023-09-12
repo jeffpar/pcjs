@@ -1208,6 +1208,10 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
  * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class Str
+ * @unrestricted
+ */
 class Str {
     /**
      * isValidInt(s, base)
@@ -1965,6 +1969,10 @@ let BitField;
 /** @typedef {Object.<BitField>} */
 let BitFields;
 
+/**
+ * @class Usr
+ * @unrestricted
+ */
 class Usr {
     /**
      * binarySearch(a, v, fnCompare)
@@ -2286,6 +2294,10 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * stop()               Stops the window from loading
  */
 
+/**
+ * @class Web
+ * @unrestricted
+ */
 class Web {
     /**
      * getResource(sURL, type, fAsync, done, progress)
@@ -4879,7 +4891,6 @@ const BYTEARRAYS = false;
 const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
 
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
@@ -5485,7 +5496,7 @@ class BusX80 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 info.aBlocks.push(Usr.initBitFields(BusX80.BlockInfo, iBlock, 0, 0, block.type));
-                info.cBlocks++
+                info.cBlocks++;
             }
             iBlock++;
         }
@@ -6865,7 +6876,7 @@ class MemoryX80 {
     writeShortChecked(off, w, addr)
     {
         if (DEBUGGER && this.dbg && this.addr != null) {
-            this.dbg.checkMemoryWrite(this.addr + off, 2)
+            this.dbg.checkMemoryWrite(this.addr + off, 2);
         }
         if (this.fReadOnly) this.writeNone(off, w, addr); else this.writeShortDirect(off, w, addr);
     }
@@ -7529,10 +7540,11 @@ class CPUx80 extends Component {
                  * control is visible, then the computer is probably sufficiently visible as well; the problem
                  * with setting fUpdateFocus to true is that it can jerk the web page around in annoying ways.
                  */
-                if (!cpu.flags.running)
+                if (!cpu.flags.running) {
                     cpu.runCPU();
-                else
+                } else {
                     cpu.stopCPU();
+                }
             };
             fBound = true;
             break;
@@ -14172,7 +14184,7 @@ class RAMx80 extends Component {
                         }
                         this.cpu.addHaltCheck(function(rom) {
                             return function(addr) {
-                                return rom.checkCPMVector(addr)
+                                return rom.checkCPMVector(addr);
                             };
                         }(this));
                     }
@@ -20744,9 +20756,9 @@ class DebuggerX80 extends DbgLib {
          * if inactive, 1 if stepping over an instruction without a register dump, or 2
          * if stepping over an instruction with a register dump.
          */
-        if (!fRegs || this.nStep == 1)
+        if (!fRegs || this.nStep == 1) {
             this.doUnassemble();
-        else {
+        } else {
             this.doRegisters();
         }
     }
@@ -20761,14 +20773,9 @@ class DebuggerX80 extends DbgLib {
      */
     isCPUAvail()
     {
-        if (!this.cpu)
+        if (!this.cpu || !this.cpu.isReady() || !this.cpu.isPowered() || this.cpu.isBusy()) {
             return false;
-        if (!this.cpu.isReady())
-            return false;
-        if (!this.cpu.isPowered())
-            return false;
-        if (this.cpu.isBusy())
-            return false;
+        }
         return !this.cpu.isError();
     }
 
@@ -22043,12 +22050,9 @@ class DebuggerX80 extends DbgLib {
                 this.printf("all breakpoints cleared\n");
                 return;
             }
-            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true))
-                return;
+            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true)) return;
             this.printf("breakpoint missing: %s\n", this.toHexAddr(dbgAddr));
             return;
         }
@@ -22283,8 +22287,9 @@ class DebuggerX80 extends DbgLib {
         let cData = 0;
         if (this.aaOpcodeCounts) {
             if (sParm == "clear") {
-                for (let i = 0; i < this.aaOpcodeCounts.length; i++)
+                for (let i = 0; i < this.aaOpcodeCounts.length; i++) {
                     this.aaOpcodeCounts[i] = [i, 0];
+                }
                 this.printf("frequency data cleared\n");
                 cData++;
             }
@@ -24153,7 +24158,7 @@ class ComputerX80 extends Component {
     {
         if (!parmsMachine) {
             let sParms;
-            let resources = globals.window['resources']
+            let resources = globals.window['resources'];
             if (typeof resources == 'object' && (sParms = resources['parms'])) {
                 try {
                     parmsMachine = /** @type {Object} */ (eval("(" + sParms + ")"));
@@ -25479,6 +25484,10 @@ Web.onExit(ComputerX80.exit);
  * @copyright https://www.pcjs.org/modules/v2/state.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class State
+ * @unrestricted
+ */
 class State {
     /**
      * State(component, sVersion, sSuffix)

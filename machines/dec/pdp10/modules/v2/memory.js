@@ -467,7 +467,7 @@ export default class MemoryPDP10 {
     writeWordChecked(w, off, addr)
     {
         if (DEBUGGER && this.dbg && this.addr != null) {
-            this.dbg.checkMemoryWrite(this.addr + off, 2)
+            this.dbg.checkMemoryWrite(this.addr + off, 2);
         }
         if (this.fReadOnly) this.writeNone(w, off, addr); else this.writeWordDirect(w, off, addr);
     }

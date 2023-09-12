@@ -83,7 +83,7 @@ export default class Memory extends Device {
 
         this.fDirty = this.fUseArrayBuffer = false;
         this.littleEndian = this.bus.littleEndian !== false;
-        this.buffer = this.dataView = null
+        this.buffer = this.dataView = null;
         this.values = this.valuePairs = this.valueQuads = null;
 
         let readValue = this.readValue;
@@ -962,7 +962,7 @@ export default class Memory extends Device {
         }
         if (this.writeTrap == func) {
             this.nWriteTraps++;
-            return true
+            return true;
         }
         return false;
     }
