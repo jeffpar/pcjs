@@ -29168,3 +29168,4 @@ globals.window['commandMachine'] = commandMachine;
 
 globals.window['enableEvents'] = Web.enablePageEvents;
 globals.window['sendEvent']    = Web.doPageEvent;
+

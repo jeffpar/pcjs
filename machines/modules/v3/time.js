@@ -955,7 +955,7 @@ export default class Time extends Device {
             return false;
         }
         this.fRunning = true;
-        this.msStartRun = this.msEndRun = 0;
+        this.msStartRun = this.msEndRun = this.msFrame = 0;
         this.update(true);
         this.assert(!this.idAnimationTimeout);
         this.idAnimationTimeout = this.requestAnimationTimeout();
