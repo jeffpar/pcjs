@@ -670,13 +670,12 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
          *
          * 2023-09-12 UPDATE: GitHub Pages has started giving me deployment errors, due to the large number
          * of pages the website contains when a page for every PC-SIG diskette is added to the site.  Even
-         * though the pcjs repository itself is well under the 1Gb "soft" limit that GitHib recommends, there
+         * though the pcjs repository itself is well under the "soft" 1Gb limit that GitHub recommends, there
          * is apparently also a "soft" (undocumented?) 1Gb limit on the amount of data GitHub Pages can deploy
-         * as well, and since the web pages are significantly larger than the README files in the repo, we
-         * were trying to deploy over 1.5Gb.  The size itself only generated a warning in their logs, but
-         * the process of deploying that much data was timing out after about 10 minutes.  None of this is
-         * explained very well by GitHub (or their email notifications), but at least their logs hinted at
-         * the problem.
+         * as well, and since the web pages are significantly larger than the README files in the repo,
+         * we were trying to deploy over 1.5Gb.  The size itself only generated a warning, but the process of
+         * deploying that much data was timing out after about 10 minutes.  None of this is explained very
+         * well by GitHub (or their email notifications), but at least their logs hinted at the problem.
          *
          * So, for now, only PC-SIG pages for diskettes that we have original copies of are being retained,
          * and the rest are no longer being automatically generated.  Hence the "/pcsig" exception below
