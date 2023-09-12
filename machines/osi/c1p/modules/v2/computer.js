@@ -165,6 +165,11 @@ export default class C1PComputer extends Component {
         return null;
     }
 
+    /**
+     * power(computer)
+     *
+     * @param {C1PComputer} computer
+     */
     static power(computer)
     {
         /*
@@ -188,8 +193,9 @@ export default class C1PComputer extends Component {
                  * The CPU component's setPower() notification handler is a special case: we don't want
                  * to call it until the end (below), after all others have been called.
                  */
-                if (sType == "cpu")
+                if (sType == "cpu") {
                     cpu = component;
+                }
                 else if (component.setPower) {
                     component.setPower(true, computer);
                 }
@@ -212,8 +218,8 @@ export default class C1PComputer extends Component {
         if (cpu) cpu.setPower(true, computer);
     }
 
-    /*
-     * C1PComputer.init()
+    /**
+     * init()
      *
      * This function operates on every HTML element of class "c1pjs-computer", extracting the
      * JSON-encoded parameters for the C1PComputer constructor from the element's "data-value"
@@ -257,8 +263,9 @@ export default class C1PComputer extends Component {
                 component = Component.getComponentByID(addrInfo['refID'], parmsComputer['id']);
                 if (component) {
                     var sType = addrInfo['type'];
-                    if (modules[sType] === undefined)
+                    if (modules[sType] === undefined) {
                         modules[sType] = [];
+                    }
                     modules[sType].push(component);
                     if (component.setBuffer && addrInfo['start'] !== undefined) {
                         component.setBuffer(abMemory, +addrInfo['start'], +addrInfo['end'], modules['cpu'][0]);

@@ -49,6 +49,10 @@ var BlockInfoPDP10 = /** @type {BlockInfo} */ (Usr.defineBitFields({num:20, coun
   */
 var BusInfoPDP10;
 
+/**
+ * @class BusPDP10
+ * @unrestricted
+ */
 export default class BusPDP10 extends Component {
     /**
      * BusPDP10(parmsBus, cpu, dbg)
@@ -367,7 +371,7 @@ export default class BusPDP10 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 info.aBlocks.push(/** @type {BlockInfo} */ (Usr.initBitFields(BlockInfoPDP10, iBlock, 0, 0, block.type)));
-                info.cBlocks++
+                info.cBlocks++;
             }
             iBlock++;
         }

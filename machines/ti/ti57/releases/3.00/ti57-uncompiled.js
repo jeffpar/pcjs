@@ -470,7 +470,7 @@ class Format {
 
             case 'S':
                 arg = hash? date.getUTCSeconds() : date.getSeconds();
-                type = 'd'
+                type = 'd';
                 break;
 
             case 'T':
@@ -5701,7 +5701,7 @@ class LED extends Device {
         let segments = LED.SYMBOL_SEGMENTS[symbol];
         if (segments) {
             for (let i = 0; i < segments.length; i++) {
-                this.drawGridSegment(segments[i], col, row)
+                this.drawGridSegment(segments[i], col, row);
             }
         }
     }
@@ -7035,7 +7035,7 @@ class Time extends Device {
          * If there was no interruption between the last run and this run (ie, msEndRun wasn't zeroed by
          * intervening setSpeed() or stop()/start() calls), and there was an unusual delay between the two
          * runs, then we assume that "browser throttling" is occurring due to visibility or redraw issues
-         * (eg, the browser window moved off-screen, the window is being actively reized, the user switched
+         * (eg, the browser window moved off-screen, the window is being actively resized, the user switched
          * tabs, etc).
          *
          * While that's good for overall system performance, it screws up our effective speed calculations,
@@ -8249,7 +8249,7 @@ class Memory extends Device {
 
         this.fDirty = this.fUseArrayBuffer = false;
         this.littleEndian = this.bus.littleEndian !== false;
-        this.buffer = this.dataView = null
+        this.buffer = this.dataView = null;
         this.values = this.valuePairs = this.valueQuads = null;
 
         let readValue = this.readValue;
@@ -9128,7 +9128,7 @@ class Memory extends Device {
         }
         if (this.writeTrap == func) {
             this.nWriteTraps++;
-            return true
+            return true;
         }
         return false;
     }

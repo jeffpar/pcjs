@@ -1013,7 +1013,7 @@ PDP10.opMOVSS = function(op, ac)
     var src = this.readWord(this.regEA);
     src = ((src / PDP10.HALF_SHIFT)|0) + ((src & PDP10.HALF_MASK) * PDP10.HALF_SHIFT);
     this.writeWord(this.regEA, src);
-    if (ac) this.writeWord(ac, src)
+    if (ac) this.writeWord(ac, src);
 };
 
 /**

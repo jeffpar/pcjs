@@ -2829,10 +2829,12 @@ export default class ChipSet extends Component {
         }
         if (pic.nICW < pic.aICW.length) {
             pic.aICW[pic.nICW++] = bOut;
-            if (pic.nICW == 2 && (pic.aICW[0] & ChipSet.PIC_LO.ICW1_SNGL))
+            if (pic.nICW == 2 && (pic.aICW[0] & ChipSet.PIC_LO.ICW1_SNGL)) {
                 pic.nICW++;
-            if (pic.nICW == 3 && !(pic.aICW[0] & ChipSet.PIC_LO.ICW1_ICW4))
+            }
+            if (pic.nICW == 3 && !(pic.aICW[0] & ChipSet.PIC_LO.ICW1_ICW4)) {
                 pic.nICW++;
+            }
         }
         else {
             /*
@@ -3124,7 +3126,7 @@ export default class ChipSet extends Component {
             if (timer.fCountLatched) {
                 b = timer.countLatched[timer.countIndex++];
                 if (timer.countIndex == timer.countBytes) {
-                    timer.fCountLatched = false
+                    timer.fCountLatched = false;
                 }
             }
             else {
@@ -3880,10 +3882,11 @@ export default class ChipSet extends Component {
         if (this.bPPIB & ChipSet.PPI_B.CLK_TIMER2) {
             let timer = this.updateTimer(ChipSet.PIT0.TIMER2);
             if (timer.fOUT) {
-                if (this.bPPIB & ChipSet.PPI_B.SPK_TIMER2)
+                if (this.bPPIB & ChipSet.PPI_B.SPK_TIMER2) {
                     b |= ChipSet.PPI_C.TIMER2_OUT;
-                else
+                } else {
                     b |= ChipSet.PPI_C.CASS_DATA_IN;
+                }
             }
         }
 

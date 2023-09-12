@@ -293,7 +293,7 @@ export default class ComputerX80 extends Component {
     {
         if (!parmsMachine) {
             let sParms;
-            let resources = globals.window['resources']
+            let resources = globals.window['resources'];
             if (typeof resources == 'object' && (sParms = resources['parms'])) {
                 try {
                     parmsMachine = /** @type {Object} */ (eval("(" + sParms + ")"));

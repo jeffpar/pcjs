@@ -147,7 +147,6 @@ if (globals.window['PCjs']) {
 globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
@@ -489,7 +488,7 @@ class Format {
 
             case 'S':
                 arg = hash? date.getUTCSeconds() : date.getSeconds();
-                type = 'd'
+                type = 'd';
                 break;
 
             case 'T':
@@ -1448,6 +1447,10 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
  * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class Str
+ * @unrestricted
+ */
 class Str {
     /**
      * isValidInt(s, base)
@@ -2205,6 +2208,10 @@ let BitField;
 /** @typedef {Object.<BitField>} */
 let BitFields;
 
+/**
+ * @class Usr
+ * @unrestricted
+ */
 class Usr {
     /**
      * binarySearch(a, v, fnCompare)
@@ -2526,6 +2533,10 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * stop()               Stops the window from loading
  */
 
+/**
+ * @class Web
+ * @unrestricted
+ */
 class Web {
     /**
      * getResource(sURL, type, fAsync, done, progress)
@@ -4444,7 +4455,7 @@ class Component {
                 fnCallReady = function processNextCommand() {
                     return function() {
                         Component.processCommands(idMachine);
-                    }
+                    };
                 }();
             }
 
@@ -4568,8 +4579,9 @@ class Component {
         let nMachine = 1;
         if (this.idMachine) {
             let aDigits = this.idMachine.match(/\d+/);
-            if (aDigits !== null)
+            if (aDigits !== null) {
                 nMachine = parseInt(aDigits[0], 10);
+            }
         }
         return nMachine;
     }
@@ -4868,7 +4880,7 @@ class Component {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
         let bitsHi = (bits / shift)|0;
-        return (num & bits) + (numHi & bitsHi) * shift
+        return (num & bits) + (numHi & bitsHi) * shift;
     }
 
     /**
@@ -5052,7 +5064,7 @@ if (!Array.prototype.indexOf) {
             if (this[i] === obj) { return i; }
         }
         return -1;
-    }
+    };
 }
 
 /*
@@ -6005,7 +6017,6 @@ PDP11.ACCESS.UPDATE_BYTE = PDP11.ACCESS.BYTE | PDP11.ACCESS.UPDATE;     // forme
 PDP11.PSW.FLAGS         = (PDP11.PSW.NF | PDP11.PSW.ZF | PDP11.PSW.VF | PDP11.PSW.CF);
 
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
@@ -6686,7 +6697,7 @@ class PanelPDP11 extends Component {
     setSwitch(sBinding, sValue)
     {
         if (sBinding == "SR") {
-            return this.setSRSwitches(Str.parseInt(sValue, 8))
+            return this.setSRSwitches(Str.parseInt(sValue, 8));
         }
         var sw = this.switches[sBinding];
         if (sw) {
@@ -7399,6 +7410,10 @@ let BusInfo;
   */
 var BusInfoPDP11;
 
+/**
+ * @class BusPDP11
+ * @unrestricted
+ */
 class BusPDP11 extends Component {
     /**
      * BusPDP11(parmsBus, cpu, dbg)
@@ -7861,7 +7876,7 @@ class BusPDP11 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 info.aBlocks.push(/** @type {BlockInfo} */ (Usr.initBitFields(BlockInfoPDP11, iBlock, 0, 0, block.type)));
-                info.cBlocks++
+                info.cBlocks++;
             }
             iBlock++;
         }
@@ -8597,7 +8612,7 @@ BusPDP11.IOController = {
                      * access using a BYTE handler registered for EVEN bytes.  But if that's all we've got,
                      * then presumably the handler is prepared for it (certainly, readROMByte() is).
                      */
-                    b = afn[BusPDP11.IOHANDLER.READ_BYTE](addrMasked)
+                    b = afn[BusPDP11.IOHANDLER.READ_BYTE](addrMasked);
                 }
             }
         }
@@ -8782,6 +8797,10 @@ BusPDP11.IOController = {
  * @copyright https://www.pcjs.org/modules/v2/device.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class DevicePDP11
+ * @unrestricted
+ */
 class DevicePDP11 extends Component {
     /**
      * DevicePDP11(parmsDevice)
@@ -10741,7 +10760,7 @@ class MemoryPDP11 {
     writeWordChecked(off, w, addr)
     {
         if (DEBUGGER && this.dbg && this.addr != null) {
-            this.dbg.checkMemoryWrite(this.addr + off, 2)
+            this.dbg.checkMemoryWrite(this.addr + off, 2);
         }
         if (this.fReadOnly) this.writeNone(off, w, addr); else this.writeWordDirect(off, w, addr);
     }
@@ -10989,6 +11008,10 @@ var littleEndian = (TYPEDARRAYS? (function() {
  * @copyright https://www.pcjs.org/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class CPUPDP11
+ * @unrestricted
+ */
 class CPUPDP11 extends Component {
     /**
      * CPUPDP11(parmsCPU, nCyclesDefault)
@@ -11384,10 +11407,11 @@ class CPUPDP11 extends Component {
                  * control is visible, then the computer is probably sufficiently visible as well; the problem
                  * with setting fUpdateFocus to true is that it can jerk the web page around in annoying ways.
                  */
-                if (!cpu.flags.running)
+                if (!cpu.flags.running) {
                     cpu.startCPU();
-                else
+                } else {
                     cpu.stopCPU();
+                }
             };
             return true;
 
@@ -12225,6 +12249,10 @@ CPUPDP11.BUTTONS = ["power", "reset"];
  */
 var IRQ;
 
+/**
+ * @class CPUStatePDP11
+ * @unrestricted
+ */
 class CPUStatePDP11 extends CPUPDP11 {
     /**
      * CPUStatePDP11(parmsCPU)
@@ -17039,7 +17067,7 @@ PDP11.opSPL = function(opCode)
  *
  *     Description:
  *          Subtracts the source operand from the destination operand and leaves the result at the destination address.
- *          The orignial [sic] contents of the destination are lost. The contents of the source are not affected.
+ *          The original contents of the destination are lost. The contents of the source are not affected.
  *          In double-precision arithmetic the C-bit, when set, indicates a "borrow".
  *
  *     Example:
@@ -17748,6 +17776,10 @@ PDP11.aOp8DXn_1140 = [
  * @copyright https://www.pcjs.org/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class ROMPDP11
+ * @unrestricted
+ */
 class ROMPDP11 extends Component {
     /**
      * ROMPDP11(parmsROM)
@@ -18101,6 +18133,10 @@ Web.onInit(ROMPDP11.init);
  * @copyright https://www.pcjs.org/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class RAMPDP11
+ * @unrestricted
+ */
 class RAMPDP11 extends Component {
     /**
      * RAMPDP11(parmsRAM)
@@ -18484,6 +18520,10 @@ Web.onInit(RAMPDP11.init);
  * @copyright https://www.pcjs.org/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class KeyboardPDP11
+ * @unrestricted
+ */
 class KeyboardPDP11 extends Component {
     /**
      * KeyboardPDP11(parmsKbd)
@@ -18582,6 +18622,7 @@ Web.onInit(KeyboardPDP11.init);
  * The upside, however, may be that since the structure of the class is completely defined by
  * the constructor, JavaScript engines may be able to optimize and run more efficiently.
  *
+ * @class SerialPortPDP11
  * @unrestricted
  */
 class SerialPortPDP11 extends Component {
@@ -19436,6 +19477,10 @@ Web.onInit(SerialPortPDP11.init);
  * @copyright https://www.pcjs.org/modules/v2/pc11.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class PC11
+ * @unrestricted
+ */
 class PC11 extends Component {
     /**
      * PC11(parms)
@@ -20473,6 +20518,10 @@ PC11.UNIBUS_IOTABLE = {
  */
 var SectorInfo;
 
+/**
+ * @class DiskPDP11
+ * @unrestricted
+ */
 class DiskPDP11 extends Component {
     /**
      * DiskPDP11(controller, drive, mode)
@@ -21200,8 +21249,9 @@ class DiskPDP11 extends Component {
      */
     write(sector, ibSector, b)
     {
-        if (this.fWriteProtected)
+        if (this.fWriteProtected) {
             return false;
+        }
 
         if (DEBUG) {
             this.printf("write(\"%s\",CHS=%d:%d:%d,index=%d,value=%#04x)\n", this.sDiskFile, sector.iCylinder, sector.iHead, sector['sector'], ibSector, b);
@@ -22227,7 +22277,7 @@ class DriveController extends Component {
             drive.fLocal,
             drive.sDiskName,
             drive.sDiskPath
-        ]
+        ];
     }
 
     /**
@@ -22955,6 +23005,10 @@ DriveController.SOURCE = {
  * @copyright https://www.pcjs.org/modules/v2/rk11.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class RK11
+ * @unrestricted
+ */
 class RK11 extends DriveController {
     /**
      * RK11(parms)
@@ -23540,6 +23594,10 @@ RK11.UNIBUS_IOTABLE = {
  * @copyright https://www.pcjs.org/modules/v2/rl11.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class RL11
+ * @unrestricted
+ */
 class RL11 extends DriveController {
     /**
      * RL11(parms)
@@ -24062,6 +24120,10 @@ RL11.UNIBUS_IOTABLE = {
  * @copyright https://www.pcjs.org/modules/v2/rx11.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class RX11
+ * @unrestricted
+ */
 class RX11 extends DriveController {
     /**
      * RX11(parms)
@@ -25318,7 +25380,7 @@ class DbgLib extends Component {
             if (sOp == ' ') {
                 if (iValue < asValues.length - 1 && !asValues[iValue]) {
                     iValue++;
-                    sOp = asValues[iValue++]
+                    sOp = asValues[iValue++];
                 } else {
                     fError = true;
                     break;
@@ -25991,6 +26053,10 @@ DbgLib.EVENTS = {
  */
 var DbgAddrPDP11;
 
+/**
+ * @class DebuggerPDP11
+ * @unrestricted
+ */
 class DebuggerPDP11 extends DbgLib {
     /**
      * DebuggerPDP11(parmsDbg)
@@ -26485,7 +26551,7 @@ class DebuggerPDP11 extends DbgLib {
             dbgAddr = this.findSymbolAddr(sAddr);
             if (dbgAddr) return dbgAddr;
             if (sAddr.indexOf("0x") >= 0) {
-                nBase = 16
+                nBase = 16;
             } else if (sAddr.indexOf("0o") >= 0) {
                 nBase = 8;
             } else if (sAddr.indexOf('.') >= 0) {
@@ -28640,12 +28706,9 @@ class DebuggerPDP11 extends DbgLib {
                 this.printf("all breakpoints cleared\n");
                 return;
             }
-            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true))
-                return;
+            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true)) return;
             this.printf("breakpoint missing: %s\n", this.toStrAddr(dbgAddr));
             return;
         }
@@ -30267,6 +30330,10 @@ if (DEBUGGER) {
  * @copyright https://www.pcjs.org/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class ComputerPDP11
+ * @unrestricted
+ */
 class ComputerPDP11 extends Component {
     /**
      * ComputerPDP11(parmsComputer, parmsMachine, fSuspended)
@@ -31909,6 +31976,10 @@ Web.onExit(ComputerPDP11.exit);
  * @copyright https://www.pcjs.org/modules/v2/state.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class State
+ * @unrestricted
+ */
 class State {
     /**
      * State(component, sVersion, sSuffix)

@@ -5,18 +5,17 @@
  https://www.pcjs.org/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/userapi.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/keys.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/x86.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/driveinfo.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/errors.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/interrupts.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v2/state.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/format.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/databuffer.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/component.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/jsonlib.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/charset.js (C) 2012-2023 Jeff Parsons
@@ -48,6 +47,7 @@
  https://www.pcjs.org/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v2/state.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v2/save.js (C) 2012-2023 Jeff Parsons
 */
 var n,aa;function ca(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}function da(a){var b="undefined"!=typeof Symbol&&Symbol.iterator&&a[Symbol.iterator];return b?b.call(a):{next:ca(a)}}function ea(a){if(!(a instanceof Array)){a=da(a);for(var b,c=[];!(b=a.next()).done;)c.push(b.value);a=c}return a}

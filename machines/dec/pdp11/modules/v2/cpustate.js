@@ -54,6 +54,10 @@ import { APPCLASS, DEBUG, DEBUGGER, PDP11 } from "./defines.js";
  */
 var IRQ;
 
+/**
+ * @class CPUStatePDP11
+ * @unrestricted
+ */
 export default class CPUStatePDP11 extends CPUPDP11 {
     /**
      * CPUStatePDP11(parmsCPU)

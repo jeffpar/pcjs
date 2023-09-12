@@ -397,7 +397,7 @@ export default class BusX86 extends Component {
             if (block.size) {
                 let btmod = (BACKTRACK && block.modBackTrack(false)? 1 : 0);
                 info.aBlocks.push(Usr.initBitFields(BusX86.BlockInfo, iBlock, 0, btmod, block.type));
-                info.cBlocks++
+                info.cBlocks++;
             }
             iBlock++;
         }

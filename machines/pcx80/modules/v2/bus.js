@@ -315,7 +315,7 @@ export default class BusX80 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 info.aBlocks.push(Usr.initBitFields(BusX80.BlockInfo, iBlock, 0, 0, block.type));
-                info.cBlocks++
+                info.cBlocks++;
             }
             iBlock++;
         }

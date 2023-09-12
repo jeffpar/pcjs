@@ -1815,7 +1815,7 @@ PDP11.opSPL = function(opCode)
  *
  *     Description:
  *          Subtracts the source operand from the destination operand and leaves the result at the destination address.
- *          The orignial [sic] contents of the destination are lost. The contents of the source are not affected.
+ *          The original contents of the destination are lost. The contents of the source are not affected.
  *          In double-precision arithmetic the C-bit, when set, indicates a "borrow".
  *
  *     Example:

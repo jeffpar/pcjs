@@ -40,6 +40,10 @@ import { APPCLASS, APPNAME, APPVERSION, COMPILED, DEBUG, DEBUGGER, PDP11, global
  */
 var DbgAddrPDP11;
 
+/**
+ * @class DebuggerPDP11
+ * @unrestricted
+ */
 export default class DebuggerPDP11 extends DbgLib {
     /**
      * DebuggerPDP11(parmsDbg)
@@ -534,7 +538,7 @@ export default class DebuggerPDP11 extends DbgLib {
             dbgAddr = this.findSymbolAddr(sAddr);
             if (dbgAddr) return dbgAddr;
             if (sAddr.indexOf("0x") >= 0) {
-                nBase = 16
+                nBase = 16;
             } else if (sAddr.indexOf("0o") >= 0) {
                 nBase = 8;
             } else if (sAddr.indexOf('.') >= 0) {
@@ -2689,12 +2693,9 @@ export default class DebuggerPDP11 extends DbgLib {
                 this.printf("all breakpoints cleared\n");
                 return;
             }
-            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true))
-                return;
+            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true)) return;
             this.printf("breakpoint missing: %s\n", this.toStrAddr(dbgAddr));
             return;
         }

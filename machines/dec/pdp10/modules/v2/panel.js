@@ -605,7 +605,7 @@ export default class PanelPDP10 extends Component {
     setSwitch(sBinding, sValue)
     {
         if (sBinding == "SR") {
-            return this.setSRSwitches(Str.parseInt(sValue, 8))
+            return this.setSRSwitches(Str.parseInt(sValue, 8));
         }
         var sw = this.switches[sBinding];
         if (sw) {

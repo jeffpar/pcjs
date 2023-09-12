@@ -9,6 +9,10 @@
 
 import Format from "../v2/format.js";
 
+/**
+ * @class Str
+ * @unrestricted
+ */
 export default class Str {
     /**
      * isValidInt(s, base)

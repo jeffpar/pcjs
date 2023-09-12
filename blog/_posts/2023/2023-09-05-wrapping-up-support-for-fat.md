@@ -4,6 +4,7 @@ title: Wrapping Up Support for FAT
 date: 2023-09-05 10:00:00
 permalink: /blog/2023/09/05/
 preview: /blog/images/reynolds-wrap.jpg
+description: "In this PCjs blog post, I wrap up my work on the PC.js command-line utility and give a little a nod to Aaron Reynolds."
 ---
 
 This will probably be the final post in my "[trilogy](/blog/2023/08/10/)" of posts about the `pc.js` command-line utility, now that I've (hopefully) finished ironing out most of the wrinkles.  I've improved FAT12 and FAT16 support, so when `pc.js` builds either a standard *or* custom FAT disk image, it should be compatible with whatever version of PC DOS, MS-DOS, or COMPAQ DOS you select.

@@ -15,6 +15,10 @@ import State from "../../../../modules/v2/state.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUGGER, PDP10 } from "./defines.js";
 
+/**
+ * @class DevicePDP10
+ * @unrestricted
+ */
 export default class DevicePDP10 extends Component {
     /**
      * DevicePDP10(parmsDevice)

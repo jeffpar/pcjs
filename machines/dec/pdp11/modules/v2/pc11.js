@@ -15,6 +15,10 @@ import Str from "../../../../modules/v2/strlib.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { CSSCLASS, DEBUG, PDP11, globals } from "./defines.js";
 
+/**
+ * @class PC11
+ * @unrestricted
+ */
 export default class PC11 extends Component {
     /**
      * PC11(parms)

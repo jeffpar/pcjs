@@ -83,8 +83,9 @@ export default class C1PROM extends Component {
          * It's possible that the ROM component didn't specify a size,
          * in which case just use the size the Computer component has specified.
          */
-        if (!this.cbROM)
+        if (!this.cbROM) {
             this.cbROM = cbROM;
+        }
         if (cbROM != this.cbROM) {
             this.setError("computer-specified ROM size (" + Str.toHexWord(cbROM) + ") does not match component-specified size (" + Str.toHexWord(this.cbROM) + ")");
             return;
@@ -125,10 +126,11 @@ export default class C1PROM extends Component {
             if (DEBUGGER && this.dbg) this.dbg.messageIO(this, addr, addrFrom, this.dbg.MESSAGE_PORT, true);
             var offset = (addr - this.offROM);
             Component.assert(offset >= 0 && offset < this.cbROM);
-            if (!this.abImage)
+            if (!this.abImage) {
                 this.abMem[this.offROM + offset] = 0;
-            else
+            } else {
                 this.abMem[this.offROM + offset] = this.abImage[offset];
+            }
         }
     }
 

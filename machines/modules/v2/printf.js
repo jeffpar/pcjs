@@ -22,4 +22,4 @@ export default function printf(format, ...args)
     process.stdout.write(sprintf(format, ...args));
 }
 
-export { printf, sprintf }
+export { printf, sprintf };

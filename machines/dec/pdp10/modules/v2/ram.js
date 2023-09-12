@@ -15,6 +15,10 @@ import Str from "../../../../modules/v2/strlib.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, PDP10 } from "./defines.js";
 
+/**
+ * @class RAMPDP10
+ * @unrestricted
+ */
 export default class RAMPDP10 extends Component {
     /**
      * RAMPDP10(parmsRAM)

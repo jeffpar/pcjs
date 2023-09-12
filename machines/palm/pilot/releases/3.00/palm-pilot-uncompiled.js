@@ -470,7 +470,7 @@ class Format {
 
             case 'S':
                 arg = hash? date.getUTCSeconds() : date.getSeconds();
-                type = 'd'
+                type = 'd';
                 break;
 
             case 'T':
@@ -5701,7 +5701,7 @@ class LED extends Device {
         let segments = LED.SYMBOL_SEGMENTS[symbol];
         if (segments) {
             for (let i = 0; i < segments.length; i++) {
-                this.drawGridSegment(segments[i], col, row)
+                this.drawGridSegment(segments[i], col, row);
             }
         }
     }
@@ -7499,7 +7499,7 @@ class Time extends Device {
          * If there was no interruption between the last run and this run (ie, msEndRun wasn't zeroed by
          * intervening setSpeed() or stop()/start() calls), and there was an unusual delay between the two
          * runs, then we assume that "browser throttling" is occurring due to visibility or redraw issues
-         * (eg, the browser window moved off-screen, the window is being actively reized, the user switched
+         * (eg, the browser window moved off-screen, the window is being actively resized, the user switched
          * tabs, etc).
          *
          * While that's good for overall system performance, it screws up our effective speed calculations,
@@ -8713,7 +8713,7 @@ class Memory extends Device {
 
         this.fDirty = this.fUseArrayBuffer = false;
         this.littleEndian = this.bus.littleEndian !== false;
-        this.buffer = this.dataView = null
+        this.buffer = this.dataView = null;
         this.values = this.valuePairs = this.valueQuads = null;
 
         let readValue = this.readValue;
@@ -9592,7 +9592,7 @@ class Memory extends Device {
         }
         if (this.writeTrap == func) {
             this.nWriteTraps++;
-            return true
+            return true;
         }
         return false;
     }
@@ -10315,9 +10315,9 @@ class Debugger extends Device {
         this.aBreakBuses[Debugger.BREAKTYPE.OUTPUT] = this.busIO;
         this.aBreakChecks = [];
         this.aBreakChecks[Debugger.BREAKTYPE.READ] = this.checkRead.bind(this);
-        this.aBreakChecks[Debugger.BREAKTYPE.WRITE] = this.checkWrite.bind(this)
-        this.aBreakChecks[Debugger.BREAKTYPE.INPUT] = this.checkInput.bind(this)
-        this.aBreakChecks[Debugger.BREAKTYPE.OUTPUT] = this.checkOutput.bind(this)
+        this.aBreakChecks[Debugger.BREAKTYPE.WRITE] = this.checkWrite.bind(this);
+        this.aBreakChecks[Debugger.BREAKTYPE.INPUT] = this.checkInput.bind(this);
+        this.aBreakChecks[Debugger.BREAKTYPE.OUTPUT] = this.checkOutput.bind(this);
         this.aBreakIndexes = [];
         this.fStepQuietly = undefined;          // when stepping, this informs onUpdate() how "quiet" to be
         this.tempBreak = null;                  // temporary auto-cleared break address managed by setTemp() and clearTemp()
@@ -11196,7 +11196,7 @@ class Debugger extends Device {
             if (sOp == ' ') {
                 if (iValue < asValues.length - 1 && !asValues[iValue]) {
                     iValue++;
-                    sOp = asValues[iValue++]
+                    sOp = asValues[iValue++];
                 } else {
                     fError = true;
                     break;
@@ -13143,10 +13143,11 @@ class CPU68K extends CPU
                     }
                     else {
                         this.dataSrc = (1 << (this.dataSrc & 7));
-                        if ((op1 & 0x00c0) == 0)
+                        if ((op1 & 0x00c0) == 0) {
                             eaModeDst = aEAModes[this.abModes401[op1 & 0x3f]];  // +(ssBYTE << 6)
-                        else
+                        } else {
                             eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];  // +(ssBYTE << 6)
+                        }
                         this.dataDst = eaModeDst.getEAData(nnn);
                     }
                     switch ((op1 >> 6) & 0x3) {
@@ -13461,12 +13462,13 @@ class CPU68K extends CPU
                     reg = this.regA[nnn];
                     eaModeSrc.getEA(nnn);
                     iMask = 0x1;
-                    for (let i = 0; i <= 7; i++, iMask <<= 1)
+                    for (let i = 0; i <= 7; i++, iMask <<= 1) {
                         if ((iModeDst & iMask) != 0) {
                             if (cRegs++ != 0) eaModeSrc.advanceEA(nnn);
                             this.regD[i] = eaModeSrc.getData();
                         }
-                    for (let i = 0; i <= 7; i++, iMask <<= 1)
+                    }
+                    for (let i = 0; i <= 7; i++, iMask <<= 1) {
                         if ((iModeDst & iMask) != 0) {
                             if (cRegs++ != 0) eaModeSrc.advanceEA(nnn);
                             op2 = eaModeSrc.getData();
@@ -13474,6 +13476,7 @@ class CPU68K extends CPU
                                 this.regA[i] = op2;
                             }
                         }
+                    }
                     if (cRegs == 0) this.regA[nnn] = reg;
                     this.addCycles(4 + (4+eaModeDst.cycle4l)*cRegs);
                     break stage1;
@@ -13702,8 +13705,9 @@ class CPU68K extends CPU
                         this.genException(CPU68K.EXCEPTION_CHK_INSTRUCTION);
                         this.addCycles(40);
                     }
-                    else
+                    else {
                         this.addCycles(10);
+                    }
                 }
                 else {
                     //  case 0x41c0:   lea      [....rrr111pppnnn, format ??????????pppnnn, p.215]
@@ -13970,8 +13974,9 @@ class CPU68K extends CPU
                 if ((op1 & 0x01f0) == 0x0100) {
                     //  case 0x8100:   sbcd     [1000rrr10000knnn, format ????rrr?bbkkknnn, p.275]
                     this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
-                    if ((op1 & 0x8) == 0)
+                    if ((op1 & 0x8) == 0) {
                         this.addCycles(6);
+                    }
                     break stage1;
                 }
                 if ((op1 & 0x01c0) == 0x00c0) {
@@ -14012,9 +14017,9 @@ class CPU68K extends CPU
                         this.dataDst = eaModeDst.getEAData(rrr);
                         dataNew = (this.dataDst / this.dataSrc)|0;
                         dataTmp = (this.dataDst % this.dataSrc)|0;
-                        if ((dataNew & 0xffff0000) != 0 && (dataNew & 0xffff0000) != 0xffff0000)
+                        if ((dataNew & 0xffff0000) != 0 && (dataNew & 0xffff0000) != 0xffff0000) {
                             this.setFlagV(-1);
-                        else {                                  // flags are based on quotient (dataNew), not the quotient+remainder combo
+                        } else {                                // flags are based on quotient (dataNew), not the quotient+remainder combo
                             eaModeDst.setData((dataNew & 0xffff) | (dataTmp << 16));
                             eaModeDst.updateFlagsZNClearCV(dataNew);
                         }
@@ -14085,8 +14090,9 @@ class CPU68K extends CPU
                     if (this.flagZNew == 0) {
                         this.flagZNew = this.flagZTmp;
                     }
-                    if ((op1 & 0x8) == 0)
+                    if ((op1 & 0x8) == 0) {
                         this.addCycles(4 + eaModeDst.cycle4l);
+                    }
                 }
                 break stage1;
 
@@ -14209,8 +14215,9 @@ class CPU68K extends CPU
                         this.flagVSrc = this.dataSrc << 24 >> 24;
                         this.flagVDst = this.dataDst << 24 >> 24;
                         this.flagNNew = this.flagVNew = dataNew << 24 >> 24;
-                        if ((op1 & 0x8) == 0)
+                        if ((op1 & 0x8) == 0) {
                             this.addCycles(6);
+                        }
                         break stage1;
 
                     case 0x5:
@@ -16042,10 +16049,11 @@ class Dbg68K extends Debugger {
                         eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
                         sDst = eaModeDst.getString(nnn);
                     }
-                    else if ((op1 & 0x00c0) == 0x0000)
+                    else if ((op1 & 0x00c0) == 0x0000) {
                         sDst = "CCR";
-                    else if ((op1 & 0x00c0) == 0x0040)
+                    } else if ((op1 & 0x00c0) == 0x0040) {
                         sDst = "SR";
+                    }
                     break stage1;
 
                 case 0x2:
@@ -16059,10 +16067,11 @@ class Dbg68K extends Debugger {
                         eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
                         sDst = eaModeDst.getString(nnn);
                     }
-                    else if ((op1 & 0x00c0) == 0x0000)
+                    else if ((op1 & 0x00c0) == 0x0000) {
                         sDst = "CCR";
-                    else if ((op1 & 0x00c0) == 0x0040)
+                    } else if ((op1 & 0x00c0) == 0x0040) {
                         sDst = "SR";
+                    }
                     break stage1;
 
                 case 0x4:
@@ -16103,10 +16112,12 @@ class Dbg68K extends Debugger {
                         eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0xff]];
                         sDst = eaModeDst.getString(nnn);
                     }
-                    else if ((op1 & 0x00c0) == 0x0000)
+                    else if ((op1 & 0x00c0) == 0x0000) {
                         sDst = "CCR";
-                    else if ((op1 & 0x00c0) == 0x0040)
+                    }
+                    else if ((op1 & 0x00c0) == 0x0040) {
                         sDst = "SR";
+                    }
                     break stage1;
 
                 case 0xc:
@@ -16177,10 +16188,11 @@ class Dbg68K extends Debugger {
                     }
                     else {
                         //dataSrc = (1 << (dataSrc & 7));
-                        if ((op1 & 0x00c0) == 0)
+                        if ((op1 & 0x00c0) == 0) {
                             eaModeDst = this.aEAModes[this.cpu.abModes401[op1 & 0x3f]];
-                        else
+                        } else {
                             eaModeDst = this.aEAModes[this.cpu.abModes407[op1 & 0x3f]];
+                        }
                         sDst = eaModeDst.getString(nnn);
                     }
                     switch ((op1 >> 6) & 0x3) {
@@ -16366,8 +16378,9 @@ class Dbg68K extends Debugger {
                             sOp = "PEA";
                             eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];    // +(ssLONG << 6)
                             sSrc = eaModeSrc.getString(nnn);
-                            if (sSrc.endsWith(".l"))
+                            if (sSrc.endsWith(".l")) {
                                 sSrc = sSrc.substring(0, sSrc.length-2);
+                            }
                         }
                         break stage1;
 
@@ -16486,9 +16499,9 @@ class Dbg68K extends Debugger {
                         //  case 0x4e40:   trap     [........0100vvvv, format none]
                         sOp = "TRAP";
                         op2 = (op1 & 0xf);
-                        if (op2 != 0xf)
+                        if (op2 != 0xf) {
                             sSrc = this.sprintf("%x", op2);
-                        else {
+                        } else {
                             op2 = this.cpu.getWord(this.curPC);
                             this.curPC += 2;
                             sSrc = "API"; // TODO: PalmOSTypes.getAPIName(op2);
@@ -16572,8 +16585,9 @@ class Dbg68K extends Debugger {
                         sOp = "JSR";
                         eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];        // +(ssLONG << 6)
                         sSrc = eaModeSrc.getString(nnn);
-                        if (sSrc.endsWith(".l"))
+                        if (sSrc.endsWith(".l")) {
                             sSrc = sSrc.substring(0, sSrc.length-2);
+                        }
                         break stage1;
 
                     case 0xc:
@@ -16584,8 +16598,9 @@ class Dbg68K extends Debugger {
                         sOp = "JMP";
                         eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];        // +(ssLONG << 6)
                         sSrc = eaModeSrc.getString(nnn);
-                        if (sSrc.endsWith(".l"))
+                        if (sSrc.endsWith(".l")) {
                             sSrc = sSrc.substring(0, sSrc.length-2);
+                        }
                         break stage1;
                     }
                     break stage1;
@@ -16630,8 +16645,9 @@ class Dbg68K extends Debugger {
                     sOp = "CHK";
                     eaModeSrc = this.aEAModes[this.cpu.abModes400[(op1 & 0x3f)+0x40]];            // +(ssWORD << 6)
                     sSrc = eaModeSrc.getString(nnn);
-                    if (sSrc.endsWith(".w"))
+                    if (sSrc.endsWith(".w")) {
                         sSrc = sSrc.substring(0, sSrc.length-2);
+                    }
                     sDst = "D" + rrr;
                 }
                 else {
@@ -16639,8 +16655,9 @@ class Dbg68K extends Debugger {
                     sOp = "LEA";
                     eaModeSrc = this.aEAModes[this.cpu.abModesD81[(op1 & 0x3f)+0x80]];            // +(ssLONG << 6)
                     sSrc = eaModeSrc.getString(nnn);
-                    if (sSrc.endsWith(".l"))
+                    if (sSrc.endsWith(".l")) {
                         sSrc = sSrc.substring(0, sSrc.length-2);
+                    }
                     sDst = "A" + rrr;
                 }
                 break stage1;
@@ -17194,9 +17211,9 @@ class Dbg68K extends Debugger {
 
             }   // End stage1
 
-
-            if (sOp == null)
+            if (sOp == null) {
                 sOp = "???";
+            }
 
             if (sSrc != null && sDst != null) {
                 // If there are both src and dst operands, collapse any common ".b", ".w" or ".l" suffixes
@@ -17228,8 +17245,9 @@ class Dbg68K extends Debugger {
                 sSrc = sSrc + "," + sDst;
             }
             else {
-                if (sSrc == null)
+                if (sSrc == null) {
                     sSrc = sDst;
+                }
                 if (sSrc != null) {
                     let iSrc = sSrc.length;
                     if (iSrc >= 2 && sSrc.charAt(iSrc-2) == '.') {
@@ -17286,8 +17304,9 @@ class Dbg68K extends Debugger {
             // for in the emulator as well.  -JP
 
             let eaMode = eaModeSrc;
-            if (eaMode == null || eaMode.sPrefix.startsWith("#"))
+            if (eaMode == null || eaMode.sPrefix.startsWith("#")) {
                 eaMode = eaModeDst;
+            }
             if (eaMode != null && !eaMode.sPrefix.startsWith("#")) {
 
                 // Check "eaMode.ea" for belonging to a debugger symbol group
@@ -17319,10 +17338,11 @@ class Dbg68K extends Debugger {
     getSignedHexString(i)
     {
         let s = i.toString(16);         // use toString() instead of sprintf() for signed conversion
-        if (s.charAt(0) != '-')
+        if (s.charAt(0) != '-') {
             return "0x" + s;
-        else
+        } else {
             return "-0x" + s.substring(1);
+        }
     }
 
     /**
@@ -17390,6 +17410,8 @@ class Dbg68K extends Debugger {
  *  getString: get effective address (ea) string
  *  getData: get data at effective address
  */
+
+/* eslint-disable require-jsdoc */
 
 class DbgMode
 {

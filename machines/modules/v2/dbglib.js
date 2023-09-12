@@ -721,7 +721,7 @@ export default class DbgLib extends Component {
             if (sOp == ' ') {
                 if (iValue < asValues.length - 1 && !asValues[iValue]) {
                     iValue++;
-                    sOp = asValues[iValue++]
+                    sOp = asValues[iValue++];
                 } else {
                     fError = true;
                     break;

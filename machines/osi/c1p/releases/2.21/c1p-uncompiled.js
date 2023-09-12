@@ -147,7 +147,6 @@ if (globals.window['PCjs']) {
 globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
@@ -489,7 +488,7 @@ class Format {
 
             case 'S':
                 arg = hash? date.getUTCSeconds() : date.getSeconds();
-                type = 'd'
+                type = 'd';
                 break;
 
             case 'T':
@@ -850,6 +849,10 @@ const ReportAPI = {
  * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class Str
+ * @unrestricted
+ */
 class Str {
     /**
      * isValidInt(s, base)
@@ -1607,6 +1610,10 @@ let BitField;
 /** @typedef {Object.<BitField>} */
 let BitFields;
 
+/**
+ * @class Usr
+ * @unrestricted
+ */
 class Usr {
     /**
      * binarySearch(a, v, fnCompare)
@@ -1928,6 +1935,10 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * stop()               Stops the window from loading
  */
 
+/**
+ * @class Web
+ * @unrestricted
+ */
 class Web {
     /**
      * getResource(sURL, type, fAsync, done, progress)
@@ -3846,7 +3857,7 @@ class Component {
                 fnCallReady = function processNextCommand() {
                     return function() {
                         Component.processCommands(idMachine);
-                    }
+                    };
                 }();
             }
 
@@ -3970,8 +3981,9 @@ class Component {
         let nMachine = 1;
         if (this.idMachine) {
             let aDigits = this.idMachine.match(/\d+/);
-            if (aDigits !== null)
+            if (aDigits !== null) {
                 nMachine = parseInt(aDigits[0], 10);
+            }
         }
         return nMachine;
     }
@@ -4270,7 +4282,7 @@ class Component {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
         let bitsHi = (bits / shift)|0;
-        return (num & bits) + (numHi & bitsHi) * shift
+        return (num & bits) + (numHi & bitsHi) * shift;
     }
 
     /**
@@ -4454,7 +4466,7 @@ if (!Array.prototype.indexOf) {
             if (this[i] === obj) { return i; }
         }
         return -1;
-    }
+    };
 }
 
 /*
@@ -4500,7 +4512,6 @@ const APPCLASS = "c1p";         // this @define is the default application class
  * @define {string}
  */
 const APPNAME = "C1Pjs";        // this @define is the default application name (eg, "PCx86", "C1Pjs")
-
 
 
 /**
@@ -5184,8 +5195,9 @@ class C1PCPU extends Component {
              */
             if (DEBUGGER) {
                 this.dbg = cmp.getComponentByType("debugger");
-                if (this.dbg)
+                if (this.dbg) {
                     this.dbg.init();
+                }
             }
             /*
              * Attach the Video device to the CPU, so that the CPU can periodically update
@@ -5222,10 +5234,12 @@ class C1PCPU extends Component {
     addReadNotify(start, end, component, fn)
     {
         if (this.findNotify(this.aReadNotify, start, end, component, fn) < 0) {
-            if (this.addrReadLower > start)
+            if (this.addrReadLower > start) {
                 this.addrReadLower = start;
-            if (this.addrReadUpper < end)
+            }
+            if (this.addrReadUpper < end) {
                 this.addrReadUpper = end;
+            }
             this.aReadNotify.push([start, end, component, fn]);
             if (DEBUG) {
                 this.printf(Messages.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
@@ -5285,10 +5299,12 @@ class C1PCPU extends Component {
     addWriteNotify(start, end, component, fn)
     {
         if (this.findNotify(this.aWriteNotify, start, end, component, fn) < 0) {
-            if (this.addrWriteLower > start)
+            if (this.addrWriteLower > start) {
                 this.addrWriteLower = start;
-            if (this.addrWriteUpper < end)
+            }
+            if (this.addrWriteUpper < end) {
                 this.addrWriteUpper = end;
+            }
             this.aWriteNotify.push([start, end, component, fn]);
             if (DEBUG) {
                 this.printf(Messages.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
@@ -5378,10 +5394,12 @@ class C1PCPU extends Component {
             aNotify.splice(i, 1);
             var addrLower = 0x10000, addrUpper = 0x0;
             for (i=0; i < aNotify.length; i++) {
-                if (addrLower > aNotify[i][0])
+                if (addrLower > aNotify[i][0]) {
                     addrLower = aNotify[i][0];
-                if (addrUpper < aNotify[i][1])
+                }
+                if (addrUpper < aNotify[i][1]) {
                     addrUpper = aNotify[i][1];
+                }
             }
             aBounds.push(addrLower);
             aBounds.push(addrUpper);
@@ -5401,8 +5419,9 @@ class C1PCPU extends Component {
     {
         if (speed !== undefined) {
             this.speed = speed;
-            if (this.bindings["setSpeed"])
+            if (this.bindings["setSpeed"]) {
                 this.bindings["setSpeed"].innerHTML = this.aSpeeds[speed >= 2? 0 : speed+1];
+            }
             this.printf("running at %s speed %s\n", this.aSpeeds[speed].toLowerCase(), this.aSpeedDescs[speed]);
             if (fOnClick) this.setFocus();
         }
@@ -5420,8 +5439,9 @@ class C1PCPU extends Component {
     {
         if (msElapsed) {
             this.mhz = Math.round(nCycles / ( msElapsed * 100)) / 10;
-            if (msElapsed >= 86400000)
+            if (msElapsed >= 86400000) {
                 this.setSpeed();        // reset all our counters once per day so that we never have to worry about overflow
+            }
         }
     }
 
@@ -5624,8 +5644,9 @@ class C1PCPU extends Component {
                  * keystrokes at higher speeds. Perhaps with future improvements to the keyboard
                  * component, this limit can be lifted.
                  */
-                if (this.mhz <= this.mhzFast)
+                if (this.mhz <= this.mhzFast) {
                     msRemainsThisRun = 0;
+                }
             }
             else
             if (this.speed == this.SPEED_MAX) {
@@ -8563,8 +8584,9 @@ class C1PROM extends Component {
          * It's possible that the ROM component didn't specify a size,
          * in which case just use the size the Computer component has specified.
          */
-        if (!this.cbROM)
+        if (!this.cbROM) {
             this.cbROM = cbROM;
+        }
         if (cbROM != this.cbROM) {
             this.setError("computer-specified ROM size (" + Str.toHexWord(cbROM) + ") does not match component-specified size (" + Str.toHexWord(this.cbROM) + ")");
             return;
@@ -8605,10 +8627,11 @@ class C1PROM extends Component {
             if (DEBUGGER && this.dbg) this.dbg.messageIO(this, addr, addrFrom, this.dbg.MESSAGE_PORT, true);
             var offset = (addr - this.offROM);
 
-            if (!this.abImage)
+            if (!this.abImage) {
                 this.abMem[this.offROM + offset] = 0;
-            else
+            } else {
                 this.abMem[this.offROM + offset] = this.abImage[offset];
+            }
         }
     }
 
@@ -9371,8 +9394,9 @@ class C1PKeyboard extends Component {
             /*
              * I could require all callers to supply CRs instead of LFs, but this is friendlier.
              */
-            if (ch == 0x0a)
+            if (ch == 0x0a) {
                 ch = 0x0d;
+            }
             /*
              * Also, if upper-case characters are being injected, convert them to lower-case, and rely
              * on the virtual SHIFT-LOCK remaining locked for the duration; otherwise, we'd have to simulate
@@ -9382,8 +9406,9 @@ class C1PKeyboard extends Component {
              * it's really intended as a work-around for a SHIFT-related problem on iOS devices only, so
              * we can't rely on that in the general case.
              */
-            if (ch >= 0x41 && ch <= 0x5A)
+            if (ch >= 0x41 && ch <= 0x5A) {
                 ch += 0x20;
+            }
             this.sInjectBuffer = this.sInjectBuffer.substr(1);
             this.keyPressSimulate(ch);
         }
@@ -9550,10 +9575,11 @@ class C1PKeyboard extends Component {
          */
         this.sInjectBuffer = "";
 
-        if (this.bitsShift & this.BIT_COMMAND)
+        if (this.bitsShift & this.BIT_COMMAND) {
             this.bitsShift &= ~this.BIT_COMMAND;
-        else
+        } else {
             fPass = !this.keyPressSimulate(charCode);
+        }
 
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
             this.dbg.printf("keyPress(%#04x): %s\n", charCode, fPass? "pass" : "consume");
@@ -9592,8 +9618,9 @@ class C1PKeyboard extends Component {
              * to use those special key combos.
              */
             if (this.fMobile) {
-                if (charCode >= 0x41 && charCode <= 0x5A)
+                if (charCode >= 0x41 && charCode <= 0x5A) {
                     charCode += 0x20;
+                }
             }
 
             /*
@@ -9677,16 +9704,18 @@ class C1PKeyboard extends Component {
             if (!bShift) bShift = bCode & 0xff;
             if (fDown) {
                 this.abKbdCols[iRow] |= 1 << iCol;
-                if (bShift == this.CHARCODE_CTRL)
+                if (bShift == this.CHARCODE_CTRL) {
                     this.abKbdCols[0] |= this.BIT_CTRL;
-                else
-                if (bShift == this.CHARCODE_LSHIFT)
+                }
+                else if (bShift == this.CHARCODE_LSHIFT) {
                     this.abKbdCols[0] |= this.BIT_LSHIFT;
-                else
-                if (bShift == this.CHARCODE_RSHIFT)
+                }
+                else if (bShift == this.CHARCODE_RSHIFT) {
                     this.abKbdCols[0] |= this.BIT_RSHIFT;
-                else
+                }
+                else {
                     this.abKbdCols[0] &= ~this.BITS_SIMULATE;
+                }
             }
             else {
                 this.abKbdCols[iRow] &= ~(1 << iCol);
@@ -9773,8 +9802,9 @@ class C1PKeyboard extends Component {
          * that works well across the board.
          */
         if (!fPropagate) {
-            if (this.cpu.speed == this.cpu.SPEED_MAX)
+            if (this.cpu.speed == this.cpu.SPEED_MAX) {
                 fPropagate = (addr !== undefined && this.nWritesSinceLastEvent >= 32);
+            }
             else {
                 /*
                  * We have to handle the delta being less than zero, in case the user changed the speed, thereby
@@ -9803,8 +9833,9 @@ class C1PKeyboard extends Component {
          */
         var b = 0;
         for (var iRow=0; iRow < 8; iRow++) {
-            if (!(this.bKbdRows & (1 << iRow)))
+            if (!(this.bKbdRows & (1 << iRow))) {
                 continue;
+            }
             b |= this.abKbdColsLast[iRow];
         }
         /*
@@ -9819,8 +9850,9 @@ class C1PKeyboard extends Component {
         else {
             addr = this.offKbd;
             if (b != this.bWriteLast) {
-                for (var offset=addr; offset < this.offKbdLimit; offset++)
+                for (var offset=addr; offset < this.offKbdLimit; offset++) {
                     this.abMem[offset] = b;
+                }
             }
         }
         this.bWriteLast = b;
@@ -10831,8 +10863,9 @@ class C1PSerialPort extends Component {
                  * An EVEN address implies they're looking, so if we have a fresh buffer,
                  * then prime the pump.
                  */
-                if (this.sInput && !this.iInput)
+                if (this.sInput && !this.iInput) {
                     this.advanceInput();
+                }
             } else {
                 /*
                  * An ODD address implies they just grabbed a data byte, so prep the next data byte.
@@ -11858,10 +11891,12 @@ class C1PDiskController extends Component {
          * PIA port range (0x00-0x0F) to 0x00-0x03, and the ACIA port range (0x10-0x1F) to 0x10-0x11.
          * The rest of the masked range (0x20-0x3F) is unmapped, so we map it to our global unknown register.
          */
-        if (port < 0x10)
+        if (port < 0x10) {
             port &= 0x03;
-        else if (port < 0x20)
+        }
+        else if (port < 0x20) {
             port &= 0x11;
+        }
         switch(port) {
         case this.PORT_PDA:
             reg = (this.regCRA.bits & this.CR_PD_SEL)? this.regPDA : this.regDDA;
@@ -11949,10 +11984,12 @@ class C1PDiskController extends Component {
         var iDriveSelect = -1;
         if (bPDA !== undefined && bPDB !== undefined) {
             iDriveSelect = 0;
-            if (!(bPDB & this.PDB_SD1))
+            if (!(bPDB & this.PDB_SD1)) {
                 iDriveSelect |= 0x02;
-            if (!(this.regPDA.bits & this.PDA_SD2))
+            }
+            if (!(this.regPDA.bits & this.PDA_SD2)) {
                 iDriveSelect |= 0x01;
+            }
         }
         if (this.iDriveSelect != iDriveSelect) {
             this.iDriveSelect = iDriveSelect;
@@ -12020,10 +12057,11 @@ class C1PDiskController extends Component {
      */
     updatePDA(bPDA)
     {
-        if (bPDA === undefined)
+        if (bPDA === undefined) {
             bPDA = this.regPDA.bits;
-        else
+        } else {
             this.setSelectedDrive(bPDA, this.regPDB.bits);
+        }
 
         /*
          * We start by turning ON most bits, except for PDA_RDY1, which we always leave
@@ -12079,10 +12117,11 @@ class C1PDiskController extends Component {
      */
     updatePDB(bPDB)
     {
-        if (bPDB === undefined)
+        if (bPDB === undefined) {
             bPDB = this.regPDB.bits;
-        else
+        } else {
             this.setSelectedDrive(this.regPDA.bits, bPDB);
+        }
 
         if (this.iDriveSelect >= 0 && this.iDriveSelect < this.aDrives.length) {
 
@@ -12096,20 +12135,23 @@ class C1PDiskController extends Component {
                     /*
                      *  PDB_STI == 0? step toward track 39 : step toward track 0
                      */
-                    if (bPDB & this.PDB_STI)
+                    if (bPDB & this.PDB_STI) {
                         drive.iTrackSelect--;
-                    else
+                    } else {
                         drive.iTrackSelect++;
+                    }
 
                     if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_DISK)) {
                         this.dbg.printf("stepping %s to track %d\n", (bPDB & this.PDB_STI)? "down" : "up", drive.iTrackSelect);
                     }
 
-                    if (drive.iTrackSelect >= drive.nTracks)
+                    if (drive.iTrackSelect >= drive.nTracks) {
                         drive.iTrackSelect = drive.nTracks;
+                    }
 
-                    if (drive.iTrackSelect < 0)
+                    if (drive.iTrackSelect < 0) {
                         drive.iTrackSelect = 0;
+                    }
 
                     drive.nIndexPulse = 20;
 
@@ -12133,11 +12175,13 @@ class C1PDiskController extends Component {
      */
     updateSTAT(bSTAT)
     {
-        if (bSTAT === undefined)
+        if (bSTAT === undefined) {
             bSTAT = this.regSTAT.bits;
+        }
         bSTAT &= ~this.STAT_RDRF;
-        if (this.iDriveSelect >= 0 && this.aDrives[this.iDriveSelect].iTrackOffset >= 0)
+        if (this.iDriveSelect >= 0 && this.aDrives[this.iDriveSelect].iTrackOffset >= 0) {
             bSTAT |= this.STAT_RDRF;
+        }
         return bSTAT;
     }
 
@@ -12899,8 +12943,9 @@ class C1PDebugger extends Component {
     {
         if (DEBUG) {
             this.aInfoBuffer[this.iInfoBuffer++] = s;
-            if (this.iInfoBuffer >= this.aInfoBuffer.length)
+            if (this.iInfoBuffer >= this.aInfoBuffer.length) {
                 this.iInfoBuffer = 0;
+            }
         }
     }
 
@@ -12984,10 +13029,11 @@ class C1PDebugger extends Component {
     update(fStep)
     {
         this.nextAddr = this.cpu.regPC;
-        if (fStep || this.fStepOver)
+        if (fStep || this.fStepOver) {
             this.doUnassemble();
-        else
+        } else {
             this.doRegisters();
+        }
     }
 
     /**
@@ -12998,12 +13044,9 @@ class C1PDebugger extends Component {
      */
     isCPUOK()
     {
-        if (!this.cpu)
+        if (!this.cpu || !this.cpu.isReady() || this.cpu.isBusy()) {
             return false;
-        if (!this.cpu.isReady())
-            return false;
-        if (this.cpu.isBusy())
-            return false;
+        }
         return !this.cpu.isError();
     }
 
@@ -13015,14 +13058,18 @@ class C1PDebugger extends Component {
     reset()
     {
         var i;
-        if (!this.aStepHistory.length)
+        if (!this.aStepHistory.length) {
             this.aStepHistory = new Array(1000);
-        for (i = 0; i < this.aStepHistory.length; i++)
+        }
+        for (i = 0; i < this.aStepHistory.length; i++) {
             this.aStepHistory[i] = -1;
-        if (!this.aaOpcodeFreqs.length)
+        }
+        if (!this.aaOpcodeFreqs.length) {
             this.aaOpcodeFreqs = new Array(256);
-        for (i = 0; i < this.aaOpcodeFreqs.length; i++)
+        }
+        for (i = 0; i < this.aaOpcodeFreqs.length; i++) {
             this.aaOpcodeFreqs[i] = [i, 0];
+        }
         if (this.cIns) this.update();
         this.cIns = 0;
         this.cReads = this.cWrites = this.cWritesZP = 0;
@@ -13097,14 +13144,16 @@ class C1PDebugger extends Component {
     checkInstruction(addr, bOpCode)
     {
         var fBreak = false;
-        if (this.checkBreakpoint(addr, this.aExecBreak, "exec"))
+        if (this.checkBreakpoint(addr, this.aExecBreak, "exec")) {
             fBreak = true;
+        }
         else {
             this.cIns++;
             this.aaOpcodeFreqs[bOpCode][1]++;
             this.aStepHistory[this.iStepHistory++] = this.cpu.regPC;
-            if (this.iStepHistory >= this.aStepHistory.length)
+            if (this.iStepHistory >= this.aStepHistory.length) {
                 this.iStepHistory = 0;
+            }
         }
         return !fBreak;
     }
@@ -13121,8 +13170,9 @@ class C1PDebugger extends Component {
     {
         var fBreak = false;
         this.cReads++;
-        if (this.checkBreakpoint(addr, this.aReadBreak, "read"))
+        if (this.checkBreakpoint(addr, this.aReadBreak, "read")) {
             fBreak = true;
+        }
         return !fBreak;
     }
 
@@ -13145,14 +13195,16 @@ class C1PDebugger extends Component {
          * because write-notification handlers never care about page zero accesses, and while write breakpoints *may*
          * care, it may not be worth the cost of tracking writes to page zero if there's an associated perf penalty.
          */
-        if (!(addr & 0xff00))
+        if (!(addr & 0xff00)) {
             this.cWritesZP++;
+        }
         if ((value & 0xff) != value) {
             this.printf("invalid value at %#06x: %s\n", addr, value);
             fBreak = true;
         }
-        if (this.checkBreakpoint(addr, this.aWriteBreak, "write"))
+        if (this.checkBreakpoint(addr, this.aWriteBreak, "write")) {
             fBreak = true;
+        }
         return !fBreak;
     }
 
@@ -13357,8 +13409,9 @@ class C1PDebugger extends Component {
              * but you can remove the next line if you decide multiple temp breakpoints are a good thing.
              */
             this.clearTempBreakpoint(this.addrTempBP);
-            if (this.addExecBreakpoint(addr))
+            if (this.addExecBreakpoint(addr)) {
                 this.addrTempBP = addr;
+            }
         }
     }
 
@@ -13392,8 +13445,9 @@ class C1PDebugger extends Component {
         var fBreak = false;
         for (var i=0; i < aBreakpoints.length; i++) {
             if (aBreakpoints[i] == addr) {
-                if (addr != this.addrTempBP)
+                if (addr != this.addrTempBP) {
                     this.printf("breakpoint hit: %#06x (%s)\n", addr, sType);
+                }
                 fBreak = true;
                 break;
             }
@@ -13441,21 +13495,25 @@ class C1PDebugger extends Component {
                 }
             }
             if (bOpMode == this.MODE_IMM && aOpDesc[1] == 1) {
-                if (b >= 0x20 && b < 0x80)
+                if (b >= 0x20 && b < 0x80) {
                     sOperand += " ;'" + String.fromCharCode(b) + "'";
+                }
             }
         }
         if (bOpCode == this.cpu.OP_SIM) {
-            if (b < this.aOpSimCodes.length)
+            if (b < this.aOpSimCodes.length) {
                 sOperand = this.aOpSimCodes[b];
+            }
             if (b == this.cpu.SIMOP_MSG) {
                 cb = 0;
                 sOperand = "\"";
                 while ((b = this.getByte(addr++))) {
-                    if (cb < 16)
+                    if (cb < 16) {
                         sOperand += String.fromCharCode(b);
-                    else if (cb == 16)
+                    }
+                    else if (cb == 16) {
                         sOperand += "…";
+                    }
                     cb++;
                 }
                 sOperand += "\"";
@@ -13566,8 +13624,9 @@ class C1PDebugger extends Component {
                          */
                         for (i = 1; i < aModeMatch.length; i++) {
                             if (aModeMatch[i] == sMode) {
-                                if (iMode === undefined)
+                                if (iMode === undefined) {
                                     iMode = i-1;
+                                }
                                 else {
                                     /*
                                      * This is really an internal consistency error; regardless what the user types, this should not occur.
@@ -13585,16 +13644,18 @@ class C1PDebugger extends Component {
                          * actually be a MODE_ABS operand; see setOpModes() for details of the aImm16Codes array.
                          */
                         if (iMode == this.MODE_IMM16) {
-                            if (this.aImm16Codes.indexOf(iCode) < 0)
+                            if (this.aImm16Codes.indexOf(iCode) < 0) {
                                 iMode = this.MODE_ABS;
+                            }
                         }
                         /*
                          * Even in "modern" syntax mode, we have to look at the context of a MODE_ABS16 match, because unless
                          * the operation is OP_JMP, then the mode must actually be MODE_ABS.
                          */
                         if (iMode == this.MODE_ABS16) {
-                            if (iCode != this.OP_JMP)
+                            if (iCode != this.OP_JMP) {
                                 iMode = this.MODE_ABS;
+                            }
                         }
                     }
                     else {
@@ -13610,8 +13671,9 @@ class C1PDebugger extends Component {
                 var bOpCode = -1;
                 for (i = 0; i < this.aaOperations.length; i++) {
                     if (this.aaOperations[i][0] === iCode && this.aaOperations[i][2] === iMode) {
-                        if (bOpCode < 0)
+                        if (bOpCode < 0) {
                             bOpCode = i;
+                        }
                         else {
                             /*
                              * This is really an internal consistency error; regardless what the user types, this should not occur.
@@ -13682,13 +13744,13 @@ class C1PDebugger extends Component {
         var addr = this.nextAddr;
         if (sAddr !== undefined) {
             var nBase = 16;
-            if (sAddr.charAt(0) == "$")
+            if (sAddr.charAt(0) == "$") {
                 sAddr = sAddr.substr(1);
-            else
-            if (sAddr.substr(0, 2) == "0x")
+            }
+            else if (sAddr.substr(0, 2) == "0x") {
                 sAddr = sAddr.substr(2);
-            else
-            if (sAddr.charAt(sAddr.length-1) == ".") {
+            }
+            else if (sAddr.charAt(sAddr.length-1) == ".") {
                 nBase = 10;
                 sAddr = sAddr.substr(0, sAddr.length-1);
             }
@@ -13745,8 +13807,9 @@ class C1PDebugger extends Component {
     doAssemble(asArgs)
     {
         var addr = this.getUserAddr(asArgs[1]);
-        if (addr === undefined)
+        if (addr === undefined) {
             return;
+        }
         this.addrAssembleNext = addr;
         if (asArgs[2] === undefined) {
             this.printf("begin assemble @%#06x\n", this.addrAssembleNext);
@@ -13802,8 +13865,9 @@ class C1PDebugger extends Component {
                 this.printf("breakpoint enabled: %#06x (write)\n", aAddrs[i]);
                 cBreaks++;
             }
-            if (!cBreaks)
+            if (!cBreaks) {
                 this.printf("no breakpoints\n");
+            }
             return;
         }
         if (sAddr === undefined) {
@@ -13816,40 +13880,47 @@ class C1PDebugger extends Component {
             return;
         }
         var addr = this.getUserAddr(sAddr);
-        if (addr === undefined)
+        if (addr === undefined) {
             return;
+        }
         if (sParm == "p") {
-            if (this.addExecBreakpoint(addr))
+            if (this.addExecBreakpoint(addr)) {
                 this.printf("breakpoint enabled: %#06x (exec)\n", addr);
-            else
+            }
+            else {
                 this.printf("breakpoint not set: %#06x\n", addr);
+            }
             return;
         }
         if (sParm == "c") {
-            if (this.findExecBreakpoint(addr, true))
+            if (this.findExecBreakpoint(addr, true)) {
                 this.printf("breakpoint cleared: %#06x (exec)\n", addr);
-            else
-            if (this.findReadBreakpoint(addr, true))
+            }
+            else if (this.findReadBreakpoint(addr, true)) {
                 this.printf("breakpoint cleared: %#06x (read)\n", addr);
-            else
-            if (this.findWriteBreakpoint(addr, true))
+            }
+            else if (this.findWriteBreakpoint(addr, true)) {
                 this.printf("breakpoint cleared: %#06x (write)\n", addr);
-            else
+            }
+            else {
                 this.printf("breakpoint missing: %#06x\n", addr);
+            }
             return;
         }
         if (sParm == "r") {
-            if (this.addReadBreakpoint(addr))
+            if (this.addReadBreakpoint(addr)) {
                 this.printf("breakpoint enabled: %#06x (read)\n", addr);
-            else
+            } else {
                 this.printf("breakpoint not set: %#06x\n", addr);
+            }
             return;
         }
         if (sParm == "w") {
-            if (this.addWriteBreakpoint(addr))
+            if (this.addWriteBreakpoint(addr)) {
                 this.printf("breakpoint enabled: %#06x (write)\n", addr);
-            else
+            } else {
                 this.printf("breakpoint not set: %#06x\n", addr);
+            }
             return;
         }
         this.printf("unknown breakpoint command: %s\n", sParm);
@@ -13868,12 +13939,14 @@ class C1PDebugger extends Component {
             return;
         }
         var addr = this.getUserAddr(sAddr);
-        if (addr === undefined)
+        if (addr === undefined) {
             return;
+        }
         var cLines = 0;
         if (sLen !== undefined) {
-            if (sLen.charAt(0) == "l")
+            if (sLen.charAt(0) == "l") {
                 sLen = sLen.substr(1);
+            }
             cLines = parseInt(sLen, 10);
         }
         if (!cLines) cLines = 1;
@@ -13905,8 +13978,9 @@ class C1PDebugger extends Component {
             return;
         }
         var addr = this.getUserAddr(sAddr);
-        if (addr === undefined)
+        if (addr === undefined) {
             return;
+        }
         for (var i=2; i < asArgs.length; i++) {
             var b = parseInt(asArgs[i], 16);
             this.setByte(addr++, b);
@@ -13927,8 +14001,9 @@ class C1PDebugger extends Component {
         var cData = 0, i;
         if (this.aaOpcodeFreqs) {
             if (sParm == "clear") {
-                for (i = 0; i < this.aaOpcodeFreqs.length; i++)
+                for (i = 0; i < this.aaOpcodeFreqs.length; i++) {
                     this.aaOpcodeFreqs[i] = [i, 0];
+                }
                 this.printf("frequency data cleared\n");
                 cData++;
             }
@@ -13973,8 +14048,9 @@ class C1PDebugger extends Component {
         var aHistory = this.aStepHistory;
         if (aHistory !== undefined) {
             var n = (sCount === undefined? this.nextHistory : parseInt(sCount, 10));
-            if (n === undefined)
+            if (n === undefined) {
                 n = 10;
+            }
             if (n > aHistory.length) {
                 this.printf("note: only %d available\n", aHistory.length);
                 n = aHistory.length;
@@ -14017,8 +14093,9 @@ class C1PDebugger extends Component {
                     this.printf("%s\n", s);
                     cLines--;
                 }
-                if (i >= this.aInfoBuffer.length)
+                if (i >= this.aInfoBuffer.length) {
                     i = 0;
+                }
             } while (cLines && i != this.iInfoBuffer);
             this.printf("nYieldsPerSecond: %d\n", this.cpu.nYieldsPerSecond);
             this.printf("msPerYield: %d\n", this.cpu.msPerYield);
@@ -14039,15 +14116,16 @@ class C1PDebugger extends Component {
     doUnassemble(sAddr, sAddrEnd, n)
     {
         var addr = this.getUserAddr(sAddr);
-        if (addr === undefined)
+        if (addr === undefined) {
             return;
-
+        }
         if (n === undefined) n = 1;
         var addrEnd = this.offLimit;
         if (sAddrEnd !== undefined) {
             addrEnd = this.getUserAddr(sAddrEnd);
-            if (addrEnd === undefined || addrEnd < addr)
+            if (addrEnd === undefined || addrEnd < addr) {
                 return;
+            }
             if (!DEBUG && (addrEnd - addr) > 0x100) {
                 /*
                  * Limiting the amount of disassembled code to one "memory page" in non-DEBUG builds is partly
@@ -14111,10 +14189,12 @@ class C1PDebugger extends Component {
         case "msg":
             var bitsMessage = 0;
             if (asArgs[2] !== undefined) {
-                if (asArgs[2] == "all")
+                if (asArgs[2] == "all") {
                     bitsMessage = 0xff;
-                else if (this.aMessageCategories[asArgs[2]] !== undefined)
+                }
+                else if (this.aMessageCategories[asArgs[2]] !== undefined) {
                     bitsMessage = this.aMessageCategories[asArgs[2]];
+                }
                 if (bitsMessage) {
                     if (asArgs[3] == "on") {
                         this.bitsMessage |= bitsMessage;
@@ -14227,8 +14307,9 @@ class C1PDebugger extends Component {
      */
     doRun(sAddr)
     {
-        if (sAddr !== undefined)
+        if (sAddr !== undefined) {
             this.setTempBreakpoint(this.getUserAddr(sAddr));
+        }
         if (!this.run()) {
             this.cpu.setFocus();
         }
@@ -14242,8 +14323,9 @@ class C1PDebugger extends Component {
         if (this.getByte(this.cpu.regPC) == this.cpu.OP_JSR) {
             this.setTempBreakpoint(this.cpu.regPC+3);
             this.fStepOver = true;
-            if (!this.run())
+            if (!this.run()) {
                 this.cpu.setFocus();
+            }
         }
         else {
             this.doTrace();
@@ -14273,6 +14355,12 @@ class C1PDebugger extends Component {
         );
     }
 
+    /**
+     * input(dbg, sCmd)
+     *
+     * @param {C1PDebugger} dbg
+     * @param {string} sCmd
+     */
     static input(dbg, sCmd)
     {
         if (!sCmd.length) {
@@ -14282,8 +14370,9 @@ class C1PDebugger extends Component {
                 dbg.fAssemble = false;
             }
             else
-            if (dbg.prevCmd)
+            if (dbg.prevCmd) {
                 sCmd = dbg.prevCmd;
+            }
         }
         if (dbg.isReady() && !dbg.isBusy(true) && sCmd.length > 0) {
 
@@ -14542,6 +14631,11 @@ class C1PComputer extends Component {
         return null;
     }
 
+    /**
+     * power(computer)
+     *
+     * @param {C1PComputer} computer
+     */
     static power(computer)
     {
         /*
@@ -14565,8 +14659,9 @@ class C1PComputer extends Component {
                  * The CPU component's setPower() notification handler is a special case: we don't want
                  * to call it until the end (below), after all others have been called.
                  */
-                if (sType == "cpu")
+                if (sType == "cpu") {
                     cpu = component;
+                }
                 else if (component.setPower) {
                     component.setPower(true, computer);
                 }
@@ -14589,8 +14684,8 @@ class C1PComputer extends Component {
         if (cpu) cpu.setPower(true, computer);
     }
 
-    /*
-     * C1PComputer.init()
+    /**
+     * init()
      *
      * This function operates on every HTML element of class "c1pjs-computer", extracting the
      * JSON-encoded parameters for the C1PComputer constructor from the element's "data-value"
@@ -14634,8 +14729,9 @@ class C1PComputer extends Component {
                 component = Component.getComponentByID(addrInfo['refID'], parmsComputer['id']);
                 if (component) {
                     var sType = addrInfo['type'];
-                    if (modules[sType] === undefined)
+                    if (modules[sType] === undefined) {
                         modules[sType] = [];
+                    }
                     modules[sType].push(component);
                     if (component.setBuffer && addrInfo['start'] !== undefined) {
                         component.setBuffer(abMemory, +addrInfo['start'], +addrInfo['end'], modules['cpu'][0]);

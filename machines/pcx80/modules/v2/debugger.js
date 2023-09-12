@@ -1199,9 +1199,9 @@ export default class DebuggerX80 extends DbgLib {
          * if inactive, 1 if stepping over an instruction without a register dump, or 2
          * if stepping over an instruction with a register dump.
          */
-        if (!fRegs || this.nStep == 1)
+        if (!fRegs || this.nStep == 1) {
             this.doUnassemble();
-        else {
+        } else {
             this.doRegisters();
         }
     }
@@ -1216,14 +1216,9 @@ export default class DebuggerX80 extends DbgLib {
      */
     isCPUAvail()
     {
-        if (!this.cpu)
+        if (!this.cpu || !this.cpu.isReady() || !this.cpu.isPowered() || this.cpu.isBusy()) {
             return false;
-        if (!this.cpu.isReady())
-            return false;
-        if (!this.cpu.isPowered())
-            return false;
-        if (this.cpu.isBusy())
-            return false;
+        }
         return !this.cpu.isError();
     }
 
@@ -2498,12 +2493,9 @@ export default class DebuggerX80 extends DbgLib {
                 this.printf("all breakpoints cleared\n");
                 return;
             }
-            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true))
-                return;
+            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true)) return;
             this.printf("breakpoint missing: %s\n", this.toHexAddr(dbgAddr));
             return;
         }
@@ -2738,8 +2730,9 @@ export default class DebuggerX80 extends DbgLib {
         let cData = 0;
         if (this.aaOpcodeCounts) {
             if (sParm == "clear") {
-                for (let i = 0; i < this.aaOpcodeCounts.length; i++)
+                for (let i = 0; i < this.aaOpcodeCounts.length; i++) {
                     this.aaOpcodeCounts[i] = [i, 0];
+                }
                 this.printf("frequency data cleared\n");
                 cData++;
             }

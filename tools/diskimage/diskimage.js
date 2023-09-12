@@ -144,7 +144,7 @@ function createDriveInfo(argv, diskette)
                 driveInfo.fPartitioned = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector >= DiskInfo.MIN_PARTITION);
             }
         } else {
-            match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i)
+            match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i);
             if (match) {
                 let driveCtrl = match[1] || driveInfo.driveCtrl || "XT";
                 let driveType = +match[2];
@@ -897,7 +897,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
          * Step 3: If a generated machine needs to be embedded, put it just ahead of the first directory listing (which
          * is why we waited until now); if there are any diskette 'info' summary lines, we want it just ahead of those, too.
          */
-        let info = ""
+        let info = "";
         if (diskette.info) {
             let i;
             info += "\n## Information about \"" + diskette.info.diskTitle + "\"\n\n";
@@ -1150,7 +1150,7 @@ function getArchiveOffset(sArchive, arcType, sOffset)
         offset = +sOffset || 0;
     } else {
         if (arcType == StreamZip.TYPE_ARC && sArchive.toUpperCase().endsWith(".EXE")) {
-            offset = -1
+            offset = -1;
             let data = readFileSync(sArchive, null);
             if (data) {
                 let sizeArc = -1, sizeFile;
@@ -1410,7 +1410,7 @@ function main(argc, argv)
             "Input options:":           optionsInput,
             "Output options:":          optionsOutput,
             "Other options:":           optionsOther
-        }
+        };
         printf("\nUsage:\n\n\tnode diskimage.js [input diskimage] [output diskimage] [options]\n");
         for (let group in optionGroups) {
             printf("\n%s\n\n", group);

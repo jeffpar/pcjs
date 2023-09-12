@@ -2249,10 +2249,11 @@ export default class KbdX86 extends Component {
                     }
                 }
                 if (bitsFake) {
-                    if (fDown)
+                    if (fDown) {
                         abScanCodes.unshift(bScan);
-                    else
+                    } else {
                         abScanCodes.push(bScan | KbdX86.SCANCODE.BREAK);
+                    }
                 }
             }
 

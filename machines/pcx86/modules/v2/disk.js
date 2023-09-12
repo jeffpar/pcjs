@@ -1773,8 +1773,9 @@ export default class Disk extends Component {
      */
     write(sector, iByte, b)
     {
-        if (this.fWriteProtected)
+        if (this.fWriteProtected) {
             return false;
+        }
 
         if (DEBUG && !iByte) {
             this.printf(Messages.DISK + Messages.ADDRESS, "write(\"%s\",CHS=%d:%d:%d)\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID]);

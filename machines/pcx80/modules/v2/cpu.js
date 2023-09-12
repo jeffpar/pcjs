@@ -450,10 +450,11 @@ export default class CPUx80 extends Component {
                  * control is visible, then the computer is probably sufficiently visible as well; the problem
                  * with setting fUpdateFocus to true is that it can jerk the web page around in annoying ways.
                  */
-                if (!cpu.flags.running)
+                if (!cpu.flags.running) {
                     cpu.runCPU();
-                else
+                } else {
                     cpu.stopCPU();
+                }
             };
             fBound = true;
             break;

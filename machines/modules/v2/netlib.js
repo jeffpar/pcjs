@@ -12,6 +12,10 @@ import http from "http";
 import path from "path";
 import url from "url";
 
+/**
+ * @class Net
+ * @unrestricted
+ */
 export default class Net {
     /**
      * hasParm(sParm, sValue, req)

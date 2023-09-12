@@ -808,7 +808,7 @@ export default class Time extends Device {
          * If there was no interruption between the last run and this run (ie, msEndRun wasn't zeroed by
          * intervening setSpeed() or stop()/start() calls), and there was an unusual delay between the two
          * runs, then we assume that "browser throttling" is occurring due to visibility or redraw issues
-         * (eg, the browser window moved off-screen, the window is being actively reized, the user switched
+         * (eg, the browser window moved off-screen, the window is being actively resized, the user switched
          * tabs, etc).
          *
          * While that's good for overall system performance, it screws up our effective speed calculations,

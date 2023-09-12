@@ -96,6 +96,10 @@ import { DEBUG, SITEURL, globals } from "./defines.js";
  * stop()               Stops the window from loading
  */
 
+/**
+ * @class Web
+ * @unrestricted
+ */
 export default class Web {
     /**
      * getResource(sURL, type, fAsync, done, progress)

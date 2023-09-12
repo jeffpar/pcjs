@@ -147,7 +147,6 @@ if (globals.window['PCjs']) {
 globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
@@ -489,7 +488,7 @@ class Format {
 
             case 'S':
                 arg = hash? date.getUTCSeconds() : date.getSeconds();
-                type = 'd'
+                type = 'd';
                 break;
 
             case 'T':
@@ -1209,6 +1208,10 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
  * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class Str
+ * @unrestricted
+ */
 class Str {
     /**
      * isValidInt(s, base)
@@ -1966,6 +1969,10 @@ let BitField;
 /** @typedef {Object.<BitField>} */
 let BitFields;
 
+/**
+ * @class Usr
+ * @unrestricted
+ */
 class Usr {
     /**
      * binarySearch(a, v, fnCompare)
@@ -2287,6 +2294,10 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * stop()               Stops the window from loading
  */
 
+/**
+ * @class Web
+ * @unrestricted
+ */
 class Web {
     /**
      * getResource(sURL, type, fAsync, done, progress)
@@ -4205,7 +4216,7 @@ class Component {
                 fnCallReady = function processNextCommand() {
                     return function() {
                         Component.processCommands(idMachine);
-                    }
+                    };
                 }();
             }
 
@@ -4329,8 +4340,9 @@ class Component {
         let nMachine = 1;
         if (this.idMachine) {
             let aDigits = this.idMachine.match(/\d+/);
-            if (aDigits !== null)
+            if (aDigits !== null) {
                 nMachine = parseInt(aDigits[0], 10);
+            }
         }
         return nMachine;
     }
@@ -4629,7 +4641,7 @@ class Component {
         let shift = Math.pow(2, 32);
         let numHi = (num / shift)|0;
         let bitsHi = (bits / shift)|0;
-        return (num & bits) + (numHi & bitsHi) * shift
+        return (num & bits) + (numHi & bitsHi) * shift;
     }
 
     /**
@@ -4813,7 +4825,7 @@ if (!Array.prototype.indexOf) {
             if (this[i] === obj) { return i; }
         }
         return -1;
-    }
+    };
 }
 
 /*
@@ -5551,7 +5563,7 @@ class DbgLib extends Component {
             if (sOp == ' ') {
                 if (iValue < asValues.length - 1 && !asValues[iValue]) {
                     iValue++;
-                    sOp = asValues[iValue++]
+                    sOp = asValues[iValue++];
                 } else {
                     fError = true;
                     break;
@@ -6425,7 +6437,6 @@ const PDP10 = {
 };
 
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
@@ -7079,7 +7090,7 @@ class PanelPDP10 extends Component {
     setSwitch(sBinding, sValue)
     {
         if (sBinding == "SR") {
-            return this.setSRSwitches(Str.parseInt(sValue, 8))
+            return this.setSRSwitches(Str.parseInt(sValue, 8));
         }
         var sw = this.switches[sBinding];
         if (sw) {
@@ -7718,6 +7729,10 @@ let BusInfo;
   */
 var BusInfoPDP10;
 
+/**
+ * @class BusPDP10
+ * @unrestricted
+ */
 class BusPDP10 extends Component {
     /**
      * BusPDP10(parmsBus, cpu, dbg)
@@ -8036,7 +8051,7 @@ class BusPDP10 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 info.aBlocks.push(/** @type {BlockInfo} */ (Usr.initBitFields(BlockInfoPDP10, iBlock, 0, 0, block.type)));
-                info.cBlocks++
+                info.cBlocks++;
             }
             iBlock++;
         }
@@ -8403,6 +8418,10 @@ BusPDP10.ERROR = {
  * @copyright https://www.pcjs.org/modules/v2/device.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class DevicePDP10
+ * @unrestricted
+ */
 class DevicePDP10 extends Component {
     /**
      * DevicePDP10(parmsDevice)
@@ -8993,7 +9012,7 @@ class MemoryPDP10 {
     writeWordChecked(w, off, addr)
     {
         if (DEBUGGER && this.dbg && this.addr != null) {
-            this.dbg.checkMemoryWrite(this.addr + off, 2)
+            this.dbg.checkMemoryWrite(this.addr + off, 2);
         }
         if (this.fReadOnly) this.writeNone(w, off, addr); else this.writeWordDirect(w, off, addr);
     }
@@ -9445,10 +9464,11 @@ class CPUPDP10 extends Component {
                  * control is visible, then the computer is probably sufficiently visible as well; the problem
                  * with setting fUpdateFocus to true is that it can jerk the web page around in annoying ways.
                  */
-                if (!cpu.flags.running)
+                if (!cpu.flags.running) {
                     cpu.startCPU();
-                else
+                } else {
                     cpu.stopCPU();
+                }
             };
             return true;
 
@@ -12200,7 +12220,7 @@ PDP10.opMOVSS = function(op, ac)
     var src = this.readWord(this.regEA);
     src = ((src / PDP10.HALF_SHIFT)|0) + ((src & PDP10.HALF_MASK) * PDP10.HALF_SHIFT);
     this.writeWord(this.regEA, src);
-    if (ac) this.writeWord(ac, src)
+    if (ac) this.writeWord(ac, src);
 };
 
 /**
@@ -18854,6 +18874,10 @@ PDP10.aOpIO_KA10 = [
  */
 var DbgAddrPDP10;
 
+/**
+ * @class DebuggerPDP10
+ * @unrestricted
+ */
 class DebuggerPDP10 extends DbgLib {
     /**
      * DebuggerPDP10(parmsDbg)
@@ -19352,7 +19376,7 @@ class DebuggerPDP10 extends DbgLib {
             var dbgAddrTmp = this.findSymbolAddr(sAddr);
             if (dbgAddrTmp) return dbgAddrTmp;
             if (sAddr.indexOf("0x") >= 0) {
-                nBase = 16
+                nBase = 16;
             } else if (sAddr.indexOf("0o") >= 0) {
                 nBase = 8;
             } else if (sAddr.indexOf('.') >= 0) {
@@ -21596,12 +21620,9 @@ class DebuggerPDP10 extends DbgLib {
                 this.printf("all breakpoints cleared\n");
                 return;
             }
-            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true))
-                return;
-            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true))
-                return;
+            if (this.findBreakpoint(this.aBreakExec, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakRead, dbgAddr, true)) return;
+            if (this.findBreakpoint(this.aBreakWrite, dbgAddr, true)) return;
             this.printf("breakpoint missing: %s\n", this.toStrAddr(dbgAddr));
             return;
         }
@@ -23125,6 +23146,10 @@ if (DEBUGGER) {
  * @copyright https://www.pcjs.org/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class ROMPDP10
+ * @unrestricted
+ */
 class ROMPDP10 extends Component {
     /**
      * ROMPDP10(parmsROM)
@@ -23427,6 +23452,10 @@ Web.onInit(ROMPDP10.init);
  * @copyright https://www.pcjs.org/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class RAMPDP10
+ * @unrestricted
+ */
 class RAMPDP10 extends Component {
     /**
      * RAMPDP10(parmsRAM)
@@ -26395,6 +26424,10 @@ Macro10.MACRO_OP = {
  * @copyright https://www.pcjs.org/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class ComputerPDP10
+ * @unrestricted
+ */
 class ComputerPDP10 extends Component {
     /**
      * ComputerPDP10(parmsComputer, parmsMachine, fSuspended)
@@ -28031,6 +28064,10 @@ Web.onExit(ComputerPDP10.exit);
  * @copyright https://www.pcjs.org/modules/v2/state.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ * @class State
+ * @unrestricted
+ */
 class State {
     /**
      * State(component, sVersion, sSuffix)
@@ -29131,4 +29168,3 @@ globals.window['commandMachine'] = commandMachine;
 
 globals.window['enableEvents'] = Web.enablePageEvents;
 globals.window['sendEvent']    = Web.doPageEvent;
-

@@ -4770,8 +4770,9 @@ export default class VideoX86 extends Component {
 
         let card = this.cardActive;
         for (let i = Card.CRTC.CURSCAN; i <= Card.CRTC.CURSORLO; i++) {
-            if (card.regCRTData[i] == null)
+            if (card.regCRTData[i] == null) {
                 return false;
+            }
         }
 
         let bCursorFlags = card.regCRTData[Card.CRTC.CURSCAN];
@@ -4899,8 +4900,10 @@ export default class VideoX86 extends Component {
          * cyCursor values are relative to when it's time to scale them.
          */
         if (this.yCursor !== bCursorStart || this.cyCursor !== bCursorSize || this.cyCursorWrap !== bCursorWrap) {
-            if (DEBUG) this.printf("checkCursor(): cursor shape changed from %d,%d to %d,%d (%#04X-%#04X)\n",
-                                    this.yCursor, this.cyCursor, bCursorStart, bCursorSize, oCursorStart, oCursorEnd);
+            if (DEBUG) {
+                this.printf("checkCursor(): cursor shape changed from %d,%d to %d,%d (%#04X-%#04X)\n",
+                            this.yCursor, this.cyCursor, bCursorStart, bCursorSize, oCursorStart, oCursorEnd);
+            }
             this.yCursor = bCursorStart;
             this.cyCursor = bCursorSize;
             this.cyCursorWrap = bCursorWrap;
@@ -6343,8 +6346,7 @@ export default class VideoX86 extends Component {
             if (x >= this.nCols) {
                 x = 0;
                 y += 2;
-                if (y > this.nRows)
-                    break;
+                if (y > this.nRows) break;
                 if (y == this.nRows) {
                     y = 1;
                     addr = addrScreen + this.cbSplit;

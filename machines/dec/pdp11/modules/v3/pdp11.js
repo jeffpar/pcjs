@@ -256,10 +256,10 @@ export default class PDP11 extends PDP11Ops {
         }
         this.defineRegisterAlias("R6", "SP");
         this.defineRegisterAlias("R7", Debugger.REGISTER.PC);
-        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF()});
-        this.defineRegister("NF", () => (this.getNF()? 1 : 0), (value) => {value? this.setNF() : this.clearNF()});
-        this.defineRegister("VF", () => (this.getVF()? 1 : 0), (value) => {value? this.setVF() : this.clearVF()});
-        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF()});
+        this.defineRegister("CF", () => (this.getCF()? 1 : 0), (value) => {value? this.setCF() : this.clearCF();});
+        this.defineRegister("NF", () => (this.getNF()? 1 : 0), (value) => {value? this.setNF() : this.clearNF();});
+        this.defineRegister("VF", () => (this.getVF()? 1 : 0), (value) => {value? this.setVF() : this.clearVF();});
+        this.defineRegister("ZF", () => (this.getZF()? 1 : 0), (value) => {value? this.setZF() : this.clearZF();});
         this.defineRegister("PS", () => this.getPSW(), (value) => this.setPSW(value));
         this.defineRegister("PI", () => this.getPIR(), (value) => this.setPIR(value));
         this.defineRegister("ER", () => this.regErr);

@@ -13,13 +13,13 @@ The format of a `pc.js` command (as `--help` will also tell you) is:
 
     [node] pc.js [machine file] [local directory] [DOS command] [options]
 
-The first argument is the name of a PCjs machine configuration files, such as [ibm5160.json](ibm5160.json) or [ibm5170.xml](ibm5170.xml), and the second is the name of a folder (eg, `empty`) containing files to copy to the machine's hard disk:
+The first argument is the name of a PCjs machine configuration files, such as [ibm5160.json](ibm5160.json) or [ibm5170.xml](ibm5170.xml), and the second is the name of a folder (eg, `disks/empty`) containing files to copy to the machine's hard disk:
 
-	% pc.js ibm5156 empty
+	% pc.js ibm5156 disks/empty
 
 If your operating system doesn't automatically associate `.js` files with [Node](https://nodejs.org/en), then use:
 
-	% node pc.js ibm5160 empty
+	% node pc.js ibm5160 disks/empty
 
 > NOTE: On Windows, the first time you attempt to run a `.js` file from the command-line, Windows may prompt you to associate a program with it (eg, "C:\Program Files\nodejs\node.exe"), and while this will eliminate the need to type `node`, the association may not automatically pass along any command-line arguments.
 > 
@@ -33,7 +33,7 @@ For "bare" machine names, `pc.js` looks for a JSON or XML file in its own `/tool
 
 Alternatively, you can use `--start` anywhere on the command-line to specify a machine, as in:
 
-    % pc.js empty --start=ibm5160
+    % pc.js disks/empty --start=ibm5160
     [Press CTRL-D to enter command mode]
     C>
 
@@ -41,7 +41,7 @@ After the machine finishes booting (about 5 seconds), you should see the familia
 
 Besides a machine name and a directory name, you can also specify a third argument, which is an initial DOS command or program to run:
 
-    % pc.js ibm5160 empty "dir *.*"
+    % pc.js ibm5160 disks/empty "dir *.*"
     [Press CTRL-D to enter command mode]
 
     Volume in drive C is EMPTY      

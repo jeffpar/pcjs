@@ -7384,6 +7384,31 @@
 					}
 				}
 			},
+			"logo": {
+				"@title": "LOGO",
+				"@versions": {
+					"1.00": {
+						"@title": "IBM LOGO 1.00",
+						"@media": [
+							{
+								"@title": "IBM LOGO 1.00",
+								"@diskette": "LOGO-100.json",
+								"@format": "PC180K",
+								"@source": "https://winworldpc.com/product/ibm-logo/100",
+								"@photo": "jpg"
+							}
+						],
+						"@documents": [
+							{
+								"@title": "IBM LOGO 1.00 (1983)",
+								"@file": "IBM_LOGO_100_1983-08.pdf",
+								"@link": "https://archive.org/details/ibm_logo_manual",
+								"@cover": "jpg"
+							}
+						]
+					}
+				}
+			},
 			"masm": {
 				"@title": "Assembler",
 				"@versions": {
