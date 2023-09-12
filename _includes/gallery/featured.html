@@ -11,7 +11,6 @@
   {%- assign item_title = item['@title'] -%}
   {%- assign item_tags = item['@tags'] | default: "" -%}
   {%- if item_title != "" and item_tags contains include_tag -%}
-    {%- if site.developer and item_tags contains "shareware" -%}{%- continue -%}{%- endif -%}
     {% assign item_num = item_num | plus:1 %}
     {%- assign item_link = item['@permalink'] -%}
     {%- assign item_id = item_link | slugify | prepend: "featured-" -%}
@@ -24,5 +23,5 @@
 {%- endfor -%}
 {%- include gallery/end.html -%}
 {%- if item_num == 0 %}
-  <p>No Featured Items found under {{ title }}</p>
+  <p>No Featured Items found under {{ title | default: include_tag }}</p>
 {%- endif -%}
