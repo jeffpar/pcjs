@@ -18,7 +18,7 @@ machines:
     layout: /_includes/ti57/ti57-full.html
 ---
 
-A PCjs emulation of the Texas Instruments TI-57 Programmable Calculator is shown below.
+A PCjs emulation of the Texas Instruments TI-57 Programmable Calculator is provided below.
 
 {% include machine.html id="ti57-rev0" %}
 

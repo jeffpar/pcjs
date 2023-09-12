@@ -6,13 +6,13 @@ redirect_from: /devices/ti57/machine/rev0/
 machines:
   - id: ti57-rev0
     type: ti57
-    uncompiled: true
+    unbundled: true
     name: TI-57 Programmable Calculator
     config: /machines/ti/ti57/rev0/ti57.json
     layout: /_includes/ti57/ti57-diag.html
 ---
 
-Our TI-57 emulator below is one of the most faithful TI-57 emulations currently available.  It should run at
+The TI-57 emulator below is one of the most faithful TI-57 emulations currently available.  It should run at
 roughly the same speed as an original device.  That includes calculation speed, display speed, and pause delays.
 
 It is also using an exact copy of an original [TI-57 ROM](/machines/ti/ti57/rom/); no instructions have been patched.
@@ -28,11 +28,11 @@ enabled, since they don't affect the overall authenticity of the simulation, suc
 <span class="indTI57">Rad</span>, and
 <span class="indTI57">Grad</span> indicators.
 
-The TI-57 emulator is also the first PCjs machine to use our new ES6 PCjs Device Classes, so it requires a modern
-web browser.  We'll probably add an ES5 fall-back mechanism eventually, but for now, make sure you're using the latest
-version of Chrome, Firefox, Safari, Edge, etc.
+This emulator is also the first PCjs machine to take advantage of JavaScript [ES6](https://www.w3schools.com/js/js_es6.asp),
+so it requires a *more* modern web browser.  However, I've also "compiled" it for [ES5](https://www.w3schools.com/js/js_es5.asp)
+back on the main [TI-57](../) page, so give that a try if you run into any problems here.
 
-If any errors occur during operation, the Diagnostics window should display the last instruction decoded.
-The window also accepts a few debugging commands.  Use '?' for help.
+If any errors occur during operation, the Diagnostics window should display the last instruction decoded.  The window
+also accepts a few debugging commands.  Use '?' for help.
 
 {% include machine.html id="ti57-rev0" %}
