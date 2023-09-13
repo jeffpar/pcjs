@@ -724,7 +724,7 @@ export default class Panel extends Component {
     {
         if (DEBUG) this.printf(Messages.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, MemoryX86.TYPE.NAMES[type], cBlocks);
         this.busInfo.aRegions[this.busInfo.cRegions++] = {iBlock: iBlock, cBlocks: cBlocks, type: type};
-        return Usr.initBitFields(BusX86.BlockInfo, iBlock, cBlocks, 0, type);
+        return Usr.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, cBlocks, 0, type);
     }
 
     /**

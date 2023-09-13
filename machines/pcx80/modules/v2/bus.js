@@ -16,6 +16,15 @@ import Usr from "../../../modules/v2/usrlib.js";
 import { DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
+ * BusInfoX80 object definition (returned by scanMemory())
+ *
+ * @typedef {Object} BusInfoX80
+ * @property {number} cbTotal           (total bytes allocated)
+ * @property {number} cBlocks           (total Memory blocks allocated)
+ * @property {Array.<number>} aBlocks   (array of allocated Memory block numbers)
+ */
+
+/**
  * TODO: The Closure Compiler treats ES6 classes as 'struct' rather than 'dict' by default,
  * which would force us to declare all class properties in the constructor, as well as prevent
  * us from defining any named properties.  So, for now, we mark all our classes as 'unrestricted'.
@@ -24,6 +33,19 @@ import { DEBUGGER, MAXDEBUG } from "./defines.js";
  * @unrestricted
  */
 export default class BusX80 extends Component {
+
+    static ERROR = {
+        ADD_MEM_INUSE:      1,
+        ADD_MEM_BADRANGE:   2,
+        SET_MEM_BADRANGE:   4,
+        REM_MEM_BADRANGE:   5
+    };
+
+    /**
+     * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
+     */
+    static BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
+
     /**
      * BusX80(cpu, dbg)
      *
@@ -314,7 +336,7 @@ export default class BusX80 extends Component {
             let block = this.aMemBlocks[iBlock];
             info.cbTotal += block.size;
             if (block.size) {
-                info.aBlocks.push(Usr.initBitFields(BusX80.BlockInfo, iBlock, 0, 0, block.type));
+                info.aBlocks.push(Usr.initBitFields(/** @type {BitFields} */ (BusX80.BlockInfo), iBlock, 0, 0, block.type));
                 info.cBlocks++;
             }
             iBlock++;
@@ -986,46 +1008,3 @@ export default class BusX80 extends Component {
         return false;
     }
 }
-
-BusX80.ERROR = {
-    ADD_MEM_INUSE:      1,
-    ADD_MEM_BADRANGE:   2,
-    SET_MEM_BADRANGE:   4,
-    REM_MEM_BADRANGE:   5
-};
-
-/*
- * Data types used by scanMemory()
- */
-
-/**
- * @typedef {number}
- */
-var BlockInfo;
-
-/**
- * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
- *
- * @typedef {{
- *  num:    BitField,
- *  count:  BitField,
- *  btmod:  BitField,
- *  type:   BitField
- * }}
- */
-BusX80.BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
-
-/**
- * BusInfoX80 object definition (returned by scanMemory())
- *
- *  cbTotal:    total bytes allocated
- *  cBlocks:    total Memory blocks allocated
- *  aBlocks:    array of allocated Memory block numbers
- *
- * @typedef {{
- *  cbTotal:    number,
- *  cBlocks:    number,
- *  aBlocks:    Array.<BlockInfo>
- * }}
- */
-var BusInfoX80;

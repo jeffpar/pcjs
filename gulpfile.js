@@ -280,10 +280,10 @@ aMachines.forEach(function(machineID)
                     define: machineDefines,
                     externs: machines.shared.externs,
                     warning_level: 'VERBOSE',
-                    language_in: 'ES6',                          // this is now the default, just documenting our requirements
-                    language_out: 'ES5',                         // this is also the default
+                    language_in: 'UNSTABLE',                    // formerly ES6, but we've since started using ES2022 (v13) features, we must use UNSTABLE now
+                    language_out: 'ES5',                        // this is also the default
                     output_wrapper: '(function(){%output%})()',
-                    js_output_file: machineReleaseFile,           // NOTE: if we go back to doing debugger/non-debugger releases, this must be updated
+                    js_output_file: machineReleaseFile,         // NOTE: if we go back to doing debugger/non-debugger releases, this must be updated
                     create_source_map: true
                   }))
                   .pipe(gulpSourceMaps.write('./'))             // gulp-sourcemaps automatically adds the sourcemap url comment

@@ -60,6 +60,168 @@ import Memory from "./memory.js";
  * @property {Array.<Array.<Address>>} aaBreakAddress
  */
 export default class Debugger extends Device {
+
+    static COMMANDS = [
+        "b?\t\tbreak commands",
+        "d?\t\tdump commands",
+        "e[o] [addr] ...\tedit memory/ports",
+        "g    [addr]\trun (to addr)",
+        "h\t\thalt",
+        "p    [expr]\tparse expression",
+        "r?   [value]\tdisplay/set registers",
+        "s?\t\tset commands",
+        "t[r] [n]\tstep (n instructions)",
+        "u    [addr] [n]\tunassemble (at addr)"
+    ];
+
+    static BREAK_COMMANDS = [
+        "bc [n|*]\tclear break address",
+        "bd [n|*]\tdisable break address",
+        "be [n|*]\tenable break address",
+        "bl [n]\t\tlist break addresses",
+        "bi [addr]\tbreak on input",
+        "bo [addr]\tbreak on output",
+        "br [addr]\tbreak on read",
+        "bw [addr]\tbreak on write",
+        "bm [on|off]\tbreak on message",
+        "bn [count]\tbreak on instruction count"
+    ];
+
+    static DUMP_COMMANDS = [
+        "db  [addr]\tdump bytes (8 bits)",
+        "dw  [addr]\tdump words (16 bits)",
+        "dd  [addr]\tdump dwords (32 bits)",
+        "di  [addr]\tdump input ports",
+        "d*y [addr]\tdump values in binary",
+        "dh  [n] [l]\tdump instruction history buffer",
+        "ds\t\tdump machine state"
+    ];
+
+    static SET_COMMANDS = [
+        "sh [on|off]\tset instruction history",
+        "sp [n]\t\tset speed multiplier",
+        "ss\t\tset debugger style"
+    ];
+
+    static ADDRESS = {
+        VIRTUAL:    0x01,           // if seg is -1, this indicates if the address is physical (clear) or virtual (set)
+        PHYSICAL:   0x00,
+        PROTECTED:  0x02,           // if seg is NOT -1, this indicates if the address is real (clear) or protected (set)
+        REAL:       0x00
+    };
+
+    /**
+     * The required characteristics of these assigned values are as follows: all even values must be read
+     * operations and all odd values must be write operations; all busMemory operations must come before all
+     * busIO operations; and INPUT must be the first busIO operation.
+     */
+    static BREAKTYPE = {
+        READ:       0,
+        WRITE:      1,
+        INPUT:      2,
+        OUTPUT:     3
+    };
+
+    static BREAKCMD = {
+        [Debugger.BREAKTYPE.READ]:     "br",
+        [Debugger.BREAKTYPE.WRITE]:    "bw",
+        [Debugger.BREAKTYPE.INPUT]:    "bi",
+        [Debugger.BREAKTYPE.OUTPUT]:   "bo"
+    };
+
+    /**
+     * Predefined "virtual registers" that we expect the CPU to support.
+     */
+    static REGISTER = {
+        PC:         "PC"            // the CPU's program counter
+    };
+
+    static SYMBOL = {
+        BYTE:       1,
+        PAIR:       2,
+        QUAD:       4,
+        LABEL:      5,
+        COMMENT:    6,
+        VALUE:      7
+    };
+
+    static SYMBOL_TYPES = {
+        "=":        Debugger.SYMBOL.VALUE,
+        "1":        Debugger.SYMBOL.BYTE,
+        "2":        Debugger.SYMBOL.PAIR,
+        "4":        Debugger.SYMBOL.QUAD,
+        "@":        Debugger.SYMBOL.LABEL,
+        ";":        Debugger.SYMBOL.COMMENT
+    };
+
+    static HISTORY_LIMIT = 100000;
+
+    /**
+     * These are our operator precedence tables.  Operators toward the bottom (with higher values) have
+     * higher precedence.  BINOP_PRECEDENCE was our original table; we had to add DECOP_PRECEDENCE because
+     * the precedence of operators in DEC's MACRO-10 expressions differ.  Having separate tables also allows
+     * us to remove operators that shouldn't be supported, but unless some operator creates a problem,
+     * I prefer to keep as much commonality between the tables as possible.
+     *
+     * Missing from these tables are the (limited) set of unary operators we support (negate and complement),
+     * since this is only a BINARY operator precedence, not a general-purpose precedence table.  Assume that
+     * all unary operators take precedence over all binary operators.
+     */
+    static BINOP_PRECEDENCE = {
+        '||':   5,      // logical OR
+        '&&':   6,      // logical AND
+        '!':    7,      // bitwise OR (conflicts with logical NOT, but we never supported that)
+        '|':    7,      // bitwise OR
+        '^!':   8,      // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
+        '&':    9,      // bitwise AND
+        '!=':   10,     // inequality
+        '==':   10,     // equality
+        '>=':   11,     // greater than or equal to
+        '>':    11,     // greater than
+        '<=':   11,     // less than or equal to
+        '<':    11,     // less than
+        '>>>':  12,     // unsigned bitwise right shift
+        '>>':   12,     // bitwise right shift
+        '<<':   12,     // bitwise left shift
+        '-':    13,     // subtraction
+        '+':    13,     // addition
+        '^/':   14,     // remainder
+        '/':    14,     // division
+        '*':    14,     // multiplication
+        '_':    19,     // MACRO-10 shift operator
+        '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
+        '{':    20,     // open grouped expression (converted from achGroup[0])
+        '}':    20      // close grouped expression (converted from achGroup[1])
+    };
+
+    static DECOP_PRECEDENCE = {
+        ',,':   1,      // high-word,,low-word
+        '||':   5,      // logical OR
+        '&&':   6,      // logical AND
+        '!=':   10,     // inequality
+        '==':   10,     // equality
+        '>=':   11,     // greater than or equal to
+        '>':    11,     // greater than
+        '<=':   11,     // less than or equal to
+        '<':    11,     // less than
+        '>>>':  12,     // unsigned bitwise right shift
+        '>>':   12,     // bitwise right shift
+        '<<':   12,     // bitwise left shift
+        '-':    13,     // subtraction
+        '+':    13,     // addition
+        '^/':   14,     // remainder
+        '/':    14,     // division
+        '*':    14,     // multiplication
+        '!':    15,     // bitwise OR (conflicts with logical NOT, but we never supported that)
+        '|':    15,     // bitwise OR
+        '^!':   15,     // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
+        '&':    15,     // bitwise AND
+        '_':    19,     // MACRO-10 shift operator
+        '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
+        '{':    20,     // open grouped expression (converted from achGroup[0])
+        '}':    20      // close grouped expression (converted from achGroup[1])
+    };
+
     /**
      * Debugger(idMachine, idDevice, config)
      *
@@ -2601,166 +2763,5 @@ export default class Debugger extends Device {
         return this.sprintf("%s %02x       unsupported       ; %s\n", sAddress, getNextOp(), annotation || "");
     }
 }
-
-Debugger.COMMANDS = [
-    "b?\t\tbreak commands",
-    "d?\t\tdump commands",
-    "e[o] [addr] ...\tedit memory/ports",
-    "g    [addr]\trun (to addr)",
-    "h\t\thalt",
-    "p    [expr]\tparse expression",
-    "r?   [value]\tdisplay/set registers",
-    "s?\t\tset commands",
-    "t[r] [n]\tstep (n instructions)",
-    "u    [addr] [n]\tunassemble (at addr)"
-];
-
-Debugger.BREAK_COMMANDS = [
-    "bc [n|*]\tclear break address",
-    "bd [n|*]\tdisable break address",
-    "be [n|*]\tenable break address",
-    "bl [n]\t\tlist break addresses",
-    "bi [addr]\tbreak on input",
-    "bo [addr]\tbreak on output",
-    "br [addr]\tbreak on read",
-    "bw [addr]\tbreak on write",
-    "bm [on|off]\tbreak on message",
-    "bn [count]\tbreak on instruction count"
-];
-
-Debugger.DUMP_COMMANDS = [
-    "db  [addr]\tdump bytes (8 bits)",
-    "dw  [addr]\tdump words (16 bits)",
-    "dd  [addr]\tdump dwords (32 bits)",
-    "di  [addr]\tdump input ports",
-    "d*y [addr]\tdump values in binary",
-    "dh  [n] [l]\tdump instruction history buffer",
-    "ds\t\tdump machine state"
-];
-
-Debugger.SET_COMMANDS = [
-    "sh [on|off]\tset instruction history",
-    "sp [n]\t\tset speed multiplier",
-    "ss\t\tset debugger style"
-];
-
-Debugger.ADDRESS = {
-    VIRTUAL:    0x01,           // if seg is -1, this indicates if the address is physical (clear) or virtual (set)
-    PHYSICAL:   0x00,
-    PROTECTED:  0x02,           // if seg is NOT -1, this indicates if the address is real (clear) or protected (set)
-    REAL:       0x00
-};
-
-/**
- * The required characteristics of these assigned values are as follows: all even values must be read
- * operations and all odd values must be write operations; all busMemory operations must come before all
- * busIO operations; and INPUT must be the first busIO operation.
- */
-Debugger.BREAKTYPE = {
-    READ:       0,
-    WRITE:      1,
-    INPUT:      2,
-    OUTPUT:     3
-};
-
-Debugger.BREAKCMD = {
-    [Debugger.BREAKTYPE.READ]:     "br",
-    [Debugger.BREAKTYPE.WRITE]:    "bw",
-    [Debugger.BREAKTYPE.INPUT]:    "bi",
-    [Debugger.BREAKTYPE.OUTPUT]:   "bo"
-};
-
-/**
- * Predefined "virtual registers" that we expect the CPU to support.
- */
-Debugger.REGISTER = {
-    PC:         "PC"            // the CPU's program counter
-};
-
-Debugger.SYMBOL = {
-    BYTE:       1,
-    PAIR:       2,
-    QUAD:       4,
-    LABEL:      5,
-    COMMENT:    6,
-    VALUE:      7
-};
-
-Debugger.SYMBOL_TYPES = {
-    "=":        Debugger.SYMBOL.VALUE,
-    "1":        Debugger.SYMBOL.BYTE,
-    "2":        Debugger.SYMBOL.PAIR,
-    "4":        Debugger.SYMBOL.QUAD,
-    "@":        Debugger.SYMBOL.LABEL,
-    ";":        Debugger.SYMBOL.COMMENT
-};
-
-Debugger.HISTORY_LIMIT = 100000;
-
-/**
- * These are our operator precedence tables.  Operators toward the bottom (with higher values) have
- * higher precedence.  BINOP_PRECEDENCE was our original table; we had to add DECOP_PRECEDENCE because
- * the precedence of operators in DEC's MACRO-10 expressions differ.  Having separate tables also allows
- * us to remove operators that shouldn't be supported, but unless some operator creates a problem,
- * I prefer to keep as much commonality between the tables as possible.
- *
- * Missing from these tables are the (limited) set of unary operators we support (negate and complement),
- * since this is only a BINARY operator precedence, not a general-purpose precedence table.  Assume that
- * all unary operators take precedence over all binary operators.
- */
-Debugger.BINOP_PRECEDENCE = {
-    '||':   5,      // logical OR
-    '&&':   6,      // logical AND
-    '!':    7,      // bitwise OR (conflicts with logical NOT, but we never supported that)
-    '|':    7,      // bitwise OR
-    '^!':   8,      // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
-    '&':    9,      // bitwise AND
-    '!=':   10,     // inequality
-    '==':   10,     // equality
-    '>=':   11,     // greater than or equal to
-    '>':    11,     // greater than
-    '<=':   11,     // less than or equal to
-    '<':    11,     // less than
-    '>>>':  12,     // unsigned bitwise right shift
-    '>>':   12,     // bitwise right shift
-    '<<':   12,     // bitwise left shift
-    '-':    13,     // subtraction
-    '+':    13,     // addition
-    '^/':   14,     // remainder
-    '/':    14,     // division
-    '*':    14,     // multiplication
-    '_':    19,     // MACRO-10 shift operator
-    '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
-    '{':    20,     // open grouped expression (converted from achGroup[0])
-    '}':    20      // close grouped expression (converted from achGroup[1])
-};
-
-Debugger.DECOP_PRECEDENCE = {
-    ',,':   1,      // high-word,,low-word
-    '||':   5,      // logical OR
-    '&&':   6,      // logical AND
-    '!=':   10,     // inequality
-    '==':   10,     // equality
-    '>=':   11,     // greater than or equal to
-    '>':    11,     // greater than
-    '<=':   11,     // less than or equal to
-    '<':    11,     // less than
-    '>>>':  12,     // unsigned bitwise right shift
-    '>>':   12,     // bitwise right shift
-    '<<':   12,     // bitwise left shift
-    '-':    13,     // subtraction
-    '+':    13,     // addition
-    '^/':   14,     // remainder
-    '/':    14,     // division
-    '*':    14,     // multiplication
-    '!':    15,     // bitwise OR (conflicts with logical NOT, but we never supported that)
-    '|':    15,     // bitwise OR
-    '^!':   15,     // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
-    '&':    15,     // bitwise AND
-    '_':    19,     // MACRO-10 shift operator
-    '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
-    '{':    20,     // open grouped expression (converted from achGroup[0])
-    '}':    20      // close grouped expression (converted from achGroup[1])
-};
 
 // Debugger.CLASSES["Debugger"] = Debugger;

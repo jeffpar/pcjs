@@ -9915,7 +9915,7 @@ class Panel extends Component {
     {
         if (DEBUG) this.printf(Messages.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, MemoryX86.TYPE.NAMES[type], cBlocks);
         this.busInfo.aRegions[this.busInfo.cRegions++] = {iBlock: iBlock, cBlocks: cBlocks, type: type};
-        return Usr.initBitFields(BusX86.BlockInfo, iBlock, cBlocks, 0, type);
+        return Usr.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, cBlocks, 0, type);
     }
 
     /**
@@ -10312,6 +10312,12 @@ Web.onInit(Panel.init);
  * @copyright https://www.pcjs.org/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
  */
 
+/** @typedef {{ cbTotal: number, cBlocks: number, aBlocks: Array.<number> }} */
+let BusInfo;
+
+/** @typedef {{ obj: Object, off: number, slot: number, refs: number }} */
+let BackTrack;
+
 /**
  * Think of this Controller class definition as an interface definition, implemented by the Video Card
  * class and the RAM CompaqController class.
@@ -10349,6 +10355,69 @@ class Controller {
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class BusX86 extends Component {
+    /*
+     * BackTrack indexes are 31-bit values, where bits 0-8 store an object offset (0-511) and bits 16-30 store
+     * an object number (1-32767).  Object number 0 is reserved for dynamic data (ie, data created independent
+     * of any source); examples include zero values produced by instructions such as "SUB AX,AX" or "XOR AX,AX".
+     * We must special-case instructions like that, because even though AX will almost certainly contain some source
+     * data prior to the instruction, the result no longer has any connection to the source.  Similarly, "SBB AX,AX"
+     * may produce 0 or -1, depending on carry, but since we don't track the source of individual bits (including the
+     * carry flag), AX is now source-less.  TODO: This is an argument for maintaining source info on selected flags,
+     * even though it would be rather expensive.
+     *
+     * The 7 middle bits (9-15) record type and access information, as follows:
+     *
+     *      bit 15: set to indicate a "data" byte, clear to indicate a "code" byte
+     *
+     * All bytes start out as "data" bytes; only once they've been executed do they become "code" bytes.  For code
+     * bytes, the remaining 6 middle bits (9-14) represent an execution count that starts at 1 (on the byte's initial
+     * transition from data to code) and tops out at 63.
+     *
+     * For data bytes, the remaining middle bits indicate any transformations the data has undergone; eg:
+     *
+     *      bit 14: ADD/SUB/INC/DEC
+     *      bit 13: MUL/DIV
+     *      bit 12: OR/AND/XOR/NOT
+     *
+     * We make no attempt to record the original data or the transformation data, only that the transformation occurred.
+     *
+     * Other middle bits indicate whether the data was ever read and/or written:
+     *
+     *      bit 11: READ
+     *      bit 10: WRITE
+     *
+     * Bit 9 is reserved for now.
+     */
+    static BTINFO = {
+        SLOT_MAX:       32768,
+        SLOT_SHIFT:     16,
+        TYPE_DATA:      0x8000,
+        TYPE_ADDSUB:    0x4000,
+        TYPE_MULDIV:    0x2000,
+        TYPE_LOGICAL:   0x1000,
+        TYPE_READ:      0x0800,
+        TYPE_WRITE:     0x0400,
+        TYPE_COUNT_INC: 0x0200,
+        TYPE_COUNT_MAX: 0x7E00,
+        TYPE_MASK:      0xFE00,
+        TYPE_SHIFT:     9,
+        OFF_MAX:        512,
+        OFF_MASK:       0x1FF
+    };
+
+    static ERROR = {
+        ADD_MEM_INUSE:      1,
+        ADD_MEM_BADRANGE:   2,
+        SET_MEM_NOCTRL:     3,
+        SET_MEM_BADRANGE:   4,
+        REM_MEM_BADRANGE:   5
+    };
+
+    /*
+     * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
+     */
+    static BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
+
     /**
      * BusX86(cpu, dbg)
      *
@@ -10693,7 +10762,7 @@ class BusX86 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 let btmod = (BACKTRACK && block.modBackTrack(false)? 1 : 0);
-                info.aBlocks.push(Usr.initBitFields(BusX86.BlockInfo, iBlock, 0, btmod, block.type));
+                info.aBlocks.push(Usr.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, 0, btmod, block.type));
                 info.cBlocks++;
             }
             iBlock++;
@@ -11933,85 +12002,6 @@ class BusX86 extends Component {
      }
      */
 }
-
-/*
- * Data types used by scanMemory()
- */
-
-/**
- * @typedef {number} BlockInfo
- */
-
-/** @typedef {{ cbTotal: number, cBlocks: number }} */
-let BusInfo;
-
-/*
- * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
- */
-BusX86.BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
-
-/** @typedef {{ obj: Object, off: number, slot: number, refs: number }} */
-let BackTrack;
-
-if (BACKTRACK) {
-    /*
-     * BackTrack indexes are 31-bit values, where bits 0-8 store an object offset (0-511) and bits 16-30 store
-     * an object number (1-32767).  Object number 0 is reserved for dynamic data (ie, data created independent
-     * of any source); examples include zero values produced by instructions such as "SUB AX,AX" or "XOR AX,AX".
-     * We must special-case instructions like that, because even though AX will almost certainly contain some source
-     * data prior to the instruction, the result no longer has any connection to the source.  Similarly, "SBB AX,AX"
-     * may produce 0 or -1, depending on carry, but since we don't track the source of individual bits (including the
-     * carry flag), AX is now source-less.  TODO: This is an argument for maintaining source info on selected flags,
-     * even though it would be rather expensive.
-     *
-     * The 7 middle bits (9-15) record type and access information, as follows:
-     *
-     *      bit 15: set to indicate a "data" byte, clear to indicate a "code" byte
-     *
-     * All bytes start out as "data" bytes; only once they've been executed do they become "code" bytes.  For code
-     * bytes, the remaining 6 middle bits (9-14) represent an execution count that starts at 1 (on the byte's initial
-     * transition from data to code) and tops out at 63.
-     *
-     * For data bytes, the remaining middle bits indicate any transformations the data has undergone; eg:
-     *
-     *      bit 14: ADD/SUB/INC/DEC
-     *      bit 13: MUL/DIV
-     *      bit 12: OR/AND/XOR/NOT
-     *
-     * We make no attempt to record the original data or the transformation data, only that the transformation occurred.
-     *
-     * Other middle bits indicate whether the data was ever read and/or written:
-     *
-     *      bit 11: READ
-     *      bit 10: WRITE
-     *
-     * Bit 9 is reserved for now.
-     */
-    BusX86.BTINFO = {
-        SLOT_MAX:       32768,
-        SLOT_SHIFT:     16,
-        TYPE_DATA:      0x8000,
-        TYPE_ADDSUB:    0x4000,
-        TYPE_MULDIV:    0x2000,
-        TYPE_LOGICAL:   0x1000,
-        TYPE_READ:      0x0800,
-        TYPE_WRITE:     0x0400,
-        TYPE_COUNT_INC: 0x0200,
-        TYPE_COUNT_MAX: 0x7E00,
-        TYPE_MASK:      0xFE00,
-        TYPE_SHIFT:     9,
-        OFF_MAX:        512,
-        OFF_MASK:       0x1FF
-    };
-}
-
-BusX86.ERROR = {
-    ADD_MEM_INUSE:      1,
-    ADD_MEM_BADRANGE:   2,
-    SET_MEM_NOCTRL:     3,
-    SET_MEM_BADRANGE:   4,
-    REM_MEM_BADRANGE:   5
-};
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/memory.js (C) 2012-2023 Jeff Parsons
