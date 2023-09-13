@@ -4,6 +4,10 @@ title: PCjs Tools
 permalink: /tools/
 ---
 
+### PC.js
+
+[PC.js](pc/) is a JavaScript command-line application that allows you to start a "headless" PCjs machine with all TTY (eg, INT 0x10) output redirected to your console, along with an automatically generated hard disk containing all the files in your current (or other specified) directory.
+
 ### DiskImage.js
 
 [DiskImage.js](diskimage/) is a JavaScript command-line application that reads/writes PCjs v2 disk images, using the [DiskInfo](../machines/pcx86/modules/v3/diskinfo.js) module to parse the data.  It supersedes the older PCjs [DiskDump](old/diskdump/) utility.
@@ -12,9 +16,9 @@ permalink: /tools/
 
 [FileImage.js](fileimage/) is a JavaScript command-line application that reads/writes PCjs file images, producing JSON-encoded versions of binary files (eg, ROM images).  It supersedes the older PCjs [FileDump](old/filedump/) utility.
 
-### PC.js
+### BASIC File Conversion
 
-[PC.js](pc/) is a JavaScript command-line application that allows you to start a "headless" PCjs machine with all TTY (eg, INT 0x10) output redirected to your console.
+The [BASConvert](basconvert/) page converts binary and/or encrypted IBM PC BASIC program files to plain-text, with any CP437 non-ASCII characters converted to UTF-8.  The [library](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js) is also built into the [DiskImage.js](diskimage/) command-line utility and is used in conjunction with the `--normalize` option.
 
 ### Other Modules
 
