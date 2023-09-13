@@ -359,6 +359,7 @@ function initMachine(args)
  */
 function intVideo(addr)
 {
+    let count = 1, s;
     let maxRows = 25, maxCols = 80;     // TODO: update these to reflect active video mode
     let CX = (this.regECX & 0xffff);
     let AH = ((this.regEAX >> 8) & 0xff), AL = (this.regEAX & 0xff);
@@ -408,34 +409,40 @@ function intVideo(addr)
         break;
     case 0x09:                          // write raw char/attr (AL/BL) with count (CX)
     case 0x0A:                          // write raw char (AL) with count (CX)
+        /*
+         * NOTE: I don't think the IBM BIOS handled CX == 0 very well (it looped 65536 times instead),
+         * so we're not going to emulate/risk that.  Also, this function isn't supposed to move the
+         * cursor, but when it's used with a count of 1, the caller usually plans to move the cursor
+         * themselves anyway, so we assume they will; otherwise, we should "backspace" an equal number
+         * of times afterward.
+         */
+        count = CX || 1;
+        if (count != 1) {
+            // printf("%s%s", s.repeat(count), "\b".repeat(count));
+            break;
+        }
         /* falls through */
     case 0x0E:                          // write TTY char (AL)
         /*
          * By default, fromCP437() does NOT translate control characters to UTF-8, which is the proper
          * thing to do for TTY control characters (ie, BEL, BS, LF, and CR) that the TTY function (0x0E)
          * wants to handle, but all other characters must be translated (including ESC or 0x1B, which
-         * BASIC uses to display a left-arrow symbol).  And when non-TTY output is being performed, there
-         * are no exceptions (ie, translate everything).
+         * BASIC uses to display a left-arrow symbol).
          */
-        let s = CharSet.fromCP437(AL, AH != 0x0E || [0x07, 0x08, 0x0A, 0x0D].indexOf(AL) < 0);
-        /*
-         * NOTE: I don't think the BIOS actually handled CX == 0 very well (it looped 65536 times instead),
-         * but we're not going to emulate/risk that.
-         */
-        if (AH == 0x0E || !CX) CX = 1;
-        printf("%s", s.repeat(CX));
+        s = CharSet.fromCP437(AL, AH != 0x0E || [0x07, 0x08, 0x0A, 0x0D].indexOf(AL) < 0);
+        printf("%s", s.repeat(count));
         if (s == '\r') {
             machine.colCursor = 0;
         } else if (s == '\n') {
-            while (machine.rowCursor < maxRows && CX--) {
+            while (machine.rowCursor < maxRows && count--) {
                 machine.rowCursor++;
             }
         } else if (s == '\b') {
-            while (machine.colCursor > 0 && CX--) {
+            while (machine.colCursor > 0 && count--) {
                 machine.colCursor--;
             }
         } else {
-            while (machine.colCursor < maxCols && CX--) {
+            while (machine.colCursor < maxCols && count--) {
                 machine.colCursor++;
             }
         }
