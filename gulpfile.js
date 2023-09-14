@@ -234,12 +234,11 @@ aMachines.forEach(function(machineID)
             .pipe(gulpForEach(function(stream, file) {
                 aMachinesOutdated.push(machineID);
                 return stream
-                    .pipe(gulpHeader('/**\n * @copyright ' + file.path.replace(/.*[\\/](modules|machines)[\\/](.*)/, "https://www.pcjs.org/$1/$2").replace(/\\/g,'/') + ' (C) 2012-' + pkg.year + ' Jeff Parsons\n */\n\n'))
+                    .pipe(gulpHeader('/**\n * @copyright ' + file.path.replace(/.*[\\/](machines)[\\/](.*)/, "https://www.pcjs.org/$1/$2").replace(/\\/g,'/') + ' (C) 2012-' + pkg.year + ' Jeff Parsons\n */\n\n'))
                     .pipe(gulpReplace(/APPVERSION = "0.00"/g, 'APPVERSION = "' + machineVersion + '"'))
                     .pipe(gulpReplace(/(var\s+VERSION\s*=\s*)"[0-9.]*"/g, '$1"' + machineVersion + '"'))
                     .pipe(gulpReplace(/(^|\n)[ \t]*(['"])use strict\2;?/g, ""))
                     .pipe(gulpReplace(/^import[ \t]+[^\n]*\n/gm, ""))
-                    .pipe(gulpReplace(/^.*?MESSAGE.*?=\s*\{\s*...DEFAULT.*?\};/gm, ""))
                     .pipe(gulpReplace(/^export[ \t]+(.*?;\n|default[ \t]+|\{.*?\}|)/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*var\s+\S+\s*=\s*require\((['"]).*?\1\)[^;]*;/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*(if\s+\(NODE\)\s*|)module\.exports\s*=\s*[^;]*;/gm, ""))

@@ -31,7 +31,7 @@ will surface over time.  [Let us know](mailto:Jeff@pcjs.org) if you find more.  
 
 ### Directory of PC Magazine (Vol. 06 No. 08)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 08)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 08)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N08
      Directory of A:\
@@ -50,7 +50,7 @@ NOTE: PC Magazine (Vol. 06 No. 08) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 09)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 09)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 09)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N09
      Directory of A:\
@@ -68,7 +68,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 10)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 10)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 10)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N10
      Directory of A:\
@@ -86,7 +86,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 11)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 11)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 11)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N11
      Directory of A:\
@@ -99,7 +99,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 12)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 12)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 12)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N12
      Directory of A:\
@@ -115,7 +115,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 13)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 13)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 13)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N13
      Directory of A:\
@@ -131,7 +131,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 14)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 14)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 14)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N14
      Directory of A:\
@@ -153,7 +153,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 15)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 15)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 15)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N15
      Directory of A:\
@@ -172,7 +172,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 16)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 16)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 16)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N16
      Directory of A:\
@@ -188,7 +188,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 17)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 17)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 17)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N17
      Directory of A:\
@@ -210,7 +210,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 18)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 18)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 18)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N18
      Directory of A:\
@@ -223,7 +223,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 19)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 19)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 19)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N19
      Directory of A:\
@@ -242,7 +242,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 20)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 20)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 20)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N20
      Directory of A:\
@@ -286,7 +286,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 21)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 21)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 21)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N21
      Directory of A:\
@@ -303,7 +303,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 06 No. 22)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 22)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 06 No. 22)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL06N22
      Directory of A:\
@@ -317,7 +317,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 01)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 01)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 01)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N01
      Directory of A:\
@@ -335,7 +335,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 02)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 02)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 02)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N02
      Directory of A:\
@@ -353,7 +353,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 03)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 03)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 03)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N03
      Directory of A:\
@@ -369,7 +369,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 05)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 05)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 05)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N05
      Directory of A:\
@@ -384,7 +384,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 06)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 06)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 06)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N06
      Directory of A:\
@@ -402,7 +402,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 07)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 07)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 07)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N07
      Directory of A:\
@@ -417,7 +417,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 08)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 08)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 08)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N08
      Directory of A:\
@@ -439,7 +439,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 09)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 09)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 09)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N09
      Directory of A:\
@@ -461,7 +461,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 10)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 10)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 10)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N10
      Directory of A:\
@@ -485,7 +485,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 12)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 12)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 12)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N12
      Directory of A:\
@@ -509,7 +509,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 13)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 13)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 13)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N13
      Directory of A:\
@@ -536,7 +536,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 14)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 14)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 14)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N14
      Directory of A:\
@@ -572,7 +572,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 15)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 15)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 15)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N15
      Directory of A:\
@@ -600,7 +600,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 16)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 16)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 16)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N16
      Directory of A:\
@@ -629,7 +629,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 17)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 17)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 17)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N17
      Directory of A:\
@@ -650,7 +650,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 18)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 18)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 18)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N18
      Directory of A:\
@@ -681,7 +681,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 19)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 19)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 19)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N19
      Directory of A:\
@@ -706,7 +706,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 20)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 20)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 20)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N20
      Directory of A:\
@@ -728,7 +728,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 21)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 21)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 21)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N21
      Directory of A:\
@@ -759,7 +759,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 07 No. 22)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 22)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 07 No. 22)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL07N22
      Directory of A:\
@@ -787,7 +787,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 01)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 01)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 01)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N01
      Directory of A:\
@@ -813,7 +813,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 02)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 02)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 02)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N02
      Directory of A:\
@@ -837,7 +837,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 03)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 03)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 03)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N03
      Directory of A:\
@@ -862,7 +862,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 04)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 04)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 04)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N04
      Directory of A:\
@@ -887,7 +887,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 05)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 05)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 05)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N05
      Directory of A:\
@@ -916,7 +916,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 06)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 06)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 06)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N06
      Directory of A:\
@@ -952,7 +952,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 07)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 07)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 07)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N07
      Directory of A:\
@@ -980,7 +980,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 08)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 08)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 08)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N08
      Directory of A:\
@@ -1003,7 +1003,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 09)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 09)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 09)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N09
      Directory of A:\
@@ -1033,7 +1033,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 10)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 10)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 10)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N10
      Directory of A:\
@@ -1051,7 +1051,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 11)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 11)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 11)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N11
      Directory of A:\
@@ -1076,7 +1076,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 12)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 12)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 12)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N12
      Directory of A:\
@@ -1107,7 +1107,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 13)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 13)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 13)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N13
      Directory of A:\
@@ -1129,7 +1129,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 14)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 14)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 14)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N14
      Directory of A:\
@@ -1151,7 +1151,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 15)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 15)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 15)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N15
      Directory of A:\
@@ -1177,7 +1177,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 16)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 16)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 16)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N16
      Directory of A:\
@@ -1208,7 +1208,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 17)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 17)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 17)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N17
      Directory of A:\
@@ -1234,7 +1234,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 18)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 18)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 18)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N18
      Directory of A:\
@@ -1268,7 +1268,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 19)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 19)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 19)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N19
      Directory of A:\
@@ -1302,7 +1302,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 20)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 20)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 20)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N20
      Directory of A:\
@@ -1337,7 +1337,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 21)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 21)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 21)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N21
      Directory of A:\
@@ -1368,7 +1368,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 08 No. 22)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 22)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 08 No. 22)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL08N22
      Directory of A:\
@@ -1397,7 +1397,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 01)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 01)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 01)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N01
      Directory of A:\
@@ -1421,7 +1421,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 02)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 02)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 02)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N02
      Directory of A:\
@@ -1452,7 +1452,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 03)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 03)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 03)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N03
      Directory of A:\
@@ -1509,7 +1509,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 04)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 04)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 04)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N04
      Directory of A:\
@@ -1531,7 +1531,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 05)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 05)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 05)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N05
      Directory of A:\
@@ -1548,7 +1548,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 06)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 06)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 06)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N06
      Directory of A:\
@@ -1567,7 +1567,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 07)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 07)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 07)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N07
      Directory of A:\
@@ -1589,7 +1589,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 08)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 08)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 08)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N08
      Directory of A:\
@@ -1614,7 +1614,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 09)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 09)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 09)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N09
      Directory of A:\
@@ -1647,7 +1647,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 10)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 10)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 10)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N10
      Directory of A:\
@@ -1667,7 +1667,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 11)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 11)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 11)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N11
      Directory of A:\
@@ -1688,7 +1688,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 12)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 12)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 12)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N12
      Directory of A:\
@@ -1710,7 +1710,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 13)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 13)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 13)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N13
      Directory of A:\
@@ -1729,7 +1729,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 14)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 14)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 14)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N14
      Directory of A:\
@@ -1750,7 +1750,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 15)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 15)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 15)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N15
      Directory of A:\
@@ -1771,7 +1771,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 16)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 16)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 16)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N16
      Directory of A:\
@@ -1807,7 +1807,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 17)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 17)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 17)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N17
      Directory of A:\
@@ -1829,7 +1829,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 19)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 19)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 19)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N19
      Directory of A:\
@@ -1849,7 +1849,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 20)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 20)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 20)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N20
      Directory of A:\
@@ -1879,7 +1879,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 21)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 21)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 21)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N21
      Directory of A:\
@@ -1953,7 +1953,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 09 No. 22)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 22)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 09 No. 22)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL09N22
      Directory of A:\
@@ -1978,7 +1978,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 01)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 01)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 01)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N01
      Directory of A:\
@@ -2007,7 +2007,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 02)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 02)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 02)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N02
      Directory of A:\
@@ -2028,7 +2028,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 03)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 03)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 03)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N03
      Directory of A:\
@@ -2049,7 +2049,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 04)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 04)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 04)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N04
      Directory of A:\
@@ -2069,7 +2069,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 05)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 05)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 05)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N05
      Directory of A:\
@@ -2091,7 +2091,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 06)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 06)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 06)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N06
      Directory of A:\
@@ -2139,7 +2139,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 07)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 07)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 07)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N07
      Directory of A:\
@@ -2159,7 +2159,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 08)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 08)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 08)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N08
      Directory of A:\
@@ -2184,7 +2184,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 09)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 09)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 09)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N09
      Directory of A:\
@@ -2204,7 +2204,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 10)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 10)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 10)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N10
      Directory of A:\
@@ -2244,7 +2244,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 11)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 11)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 11)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N11
      Directory of A:\
@@ -2270,7 +2270,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 12)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 12)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 12)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N12
      Directory of A:\
@@ -2321,7 +2321,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 13)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 13)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 13)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N13
      Directory of A:\
@@ -2342,7 +2342,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 14)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 14)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 14)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N14
      Directory of A:\
@@ -2368,7 +2368,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 15)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 15)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 15)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N15
      Directory of A:\
@@ -2397,7 +2397,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 16)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 16)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 16)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N16
      Directory of A:\
@@ -2430,7 +2430,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 17)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 17)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 17)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N17
      Directory of A:\
@@ -2458,7 +2458,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 18)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 18)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 18)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N18
      Directory of A:\
@@ -2496,7 +2496,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 19)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 19)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 19)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N19
      Directory of A:\
@@ -2527,7 +2527,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 20)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 20)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 20)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N20
      Directory of A:\
@@ -2553,7 +2553,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 21)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 21)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 21)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N21
      Directory of A:\
@@ -2576,7 +2576,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 10 No. 22)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 22)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 10 No. 22)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL10N22
      Directory of A:\
@@ -2600,7 +2600,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 01)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 01)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 01)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N01
      Directory of A:\
@@ -2616,7 +2616,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 02)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 02)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 02)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N02
      Directory of A:\
@@ -2658,7 +2658,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 03)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 03)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 03)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N03
      Directory of A:\
@@ -2674,7 +2674,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 04)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 04)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 04)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N04
      Directory of A:\
@@ -2691,7 +2691,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 05)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 05)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 05)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N05
      Directory of A:\
@@ -2742,7 +2742,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 06)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 06)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 06)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N06
      Directory of A:\
@@ -2779,7 +2779,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 07)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 07)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 07)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N07
      Directory of A:\
@@ -2808,7 +2808,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 08)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 08)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 08)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N08
      Directory of A:\
@@ -2840,7 +2840,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 09)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 09)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 09)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N09
      Directory of A:\
@@ -2896,7 +2896,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 10)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 10)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 10)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N10
      Directory of A:\
@@ -2917,7 +2917,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 11)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 11)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 11)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N11
      Directory of A:\
@@ -2984,7 +2984,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 12)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 12)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 12)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N12
      Directory of A:\
@@ -3030,7 +3030,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 13)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 13)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 13)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N13
      Directory of A:\
@@ -3054,7 +3054,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 14)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 14)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 14)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N14
      Directory of A:\
@@ -3130,7 +3130,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 15)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 15)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 15)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N15
      Directory of A:\
@@ -3176,7 +3176,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 16)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 16)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 16)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N16
      Directory of A:\
@@ -3195,7 +3195,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 17)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 17)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 17)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N17
      Directory of A:\
@@ -3211,7 +3211,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 18)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 18)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 18)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N18
      Directory of A:\
@@ -3263,7 +3263,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 19)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 19)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 19)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N19
      Directory of A:\
@@ -3353,7 +3353,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 20)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 20)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 20)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N20
      Directory of A:\
@@ -3409,7 +3409,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 21)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 21)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 21)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N21
      Directory of A:\
@@ -3447,7 +3447,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 11 No. 22)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 22)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 11 No. 22)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL11N22
      Directory of A:\
@@ -3466,7 +3466,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 01)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 01)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 01)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N01
      Directory of A:\
@@ -3486,7 +3486,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 02)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 02)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 02)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N02
      Directory of A:\
@@ -3520,7 +3520,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 03)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 03)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 03)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N03
      Directory of A:\
@@ -3558,7 +3558,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 04)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 04)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 04)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N04
      Directory of A:\
@@ -3574,7 +3574,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 05)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 05)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 05)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N05
      Directory of A:\
@@ -3590,7 +3590,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 06)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 06)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 06)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N06
      Directory of A:\
@@ -3607,7 +3607,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 07)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 07)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 07)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N07
      Directory of A:\
@@ -3625,7 +3625,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 08)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 08)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 08)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N08
      Directory of A:\
@@ -3642,7 +3642,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 09)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 09)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 09)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N09
      Directory of A:\
@@ -3690,7 +3690,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 10)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 10)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 10)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N10
      Directory of A:\
@@ -3721,7 +3721,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 11)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 11)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 11)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N11
      Directory of A:\
@@ -3739,7 +3739,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 12)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 12)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 12)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N12
      Directory of A:\
@@ -3759,7 +3759,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 13)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 13)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 13)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N13
      Directory of A:\
@@ -3775,7 +3775,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 14)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 14)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 14)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N14
      Directory of A:\
@@ -3790,7 +3790,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 15)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 15)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 15)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N15
      Directory of A:\
@@ -3806,7 +3806,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 16)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 16)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 16)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N16
      Directory of A:\
@@ -3822,7 +3822,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 17)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 17)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 17)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N17
      Directory of A:\
@@ -3838,7 +3838,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 18)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 18)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 18)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N18
      Directory of A:\
@@ -3854,7 +3854,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 19)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 19)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 19)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N19
      Directory of A:\
@@ -3869,7 +3869,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 20)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 20)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 20)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N20
      Directory of A:\
@@ -3885,7 +3885,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 21)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 21)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 21)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N21
      Directory of A:\
@@ -3900,7 +3900,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 12 No. 22)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 22)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 12 No. 22)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL12N22
      Directory of A:\
@@ -3916,7 +3916,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 01)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 01)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 01)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N01
      Directory of A:\
@@ -3932,7 +3932,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 02)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 02)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 02)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N02
      Directory of A:\
@@ -3947,7 +3947,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 03)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 03)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 03)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N03
      Directory of A:\
@@ -3965,7 +3965,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 04)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 04)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 04)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N04
      Directory of A:\
@@ -3980,7 +3980,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 05)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 05)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 05)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N05
      Directory of A:\
@@ -3997,7 +3997,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 06)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 06)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 06)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N06
      Directory of A:\
@@ -4010,7 +4010,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 07)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 07)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 07)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N07
      Directory of A:\
@@ -4027,7 +4027,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 08)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 08)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 08)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N08
      Directory of A:\
@@ -4043,7 +4043,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 09)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 09)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 09)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N09
      Directory of A:\
@@ -4061,7 +4061,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 10)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 10)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 10)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N10
      Directory of A:\
@@ -4075,7 +4075,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 11)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 11)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 11)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N11
      Directory of A:\
@@ -4087,7 +4087,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 12)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 12)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 12)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N12
      Directory of A:\
@@ -4100,7 +4100,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 13)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 13)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 13)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N13
      Directory of A:\
@@ -4116,7 +4116,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 14)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 14)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 14)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N14
      Directory of A:\
@@ -4131,7 +4131,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 15)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 15)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 15)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N15
      Directory of A:\
@@ -4146,7 +4146,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 16)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 16)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 16)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N16
      Directory of A:\
@@ -4160,7 +4160,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 17)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 17)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 17)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N17
      Directory of A:\
@@ -4179,7 +4179,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 18)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 18)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 18)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N18
      Directory of A:\
@@ -4194,7 +4194,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 19)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 19)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 19)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N19
      Directory of A:\
@@ -4212,7 +4212,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 20)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 20)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 20)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N20
      Directory of A:\
@@ -4227,7 +4227,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 21)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 21)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 21)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N21
      Directory of A:\
@@ -4243,7 +4243,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 13 No. 22)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 22)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 13 No. 22)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL13N22
      Directory of A:\
@@ -4258,7 +4258,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 14 No. 01)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 01)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 01)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL14N01
      Directory of A:\
@@ -4274,7 +4274,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 14 No. 02)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 02)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 02)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL14N02
      Directory of A:\
@@ -4289,7 +4289,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 14 No. 03)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 03)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 03)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL14N03
      Directory of A:\
@@ -4306,7 +4306,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 14 No. 04)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 04)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 04)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL14N04
      Directory of A:\
@@ -4323,7 +4323,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 14 No. 05)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 05)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 05)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL14N05
      Directory of A:\
@@ -4344,7 +4344,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
 ### Directory of PC Magazine (Vol. 14 No. 06)
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 06)"; loadDisk FDC scroll' %}
+{% include machines/command.html type='button' label='Load Disk' machine='pcmag' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC Magazine (Vol. 14 No. 06)"; loadDisk FDC scroll' %}
 
      Volume in drive A is VOL14N06
      Directory of A:\

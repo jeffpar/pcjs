@@ -1,5 +1,5 @@
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -148,7 +148,7 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/message.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -205,7 +205,7 @@ MESSAGE.NAMES = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -763,7 +763,7 @@ Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "F
 Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/diskapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/diskapi.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -1002,7 +1002,7 @@ DiskAPI.ATTR = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -1062,7 +1062,7 @@ DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
  */
 
 const ReportAPI = {
@@ -1085,7 +1085,7 @@ const ReportAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/userapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/userapi.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -1127,7 +1127,7 @@ const UserAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/keys.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/keys.js (C) 2012-2023 Jeff Parsons
  */
 
 const Keys = {
@@ -1444,7 +1444,7 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -2199,7 +2199,7 @@ Str.format = new Format();
 Str.sprintf = Str.format.sprintf.bind(Str.format);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ mask: number, shift: number }} */
@@ -2446,7 +2446,7 @@ class Usr {
 Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -3631,7 +3631,7 @@ if (DEBUG) {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/component.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -5098,7 +5098,7 @@ if (!Function.prototype.bind) {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -6018,7 +6018,7 @@ PDP11.PSW.FLAGS         = (PDP11.PSW.NF | PDP11.PSW.ZF | PDP11.PSW.VF | PDP11.PS
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/message.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/message.js (C) 2012-2023 Jeff Parsons
  */
 
 MESSAGE.CPU         = 0x00000002;
@@ -6091,7 +6091,7 @@ MESSAGE.NAMES["computer"]   = MESSAGE.COMPUTER;
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -7391,7 +7391,7 @@ PanelPDP11.UNIBUS_IOTABLE = {
 Web.onInit(PanelPDP11.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -8794,7 +8794,7 @@ BusPDP11.IOController = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/device.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/device.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -10021,7 +10021,7 @@ DevicePDP11.UNIBUS_IOTABLE = {
 Web.onInit(DevicePDP11.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/memory.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/memory.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -11005,7 +11005,7 @@ var littleEndian = (TYPEDARRAYS? (function() {
 })() : false);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -12212,7 +12212,7 @@ CPUPDP11.YIELDS_PER_STATUS      = 15;           // every 15 yields (ie, twice pe
 CPUPDP11.BUTTONS = ["power", "reset"];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpustate.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/cpustate.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -15261,7 +15261,7 @@ class CPUStatePDP11 extends CPUPDP11 {
 Web.onInit(CPUStatePDP11.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpuops.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/cpuops.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -17773,7 +17773,7 @@ PDP11.aOp8DXn_1140 = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -18130,7 +18130,7 @@ class ROMPDP11 extends Component {
 Web.onInit(ROMPDP11.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -18517,7 +18517,7 @@ class RAMPDP11 extends Component {
 Web.onInit(RAMPDP11.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -18596,7 +18596,7 @@ KeyboardPDP11.MINPRESSTIME = 100;            // 100ms
 Web.onInit(KeyboardPDP11.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -19474,7 +19474,7 @@ SerialPortPDP11.UNIBUS_IOTABLE = {
 Web.onInit(SerialPortPDP11.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/pc11.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/pc11.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -20465,7 +20465,7 @@ PC11.UNIBUS_IOTABLE = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -21675,7 +21675,7 @@ class DiskPDP11 extends Component {
 DiskPDP11.nDisks = 0;
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/drive.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/drive.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -23002,7 +23002,7 @@ DriveController.SOURCE = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/rk11.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/rk11.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -23591,7 +23591,7 @@ RK11.UNIBUS_IOTABLE = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/rl11.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/rl11.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -24117,7 +24117,7 @@ RL11.UNIBUS_IOTABLE = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/rx11.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/rx11.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -24676,7 +24676,7 @@ RX11.UNIBUS_IOTABLE = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
@@ -26029,7 +26029,7 @@ DbgLib.EVENTS = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -30327,7 +30327,7 @@ if (DEBUGGER) {
 }   // endif DEBUGGER
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -31973,7 +31973,7 @@ Web.onShow(ComputerPDP11.show);
 Web.onExit(ComputerPDP11.exit);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/state.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/state.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -32340,7 +32340,7 @@ class State {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
  */
 
 /*

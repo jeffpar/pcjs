@@ -4,7 +4,7 @@ As discussed in /_posts/2017-01-03-pdp-11-tutorials.md, when a page (usually par
 wants to create a control that tests some feature of a machine, the page will define a machine command
 using a Liquid-style include that looks like this:
 
-    {%- include machine/command.html type='button' label='Try It!' machine='vt100' component='Keyboard' command='sendString' value='Hello World' -%}
+    {%- include machines/command.html type='button' label='Try It!' machine='vt100' component='Keyboard' command='sendString' value='Hello World' -%}
 
 and which should generate something like this:
 
@@ -12,7 +12,7 @@ and which should generate something like this:
 
 Alternatively, if the command parameter is the name of a machine script in the page's Front Matter, then this:
 
-    {%- include machine/command.html type='button' label='Try It!' machine='vt100' component='Keyboard' command='scriptName' -%}
+    {%- include machines/command.html type='button' label='Try It!' machine='vt100' component='Keyboard' command='scriptName' -%}
 
 should generate something like this:
 

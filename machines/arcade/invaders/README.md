@@ -13,7 +13,7 @@ machines:
     type: invaders
     name: Space Invaders
     config: /machines/arcade/invaders/invaders.json
-    layout: /_includes/invaders/invaders-diag.html
+    layout: /_includes/machines/invaders/invaders-diag.html
 ---
 
 This 8080-based PCjs machine emulates the original Space Invaders arcade machine.

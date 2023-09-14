@@ -8,7 +8,7 @@ machines:
     type: ti57
     name: TI-57 Programmable Calculator
     config: /machines/ti/ti57/rev0/ti57.json
-    layout: /_includes/ti57/ti57-diag.html
+    layout: /_includes/machines/ti57/ti57-diag.html
 ---
 
 The new [TI-57 Programmable Calculator](/machines/ti/ti57/) emulator, shown below, is the latest addition to the

@@ -10,7 +10,7 @@ machines:
     type: vt100
     name: DEC VT100
     config: /machines/dec/vt100/vt100.json
-    layout: /_includes/vt100/vt100-diag.html
+    layout: /_includes/machines/vt100/vt100-diag.html
 ---
 
 This is an updated PCjs emulation of the 8080-based DEC VT100 Terminal.

@@ -9,7 +9,7 @@ machines:
     unbundled: true
     name: TI-57 Programmable Calculator
     config: /machines/ti/ti57/rev0/ti57.json
-    layout: /_includes/ti57/ti57-diag.html
+    layout: /_includes/machines/ti57/ti57-diag.html
 ---
 
 The TI-57 emulator below is one of the most faithful TI-57 emulations currently available.  It should run at

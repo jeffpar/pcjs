@@ -9,7 +9,7 @@ machines:
     type: led
     name: Lite-Brite
     config: /machines/led/lite-brite-xmas.json
-    layout: /_includes/led/lite-brite.html
+    layout: /_includes/machines/led/lite-brite.html
 ---
 
 The [Lite-Brite](https://en.wikipedia.org/wiki/Lite-Brite) concept was invented by Joseph M. Burck at

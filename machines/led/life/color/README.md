@@ -9,7 +9,7 @@ machines:
     type: led
     name: Game of Life
     config: /machines/led/life-color.json
-    layout: /_includes/led/life-color.html
+    layout: /_includes/machines/led/life-color.html
 ---
 
 Here's a simple demo of

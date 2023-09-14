@@ -7,7 +7,7 @@ machines:
     type: palm-pilot
     name: Palm Pilot
     config: /machines/palm/pilot.json
-    layout: /_includes/palm/pilot-diag.html
+    layout: /_includes/machines/palm/pilot-diag.html
     unbundled: true
 ---
 

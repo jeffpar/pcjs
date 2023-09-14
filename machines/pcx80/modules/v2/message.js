@@ -7,10 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import DEFAULT from "../../../modules/v2/message.js";
-
-const MESSAGE = { ...DEFAULT };
-MESSAGE.NAMES = { ...DEFAULT.NAMES };
+import MESSAGE from "../../../modules/v2/message.js";
 
 MESSAGE.CPU         = 0x00000002;
 MESSAGE.BUS         = 0x00000004;
