@@ -7,8 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../../../modules/v3/device.js";
-import LED    from "../../../../modules/v3/led.js";
+import Device  from "../../../../modules/v3/device.js";
+import LED     from "../../../../modules/v3/led.js";
+import MESSAGE from "../../../../modules/v3/message.js";
 
 /**
  * @class VT100Serial
@@ -242,7 +243,7 @@ export default class VT100Serial extends Device {
      */
     receiveByte(b)
     {
-        this.printf(Device.MESSAGE.SERIAL, "receiveByte(%#04x): status=%#04x\n", b, this.bStatus);
+        this.printf(MESSAGE.SERIAL, "receiveByte(%#04x): status=%#04x\n", b, this.bStatus);
         if (!this.fAutoStop && !(this.bStatus & VT100Serial.UART8251.STATUS.RECV_FULL)) {
             if (this.cpu) {
                 this.bDataIn = b;
@@ -313,7 +314,7 @@ export default class VT100Serial extends Device {
     transmitByte(b)
     {
         let fTransmitted = false;
-        this.printf(Device.MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
+        this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
         if (this.fAutoXOFF) {
             if (b == 0x13) {        // XOFF
                 this.fAutoStop = true;
@@ -365,7 +366,7 @@ export default class VT100Serial extends Device {
     inData(port)
     {
         let value = this.bDataIn;
-        this.printf(Device.MESSAGE.SERIAL + Device.MESSAGE.PORTS, "inData(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inData(%#04x): %#04x\n", port, value);
         this.bStatus &= ~VT100Serial.UART8251.STATUS.RECV_FULL;
         return value;
     }
@@ -380,7 +381,7 @@ export default class VT100Serial extends Device {
     inStatus(port)
     {
         let value = this.bStatus;
-        this.printf(Device.MESSAGE.SERIAL + Device.MESSAGE.PORTS, "inStatus(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "inStatus(%#04x): %#04x\n", port, value);
         return value;
     }
 
@@ -393,7 +394,7 @@ export default class VT100Serial extends Device {
      */
     outData(port, value)
     {
-        this.printf(Device.MESSAGE.SERIAL + Device.MESSAGE.PORTS, "outData(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outData(%#04x): %#04x\n", port, value);
         this.bDataOut = value;
         this.bStatus &= ~(VT100Serial.UART8251.STATUS.XMIT_READY | VT100Serial.UART8251.STATUS.XMIT_EMPTY);
         /*
@@ -425,7 +426,7 @@ export default class VT100Serial extends Device {
      */
     outControl(port, value)
     {
-        this.printf(Device.MESSAGE.SERIAL + Device.MESSAGE.PORTS, "outControl(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outControl(%#04x): %#04x\n", port, value);
         if (!this.fReady) {
             this.bMode = value;
             this.fReady = true;
@@ -464,7 +465,7 @@ export default class VT100Serial extends Device {
      */
     outBaudRates(port, value)
     {
-        this.printf(Device.MESSAGE.SERIAL + Device.MESSAGE.PORTS, "outBaudRates(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.SERIAL + MESSAGE.PORTS, "outBaudRates(%#04x): %#04x\n", port, value);
         this.bBaudRates = value;
     }
 

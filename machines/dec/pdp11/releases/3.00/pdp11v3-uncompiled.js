@@ -89,25 +89,6 @@ const LITTLE_ENDIAN = function() {
 }();
 
 /**
- * List of standard message groups.  The messages properties defines the set of active message
- * groups, and their names are defined by MESSAGE_NAMES.  See the Device class for more message
- * group definitions.
- *
- * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
- */
-const MESSAGE = {
-    ALL:        0xffffffffffff,
-    NONE:       0x000000000000,
-    DEFAULT:    0x000000000000,
-    HALT:       0x000008000000,
-    INFO:       0x000010000000,
-    WARN:       0x000020000000,
-    ERROR:      0x000040000000,
-    DEBUG:      0x000080000000,
-    BUFFER:     0x800000000000,
-};
-
-/**
  * RS-232 DB-25 Pin Definitions, mapped to bits 1-25 in a 32-bit status value.
  *
  * Serial devices in PCjs machines are considered DTE (Data Terminal Equipment), which means they should be "virtually"
@@ -159,7 +140,6 @@ Defines.DEBUG           = DEBUG;
 Defines.FACTORY         = FACTORY;
 Defines.LITTLE_ENDIAN   = LITTLE_ENDIAN;
 Defines.MAXDEBUG        = MAXDEBUG;
-Defines.MESSAGE         = MESSAGE;
 Defines.REPOSITORY      = REPOSITORY;
 Defines.RS232           = RS232;
 Defines.VERSION         = VERSION;
@@ -184,6 +164,93 @@ Defines.Components = typeof window != "undefined"? window['PCjs']['components'] 
 
 Defines.CLASSES = {};
 Defines.CLASSES["Defines"] = Defines;
+
+
+/**
+ * @copyright https://www.pcjs.org/modules/v3/message.js (C) 2012-2023 Jeff Parsons
+ */
+
+/**
+ * List of standard message groups.  The messages properties defines the set of active message
+ * groups, and their names are defined by MESSAGE_NAMES.  See the Device class for more message
+ * group definitions.
+ *
+ * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
+ */
+const MESSAGE = {
+    ALL:            0xffffffffffff,
+    NONE:           0x000000000000,
+    DEFAULT:        0x000000000000,
+    ADDR:           0x000000000001,     // this is a special bit (bit 0) used to append address info to messages
+    BUS:            0x000000000002,
+    FAULT:          0x000000000004,
+    MEMORY:         0x000000000008,
+    PORTS:          0x000000000010,
+    CHIPS:          0x000000000020,
+    KBD:            0x000000000040,
+    SERIAL:         0x000000000080,
+    MISC:           0x000000000100,
+    CPU:            0x000000000200,
+    MMU:            0x000000000400,
+    INT:            0x000000000800,
+    TRAP:           0x000000001000,
+    VIDEO:          0x000000002000,     // used with video hardware messages (see video.js)
+    MONITOR:        0x000000004000,     // used with video monitor messages (see monitor.js)
+    SCREEN:         0x000000008000,     // used with screen-related messages (also monitor.js)
+    DISK:           0x000000010000,
+    FILE:           0x000000020000,
+    TIME:           0x000000040000,
+    TIMER:          0x000000080000,
+    EVENT:          0x000000100000,
+    INPUT:          0x000000200000,
+    KEY:            0x000000400000,
+    MOUSE:          0x000000800000,
+    TOUCH:          0x000001000000,
+    CUSTOM:         0x000100000000,     // all custom device messages must start here
+    HALT:           0x000008000000,
+    INFO:           0x000010000000,
+    WARN:           0x000020000000,
+    ERROR:          0x000040000000,
+    DEBUG:          0x000080000000,
+    BUFFER:         0x800000000000
+};
+
+/**
+ * NOTE: The first name is automatically omitted from global "on" and "off" operations.
+ */
+MESSAGE.NAMES = {
+    "all":      MESSAGE.ALL,
+    "addr":     MESSAGE.ADDR,
+    "bus":      MESSAGE.BUS,
+    "fault":    MESSAGE.FAULT,
+    "memory":   MESSAGE.MEMORY,
+    "ports":    MESSAGE.PORTS,
+    "chips":    MESSAGE.CHIPS,
+    "kbd":      MESSAGE.KBD,
+    "serial":   MESSAGE.SERIAL,
+    "misc":     MESSAGE.MISC,
+    "cpu":      MESSAGE.CPU,
+    "mmu":      MESSAGE.MMU,
+    "int":      MESSAGE.INT,
+    "trap":     MESSAGE.TRAP,
+    "video":    MESSAGE.VIDEO,
+    "monitor":  MESSAGE.MONITOR,
+    "screen":   MESSAGE.SCREEN,
+    "disk":     MESSAGE.DISK,
+    "file":     MESSAGE.FILE,
+    "time":     MESSAGE.TIME,
+    "timer":    MESSAGE.TIMER,
+    "event":    MESSAGE.EVENT,
+    "input":    MESSAGE.INPUT,
+    "key":      MESSAGE.KEY,
+    "mouse":    MESSAGE.MOUSE,
+    "touch":    MESSAGE.TOUCH,
+    "halt":     MESSAGE.HALT,
+    "info":     MESSAGE.INFO,
+    "warn":     MESSAGE.WARN,
+    "error":    MESSAGE.ERROR,
+    "buffer":   MESSAGE.BUFFER
+};
 
 
 /**
@@ -2468,11 +2535,11 @@ class WebIO extends StdIO {
                         aTokens[iToken] = "all";
                     }
                     if (aTokens[iToken] == "all") {
-                        aTokens = Object.keys(WebIO.MESSAGE_NAMES);
+                        aTokens = Object.keys(MESSAGE.NAMES);
                     }
                     for (let i = iToken; i < aTokens.length; i++) {
                         token = aTokens[i];
-                        message = WebIO.MESSAGE_NAMES[token];
+                        message = MESSAGE.NAMES[token];
                         if (!message) {
                             result += "unrecognized message: " + token + '\n';
                             break;
@@ -2484,7 +2551,7 @@ class WebIO extends StdIO {
                             result += this.sprintf("%8s: %b\n", token, this.isMessageOn(message));
                         }
                     }
-                    if (this.isMessageOn(WebIO.MESSAGE.BUFFER)) {
+                    if (this.isMessageOn(MESSAGE.BUFFER)) {
                         result += "all messages will be buffered until buffer is turned off\n";
                     }
                     if (!result) result = "no messages\n";
@@ -2555,7 +2622,7 @@ class WebIO extends StdIO {
     print(s, fBuffer)
     {
         if (fBuffer == undefined) {
-            fBuffer = this.isMessageOn(WebIO.MESSAGE.BUFFER);
+            fBuffer = this.isMessageOn(MESSAGE.BUFFER);
         }
         if (!fBuffer) {
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
@@ -2612,10 +2679,10 @@ class WebIO extends StdIO {
             format = args.shift();
         }
         if (this.isMessageOn(messages)) {
-            if (this.testBits(messages, WebIO.MESSAGE.ERROR)) {
+            if (this.testBits(messages, MESSAGE.ERROR)) {
                 format = "error: " + format;
             }
-            if (this.testBits(messages, WebIO.MESSAGE.WARN)) {
+            if (this.testBits(messages, MESSAGE.WARN)) {
                 format = "warning: " + format;
             }
             return super.printf(format, ...args);
@@ -2696,7 +2763,7 @@ class WebIO extends StdIO {
         if (on) {
             this.machine.messages = this.setBits(this.machine.messages, messages);
         } else {
-            flush = (this.testBits(this.machine.messages, WebIO.MESSAGE.BUFFER) && this.testBits(messages, WebIO.MESSAGE.BUFFER));
+            flush = (this.testBits(this.machine.messages, MESSAGE.BUFFER) && this.testBits(messages, MESSAGE.BUFFER));
             this.machine.messages = this.clearBits(this.machine.messages, messages);
         }
         if (flush) this.flush();
@@ -2722,14 +2789,6 @@ WebIO.MESSAGE_COMMANDS = [
     "m all [on|off]\tturn all messages on or off",
     "m ... [on|off]\tturn selected messages on or off"
 ];
-
-/**
- * NOTE: The first name is automatically omitted from global "on" and "off" operations.
- */
-WebIO.MESSAGE_NAMES = {
-    "all":      WebIO.MESSAGE.ALL,
-    "buffer":   WebIO.MESSAGE.BUFFER
-};
 
 WebIO.HANDLER = {
     COMMAND:    "command"
@@ -3626,7 +3685,7 @@ class Device extends WebIO {
             if (this.dbg) {
                 this.dbg.notifyMessage(format);
             }
-            if (this.machine.messages & Device.MESSAGE.ADDR) {
+            if (this.machine.messages & MESSAGE.ADDR) {
                 /**
                  * Same rules as above apply here.  Hopefully no message-based printf() calls will arrive with MESSAGE.ADDR
                  * set *before* the CPU device has been initialized.
@@ -3674,68 +3733,6 @@ class Device extends WebIO {
         return false;
     }
 }
-
-/**
- * List of additional message groups, extending the base set defined in webio.js.
- *
- * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
- */
-Device.MESSAGE.ADDR             = 0x000000000001;       // this is a special bit (bit 0) used to append address info to messages
-Device.MESSAGE.BUS              = 0x000000000002;
-Device.MESSAGE.FAULT            = 0x000000000004;
-Device.MESSAGE.MEMORY           = 0x000000000008;
-Device.MESSAGE.PORTS            = 0x000000000010;
-Device.MESSAGE.CHIPS            = 0x000000000020;
-Device.MESSAGE.KBD              = 0x000000000040;
-Device.MESSAGE.SERIAL           = 0x000000000080;
-Device.MESSAGE.MISC             = 0x000000000100;
-Device.MESSAGE.CPU              = 0x000000000200;
-Device.MESSAGE.MMU              = 0x000000000400;
-Device.MESSAGE.INT              = 0x000000000800;
-Device.MESSAGE.TRAP             = 0x000000001000;
-Device.MESSAGE.VIDEO            = 0x000000002000;       // used with video hardware messages (see video.js)
-Device.MESSAGE.MONITOR          = 0x000000004000;       // used with video monitor messages (see monitor.js)
-Device.MESSAGE.SCREEN           = 0x000000008000;       // used with screen-related messages (also monitor.js)
-Device.MESSAGE.DISK             = 0x000000010000;
-Device.MESSAGE.FILE             = 0x000000020000;
-Device.MESSAGE.TIME             = 0x000000040000;
-Device.MESSAGE.TIMER            = 0x000000080000;
-Device.MESSAGE.EVENT            = 0x000000100000;
-Device.MESSAGE.INPUT            = 0x000000200000;
-Device.MESSAGE.KEY              = 0x000000400000;
-Device.MESSAGE.MOUSE            = 0x000000800000;
-Device.MESSAGE.TOUCH            = 0x000001000000;
-Device.MESSAGE.CUSTOM           = 0x000100000000;       // all custom device messages must start here
-
-Device.MESSAGE_NAMES["addr"]    = Device.MESSAGE.ADDR;
-Device.MESSAGE_NAMES["bus"]     = Device.MESSAGE.BUS;
-Device.MESSAGE_NAMES["fault"]   = Device.MESSAGE.FAULT;
-Device.MESSAGE_NAMES["memory"]  = Device.MESSAGE.MEMORY;
-Device.MESSAGE_NAMES["ports"]   = Device.MESSAGE.PORTS;
-Device.MESSAGE_NAMES["chips"]   = Device.MESSAGE.CHIPS;
-Device.MESSAGE_NAMES["kbd"]     = Device.MESSAGE.KBD;
-Device.MESSAGE_NAMES["serial"]  = Device.MESSAGE.SERIAL;
-Device.MESSAGE_NAMES["misc"]    = Device.MESSAGE.MISC;
-Device.MESSAGE_NAMES["cpu"]     = Device.MESSAGE.CPU;
-Device.MESSAGE_NAMES["mmu"]     = Device.MESSAGE.MMU;
-Device.MESSAGE_NAMES["int"]     = Device.MESSAGE.INT;
-Device.MESSAGE_NAMES["trap"]    = Device.MESSAGE.TRAP;
-Device.MESSAGE_NAMES["video"]   = Device.MESSAGE.VIDEO;
-Device.MESSAGE_NAMES["monitor"] = Device.MESSAGE.MONITOR;
-Device.MESSAGE_NAMES["screen"]  = Device.MESSAGE.SCREEN;
-Device.MESSAGE_NAMES["disk"]    = Device.MESSAGE.DISK;
-Device.MESSAGE_NAMES["file"]    = Device.MESSAGE.FILE;
-Device.MESSAGE_NAMES["time"]    = Device.MESSAGE.TIME;
-Device.MESSAGE_NAMES["timer"]   = Device.MESSAGE.TIMER;
-Device.MESSAGE_NAMES["event"]   = Device.MESSAGE.EVENT;
-Device.MESSAGE_NAMES["input"]   = Device.MESSAGE.INPUT;
-Device.MESSAGE_NAMES["key"]     = Device.MESSAGE.KEY;
-Device.MESSAGE_NAMES["mouse"]   = Device.MESSAGE.MOUSE;
-Device.MESSAGE_NAMES["touch"]   = Device.MESSAGE.TOUCH;
-Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
-Device.MESSAGE_NAMES["info"]    = Device.MESSAGE.INFO;
-Device.MESSAGE_NAMES["warn"]    = Device.MESSAGE.WARN;
-Device.MESSAGE_NAMES["error"]   = Device.MESSAGE.ERROR;
 
 Device.CLASSES["Device"] = Device;
 
@@ -3819,7 +3816,7 @@ class Input extends Device {
     {
         super(idMachine, idDevice, config);
 
-        this.messages = Device.MESSAGE.INPUT;
+        this.messages = MESSAGE.INPUT;
         this.onInput = this.onHover = null;
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.machine = /** @type {Machine} */ (this.findDeviceByClass("Machine"));
@@ -4384,7 +4381,7 @@ class Input extends Device {
          */
         let printEvent = function(type, code, used) {
             let activeElement = document.activeElement;
-            input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "%s.onKey%s(%d): %5.2f (%s)\n", activeElement.id || activeElement.nodeName, type, code, (Date.now() / 1000) % 60, used != undefined? (used? "used" : "unused") : "ignored");
+            input.printf(MESSAGE.KEY + MESSAGE.EVENT, "%s.onKey%s(%d): %5.2f (%s)\n", activeElement.id || activeElement.nodeName, type, code, (Date.now() / 1000) % 60, used != undefined? (used? "used" : "unused") : "ignored");
         };
 
         element.addEventListener(
@@ -4439,13 +4436,13 @@ class Input extends Device {
             element.addEventListener(
                 'blur',
                 function onBlur(event) {
-                    input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "onBlur(%s)\n", event.target.id || event.target.nodeName);
+                    input.printf(MESSAGE.KEY + MESSAGE.EVENT, "onBlur(%s)\n", event.target.id || event.target.nodeName);
                 }
             );
             element.addEventListener(
                 'focus',
                 function onFocus(event) {
-                    input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "onFocus(%s)\n", event.target.id || event.target.nodeName);
+                    input.printf(MESSAGE.KEY + MESSAGE.EVENT, "onFocus(%s)\n", event.target.id || event.target.nodeName);
                 }
             );
         }
@@ -4639,7 +4636,7 @@ class Input extends Device {
             this.aActiveKeys.push({
                 keyNum, msDown, autoRelease
             });
-            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "addActiveKey(keyNum=%d,autoRelease=%b)\n", keyNum, autoRelease);
+            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "addActiveKey(keyNum=%d,autoRelease=%b)\n", keyNum, autoRelease);
         } else {
             this.aActiveKeys[i].msDown = msDown;
             this.aActiveKeys[i].autoRelease = autoRelease;
@@ -4688,10 +4685,10 @@ class Input extends Device {
                 this.checkAutoRelease();
                 return;
             }
-            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "removeActiveKey(keyNum=%d,duration=%dms,autoRelease=%b)\n", keyNum, msDuration, activeKey.autoRelease);
+            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "removeActiveKey(keyNum=%d,duration=%dms,autoRelease=%b)\n", keyNum, msDuration, activeKey.autoRelease);
             this.aActiveKeys.splice(i, 1);
         } else {
-            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "removeActiveKey(keyNum=%d): up without down?\n", keyNum);
+            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "removeActiveKey(keyNum=%d): up without down?\n", keyNum);
         }
     }
 
@@ -5070,7 +5067,7 @@ class Input extends Device {
          */
         let focusElement = this.altFocus? this.altFocusElement : this.focusElement;
         if (focusElement && this.machine.isReady()) {
-            this.printf(Device.MESSAGE.INPUT, 'setFocus("%s")\n', focusElement.id || focusElement.nodeName);
+            this.printf(MESSAGE.INPUT, 'setFocus("%s")\n', focusElement.id || focusElement.nodeName);
             focusElement.focus();
             focusElement.scrollIntoView();      // one would have thought focus() would do this, but apparently not....
         }
@@ -6546,7 +6543,7 @@ class Time extends Device {
         let nCyclesPerSecond = mhz * 1000000;
         if (nCycles && msElapsed) {
             mhz = (nCycles / (msElapsed * 10)) / 100;
-            this.printf(Device.MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
+            this.printf(MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
             if (msFrame > this.msFrameDefault) {
                 if (this.nTargetMultiplier > 1) {
                     /**
@@ -6556,7 +6553,7 @@ class Time extends Device {
                      * reach 90% of our original target and revert back to the base multiplier.
                      */
                     this.nTargetMultiplier >>= 1;
-                    this.printf(Device.MESSAGE.WARN, "frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
+                    this.printf(MESSAGE.WARN, "frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
                 }
                 /**
                  * If we (potentially) took too long on this last run, we pass that time back as an adjustment,
@@ -6583,7 +6580,7 @@ class Time extends Device {
          */
         let nDivisor = this.nCurrentMultiplier / this.nTargetMultiplier;
         this.nCyclesDepositPerFrame = (nCyclesPerSecond / nDivisor / this.nFramesPerSecond) + 0.00000001;
-        this.printf(Device.MESSAGE.TIME, "nCyclesDepositPerFrame(%5.3f) = nCyclesPerSecond(%d) / nDivisor(%5.3f) / nFramesPerSecond(%d)\n", this.nCyclesDepositPerFrame, nCyclesPerSecond, nDivisor, this.nFramesPerSecond);
+        this.printf(MESSAGE.TIME, "nCyclesDepositPerFrame(%5.3f) = nCyclesPerSecond(%d) / nDivisor(%5.3f) / nFramesPerSecond(%d)\n", this.nCyclesDepositPerFrame, nCyclesPerSecond, nDivisor, this.nFramesPerSecond);
         return msAdjust;
     }
 
@@ -6717,7 +6714,7 @@ class Time extends Device {
                 nCycles = (this.nCyclesDeposited += this.nCyclesDepositPerFrame);
             }
             if (nCycles < 0) {
-                this.printf(Device.MESSAGE.TIME, "warning: cycle count dropped below zero: %f\n", nCycles);
+                this.printf(MESSAGE.TIME, "warning: cycle count dropped below zero: %f\n", nCycles);
                 nCycles = this.nCyclesDeposited = 0;
             }
             nCycles |= 0;
@@ -6764,7 +6761,7 @@ class Time extends Device {
      */
     getSpeedCurrent()
     {
-        this.printf(Device.MESSAGE.TIME, "getSpeedCurrent(%5.3fhz)\n", this.mhzCurrent * 1000000);
+        this.printf(MESSAGE.TIME, "getSpeedCurrent(%5.3fhz)\n", this.mhzCurrent * 1000000);
         return (this.fRunning && this.mhzCurrent)? this.getSpeed(this.mhzCurrent) : "Stopped";
     }
 
@@ -7051,7 +7048,7 @@ class Time extends Device {
             let msDeltaRun = msStartThisRun - this.msStartThisRun - this.msFrameDefault;
             if (msDeltaRun > this.msFrameDefault) {
                 this.msStartRun += msDeltaRun;
-                this.printf(Device.MESSAGE.WARN, "browser throttling detected, compensating by %5.3fms\n", msDeltaRun);
+                this.printf(MESSAGE.WARN, "browser throttling detected, compensating by %5.3fms\n", msDeltaRun);
             }
         }
         this.msStartThisRun = msStartThisRun;
@@ -7600,7 +7597,7 @@ class Bus extends Device {
              * We must call the Debugger's printf() instead of our own in order to use its custom formatters (eg, %n).
              */
             if (this.dbg) {
-                this.dbg.printf(Device.MESSAGE.FAULT, "bus fault (%d) at %n\n", reason, addr);
+                this.dbg.printf(MESSAGE.FAULT, "bus fault (%d) at %n\n", reason, addr);
             }
             if (this.faultHandler) {
                 this.faultHandler(addr, reason);
@@ -9374,7 +9371,7 @@ class Ports extends Memory {
         }
         if (!read) {
             this.bus.fault(port, 0);
-            this.printf(Memory.MESSAGE.PORTS + Memory.MESSAGE.MISC, "readNone(%#04x): unknown port\n", port);
+            this.printf(MESSAGE.PORTS + MESSAGE.MISC, "readNone(%#04x): unknown port\n", port);
             value = super.readNone(offset);
         }
         return value;
@@ -9424,7 +9421,7 @@ class Ports extends Memory {
         }
         if (!written) {
             this.bus.fault(port, 1);
-            this.printf(Memory.MESSAGE.PORTS + Memory.MESSAGE.MISC, "writeNone(%#04x,%#04x): unknown port\n", port, value);
+            this.printf(MESSAGE.PORTS + MESSAGE.MISC, "writeNone(%#04x,%#04x): unknown port\n", port, value);
             super.writeNone(offset, value);
         }
     }
@@ -10137,7 +10134,7 @@ class Debugger extends Device {
          * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
          * but there is currently no UI for that.
          */
-        this.messagesBreak = Device.MESSAGE.NONE;
+        this.messagesBreak = MESSAGE.NONE;
 
         /**
          * variables is an object with properties that grow as setVariable() assigns more variables;
@@ -11788,7 +11785,7 @@ class Debugger extends Device {
         if (option) {
             let on = this.parseBoolean(option);
             if (on != undefined) {
-                this.messagesBreak = on? Device.MESSAGE.ALL : Device.MESSAGE.NONE;
+                this.messagesBreak = on? MESSAGE.ALL : MESSAGE.NONE;
             } else {
                 result = this.sprintf("unrecognized message option: %s\n", option);
             }
@@ -16102,7 +16099,7 @@ class PDP11 extends PDP11Ops {
     {
         if (irq) {
             this.insertIRQ(irq);
-            this.printf(PDP11.MESSAGE.INT + irq.message, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
+            this.printf(MESSAGE.INT + irq.message, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
         }
     }
 
@@ -16116,7 +16113,7 @@ class PDP11 extends PDP11Ops {
     {
         if (irq) {
             this.removeIRQ(irq);
-            this.printf(PDP11.MESSAGE.INT + irq.message, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
+            this.printf(MESSAGE.INT + irq.message, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
         }
     }
 
@@ -16606,7 +16603,7 @@ class PDP11 extends PDP11Ops {
      */
     trap(vector, flag, reason)
     {
-        this.printf(PDP11.MESSAGE.TRAP, "trap to vector %o (%o: %s)\n", vector, reason, reason < 0? PDP11.REASONS[-reason] : "BUS ERROR");
+        this.printf(MESSAGE.TRAP, "trap to vector %o (%o: %s)\n", vector, reason, reason < 0? PDP11.REASONS[-reason] : "BUS ERROR");
 
         if (this.nDisableTraps) return;
 
@@ -19547,8 +19544,8 @@ IOPage.CLASSES["IOPage"] = IOPage;
  * @copyright https://www.pcjs.org/modules/v3/dl11.js (C) 2012-2023 Jeff Parsons
  */
 
-Device.MESSAGE.DL11             = 0x000100000000;
-Device.MESSAGE_NAMES["dl11"]    = Device.MESSAGE.DL11;
+MESSAGE.DL11            = 0x000100000000;
+MESSAGE.NAMES["dl11"]   = MESSAGE.DL11;
 
 /**
  * @class DL11
@@ -19700,8 +19697,8 @@ class DL11 extends Device {
     {
         if (!this.cpu) {
             this.cpu = /** @type {PDP11} */ (this.findDeviceByClass("CPU"));
-            this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, DL11.MESSAGE.SERIAL);
-            this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, DL11.MESSAGE.SERIAL);
+            this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, MESSAGE.SERIAL);
+            this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, MESSAGE.SERIAL);
         }
     }
 
@@ -19748,7 +19745,7 @@ class DL11 extends Device {
      */
     receiveByte(b)
     {
-        this.printf(DL11.MESSAGE.SERIAL, "receiveByte(%#04x)\n", b);
+        this.printf(MESSAGE.SERIAL, "receiveByte(%#04x)\n", b);
         if (!this.fAutoStop) {
             this.regRBUF = b;
             if (!(this.regRCSR & PDP11.DL11.RCSR.RD)) {
@@ -19849,7 +19846,7 @@ class DL11 extends Device {
     transmitByte(b)
     {
         let fTransmitted = false;
-        this.printf(DL11.MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
+        this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
         if (this.fAutoXOFF) {
             if (b == 0x13) {        // XOFF
                 this.fAutoStop = true;
@@ -20047,8 +20044,8 @@ DL11.CLASSES["DL11"] = DL11;
  * @copyright https://www.pcjs.org/modules/v3/pc11.js (C) 2012-2023 Jeff Parsons
  */
 
-Device.MESSAGE.PC11             = 0x000200000000;
-Device.MESSAGE_NAMES["pc11"]    = Device.MESSAGE.PC11;
+MESSAGE.PC11            = 0x000200000000;
+MESSAGE.NAMES["pc11"]   = MESSAGE.PC11;
 
 /** @typedef {{ name: string, autoLoad: (Media|string), baudReceive: number, baudTransmit: (number|undefined), library: (Array.<Media>|string), mediaLoaded: (Media|null) }} */
 let PC11Config;
@@ -20262,7 +20259,7 @@ class PC11 extends Device {
     {
         if (!this.cpu) {
             this.cpu = /** @type {PDP11} */ (this.findDeviceByClass("CPU"));
-            this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, Device.MESSAGE.PC11);
+            this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, MESSAGE.PC11);
         }
     }
 
@@ -20296,7 +20293,7 @@ class PC11 extends Device {
         let name = media['name'];
         let path = media['path'];
 
-        this.printf(Device.MESSAGE.PC11, 'load("%s","%s")\n', name, path);
+        this.printf(MESSAGE.PC11, 'load("%s","%s")\n', name, path);
 
         if (!path) {
             this.unloadMedia(false);
@@ -20573,11 +20570,11 @@ class PC11 extends Device {
                 }
                 let offBlock = off;
                 if (w != 0x0001) {
-                    this.printf(Device.MESSAGE.PC11, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
+                    this.printf(MESSAGE.PC11, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
                     break;
                 }
                 if (off + 6 >= aBytes.length) {
-                    this.printf(Device.MESSAGE.PC11, "invalid block at offset %#06x\n", offBlock);
+                    this.printf(MESSAGE.PC11, "invalid block at offset %#06x\n", offBlock);
                     break;
                 }
                 off += 2;
@@ -20591,12 +20588,12 @@ class PC11 extends Device {
                     len--;
                 }
                 if (len != 0 || off >= aBytes.length) {
-                    this.printf(Device.MESSAGE.PC11, "insufficient data for block at offset %#06x\n", offBlock);
+                    this.printf(MESSAGE.PC11, "insufficient data for block at offset %#06x\n", offBlock);
                     break;
                 }
                 checksum += aBytes[off++] & 0xff;
                 if (checksum & 0xff) {
-                    this.printf(Device.MESSAGE.PC11, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
+                    this.printf(MESSAGE.PC11, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
                     break;
                 }
                 if (!cbData) {
@@ -20605,9 +20602,9 @@ class PC11 extends Device {
                     } else {
                         if (addrExec == null) addrExec = addr;
                     }
-                    if (addrExec != null) this.printf(Device.MESSAGE.PC11, "starting address: %#06x\n", addrExec);
+                    if (addrExec != null) this.printf(MESSAGE.PC11, "starting address: %#06x\n", addrExec);
                 } else {
-                    this.printf(Device.MESSAGE.PC11, "loading %#06x bytes at %#06x-%#06x\n", cbData, addr, addr + cbData);
+                    this.printf(MESSAGE.PC11, "loading %#06x bytes at %#06x-%#06x\n", cbData, addr, addr + cbData);
                     while (cbData--) {
                         this.bus.writeDirect(addr++, aBytes[offData++] & 0xff);
                     }
@@ -20706,7 +20703,7 @@ class PC11 extends Device {
                      * the data assigned to PRB with 0xff.
                      */
                     this.regPRB = this.aTapeData[this.iTapeData] & 0xff;
-                    this.printf(Device.MESSAGE.PC11, "%s.advanceReader(%d): %#02x\n", this.idDevice, this.iTapeData, this.regPRB);
+                    this.printf(MESSAGE.PC11, "%s.advanceReader(%d): %#02x\n", this.idDevice, this.iTapeData, this.regPRB);
                     this.iTapeData++;
                     this.displayProgress(this.iTapeData / this.aTapeData.length * 100);
                 }
@@ -21021,7 +21018,7 @@ class Machine extends Device {
          * One alternative is to hard-code any MESSAGE groups here, to ensure that the relevant messages
          * from all device constructors get displayed.
          */
-        this.messages = Device.DEBUG? Device.MESSAGE.WARN : Device.MESSAGE.DEFAULT;
+        this.messages = Device.DEBUG? MESSAGE.WARN : MESSAGE.DEFAULT;
 
         sConfig = sConfig.trim();
         if (sConfig[0] == '{') {

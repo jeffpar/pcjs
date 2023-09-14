@@ -7,8 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Input from "../../../../modules/v3/input.js";
-import Ports from "../../../../modules/v3/ports.js";
+import Input   from "../../../../modules/v3/input.js";
+import Ports   from "../../../../modules/v3/ports.js";
+import MESSAGE from "../../../../modules/v3/message.js";
 
 /**
  * @typedef {PortsConfig} InvadersPortsConfig
@@ -186,7 +187,7 @@ export default class InvadersPorts extends Ports {
     inStatus0(port)
     {
         let value = this.bStatus0;
-        this.printf(Ports.MESSAGE.BUS, "inStatus0(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.BUS, "inStatus0(%#04x): %#04x\n", port, value);
         return value;
     }
 
@@ -200,7 +201,7 @@ export default class InvadersPorts extends Ports {
     inStatus1(port)
     {
         let value = this.bStatus1;
-        this.printf(Ports.MESSAGE.PORTS, "inStatus1(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.PORTS, "inStatus1(%#04x): %#04x\n", port, value);
         return value;
     }
 
@@ -214,7 +215,7 @@ export default class InvadersPorts extends Ports {
     inStatus2(port)
     {
         let value = this.bStatus2 | (this.switches & (InvadersPorts.STATUS2.DIP1_2 | InvadersPorts.STATUS2.DIP4 | InvadersPorts.STATUS2.DIP7));
-        this.printf(Ports.MESSAGE.PORTS, "inStatus2(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.PORTS, "inStatus2(%#04x): %#04x\n", port, value);
         return value;
     }
 
@@ -228,7 +229,7 @@ export default class InvadersPorts extends Ports {
     inShiftResult(port)
     {
         let value = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
-        this.printf(Ports.MESSAGE.PORTS, "inShiftResult(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.PORTS, "inShiftResult(%#04x): %#04x\n", port, value);
         return value;
     }
 
@@ -241,7 +242,7 @@ export default class InvadersPorts extends Ports {
      */
     outShiftCount(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outShiftCount(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.PORTS, "outShiftCount(%#04x): %#04x\n", port, value);
         this.bShiftCount = value;
     }
 
@@ -254,7 +255,7 @@ export default class InvadersPorts extends Ports {
      */
     outSound1(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outSound1(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.PORTS, "outSound1(%#04x): %#04x\n", port, value);
         this.bSound1 = value;
     }
 
@@ -267,7 +268,7 @@ export default class InvadersPorts extends Ports {
      */
     outShiftData(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outShiftData(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.PORTS, "outShiftData(%#04x): %#04x\n", port, value);
         this.wShiftData = (value << 8) | (this.wShiftData >> 8);
     }
 
@@ -280,7 +281,7 @@ export default class InvadersPorts extends Ports {
      */
     outSound2(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outSound2(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.PORTS, "outSound2(%#04x): %#04x\n", port, value);
         this.bSound2 = value;
     }
 
@@ -293,7 +294,7 @@ export default class InvadersPorts extends Ports {
      */
     outWatchdog(port, value)
     {
-        this.printf(Ports.MESSAGE.PORTS, "outWatchDog(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.PORTS, "outWatchDog(%#04x): %#04x\n", port, value);
     }
 }
 

@@ -7,8 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "./device.js";
-import Memory from "./memory.js";
+import Device  from "./device.js";
+import Memory  from "./memory.js";
+import MESSAGE from "./message.js";
 
 /**
  * DebuggerConfig properties
@@ -316,7 +317,7 @@ export default class Debugger extends Device {
          * If set to MESSAGE.ALL, then we break on all messages.  It can be set to a subset of message bits,
          * but there is currently no UI for that.
          */
-        this.messagesBreak = Device.MESSAGE.NONE;
+        this.messagesBreak = MESSAGE.NONE;
 
         /**
          * variables is an object with properties that grow as setVariable() assigns more variables;
@@ -1967,7 +1968,7 @@ export default class Debugger extends Device {
         if (option) {
             let on = this.parseBoolean(option);
             if (on != undefined) {
-                this.messagesBreak = on? Device.MESSAGE.ALL : Device.MESSAGE.NONE;
+                this.messagesBreak = on? MESSAGE.ALL : MESSAGE.NONE;
             } else {
                 result = this.sprintf("unrecognized message option: %s\n", option);
             }

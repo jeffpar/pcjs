@@ -94,25 +94,6 @@ const LITTLE_ENDIAN = function() {
 }();
 
 /**
- * List of standard message groups.  The messages properties defines the set of active message
- * groups, and their names are defined by MESSAGE_NAMES.  See the Device class for more message
- * group definitions.
- *
- * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
- */
-const MESSAGE = {
-    ALL:        0xffffffffffff,
-    NONE:       0x000000000000,
-    DEFAULT:    0x000000000000,
-    HALT:       0x000008000000,
-    INFO:       0x000010000000,
-    WARN:       0x000020000000,
-    ERROR:      0x000040000000,
-    DEBUG:      0x000080000000,
-    BUFFER:     0x800000000000,
-};
-
-/**
  * RS-232 DB-25 Pin Definitions, mapped to bits 1-25 in a 32-bit status value.
  *
  * Serial devices in PCjs machines are considered DTE (Data Terminal Equipment), which means they should be "virtually"
@@ -164,7 +145,6 @@ Defines.DEBUG           = DEBUG;
 Defines.FACTORY         = FACTORY;
 Defines.LITTLE_ENDIAN   = LITTLE_ENDIAN;
 Defines.MAXDEBUG        = MAXDEBUG;
-Defines.MESSAGE         = MESSAGE;
 Defines.REPOSITORY      = REPOSITORY;
 Defines.RS232           = RS232;
 Defines.VERSION         = VERSION;
@@ -190,4 +170,4 @@ Defines.Components = typeof window != "undefined"? window['PCjs']['components'] 
 Defines.CLASSES = {};
 Defines.CLASSES["Defines"] = Defines;
 
-export { Defines, COMMAND, COMPILED, COPYRIGHT, DEBUG, FACTORY, LITTLE_ENDIAN, MAXDEBUG, MESSAGE, REPOSITORY, RS232, VERSION };
+export { Defines, COMMAND, COMPILED, COPYRIGHT, DEBUG, FACTORY, LITTLE_ENDIAN, MAXDEBUG, REPOSITORY, RS232, VERSION };

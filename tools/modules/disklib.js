@@ -18,6 +18,7 @@ import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import FileLib    from "../../machines/modules/v2/filelib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
+import MESSAGE    from "../../machines/modules/v3/message.js";
 import CharSet    from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 
@@ -27,6 +28,12 @@ let sprintf = device.sprintf.bind(device);
 
 export { device, printf, sprintf };
 
+/**
+ * printError(err, filename)
+ *
+ * @param {Error} err
+ * @param {string} [filename]
+ */
 export function printError(err, filename)
 {
     let msg = err.message || err.stack;
@@ -578,11 +585,11 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, driveInfo, d
                 if (CharSet.isText(data)) {
                     let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
                     if (dataNew != data) {
-                        printf(Device.MESSAGE.FILE + Device.MESSAGE.INFO, "replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
+                        printf(MESSAGE.FILE + MESSAGE.INFO, "replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
                     }
                     data = dataNew;
                 } else {
-                    printf(Device.MESSAGE.FILE + Device.MESSAGE.INFO, "non-ASCII data in %s (line endings unchanged)\n", sName);
+                    printf(MESSAGE.FILE + MESSAGE.INFO, "non-ASCII data in %s (line endings unchanged)\n", sName);
                 }
                 data = new DataBuffer(data);
             } else {

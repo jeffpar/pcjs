@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "./device.js";
+import Device  from "./device.js";
+import MESSAGE from "./message.js";
 
 /**
  * Timer objects
@@ -319,7 +320,7 @@ export default class Time extends Device {
         let nCyclesPerSecond = mhz * 1000000;
         if (nCycles && msElapsed) {
             mhz = (nCycles / (msElapsed * 10)) / 100;
-            this.printf(Device.MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
+            this.printf(MESSAGE.TIME, "calcSpeed(%d cycles, %5.3fms): %5.3fMhz\n", nCycles, msElapsed, mhz);
             if (msFrame > this.msFrameDefault) {
                 if (this.nTargetMultiplier > 1) {
                     /**
@@ -329,7 +330,7 @@ export default class Time extends Device {
                      * reach 90% of our original target and revert back to the base multiplier.
                      */
                     this.nTargetMultiplier >>= 1;
-                    this.printf(Device.MESSAGE.WARN, "frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
+                    this.printf(MESSAGE.WARN, "frame time (%5.3fms) exceeded maximum (%5.3fms), target multiplier now %d\n", msFrame, this.msFrameDefault, this.nTargetMultiplier);
                 }
                 /**
                  * If we (potentially) took too long on this last run, we pass that time back as an adjustment,
@@ -356,7 +357,7 @@ export default class Time extends Device {
          */
         let nDivisor = this.nCurrentMultiplier / this.nTargetMultiplier;
         this.nCyclesDepositPerFrame = (nCyclesPerSecond / nDivisor / this.nFramesPerSecond) + 0.00000001;
-        this.printf(Device.MESSAGE.TIME, "nCyclesDepositPerFrame(%5.3f) = nCyclesPerSecond(%d) / nDivisor(%5.3f) / nFramesPerSecond(%d)\n", this.nCyclesDepositPerFrame, nCyclesPerSecond, nDivisor, this.nFramesPerSecond);
+        this.printf(MESSAGE.TIME, "nCyclesDepositPerFrame(%5.3f) = nCyclesPerSecond(%d) / nDivisor(%5.3f) / nFramesPerSecond(%d)\n", this.nCyclesDepositPerFrame, nCyclesPerSecond, nDivisor, this.nFramesPerSecond);
         return msAdjust;
     }
 
@@ -490,7 +491,7 @@ export default class Time extends Device {
                 nCycles = (this.nCyclesDeposited += this.nCyclesDepositPerFrame);
             }
             if (nCycles < 0) {
-                this.printf(Device.MESSAGE.TIME, "warning: cycle count dropped below zero: %f\n", nCycles);
+                this.printf(MESSAGE.TIME, "warning: cycle count dropped below zero: %f\n", nCycles);
                 nCycles = this.nCyclesDeposited = 0;
             }
             nCycles |= 0;
@@ -537,7 +538,7 @@ export default class Time extends Device {
      */
     getSpeedCurrent()
     {
-        this.printf(Device.MESSAGE.TIME, "getSpeedCurrent(%5.3fhz)\n", this.mhzCurrent * 1000000);
+        this.printf(MESSAGE.TIME, "getSpeedCurrent(%5.3fhz)\n", this.mhzCurrent * 1000000);
         return (this.fRunning && this.mhzCurrent)? this.getSpeed(this.mhzCurrent) : "Stopped";
     }
 
@@ -824,7 +825,7 @@ export default class Time extends Device {
             let msDeltaRun = msStartThisRun - this.msStartThisRun - this.msFrameDefault;
             if (msDeltaRun > this.msFrameDefault) {
                 this.msStartRun += msDeltaRun;
-                this.printf(Device.MESSAGE.WARN, "browser throttling detected, compensating by %5.3fms\n", msDeltaRun);
+                this.printf(MESSAGE.WARN, "browser throttling detected, compensating by %5.3fms\n", msDeltaRun);
             }
         }
         this.msStartThisRun = msStartThisRun;

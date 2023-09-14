@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import StdIO from "./stdio.js";
+import StdIO   from "./stdio.js";
+import MESSAGE from "./message.js";
 
 /**
  * Media libraries generally consist of an array of Media objects.
@@ -979,11 +980,11 @@ export default class WebIO extends StdIO {
                         aTokens[iToken] = "all";
                     }
                     if (aTokens[iToken] == "all") {
-                        aTokens = Object.keys(WebIO.MESSAGE_NAMES);
+                        aTokens = Object.keys(MESSAGE.NAMES);
                     }
                     for (let i = iToken; i < aTokens.length; i++) {
                         token = aTokens[i];
-                        message = WebIO.MESSAGE_NAMES[token];
+                        message = MESSAGE.NAMES[token];
                         if (!message) {
                             result += "unrecognized message: " + token + '\n';
                             break;
@@ -995,7 +996,7 @@ export default class WebIO extends StdIO {
                             result += this.sprintf("%8s: %b\n", token, this.isMessageOn(message));
                         }
                     }
-                    if (this.isMessageOn(WebIO.MESSAGE.BUFFER)) {
+                    if (this.isMessageOn(MESSAGE.BUFFER)) {
                         result += "all messages will be buffered until buffer is turned off\n";
                     }
                     if (!result) result = "no messages\n";
@@ -1066,7 +1067,7 @@ export default class WebIO extends StdIO {
     print(s, fBuffer)
     {
         if (fBuffer == undefined) {
-            fBuffer = this.isMessageOn(WebIO.MESSAGE.BUFFER);
+            fBuffer = this.isMessageOn(MESSAGE.BUFFER);
         }
         if (!fBuffer) {
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
@@ -1123,10 +1124,10 @@ export default class WebIO extends StdIO {
             format = args.shift();
         }
         if (this.isMessageOn(messages)) {
-            if (this.testBits(messages, WebIO.MESSAGE.ERROR)) {
+            if (this.testBits(messages, MESSAGE.ERROR)) {
                 format = "error: " + format;
             }
-            if (this.testBits(messages, WebIO.MESSAGE.WARN)) {
+            if (this.testBits(messages, MESSAGE.WARN)) {
                 format = "warning: " + format;
             }
             return super.printf(format, ...args);
@@ -1207,7 +1208,7 @@ export default class WebIO extends StdIO {
         if (on) {
             this.machine.messages = this.setBits(this.machine.messages, messages);
         } else {
-            flush = (this.testBits(this.machine.messages, WebIO.MESSAGE.BUFFER) && this.testBits(messages, WebIO.MESSAGE.BUFFER));
+            flush = (this.testBits(this.machine.messages, MESSAGE.BUFFER) && this.testBits(messages, MESSAGE.BUFFER));
             this.machine.messages = this.clearBits(this.machine.messages, messages);
         }
         if (flush) this.flush();
@@ -1233,14 +1234,6 @@ WebIO.MESSAGE_COMMANDS = [
     "m all [on|off]\tturn all messages on or off",
     "m ... [on|off]\tturn selected messages on or off"
 ];
-
-/**
- * NOTE: The first name is automatically omitted from global "on" and "off" operations.
- */
-WebIO.MESSAGE_NAMES = {
-    "all":      WebIO.MESSAGE.ALL,
-    "buffer":   WebIO.MESSAGE.BUFFER
-};
 
 WebIO.HANDLER = {
     COMMAND:    "command"

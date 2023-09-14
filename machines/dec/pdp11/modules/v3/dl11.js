@@ -10,11 +10,12 @@
  * <paulnank@hotmail.com> at <http://skn.noip.me/pdp11/pdp11.html> with permission.
  */
 
-import PDP11 from "./pdp11.js";
-import Device from "../../../../modules/v3/device.js";
+import PDP11   from "./pdp11.js";
+import Device  from "../../../../modules/v3/device.js";
+import MESSAGE from "../../../../modules/v3/message.js";
 
-Device.MESSAGE.DL11             = 0x000100000000;
-Device.MESSAGE_NAMES["dl11"]    = Device.MESSAGE.DL11;
+MESSAGE.DL11            = 0x000100000000;
+MESSAGE.NAMES["dl11"]   = MESSAGE.DL11;
 
 /**
  * @class DL11
@@ -166,8 +167,8 @@ export default class DL11 extends Device {
     {
         if (!this.cpu) {
             this.cpu = /** @type {PDP11} */ (this.findDeviceByClass("CPU"));
-            this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, DL11.MESSAGE.SERIAL);
-            this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, DL11.MESSAGE.SERIAL);
+            this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, MESSAGE.SERIAL);
+            this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, MESSAGE.SERIAL);
         }
     }
 
@@ -214,7 +215,7 @@ export default class DL11 extends Device {
      */
     receiveByte(b)
     {
-        this.printf(DL11.MESSAGE.SERIAL, "receiveByte(%#04x)\n", b);
+        this.printf(MESSAGE.SERIAL, "receiveByte(%#04x)\n", b);
         if (!this.fAutoStop) {
             this.regRBUF = b;
             if (!(this.regRCSR & PDP11.DL11.RCSR.RD)) {
@@ -315,7 +316,7 @@ export default class DL11 extends Device {
     transmitByte(b)
     {
         let fTransmitted = false;
-        this.printf(DL11.MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
+        this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
         if (this.fAutoXOFF) {
             if (b == 0x13) {        // XOFF
                 this.fAutoStop = true;

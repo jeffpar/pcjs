@@ -13,6 +13,7 @@
 import PDP11Ops from "./pdp11ops.js";
 import Debugger from "../../../../modules/v3/debugger.js";
 import Memory   from "../../../../modules/v3/memory.js";
+import MESSAGE  from "../../../../modules/v3/message.js";
 
 /**
  * Overview of Device Interrupt Support
@@ -1024,7 +1025,7 @@ export default class PDP11 extends PDP11Ops {
     {
         if (irq) {
             this.insertIRQ(irq);
-            this.printf(PDP11.MESSAGE.INT + irq.message, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
+            this.printf(MESSAGE.INT + irq.message, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
         }
     }
 
@@ -1038,7 +1039,7 @@ export default class PDP11 extends PDP11Ops {
     {
         if (irq) {
             this.removeIRQ(irq);
-            this.printf(PDP11.MESSAGE.INT + irq.message, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
+            this.printf(MESSAGE.INT + irq.message, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority + ")");
         }
     }
 
@@ -1528,7 +1529,7 @@ export default class PDP11 extends PDP11Ops {
      */
     trap(vector, flag, reason)
     {
-        this.printf(PDP11.MESSAGE.TRAP, "trap to vector %o (%o: %s)\n", vector, reason, reason < 0? PDP11.REASONS[-reason] : "BUS ERROR");
+        this.printf(MESSAGE.TRAP, "trap to vector %o (%o: %s)\n", vector, reason, reason < 0? PDP11.REASONS[-reason] : "BUS ERROR");
 
         if (this.nDisableTraps) return;
 

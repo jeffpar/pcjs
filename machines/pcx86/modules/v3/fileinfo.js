@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../../modules/v3/device.js";
+import Device   from "../../../modules/v3/device.js";
+import MESSAGE  from "../../../modules/v3/message.js";
 import DiskInfo from "./diskinfo.js";
 
 /**
@@ -159,7 +160,7 @@ export default class FileInfo {
         this.aLBA = aLBA;
         this.device = disk.device;
         if (Device.DEBUG && cluster >= 0) {
-            this.device.printf(Device.MESSAGE.FILE, '"%d:%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', iVolume, path, size, attr, date, cluster, aLBA);
+            this.device.printf(MESSAGE.FILE, '"%d:%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', iVolume, path, size, attr, date, cluster, aLBA);
         }
     }
 
@@ -250,7 +251,7 @@ export default class FileInfo {
         this.ordinals = fOrdinalTable? {} : null;   // this is an optional table for quick ordinal-to-segment lookup
 
         if (Device.DEBUG) {
-            this.device.printf(Device.MESSAGE.FILE, "loadSegmentTable(%s,%#0lx,%#0wx)\n", this.path, offEntries, nEntries);
+            this.device.printf(MESSAGE.FILE, "loadSegmentTable(%s,%#0lx,%#0wx)\n", this.path, offEntries, nEntries);
         }
 
         while (nEntries--) {
@@ -258,7 +259,7 @@ export default class FileInfo {
             if (offSegment) {
                 let lenSegment = this.loadValue(offEntries + 2) || 0x10000;       // 0 means 64K
                 if (Device.DEBUG) {
-                    this.device.printf(Device.MESSAGE.FILE, "segment %d: offStart=%#0lx offEnd=%#0lx\n" + iSegment, offSegment, offSegment + lenSegment);
+                    this.device.printf(MESSAGE.FILE, "segment %d: offStart=%#0lx offEnd=%#0lx\n" + iSegment, offSegment, offSegment + lenSegment);
                 }
                 this.segments[iSegment++] = {offStart: offSegment, offEnd: offSegment + lenSegment - 1};
             }
@@ -312,7 +313,7 @@ export default class FileInfo {
             let bSegment = w >> 8, iSegment;
 
             if (Device.DEBUG) {
-                this.device.printf(Device.MESSAGE.FILE, "bundle for segment %d: %d entries @%#x\n", bSegment, bEntries, offEntries);
+                this.device.printf(MESSAGE.FILE, "bundle for segment %d: %d entries @%#x\n", bSegment, bEntries, offEntries);
             }
 
             offEntries += 2;
@@ -349,13 +350,13 @@ export default class FileInfo {
                 }
                 if (!this.segments[iSegment]) {
                     if (Device.DEBUG) {
-                        this.device.printf(Device.MESSAGE.FILE, "invalid segment: %d\n", iSegment);
+                        this.device.printf(MESSAGE.FILE, "invalid segment: %d\n", iSegment);
                     }
                 } else {
                     if (!this.segments[iSegment].ordinals) this.segments[iSegment].ordinals = {};
                     this.segments[iSegment].ordinals[iOrdinal] = {[FileInfo.ENTRY.OFFSET]: offset};
                     if (Device.DEBUG) {
-                        this.device.printf(Device.MESSAGE.FILE, "ordinal %d: segment=%d offset=%#0lx @%x\n", iOrdinal, iSegment, offset, offDebug);
+                        this.device.printf(MESSAGE.FILE, "ordinal %d: segment=%d offset=%#0lx @%x\n", iOrdinal, iSegment, offset, offDebug);
                     }
                 }
                 if (this.ordinals) this.ordinals[iOrdinal] = [iSegment, offset];
@@ -380,7 +381,7 @@ export default class FileInfo {
         let cNames = 0;
 
         if (Device.DEBUG) {
-            this.device.printf(Device.MESSAGE.FILE, "loadNameTable(%#0lx,%#0lx)\n", offEntries, offEntriesEnd || 0);
+            this.device.printf(MESSAGE.FILE, "loadNameTable(%#0lx,%#0lx)\n", offEntries, offEntriesEnd || 0);
         }
 
         while (!offEntriesEnd || offEntries < offEntriesEnd) {
@@ -414,7 +415,7 @@ export default class FileInfo {
                             if (ordinalEntry) {
                                 ordinalEntry[FileInfo.ENTRY.SYMBOL] = sSymbol;
                                 if (Device.DEBUG) {
-                                    this.device.printf(Device.MESSAGE.FILE, "segment %d offset %#0wx ordinal %d: %s @ %x\n", iSegment, ordinalEntry[FileInfo.ENTRY.OFFSET], iOrdinal, sSymbol, offDebug);
+                                    this.device.printf(MESSAGE.FILE, "segment %d offset %#0wx ordinal %d: %s @ %x\n", iSegment, ordinalEntry[FileInfo.ENTRY.OFFSET], iOrdinal, sSymbol, offDebug);
                                 }
                             }
                         }
@@ -425,7 +426,7 @@ export default class FileInfo {
                     }
                 }
                 if (Device.DEBUG && !ordinalEntry) {
-                    this.device.printf(Device.MESSAGE.FILE, "s: cannot find ordinal %d for symbol %s @%x\n", this.path, iOrdinal, sSymbol, offDebug);
+                    this.device.printf(MESSAGE.FILE, "s: cannot find ordinal %d for symbol %s @%x\n", this.path, iOrdinal, sSymbol, offDebug);
                 }
             }
             offEntries += 2;

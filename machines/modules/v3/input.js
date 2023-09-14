@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "./device.js";
+import Device  from "./device.js";
+import MESSAGE from "./message.js";
 
 /**
  * @typedef {Config} InputConfig
@@ -131,7 +132,7 @@ export default class Input extends Device {
     {
         super(idMachine, idDevice, config);
 
-        this.messages = Device.MESSAGE.INPUT;
+        this.messages = MESSAGE.INPUT;
         this.onInput = this.onHover = null;
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.machine = /** @type {Machine} */ (this.findDeviceByClass("Machine"));
@@ -696,7 +697,7 @@ export default class Input extends Device {
          */
         let printEvent = function(type, code, used) {
             let activeElement = document.activeElement;
-            input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "%s.onKey%s(%d): %5.2f (%s)\n", activeElement.id || activeElement.nodeName, type, code, (Date.now() / 1000) % 60, used != undefined? (used? "used" : "unused") : "ignored");
+            input.printf(MESSAGE.KEY + MESSAGE.EVENT, "%s.onKey%s(%d): %5.2f (%s)\n", activeElement.id || activeElement.nodeName, type, code, (Date.now() / 1000) % 60, used != undefined? (used? "used" : "unused") : "ignored");
         };
 
         element.addEventListener(
@@ -751,13 +752,13 @@ export default class Input extends Device {
             element.addEventListener(
                 'blur',
                 function onBlur(event) {
-                    input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "onBlur(%s)\n", event.target.id || event.target.nodeName);
+                    input.printf(MESSAGE.KEY + MESSAGE.EVENT, "onBlur(%s)\n", event.target.id || event.target.nodeName);
                 }
             );
             element.addEventListener(
                 'focus',
                 function onFocus(event) {
-                    input.printf(Device.MESSAGE.KEY + Device.MESSAGE.EVENT, "onFocus(%s)\n", event.target.id || event.target.nodeName);
+                    input.printf(MESSAGE.KEY + MESSAGE.EVENT, "onFocus(%s)\n", event.target.id || event.target.nodeName);
                 }
             );
         }
@@ -951,7 +952,7 @@ export default class Input extends Device {
             this.aActiveKeys.push({
                 keyNum, msDown, autoRelease
             });
-            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "addActiveKey(keyNum=%d,autoRelease=%b)\n", keyNum, autoRelease);
+            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "addActiveKey(keyNum=%d,autoRelease=%b)\n", keyNum, autoRelease);
         } else {
             this.aActiveKeys[i].msDown = msDown;
             this.aActiveKeys[i].autoRelease = autoRelease;
@@ -1000,10 +1001,10 @@ export default class Input extends Device {
                 this.checkAutoRelease();
                 return;
             }
-            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "removeActiveKey(keyNum=%d,duration=%dms,autoRelease=%b)\n", keyNum, msDuration, activeKey.autoRelease);
+            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "removeActiveKey(keyNum=%d,duration=%dms,autoRelease=%b)\n", keyNum, msDuration, activeKey.autoRelease);
             this.aActiveKeys.splice(i, 1);
         } else {
-            this.printf(Device.MESSAGE.KEY + Device.MESSAGE.INPUT, "removeActiveKey(keyNum=%d): up without down?\n", keyNum);
+            this.printf(MESSAGE.KEY + MESSAGE.INPUT, "removeActiveKey(keyNum=%d): up without down?\n", keyNum);
         }
     }
 
@@ -1382,7 +1383,7 @@ export default class Input extends Device {
          */
         let focusElement = this.altFocus? this.altFocusElement : this.focusElement;
         if (focusElement && this.machine.isReady()) {
-            this.printf(Device.MESSAGE.INPUT, 'setFocus("%s")\n', focusElement.id || focusElement.nodeName);
+            this.printf(MESSAGE.INPUT, 'setFocus("%s")\n', focusElement.id || focusElement.nodeName);
             focusElement.focus();
             focusElement.scrollIntoView();      // one would have thought focus() would do this, but apparently not....
         }
