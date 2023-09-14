@@ -11,7 +11,7 @@ import ChipSet from "./chipset.js";
 import { Controller } from "./bus.js";
 import KbdX86 from "./keyboard.js";
 import MemoryX86 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Mouse from "./mouse.js";
 import CharSet from "./charset.js";
 import Component from "../../../modules/v2/component.js";
@@ -975,7 +975,7 @@ export class Card extends Controller {
             let fnReadByte = Card.ACCESS.afn[nReadAccess];
             if (!fnReadByte) {
                 if (DEBUG && this.dbg) {
-                    this.dbg.printf(Messages.VIDEO, "Card.setMemoryAccess(%#06x): missing readByte handler", nAccess);
+                    this.dbg.printf(MESSAGE.VIDEO, "Card.setMemoryAccess(%#06x): missing readByte handler", nAccess);
                     /*
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
@@ -1000,7 +1000,7 @@ export class Card extends Controller {
             let fnWriteByte = Card.ACCESS.afn[nWriteAccess];
             if (!fnWriteByte) {
                 if (DEBUG && this.dbg) {
-                    this.dbg.printf(Messages.VIDEO, "Card.setMemoryAccess(%#06x): missing writeByte handler", nAccess);
+                    this.dbg.printf(MESSAGE.VIDEO, "Card.setMemoryAccess(%#06x): missing writeByte handler", nAccess);
                     /*
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
@@ -1916,11 +1916,11 @@ Card.ACCESS.writeByteMode0 = function writeByteMode0(off, b, addr)
             let bitDirtyBank = (1 << ((idw >> 13) & 7));
             if (!(card.bitsDirtyBanks & bitDirtyBank)) {
                 card.bitsDirtyBanks |= bitDirtyBank;
-                if (DEBUG) card.video.printf(Messages.VIDEO, "writeByteMode0(%#010X): modified font bank %#04X\n", addr, bitDirtyBank);
+                if (DEBUG) card.video.printf(MESSAGE.VIDEO, "writeByteMode0(%#010X): modified font bank %#04X\n", addr, bitDirtyBank);
             }
         }
     }
-    if (DEBUG) card.video.printf(Messages.VIDEO + Messages.MEM, "writeByteMode0(%#10X): %#04X -> %#10X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.VIDEO + MESSAGE.MEM, "writeByteMode0(%#10X): %#04X -> %#10X\n", addr, b, dw);
 };
 
 /**
@@ -1972,7 +1972,7 @@ Card.ACCESS.writeByteMode0Chain4 = function writeByteMode0Chain4(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0Chain4(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Chain4(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -1999,7 +1999,7 @@ Card.ACCESS.writeByteMode0EvenOdd = function writeByteMode0EvenOdd(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0EvenOdd(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0EvenOdd(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -2023,7 +2023,7 @@ Card.ACCESS.writeByteMode0Rot = function writeByteMode0Rot(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0Rot(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Rot(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -2048,7 +2048,7 @@ Card.ACCESS.writeByteMode0And = function writeByteMode0And(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0And(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0And(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -2073,7 +2073,7 @@ Card.ACCESS.writeByteMode0Or = function writeByteMode0Or(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -2098,7 +2098,7 @@ Card.ACCESS.writeByteMode0Xor = function writeByteMode0Xor(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -2118,7 +2118,7 @@ Card.ACCESS.writeByteMode1 = function writeByteMode1(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode1(%#010X): %#010X\n", addr, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1(%#010X): %#010X\n", addr, dw);
 };
 
 /**
@@ -2146,7 +2146,7 @@ Card.ACCESS.writeByteMode1EvenOdd = function writeByteMode1EvenOdd(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode1EvenOdd(%#010X): %#010X\n", addr, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1EvenOdd(%#010X): %#010X\n", addr, dw);
 };
 
 /**
@@ -2168,7 +2168,7 @@ Card.ACCESS.writeByteMode2 = function writeByteMode2(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode2(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -2191,7 +2191,7 @@ Card.ACCESS.writeByteMode2And = function writeByteMode2And(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode2And(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2And(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -2214,7 +2214,7 @@ Card.ACCESS.writeByteMode2Or = function writeByteMode2Or(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode2Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -2237,7 +2237,7 @@ Card.ACCESS.writeByteMode2Xor = function writeByteMode2Xor(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode2Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -2267,7 +2267,7 @@ Card.ACCESS.writeByteMode3 = function writeByteMode3(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode3(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode3(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /*
@@ -2363,7 +2363,7 @@ export default class VideoX86 extends Component {
      */
     constructor(parmsVideo, canvas, context, textarea, container, aDiagElements)
     {
-        super("Video", parmsVideo, Messages.VIDEO);
+        super("Video", parmsVideo, MESSAGE.VIDEO);
 
         let video = this, sProp, sEvent;
         this.bindingsExternal = [];
@@ -2701,7 +2701,7 @@ export default class VideoX86 extends Component {
         }
 
         if (DEBUGGER && dbg) {
-            dbg.messageDump(Messages.VIDEO, function onDumpVideo(asArgs) {
+            dbg.messageDump(MESSAGE.VIDEO, function onDumpVideo(asArgs) {
                 video.dumpVideo(asArgs);
             });
         }
@@ -2757,7 +2757,7 @@ export default class VideoX86 extends Component {
             Web.getResource(this.sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 video.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
-                video.printf(Messages.PROGRESS, "%s\n", sProgress);
+                video.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
             });
             return;
         }
@@ -2809,7 +2809,7 @@ export default class VideoX86 extends Component {
                         video.goFullScreen();
                     };
                 } else {
-                    if (DEBUG) this.printf(Messages.LOG, "FullScreen API not available\n");
+                    if (DEBUG) this.printf(MESSAGE.LOG, "FullScreen API not available\n");
                     control.parentNode.removeChild(/** @type {Node} */ (control));
                 }
                 return true;
@@ -2822,7 +2822,7 @@ export default class VideoX86 extends Component {
                         video.lockPointer(true);
                     };
                 } else {
-                    if (DEBUG) this.printf(Messages.LOG, "Pointer Lock API not available\n");
+                    if (DEBUG) this.printf(MESSAGE.LOG, "Pointer Lock API not available\n");
                     control.parentNode.removeChild(/** @type {Node} */ (control));
                 }
                 return true;
@@ -3164,7 +3164,7 @@ export default class VideoX86 extends Component {
                     );
                 }
 
-                // this.printf(Messages.LOG, "touch events captured\n");
+                // this.printf(MESSAGE.LOG, "touch events captured\n");
 
                 this.xTouch = this.yTouch = this.timeTouch = -1;
 
@@ -3491,7 +3491,7 @@ export default class VideoX86 extends Component {
                         }
                     }
                     card.nCyclesVertRetrace = video.cpu.getCycles();
-                    if (DEBUG) video.printf(Messages.VIDEO + Messages.TIMER, "vertical retrace timer fired (%d cycles)\n", card.nCyclesVertRetrace);
+                    if (DEBUG) video.printf(MESSAGE.VIDEO + MESSAGE.TIMER, "vertical retrace timer fired (%d cycles)\n", card.nCyclesVertRetrace);
                     if (video.nIRQ) {
                         if (!(card.regCRTData[Card.CRTC.EGA.VREND.INDX] & Card.CRTC.EGA.VREND.DISABLE_VRINT)) {
                             if (video.chipset) video.chipset.setIRR(video.nIRQ);
@@ -3538,7 +3538,7 @@ export default class VideoX86 extends Component {
                         video.msUpdatePrev = msUpdate - (msDelta >= video.msUpdateInterval? 0 : msDelta);
                     }
                     else if (DEBUG) {
-                        video.printf(Messages.VIDEO + Messages.TIMER, "skipping update (%dms too soon)\n", -msDelta);
+                        video.printf(MESSAGE.VIDEO + MESSAGE.TIMER, "skipping update (%dms too soon)\n", -msDelta);
                     }
                     video.latchStartAddress();
                 }, -this.cardActive.nCyclesVertPeriod);
@@ -3778,7 +3778,7 @@ export default class VideoX86 extends Component {
     doneLoad(sURL, sFontData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(nErrorCode < 0? MESSAGE.STATUS : MESSAGE.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -3878,12 +3878,12 @@ export default class VideoX86 extends Component {
                 this.setFontData(ab, [0x0000]);
             }
             else {
-                this.printf(Messages.NOTICE, "Unrecognized font data length (%d)\n", ab.length);
+                this.printf(MESSAGE.NOTICE, "Unrecognized font data length (%d)\n", ab.length);
                 return;
             }
 
         } catch (e) {
-            this.printf(Messages.NOTICE, "Font ROM data error: %s\n", e.message);
+            this.printf(MESSAGE.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
         /*
@@ -5788,7 +5788,7 @@ export default class VideoX86 extends Component {
             this.contextScreen.fillRect(xDst, yDst, this.cxScreenCell, this.cyScreenCell);
         }
 
-        if (MAXDEBUG) this.printf(Messages.VIDEO + Messages.BUFFER, "updateCharBgnd(%d,%d,%d): filled %d,%d\n", col, row, bChar, xDst, yDst);
+        if (MAXDEBUG) this.printf(MESSAGE.VIDEO + MESSAGE.BUFFER, "updateCharBgnd(%d,%d,%d): filled %d,%d\n", col, row, bChar, xDst, yDst);
 
         if (bAttr & VideoX86.ATTRS.DRAW_FGND) {
             /*
@@ -5797,7 +5797,7 @@ export default class VideoX86 extends Component {
             let xSrcFgnd = (bChar & 0xf) * font.cxCell;
             let ySrcFgnd = (bChar >> 4) * font.cyCell;
 
-            if (MAXDEBUG) this.printf(Messages.VIDEO + Messages.BUFFER, "updateCharFgnd(%d,%d,%d): draw from %d,%d (%d,%d) to %d,%d\n", col, row , bChar, xSrcFgnd, ySrcFgnd, font.cxCell, font.cyCell, xDst, yDst);
+            if (MAXDEBUG) this.printf(MESSAGE.VIDEO + MESSAGE.BUFFER, "updateCharFgnd(%d,%d,%d): draw from %d,%d (%d,%d) to %d,%d\n", col, row , bChar, xSrcFgnd, ySrcFgnd, font.cxCell, font.cyCell, xDst, yDst);
 
             if (context) {
                 context.drawImage(font.aCanvas[iFgnd], xSrcFgnd, ySrcFgnd, font.cxCell, font.cyCell, xDst, yDst, font.cxCell, font.cyCell);
@@ -7056,7 +7056,7 @@ export default class VideoX86 extends Component {
             if (nFontSelect != this.nFontSelect) {
                 if (DEBUG) {
                     if ((nFontSelect & 0xff) == (nFontSelect >> 8)) {
-                        if (this.messageEnabled(Messages.VIDEO + Messages.PORT)) {
+                        if (this.messageEnabled(MESSAGE.VIDEO + MESSAGE.PORT)) {
                             this.printf("outSEQData(%#04X): font selection changing from %#06X to %#06X\n", bOut, this.nFontSelect, nFontSelect);
                         }
                     } else {

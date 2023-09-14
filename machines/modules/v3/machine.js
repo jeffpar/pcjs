@@ -130,7 +130,7 @@ export default class Machine extends Device {
          * One alternative is to hard-code any MESSAGE groups here, to ensure that the relevant messages
          * from all device constructors get displayed.
          */
-        this.messages = Device.DEBUG? MESSAGE.WARN : MESSAGE.DEFAULT;
+        this.messages = Device.DEBUG? MESSAGE.WARNING : MESSAGE.DEFAULT;
 
         sConfig = sConfig.trim();
         if (sConfig[0] == '{') {

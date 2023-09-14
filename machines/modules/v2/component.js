@@ -28,7 +28,7 @@
  * default parameters.
  */
 
-import Messages from "../v2/messages.js";
+import MESSAGE from "../v2/message.js";
 import Str from "./strlib.js";
 import { COMPILED, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 
@@ -260,15 +260,15 @@ export default class Component {
             bitsMessage = format;
             format = args.shift();
         }
-        if (DEBUG || bitsMessage >= Messages.LOG && bitsMessage <= Messages.ERROR) {
+        if (DEBUG || bitsMessage >= MESSAGE.LOG && bitsMessage <= MESSAGE.ERROR) {
             let alert = false;
-            if (bitsMessage == Messages.ERROR) {
+            if (bitsMessage == MESSAGE.ERROR) {
                 alert = true;
                 format = "Error: " + format;
-            } else if (bitsMessage == Messages.WARNING) {
+            } else if (bitsMessage == MESSAGE.WARNING) {
                 alert = true;
                 format = "Warning: " + format;
-            } else if (bitsMessage == Messages.NOTICE) {
+            } else if (bitsMessage == MESSAGE.NOTICE) {
                 alert = true;
             }
             let sMessage = Str.sprintf(format, ...args).trim();
@@ -314,7 +314,7 @@ export default class Component {
                 try {
                     throw new Error(s);
                 } catch(e) {
-                    Component.printf(Messages.ERROR, "%s\n", e.stack || e.message);
+                    Component.printf(MESSAGE.ERROR, "%s\n", e.stack || e.message);
                 }
             }
         }
@@ -327,7 +327,7 @@ export default class Component {
      */
     static warning(s)
     {
-        Component.printf(Messages.WARNING, s);
+        Component.printf(MESSAGE.WARNING, s);
     }
 
     /**
@@ -337,7 +337,7 @@ export default class Component {
      */
     static error(s)
     {
-        Component.printf(Messages.ERROR, s);
+        Component.printf(MESSAGE.ERROR, s);
     }
 
     /**
@@ -480,12 +480,12 @@ export default class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.printf(Messages.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
+                                Component.printf(MESSAGE.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.printf(Messages.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
+                            // if (DEBUG) Component.printf(MESSAGE.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
                             break;
                     }
                 }
@@ -553,7 +553,7 @@ export default class Component {
                 }
             }
             if (components.length && idRelated !== false) {
-                Component.printf(Messages.WARNING, "Component ID \"%s\" not found\n", id);
+                Component.printf(MESSAGE.WARNING, "Component ID \"%s\" not found\n", id);
             }
         }
         return null;
@@ -594,7 +594,7 @@ export default class Component {
                 }
             }
             if (MAXDEBUG && componentPrev !== false) {
-                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+                Component.printf(MESSAGE.WARNING, "Component type \"%s\" not found\n", sType);
             }
         }
         return null;
@@ -695,7 +695,7 @@ export default class Component {
             }
         }
         if (!ae.length) {
-            if (MAXDEBUG) Component.printf(Messages.WARNING, "No elements of class \"%s\" found\n", sClass);
+            if (MAXDEBUG) Component.printf(MESSAGE.WARNING, "No elements of class \"%s\" found\n", sClass);
         }
         return ae;
     }
@@ -824,7 +824,7 @@ export default class Component {
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.printf(Messages.SCRIPT, aTokens.join(' '));
+            Component.printf(MESSAGE.SCRIPT, aTokens.join(' '));
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -1002,7 +1002,7 @@ export default class Component {
                 this.print = function(component, control) {
                     return function printControl(sMessage, bitsMessage = 0) {
                         if (!sMessage) sMessage = "";
-                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == MESSAGE.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -1074,7 +1074,7 @@ export default class Component {
     setError(s)
     {
         this.flags.error = true;
-        this.printf(Messages.NOTICE, "%s\n", s);
+        this.printf(MESSAGE.NOTICE, "%s\n", s);
     }
 
     /**
@@ -1124,7 +1124,7 @@ export default class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -1144,7 +1144,7 @@ export default class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
+                if (MAXDEBUG /* || this.name */) this.printf(MESSAGE.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -1296,7 +1296,7 @@ export default class Component {
     /**
      * messageEnabled(bitsMessage)
      *
-     * If bitsMessage is Messages.NONE (0), then the component's Messages category is used.
+     * If bitsMessage is MESSAGE.NONE (0), then the component's Messages category is used.
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
@@ -1305,22 +1305,22 @@ export default class Component {
     messageEnabled(bitsMessage = 0)
     {
         /*
-         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.NONE, because
-         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         * It's important to subtract MESSAGE.ADDR from bitsMessage before testing for MESSAGE.NONE, because
+         * if MESSAGE.ADDR was the ONLY bit specified, we still want to default to the component's message category.
          */
-        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        if (bitsMessage & MESSAGE.ADDR) bitsMessage -= MESSAGE.ADDR;
         bitsMessage = bitsMessage || this.bitsMessage;
         /*
-         * printf() calls that specify Messages.DEBUG should be stripped out of non-DEBUG builds, but just in case
+         * printf() calls that specify MESSAGE.DEBUG should be stripped out of non-DEBUG builds, but just in case
          * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
          */
-        if (DEBUG || !Component.testBits(bitsMessage, Messages.DEBUG)) {
+        if (DEBUG || !Component.testBits(bitsMessage, MESSAGE.DEBUG)) {
             /*
-             * The debugger has the ability to filter any messages listed in Messages.Categories, and that currently
+             * The debugger has the ability to filter any messages listed in MESSAGE.NAMES, and that currently
              * includes message types LOG and WARNING, so if the debugger is loaded, subtract those from the types we allow
              * by default.
              */
-            let allowedMessages = Messages.TYPES - (this.dbg? Messages.LOG + Messages.WARNING : 0);
+            let allowedMessages = MESSAGE.TYPES - (this.dbg? MESSAGE.LOG + MESSAGE.WARNING : 0);
             if (Component.testBits(allowedMessages, bitsMessage) || this.dbg && Component.testBits(this.dbg.bitsMessage, bitsMessage)) {
                 return true;
             }
@@ -1336,7 +1336,7 @@ export default class Component {
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
      * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
-     * of whether the debugger has enabled it, the caller can use printf(Messages.NONE), and if the caller wants
+     * of whether the debugger has enabled it, the caller can use printf(MESSAGE.NONE), and if the caller wants
      * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
@@ -1347,12 +1347,12 @@ export default class Component {
     {
         let bitsMessage = 0;
         if (typeof format == "number") {
-            bitsMessage = format || Messages.PROGRESS;
+            bitsMessage = format || MESSAGE.PROGRESS;
             format = args.shift();
-            if (Component.testBits(bitsMessage, Messages.LOG)) {
+            if (Component.testBits(bitsMessage, MESSAGE.LOG)) {
                 format = (this.id || this.type || "log") + ": " + format;
             }
-            else if (Component.testBits(bitsMessage, Messages.STATUS)) {
+            else if (Component.testBits(bitsMessage, MESSAGE.STATUS)) {
                 format = this.type + ": " + format;
             }
         }
@@ -1370,7 +1370,7 @@ export default class Component {
      * printIO(port, bOut, addrFrom, name, bIn, bitsMessage)
      *
      * If bitsMessage is not specified, the component's Messages category is used,
-     * and if bitsMessage is true, the message is displayed if Messages.PORT is enabled also.
+     * and if bitsMessage is true, the message is displayed if MESSAGE.PORT is enabled also.
      *
      * @this {Component}
      * @param {number} port

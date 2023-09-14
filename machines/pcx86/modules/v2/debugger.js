@@ -9,7 +9,7 @@
 
 import Interrupts from "./interrupts.js";
 import MemoryX86 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import SegX86 from "./segx86.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
@@ -224,10 +224,10 @@ export default class DebuggerX86 extends DbgLib {
          * If CHIPSET or VIDEO messages are enabled at startup, we enable ChipSet or Video diagnostic info in the
          * instruction history buffer as appropriate.
          */
-        if (this.messageEnabled(Messages.CHIPSET)) {
+        if (this.messageEnabled(MESSAGE.CHIPSET)) {
             this.chipset = cmp.getMachineComponent("ChipSet");
         }
-        else if (this.messageEnabled(Messages.VIDEO)) {
+        else if (this.messageEnabled(MESSAGE.VIDEO)) {
             this.video = cmp.getMachineComponent("Video");
         }
 
@@ -258,11 +258,11 @@ export default class DebuggerX86 extends DbgLib {
             }
         }
 
-        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
-        this.messageDump(Messages.DESC, function onDumpSel(asArgs) { dbg.dumpSel(asArgs); });
-        this.messageDump(Messages.DOS,  function onDumpDOS(asArgs) { dbg.dumpDOS(asArgs); });
-        this.messageDump(Messages.MEM,  function onDumpMem(asArgs) { dbg.dumpMem(asArgs); });
-        this.messageDump(Messages.TSS,  function onDumpTSS(asArgs) { dbg.dumpTSS(asArgs); });
+        this.messageDump(MESSAGE.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(MESSAGE.DESC, function onDumpSel(asArgs) { dbg.dumpSel(asArgs); });
+        this.messageDump(MESSAGE.DOS,  function onDumpDOS(asArgs) { dbg.dumpDOS(asArgs); });
+        this.messageDump(MESSAGE.MEM,  function onDumpMem(asArgs) { dbg.dumpMem(asArgs); });
+        this.messageDump(MESSAGE.TSS,  function onDumpTSS(asArgs) { dbg.dumpTSS(asArgs); });
 
         if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED) {
             this.fWinDbg = null;
@@ -297,7 +297,7 @@ export default class DebuggerX86 extends DbgLib {
         let seg = this.getSegment(sel);
         let len = seg? seg.limit + 1 : 0;
         let sSection = (fCode? "_CODE" : "_DATA") + Str.toHex(nSegment, 2);
-        if (fPrint) this.printf(Messages.MEM, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
+        if (fPrint) this.printf(MESSAGE.MEM, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
         let off = 0;
         let aSymbols = this.findModuleInfo(sModule, nSegment);
         aSymbols[sModule + sSection] = off;
@@ -318,9 +318,9 @@ export default class DebuggerX86 extends DbgLib {
         let sModuleRemoved = this.removeSymbols(null, sel);
         if (fPrint) {
             if (sModuleRemoved) {
-                this.printf(Messages.MEM, "%s #%04X removed\n", sModuleRemoved, sel);
+                this.printf(MESSAGE.MEM, "%s #%04X removed\n", sModuleRemoved, sel);
             } else {
-                this.printf(Messages.MEM, "unable to remove module for segment #%04X\n", sel);
+                this.printf(MESSAGE.MEM, "unable to remove module for segment #%04X\n", sel);
             }
         }
     }
@@ -365,7 +365,7 @@ export default class DebuggerX86 extends DbgLib {
             /*
              * Mimics WDEB386 output, except that WDEB386 only displays a linear address, omitting the selector.
              */
-            this.printf(Messages.MEM, "%s%s %s(%04X)=%04X:%0X len %0X\n", sParent, sModule, (fCode? "code" : "data"), nSegment, sel, off, len);
+            this.printf(MESSAGE.MEM, "%s%s %s(%04X)=%04X:%0X len %0X\n", sParent, sModule, (fCode? "code" : "data"), nSegment, sel, off, len);
         }
         /*
          * TODO: Add support for 32-bit symbols; findModuleInfo() relies on Disk.getModuleInfo(),
@@ -392,9 +392,9 @@ export default class DebuggerX86 extends DbgLib {
         let sModuleRemoved = this.removeSymbols(sModule, nSegment);
         if (fPrint) {
             if (sModuleRemoved) {
-                this.printf(Messages.MEM, "%s %04X removed\n", sModule, nSegment);
+                this.printf(MESSAGE.MEM, "%s %04X removed\n", sModule, nSegment);
             } else {
-                this.printf(Messages.MEM, "unable to remove %s for section %04X\n", sModule, nSegment);
+                this.printf(MESSAGE.MEM, "unable to remove %s for section %04X\n", sModule, nSegment);
             }
         }
     }
@@ -500,10 +500,10 @@ export default class DebuggerX86 extends DbgLib {
                             /*
                              * TODO: We need a DEBUGGER message category; using the MEM category for now.
                              */
-                            dbg.printf(Messages.MEM, "INT 0x41 handling enabled\n");
+                            dbg.printf(MESSAGE.MEM, "INT 0x41 handling enabled\n");
                             dbg.fWinDbg = true;
                         } else {
-                            dbg.printf(Messages.MEM, "INT 0x41 monitoring enabled\n");
+                            dbg.printf(MESSAGE.MEM, "INT 0x41 monitoring enabled\n");
                             dbg.fWinDbg = false;
                         }
                     };
@@ -520,7 +520,7 @@ export default class DebuggerX86 extends DbgLib {
         case Interrupts.WINDBG.IS_LOADED:           // 0x004F
             if (this.fWinDbg) {
                 cpu.regEAX = (cpu.regEAX & ~0xffff) | Interrupts.WINDBG.LOADED;
-                this.printf(Messages.MEM, "INT 0x41 handling enabled\n");
+                this.printf(MESSAGE.MEM, "INT 0x41 handling enabled\n");
             }
             break;
 
@@ -701,14 +701,14 @@ export default class DebuggerX86 extends DbgLib {
                     return function onInt68Return(nLevel) {
                         if ((cpu.regEAX & 0xffff) != Interrupts.WINDBGRM.LOADED) {
                             cpu.regEAX = (cpu.regEAX & ~0xffff) | Interrupts.WINDBGRM.LOADED;
-                            dbg.printf(Messages.MEM, "INT 0x68 handling enabled\n");
+                            dbg.printf(MESSAGE.MEM, "INT 0x68 handling enabled\n");
                             /*
                              * If we turn on INT 0x68 handling, we must also turn on INT 0x41 handling,
                              * because Windows assumes that the latter handler exists whenever the former does.
                              */
                             dbg.fWinDbg = dbg.fWinDbgRM = true;
                         } else {
-                            dbg.printf(Messages.MEM, "INT 0x68 monitoring enabled\n");
+                            dbg.printf(MESSAGE.MEM, "INT 0x68 monitoring enabled\n");
                             dbg.fWinDbgRM = false;
                         }
                     };
@@ -920,7 +920,7 @@ export default class DebuggerX86 extends DbgLib {
                         dbg.doCommands(sCommands, true);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
+                    if (DEBUG) dbg.printf(MESSAGE.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -2136,20 +2136,20 @@ export default class DebuggerX86 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = Messages.WARNING;
+        this.bitsMessage = MESSAGE.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         let aEnable = this.parseCommand(sEnable, false, ',');
         if (aEnable.length) {
-            this.bitsMessage = Messages.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
-            for (let m in Messages.Categories) {
+            this.bitsMessage = MESSAGE.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
+            for (let m in MESSAGE.NAMES) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage += Messages.Categories[m];
+                    this.bitsMessage += MESSAGE.NAMES[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
         }
-        this.historyInit();                     // call this just in case Messages.INT was turned on
+        this.historyInit();                     // call this just in case MESSAGE.INT was turned on
     }
 
     /**
@@ -2162,8 +2162,8 @@ export default class DebuggerX86 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (let m in Messages.Categories) {
-            if (bitMessage == Messages.Categories[m]) {
+        for (let m in MESSAGE.NAMES) {
+            if (bitMessage == MESSAGE.NAMES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -2480,12 +2480,12 @@ export default class DebuggerX86 extends DbgLib {
      */
     message(sMessage, bitsMessage = 0)
     {
-        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+        if ((bitsMessage & MESSAGE.ADDR) && this.cpu) {
             let sAddress = Str.sprintf(" at %s (%%%X)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
-        if (Component.testBits(this.bitsMessage, Messages.BUFFER)) {
+        if (Component.testBits(this.bitsMessage, MESSAGE.BUFFER)) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
@@ -2493,7 +2493,7 @@ export default class DebuggerX86 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (Component.testBits(this.bitsMessage, Messages.HALT)) {
+        if (Component.testBits(this.bitsMessage, MESSAGE.HALT)) {
             sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -2538,7 +2538,7 @@ export default class DebuggerX86 extends DbgLib {
              * Display all software interrupts if CPU messages are enabled (and it's not an "annoying" interrupt);
              * note that in some cases, even "annoying" interrupts can be turned with an extra message category.
              */
-            fMessage = this.messageEnabled(Messages.CPU) && DebuggerX86.INT_ANNOYING.indexOf(nInt) < 0;
+            fMessage = this.messageEnabled(MESSAGE.CPU) && DebuggerX86.INT_ANNOYING.indexOf(nInt) < 0;
             if (!fMessage) {
                 /*
                  * Alternatively, display this software interrupt if its corresponding message category is enabled.
@@ -2554,7 +2554,7 @@ export default class DebuggerX86 extends DbgLib {
                          * vector to the ALT_DISK (0x40) vector, but it's a nuisance having to check different
                          * interrupts in different configurations for the same frickin' functionality, so we don't.
                          */
-                        fMessage = (nCategory == Messages.FDC && this.messageEnabled(nCategory = Messages.HDC));
+                        fMessage = (nCategory == MESSAGE.FDC && this.messageEnabled(nCategory = MESSAGE.HDC));
                     }
                 }
             }
@@ -2563,7 +2563,7 @@ export default class DebuggerX86 extends DbgLib {
             AH = (this.cpu.regEAX >> 8) & 0xff;
             DL = this.cpu.regEDX & 0xff;
             if (nInt == Interrupts.DOS /* 0x21 */ && AH == 0x0b ||
-                nCategory == Messages.FDC && DL >= 0x80 || nCategory == Messages.HDC && DL < 0x80) {
+                nCategory == MESSAGE.FDC && DL >= 0x80 || nCategory == MESSAGE.HDC && DL < 0x80) {
                 fMessage = false;
             }
         }
@@ -2611,13 +2611,13 @@ export default class DebuggerX86 extends DbgLib {
     messageIO(component, port, bOut, addrFrom, name, bIn, bitsMessage)
     {
         /*
-         * Add Messages.PORT to the set of required message flags.
+         * Add MESSAGE.PORT to the set of required message flags.
          */
-        bitsMessage = Component.setBits(bitsMessage || 0, Messages.PORT);
+        bitsMessage = Component.setBits(bitsMessage || 0, MESSAGE.PORT);
         /*
          * We don't want to see "unknown" I/O messages unless WARNING is enabled.
          */
-        if (!name) bitsMessage = Component.setBits(bitsMessage, Messages.WARNING);
+        if (!name) bitsMessage = Component.setBits(bitsMessage, MESSAGE.WARNING);
 
         if (addrFrom == undefined || Component.testBits(this.bitsMessage, bitsMessage)) {
             let sFrom = "";
@@ -2898,7 +2898,7 @@ export default class DebuggerX86 extends DbgLib {
         state.set(0, this.packAddr(this.dbgAddrNextCode));
         state.set(1, this.packAddr(this.dbgAddrNextData));
         state.set(2, this.packAddr(this.dbgAddrAssemble));
-        state.set(3, [this.aPrevCmds, this.fAssemble, Component.setBits(this.bitsMessage, Messages.BUFFER)]);
+        state.set(3, [this.aPrevCmds, this.fAssemble, Component.setBits(this.bitsMessage, MESSAGE.BUFFER)]);
         state.set(4, this.aSymbolTable);
         state.set(5, [this.aBreakExec, this.aBreakRead, this.aBreakWrite]);
         return state.data();
@@ -2928,12 +2928,12 @@ export default class DebuggerX86 extends DbgLib {
             this.fAssemble = data[i][1];
             let bitsMessage = data[i][2];
             /*
-             * We ensure that we're restoring updated Messages flags, by verifying that Messages.BUFFER was set by the save()
-             * function; if so, we clear Messages.BUFFER before restoring it (and yes, this means we'll never restore the BUFFER
+             * We ensure that we're restoring updated Messages flags, by verifying that MESSAGE.BUFFER was set by the save()
+             * function; if so, we clear MESSAGE.BUFFER before restoring it (and yes, this means we'll never restore the BUFFER
              * setting, which is fine, and we'll also never restore any old Messages flags, which I doubt anyone will miss).
              */
-            if (Component.testBits(bitsMessage, Messages.BUFFER)) {
-                bitsMessage = Component.clearBits(bitsMessage, Messages.BUFFER);
+            if (Component.testBits(bitsMessage, MESSAGE.BUFFER)) {
+                bitsMessage = Component.clearBits(bitsMessage, MESSAGE.BUFFER);
                 this.bitsMessage = Component.setBits(this.bitsMessage, bitsMessage);
             }
             i++;
@@ -3024,7 +3024,7 @@ export default class DebuggerX86 extends DbgLib {
                         this.chipset.acTimer0Counts = [];
                     }
                 } else {
-                    if (this.messageEnabled(Messages.HALT)) {
+                    if (this.messageEnabled(MESSAGE.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -3058,7 +3058,7 @@ export default class DebuggerX86 extends DbgLib {
      */
     checksEnabled(fRelease)
     {
-        return ((MAXDEBUG && !fRelease)? true : (this.aBreakExec.length > 1 || !!this.nBreakIns || this.messageEnabled(Messages.INT) /* || this.aBreakRead.length > 1 || this.aBreakWrite.length > 1 */));
+        return ((MAXDEBUG && !fRelease)? true : (this.aBreakExec.length > 1 || !!this.nBreakIns || this.messageEnabled(MESSAGE.INT) /* || this.aBreakRead.length > 1 || this.aBreakWrite.length > 1 */));
     }
 
     /**
@@ -3096,7 +3096,7 @@ export default class DebuggerX86 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling Messages.INT messages.
+         * well, OK, and a few other things now, like enabling MESSAGE.INT messages.
          */
         if (nState >= 0 && this.aaOpcodeCounts.length) {
             this.cOpcodes++;
@@ -3513,7 +3513,7 @@ export default class DebuggerX86 extends DbgLib {
              * stop on INT3 whenever both the INT and HALT message bits are set; a simple "g" command allows you
              * to continue.
              */
-            if (this.messageEnabled(Messages.INT + Messages.HALT)) {
+            if (this.messageEnabled(MESSAGE.INT + MESSAGE.HALT)) {
                 if (this.cpu.probeAddr(addr) == X86.OPCODE.INT3) {
                     fBreak = true;
                 }
@@ -4839,7 +4839,7 @@ export default class DebuggerX86 extends DbgLib {
 
         if (sAddr == '?') {
             let sDumpers = "";
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers += m;
@@ -4927,7 +4927,7 @@ export default class DebuggerX86 extends DbgLib {
                 this.doLoad(asArgs);
                 return;
             }
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (asArgs[1] == m) {
                     let fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -5509,7 +5509,7 @@ export default class DebuggerX86 extends DbgLib {
         if (sCategory !== undefined) {
             let bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = Messages.ALL - Messages.HALT - Messages.BUFFER;
+                bitsMessage = MESSAGE.ALL - MESSAGE.HALT - MESSAGE.BUFFER;
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -5518,9 +5518,9 @@ export default class DebuggerX86 extends DbgLib {
                 fCriteria = false;
                 sCategory = null;
             } else {
-                for (m in Messages.Categories) {
+                for (m in MESSAGE.NAMES) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.Categories[m];
+                        bitsMessage = MESSAGE.NAMES[m];
                         fCriteria = Component.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
@@ -5538,7 +5538,7 @@ export default class DebuggerX86 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage = Component.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
-                    if (bitsMessage == Messages.BUFFER) {
+                    if (bitsMessage == MESSAGE.BUFFER) {
                         this.printf("%s\n", this.aMessageBuffer.join(""));
                         this.aMessageBuffer = [];
                     }
@@ -5551,9 +5551,9 @@ export default class DebuggerX86 extends DbgLib {
          */
         let n = 0;
         let sCategories = "";
-        for (m in Messages.Categories) {
+        for (m in MESSAGE.NAMES) {
             if (!sCategory || sCategory == m) {
-                let bitsMessage = Messages.Categories[m];
+                let bitsMessage = MESSAGE.NAMES[m];
                 let fEnabled = Component.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -5568,7 +5568,7 @@ export default class DebuggerX86 extends DbgLib {
 
         this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
 
-        this.historyInit();     // call this just in case Messages.INT was turned on
+        this.historyInit();     // call this just in case MESSAGE.INT was turned on
     }
 
     /**
@@ -6782,14 +6782,14 @@ if (DEBUGGER) {
      * Information regarding interrupts of interest (used by messageInt() and others)
      */
     DebuggerX86.INT_MESSAGES = {
-        0x10:       Messages.VIDEO,
-        0x13:       Messages.FDC,
-        0x15:       Messages.CHIPSET,
-        0x16:       Messages.KBD,
-     // 0x1A:       Messages.RTC,       // ChipSet contains its own custom messageInt() handler for the RTC
-        0x1C:       Messages.TIMER,
-        0x21:       Messages.DOS,
-        0x33:       Messages.MOUSE
+        0x10:       MESSAGE.VIDEO,
+        0x13:       MESSAGE.FDC,
+        0x15:       MESSAGE.CHIPSET,
+        0x16:       MESSAGE.KBD,
+     // 0x1A:       MESSAGE.RTC,       // ChipSet contains its own custom messageInt() handler for the RTC
+        0x1C:       MESSAGE.TIMER,
+        0x21:       MESSAGE.DOS,
+        0x33:       MESSAGE.MOUSE
     };
 
     /*

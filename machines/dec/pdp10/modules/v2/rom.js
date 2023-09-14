@@ -9,7 +9,7 @@
 
 import BusPDP10 from "./bus.js";
 import MemoryPDP10 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import Str from "../../../../modules/v2/strlib.js";
@@ -41,7 +41,7 @@ export default class ROMPDP10 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROM", parmsROM, Messages.ROM);
+        super("ROM", parmsROM, MESSAGE.ROM);
 
         this.abInit = null;
         this.aSymbols = null;
@@ -71,7 +71,7 @@ export default class ROMPDP10 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
+            if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -157,7 +157,7 @@ export default class ROMPDP10 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -247,7 +247,7 @@ export default class ROMPDP10 extends Component {
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryPDP10.TYPE.ROM)) {
             if (DEBUG) {
-                this.printf(Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
+                this.printf(MESSAGE.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
             }
             for (let i = 0; i < this.abInit.length; i++) {
                 this.bus.setWordDirect(addr + i, this.abInit[i]);

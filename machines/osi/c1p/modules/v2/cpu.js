@@ -8,7 +8,7 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
-import Messages from "../../../../modules/v2/messages.js";
+import MESSAGE from "../../../../modules/v2/message.js";
 import Str from "../../../../modules/v2/strlib.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
@@ -631,7 +631,7 @@ export default class C1PCPU extends Component {
             }
             this.aReadNotify.push([start, end, component, fn]);
             if (DEBUG) {
-                this.printf(Messages.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+                this.printf(MESSAGE.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
             }
         }
     }
@@ -669,7 +669,7 @@ export default class C1PCPU extends Component {
             this.addrReadLower = aBounds[2];
             this.addrReadUpper = aBounds[3];
             if (DEBUG) {
-                this.printf(Messages.LOG, "removeReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+                this.printf(MESSAGE.LOG, "removeReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
             }
             return true;
         }
@@ -696,7 +696,7 @@ export default class C1PCPU extends Component {
             }
             this.aWriteNotify.push([start, end, component, fn]);
             if (DEBUG) {
-                this.printf(Messages.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+                this.printf(MESSAGE.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
             }
         }
     }
@@ -734,7 +734,7 @@ export default class C1PCPU extends Component {
             this.addrWriteLower = aBounds[2];
             this.addrWriteUpper = aBounds[3];
             if (DEBUG) {
-                this.printf(Messages.LOG, "removeWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+                this.printf(MESSAGE.LOG, "removeWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
             }
             return true;
         }

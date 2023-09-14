@@ -8,7 +8,7 @@
  */
 
 import MemoryX80 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import State from "../../../modules/v2/state.js";
@@ -78,7 +78,7 @@ export default class VideoX80 extends Component {
      */
     constructor(parmsVideo, canvas, context, textarea, container)
     {
-        super("Video", parmsVideo, Messages.VIDEO);
+        super("Video", parmsVideo, MESSAGE.VIDEO);
 
         let video = this, sProp, sEvent;
         this.fGecko = Web.isUserAgent("Gecko/");
@@ -108,7 +108,7 @@ export default class VideoX80 extends Component {
             this.rotateBuffer = this.rotateBuffer % 360;
             if (this.rotateBuffer > 0) this.rotateBuffer -= 360;
             if (this.rotateBuffer != -90) {
-                this.printf(Messages.NOTICE, "unsupported buffer rotation: %d\n", this.rotateBuffer);
+                this.printf(MESSAGE.NOTICE, "unsupported buffer rotation: %d\n", this.rotateBuffer);
                 this.rotateBuffer = 0;
             }
         }
@@ -163,7 +163,7 @@ export default class VideoX80 extends Component {
              * both is most likely a mistake, but who knows, maybe someone wants to use both for 180-degree rotation?
              */
             if (this.rotateScreen != -90) {
-                this.printf(Messages.NOTICE, "unsupported screen rotation: %d\n", this.rotateScreen);
+                this.printf(MESSAGE.NOTICE, "unsupported screen rotation: %d\n", this.rotateScreen);
                 this.rotateScreen = 0;
             } else {
                 this.contextScreen.translate(0, this.cyScreen);
@@ -350,11 +350,11 @@ export default class VideoX80 extends Component {
             this.bindings[sBinding] = control;
             if (this.container && this.container.doFullScreen) {
                 control.onclick = function onClickFullScreen() {
-                    video.printf(Messages.DEBUG, "fullScreen()\n");
+                    video.printf(MESSAGE.DEBUG, "fullScreen()\n");
                     video.doFullScreen();
                 };
             } else {
-                this.printf(Messages.DEBUG + Messages.LOG, "FullScreen API not available\n");
+                this.printf(MESSAGE.DEBUG + MESSAGE.LOG, "FullScreen API not available\n");
                 control.parentNode.removeChild(/** @type {Node} */ (control));
             }
             return true;
@@ -421,7 +421,7 @@ export default class VideoX80 extends Component {
     doneLoad(sURL, sFontData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -452,12 +452,12 @@ export default class VideoX80 extends Component {
                 this.createFonts();
             }
             else {
-                this.printf(Messages.NOTICE, "Unrecognized font data length (%d)\n", abFontData.length);
+                this.printf(MESSAGE.NOTICE, "Unrecognized font data length (%d)\n", abFontData.length);
                 return;
             }
 
         } catch (e) {
-            this.printf(Messages.NOTICE, "Font ROM data error: %s\n", e.message);
+            this.printf(MESSAGE.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
 

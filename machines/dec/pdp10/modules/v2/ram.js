@@ -8,7 +8,7 @@
  */
 
 import MemoryPDP10 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import Str from "../../../../modules/v2/strlib.js";
@@ -59,7 +59,7 @@ export default class RAMPDP10 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
+            if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -154,7 +154,7 @@ export default class RAMPDP10 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -203,9 +203,9 @@ export default class RAMPDP10 extends Component {
                 if (!this.aData) return;
 
                 if (this.loadImage(this.aData, this.addrLoad, this.addrExec, this.addrRAM)) {
-                    this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
+                    this.printf(MESSAGE.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
-                    this.printf(Messages.STATUS, 'Error loading image "%s"\n', this.sFileName);
+                    this.printf(MESSAGE.STATUS, 'Error loading image "%s"\n', this.sFileName);
                 }
 
                 /*

@@ -8,7 +8,7 @@
  */
 
 import ChipSet from "./chipset.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -75,7 +75,7 @@ export default class SerialPort extends Component {
      */
     constructor(parms)
     {
-        super("SerialPort", parms, Messages.SERIAL);
+        super("SerialPort", parms, MESSAGE.SERIAL);
 
         this.iAdapter = +parms['adapter'];
 
@@ -388,7 +388,7 @@ export default class SerialPort extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
+                                this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
@@ -397,7 +397,7 @@ export default class SerialPort extends Component {
                 /*
                  * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
+                this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }

@@ -148,7 +148,7 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/message.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -157,9 +157,9 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
  * NOTE: Because this machine defines more than 32 message categories, some of these message flags
  * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
  */
-const Messages = {
+const MESSAGE = {
     NONE:       0x000000000000,
-    ADDRESS:    0x000000000001,
+    ADDR:       0x000000000001,
     LOG:        0x001000000000,
     STATUS:     0x002000000000,
     NOTICE:     0x004000000000,
@@ -189,9 +189,9 @@ const Messages = {
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-Messages.Categories = {
-    "log":      Messages.LOG,
-    "warn":     Messages.WARNING,
+MESSAGE.NAMES = {
+    "log":      MESSAGE.LOG,
+    "warn":     MESSAGE.WARNING,
     /*
      * Now we turn to message actions rather than message types; for example, setting "halt"
      * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
@@ -199,8 +199,8 @@ Messages.Categories = {
      * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
      * until "m buffer off" is issued.
      */
-    "halt":     Messages.HALT,
-    "buffer":   Messages.BUFFER
+    "halt":     MESSAGE.HALT,
+    "buffer":   MESSAGE.BUFFER
 };
 
 
@@ -2350,7 +2350,7 @@ class Web {
         }
 
         if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "reading: %s\n", sURL);
             try {
                 let encoding = (type == "arraybuffer"? null : "utf8");
                 resource = globals.node.readFileSync(sURL, encoding);
@@ -2376,7 +2376,7 @@ class Web {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetching: %s\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -2390,11 +2390,11 @@ class Web {
                 }
             })
             .then(resource => {
-
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
-                Component.printf(Messages.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
                 if (done) done(sURL, resource, nErrorCode);
             });
             return response;
@@ -2433,18 +2433,18 @@ class Web {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
+                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
                 if (!request.status && !Web.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
@@ -2472,12 +2472,12 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "posting: %s (%d bytes)\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "requesting: %s\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -2805,7 +2805,7 @@ class Web {
      */
     static printLocalStorageError(e)
     {
-        Component.printf(Messages.ERROR, "Local storage error: %s\n", e.message);
+        Component.printf(MESSAGE.ERROR, "Local storage error: %s\n", e.message);
     }
 
     /**
@@ -3156,7 +3156,7 @@ class Web {
         };
         e.onmousedown = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onMouseDown()\n");
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -3166,7 +3166,7 @@ class Web {
         };
         e.ontouchstart = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onTouchStart()\n");
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -3174,7 +3174,7 @@ class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onMouseUp()/onMouseOut()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3182,7 +3182,7 @@ class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onTouchEnd()/onTouchCancel()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3246,7 +3246,7 @@ class Web {
      */
     static onError(sMessage)
     {
-        Component.printf(Messages.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
+        Component.printf(MESSAGE.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
     }
 
     /**
@@ -3645,15 +3645,15 @@ class Component {
             bitsMessage = format;
             format = args.shift();
         }
-        if (DEBUG || bitsMessage >= Messages.LOG && bitsMessage <= Messages.ERROR) {
+        if (DEBUG || bitsMessage >= MESSAGE.LOG && bitsMessage <= MESSAGE.ERROR) {
             let alert = false;
-            if (bitsMessage == Messages.ERROR) {
+            if (bitsMessage == MESSAGE.ERROR) {
                 alert = true;
                 format = "Error: " + format;
-            } else if (bitsMessage == Messages.WARNING) {
+            } else if (bitsMessage == MESSAGE.WARNING) {
                 alert = true;
                 format = "Warning: " + format;
-            } else if (bitsMessage == Messages.NOTICE) {
+            } else if (bitsMessage == MESSAGE.NOTICE) {
                 alert = true;
             }
             let sMessage = Str.sprintf(format, ...args).trim();
@@ -3699,7 +3699,7 @@ class Component {
                 try {
                     throw new Error(s);
                 } catch(e) {
-                    Component.printf(Messages.ERROR, "%s\n", e.stack || e.message);
+                    Component.printf(MESSAGE.ERROR, "%s\n", e.stack || e.message);
                 }
             }
         }
@@ -3712,7 +3712,7 @@ class Component {
      */
     static warning(s)
     {
-        Component.printf(Messages.WARNING, s);
+        Component.printf(MESSAGE.WARNING, s);
     }
 
     /**
@@ -3722,7 +3722,7 @@ class Component {
      */
     static error(s)
     {
-        Component.printf(Messages.ERROR, s);
+        Component.printf(MESSAGE.ERROR, s);
     }
 
     /**
@@ -3865,12 +3865,12 @@ class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.printf(Messages.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
+                                Component.printf(MESSAGE.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.printf(Messages.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
+                            // if (DEBUG) Component.printf(MESSAGE.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
                             break;
                     }
                 }
@@ -3938,7 +3938,7 @@ class Component {
                 }
             }
             if (components.length && idRelated !== false) {
-                Component.printf(Messages.WARNING, "Component ID \"%s\" not found\n", id);
+                Component.printf(MESSAGE.WARNING, "Component ID \"%s\" not found\n", id);
             }
         }
         return null;
@@ -3979,7 +3979,7 @@ class Component {
                 }
             }
             if (MAXDEBUG && componentPrev !== false) {
-                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+                Component.printf(MESSAGE.WARNING, "Component type \"%s\" not found\n", sType);
             }
         }
         return null;
@@ -4080,7 +4080,7 @@ class Component {
             }
         }
         if (!ae.length) {
-            if (MAXDEBUG) Component.printf(Messages.WARNING, "No elements of class \"%s\" found\n", sClass);
+            if (MAXDEBUG) Component.printf(MESSAGE.WARNING, "No elements of class \"%s\" found\n", sClass);
         }
         return ae;
     }
@@ -4209,7 +4209,7 @@ class Component {
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.printf(Messages.SCRIPT, aTokens.join(' '));
+            Component.printf(MESSAGE.SCRIPT, aTokens.join(' '));
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -4387,7 +4387,7 @@ class Component {
                 this.print = function(component, control) {
                     return function printControl(sMessage, bitsMessage = 0) {
                         if (!sMessage) sMessage = "";
-                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == MESSAGE.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -4459,7 +4459,7 @@ class Component {
     setError(s)
     {
         this.flags.error = true;
-        this.printf(Messages.NOTICE, "%s\n", s);
+        this.printf(MESSAGE.NOTICE, "%s\n", s);
     }
 
     /**
@@ -4509,7 +4509,7 @@ class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -4529,7 +4529,7 @@ class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
+                if (MAXDEBUG /* || this.name */) this.printf(MESSAGE.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -4681,7 +4681,7 @@ class Component {
     /**
      * messageEnabled(bitsMessage)
      *
-     * If bitsMessage is Messages.NONE (0), then the component's Messages category is used.
+     * If bitsMessage is MESSAGE.NONE (0), then the component's Messages category is used.
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
@@ -4690,22 +4690,22 @@ class Component {
     messageEnabled(bitsMessage = 0)
     {
         /*
-         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.NONE, because
-         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         * It's important to subtract MESSAGE.ADDR from bitsMessage before testing for MESSAGE.NONE, because
+         * if MESSAGE.ADDR was the ONLY bit specified, we still want to default to the component's message category.
          */
-        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        if (bitsMessage & MESSAGE.ADDR) bitsMessage -= MESSAGE.ADDR;
         bitsMessage = bitsMessage || this.bitsMessage;
         /*
-         * printf() calls that specify Messages.DEBUG should be stripped out of non-DEBUG builds, but just in case
+         * printf() calls that specify MESSAGE.DEBUG should be stripped out of non-DEBUG builds, but just in case
          * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
          */
-        if (DEBUG || !Component.testBits(bitsMessage, Messages.DEBUG)) {
+        if (DEBUG || !Component.testBits(bitsMessage, MESSAGE.DEBUG)) {
             /*
-             * The debugger has the ability to filter any messages listed in Messages.Categories, and that currently
+             * The debugger has the ability to filter any messages listed in MESSAGE.NAMES, and that currently
              * includes message types LOG and WARNING, so if the debugger is loaded, subtract those from the types we allow
              * by default.
              */
-            let allowedMessages = Messages.TYPES - (this.dbg? Messages.LOG + Messages.WARNING : 0);
+            let allowedMessages = MESSAGE.TYPES - (this.dbg? MESSAGE.LOG + MESSAGE.WARNING : 0);
             if (Component.testBits(allowedMessages, bitsMessage) || this.dbg && Component.testBits(this.dbg.bitsMessage, bitsMessage)) {
                 return true;
             }
@@ -4721,7 +4721,7 @@ class Component {
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
      * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
-     * of whether the debugger has enabled it, the caller can use printf(Messages.NONE), and if the caller wants
+     * of whether the debugger has enabled it, the caller can use printf(MESSAGE.NONE), and if the caller wants
      * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
@@ -4732,12 +4732,12 @@ class Component {
     {
         let bitsMessage = 0;
         if (typeof format == "number") {
-            bitsMessage = format || Messages.PROGRESS;
+            bitsMessage = format || MESSAGE.PROGRESS;
             format = args.shift();
-            if (Component.testBits(bitsMessage, Messages.LOG)) {
+            if (Component.testBits(bitsMessage, MESSAGE.LOG)) {
                 format = (this.id || this.type || "log") + ": " + format;
             }
-            else if (Component.testBits(bitsMessage, Messages.STATUS)) {
+            else if (Component.testBits(bitsMessage, MESSAGE.STATUS)) {
                 format = this.type + ": " + format;
             }
         }
@@ -4755,7 +4755,7 @@ class Component {
      * printIO(port, bOut, addrFrom, name, bIn, bitsMessage)
      *
      * If bitsMessage is not specified, the component's Messages category is used,
-     * and if bitsMessage is true, the message is displayed if Messages.PORT is enabled also.
+     * and if bitsMessage is true, the message is displayed if MESSAGE.PORT is enabled also.
      *
      * @this {Component}
      * @param {number} port
@@ -6438,28 +6438,28 @@ const PDP10 = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/message.js (C) 2012-2023 Jeff Parsons
  */
 
-Messages.CPU        = 0x00000002;
-Messages.TRAP       = 0x00000004;
-Messages.FAULT      = 0x00000008;
-Messages.INT        = 0x00000010;
-Messages.BUS        = 0x00000020;
-Messages.MEMORY     = 0x00000040;
-Messages.MMU        = 0x00000080;
-Messages.ROM        = 0x00000100;
-Messages.DEVICE     = 0x00000200;
-Messages.PANEL      = 0x00000400;
-Messages.KEYBOARD   = 0x00000800;
-Messages.KEYS       = 0x00001000;
-Messages.PAPER      = 0x00002000;
-Messages.READ       = 0x00004000;
-Messages.WRITE      = 0x00008000;
-Messages.SERIAL     = 0x00010000;
-Messages.TIMER      = 0x00020000;
-Messages.SPEAKER    = 0x00040000;
-Messages.COMPUTER   = 0x00080000;
+MESSAGE.CPU         = 0x00000002;
+MESSAGE.TRAP        = 0x00000004;
+MESSAGE.FAULT       = 0x00000008;
+MESSAGE.INT         = 0x00000010;
+MESSAGE.BUS         = 0x00000020;
+MESSAGE.MEMORY      = 0x00000040;
+MESSAGE.MMU         = 0x00000080;
+MESSAGE.ROM         = 0x00000100;
+MESSAGE.DEVICE      = 0x00000200;
+MESSAGE.PANEL       = 0x00000400;
+MESSAGE.KEYBOARD    = 0x00000800;
+MESSAGE.KEYS        = 0x00001000;
+MESSAGE.PAPER       = 0x00002000;
+MESSAGE.READ        = 0x00004000;
+MESSAGE.WRITE       = 0x00008000;
+MESSAGE.SERIAL      = 0x00010000;
+MESSAGE.TIMER       = 0x00020000;
+MESSAGE.SPEAKER     = 0x00040000;
+MESSAGE.COMPUTER    = 0x00080000;
 
 /*
  * Message categories supported by the messageEnabled() function and other assorted message
@@ -6475,25 +6475,25 @@ Messages.COMPUTER   = 0x00080000;
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-Messages.Categories["cpu"]      = Messages.CPU;
-Messages.Categories["trap"]     = Messages.TRAP;
-Messages.Categories["fault"]    = Messages.FAULT;
-Messages.Categories["int"]      = Messages.INT;
-Messages.Categories["bus"]      = Messages.BUS;
-Messages.Categories["memory"]   = Messages.MEMORY;
-Messages.Categories["mmu"]      = Messages.MMU;
-Messages.Categories["rom"]      = Messages.ROM;
-Messages.Categories["device"]   = Messages.DEVICE;
-Messages.Categories["panel"]    = Messages.PANEL;
-Messages.Categories["keyboard"] = Messages.KEYBOARD;       // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
-Messages.Categories["key"]      = Messages.KEYS;           // using "key" instead of "keys", since the latter is a method on JavasScript objects
-Messages.Categories["paper"]    = Messages.PAPER;
-Messages.Categories["read"]     = Messages.READ;
-Messages.Categories["write"]    = Messages.WRITE;
-Messages.Categories["serial"]   = Messages.SERIAL;
-Messages.Categories["timer"]    = Messages.TIMER;
-Messages.Categories["speaker"]  = Messages.SPEAKER;
-Messages.Categories["computer"] = Messages.COMPUTER;
+MESSAGE.NAMES["cpu"]        = MESSAGE.CPU;
+MESSAGE.NAMES["trap"]       = MESSAGE.TRAP;
+MESSAGE.NAMES["fault"]      = MESSAGE.FAULT;
+MESSAGE.NAMES["int"]        = MESSAGE.INT;
+MESSAGE.NAMES["bus"]        = MESSAGE.BUS;
+MESSAGE.NAMES["memory"]     = MESSAGE.MEMORY;
+MESSAGE.NAMES["mmu"]        = MESSAGE.MMU;
+MESSAGE.NAMES["rom"]        = MESSAGE.ROM;
+MESSAGE.NAMES["device"]     = MESSAGE.DEVICE;
+MESSAGE.NAMES["panel"]      = MESSAGE.PANEL;
+MESSAGE.NAMES["keyboard"]   = MESSAGE.KEYBOARD;     // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
+MESSAGE.NAMES["key"]        = MESSAGE.KEYS;         // using "key" instead of "keys", since the latter is a method on JavasScript objects
+MESSAGE.NAMES["paper"]      = MESSAGE.PAPER;
+MESSAGE.NAMES["read"]       = MESSAGE.READ;
+MESSAGE.NAMES["write"]      = MESSAGE.WRITE;
+MESSAGE.NAMES["serial"]     = MESSAGE.SERIAL;
+MESSAGE.NAMES["timer"]      = MESSAGE.TIMER;
+MESSAGE.NAMES["speaker"]    = MESSAGE.SPEAKER;
+MESSAGE.NAMES["computer"]   = MESSAGE.COMPUTER;
 
 
 /**
@@ -6537,7 +6537,7 @@ class PanelPDP10 extends Component {
      */
     constructor(parmsPanel, fBindings)
     {
-        super("Panel", parmsPanel, Messages.PANEL);
+        super("Panel", parmsPanel, MESSAGE.PANEL);
 
         /*
          * If there are any live registers, LEDs, etc, to display, this will provide a count.
@@ -7755,7 +7755,7 @@ class BusPDP10 extends Component {
      */
     constructor(parmsBus, cpu, dbg)
     {
-        super("Bus", parmsBus, Messages.BUS);
+        super("Bus", parmsBus, MESSAGE.BUS);
 
         this.cpu = cpu;
         this.dbg = dbg;
@@ -7972,7 +7972,7 @@ class BusPDP10 extends Component {
         }
 
         if (sizeLeft <= 0) {
-            this.printf(Messages.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP10.TYPE_NAMES[type], addr);
+            this.printf(MESSAGE.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP10.TYPE_NAMES[type], addr);
             return true;
         }
 
@@ -8371,7 +8371,7 @@ class BusPDP10 extends Component {
         this.fFault = true;
         if (!this.nDisableFaults) {
             if (DEBUGGER && this.dbg) {
-                this.dbg.printf(Messages.FAULT + Messages.ADDRESS, "memory fault on %s\n", this.dbg.toStrBase(addr));
+                this.dbg.printf(MESSAGE.FAULT + MESSAGE.ADDR, "memory fault on %s\n", this.dbg.toStrBase(addr));
             }
             this.cpu.haltCPU();
         }
@@ -8404,7 +8404,7 @@ class BusPDP10 extends Component {
      */
     reportError(errNum, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.NONE : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
+        this.printf(fQuiet? MESSAGE.NONE : MESSAGE.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
         return false;
     }
 }
@@ -8430,7 +8430,7 @@ class DevicePDP10 extends Component {
      */
     constructor(parmsDevice)
     {
-        super("Device", parmsDevice, Messages.DEVICE);
+        super("Device", parmsDevice, MESSAGE.DEVICE);
     }
 
     /**
@@ -8847,7 +8847,7 @@ class MemoryPDP10 {
     printAddr(sMessage)
     {
         if (DEBUG && this.dbg) {
-            this.dbg.printf(Messages.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
+            this.dbg.printf(MESSAGE.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
         }
     }
 
@@ -8931,7 +8931,7 @@ class MemoryPDP10 {
     readNone(off, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
+            this.dbg.printf(MESSAGE.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
         return PDP10.WORD_INVALID;
@@ -8948,7 +8948,7 @@ class MemoryPDP10 {
     writeNone(v, off, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
+            this.dbg.printf(MESSAGE.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
     }
@@ -9102,7 +9102,7 @@ class CPUPDP10 extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, Messages.CPU);
+        super("CPU", parmsCPU, MESSAGE.CPU);
 
         var nCycles = +parmsCPU['cycles'] || nCyclesDefault;
 
@@ -9262,7 +9262,7 @@ class CPUPDP10 extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init(this.flags.autoStart);
             } else {
-                this.printf(Messages.STATUS, "No debugger detected\n");
+                this.printf(MESSAGE.STATUS, "No debugger detected\n");
             }
             if (!this.flags.autoStart) {
                 this.printf("CPU will not be auto-started %s\n", (this.panel? "(click Run to start)" : "(type 'go' to start)"));
@@ -9880,7 +9880,7 @@ class CPUPDP10 extends Component {
         this.nCyclesRecalc += this.nCyclesThisRun;
 
         if (DEBUG && msRemainsThisRun) {
-            this.printf(Messages.LOG + Messages.BUFFER, "calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
+            this.printf(MESSAGE.LOG + MESSAGE.BUFFER, "calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
         }
 
         this.msEndThisRun += msRemainsThisRun;
@@ -10177,7 +10177,7 @@ class CPUPDP10 extends Component {
             if (fUpdateFocus) this.cmp.setFocus(true);
             this.cmp.start(this.msStartRun, this.getCycles());
         }
-        if (!this.dbg) this.printf(Messages.STATUS, "Started\n");
+        if (!this.dbg) this.printf(MESSAGE.STATUS, "Started\n");
         setTimeout(this.onRunTimeout, 0);
         return true;
     }
@@ -10222,7 +10222,7 @@ class CPUPDP10 extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
             }
             fStopped = true;
-            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
+            if (!this.dbg) this.printf(MESSAGE.STATUS, "Stopped\n");
         }
         this.flags.complete = fComplete;
         return fStopped;
@@ -10391,7 +10391,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      */
     reset()
     {
-        this.printf(Messages.STATUS, "Model %s\n", this.model);
+        this.printf(MESSAGE.STATUS, "Model %s\n", this.model);
         if (this.flags.running) this.stopCPU();
         this.initCPU();
         this.resetCycles();
@@ -10873,7 +10873,7 @@ class CPUStatePDP10 extends CPUPDP10 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
+            this.printf(irq.message + MESSAGE.INT + MESSAGE.ADDR, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -10887,7 +10887,7 @@ class CPUStatePDP10 extends CPUPDP10 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
+            this.printf(irq.message + MESSAGE.INT + MESSAGE.ADDR, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -19154,7 +19154,7 @@ class DebuggerPDP10 extends DbgLib {
          * Update aOpReserved as appropriate for the current model
          */
 
-        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(MESSAGE.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
 
         this.setReady();
     }
@@ -19221,7 +19221,7 @@ class DebuggerPDP10 extends DbgLib {
                         dbg.doCommands(sCmd, true);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
+                    if (DEBUG) dbg.printf(MESSAGE.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -19676,7 +19676,7 @@ class DebuggerPDP10 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = Messages.FAULT | Messages.WARNING;
+        this.bitsMessage = this.bitsWarning = MESSAGE.FAULT | MESSAGE.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*
@@ -19685,9 +19685,9 @@ class DebuggerPDP10 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, ',');
         if (aEnable.length) {
-            for (var m in Messages.Categories) {
+            for (var m in MESSAGE.NAMES) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= Messages.Categories[m];
+                    this.bitsMessage |= MESSAGE.NAMES[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
@@ -19704,8 +19704,8 @@ class DebuggerPDP10 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in Messages.Categories) {
-            if (bitMessage == Messages.Categories[m]) {
+        for (var m in MESSAGE.NAMES) {
+            if (bitMessage == MESSAGE.NAMES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -19856,7 +19856,7 @@ class DebuggerPDP10 extends DbgLib {
     message(sMessage, bitsMessage)
     {
         var sAddress, fRunning;
-        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+        if ((bitsMessage & MESSAGE.ADDR) && this.cpu) {
             sAddress = " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
@@ -19864,12 +19864,12 @@ class DebuggerPDP10 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.bitsMessage & Messages.BUFFER) {
+        if (this.bitsMessage & MESSAGE.BUFFER) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
 
-        if ((this.bitsMessage & Messages.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
+        if ((this.bitsMessage & MESSAGE.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
             if (fRunning) sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -20247,7 +20247,7 @@ class DebuggerPDP10 extends DbgLib {
                     }
                     sStopped += this.nCycles + " cycles, " + msTotal + " ms, " + nCyclesPerSecond + " hz)";
                 } else {
-                    if (this.messageEnabled(Messages.HALT)) {
+                    if (this.messageEnabled(MESSAGE.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -20328,7 +20328,7 @@ class DebuggerPDP10 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling Messages.INT messages.
+         * well, OK, and a few other things now, like enabling MESSAGE.INT messages.
          */
         if (nState >= 0 && this.aInstructionHistory.length) {
             this.cInstructions++;
@@ -20726,8 +20726,8 @@ class DebuggerPDP10 extends DbgLib {
      */
     undefinedInstruction(opCode)
     {
-        if (this.messageEnabled(Messages.CPU)) {
-            this.printf(Messages.CPU + Messages.ADDRESS, "undefined opcode %s\n", this.toStrBase(opCode));
+        if (this.messageEnabled(MESSAGE.CPU)) {
+            this.printf(MESSAGE.CPU + MESSAGE.ADDR, "undefined opcode %s\n", this.toStrBase(opCode));
             return this.stopInstruction();  // allow the caller to step over it if they really want a trap generated
         }
         return false;
@@ -21673,7 +21673,7 @@ class DebuggerPDP10 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers = sDumpers + m;
@@ -21717,7 +21717,7 @@ class DebuggerPDP10 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -21993,7 +21993,7 @@ class DebuggerPDP10 extends DbgLib {
         if (sCategory !== undefined) {
             var bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.LOG);
+                bitsMessage = (0xffffffff|0) & ~(MESSAGE.HALT | MESSAGE.KEYS | MESSAGE.LOG);
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -22008,9 +22008,9 @@ class DebuggerPDP10 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in Messages.Categories) {
+                for (m in MESSAGE.NAMES) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.Categories[m];
+                        bitsMessage = MESSAGE.NAMES[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
@@ -22028,7 +22028,7 @@ class DebuggerPDP10 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage &= ~bitsMessage;
                     fCriteria = false;
-                    if (bitsMessage == Messages.BUFFER) {
+                    if (bitsMessage == MESSAGE.BUFFER) {
                         var i = this.aMessageBuffer.length >= 1000? this.aMessageBuffer.length - 1000 : 0;
                         while (i < this.aMessageBuffer.length) {
                             this.printf("%s\n", this.aMessageBuffer[i++]);
@@ -22044,9 +22044,9 @@ class DebuggerPDP10 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in Messages.Categories) {
+        for (m in MESSAGE.NAMES) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = Messages.Categories[m];
+                var bitMessage = MESSAGE.NAMES[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -22066,7 +22066,7 @@ class DebuggerPDP10 extends DbgLib {
 
         this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
 
-        this.historyInit();     // call this just in case Messages.INT was turned on
+        this.historyInit();     // call this just in case MESSAGE.INT was turned on
     }
 
     /**
@@ -23171,7 +23171,7 @@ class ROMPDP10 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROM", parmsROM, Messages.ROM);
+        super("ROM", parmsROM, MESSAGE.ROM);
 
         this.abInit = null;
         this.aSymbols = null;
@@ -23201,7 +23201,7 @@ class ROMPDP10 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
+            if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -23287,7 +23287,7 @@ class ROMPDP10 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -23377,7 +23377,7 @@ class ROMPDP10 extends Component {
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryPDP10.TYPE.ROM)) {
             if (DEBUG) {
-                this.printf(Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
+                this.printf(MESSAGE.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
             }
             for (let i = 0; i < this.abInit.length; i++) {
                 this.bus.setWordDirect(addr + i, this.abInit[i]);
@@ -23496,7 +23496,7 @@ class RAMPDP10 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
+            if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -23591,7 +23591,7 @@ class RAMPDP10 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -23640,9 +23640,9 @@ class RAMPDP10 extends Component {
                 if (!this.aData) return;
 
                 if (this.loadImage(this.aData, this.addrLoad, this.addrExec, this.addrRAM)) {
-                    this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
+                    this.printf(MESSAGE.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
-                    this.printf(Messages.STATUS, 'Error loading image "%s"\n', this.sFileName);
+                    this.printf(MESSAGE.STATUS, 'Error loading image "%s"\n', this.sFileName);
                 }
 
                 /*
@@ -23802,7 +23802,7 @@ class SerialPortPDP10 extends Component {
      */
     constructor(parmsSerial)
     {
-        super("SerialPort", parmsSerial, Messages.SERIAL);
+        super("SerialPort", parmsSerial, MESSAGE.SERIAL);
 
         this.iAdapter = +parmsSerial['adapter'];
         this.fUpperCase = parmsSerial['upperCase'];
@@ -24060,7 +24060,7 @@ class SerialPortPDP10 extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
+                                this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
@@ -24069,7 +24069,7 @@ class SerialPortPDP10 extends Component {
                 /*
                  * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
+                this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }
@@ -26492,7 +26492,7 @@ class ComputerPDP10 extends Component {
      */
     constructor(parmsComputer, parmsMachine, fSuspended)
     {
-        super("Computer", parmsComputer, Messages.COMPUTER);
+        super("Computer", parmsComputer, MESSAGE.COMPUTER);
 
         this.flags.powered = false;
 
@@ -26568,7 +26568,7 @@ class ComputerPDP10 extends Component {
             }
         }
 
-        this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(MESSAGE.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -26791,7 +26791,7 @@ class ComputerPDP10 extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
+            this.printf(MESSAGE.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -26848,7 +26848,7 @@ class ComputerPDP10 extends Component {
             var sTimestampValidate = stateValidate.get(ComputerPDP10.STATE_TIMESTAMP);
             var sTimestampComputer = stateComputer? stateComputer.get(ComputerPDP10.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
+                this.printf(MESSAGE.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
@@ -26932,7 +26932,7 @@ class ComputerPDP10 extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
+                                    this.printf(MESSAGE.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
                                     this.printf("%s: %s\n", sCode, sData);
@@ -27100,7 +27100,7 @@ class ComputerPDP10 extends Component {
                 if (!fRepower && component.comment) {
                     var asComments = component.comment.split("|");
                     for (var i = 0; i < asComments.length; i++) {
-                        component.printf(Messages.STATUS, "%s\n", asComments[i]);
+                        component.printf(MESSAGE.STATUS, "%s\n", asComments[i]);
                     }
                 }
             }
@@ -27523,7 +27523,7 @@ class ComputerPDP10 extends Component {
              * particular host.
              */
             if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Remote user API not available");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -27550,7 +27550,7 @@ class ComputerPDP10 extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
+                        computer.printf(MESSAGE.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -27608,11 +27608,11 @@ class ComputerPDP10 extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
+                        if (!sUserID) this.printf(MESSAGE.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
+                this.printf(MESSAGE.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -27696,7 +27696,7 @@ class ComputerPDP10 extends Component {
             }
             var response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.printf(Messages.NOTICE, "Machine state saved to server\n");
+                this.printf(MESSAGE.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 var sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -27704,7 +27704,7 @@ class ComputerPDP10 extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.printf(Messages.NOTICE, "%s\n", sError);
+                this.printf(MESSAGE.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {
@@ -27852,7 +27852,7 @@ class ComputerPDP10 extends Component {
             if (component.type == sType) return component;
         }
         if (!componentLast && DEBUG && componentPrev !== false) {
-            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
+            this.printf(MESSAGE.WARNING, "Machine component type \"%s\" not found\n", sType);
         }
         return null;
     }
@@ -28116,7 +28116,7 @@ class State {
         try {
             this.state[id] = data;
         } catch(e) {
-            Component.printf(Messages.ERROR, e.message);
+            Component.printf(MESSAGE.ERROR, e.message);
         }
     }
 
@@ -28224,7 +28224,7 @@ class State {
                  * think of some way to notify the user that there's a problem, and offer a way of cleaning
                  * up old states.
                  */
-                Component.printf(Messages.ERROR, "Unable to store %d bytes in browser local storage\n", s.length);
+                Component.printf(MESSAGE.ERROR, "Unable to store %d bytes in browser local storage\n", s.length);
                 fSuccess = false;
             }
         }
@@ -28277,7 +28277,7 @@ class State {
             let sKey = aKeys[i];
             if (sKey && (fAll || sKey.substr(0, this.key.length) == this.key)) {
                 Web.removeLocalStorageItem(sKey);
-
+                Component.printf(MESSAGE.DEBUG, "localStorage(%s) removed\n", sKey);
                 aKeys.splice(i, 1);
                 i = 0;
             }
@@ -28813,7 +28813,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (match) sError = match[1];
             }
         }
-        Component.printf(Messages.ERROR, "%s\n", sError);
+        Component.printf(MESSAGE.ERROR, "%s\n", sError);
         displayMessage("Error: " + sError + (sURL? " (" + sURL + ")" : ""));
         if (fSuccess) doneMachine();
         fSuccess = false;

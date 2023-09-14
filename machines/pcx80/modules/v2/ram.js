@@ -9,7 +9,7 @@
 
 import CPUDefX80 from "./cpudef.js";
 import MemoryX80 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -62,7 +62,7 @@ export default class RAMx80 extends Component {
 
         if (this.sFilePath) {
             let sFileURL = this.sFilePath;
-            this.printf(Messages.DEBUG + Messages.LOG, "load(\"%s\")\n", sFileURL);
+            this.printf(MESSAGE.DEBUG + MESSAGE.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -145,7 +145,7 @@ export default class RAMx80 extends Component {
     doneLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 

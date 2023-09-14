@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -36,12 +36,12 @@ export default class ChipSetX80 extends Component {
      */
     constructor(parmsChipSet)
     {
-        super("ChipSet", parmsChipSet, Messages.CHIPSET);
+        super("ChipSet", parmsChipSet, MESSAGE.CHIPSET);
 
         let model = parmsChipSet['model'];
 
         if (model && !ChipSetX80.MODELS[model]) {
-            Component.printf(Messages.NOTICE, "Unrecognized ChipSet model: %s\n", model);
+            Component.printf(MESSAGE.NOTICE, "Unrecognized ChipSet model: %s\n", model);
         }
 
         this.config = ChipSetX80.MODELS[model] || {};
@@ -70,7 +70,7 @@ export default class ChipSetX80 extends Component {
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
-                this.printf(Messages.DEBUG + Messages.LOG, "AudioContext not available\n");
+                this.printf(MESSAGE.DEBUG + MESSAGE.LOG, "AudioContext not available\n");
             }
         }
 
@@ -141,7 +141,7 @@ export default class ChipSetX80 extends Component {
         if (DEBUGGER) {
             if (dbg) {
                 let chipset = this;
-                dbg.messageDump(Messages.NVR, function onDumpNVR() {
+                dbg.messageDump(MESSAGE.NVR, function onDumpNVR() {
                     chipset.dumpNVR();
                 });
             }
@@ -208,7 +208,7 @@ export default class ChipSetX80 extends Component {
     reset()
     {
         if (this.config.INIT && !this.restore(this.config.INIT)) {
-            this.printf(Messages.NOTICE, "reset error\n");
+            this.printf(MESSAGE.NOTICE, "reset error\n");
         }
     }
 

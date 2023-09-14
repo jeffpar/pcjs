@@ -11,7 +11,7 @@
  */
 
 import DriveController from "./drive.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Str from "../../../../modules/v2/strlib.js";
 import { DEBUG, PDP11 } from "./defines.js";
 
@@ -40,7 +40,7 @@ export default class RL11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RL11", parms, Messages.RL11, PDP11.RL11, PDP11.RL11.RL02K, RL11.UNIBUS_IOTABLE);
+        super("RL11", parms, MESSAGE.RL11, PDP11.RL11, PDP11.RL11.RL02K, RL11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -175,7 +175,7 @@ export default class RL11 extends DriveController {
             nWords = (0x10000 - this.regRLMP) & 0xffff;
             addr = (((this.regRLBE & RL11.RLBE.MASK)) << 16) | this.regRLBA;   // 22 bit mode
 
-            this.printf(Messages.ADDRESS, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
+            this.printf(MESSAGE.ADDR, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
             fInterrupt = fnReadWrite.call(this, drive, iCylinder, iHead, iSector, nWords, addr, 2, false, this.doneReadWrite.bind(this));
             break;
@@ -238,7 +238,7 @@ export default class RL11 extends DriveController {
              * code, so let's review the documentation on this.
              */
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data = b0 | (b1 << 8));
-            if (DEBUG && this.messageEnabled(Messages.READ)) {
+            if (DEBUG && this.messageEnabled(MESSAGE.READ)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -268,7 +268,7 @@ export default class RL11 extends DriveController {
             }
         }
 
-        if (DEBUG && this.messageEnabled(Messages.READ)) {
+        if (DEBUG && this.messageEnabled(MESSAGE.READ)) {
             console.log("checksum: " + (checksum|0));
         }
 
@@ -314,7 +314,7 @@ export default class RL11 extends DriveController {
                 nError = RL11.ERRC.NXM;
                 break;
             }
-            if (DEBUG && this.messageEnabled(Messages.WRITE)) {
+            if (DEBUG && this.messageEnabled(MESSAGE.WRITE)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -352,7 +352,7 @@ export default class RL11 extends DriveController {
             }
         }
 
-        if (DEBUG && this.messageEnabled(Messages.WRITE)) {
+        if (DEBUG && this.messageEnabled(MESSAGE.WRITE)) {
             console.log("checksum: " + (checksum|0));
         }
 

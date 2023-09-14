@@ -15,7 +15,6 @@ import JSON5         from 'json5';
 import path          from "path";
 import xml2js        from "xml2js";
 import DbgLib        from "../../machines/modules/v2/dbglib.js";
-import Messages      from "../../machines/modules/v2/messages.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib        from "../../machines/modules/v2/strlib.js";
 import Device        from "../../machines/modules/v3/device.js";
@@ -240,11 +239,11 @@ async function loadModules(factory, modules, done)
                     bitsMessage = format;
                     format = args.shift();
                 }
-                if (Component.testBits(bitsMessage, Messages.ERROR)) {
+                if (Component.testBits(bitsMessage, MESSAGE.ERROR)) {
                     format = "error: " + format + "\n";
                     bitsMessage = 0;
                 }
-                if (Component.testBits(bitsMessage, Messages.WARNING)) {
+                if (Component.testBits(bitsMessage, MESSAGE.WARNING)) {
                     format = "warning: " + format + "\n";
                     bitsMessage = 0;
                 }
@@ -2677,8 +2676,8 @@ function checkArgs(argv, removeArg, removeFlag)
     fTest = removeFlag('test') || fTest;
 
     device.setDebug(fDebug);
-    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
-    messagesFilter = fDebug? Messages.ALL + Messages.TYPES + Messages.ADDRESS : Messages.ALERTS;
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
+    messagesFilter = fDebug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
 
     let arg0 = argv[0].split(' ');
     rootDir = path.join(path.dirname(arg0[0]), "../..");

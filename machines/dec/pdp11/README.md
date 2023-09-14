@@ -15,7 +15,7 @@ Portions were adapted from the [PDP-11/70 Emulator](http://skn.noip.me/pdp11/pdp
   - [drive.js](modules/v2/drive.js)
   - [keyboard.js](modules/v2/keyboard.js)
   - [memory.js](modules/v2/memory.js)
-  - [messages.js](modules/v2/messages.js)
+  - [message.js](modules/v2/message.js)
   - [panel.js](modules/v2/panel.js)
   - [pc11.js](modules/v2/pc11.js)
   - [ram.js](modules/v2/ram.js)

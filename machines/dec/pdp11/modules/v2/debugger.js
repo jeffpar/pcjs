@@ -9,7 +9,7 @@
 
 import BusPDP11 from "./bus.js";
 import MemoryPDP11 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DbgLib from "../../../../modules/v2/dbglib.js";
 import Keys from "../../../../modules/v2/keys.js";
@@ -286,7 +286,7 @@ export default class DebuggerPDP11 extends DbgLib {
             this.aOpReserved = this.aOpReserved.concat(DebuggerPDP11.OP1145);
         }
 
-        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(MESSAGE.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
 
         this.setReady();
     }
@@ -353,7 +353,7 @@ export default class DebuggerPDP11 extends DbgLib {
                         dbg.doCommands(sCmd, true);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer");
+                    if (DEBUG) dbg.printf(MESSAGE.LOG, "no debugger input buffer");
                     return false;
                 }
             );
@@ -820,7 +820,7 @@ export default class DebuggerPDP11 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = Messages.WARNING;
+        this.bitsMessage = this.bitsWarning = MESSAGE.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*
@@ -829,9 +829,9 @@ export default class DebuggerPDP11 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, ',');
         if (aEnable.length) {
-            for (var m in Messages.Categories) {
+            for (var m in MESSAGE.NAMES) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= Messages.Categories[m];
+                    this.bitsMessage |= MESSAGE.NAMES[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
@@ -848,8 +848,8 @@ export default class DebuggerPDP11 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in Messages.Categories) {
-            if (bitMessage == Messages.Categories[m]) {
+        for (var m in MESSAGE.NAMES) {
+            if (bitMessage == MESSAGE.NAMES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -983,7 +983,7 @@ export default class DebuggerPDP11 extends DbgLib {
     message(sMessage, bitsMessage)
     {
         var sAddress, fRunning;
-        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+        if ((bitsMessage & MESSAGE.ADDR) && this.cpu) {
             sAddress = " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
@@ -991,12 +991,12 @@ export default class DebuggerPDP11 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.bitsMessage & Messages.BUFFER) {
+        if (this.bitsMessage & MESSAGE.BUFFER) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
 
-        if ((this.bitsMessage & Messages.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
+        if ((this.bitsMessage & MESSAGE.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
             if (fRunning) sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -1382,7 +1382,7 @@ export default class DebuggerPDP11 extends DbgLib {
                     }
                     sStopped += this.nCycles + " cycles, " + msTotal + " ms, " + nCyclesPerSecond + " hz)";
                 } else {
-                    if (this.messageEnabled(Messages.HALT)) {
+                    if (this.messageEnabled(MESSAGE.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -1491,7 +1491,7 @@ export default class DebuggerPDP11 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling Messages.INT messages.
+         * well, OK, and a few other things now, like enabling MESSAGE.INT messages.
          */
         if (nState >= 0 && this.aInstructionHistory.length) {
             this.cInstructions++;
@@ -1543,8 +1543,8 @@ export default class DebuggerPDP11 extends DbgLib {
      */
     undefinedInstruction(opCode)
     {
-        if (this.messageEnabled(Messages.CPU)) {
-            this.printf(Messages.CPU + Messages.ADDRESS, "undefined opcode %s\n", this.toStrBase(opCode));
+        if (this.messageEnabled(MESSAGE.CPU)) {
+            this.printf(MESSAGE.CPU + MESSAGE.ADDR, "undefined opcode %s\n", this.toStrBase(opCode));
             return this.stopInstruction();  // allow the caller to step over it if they really want a trap generated
         }
         return false;
@@ -2749,7 +2749,7 @@ export default class DebuggerPDP11 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers += m;
@@ -2796,7 +2796,7 @@ export default class DebuggerPDP11 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -2981,7 +2981,7 @@ export default class DebuggerPDP11 extends DbgLib {
             if (vNew & ~mask) {
                 this.printf("warning: %x exceeds %s-byte value\n", vNew, size);
             }
-            this.printf("changing %s%s to %s\n", this.toStrAddr(dbgAddr), (this.messageEnabled(Messages.BUS)? "" : (" from " + this.toStrBase(fnGet.call(this, dbgAddr), size << 3))), this.toStrBase(vNew, size << 3));
+            this.printf("changing %s%s to %s\n", this.toStrAddr(dbgAddr), (this.messageEnabled(MESSAGE.BUS)? "" : (" from " + this.toStrBase(fnGet.call(this, dbgAddr), size << 3))), this.toStrBase(vNew, size << 3));
             fnSet.call(this, dbgAddr, vNew, size);
         }
     }
@@ -3144,7 +3144,7 @@ export default class DebuggerPDP11 extends DbgLib {
         if (sCategory !== undefined) {
             var bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.BUFFER);
+                bitsMessage = (0xffffffff|0) & ~(MESSAGE.HALT | MESSAGE.KEYS | MESSAGE.BUFFER);
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -3159,9 +3159,9 @@ export default class DebuggerPDP11 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in Messages.Categories) {
+                for (m in MESSAGE.NAMES) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.Categories[m];
+                        bitsMessage = MESSAGE.NAMES[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
@@ -3179,7 +3179,7 @@ export default class DebuggerPDP11 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage &= ~bitsMessage;
                     fCriteria = false;
-                    if (bitsMessage == Messages.BUFFER) {
+                    if (bitsMessage == MESSAGE.BUFFER) {
                         var i = this.aMessageBuffer.length >= 1000? this.aMessageBuffer.length - 1000 : 0;
                         while (i < this.aMessageBuffer.length) {
                             this.printf("%s\n", this.aMessageBuffer[i++]);
@@ -3195,9 +3195,9 @@ export default class DebuggerPDP11 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in Messages.Categories) {
+        for (m in MESSAGE.NAMES) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = Messages.Categories[m];
+                var bitMessage = MESSAGE.NAMES[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -3217,7 +3217,7 @@ export default class DebuggerPDP11 extends DbgLib {
 
         this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
 
-        this.historyInit();     // call this just in case Messages.INT was turned on
+        this.historyInit();     // call this just in case MESSAGE.INT was turned on
     }
 
     /**

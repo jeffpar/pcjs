@@ -148,7 +148,7 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/message.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -157,9 +157,9 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
  * NOTE: Because this machine defines more than 32 message categories, some of these message flags
  * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
  */
-const Messages = {
+const MESSAGE = {
     NONE:       0x000000000000,
-    ADDRESS:    0x000000000001,
+    ADDR:       0x000000000001,
     LOG:        0x001000000000,
     STATUS:     0x002000000000,
     NOTICE:     0x004000000000,
@@ -189,9 +189,9 @@ const Messages = {
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-Messages.Categories = {
-    "log":      Messages.LOG,
-    "warn":     Messages.WARNING,
+MESSAGE.NAMES = {
+    "log":      MESSAGE.LOG,
+    "warn":     MESSAGE.WARNING,
     /*
      * Now we turn to message actions rather than message types; for example, setting "halt"
      * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
@@ -199,8 +199,8 @@ Messages.Categories = {
      * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
      * until "m buffer off" is issued.
      */
-    "halt":     Messages.HALT,
-    "buffer":   Messages.BUFFER
+    "halt":     MESSAGE.HALT,
+    "buffer":   MESSAGE.BUFFER
 };
 
 
@@ -2953,7 +2953,7 @@ class Web {
         }
 
         if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "reading: %s\n", sURL);
             try {
                 let encoding = (type == "arraybuffer"? null : "utf8");
                 resource = globals.node.readFileSync(sURL, encoding);
@@ -2979,7 +2979,7 @@ class Web {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetching: %s\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -2993,11 +2993,11 @@ class Web {
                 }
             })
             .then(resource => {
-
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
-                Component.printf(Messages.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
                 if (done) done(sURL, resource, nErrorCode);
             });
             return response;
@@ -3036,18 +3036,18 @@ class Web {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
+                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
                 if (!request.status && !Web.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
@@ -3075,12 +3075,12 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "posting: %s (%d bytes)\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "requesting: %s\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -3408,7 +3408,7 @@ class Web {
      */
     static printLocalStorageError(e)
     {
-        Component.printf(Messages.ERROR, "Local storage error: %s\n", e.message);
+        Component.printf(MESSAGE.ERROR, "Local storage error: %s\n", e.message);
     }
 
     /**
@@ -3759,7 +3759,7 @@ class Web {
         };
         e.onmousedown = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onMouseDown()\n");
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -3769,7 +3769,7 @@ class Web {
         };
         e.ontouchstart = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onTouchStart()\n");
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -3777,7 +3777,7 @@ class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onMouseUp()/onMouseOut()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3785,7 +3785,7 @@ class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onTouchEnd()/onTouchCancel()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3849,7 +3849,7 @@ class Web {
      */
     static onError(sMessage)
     {
-        Component.printf(Messages.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
+        Component.printf(MESSAGE.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
     }
 
     /**
@@ -4248,15 +4248,15 @@ class Component {
             bitsMessage = format;
             format = args.shift();
         }
-        if (DEBUG || bitsMessage >= Messages.LOG && bitsMessage <= Messages.ERROR) {
+        if (DEBUG || bitsMessage >= MESSAGE.LOG && bitsMessage <= MESSAGE.ERROR) {
             let alert = false;
-            if (bitsMessage == Messages.ERROR) {
+            if (bitsMessage == MESSAGE.ERROR) {
                 alert = true;
                 format = "Error: " + format;
-            } else if (bitsMessage == Messages.WARNING) {
+            } else if (bitsMessage == MESSAGE.WARNING) {
                 alert = true;
                 format = "Warning: " + format;
-            } else if (bitsMessage == Messages.NOTICE) {
+            } else if (bitsMessage == MESSAGE.NOTICE) {
                 alert = true;
             }
             let sMessage = Str.sprintf(format, ...args).trim();
@@ -4302,7 +4302,7 @@ class Component {
                 try {
                     throw new Error(s);
                 } catch(e) {
-                    Component.printf(Messages.ERROR, "%s\n", e.stack || e.message);
+                    Component.printf(MESSAGE.ERROR, "%s\n", e.stack || e.message);
                 }
             }
         }
@@ -4315,7 +4315,7 @@ class Component {
      */
     static warning(s)
     {
-        Component.printf(Messages.WARNING, s);
+        Component.printf(MESSAGE.WARNING, s);
     }
 
     /**
@@ -4325,7 +4325,7 @@ class Component {
      */
     static error(s)
     {
-        Component.printf(Messages.ERROR, s);
+        Component.printf(MESSAGE.ERROR, s);
     }
 
     /**
@@ -4468,12 +4468,12 @@ class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.printf(Messages.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
+                                Component.printf(MESSAGE.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.printf(Messages.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
+                            // if (DEBUG) Component.printf(MESSAGE.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
                             break;
                     }
                 }
@@ -4541,7 +4541,7 @@ class Component {
                 }
             }
             if (components.length && idRelated !== false) {
-                Component.printf(Messages.WARNING, "Component ID \"%s\" not found\n", id);
+                Component.printf(MESSAGE.WARNING, "Component ID \"%s\" not found\n", id);
             }
         }
         return null;
@@ -4582,7 +4582,7 @@ class Component {
                 }
             }
             if (MAXDEBUG && componentPrev !== false) {
-                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+                Component.printf(MESSAGE.WARNING, "Component type \"%s\" not found\n", sType);
             }
         }
         return null;
@@ -4683,7 +4683,7 @@ class Component {
             }
         }
         if (!ae.length) {
-            if (MAXDEBUG) Component.printf(Messages.WARNING, "No elements of class \"%s\" found\n", sClass);
+            if (MAXDEBUG) Component.printf(MESSAGE.WARNING, "No elements of class \"%s\" found\n", sClass);
         }
         return ae;
     }
@@ -4812,7 +4812,7 @@ class Component {
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.printf(Messages.SCRIPT, aTokens.join(' '));
+            Component.printf(MESSAGE.SCRIPT, aTokens.join(' '));
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -4990,7 +4990,7 @@ class Component {
                 this.print = function(component, control) {
                     return function printControl(sMessage, bitsMessage = 0) {
                         if (!sMessage) sMessage = "";
-                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == MESSAGE.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -5062,7 +5062,7 @@ class Component {
     setError(s)
     {
         this.flags.error = true;
-        this.printf(Messages.NOTICE, "%s\n", s);
+        this.printf(MESSAGE.NOTICE, "%s\n", s);
     }
 
     /**
@@ -5112,7 +5112,7 @@ class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -5132,7 +5132,7 @@ class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
+                if (MAXDEBUG /* || this.name */) this.printf(MESSAGE.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -5284,7 +5284,7 @@ class Component {
     /**
      * messageEnabled(bitsMessage)
      *
-     * If bitsMessage is Messages.NONE (0), then the component's Messages category is used.
+     * If bitsMessage is MESSAGE.NONE (0), then the component's Messages category is used.
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
@@ -5293,22 +5293,22 @@ class Component {
     messageEnabled(bitsMessage = 0)
     {
         /*
-         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.NONE, because
-         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         * It's important to subtract MESSAGE.ADDR from bitsMessage before testing for MESSAGE.NONE, because
+         * if MESSAGE.ADDR was the ONLY bit specified, we still want to default to the component's message category.
          */
-        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        if (bitsMessage & MESSAGE.ADDR) bitsMessage -= MESSAGE.ADDR;
         bitsMessage = bitsMessage || this.bitsMessage;
         /*
-         * printf() calls that specify Messages.DEBUG should be stripped out of non-DEBUG builds, but just in case
+         * printf() calls that specify MESSAGE.DEBUG should be stripped out of non-DEBUG builds, but just in case
          * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
          */
-        if (DEBUG || !Component.testBits(bitsMessage, Messages.DEBUG)) {
+        if (DEBUG || !Component.testBits(bitsMessage, MESSAGE.DEBUG)) {
             /*
-             * The debugger has the ability to filter any messages listed in Messages.Categories, and that currently
+             * The debugger has the ability to filter any messages listed in MESSAGE.NAMES, and that currently
              * includes message types LOG and WARNING, so if the debugger is loaded, subtract those from the types we allow
              * by default.
              */
-            let allowedMessages = Messages.TYPES - (this.dbg? Messages.LOG + Messages.WARNING : 0);
+            let allowedMessages = MESSAGE.TYPES - (this.dbg? MESSAGE.LOG + MESSAGE.WARNING : 0);
             if (Component.testBits(allowedMessages, bitsMessage) || this.dbg && Component.testBits(this.dbg.bitsMessage, bitsMessage)) {
                 return true;
             }
@@ -5324,7 +5324,7 @@ class Component {
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
      * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
-     * of whether the debugger has enabled it, the caller can use printf(Messages.NONE), and if the caller wants
+     * of whether the debugger has enabled it, the caller can use printf(MESSAGE.NONE), and if the caller wants
      * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
@@ -5335,12 +5335,12 @@ class Component {
     {
         let bitsMessage = 0;
         if (typeof format == "number") {
-            bitsMessage = format || Messages.PROGRESS;
+            bitsMessage = format || MESSAGE.PROGRESS;
             format = args.shift();
-            if (Component.testBits(bitsMessage, Messages.LOG)) {
+            if (Component.testBits(bitsMessage, MESSAGE.LOG)) {
                 format = (this.id || this.type || "log") + ": " + format;
             }
-            else if (Component.testBits(bitsMessage, Messages.STATUS)) {
+            else if (Component.testBits(bitsMessage, MESSAGE.STATUS)) {
                 format = this.type + ": " + format;
             }
         }
@@ -5358,7 +5358,7 @@ class Component {
      * printIO(port, bOut, addrFrom, name, bIn, bitsMessage)
      *
      * If bitsMessage is not specified, the component's Messages category is used,
-     * and if bitsMessage is true, the message is displayed if Messages.PORT is enabled also.
+     * and if bitsMessage is true, the message is displayed if MESSAGE.PORT is enabled also.
      *
      * @this {Component}
      * @param {number} port
@@ -5757,7 +5757,7 @@ if (DEBUG) {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/message.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -5766,76 +5766,76 @@ if (DEBUG) {
  * NOTE: Because this machine defines more than 32 message categories, some of these message flags
  * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
  */
-Messages.CPU         = 0x000000000002;
-Messages.SEG         = 0x000000000004;
-Messages.DESC        = 0x000000000008;
-Messages.TSS         = 0x000000000010;
-Messages.PORT        = 0x000000000020;
-Messages.IOPM        = 0x000000000040;
-Messages.NMI         = 0x000000000080;
-Messages.TRAP        = 0x000000000100;
-Messages.FAULT       = 0x000000000200;
-Messages.INT         = 0x000000000400;
-Messages.IRQ         = 0x000000000800;
-Messages.BUS         = 0x000000001000;
-Messages.MEM         = 0x000000002000;
-Messages.DMA         = 0x000000004000;
-Messages.FDC         = 0x000000008000;
-Messages.HDC         = 0x000000010000;
-Messages.DISK        = 0x000000020000;
-Messages.PIC         = 0x000000040000;
-Messages.TIMER       = 0x000000080000;
-Messages.CMOS        = 0x000000100000;
-Messages.RTC         = 0x000000200000;
-Messages.C8042       = 0x000000400000;
-Messages.KBD         = 0x000000800000;
-Messages.PARALLEL    = 0x000001000000;
-Messages.SERIAL      = 0x000002000000;
-Messages.MOUSE       = 0x000004000000;
-Messages.SPEAKER     = 0x000008000000;
-Messages.CHIPSET     = 0x000010000000;
-Messages.VIDEO       = 0x000020000000;
-Messages.COMPUTER    = 0x000040000000;
-Messages.DATA        = 0x000080000000;
-Messages.DOS         = 0x000100000000;
-Messages.EVENT       = 0x000200000000;
-Messages.KEY         = 0x000400000000;
-Messages.RESERVED    = 0xfff000000000;
+MESSAGE.CPU         = 0x000000000002;
+MESSAGE.SEG         = 0x000000000004;
+MESSAGE.DESC        = 0x000000000008;
+MESSAGE.TSS         = 0x000000000010;
+MESSAGE.PORT        = 0x000000000020;
+MESSAGE.IOPM        = 0x000000000040;
+MESSAGE.NMI         = 0x000000000080;
+MESSAGE.TRAP        = 0x000000000100;
+MESSAGE.FAULT       = 0x000000000200;
+MESSAGE.INT         = 0x000000000400;
+MESSAGE.IRQ         = 0x000000000800;
+MESSAGE.BUS         = 0x000000001000;
+MESSAGE.MEM         = 0x000000002000;
+MESSAGE.DMA         = 0x000000004000;
+MESSAGE.FDC         = 0x000000008000;
+MESSAGE.HDC         = 0x000000010000;
+MESSAGE.DISK        = 0x000000020000;
+MESSAGE.PIC         = 0x000000040000;
+MESSAGE.TIMER       = 0x000000080000;
+MESSAGE.CMOS        = 0x000000100000;
+MESSAGE.RTC         = 0x000000200000;
+MESSAGE.C8042       = 0x000000400000;
+MESSAGE.KBD         = 0x000000800000;
+MESSAGE.PARALLEL    = 0x000001000000;
+MESSAGE.SERIAL      = 0x000002000000;
+MESSAGE.MOUSE       = 0x000004000000;
+MESSAGE.SPEAKER     = 0x000008000000;
+MESSAGE.CHIPSET     = 0x000010000000;
+MESSAGE.VIDEO       = 0x000020000000;
+MESSAGE.COMPUTER    = 0x000040000000;
+MESSAGE.DATA        = 0x000080000000;
+MESSAGE.DOS         = 0x000100000000;
+MESSAGE.EVENT       = 0x000200000000;
+MESSAGE.KEY         = 0x000400000000;
+MESSAGE.RESERVED    = 0xfff000000000;
 
-Messages.Categories['cpu']       = Messages.CPU;
-Messages.Categories['seg']       = Messages.SEG;
-Messages.Categories['desc']      = Messages.DESC;
-Messages.Categories['port']      = Messages.PORT;
-Messages.Categories['tss']       = Messages.TSS;
-Messages.Categories['iopm']      = Messages.IOPM;
-Messages.Categories['int']       = Messages.INT;
-Messages.Categories['nmi']       = Messages.NMI;
-Messages.Categories['fault']     = Messages.FAULT;
-Messages.Categories['trap']      = Messages.TRAP;
-Messages.Categories['bus']       = Messages.BUS;
-Messages.Categories['irq']       = Messages.IRQ;
-Messages.Categories['mem']       = Messages.MEM;
-Messages.Categories['dma']       = Messages.DMA;
-Messages.Categories['fdc']       = Messages.FDC;
-Messages.Categories['hdc']       = Messages.HDC;
-Messages.Categories['disk']      = Messages.DISK;
-Messages.Categories['pic']       = Messages.PIC;
-Messages.Categories['timer']     = Messages.TIMER;
-Messages.Categories['cmos']      = Messages.CMOS;
-Messages.Categories['rtc']       = Messages.RTC;
-Messages.Categories['8042']      = Messages.C8042;
-Messages.Categories['kbd']       = Messages.KBD;
-Messages.Categories['parallel']  = Messages.PARALLEL;
-Messages.Categories['serial']    = Messages.SERIAL;
-Messages.Categories['mouse']     = Messages.MOUSE;
-Messages.Categories['speaker']   = Messages.SPEAKER;
-Messages.Categories['chipset']   = Messages.CHIPSET;
-Messages.Categories['video']     = Messages.VIDEO;
-Messages.Categories['computer']  = Messages.COMPUTER;
-Messages.Categories['dos']       = Messages.DOS;
-Messages.Categories['data']      = Messages.DATA;
-Messages.Categories['event']     = Messages.EVENT;
-Messages.Categories['key']       = Messages.KEY;
+MESSAGE.NAMES['cpu']        = MESSAGE.CPU;
+MESSAGE.NAMES['seg']        = MESSAGE.SEG;
+MESSAGE.NAMES['desc']       = MESSAGE.DESC;
+MESSAGE.NAMES['port']       = MESSAGE.PORT;
+MESSAGE.NAMES['tss']        = MESSAGE.TSS;
+MESSAGE.NAMES['iopm']       = MESSAGE.IOPM;
+MESSAGE.NAMES['int']        = MESSAGE.INT;
+MESSAGE.NAMES['nmi']        = MESSAGE.NMI;
+MESSAGE.NAMES['fault']      = MESSAGE.FAULT;
+MESSAGE.NAMES['trap']       = MESSAGE.TRAP;
+MESSAGE.NAMES['bus']        = MESSAGE.BUS;
+MESSAGE.NAMES['irq']        = MESSAGE.IRQ;
+MESSAGE.NAMES['mem']        = MESSAGE.MEM;
+MESSAGE.NAMES['dma']        = MESSAGE.DMA;
+MESSAGE.NAMES['fdc']        = MESSAGE.FDC;
+MESSAGE.NAMES['hdc']        = MESSAGE.HDC;
+MESSAGE.NAMES['disk']       = MESSAGE.DISK;
+MESSAGE.NAMES['pic']        = MESSAGE.PIC;
+MESSAGE.NAMES['timer']      = MESSAGE.TIMER;
+MESSAGE.NAMES['cmos']       = MESSAGE.CMOS;
+MESSAGE.NAMES['rtc']        = MESSAGE.RTC;
+MESSAGE.NAMES['8042']       = MESSAGE.C8042;
+MESSAGE.NAMES['kbd']        = MESSAGE.KBD;
+MESSAGE.NAMES['parallel']   = MESSAGE.PARALLEL;
+MESSAGE.NAMES['serial']     = MESSAGE.SERIAL;
+MESSAGE.NAMES['mouse']      = MESSAGE.MOUSE;
+MESSAGE.NAMES['speaker']    = MESSAGE.SPEAKER;
+MESSAGE.NAMES['chipset']    = MESSAGE.CHIPSET;
+MESSAGE.NAMES['video']      = MESSAGE.VIDEO;
+MESSAGE.NAMES['computer']   = MESSAGE.COMPUTER;
+MESSAGE.NAMES['dos']        = MESSAGE.DOS;
+MESSAGE.NAMES['data']       = MESSAGE.DATA;
+MESSAGE.NAMES['event']      = MESSAGE.EVENT;
+MESSAGE.NAMES['key']        = MESSAGE.KEY;
 
 
 /**
@@ -9702,7 +9702,7 @@ class Panel extends Component {
         this.xMouse = x;
         this.yMouse = y;
 
-        if (MAXDEBUG) this.printf(Messages.LOG, "Panel.moveMouse(%d,%d)\n", x, y);
+        if (MAXDEBUG) this.printf(MESSAGE.LOG, "Panel.moveMouse(%d,%d)\n", x, y);
 
         if (x >= 0 && x < Panel.LIVECANVAS.CX && y >= 0 && y < Panel.LIVECANVAS.CY) {
             /*
@@ -9752,7 +9752,7 @@ class Panel extends Component {
 
                     addr |= 0;
                     if (addr > addrLimit) addr = addrLimit;
-                    if (MAXDEBUG) this.printf(Messages.LOG, "Panel.findAddress(%d,%d) found type %s, address %#010x\n", x, y, MemoryX86.TYPE.NAMES[region.type], addr);
+                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "Panel.findAddress(%d,%d) found type %s, address %#010x\n", x, y, MemoryX86.TYPE.NAMES[region.type], addr);
                     return addr;
                 }
             }
@@ -9779,7 +9779,7 @@ class Panel extends Component {
             this.initPen(10, Panel.LIVECANVAS.FONT.CY, this.canvasLiveMem, this.contextLiveMem, this.canvas.style.color);
 
             if (this.fVisual) {
-                if (DEBUG) this.printf(Messages.LOG, "begin scanMemory()\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "begin scanMemory()\n");
                 this.busInfo = this.bus.scanMemory(this.busInfo);
                 /*
                  * Calculate the pixel-to-memory-address ratio
@@ -9806,7 +9806,7 @@ class Panel extends Component {
                     for (i = 0; i < this.busInfo.cRegions; i++) {
                         let cBlocksRegion = this.busInfo.aRegions[i].cBlocks;
                         this.busInfo.aRects.push(rect = rectAvail.subDivide(cBlocksRegion, cBlocksRemaining, !i));
-                        if (MAXDEBUG) this.printf(Messages.LOG, "region %d rectangle (x=%d,y=%d cx=%d,cy=%d)\n", i, rect.x, rect.y, rect.cx, rect.cy);
+                        if (MAXDEBUG) this.printf(MESSAGE.LOG, "region %d rectangle (x=%d,y=%d cx=%d,cy=%d)\n", i, rect.x, rect.y, rect.cx, rect.cy);
                         cBlocksRemaining -= cBlocksRegion;
                     }
 
@@ -9827,7 +9827,7 @@ class Panel extends Component {
                         this.centerText(MemoryX86.TYPE.NAMES[region.type] + " (" + (((region.cBlocks * this.bus.nBlockSize) / 1024) | 0) + "Kb)");
                     }
                 }
-                if (DEBUG) this.printf(Messages.LOG, "end scanMemory(): %d total bytes, %d total blocks, %d total regions\n", this.busInfo.cbTotal, this.busInfo.cBlocks, this.busInfo.cRegions);
+                if (DEBUG) this.printf(MESSAGE.LOG, "end scanMemory(): %d total bytes, %d total blocks, %d total regions\n", this.busInfo.cbTotal, this.busInfo.cBlocks, this.busInfo.cRegions);
             } else {
                 this.drawText("This space intentionally left blank");
             }
@@ -9913,7 +9913,7 @@ class Panel extends Component {
      */
     addRegion(addr, iBlock, cBlocks, type)
     {
-        if (DEBUG) this.printf(Messages.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, MemoryX86.TYPE.NAMES[type], cBlocks);
+        if (DEBUG) this.printf(MESSAGE.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, MemoryX86.TYPE.NAMES[type], cBlocks);
         this.busInfo.aRegions[this.busInfo.cRegions++] = {iBlock: iBlock, cBlocks: cBlocks, type: type};
         return Usr.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, cBlocks, 0, type);
     }
@@ -10703,7 +10703,7 @@ class BusX86 extends Component {
             if (!this.cpu.isRunning()) {        // allocation messages at "run time" are bit too much
                 let kb = (size / 1024)|0;
                 let sb = kb? (kb + "Kb") : (size + " bytes");
-                this.printf(Messages.STATUS, "%s %s at 0x%X\n", sb, MemoryX86.TYPE.NAMES[type], addr);
+                this.printf(MESSAGE.STATUS, "%s %s at 0x%X\n", sb, MemoryX86.TYPE.NAMES[type], addr);
             }
             return true;
         }
@@ -11313,10 +11313,10 @@ class BusX86 extends Component {
                 if (btiPrev && slotPrev) {
                     let btoPrev = this.abtObjects[slotPrev-1];
                     if (!btoPrev) {
-
+                        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to empty slot (%d)\n", addr, bti, btiPrev, slotPrev);
                     }
                     else if (btoPrev.refs <= 0) {
-
+                        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
                         /*
                          * We used to just slam a null into the previous slot and consider it gone, but there may still
                          * be "weak references" to that slot (ie, it may still be associated with a register bti).
@@ -11618,7 +11618,7 @@ class BusX86 extends Component {
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.printf(Messages.LOG, "addPortInputNotify(%#06x)\n", port);
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "addPortInputNotify(%#06x)\n", port);
             }
         }
     }
@@ -11760,7 +11760,7 @@ class BusX86 extends Component {
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.printf(Messages.LOG, "addPortOutputNotify(%#06x)\n", port);
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "addPortOutputNotify(%#06x)\n", port);
             }
         }
     }
@@ -11860,7 +11860,7 @@ class BusX86 extends Component {
      */
     reportError(op, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.DEBUG : Messages.NONE, "Memory block error (%d: %x,%x)\n", op, addr, size);
+        this.printf(fQuiet? MESSAGE.DEBUG : MESSAGE.NONE, "Memory block error (%d: %x,%x)\n", op, addr, size);
         return false;
     }
 
@@ -12537,7 +12537,7 @@ class MemoryX86 {
     printAddr(sMessage)
     {
         if (DEBUG && this.dbg) {
-            this.dbg.printf(Messages.MEM, "%s %%%x #%s\n", this.addr, this.id);
+            this.dbg.printf(MESSAGE.MEM, "%s %%%x #%s\n", this.addr, this.id);
         }
     }
 
@@ -12650,7 +12650,7 @@ class MemoryX86 {
     readNone(off, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to read invalid block %%%x\n", addr);
+            this.dbg.printf(MESSAGE.CPU + MESSAGE.MEM, "attempt to read invalid block %%%x\n", addr);
         }
         return 0xff;
     }
@@ -12666,7 +12666,7 @@ class MemoryX86 {
     writeNone(off, v, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to write %#06x to invalid block %%%x\n", v, addr);
+            this.dbg.printf(MESSAGE.CPU + MESSAGE.MEM, "attempt to write %#06x to invalid block %%%x\n", v, addr);
         }
     }
 
@@ -13802,7 +13802,7 @@ class CPULib extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, Messages.CPU);
+        super("CPU", parmsCPU, MESSAGE.CPU);
 
         let nCycles = parmsCPU['cycles'] || nCyclesDefault;
 
@@ -14008,7 +14008,7 @@ class CPULib extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init();
             } else {
-                this.printf(Messages.NONE, "No debugger detected\n");
+                this.printf(MESSAGE.NONE, "No debugger detected\n");
             }
         }
         /*
@@ -14071,7 +14071,7 @@ class CPULib extends Component {
     isPowered()
     {
         if (!this.flags.powered) {
-            this.printf(Messages.NONE, "%s not powered\n", this.toString());
+            this.printf(MESSAGE.NONE, "%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -14498,7 +14498,7 @@ class CPULib extends Component {
                 let sSpeed = this.getSpeedTarget();
                 let controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.printf(Messages.NONE, "target speed: %s\n", sSpeed);
+                this.printf(MESSAGE.NONE, "target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.updateFocus();
         }
@@ -14659,7 +14659,7 @@ class CPULib extends Component {
              * Every time the browser gives us another chance to run, we want to display our targets for that run
              * here, followed by what we accomplished in that run.
              */
-            this.printf(Messages.CPU, "%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
+            this.printf(MESSAGE.CPU, "%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
                 msElapsedThisRun,
                 msRemainsThisRun,
                 this.nCyclesThisRun,
@@ -14881,14 +14881,14 @@ class CPULib extends Component {
             timer[1] -= nCycles;
             if (timer[1] <= 0) {
                 if (DEBUG) {
-                    this.printf(Messages.CPU + Messages.TIMER, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
+                    this.printf(MESSAGE.CPU + MESSAGE.TIMER, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
                 }
                 timer[1] = -1;      // zero is technically an "active" value, so ensure the timer is dormant now
                 timer[3]();         // safe to invoke the callback function now
                 if (timer[2]) {
                     this.setTimer(iTimer, timer[2]);
                     if (DEBUG) {
-                        this.printf(Messages.CPU + Messages.TIMER, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
+                        this.printf(MESSAGE.CPU + MESSAGE.TIMER, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
                     }
                 }
             }
@@ -15043,7 +15043,7 @@ class CPULib extends Component {
             return false;
         }
         if (this.flags.running) {
-            if (!fQuiet) this.printf(Messages.NONE, "%s busy\n", this.toString());
+            if (!fQuiet) this.printf(MESSAGE.NONE, "%s busy\n", this.toString());
             return false;
         }
         if (this.idRunTimeout) {
@@ -15113,7 +15113,7 @@ class CPULib extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
                 this.cmp.updateStatus(true);
             }
-            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
+            if (!this.dbg) this.printf(MESSAGE.STATUS, "Stopped\n");
             fStopped = true;
         }
         this.flags.complete = fComplete;
@@ -16692,7 +16692,7 @@ class CPUx86 extends CPULib {
          * of messages on and off, is good enough.
          */
         if (DEBUGGER && this.flags.debugCheck) {
-            if (this.messageEnabled(Messages.INT) && this.dbg.messageInt(nInt, this.regLIP) && MAXDEBUG) {
+            if (this.messageEnabled(MESSAGE.INT) && this.dbg.messageInt(nInt, this.regLIP) && MAXDEBUG) {
                 this.addIntReturn(this.regLIP, function(cpu, nCycles) {
                     return function onIntReturn(nLevel) {
                         cpu.dbg.messageIntReturn(nInt, nLevel, cpu.getCycles() - nCycles);
@@ -16917,7 +16917,7 @@ class CPUx86 extends CPULib {
             fV86 = this.isV86Mode();
         }
         if (DEBUG && (fProt != this.isProtMode() || fV86 != this.isV86Mode())) {
-            this.printf(Messages.ADDRESS, "CPU switching to %s-mode\n", (fProt? (fV86? "v86" : "protected") : "real"));
+            this.printf(MESSAGE.ADDR, "CPU switching to %s-mode\n", (fProt? (fV86? "v86" : "protected") : "real"));
         }
         this.aOpGrp6 = (fProt && !fV86? X86.aOpGrp6Prot : X86.aOpGrp6Real);
         this.segCS.updateMode(false, fProt, fV86);
@@ -18186,7 +18186,7 @@ class CPUx86 extends CPULib {
             }
         }
         if (bitsPorts) {
-            this.printf(Messages.IOPM + Messages.ADDRESS, "checkIOPM(%#06x,%d,%s): trapped\n", port, nPorts, (fInput? "input" : "output"));
+            this.printf(MESSAGE.IOPM + MESSAGE.ADDR, "checkIOPM(%#06x,%d,%s): trapped\n", port, nPorts, (fInput? "input" : "output"));
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return false;
         }
@@ -19599,7 +19599,7 @@ class CPUx86 extends CPULib {
          * One exception I make here is when you've asked the Debugger to display PIC messages, the idea being that
          * if you're watching the PIC that closely, then you want to hardware interrupts to occur regardless.
          */
-        if (!nMinCycles && !this.messageEnabled(Messages.PIC)) this.opFlags |= X86.OPFLAG.NOINTR;
+        if (!nMinCycles && !this.messageEnabled(MESSAGE.PIC)) this.opFlags |= X86.OPFLAG.NOINTR;
 
         do {
             let opPrefixes = this.opFlags & X86.OPFLAG_PREFIXES;
@@ -24273,7 +24273,7 @@ class SegX86 {
 
         let addrNew = cpu.segTSS.base;
         if (DEBUG && DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
+            this.dbg.printf(MESSAGE.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
         }
 
         if (fNest !== false) {
@@ -24659,11 +24659,11 @@ class SegX86 {
     messageSeg(sel, base, limit, type, ext)
     {
         if (DEBUG) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.SEG)) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MESSAGE.SEG)) {
                 let ch = (this.sName.length < 3? " " : "");
                 let sDPL = " dpl=" + this.dpl;
                 if (this.id == SegX86.ID.CODE) sDPL += " cpl=" + this.cpl;
-                this.dbg.printf(Messages.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
+                this.dbg.printf(MESSAGE.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
             }
             /*
              * Unless I've got a bug that's causing descriptor corruption, it appears that Windows 3.0 may be setting the
@@ -28650,17 +28650,17 @@ X86.helpINT = function(nIDT, nError, nCycles)
             case 0xFB:
                 actual = (argA * argB)|0;
                 if (result != actual) {
-                    if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x * %#x does not match actual: %#x\n", result, argA, argB, actual);
+                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x * %#x does not match actual: %#x\n", result, argA, argB, actual);
                 }
                 break;
             case 0xFC:
                 actual = (argA / argB)|0;
                 if (result != actual) {
-                    if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x / %#x does not match actual: %#x\n", result, argA, argB, actual);
+                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x / %#x does not match actual: %#x\n", result, argA, argB, actual);
                 }
                 actual = (argA % argB)|0;
                 if (remainder != actual) {
-                    if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x % %#x does not match actual: %#x\n", result, argA, argB, actual);
+                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x % %#x does not match actual: %#x\n", result, argA, argB, actual);
                 }
                 break;
             }
@@ -29070,7 +29070,7 @@ X86.helpPageFault = function(addr, fPresent, fWrite)
  */
 X86.helpCheckFault = function(nFault, nError, fHalt)
 {
-    let bitsMessage = Messages.FAULT;
+    let bitsMessage = MESSAGE.FAULT;
 
     let bOpcode = this.probeAddr(this.regLIP);
 
@@ -29115,7 +29115,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
      * (which you can override by turning on CPU messages).
      */
     if (fHalt === false) {
-        bitsMessage |= Messages.CPU;
+        bitsMessage |= MESSAGE.CPU;
     }
 
     /*
@@ -29135,7 +29135,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
      * However, the foregoing notwithstanding, if MESSAGE.HALT is enabled along with all the other required
      * MESSAGE bits, then we want to halt regardless.
      */
-    if (this.messageEnabled(bitsMessage + Messages.HALT)) {
+    if (this.messageEnabled(bitsMessage + MESSAGE.HALT)) {
         fHalt = true;
     }
 
@@ -29147,7 +29147,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
             if (fRunning) sMessage += " (blocked)";
         }
         if (DEBUGGER && this.dbg) {
-            this.printf((fHalt? Messages.PROGRESS : bitsMessage) + Messages.ADDRESS, "%s\n", sMessage);
+            this.printf((fHalt? MESSAGE.PROGRESS : bitsMessage) + MESSAGE.ADDR, "%s\n", sMessage);
             if (fHalt) {
                 /*
                  * By setting fHalt to fRunning (which is true while running but false while single-stepping),
@@ -29166,7 +29166,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
              * be true.  Which means we should shut the machine down.
              */
 
-            this.printf(Messages.NOTICE, "%s\n", sMessage);
+            this.printf(MESSAGE.NOTICE, "%s\n", sMessage);
             this.stopCPU();
         }
     }
@@ -35729,7 +35729,7 @@ X86.opPUSHF = function()
     let regPS = this.getPS();
     if (I386) {
         if ((regPS & X86.PS.VM) && this.nIOPL < 3) {
-            if (DEBUG) this.printf(Messages.ADDRESS, "PUSHF in v86-mode (IOPL < 3)\n");
+            if (DEBUG) this.printf(MESSAGE.ADDR, "PUSHF in v86-mode (IOPL < 3)\n");
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return;
         }
@@ -35764,7 +35764,7 @@ X86.opPOPF = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printf(Messages.ADDRESS, "POPF in v86-mode (IOPL < 3)\n");
+        if (DEBUG) this.printf(MESSAGE.ADDR, "POPF in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -36700,7 +36700,7 @@ X86.opINT3 = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printf(Messages.ADDRESS, "INT 0x03 in v86-mode (IOPL < 3)\n");
+        if (DEBUG) this.printf(MESSAGE.ADDR, "INT 0x03 in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -36725,7 +36725,7 @@ X86.opINTn = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printf(Messages.ADDRESS, "INT %#04x in v86-mode (IOPL < 3)\n", nInt);
+        if (DEBUG) this.printf(MESSAGE.ADDR, "INT %#04x in v86-mode (IOPL < 3)\n", nInt);
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -36752,7 +36752,7 @@ X86.opINTO = function()
          * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
          */
         if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-            if (DEBUG) this.printf(Messages.ADDRESS, "INTO in v86-mode (IOPL < 3)\n");
+            if (DEBUG) this.printf(MESSAGE.ADDR, "INTO in v86-mode (IOPL < 3)\n");
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return;
         }
@@ -36773,7 +36773,7 @@ X86.opIRET = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printf(Messages.ADDRESS, "IRET in v86-mode (IOPL < 3)\n");
+        if (DEBUG) this.printf(MESSAGE.ADDR, "IRET in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -37405,7 +37405,7 @@ X86.opHLT = function()
      * If a Debugger is present and both the CPU and HALT message categories are enabled, then we
      * REALLY halt the CPU, on the theory that whoever's using the Debugger would like to see HLTs.
      */
-    if (DEBUGGER && this.dbg && this.messageEnabled(Messages.CPU + Messages.HALT)) {
+    if (DEBUGGER && this.dbg && this.messageEnabled(MESSAGE.CPU + MESSAGE.HALT)) {
         this.resetIP();         // this is purely for the Debugger's benefit, to show the HLT
         this.dbg.stopCPU();
         return;
@@ -37522,7 +37522,7 @@ X86.opCLI = function()
      * and in V86-mode, CPL is always 3.
      */
     if (this.nCPL > this.nIOPL) {
-        if (DEBUG && (this.regPS & X86.PS.VM)) this.printf(Messages.ADDRESS, "CLI in v86-mode (IOPL < 3)\n");
+        if (DEBUG && (this.regPS & X86.PS.VM)) this.printf(MESSAGE.ADDR, "CLI in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -37542,7 +37542,7 @@ X86.opSTI = function()
      * and in V86-mode, CPL is always 3.
      */
     if (this.nCPL > this.nIOPL) {
-        if (DEBUG && (this.regPS & X86.PS.VM)) this.printf(Messages.ADDRESS, "STI in v86-mode (IOPL < 3)\n");
+        if (DEBUG && (this.regPS & X86.PS.VM)) this.printf(MESSAGE.ADDR, "STI in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -37623,7 +37623,7 @@ X86.opUndefined = function()
 X86.opTBD = function()
 {
     this.setIP(this.opLIP - this.segCS.base);
-    this.printf(Messages.NONE, "unimplemented 80386 opcode\n");
+    this.printf(MESSAGE.NONE, "unimplemented 80386 opcode\n");
     this.stopCPU();
 };
 
@@ -39606,7 +39606,7 @@ class ChipSet extends Component {
      */
     constructor(parmsChipSet)
     {
-        super("ChipSet", parmsChipSet, Messages.CHIPSET);
+        super("ChipSet", parmsChipSet, MESSAGE.CHIPSET);
 
         let model = parmsChipSet['model'];
 
@@ -39615,7 +39615,7 @@ class ChipSet extends Component {
          * model numbers, you should generally compare (this.model|0) to the target value, which truncates it.
          */
         if (model && !ChipSet.MODELS[model]) {
-            Component.printf(Messages.NOTICE, "Unrecognized ChipSet model: %s\n", model);
+            Component.printf(MESSAGE.NOTICE, "Unrecognized ChipSet model: %s\n", model);
         }
 
         this.model = ChipSet.MODELS[model] || ChipSet.MODEL_5150_OTHER;
@@ -39698,7 +39698,7 @@ class ChipSet extends Component {
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
-                if (DEBUG) this.printf(Messages.LOG, "AudioContext not available");
+                if (DEBUG) this.printf(MESSAGE.LOG, "AudioContext not available");
             }
         }
         /*
@@ -39744,7 +39744,7 @@ class ChipSet extends Component {
             let volume = +sound || 0;
             this.volumeInit = (sound == "true" || volume < 0 || volume > 1? 0.5 : volume);
         }
-        if (!this.volumeInit) this.printf(Messages.NONE, "note: speaker disabled\n");
+        if (!this.volumeInit) this.printf(MESSAGE.NONE, "note: speaker disabled\n");
 
         /*
          * This divisor is invariant, so we calculate it as soon as we're able to query the CPU's base speed.
@@ -39783,14 +39783,14 @@ class ChipSet extends Component {
                 /*
                  * TODO: Add more "dumpers" (eg, for DMA, RTC, 8042, etc)
                  */
-                dbg.messageDump(Messages.PIC, function onDumpPIC() {
+                dbg.messageDump(MESSAGE.PIC, function onDumpPIC() {
                     chipset.dumpPIC();
                 });
-                dbg.messageDump(Messages.TIMER, function onDumpTimer(asArgs) {
+                dbg.messageDump(MESSAGE.TIMER, function onDumpTimer(asArgs) {
                     chipset.dumpTimer(asArgs);
                 });
                 if (this.model >= ChipSet.MODEL_5170) {
-                    dbg.messageDump(Messages.CMOS, function onDumpCMOS() {
+                    dbg.messageDump(MESSAGE.CMOS, function onDumpCMOS() {
                         chipset.dumpCMOS();
                     });
                 }
@@ -40060,9 +40060,9 @@ class ChipSet extends Component {
          */
         if (Object.prototype.toString.call(date) !== "[object Date]" || isNaN(date.getTime())) {
             date = new Date();
-            this.printf(Messages.NONE, "CMOS date invalid (%s), using %T\n", sDate, date);
+            this.printf(MESSAGE.NONE, "CMOS date invalid (%s), using %T\n", sDate, date);
         } else if (sDate) {
-            this.printf(Messages.NONE, "CMOS date: %T\n", date);
+            this.printf(MESSAGE.NONE, "CMOS date: %T\n", date);
         }
 
         let h, m, s;
@@ -40224,13 +40224,13 @@ class ChipSet extends Component {
             let nCyclesUpdate = this.nRTCCyclesNextUpdate - this.cpu.getCycles(this.fScaleTimers);
             if (nCyclesUpdate > 0) {
                 if (nCycles > nCyclesUpdate) {
-                    if (DEBUG) this.printf(Messages.RTC, "getRTCCycleLimit(%d): reduced to %d cycles\n", nCycles, nCyclesUpdate);
+                    if (DEBUG) this.printf(MESSAGE.RTC, "getRTCCycleLimit(%d): reduced to %d cycles\n", nCycles, nCyclesUpdate);
                     nCycles = nCyclesUpdate;
                 } else {
-                    if (DEBUG) this.printf(Messages.RTC, "getRTCCycleLimit(%d): already less than %d cycles\n", nCycles, nCyclesUpdate);
+                    if (DEBUG) this.printf(MESSAGE.RTC, "getRTCCycleLimit(%d): already less than %d cycles\n", nCycles, nCyclesUpdate);
                 }
             } else {
-                if (DEBUG) this.printf(Messages.RTC, "RTC next update has passed by %d cycles\n", nCyclesUpdate);
+                if (DEBUG) this.printf(MESSAGE.RTC, "RTC next update has passed by %d cycles\n", nCyclesUpdate);
             }
         }
         return nCycles;
@@ -40287,9 +40287,9 @@ class ChipSet extends Component {
                 if (DEBUG) {
                     if (nCyclesUpdate - this.nRTCCyclesNextUpdate > this.nRTCCyclesPerPeriod) {
                         if (bPrev & ChipSet.CMOS.STATUSC.PF) {
-                            this.printf(Messages.RTC, "RTC interrupt handler failed to clear STATUSC\n");
+                            this.printf(MESSAGE.RTC, "RTC interrupt handler failed to clear STATUSC\n");
                         } else {
-                            this.printf(Messages.RTC, "CPU took too long trigger new RTC periodic interrupt\n");
+                            this.printf(MESSAGE.RTC, "CPU took too long trigger new RTC periodic interrupt\n");
                         }
                     }
                 }
@@ -41486,7 +41486,7 @@ class ChipSet extends Component {
         let controller = this.aDMACs[iDMAC];
         let channel = controller.aChannels[iChannel];
         let b = channel.addrCurrent[controller.bIndex];
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".ADDR[" + controller.bIndex + "]", b, true);
         }
         controller.bIndex ^= 0x1;
@@ -41524,7 +41524,7 @@ class ChipSet extends Component {
     outDMAChannelAddr(iDMAC, iChannel, port, bOut, addrFrom)
     {
         let controller = this.aDMACs[iDMAC];
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".ADDR[" + controller.bIndex + "]", undefined, true);
         }
         let channel = controller.aChannels[iChannel];
@@ -41547,7 +41547,7 @@ class ChipSet extends Component {
         let controller = this.aDMACs[iDMAC];
         let channel = controller.aChannels[iChannel];
         let b = channel.countCurrent[controller.bIndex];
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".COUNT[" + controller.bIndex + "]", b, true);
         }
         controller.bIndex ^= 0x1;
@@ -41589,7 +41589,7 @@ class ChipSet extends Component {
     outDMAChannelCount(iDMAC, iChannel, port, bOut, addrFrom)
     {
         let controller = this.aDMACs[iDMAC];
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".COUNT[" + controller.bIndex + "]", undefined, true);
         }
         let channel = controller.aChannels[iChannel];
@@ -41632,7 +41632,7 @@ class ChipSet extends Component {
         let controller = this.aDMACs[iDMAC];
         let b = controller.bStatus | ChipSet.DMA_STATUS.CH0_TC;
         controller.bStatus &= ~ChipSet.DMA_STATUS.ALL_TC;
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".STATUS", b, true);
         }
         return b;
@@ -41649,7 +41649,7 @@ class ChipSet extends Component {
      */
     outDMACmd(iDMAC, port, bOut, addrFrom)
     {
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CMD", undefined, true);
         }
         this.aDMACs[iDMAC].bCmd = bOut;
@@ -41677,7 +41677,7 @@ class ChipSet extends Component {
     outDMAReq(iDMAC, port, bOut, addrFrom)
     {
         let controller = this.aDMACs[iDMAC];
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".REQ", undefined, true);
         }
         /*
@@ -41704,7 +41704,7 @@ class ChipSet extends Component {
     outDMAMask(iDMAC, port, bOut, addrFrom)
     {
         let controller = this.aDMACs[iDMAC];
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MASK", undefined, true);
         }
         let iChannel = bOut & ChipSet.DMA_MASK.CHANNEL;
@@ -41724,7 +41724,7 @@ class ChipSet extends Component {
      */
     outDMAMode(iDMAC, port, bOut, addrFrom)
     {
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MODE", undefined, true);
         }
         let iChannel = bOut & ChipSet.DMA_MODE.CHANNEL;
@@ -41745,7 +41745,7 @@ class ChipSet extends Component {
      */
     outDMAResetFF(iDMAC, port, bOut, addrFrom)
     {
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".RESET_FF", undefined, true);
         }
         this.aDMACs[iDMAC].bIndex = 0;
@@ -41776,7 +41776,7 @@ class ChipSet extends Component {
     {
         let controller = this.aDMACs[iDMAC];
         let b = controller.bTemp;
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".TEMP", b, true);
         }
         return b;
@@ -41793,7 +41793,7 @@ class ChipSet extends Component {
      */
     outDMAMasterClear(iDMAC, port, bOut, addrFrom)
     {
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MASTER_CLEAR", undefined, true);
         }
         /*
@@ -41820,7 +41820,7 @@ class ChipSet extends Component {
     inDMAPageReg(iDMAC, iChannel, port, addrFrom)
     {
         let bIn = this.aDMACs[iDMAC].aChannels[iChannel].bPage;
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".PAGE", bIn, true);
         }
         return bIn;
@@ -41838,7 +41838,7 @@ class ChipSet extends Component {
      */
     outDMAPageReg(iDMAC, iChannel, port, bOut, addrFrom)
     {
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".PAGE", undefined, true);
         }
         this.aDMACs[iDMAC].aChannels[iChannel].bPage = bOut;
@@ -41856,7 +41856,7 @@ class ChipSet extends Component {
     inDMAPageSpare(iSpare, port, addrFrom)
     {
         let bIn = this.abDMAPageSpare[iSpare];
-        if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, undefined, addrFrom, "DMA.SPARE" + iSpare + ".PAGE", bIn, true);
         }
         return bIn;
@@ -41877,7 +41877,7 @@ class ChipSet extends Component {
          * TODO: Remove this DEBUG-only DESKPRO386 code once we're done debugging DeskPro 386 ROMs;
          * it enables logging of all DeskPro 386 ROM checkpoint I/O to port 0x84.
          */
-        if (this.messageEnabled(Messages.DMA + Messages.PORT) /* || DEBUG && (this.model|0) == ChipSet.MODEL_COMPAQ_DESKPRO386 */) {
+        if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT) /* || DEBUG && (this.model|0) == ChipSet.MODEL_COMPAQ_DESKPRO386 */) {
             this.printIO(port, bOut, addrFrom, "DMA.SPARE" + iSpare + ".PAGE", undefined, true);
         }
         this.abDMAPageSpare[iSpare] = bOut;
@@ -41941,7 +41941,7 @@ class ChipSet extends Component {
         let channel = controller.aChannels[iChannel];
 
         if (!channel.component || !channel.fnTransfer || !channel.obj) {
-            if (DEBUG) this.printf(Messages.DMA + Messages.DATA, "requestDMA(%d): not connected to a component\n", iDMAChannel);
+            if (DEBUG) this.printf(MESSAGE.DMA + MESSAGE.DATA, "requestDMA(%d): not connected to a component\n", iDMAChannel);
             if (done) done(true);
             return;
         }
@@ -41956,7 +41956,7 @@ class ChipSet extends Component {
         if (done) channel.done = done;
 
         if (channel.masked) {
-            if (DEBUG) this.printf(Messages.DMA + Messages.DATA, "requestDMA(%d): channel masked, request queued\n", iDMAChannel);
+            if (DEBUG) this.printf(MESSAGE.DMA + MESSAGE.DATA, "requestDMA(%d): channel masked, request queued\n", iDMAChannel);
             return;
         }
 
@@ -42010,7 +42010,7 @@ class ChipSet extends Component {
                 if (DEBUG && DEBUGGER && channel.sAddrDebug === null) {
                     channel.sAddrDebug = Str.toHex(addr >> 4, 4) + ":" + Str.toHex(addr & 0xf, 4);
                     if (channel.type != ChipSet.DMA_MODE.TYPE_WRITE && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
-                        this.printf(Messages.DMA, "advanceDMA(%d) transferring %d bytes from %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
+                        this.printf(MESSAGE.DMA, "advanceDMA(%d) transferring %d bytes from %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
                         this.dbg.doDump(["db", channel.sAddrDebug, "l" + channel.cbDebug]);
                     }
                 }
@@ -42020,7 +42020,7 @@ class ChipSet extends Component {
                         channel.fnTransfer.call(channel.component, channel.obj, -1, function onTransferDMA(b, fAsync, obj, off) {
                             if (b < 0) {
                                 if (!channel.fWarning) {
-                                    if (DEBUG) chipset.printf(Messages.DMA, "advanceDMAWrite(%d) ran out of data, assuming 0xff\n", iDMAChannel);
+                                    if (DEBUG) chipset.printf(MESSAGE.DMA, "advanceDMAWrite(%d) ran out of data, assuming 0xff\n", iDMAChannel);
                                     channel.fWarning = true;
                                 }
                                 /*
@@ -42035,7 +42035,7 @@ class ChipSet extends Component {
                                  */
                                 if (BACKTRACK && obj) {
                                     if (!off && obj.file) {
-                                        chipset.printf(Messages.DISK, "loading %s[%#0X] at %%%0X\n", obj.file.path, obj.offFile, addrCur);
+                                        chipset.printf(MESSAGE.DISK, "loading %s[%#0X] at %%%0X\n", obj.file.path, obj.offFile, addrCur);
                                         /*
                                         if (obj.file.path == "\\SYSBAS.EXE" && obj.offFile == 512) {
                                             chipset.cpu.stopCPU();
@@ -42085,7 +42085,7 @@ class ChipSet extends Component {
                         channel.fnTransfer.call(channel.component, channel.obj, -1, function onTransferDMA(b, fAsync, obj, off) {
                             if (b < 0) {
                                 if (!channel.fWarning) {
-                                    if (DEBUG) chipset.printf(Messages.DMA, "advanceDMAVerify(%d) ran out of data\n", iDMAChannel);
+                                    if (DEBUG) chipset.printf(MESSAGE.DMA, "advanceDMAVerify(%d) ran out of data\n", iDMAChannel);
                                     channel.fWarning = true;
                                 }
                                 /*
@@ -42096,7 +42096,7 @@ class ChipSet extends Component {
                     }(addr));
                 }
                 else {
-                    if (DEBUG) this.printf(Messages.DMA + Messages.WARNING, "advanceDMA(%d) unsupported transfer type %#06X\n", iDMAChannel, channel.type);
+                    if (DEBUG) this.printf(MESSAGE.DMA + MESSAGE.WARNING, "advanceDMA(%d) unsupported transfer type %#06X\n", iDMAChannel, channel.type);
                     channel.fError = true;
                 }
             }
@@ -42150,7 +42150,7 @@ class ChipSet extends Component {
         }
 
         if (DEBUG && channel.type == ChipSet.DMA_MODE.TYPE_WRITE && channel.sAddrDebug && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
-            this.printf(Messages.DMA, "updateDMA(%d) transferred %d bytes to %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
+            this.printf(MESSAGE.DMA, "updateDMA(%d) transferred %d bytes to %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
             this.dbg.doDump(["db", channel.sAddrDebug, "l" + channel.cbDebug]);
         }
 
@@ -42191,7 +42191,7 @@ class ChipSet extends Component {
                     break;
             }
         }
-        if (this.messageEnabled(Messages.PIC + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.PIC + MESSAGE.PORT)) {
             this.printIO(pic.port, undefined, addrFrom, "PIC" + iPIC, b, true);
         }
         return b;
@@ -42208,7 +42208,7 @@ class ChipSet extends Component {
     outPICLo(iPIC, bOut, addrFrom)
     {
         let pic = this.aPICs[iPIC];
-        if (this.messageEnabled(Messages.PIC + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.PIC + MESSAGE.PORT)) {
             this.printIO(pic.port, bOut, addrFrom, "PIC" + iPIC, undefined, true);
         }
         if (bOut & ChipSet.PIC_LO.ICW1) {
@@ -42297,7 +42297,7 @@ class ChipSet extends Component {
                     this.checkIRR();
                 } else {
                     if (DEBUG) {
-                        this.printf(Messages.PIC + Messages.WARNING + Messages.ADDRESS, "outPIC%d(%#04X): unexpected EOI for IRQ %d\n", iPIC, pic.port, nIRQ);
+                        this.printf(MESSAGE.PIC + MESSAGE.WARNING + MESSAGE.ADDR, "outPIC%d(%#04X): unexpected EOI for IRQ %d\n", iPIC, pic.port, nIRQ);
                         if (MAXDEBUG && this.dbg) this.dbg.stopCPU();
                     }
                 }
@@ -42305,7 +42305,7 @@ class ChipSet extends Component {
                  * TODO: Support EOI commands with automatic rotation (eg, ChipSet.PIC_LO.OCW2_EOI_ROT and ChipSet.PIC_LO.OCW2_EOI_ROTSPEC)
                  */
                 if (bOCW2 & ChipSet.PIC_LO.OCW2_SET_ROTAUTO) {
-                    this.printf(Messages.PIC + Messages.WARNING + Messages.ADDRESS, "outPIC%d(%#04X): unsupported OCW2 rotate %#04X\n", iPIC, pic.port, bOut);
+                    this.printf(MESSAGE.PIC + MESSAGE.WARNING + MESSAGE.ADDR, "outPIC%d(%#04X): unsupported OCW2 rotate %#04X\n", iPIC, pic.port, bOut);
                 }
             }
             else  if (bOCW2 == ChipSet.PIC_LO.OCW2_SET_PRI) {
@@ -42318,7 +42318,7 @@ class ChipSet extends Component {
                 /*
                  * TODO: Remaining commands to support: ChipSet.PIC_LO.OCW2_SET_ROTAUTO and ChipSet.PIC_LO.OCW2_CLR_ROTAUTO
                  */
-                this.printf(Messages.PIC + Messages.WARNING + Messages.ADDRESS, "outPIC%d(%#04X): unsupported OCW2 automatic rotate %#04X\n", iPIC, pic.port, bOut);
+                this.printf(MESSAGE.PIC + MESSAGE.WARNING + MESSAGE.ADDR, "outPIC%d(%#04X): unsupported OCW2 automatic rotate %#04X\n", iPIC, pic.port, bOut);
             }
         } else {
             /*
@@ -42328,7 +42328,7 @@ class ChipSet extends Component {
              * that's unfortunate, because I don't support them yet.
              */
             if (bOut & (ChipSet.PIC_LO.OCW3_POLL_CMD | ChipSet.PIC_LO.OCW3_SMM_CMD)) {
-                this.printf(Messages.PIC + Messages.WARNING + Messages.ADDRESS, "outPIC%d(%#04X): unsupported OCW3 %#04X\n", iPIC, pic.port, bOut);
+                this.printf(MESSAGE.PIC + MESSAGE.WARNING + MESSAGE.ADDR, "outPIC%d(%#04X): unsupported OCW3 %#04X\n", iPIC, pic.port, bOut);
             }
             pic.bOCW3 = bOut;
         }
@@ -42346,7 +42346,7 @@ class ChipSet extends Component {
     {
         let pic = this.aPICs[iPIC];
         let b = pic.bIMR;
-        if (this.messageEnabled(Messages.PIC + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.PIC + MESSAGE.PORT)) {
             this.printIO(pic.port+1, undefined, addrFrom, "PIC" + iPIC, b, true);
         }
         return b;
@@ -42363,7 +42363,7 @@ class ChipSet extends Component {
     outPICHi(iPIC, bOut, addrFrom)
     {
         let pic = this.aPICs[iPIC];
-        if (this.messageEnabled(Messages.PIC + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.PIC + MESSAGE.PORT)) {
             this.printIO(pic.port+1, bOut, addrFrom, "PIC" + iPIC, undefined, true);
         }
         if (pic.nICW < pic.aICW.length) {
@@ -42586,7 +42586,7 @@ class ChipSet extends Component {
                         pic.bIRR &= ~bIRNext;
 
                         let nIRQ = pic.nIRQBase + nIRL;
-                        if (DEBUG && this.dbg) this.printf(this.messageBitsIRQ(nIRQ) + Messages.ADDRESS, "getIRRVector(): IRQ %d interrupting stack %s\n", nIRQ, this.dbg.toHexOffset(this.cpu.getSP(), this.cpu.getSS()));
+                        if (DEBUG && this.dbg) this.printf(this.messageBitsIRQ(nIRQ) + MESSAGE.ADDR, "getIRRVector(): IRQ %d interrupting stack %s\n", nIRQ, this.dbg.toHexOffset(this.cpu.getSP(), this.cpu.getSS()));
                         if (MAXDEBUG && DEBUGGER) this.acInterrupts[nIRQ]++;
                     }
                     break;
@@ -42673,7 +42673,7 @@ class ChipSet extends Component {
                 b = timer.countCurrent[timer.countIndex++];
             }
         }
-        if (this.messageEnabled(Messages.TIMER + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.TIMER + MESSAGE.PORT)) {
             this.printIO(port, undefined, addrFrom, "PIT" + iPIT + ".TIMER" + iPITTimer, b, true);
         }
         return b;
@@ -42696,7 +42696,7 @@ class ChipSet extends Component {
      */
     outTimer(iPIT, iPITTimer, port, bOut, addrFrom)
     {
-        if (this.messageEnabled(Messages.TIMER + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.TIMER + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "PIT" + iPIT + ".TIMER" + iPITTimer, undefined, true);
         }
 
@@ -42756,7 +42756,7 @@ class ChipSet extends Component {
      */
     inTimerCtrl(iPIT, port, addrFrom)
     {
-        this.printIO(port, undefined, addrFrom, "PIT" + iPIT + ".CTRL", undefined, Messages.TIMER);
+        this.printIO(port, undefined, addrFrom, "PIT" + iPIT + ".CTRL", undefined, MESSAGE.TIMER);
         /*
          * NOTE: Even though reads to port 0x43 are undefined (I think), I'm going to "define" it
          * as returning the last value written, purely for the Debugger's benefit.
@@ -42775,7 +42775,7 @@ class ChipSet extends Component {
      */
     outTimerCtrl(iPIT, port, bOut, addrFrom)
     {
-        this.printIO(port, bOut, addrFrom, "PIT" + iPIT + ".CTRL", undefined, Messages.TIMER);
+        this.printIO(port, bOut, addrFrom, "PIT" + iPIT + ".CTRL", undefined, MESSAGE.TIMER);
 
         /*
          * Extract the SC (Select Counter) bits.
@@ -42869,7 +42869,7 @@ class ChipSet extends Component {
                     timer.countStart[0] = timer.countInit[0];
                     timer.countStart[1] = timer.countInit[1];
                     timer.nCyclesStart = this.cpu.getCycles(this.fScaleTimers);
-                    if (DEBUG) this.printf(Messages.TIMER, "PIT0.TIMER0 count reset @%d cycles\n", timer.nCyclesStart);
+                    if (DEBUG) this.printf(MESSAGE.TIMER, "PIT0.TIMER0 count reset @%d cycles\n", timer.nCyclesStart);
                 }
             }
         }
@@ -43087,7 +43087,7 @@ class ChipSet extends Component {
             let ticksElapsed = ((nCycles - timer.nCyclesStart) / this.nTicksDivisor) | 0;
 
             if (ticksElapsed < 0) {
-                if (DEBUG) this.printf(Messages.TIMER, "updateTimer(%d): negative tick count (%d)\n", iTimer, ticksElapsed);
+                if (DEBUG) this.printf(MESSAGE.TIMER, "updateTimer(%d): negative tick count (%d)\n", iTimer, ticksElapsed);
                 timer.nCyclesStart = nCycles;
                 ticksElapsed = 0;
             }
@@ -43105,7 +43105,7 @@ class ChipSet extends Component {
              */
             if (timer.mode == ChipSet.PIT_CTRL.MODE0) {
                 if (count <= 0) count = 0;
-                if (DEBUG) this.printf(Messages.TIMER, "updateTimer(%d): MODE0 timer count=%d\n" + iTimer, count);
+                if (DEBUG) this.printf(MESSAGE.TIMER, "updateTimer(%d): MODE0 timer count=%d\n" + iTimer, count);
                 if (!count) {
                     timer.fOUT = true;
                     timer.fCounting = false;
@@ -43140,7 +43140,7 @@ class ChipSet extends Component {
                         /*
                          * TODO: Consider whether we ever care about TIMER1 or TIMER2 underflow
                          */
-                        if (DEBUG && !iTimer) this.printf(Messages.TIMER, "updateTimer(%d): mode=2, underflow=%d\n", iTimer, count);
+                        if (DEBUG && !iTimer) this.printf(MESSAGE.TIMER, "updateTimer(%d): mode=2, underflow=%d\n", iTimer, count);
                         count = countInit;
                     }
                     timer.countStart[0] = count & 0xff;
@@ -43172,7 +43172,7 @@ class ChipSet extends Component {
                         /*
                          * TODO: Consider whether we ever care about TIMER1 or TIMER2 underflow
                          */
-                        if (DEBUG && !iTimer) this.printf(Messages.TIMER, "updateTimer(%d): mode=3, underflow=%d\n", iTimer, count);
+                        if (DEBUG && !iTimer) this.printf(MESSAGE.TIMER, "updateTimer(%d): mode=3, underflow=%d\n", iTimer, count);
                         count = countInit;
                     }
                     if (MAXDEBUG && DEBUGGER && !iTimer) {
@@ -43192,7 +43192,7 @@ class ChipSet extends Component {
             }
 
             if (MAXDEBUG) {
-                this.printf(Messages.TIMER + Messages.WARNING, "TIMER%d count: %d, ticks: %d, fired: %b\n", iTimer, count, ticksElapsed, fFired);
+                this.printf(MESSAGE.TIMER + MESSAGE.WARNING, "TIMER%d count: %d, ticks: %d, fired: %b\n", iTimer, count, ticksElapsed, fFired);
             }
 
             timer.countCurrent[0] = count & 0xff;
@@ -43247,7 +43247,7 @@ class ChipSet extends Component {
                 b = this.aDIPSwitches[0][1];
             } else {
                 b = this.bKbdData;
-                this.printIO(port, undefined, addrFrom, "PPI_A", b, Messages.KBD);
+                this.printIO(port, undefined, addrFrom, "PPI_A", b, MESSAGE.KBD);
                 return b;
             }
         }
@@ -43431,9 +43431,9 @@ class ChipSet extends Component {
 
         /*
          * The ROM BIOS polls this port incessantly during its memory tests, checking for memory parity errors
-         * (which of course we never report), so you must use both Messages.PORT and Messages.CHIPSET.
+         * (which of course we never report), so you must use both MESSAGE.PORT and MESSAGE.CHIPSET.
          */
-        this.printIO(port, undefined, addrFrom, "PPI_C", b, Messages.CHIPSET);
+        this.printIO(port, undefined, addrFrom, "PPI_C", b, MESSAGE.CHIPSET);
         return b;
     }
 
@@ -43491,7 +43491,7 @@ class ChipSet extends Component {
     in8041Kbd(port, addrFrom)
     {
         let b = this.bKbdData;
-        this.printIO(port, undefined, addrFrom, "8041_KBD", b, Messages.KBD);
+        this.printIO(port, undefined, addrFrom, "8041_KBD", b, MESSAGE.KBD);
         this.b8041Status &= ~ChipSet.C8042.STATUS.OUTBUFF_FULL;
         return b;
     }
@@ -43588,7 +43588,7 @@ class ChipSet extends Component {
     in8042OutBuff(port, addrFrom)
     {
         let b = this.b8042OutBuff;
-        this.printIO(port, undefined, addrFrom, "8042_OUTBUFF", b, Messages.C8042);
+        this.printIO(port, undefined, addrFrom, "8042_OUTBUFF", b, MESSAGE.C8042);
         this.b8042Status &= ~(ChipSet.C8042.STATUS.OUTBUFF_FULL | ChipSet.C8042.STATUS.OUTBUFF_DELAY);
         if (this.kbd) this.kbd.checkBuffer(b);
         return b;
@@ -43608,7 +43608,7 @@ class ChipSet extends Component {
      */
     out8042InBuffData(port, bOut, addrFrom)
     {
-        this.printIO(port, bOut, addrFrom, "8042_INBUF.DATA", undefined, Messages.C8042);
+        this.printIO(port, bOut, addrFrom, "8042_INBUF.DATA", undefined, MESSAGE.C8042);
 
         if (this.b8042Status & ChipSet.C8042.STATUS.CMD_FLAG) {
 
@@ -43733,9 +43733,9 @@ class ChipSet extends Component {
         let b = this.bPPIB & ~(ChipSet.C8042.RWREG.NMI_ERROR | ChipSet.C8042.RWREG.REFRESH_BIT) | ((this.cpu.getCycles() & 0x40)? ChipSet.C8042.RWREG.REFRESH_BIT : 0);
         /*
          * Thanks to the WAITF function, this has become a very "busy" port, so if this generates too
-         * many messages, try adding Messages.WARNING to the criteria.
+         * many messages, try adding MESSAGE.WARNING to the criteria.
          */
-        this.printIO(port, undefined, addrFrom, "8042_RWREG", b, Messages.C8042 + Messages.WARNING);
+        this.printIO(port, undefined, addrFrom, "8042_RWREG", b, MESSAGE.C8042 + MESSAGE.WARNING);
         return b;
     }
 
@@ -43749,7 +43749,7 @@ class ChipSet extends Component {
      */
     out8042RWReg(port, bOut, addrFrom)
     {
-        this.printIO(port, bOut, addrFrom, "8042_RWREG", undefined, Messages.C8042);
+        this.printIO(port, bOut, addrFrom, "8042_RWREG", undefined, MESSAGE.C8042);
         this.updatePPIB(bOut);
     }
 
@@ -43763,7 +43763,7 @@ class ChipSet extends Component {
      */
     in8042Status(port, addrFrom)
     {
-        this.printIO(port, undefined, addrFrom, "8042_STATUS", this.b8042Status, Messages.C8042);
+        this.printIO(port, undefined, addrFrom, "8042_STATUS", this.b8042Status, MESSAGE.C8042);
         let b = this.b8042Status & 0xff;
         /*
          * There's code in the 5170 BIOS (F000:03BF) that writes an 8042 command (0xAA), waits for
@@ -43813,7 +43813,7 @@ class ChipSet extends Component {
      */
     out8042InBuffCmd(port, bOut, addrFrom)
     {
-        this.printIO(port, bOut, addrFrom, "8042_INBUFF.CMD", undefined, Messages.C8042);
+        this.printIO(port, bOut, addrFrom, "8042_INBUFF.CMD", undefined, MESSAGE.C8042);
 
         this.b8042InBuff = bOut;
 
@@ -43841,7 +43841,7 @@ class ChipSet extends Component {
 
         case ChipSet.C8042.CMD.DISABLE_KBD:     // 0xAD
             this.set8042CmdData(this.b8042CmdData | ChipSet.C8042.DATA.CMD.NO_CLOCK);
-            if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "keyboard disabled\n");
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard disabled\n");
             /*
              * NOTE: The MODEL_5170 BIOS calls "KBD_RESET" (F000:17D2) while the keyboard interface is disabled,
              * yet we must still deliver the Keyboard's CMDRES.BAT_OK response code?  Seems like an odd thing for
@@ -43851,14 +43851,14 @@ class ChipSet extends Component {
 
         case ChipSet.C8042.CMD.ENABLE_KBD:      // 0xAE
             this.set8042CmdData(this.b8042CmdData & ~ChipSet.C8042.DATA.CMD.NO_CLOCK);
-            if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "keyboard re-enabled\n");
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard re-enabled\n");
             if (this.kbd) this.kbd.checkBuffer();
             break;
 
         case ChipSet.C8042.CMD.SELF_TEST:       // 0xAA
             if (this.kbd) this.kbd.flushBuffer();
             this.set8042CmdData(this.b8042CmdData | ChipSet.C8042.DATA.CMD.NO_CLOCK);
-            if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "keyboard disabled on reset\n");
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard disabled on reset\n");
             this.set8042OutBuff(ChipSet.C8042.DATA.SELF_TEST.OK);
             this.set8042OutPort(ChipSet.C8042.OUTPORT.NO_RESET | ChipSet.C8042.OUTPORT.A20_ON);
             break;
@@ -43901,7 +43901,7 @@ class ChipSet extends Component {
 
         default:
             if (!COMPILED) {
-                this.printf(Messages.LOG, "unrecognized 8042 command: %#04X\n", this.b8042InBuff);
+                this.printf(MESSAGE.LOG, "unrecognized 8042 command: %#04X\n", this.b8042InBuff);
                 // if (this.dbg) this.dbg.stopCPU();
             }
             break;
@@ -43969,7 +43969,7 @@ class ChipSet extends Component {
                 this.b8042Status &= ~ChipSet.C8042.STATUS.OUTBUFF_FULL;
                 this.b8042Status |= ChipSet.C8042.STATUS.OUTBUFF_DELAY;
             }
-            if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "chipset.set8042OutBuff(%#04X,delay=%b)\n", b, !fNoDelay);
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "chipset.set8042OutBuff(%#04X,delay=%b)\n", b, !fNoDelay);
         }
     }
 
@@ -43996,7 +43996,7 @@ class ChipSet extends Component {
              * determine if that's what the caller intended.
              */
             if (!COMPILED) {
-                this.printf(Messages.NONE, "unexpected 8042 output port reset: %#04X\n", b);
+                this.printf(MESSAGE.NONE, "unexpected 8042 output port reset: %#04X\n", b);
                 if (this.dbg) this.dbg.stopCPU();
             }
             this.cpu.resetRegs();
@@ -44084,7 +44084,7 @@ class ChipSet extends Component {
      */
     receiveKbdData(b)
     {
-        if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "chipset.receiveKbdData(%#04X)\n", b);
+        if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "chipset.receiveKbdData(%#04X)\n", b);
         if (this.model == ChipSet.MODEL_4860) {
             if (!(this.bNMI & ChipSet.NMI.KBD_LATCH)) {
                 this.bNMI |= ChipSet.NMI.KBD_LATCH;
@@ -44122,10 +44122,10 @@ class ChipSet extends Component {
                     this.setIRR(ChipSet.IRQ.KBD, 120);
                     return true;
                 }
-                if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "chipset.receiveKbdData(%#04X): output buffer full\n", b);
+                if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "chipset.receiveKbdData(%#04X): output buffer full\n", b);
                 return false;
             }
-            if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "chipset.receiveKbdData(%#04X): disabled\n", b);
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "chipset.receiveKbdData(%#04X): disabled\n", b);
         }
         return false;
     }
@@ -44142,7 +44142,7 @@ class ChipSet extends Component {
     in6300DIPSwitches(iDIP, port, addrFrom)
     {
         let b = this.aDIPSwitches[iDIP][1];
-        this.printIO(port, undefined, addrFrom, "DIPSW-" + iDIP, b, Messages.CHIPSET);
+        this.printIO(port, undefined, addrFrom, "DIPSW-" + iDIP, b, MESSAGE.CHIPSET);
         return b;
     }
 
@@ -44156,7 +44156,7 @@ class ChipSet extends Component {
      */
     inCMOSAddr(port, addrFrom)
     {
-        this.printIO(port, undefined, addrFrom, "CMOS.ADDR", this.bCMOSAddr, Messages.CMOS);
+        this.printIO(port, undefined, addrFrom, "CMOS.ADDR", this.bCMOSAddr, MESSAGE.CMOS);
         return this.bCMOSAddr;
     }
 
@@ -44170,7 +44170,7 @@ class ChipSet extends Component {
      */
     outCMOSAddr(port, bOut, addrFrom)
     {
-        this.printIO(port, bOut, addrFrom, "CMOS.ADDR", undefined, Messages.CMOS);
+        this.printIO(port, bOut, addrFrom, "CMOS.ADDR", undefined, MESSAGE.CMOS);
         this.bCMOSAddr = bOut;
         this.bNMI = (this.bNMI & ~ChipSet.NMI.ENABLE) | ((bOut & ChipSet.CMOS.ADDR.NMI_DISABLE)? 0 : ChipSet.NMI.ENABLE);
     }
@@ -44187,7 +44187,7 @@ class ChipSet extends Component {
     {
         let bAddr = this.bCMOSAddr & ChipSet.CMOS.ADDR.MASK;
         let bIn = (bAddr <= ChipSet.CMOS.ADDR.STATUSD? this.getRTCByte(bAddr) : this.abCMOSData[bAddr]);
-        if (this.messageEnabled(Messages.CMOS + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.CMOS + MESSAGE.PORT)) {
             this.printIO(port, undefined, addrFrom, "CMOS.DATA[" + Str.toHexByte(bAddr) + "]", bIn, true);
         }
         if (addrFrom != null) {
@@ -44203,7 +44203,7 @@ class ChipSet extends Component {
                  * occurs in a timely manner, too.
                  */
                 if ((bIn & ChipSet.CMOS.STATUSC.PF) && (this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.PIE)) {
-                    if (!COMPILED) this.printf(Messages.RTC, "RTC periodic interrupt cleared\n");
+                    if (!COMPILED) this.printf(MESSAGE.RTC, "RTC periodic interrupt cleared\n");
                     this.setRTCCycleLimit();
                 }
             }
@@ -44222,17 +44222,17 @@ class ChipSet extends Component {
     outCMOSData(port, bOut, addrFrom)
     {
         let bAddr = this.bCMOSAddr & ChipSet.CMOS.ADDR.MASK;
-        if (this.messageEnabled(Messages.CMOS + Messages.PORT)) {
+        if (this.messageEnabled(MESSAGE.CMOS + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "CMOS.DATA[" + Str.toHexByte(bAddr) + "]", undefined, true);
         }
         let bDelta = bOut ^ this.abCMOSData[bAddr];
         this.abCMOSData[bAddr] = (bAddr <= ChipSet.CMOS.ADDR.STATUSD? this.setRTCByte(bAddr, bOut) : bOut);
         if (bAddr == ChipSet.CMOS.ADDR.STATUSB && (bDelta & ChipSet.CMOS.STATUSB.PIE)) {
             if (bOut & ChipSet.CMOS.STATUSB.PIE) {
-                if (!COMPILED) this.printf(Messages.RTC, "RTC periodic interrupts enabled\n");
+                if (!COMPILED) this.printf(MESSAGE.RTC, "RTC periodic interrupts enabled\n");
                 this.setRTCCycleLimit();
             } else {
-                if (!COMPILED) this.printf(Messages.RTC, "RTC periodic interrupts disabled\n");
+                if (!COMPILED) this.printf(MESSAGE.RTC, "RTC periodic interrupts disabled\n");
             }
         }
     }
@@ -44330,7 +44330,7 @@ class ChipSet extends Component {
     intBIOSTimer(addr)
     {
         if (DEBUGGER) {
-            if (this.messageEnabled(Messages.INT) && this.dbg.messageInt(Interrupts.TIMER, addr)) {
+            if (this.messageEnabled(MESSAGE.INT) && this.dbg.messageInt(Interrupts.TIMER, addr)) {
                 /*
                  * By computing AH now, we get the incoming AH value; if we computed it below, along with
                  * the rest of the register values, we'd get the outgoing AH value, which is not what we want.
@@ -44402,13 +44402,13 @@ class ChipSet extends Component {
                 this.oscillatorAudio['frequency']['setValueAtTime'](freq, 0);
                 // this.volumeAudio['gain']['value'] = this.volumeInit;
                 this.volumeAudio['gain']['setValueAtTime'](this.volumeInit, 0);
-                this.printf(Messages.SPEAKER, "speaker on at  %dhz\n", freq);
+                this.printf(MESSAGE.SPEAKER, "speaker on at  %dhz\n", freq);
             } else if (this.volumeAudio) {
                 this.volumeAudio['gain']['setValueAtTime'](0, 0);
-                this.printf(Messages.SPEAKER, "speaker off at %dhz\n", freq);
+                this.printf(MESSAGE.SPEAKER, "speaker off at %dhz\n", freq);
             }
         } else if (fOn && this.fSpeakerOn != fOn) {
-            this.printf(Messages.SPEAKER, "BEEP\n");
+            this.printf(MESSAGE.SPEAKER, "BEEP\n");
         }
         this.fSpeakerOn = fOn;
     }
@@ -44459,7 +44459,7 @@ class ChipSet extends Component {
                     return true;
                 }
             } catch(e) {
-                this.printf(Messages.NOTICE, "AudioContext exception: %s\n", e.message);
+                this.printf(MESSAGE.NOTICE, "AudioContext exception: %s\n", e.message);
                 this.contextAudio = null;
             }
         }
@@ -44477,11 +44477,11 @@ class ChipSet extends Component {
     {
         let bitsMessage = 0;
         if (DEBUG) {
-            bitsMessage = Messages.DATA;
+            bitsMessage = MESSAGE.DATA;
             if (iChannel == ChipSet.DMA_FDC) {
-                bitsMessage += Messages.FDC;
+                bitsMessage += MESSAGE.FDC;
             } else if (iChannel == ChipSet.DMA_HDC) {
-                bitsMessage += Messages.HDC;
+                bitsMessage += MESSAGE.HDC;
             }
         }
         return bitsMessage;
@@ -44496,23 +44496,23 @@ class ChipSet extends Component {
      */
     messageBitsIRQ(nIRQ)
     {
-        let bitsMessage = Messages.IRQ;
+        let bitsMessage = MESSAGE.IRQ;
         if (nIRQ == ChipSet.IRQ.TIMER0) {       // IRQ 0
-            bitsMessage |= Messages.TIMER;
+            bitsMessage |= MESSAGE.TIMER;
         } else if (nIRQ == ChipSet.IRQ.KBD) {   // IRQ 1
-            bitsMessage |= Messages.KBD;
+            bitsMessage |= MESSAGE.KBD;
         } else if (nIRQ == ChipSet.IRQ.SLAVE) { // IRQ 2
-            bitsMessage |= Messages.NONE;       // (we're not really interested in IRQ 2 itself, just the slaves)
+            bitsMessage |= MESSAGE.NONE;       // (we're not really interested in IRQ 2 itself, just the slaves)
         } else if (nIRQ == ChipSet.IRQ.COM1 || nIRQ == ChipSet.IRQ.COM2) {
-            bitsMessage |= Messages.SERIAL;
+            bitsMessage |= MESSAGE.SERIAL;
         } else if (nIRQ == ChipSet.IRQ.XTC) {   // IRQ 5 (MODEL_5160)
-            bitsMessage |= Messages.HDC;
+            bitsMessage |= MESSAGE.HDC;
         } else if (nIRQ == ChipSet.IRQ.FDC) {   // IRQ 6
-            bitsMessage |= Messages.FDC;
+            bitsMessage |= MESSAGE.FDC;
         } else if (nIRQ == ChipSet.IRQ.RTC) {   // IRQ 8 (MODEL_5170 and up)
-            bitsMessage |= Messages.RTC;
+            bitsMessage |= MESSAGE.RTC;
         } else if (nIRQ == ChipSet.IRQ.ATC1 || nIRQ == ChipSet.IRQ.ATC2) {      // IRQ 14 or 15 (MODEL_5170 and up)
-            bitsMessage |= Messages.HDC;
+            bitsMessage |= MESSAGE.HDC;
         }
         return bitsMessage;
     }
@@ -45900,7 +45900,7 @@ class ROMx86 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROMx86", parmsROM, Messages.MEM);
+        super("ROMx86", parmsROM, MESSAGE.MEM);
 
         this.abROM = null;
         this.addrROM = +parmsROM['addr'];       // we allow numbers or strings (JSON strings permit hex)
@@ -45951,7 +45951,7 @@ class ROMx86 extends Component {
 
         if (this.sFileURL) {
             let sFileName = Str.getBaseName(this.sFileURL);
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", this.sFileURL);
+            if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", this.sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -45985,7 +45985,7 @@ class ROMx86 extends Component {
             Web.getResource(this.sFileURL, null, true, function doneROMLoad(sURL, sResponse, nErrorCode) {
                 rom.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
-                rom.printf(Messages.PROGRESS, "Loading %s...\n", rom.sFileURL);
+                rom.printf(MESSAGE.PROGRESS, "Loading %s...\n", rom.sFileURL);
             });
         }
     }
@@ -46042,7 +46042,7 @@ class ROMx86 extends Component {
     doneLoad(sURL, sROMData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load system ROM (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(nErrorCode < 0? MESSAGE.STATUS : MESSAGE.NOTICE, "Unable to load system ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -46119,7 +46119,7 @@ class ROMx86 extends Component {
                     return;
                 }
             } catch (e) {
-                this.printf(Messages.NOTICE, "ROM data error: %s\n", e.message);
+                this.printf(MESSAGE.NOTICE, "ROM data error: %s\n", e.message);
                 return;
             }
         }
@@ -46190,7 +46190,7 @@ class ROMx86 extends Component {
                         if (component) {
                             component.onROMLoad(this.abROM, this.aNotifyParms);
                         } else {
-                            this.printf(Messages.NOTICE, "Unable to find component: %s\n", this.idNotify);
+                            this.printf(MESSAGE.NOTICE, "Unable to find component: %s\n", this.idNotify);
                         }
                     }
                     /*
@@ -46220,7 +46220,7 @@ class ROMx86 extends Component {
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX86.TYPE.ROM)) {
-            if (MAXDEBUG) this.printf(Messages.LOG, "addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
+            if (MAXDEBUG) this.printf(MESSAGE.LOG, "addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
             let bto = null;
             for (let off = 0; off < this.abROM.length; off++) {
                 this.bus.setByteDirect(addr + off, this.abROM[off]);
@@ -46759,7 +46759,7 @@ class RAMx86 extends Component {
                  * for these components, which the Computer component will display as it "powers up" components.
                  */
                 if (MAXDEBUG && !this.addrRAM && this.fInstalled) {
-                    this.printf(Messages.STATUS, "specified size overrides SW1\n");
+                    this.printf(MESSAGE.STATUS, "specified size overrides SW1\n");
                 }
 
                 /*
@@ -46795,7 +46795,7 @@ class RAMx86 extends Component {
                  * memory storage tests. See rom.js for more RBDA definitions.
                  */
                 if (MAXDEBUG) {
-                    this.printf(Messages.STATUS, "ROM BIOS memory test has been disabled\n");
+                    this.printf(MESSAGE.STATUS, "ROM BIOS memory test has been disabled\n");
                 }
                 this.bus.setShortDirect(ROMx86.BIOS.RESET_FLAG.ADDR, ROMx86.BIOS.RESET_FLAG.WARMBOOT);
             }
@@ -47052,7 +47052,7 @@ class CompaqController extends Controller {
     {
         let b = this.controller.getByte(off);
         if (DEBUG) {
-            this.controller.ram.printf(Messages.MEM + Messages.ADDRESS, "CompaqController.readByte(%#06x) returned %#04x\n", off, b);
+            this.controller.ram.printf(MESSAGE.MEM + MESSAGE.ADDR, "CompaqController.readByte(%#06x) returned %#04x\n", off, b);
         }
         return b;
     }
@@ -47078,7 +47078,7 @@ class CompaqController extends Controller {
          * All bits in 0x80C00001 and 0x80C00003 are reserved, so we can simply ignore those writes.
          */
         if (DEBUG) {
-            this.controller.ram.printf(Messages.MEM + Messages.ADDRESS, "CompaqController.writeByte(%#06x,%#04x)\n", off, b);
+            this.controller.ram.printf(MESSAGE.MEM + MESSAGE.ADDR, "CompaqController.writeByte(%#06x,%#04x)\n", off, b);
         }
     }
 }
@@ -47222,7 +47222,7 @@ class KbdX86 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, Messages.KBD);
+        super("Keyboard", parmsKbd, MESSAGE.KBD);
 
         this.setModel(parmsKbd['model']);
 
@@ -47505,10 +47505,10 @@ class KbdX86 extends Component {
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
                 if (KbdX86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) this.printf(Messages.LOG, "binding click-code '%s'\n", sCode);
+                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "binding click-code '%s'\n", sCode);
                     controlText.onclick = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingClick(event) {
-                            kbd.printf(Messages.EVENT + Messages.KEY, "%s clicked\n", sKey);
+                            kbd.printf(MESSAGE.EVENT + MESSAGE.KEY, "%s clicked\n", sKey);
                             kbd.updateFocus(event);
                             kbd.sInjectBuffer = "";                 // key events should stop any injection currently in progress
                             kbd.updateShiftState(simCode, true);    // future-proofing if/when any LOCK keys are added to CLICKCODES
@@ -47527,7 +47527,7 @@ class KbdX86 extends Component {
                     }
                     this.cSoftCodes++;
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) this.printf(Messages.LOG, "binding soft-code '%s'\n", sBinding);
+                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "binding soft-code '%s'\n", sBinding);
                     let msLastEvent = 0, nClickState = 0;
                     let fStateKey = (KbdX86.KEYSTATES[KbdX86.SOFTCODES[sBinding]] <= KbdX86.STATE.ALL_MODIFIERS);
                     let fnDown = function(kbd, sKey, simCode) {
@@ -47549,7 +47549,7 @@ class KbdX86 extends Component {
                                 if (nClickState < 8) {
                                     kbd.removeActiveKey(simCode);
                                 } else {
-                                    if (MAXDEBUG) this.printf(Messages.LOG, "soft-locking '%s'\n", sBinding);
+                                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "soft-locking '%s'\n", sBinding);
                                     nClickState = 0;
                                 }
                             }
@@ -47780,7 +47780,7 @@ class KbdX86 extends Component {
         /*
          * TODO: There's more to reset, like LED indicators, default type rate, and emptying the scan code buffer.
          */
-        this.printf(Messages.KBD + Messages.PORT, "keyboard reset\n");
+        this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard reset\n");
         this.abBuffer = [];
         this.setResponse(KbdX86.CMDRES.BAT_OK);
     }
@@ -47917,7 +47917,7 @@ class KbdX86 extends Component {
     {
         let fReset = false;
         if (this.fClock !== fClock) {
-            if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "keyboard clock line changing to %b\n", fClock);
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard clock line changing to %b\n", fClock);
             /*
              * Toggling the clock line low and then high signals a "reset", which we acknowledge once the
              * data line is high as well.
@@ -47925,7 +47925,7 @@ class KbdX86 extends Component {
             this.fClock = this.fResetOnEnable = fClock;
         }
         if (this.fData !== fData) {
-            if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "keyboard data line changing to %b\n", fData);
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard data line changing to %b\n", fData);
             this.fData = fData;
             if (fData && !this.fResetOnEnable) {
                 this.transmitData(true);
@@ -48649,7 +48649,7 @@ class KbdX86 extends Component {
         let wCode = KbdX86.SIMCODES[simCode] || KbdX86.SIMCODES[simCode += Keys.KEYCODE.ONDOWN];
 
         if (!wCode) {
-            if (!COMPILED) this.printf(Messages.KBD + Messages.KEY, "addActiveKey(%d,%s): unrecognized\n", simCode, (fPress? "press" : "down"));
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "addActiveKey(%d,%s): unrecognized\n", simCode, (fPress? "press" : "down"));
             return false;
         }
 
@@ -48685,7 +48685,7 @@ class KbdX86 extends Component {
             }
         }
 
-        if (!COMPILED) this.printf(Messages.KBD + Messages.KEY, "addActiveKey(%d,%s): %s\n", simCode, (fPress? "press" : "down"), (i < 0? "already active" : (i == this.aKeysActive.length? "adding" : "updating")));
+        if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "addActiveKey(%d,%s): %s\n", simCode, (fPress? "press" : "down"), (i < 0? "already active" : (i == this.aKeysActive.length? "adding" : "updating")));
 
         if (i < 0) return false;
 
@@ -48772,7 +48772,7 @@ class KbdX86 extends Component {
     removeActiveKey(simCode, fFlush)
     {
         if (!KbdX86.SIMCODES[simCode]) {
-            if (!COMPILED) this.printf(Messages.KBD + Messages.KEY, "removeActiveKey(%d): unrecognized\n", simCode);
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "removeActiveKey(%d): unrecognized\n", simCode);
             return false;
         }
 
@@ -48795,11 +48795,11 @@ class KbdX86 extends Component {
         }
 
         if (!COMPILED && !fFlush) {
-            this.printf(Messages.KBD + Messages.KEY, "removeActiveKey(%d): %s\n", simCode, (fRemoved? "removed" : "not active"));
+            this.printf(MESSAGE.KBD + MESSAGE.KEY, "removeActiveKey(%d): %s\n", simCode, (fRemoved? "removed" : "not active"));
         }
 
         if (!this.aKeysActive.length && this.fToggleCapsLock) {
-            if (!COMPILED) this.printf(Messages.KBD + Messages.KEY, "removeActiveKey(): inverting caps-lock now\n");
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "removeActiveKey(): inverting caps-lock now\n");
             this.updateShiftState(KbdX86.SIMCODE.CAPS_LOCK);
             this.fToggleCapsLock = false;
         }
@@ -48825,7 +48825,7 @@ class KbdX86 extends Component {
         }
 
         if (!COMPILED) {
-            this.printf(Messages.KBD + Messages.KEY, "updateActiveKey(%d,%dms): %b\n", key.simCode, msTimer, key.fDown);
+            this.printf(MESSAGE.KBD + MESSAGE.KEY, "updateActiveKey(%d,%dms): %b\n", key.simCode, msTimer, key.fDown);
         }
 
         if (msTimer && key.nRepeat < 0) {
@@ -48910,7 +48910,7 @@ class KbdX86 extends Component {
     onFocusChange(fFocus)
     {
         if (!COMPILED && this.fHasFocus != fFocus) {
-            this.printf(Messages.EVENT, "onFocusChange(%b)\n", fFocus);
+            this.printf(MESSAGE.EVENT, "onFocusChange(%b)\n", fFocus);
         }
         this.fHasFocus = fFocus;
         /*
@@ -48974,7 +48974,7 @@ class KbdX86 extends Component {
             } else {
                 keyCode = Keys.CODEKEY[code] || 0;
             }
-            this.printf(Messages.EVENT + Messages.KEY, "onKeyActive(%d): remapped using event code '%s'\n", keyCode, code);
+            this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyActive(%d): remapped using event code '%s'\n", keyCode, code);
         }
 
         if (!this.cmp.notifyKbdEvent(event, fDown)) {
@@ -49162,7 +49162,7 @@ class KbdX86 extends Component {
             event.preventDefault();
         }
 
-        this.printf(Messages.EVENT + Messages.KEY, "onKeyActive(%d): %b%s\n", keyCode, fDown, (fIgnore? ",ignore" : (fPass? "" : ",consume")));
+        this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyActive(%d): %b%s\n", keyCode, fDown, (fIgnore? ",ignore" : (fPass? "" : ",consume")));
 
         /*
          * Mobile (eg, iOS) keyboards don't fully support onkeydown/onkeyup events; for example, they usually
@@ -49179,7 +49179,7 @@ class KbdX86 extends Component {
                  */
                 if (this.fDelayALT && (this.bitsState & KbdX86.STATE.ALTS)) {
                     let simCodeAlt = KbdX86.SIMCODE.ALT;
-                    this.printf(Messages.EVENT, "onKeyActive(%d): simulating ALT down\n", simCodeAlt);
+                    this.printf(MESSAGE.EVENT, "onKeyActive(%d): simulating ALT down\n", simCodeAlt);
                     this.addActiveKey(simCodeAlt);
                 }
                 this.addActiveKey(simCode, fPress);
@@ -49216,7 +49216,7 @@ class KbdX86 extends Component {
         if (this.fAllDown) {
             let simCode = this.checkActiveKey();
             if (simCode && this.isAlphaKey(simCode) && this.isAlphaKey(keyCode) && simCode != keyCode) {
-                if (!COMPILED) this.printf(Messages.EVENT + Messages.KEY, "onKeyPress(%d) out of sync with %d, invert caps-lock\n", keyCode, simCode);
+                if (!COMPILED) this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyPress(%d) out of sync with %d, invert caps-lock\n", keyCode, simCode);
                 this.fToggleCapsLock = true;
                 keyCode = simCode;
             }
@@ -49224,7 +49224,7 @@ class KbdX86 extends Component {
 
         let fPass = !KbdX86.SIMCODES[keyCode] || !!(this.bitsState & KbdX86.STATE.CMD);
 
-        this.printf(Messages.EVENT + Messages.KEY, "onKeyPress(%d): %b\n", keyCode, fPass);
+        this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyPress(%d): %b\n", keyCode, fPass);
 
         if (!fPass) {
             /*
@@ -49234,7 +49234,7 @@ class KbdX86 extends Component {
              */
             if (this.fDelayALT && (this.bitsState & KbdX86.STATE.ALTS)) {
                 let simCodeAlt = KbdX86.SIMCODE.ALT;
-                this.printf(Messages.EVENT, "onKeyPress(%d): simulating ALT down\n", simCodeAlt);
+                this.printf(MESSAGE.EVENT, "onKeyPress(%d): simulating ALT down\n", simCodeAlt);
                 this.addActiveKey(simCodeAlt);
             }
             this.addActiveKey(keyCode, true);
@@ -49434,7 +49434,7 @@ class KbdX86 extends Component {
             fSimulated = true;
         }
 
-        if (!COMPILED) this.printf(Messages.KBD + Messages.KEY, "simulateKey(%d,%b): %b\n", simCode, fDown, fSimulated);
+        if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "simulateKey(%d,%b): %b\n", simCode, fDown, fSimulated);
 
         return fSimulated;
     }
@@ -51359,7 +51359,7 @@ class Card extends Controller {
             let fnReadByte = Card.ACCESS.afn[nReadAccess];
             if (!fnReadByte) {
                 if (DEBUG && this.dbg) {
-                    this.dbg.printf(Messages.VIDEO, "Card.setMemoryAccess(%#06x): missing readByte handler", nAccess);
+                    this.dbg.printf(MESSAGE.VIDEO, "Card.setMemoryAccess(%#06x): missing readByte handler", nAccess);
                     /*
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
@@ -51384,7 +51384,7 @@ class Card extends Controller {
             let fnWriteByte = Card.ACCESS.afn[nWriteAccess];
             if (!fnWriteByte) {
                 if (DEBUG && this.dbg) {
-                    this.dbg.printf(Messages.VIDEO, "Card.setMemoryAccess(%#06x): missing writeByte handler", nAccess);
+                    this.dbg.printf(MESSAGE.VIDEO, "Card.setMemoryAccess(%#06x): missing writeByte handler", nAccess);
                     /*
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
@@ -52300,11 +52300,11 @@ Card.ACCESS.writeByteMode0 = function writeByteMode0(off, b, addr)
             let bitDirtyBank = (1 << ((idw >> 13) & 7));
             if (!(card.bitsDirtyBanks & bitDirtyBank)) {
                 card.bitsDirtyBanks |= bitDirtyBank;
-                if (DEBUG) card.video.printf(Messages.VIDEO, "writeByteMode0(%#010X): modified font bank %#04X\n", addr, bitDirtyBank);
+                if (DEBUG) card.video.printf(MESSAGE.VIDEO, "writeByteMode0(%#010X): modified font bank %#04X\n", addr, bitDirtyBank);
             }
         }
     }
-    if (DEBUG) card.video.printf(Messages.VIDEO + Messages.MEM, "writeByteMode0(%#10X): %#04X -> %#10X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.VIDEO + MESSAGE.MEM, "writeByteMode0(%#10X): %#04X -> %#10X\n", addr, b, dw);
 };
 
 /**
@@ -52356,7 +52356,7 @@ Card.ACCESS.writeByteMode0Chain4 = function writeByteMode0Chain4(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0Chain4(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Chain4(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -52383,7 +52383,7 @@ Card.ACCESS.writeByteMode0EvenOdd = function writeByteMode0EvenOdd(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0EvenOdd(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0EvenOdd(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -52407,7 +52407,7 @@ Card.ACCESS.writeByteMode0Rot = function writeByteMode0Rot(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0Rot(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Rot(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -52432,7 +52432,7 @@ Card.ACCESS.writeByteMode0And = function writeByteMode0And(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0And(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0And(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -52457,7 +52457,7 @@ Card.ACCESS.writeByteMode0Or = function writeByteMode0Or(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -52482,7 +52482,7 @@ Card.ACCESS.writeByteMode0Xor = function writeByteMode0Xor(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode0Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -52502,7 +52502,7 @@ Card.ACCESS.writeByteMode1 = function writeByteMode1(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode1(%#010X): %#010X\n", addr, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1(%#010X): %#010X\n", addr, dw);
 };
 
 /**
@@ -52530,7 +52530,7 @@ Card.ACCESS.writeByteMode1EvenOdd = function writeByteMode1EvenOdd(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode1EvenOdd(%#010X): %#010X\n", addr, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1EvenOdd(%#010X): %#010X\n", addr, dw);
 };
 
 /**
@@ -52552,7 +52552,7 @@ Card.ACCESS.writeByteMode2 = function writeByteMode2(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode2(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -52575,7 +52575,7 @@ Card.ACCESS.writeByteMode2And = function writeByteMode2And(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode2And(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2And(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -52598,7 +52598,7 @@ Card.ACCESS.writeByteMode2Or = function writeByteMode2Or(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode2Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -52621,7 +52621,7 @@ Card.ACCESS.writeByteMode2Xor = function writeByteMode2Xor(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode2Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /**
@@ -52651,7 +52651,7 @@ Card.ACCESS.writeByteMode3 = function writeByteMode3(off, b, addr)
         this.adw[idw] = dw;
         this.flags |= MemoryX86.FLAGS.DIRTY;
     }
-    if (DEBUG) card.video.printf(Messages.MEM + Messages.VIDEO, "writeByteMode3(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode3(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
 /*
@@ -52747,7 +52747,7 @@ class VideoX86 extends Component {
      */
     constructor(parmsVideo, canvas, context, textarea, container, aDiagElements)
     {
-        super("Video", parmsVideo, Messages.VIDEO);
+        super("Video", parmsVideo, MESSAGE.VIDEO);
 
         let video = this, sProp, sEvent;
         this.bindingsExternal = [];
@@ -53085,7 +53085,7 @@ class VideoX86 extends Component {
         }
 
         if (DEBUGGER && dbg) {
-            dbg.messageDump(Messages.VIDEO, function onDumpVideo(asArgs) {
+            dbg.messageDump(MESSAGE.VIDEO, function onDumpVideo(asArgs) {
                 video.dumpVideo(asArgs);
             });
         }
@@ -53141,7 +53141,7 @@ class VideoX86 extends Component {
             Web.getResource(this.sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 video.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
-                video.printf(Messages.PROGRESS, "%s\n", sProgress);
+                video.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
             });
             return;
         }
@@ -53193,7 +53193,7 @@ class VideoX86 extends Component {
                         video.goFullScreen();
                     };
                 } else {
-                    if (DEBUG) this.printf(Messages.LOG, "FullScreen API not available\n");
+                    if (DEBUG) this.printf(MESSAGE.LOG, "FullScreen API not available\n");
                     control.parentNode.removeChild(/** @type {Node} */ (control));
                 }
                 return true;
@@ -53206,7 +53206,7 @@ class VideoX86 extends Component {
                         video.lockPointer(true);
                     };
                 } else {
-                    if (DEBUG) this.printf(Messages.LOG, "Pointer Lock API not available\n");
+                    if (DEBUG) this.printf(MESSAGE.LOG, "Pointer Lock API not available\n");
                     control.parentNode.removeChild(/** @type {Node} */ (control));
                 }
                 return true;
@@ -53548,7 +53548,7 @@ class VideoX86 extends Component {
                     );
                 }
 
-                // this.printf(Messages.LOG, "touch events captured\n");
+                // this.printf(MESSAGE.LOG, "touch events captured\n");
 
                 this.xTouch = this.yTouch = this.timeTouch = -1;
 
@@ -53875,7 +53875,7 @@ class VideoX86 extends Component {
                         }
                     }
                     card.nCyclesVertRetrace = video.cpu.getCycles();
-                    if (DEBUG) video.printf(Messages.VIDEO + Messages.TIMER, "vertical retrace timer fired (%d cycles)\n", card.nCyclesVertRetrace);
+                    if (DEBUG) video.printf(MESSAGE.VIDEO + MESSAGE.TIMER, "vertical retrace timer fired (%d cycles)\n", card.nCyclesVertRetrace);
                     if (video.nIRQ) {
                         if (!(card.regCRTData[Card.CRTC.EGA.VREND.INDX] & Card.CRTC.EGA.VREND.DISABLE_VRINT)) {
                             if (video.chipset) video.chipset.setIRR(video.nIRQ);
@@ -53922,7 +53922,7 @@ class VideoX86 extends Component {
                         video.msUpdatePrev = msUpdate - (msDelta >= video.msUpdateInterval? 0 : msDelta);
                     }
                     else if (DEBUG) {
-                        video.printf(Messages.VIDEO + Messages.TIMER, "skipping update (%dms too soon)\n", -msDelta);
+                        video.printf(MESSAGE.VIDEO + MESSAGE.TIMER, "skipping update (%dms too soon)\n", -msDelta);
                     }
                     video.latchStartAddress();
                 }, -this.cardActive.nCyclesVertPeriod);
@@ -54162,7 +54162,7 @@ class VideoX86 extends Component {
     doneLoad(sURL, sFontData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(nErrorCode < 0? MESSAGE.STATUS : MESSAGE.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -54262,12 +54262,12 @@ class VideoX86 extends Component {
                 this.setFontData(ab, [0x0000]);
             }
             else {
-                this.printf(Messages.NOTICE, "Unrecognized font data length (%d)\n", ab.length);
+                this.printf(MESSAGE.NOTICE, "Unrecognized font data length (%d)\n", ab.length);
                 return;
             }
 
         } catch (e) {
-            this.printf(Messages.NOTICE, "Font ROM data error: %s\n", e.message);
+            this.printf(MESSAGE.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
         /*
@@ -56172,7 +56172,7 @@ class VideoX86 extends Component {
             this.contextScreen.fillRect(xDst, yDst, this.cxScreenCell, this.cyScreenCell);
         }
 
-        if (MAXDEBUG) this.printf(Messages.VIDEO + Messages.BUFFER, "updateCharBgnd(%d,%d,%d): filled %d,%d\n", col, row, bChar, xDst, yDst);
+        if (MAXDEBUG) this.printf(MESSAGE.VIDEO + MESSAGE.BUFFER, "updateCharBgnd(%d,%d,%d): filled %d,%d\n", col, row, bChar, xDst, yDst);
 
         if (bAttr & VideoX86.ATTRS.DRAW_FGND) {
             /*
@@ -56181,7 +56181,7 @@ class VideoX86 extends Component {
             let xSrcFgnd = (bChar & 0xf) * font.cxCell;
             let ySrcFgnd = (bChar >> 4) * font.cyCell;
 
-            if (MAXDEBUG) this.printf(Messages.VIDEO + Messages.BUFFER, "updateCharFgnd(%d,%d,%d): draw from %d,%d (%d,%d) to %d,%d\n", col, row , bChar, xSrcFgnd, ySrcFgnd, font.cxCell, font.cyCell, xDst, yDst);
+            if (MAXDEBUG) this.printf(MESSAGE.VIDEO + MESSAGE.BUFFER, "updateCharFgnd(%d,%d,%d): draw from %d,%d (%d,%d) to %d,%d\n", col, row , bChar, xSrcFgnd, ySrcFgnd, font.cxCell, font.cyCell, xDst, yDst);
 
             if (context) {
                 context.drawImage(font.aCanvas[iFgnd], xSrcFgnd, ySrcFgnd, font.cxCell, font.cyCell, xDst, yDst, font.cxCell, font.cyCell);
@@ -57440,7 +57440,7 @@ class VideoX86 extends Component {
             if (nFontSelect != this.nFontSelect) {
                 if (DEBUG) {
                     if ((nFontSelect & 0xff) == (nFontSelect >> 8)) {
-                        if (this.messageEnabled(Messages.VIDEO + Messages.PORT)) {
+                        if (this.messageEnabled(MESSAGE.VIDEO + MESSAGE.PORT)) {
                             this.printf("outSEQData(%#04X): font selection changing from %#06X to %#06X\n", bOut, this.nFontSelect, nFontSelect);
                         }
                     } else {
@@ -59083,7 +59083,7 @@ class ParallelPort extends Component {
      */
     constructor(parmsParallel)
     {
-        super("ParallelPort", parmsParallel, Messages.PARALLEL);
+        super("ParallelPort", parmsParallel, MESSAGE.PARALLEL);
 
         this.iAdapter = parmsParallel['adapter'];
 
@@ -59620,7 +59620,7 @@ class SerialPort extends Component {
      */
     constructor(parms)
     {
-        super("SerialPort", parms, Messages.SERIAL);
+        super("SerialPort", parms, MESSAGE.SERIAL);
 
         this.iAdapter = +parms['adapter'];
 
@@ -59933,7 +59933,7 @@ class SerialPort extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
+                                this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
@@ -59942,7 +59942,7 @@ class SerialPort extends Component {
                 /*
                  * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
+                this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }
@@ -60797,7 +60797,7 @@ class TestController extends Component {
         Web.getResource(sURL, null, true, function(sURL, sResponse, nErrorCode) {
             controller.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
-            controller.printf(Messages.PROGRESS, "%s\n", sProgress);
+            controller.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
         });
 
     }
@@ -60813,7 +60813,7 @@ class TestController extends Component {
     doneLoad(sURL, sTestData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load tests (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(nErrorCode < 0? MESSAGE.STATUS : MESSAGE.NOTICE, "Unable to load tests (error %d: %s)\n", nErrorCode, sURL);
         }
         else {
             try {
@@ -60824,7 +60824,7 @@ class TestController extends Component {
                 }
                 Component.addMachineResource(this.idMachine, sURL, sTestData);
             } catch (err) {
-                this.printf(Messages.NOTICE, "Test parsing error: %s\n", err.message);
+                this.printf(MESSAGE.NOTICE, "Test parsing error: %s\n", err.message);
             }
         }
         this.setReady();
@@ -61532,7 +61532,7 @@ class Mouse extends Component {
      */
     constructor(parmsMouse)
     {
-        super("Mouse", parmsMouse, Messages.MOUSE);
+        super("Mouse", parmsMouse, MESSAGE.MOUSE);
 
         this.iAdapter = parmsMouse['adapter'] || 0;
         this.idDevice = parmsMouse['serial'] || parmsMouse['binding'];
@@ -61979,7 +61979,7 @@ class Mouse extends Component {
             let xScaled = (Math.round(Math.abs(xDelta) * this.scale) * Math.sign(xDelta)) || Math.sign(xDelta);
             let yScaled = (Math.round(Math.abs(yDelta) * this.scale) * Math.sign(yDelta)) || Math.sign(yDelta);
             if (xScaled || yScaled) {
-                this.printf(Messages.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
+                this.printf(MESSAGE.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
                 /*
                  * As sendPacket() indicates, any x and y coordinates we supply are for diagnostic purposes only.
                  * sendPacket() only cares about the xDelta and yDelta properties we provide above, which it then zeroes
@@ -62014,7 +62014,7 @@ class Mouse extends Component {
         let b1 = 0x40 | (this.fButton1? 0x20 : 0) | (this.fButton2? 0x10 : 0) | ((this.yDelta & 0xC0) >> 4) | ((this.xDelta & 0xC0) >> 6);
         let b2 = this.xDelta & 0x3F;
         let b3 = this.yDelta & 0x3F;
-        this.printf(Messages.SERIAL + Messages.ADDRESS, "%s%sserial packet [%#04x,%#04x,%#04x]\n", (sDiag? (sDiag + ": ") : ""), (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : ""), b1, b2, b3);
+        this.printf(MESSAGE.SERIAL + MESSAGE.ADDR, "%s%sserial packet [%#04x,%#04x,%#04x]\n", (sDiag? (sDiag + ": ") : ""), (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : ""), b1, b2, b3);
         this.componentDevice.receiveData([b1, b2, b3]);
         this.xDelta = this.yDelta = 0;
     }
@@ -62606,7 +62606,7 @@ class Disk extends Component {
      */
     constructor(controller, drive, mode)
     {
-        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++Disk.nDisks, 4)}, Messages.DISK);
+        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++Disk.nDisks, 4)}, MESSAGE.DISK);
 
         this.controller = controller;
 
@@ -62758,7 +62758,7 @@ class Disk extends Component {
             }
             while ((response = this.findDirtySectors(false))) {
                 if ((nErrorCode = response[0])) {
-                    this.printf(Messages.NOTICE, "Unable to save \"%s\" (error %d)\n", this.sDiskName, nErrorCode);
+                    this.printf(MESSAGE.NOTICE, "Unable to save \"%s\" (error %d)\n", this.sDiskName, nErrorCode);
                     break;
                 }
             }
@@ -62771,7 +62771,7 @@ class Disk extends Component {
              * all diskettes to their original state) and discarding remote changes (which could leave the remote disk
              * in a bad state).
              */
-            if (!nErrorCode && fSave) this.printf(Messages.NOTICE, "\"%s\" saved\n", this.sDiskName);
+            if (!nErrorCode && fSave) this.printf(MESSAGE.NOTICE, "\"%s\" saved\n", this.sDiskName);
         }
         return true;
     }
@@ -62802,7 +62802,7 @@ class Disk extends Component {
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
 
-
+            this.printf(MESSAGE.DEBUG, "blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
 
             let aCylinders = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
@@ -62858,10 +62858,10 @@ class Disk extends Component {
     {
         let sDiskURL = sDiskPath;
 
-
+        this.printf(MESSAGE.DEBUG, 'load("%s","%s")\n', sDiskName, sDiskPath);
 
         if (this.fnNotify) {
-
+            this.printf(MESSAGE.DEBUG, 'too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
             return true;
         }
 
@@ -62956,7 +62956,7 @@ class Disk extends Component {
         return !!Web.getResource(sDiskURL, this.sFormat, true, function loadDone(sURL, sResponse, nErrorCode) {
             disk.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
-            disk.printf(Messages.PROGRESS, "%s\n", sProgress);
+            disk.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
         });
     }
 
@@ -63039,7 +63039,7 @@ class Disk extends Component {
             this.dwChecksum = dwChecksum;
             disk = this;
         } else {
-            this.printf(Messages.NOTICE, "%s\n", message || ("Unrecognized disk format (" + cbDiskData + " bytes)"));
+            this.printf(MESSAGE.NOTICE, "%s\n", message || ("Unrecognized disk format (" + cbDiskData + " bytes)"));
         }
 
         if (this.fnNotify) {
@@ -63063,12 +63063,12 @@ class Disk extends Component {
     {
         let disk = null;
         this.fWriteProtected = false;
-        let idMessage = (nErrorCode < 0 && this.cmp && !this.cmp.flags.powered)? Messages.STATUS : Messages.NOTICE;
+        let idMessage = (nErrorCode < 0 && this.cmp && !this.cmp.flags.powered)? MESSAGE.STATUS : MESSAGE.NOTICE;
 
         if (this.fOnDemand) {
             if (!nErrorCode) {
                 disk = this;
-
+                this.printf(MESSAGE.DEBUG, "doneLoad(\"%s\")\n", this.sDiskPath);
                 this.fRemote = true;
             } else {
                 this.printf(idMessage, "Unable to connect to disk \"%s\" (error %d: %s)\n", this.sDiskPath, nErrorCode, imageData);
@@ -63084,7 +63084,7 @@ class Disk extends Component {
              */
             this.printf(idMessage, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
-
+            this.printf(MESSAGE.DEBUG, "doneLoad(\"%s\")\n", this.sDiskPath);
 
             /*
              * If we received binary data instead of JSON, we can use the same buildDisk() function that
@@ -63189,7 +63189,7 @@ class Disk extends Component {
                  * conversion to a forward-compatible DATA array.
                  */
                 else {
-                    if (DEBUG && this.messageEnabled(Messages.DISK + Messages.DATA)) {
+                    if (DEBUG && this.messageEnabled(MESSAGE.DISK + MESSAGE.DATA)) {
                         let sCylinders = diskData.length + " track" + (diskData.length > 1 ? "s" : "");
                         let nHeads = diskData[0].length;
                         let sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
@@ -63615,7 +63615,7 @@ class Disk extends Component {
      */
     readRemoteSectors(iCylinder, iHead, iSector, nSectors, fAsync, done)
     {
-
+        this.printf(MESSAGE.DEBUG, "readRemoteSectors(CHS=%d:%d:%d,N=%d)\n", iCylinder, iHead, iSector, nSectors);
 
         if (this.fRemote) {
             let sParms = DiskAPI.QUERY.ACTION + '=' + DiskAPI.ACTION.READ;
@@ -63667,7 +63667,7 @@ class Disk extends Component {
                  */
                 let sector = this.seek(iCylinder, iHead, iSector, null, true);
                 if (!sector) {
-
+                    this.printf(MESSAGE.DEBUG, "doneReadRemoteSectors(): seek(CHS=%d:%d:%d) failed\n", iCylinder, iHead, iSector);
                     break;
                 }
                 this.fill(sector, abData, offData);
@@ -63680,7 +63680,7 @@ class Disk extends Component {
             }
             fAsync = aRequest[4];
         } else {
-
+            this.printf(MESSAGE.DEBUG, "doneReadRemoteSectors(CHS=%d:%d:%d,N=%d) returned error %d\n", iCylinder, iHead, iSector, nSectors, nErrorCode);
         }
         let done = aRequest[5];
         if (done) done(nErrorCode, fAsync);
@@ -63709,7 +63709,7 @@ class Disk extends Component {
      */
     writeRemoteSectors(iCylinder, iHead, iSector, nSectors, abSectors, fAsync)
     {
-
+        this.printf(MESSAGE.DEBUG, "writeRemoteSectors(CHS=%d:%d:%d,N=%d)\n", iCylinder, iHead, iSector, nSectors);
 
         if (this.fRemote) {
             let dataPost = {};
@@ -63757,7 +63757,7 @@ class Disk extends Component {
                         sector.iModify = sector.cModify = 0;
                     }
                 } else {
-
+                    this.printf(MESSAGE.DEBUG, "doneWriteRemoteSectors(CHS=%d:%d:%d) returned error %d\n", iCylinder, iHead, sector[Disk.SECTOR.ID], nErrorCode);
                     this.queueDirtySector(sector, false);
                 }
             }
@@ -63815,7 +63815,7 @@ class Disk extends Component {
         this.aDirtySectors.push(sector);
         this.aDirtyTimestamps.push(Component.getTime());
 
-
+        this.printf(MESSAGE.DEBUG, "queueDirtySector(CHS=%d:%d:%d): %d dirty\n", sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.aDirtySectors.length);
 
         return fAsync && this.updateWriteTimer();
     }
@@ -63886,7 +63886,7 @@ class Disk extends Component {
                 if (!sectorNext.fDirty) break;
                 let j = this.aDirtySectors.indexOf(sectorNext);
 
-
+                this.printf(MESSAGE.DEBUG, "findDirtySectors(CHS=%d:%d:%d)\n", iCylinder, iHead, sectorNext[Disk.SECTOR.ID]);
                 this.aDirtySectors.splice(j, 1);
                 this.aDirtyTimestamps.splice(j, 1);
                 abSectors = abSectors.concat(this.toBytes(sectorNext));
@@ -64101,7 +64101,7 @@ class Disk extends Component {
         let b = -1;
         if (sector) {
             if (DEBUG && !iByte && !fCompare) {
-                this.printf(Messages.DISK + Messages.ADDRESS, "read(\"%s\",CHS=%d:%d:%d): %s\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.getFileInfo(sector));
+                this.printf(MESSAGE.DISK + MESSAGE.ADDR, "read(\"%s\",CHS=%d:%d:%d): %s\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.getFileInfo(sector));
             }
             if (iByte < sector[Disk.SECTOR.LENGTH]) {
                 let adw = sector[Disk.SECTOR.DATA];
@@ -64129,7 +64129,7 @@ class Disk extends Component {
         }
 
         if (DEBUG && !iByte) {
-            this.printf(Messages.DISK + Messages.ADDRESS, "write(\"%s\",CHS=%d:%d:%d)\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID]);
+            this.printf(MESSAGE.DISK + MESSAGE.ADDR, "write(\"%s\",CHS=%d:%d:%d)\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID]);
         }
 
         if (iByte < sector[Disk.SECTOR.LENGTH]) {
@@ -64237,7 +64237,7 @@ class Disk extends Component {
                 }
             }
         }
-
+        this.printf(MESSAGE.DEBUG, "save(\"%s\"): saved %d change(s)\n", this.sDiskName, (deltas.length - 1));
         return deltas;
     }
 
@@ -64373,10 +64373,10 @@ class Disk extends Component {
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
-                this.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
+                this.printf(MESSAGE.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
-
+            this.printf(MESSAGE.DEBUG, "restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
             /*
              * Last but not least, rebuild the disk's file table if BACKTRACK or SYMBOLS support is enabled.
              */
@@ -64738,7 +64738,7 @@ class FDC extends Component {
          * TODO: Indicate the type of diskette image being loaded (this might help folks understand what's going
          * on when they try to load a diskette image that's larger than what the selected operating system supports).
          */
-        super("FDC", parmsFDC, Messages.FDC);
+        super("FDC", parmsFDC, MESSAGE.FDC);
 
         this['dmaRead'] = FDC.prototype.doDMARead;
         this['dmaWrite'] = FDC.prototype.doDMAWrite;
@@ -64878,7 +64878,7 @@ class FDC extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available");
                 /*
                  * We could also simply remove the control; eg:
                  *
@@ -64907,10 +64907,10 @@ class FDC extends Component {
                             let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
-                            fdc.printf(Messages.NOTICE, "No diskette loaded in drive\n");
+                            fdc.printf(MESSAGE.NOTICE, "No diskette loaded in drive\n");
                         }
                     } else {
-                        fdc.printf(Messages.NOTICE, "No diskette drive selected\n");
+                        fdc.printf(MESSAGE.NOTICE, "No diskette drive selected\n");
                     }
                 }
             };
@@ -64918,7 +64918,7 @@ class FDC extends Component {
 
         case "mountDisk":
             if (!this.fLocalDisks) {
-                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -65045,14 +65045,14 @@ class FDC extends Component {
                             JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
                             cSuccessful++;
                         } catch(err) {
-                            if (!privateURL || sResponse[0] != '<') fdc.printf(Messages.WARNING, "Unable to parse %s: %s\n", url, err.message);
+                            if (!privateURL || sResponse[0] != '<') fdc.printf(MESSAGE.WARNING, "Unable to parse %s: %s\n", url, err.message);
                         }
                     } else {
-                        if (!privateURL) fdc.printf(Messages.WARNING, "Unable to open %s (%d)\n", url, nErrorCode);
+                        if (!privateURL) fdc.printf(MESSAGE.WARNING, "Unable to open %s (%d)\n", url, nErrorCode);
                     }
                     if (++cLoaded == urls.length) fdc.addDiskettes(!cSuccessful);
                 }, function(nState) {
-                    fdc.printf(Messages.PROGRESS, "%s\n", sProgress);
+                    fdc.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
                 });
             }
             return;
@@ -65450,8 +65450,8 @@ class FDC extends Component {
 
         if (fInit) {
             drive.fWritable = true;
-            if (nHeads) this.printf(Messages.STATUS, "drive %d configured with %d head%s\n", iDrive, nHeads, nHeads > 1? 's' : '');
-            if (!drive.fBootable) this.printf(Messages.STATUS, "drive %d configured as non-bootable\n", iDrive);
+            if (nHeads) this.printf(MESSAGE.STATUS, "drive %d configured with %d head%s\n", iDrive, nHeads, nHeads > 1? 's' : '');
+            if (!drive.fBootable) this.printf(MESSAGE.STATUS, "drive %d configured as non-bootable\n", iDrive);
         }
 
         if (data === undefined) {
@@ -65824,7 +65824,7 @@ class FDC extends Component {
                     }
                     continue;
                 }
-                this.printf(Messages.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDrive));
+                this.printf(MESSAGE.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDrive));
             }
         }
         return !!this.cAutoMount;
@@ -65873,7 +65873,7 @@ class FDC extends Component {
             }
 
             if (sDiskPath == "?") {
-                this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk\n");
+                this.printf(MESSAGE.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk\n");
                 return false;
             }
 
@@ -65893,7 +65893,7 @@ class FDC extends Component {
                 }
                 if (!sDiskPath) return false;
                 sDiskName = Str.getBaseName(sDiskPath);
-
+                this.printf(MESSAGE.DEBUG, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
@@ -65901,7 +65901,7 @@ class FDC extends Component {
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
                 if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
-
+                    this.printf(MESSAGE.DEBUG, "load cancelled\n");
                     return false;
                 }
                 /*
@@ -65917,7 +65917,7 @@ class FDC extends Component {
             }
             return true;
         }
-        this.printf(Messages.NOTICE, "Unable to load the selected drive\n");
+        this.printf(MESSAGE.NOTICE, "Unable to load the selected drive\n");
         return false;
     }
 
@@ -65974,7 +65974,7 @@ class FDC extends Component {
                 result = 1;
                 this.unloadDrive(iDrive, fAutoMount, true);
                 if (drive.fBusy) {
-                    this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
+                    this.printf(MESSAGE.NOTICE, "Drive %d busy\n", iDrive);
                     return 0;
                 }
                 drive.fBusy = true;
@@ -66024,7 +66024,7 @@ class FDC extends Component {
              */
             aDiskInfo = disk.info();
             if (disk && aDiskInfo[0] > drive.nCylinders || aDiskInfo[1] > drive.nHeads /* || aDiskInfo[2] > drive.nSectors */) {
-                this.printf(Messages.NOTICE, "Diskette \"%s\" too large for drive %s\n", sDiskName, String.fromCharCode(0x41 + drive.iDrive));
+                this.printf(MESSAGE.NOTICE, "Diskette \"%s\" too large for drive %s\n", sDiskName, String.fromCharCode(0x41 + drive.iDrive));
                 disk = null;
             }
         }
@@ -66081,7 +66081,7 @@ class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!drive.fnCallReady) {
-                this.printf(Messages.STATUS, "Mounted \"%s\" (format %s) in drive %s\n", sDiskName, (disk.imageInfo && disk.imageInfo.format || "unknown"), String.fromCharCode(0x41 + drive.iDrive));
+                this.printf(MESSAGE.STATUS, "Mounted \"%s\" (format %s) in drive %s\n", sDiskName, (disk.imageInfo && disk.imageInfo.format || "unknown"), String.fromCharCode(0x41 + drive.iDrive));
             }
 
             /*
@@ -66268,7 +66268,7 @@ class FDC extends Component {
                     if (diskette['name'] == sName) return diskette['path'];
                 }
             }
-            this.printf(Messages.NOTICE, "Unable to find diskette \"%s\"\n", sName);
+            this.printf(MESSAGE.NOTICE, "Unable to find diskette \"%s\"\n", sName);
         }
         return "";
     }
@@ -66422,7 +66422,7 @@ class FDC extends Component {
                     if (drive.fWritable != !(controlDrives.selectedIndex & 0x1)) {
                         drive.fWritable = !drive.fWritable;
                         if (!drive.fWritable) {
-                            this.printf(Messages.NOTICE, "Any diskette loaded in this drive will now be write-protected.");
+                            this.printf(MESSAGE.NOTICE, "Any diskette loaded in this drive will now be write-protected.");
                         }
                     }
                 }
@@ -66506,7 +66506,7 @@ class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!fQuiet) {
-                this.printf(Messages.STATUS, "Drive %s unloaded\n", String.fromCharCode(0x41 + iDrive));
+                this.printf(MESSAGE.STATUS, "Drive %s unloaded\n", String.fromCharCode(0x41 + iDrive));
             }
             /*
              * Try to avoid any unnecessary hysteresis regarding the diskette display if this unload is merely
@@ -67183,7 +67183,7 @@ class FDC extends Component {
         if (DEBUG) {
             let bCmdMasked = bCmd & FDC.REG_DATA.CMD.MASK;
             if (!name && !this.regDataIndex && FDC.aCmdInfo[bCmdMasked]) name = FDC.aCmdInfo[bCmdMasked].name;
-            this.printf(Messages.PORT + Messages.FDC, "%s.popCmd(%s): %#04x\n", this.idComponent, (name || this.regDataIndex), bCmd);
+            this.printf(MESSAGE.PORT + MESSAGE.FDC, "%s.popCmd(%s): %#04x\n", this.idComponent, (name || this.regDataIndex), bCmd);
         }
         this.regDataIndex++;
         return bCmd;
@@ -67250,7 +67250,7 @@ class FDC extends Component {
      */
     pushResult(bResult, name)
     {
-        if (DEBUG) this.printf(Messages.PORT + Messages.FDC, "%s.pushResult(%s): %#04x\n", this.idComponent, (name || this.regDataTotal), bResult);
+        if (DEBUG) this.printf(MESSAGE.PORT + MESSAGE.FDC, "%s.pushResult(%s): %#04x\n", this.idComponent, (name || this.regDataTotal), bResult);
 
         this.regDataArray[this.regDataTotal++] = bResult;
     }
@@ -68006,7 +68006,7 @@ class HDC extends Component {
      */
     constructor(parmsHDC)
     {
-        super("HDC", parmsHDC, Messages.HDC);
+        super("HDC", parmsHDC, MESSAGE.HDC);
 
         this['dmaRead'] = HDC.prototype.doDMARead;
         this['dmaWrite'] = HDC.prototype.doDMAWrite;
@@ -68080,7 +68080,7 @@ class HDC extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply remove the control; eg:
                  *
@@ -68116,7 +68116,7 @@ class HDC extends Component {
                         let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {
-                        hdc.printf(Messages.NOTICE, "Hard drive %d is not available.\n", iDrive);
+                        hdc.printf(MESSAGE.NOTICE, "Hard drive %d is not available.\n", iDrive);
                     }
                 };
             }(+sBinding.slice(-1));
@@ -68572,7 +68572,7 @@ class HDC extends Component {
          */
         if (drive.disk === undefined) {
             drive.disk = null;
-            this.printf(Messages.STATUS, "Type %d \"%s\" is fixed disk %d\n", drive.type, drive.name, iDrive);
+            this.printf(MESSAGE.STATUS, "Type %d \"%s\" is fixed disk %d\n", drive.type, drive.name, iDrive);
         }
 
         /*
@@ -68714,7 +68714,7 @@ class HDC extends Component {
                 let driveType = DRIVE_TYPES[this.iDriveCtrl][drive.type];
                 if (driveType) {
                     if (nCylinders != driveType[0] && nHeads != driveType[1]) {
-                        this.printf(Messages.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
+                        this.printf(MESSAGE.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
                     }
                 }
                 drive.nCylinders = nCylinders;
@@ -68836,7 +68836,7 @@ class HDC extends Component {
     {
         let drive = this.aDrives[iDrive];
         if (drive.fBusy) {
-            this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
+            this.printf(MESSAGE.NOTICE, "Drive %d busy\n", iDrive);
             return true;
         }
         drive.fBusy = true;
@@ -68888,7 +68888,7 @@ class HDC extends Component {
              * WARNING: This conversion of drive number to drive letter, starting with "C:" (0x43), is very simplistic
              * and is not guaranteed to match the drive mapping that DOS ultimately uses.
              */
-            this.printf(drive.fAutoMount? Messages.STATUS : Messages.NOTICE, "Mounted disk \"%s\" in drive %s\n", sDiskName, String.fromCharCode(0x43 + drive.iDrive));
+            this.printf(drive.fAutoMount? MESSAGE.STATUS : MESSAGE.NOTICE, "Mounted disk \"%s\" in drive %s\n", sDiskName, String.fromCharCode(0x43 + drive.iDrive));
 
             let aDiskInfo = disk.info();
             if (aDiskInfo[0] != drive.nCylinders || aDiskInfo[1] != drive.nHeads || aDiskInfo[2] != drive.nSectors || aDiskInfo[3] != drive.cbSector) {
@@ -68898,7 +68898,7 @@ class HDC extends Component {
                  * disk so that its geometry matches the controller requirements.
                  */
                 if (this.sType.indexOf("PCJS") < 0) {   // skip the warning if pc.js custom-built this disk
-                    this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDriveCtrl], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                    this.printf(MESSAGE.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDriveCtrl], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
                 }
             }
         }
@@ -69102,7 +69102,7 @@ class HDC extends Component {
 
                 if (BACKTRACK && obj) {
                     if (!off && obj.file) {
-                        hdc.printf(Messages.DISK + Messages.PORT + Messages.ADDRESS, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
+                        hdc.printf(MESSAGE.DISK + MESSAGE.PORT + MESSAGE.ADDR, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
                     }
                     /*
                      * TODO: We could define a cached BTO that's reset prior to a new ATC command, and then pass that
@@ -69121,11 +69121,11 @@ class HDC extends Component {
                  * printIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
                  * and last bytes of each sector.
                  */
-                if (this.messageEnabled(Messages.PORT + Messages.HDC)) {
+                if (this.messageEnabled(MESSAGE.PORT + MESSAGE.HDC)) {
                     this.printIO(port, undefined, addrFrom, "DATA[" + drive.iByte + "]", bIn);
                 }
                 if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
-                    if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
+                    if (this.messageEnabled(MESSAGE.DATA + MESSAGE.HDC)) {
                         let sDump = drive.disk.dumpSector(drive.sector);
                         if (sDump) this.print(sDump);
                     }
@@ -69237,11 +69237,11 @@ class HDC extends Component {
                      * printIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
                      * and last bytes of each sector.
                      */
-                    if (this.messageEnabled(Messages.PORT + Messages.HDC)) {
+                    if (this.messageEnabled(MESSAGE.PORT + MESSAGE.HDC)) {
                         this.printIO(port, bOut, addrFrom, "DATA[" + drive.iByte + "]");
                     }
                     if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
-                        if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
+                        if (this.messageEnabled(MESSAGE.DATA + MESSAGE.HDC)) {
                             let sDump = drive.disk.dumpSector(drive.sector);
                             if (sDump) this.print(sDump);
                         }
@@ -69605,7 +69605,7 @@ class HDC extends Component {
         this.regStatus = HDC.ATC.STATUS.READY | HDC.ATC.STATUS.SEEK_OK;
         let drive = this.aDrives[iDrive];
 
-        this.printf(Messages.HDC + Messages.PORT + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
+        this.printf(MESSAGE.HDC + MESSAGE.PORT + MESSAGE.ADDR, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
 
         if (!drive) return;
         this.iDrive = iDrive;
@@ -69655,7 +69655,7 @@ class HDC extends Component {
 
         case HDC.ATC.COMMAND.READ_DATA:             // 0x20 (ATA)
             if (!drive.useBuffer) {
-                this.printf(Messages.HDC + Messages.PORT, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
+                this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             /*
              * We're using a call to readData() that disables auto-increment, so that once we've got the first
@@ -69695,7 +69695,7 @@ class HDC extends Component {
 
         case HDC.ATC.COMMAND.WRITE_DATA:            // 0x30 (ATA)
             if (!drive.useBuffer) {
-                this.printf(Messages.HDC + Messages.PORT, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
+                this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             this.regStatus = HDC.ATC.STATUS.DATA_REQ;
             fProcessed = true;
@@ -69798,9 +69798,9 @@ class HDC extends Component {
                  * has a low tolerance for fast controller interrupts during multi-sector operations.
                  */
                 this.chipset.setIRR(ChipSet.IRQ.ATC1 + this.nInterface, 120);
-                if (DEBUG) this.printf(Messages.PIC + Messages.HDC, "%s.setATCIRR(): enabled\n", this.idComponent);
+                if (DEBUG) this.printf(MESSAGE.PIC + MESSAGE.HDC, "%s.setATCIRR(): enabled\n", this.idComponent);
             } else {
-                if (DEBUG) this.printf(Messages.PIC + Messages.HDC, "%s.setATCIRR(): disabled\n", this.idComponent);
+                if (DEBUG) this.printf(MESSAGE.PIC + MESSAGE.HDC, "%s.setATCIRR(): disabled\n", this.idComponent);
             }
         }
     }
@@ -69978,7 +69978,7 @@ class HDC extends Component {
         let bCmdIndex = this.regDataIndex;
         if (bCmdIndex < this.regDataTotal) {
             bCmd = this.regDataArray[this.regDataIndex++];
-            this.printf((bCmdIndex > 0? Messages.PORT : 0) + Messages.HDC, "%s.popCmd(%d): %#04x%s\n", this.idComponent, bCmdIndex, bCmd, (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""));
+            this.printf((bCmdIndex > 0? MESSAGE.PORT : 0) + MESSAGE.HDC, "%s.popCmd(%d): %#04x%s\n", this.idComponent, bCmdIndex, bCmd, (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""));
         }
         return bCmd;
     }
@@ -70011,7 +70011,7 @@ class HDC extends Component {
     pushResult(bResult)
     {
         if (DEBUG) {
-            this.printf((this.regDataTotal > 0? Messages.PORT : 0) + Messages.HDC, "%s.pushResult(%d): %#04x\n", this.idComponent, this.regDataTotal, bResult);
+            this.printf((this.regDataTotal > 0? MESSAGE.PORT : 0) + MESSAGE.HDC, "%s.pushResult(%d): %#04x\n", this.idComponent, this.regDataTotal, bResult);
         }
         this.regDataArray[this.regDataTotal++] = bResult;
     }
@@ -70662,7 +70662,7 @@ class HDC extends Component {
 
         bPacketCmd = getByte(0);
 
-        this.printf(Messages.HDC, "%s.packet(%#04x): %s (drive %d)\n", this.idComponent, bPacketCmd, HDC.aATAPICommands[bPacketCmd], drive.iDrive);
+        this.printf(MESSAGE.HDC, "%s.packet(%#04x): %s (drive %d)\n", this.idComponent, bPacketCmd, HDC.aATAPICommands[bPacketCmd], drive.iDrive);
 
         switch(bPacketCmd) {
         case HDC.ATC.PACKET.COMMAND.TEST_UNIT:  // 0x00
@@ -70753,7 +70753,7 @@ class HDC extends Component {
                 break;
 
             default:
-                this.printf(Messages.HDC, "%s.packet(%#04x): unsupported format %d\n", this.idComponent, bPacketCmd, format);
+                this.printf(MESSAGE.HDC, "%s.packet(%#04x): unsupported format %d\n", this.idComponent, bPacketCmd, format);
                 if (MAXDEBUG) this.dbg.stopCPU();
                 bPacketCmd = -1;                // TODO: Add support for other READ_TOC formats
                 break;
@@ -70856,7 +70856,7 @@ class HDC extends Component {
                 break;
 
             default:
-                this.printf(Messages.HDC, "%s.packet(%#04x): unsupported page code %d\n", this.idComponent, bPacketCmd, pageCode);
+                this.printf(MESSAGE.HDC, "%s.packet(%#04x): unsupported page code %d\n", this.idComponent, bPacketCmd, pageCode);
                 if (MAXDEBUG) this.dbg.stopCPU();
                 bPacketCmd = -1;        // TODO: Add support for other Page Codes
                 break;
@@ -70992,7 +70992,7 @@ class HDC extends Component {
     //     // WARNING: This conversion of drive number to drive letter, starting with "C:" (0x43), is very simplistic
     //     // and is not guaranteed to match the drive mapping that DOS ultimately uses.
     //     //
-    //     this.printf(Messages.NOTICE, "Drive %s unloaded\n", String.fromCharCode(0x43 + iDrive));
+    //     this.printf(MESSAGE.NOTICE, "Drive %s unloaded\n", String.fromCharCode(0x43 + iDrive));
     // }
 
     /**
@@ -73141,10 +73141,10 @@ class DebuggerX86 extends DbgLib {
          * If CHIPSET or VIDEO messages are enabled at startup, we enable ChipSet or Video diagnostic info in the
          * instruction history buffer as appropriate.
          */
-        if (this.messageEnabled(Messages.CHIPSET)) {
+        if (this.messageEnabled(MESSAGE.CHIPSET)) {
             this.chipset = cmp.getMachineComponent("ChipSet");
         }
-        else if (this.messageEnabled(Messages.VIDEO)) {
+        else if (this.messageEnabled(MESSAGE.VIDEO)) {
             this.video = cmp.getMachineComponent("Video");
         }
 
@@ -73175,11 +73175,11 @@ class DebuggerX86 extends DbgLib {
             }
         }
 
-        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
-        this.messageDump(Messages.DESC, function onDumpSel(asArgs) { dbg.dumpSel(asArgs); });
-        this.messageDump(Messages.DOS,  function onDumpDOS(asArgs) { dbg.dumpDOS(asArgs); });
-        this.messageDump(Messages.MEM,  function onDumpMem(asArgs) { dbg.dumpMem(asArgs); });
-        this.messageDump(Messages.TSS,  function onDumpTSS(asArgs) { dbg.dumpTSS(asArgs); });
+        this.messageDump(MESSAGE.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(MESSAGE.DESC, function onDumpSel(asArgs) { dbg.dumpSel(asArgs); });
+        this.messageDump(MESSAGE.DOS,  function onDumpDOS(asArgs) { dbg.dumpDOS(asArgs); });
+        this.messageDump(MESSAGE.MEM,  function onDumpMem(asArgs) { dbg.dumpMem(asArgs); });
+        this.messageDump(MESSAGE.TSS,  function onDumpTSS(asArgs) { dbg.dumpTSS(asArgs); });
 
         if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED) {
             this.fWinDbg = null;
@@ -73214,7 +73214,7 @@ class DebuggerX86 extends DbgLib {
         let seg = this.getSegment(sel);
         let len = seg? seg.limit + 1 : 0;
         let sSection = (fCode? "_CODE" : "_DATA") + Str.toHex(nSegment, 2);
-        if (fPrint) this.printf(Messages.MEM, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
+        if (fPrint) this.printf(MESSAGE.MEM, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
         let off = 0;
         let aSymbols = this.findModuleInfo(sModule, nSegment);
         aSymbols[sModule + sSection] = off;
@@ -73235,9 +73235,9 @@ class DebuggerX86 extends DbgLib {
         let sModuleRemoved = this.removeSymbols(null, sel);
         if (fPrint) {
             if (sModuleRemoved) {
-                this.printf(Messages.MEM, "%s #%04X removed\n", sModuleRemoved, sel);
+                this.printf(MESSAGE.MEM, "%s #%04X removed\n", sModuleRemoved, sel);
             } else {
-                this.printf(Messages.MEM, "unable to remove module for segment #%04X\n", sel);
+                this.printf(MESSAGE.MEM, "unable to remove module for segment #%04X\n", sel);
             }
         }
     }
@@ -73282,7 +73282,7 @@ class DebuggerX86 extends DbgLib {
             /*
              * Mimics WDEB386 output, except that WDEB386 only displays a linear address, omitting the selector.
              */
-            this.printf(Messages.MEM, "%s%s %s(%04X)=%04X:%0X len %0X\n", sParent, sModule, (fCode? "code" : "data"), nSegment, sel, off, len);
+            this.printf(MESSAGE.MEM, "%s%s %s(%04X)=%04X:%0X len %0X\n", sParent, sModule, (fCode? "code" : "data"), nSegment, sel, off, len);
         }
         /*
          * TODO: Add support for 32-bit symbols; findModuleInfo() relies on Disk.getModuleInfo(),
@@ -73309,9 +73309,9 @@ class DebuggerX86 extends DbgLib {
         let sModuleRemoved = this.removeSymbols(sModule, nSegment);
         if (fPrint) {
             if (sModuleRemoved) {
-                this.printf(Messages.MEM, "%s %04X removed\n", sModule, nSegment);
+                this.printf(MESSAGE.MEM, "%s %04X removed\n", sModule, nSegment);
             } else {
-                this.printf(Messages.MEM, "unable to remove %s for section %04X\n", sModule, nSegment);
+                this.printf(MESSAGE.MEM, "unable to remove %s for section %04X\n", sModule, nSegment);
             }
         }
     }
@@ -73417,10 +73417,10 @@ class DebuggerX86 extends DbgLib {
                             /*
                              * TODO: We need a DEBUGGER message category; using the MEM category for now.
                              */
-                            dbg.printf(Messages.MEM, "INT 0x41 handling enabled\n");
+                            dbg.printf(MESSAGE.MEM, "INT 0x41 handling enabled\n");
                             dbg.fWinDbg = true;
                         } else {
-                            dbg.printf(Messages.MEM, "INT 0x41 monitoring enabled\n");
+                            dbg.printf(MESSAGE.MEM, "INT 0x41 monitoring enabled\n");
                             dbg.fWinDbg = false;
                         }
                     };
@@ -73437,7 +73437,7 @@ class DebuggerX86 extends DbgLib {
         case Interrupts.WINDBG.IS_LOADED:           // 0x004F
             if (this.fWinDbg) {
                 cpu.regEAX = (cpu.regEAX & ~0xffff) | Interrupts.WINDBG.LOADED;
-                this.printf(Messages.MEM, "INT 0x41 handling enabled\n");
+                this.printf(MESSAGE.MEM, "INT 0x41 handling enabled\n");
             }
             break;
 
@@ -73618,14 +73618,14 @@ class DebuggerX86 extends DbgLib {
                     return function onInt68Return(nLevel) {
                         if ((cpu.regEAX & 0xffff) != Interrupts.WINDBGRM.LOADED) {
                             cpu.regEAX = (cpu.regEAX & ~0xffff) | Interrupts.WINDBGRM.LOADED;
-                            dbg.printf(Messages.MEM, "INT 0x68 handling enabled\n");
+                            dbg.printf(MESSAGE.MEM, "INT 0x68 handling enabled\n");
                             /*
                              * If we turn on INT 0x68 handling, we must also turn on INT 0x41 handling,
                              * because Windows assumes that the latter handler exists whenever the former does.
                              */
                             dbg.fWinDbg = dbg.fWinDbgRM = true;
                         } else {
-                            dbg.printf(Messages.MEM, "INT 0x68 monitoring enabled\n");
+                            dbg.printf(MESSAGE.MEM, "INT 0x68 monitoring enabled\n");
                             dbg.fWinDbgRM = false;
                         }
                     };
@@ -73837,7 +73837,7 @@ class DebuggerX86 extends DbgLib {
                         dbg.doCommands(sCommands, true);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
+                    if (DEBUG) dbg.printf(MESSAGE.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -75053,20 +75053,20 @@ class DebuggerX86 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = Messages.WARNING;
+        this.bitsMessage = MESSAGE.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         let aEnable = this.parseCommand(sEnable, false, ',');
         if (aEnable.length) {
-            this.bitsMessage = Messages.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
-            for (let m in Messages.Categories) {
+            this.bitsMessage = MESSAGE.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
+            for (let m in MESSAGE.NAMES) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage += Messages.Categories[m];
+                    this.bitsMessage += MESSAGE.NAMES[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
         }
-        this.historyInit();                     // call this just in case Messages.INT was turned on
+        this.historyInit();                     // call this just in case MESSAGE.INT was turned on
     }
 
     /**
@@ -75079,8 +75079,8 @@ class DebuggerX86 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (let m in Messages.Categories) {
-            if (bitMessage == Messages.Categories[m]) {
+        for (let m in MESSAGE.NAMES) {
+            if (bitMessage == MESSAGE.NAMES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -75397,12 +75397,12 @@ class DebuggerX86 extends DbgLib {
      */
     message(sMessage, bitsMessage = 0)
     {
-        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+        if ((bitsMessage & MESSAGE.ADDR) && this.cpu) {
             let sAddress = Str.sprintf(" at %s (%%%X)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
-        if (Component.testBits(this.bitsMessage, Messages.BUFFER)) {
+        if (Component.testBits(this.bitsMessage, MESSAGE.BUFFER)) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
@@ -75410,7 +75410,7 @@ class DebuggerX86 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (Component.testBits(this.bitsMessage, Messages.HALT)) {
+        if (Component.testBits(this.bitsMessage, MESSAGE.HALT)) {
             sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -75455,7 +75455,7 @@ class DebuggerX86 extends DbgLib {
              * Display all software interrupts if CPU messages are enabled (and it's not an "annoying" interrupt);
              * note that in some cases, even "annoying" interrupts can be turned with an extra message category.
              */
-            fMessage = this.messageEnabled(Messages.CPU) && DebuggerX86.INT_ANNOYING.indexOf(nInt) < 0;
+            fMessage = this.messageEnabled(MESSAGE.CPU) && DebuggerX86.INT_ANNOYING.indexOf(nInt) < 0;
             if (!fMessage) {
                 /*
                  * Alternatively, display this software interrupt if its corresponding message category is enabled.
@@ -75471,7 +75471,7 @@ class DebuggerX86 extends DbgLib {
                          * vector to the ALT_DISK (0x40) vector, but it's a nuisance having to check different
                          * interrupts in different configurations for the same frickin' functionality, so we don't.
                          */
-                        fMessage = (nCategory == Messages.FDC && this.messageEnabled(nCategory = Messages.HDC));
+                        fMessage = (nCategory == MESSAGE.FDC && this.messageEnabled(nCategory = MESSAGE.HDC));
                     }
                 }
             }
@@ -75480,7 +75480,7 @@ class DebuggerX86 extends DbgLib {
             AH = (this.cpu.regEAX >> 8) & 0xff;
             DL = this.cpu.regEDX & 0xff;
             if (nInt == Interrupts.DOS /* 0x21 */ && AH == 0x0b ||
-                nCategory == Messages.FDC && DL >= 0x80 || nCategory == Messages.HDC && DL < 0x80) {
+                nCategory == MESSAGE.FDC && DL >= 0x80 || nCategory == MESSAGE.HDC && DL < 0x80) {
                 fMessage = false;
             }
         }
@@ -75528,13 +75528,13 @@ class DebuggerX86 extends DbgLib {
     messageIO(component, port, bOut, addrFrom, name, bIn, bitsMessage)
     {
         /*
-         * Add Messages.PORT to the set of required message flags.
+         * Add MESSAGE.PORT to the set of required message flags.
          */
-        bitsMessage = Component.setBits(bitsMessage || 0, Messages.PORT);
+        bitsMessage = Component.setBits(bitsMessage || 0, MESSAGE.PORT);
         /*
          * We don't want to see "unknown" I/O messages unless WARNING is enabled.
          */
-        if (!name) bitsMessage = Component.setBits(bitsMessage, Messages.WARNING);
+        if (!name) bitsMessage = Component.setBits(bitsMessage, MESSAGE.WARNING);
 
         if (addrFrom == undefined || Component.testBits(this.bitsMessage, bitsMessage)) {
             let sFrom = "";
@@ -75815,7 +75815,7 @@ class DebuggerX86 extends DbgLib {
         state.set(0, this.packAddr(this.dbgAddrNextCode));
         state.set(1, this.packAddr(this.dbgAddrNextData));
         state.set(2, this.packAddr(this.dbgAddrAssemble));
-        state.set(3, [this.aPrevCmds, this.fAssemble, Component.setBits(this.bitsMessage, Messages.BUFFER)]);
+        state.set(3, [this.aPrevCmds, this.fAssemble, Component.setBits(this.bitsMessage, MESSAGE.BUFFER)]);
         state.set(4, this.aSymbolTable);
         state.set(5, [this.aBreakExec, this.aBreakRead, this.aBreakWrite]);
         return state.data();
@@ -75845,12 +75845,12 @@ class DebuggerX86 extends DbgLib {
             this.fAssemble = data[i][1];
             let bitsMessage = data[i][2];
             /*
-             * We ensure that we're restoring updated Messages flags, by verifying that Messages.BUFFER was set by the save()
-             * function; if so, we clear Messages.BUFFER before restoring it (and yes, this means we'll never restore the BUFFER
+             * We ensure that we're restoring updated Messages flags, by verifying that MESSAGE.BUFFER was set by the save()
+             * function; if so, we clear MESSAGE.BUFFER before restoring it (and yes, this means we'll never restore the BUFFER
              * setting, which is fine, and we'll also never restore any old Messages flags, which I doubt anyone will miss).
              */
-            if (Component.testBits(bitsMessage, Messages.BUFFER)) {
-                bitsMessage = Component.clearBits(bitsMessage, Messages.BUFFER);
+            if (Component.testBits(bitsMessage, MESSAGE.BUFFER)) {
+                bitsMessage = Component.clearBits(bitsMessage, MESSAGE.BUFFER);
                 this.bitsMessage = Component.setBits(this.bitsMessage, bitsMessage);
             }
             i++;
@@ -75941,7 +75941,7 @@ class DebuggerX86 extends DbgLib {
                         this.chipset.acTimer0Counts = [];
                     }
                 } else {
-                    if (this.messageEnabled(Messages.HALT)) {
+                    if (this.messageEnabled(MESSAGE.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -75975,7 +75975,7 @@ class DebuggerX86 extends DbgLib {
      */
     checksEnabled(fRelease)
     {
-        return ((MAXDEBUG && !fRelease)? true : (this.aBreakExec.length > 1 || !!this.nBreakIns || this.messageEnabled(Messages.INT) /* || this.aBreakRead.length > 1 || this.aBreakWrite.length > 1 */));
+        return ((MAXDEBUG && !fRelease)? true : (this.aBreakExec.length > 1 || !!this.nBreakIns || this.messageEnabled(MESSAGE.INT) /* || this.aBreakRead.length > 1 || this.aBreakWrite.length > 1 */));
     }
 
     /**
@@ -76013,7 +76013,7 @@ class DebuggerX86 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling Messages.INT messages.
+         * well, OK, and a few other things now, like enabling MESSAGE.INT messages.
          */
         if (nState >= 0 && this.aaOpcodeCounts.length) {
             this.cOpcodes++;
@@ -76430,7 +76430,7 @@ class DebuggerX86 extends DbgLib {
              * stop on INT3 whenever both the INT and HALT message bits are set; a simple "g" command allows you
              * to continue.
              */
-            if (this.messageEnabled(Messages.INT + Messages.HALT)) {
+            if (this.messageEnabled(MESSAGE.INT + MESSAGE.HALT)) {
                 if (this.cpu.probeAddr(addr) == X86.OPCODE.INT3) {
                     fBreak = true;
                 }
@@ -77756,7 +77756,7 @@ class DebuggerX86 extends DbgLib {
 
         if (sAddr == '?') {
             let sDumpers = "";
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers += m;
@@ -77844,7 +77844,7 @@ class DebuggerX86 extends DbgLib {
                 this.doLoad(asArgs);
                 return;
             }
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (asArgs[1] == m) {
                     let fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -78426,7 +78426,7 @@ class DebuggerX86 extends DbgLib {
         if (sCategory !== undefined) {
             let bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = Messages.ALL - Messages.HALT - Messages.BUFFER;
+                bitsMessage = MESSAGE.ALL - MESSAGE.HALT - MESSAGE.BUFFER;
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -78435,9 +78435,9 @@ class DebuggerX86 extends DbgLib {
                 fCriteria = false;
                 sCategory = null;
             } else {
-                for (m in Messages.Categories) {
+                for (m in MESSAGE.NAMES) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.Categories[m];
+                        bitsMessage = MESSAGE.NAMES[m];
                         fCriteria = Component.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
@@ -78455,7 +78455,7 @@ class DebuggerX86 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage = Component.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
-                    if (bitsMessage == Messages.BUFFER) {
+                    if (bitsMessage == MESSAGE.BUFFER) {
                         this.printf("%s\n", this.aMessageBuffer.join(""));
                         this.aMessageBuffer = [];
                     }
@@ -78468,9 +78468,9 @@ class DebuggerX86 extends DbgLib {
          */
         let n = 0;
         let sCategories = "";
-        for (m in Messages.Categories) {
+        for (m in MESSAGE.NAMES) {
             if (!sCategory || sCategory == m) {
-                let bitsMessage = Messages.Categories[m];
+                let bitsMessage = MESSAGE.NAMES[m];
                 let fEnabled = Component.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -78485,7 +78485,7 @@ class DebuggerX86 extends DbgLib {
 
         this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
 
-        this.historyInit();     // call this just in case Messages.INT was turned on
+        this.historyInit();     // call this just in case MESSAGE.INT was turned on
     }
 
     /**
@@ -79699,14 +79699,14 @@ if (DEBUGGER) {
      * Information regarding interrupts of interest (used by messageInt() and others)
      */
     DebuggerX86.INT_MESSAGES = {
-        0x10:       Messages.VIDEO,
-        0x13:       Messages.FDC,
-        0x15:       Messages.CHIPSET,
-        0x16:       Messages.KBD,
-     // 0x1A:       Messages.RTC,       // ChipSet contains its own custom messageInt() handler for the RTC
-        0x1C:       Messages.TIMER,
-        0x21:       Messages.DOS,
-        0x33:       Messages.MOUSE
+        0x10:       MESSAGE.VIDEO,
+        0x13:       MESSAGE.FDC,
+        0x15:       MESSAGE.CHIPSET,
+        0x16:       MESSAGE.KBD,
+     // 0x1A:       MESSAGE.RTC,       // ChipSet contains its own custom messageInt() handler for the RTC
+        0x1C:       MESSAGE.TIMER,
+        0x21:       MESSAGE.DOS,
+        0x33:       MESSAGE.MOUSE
     };
 
     /*
@@ -80946,7 +80946,7 @@ class Computer extends Component {
      */
     constructor(parmsComputer, parmsMachine, fSuspended)
     {
-        super("Computer", parmsComputer, Messages.COMPUTER);
+        super("Computer", parmsComputer, MESSAGE.COMPUTER);
 
         let cmp = this;
         this.setMachineParms(parmsMachine);
@@ -81043,9 +81043,9 @@ class Computer extends Component {
             this.enableDiagnostics();
         }
 
-        this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(MESSAGE.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-
+        if (MAXDEBUG) this.printf(MESSAGE.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -81130,7 +81130,7 @@ class Computer extends Component {
             Web.getResource(this.sStateURL, null, true, function(sURL, sResource, nErrorCode) {
                 cmp.doneLoad(sURL, sResource, nErrorCode);
             }, function(nState) {
-                cmp.printf(Messages.PROGRESS, "%s\n", sProgress);
+                cmp.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
             });
         }
 
@@ -81250,11 +81250,11 @@ class Computer extends Component {
                         cmp.notifyKbdEvent();
                     };
                 }(this), 2000);
-                this.printf(Messages.NONE, "Initialization complete\n");
+                this.printf(MESSAGE.NONE, "Initialization complete\n");
             }
             if (this.nDiagnostics == 2) {
                 this.nDiagnostics += 2;
-                this.printf(Messages.NONE, "Initialization complete, press a key to continue...\n");
+                this.printf(MESSAGE.NONE, "Initialization complete, press a key to continue...\n");
             }
             if (this.nDiagnostics == 3 || this.nDiagnostics == 4) {
                 /*
@@ -81284,7 +81284,7 @@ class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == MESSAGE.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -81312,7 +81312,7 @@ class Computer extends Component {
         let nDiagnostics = this.nDiagnostics;
         if (event && event.keyCode == 16 && this.nDiagnostics == 3) {
             this.nDiagnostics++;        // if we're waiting for a timeout and a shift key was pressed, wait for another key
-            this.printf(Messages.NONE, "Machine paused, press another key to continue...\n");
+            this.printf(MESSAGE.NONE, "Machine paused, press another key to continue...\n");
             event = null;
         }
         if (!event && this.nDiagnostics == 3 || event && fDown && this.nDiagnostics == 4) {
@@ -81501,7 +81501,7 @@ class Computer extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.printf(Messages.NOTICE, "Unable to load machine state (%s) from server (error %d%s)\n", sURL, nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
+            this.printf(MESSAGE.NOTICE, "Unable to load machine state (%s) from server (error %d%s)\n", sURL, nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -81558,7 +81558,7 @@ class Computer extends Component {
             let sTimestampValidate = stateValidate.get(Computer.STATE_TIMESTAMP);
             let sTimestampComputer = stateComputer ? stateComputer.get(Computer.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
+                this.printf(MESSAGE.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
@@ -81638,10 +81638,10 @@ class Computer extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
+                                    this.printf(MESSAGE.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
-
+                                    this.printf(MESSAGE.DEBUG, "%s: %s\n", sCode, sData);
                                 }
                                 /*
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the
@@ -81767,7 +81767,7 @@ class Computer extends Component {
                 if (!component.powerUp(data, fRepower) && data) {
 
                     if (!this.flags.unloading) {
-                        this.printf(Messages.NOTICE, "Unable to restore hardware state\n");
+                        this.printf(MESSAGE.NOTICE, "Unable to restore hardware state\n");
                         /*
                          * If this is a resume error for a machine that also has a predefined state
                          * AND we're not restoring from that state, then throw away the current state,
@@ -81811,7 +81811,7 @@ class Computer extends Component {
             if (!fRepower && component.comment) {
                 let asComments = component.comment.split("|");
                 for (let i = 0; i < asComments.length; i++) {
-                    component.printf(Messages.STATUS, "%s\n", asComments[i]);
+                    component.printf(MESSAGE.STATUS, "%s\n", asComments[i]);
                 }
             }
         }
@@ -81921,7 +81921,7 @@ class Computer extends Component {
         }
         if (iComponent == aComponents.length) component = this;
         let status = (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet");
-        Component.printf(Messages.NOTICE, "The %s component (%s) is not %s\n", component.type, component.id, status);
+        Component.printf(MESSAGE.NOTICE, "The %s component (%s) is not %s\n", component.type, component.id, status);
         return false;
     }
 
@@ -82216,7 +82216,7 @@ class Computer extends Component {
              * particular host.
              */
             if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -82243,7 +82243,7 @@ class Computer extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
+                        computer.printf(MESSAGE.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -82301,11 +82301,11 @@ class Computer extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
+                        if (!sUserID) this.printf(MESSAGE.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
+                this.printf(MESSAGE.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -82382,7 +82382,7 @@ class Computer extends Component {
             if (DEBUG) this.printf("size of server state: %d bytes\n", sState.length);
             let response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.printf(Messages.NOTICE, "Machine state saved to server\n");
+                this.printf(MESSAGE.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 let sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -82390,7 +82390,7 @@ class Computer extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.printf(Messages.NOTICE, "%s\n", sError);
+                this.printf(MESSAGE.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {
@@ -82541,7 +82541,7 @@ class Computer extends Component {
             if (component.type == sType) return component;
         }
         if (!componentLast && DEBUG && componentPrev !== false) {
-            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
+            this.printf(MESSAGE.WARNING, "Machine component type \"%s\" not found\n", sType);
         }
         return null;
     }
@@ -82847,7 +82847,7 @@ class State {
         try {
             this.state[id] = data;
         } catch(e) {
-            Component.printf(Messages.ERROR, e.message);
+            Component.printf(MESSAGE.ERROR, e.message);
         }
     }
 
@@ -82955,7 +82955,7 @@ class State {
                  * think of some way to notify the user that there's a problem, and offer a way of cleaning
                  * up old states.
                  */
-                Component.printf(Messages.ERROR, "Unable to store %d bytes in browser local storage\n", s.length);
+                Component.printf(MESSAGE.ERROR, "Unable to store %d bytes in browser local storage\n", s.length);
                 fSuccess = false;
             }
         }
@@ -83008,7 +83008,7 @@ class State {
             let sKey = aKeys[i];
             if (sKey && (fAll || sKey.substr(0, this.key.length) == this.key)) {
                 Web.removeLocalStorageItem(sKey);
-
+                Component.printf(MESSAGE.DEBUG, "localStorage(%s) removed\n", sKey);
                 aKeys.splice(i, 1);
                 i = 0;
             }
@@ -83544,7 +83544,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (match) sError = match[1];
             }
         }
-        Component.printf(Messages.ERROR, "%s\n", sError);
+        Component.printf(MESSAGE.ERROR, "%s\n", sError);
         displayMessage("Error: " + sError + (sURL? " (" + sURL + ")" : ""));
         if (fSuccess) doneMachine();
         fSuccess = false;

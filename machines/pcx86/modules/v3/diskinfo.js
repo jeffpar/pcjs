@@ -912,20 +912,20 @@ export default class DiskInfo {
 
                 if (defaultGeometry && driveInfo.driveType < 0) {
                     if (bMediaID && bMediaID != bMediaIDBPB) {
-                        this.printf(MESSAGE.WARN, "BPB media ID (%#0bx) does not match physical media ID (%#0bx)\n", bMediaIDBPB, bMediaID);
+                        this.printf(MESSAGE.WARNING, "BPB media ID (%#0bx) does not match physical media ID (%#0bx)\n", bMediaIDBPB, bMediaID);
                     }
                     if (nCylinders != nCylindersBPB) {
-                        let message = (nCylinders - nCylindersBPB == 1)? MESSAGE.INFO : MESSAGE.WARN;
+                        let message = (nCylinders - nCylindersBPB == 1)? MESSAGE.INFO : MESSAGE.WARNING;
                         this.printf(message, "BPB cylinders (%d) do not match physical cylinders (%d)\n", nCylindersBPB, nCylinders);
                         if (message == MESSAGE.INFO) {
                             this.printf(message, "last cylinder may have been reserved for diagnostics and/or head-parking\n");
                         }
                     }
                     if (nHeads != nHeadsBPB) {
-                        this.printf(MESSAGE.WARN, "BPB heads (%d) do not match physical heads (%d)\n", nHeadsBPB, nHeads);
+                        this.printf(MESSAGE.WARNING, "BPB heads (%d) do not match physical heads (%d)\n", nHeadsBPB, nHeads);
                     }
                     if (nSectorsPerTrack != nSectorsPerTrackBPB) {
-                        this.printf(MESSAGE.WARN, "BPB sectors/track (%d) do not match physical sectors/track (%d)\n", nSectorsPerTrackBPB, nSectorsPerTrack);
+                        this.printf(MESSAGE.WARNING, "BPB sectors/track (%d) do not match physical sectors/track (%d)\n", nSectorsPerTrackBPB, nSectorsPerTrack);
                     }
                 }
                 else {
@@ -933,11 +933,11 @@ export default class DiskInfo {
                     nSectorsPerTrack = nSectorsPerTrackBPB;
                     nCylinders = cbDiskData / (nHeads * nSectorsPerTrack * cbSectorBPB);
                     if (nCylinders != (nCylinders|0)) {
-                        this.printf(MESSAGE.WARN, "total cylinders (%d) not a multiple of %d sectors per cylinder\n", nCylinders, nHeads * nSectorsPerTrack);
+                        this.printf(MESSAGE.WARNING, "total cylinders (%d) not a multiple of %d sectors per cylinder\n", nCylinders, nHeads * nSectorsPerTrack);
                         nCylinders |= 0;
                     }
                     if (cbSector != cbSectorBPB) {
-                        this.printf(MESSAGE.WARN, "overriding default sector size (%d) with BPB sector size (%d)\n", cbSector, cbSectorBPB);
+                        this.printf(MESSAGE.WARNING, "overriding default sector size (%d) with BPB sector size (%d)\n", cbSector, cbSectorBPB);
                         cbSector = cbSectorBPB;
                     }
                     bMediaID = bMediaIDBPB;
@@ -970,7 +970,7 @@ export default class DiskInfo {
                  * For more details, check out this helpful article: http://www.os2museum.com/wp/the-xdf-diskette-format/
                  */
                 if (nSectorsTotalBPB == 3680 && this.fXDFSupport) {
-                    this.printf(MESSAGE.WARN, "XDF diskette detected, experimental XDF output enabled\n");
+                    this.printf(MESSAGE.WARNING, "XDF diskette detected, experimental XDF output enabled\n");
                     fXDFOutput = true;
                 }
             }
@@ -1012,7 +1012,7 @@ export default class DiskInfo {
                 iBPB -= 2;
                 bMediaID = DiskInfo.aDefaultBPBs[iBPB][DiskInfo.BPB.MEDIA];
                 nLogicalSectorsPerTrack = DiskInfo.aDefaultBPBs[iBPB][DiskInfo.BPB.TRACKSECS];
-                this.printf(MESSAGE.WARN, "shrinking track size to %d sectors/track\n", nLogicalSectorsPerTrack);
+                this.printf(MESSAGE.WARNING, "shrinking track size to %d sectors/track\n", nLogicalSectorsPerTrack);
             }
             let fBPBWarning = false;
             if (fBPBExists) {
@@ -1024,7 +1024,7 @@ export default class DiskInfo {
                     let bDefault = DiskInfo.aDefaultBPBs[iBPB][off];
                     let bActual = dbDisk.readUInt8(offBootSector + off);
                     if (bDefault != bActual) {
-                        this.printf(MESSAGE.WARN, "BPB byte %#02bx default (%#02bx) does not match actual byte: %#02bx\n", off, bDefault, bActual);
+                        this.printf(MESSAGE.WARNING, "BPB byte %#02bx default (%#02bx) does not match actual byte: %#02bx\n", off, bDefault, bActual);
                         /*
                          * Silly me for thinking that a given media ID (eg, 0xF9) AND a given disk size (eg, 720K)
                          * AND a given number of sectors/cluster (eg, 2) would always map to the same BPB.  I had already
@@ -1072,13 +1072,13 @@ export default class DiskInfo {
                      * inadvertent reformat, or...?  However, certain Xenix diskettes get misdetected by this, so we at least
                      * require the media ID (from the first byte of the first FAT sector) be sensible.
                      */
-                    this.printf(MESSAGE.WARN, "repairing damaged boot sector with BPB for media ID %#02bx\n", bMediaID);
+                    this.printf(MESSAGE.WARNING, "repairing damaged boot sector with BPB for media ID %#02bx\n", bMediaID);
                     for (let i = 0; i < DiskInfo.BPB.LARGESECS+4; i++) {
                         dbDisk.writeUInt8(DiskInfo.aDefaultBPBs[iBPB][i] || 0, offBootSector + i);
                     }
                 }
                 else {
-                    this.printf(MESSAGE.WARN, "unrecognized boot sector: %#02bx,%#02bx\n", bByte0, bByte1);
+                    this.printf(MESSAGE.WARNING, "unrecognized boot sector: %#02bx,%#02bx\n", bByte0, bByte1);
                 }
             }
         }
@@ -1260,7 +1260,7 @@ export default class DiskInfo {
                                     n = +aParts[3];
                                     if (!isNaN(n)) {
                                         sectorID = n;
-                                        this.printf(MESSAGE.WARN, "changing %d:%d:%d sectorID to %d\n", +aParts[0], +aParts[1], +aParts[2], sectorID);
+                                        this.printf(MESSAGE.WARNING, "changing %d:%d:%d sectorID to %d\n", +aParts[0], +aParts[1], +aParts[2], sectorID);
                                     }
                                 }
                             }
@@ -1274,7 +1274,7 @@ export default class DiskInfo {
                                     n = +aParts[3] || -1;
                                     if (n) {
                                         sectorError = n;
-                                        this.printf(MESSAGE.WARN, "forcing error for sector %d:%d:%d at %d bytes\n", +aParts[0], +aParts[1], +aParts[2], sectorError);
+                                        this.printf(MESSAGE.WARNING, "forcing error for sector %d:%d:%d at %d bytes\n", +aParts[0], +aParts[1], +aParts[2], sectorError);
                                     }
                                 }
                             }
@@ -1291,7 +1291,7 @@ export default class DiskInfo {
                         if (bMediaID && !iCylinder && !iHead && iSector == ((offBootSector/cbSector)|0) + 2) {
                             let bFATID = dbSector.readUInt8(0);
                             if (bMediaID != bFATID) {
-                                this.printf(MESSAGE.WARN, "FAT ID (%#02bx) does not match physical media ID (%#02bx)\n", bFATID, bMediaID);
+                                this.printf(MESSAGE.WARNING, "FAT ID (%#02bx) does not match physical media ID (%#02bx)\n", bFATID, bMediaID);
                             }
                             bMediaID = 0;
                         }
@@ -1855,7 +1855,7 @@ export default class DiskInfo {
             let cActualClusters = Math.trunc(cDataSectors / cSectorsPerCluster);
             let cActualFATSectors = Math.ceil(Math.ceil((cActualClusters + 2) * typeFAT / 8) / cbSector);
             if (cActualFATSectors != cFATSectors) {
-                this.printf(MESSAGE.DISK + MESSAGE.WARN, "%d FAT sectors allocated, but only %d are required\n", cFATSectors, cActualFATSectors);
+                this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%d FAT sectors allocated, but only %d are required\n", cFATSectors, cActualFATSectors);
             }
         }
 
@@ -2696,7 +2696,7 @@ export default class DiskInfo {
             if (chunkCRC == myCRC) {
                 dbChunk = dbDisk.slice(chunkOffset + 8, chunkOffset + 8 + chunkSize);
             } else {
-                this.printf(MESSAGE.WARN, "chunk 0x%x at 0x%x: CRC 0x%x != calculated CRC 0x%x\n", chunkID, chunkOffset, chunkCRC, myCRC);
+                this.printf(MESSAGE.WARNING, "chunk 0x%x at 0x%x: CRC 0x%x != calculated CRC 0x%x\n", chunkID, chunkOffset, chunkCRC, myCRC);
                 chunkID = CHUNK_END;
             }
         };
@@ -2704,7 +2704,7 @@ export default class DiskInfo {
         getNextChunk();
 
         if (chunkID != CHUNK_PSI) {
-            this.printf(MESSAGE.WARN, "missing PSI header\n");
+            this.printf(MESSAGE.WARNING, "missing PSI header\n");
             chunkEnd = 0;
         }
 
@@ -2749,7 +2749,7 @@ export default class DiskInfo {
                     sector[DiskInfo.SECTOR.DATA_ERROR] = -1;
                 }
                 if (flags & ~(0x1 | 0x4)) {
-                    this.printf(MESSAGE.WARN, "unsupported flags: 0x%x\n", flags);
+                    this.printf(MESSAGE.WARNING, "unsupported flags: 0x%x\n", flags);
                 }
                 this.cbDiskData += size;
                 break;
@@ -2762,17 +2762,17 @@ export default class DiskInfo {
                     break;
                 }
                 if (sectorIndex) {
-                    this.printf(MESSAGE.WARN, "sector with data and pattern\n");
+                    this.printf(MESSAGE.WARNING, "sector with data and pattern\n");
                     sectorIndex = 0;
                 }
                 for (let off = 0; off < dbChunk.length; off += 4) {
                     if (sectorIndex >= maxIndex) {
-                        this.printf(MESSAGE.WARN, "data for sector offset %d exceeds sector length\n", sectorIndex * 4, size);
+                        this.printf(MESSAGE.WARNING, "data for sector offset %d exceeds sector length\n", sectorIndex * 4, size);
                     }
                     sector[DiskInfo.SECTOR.DATA][sectorIndex++] = dbChunk.readUInt8(off) | (dbChunk.readUInt8(off+1) << 8) | (dbChunk.readUInt8(off+2) << 16) | (dbChunk.readUInt8(off+3) << 24);
                 }
                 if (sectorIndex < maxIndex) {
-                    this.printf(MESSAGE.WARN, "sector data stops at offset %d instead of %d\n", sectorIndex * 4, size);
+                    this.printf(MESSAGE.WARNING, "sector data stops at offset %d instead of %d\n", sectorIndex * 4, size);
                 }
                 break;
 
@@ -2794,7 +2794,7 @@ export default class DiskInfo {
                 break;
 
             default:
-                this.printf(MESSAGE.WARN, "unrecognized chunk at 0x%x: 0x%08x\n", chunkOffset, chunkID);
+                this.printf(MESSAGE.WARNING, "unrecognized chunk at 0x%x: 0x%08x\n", chunkOffset, chunkID);
                 chunkID = 0;
             }
             if (!chunkID) break;
@@ -3064,7 +3064,7 @@ export default class DiskInfo {
             }
 
             if (!sectorBoot || iEntry == 4) {
-                if (!iVolume) this.printf(MESSAGE.DISK + MESSAGE.WARN, "%d-byte %s disk image contains unknown volume(s)\n", cbDisk, this.diskName);
+                if (!iVolume) this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%d-byte %s disk image contains unknown volume(s)\n", cbDisk, this.diskName);
                 return null;
             }
 
@@ -3279,7 +3279,7 @@ export default class DiskInfo {
         if (fnHash && ab) {
             let hash = fnHash(ab);
             if (desc[DiskInfo.FILEDESC.HASH] && hash != desc[DiskInfo.FILEDESC.HASH]) {
-                this.printf(MESSAGE.DISK + MESSAGE.WARN, "%s original hash (%s) does not match current hash (%s)\n", desc[DiskInfo.FILEDESC.PATH], desc[DiskInfo.FILEDESC.HASH], hash);
+                this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%s original hash (%s) does not match current hash (%s)\n", desc[DiskInfo.FILEDESC.PATH], desc[DiskInfo.FILEDESC.HASH], hash);
             }
             desc[DiskInfo.FILEDESC.HASH] = hash;
         } else {
@@ -3621,7 +3621,7 @@ export default class DiskInfo {
             errors++;
         }
         if (errors) {
-            this.printf(MESSAGE.DISK + MESSAGE.WARN, "%s has invalid timestamp: %04d-%02d-%02d %02d:%02d:%02d\n", sFile, year, month, day, hour, minute, second);
+            this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%s has invalid timestamp: %04d-%02d-%02d %02d:%02d:%02d\n", sFile, year, month, day, hour, minute, second);
         }
         /*
          * Previously, I used device.parseDate() to create a UTC date and then used "%#T" in getFileDesc() and
@@ -3789,7 +3789,7 @@ export default class DiskInfo {
                 cluster = this.getClusterEntry(vol, cluster, 0) | this.getClusterEntry(vol, cluster, 1);
             }
             if (cluster < DiskInfo.FAT12.CLUSNUM_MIN || cluster == vol.clusMax + 1 /* aka CLUSNUM_BAD */) {
-                this.printf(MESSAGE.DISK + MESSAGE.WARN, "%s %s contains invalid cluster (%d)\n", this.diskName, dir.name, cluster);
+                this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%s %s contains invalid cluster (%d)\n", this.diskName, dir.name, cluster);
             }
         }
         return aLBA;
@@ -4073,12 +4073,12 @@ export default class DiskInfo {
         if ((cylinder = this.aDiskData[iCylinder]) && (head = cylinder[iHead]) && (sector = head[idSector - 1])) {
             let file = this.fileTable[iFile];
             if (sector[DiskInfo.SECTOR.ID] != idSector) {
-                this.printf(MESSAGE.DISK + MESSAGE.WARN, "%d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, idSector, sector[DiskInfo.SECTOR.ID], file.path);
+                this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, idSector, sector[DiskInfo.SECTOR.ID], file.path);
             }
             if (sector[DiskInfo.SECTOR.FILE_INDEX] != undefined) {
                 if (sector[DiskInfo.SECTOR.FILE_INDEX] != iFile || sector[DiskInfo.SECTOR.FILE_OFFSET] != off) {
                     let filePrev = this.fileTable[sector[DiskInfo.SECTOR.FILE_INDEX]];
-                    this.printf(MESSAGE.DISK + MESSAGE.WARN, '"%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskInfo.SECTOR.FILE_OFFSET], file.path, off);
+                    this.printf(MESSAGE.DISK + MESSAGE.WARNING, '"%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskInfo.SECTOR.FILE_OFFSET], file.path, off);
                     return false;
                 }
             }

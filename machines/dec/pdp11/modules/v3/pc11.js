@@ -11,7 +11,7 @@ import PDP11   from "./pdp11.js";
 import Device  from "../../../../modules/v3/device.js";
 import MESSAGE from "../../../../modules/v3/message.js";
 
-MESSAGE.PC11            = 0x000200000000;
+MESSAGE.PC11            = 0x000020000000;
 MESSAGE.NAMES["pc11"]   = MESSAGE.PC11;
 
 /**

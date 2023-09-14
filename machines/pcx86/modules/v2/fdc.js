@@ -10,7 +10,7 @@
 import ChipSet from "./chipset.js";
 import Disk from "./disk.js";
 import Errors from "./errors.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Panel from "./panel.js";
 import Component from "../../../modules/v2/component.js";
 import DiskAPI from "../../../modules/v2/diskapi.js";
@@ -162,7 +162,7 @@ export default class FDC extends Component {
          * TODO: Indicate the type of diskette image being loaded (this might help folks understand what's going
          * on when they try to load a diskette image that's larger than what the selected operating system supports).
          */
-        super("FDC", parmsFDC, Messages.FDC);
+        super("FDC", parmsFDC, MESSAGE.FDC);
 
         this['dmaRead'] = FDC.prototype.doDMARead;
         this['dmaWrite'] = FDC.prototype.doDMAWrite;
@@ -302,7 +302,7 @@ export default class FDC extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available");
                 /*
                  * We could also simply remove the control; eg:
                  *
@@ -331,10 +331,10 @@ export default class FDC extends Component {
                             let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
-                            fdc.printf(Messages.NOTICE, "No diskette loaded in drive\n");
+                            fdc.printf(MESSAGE.NOTICE, "No diskette loaded in drive\n");
                         }
                     } else {
-                        fdc.printf(Messages.NOTICE, "No diskette drive selected\n");
+                        fdc.printf(MESSAGE.NOTICE, "No diskette drive selected\n");
                     }
                 }
             };
@@ -342,7 +342,7 @@ export default class FDC extends Component {
 
         case "mountDisk":
             if (!this.fLocalDisks) {
-                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -469,14 +469,14 @@ export default class FDC extends Component {
                             JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
                             cSuccessful++;
                         } catch(err) {
-                            if (!privateURL || sResponse[0] != '<') fdc.printf(Messages.WARNING, "Unable to parse %s: %s\n", url, err.message);
+                            if (!privateURL || sResponse[0] != '<') fdc.printf(MESSAGE.WARNING, "Unable to parse %s: %s\n", url, err.message);
                         }
                     } else {
-                        if (!privateURL) fdc.printf(Messages.WARNING, "Unable to open %s (%d)\n", url, nErrorCode);
+                        if (!privateURL) fdc.printf(MESSAGE.WARNING, "Unable to open %s (%d)\n", url, nErrorCode);
                     }
                     if (++cLoaded == urls.length) fdc.addDiskettes(!cSuccessful);
                 }, function(nState) {
-                    fdc.printf(Messages.PROGRESS, "%s\n", sProgress);
+                    fdc.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
                 });
             }
             return;
@@ -874,8 +874,8 @@ export default class FDC extends Component {
 
         if (fInit) {
             drive.fWritable = true;
-            if (nHeads) this.printf(Messages.STATUS, "drive %d configured with %d head%s\n", iDrive, nHeads, nHeads > 1? 's' : '');
-            if (!drive.fBootable) this.printf(Messages.STATUS, "drive %d configured as non-bootable\n", iDrive);
+            if (nHeads) this.printf(MESSAGE.STATUS, "drive %d configured with %d head%s\n", iDrive, nHeads, nHeads > 1? 's' : '');
+            if (!drive.fBootable) this.printf(MESSAGE.STATUS, "drive %d configured as non-bootable\n", iDrive);
         }
 
         if (data === undefined) {
@@ -1248,7 +1248,7 @@ export default class FDC extends Component {
                     }
                     continue;
                 }
-                this.printf(Messages.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDrive));
+                this.printf(MESSAGE.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDrive));
             }
         }
         return !!this.cAutoMount;
@@ -1297,7 +1297,7 @@ export default class FDC extends Component {
             }
 
             if (sDiskPath == "?") {
-                this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk\n");
+                this.printf(MESSAGE.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk\n");
                 return false;
             }
 
@@ -1317,7 +1317,7 @@ export default class FDC extends Component {
                 }
                 if (!sDiskPath) return false;
                 sDiskName = Str.getBaseName(sDiskPath);
-                this.printf(Messages.DEBUG, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
+                this.printf(MESSAGE.DEBUG, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
@@ -1325,7 +1325,7 @@ export default class FDC extends Component {
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
                 if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
-                    this.printf(Messages.DEBUG, "load cancelled\n");
+                    this.printf(MESSAGE.DEBUG, "load cancelled\n");
                     return false;
                 }
                 /*
@@ -1341,7 +1341,7 @@ export default class FDC extends Component {
             }
             return true;
         }
-        this.printf(Messages.NOTICE, "Unable to load the selected drive\n");
+        this.printf(MESSAGE.NOTICE, "Unable to load the selected drive\n");
         return false;
     }
 
@@ -1398,7 +1398,7 @@ export default class FDC extends Component {
                 result = 1;
                 this.unloadDrive(iDrive, fAutoMount, true);
                 if (drive.fBusy) {
-                    this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
+                    this.printf(MESSAGE.NOTICE, "Drive %d busy\n", iDrive);
                     return 0;
                 }
                 drive.fBusy = true;
@@ -1448,7 +1448,7 @@ export default class FDC extends Component {
              */
             aDiskInfo = disk.info();
             if (disk && aDiskInfo[0] > drive.nCylinders || aDiskInfo[1] > drive.nHeads /* || aDiskInfo[2] > drive.nSectors */) {
-                this.printf(Messages.NOTICE, "Diskette \"%s\" too large for drive %s\n", sDiskName, String.fromCharCode(0x41 + drive.iDrive));
+                this.printf(MESSAGE.NOTICE, "Diskette \"%s\" too large for drive %s\n", sDiskName, String.fromCharCode(0x41 + drive.iDrive));
                 disk = null;
             }
         }
@@ -1505,7 +1505,7 @@ export default class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!drive.fnCallReady) {
-                this.printf(Messages.STATUS, "Mounted \"%s\" (format %s) in drive %s\n", sDiskName, (disk.imageInfo && disk.imageInfo.format || "unknown"), String.fromCharCode(0x41 + drive.iDrive));
+                this.printf(MESSAGE.STATUS, "Mounted \"%s\" (format %s) in drive %s\n", sDiskName, (disk.imageInfo && disk.imageInfo.format || "unknown"), String.fromCharCode(0x41 + drive.iDrive));
             }
 
             /*
@@ -1692,7 +1692,7 @@ export default class FDC extends Component {
                     if (diskette['name'] == sName) return diskette['path'];
                 }
             }
-            this.printf(Messages.NOTICE, "Unable to find diskette \"%s\"\n", sName);
+            this.printf(MESSAGE.NOTICE, "Unable to find diskette \"%s\"\n", sName);
         }
         return "";
     }
@@ -1846,7 +1846,7 @@ export default class FDC extends Component {
                     if (drive.fWritable != !(controlDrives.selectedIndex & 0x1)) {
                         drive.fWritable = !drive.fWritable;
                         if (!drive.fWritable) {
-                            this.printf(Messages.NOTICE, "Any diskette loaded in this drive will now be write-protected.");
+                            this.printf(MESSAGE.NOTICE, "Any diskette loaded in this drive will now be write-protected.");
                         }
                     }
                 }
@@ -1930,7 +1930,7 @@ export default class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!fQuiet) {
-                this.printf(Messages.STATUS, "Drive %s unloaded\n", String.fromCharCode(0x41 + iDrive));
+                this.printf(MESSAGE.STATUS, "Drive %s unloaded\n", String.fromCharCode(0x41 + iDrive));
             }
             /*
              * Try to avoid any unnecessary hysteresis regarding the diskette display if this unload is merely
@@ -2607,7 +2607,7 @@ export default class FDC extends Component {
         if (DEBUG) {
             let bCmdMasked = bCmd & FDC.REG_DATA.CMD.MASK;
             if (!name && !this.regDataIndex && FDC.aCmdInfo[bCmdMasked]) name = FDC.aCmdInfo[bCmdMasked].name;
-            this.printf(Messages.PORT + Messages.FDC, "%s.popCmd(%s): %#04x\n", this.idComponent, (name || this.regDataIndex), bCmd);
+            this.printf(MESSAGE.PORT + MESSAGE.FDC, "%s.popCmd(%s): %#04x\n", this.idComponent, (name || this.regDataIndex), bCmd);
         }
         this.regDataIndex++;
         return bCmd;
@@ -2674,7 +2674,7 @@ export default class FDC extends Component {
      */
     pushResult(bResult, name)
     {
-        if (DEBUG) this.printf(Messages.PORT + Messages.FDC, "%s.pushResult(%s): %#04x\n", this.idComponent, (name || this.regDataTotal), bResult);
+        if (DEBUG) this.printf(MESSAGE.PORT + MESSAGE.FDC, "%s.pushResult(%s): %#04x\n", this.idComponent, (name || this.regDataTotal), bResult);
         this.assert(!(bResult & ~0xff));
         this.regDataArray[this.regDataTotal++] = bResult;
     }

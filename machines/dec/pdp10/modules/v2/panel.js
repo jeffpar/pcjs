@@ -8,7 +8,7 @@
  */
 
 import BusPDP10 from "./bus.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
@@ -52,7 +52,7 @@ export default class PanelPDP10 extends Component {
      */
     constructor(parmsPanel, fBindings)
     {
-        super("Panel", parmsPanel, Messages.PANEL);
+        super("Panel", parmsPanel, MESSAGE.PANEL);
 
         /*
          * If there are any live registers, LEDs, etc, to display, this will provide a count.

@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import X86 from "./x86.js";
 import Str from "../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, I386 } from "./defines.js";
@@ -1166,7 +1166,7 @@ export default class SegX86 {
 
         let addrNew = cpu.segTSS.base;
         if (DEBUG && DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
+            this.dbg.printf(MESSAGE.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
         }
 
         if (fNest !== false) {
@@ -1552,11 +1552,11 @@ export default class SegX86 {
     messageSeg(sel, base, limit, type, ext)
     {
         if (DEBUG) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.SEG)) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MESSAGE.SEG)) {
                 let ch = (this.sName.length < 3? " " : "");
                 let sDPL = " dpl=" + this.dpl;
                 if (this.id == SegX86.ID.CODE) sDPL += " cpl=" + this.cpl;
-                this.dbg.printf(Messages.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
+                this.dbg.printf(MESSAGE.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
             }
             /*
              * Unless I've got a bug that's causing descriptor corruption, it appears that Windows 3.0 may be setting the

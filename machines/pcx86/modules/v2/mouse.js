@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import SerialPort from "./serial.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
@@ -59,7 +59,7 @@ export default class Mouse extends Component {
      */
     constructor(parmsMouse)
     {
-        super("Mouse", parmsMouse, Messages.MOUSE);
+        super("Mouse", parmsMouse, MESSAGE.MOUSE);
 
         this.iAdapter = parmsMouse['adapter'] || 0;
         this.idDevice = parmsMouse['serial'] || parmsMouse['binding'];
@@ -506,7 +506,7 @@ export default class Mouse extends Component {
             let xScaled = (Math.round(Math.abs(xDelta) * this.scale) * Math.sign(xDelta)) || Math.sign(xDelta);
             let yScaled = (Math.round(Math.abs(yDelta) * this.scale) * Math.sign(yDelta)) || Math.sign(yDelta);
             if (xScaled || yScaled) {
-                this.printf(Messages.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
+                this.printf(MESSAGE.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
                 /*
                  * As sendPacket() indicates, any x and y coordinates we supply are for diagnostic purposes only.
                  * sendPacket() only cares about the xDelta and yDelta properties we provide above, which it then zeroes
@@ -541,7 +541,7 @@ export default class Mouse extends Component {
         let b1 = 0x40 | (this.fButton1? 0x20 : 0) | (this.fButton2? 0x10 : 0) | ((this.yDelta & 0xC0) >> 4) | ((this.xDelta & 0xC0) >> 6);
         let b2 = this.xDelta & 0x3F;
         let b3 = this.yDelta & 0x3F;
-        this.printf(Messages.SERIAL + Messages.ADDRESS, "%s%sserial packet [%#04x,%#04x,%#04x]\n", (sDiag? (sDiag + ": ") : ""), (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : ""), b1, b2, b3);
+        this.printf(MESSAGE.SERIAL + MESSAGE.ADDR, "%s%sserial packet [%#04x,%#04x,%#04x]\n", (sDiag? (sDiag + ": ") : ""), (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : ""), b1, b2, b3);
         this.componentDevice.receiveData([b1, b2, b3]);
         this.xDelta = this.yDelta = 0;
     }

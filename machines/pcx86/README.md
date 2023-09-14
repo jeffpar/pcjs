@@ -35,7 +35,7 @@ At the time of this writing, the recommended order is:
   - [pcx86/defines.js](modules/v2/defines.js)
   - [pcx86/x86.js](modules/v2/x86.js)
   - [pcx86/interrupts.js](modules/v2/interrupts.js)
-  - [pcx86/messages.js](modules/v2/messages.js)
+  - [pcx86/message.js](modules/v2/message.js)
   - [pcx86/panel.js](modules/v2/panel.js)
   - [pcx86/bus.js](modules/v2/bus.js)
   - [pcx86/memory.js](modules/v2/memory.js)

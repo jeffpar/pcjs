@@ -924,7 +924,7 @@ function main(argc, argv)
         device.setMessages(MESSAGE.FILE, true);
     }
 
-    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR, true);
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR, true);
 
     let sFile = argv['file'];
     if (typeof sFile != "string") sFile = argv[1] || "";

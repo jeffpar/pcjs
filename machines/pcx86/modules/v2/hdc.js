@@ -10,7 +10,7 @@
 import ChipSet from "./chipset.js";
 import Disk from "./disk.js";
 import Interrupts from "./interrupts.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DiskAPI from "../../../modules/v2/diskapi.js";
 import State from "../../../modules/v2/state.js";
@@ -110,7 +110,7 @@ export default class HDC extends Component {
      */
     constructor(parmsHDC)
     {
-        super("HDC", parmsHDC, Messages.HDC);
+        super("HDC", parmsHDC, MESSAGE.HDC);
 
         this['dmaRead'] = HDC.prototype.doDMARead;
         this['dmaWrite'] = HDC.prototype.doDMAWrite;
@@ -184,7 +184,7 @@ export default class HDC extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply remove the control; eg:
                  *
@@ -220,7 +220,7 @@ export default class HDC extends Component {
                         let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {
-                        hdc.printf(Messages.NOTICE, "Hard drive %d is not available.\n", iDrive);
+                        hdc.printf(MESSAGE.NOTICE, "Hard drive %d is not available.\n", iDrive);
                     }
                 };
             }(+sBinding.slice(-1));
@@ -676,7 +676,7 @@ export default class HDC extends Component {
          */
         if (drive.disk === undefined) {
             drive.disk = null;
-            this.printf(Messages.STATUS, "Type %d \"%s\" is fixed disk %d\n", drive.type, drive.name, iDrive);
+            this.printf(MESSAGE.STATUS, "Type %d \"%s\" is fixed disk %d\n", drive.type, drive.name, iDrive);
         }
 
         /*
@@ -818,7 +818,7 @@ export default class HDC extends Component {
                 let driveType = DRIVE_TYPES[this.iDriveCtrl][drive.type];
                 if (driveType) {
                     if (nCylinders != driveType[0] && nHeads != driveType[1]) {
-                        this.printf(Messages.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
+                        this.printf(MESSAGE.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
                     }
                 }
                 drive.nCylinders = nCylinders;
@@ -940,7 +940,7 @@ export default class HDC extends Component {
     {
         let drive = this.aDrives[iDrive];
         if (drive.fBusy) {
-            this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
+            this.printf(MESSAGE.NOTICE, "Drive %d busy\n", iDrive);
             return true;
         }
         drive.fBusy = true;
@@ -992,7 +992,7 @@ export default class HDC extends Component {
              * WARNING: This conversion of drive number to drive letter, starting with "C:" (0x43), is very simplistic
              * and is not guaranteed to match the drive mapping that DOS ultimately uses.
              */
-            this.printf(drive.fAutoMount? Messages.STATUS : Messages.NOTICE, "Mounted disk \"%s\" in drive %s\n", sDiskName, String.fromCharCode(0x43 + drive.iDrive));
+            this.printf(drive.fAutoMount? MESSAGE.STATUS : MESSAGE.NOTICE, "Mounted disk \"%s\" in drive %s\n", sDiskName, String.fromCharCode(0x43 + drive.iDrive));
 
             let aDiskInfo = disk.info();
             if (aDiskInfo[0] != drive.nCylinders || aDiskInfo[1] != drive.nHeads || aDiskInfo[2] != drive.nSectors || aDiskInfo[3] != drive.cbSector) {
@@ -1002,7 +1002,7 @@ export default class HDC extends Component {
                  * disk so that its geometry matches the controller requirements.
                  */
                 if (this.sType.indexOf("PCJS") < 0) {   // skip the warning if pc.js custom-built this disk
-                    this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDriveCtrl], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
+                    this.printf(MESSAGE.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDriveCtrl], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
                 }
             }
         }
@@ -1206,7 +1206,7 @@ export default class HDC extends Component {
                 hdc.assert(!fAsync);
                 if (BACKTRACK && obj) {
                     if (!off && obj.file) {
-                        hdc.printf(Messages.DISK + Messages.PORT + Messages.ADDRESS, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
+                        hdc.printf(MESSAGE.DISK + MESSAGE.PORT + MESSAGE.ADDR, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
                     }
                     /*
                      * TODO: We could define a cached BTO that's reset prior to a new ATC command, and then pass that
@@ -1225,11 +1225,11 @@ export default class HDC extends Component {
                  * printIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
                  * and last bytes of each sector.
                  */
-                if (this.messageEnabled(Messages.PORT + Messages.HDC)) {
+                if (this.messageEnabled(MESSAGE.PORT + MESSAGE.HDC)) {
                     this.printIO(port, undefined, addrFrom, "DATA[" + drive.iByte + "]", bIn);
                 }
                 if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
-                    if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
+                    if (this.messageEnabled(MESSAGE.DATA + MESSAGE.HDC)) {
                         let sDump = drive.disk.dumpSector(drive.sector);
                         if (sDump) this.print(sDump);
                     }
@@ -1341,11 +1341,11 @@ export default class HDC extends Component {
                      * printIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
                      * and last bytes of each sector.
                      */
-                    if (this.messageEnabled(Messages.PORT + Messages.HDC)) {
+                    if (this.messageEnabled(MESSAGE.PORT + MESSAGE.HDC)) {
                         this.printIO(port, bOut, addrFrom, "DATA[" + drive.iByte + "]");
                     }
                     if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
-                        if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
+                        if (this.messageEnabled(MESSAGE.DATA + MESSAGE.HDC)) {
                             let sDump = drive.disk.dumpSector(drive.sector);
                             if (sDump) this.print(sDump);
                         }
@@ -1709,7 +1709,7 @@ export default class HDC extends Component {
         this.regStatus = HDC.ATC.STATUS.READY | HDC.ATC.STATUS.SEEK_OK;
         let drive = this.aDrives[iDrive];
 
-        this.printf(Messages.HDC + Messages.PORT + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
+        this.printf(MESSAGE.HDC + MESSAGE.PORT + MESSAGE.ADDR, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
 
         if (!drive) return;
         this.iDrive = iDrive;
@@ -1759,7 +1759,7 @@ export default class HDC extends Component {
 
         case HDC.ATC.COMMAND.READ_DATA:             // 0x20 (ATA)
             if (!drive.useBuffer) {
-                this.printf(Messages.HDC + Messages.PORT, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
+                this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             /*
              * We're using a call to readData() that disables auto-increment, so that once we've got the first
@@ -1799,7 +1799,7 @@ export default class HDC extends Component {
 
         case HDC.ATC.COMMAND.WRITE_DATA:            // 0x30 (ATA)
             if (!drive.useBuffer) {
-                this.printf(Messages.HDC + Messages.PORT, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
+                this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             this.regStatus = HDC.ATC.STATUS.DATA_REQ;
             fProcessed = true;
@@ -1902,9 +1902,9 @@ export default class HDC extends Component {
                  * has a low tolerance for fast controller interrupts during multi-sector operations.
                  */
                 this.chipset.setIRR(ChipSet.IRQ.ATC1 + this.nInterface, 120);
-                if (DEBUG) this.printf(Messages.PIC + Messages.HDC, "%s.setATCIRR(): enabled\n", this.idComponent);
+                if (DEBUG) this.printf(MESSAGE.PIC + MESSAGE.HDC, "%s.setATCIRR(): enabled\n", this.idComponent);
             } else {
-                if (DEBUG) this.printf(Messages.PIC + Messages.HDC, "%s.setATCIRR(): disabled\n", this.idComponent);
+                if (DEBUG) this.printf(MESSAGE.PIC + MESSAGE.HDC, "%s.setATCIRR(): disabled\n", this.idComponent);
             }
         }
     }
@@ -2082,7 +2082,7 @@ export default class HDC extends Component {
         let bCmdIndex = this.regDataIndex;
         if (bCmdIndex < this.regDataTotal) {
             bCmd = this.regDataArray[this.regDataIndex++];
-            this.printf((bCmdIndex > 0? Messages.PORT : 0) + Messages.HDC, "%s.popCmd(%d): %#04x%s\n", this.idComponent, bCmdIndex, bCmd, (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""));
+            this.printf((bCmdIndex > 0? MESSAGE.PORT : 0) + MESSAGE.HDC, "%s.popCmd(%d): %#04x%s\n", this.idComponent, bCmdIndex, bCmd, (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""));
         }
         return bCmd;
     }
@@ -2115,7 +2115,7 @@ export default class HDC extends Component {
     pushResult(bResult)
     {
         if (DEBUG) {
-            this.printf((this.regDataTotal > 0? Messages.PORT : 0) + Messages.HDC, "%s.pushResult(%d): %#04x\n", this.idComponent, this.regDataTotal, bResult);
+            this.printf((this.regDataTotal > 0? MESSAGE.PORT : 0) + MESSAGE.HDC, "%s.pushResult(%d): %#04x\n", this.idComponent, this.regDataTotal, bResult);
         }
         this.regDataArray[this.regDataTotal++] = bResult;
     }
@@ -2766,7 +2766,7 @@ export default class HDC extends Component {
 
         bPacketCmd = getByte(0);
 
-        this.printf(Messages.HDC, "%s.packet(%#04x): %s (drive %d)\n", this.idComponent, bPacketCmd, HDC.aATAPICommands[bPacketCmd], drive.iDrive);
+        this.printf(MESSAGE.HDC, "%s.packet(%#04x): %s (drive %d)\n", this.idComponent, bPacketCmd, HDC.aATAPICommands[bPacketCmd], drive.iDrive);
 
         switch(bPacketCmd) {
         case HDC.ATC.PACKET.COMMAND.TEST_UNIT:  // 0x00
@@ -2857,7 +2857,7 @@ export default class HDC extends Component {
                 break;
 
             default:
-                this.printf(Messages.HDC, "%s.packet(%#04x): unsupported format %d\n", this.idComponent, bPacketCmd, format);
+                this.printf(MESSAGE.HDC, "%s.packet(%#04x): unsupported format %d\n", this.idComponent, bPacketCmd, format);
                 if (MAXDEBUG) this.dbg.stopCPU();
                 bPacketCmd = -1;                // TODO: Add support for other READ_TOC formats
                 break;
@@ -2960,7 +2960,7 @@ export default class HDC extends Component {
                 break;
 
             default:
-                this.printf(Messages.HDC, "%s.packet(%#04x): unsupported page code %d\n", this.idComponent, bPacketCmd, pageCode);
+                this.printf(MESSAGE.HDC, "%s.packet(%#04x): unsupported page code %d\n", this.idComponent, bPacketCmd, pageCode);
                 if (MAXDEBUG) this.dbg.stopCPU();
                 bPacketCmd = -1;        // TODO: Add support for other Page Codes
                 break;
@@ -3096,7 +3096,7 @@ export default class HDC extends Component {
     //     // WARNING: This conversion of drive number to drive letter, starting with "C:" (0x43), is very simplistic
     //     // and is not guaranteed to match the drive mapping that DOS ultimately uses.
     //     //
-    //     this.printf(Messages.NOTICE, "Drive %s unloaded\n", String.fromCharCode(0x43 + iDrive));
+    //     this.printf(MESSAGE.NOTICE, "Drive %s unloaded\n", String.fromCharCode(0x43 + iDrive));
     // }
 
     /**

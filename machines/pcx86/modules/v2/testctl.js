@@ -12,7 +12,7 @@
  * our 'binding' property indicates, if any.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import TestMonitor from "./testmon.js";
 import Component from "../../../modules/v2/component.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -89,7 +89,7 @@ export default class TestController extends Component {
         Web.getResource(sURL, null, true, function(sURL, sResponse, nErrorCode) {
             controller.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
-            controller.printf(Messages.PROGRESS, "%s\n", sProgress);
+            controller.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
         });
 
     }
@@ -105,7 +105,7 @@ export default class TestController extends Component {
     doneLoad(sURL, sTestData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load tests (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(nErrorCode < 0? MESSAGE.STATUS : MESSAGE.NOTICE, "Unable to load tests (error %d: %s)\n", nErrorCode, sURL);
         }
         else {
             try {
@@ -116,7 +116,7 @@ export default class TestController extends Component {
                 }
                 Component.addMachineResource(this.idMachine, sURL, sTestData);
             } catch (err) {
-                this.printf(Messages.NOTICE, "Test parsing error: %s\n", err.message);
+                this.printf(MESSAGE.NOTICE, "Test parsing error: %s\n", err.message);
             }
         }
         this.setReady();

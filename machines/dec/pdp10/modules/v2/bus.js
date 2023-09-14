@@ -8,7 +8,7 @@
  */
 
 import MemoryPDP10 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Str from "../../../../modules/v2/strlib.js";
 import Usr from "../../../../modules/v2/usrlib.js";
 import Component from "../../../../modules/v2/component.js";
@@ -75,7 +75,7 @@ export default class BusPDP10 extends Component {
      */
     constructor(parmsBus, cpu, dbg)
     {
-        super("Bus", parmsBus, Messages.BUS);
+        super("Bus", parmsBus, MESSAGE.BUS);
 
         this.cpu = cpu;
         this.dbg = dbg;
@@ -292,7 +292,7 @@ export default class BusPDP10 extends Component {
         }
 
         if (sizeLeft <= 0) {
-            this.printf(Messages.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP10.TYPE_NAMES[type], addr);
+            this.printf(MESSAGE.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP10.TYPE_NAMES[type], addr);
             return true;
         }
 
@@ -691,7 +691,7 @@ export default class BusPDP10 extends Component {
         this.fFault = true;
         if (!this.nDisableFaults) {
             if (DEBUGGER && this.dbg) {
-                this.dbg.printf(Messages.FAULT + Messages.ADDRESS, "memory fault on %s\n", this.dbg.toStrBase(addr));
+                this.dbg.printf(MESSAGE.FAULT + MESSAGE.ADDR, "memory fault on %s\n", this.dbg.toStrBase(addr));
             }
             this.cpu.haltCPU();
         }
@@ -724,7 +724,7 @@ export default class BusPDP10 extends Component {
      */
     reportError(errNum, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.NONE : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
+        this.printf(fQuiet? MESSAGE.NONE : MESSAGE.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
         return false;
     }
 }

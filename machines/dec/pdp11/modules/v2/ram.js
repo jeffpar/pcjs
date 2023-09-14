@@ -8,7 +8,7 @@
  */
 
 import MemoryPDP11 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import Str from "../../../../modules/v2/strlib.js";
@@ -64,7 +64,7 @@ export default class RAMPDP11 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
+            if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -159,7 +159,7 @@ export default class RAMPDP11 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -208,9 +208,9 @@ export default class RAMPDP11 extends Component {
                 if (!this.abInit) return;
 
                 if (this.loadImage(this.abInit, this.addrLoad, this.addrExec, this.addrRAM)) {
-                    this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
+                    this.printf(MESSAGE.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
-                    this.printf(Messages.NOTICE, "Error loading image \"%s\"\n", this.sFileName);
+                    this.printf(MESSAGE.NOTICE, "Error loading image \"%s\"\n", this.sFileName);
                 }
 
                 /*
@@ -302,11 +302,11 @@ export default class RAMPDP11 extends Component {
                 }
                 var offBlock = off;
                 if (w != 0x0001) {
-                    this.printf(Messages.PAPER, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
+                    this.printf(MESSAGE.PAPER, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
                     break;
                 }
                 if (off + 6 >= aBytes.length) {
-                    this.printf(Messages.PAPER, "invalid block at offset %#06x\n", offBlock);
+                    this.printf(MESSAGE.PAPER, "invalid block at offset %#06x\n", offBlock);
                     break;
                 }
                 off += 2;
@@ -320,12 +320,12 @@ export default class RAMPDP11 extends Component {
                     len--;
                 }
                 if (len != 0 || off >= aBytes.length) {
-                    this.printf(Messages.PAPER, "insufficient data for block at offset %#06x\n", offBlock);
+                    this.printf(MESSAGE.PAPER, "insufficient data for block at offset %#06x\n", offBlock);
                     break;
                 }
                 checksum += aBytes[off++] & 0xff;
                 if (checksum & 0xff) {
-                    this.printf(Messages.PAPER, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
+                    this.printf(MESSAGE.PAPER, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
                     break;
                 }
                 if (!cbData) {
@@ -334,9 +334,9 @@ export default class RAMPDP11 extends Component {
                     } else {
                         if (addrExec == null) addrExec = addr;
                     }
-                    if (addrExec != null) this.printf(Messages.PAPER, "starting address: %#06x\n", addrExec);
+                    if (addrExec != null) this.printf(MESSAGE.PAPER, "starting address: %#06x\n", addrExec);
                 } else {
-                    this.printf(Messages.PAPER, "loading %#06x bytes at %#06x-%%#06x\n", cbData, addr, addr + cbData);
+                    this.printf(MESSAGE.PAPER, "loading %#06x bytes at %#06x-%%#06x\n", cbData, addr, addr + cbData);
                     while (cbData--) {
                         this.bus.setByteDirect(addr++, aBytes[offData++] & 0xff);
                     }

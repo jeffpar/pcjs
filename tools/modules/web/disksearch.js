@@ -220,7 +220,7 @@ export default class DiskSearch {
                         if (matchDisk) {
                             pathDisk = "?automount={A:\"None\",B:\"PC-SIG%20Library%20Disk%20%23" + matchDisk[1] + "\"}";
                             if (this.idMachine) {
-                                onclick = "return !commandMachine(this, false, '" + this.idMachine + "', '', 'script', 'select FDC listDrives &quot;B:&quot;; select FDC listDisks &quot;PC-SIG Library Disk #" + matchDisk[1] + "&quot;; loadDisk FDC scroll')";
+                                onclick = "return !commandMachine(this, false, '" + this.idMachine + "', '', 'script', 'select FDC listDrives &quot;B:&quot;; select FDC listDisks &quot;PC-SIG Library Disk #" + matchDisk[1] + "&quot;; loadDisk FDC scroll; wait FDC; type Keyboard &quot;DIR B:\\r&quot;')";
                             }
                         }
                         item.innerHTML = "<a href='" + pathDisk + "' target=\"_blank\"" + (onclick? " onclick=\"" + onclick + "\"" : "") + ">" + title + "</a>: " + summary;

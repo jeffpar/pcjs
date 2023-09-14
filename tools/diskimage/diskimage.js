@@ -1064,7 +1064,7 @@ function readCollection(argv)
     });
     let messages;
     if (argv['quiet']) {
-        messages = device.setMessages(MESSAGE.WARN + MESSAGE.ERROR, false);
+        messages = device.setMessages(MESSAGE.WARNING + MESSAGE.ERROR, false);
     }
     let aDiskNames = {};        // we use this table of disk names to detect non-unique disk names
     asCollections.forEach(function readAllCollections(collectionFile) {
@@ -1386,7 +1386,7 @@ function main(argc, argv)
         device.setMessages(MESSAGE.FILE, true);
     }
 
-    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR, true);
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR, true);
 
     if (argv['help']) {
         let optionsInput = {

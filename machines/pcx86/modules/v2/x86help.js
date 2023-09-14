@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import X86 from "./x86.js";
 import Str from "../../../modules/v2/strlib.js";
 import { COMPILED, DEBUGGER, I386 } from "./defines.js";
@@ -507,17 +507,17 @@ X86.helpINT = function(nIDT, nError, nCycles)
             case 0xFB:
                 actual = (argA * argB)|0;
                 if (result != actual) {
-                    if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x * %#x does not match actual: %#x\n", result, argA, argB, actual);
+                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x * %#x does not match actual: %#x\n", result, argA, argB, actual);
                 }
                 break;
             case 0xFC:
                 actual = (argA / argB)|0;
                 if (result != actual) {
-                    if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x / %#x does not match actual: %#x\n", result, argA, argB, actual);
+                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x / %#x does not match actual: %#x\n", result, argA, argB, actual);
                 }
                 actual = (argA % argB)|0;
                 if (remainder != actual) {
-                    if (!COMPILED) this.printf(Messages.INT, "result %#x for %#x % %#x does not match actual: %#x\n", result, argA, argB, actual);
+                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x % %#x does not match actual: %#x\n", result, argA, argB, actual);
                 }
                 break;
             }
@@ -927,7 +927,7 @@ X86.helpPageFault = function(addr, fPresent, fWrite)
  */
 X86.helpCheckFault = function(nFault, nError, fHalt)
 {
-    let bitsMessage = Messages.FAULT;
+    let bitsMessage = MESSAGE.FAULT;
 
     let bOpcode = this.probeAddr(this.regLIP);
 
@@ -972,7 +972,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
      * (which you can override by turning on CPU messages).
      */
     if (fHalt === false) {
-        bitsMessage |= Messages.CPU;
+        bitsMessage |= MESSAGE.CPU;
     }
 
     /*
@@ -992,7 +992,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
      * However, the foregoing notwithstanding, if MESSAGE.HALT is enabled along with all the other required
      * MESSAGE bits, then we want to halt regardless.
      */
-    if (this.messageEnabled(bitsMessage + Messages.HALT)) {
+    if (this.messageEnabled(bitsMessage + MESSAGE.HALT)) {
         fHalt = true;
     }
 
@@ -1004,7 +1004,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
             if (fRunning) sMessage += " (blocked)";
         }
         if (DEBUGGER && this.dbg) {
-            this.printf((fHalt? Messages.PROGRESS : bitsMessage) + Messages.ADDRESS, "%s\n", sMessage);
+            this.printf((fHalt? MESSAGE.PROGRESS : bitsMessage) + MESSAGE.ADDR, "%s\n", sMessage);
             if (fHalt) {
                 /*
                  * By setting fHalt to fRunning (which is true while running but false while single-stepping),
@@ -1023,7 +1023,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
              * be true.  Which means we should shut the machine down.
              */
             this.assert(fHalt);
-            this.printf(Messages.NOTICE, "%s\n", sMessage);
+            this.printf(MESSAGE.NOTICE, "%s\n", sMessage);
             this.stopCPU();
         }
     }

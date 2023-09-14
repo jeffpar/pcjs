@@ -9,7 +9,7 @@ PCx80 is comprised of the following non-shared components, as listed in [machine
 
   - [defines.js](modules/v2/defines.js)
   - [cpudef.js](modules/v2/cpudef.js)
-  - [messages.js](modules/v2/messages.js)
+  - [message.js](modules/v2/message.js)
   - [panel.js](modules/v2/panel.js)
   - [bus.js](modules/v2/bus.js)
   - [memory.js](modules/v2/memory.js)

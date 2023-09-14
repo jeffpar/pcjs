@@ -8,7 +8,7 @@
  */
 
 import ChipSet from "./chipset.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -57,7 +57,7 @@ export default class ParallelPort extends Component {
      */
     constructor(parmsParallel)
     {
-        super("ParallelPort", parmsParallel, Messages.PARALLEL);
+        super("ParallelPort", parmsParallel, MESSAGE.PARALLEL);
 
         this.iAdapter = parmsParallel['adapter'];
 
