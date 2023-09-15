@@ -149,8 +149,21 @@ Defines.REPOSITORY      = REPOSITORY;
 Defines.RS232           = RS232;
 Defines.VERSION         = VERSION;
 
-if (typeof window != "undefined" && !window['PCjs']) {
-    window['PCjs'] = {'machines': {}, 'components': [], 'commands': {}};
+/*
+ * Platform-agnostic way to isolate global variables (both mine and the system's).
+ */
+let globals = {
+    browser: (typeof window != "undefined")? {} : null,
+    node: (typeof window != "undefined")? {} : global,
+    window: (typeof window != "undefined")? window : global,
+    document: (typeof document != "undefined")? document : {},
+    pcjs: { 'machines': {}, 'components': [], 'commands': {} }
+};
+
+if (globals.window['PCjs']) {
+    globals.pcjs = globals.window['PCjs'];
+} else {
+    globals.window['PCjs'] = globals.pcjs;
 }
 
 /**
@@ -158,16 +171,16 @@ if (typeof window != "undefined" && !window['PCjs']) {
  *
  * @type {Object}
  */
-Defines.Machines = typeof window != "undefined"? window['PCjs']['machines'] : {};
+Defines.Machines = globals.pcjs['machines'];
 
 /**
  * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
  *
  * @type {Array}
  */
-Defines.Components = typeof window != "undefined"? window['PCjs']['components'] : [];
+Defines.Components = globals.pcjs['components'];
 
 Defines.CLASSES = {};
 Defines.CLASSES["Defines"] = Defines;
 
-export { Defines, COMMAND, COMPILED, COPYRIGHT, DEBUG, FACTORY, LITTLE_ENDIAN, MAXDEBUG, REPOSITORY, RS232, VERSION };
+export { Defines, COMMAND, COMPILED, COPYRIGHT, DEBUG, FACTORY, LITTLE_ENDIAN, MAXDEBUG, REPOSITORY, RS232, VERSION, globals };

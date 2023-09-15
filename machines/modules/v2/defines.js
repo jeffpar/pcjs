@@ -133,7 +133,7 @@ const SITEURL = "http://localhost:8088";// this @define is overridden by the Clo
 var LOCALDISKS = false;
 
 /*
- * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
+ * Platform-agnostic way to isolate global variables (both mine and the system's).
  */
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
