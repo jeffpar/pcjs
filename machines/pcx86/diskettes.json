@@ -2033,6 +2033,15 @@
 								"@diskette": "MSDOS200-OEM-DISK5.json",
 								"@format": "PC160K"
 							}
+						],
+						"@documents": [
+							{
+								"@title": "Microsoft MS-DOS 2.00 User's Guide",
+								"@file": "MSDOS_200_USERS_GUIDE-1983.pdf",
+								"@link": "https://archive.org/details/msdos-200-users-guide-1983",
+								"@cover": "jpg",
+								"@source": "PCjs"
+							}
 						]
 					},
 					"3.20": {

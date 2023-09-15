@@ -87,7 +87,8 @@ applying a DST adjustment to any timestamps that were either inside or outside o
 the *current* date is inside or outside of DST, which makes the alteration even more insidious.  And not all regions around
 the world observe DST, even within the United States.
 
-As a result, Daylight Savings Time is a serious obstacle to accurate date and time preservation.  And arbitrarily renaming files with unexplained suffixes, or more convenient file extensions, doesn't help either.
+As a result, Daylight Savings Time is a serious obstacle to accurate date and time preservation.  And arbitrarily renaming
+files with unexplained suffixes, or more convenient file extensions, doesn't help either.
 
 I have attempted to correct all the file names and timestamps on the five disks below.  Whether the rest of the (2.11) files in
 CHM's original archive suffer from similar timestamp alterations is hard to say without more information.
@@ -128,6 +129,9 @@ CHM's original archive suffer from similar timestamp alterations is hard to say 
          If you do decide to distribute it, it is at your own risk!
     
     5.   Documentation.  Features of 2.0 are documented on this disk.
+
+
+{% include gallery/documents.html width="200" height="280" %}
 
 ### Directory of MS-DOS 2.00 OEM (Disk 1)
 
