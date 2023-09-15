@@ -14,8 +14,8 @@ import ROMx86 from "./rom.js";
 import Component from "../../../modules/v2/component.js";
 import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, COMPILED, DEBUG, DESKPRO386, MAXDEBUG } from "./defines.js";
 
 /**
@@ -56,7 +56,7 @@ export default class KbdX86 extends Component {
 
         this.setModel(parmsKbd['model']);
 
-        this.fMobile = Web.isMobile("!iPad");
+        this.fMobile = WebLib.isMobile("!iPad");
         this.printf("mobile keyboard support: %b\n", this.fMobile);
 
         /*
@@ -66,7 +66,7 @@ export default class KbdX86 extends Component {
          * keys: keys like CAPS-LOCK generate both UP and DOWN events on every press.  On other platforms (eg, macOS),
          * those keys generate only a DOWN event when "locking" and only an UP event when "unlocking".
          */
-        this.fMSWindows = Web.isUserAgent("Windows");
+        this.fMSWindows = WebLib.isUserAgent("Windows");
 
         /*
          * This is count of the number of "soft keyboard" keys present.  At the moment, its only
@@ -263,7 +263,7 @@ export default class KbdX86 extends Component {
                  *
                  *      this.bindings[id] = control;
                  */
-                if (sHTMLType == "textarea" && !Web.isUserAgent("iPhone")) {
+                if (sHTMLType == "textarea" && !WebLib.isUserAgent("iPhone")) {
                     this.controlTextKeyboard = controlText;
                     this.controlTextKeyboard.addEventListener(
                         'copy',
@@ -1259,7 +1259,7 @@ export default class KbdX86 extends Component {
      * operations, multiple dollar signs could eventually get reduced to a single dollar sign BEFORE we get here.
      *
      * To compensate, I've changed a few replace() methods, like MarkOut's convertMDMachineLinks() and HTMLOut's
-     * addFilesToHTML(), from the conventional string replace() to my own Str.replace(), and for situations like the
+     * addFilesToHTML(), from the conventional string replace() to my own StrLib.replace(), and for situations like the
      * embed.js parseXML() function, which needs to use a RegExp-style replace(), I've added a preliminary
      * replace(/\$/g, "$$$$") to the replacement string.
      *
@@ -1280,10 +1280,10 @@ export default class KbdX86 extends Component {
                 if (reSpecial.lastIndex) reSpecial.lastIndex--;
                 switch (match[1]) {
                 case 'date':
-                    sReplace = Str.sprintf("%M-%02D-%04Y", date);
+                    sReplace = StrLib.sprintf("%M-%02D-%04Y", date);
                     break;
                 case 'time':
-                    sReplace = Str.sprintf("%H:%02N:%02S", date);
+                    sReplace = StrLib.sprintf("%H:%02N:%02S", date);
                     break;
                 default:
                     continue;
@@ -1774,7 +1774,7 @@ export default class KbdX86 extends Component {
          * NOTE: isUserAgent struggles to detect iPadOS because Apple insists on pretending that it be indistinguishable
          * from desktop systems, so be aware that this hack may stop working at some undefined point.
          */
-        if (Web.isUserAgent("iOS") && (this.bitsState & KbdX86.STATE.CTRL)) {
+        if (WebLib.isUserAgent("iOS") && (this.bitsState & KbdX86.STATE.CTRL)) {
             if (keyCode == Keys.KEYCODE.CR) {
                 keyCode = Keys.ASCII.C;
             }
@@ -3229,4 +3229,4 @@ KbdX86.INJECTION = {
 /*
  * Initialize every Keyboard module on the page.
  */
-Web.onInit(KbdX86.init);
+WebLib.onInit(KbdX86.init);

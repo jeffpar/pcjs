@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Str from "./strlib.js";
+import StrLib from "./strlib.js";
 import Component from "./component.js";
 import { DEBUGGER, MAXDEBUG } from "./defines.js";
 
@@ -118,11 +118,11 @@ export default class DbgLib extends Component {
              *
              * Note that parseValue() parses variables before numbers, so any variable that looks like a
              * unprefixed hex value (eg, "a5" as opposed to "0xa5") will trump the numeric value.  Unprefixed
-             * hex values are a convenience of parseValue(), which always calls Str.parseInt() with a default
+             * hex values are a convenience of parseValue(), which always calls StrLib.parseInt() with a default
              * base of 16; however, that default be overridden with a variety of explicit prefixes or suffixes
              * (eg, a leading "0o" to indicate octal, a trailing period to indicate decimal, etc.)
              *
-             * See Str.parseInt() for more details about supported numbers.
+             * See StrLib.parseInt() for more details about supported numbers.
              */
             this.aVariables = {};
 
@@ -249,7 +249,7 @@ export default class DbgLib extends Component {
              * associated with a breakpoint), we can no longer perform simplistic splitting.
              *
              *      a = sCmd.split(chSep || ';');
-             *      for (let i = 0; i < a.length; i++) a[i] = Str.trim(a[i]);
+             *      for (let i = 0; i < a.length; i++) a[i] = StrLib.trim(a[i]);
              *
              * We may now split on semi-colons ONLY if they are outside a quoted sequence.
              *
@@ -282,7 +282,7 @@ export default class DbgLib extends Component {
                      * Recall that substring() accepts starting (inclusive) and ending (exclusive)
                      * indexes, whereas substr() accepts a starting index and a length.  We need the former.
                      */
-                    a.push(Str.trim(sCmd.substring(iPrev, i)));
+                    a.push(StrLib.trim(sCmd.substring(iPrev, i)));
                     iPrev = i + 1;
                 }
             }
@@ -887,7 +887,7 @@ export default class DbgLib extends Component {
              * inside symbols, or inside hex values.  So if the default base is NOT 16, then I pre-scan for that suffix
              * and replace all non-symbolic occurrences with an internal shift operator ('^_').
              *
-             * Note that Str.parseInt(), which parseValue() relies on, supports both the MACRO-10 base prefix overrides
+             * Note that StrLib.parseInt(), which parseValue() relies on, supports both the MACRO-10 base prefix overrides
              * and the binary shifting suffix ('B'), but since that suffix can also be a bracketed expression, we have to
              * support it here as well.
              *
@@ -1072,7 +1072,7 @@ export default class DbgLib extends Component {
                     /*
                      * A feature of MACRO-10 is that any single-digit number is automatically interpreted as base-10.
                      */
-                    value = Str.parseInt(sValue, sValue.length > 1 || this.nBase > 10? this.nBase : 10);
+                    value = StrLib.parseInt(sValue, sValue.length > 1 || this.nBase > 10? this.nBase : 10);
                 }
             }
             if (value != undefined) {
@@ -1247,23 +1247,23 @@ export default class DbgLib extends Component {
         let s;
         switch(nBase || this.nBase) {
         case 2:
-            s = Str.toBin(n, nBits > 0? nBits : 0, nGrouping);
+            s = StrLib.toBin(n, nBits > 0? nBits : 0, nGrouping);
             break;
         case 8:
-            s = Str.toOct(n, nBits > 0? ((nBits + 2)/3)|0 : 0, !!nGrouping);
+            s = StrLib.toOct(n, nBits > 0? ((nBits + 2)/3)|0 : 0, !!nGrouping);
             break;
         case 10:
             /*
              * The multiplier is actually Math.log(2)/Math.log(10), but an approximation is more than adequate.
              */
-            s = Str.toDec(n, nBits > 0? Math.ceil(nBits * 0.3) : 0);
+            s = StrLib.toDec(n, nBits > 0? Math.ceil(nBits * 0.3) : 0);
             break;
         case 16:
         default:
-            s = Str.toHex(n, nBits > 0? ((nBits + 3) >> 2) : 0, !!nGrouping);
+            s = StrLib.toHex(n, nBits > 0? ((nBits + 3) >> 2) : 0, !!nGrouping);
             break;
         }
-        return (nBits < 0? Str.stripLeadingZeros(s) : s);
+        return (nBits < 0? StrLib.stripLeadingZeros(s) : s);
     }
 
     /**

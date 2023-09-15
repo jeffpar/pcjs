@@ -9,7 +9,7 @@
 
 import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
-import Web from "../../../../modules/v2/weblib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS } from "./defines.js";
 
 /**
@@ -85,4 +85,4 @@ KeyboardPDP11.MINPRESSTIME = 100;            // 100ms
 /*
  * Initialize every Keyboard module on the page.
  */
-Web.onInit(KeyboardPDP11.init);
+WebLib.onInit(KeyboardPDP11.init);

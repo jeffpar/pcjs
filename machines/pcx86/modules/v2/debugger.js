@@ -16,9 +16,9 @@ import Component from "../../../modules/v2/component.js";
 import DbgLib from "../../../modules/v2/dbglib.js";
 import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Usr from "../../../modules/v2/usrlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import UsrLib from "../../../modules/v2/usrlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BYTEARRAYS, COMPILED, DEBUG, DEBUGGER, I386, MAXDEBUG, PREFETCH, SYMBOLS, TYPEDARRAYS, globals } from "./defines.js";
 
 /**
@@ -296,7 +296,7 @@ export default class DebuggerX86 extends DbgLib {
         let sModule = this.getSZ(dbgAddr);
         let seg = this.getSegment(sel);
         let len = seg? seg.limit + 1 : 0;
-        let sSection = (fCode? "_CODE" : "_DATA") + Str.toHex(nSegment, 2);
+        let sSection = (fCode? "_CODE" : "_DATA") + StrLib.toHex(nSegment, 2);
         if (fPrint) this.printf(MESSAGE.MEM, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
         let off = 0;
         let aSymbols = this.findModuleInfo(sModule, nSegment);
@@ -360,7 +360,7 @@ export default class DebuggerX86 extends DbgLib {
         } else {
             sParent += '!';
         }
-        let sSection = (fCode? "_CODE" : "_DATA") + Str.toHex(nSegment, 2);
+        let sSection = (fCode? "_CODE" : "_DATA") + StrLib.toHex(nSegment, 2);
         if (fPrint) {
             /*
              * Mimics WDEB386 output, except that WDEB386 only displays a linear address, omitting the selector.
@@ -910,7 +910,7 @@ export default class DebuggerX86 extends DbgLib {
 
         case "debugEnter":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickDebugEnter(fRepeat) {
@@ -928,7 +928,7 @@ export default class DebuggerX86 extends DbgLib {
 
         case "step":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickStep(fRepeat) {
@@ -1474,7 +1474,7 @@ export default class DebuggerX86 extends DbgLib {
     parseAddrReference(s, sAddr)
     {
         let dbgAddr = this.parseAddr(sAddr);
-        return s.replace('[' + sAddr + ']', dbgAddr? Str.toHex(this.getWord(dbgAddr), dbgAddr.fData32? 8 : 4) : "undefined");
+        return s.replace('[' + sAddr + ']', dbgAddr? StrLib.toHex(this.getWord(dbgAddr), dbgAddr.fData32? 8 : 4) : "undefined");
     }
 
     /**
@@ -1511,9 +1511,9 @@ export default class DebuggerX86 extends DbgLib {
     toHexOffset(off, sel, fAddr32)
     {
         if (sel != undefined) {
-            return Str.toHex(sel, 4) + ':' + Str.toHex(off, (off & ~0xffff) || fAddr32? 8 : 4);
+            return StrLib.toHex(sel, 4) + ':' + StrLib.toHex(off, (off & ~0xffff) || fAddr32? 8 : 4);
         }
-        return Str.toHex(off);
+        return StrLib.toHex(off);
     }
 
     /**
@@ -1529,7 +1529,7 @@ export default class DebuggerX86 extends DbgLib {
         /*
          * TODO: Revisit the decision to check sel == undefined; I would rather see these decisions based on type.
          */
-        return (dbgAddr.type >= DebuggerX86.ADDRTYPE.LINEAR || dbgAddr.sel == undefined)? (ch + Str.toHex(dbgAddr.addr)) : (ch + this.toHexOffset(dbgAddr.off, dbgAddr.sel, dbgAddr.fAddr32));
+        return (dbgAddr.type >= DebuggerX86.ADDRTYPE.LINEAR || dbgAddr.sel == undefined)? (ch + StrLib.toHex(dbgAddr.addr)) : (ch + this.toHexOffset(dbgAddr.off, dbgAddr.sel, dbgAddr.fAddr32));
     }
 
     /**
@@ -1587,7 +1587,7 @@ export default class DebuggerX86 extends DbgLib {
                         for (let i in aInfo) {
                             let a = aInfo[i];
                             if (sInfo) sInfo += '\n';
-                            sInfo += a[0] + ": " + a[1] + ' ' + Str.toHex(a[2], 4) + ':' + Str.toHex(a[3], 4) + " len " + Str.toHexWord(a[4]);
+                            sInfo += a[0] + ": " + a[1] + ' ' + StrLib.toHex(a[2], 4) + ':' + StrLib.toHex(a[3], 4) + " len " + StrLib.toHexWord(a[4]);
                         }
                     }
                     componentPrev = component;
@@ -1769,7 +1769,7 @@ export default class DebuggerX86 extends DbgLib {
      */
     getPageEntry(addrPE, lPE, fPTE)
     {
-        let s = Str.toHex(addrPE) + ' ' + Str.toHex(lPE) + ' ';
+        let s = StrLib.toHex(addrPE) + ' ' + StrLib.toHex(lPE) + ' ';
         s += (fPTE && (lPE & X86.PTE.DIRTY))? 'D' : '-';
         s += (lPE & X86.PTE.ACCESSED)? 'A' : '-';
         s += (lPE & X86.PTE.USER)? 'U' : 'S';
@@ -1838,10 +1838,10 @@ export default class DebuggerX86 extends DbgLib {
 
         this.printf("linear     PDE addr   PDE             PTE addr   PTE             physical\n");
         this.printf("---------  ---------- --------        ---------- --------        ----------\n");
-        let s = '%' + Str.toHex(addr);
+        let s = '%' + StrLib.toHex(addr);
         s += "  %%" + this.getPageEntry(pageInfo.addrPDE, pageInfo.lPDE);
         s += "  %%" + this.getPageEntry(pageInfo.addrPTE, pageInfo.lPTE, true);
-        s += "  %%" + Str.toHex(pageInfo.addrPhys);
+        s += "  %%" + StrLib.toHex(pageInfo.addrPhys);
         this.printf("%s\n", s);
     }
 
@@ -1899,9 +1899,9 @@ export default class DebuggerX86 extends DbgLib {
 
         let sDump;
         if (fGate) {
-            sDump = "seg=" + Str.toHexWord(seg.base & 0xffff) + " off=" + Str.toHexWord(seg.limit);
+            sDump = "seg=" + StrLib.toHexWord(seg.base & 0xffff) + " off=" + StrLib.toHexWord(seg.limit);
         } else {
-            sDump = "base=" + Str.toHex(seg.base, this.cchAddr) + " limit=" + this.getLimitString(seg.limit);
+            sDump = "base=" + StrLib.toHex(seg.base, this.cchAddr) + " limit=" + this.getLimitString(seg.limit);
         }
         /*
          * When we dump the EXT word, we mask off the LIMIT1619 and BASE2431 bits, because those have already
@@ -2008,7 +2008,7 @@ export default class DebuggerX86 extends DbgLib {
                 let sInstruction = this.getInstruction(dbgAddrNew, sComment, nSequence);
 
                 if (dbgAddr.nDebugCycles != null) {
-                    sInstruction += " (" + dbgAddr.nDebugCycles + "," + Str.toHexByte(dbgAddr.nDebugState) + ")";
+                    sInstruction += " (" + dbgAddr.nDebugCycles + "," + StrLib.toHexByte(dbgAddr.nDebugState) + ")";
                 }
 
                 if (!aFilters.length || sInstruction.indexOf(aFilters[0]) >= 0) {
@@ -2084,7 +2084,7 @@ export default class DebuggerX86 extends DbgLib {
                 v |= this.cpu.probeAddr(addr + 2, 2) << 16;
             }
             if (sDump) sDump += '\n';
-            sDump += Str.toHexWord(off) + ' ' + Str.pad(sField + ':', 11) + Str.toHex(v, cch);
+            sDump += StrLib.toHexWord(off) + ' ' + StrLib.pad(sField + ':', 11) + StrLib.toHex(v, cch);
         }
         if (type == X86.DESC.ACC.TYPE.TSS386) {
             let iPort = 0;
@@ -2095,7 +2095,7 @@ export default class DebuggerX86 extends DbgLib {
             while (off < seg.offMax && iPort < 0x3ff) {
                 addr = seg.base + off;
                 v = this.cpu.probeAddr(addr, 2);
-                sDump += "\n" + Str.toHexWord(off) + " ports " + Str.toHexWord(iPort) + '-' + Str.toHexWord(iPort+15) + ": " + Str.toBinBytes(v, 2);
+                sDump += "\n" + StrLib.toHexWord(off) + " ports " + StrLib.toHexWord(iPort) + '-' + StrLib.toHexWord(iPort+15) + ": " + StrLib.toBinBytes(v, 2);
                 iPort += 16;
                 off += 2;
             }
@@ -2143,7 +2143,7 @@ export default class DebuggerX86 extends DbgLib {
         if (aEnable.length) {
             this.bitsMessage = MESSAGE.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
             for (let m in MESSAGE.NAMES) {
-                if (Usr.indexOf(aEnable, m) >= 0) {
+                if (UsrLib.indexOf(aEnable, m) >= 0) {
                     this.bitsMessage += MESSAGE.NAMES[m];
                     this.printf("%s messages enabled\n", m);
                 }
@@ -2184,10 +2184,10 @@ export default class DebuggerX86 extends DbgLib {
         let i;
         sReg = sReg.toUpperCase();
         if (off == null) {
-            i = Usr.indexOf(DebuggerX86.REGS, sReg);
+            i = UsrLib.indexOf(DebuggerX86.REGS, sReg);
         } else {
-            i = Usr.indexOf(DebuggerX86.REGS, sReg.substr(off, 3));
-            if (i < 0) i = Usr.indexOf(DebuggerX86.REGS, sReg.substr(off, 2));
+            i = UsrLib.indexOf(DebuggerX86.REGS, sReg.substr(off, 3));
+            if (i < 0) i = UsrLib.indexOf(DebuggerX86.REGS, sReg.substr(off, 2));
         }
         return i;
     }
@@ -2252,7 +2252,7 @@ export default class DebuggerX86 extends DbgLib {
                 break;
             }
         }
-        return cch? Str.toHex(n, cch) : "??";
+        return cch? StrLib.toHex(n, cch) : "??";
     }
 
     /**
@@ -2428,7 +2428,7 @@ export default class DebuggerX86 extends DbgLib {
         i = 0;
         while ((i = s.indexOf('#', i)) >= 0) {
             sChar = s.substr(i+1, 2);
-            b = Str.parseInt(sChar, 16);
+            b = StrLib.parseInt(sChar, 16);
             if (b != null && b >= 32 && b < 127) {
                 sReplace = sChar + " '" + String.fromCharCode(b) + "'";
                 s = s.replace('#' + sChar, sReplace);
@@ -2481,7 +2481,7 @@ export default class DebuggerX86 extends DbgLib {
     message(sMessage, bitsMessage = 0)
     {
         if ((bitsMessage & MESSAGE.ADDR) && this.cpu) {
-            let sAddress = Str.sprintf(" at %s (%%%X)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
+            let sAddress = StrLib.sprintf(" at %s (%%%X)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
@@ -3761,7 +3761,7 @@ export default class DebuggerX86 extends DbgLib {
                     cch = 8;
                     off = this.getLong(dbgAddr, 4);
                 }
-                sOperand = '[' + Str.toHex(off, cch) + ']';
+                sOperand = '[' + StrLib.toHex(off, cch) + ']';
             }
             else if (typeMode == DebuggerX86.TYPE_IMMREL) {
                 if (typeSize == DebuggerX86.TYPE_BYTE) {
@@ -3771,7 +3771,7 @@ export default class DebuggerX86 extends DbgLib {
                     disp = this.getWord(dbgAddr, true);
                 }
                 off = (dbgAddr.off + disp) & (dbgAddr.fData32? -1 : 0xffff);
-                sOperand = Str.toHex(off, dbgAddr.fData32? 8: 4);
+                sOperand = StrLib.toHex(off, dbgAddr.fData32? 8: 4);
                 let aSymbol = this.findSymbol(this.newAddr(off, dbgAddr.sel));
                 if (aSymbol[0]) sOperand += " (" + aSymbol[0] + ")";
             }
@@ -3805,13 +3805,13 @@ export default class DebuggerX86 extends DbgLib {
         let sLine = this.toHexAddr(dbgAddrIns) + ' ';
         if (dbgAddrIns.addr !== X86.ADDR_INVALID && dbgAddr.addr !== X86.ADDR_INVALID) {
             do {
-                sBytes += Str.toHex(this.getByte(dbgAddrIns, 1), 2);
+                sBytes += StrLib.toHex(this.getByte(dbgAddrIns, 1), 2);
                 if (dbgAddrIns.addr === X86.ADDR_INVALID || dbgAddrIns.addr == undefined) break;
             } while (dbgAddrIns.addr != dbgAddr.addr);
         }
 
-        sLine += Str.pad(sBytes, dbgAddrIns.fAddr32? 25 : 17);
-        sLine += Str.pad(sOpcode, 8);
+        sLine += StrLib.pad(sBytes, dbgAddrIns.fAddr32? 25 : 17);
+        sLine += StrLib.pad(sOpcode, 8);
         if (sOperands) sLine += ' ' + sOperands;
 
         if (this.cpu.model < DebuggerX86.CPUS[typeCPU]) {
@@ -3819,12 +3819,12 @@ export default class DebuggerX86 extends DbgLib {
         }
 
         if (sComment && fComplete) {
-            sLine = Str.pad(sLine, dbgAddrIns.fAddr32? 74 : 62) + ';' + sComment;
+            sLine = StrLib.pad(sLine, dbgAddrIns.fAddr32? 74 : 62) + ';' + sComment;
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence >= 0? '=' + nSequence.toString() : "");
             } else {
                 let nCycles = this.cpu.getCycles();
-                sLine += "cycles=" + nCycles.toString() + " cs=" + Str.toHex(this.cpu.nChecksum);
+                sLine += "cycles=" + nCycles.toString() + " cs=" + StrLib.toHex(this.cpu.nChecksum);
             }
         }
 
@@ -3891,20 +3891,20 @@ export default class DebuggerX86 extends DbgLib {
              * or TYPE_OUT designation (and TYPE_BOTH, as the name implies, includes both).
              */
             if (type & DebuggerX86.TYPE_BOTH) {
-                sOperand = Str.toHex(this.getByte(dbgAddr, 1), 2);
+                sOperand = StrLib.toHex(this.getByte(dbgAddr, 1), 2);
             }
             break;
         case DebuggerX86.TYPE_SBYTE:
-            sOperand = Str.toHex((this.getByte(dbgAddr, 1) << 24) >> 24, dbgAddr.fData32? 8: 4);
+            sOperand = StrLib.toHex((this.getByte(dbgAddr, 1) << 24) >> 24, dbgAddr.fData32? 8: 4);
             break;
         case DebuggerX86.TYPE_WORD:
             if (dbgAddr.fData32) {
-                sOperand = Str.toHex(this.getLong(dbgAddr, 4));
+                sOperand = StrLib.toHex(this.getLong(dbgAddr, 4));
                 break;
             }
             /* falls through */
         case DebuggerX86.TYPE_SHORT:
-            sOperand = Str.toHex(this.getShort(dbgAddr, 2), 4);
+            sOperand = StrLib.toHex(this.getShort(dbgAddr, 2), 4);
             break;
         case DebuggerX86.TYPE_FARP:
             dbgAddr = this.newAddr(this.getWord(dbgAddr, true), this.getShort(dbgAddr, 2), undefined, dbgAddr.type, dbgAddr.fData32, dbgAddr.fAddr32);
@@ -3913,7 +3913,7 @@ export default class DebuggerX86 extends DbgLib {
             if (aSymbol[0]) sOperand += " (" + aSymbol[0] + ")";
             break;
         default:
-            sOperand = "imm(" + Str.toHexWord(type) + ')';
+            sOperand = "imm(" + StrLib.toHexWord(type) + ')';
             break;
         }
         return sOperand;
@@ -3990,7 +3990,7 @@ export default class DebuggerX86 extends DbgLib {
          */
         if (!bMod && bBase == 5) {
             if (sOperand) sOperand += '+';
-            sOperand += Str.toHex(this.getLong(dbgAddr, 4));
+            sOperand += StrLib.toHex(this.getLong(dbgAddr, 4));
         }
         return sOperand;
     }
@@ -4029,21 +4029,21 @@ export default class DebuggerX86 extends DbgLib {
             if (bMod == 1) {
                 disp = this.getByte(dbgAddr, 1);
                 if (!(disp & 0x80)) {
-                    sOperand += '+' + Str.toHex(disp, 2);
+                    sOperand += '+' + StrLib.toHex(disp, 2);
                 }
                 else {
                     disp = ((disp << 24) >> 24);
-                    sOperand += '-' + Str.toHex(-disp, 2);
+                    sOperand += '-' + StrLib.toHex(-disp, 2);
                 }
             }
             else if (bMod == 2) {
                 if (sOperand) sOperand += '+';
                 if (!dbgAddr.fAddr32) {
                     disp = this.getShort(dbgAddr, 2);
-                    sOperand += Str.toHex(disp, 4);
+                    sOperand += StrLib.toHex(disp, 4);
                 } else {
                     disp = this.getLong(dbgAddr, 4);
-                    sOperand += Str.toHex(disp);
+                    sOperand += StrLib.toHex(disp);
                 }
             }
             sOperand = '[' + sOperand + ']';
@@ -4177,7 +4177,7 @@ export default class DebuggerX86 extends DbgLib {
      */
     getLimitString(l)
     {
-        return Str.toHex(l, (l & ~0xffff)? 8 : 4);
+        return StrLib.toHex(l, (l & ~0xffff)? 8 : 4);
     }
 
     /**
@@ -4205,7 +4205,7 @@ export default class DebuggerX86 extends DbgLib {
      */
     getSegOutput(seg, fProt)
     {
-        return seg.sName + '=' + Str.toHex(seg.sel, 4) + (fProt? '[' + Str.toHex(seg.base, this.cchAddr) + ',' + this.getLimitString(seg.limit) + ']' : "");
+        return seg.sName + '=' + StrLib.toHex(seg.sel, 4) + (fProt? '[' + StrLib.toHex(seg.base, this.cchAddr) + ',' + this.getLimitString(seg.limit) + ']' : "");
     }
 
     /**
@@ -4220,7 +4220,7 @@ export default class DebuggerX86 extends DbgLib {
      */
     getDTROutput(sName, sel, addr, addrLimit)
     {
-        return sName + '=' + (sel != null? Str.toHex(sel, 4) : "") + '[' + Str.toHex(addr, this.cchAddr) + ',' + Str.toHex(addrLimit - addr, 4) + ']';
+        return sName + '=' + (sel != null? StrLib.toHex(sel, 4) : "") + '[' + StrLib.toHex(addr, this.cchAddr) + ',' + StrLib.toHex(addrLimit - addr, 4) + ']';
     }
 
     /**
@@ -4285,7 +4285,7 @@ export default class DebuggerX86 extends DbgLib {
             this.getSegOutput(this.cpu.segES, fProt) + ' ';
 
         if (fProt) {
-            let sTR = "TR=" + Str.toHex(this.cpu.segTSS.sel, 4);
+            let sTR = "TR=" + StrLib.toHex(this.cpu.segTSS.sel, 4);
             let sA20 = "A20=" + (this.bus.getA20()? "ON " : "OFF ");
             if (this.cpu.model < X86.MODEL_80386) {
                 sTR = '\n' + sTR;
@@ -4443,7 +4443,7 @@ export default class DebuggerX86 extends DbgLib {
                     }
                     symbol['p'] = dbgAddr.addr;
                 }
-                Usr.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
+                UsrLib.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
             }
             if (sAnnotation) symbol['a'] = sAnnotation.replace(/''/g, "\"");
         }
@@ -4536,7 +4536,7 @@ export default class DebuggerX86 extends DbgLib {
             let len = symbolTable.len;
             if (sel == 0x30) sel = 0x28;        // TODO: Remove this hack once we're able to differentiate Windows 95 ring 0 code and data
             if (sel == dbgAddr.sel && offSymbol >= off && offSymbol < off + len || addr != null && addrSymbol >= addr && addrSymbol < addr + len) {
-                let result = Usr.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
+                let result = UsrLib.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
                 if (result >= 0) {
                     this.returnSymbol(iTable, result, aSymbol);
                 }
@@ -4636,7 +4636,7 @@ export default class DebuggerX86 extends DbgLib {
     {
         let s = "debugger commands:";
         for (let sCommand in DebuggerX86.COMMANDS) {
-            s += '\n  ' + Str.pad(sCommand, 7) + DebuggerX86.COMMANDS[sCommand];
+            s += '\n  ' + StrLib.pad(sCommand, 7) + DebuggerX86.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -4765,7 +4765,7 @@ export default class DebuggerX86 extends DbgLib {
             if (!dbgAddr) return;
         }
 
-        sAddr = (dbgAddr.off == null? sAddr : Str.toHexWord(dbgAddr.off));
+        sAddr = (dbgAddr.off == null? sAddr : StrLib.toHexWord(dbgAddr.off));
 
         if (sParm == 'c') {
             if (dbgAddr.off == null) {
@@ -5026,9 +5026,9 @@ export default class DebuggerX86 extends DbgLib {
                 let b = this.getByte(dbgAddr, 1);
                 data |= (b << (iByte++ << 3));
                 if (iByte == size) {
-                    sData += (this.nBase == 8? Str.toOct(data, size * 3) : Str.toHex(data, size * 2));
+                    sData += (this.nBase == 8? StrLib.toOct(data, size * 3) : StrLib.toHex(data, size * 2));
                     sData += (size == 1? (i == 9? '-' : ' ') : "  ");
-                    if (cchBinary) sChars += Str.toBin(data, cchBinary);
+                    if (cchBinary) sChars += StrLib.toBin(data, cchBinary);
                     data = iByte = 0;
                 }
                 if (!cchBinary) sChars += (b >= 32 && b < 127? String.fromCharCode(b) : (fASCII? '' : '.'));
@@ -5038,7 +5038,7 @@ export default class DebuggerX86 extends DbgLib {
             if (fASCII) {
                 sDump += sChars;
             } else {
-                sDump += sAddr + "  " + sData + Str.pad(sChars, sChars.length + i * 3 + 1, true);
+                sDump += sAddr + "  " + sData + StrLib.pad(sChars, sChars.length + i * 3 + 1, true);
             }
         }
         if (sDump) this.print(sDump.replace(/\s*$/, "") + "\n");
@@ -5068,7 +5068,7 @@ export default class DebuggerX86 extends DbgLib {
          */
         if (asArgs[0] == "ev") {
             for (let i = 0; i < 256; i++) {
-                let sHex = Str.toHex(i, 2);
+                let sHex = StrLib.toHex(i, 2);
                 if (i && !(i & 0xf)) this.incAddr(dbgAddr, 64);
                 this.setShort(dbgAddr, (i << 8) | sHex.charCodeAt(0), 2, true);
                 this.setShort(dbgAddr, (i << 8) | sHex.charCodeAt(1), 2, true);
@@ -5107,7 +5107,7 @@ export default class DebuggerX86 extends DbgLib {
                 for (let j = 1; j < sArg.length; j++) {
                     let ch = sArg[j];
                     if (ch == sArg[0]) break;
-                    asNum.push(Str.toHexByte(ch.charCodeAt(0)));
+                    asNum.push(StrLib.toHexByte(ch.charCodeAt(0)));
                 }
                 asNum.push("");
                 asArgs.splice(i, 1, ...asNum);
@@ -5211,7 +5211,7 @@ export default class DebuggerX86 extends DbgLib {
      */
     doIf(sCmd, fQuiet)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         if (!this.parseExpression(sCmd)) {
             if (!fQuiet) this.printf("false: %s\n", sCmd);
             return false;
@@ -5362,7 +5362,7 @@ export default class DebuggerX86 extends DbgLib {
                 if (aSymbol[0]) {
                     sDelta = "";
                     nDelta = dbgAddr.off - aSymbol[1];
-                    if (nDelta) sDelta = " + " + Str.toHex(nDelta, 0, true);
+                    if (nDelta) sDelta = " + " + StrLib.toHex(nDelta, 0, true);
                     s = aSymbol[0] + " (" + this.toHexOffset(aSymbol[1], dbgAddr.sel) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
                     sSymbol = s;
@@ -5370,7 +5370,7 @@ export default class DebuggerX86 extends DbgLib {
                 if (aSymbol.length > 4 && aSymbol[4]) {
                     sDelta = "";
                     nDelta = aSymbol[5] - dbgAddr.off;
-                    if (nDelta) sDelta = " - " + Str.toHex(nDelta, 0, true);
+                    if (nDelta) sDelta = " - " + StrLib.toHex(nDelta, 0, true);
                     s = aSymbol[4] + " (" + this.toHexOffset(aSymbol[5], dbgAddr.sel) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
                     if (!sSymbol) sSymbol = s;
@@ -5988,12 +5988,12 @@ export default class DebuggerX86 extends DbgLib {
         for (let i = 0; i < 8; i++) {
             let a = fpu.readFPUStack(i);
             if (!a) break;
-            let sValue = Str.pad(a[2].toFixed(15), 24, true);
+            let sValue = StrLib.pad(a[2].toFixed(15), 24, true);
             this.printf("ST%d: %s  %x,%x  [%d:%s]\n", i, sValue, a[4], a[3], a[0], DebuggerX86.FPU_TAGS[a[1]]);
-            // this.printf("  REG%d %s%s%s\n", a[0], Str.toBin(a[7], 16), Str.toBin(a[6]), Str.toBin(a[5]));
+            // this.printf("  REG%d %s%s%s\n", a[0], StrLib.toBin(a[7], 16), StrLib.toBin(a[6]), StrLib.toBin(a[5]));
         }
         this.printf("    B3SSS210ESPUOZDI               xxxIRRPPIxPUOZDI\n");
-        this.printf("SW: %s (%#06x)  CW: %s (%#06x)\n", Str.toBin(wStatus, 16), wStatus, Str.toBin(wControl, 16), wControl);
+        this.printf("SW: %s (%#06x)  CW: %s (%#06x)\n", StrLib.toBin(wStatus, 16), wStatus, StrLib.toBin(wControl, 16), wControl);
     }
 
     /**
@@ -6030,7 +6030,7 @@ export default class DebuggerX86 extends DbgLib {
      */
     doPrint(sCmd)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         let a = sCmd.match(/^(['"])(.*?)\1$/);
         if (!a) {
             this.parseExpression(sCmd, false);
@@ -6275,7 +6275,7 @@ export default class DebuggerX86 extends DbgLib {
                 let a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = Str.pad(sCall, dbgAddrCall.fAddr32? 74 : 62) + ';' + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, dbgAddrCall.fAddr32? 74 : 62) + ';' + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;
@@ -6313,7 +6313,7 @@ export default class DebuggerX86 extends DbgLib {
             nCycles = nCount;
             nCount = 1;
         }
-        Web.onCountRepeat(
+        WebLib.onCountRepeat(
             nCount,
             function onCountStep() {
                 return dbg.setBusy(true) && dbg.stepCPU(nCycles, fRegs, false);
@@ -6483,7 +6483,7 @@ export default class DebuggerX86 extends DbgLib {
              * associated with a breakpoint), we can no longer perform simplistic splitting.
              *
              *      asArgs = sCmd.split(chSep);
-             *      for (let i = 0; i < asArgs.length; i++) asArgs[i] = Str.trim(asArgs[i]);
+             *      for (let i = 0; i < asArgs.length; i++) asArgs[i] = StrLib.trim(asArgs[i]);
              *
              * We may now split on semi-colons ONLY if they are outside a quoted sequence.
              *
@@ -6517,7 +6517,7 @@ export default class DebuggerX86 extends DbgLib {
                      * Recall that substring() accepts starting (inclusive) and ending (exclusive)
                      * indexes, whereas substr() accepts a starting index and a length.  We need the former.
                      */
-                    let s = Str.trim(sCmd.substring(iPrev, i));
+                    let s = StrLib.trim(sCmd.substring(iPrev, i));
                     if (!fQuoted) s = s.toLowerCase();
                     asArgs.push(s);
                     iPrev = i + 1;
@@ -6692,7 +6692,7 @@ export default class DebuggerX86 extends DbgLib {
                         break;
                     }
                     this.printf("%s version %s (%s%s%s%s%s)\n", (APPNAME || "PCx86"), APPVERSION, this.cpu.model, (COMPILED? ",RELEASE" : (DEBUG? ",DEBUG" : ",NODEBUG")), (PREFETCH? ",PREFETCH" : ",NOPREFETCH"), (TYPEDARRAYS? ",TYPEDARRAYS" : (BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")), (BACKTRACK? ",BACKTRACK" : ",NOBACKTRACK"));
-                    this.printf("%s\n", Web.getUserAgent());
+                    this.printf("%s\n", WebLib.getUserAgent());
                     break;
                 case 'x':
                     this.doExecOptions(asArgs);
@@ -7958,6 +7958,6 @@ if (DEBUGGER) {
     /*
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
-    Web.onInit(DebuggerX86.init);
+    WebLib.onInit(DebuggerX86.init);
 
 }   // endif DEBUGGER

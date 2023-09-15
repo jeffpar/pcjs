@@ -100,7 +100,7 @@ import { DEBUG, SITEURL, globals } from "./defines.js";
  * @class Web
  * @unrestricted
  */
-export default class Web {
+export default class WebLib {
     /**
      * getResource(sURL, type, fAsync, done, progress)
      *
@@ -145,7 +145,7 @@ export default class Web {
          * value of the global variable 'LOCALDISKS'; since imported values are immutable, we must look at the global
          * variable, since that's the only one that *might* have been changed at runtime.
          */
-        if (globals.window['LOCALDISKS'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
+        if (globals.window['LOCALDISKS'] && WebLib.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
         } else {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
@@ -241,17 +241,17 @@ export default class Web {
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
-            if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
+            if (resource != null && (request.status == 200 || !request.status && resource.length && WebLib.getHostProtocol() == "file:")) {
                 Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
                 Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
-                if (!request.status && !Web.fAdBlockerWarning) {
+                if (!request.status && !WebLib.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
-                        Web.fAdBlockerWarning = true;
-                        Component.alertUser("PCjs was unable to perform a cross-origin resource request to '" + match[1] + "'.\n\nIf you're running an ad blocker, try adding '" + Web.getHostOrigin() + "' to your whitelist (or find a smarter ad blocker).");
+                        WebLib.fAdBlockerWarning = true;
+                        Component.alertUser("PCjs was unable to perform a cross-origin resource request to '" + match[1] + "'.\n\nIf you're running an ad blocker, try adding '" + WebLib.getHostOrigin() + "' to your whitelist (or find a smarter ad blocker).");
                     }
                 }
             }
@@ -507,7 +507,7 @@ export default class Web {
         dataPost[ReportAPI.QUERY.TYPE] = sType;
         dataPost[ReportAPI.QUERY.DATA] = sReport;
         let sReportURL = (sHostName? sHostName : SITEURL) + ReportAPI.ENDPOINT;
-        Web.getResource(sReportURL, dataPost, true);
+        WebLib.getResource(sReportURL, dataPost, true);
     }
 
     /**
@@ -583,21 +583,21 @@ export default class Web {
      */
     static hasLocalStorage()
     {
-        if (Web.fLocalStorage == null) {
+        if (WebLib.fLocalStorage == null) {
             let f = false;
             if (globals.window.localStorage) {
                 try {
-                    globals.window.localStorage.setItem(Web.sLocalStorageTest, Web.sLocalStorageTest);
-                    f = (globals.window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
-                    globals.window.localStorage.removeItem(Web.sLocalStorageTest);
+                    globals.window.localStorage.setItem(WebLib.sLocalStorageTest, WebLib.sLocalStorageTest);
+                    f = (globals.window.localStorage.getItem(WebLib.sLocalStorageTest) == WebLib.sLocalStorageTest);
+                    globals.window.localStorage.removeItem(WebLib.sLocalStorageTest);
                 } catch (e) {
-                    Web.printLocalStorageError(e);
+                    WebLib.printLocalStorageError(e);
                     f = false;
                 }
             }
-            Web.fLocalStorage = f;
+            WebLib.fLocalStorage = f;
         }
-        return Web.fLocalStorage;
+        return WebLib.fLocalStorage;
     }
 
     /**
@@ -621,11 +621,11 @@ export default class Web {
     static getLocalStorageItem(sKey)
     {
         let sValue;
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 sValue = globals.window.localStorage.getItem(sKey);
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return sValue;
@@ -640,12 +640,12 @@ export default class Web {
      */
     static setLocalStorageItem(sKey, sValue)
     {
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 globals.window.localStorage.setItem(sKey, sValue);
                 return true;
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return false;
@@ -658,11 +658,11 @@ export default class Web {
      */
     static removeLocalStorageItem(sKey)
     {
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 globals.window.localStorage.removeItem(sKey);
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
     }
@@ -675,13 +675,13 @@ export default class Web {
     static getLocalStorageKeys()
     {
         let a = [];
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 for (let i = 0, c = globals.window.localStorage.length; i < c; i++) {
                     a.push(globals.window.localStorage.key(i));
                 }
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return a;
@@ -729,7 +729,7 @@ export default class Web {
     static isUserAgent(s)
     {
         if (globals.window.navigator) {
-            let userAgent = Web.getUserAgent();
+            let userAgent = WebLib.getUserAgent();
             /*
              * Here's one case where we have to be careful with Component, because when isUserAgent() is called by
              * the init code below, component.js hasn't been loaded yet.  The simple solution for now is to remove the call.
@@ -757,13 +757,13 @@ export default class Web {
      */
     static isMobile(sDevice)
     {
-        let sMobile = Web.getURLParm("mobile");
+        let sMobile = WebLib.getURLParm("mobile");
         if (sMobile) return sMobile == "true";
-        if (Web.isUserAgent("Mobi")) {
+        if (WebLib.isUserAgent("Mobi")) {
             if (!sDevice) return true;
             let fInvert = sDevice[0] == '!';
             if (fInvert) sDevice = sDevice.substr(1);
-            return Web.isUserAgent(sDevice) != fInvert;
+            return WebLib.isUserAgent(sDevice) != fInvert;
         }
         return false;
     }
@@ -787,8 +787,8 @@ export default class Web {
     static findProperty(obj, sProp, sSuffix)
     {
         if (obj) {
-            for (let i = 0; i < Web.asBrowserPrefixes.length; i++) {
-                let sName = Web.asBrowserPrefixes[i];
+            for (let i = 0; i < WebLib.asBrowserPrefixes.length; i++) {
+                let sName = WebLib.asBrowserPrefixes[i];
                 if (sSuffix) {
                     sName += sSuffix;
                     let sEvent = sProp + sName;
@@ -817,10 +817,10 @@ export default class Web {
      */
     static getURLParm(sParm)
     {
-        if (!Web.parmsURL) {
-            Web.parmsURL = Web.parseURLParms();
+        if (!WebLib.parmsURL) {
+            WebLib.parmsURL = WebLib.parseURLParms();
         }
-        return Web.parmsURL[sParm] || Web.parmsURL[sParm.toLowerCase()];
+        return WebLib.parmsURL[sParm] || WebLib.parmsURL[sParm.toLowerCase()];
     }
 
     /**
@@ -892,7 +892,7 @@ export default class Web {
                 link.click();
                 document.body.removeChild(link);
                 sAlert = 'Check your Downloads folder for ' + sFileName + '.';
-                // if (Web.isUserAgent("Chrome")) {
+                // if (WebLib.isUserAgent("Chrome")) {
                 //     sAlert += '\n\nIn Chrome, after clicking OK, you may ALSO have to select the "Window" menu, choose "Downloads", and then locate this download and select "Keep".';
                 //     sAlert += '\n\nThis is part of Chrome\'s "Security By Jumping Through Extra Hoops" technology, which is much easier for Google to implement than actually checking for something malicious.';
                 //     sAlert += '\n\nAnd for the record, there is nothing malicious on the PCjs website.';
@@ -1002,7 +1002,7 @@ export default class Web {
      * addPageEvent(sEvent, fn)
      *
      * For 'load', 'unload', and 'pageshow' events, most callers should NOT use this function, but instead use
-     * Web.onInit(), Web.onShow(), and Web.onExit(), respectively.
+     * WebLib.onInit(), WebLib.onShow(), and WebLib.onExit(), respectively.
      *
      * The only components that should still use addPageEvent() are THIS component (see the bottom of this file)
      * and components that need to capture other events (eg, the 'resize' event in the Video component).
@@ -1026,7 +1026,7 @@ export default class Web {
      */
     static onInit(fn)
     {
-        Web.aPageEventHandlers['init'].push(fn);
+        WebLib.aPageEventHandlers['init'].push(fn);
     }
 
     /**
@@ -1038,7 +1038,7 @@ export default class Web {
      */
     static onShow(fn)
     {
-        Web.aPageEventHandlers['show'].push(fn);
+        WebLib.aPageEventHandlers['show'].push(fn);
     }
 
     /**
@@ -1060,7 +1060,7 @@ export default class Web {
      */
     static onExit(fn)
     {
-        Web.aPageEventHandlers['exit'].push(fn);
+        WebLib.aPageEventHandlers['exit'].push(fn);
     }
 
     /**
@@ -1071,14 +1071,14 @@ export default class Web {
      */
     static doPageEvent(sEvent, browser)
     {
-        let afn = Web.aPageEventHandlers[sEvent];
-        if (afn && Web.fPageEventsEnabled) {
+        let afn = WebLib.aPageEventHandlers[sEvent];
+        if (afn && WebLib.fPageEventsEnabled) {
             try {
                 for (let i = 0; i < afn.length; i++) {
                     afn[i]();
                 }
             } catch (e) {
-                Web.onError("An unexpected error occurred: " + e.message);
+                WebLib.onError("An unexpected error occurred: " + e.message);
             }
         }
     }
@@ -1090,13 +1090,13 @@ export default class Web {
      */
     static enablePageEvents(fEnable)
     {
-        if (!Web.fPageEventsEnabled && fEnable) {
-            Web.fPageEventsEnabled = true;
-            if (Web.fPageLoaded) Web.doPageEvent('init');
-            if (Web.fPageShowed) Web.doPageEvent('show');
+        if (!WebLib.fPageEventsEnabled && fEnable) {
+            WebLib.fPageEventsEnabled = true;
+            if (WebLib.fPageLoaded) WebLib.doPageEvent('init');
+            if (WebLib.fPageShowed) WebLib.doPageEvent('show');
             return;
         }
-        Web.fPageEventsEnabled = fEnable;
+        WebLib.fPageEventsEnabled = fEnable;
     }
 
     /**
@@ -1104,8 +1104,8 @@ export default class Web {
      */
     static doPageInit()
     {
-        Web.fPageLoaded = true;
-        Web.doPageEvent('init', true);
+        WebLib.fPageLoaded = true;
+        WebLib.doPageEvent('init', true);
     }
 
     /**
@@ -1113,8 +1113,8 @@ export default class Web {
      */
     static doPageShow()
     {
-        Web.fPageShowed = true;
-        Web.doPageEvent('show', true);
+        WebLib.fPageShowed = true;
+        WebLib.doPageEvent('show', true);
     }
 
     /**
@@ -1122,7 +1122,7 @@ export default class Web {
      */
     static doPageExit()
     {
-        Web.doPageEvent('exit', true);
+        WebLib.doPageEvent('exit', true);
     }
 
     /**
@@ -1130,9 +1130,9 @@ export default class Web {
      */
     static doPageReset()
     {
-        if (Web.fPageLoaded) {
-            Web.fPageLoaded = false;
-            Web.fPageShowed = false;
+        if (WebLib.fPageLoaded) {
+            WebLib.fPageLoaded = false;
+            WebLib.fPageShowed = false;
             /*
              * TODO: Anything else?
              */
@@ -1140,20 +1140,20 @@ export default class Web {
     }
 }
 
-Web.parmsURL = null;            // initialized on first call to parseURLParms()
+WebLib.parmsURL = null;            // initialized on first call to parseURLParms()
 
-Web.aPageEventHandlers = {
+WebLib.aPageEventHandlers = {
     'init': [],                 // list of 'load' handlers
     'show': [],                 // list of 'pageshow' handlers
     'exit': []                  // list of 'unload' handlers (although we prefer to use 'beforeunload' if possible)
 };
 
-Web.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
+WebLib.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
 
-Web.fPageLoaded = false;        // set once the page's first 'load' event has occurred
-Web.fPageShowed = false;        // set once the page's first 'pageshow' event has occurred
-Web.fPageEventsEnabled = true;  // default is true, set to false (or true) by enablePageEvents()
-Web.fAdBlockerWarning = false;
+WebLib.fPageLoaded = false;        // set once the page's first 'load' event has occurred
+WebLib.fPageShowed = false;        // set once the page's first 'pageshow' event has occurred
+WebLib.fPageEventsEnabled = true;  // default is true, set to false (or true) by enablePageEvents()
+WebLib.fAdBlockerWarning = false;
 
 /**
  * fLocalStorage
@@ -1162,18 +1162,18 @@ Web.fAdBlockerWarning = false;
  *
  * @type {boolean|null}
  */
-Web.fLocalStorage = null;
+WebLib.fLocalStorage = null;
 
 /**
  * TODO: Is there any way to get the Closure Compiler to stop inlining this string?  This isn't cutting it.
  *
  * @const {string}
  */
-Web.sLocalStorageTest = "PCjs.localStorage";
+WebLib.sLocalStorageTest = "PCjs.localStorage";
 
-Web.addPageEvent('load', Web.doPageInit);
-Web.addPageEvent('pageshow', Web.doPageShow);
-Web.addPageEvent(Web.isUserAgent("iOS")? 'pagehide' : (Web.isUserAgent("Opera")? 'unload' : 'beforeunload'), Web.doPageExit);
+WebLib.addPageEvent('load', WebLib.doPageInit);
+WebLib.addPageEvent('pageshow', WebLib.doPageShow);
+WebLib.addPageEvent(WebLib.isUserAgent("iOS")? 'pagehide' : (WebLib.isUserAgent("Opera")? 'unload' : 'beforeunload'), WebLib.doPageExit);
 
 /*
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override DEBUG with a "debug=false" embedded in
@@ -1184,10 +1184,10 @@ Web.addPageEvent(Web.isUserAgent("iOS")? 'pagehide' : (Web.isUserAgent("Opera")?
  * it's low priority, because it would only affect machines that explicitly request un-COMPILED code, and there are very
  * few such machines (eg, /blog/_posts/2015/2015-01-17-pcjs-uncompiled.md).
  *
- * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
+ * Deal with WebLib.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */
 if (DEBUG) {
-    let debug = Web.getURLParm("debug");
+    let debug = WebLib.getURLParm("debug");
     if (debug == "false") {
         globals.window['DEBUG'] = false;
     }

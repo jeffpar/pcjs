@@ -11,8 +11,8 @@ import MemoryX86 from "./memory.js";
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Usr from "../../../modules/v2/usrlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import UsrLib from "../../../modules/v2/usrlib.js";
 import { BACKTRACK, DEBUGGER, MAXDEBUG, PAGEBLOCKS } from "./defines.js";
 
 
@@ -133,7 +133,7 @@ export default class BusX86 extends Component {
     /*
      * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
      */
-    static BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
+    static BlockInfo = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
 
     /**
      * BusX86(cpu, dbg)
@@ -479,7 +479,7 @@ export default class BusX86 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 let btmod = (BACKTRACK && block.modBackTrack(false)? 1 : 0);
-                info.aBlocks.push(Usr.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, 0, btmod, block.type));
+                info.aBlocks.push(UsrLib.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, 0, btmod, block.type));
                 info.cBlocks++;
             }
             iBlock++;
@@ -1161,7 +1161,7 @@ export default class BusX86 extends Component {
                 }
                 if (!fSymbol || fNearest) {
                     if (bto.obj.idComponent) {
-                        return bto.obj.idComponent + '+' + Str.toHex(bto.off + off, 0, true);
+                        return bto.obj.idComponent + '+' + StrLib.toHex(bto.off + off, 0, true);
                     }
                 }
             }
@@ -1331,7 +1331,7 @@ export default class BusX86 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortInputNotify[port] !== undefined) {
-                    Component.warning("input port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("input port " + StrLib.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
@@ -1473,7 +1473,7 @@ export default class BusX86 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortOutputNotify[port] !== undefined) {
-                    Component.warning("output port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("output port " + StrLib.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];

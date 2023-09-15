@@ -20,7 +20,7 @@ import StrLib        from "../../machines/modules/v2/strlib.js";
 import Device        from "../../machines/modules/v3/device.js";
 import CharSet       from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo      from "../../machines/pcx86/modules/v3/diskinfo.js";
-import Defines       from "../../machines/modules/v3/defines.js";
+import { MAXDEBUG }  from "../../machines/modules/v3/defines.js";
 import MESSAGE       from "../../machines/modules/v3/message.js";
 import { device, existsDir, existsFile, getDiskSector, getTargetValue, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
 import pcjslib       from "../modules/pcjslib.js";
@@ -2586,7 +2586,7 @@ function readInput(stdin, stdout)
 
     stdin.on("data", function(data) {
         let code = data.charCodeAt(0);
-        if (Defines.MAXDEBUG) {
+        if (MAXDEBUG) {
             printf("key(s): %j\n", data);
         }
         if (code == 0x04 && !debugMode) {               // check for CTRL-D when NOT in debug mode
@@ -2602,7 +2602,7 @@ function readInput(stdin, stdout)
             data = functionKeys[data] || data;
             data = data.replace(/\x7f/g, "\b");         // convert DEL to BS
             if (machine.kbd) {
-                if (Defines.MAXDEBUG) {
+                if (MAXDEBUG) {
                     printf("injecting key(s): %s\n", data);
                 }
                 machine.kbd.injectKeys.call(machine.kbd, data, 0);

@@ -14,7 +14,7 @@ import MESSAGE from "./message.js";
 import ROMx86 from "./rom.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Web from "../../../modules/v2/weblib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DESKPRO386, MAXDEBUG } from "./defines.js";
 
 /**
@@ -657,4 +657,4 @@ CompaqController.ACCESS = [CompaqController.readByte, CompaqController.writeByte
 /*
  * Initialize all the RAM modules on the page.
  */
-Web.onInit(RAMx86.init);
+WebLib.onInit(RAMx86.init);

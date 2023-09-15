@@ -29,8 +29,8 @@ import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DiskAPI from "../../../../modules/v2/diskapi.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { DEBUG } from "./defines.js";
 
 /**
@@ -92,7 +92,7 @@ export default class DiskPDP11 extends Component {
      */
     constructor(controller, drive, mode)
     {
-        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, MESSAGE.DISK);
+        super("Disk", {'id': controller.idMachine + ".disk" + StrLib.toHex(++DiskPDP11.nDisks, 4)}, MESSAGE.DISK);
 
         /*
          * Route all non-Debugger messages (eg, print() calls) through this.controller
@@ -234,7 +234,7 @@ export default class DiskPDP11 extends Component {
 
         this.sDiskName = sDiskName;
         this.sDiskPath = sDiskPath;
-        this.sDiskFile = Str.getBaseName(sDiskPath);
+        this.sDiskFile = StrLib.getBaseName(sDiskPath);
 
         var disk = this;
         this.fnNotify = fnNotify;
@@ -259,7 +259,7 @@ export default class DiskPDP11 extends Component {
              * JSON-encoded disk image, so we load it as-is; otherwise, we ask our server-side disk image
              * converter to return the corresponding JSON-encoded data.
              */
-            var sDiskExt = Str.getExtension(sDiskPath);
+            var sDiskExt = StrLib.getExtension(sDiskPath);
             if (sDiskExt == DumpAPI.FORMAT.JSON || sDiskExt == DumpAPI.FORMAT.JSON_GZ) {
                 sDiskURL = encodeURI(sDiskPath);
             } else {
@@ -289,13 +289,13 @@ export default class DiskPDP11 extends Component {
                 if (!sDiskPath.indexOf("http:") || !sDiskPath.indexOf("ftp:") || ["dsk", "ima", "img", "360", "720", "12", "144"].indexOf(sDiskExt) >= 0) {
                     sDiskParm = DumpAPI.QUERY.DISK;
                     sSizeParm = '&' + DumpAPI.QUERY.MBHD + "=0";
-                } else if (Str.endsWith(sDiskPath, '/')) {
+                } else if (StrLib.endsWith(sDiskPath, '/')) {
                     sDiskParm = DumpAPI.QUERY.DIR;
                 }
-                sDiskURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sDiskParm + '=' + encodeURIComponent(sDiskPath) + (this.fRemovable ? "" : sSizeParm) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
+                sDiskURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sDiskParm + '=' + encodeURIComponent(sDiskPath) + (this.fRemovable ? "" : sSizeParm) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
             }
         }
-        return !!Web.getResource(sDiskURL, null, true, function(sURL, sResponse, nErrorCode) {
+        return !!WebLib.getResource(sDiskURL, null, true, function(sURL, sResponse, nErrorCode) {
             disk.doneLoad(sURL, sResponse, nErrorCode);
         });
     }
@@ -398,7 +398,7 @@ export default class DiskPDP11 extends Component {
                  * TODO: Provide some UI for turning write-protection on/off for disks at will, and provide
                  * an XML-based solution (ie, a per-disk XML configuration option) for controlling it as well.
                  */
-                var sBaseName = Str.getBaseName(this.sDiskFile, true).toLowerCase();
+                var sBaseName = StrLib.getBaseName(this.sDiskFile, true).toLowerCase();
                 if (sBaseName.indexOf("-readonly") > 0) {
                     this.fWriteProtected = true;
                 } else {
@@ -1198,7 +1198,7 @@ export default class DiskPDP11 extends Component {
             for (var i = 0; i < cbSector; i++) {
                 if ((i % 16) === 0) {
                     if (sDump) sDump += sBytes + ' ' + sChars + '\n';
-                    sDump += Str.toHex(i, 4) + ": ";
+                    sDump += StrLib.toHex(i, 4) + ": ";
                     sBytes = sChars = "";
                 }
                 if ((i % 4) === 0) {
@@ -1207,7 +1207,7 @@ export default class DiskPDP11 extends Component {
                 }
                 var b = dw & 0xff;
                 dw >>>= 8;
-                sBytes += Str.toHex(b, 2) + (i % 16 == 7? "-" : " ");
+                sBytes += StrLib.toHex(b, 2) + (i % 16 == 7? "-" : " ");
                 sChars += (b >= 32 && b < 128? String.fromCharCode(b) : ".");
             }
             if (sBytes) sDump += sBytes + ' ' + sChars;

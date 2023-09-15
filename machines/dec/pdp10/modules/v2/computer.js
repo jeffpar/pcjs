@@ -11,10 +11,10 @@ import BusPDP10 from "./bus.js";
 import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
 import UserAPI from "../../../../modules/v2/userapi.js";
-import Usr from "../../../../modules/v2/usrlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import UsrLib from "../../../../modules/v2/usrlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG, LICENSE, globals } from "./defines.js";
 
 /**
@@ -92,7 +92,7 @@ export default class ComputerPDP10 extends Component {
         this.parmsMachine = null;
         this.setMachineParms(parmsMachine);
 
-        this.fAutoPower = this.getMachineParm('autoPower', parmsComputer, Str.TYPES.BOOLEAN);
+        this.fAutoPower = this.getMachineParm('autoPower', parmsComputer, StrLib.TYPES.BOOLEAN);
 
         /*
          * nPowerChange is 0 while the power state is stable, 1 while power is transitioning to "on",
@@ -234,7 +234,7 @@ export default class ComputerPDP10 extends Component {
             this.setReady();
         } else {
             var cmp = this;
-            Web.getResource(/** @type {string} */ (sStatePath), null, true, function doneStateLoad(sURL, sResource, nErrorCode) {
+            WebLib.getResource(/** @type {string} */ (sStatePath), null, true, function doneStateLoad(sURL, sResource, nErrorCode) {
                 cmp.finishStateLoad(sURL, sResource, nErrorCode);
             });
         }
@@ -304,13 +304,13 @@ export default class ComputerPDP10 extends Component {
      * then attempt to load the 'state' resource to obtain the actual state.
      *
      * TODO: It would be nice if we could tell the Closure Compiler that when a specific type parameter
-     * (eg, Str.TYPES.NUMBER) is used, the return value will be that type; unfortunately, every caller
+     * (eg, StrLib.TYPES.NUMBER) is used, the return value will be that type; unfortunately, every caller
      * must coerce their own return value.
      *
      * @this {ComputerPDP10}
      * @param {string} sParm
      * @param {Object|null} [parmsComponent]
-     * @param {number} [type] (from Str.TYPES)
+     * @param {number} [type] (from StrLib.TYPES)
      * @param {*} [defaultValue]
      * @returns {*}
      */
@@ -323,7 +323,7 @@ export default class ComputerPDP10 extends Component {
          * but there are limits to my paranoia.
          */
         var sParmLC = sParm.toLowerCase();
-        var value = Web.getURLParm(sParm) || Web.getURLParm(sParmLC);
+        var value = WebLib.getURLParm(sParm) || WebLib.getURLParm(sParmLC);
         var resources = globals.window['resources'];
         if (value === undefined && this.parmsMachine) value = this.parmsMachine[sParm];
         if (value === undefined && parmsComponent) value = parmsComponent[sParm];
@@ -331,11 +331,11 @@ export default class ComputerPDP10 extends Component {
         if (value === undefined) value = defaultValue;
         if (typeof value == "string" && type) {
             switch(type) {
-            case Str.TYPES.NUMBER:
+            case StrLib.TYPES.NUMBER:
                 value = +value;
                 if (isNaN(/** @type {number} */(value))) value = defaultValue || 0;
                 break;
-            case Str.TYPES.BOOLEAN:
+            case StrLib.TYPES.BOOLEAN:
                 value = (value == "true");
                 break;
             }
@@ -384,7 +384,7 @@ export default class ComputerPDP10 extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.printf(MESSAGE.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
+            this.printf(MESSAGE.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + StrLib.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -508,7 +508,7 @@ export default class ComputerPDP10 extends Component {
                     this.stateFailSafe.unload();
                 }
 
-                this.stateFailSafe.set(ComputerPDP10.STATE_TIMESTAMP, Usr.getTimestamp());
+                this.stateFailSafe.set(ComputerPDP10.STATE_TIMESTAMP, UsrLib.getTimestamp());
                 this.stateFailSafe.store();
 
                 var fValidate = this.resume && !this.fServerState;
@@ -667,7 +667,7 @@ export default class ComputerPDP10 extends Component {
                     if (this.sStatePath && !this.fStateData) {
                         stateComputer.clear();
                         this.resume = ComputerPDP10.RESUME_NONE;
-                        Web.reloadPage();
+                        WebLib.reloadPage();
                     } else {
                         /*
                          * In all other cases, we set fRestoreError, which should trigger a call to
@@ -796,10 +796,10 @@ export default class ComputerPDP10 extends Component {
         //
         // This is all we can realistically do for now.
         //
-        Web.onError("There may be a problem with your " + APPNAME + " machine.");
+        WebLib.onError("There may be a problem with your " + APPNAME + " machine.");
         //
         // if (Component.confirmUser("There may be a problem with your " + APPNAME + " machine.\n\nTo help us diagnose it, click OK to send this " + APPNAME + " machine state to " + SITEURL + ".")) {
-        //     Web.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
+        //     WebLib.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
         // }
         //
     }
@@ -852,12 +852,12 @@ export default class ComputerPDP10 extends Component {
         var stateComputer = new State(this, APPVERSION);
         var stateValidate = new State(this, APPVERSION, ComputerPDP10.STATE_VALIDATE);
 
-        var sTimestamp = Usr.getTimestamp();
+        var sTimestamp = UsrLib.getTimestamp();
         stateValidate.set(ComputerPDP10.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerPDP10.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerPDP10.STATE_VERSION, APPVERSION);
-        stateComputer.set(ComputerPDP10.STATE_HOSTURL, Web.getHostURL());
-        stateComputer.set(ComputerPDP10.STATE_BROWSER, Web.getUserAgent());
+        stateComputer.set(ComputerPDP10.STATE_HOSTURL, WebLib.getHostURL());
+        stateComputer.set(ComputerPDP10.STATE_BROWSER, WebLib.getUserAgent());
 
         /*
          * Always power the CPU "down" first, just to help insure it doesn't ask other components to do anything
@@ -1115,7 +1115,7 @@ export default class ComputerPDP10 extends Component {
              * and since pcjs.org is no longer running a Node web server, we disable the feature for that
              * particular host.
              */
-            if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
+            if (StrLib.endsWith(WebLib.getHostName(), "pcjs.org")) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "Remote user API not available");
                 /*
                  * We could also simply hide the control; eg:
@@ -1175,7 +1175,7 @@ export default class ComputerPDP10 extends Component {
      */
     resetUserID()
     {
-        Web.setLocalStorageItem(ComputerPDP10.STATE_USERID, "");
+        WebLib.setLocalStorageItem(ComputerPDP10.STATE_USERID, "");
         this.sUserID = null;
     }
 
@@ -1190,7 +1190,7 @@ export default class ComputerPDP10 extends Component {
     {
         var sUserID = this.sUserID;
         if (!sUserID) {
-            sUserID = Web.getLocalStorageItem(ComputerPDP10.STATE_USERID);
+            sUserID = WebLib.getLocalStorageItem(ComputerPDP10.STATE_USERID);
             if (sUserID !== undefined) {
                 if (!sUserID && fPrompt) {
                     /*
@@ -1223,15 +1223,15 @@ export default class ComputerPDP10 extends Component {
         this.sUserID = null;
         var fMessages = DEBUG && this.messageEnabled();
         if (fMessages) this.printf("verifyUserID(%s)\n", sUserID);
-        var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
-        var response = Web.getResource(sRequest);
+        var sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
+        var response = WebLib.getResource(sRequest);
         var nErrorCode = response[0];
         var sResponse = response[1];
         if (!nErrorCode && sResponse) {
             try {
                 response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
-                    Web.setLocalStorageItem(ComputerPDP10.STATE_USERID, response.data);
+                    WebLib.setLocalStorageItem(ComputerPDP10.STATE_USERID, response.data);
                     if (fMessages) this.printf("%s updated: %s\n", ComputerPDP10.STATE_USERID, response.data);
                     this.sUserID = response.data;
                 } else {
@@ -1259,7 +1259,7 @@ export default class ComputerPDP10 extends Component {
             if (DEBUG) {
                 this.printf("%s for load: %s\n", ComputerPDP10.STATE_USERID, this.sUserID);
             }
-            sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
+            sStatePath = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
             if (DEBUG) {
                 this.printf("%s unavailable\n", ComputerPDP10.STATE_USERID);
@@ -1330,11 +1330,11 @@ export default class ComputerPDP10 extends Component {
         dataPost[UserAPI.QUERY.USER] = sUserID;
         dataPost[UserAPI.QUERY.STATE] = State.getKey(this, APPVERSION);
         dataPost[UserAPI.QUERY.DATA] = sState;
-        var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
+        var sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT;
         if (!fSync) {
-            Web.getResource(sRequest, dataPost, true);
+            WebLib.getResource(sRequest, dataPost, true);
         } else {
-            var response = Web.getResource(sRequest, dataPost);
+            var response = WebLib.getResource(sRequest, dataPost);
             var sResponse = response[0];
             if (response[1]) {
                 if (sResponse) {
@@ -1412,7 +1412,7 @@ export default class ComputerPDP10 extends Component {
              * TODO: Make this more graceful, so that we can stop using the reloadPage() sledgehammer.
              */
             if (!fSave && this.sStatePath) {
-                Web.reloadPage();
+                WebLib.reloadPage();
                 return;
             }
             if (!fSave) this.fReload = true;
@@ -1573,7 +1573,7 @@ export default class ComputerPDP10 extends Component {
     /**
      * ComputerPDP10.exit()
      *
-     * The Computer is currently the only component that uses an "exit" handler, which Web.onExit() defines as
+     * The Computer is currently the only component that uses an "exit" handler, which WebLib.onExit() defines as
      * either an 'load' or 'beforeunload' handler.  This gives us the opportunity to save the machine state,
      * using our powerOff() function, before the page goes away.
      *
@@ -1649,6 +1649,6 @@ ComputerPDP10.RESUME_DELETE   =  3;  // same as RESUME_PROMPT but discards ALL m
 /*
  * Initialize every Computer on the page.
  */
-Web.onInit(ComputerPDP10.init);
-Web.onShow(ComputerPDP10.show);
-Web.onExit(ComputerPDP10.exit);
+WebLib.onInit(ComputerPDP10.init);
+WebLib.onShow(ComputerPDP10.show);
+WebLib.onExit(ComputerPDP10.exit);

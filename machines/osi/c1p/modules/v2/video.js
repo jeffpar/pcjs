@@ -9,7 +9,7 @@
 
 import Component from "../../../../modules/v2/component.js";
 import MESSAGE from "../../../../modules/v2/message.js";
-import Web from "../../../../modules/v2/weblib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
 /**
@@ -147,7 +147,7 @@ export default class C1PVideo extends Component {
          */
         var i, sEvent, asWebPrefixes = ['', 'moz', 'ms', 'webkit'];
         var fSmoothing = parmsVideo['smoothing'];
-        var sSmoothing = Web.getURLParm('smoothing');
+        var sSmoothing = WebLib.getURLParm('smoothing');
         if (sSmoothing) fSmoothing = (sSmoothing == "true");
         if (fSmoothing != null) {
             for (i = 0; i < asWebPrefixes.length; i++) {
@@ -589,7 +589,7 @@ export default class C1PVideo extends Component {
             eCanvas.setAttribute("autocorrect", "off");
             eCanvas.setAttribute("spellcheck", "false");
 
-            if (Web.getUserAgent().indexOf("MSIE") >= 0) {
+            if (WebLib.getUserAgent().indexOf("MSIE") >= 0) {
                 eCanvas.style.height = (((eVideo.clientWidth * parmsVideo['screenHeight']) / parmsVideo['screenWidth']) | 0) + "px";
                 eVideo['onresize'] = function(eParent, eChild, cx, cy) {
                     return function() {
@@ -630,4 +630,4 @@ export default class C1PVideo extends Component {
 /*
  * Initialize every Video module on the page.
  */
-Web.onInit(C1PVideo.init);
+WebLib.onInit(C1PVideo.init);

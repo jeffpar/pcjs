@@ -11,10 +11,10 @@ import BusX80 from "./bus.js";
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 import UserAPI from "../../../modules/v2/userapi.js";
-import Usr from "../../../modules/v2/usrlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import UsrLib from "../../../modules/v2/usrlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG, LICENSE, MAXDEBUG, TYPEDARRAYS, globals } from "./defines.js";
 
 /**
@@ -245,7 +245,7 @@ export default class ComputerX80 extends Component {
             this.setReady();
         } else {
             let cmp = this;
-            Web.getResource(/** @type {string} */ (sStatePath), null, true, function(sURL, sResource, nErrorCode) {
+            WebLib.getResource(/** @type {string} */ (sStatePath), null, true, function(sURL, sResource, nErrorCode) {
                 cmp.doneLoad(sURL, sResource, nErrorCode);
             });
         }
@@ -330,7 +330,7 @@ export default class ComputerX80 extends Component {
          */
         let resources = globals.window['resources'];
         let sParmLC = sParm.toLowerCase();
-        let value = Web.getURLParm(sParm) || Web.getURLParm(sParmLC);
+        let value = WebLib.getURLParm(sParm) || WebLib.getURLParm(sParmLC);
 
         if (value === undefined && this.parmsMachine) {
             value = this.parmsMachine[sParm];
@@ -383,7 +383,7 @@ export default class ComputerX80 extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.printf(MESSAGE.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
+            this.printf(MESSAGE.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + StrLib.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -503,7 +503,7 @@ export default class ComputerX80 extends Component {
                     this.stateFailSafe.unload();
                 }
 
-                this.stateFailSafe.set(ComputerX80.STATE_TIMESTAMP, Usr.getTimestamp());
+                this.stateFailSafe.set(ComputerX80.STATE_TIMESTAMP, UsrLib.getTimestamp());
                 this.stateFailSafe.store();
 
                 let fValidate = this.resume && !this.fServerState;
@@ -660,7 +660,7 @@ export default class ComputerX80 extends Component {
                     if (this.sStatePath && !this.fStateData) {
                         stateComputer.clear();
                         this.resume = ComputerX80.RESUME_NONE;
-                        Web.reloadPage();
+                        WebLib.reloadPage();
                     } else {
                         /*
                          * In all other cases, we set fRestoreError, which should trigger a call to
@@ -783,10 +783,10 @@ export default class ComputerX80 extends Component {
         //
         // This is all we can realistically do for now.
         //
-        Web.onError("There may be a problem with your " + APPNAME + " machine.");
+        WebLib.onError("There may be a problem with your " + APPNAME + " machine.");
         //
         // if (Component.confirmUser("There may be a problem with your " + APPNAME + " machine.\n\nTo help us diagnose it, click OK to send this " + APPNAME + " machine state to " + SITEURL + ".")) {
-        //     Web.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
+        //     WebLib.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
         // }
         //
     }
@@ -837,12 +837,12 @@ export default class ComputerX80 extends Component {
         let stateComputer = new State(this, APPVERSION);
         let stateValidate = new State(this, APPVERSION, ComputerX80.STATE_VALIDATE);
 
-        let sTimestamp = Usr.getTimestamp();
+        let sTimestamp = UsrLib.getTimestamp();
         stateValidate.set(ComputerX80.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerX80.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerX80.STATE_VERSION, APPVERSION);
-        stateComputer.set(ComputerX80.STATE_HOSTURL, Web.getHostURL());
-        stateComputer.set(ComputerX80.STATE_BROWSER, Web.getUserAgent());
+        stateComputer.set(ComputerX80.STATE_HOSTURL, WebLib.getHostURL());
+        stateComputer.set(ComputerX80.STATE_BROWSER, WebLib.getUserAgent());
 
         /*
          * Always power the CPU "down" first, just to help insure it doesn't ask other components to do anything
@@ -1050,7 +1050,7 @@ export default class ComputerX80 extends Component {
              * and since pcjs.org is no longer running a Node web server, we disable the feature for that
              * particular host.
              */
-            if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
+            if (StrLib.endsWith(WebLib.getHostName(), "pcjs.org")) {
                 this.printf(MESSAGE.DEBUG + MESSAGE.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
@@ -1108,7 +1108,7 @@ export default class ComputerX80 extends Component {
      */
     resetUserID()
     {
-        Web.setLocalStorageItem(ComputerX80.STATE_USERID, "");
+        WebLib.setLocalStorageItem(ComputerX80.STATE_USERID, "");
         this.sUserID = null;
     }
 
@@ -1122,7 +1122,7 @@ export default class ComputerX80 extends Component {
     {
         let sUserID = this.sUserID;
         if (!sUserID) {
-            sUserID = Web.getLocalStorageItem(ComputerX80.STATE_USERID);
+            sUserID = WebLib.getLocalStorageItem(ComputerX80.STATE_USERID);
             if (sUserID !== undefined) {
                 if (!sUserID && fPrompt) {
                     /*
@@ -1155,15 +1155,15 @@ export default class ComputerX80 extends Component {
         this.sUserID = null;
         let fMessages = DEBUG && this.messageEnabled();
         if (fMessages) this.printf("verifyUserID(%s)\n", sUserID);
-        let sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
-        let response = Web.getResource(sRequest);
+        let sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
+        let response = WebLib.getResource(sRequest);
         let nErrorCode = response[0];
         let sResponse = response[1];
         if (!nErrorCode && sResponse) {
             try {
                 response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
-                    Web.setLocalStorageItem(ComputerX80.STATE_USERID, response.data);
+                    WebLib.setLocalStorageItem(ComputerX80.STATE_USERID, response.data);
                     if (fMessages) this.printf("%s updated: %s\n", ComputerX80.STATE_USERID, response.data);
                     this.sUserID = response.data;
                 } else {
@@ -1189,7 +1189,7 @@ export default class ComputerX80 extends Component {
         let sStatePath = null;
         if (this.sUserID) {
             this.printf(MESSAGE.DEBUG + MESSAGE.LOG, "%s for load: %s\n", ComputerX80.STATE_USERID, this.sUserID);
-            sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
+            sStatePath = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
             this.printf(MESSAGE.DEBUG + MESSAGE.LOG, "%s unavailable\n", ComputerX80.STATE_USERID);
         }
@@ -1251,11 +1251,11 @@ export default class ComputerX80 extends Component {
         dataPost[UserAPI.QUERY.USER] = sUserID;
         dataPost[UserAPI.QUERY.STATE] = State.getKey(this, APPVERSION);
         dataPost[UserAPI.QUERY.DATA] = sState;
-        let sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
+        let sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT;
         if (!fSync) {
-            Web.getResource(sRequest, dataPost, true);
+            WebLib.getResource(sRequest, dataPost, true);
         } else {
-            let response = Web.getResource(sRequest, dataPost);
+            let response = WebLib.getResource(sRequest, dataPost);
             let sResponse = response[0];
             if (response[1]) {
                 if (sResponse) {
@@ -1333,7 +1333,7 @@ export default class ComputerX80 extends Component {
              * TODO: Make this more graceful, so that we can stop using the reloadPage() sledgehammer.
              */
             if (!fSave && this.sStatePath) {
-                Web.reloadPage();
+                WebLib.reloadPage();
                 return;
             }
             if (!fSave) this.fReload = true;
@@ -1611,6 +1611,6 @@ ComputerX80.RESUME_DELETE   =  3;  // same as RESUME_PROMPT but discards ALL mac
 /*
  * Initialize every Computer on the page.
  */
-Web.onInit(ComputerX80.init);
-Web.onShow(ComputerX80.show);
-Web.onExit(ComputerX80.exit);
+WebLib.onInit(ComputerX80.init);
+WebLib.onShow(ComputerX80.show);
+WebLib.onExit(ComputerX80.exit);

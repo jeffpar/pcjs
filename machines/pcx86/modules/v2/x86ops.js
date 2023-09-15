@@ -9,7 +9,7 @@
 
 import MESSAGE from "./message.js";
 import X86 from "./x86.js";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 import { BACKTRACK, DEBUG, DEBUGGER, I386 } from "./defines.js";
 
 /**
@@ -4397,7 +4397,7 @@ X86.opInvalid = function()
 X86.opUndefined = function()
 {
     this.setIP(this.opLIP - this.segCS.base);
-    this.setError("Undefined opcode " + Str.toHexByte(this.getByte(this.regLIP)) + " at " + Str.toHexLong(this.regLIP));
+    this.setError("Undefined opcode " + StrLib.toHexByte(this.getByte(this.regLIP)) + " at " + StrLib.toHexLong(this.regLIP));
     this.stopCPU();
 };
 

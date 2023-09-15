@@ -12,9 +12,9 @@ import MemoryX86 from "./memory.js";
 import MESSAGE from "./message.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
-import Str from "../../../modules/v2/strlib.js";
-import Usr from "../../../modules/v2/usrlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import UsrLib from "../../../modules/v2/usrlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
@@ -77,7 +77,7 @@ class Color {
      */
     toString()
     {
-        if (!this.sValue) this.sValue = '#' + Str.toHex(this.rgb[0], 2) + Str.toHex(this.rgb[1], 2) + Str.toHex(this.rgb[2], 2);
+        if (!this.sValue) this.sValue = '#' + StrLib.toHex(this.rgb[0], 2) + StrLib.toHex(this.rgb[1], 2) + StrLib.toHex(this.rgb[2], 2);
         return this.sValue;
     }
 }
@@ -309,7 +309,7 @@ export default class Panel extends Component {
             /*
              * Employ the same gross onresize() hack for IE9/IE10 that we had to use for the Video canvas
              */
-            if (Web.getUserAgent().indexOf("MSIE") >= 0) {
+            if (WebLib.getUserAgent().indexOf("MSIE") >= 0) {
                 this.canvas['onresize'] = function(canvas, cx, cy) {
                     return function onResizeVideo() {
                         canvas.style.height = (((canvas.clientWidth * cy) / cx) | 0) + "px";
@@ -546,7 +546,7 @@ export default class Panel extends Component {
                     x -= rect.x;
                     y -= rect.y;
                     let region = this.busInfo.aRegions[i];
-                    let iBlock = Usr.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), this.busInfo.aBlocks[region.iBlock]);
+                    let iBlock = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), this.busInfo.aBlocks[region.iBlock]);
                     let addr = iBlock * this.bus.nBlockSize;
                     let addrLimit = (iBlock + region.cBlocks) * this.bus.nBlockSize - 1;
 
@@ -689,8 +689,8 @@ export default class Panel extends Component {
 
         for (; iBlock < this.busInfo.cBlocks; iBlock++) {
             let blockInfo = this.busInfo.aBlocks[iBlock];
-            let typeBlock = Usr.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.type), blockInfo);
-            let nBlockCurr = Usr.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), blockInfo);
+            let typeBlock = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.type), blockInfo);
+            let nBlockCurr = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), blockInfo);
             if (typeBlock != typeRegion || nBlockCurr != nBlockPrev + 1) {
                 let cBlocks = iBlock - iBlockRegion;
                 if (cBlocks) {
@@ -724,7 +724,7 @@ export default class Panel extends Component {
     {
         if (DEBUG) this.printf(MESSAGE.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, MemoryX86.TYPE.NAMES[type], cBlocks);
         this.busInfo.aRegions[this.busInfo.cRegions++] = {iBlock: iBlock, cBlocks: cBlocks, type: type};
-        return Usr.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, cBlocks, 0, type);
+        return UsrLib.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, cBlocks, 0, type);
     }
 
     /**
@@ -815,12 +815,12 @@ export default class Panel extends Component {
             if (addr == null) {
                 this.drawText("Mouse over memory to dump");
             } else {
-                this.drawText(Str.toHexLong(addr), null, 0, 1);
+                this.drawText(StrLib.toHexLong(addr), null, 0, 1);
                 for (let iLine = 1; iLine <= 16; iLine++) {
                     let sChars = "";
                     for (let iCol = 1; iCol <= 8; iCol++) {
                         let b = this.bus.getByteDirect(addr++);
-                        this.drawText(Str.toHex(b, 2), null, 1);
+                        this.drawText(StrLib.toHex(b, 2), null, 1);
                         sChars += (b >= 32 && b < 128? String.fromCharCode(b) : ".");
                     }
                     this.drawText(sChars, null, 0, 1);
@@ -967,7 +967,7 @@ export default class Panel extends Component {
                 sValue = nValue.toString();
             } else {
                 sValue = this.nDefaultDigits < 8? "0x" : "";
-                sValue += Str.toHex(nValue, this.nDefaultDigits);
+                sValue += StrLib.toHex(nValue, this.nDefaultDigits);
             }
             this.contextText.fillText(sValue, this.xText, this.yText);
             this.xText += this.cxColumn;
@@ -1115,4 +1115,4 @@ Panel.UPDATES_PER_SECOND = 10;
 /*
  * Initialize every Panel module on the page.
  */
-Web.onInit(Panel.init);
+WebLib.onInit(Panel.init);

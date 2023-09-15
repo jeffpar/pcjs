@@ -11,8 +11,8 @@ import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DiskAPI from "../../../modules/v2/diskapi.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { BACKTRACK, DEBUG, SYMBOLS } from "./defines.js";
 
 /*
@@ -255,7 +255,7 @@ export default class Disk extends Component {
      */
     constructor(controller, drive, mode)
     {
-        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++Disk.nDisks, 4)}, MESSAGE.DISK);
+        super("Disk", {'id': controller.idMachine + ".disk" + StrLib.toHex(++Disk.nDisks, 4)}, MESSAGE.DISK);
 
         this.controller = controller;
 
@@ -516,7 +516,7 @@ export default class Disk extends Component {
 
         this.sDiskName = sDiskName;
         this.sDiskPath = sDiskPath;
-        this.sDiskFile = Str.getBaseName(sDiskPath);
+        this.sDiskFile = StrLib.getBaseName(sDiskPath);
         this.sFormat = "json";
 
         let disk = this;
@@ -555,7 +555,7 @@ export default class Disk extends Component {
              * JSON-encoded disk image, so we load it as-is; otherwise, we ask our server-side disk image
              * converter to return the corresponding JSON-encoded data.
              */
-            let sDiskExt = Str.getExtension(sDiskPath);
+            let sDiskExt = StrLib.getExtension(sDiskPath);
             if (sDiskExt == DumpAPI.FORMAT.JSON || sDiskExt == DumpAPI.FORMAT.JSON_GZ) {
                 if (!sDiskPath.match(/^[A-Z]:/i)) {
                     sDiskURL = encodeURI(sDiskPath);    // don't encode Windows paths (TODO: sufficient?)
@@ -594,15 +594,15 @@ export default class Disk extends Component {
                 //     if (!sDiskPath.indexOf("http:") || !sDiskPath.indexOf("ftp:") || ["dsk", "ima", "img", "360", "720", "12", "144"].indexOf(sDiskExt) >= 0) {
                 //         sDiskParm = DumpAPI.QUERY.DISK;
                 //         sSizeParm = '&' + DumpAPI.QUERY.MBHD + "=0";
-                //     } else if (Str.endsWith(sDiskPath, '/')) {
+                //     } else if (StrLib.endsWith(sDiskPath, '/')) {
                 //         sDiskParm = DumpAPI.QUERY.DIR;
                 //     }
-                //     sDiskURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sDiskParm + '=' + encodeURIComponent(sDiskPath) + (this.fRemovable ? "" : sSizeParm) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
+                //     sDiskURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sDiskParm + '=' + encodeURIComponent(sDiskPath) + (this.fRemovable ? "" : sSizeParm) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
                 // }
             }
         }
         let sProgress = "Loading " + sDiskURL + "...";
-        return !!Web.getResource(sDiskURL, this.sFormat, true, function loadDone(sURL, sResponse, nErrorCode) {
+        return !!WebLib.getResource(sDiskURL, this.sFormat, true, function loadDone(sURL, sResponse, nErrorCode) {
             disk.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
             disk.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
@@ -754,7 +754,7 @@ export default class Disk extends Component {
                  * TODO: Provide some UI for turning write-protection on/off for disks at will, and provide
                  * an XML-based solution (ie, a per-disk XML configuration option) for controlling it as well.
                  */
-                let sBaseName = Str.getBaseName(this.sDiskFile, true).toLowerCase();
+                let sBaseName = StrLib.getBaseName(this.sDiskFile, true).toLowerCase();
                 if (sBaseName.indexOf("-readonly") > 0) {
                     this.fWriteProtected = true;
                 } else {
@@ -1008,7 +1008,7 @@ export default class Disk extends Component {
                                     let file = this.aFileTable[index];
                                     if (!file) {
                                         let desc = fileTable[index];
-                                        file = new FileInfo(this, desc.path, Str.getBaseName(desc.path), +desc.attr, desc.size || 0, desc.module);
+                                        file = new FileInfo(this, desc.path, StrLib.getBaseName(desc.path), +desc.attr, desc.size || 0, desc.module);
                                         this.aFileTable[index] = file;
                                     }
                                     sector.file = file;
@@ -1044,10 +1044,10 @@ export default class Disk extends Component {
         //     let iFile = sector[Disk.SECTOR.FILE_INDEX];
         //     if (iFile !== undefined) {
         //         let file = this.aFileTable[iFile];
-        //         return file.path + "[" + Str.toHex(sector[Disk.SECTOR.FILE_OFFSET], 0, true) + "]";
+        //         return file.path + "[" + StrLib.toHex(sector[Disk.SECTOR.FILE_OFFSET], 0, true) + "]";
         //     }
         // }
-        return sector.file? (sector.file.path + "[" + Str.toHex(sector.offFile, 0, true) + "]") : "unknown";
+        return sector.file? (sector.file.path + "[" + StrLib.toHex(sector.offFile, 0, true) + "]") : "unknown";
     }
 
     /**
@@ -1248,7 +1248,7 @@ export default class Disk extends Component {
         sParms += '&' + DiskAPI.QUERY.CHS + '=' + this.nCylinders + ':' + this.nHeads + ':' + this.nSectors + ':' + this.cbSector;
         sParms += '&' + DiskAPI.QUERY.MACHINE + '=' + this.controller.getMachineID();
         sParms += '&' + DiskAPI.QUERY.USER + '=' + this.controller.getUserID();
-        return Web.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
+        return WebLib.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
     }
 
     /**
@@ -1274,8 +1274,8 @@ export default class Disk extends Component {
             sParms += '&' + DiskAPI.QUERY.MACHINE + '=' + this.controller.getMachineID();
             sParms += '&' + DiskAPI.QUERY.USER + '=' + this.controller.getUserID();
             let disk = this;
-            let sDiskURL = Web.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
-            Web.getResource(sDiskURL, null, fAsync, function(sURL, sResponse, nErrorCode) {
+            let sDiskURL = WebLib.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
+            WebLib.getResource(sDiskURL, null, fAsync, function(sURL, sResponse, nErrorCode) {
                 disk.doneReadRemoteSectors(sURL, sResponse, nErrorCode, [iCylinder, iHead, iSector, nSectors, fAsync, done]);
             });
             return;
@@ -1371,8 +1371,8 @@ export default class Disk extends Component {
             dataPost[DiskAPI.QUERY.USER] = this.controller.getUserID();
             dataPost[DiskAPI.QUERY.DATA] = JSON.stringify(abSectors);
             let disk = this;
-            let sDiskURL = Web.getHostOrigin() + DiskAPI.ENDPOINT;
-            Web.getResource(sDiskURL, dataPost, fAsync, function(sURL, sResponse, nErrorCode) {
+            let sDiskURL = WebLib.getHostOrigin() + DiskAPI.ENDPOINT;
+            WebLib.getResource(sDiskURL, dataPost, fAsync, function(sURL, sResponse, nErrorCode) {
                 disk.doneWriteRemoteSectors(sURL, sResponse, nErrorCode, [iCylinder, iHead, iSector, nSectors, fAsync]);
             });
         }
@@ -1429,8 +1429,8 @@ export default class Disk extends Component {
             sParms += '&' + DiskAPI.QUERY.VOLUME + '=' + this.sDiskPath;
             sParms += '&' + DiskAPI.QUERY.MACHINE + '=' + this.controller.getMachineID();
             sParms += '&' + DiskAPI.QUERY.USER + '=' + this.controller.getUserID();
-            let sDiskURL = Web.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
-            Web.getResource(sDiskURL, null, true);
+            let sDiskURL = WebLib.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
+            WebLib.getResource(sDiskURL, null, true);
             this.fRemote = false;
         }
     }
@@ -2144,7 +2144,7 @@ export default class Disk extends Component {
             for (let i = 0; i < cbSector; i++) {
                 if ((i % 16) === 0) {
                     if (sDump) sDump += sBytes + ' ' + sChars + '\n';
-                    sDump += Str.toHex(i, 4) + ": ";
+                    sDump += StrLib.toHex(i, 4) + ": ";
                     sBytes = sChars = "";
                 }
                 if ((i % 4) === 0) {
@@ -2153,7 +2153,7 @@ export default class Disk extends Component {
                 }
                 let b = dw & 0xff;
                 dw >>>= 8;
-                sBytes += Str.toHex(b, 2) + (i % 16 == 7? "-" : " ");
+                sBytes += StrLib.toHex(b, 2) + (i % 16 == 7? "-" : " ");
                 sChars += (b >= 32 && b < 128? String.fromCharCode(b) : ".");
             }
             if (sBytes) sDump += sBytes + ' ' + sChars;
@@ -2260,12 +2260,12 @@ class FileInfo {
                         }
                     }
                     if (!sSymbol && entryNearest) {
-                        sSymbol = this.module['name'] + '!' + entryNearest[1] + "+" + Str.toHex(cbNearest, 0, true);
+                        sSymbol = this.module['name'] + '!' + entryNearest[1] + "+" + StrLib.toHex(cbNearest, 0, true);
                     }
                     break;
                 }
             }
         }
-        return sSymbol || this.name + '+' + Str.toHex(off, 0, true);
+        return sSymbol || this.name + '+' + StrLib.toHex(off, 0, true);
     }
 }

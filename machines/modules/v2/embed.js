@@ -8,8 +8,8 @@
  */
 
 import MESSAGE from "./message.js";
-import Str from "./strlib.js";
-import Web from "./weblib.js";
+import StrLib from "./strlib.js";
+import WebLib from "./weblib.js";
 import Component from "./component.js";
 import { APPVERSION, PRIVATE, globals } from "./defines.js";
 
@@ -22,8 +22,8 @@ import { APPVERSION, PRIVATE, globals } from "./defines.js";
  * machine component init() handlers.
  *
  * Also, to prevent those init() handlers from running prematurely, we must disable all page
- * notification events at the start of the embedding process (Web.enablePageEvents(false)) and
- * re-enable them at the end (Web.enablePageEvents(true)).
+ * notification events at the start of the embedding process (WebLib.enablePageEvents(false)) and
+ * re-enable them at the end (WebLib.enablePageEvents(true)).
  */
 var fAsync = true;
 var cAsyncMachines = 0;
@@ -73,7 +73,7 @@ function loadXML(sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fReso
         parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fResolve, display, done);
     };
     display("Loading " + sXMLFile + "...");
-    Web.getResource(sXMLFile, null, fAsync, doneLoadXML);
+    WebLib.getResource(sXMLFile, null, fAsync, doneLoadXML);
 }
 
 /**
@@ -194,7 +194,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
          * Supposedly, the IE XML DOM parser will throw an exception, but I haven't tested that, and unless all other
          * browsers do that, that's not helpful.
          *
-         * The best I can do at this stage (assuming Web.getResource() didn't drop any error information on the floor)
+         * The best I can do at this stage (assuming WebLib.getResource() didn't drop any error information on the floor)
          * is verify that the requested resource "looks like" valid XML (in other words, it begins with a '<').
          */
         let xmlDoc = null;
@@ -327,7 +327,7 @@ function resolveXML(sURL, sXML, display, done)
         };
 
         display("Loading " + sRefFile + "...");
-        Web.getResource(sRefFile, null, fAsync, doneReadXML);
+        WebLib.getResource(sRefFile, null, fAsync, doneReadXML);
         return;
     }
     done(sURL, sXML, "");
@@ -357,7 +357,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
     let doneMachine = function() {
         Component.assert(cAsyncMachines > 0);
         if (!--cAsyncMachines) {
-            if (fAsync) Web.enablePageEvents(true);
+            if (fAsync) WebLib.enablePageEvents(true);
         }
     };
 
@@ -384,7 +384,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
         return fSuccess;
     }
 
-    if (Web.getURLParm('debugger') == "true" && sXMLFile.indexOf("/debugger") < 0) {
+    if (WebLib.getURLParm('debugger') == "true" && sXMLFile.indexOf("/debugger") < 0) {
         sXMLFile = sXMLFile.replace("/machine.xml", "/debugger/machine.xml");
     }
 
@@ -418,7 +418,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
             let aeWarning = (eMachine && Component.getElementsByClass("machine-warning", "", eMachine));
             eWarning = (aeWarning && aeWarning[0]) || eMachine;
         }
-        if (eWarning) eWarning.innerHTML = Str.escapeHTML(sMessage);
+        if (eWarning) eWarning.innerHTML = StrLib.escapeHTML(sMessage);
     };
 
     try {
@@ -616,7 +616,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
  */
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("C1Pjs", "osi/c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
 }
 
@@ -632,7 +632,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PCx86", "pcx86", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -648,7 +648,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PCx80", "pcx80", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -664,7 +664,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PDPjs", "dec/pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -680,7 +680,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PDPjs", "dec/pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -748,7 +748,7 @@ globals.window['embedPDP10']  = embedPDP10;
 globals.window['embedPDP11']  = embedPDP11;
 globals.window['commandMachine'] = commandMachine;
 
-globals.window['enableEvents'] = Web.enablePageEvents;
-globals.window['sendEvent']    = Web.doPageEvent;
+globals.window['enableEvents'] = WebLib.enablePageEvents;
+globals.window['sendEvent']    = WebLib.doPageEvent;
 
 export { embedC1P, embedPCx86, embedPCx80, embedPDP10, embedPDP11, commandMachine, globals };

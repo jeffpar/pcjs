@@ -14,8 +14,8 @@ import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DiskAPI from "../../../modules/v2/diskapi.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { DRIVE_CTRLS, DRIVE_TYPES } from "./driveinfo.js";
 import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG, globals } from "./defines.js";
 
@@ -149,7 +149,7 @@ export default class HDC extends Component {
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
-        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
+        this.fLocalDisks = (!WebLib.isMobile() && 'FileReader' in globals.window);
 
         /*
          * The remainder of HDC initialization now takes place in our initBus() handler.
@@ -217,7 +217,7 @@ export default class HDC extends Component {
                         if (i >= 0) sDiskName = sDiskName.substr(0, i);
                         sDiskName += ".img";
                         if (DEBUG) hdc.printf("saving disk %s...\n", sDiskName);
-                        let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
+                        let sAlert = WebLib.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {
                         hdc.printf(MESSAGE.NOTICE, "Hard drive %d is not available.\n", iDrive);
@@ -950,7 +950,7 @@ export default class HDC extends Component {
             this.printf("loading \"%s\"\n", sDiskName);
         }
         let disk = drive.disk || new Disk(this, drive, drive.mode);
-        sDiskPath = Web.redirectResource(sDiskPath);
+        sDiskPath = WebLib.redirectResource(sDiskPath);
         disk.load(sDiskName, sDiskPath, null, this.doneLoadDisk);
         return false;
     }
@@ -2754,7 +2754,7 @@ export default class HDC extends Component {
         let readChunk = function(iChunk, offChunk, lenChunk, offBuffer) {
             nChunks++;
             if (copyChunk(null, iChunk, offChunk, lenChunk, offBuffer)) return;
-            Web.getResource(Str.sprintf("%s/x%05d", drive.sDiskPath, iChunk), "arraybuffer", true, function(url, data, error) {
+            WebLib.getResource(StrLib.sprintf("%s/x%05d", drive.sDiskPath, iChunk), "arraybuffer", true, function(url, data, error) {
                 if (data && !error) {
                     copyChunk(data, iChunk, offChunk, lenChunk, offBuffer);
                     return;
@@ -3700,4 +3700,4 @@ HDC.aATCPortOutputSecondary = {
 /*
  * Initialize every Hard Drive Controller (HDC) module on the page.
  */
-Web.onInit(HDC.init);
+WebLib.onInit(HDC.init);

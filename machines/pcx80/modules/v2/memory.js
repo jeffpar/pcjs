@@ -9,7 +9,7 @@
 
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 import { BYTEARRAYS, DEBUG, DEBUGGER, TYPEDARRAYS } from "./defines.js";
 
 /**
@@ -383,7 +383,7 @@ export default class MemoryX80 {
     printAddr(sMessage)
     {
         if (DEBUG && this.dbg) {
-            this.dbg.printf(MESSAGE.MEM, "%s %d\n", sMessage, (this.addr != null? ('%' + Str.toHex(this.addr)) : '#' + this.id));
+            this.dbg.printf(MESSAGE.MEM, "%s %d\n", sMessage, (this.addr != null? ('%' + StrLib.toHex(this.addr)) : '#' + this.id));
         }
     }
 

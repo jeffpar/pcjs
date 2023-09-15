@@ -17,8 +17,8 @@ import CharSet from "./charset.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 
 /*
@@ -755,8 +755,8 @@ export class Card extends Controller {
                  * the extended bits of certain registers, so that we don't have to "mentally" concatenate them.
                  */
                 let reg = (aRegs === this.regCRTData)? this.getCRTCReg(i) : aRegs[i];
-                let sRegName = (asRegs? asRegs[i] : sName.substr(1) + Str.toDec(i, 3));
-                s += Str.sprintf("%s[%02X]: %-12s %*X%s (%*d)\n", sName, i, sRegName, (asRegs? 4 : 6), reg, (i === iReg? '*' : ' '), (asRegs? 4 : 6), reg);
+                let sRegName = (asRegs? asRegs[i] : sName.substr(1) + StrLib.toDec(i, 3));
+                s += StrLib.sprintf("%s[%02X]: %-12s %*X%s (%*d)\n", sName, i, sRegName, (asRegs? 4 : 6), reg, (i === iReg? '*' : ' '), (asRegs? 4 : 6), reg);
             }
             this.dbg.printf("%s", s);
         }
@@ -875,12 +875,12 @@ export class Card extends Controller {
 
                 let s = asArgs[i];
                 if (!i) {
-                    idw = Str.parseInt(s, 16);
+                    idw = StrLib.parseInt(s, 16);
                     continue;
                 }
 
                 let ch = s.charAt(0);
-                j = Str.parseInt(s.substr(1), 16);
+                j = StrLib.parseInt(s.substr(1), 16);
 
                 switch(ch) {
                 case 'l':
@@ -912,10 +912,10 @@ export class Card extends Controller {
 
             let sDump = "";
             for (i = 0; i < l; i++) {
-                let sData = Str.toHex(this.addrBuffer + idw) + ":";
+                let sData = StrLib.toHex(this.addrBuffer + idw) + ":";
                 for (j = 0; j < n && idw < this.adwMemory.length; j++) {
                     let dw = this.adwMemory[idw++];
-                    sData += ' ' + ((p < 0)? Str.toHex(dw, 8) : Str.toBin((dw >> (p << 3)), 8));
+                    sData += ' ' + ((p < 0)? StrLib.toHex(dw, 8) : StrLib.toBin((dw >> (p << 3)), 8));
                 }
                 if (fColAdjust) idw += w - n;
                 sDump += sData + "\n";
@@ -2452,7 +2452,7 @@ export default class VideoX86 extends Component {
         this.fStyleCanvasFullScreen = false;
         if (canvas) {
             canvas.style.backgroundColor = this.colorScreen;
-            this.fStyleCanvasFullScreen = document.fullscreenEnabled || Web.isUserAgent("Edge/");   // formerly fGecko = Web.isUserAgent("Gecko/");
+            this.fStyleCanvasFullScreen = document.fullscreenEnabled || WebLib.isUserAgent("Edge/");   // formerly fGecko = WebLib.isUserAgent("Gecko/");
         }
         if (container) container.style.backgroundColor = this.colorScreen;
 
@@ -2469,10 +2469,10 @@ export default class VideoX86 extends Component {
          * the default property name and value, and leave it to setDimensions() to do the actual setting.
          */
         let fSmoothing = parmsVideo['smoothing'];
-        let sSmoothing = Web.getURLParm('smoothing');
+        let sSmoothing = WebLib.getURLParm('smoothing');
         if (sSmoothing) fSmoothing = (sSmoothing == "true");
         this.fSmoothing = fSmoothing;
-        this.sSmoothing = Web.findProperty(this.contextScreen, 'imageSmoothingEnabled');
+        this.sSmoothing = WebLib.findProperty(this.contextScreen, 'imageSmoothingEnabled');
 
         /*
          * initBus() will determine touch-screen support; for now, just record values and set defaults.
@@ -2544,17 +2544,17 @@ export default class VideoX86 extends Component {
          */
         this.container = container;
         if (this.container) {
-            sProp = Web.findProperty(container, 'requestFullscreen') || Web.findProperty(container, 'requestFullScreen');
+            sProp = WebLib.findProperty(container, 'requestFullscreen') || WebLib.findProperty(container, 'requestFullScreen');
             if (sProp) {
                 this.container.doFullScreen = container[sProp];
-                sEvent = Web.findProperty(document, 'on', 'fullscreenchange');
+                sEvent = WebLib.findProperty(document, 'on', 'fullscreenchange');
                 if (sEvent) {
-                    let sFullScreen = Web.findProperty(document, 'fullscreenElement') || Web.findProperty(document, 'fullScreenElement');
+                    let sFullScreen = WebLib.findProperty(document, 'fullscreenElement') || WebLib.findProperty(document, 'fullScreenElement');
                     document.addEventListener(sEvent, function onFullScreenChange() {
                         video.notifyFullScreen(document[sFullScreen] != null);
                     }, false);
                 }
-                sEvent = Web.findProperty(document, 'on', 'fullscreenerror');
+                sEvent = WebLib.findProperty(document, 'on', 'fullscreenerror');
                 if (sEvent) {
                     document.addEventListener(sEvent, function onFullScreenError() {
                         video.notifyFullScreen();
@@ -2573,12 +2573,12 @@ export default class VideoX86 extends Component {
             this.inputScreen.onblur = function onBlurScreen() {
                 return video.onFocusChange(false);
             };
-            this.inputScreen.lockPointer = (sProp = Web.findProperty(this.inputScreen, 'requestPointerLock')) && this.inputScreen[sProp];
-            this.inputScreen.unlockPointer = (sProp = Web.findProperty(this.inputScreen, 'exitPointerLock')) && this.inputScreen[sProp];
+            this.inputScreen.lockPointer = (sProp = WebLib.findProperty(this.inputScreen, 'requestPointerLock')) && this.inputScreen[sProp];
+            this.inputScreen.unlockPointer = (sProp = WebLib.findProperty(this.inputScreen, 'exitPointerLock')) && this.inputScreen[sProp];
             if (this.inputScreen.lockPointer) {
-                sEvent = Web.findProperty(document, 'on', 'pointerlockchange');
+                sEvent = WebLib.findProperty(document, 'on', 'pointerlockchange');
                 if (sEvent) {
-                    let sPointerLock = Web.findProperty(document, 'pointerLockElement');
+                    let sPointerLock = WebLib.findProperty(document, 'pointerLockElement');
                     document.addEventListener(sEvent, function onPointerLockChange() {
                         let fLocked = !!(sPointerLock && document[sPointerLock] === video.inputScreen);
                         video.notifyPointerLocked(fLocked);
@@ -2590,9 +2590,9 @@ export default class VideoX86 extends Component {
         this.sFileURL = parmsVideo['fontROM'];
 
         if (this.sFileURL) {
-            let sFileExt = Str.getExtension(this.sFileURL);
+            let sFileExt = StrLib.getExtension(this.sFileURL);
             if (sFileExt != "json") {
-                this.sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFileURL + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
+                this.sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFileURL + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
             }
         }
 
@@ -2654,7 +2654,7 @@ export default class VideoX86 extends Component {
         }
 
         /*
-         * Moved this from the constructor (and changed Web.getURLParm() to cmp.getMachineParm()),
+         * Moved this from the constructor (and changed WebLib.getURLParm() to cmp.getMachineParm()),
          * so that the flicker setting can be easily overridden from the page, not just from the URL.
          */
         this.opacityFlicker = (1 - (cmp.getMachineParm('flicker', this.parmsVideo) || 0)).toString();
@@ -2754,7 +2754,7 @@ export default class VideoX86 extends Component {
 
         if (this.sFileURL) {
             let sProgress = "Loading " + this.sFileURL + "...";
-            Web.getResource(this.sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(this.sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 video.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
                 video.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
@@ -4597,7 +4597,7 @@ export default class VideoX86 extends Component {
         /*
          * The colors for cell backgrounds and cursor elements must be converted to CSS color strings.
          */
-        font.aCSSColors[iColor] = Str.sprintf("#%02X%02X%02X", rgbColor[0], rgbColor[1], rgbColor[2]);
+        font.aCSSColors[iColor] = StrLib.sprintf("#%02X%02X%02X", rgbColor[0], rgbColor[1], rgbColor[2]);
         font.aRGBColors[iColor] = rgbColor;
         font.aCanvas[iColor] = canvasFont;
         return true;
@@ -7206,7 +7206,7 @@ export default class VideoX86 extends Component {
     {
         let b = (this.cardEGA.regDACData[this.cardEGA.regDACAddr] >> this.cardEGA.regDACShift) & 0x3f;
         if (!addrFrom || this.messageEnabled()) {
-            this.printIO(Card.DAC.DATA.PORT, undefined, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", b, true);
+            this.printIO(Card.DAC.DATA.PORT, undefined, addrFrom, "DAC.DATA[" + StrLib.toHexByte(this.cardEGA.regDACAddr) + "][" + StrLib.toHexByte(this.cardEGA.regDACShift) + "]", b, true);
         }
         this.cardEGA.regDACShift += 6;
         if (this.cardEGA.regDACShift > 12) {
@@ -7228,7 +7228,7 @@ export default class VideoX86 extends Component {
     {
         let dw = this.cardEGA.regDACData[this.cardEGA.regDACAddr];
         if (!addrFrom || this.messageEnabled()) {
-            this.printIO(Card.DAC.DATA.PORT, bOut, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", undefined, true);
+            this.printIO(Card.DAC.DATA.PORT, bOut, addrFrom, "DAC.DATA[" + StrLib.toHexByte(this.cardEGA.regDACAddr) + "][" + StrLib.toHexByte(this.cardEGA.regDACShift) + "]", undefined, true);
         }
         let dwNew = (dw & ~(0x3f << this.cardEGA.regDACShift)) | ((bOut & 0x3f) << this.cardEGA.regDACShift);
         if (dw !== dwNew) {
@@ -7931,7 +7931,7 @@ export default class VideoX86 extends Component {
              * The other reason it's good to keep this particular hack limited to IE9/IE10 is that most other
              * browsers don't actually support an 'onresize' handler on anything but the window object.
              */
-            if (Web.getUserAgent().indexOf("MSIE") >= 0) {
+            if (WebLib.getUserAgent().indexOf("MSIE") >= 0) {
                 element['onresize'] = function(eParent, eChild, cx, cy) {
                     return function onResizeVideo() {
                         eChild.style.height = (((eParent.clientWidth * cy) / cx) | 0) + "px";
@@ -7943,17 +7943,17 @@ export default class VideoX86 extends Component {
             /*
              * The following is a related hack that allows the user to force the screen to use a particular aspect
              * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
-             * until we figure out a better UI.  And note that we use our Web.addPageEvent() helper function to make
+             * until we figure out a better UI.  And note that we use our WebLib.addPageEvent() helper function to make
              * sure we don't trample any other 'onresize' handler(s) attached to the window object.
              */
-            let aspect = +(Web.getURLParm('aspect') || parmsVideo['aspect']);
+            let aspect = +(WebLib.getURLParm('aspect') || parmsVideo['aspect']);
 
             /*
              * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
              * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
              */
             if (aspect && aspect >= 0.3 && aspect <= 3.33) {
-                Web.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
+                WebLib.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
                     return function onResizeWindow() {
                         /*
                          * Since aspectRatio is the target width/height, we have:
@@ -8047,7 +8047,7 @@ export default class VideoX86 extends Component {
                     textarea.style.fontSize = ((textarea.clientWidth * 0.01875)|0) + "px";
                 };
                 onResizeTextArea();
-                Web.addPageEvent('resize', onResizeTextArea);
+                WebLib.addPageEvent('resize', onResizeTextArea);
             }
 
             /*
@@ -8665,4 +8665,4 @@ VideoX86.aVGAPortOutput = {
 /*
  * Initialize every Video module on the page.
  */
-Web.onInit(VideoX86.init);
+WebLib.onInit(VideoX86.init);

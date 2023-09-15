@@ -12,8 +12,8 @@
 
 import MemoryPDP11 from "./memory.js";
 import MESSAGE from "./message.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Usr from "../../../../modules/v2/usrlib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import UsrLib from "../../../../modules/v2/usrlib.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import { DEBUGGER, MAXDEBUG, PDP11, WORDBUS } from "./defines.js";
@@ -31,7 +31,7 @@ import { DEBUGGER, MAXDEBUG, PDP11, WORDBUS } from "./defines.js";
  * @property {BitField} btmod
  * @property {BitField} type
  */
-var BlockInfoPDP11 = /** @type {BlockInfo} */ (Usr.defineBitFields({num:20, count:8, btmod:1, type:3}));
+var BlockInfoPDP11 = /** @type {BlockInfo} */ (UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3}));
 
 /**
  * BusInfo object definition (returned by scanMemory())
@@ -516,7 +516,7 @@ export default class BusPDP11 extends Component {
             var block = this.aBusBlocks[iBlock];
             info.cbTotal += block.size;
             if (block.size) {
-                info.aBlocks.push(/** @type {BlockInfo} */ (Usr.initBitFields(BlockInfoPDP11, iBlock, 0, 0, block.type)));
+                info.aBlocks.push(/** @type {BlockInfo} */ (UsrLib.initBitFields(BlockInfoPDP11, iBlock, 0, 0, block.type)));
                 info.cBlocks++;
             }
             iBlock++;
@@ -964,7 +964,7 @@ export default class BusPDP11 extends Component {
         for (var addr = start; addr <= end; addr += 2) {
             var off = addr & BusPDP11.IOPAGE_MASK;
             if (this.aIOHandlers[off] !== undefined) {
-                Component.warning("I/O address already registered: " + Str.toHexLong(addr));
+                Component.warning("I/O address already registered: " + StrLib.toHexLong(addr));
                 return false;
             }
             var s = sName || "unknown";

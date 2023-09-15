@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Str from "./strlib.js";
+import StrLib from "./strlib.js";
 
 /**
  * @typedef {Object} BitField
@@ -20,10 +20,15 @@ import Str from "./strlib.js";
  */
 
 /**
- * @class Usr
+ * @class UsrLib
  * @unrestricted
  */
-export default class Usr {
+export default class UsrLib {
+
+    static aMonthDays = [
+        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+    ];
+
     /**
      * binarySearch(a, v, fnCompare)
      *
@@ -69,7 +74,7 @@ export default class Usr {
      */
     static binaryInsert(a, v, fnCompare)
     {
-        let index = Usr.binarySearch(a, v, fnCompare);
+        let index = UsrLib.binarySearch(a, v, fnCompare);
         if (index < 0) {
             a.splice(-(index + 1), 0, v);
         }
@@ -83,7 +88,7 @@ export default class Usr {
     static getTimestamp()
     {
         let date = new Date();
-        return Str.sprintf("%T", date);
+        return StrLib.sprintf("%T", date);
     }
 
     /**
@@ -105,7 +110,7 @@ export default class Usr {
      */
     static getMonthDays(nMonth, nYear)
     {
-        let nDays = Usr.aMonthDays[nMonth - 1];
+        let nDays = UsrLib.aMonthDays[nMonth - 1];
         if (nDays == 28) {
             if ((nYear % 4) === 0 && ((nYear % 100) || (nYear % 400) === 0)) {
                 nDays++;
@@ -164,11 +169,11 @@ export default class Usr {
      *
      * Prepares a bit field definition for use with getBitField() and setBitField(); eg:
      *
-     *      let bfs = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
+     *      let bfs = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
      *
      * The above defines a set of bit fields containing four fields: num (bits 0-19), count (bits 20-27), btmod (bit 28), and type (bits 29-31).
      *
-     *      Usr.setBitField(bfs.num, n, 1);
+     *      UsrLib.setBitField(bfs.num, n, 1);
      *
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
@@ -199,7 +204,7 @@ export default class Usr {
         let v = 0, i = 1;
         for (let f in bfs) {
             if (i >= arguments.length) break;
-            v = Usr.setBitField(bfs[f], v, arguments[i++]);
+            v = UsrLib.setBitField(bfs[f], v, arguments[i++]);
         }
         return v;
     }
@@ -253,5 +258,3 @@ export default class Usr {
         return -1;
     }
 }
-
-Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];

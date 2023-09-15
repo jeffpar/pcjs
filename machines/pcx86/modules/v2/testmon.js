@@ -8,7 +8,7 @@
  */
 
 import Keys from "../../../modules/v2/keys.js";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 import { APPNAME, APPVERSION, DEBUG } from "./defines.js";
 
 /*
@@ -140,7 +140,7 @@ export default class TestMonitor {
                 } else if (p1 == '$') {
                     result = commandParts[i];
                 } else {        // p1 must be '%', which means convert the value to hex
-                    result = Str.sprintf("%x", commandParts[i]);
+                    result = StrLib.sprintf("%x", commandParts[i]);
                 }
                 return result;
             });

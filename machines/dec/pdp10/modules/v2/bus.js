@@ -9,8 +9,8 @@
 
 import MemoryPDP10 from "./memory.js";
 import MESSAGE from "./message.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Usr from "../../../../modules/v2/usrlib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import UsrLib from "../../../../modules/v2/usrlib.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import { DEBUGGER, PDP10 } from "./defines.js";
@@ -29,7 +29,7 @@ import { DEBUGGER, PDP10 } from "./defines.js";
  * @property {BitField} type
  */
 
-var BlockInfoPDP10 = /** @type {BlockInfo} */ (Usr.defineBitFields({num:20, count:8, btmod:1, type:3}));
+var BlockInfoPDP10 = /** @type {BlockInfo} */ (UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3}));
 
 /**
  * BusInfo object definition (returned by scanMemory())
@@ -370,7 +370,7 @@ export default class BusPDP10 extends Component {
             var block = this.aBusBlocks[iBlock];
             info.cbTotal += block.size;
             if (block.size) {
-                info.aBlocks.push(/** @type {BlockInfo} */ (Usr.initBitFields(BlockInfoPDP10, iBlock, 0, 0, block.type)));
+                info.aBlocks.push(/** @type {BlockInfo} */ (UsrLib.initBitFields(BlockInfoPDP10, iBlock, 0, 0, block.type)));
                 info.cBlocks++;
             }
             iBlock++;

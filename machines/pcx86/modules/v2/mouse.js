@@ -11,8 +11,8 @@ import MESSAGE from "./message.js";
 import SerialPort from "./serial.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, COMPILED, DEBUGGER, DESKPRO386, MAXDEBUG, RS232 } from "./defines.js";
 
 /**
@@ -958,4 +958,4 @@ Mouse.SERIAL = {
 /*
  * Initialize every Mouse module on the page.
  */
-Web.onInit(Mouse.init);
+WebLib.onInit(Mouse.init);

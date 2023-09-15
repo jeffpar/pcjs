@@ -16,8 +16,8 @@ import Component from "../../../modules/v2/component.js";
 import DiskAPI from "../../../modules/v2/diskapi.js";
 import JSONLib from "../../../modules/v2/jsonlib.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /*
@@ -214,7 +214,7 @@ export default class FDC extends Component {
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
-        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
+        this.fLocalDisks = (!WebLib.isMobile() && 'FileReader' in globals.window);
 
         /*
          * If the HDC component is configured for removable discs (ie, if it's configured as a CD-ROM drive),
@@ -278,7 +278,7 @@ export default class FDC extends Component {
              * However, that doesn't seem to work for all browsers, so I've reverted to onchange.
              */
             controlSelect.onchange = function onChangeListDrives(event) {
-                let iDrive = Str.parseInt(controlSelect.value, 10);
+                let iDrive = StrLib.parseInt(controlSelect.value, 10);
                 if (iDrive != null) fdc.displayDiskette(iDrive, true);
             };
             return true;
@@ -318,7 +318,7 @@ export default class FDC extends Component {
             control.onclick = function onClickSaveDisk(event) {
                 let controlDrives = fdc.bindings["listDrives"];
                 if (controlDrives && controlDrives.options && fdc.aDrives) {
-                    let iDriveSelected = Str.parseInt(controlDrives.value, 10) || 0;
+                    let iDriveSelected = StrLib.parseInt(controlDrives.value, 10) || 0;
                     let drive = fdc.aDrives[iDriveSelected];
                     if (drive) {
                         /*
@@ -328,7 +328,7 @@ export default class FDC extends Component {
                         let disk = drive.disk;
                         if (disk) {
                             if (DEBUG) fdc.printf("saving diskette %s...\n", disk.sDiskPath);
-                            let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
+                            let sAlert = WebLib.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
                             fdc.printf(MESSAGE.NOTICE, "No diskette loaded in drive\n");
@@ -367,7 +367,7 @@ export default class FDC extends Component {
                 let file = event.currentTarget[1].files[0];
                 if (file) {
                     let sDiskPath = file.name;
-                    let sDiskName = Str.getBaseName(sDiskPath, true);
+                    let sDiskName = StrLib.getBaseName(sDiskPath, true);
                     fdc.loadSelectedDrive(sDiskName, sDiskPath, file);
                 }
                 /*
@@ -446,7 +446,7 @@ export default class FDC extends Component {
 
         if (this.aDiskettes && typeof this.aDiskettes == "string") {
             let fdc = this;
-            let hostName = Web.getHostName();
+            let hostName = WebLib.getHostName();
             let limits = fdc.getDriveLimits();
             let urls = fdc.aDiskettes.split(',');
             let cLoaded = 0, cSuccessful = 0;
@@ -462,7 +462,7 @@ export default class FDC extends Component {
             for (let i = 0; i < urls.length; i++) {
                 let url = urls[i];
                 let sProgress = "Loading " + url + "...";
-                Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
+                WebLib.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
                     let privateURL = url.indexOf("private") >= 0;
                     if (sResponse && !nErrorCode) {
                         try {
@@ -1242,7 +1242,7 @@ export default class FDC extends Component {
                  */
                 let iDrive = sDrive.charCodeAt(0) - 0x41;
                 if (iDrive >= 0 && iDrive < this.aDrives.length) {
-                    let sDiskName = configDrive['name'] || this.findDisketteByPath(sDiskPath) || Str.getBaseName(sDiskPath, true);
+                    let sDiskName = configDrive['name'] || this.findDisketteByPath(sDiskPath) || StrLib.getBaseName(sDiskPath, true);
                     if (!this.loadDrive(iDrive, sDiskName, sDiskPath, true) && fRemount) {
                         this.setReady(false);
                     }
@@ -1289,7 +1289,7 @@ export default class FDC extends Component {
     {
         let iDrive;
         let controlDrives = this.bindings["listDrives"];
-        if (controlDrives && !isNaN(iDrive = Str.parseInt(controlDrives.value, 10)) && iDrive >= 0 && iDrive < this.aDrives.length) {
+        if (controlDrives && !isNaN(iDrive = StrLib.parseInt(controlDrives.value, 10)) && iDrive >= 0 && iDrive < this.aDrives.length) {
 
             if (!sDiskPath) {
                 this.unloadDrive(iDrive);
@@ -1316,7 +1316,7 @@ export default class FDC extends Component {
                     sDiskPath = globals.window.prompt("Enter the URL of a remote disk image.", "") || "";
                 }
                 if (!sDiskPath) return false;
-                sDiskName = Str.getBaseName(sDiskPath);
+                sDiskName = StrLib.getBaseName(sDiskPath);
                 this.printf(MESSAGE.DEBUG, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
             }
 
@@ -1324,7 +1324,7 @@ export default class FDC extends Component {
                 /*
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
-                if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
+                if (WebLib.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
                     this.printf(MESSAGE.DEBUG, "load cancelled\n");
                     return false;
                 }
@@ -1388,7 +1388,7 @@ export default class FDC extends Component {
             result = Errors.DOS.INVALID_DRIVE;
         }
         else if (sDiskPath) {
-            sDiskPath = Web.redirectResource(sDiskPath);
+            sDiskPath = WebLib.redirectResource(sDiskPath);
             /*
              * TODO: Machines with saved states may be using lower-case disk image names, whereas we now use
              * UPPER-CASE names for disk images, so we upper-case both before comparing.  The only problem with
@@ -1808,7 +1808,7 @@ export default class FDC extends Component {
              */
             let drive = this.driveActive;
             let controlDrives = this.bindings["listDrives"];
-            let i, iDriveSelected = Str.parseInt(controlDrives.value, 10);
+            let i, iDriveSelected = StrLib.parseInt(controlDrives.value, 10);
             let sTargetPath = (drive.fLocal? "?" : drive.sDiskPath);
             if (!isNaN(iDriveSelected) && iDriveSelected == iDrive) {
                 for (i = 0; i < controlDisks.options.length; i++) {
@@ -3368,4 +3368,4 @@ FDC.aPortOutput = {
 /*
  * Initialize every Floppy Drive Controller (FDC) module on the page.
  */
-Web.onInit(FDC.init);
+WebLib.onInit(FDC.init);

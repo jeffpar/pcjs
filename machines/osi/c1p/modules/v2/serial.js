@@ -9,7 +9,7 @@
 
 import Component from "../../../../modules/v2/component.js";
 import MESSAGE from "../../../../modules/v2/message.js";
-import Web from "../../../../modules/v2/weblib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
 /**
@@ -44,7 +44,7 @@ export default class C1PSerialPort extends Component {
         this.sDemo = "10 PRINT \"HELLO OSI #" + this.getMachineNum() + "\"\n";
 
         this.autoLoad = C1PSerialPort.AUTOLOAD_NONE;
-        this.autoMount = Web.getURLParm('autoMount') || parmsSerial['autoMount'];
+        this.autoMount = WebLib.getURLParm('autoMount') || parmsSerial['autoMount'];
 
         if (typeof this.autoMount == "string") {
             try {
@@ -59,7 +59,7 @@ export default class C1PSerialPort extends Component {
         if (path) {
             var serial = this;
             this.fDemo = true;
-            Web.getResource(path, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(path, null, true, function(sURL, sResponse, nErrorCode) {
                 serial.loadFile(sURL, sResponse, nErrorCode);
                 serial.sDemo = sResponse;
                 serial.autoMount = null;
@@ -195,7 +195,7 @@ export default class C1PSerialPort extends Component {
                 if (serial.bindings["listSerial"]) {
                     var sFile = serial.bindings["listSerial"].value;
                     // serial.printf("loading %s...\n", sFile);
-                    Web.getResource(sFile, null, true, function(sURL, sResponse, nErrorCode) {
+                    WebLib.getResource(sFile, null, true, function(sURL, sResponse, nErrorCode) {
                         serial.loadFile(sURL, sResponse, nErrorCode);
                     });
                 }
@@ -207,7 +207,7 @@ export default class C1PSerialPort extends Component {
              * Check for non-mobile (desktop) browser and the availability of FileReader
              */
             var controlInput = /** @type {Object} */ (control);
-            if (!Web.isMobile() && window && 'FileReader' in window) {
+            if (!WebLib.isMobile() && window && 'FileReader' in window) {
                 this.bindings[sBinding] = controlInput;
                 /*
                  * Enable "Mount" button only if a file is actually selected
@@ -468,4 +468,4 @@ C1PSerialPort.AUTOLOAD_6502  = 2;
 /*
  * Initialize every SerialPort module on the page.
  */
-Web.onInit(C1PSerialPort.init);
+WebLib.onInit(C1PSerialPort.init);

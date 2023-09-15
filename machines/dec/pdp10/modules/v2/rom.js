@@ -12,8 +12,8 @@ import MemoryPDP10 from "./memory.js";
 import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG } from "./defines.js";
 
 /**
@@ -67,7 +67,7 @@ export default class ROMPDP10 extends Component {
         }
 
         this.sFilePath = parmsROM['file'];
-        this.sFileName = Str.getBaseName(this.sFilePath);
+        this.sFileName = StrLib.getBaseName(this.sFilePath);
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
@@ -77,12 +77,12 @@ export default class ROMPDP10 extends Component {
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side ROM converter to return the file in a JSON-compatible format.
              */
-            var sFileExt = Str.getExtension(this.sFileName);
+            var sFileExt = StrLib.getExtension(this.sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
+                sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
             var rom = this;
-            Web.getResource(sFileURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sFileURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
                 rom.finishLoad(sURL, sResponse, nErrorCode);
             });
         }
@@ -162,7 +162,7 @@ export default class ROMPDP10 extends Component {
         }
         else {
             Component.addMachineResource(this.idMachine, sURL, sData);
-            var resource = Web.parseMemoryResource(sURL, sData);
+            var resource = WebLib.parseMemoryResource(sURL, sData);
             if (resource) {
                 this.abInit = resource.aBytes;
                 this.aSymbols = resource.aSymbols;
@@ -204,7 +204,7 @@ export default class ROMPDP10 extends Component {
                      * good idea to stop the machine in its tracks whenever a setError() occurs, but there may also be
                      * times when we'd like to forge ahead anyway.
                      */
-                    this.setError("ROM size (" + Str.toHexLong(this.abInit.length) + ") does not match specified size (" + Str.toHexLong(this.sizeROM) + ")");
+                    this.setError("ROM size (" + StrLib.toHexLong(this.abInit.length) + ") does not match specified size (" + StrLib.toHexLong(this.sizeROM) + ")");
                 }
                 else if (this.addROM(this.addrROM)) {
 
@@ -316,4 +316,4 @@ export default class ROMPDP10 extends Component {
 /*
  * Initialize all the ROMPDP10 modules on the page.
  */
-Web.onInit(ROMPDP10.init);
+WebLib.onInit(ROMPDP10.init);

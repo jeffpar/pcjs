@@ -9,7 +9,7 @@
 
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
@@ -400,7 +400,7 @@ export default class CPUx80 extends Component {
             }
             let sVal;
             if (!this.flags.running || this.flags.displayLiveRegs) {
-                sVal = Str.toHex(nValue, cch);
+                sVal = StrLib.toHex(nValue, cch);
             } else {
                 sVal = "--------".substr(0, cch);
             }

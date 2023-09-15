@@ -8,7 +8,7 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
-import Str from "../../../../modules/v2/strlib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
 import { PDP10, SIMH } from "./defines.js";
 
 /*

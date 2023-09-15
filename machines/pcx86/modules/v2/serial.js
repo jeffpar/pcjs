@@ -11,8 +11,8 @@ import ChipSet from "./chipset.js";
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, RS232 } from "./defines.js";
 
 /**
@@ -375,9 +375,9 @@ export default class SerialPort extends Component {
             if (sConnection) {
                 let asParts = sConnection.split('->');
                 if (asParts.length == 2) {
-                    let sSourceID = Str.trim(asParts[0]);
+                    let sSourceID = StrLib.trim(asParts[0]);
                     if (sSourceID != this.idComponent) return;  // this connection string is intended for another instance
-                    let sTargetID = Str.trim(asParts[1]);
+                    let sTargetID = StrLib.trim(asParts[1]);
                     this.connection = Component.getComponentByID(sTargetID, false);
                     if (this.connection) {
                         let exports = this.connection['exports'];
@@ -938,13 +938,13 @@ export default class SerialPort extends Component {
                 if (this.iLogicalCol > 0) this.iLogicalCol--;
             }
             else {
-                let s = Str.toASCIICode(b); // formerly: String.fromCharCode(b);
+                let s = StrLib.toASCIICode(b); // formerly: String.fromCharCode(b);
                 let nChars = s.length;      // formerly: (b >= 0x20? 1 : 0);
                 if (b < 0x20 && nChars == 1) nChars = 0;
                 if (b == 0x09) {
                     let tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
-                    if (this.tabSize) s = Str.pad("", nChars);
+                    if (this.tabSize) s = StrLib.pad("", nChars);
                 }
                 if (!this.iLogicalCol && nChars) {
                     /*
@@ -1170,4 +1170,4 @@ SerialPort.aPortOutput = {
 /*
  * Initialize every SerialPort module on the page.
  */
-Web.onInit(SerialPort.init);
+WebLib.onInit(SerialPort.init);

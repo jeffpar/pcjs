@@ -11,8 +11,8 @@ import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { CSSCLASS, DEBUG, PDP11, globals } from "./defines.js";
 
 /**
@@ -80,7 +80,7 @@ export default class PC11 extends Component {
          * when this flag is set, setBinding() allows local tape bindings and informs initBus() to update the
          * "listTapes" binding accordingly.
          */
-        this.fLocalTapes = (!Web.isMobile() && 'FileReader' in globals.window);
+        this.fLocalTapes = (!WebLib.isMobile() && 'FileReader' in globals.window);
 
         this.irqReader = null;
         this.timerReader = -1;
@@ -211,7 +211,7 @@ export default class PC11 extends Component {
                 var file = event.currentTarget[1].files[0];
                 if (file) {
                     var sTapePath = file.name;
-                    var sTapeName = Str.getBaseName(sTapePath, true);
+                    var sTapeName = StrLib.getBaseName(sTapePath, true);
                     /*
                      * TODO: Provide a way to mount tapes into MEMORY as well as READER.
                      */
@@ -393,7 +393,7 @@ export default class PC11 extends Component {
         if (sTapePath == PC11.SOURCE.REMOTE) {
             sTapePath = globals.window.prompt("Enter the URL of a remote tape image.", "") || "";
             if (!sTapePath) return;
-            sTapeName = Str.getBaseName(sTapePath);
+            sTapeName = StrLib.getBaseName(sTapePath);
             this.printf(MESSAGE.STATUS, 'Attempting to load %s as "%s"\n', sTapePath, sTapeName);
             this.sTapeSource = PC11.SOURCE.REMOTE;
         }
@@ -493,16 +493,16 @@ export default class PC11 extends Component {
              * JSON-encoded tape image, so we load it as-is; otherwise, we ask our server-side tape image
              * converter to return the corresponding JSON-encoded data.
              */
-            var sTapeExt = Str.getExtension(sTapePath);
+            var sTapeExt = StrLib.getExtension(sTapePath);
             if (sTapeExt == DumpAPI.FORMAT.JSON || sTapeExt == DumpAPI.FORMAT.JSON_GZ) {
                 sTapeURL = encodeURI(sTapePath);
             } else {
                 var sTapeParm = DumpAPI.QUERY.PATH;
-                sTapeURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sTapeParm + '=' + encodeURIComponent(sTapePath) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
+                sTapeURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sTapeParm + '=' + encodeURIComponent(sTapePath) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
             }
         }
 
-        return !!Web.getResource(sTapeURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
+        return !!WebLib.getResource(sTapeURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
             pc11.finishLoad(sTapeName, sTapePath, nTapeTarget, sResponse, sURL, nErrorCode);
         });
     }
@@ -537,7 +537,7 @@ export default class PC11 extends Component {
                 this.printf("finishLoad(\"%s\")\n", sTapePath);
             }
             Component.addMachineResource(this.idMachine, sURL, sTapeData);
-            var resource = Web.parseMemoryResource(sURL, sTapeData);
+            var resource = WebLib.parseMemoryResource(sURL, sTapeData);
             if (resource) {
                 this.parseTape(sTapeName, sTapePath, nTapeTarget, resource.aBytes, resource.addrLoad, resource.addrExec);
             }
@@ -615,7 +615,7 @@ export default class PC11 extends Component {
                 if (control.value == sPath) return control.text;
             }
         }
-        return Str.getBaseName(sPath, true);
+        return StrLib.getBaseName(sPath, true);
     }
 
     /**

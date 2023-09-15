@@ -10,12 +10,23 @@
 import Defines from "./defines.js";
 
 /**
- * @class NumIO
+ * @class StdLib
  * @unrestricted
  */
-export default class NumIO extends Defines {
+export default class StdLib extends Defines {
     /**
-     * NumIO()
+     * Strangely, the Closure Compiler automatically knows the type when it's defined outside the class; eg:
+     *
+     *      StdLib.TWO_POW32 = Math.pow(2, 32);
+     *
+     * but when it's defined as a class constant, it's considered untyped (ie, "*") unless we explicitly type it.
+     *
+     * @type {number}
+     */
+    static TWO_POW32 = Math.pow(2, 32);
+
+    /**
+     * StdLib()
      *
      * String to integer conversion:
      *
@@ -39,12 +50,11 @@ export default class NumIO extends Defines {
      *      compress()
      *      decompress()
      *
-     * Initially, this file was going to be called "stdlib.js", since the C runtime library file "stdlib.h"
-     * defines numeric conversion functions like atoi().  But stdlib has too many other functions that have
-     * nothing to do with data conversion, and we have many conversion functions that you won't find in stdlib.
-     * So I settled on "numio.js" instead.
+     * This file is called "stdlib.js" since the C runtime library file "stdlib.h" has a few similar
+     * functions (eg, atoi()).  However, the similarity is very tenuous; at the end of the day, this
+     * is just library of utility functions.
      *
-     * @this {NumIO}
+     * @this {StdLib}
      */
 
     /**
@@ -56,7 +66,7 @@ export default class NumIO extends Defines {
      * So it's best to use our own parseInt() function, which will in turn use this function to validate
      * the entire string.
      *
-     * @this {NumIO}
+     * @this {StdLib}
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); only 2, 8, 10 and 16 are supported
      * @returns {boolean} true if valid, false if invalid (or the specified base isn't supported)
@@ -90,7 +100,7 @@ export default class NumIO extends Defines {
      * Similarly, we've added support for "K", "M", and "G" MACRO-10-style suffixes that add 3, 6, or 9 zeros
      * to the value to be parsed, respectively.
      *
-     * @this {NumIO}
+     * @this {StdLib}
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); can be overridden by prefixes/suffixes
      * @returns {number|undefined} corresponding value, or undefined if invalid
@@ -221,7 +231,7 @@ export default class NumIO extends Defines {
      *
      *      aData
      *
-     * @this {NumIO}
+     * @this {StdLib}
      * @param {string} sURL
      * @param {string} sData
      * @returns {Object|null} (resource)
@@ -367,7 +377,7 @@ export default class NumIO extends Defines {
      *
      * Parses DIP switch string definitions into numbers.
      *
-     * @this {NumIO}
+     * @this {StdLib}
      * @param {string} sws (eg, "00000000", where sws[0] is SW0, sws[1] is SW1, etc.)
      * @param {number} [switchesDefault] (use -1 to parse sws as a mask: 0 for any non-digit character)
      * @returns {number|undefined}
@@ -407,7 +417,7 @@ export default class NumIO extends Defines {
      * sprintf() may be a better choice, depending on your needs (eg, signed integers, formatting options, etc.)
      * and support for the desired radix (eg, 8, 10, and 16).
      *
-     * @this {NumIO}
+     * @this {StdLib}
      * @param {number|*} n
      * @param {number} [base] (ie, the radix; 0 or undefined for default)
      * @param {number} [bits] (the number of bits in the value, 0 for variable)
@@ -497,14 +507,14 @@ export default class NumIO extends Defines {
      *
      * Function for clearing bits in numbers with more than 32 bits.
      *
-     * @this {NumIO}
+     * @this {StdLib}
      * @param {number} num
      * @param {number} bits
      * @returns {number} (num & ~bits)
      */
     clearBits(num, bits)
     {
-        let shift = NumIO.TWO_POW32;
+        let shift = StdLib.TWO_POW32;
         let numHi = (num / shift)|0;
         let bitsHi = (bits / shift)|0;
         return (num & ~bits) + (numHi & ~bitsHi) * shift;
@@ -515,14 +525,14 @@ export default class NumIO extends Defines {
      *
      * Function for setting bits in numbers with more than 32 bits.
      *
-     * @this {NumIO}
+     * @this {StdLib}
      * @param {number} num
      * @param {number} bits
      * @returns {number} (num | bits)
      */
     setBits(num, bits)
     {
-        let shift = NumIO.TWO_POW32;
+        let shift = StdLib.TWO_POW32;
         let numHi = (num / shift)|0;
         let bitsHi = (bits / shift)|0;
         return (num | bits) + (numHi | bitsHi) * shift;
@@ -533,14 +543,14 @@ export default class NumIO extends Defines {
      *
      * Function for testing bits in numbers with more than 32 bits.
      *
-     * @this {NumIO}
+     * @this {StdLib}
      * @param {number} num
      * @param {number} bits
      * @returns {boolean} (true IFF num & bits == bits)
      */
     testBits(num, bits)
     {
-        let shift = NumIO.TWO_POW32;
+        let shift = StdLib.TWO_POW32;
         let numHi = (num / shift)|0;
         let bitsHi = (bits / shift)|0;
         return ((num & bits) == (bits|0) && (numHi & bitsHi) == bitsHi);
@@ -551,7 +561,7 @@ export default class NumIO extends Defines {
      *
      * Compresses an array of numbers.
      *
-     * @this {NumIO}
+     * @this {StdLib}
      * @param {Array|Uint8Array} aSrc
      * @returns {Array|Uint8Array} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
@@ -578,7 +588,7 @@ export default class NumIO extends Defines {
      *
      * Decompresses an array of numbers.
      *
-     * @this {NumIO}
+     * @this {StdLib}
      * @param {Array} aComp
      * @param {number} [length] (expected length of decompressed data)
      * @returns {Array}
@@ -599,9 +609,4 @@ export default class NumIO extends Defines {
     }
 }
 
-/**
- * Assorted constants
- */
-NumIO.TWO_POW32 = Math.pow(2, 32);
-
-NumIO.CLASSES["NumIO"] = NumIO;
+StdLib.CLASSES["StdLib"] = StdLib;

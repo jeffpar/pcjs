@@ -9,7 +9,7 @@
 
 import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
-import Str from "../../../../modules/v2/strlib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**

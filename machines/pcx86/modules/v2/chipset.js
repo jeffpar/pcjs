@@ -13,9 +13,9 @@ import ROMx86 from "./rom.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Usr from "../../../modules/v2/usrlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import UsrLib from "../../../modules/v2/usrlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, BACKTRACK, COMPILED, CSSCLASS, DEBUG, DEBUGGER, DESKPRO386, MAXDEBUG, globals } from "./defines.js";
 
 /**
@@ -143,7 +143,7 @@ export default class ChipSet extends Component {
         this.sDateRTC = parmsChipSet['dateRTC'];
 
         /*
-         * Here, I'm finally getting around to trying the Web Audio API.  Fortunately, based on what little
+         * Here, I'm finally getting around to trying the WebLib Audio API.  Fortunately, based on what little
          * I know about sound generation, using the API to make the same noises as the IBM PC speaker seems
          * straightforward.
          *
@@ -810,7 +810,7 @@ export default class ChipSet extends Component {
                         if (++this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] >= 24) {
                             this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] = 0;
                             this.abCMOSData[ChipSet.CMOS.ADDR.RTC_WEEK_DAY] = (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_WEEK_DAY] % 7) + 1;
-                            let nDayMax = Usr.getMonthDays(this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH], this.abCMOSData[ChipSet.CMOS.ADDR.RTC_YEAR]);
+                            let nDayMax = UsrLib.getMonthDays(this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH], this.abCMOSData[ChipSet.CMOS.ADDR.RTC_YEAR]);
                             if (++this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH_DAY] > nDayMax) {
                                 this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH_DAY] = 1;
                                 if (++this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH] > 12) {
@@ -1876,9 +1876,9 @@ export default class ChipSet extends Component {
                 let sDump = "PIC" + iPIC + ":";
                 for (let i = 0; i < pic.aICW.length; i++) {
                     let b = pic.aICW[i];
-                    sDump += " IC" + (i + 1) + '=' + Str.toHexByte(b);
+                    sDump += " IC" + (i + 1) + '=' + StrLib.toHexByte(b);
                 }
-                sDump += " IMR=" + Str.toHexByte(pic.bIMR) + " IRR=" + Str.toHexByte(pic.bIRR) + " ISR=" + Str.toHexByte(pic.bISR) + " DELAY=" + pic.nDelay + "\n";
+                sDump += " IMR=" + StrLib.toHexByte(pic.bIMR) + " IRR=" + StrLib.toHexByte(pic.bIRR) + " ISR=" + StrLib.toHexByte(pic.bISR) + " DELAY=" + pic.nDelay + "\n";
                 this.print(sDump);
             }
         }
@@ -1908,7 +1908,7 @@ export default class ChipSet extends Component {
                         count |= (timer.countCurrent[i] << (i * 8));
                     }
                 }
-                sDump += " mode=" + (timer.mode >> 1) + " bytes=" + timer.countBytes + " count=" + Str.toHexWord(count) + "\n";
+                sDump += " mode=" + (timer.mode >> 1) + " bytes=" + timer.countBytes + " count=" + StrLib.toHexWord(count) + "\n";
                 this.print(sDump);
             }
         }
@@ -1926,7 +1926,7 @@ export default class ChipSet extends Component {
             for (let iCMOS = 0; iCMOS < ChipSet.CMOS.ADDR.TOTAL; iCMOS++) {
                 let b = (iCMOS <= ChipSet.CMOS.ADDR.STATUSD? this.getRTCByte(iCMOS) : this.abCMOSData[iCMOS]);
                 if (sDump) sDump += '\n';
-                sDump += "CMOS[" + Str.toHexByte(iCMOS) + "]: " + Str.toHexByte(b) + "\n";
+                sDump += "CMOS[" + StrLib.toHexByte(iCMOS) + "]: " + StrLib.toHexByte(b) + "\n";
             }
             this.print(sDump);
         }
@@ -2469,7 +2469,7 @@ export default class ChipSet extends Component {
                 let b;
                 let addr = (channel.bPage << 16) | (channel.addrCurrent[1] << 8) | channel.addrCurrent[0];
                 if (DEBUG && DEBUGGER && channel.sAddrDebug === null) {
-                    channel.sAddrDebug = Str.toHex(addr >> 4, 4) + ":" + Str.toHex(addr & 0xf, 4);
+                    channel.sAddrDebug = StrLib.toHex(addr >> 4, 4) + ":" + StrLib.toHex(addr & 0xf, 4);
                     if (channel.type != ChipSet.DMA_MODE.TYPE_WRITE && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
                         this.printf(MESSAGE.DMA, "advanceDMA(%d) transferring %d bytes from %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
                         this.dbg.doDump(["db", channel.sAddrDebug, "l" + channel.cbDebug]);
@@ -4649,7 +4649,7 @@ export default class ChipSet extends Component {
         let bAddr = this.bCMOSAddr & ChipSet.CMOS.ADDR.MASK;
         let bIn = (bAddr <= ChipSet.CMOS.ADDR.STATUSD? this.getRTCByte(bAddr) : this.abCMOSData[bAddr]);
         if (this.messageEnabled(MESSAGE.CMOS + MESSAGE.PORT)) {
-            this.printIO(port, undefined, addrFrom, "CMOS.DATA[" + Str.toHexByte(bAddr) + "]", bIn, true);
+            this.printIO(port, undefined, addrFrom, "CMOS.DATA[" + StrLib.toHexByte(bAddr) + "]", bIn, true);
         }
         if (addrFrom != null) {
             if (bAddr == ChipSet.CMOS.ADDR.STATUSC) {
@@ -4684,7 +4684,7 @@ export default class ChipSet extends Component {
     {
         let bAddr = this.bCMOSAddr & ChipSet.CMOS.ADDR.MASK;
         if (this.messageEnabled(MESSAGE.CMOS + MESSAGE.PORT)) {
-            this.printIO(port, bOut, addrFrom, "CMOS.DATA[" + Str.toHexByte(bAddr) + "]", undefined, true);
+            this.printIO(port, bOut, addrFrom, "CMOS.DATA[" + StrLib.toHexByte(bAddr) + "]", undefined, true);
         }
         let bDelta = bOut ^ this.abCMOSData[bAddr];
         this.abCMOSData[bAddr] = (bAddr <= ChipSet.CMOS.ADDR.STATUSD? this.setRTCByte(bAddr, bOut) : bOut);
@@ -4806,9 +4806,9 @@ export default class ChipSet extends Component {
                     let DL = chipset.cpu.regEDX & 0xff;
                     let DH = chipset.cpu.regEDX >> 8;
                     if (AH == 0x02 || AH == 0x03) {
-                        sResult = " CH(hour)=" + Str.toHexWord(CH) + " CL(min)=" + Str.toHexByte(CL) + " DH(sec)=" + Str.toHexByte(DH);
+                        sResult = " CH(hour)=" + StrLib.toHexWord(CH) + " CL(min)=" + StrLib.toHexByte(CL) + " DH(sec)=" + StrLib.toHexByte(DH);
                     } else if (AH == 0x04 || AH == 0x05) {
-                        sResult = " CX(year)=" + Str.toHexWord(chipset.cpu.regECX) + " DH(month)=" + Str.toHexByte(DH) + " DL(day)=" + Str.toHexByte(DL);
+                        sResult = " CX(year)=" + StrLib.toHexWord(chipset.cpu.regECX) + " DH(month)=" + StrLib.toHexByte(DH) + " DL(day)=" + StrLib.toHexByte(DL);
                     }
                     let nCyclesDelta = -nCycles + (nCycles = chipset.cpu.getCycles());
                     chipset.dbg.messageIntReturn(Interrupts.TIMER, nLevel, nCyclesDelta, sResult);
@@ -4910,7 +4910,7 @@ export default class ChipSet extends Component {
             if (this.oscillatorAudio) return true;
             try {
                 this.oscillatorAudio = this.contextAudio['createOscillator']();
-                if ('start' in this.oscillatorAudio) {  // early versions of Web Audio used noteOn() instead of start()
+                if ('start' in this.oscillatorAudio) {  // early versions of WebLib Audio used noteOn() instead of start()
                     this.volumeAudio = this.contextAudio['createGain']();
                     this.oscillatorAudio['connect'](this.volumeAudio);
                     this.volumeAudio['connect'](this.contextAudio['destination']);
@@ -6328,4 +6328,4 @@ if (DESKPRO386) {
 /*
  * Initialize every ChipSet module on the page.
  */
-Web.onInit(ChipSet.init);
+WebLib.onInit(ChipSet.init);

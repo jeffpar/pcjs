@@ -10,7 +10,7 @@
 import MESSAGE from "./message.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 import { BACKTRACK, BYTEARRAYS, DEBUG, DEBUGGER, I386, PAGEBLOCKS, TYPEDARRAYS } from "./defines.js";
 
 /**

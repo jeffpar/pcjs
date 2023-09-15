@@ -14,8 +14,8 @@ import SegX86 from "./segx86.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, BACKTRACK, BUGS_8086, DEBUG, DEBUGGER, I386, MAXDEBUG, PAGEBLOCKS, PREFETCH } from "./defines.js";
 
 /**
@@ -86,7 +86,7 @@ export default class CPUx86 extends CPULib {
          * is equal to model.
          */
         let stepping = parmsCPU['stepping'];
-        this.stepping = model + (stepping? Str.parseInt(stepping, 16) : 0);
+        this.stepping = model + (stepping? StrLib.parseInt(stepping, 16) : 0);
 
         /*
          * Initialize processor operation to match the requested model
@@ -4609,4 +4609,4 @@ CPUx86.PAGEBLOCKS_CACHE = 512;      // TODO: This seems adequate for 4Mb of RAM,
 /*
  * Initialize every CPU module on the page
  */
-Web.onInit(CPUx86.init);
+WebLib.onInit(CPUx86.init);

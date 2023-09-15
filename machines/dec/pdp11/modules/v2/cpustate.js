@@ -16,8 +16,8 @@ import MemoryPDP11 from "./memory.js";
 import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, PDP11 } from "./defines.js";
 
 /*
@@ -3063,4 +3063,4 @@ export default class CPUStatePDP11 extends CPUPDP11 {
 /*
  * Initialize every CPU module on the page
  */
-Web.onInit(CPUStatePDP11.init);
+WebLib.onInit(CPUStatePDP11.init);

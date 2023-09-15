@@ -10,8 +10,8 @@
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import MESSAGE from "../../../../modules/v2/message.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
 /**
@@ -54,12 +54,12 @@ export default class C1PROM extends Component {
              * we ask our server-side ROM image converter to return the corresponding JSON-encoded data,
              * in compact form (ie, minimal whitespace, no ASCII data comments, etc).
              */
-            var sFileExt = Str.getExtension(this.sImage);
+            var sFileExt = StrLib.getExtension(this.sImage);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sImage + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
+                sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sImage + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
             }
             var rom = this;
-            Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 rom.convertImage(sURL, sResponse, nErrorCode);
             });
             return;
@@ -87,7 +87,7 @@ export default class C1PROM extends Component {
             this.cbROM = cbROM;
         }
         if (cbROM != this.cbROM) {
-            this.setError("computer-specified ROM size (" + Str.toHexWord(cbROM) + ") does not match component-specified size (" + Str.toHexWord(this.cbROM) + ")");
+            this.setError("computer-specified ROM size (" + StrLib.toHexWord(cbROM) + ") does not match component-specified size (" + StrLib.toHexWord(this.cbROM) + ")");
             return;
         }
         if (cpu) {
@@ -196,7 +196,7 @@ export default class C1PROM extends Component {
             if (this.abImage && this.abMem) {
                 var cbImage = this.abImage.length;
                 if (cbImage != this.cbROM) {
-                    this.setError("ROM image size (" + Str.toHexWord(cbImage) + ") does not match component-specified size (" + Str.toHexWord(this.cbROM) + ")");
+                    this.setError("ROM image size (" + StrLib.toHexWord(cbImage) + ") does not match component-specified size (" + StrLib.toHexWord(this.cbROM) + ")");
                     return;
                 }
                 if (DEBUG) this.printf(MESSAGE.LOG, "copyImage(%#06x): %#06x bytes\n", this.offROM, cbImage);
@@ -231,4 +231,4 @@ export default class C1PROM extends Component {
 /*
  * Initialize all the ROM modules on the page.
  */
-Web.onInit(C1PROM.init);
+WebLib.onInit(C1PROM.init);

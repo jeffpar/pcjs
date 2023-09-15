@@ -11,8 +11,8 @@ import MemoryX80 from "./memory.js";
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Usr from "../../../modules/v2/usrlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import UsrLib from "../../../modules/v2/usrlib.js";
 import { DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
@@ -44,7 +44,7 @@ export default class BusX80 extends Component {
     /**
      * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
      */
-    static BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
+    static BlockInfo = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
 
     /**
      * BusX80(cpu, dbg)
@@ -336,7 +336,7 @@ export default class BusX80 extends Component {
             let block = this.aMemBlocks[iBlock];
             info.cbTotal += block.size;
             if (block.size) {
-                info.aBlocks.push(Usr.initBitFields(/** @type {BitFields} */ (BusX80.BlockInfo), iBlock, 0, 0, block.type));
+                info.aBlocks.push(UsrLib.initBitFields(/** @type {BitFields} */ (BusX80.BlockInfo), iBlock, 0, 0, block.type));
                 info.cBlocks++;
             }
             iBlock++;
@@ -720,7 +720,7 @@ export default class BusX80 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortInputNotify[port] !== undefined) {
-                    Component.warning("Input port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("Input port " + StrLib.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
@@ -860,7 +860,7 @@ export default class BusX80 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortOutputNotify[port] !== undefined) {
-                    Component.warning("Output port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("Output port " + StrLib.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];

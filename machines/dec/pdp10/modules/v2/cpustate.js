@@ -13,8 +13,8 @@ import MemoryPDP10 from "./memory.js";
 import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, PDP10 } from "./defines.js";
 
 /*
@@ -957,4 +957,4 @@ export default class CPUStatePDP10 extends CPUPDP10 {
 /*
  * Initialize every CPU module on the page
  */
-Web.onInit(CPUStatePDP10.init);
+WebLib.onInit(CPUStatePDP10.init);

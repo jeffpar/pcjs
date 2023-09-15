@@ -14,8 +14,8 @@ import BusPDP11 from "./bus.js";
 import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, PDP11 } from "./defines.js";
 
 /**
@@ -570,7 +570,7 @@ export default class PanelPDP11 extends Component {
             var nBase = this.dbg && this.dbg.nBase || 8;
             nValue = nValue || 0;
             if (!this.cpu.isRunning() || this.fDisplayLiveRegs) {
-                sVal = nBase == 8? Str.toOct(nValue, cch) : Str.toHex(nValue, cch);
+                sVal = nBase == 8? StrLib.toOct(nValue, cch) : StrLib.toHex(nValue, cch);
             } else {
                 sVal = "--------".substr(0, cch || 4);
             }
@@ -621,7 +621,7 @@ export default class PanelPDP11 extends Component {
     setSwitch(sBinding, sValue)
     {
         if (sBinding == "SR") {
-            return this.setSRSwitches(Str.parseInt(sValue, 8));
+            return this.setSRSwitches(StrLib.parseInt(sValue, 8));
         }
         var sw = this.switches[sBinding];
         if (sw) {
@@ -1312,4 +1312,4 @@ PanelPDP11.UNIBUS_IOTABLE = {
 /*
  * Initialize every Panel module on the page.
  */
-Web.onInit(PanelPDP11.init);
+WebLib.onInit(PanelPDP11.init);

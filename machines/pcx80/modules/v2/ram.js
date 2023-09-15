@@ -12,8 +12,8 @@ import MemoryX80 from "./memory.js";
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
 /**
@@ -58,7 +58,7 @@ export default class RAMx80 extends Component {
         this.fAllocated = false;
 
         this.sFilePath = parmsRAM['file'];
-        this.sFileName = Str.getBaseName(this.sFilePath);
+        this.sFileName = StrLib.getBaseName(this.sFilePath);
 
         if (this.sFilePath) {
             let sFileURL = this.sFilePath;
@@ -68,12 +68,12 @@ export default class RAMx80 extends Component {
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side converter to return the file in a JSON-compatible format.
              */
-            let sFileExt = Str.getExtension(this.sFileName);
+            let sFileExt = StrLib.getExtension(this.sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
+                sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
             let ram = this;
-            Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 ram.doneLoad(sURL, sResponse, nErrorCode);
             });
         }
@@ -151,7 +151,7 @@ export default class RAMx80 extends Component {
 
         Component.addMachineResource(this.idMachine, sURL, sData);
 
-        let resource = Web.parseMemoryResource(sURL, sData);
+        let resource = WebLib.parseMemoryResource(sURL, sData);
         if (resource) {
             this.abInit = resource.aBytes;
             this.aSymbols = resource.aSymbols;
@@ -369,4 +369,4 @@ RAMx80.CPM.VECTORS = [RAMx80.CPM.BIOS.VECTOR, RAMx80.CPM.BDOS.VECTOR];
 /*
  * Initialize all the RAMx80 modules on the page.
  */
-Web.onInit(RAMx80.init);
+WebLib.onInit(RAMx80.init);

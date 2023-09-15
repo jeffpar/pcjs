@@ -25,6 +25,15 @@
  */
 export default class Format {
 
+    static NamesOfDays = [
+        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+    ];
+    static NamesOfMonths = [
+        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+    ];
+    static HexLowerCase = "0123456789abcdef?";
+    static HexUpperCase = "0123456789ABCDEF?";
+
     /**
      * constructor()
      *
@@ -553,19 +562,3 @@ export default class Format {
         return buffer;
     }
 }
-
-//
-// TODO: Put these definitions inside the class once we have a Closure Compiler that doesn't complain about them:
-//
-//      This language feature is only supported for UNSTABLE mode or better: Public class fields
-//
-// static HexLowerCase = "0123456789abcdef?";
-// static HexUpperCase = "0123456789ABCDEF?";
-// static NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-// static NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-//
-
-Format.HexLowerCase = "0123456789abcdef?";
-Format.HexUpperCase = "0123456789ABCDEF?";
-Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

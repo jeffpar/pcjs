@@ -19,8 +19,8 @@ import RK11 from "./rk11.js";
 import RX11 from "./rx11.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUGGER, PDP11 } from "./defines.js";
 
 /**
@@ -141,7 +141,7 @@ export default class DevicePDP11 extends Component {
             for (var i = 0; i < nRegs; i++) {
                 if (i % nWidth == 0) {
                     if (sDump) sDump += '\n';
-                    sDump += sName + (fIndex? ('[' + Str.toDec(i, 2) + ']') : '') + ':';
+                    sDump += sName + (fIndex? ('[' + StrLib.toDec(i, 2) + ']') : '') + ':';
                 }
                 sDump += ' ' + dbg.toStrBase(aRegs[offset + i], nBits);
             }
@@ -1244,4 +1244,4 @@ DevicePDP11.UNIBUS_IOTABLE = {
 /*
  * Initialize all the DevicePDP11 modules on the page.
  */
-Web.onInit(DevicePDP11.init);
+WebLib.onInit(DevicePDP11.init);

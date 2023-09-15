@@ -217,6 +217,15 @@ let Formatter;
  */
 class Format {
 
+    static NamesOfDays = [
+        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+    ];
+    static NamesOfMonths = [
+        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+    ];
+    static HexLowerCase = "0123456789abcdef?";
+    static HexUpperCase = "0123456789ABCDEF?";
+
     /**
      * constructor()
      *
@@ -745,22 +754,6 @@ class Format {
         return buffer;
     }
 }
-
-//
-// TODO: Put these definitions inside the class once we have a Closure Compiler that doesn't complain about them:
-//
-//      This language feature is only supported for UNSTABLE mode or better: Public class fields
-//
-// static HexLowerCase = "0123456789abcdef?";
-// static HexUpperCase = "0123456789ABCDEF?";
-// static NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-// static NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-//
-
-Format.HexLowerCase = "0123456789abcdef?";
-Format.HexUpperCase = "0123456789ABCDEF?";
-Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 /**
  * @copyright https://www.pcjs.org/machines/modules/v2/databuffer.js (C) 2012-2023 Jeff Parsons
@@ -1498,7 +1491,7 @@ const Keys = {
     /*
      * Keys and/or key combinations that generate common ASCII codes.
      *
-     * NOTE: If you're looking for a general-purpose ASCII code table, see Str.ASCII in strlib.js;
+     * NOTE: If you're looking for a general-purpose ASCII code table, see StrLib.ASCII in strlib.js;
      * if something's missing, that's probably the more appropriate table to add it to.
      *
      * TODO: The Closure Compiler doesn't inline all references to these values, at least those with
@@ -1812,17 +1805,88 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
  */
 
 /**
- * @class Str
+ * @class StrLib
  * @unrestricted
  */
-class Str {
+class StrLib {
+    /*
+     * Map special characters to their HTML escape sequences.
+     */
+    static HTMLEscapeMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&apos;',
+        '$': '&dollar;'
+    };
+
+    /*
+     * Map "unprintable" ASCII codes to mnemonics, to more clearly see what's being printed.
+     */
+    static ASCIICodeMap = {
+        0x00:   "NUL",
+        0x01:   "SOH",      // (CTRL_A) Start of Heading
+        0x02:   "STX",      // (CTRL_B) Start of Text
+        0x03:   "ETX",      // (CTRL_C) End of Text
+        0x04:   "EOT",      // (CTRL_D) End of Transmission
+        0x05:   "ENQ",      // (CTRL_E) Enquiry
+        0x06:   "ACK",      // (CTRL_F) Acknowledge
+        0x07:   "BEL",      // (CTRL_G) Bell
+        0x08:   "BS",       // (CTRL_H) Backspace
+        0x09:   "TAB",      // (CTRL_I) Horizontal Tab (aka HT)
+        0x0A:   "LF",       // (CTRL_J) Line Feed (New Line)
+        0x0B:   "VT",       // (CTRL_K) Vertical Tab
+        0x0C:   "FF",       // (CTRL_L) Form Feed (New Page)
+        0x0D:   "CR",       // (CTRL_M) Carriage Return
+        0x0E:   "SO",       // (CTRL_N) Shift Out
+        0x0F:   "SI",       // (CTRL_O) Shift In
+        0x10:   "DLE",      // (CTRL_P) Data Link Escape
+        0x11:   "XON",      // (CTRL_Q) Device Control 1 (aka DC1)
+        0x12:   "DC2",      // (CTRL_R) Device Control 2
+        0x13:   "XOFF",     // (CTRL_S) Device Control 3 (aka DC3)
+        0x14:   "DC4",      // (CTRL_T) Device Control 4
+        0x15:   "NAK",      // (CTRL_U) Negative Acknowledge
+        0x16:   "SYN",      // (CTRL_V) Synchronous Idle
+        0x17:   "ETB",      // (CTRL_W) End of Transmission Block
+        0x18:   "CAN",      // (CTRL_X) Cancel
+        0x19:   "EM",       // (CTRL_Y) End of Medium
+        0x1A:   "SUB",      // (CTRL_Z) Substitute
+        0x1B:   "ESC",      // Escape
+        0x1C:   "FS",       // File Separator
+        0x1D:   "GS",       // Group Separator
+        0x1E:   "RS",       // Record Separator
+        0x1F:   "US",       // Unit Separator
+        0x7F:   "DEL"
+    };
+
+    /*
+     * TODO: Future home of a complete ASCII table.
+     */
+    static ASCII = {
+        LF:     0x0A,
+        CR:     0x0D
+    };
+
+    static TYPES = {
+        NULL:       0,
+        BYTE:       1,
+        WORD:       2,
+        DWORD:      3,
+        NUMBER:     4,
+        STRING:     5,
+        BOOLEAN:    6,
+        OBJECT:     7,
+        ARRAY:      8
+    };
+
     /**
      * isValidInt(s, base)
      *
      * The built-in parseInt() function has the annoying feature of returning a partial value (ie,
      * up to the point where it encounters an invalid character); eg, parseInt("foo", 16) returns 0xf.
      *
-     * So it's best to use our own Str.parseInt() function, which will in turn use this function to
+     * So it's best to use our own StrLib.parseInt() function, which will in turn use this function to
      * validate the entire string.
      *
      * @param {string} s is the string representation of some number
@@ -1942,7 +2006,7 @@ class Str {
                     shift = 35 - ((match[2] || 35) & 0xff);
                 }
             }
-            if (Str.isValidInt(s, base) && !isNaN(v = parseInt(s, base))) {
+            if (StrLib.isValidInt(s, base) && !isNaN(v = parseInt(s, base))) {
                 /*
                  * With the need to support larger (eg, 36-bit) integers, truncating to 32 bits is no longer helpful.
                  *
@@ -2053,7 +2117,7 @@ class Str {
                 cch = 36;
             }
         } else if (cch > 36) cch = 36;
-        return Str.toBase(n, 2, cch, "", nGrouping);
+        return StrLib.toBase(n, 2, cch, "", nGrouping);
     }
 
     /**
@@ -2072,7 +2136,7 @@ class Str {
         if (!cb || cb > 4) cb = 4;
         for (let i = 0; i < cb; i++) {
             if (s) s = ',' + s;
-            s = Str.toBin(n & 0xff, 8) + s;
+            s = StrLib.toBin(n & 0xff, 8) + s;
             n >>= 8;
         }
         return (fPrefix? "0b" : "") + s;
@@ -2105,7 +2169,7 @@ class Str {
                 cch = 12;
             }
         } else if (cch > 12) cch = 12;
-        return Str.toBase(n, 8, cch, fPrefix? "0o" : "");
+        return StrLib.toBase(n, 8, cch, fPrefix? "0o" : "");
     }
 
     /**
@@ -2132,7 +2196,7 @@ class Str {
                 cch = 11;
             }
         } else if (cch > 11) cch = 11;
-        return Str.toBase(n, 10, cch);
+        return StrLib.toBase(n, 10, cch);
     }
 
     /**
@@ -2170,46 +2234,46 @@ class Str {
                 cch = 9;
             }
         } else if (cch > 9) cch = 9;
-        return Str.toBase(n, 16, cch, fPrefix? "0x" : "");
+        return StrLib.toBase(n, 16, cch, fPrefix? "0x" : "");
     }
 
     /**
      * toHexByte(b)
      *
-     * Alias for Str.toHex(b, 2, true)
+     * Alias for StrLib.toHex(b, 2, true)
      *
      * @param {number|null|undefined} b is a byte value
      * @returns {string} the hex representation of b
      */
     static toHexByte(b)
     {
-        return Str.toHex(b, 2, true);
+        return StrLib.toHex(b, 2, true);
     }
 
     /**
      * toHexWord(w)
      *
-     * Alias for Str.toHex(w, 4, true)
+     * Alias for StrLib.toHex(w, 4, true)
      *
      * @param {number|null|undefined} w is a word (16-bit) value
      * @returns {string} the hex representation of w
      */
     static toHexWord(w)
     {
-        return Str.toHex(w, 4, true);
+        return StrLib.toHex(w, 4, true);
     }
 
     /**
      * toHexLong(l)
      *
-     * Alias for Str.toHex(l, 8, true)
+     * Alias for StrLib.toHex(l, 8, true)
      *
      * @param {number|null|undefined} l is a dword (32-bit) value
      * @returns {string} the hex representation of w
      */
     static toHexLong(l)
     {
-        return Str.toHex(l, 8, true);
+        return StrLib.toHex(l, 8, true);
     }
 
     /**
@@ -2294,7 +2358,7 @@ class Str {
          */
         return sHTML.replace(/[&<>"'$]/g, function(m)
         {
-            return Str.HTMLEscapeMap[m];
+            return StrLib.HTMLEscapeMap[m];
         });
     }
 
@@ -2344,7 +2408,7 @@ class Str {
     {
         let a = {};
         a[sSearch] = sReplace;
-        return Str.replaceArray(a, s);
+        return StrLib.replaceArray(a, s);
     }
 
     /**
@@ -2449,7 +2513,7 @@ class Str {
     {
         let cch = s.length;
         s = s.replace(/^0+([0-9A-F]+)$/i, "$1");
-        if (fPad) s = Str.pad(s, cch, true);
+        if (fPad) s = StrLib.pad(s, cch, true);
         return s;
     }
 
@@ -2476,8 +2540,8 @@ class Str {
     static toASCIICode(b)
     {
         let s;
-        if (b != Str.ASCII.CR && b != Str.ASCII.LF) {
-            s = Str.ASCIICodeMap[b];
+        if (b != StrLib.ASCII.CR && b != StrLib.ASCII.LF) {
+            s = StrLib.ASCIICodeMap[b];
         }
         if (s) {
             s = '<' + s + '>';
@@ -2488,79 +2552,8 @@ class Str {
     }
 }
 
-/*
- * Map special characters to their HTML escape sequences.
- */
-Str.HTMLEscapeMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&apos;',
-    '$': '&dollar;'
-};
-
-/*
- * Map "unprintable" ASCII codes to mnemonics, to more clearly see what's being printed.
- */
-Str.ASCIICodeMap = {
-    0x00:   "NUL",
-    0x01:   "SOH",      // (CTRL_A) Start of Heading
-    0x02:   "STX",      // (CTRL_B) Start of Text
-    0x03:   "ETX",      // (CTRL_C) End of Text
-    0x04:   "EOT",      // (CTRL_D) End of Transmission
-    0x05:   "ENQ",      // (CTRL_E) Enquiry
-    0x06:   "ACK",      // (CTRL_F) Acknowledge
-    0x07:   "BEL",      // (CTRL_G) Bell
-    0x08:   "BS",       // (CTRL_H) Backspace
-    0x09:   "TAB",      // (CTRL_I) Horizontal Tab (aka HT)
-    0x0A:   "LF",       // (CTRL_J) Line Feed (New Line)
-    0x0B:   "VT",       // (CTRL_K) Vertical Tab
-    0x0C:   "FF",       // (CTRL_L) Form Feed (New Page)
-    0x0D:   "CR",       // (CTRL_M) Carriage Return
-    0x0E:   "SO",       // (CTRL_N) Shift Out
-    0x0F:   "SI",       // (CTRL_O) Shift In
-    0x10:   "DLE",      // (CTRL_P) Data Link Escape
-    0x11:   "XON",      // (CTRL_Q) Device Control 1 (aka DC1)
-    0x12:   "DC2",      // (CTRL_R) Device Control 2
-    0x13:   "XOFF",     // (CTRL_S) Device Control 3 (aka DC3)
-    0x14:   "DC4",      // (CTRL_T) Device Control 4
-    0x15:   "NAK",      // (CTRL_U) Negative Acknowledge
-    0x16:   "SYN",      // (CTRL_V) Synchronous Idle
-    0x17:   "ETB",      // (CTRL_W) End of Transmission Block
-    0x18:   "CAN",      // (CTRL_X) Cancel
-    0x19:   "EM",       // (CTRL_Y) End of Medium
-    0x1A:   "SUB",      // (CTRL_Z) Substitute
-    0x1B:   "ESC",      // Escape
-    0x1C:   "FS",       // File Separator
-    0x1D:   "GS",       // Group Separator
-    0x1E:   "RS",       // Record Separator
-    0x1F:   "US",       // Unit Separator
-    0x7F:   "DEL"
-};
-
-/*
- * TODO: Future home of a complete ASCII table.
- */
-Str.ASCII = {
-    LF:     0x0A,
-    CR:     0x0D
-};
-
-Str.TYPES = {
-    NULL:       0,
-    BYTE:       1,
-    WORD:       2,
-    DWORD:      3,
-    NUMBER:     4,
-    STRING:     5,
-    BOOLEAN:    6,
-    OBJECT:     7,
-    ARRAY:      8
-};
-
-Str.format = new Format();
-Str.sprintf = Str.format.sprintf.bind(Str.format);
+StrLib.format = new Format();
+StrLib.sprintf = StrLib.format.sprintf.bind(StrLib.format);
 
 /**
  * @copyright https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
@@ -2573,10 +2566,15 @@ let BitField;
 let BitFields;
 
 /**
- * @class Usr
+ * @class UsrLib
  * @unrestricted
  */
-class Usr {
+class UsrLib {
+
+    static aMonthDays = [
+        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+    ];
+
     /**
      * binarySearch(a, v, fnCompare)
      *
@@ -2622,7 +2620,7 @@ class Usr {
      */
     static binaryInsert(a, v, fnCompare)
     {
-        let index = Usr.binarySearch(a, v, fnCompare);
+        let index = UsrLib.binarySearch(a, v, fnCompare);
         if (index < 0) {
             a.splice(-(index + 1), 0, v);
         }
@@ -2636,7 +2634,7 @@ class Usr {
     static getTimestamp()
     {
         let date = new Date();
-        return Str.sprintf("%T", date);
+        return StrLib.sprintf("%T", date);
     }
 
     /**
@@ -2658,7 +2656,7 @@ class Usr {
      */
     static getMonthDays(nMonth, nYear)
     {
-        let nDays = Usr.aMonthDays[nMonth - 1];
+        let nDays = UsrLib.aMonthDays[nMonth - 1];
         if (nDays == 28) {
             if ((nYear % 4) === 0 && ((nYear % 100) || (nYear % 400) === 0)) {
                 nDays++;
@@ -2717,11 +2715,11 @@ class Usr {
      *
      * Prepares a bit field definition for use with getBitField() and setBitField(); eg:
      *
-     *      let bfs = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
+     *      let bfs = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
      *
      * The above defines a set of bit fields containing four fields: num (bits 0-19), count (bits 20-27), btmod (bit 28), and type (bits 29-31).
      *
-     *      Usr.setBitField(bfs.num, n, 1);
+     *      UsrLib.setBitField(bfs.num, n, 1);
      *
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
@@ -2752,7 +2750,7 @@ class Usr {
         let v = 0, i = 1;
         for (let f in bfs) {
             if (i >= arguments.length) break;
-            v = Usr.setBitField(bfs[f], v, arguments[i++]);
+            v = UsrLib.setBitField(bfs[f], v, arguments[i++]);
         }
         return v;
     }
@@ -2806,8 +2804,6 @@ class Usr {
         return -1;
     }
 }
-
-Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 /**
  * @copyright https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
@@ -2901,7 +2897,7 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * @class Web
  * @unrestricted
  */
-class Web {
+class WebLib {
     /**
      * getResource(sURL, type, fAsync, done, progress)
      *
@@ -2946,7 +2942,7 @@ class Web {
          * value of the global variable 'LOCALDISKS'; since imported values are immutable, we must look at the global
          * variable, since that's the only one that *might* have been changed at runtime.
          */
-        if (globals.window['LOCALDISKS'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
+        if (globals.window['LOCALDISKS'] && WebLib.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
         } else {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
@@ -3042,17 +3038,17 @@ class Web {
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
-            if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
+            if (resource != null && (request.status == 200 || !request.status && resource.length && WebLib.getHostProtocol() == "file:")) {
                 Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
                 Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
-                if (!request.status && !Web.fAdBlockerWarning) {
+                if (!request.status && !WebLib.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
-                        Web.fAdBlockerWarning = true;
-                        Component.alertUser("PCjs was unable to perform a cross-origin resource request to '" + match[1] + "'.\n\nIf you're running an ad blocker, try adding '" + Web.getHostOrigin() + "' to your whitelist (or find a smarter ad blocker).");
+                        WebLib.fAdBlockerWarning = true;
+                        Component.alertUser("PCjs was unable to perform a cross-origin resource request to '" + match[1] + "'.\n\nIf you're running an ad blocker, try adding '" + WebLib.getHostOrigin() + "' to your whitelist (or find a smarter ad blocker).");
                     }
                 }
             }
@@ -3308,7 +3304,7 @@ class Web {
         dataPost[ReportAPI.QUERY.TYPE] = sType;
         dataPost[ReportAPI.QUERY.DATA] = sReport;
         let sReportURL = (sHostName? sHostName : SITEURL) + ReportAPI.ENDPOINT;
-        Web.getResource(sReportURL, dataPost, true);
+        WebLib.getResource(sReportURL, dataPost, true);
     }
 
     /**
@@ -3384,21 +3380,21 @@ class Web {
      */
     static hasLocalStorage()
     {
-        if (Web.fLocalStorage == null) {
+        if (WebLib.fLocalStorage == null) {
             let f = false;
             if (globals.window.localStorage) {
                 try {
-                    globals.window.localStorage.setItem(Web.sLocalStorageTest, Web.sLocalStorageTest);
-                    f = (globals.window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
-                    globals.window.localStorage.removeItem(Web.sLocalStorageTest);
+                    globals.window.localStorage.setItem(WebLib.sLocalStorageTest, WebLib.sLocalStorageTest);
+                    f = (globals.window.localStorage.getItem(WebLib.sLocalStorageTest) == WebLib.sLocalStorageTest);
+                    globals.window.localStorage.removeItem(WebLib.sLocalStorageTest);
                 } catch (e) {
-                    Web.printLocalStorageError(e);
+                    WebLib.printLocalStorageError(e);
                     f = false;
                 }
             }
-            Web.fLocalStorage = f;
+            WebLib.fLocalStorage = f;
         }
-        return Web.fLocalStorage;
+        return WebLib.fLocalStorage;
     }
 
     /**
@@ -3422,11 +3418,11 @@ class Web {
     static getLocalStorageItem(sKey)
     {
         let sValue;
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 sValue = globals.window.localStorage.getItem(sKey);
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return sValue;
@@ -3441,12 +3437,12 @@ class Web {
      */
     static setLocalStorageItem(sKey, sValue)
     {
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 globals.window.localStorage.setItem(sKey, sValue);
                 return true;
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return false;
@@ -3459,11 +3455,11 @@ class Web {
      */
     static removeLocalStorageItem(sKey)
     {
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 globals.window.localStorage.removeItem(sKey);
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
     }
@@ -3476,13 +3472,13 @@ class Web {
     static getLocalStorageKeys()
     {
         let a = [];
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 for (let i = 0, c = globals.window.localStorage.length; i < c; i++) {
                     a.push(globals.window.localStorage.key(i));
                 }
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return a;
@@ -3530,7 +3526,7 @@ class Web {
     static isUserAgent(s)
     {
         if (globals.window.navigator) {
-            let userAgent = Web.getUserAgent();
+            let userAgent = WebLib.getUserAgent();
             /*
              * Here's one case where we have to be careful with Component, because when isUserAgent() is called by
              * the init code below, component.js hasn't been loaded yet.  The simple solution for now is to remove the call.
@@ -3558,13 +3554,13 @@ class Web {
      */
     static isMobile(sDevice)
     {
-        let sMobile = Web.getURLParm("mobile");
+        let sMobile = WebLib.getURLParm("mobile");
         if (sMobile) return sMobile == "true";
-        if (Web.isUserAgent("Mobi")) {
+        if (WebLib.isUserAgent("Mobi")) {
             if (!sDevice) return true;
             let fInvert = sDevice[0] == '!';
             if (fInvert) sDevice = sDevice.substr(1);
-            return Web.isUserAgent(sDevice) != fInvert;
+            return WebLib.isUserAgent(sDevice) != fInvert;
         }
         return false;
     }
@@ -3588,8 +3584,8 @@ class Web {
     static findProperty(obj, sProp, sSuffix)
     {
         if (obj) {
-            for (let i = 0; i < Web.asBrowserPrefixes.length; i++) {
-                let sName = Web.asBrowserPrefixes[i];
+            for (let i = 0; i < WebLib.asBrowserPrefixes.length; i++) {
+                let sName = WebLib.asBrowserPrefixes[i];
                 if (sSuffix) {
                     sName += sSuffix;
                     let sEvent = sProp + sName;
@@ -3618,10 +3614,10 @@ class Web {
      */
     static getURLParm(sParm)
     {
-        if (!Web.parmsURL) {
-            Web.parmsURL = Web.parseURLParms();
+        if (!WebLib.parmsURL) {
+            WebLib.parmsURL = WebLib.parseURLParms();
         }
-        return Web.parmsURL[sParm] || Web.parmsURL[sParm.toLowerCase()];
+        return WebLib.parmsURL[sParm] || WebLib.parmsURL[sParm.toLowerCase()];
     }
 
     /**
@@ -3693,7 +3689,7 @@ class Web {
                 link.click();
                 document.body.removeChild(link);
                 sAlert = 'Check your Downloads folder for ' + sFileName + '.';
-                // if (Web.isUserAgent("Chrome")) {
+                // if (WebLib.isUserAgent("Chrome")) {
                 //     sAlert += '\n\nIn Chrome, after clicking OK, you may ALSO have to select the "Window" menu, choose "Downloads", and then locate this download and select "Keep".';
                 //     sAlert += '\n\nThis is part of Chrome\'s "Security By Jumping Through Extra Hoops" technology, which is much easier for Google to implement than actually checking for something malicious.';
                 //     sAlert += '\n\nAnd for the record, there is nothing malicious on the PCjs website.';
@@ -3803,7 +3799,7 @@ class Web {
      * addPageEvent(sEvent, fn)
      *
      * For 'load', 'unload', and 'pageshow' events, most callers should NOT use this function, but instead use
-     * Web.onInit(), Web.onShow(), and Web.onExit(), respectively.
+     * WebLib.onInit(), WebLib.onShow(), and WebLib.onExit(), respectively.
      *
      * The only components that should still use addPageEvent() are THIS component (see the bottom of this file)
      * and components that need to capture other events (eg, the 'resize' event in the Video component).
@@ -3827,7 +3823,7 @@ class Web {
      */
     static onInit(fn)
     {
-        Web.aPageEventHandlers['init'].push(fn);
+        WebLib.aPageEventHandlers['init'].push(fn);
     }
 
     /**
@@ -3839,7 +3835,7 @@ class Web {
      */
     static onShow(fn)
     {
-        Web.aPageEventHandlers['show'].push(fn);
+        WebLib.aPageEventHandlers['show'].push(fn);
     }
 
     /**
@@ -3861,7 +3857,7 @@ class Web {
      */
     static onExit(fn)
     {
-        Web.aPageEventHandlers['exit'].push(fn);
+        WebLib.aPageEventHandlers['exit'].push(fn);
     }
 
     /**
@@ -3872,14 +3868,14 @@ class Web {
      */
     static doPageEvent(sEvent, browser)
     {
-        let afn = Web.aPageEventHandlers[sEvent];
-        if (afn && Web.fPageEventsEnabled) {
+        let afn = WebLib.aPageEventHandlers[sEvent];
+        if (afn && WebLib.fPageEventsEnabled) {
             try {
                 for (let i = 0; i < afn.length; i++) {
                     afn[i]();
                 }
             } catch (e) {
-                Web.onError("An unexpected error occurred: " + e.message);
+                WebLib.onError("An unexpected error occurred: " + e.message);
             }
         }
     }
@@ -3891,13 +3887,13 @@ class Web {
      */
     static enablePageEvents(fEnable)
     {
-        if (!Web.fPageEventsEnabled && fEnable) {
-            Web.fPageEventsEnabled = true;
-            if (Web.fPageLoaded) Web.doPageEvent('init');
-            if (Web.fPageShowed) Web.doPageEvent('show');
+        if (!WebLib.fPageEventsEnabled && fEnable) {
+            WebLib.fPageEventsEnabled = true;
+            if (WebLib.fPageLoaded) WebLib.doPageEvent('init');
+            if (WebLib.fPageShowed) WebLib.doPageEvent('show');
             return;
         }
-        Web.fPageEventsEnabled = fEnable;
+        WebLib.fPageEventsEnabled = fEnable;
     }
 
     /**
@@ -3905,8 +3901,8 @@ class Web {
      */
     static doPageInit()
     {
-        Web.fPageLoaded = true;
-        Web.doPageEvent('init', true);
+        WebLib.fPageLoaded = true;
+        WebLib.doPageEvent('init', true);
     }
 
     /**
@@ -3914,8 +3910,8 @@ class Web {
      */
     static doPageShow()
     {
-        Web.fPageShowed = true;
-        Web.doPageEvent('show', true);
+        WebLib.fPageShowed = true;
+        WebLib.doPageEvent('show', true);
     }
 
     /**
@@ -3923,7 +3919,7 @@ class Web {
      */
     static doPageExit()
     {
-        Web.doPageEvent('exit', true);
+        WebLib.doPageEvent('exit', true);
     }
 
     /**
@@ -3931,9 +3927,9 @@ class Web {
      */
     static doPageReset()
     {
-        if (Web.fPageLoaded) {
-            Web.fPageLoaded = false;
-            Web.fPageShowed = false;
+        if (WebLib.fPageLoaded) {
+            WebLib.fPageLoaded = false;
+            WebLib.fPageShowed = false;
             /*
              * TODO: Anything else?
              */
@@ -3941,20 +3937,20 @@ class Web {
     }
 }
 
-Web.parmsURL = null;            // initialized on first call to parseURLParms()
+WebLib.parmsURL = null;            // initialized on first call to parseURLParms()
 
-Web.aPageEventHandlers = {
+WebLib.aPageEventHandlers = {
     'init': [],                 // list of 'load' handlers
     'show': [],                 // list of 'pageshow' handlers
     'exit': []                  // list of 'unload' handlers (although we prefer to use 'beforeunload' if possible)
 };
 
-Web.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
+WebLib.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
 
-Web.fPageLoaded = false;        // set once the page's first 'load' event has occurred
-Web.fPageShowed = false;        // set once the page's first 'pageshow' event has occurred
-Web.fPageEventsEnabled = true;  // default is true, set to false (or true) by enablePageEvents()
-Web.fAdBlockerWarning = false;
+WebLib.fPageLoaded = false;        // set once the page's first 'load' event has occurred
+WebLib.fPageShowed = false;        // set once the page's first 'pageshow' event has occurred
+WebLib.fPageEventsEnabled = true;  // default is true, set to false (or true) by enablePageEvents()
+WebLib.fAdBlockerWarning = false;
 
 /**
  * fLocalStorage
@@ -3963,18 +3959,18 @@ Web.fAdBlockerWarning = false;
  *
  * @type {boolean|null}
  */
-Web.fLocalStorage = null;
+WebLib.fLocalStorage = null;
 
 /**
  * TODO: Is there any way to get the Closure Compiler to stop inlining this string?  This isn't cutting it.
  *
  * @const {string}
  */
-Web.sLocalStorageTest = "PCjs.localStorage";
+WebLib.sLocalStorageTest = "PCjs.localStorage";
 
-Web.addPageEvent('load', Web.doPageInit);
-Web.addPageEvent('pageshow', Web.doPageShow);
-Web.addPageEvent(Web.isUserAgent("iOS")? 'pagehide' : (Web.isUserAgent("Opera")? 'unload' : 'beforeunload'), Web.doPageExit);
+WebLib.addPageEvent('load', WebLib.doPageInit);
+WebLib.addPageEvent('pageshow', WebLib.doPageShow);
+WebLib.addPageEvent(WebLib.isUserAgent("iOS")? 'pagehide' : (WebLib.isUserAgent("Opera")? 'unload' : 'beforeunload'), WebLib.doPageExit);
 
 /*
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override DEBUG with a "debug=false" embedded in
@@ -3985,10 +3981,10 @@ Web.addPageEvent(Web.isUserAgent("iOS")? 'pagehide' : (Web.isUserAgent("Opera")?
  * it's low priority, because it would only affect machines that explicitly request un-COMPILED code, and there are very
  * few such machines (eg, /blog/_posts/2015/2015-01-17-pcjs-uncompiled.md).
  *
- * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
+ * Deal with WebLib.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */
 if (DEBUG) {
-    let debug = Web.getURLParm("debug");
+    let debug = WebLib.getURLParm("debug");
     if (debug == "false") {
         globals.window['DEBUG'] = false;
     }
@@ -4259,7 +4255,7 @@ class Component {
             } else if (bitsMessage == MESSAGE.NOTICE) {
                 alert = true;
             }
-            let sMessage = Str.sprintf(format, ...args).trim();
+            let sMessage = StrLib.sprintf(format, ...args).trim();
             if (!alert) {
                 console.log(sMessage);
             } else {
@@ -5345,7 +5341,7 @@ class Component {
             }
         }
         if (this.messageEnabled(bitsMessage)) {
-            let sMessage = Str.sprintf(format, ...args);
+            let sMessage = StrLib.sprintf(format, ...args);
             if (this.dbg && this.dbg.message) {
                 this.dbg.message(sMessage, bitsMessage);
             } else {
@@ -5745,11 +5741,11 @@ const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
  *
  * TODO: Consider yet another embedXXX() parameter that would also allow BACKTRACK to be turned off on a page-by-page basis.
  *
- * Deal with Web.getURLParm("debug") in /machines/modules/v2/weblib.js at the same time.
+ * Deal with WebLib.getURLParm("debug") in /machines/modules/v2/weblib.js at the same time.
  */
 
 if (DEBUG) {
-    let backTrack = Web.getURLParm("backtrack");
+    let backTrack = WebLib.getURLParm("backtrack");
     if (backTrack == "false") {
         globals.window['BACKTRACK'] = false;
     }
@@ -9268,7 +9264,7 @@ class Color {
      */
     toString()
     {
-        if (!this.sValue) this.sValue = '#' + Str.toHex(this.rgb[0], 2) + Str.toHex(this.rgb[1], 2) + Str.toHex(this.rgb[2], 2);
+        if (!this.sValue) this.sValue = '#' + StrLib.toHex(this.rgb[0], 2) + StrLib.toHex(this.rgb[1], 2) + StrLib.toHex(this.rgb[2], 2);
         return this.sValue;
     }
 }
@@ -9500,7 +9496,7 @@ class Panel extends Component {
             /*
              * Employ the same gross onresize() hack for IE9/IE10 that we had to use for the Video canvas
              */
-            if (Web.getUserAgent().indexOf("MSIE") >= 0) {
+            if (WebLib.getUserAgent().indexOf("MSIE") >= 0) {
                 this.canvas['onresize'] = function(canvas, cx, cy) {
                     return function onResizeVideo() {
                         canvas.style.height = (((canvas.clientWidth * cy) / cx) | 0) + "px";
@@ -9737,7 +9733,7 @@ class Panel extends Component {
                     x -= rect.x;
                     y -= rect.y;
                     let region = this.busInfo.aRegions[i];
-                    let iBlock = Usr.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), this.busInfo.aBlocks[region.iBlock]);
+                    let iBlock = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), this.busInfo.aBlocks[region.iBlock]);
                     let addr = iBlock * this.bus.nBlockSize;
                     let addrLimit = (iBlock + region.cBlocks) * this.bus.nBlockSize - 1;
 
@@ -9880,8 +9876,8 @@ class Panel extends Component {
 
         for (; iBlock < this.busInfo.cBlocks; iBlock++) {
             let blockInfo = this.busInfo.aBlocks[iBlock];
-            let typeBlock = Usr.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.type), blockInfo);
-            let nBlockCurr = Usr.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), blockInfo);
+            let typeBlock = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.type), blockInfo);
+            let nBlockCurr = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), blockInfo);
             if (typeBlock != typeRegion || nBlockCurr != nBlockPrev + 1) {
                 let cBlocks = iBlock - iBlockRegion;
                 if (cBlocks) {
@@ -9915,7 +9911,7 @@ class Panel extends Component {
     {
         if (DEBUG) this.printf(MESSAGE.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, MemoryX86.TYPE.NAMES[type], cBlocks);
         this.busInfo.aRegions[this.busInfo.cRegions++] = {iBlock: iBlock, cBlocks: cBlocks, type: type};
-        return Usr.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, cBlocks, 0, type);
+        return UsrLib.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, cBlocks, 0, type);
     }
 
     /**
@@ -10006,12 +10002,12 @@ class Panel extends Component {
             if (addr == null) {
                 this.drawText("Mouse over memory to dump");
             } else {
-                this.drawText(Str.toHexLong(addr), null, 0, 1);
+                this.drawText(StrLib.toHexLong(addr), null, 0, 1);
                 for (let iLine = 1; iLine <= 16; iLine++) {
                     let sChars = "";
                     for (let iCol = 1; iCol <= 8; iCol++) {
                         let b = this.bus.getByteDirect(addr++);
-                        this.drawText(Str.toHex(b, 2), null, 1);
+                        this.drawText(StrLib.toHex(b, 2), null, 1);
                         sChars += (b >= 32 && b < 128? String.fromCharCode(b) : ".");
                     }
                     this.drawText(sChars, null, 0, 1);
@@ -10158,7 +10154,7 @@ class Panel extends Component {
                 sValue = nValue.toString();
             } else {
                 sValue = this.nDefaultDigits < 8? "0x" : "";
-                sValue += Str.toHex(nValue, this.nDefaultDigits);
+                sValue += StrLib.toHex(nValue, this.nDefaultDigits);
             }
             this.contextText.fillText(sValue, this.xText, this.yText);
             this.xText += this.cxColumn;
@@ -10306,7 +10302,7 @@ Panel.UPDATES_PER_SECOND = 10;
 /*
  * Initialize every Panel module on the page.
  */
-Web.onInit(Panel.init);
+WebLib.onInit(Panel.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
@@ -10416,7 +10412,7 @@ class BusX86 extends Component {
     /*
      * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
      */
-    static BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
+    static BlockInfo = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
 
     /**
      * BusX86(cpu, dbg)
@@ -10762,7 +10758,7 @@ class BusX86 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 let btmod = (BACKTRACK && block.modBackTrack(false)? 1 : 0);
-                info.aBlocks.push(Usr.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, 0, btmod, block.type));
+                info.aBlocks.push(UsrLib.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, 0, btmod, block.type));
                 info.cBlocks++;
             }
             iBlock++;
@@ -11444,7 +11440,7 @@ class BusX86 extends Component {
                 }
                 if (!fSymbol || fNearest) {
                     if (bto.obj.idComponent) {
-                        return bto.obj.idComponent + '+' + Str.toHex(bto.off + off, 0, true);
+                        return bto.obj.idComponent + '+' + StrLib.toHex(bto.off + off, 0, true);
                     }
                 }
             }
@@ -11614,7 +11610,7 @@ class BusX86 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortInputNotify[port] !== undefined) {
-                    Component.warning("input port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("input port " + StrLib.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
@@ -11756,7 +11752,7 @@ class BusX86 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortOutputNotify[port] !== undefined) {
-                    Component.warning("output port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("output port " + StrLib.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];
@@ -14199,7 +14195,7 @@ class CPULib extends Component {
             }
             let sVal;
             if (!this.flags.running || this.flags.displayLiveRegs) {
-                sVal = Str.toHex(nValue, cch);
+                sVal = StrLib.toHex(nValue, cch);
             } else {
                 sVal = "--------".substr(0, cch);
             }
@@ -15253,7 +15249,7 @@ class CPUx86 extends CPULib {
          * is equal to model.
          */
         let stepping = parmsCPU['stepping'];
-        this.stepping = model + (stepping? Str.parseInt(stepping, 16) : 0);
+        this.stepping = model + (stepping? StrLib.parseInt(stepping, 16) : 0);
 
         /*
          * Initialize processor operation to match the requested model
@@ -19776,7 +19772,7 @@ CPUx86.PAGEBLOCKS_CACHE = 512;      // TODO: This seems adequate for 4Mb of RAM,
 /*
  * Initialize every CPU module on the page
  */
-Web.onInit(CPUx86.init);
+WebLib.onInit(CPUx86.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fpux86.js (C) 2012-2023 Jeff Parsons
@@ -19838,7 +19834,7 @@ class FPUx86 extends Component {
          * is equal to model.
          */
         let stepping = this.parms['stepping'];
-        this.stepping = this.model + (stepping? Str.parseInt(stepping, 16) : 0);
+        this.stepping = this.model + (stepping? StrLib.parseInt(stepping, 16) : 0);
 
         /*
          * Perform a one-time allocation of all floating-point registers.
@@ -23113,7 +23109,7 @@ FPUx86.afnPreserveExceptions = [
 /*
  * Initialize every FPU module on the page
  */
-Web.onInit(FPUx86.init);
+WebLib.onInit(FPUx86.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/segx86.js (C) 2012-2023 Jeff Parsons
@@ -29142,7 +29138,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
     if (this.messageEnabled(bitsMessage) || fHalt) {
 
         let fRunning = this.flags.running;
-        let sMessage = "Fault " + Str.toHexByte(nFault) + (nError != null? " (" + Str.toHexWord(nError) + ")" : "") + " on opcode " + Str.toHexByte(bOpcode);
+        let sMessage = "Fault " + StrLib.toHexByte(nFault) + (nError != null? " (" + StrLib.toHexWord(nError) + ")" : "") + " on opcode " + StrLib.toHexByte(bOpcode);
         if (fHalt) {
             if (fRunning) sMessage += " (blocked)";
         }
@@ -37611,7 +37607,7 @@ X86.opInvalid = function()
 X86.opUndefined = function()
 {
     this.setIP(this.opLIP - this.segCS.base);
-    this.setError("Undefined opcode " + Str.toHexByte(this.getByte(this.regLIP)) + " at " + Str.toHexLong(this.regLIP));
+    this.setError("Undefined opcode " + StrLib.toHexByte(this.getByte(this.regLIP)) + " at " + StrLib.toHexLong(this.regLIP));
     this.stopCPU();
 };
 
@@ -39682,7 +39678,7 @@ class ChipSet extends Component {
         this.sDateRTC = parmsChipSet['dateRTC'];
 
         /*
-         * Here, I'm finally getting around to trying the Web Audio API.  Fortunately, based on what little
+         * Here, I'm finally getting around to trying the WebLib Audio API.  Fortunately, based on what little
          * I know about sound generation, using the API to make the same noises as the IBM PC speaker seems
          * straightforward.
          *
@@ -40349,7 +40345,7 @@ class ChipSet extends Component {
                         if (++this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] >= 24) {
                             this.abCMOSData[ChipSet.CMOS.ADDR.RTC_HOUR] = 0;
                             this.abCMOSData[ChipSet.CMOS.ADDR.RTC_WEEK_DAY] = (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_WEEK_DAY] % 7) + 1;
-                            let nDayMax = Usr.getMonthDays(this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH], this.abCMOSData[ChipSet.CMOS.ADDR.RTC_YEAR]);
+                            let nDayMax = UsrLib.getMonthDays(this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH], this.abCMOSData[ChipSet.CMOS.ADDR.RTC_YEAR]);
                             if (++this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH_DAY] > nDayMax) {
                                 this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH_DAY] = 1;
                                 if (++this.abCMOSData[ChipSet.CMOS.ADDR.RTC_MONTH] > 12) {
@@ -41415,9 +41411,9 @@ class ChipSet extends Component {
                 let sDump = "PIC" + iPIC + ":";
                 for (let i = 0; i < pic.aICW.length; i++) {
                     let b = pic.aICW[i];
-                    sDump += " IC" + (i + 1) + '=' + Str.toHexByte(b);
+                    sDump += " IC" + (i + 1) + '=' + StrLib.toHexByte(b);
                 }
-                sDump += " IMR=" + Str.toHexByte(pic.bIMR) + " IRR=" + Str.toHexByte(pic.bIRR) + " ISR=" + Str.toHexByte(pic.bISR) + " DELAY=" + pic.nDelay + "\n";
+                sDump += " IMR=" + StrLib.toHexByte(pic.bIMR) + " IRR=" + StrLib.toHexByte(pic.bIRR) + " ISR=" + StrLib.toHexByte(pic.bISR) + " DELAY=" + pic.nDelay + "\n";
                 this.print(sDump);
             }
         }
@@ -41447,7 +41443,7 @@ class ChipSet extends Component {
                         count |= (timer.countCurrent[i] << (i * 8));
                     }
                 }
-                sDump += " mode=" + (timer.mode >> 1) + " bytes=" + timer.countBytes + " count=" + Str.toHexWord(count) + "\n";
+                sDump += " mode=" + (timer.mode >> 1) + " bytes=" + timer.countBytes + " count=" + StrLib.toHexWord(count) + "\n";
                 this.print(sDump);
             }
         }
@@ -41465,7 +41461,7 @@ class ChipSet extends Component {
             for (let iCMOS = 0; iCMOS < ChipSet.CMOS.ADDR.TOTAL; iCMOS++) {
                 let b = (iCMOS <= ChipSet.CMOS.ADDR.STATUSD? this.getRTCByte(iCMOS) : this.abCMOSData[iCMOS]);
                 if (sDump) sDump += '\n';
-                sDump += "CMOS[" + Str.toHexByte(iCMOS) + "]: " + Str.toHexByte(b) + "\n";
+                sDump += "CMOS[" + StrLib.toHexByte(iCMOS) + "]: " + StrLib.toHexByte(b) + "\n";
             }
             this.print(sDump);
         }
@@ -42008,7 +42004,7 @@ class ChipSet extends Component {
                 let b;
                 let addr = (channel.bPage << 16) | (channel.addrCurrent[1] << 8) | channel.addrCurrent[0];
                 if (DEBUG && DEBUGGER && channel.sAddrDebug === null) {
-                    channel.sAddrDebug = Str.toHex(addr >> 4, 4) + ":" + Str.toHex(addr & 0xf, 4);
+                    channel.sAddrDebug = StrLib.toHex(addr >> 4, 4) + ":" + StrLib.toHex(addr & 0xf, 4);
                     if (channel.type != ChipSet.DMA_MODE.TYPE_WRITE && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
                         this.printf(MESSAGE.DMA, "advanceDMA(%d) transferring %d bytes from %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
                         this.dbg.doDump(["db", channel.sAddrDebug, "l" + channel.cbDebug]);
@@ -44188,7 +44184,7 @@ class ChipSet extends Component {
         let bAddr = this.bCMOSAddr & ChipSet.CMOS.ADDR.MASK;
         let bIn = (bAddr <= ChipSet.CMOS.ADDR.STATUSD? this.getRTCByte(bAddr) : this.abCMOSData[bAddr]);
         if (this.messageEnabled(MESSAGE.CMOS + MESSAGE.PORT)) {
-            this.printIO(port, undefined, addrFrom, "CMOS.DATA[" + Str.toHexByte(bAddr) + "]", bIn, true);
+            this.printIO(port, undefined, addrFrom, "CMOS.DATA[" + StrLib.toHexByte(bAddr) + "]", bIn, true);
         }
         if (addrFrom != null) {
             if (bAddr == ChipSet.CMOS.ADDR.STATUSC) {
@@ -44223,7 +44219,7 @@ class ChipSet extends Component {
     {
         let bAddr = this.bCMOSAddr & ChipSet.CMOS.ADDR.MASK;
         if (this.messageEnabled(MESSAGE.CMOS + MESSAGE.PORT)) {
-            this.printIO(port, bOut, addrFrom, "CMOS.DATA[" + Str.toHexByte(bAddr) + "]", undefined, true);
+            this.printIO(port, bOut, addrFrom, "CMOS.DATA[" + StrLib.toHexByte(bAddr) + "]", undefined, true);
         }
         let bDelta = bOut ^ this.abCMOSData[bAddr];
         this.abCMOSData[bAddr] = (bAddr <= ChipSet.CMOS.ADDR.STATUSD? this.setRTCByte(bAddr, bOut) : bOut);
@@ -44345,9 +44341,9 @@ class ChipSet extends Component {
                     let DL = chipset.cpu.regEDX & 0xff;
                     let DH = chipset.cpu.regEDX >> 8;
                     if (AH == 0x02 || AH == 0x03) {
-                        sResult = " CH(hour)=" + Str.toHexWord(CH) + " CL(min)=" + Str.toHexByte(CL) + " DH(sec)=" + Str.toHexByte(DH);
+                        sResult = " CH(hour)=" + StrLib.toHexWord(CH) + " CL(min)=" + StrLib.toHexByte(CL) + " DH(sec)=" + StrLib.toHexByte(DH);
                     } else if (AH == 0x04 || AH == 0x05) {
-                        sResult = " CX(year)=" + Str.toHexWord(chipset.cpu.regECX) + " DH(month)=" + Str.toHexByte(DH) + " DL(day)=" + Str.toHexByte(DL);
+                        sResult = " CX(year)=" + StrLib.toHexWord(chipset.cpu.regECX) + " DH(month)=" + StrLib.toHexByte(DH) + " DL(day)=" + StrLib.toHexByte(DL);
                     }
                     let nCyclesDelta = -nCycles + (nCycles = chipset.cpu.getCycles());
                     chipset.dbg.messageIntReturn(Interrupts.TIMER, nLevel, nCyclesDelta, sResult);
@@ -44449,7 +44445,7 @@ class ChipSet extends Component {
             if (this.oscillatorAudio) return true;
             try {
                 this.oscillatorAudio = this.contextAudio['createOscillator']();
-                if ('start' in this.oscillatorAudio) {  // early versions of Web Audio used noteOn() instead of start()
+                if ('start' in this.oscillatorAudio) {  // early versions of WebLib Audio used noteOn() instead of start()
                     this.volumeAudio = this.contextAudio['createGain']();
                     this.oscillatorAudio['connect'](this.volumeAudio);
                     this.volumeAudio['connect'](this.contextAudio['destination']);
@@ -45867,7 +45863,7 @@ if (DESKPRO386) {
 /*
  * Initialize every ChipSet module on the page.
  */
-Web.onInit(ChipSet.init);
+WebLib.onInit(ChipSet.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
@@ -45950,16 +45946,16 @@ class ROMx86 extends Component {
         this.sFileURL = this.sFilePath = parmsROM['file'];
 
         if (this.sFileURL) {
-            let sFileName = Str.getBaseName(this.sFileURL);
+            let sFileName = StrLib.getBaseName(this.sFileURL);
             if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", this.sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side ROM converter to return the file in a JSON-compatible format.
              */
-            let sFileExt = Str.getExtension(sFileName);
+            let sFileExt = StrLib.getExtension(sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                this.sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
+                this.sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
         }
     }
@@ -45982,7 +45978,7 @@ class ROMx86 extends Component {
 
         if (this.sFileURL) {
             let rom = this;
-            Web.getResource(this.sFileURL, null, true, function doneROMLoad(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(this.sFileURL, null, true, function doneROMLoad(sURL, sResponse, nErrorCode) {
                 rom.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
                 rom.printf(MESSAGE.PROGRESS, "Loading %s...\n", rom.sFileURL);
@@ -46132,7 +46128,7 @@ class ROMx86 extends Component {
             let asHexData = sHexData.split(" ");
             this.abROM = new Array(asHexData.length);
             for (let i = 0; i < asHexData.length; i++) {
-                this.abROM[i] = Str.parseInt(asHexData[i], 16);
+                this.abROM[i] = StrLib.parseInt(asHexData[i], 16);
             }
         }
         this.copyROM();
@@ -46167,7 +46163,7 @@ class ROMx86 extends Component {
                      * good idea to stop the machine in its tracks whenever a setError() occurs, but there may also be
                      * times when we'd like to forge ahead anyway.
                      */
-                    this.setError("ROM size (" + Str.toHexLong(this.abROM.length) + ") does not match specified size (" + Str.toHexLong(this.sizeROM) + ")");
+                    this.setError("ROM size (" + StrLib.toHexLong(this.abROM.length) + ") does not match specified size (" + StrLib.toHexLong(this.sizeROM) + ")");
                 }
                 else if (this.addROM(this.addrROM)) {
 
@@ -46536,7 +46532,7 @@ ROMx86.BIOS = {
 /*
  * Initialize all the ROM modules on the page.
  */
-Web.onInit(ROMx86.init);
+WebLib.onInit(ROMx86.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
@@ -47182,7 +47178,7 @@ CompaqController.ACCESS = [CompaqController.readByte, CompaqController.writeByte
 /*
  * Initialize all the RAM modules on the page.
  */
-Web.onInit(RAMx86.init);
+WebLib.onInit(RAMx86.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
@@ -47226,7 +47222,7 @@ class KbdX86 extends Component {
 
         this.setModel(parmsKbd['model']);
 
-        this.fMobile = Web.isMobile("!iPad");
+        this.fMobile = WebLib.isMobile("!iPad");
         this.printf("mobile keyboard support: %b\n", this.fMobile);
 
         /*
@@ -47236,7 +47232,7 @@ class KbdX86 extends Component {
          * keys: keys like CAPS-LOCK generate both UP and DOWN events on every press.  On other platforms (eg, macOS),
          * those keys generate only a DOWN event when "locking" and only an UP event when "unlocking".
          */
-        this.fMSWindows = Web.isUserAgent("Windows");
+        this.fMSWindows = WebLib.isUserAgent("Windows");
 
         /*
          * This is count of the number of "soft keyboard" keys present.  At the moment, its only
@@ -47433,7 +47429,7 @@ class KbdX86 extends Component {
                  *
                  *      this.bindings[id] = control;
                  */
-                if (sHTMLType == "textarea" && !Web.isUserAgent("iPhone")) {
+                if (sHTMLType == "textarea" && !WebLib.isUserAgent("iPhone")) {
                     this.controlTextKeyboard = controlText;
                     this.controlTextKeyboard.addEventListener(
                         'copy',
@@ -48429,7 +48425,7 @@ class KbdX86 extends Component {
      * operations, multiple dollar signs could eventually get reduced to a single dollar sign BEFORE we get here.
      *
      * To compensate, I've changed a few replace() methods, like MarkOut's convertMDMachineLinks() and HTMLOut's
-     * addFilesToHTML(), from the conventional string replace() to my own Str.replace(), and for situations like the
+     * addFilesToHTML(), from the conventional string replace() to my own StrLib.replace(), and for situations like the
      * embed.js parseXML() function, which needs to use a RegExp-style replace(), I've added a preliminary
      * replace(/\$/g, "$$$$") to the replacement string.
      *
@@ -48450,10 +48446,10 @@ class KbdX86 extends Component {
                 if (reSpecial.lastIndex) reSpecial.lastIndex--;
                 switch (match[1]) {
                 case 'date':
-                    sReplace = Str.sprintf("%M-%02D-%04Y", date);
+                    sReplace = StrLib.sprintf("%M-%02D-%04Y", date);
                     break;
                 case 'time':
-                    sReplace = Str.sprintf("%H:%02N:%02S", date);
+                    sReplace = StrLib.sprintf("%H:%02N:%02S", date);
                     break;
                 default:
                     continue;
@@ -48944,7 +48940,7 @@ class KbdX86 extends Component {
          * NOTE: isUserAgent struggles to detect iPadOS because Apple insists on pretending that it be indistinguishable
          * from desktop systems, so be aware that this hack may stop working at some undefined point.
          */
-        if (Web.isUserAgent("iOS") && (this.bitsState & KbdX86.STATE.CTRL)) {
+        if (WebLib.isUserAgent("iOS") && (this.bitsState & KbdX86.STATE.CTRL)) {
             if (keyCode == Keys.KEYCODE.CR) {
                 keyCode = Keys.ASCII.C;
             }
@@ -50399,7 +50395,7 @@ KbdX86.INJECTION = {
 /*
  * Initialize every Keyboard module on the page.
  */
-Web.onInit(KbdX86.init);
+WebLib.onInit(KbdX86.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/video.js (C) 2012-2023 Jeff Parsons
@@ -51139,8 +51135,8 @@ class Card extends Controller {
                  * the extended bits of certain registers, so that we don't have to "mentally" concatenate them.
                  */
                 let reg = (aRegs === this.regCRTData)? this.getCRTCReg(i) : aRegs[i];
-                let sRegName = (asRegs? asRegs[i] : sName.substr(1) + Str.toDec(i, 3));
-                s += Str.sprintf("%s[%02X]: %-12s %*X%s (%*d)\n", sName, i, sRegName, (asRegs? 4 : 6), reg, (i === iReg? '*' : ' '), (asRegs? 4 : 6), reg);
+                let sRegName = (asRegs? asRegs[i] : sName.substr(1) + StrLib.toDec(i, 3));
+                s += StrLib.sprintf("%s[%02X]: %-12s %*X%s (%*d)\n", sName, i, sRegName, (asRegs? 4 : 6), reg, (i === iReg? '*' : ' '), (asRegs? 4 : 6), reg);
             }
             this.dbg.printf("%s", s);
         }
@@ -51259,12 +51255,12 @@ class Card extends Controller {
 
                 let s = asArgs[i];
                 if (!i) {
-                    idw = Str.parseInt(s, 16);
+                    idw = StrLib.parseInt(s, 16);
                     continue;
                 }
 
                 let ch = s.charAt(0);
-                j = Str.parseInt(s.substr(1), 16);
+                j = StrLib.parseInt(s.substr(1), 16);
 
                 switch(ch) {
                 case 'l':
@@ -51296,10 +51292,10 @@ class Card extends Controller {
 
             let sDump = "";
             for (i = 0; i < l; i++) {
-                let sData = Str.toHex(this.addrBuffer + idw) + ":";
+                let sData = StrLib.toHex(this.addrBuffer + idw) + ":";
                 for (j = 0; j < n && idw < this.adwMemory.length; j++) {
                     let dw = this.adwMemory[idw++];
-                    sData += ' ' + ((p < 0)? Str.toHex(dw, 8) : Str.toBin((dw >> (p << 3)), 8));
+                    sData += ' ' + ((p < 0)? StrLib.toHex(dw, 8) : StrLib.toBin((dw >> (p << 3)), 8));
                 }
                 if (fColAdjust) idw += w - n;
                 sDump += sData + "\n";
@@ -52836,7 +52832,7 @@ class VideoX86 extends Component {
         this.fStyleCanvasFullScreen = false;
         if (canvas) {
             canvas.style.backgroundColor = this.colorScreen;
-            this.fStyleCanvasFullScreen = document.fullscreenEnabled || Web.isUserAgent("Edge/");   // formerly fGecko = Web.isUserAgent("Gecko/");
+            this.fStyleCanvasFullScreen = document.fullscreenEnabled || WebLib.isUserAgent("Edge/");   // formerly fGecko = WebLib.isUserAgent("Gecko/");
         }
         if (container) container.style.backgroundColor = this.colorScreen;
 
@@ -52853,10 +52849,10 @@ class VideoX86 extends Component {
          * the default property name and value, and leave it to setDimensions() to do the actual setting.
          */
         let fSmoothing = parmsVideo['smoothing'];
-        let sSmoothing = Web.getURLParm('smoothing');
+        let sSmoothing = WebLib.getURLParm('smoothing');
         if (sSmoothing) fSmoothing = (sSmoothing == "true");
         this.fSmoothing = fSmoothing;
-        this.sSmoothing = Web.findProperty(this.contextScreen, 'imageSmoothingEnabled');
+        this.sSmoothing = WebLib.findProperty(this.contextScreen, 'imageSmoothingEnabled');
 
         /*
          * initBus() will determine touch-screen support; for now, just record values and set defaults.
@@ -52928,17 +52924,17 @@ class VideoX86 extends Component {
          */
         this.container = container;
         if (this.container) {
-            sProp = Web.findProperty(container, 'requestFullscreen') || Web.findProperty(container, 'requestFullScreen');
+            sProp = WebLib.findProperty(container, 'requestFullscreen') || WebLib.findProperty(container, 'requestFullScreen');
             if (sProp) {
                 this.container.doFullScreen = container[sProp];
-                sEvent = Web.findProperty(document, 'on', 'fullscreenchange');
+                sEvent = WebLib.findProperty(document, 'on', 'fullscreenchange');
                 if (sEvent) {
-                    let sFullScreen = Web.findProperty(document, 'fullscreenElement') || Web.findProperty(document, 'fullScreenElement');
+                    let sFullScreen = WebLib.findProperty(document, 'fullscreenElement') || WebLib.findProperty(document, 'fullScreenElement');
                     document.addEventListener(sEvent, function onFullScreenChange() {
                         video.notifyFullScreen(document[sFullScreen] != null);
                     }, false);
                 }
-                sEvent = Web.findProperty(document, 'on', 'fullscreenerror');
+                sEvent = WebLib.findProperty(document, 'on', 'fullscreenerror');
                 if (sEvent) {
                     document.addEventListener(sEvent, function onFullScreenError() {
                         video.notifyFullScreen();
@@ -52957,12 +52953,12 @@ class VideoX86 extends Component {
             this.inputScreen.onblur = function onBlurScreen() {
                 return video.onFocusChange(false);
             };
-            this.inputScreen.lockPointer = (sProp = Web.findProperty(this.inputScreen, 'requestPointerLock')) && this.inputScreen[sProp];
-            this.inputScreen.unlockPointer = (sProp = Web.findProperty(this.inputScreen, 'exitPointerLock')) && this.inputScreen[sProp];
+            this.inputScreen.lockPointer = (sProp = WebLib.findProperty(this.inputScreen, 'requestPointerLock')) && this.inputScreen[sProp];
+            this.inputScreen.unlockPointer = (sProp = WebLib.findProperty(this.inputScreen, 'exitPointerLock')) && this.inputScreen[sProp];
             if (this.inputScreen.lockPointer) {
-                sEvent = Web.findProperty(document, 'on', 'pointerlockchange');
+                sEvent = WebLib.findProperty(document, 'on', 'pointerlockchange');
                 if (sEvent) {
-                    let sPointerLock = Web.findProperty(document, 'pointerLockElement');
+                    let sPointerLock = WebLib.findProperty(document, 'pointerLockElement');
                     document.addEventListener(sEvent, function onPointerLockChange() {
                         let fLocked = !!(sPointerLock && document[sPointerLock] === video.inputScreen);
                         video.notifyPointerLocked(fLocked);
@@ -52974,9 +52970,9 @@ class VideoX86 extends Component {
         this.sFileURL = parmsVideo['fontROM'];
 
         if (this.sFileURL) {
-            let sFileExt = Str.getExtension(this.sFileURL);
+            let sFileExt = StrLib.getExtension(this.sFileURL);
             if (sFileExt != "json") {
-                this.sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFileURL + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
+                this.sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFileURL + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
             }
         }
 
@@ -53038,7 +53034,7 @@ class VideoX86 extends Component {
         }
 
         /*
-         * Moved this from the constructor (and changed Web.getURLParm() to cmp.getMachineParm()),
+         * Moved this from the constructor (and changed WebLib.getURLParm() to cmp.getMachineParm()),
          * so that the flicker setting can be easily overridden from the page, not just from the URL.
          */
         this.opacityFlicker = (1 - (cmp.getMachineParm('flicker', this.parmsVideo) || 0)).toString();
@@ -53138,7 +53134,7 @@ class VideoX86 extends Component {
 
         if (this.sFileURL) {
             let sProgress = "Loading " + this.sFileURL + "...";
-            Web.getResource(this.sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(this.sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 video.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
                 video.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
@@ -54981,7 +54977,7 @@ class VideoX86 extends Component {
         /*
          * The colors for cell backgrounds and cursor elements must be converted to CSS color strings.
          */
-        font.aCSSColors[iColor] = Str.sprintf("#%02X%02X%02X", rgbColor[0], rgbColor[1], rgbColor[2]);
+        font.aCSSColors[iColor] = StrLib.sprintf("#%02X%02X%02X", rgbColor[0], rgbColor[1], rgbColor[2]);
         font.aRGBColors[iColor] = rgbColor;
         font.aCanvas[iColor] = canvasFont;
         return true;
@@ -57590,7 +57586,7 @@ class VideoX86 extends Component {
     {
         let b = (this.cardEGA.regDACData[this.cardEGA.regDACAddr] >> this.cardEGA.regDACShift) & 0x3f;
         if (!addrFrom || this.messageEnabled()) {
-            this.printIO(Card.DAC.DATA.PORT, undefined, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", b, true);
+            this.printIO(Card.DAC.DATA.PORT, undefined, addrFrom, "DAC.DATA[" + StrLib.toHexByte(this.cardEGA.regDACAddr) + "][" + StrLib.toHexByte(this.cardEGA.regDACShift) + "]", b, true);
         }
         this.cardEGA.regDACShift += 6;
         if (this.cardEGA.regDACShift > 12) {
@@ -57612,7 +57608,7 @@ class VideoX86 extends Component {
     {
         let dw = this.cardEGA.regDACData[this.cardEGA.regDACAddr];
         if (!addrFrom || this.messageEnabled()) {
-            this.printIO(Card.DAC.DATA.PORT, bOut, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", undefined, true);
+            this.printIO(Card.DAC.DATA.PORT, bOut, addrFrom, "DAC.DATA[" + StrLib.toHexByte(this.cardEGA.regDACAddr) + "][" + StrLib.toHexByte(this.cardEGA.regDACShift) + "]", undefined, true);
         }
         let dwNew = (dw & ~(0x3f << this.cardEGA.regDACShift)) | ((bOut & 0x3f) << this.cardEGA.regDACShift);
         if (dw !== dwNew) {
@@ -58315,7 +58311,7 @@ class VideoX86 extends Component {
              * The other reason it's good to keep this particular hack limited to IE9/IE10 is that most other
              * browsers don't actually support an 'onresize' handler on anything but the window object.
              */
-            if (Web.getUserAgent().indexOf("MSIE") >= 0) {
+            if (WebLib.getUserAgent().indexOf("MSIE") >= 0) {
                 element['onresize'] = function(eParent, eChild, cx, cy) {
                     return function onResizeVideo() {
                         eChild.style.height = (((eParent.clientWidth * cy) / cx) | 0) + "px";
@@ -58327,17 +58323,17 @@ class VideoX86 extends Component {
             /*
              * The following is a related hack that allows the user to force the screen to use a particular aspect
              * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
-             * until we figure out a better UI.  And note that we use our Web.addPageEvent() helper function to make
+             * until we figure out a better UI.  And note that we use our WebLib.addPageEvent() helper function to make
              * sure we don't trample any other 'onresize' handler(s) attached to the window object.
              */
-            let aspect = +(Web.getURLParm('aspect') || parmsVideo['aspect']);
+            let aspect = +(WebLib.getURLParm('aspect') || parmsVideo['aspect']);
 
             /*
              * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
              * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
              */
             if (aspect && aspect >= 0.3 && aspect <= 3.33) {
-                Web.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
+                WebLib.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
                     return function onResizeWindow() {
                         /*
                          * Since aspectRatio is the target width/height, we have:
@@ -58431,7 +58427,7 @@ class VideoX86 extends Component {
                     textarea.style.fontSize = ((textarea.clientWidth * 0.01875)|0) + "px";
                 };
                 onResizeTextArea();
-                Web.addPageEvent('resize', onResizeTextArea);
+                WebLib.addPageEvent('resize', onResizeTextArea);
             }
 
             /*
@@ -59035,7 +59031,7 @@ VideoX86.aVGAPortOutput = {
 /*
  * Initialize every Video module on the page.
  */
-Web.onInit(VideoX86.init);
+WebLib.onInit(VideoX86.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/parallel.js (C) 2012-2023 Jeff Parsons
@@ -59431,7 +59427,7 @@ class ParallelPort extends Component {
                         b = 0x20;       // ASCII code for a space
                     }
                 }
-                this.controlBuffer.value += Str.toASCIICode(b);
+                this.controlBuffer.value += StrLib.toASCIICode(b);
                 this.controlBuffer.scrollTop = this.controlBuffer.scrollHeight;
             }
             fTransmitted = true;
@@ -59554,7 +59550,7 @@ ParallelPort.aPortOutput = {
 /*
  * Initialize every ParallelPort module on the page.
  */
-Web.onInit(ParallelPort.init);
+WebLib.onInit(ParallelPort.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
@@ -59920,9 +59916,9 @@ class SerialPort extends Component {
             if (sConnection) {
                 let asParts = sConnection.split('->');
                 if (asParts.length == 2) {
-                    let sSourceID = Str.trim(asParts[0]);
+                    let sSourceID = StrLib.trim(asParts[0]);
                     if (sSourceID != this.idComponent) return;  // this connection string is intended for another instance
-                    let sTargetID = Str.trim(asParts[1]);
+                    let sTargetID = StrLib.trim(asParts[1]);
                     this.connection = Component.getComponentByID(sTargetID, false);
                     if (this.connection) {
                         let exports = this.connection['exports'];
@@ -60483,13 +60479,13 @@ class SerialPort extends Component {
                 if (this.iLogicalCol > 0) this.iLogicalCol--;
             }
             else {
-                let s = Str.toASCIICode(b); // formerly: String.fromCharCode(b);
+                let s = StrLib.toASCIICode(b); // formerly: String.fromCharCode(b);
                 let nChars = s.length;      // formerly: (b >= 0x20? 1 : 0);
                 if (b < 0x20 && nChars == 1) nChars = 0;
                 if (b == 0x09) {
                     let tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
-                    if (this.tabSize) s = Str.pad("", nChars);
+                    if (this.tabSize) s = StrLib.pad("", nChars);
                 }
                 if (!this.iLogicalCol && nChars) {
                     /*
@@ -60715,7 +60711,7 @@ SerialPort.aPortOutput = {
 /*
  * Initialize every SerialPort module on the page.
  */
-Web.onInit(SerialPort.init);
+WebLib.onInit(SerialPort.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testctl.js (C) 2012-2023 Jeff Parsons
@@ -60794,7 +60790,7 @@ class TestController extends Component {
     {
         let controller = this;
         let sProgress = "Loading " + sURL + "...";
-        Web.getResource(sURL, null, true, function(sURL, sResponse, nErrorCode) {
+        WebLib.getResource(sURL, null, true, function(sURL, sResponse, nErrorCode) {
             controller.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
             controller.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
@@ -60959,7 +60955,7 @@ class TestController extends Component {
      */
     printf(format, ...args)
     {
-        let s = Str.sprintf(format.toString(), ...args);
+        let s = StrLib.sprintf(format.toString(), ...args);
 
         if (this.controlBuffer != null) {
             if (s != '\r') {
@@ -61031,7 +61027,7 @@ class TestController extends Component {
 /*
  * Initialize every TestController module on the page.
  */
-Web.onInit(TestController.init);
+WebLib.onInit(TestController.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testmon.js (C) 2012-2023 Jeff Parsons
@@ -61166,7 +61162,7 @@ class TestMonitor {
                 } else if (p1 == '$') {
                     result = commandParts[i];
                 } else {        // p1 must be '%', which means convert the value to hex
-                    result = Str.sprintf("%x", commandParts[i]);
+                    result = StrLib.sprintf("%x", commandParts[i]);
                 }
                 return result;
             });
@@ -62431,7 +62427,7 @@ Mouse.SERIAL = {
 /*
  * Initialize every Mouse module on the page.
  */
-Web.onInit(Mouse.init);
+WebLib.onInit(Mouse.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
@@ -62606,7 +62602,7 @@ class Disk extends Component {
      */
     constructor(controller, drive, mode)
     {
-        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++Disk.nDisks, 4)}, MESSAGE.DISK);
+        super("Disk", {'id': controller.idMachine + ".disk" + StrLib.toHex(++Disk.nDisks, 4)}, MESSAGE.DISK);
 
         this.controller = controller;
 
@@ -62867,7 +62863,7 @@ class Disk extends Component {
 
         this.sDiskName = sDiskName;
         this.sDiskPath = sDiskPath;
-        this.sDiskFile = Str.getBaseName(sDiskPath);
+        this.sDiskFile = StrLib.getBaseName(sDiskPath);
         this.sFormat = "json";
 
         let disk = this;
@@ -62906,7 +62902,7 @@ class Disk extends Component {
              * JSON-encoded disk image, so we load it as-is; otherwise, we ask our server-side disk image
              * converter to return the corresponding JSON-encoded data.
              */
-            let sDiskExt = Str.getExtension(sDiskPath);
+            let sDiskExt = StrLib.getExtension(sDiskPath);
             if (sDiskExt == DumpAPI.FORMAT.JSON || sDiskExt == DumpAPI.FORMAT.JSON_GZ) {
                 if (!sDiskPath.match(/^[A-Z]:/i)) {
                     sDiskURL = encodeURI(sDiskPath);    // don't encode Windows paths (TODO: sufficient?)
@@ -62945,15 +62941,15 @@ class Disk extends Component {
                 //     if (!sDiskPath.indexOf("http:") || !sDiskPath.indexOf("ftp:") || ["dsk", "ima", "img", "360", "720", "12", "144"].indexOf(sDiskExt) >= 0) {
                 //         sDiskParm = DumpAPI.QUERY.DISK;
                 //         sSizeParm = '&' + DumpAPI.QUERY.MBHD + "=0";
-                //     } else if (Str.endsWith(sDiskPath, '/')) {
+                //     } else if (StrLib.endsWith(sDiskPath, '/')) {
                 //         sDiskParm = DumpAPI.QUERY.DIR;
                 //     }
-                //     sDiskURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sDiskParm + '=' + encodeURIComponent(sDiskPath) + (this.fRemovable ? "" : sSizeParm) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
+                //     sDiskURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sDiskParm + '=' + encodeURIComponent(sDiskPath) + (this.fRemovable ? "" : sSizeParm) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
                 // }
             }
         }
         let sProgress = "Loading " + sDiskURL + "...";
-        return !!Web.getResource(sDiskURL, this.sFormat, true, function loadDone(sURL, sResponse, nErrorCode) {
+        return !!WebLib.getResource(sDiskURL, this.sFormat, true, function loadDone(sURL, sResponse, nErrorCode) {
             disk.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
             disk.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
@@ -63105,7 +63101,7 @@ class Disk extends Component {
                  * TODO: Provide some UI for turning write-protection on/off for disks at will, and provide
                  * an XML-based solution (ie, a per-disk XML configuration option) for controlling it as well.
                  */
-                let sBaseName = Str.getBaseName(this.sDiskFile, true).toLowerCase();
+                let sBaseName = StrLib.getBaseName(this.sDiskFile, true).toLowerCase();
                 if (sBaseName.indexOf("-readonly") > 0) {
                     this.fWriteProtected = true;
                 } else {
@@ -63359,7 +63355,7 @@ class Disk extends Component {
                                     let file = this.aFileTable[index];
                                     if (!file) {
                                         let desc = fileTable[index];
-                                        file = new FileInfo(this, desc.path, Str.getBaseName(desc.path), +desc.attr, desc.size || 0, desc.module);
+                                        file = new FileInfo(this, desc.path, StrLib.getBaseName(desc.path), +desc.attr, desc.size || 0, desc.module);
                                         this.aFileTable[index] = file;
                                     }
                                     sector.file = file;
@@ -63395,10 +63391,10 @@ class Disk extends Component {
         //     let iFile = sector[Disk.SECTOR.FILE_INDEX];
         //     if (iFile !== undefined) {
         //         let file = this.aFileTable[iFile];
-        //         return file.path + "[" + Str.toHex(sector[Disk.SECTOR.FILE_OFFSET], 0, true) + "]";
+        //         return file.path + "[" + StrLib.toHex(sector[Disk.SECTOR.FILE_OFFSET], 0, true) + "]";
         //     }
         // }
-        return sector.file? (sector.file.path + "[" + Str.toHex(sector.offFile, 0, true) + "]") : "unknown";
+        return sector.file? (sector.file.path + "[" + StrLib.toHex(sector.offFile, 0, true) + "]") : "unknown";
     }
 
     /**
@@ -63599,7 +63595,7 @@ class Disk extends Component {
         sParms += '&' + DiskAPI.QUERY.CHS + '=' + this.nCylinders + ':' + this.nHeads + ':' + this.nSectors + ':' + this.cbSector;
         sParms += '&' + DiskAPI.QUERY.MACHINE + '=' + this.controller.getMachineID();
         sParms += '&' + DiskAPI.QUERY.USER + '=' + this.controller.getUserID();
-        return Web.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
+        return WebLib.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
     }
 
     /**
@@ -63625,8 +63621,8 @@ class Disk extends Component {
             sParms += '&' + DiskAPI.QUERY.MACHINE + '=' + this.controller.getMachineID();
             sParms += '&' + DiskAPI.QUERY.USER + '=' + this.controller.getUserID();
             let disk = this;
-            let sDiskURL = Web.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
-            Web.getResource(sDiskURL, null, fAsync, function(sURL, sResponse, nErrorCode) {
+            let sDiskURL = WebLib.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
+            WebLib.getResource(sDiskURL, null, fAsync, function(sURL, sResponse, nErrorCode) {
                 disk.doneReadRemoteSectors(sURL, sResponse, nErrorCode, [iCylinder, iHead, iSector, nSectors, fAsync, done]);
             });
             return;
@@ -63722,8 +63718,8 @@ class Disk extends Component {
             dataPost[DiskAPI.QUERY.USER] = this.controller.getUserID();
             dataPost[DiskAPI.QUERY.DATA] = JSON.stringify(abSectors);
             let disk = this;
-            let sDiskURL = Web.getHostOrigin() + DiskAPI.ENDPOINT;
-            Web.getResource(sDiskURL, dataPost, fAsync, function(sURL, sResponse, nErrorCode) {
+            let sDiskURL = WebLib.getHostOrigin() + DiskAPI.ENDPOINT;
+            WebLib.getResource(sDiskURL, dataPost, fAsync, function(sURL, sResponse, nErrorCode) {
                 disk.doneWriteRemoteSectors(sURL, sResponse, nErrorCode, [iCylinder, iHead, iSector, nSectors, fAsync]);
             });
         }
@@ -63780,8 +63776,8 @@ class Disk extends Component {
             sParms += '&' + DiskAPI.QUERY.VOLUME + '=' + this.sDiskPath;
             sParms += '&' + DiskAPI.QUERY.MACHINE + '=' + this.controller.getMachineID();
             sParms += '&' + DiskAPI.QUERY.USER + '=' + this.controller.getUserID();
-            let sDiskURL = Web.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
-            Web.getResource(sDiskURL, null, true);
+            let sDiskURL = WebLib.getHostOrigin() + DiskAPI.ENDPOINT + '?' + sParms;
+            WebLib.getResource(sDiskURL, null, true);
             this.fRemote = false;
         }
     }
@@ -64495,7 +64491,7 @@ class Disk extends Component {
             for (let i = 0; i < cbSector; i++) {
                 if ((i % 16) === 0) {
                     if (sDump) sDump += sBytes + ' ' + sChars + '\n';
-                    sDump += Str.toHex(i, 4) + ": ";
+                    sDump += StrLib.toHex(i, 4) + ": ";
                     sBytes = sChars = "";
                 }
                 if ((i % 4) === 0) {
@@ -64504,7 +64500,7 @@ class Disk extends Component {
                 }
                 let b = dw & 0xff;
                 dw >>>= 8;
-                sBytes += Str.toHex(b, 2) + (i % 16 == 7? "-" : " ");
+                sBytes += StrLib.toHex(b, 2) + (i % 16 == 7? "-" : " ");
                 sChars += (b >= 32 && b < 128? String.fromCharCode(b) : ".");
             }
             if (sBytes) sDump += sBytes + ' ' + sChars;
@@ -64611,13 +64607,13 @@ class FileInfo {
                         }
                     }
                     if (!sSymbol && entryNearest) {
-                        sSymbol = this.module['name'] + '!' + entryNearest[1] + "+" + Str.toHex(cbNearest, 0, true);
+                        sSymbol = this.module['name'] + '!' + entryNearest[1] + "+" + StrLib.toHex(cbNearest, 0, true);
                     }
                     break;
                 }
             }
         }
-        return sSymbol || this.name + '+' + Str.toHex(off, 0, true);
+        return sSymbol || this.name + '+' + StrLib.toHex(off, 0, true);
     }
 }
 
@@ -64790,7 +64786,7 @@ class FDC extends Component {
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
-        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
+        this.fLocalDisks = (!WebLib.isMobile() && 'FileReader' in globals.window);
 
         /*
          * If the HDC component is configured for removable discs (ie, if it's configured as a CD-ROM drive),
@@ -64854,7 +64850,7 @@ class FDC extends Component {
              * However, that doesn't seem to work for all browsers, so I've reverted to onchange.
              */
             controlSelect.onchange = function onChangeListDrives(event) {
-                let iDrive = Str.parseInt(controlSelect.value, 10);
+                let iDrive = StrLib.parseInt(controlSelect.value, 10);
                 if (iDrive != null) fdc.displayDiskette(iDrive, true);
             };
             return true;
@@ -64894,7 +64890,7 @@ class FDC extends Component {
             control.onclick = function onClickSaveDisk(event) {
                 let controlDrives = fdc.bindings["listDrives"];
                 if (controlDrives && controlDrives.options && fdc.aDrives) {
-                    let iDriveSelected = Str.parseInt(controlDrives.value, 10) || 0;
+                    let iDriveSelected = StrLib.parseInt(controlDrives.value, 10) || 0;
                     let drive = fdc.aDrives[iDriveSelected];
                     if (drive) {
                         /*
@@ -64904,7 +64900,7 @@ class FDC extends Component {
                         let disk = drive.disk;
                         if (disk) {
                             if (DEBUG) fdc.printf("saving diskette %s...\n", disk.sDiskPath);
-                            let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
+                            let sAlert = WebLib.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
                             fdc.printf(MESSAGE.NOTICE, "No diskette loaded in drive\n");
@@ -64943,7 +64939,7 @@ class FDC extends Component {
                 let file = event.currentTarget[1].files[0];
                 if (file) {
                     let sDiskPath = file.name;
-                    let sDiskName = Str.getBaseName(sDiskPath, true);
+                    let sDiskName = StrLib.getBaseName(sDiskPath, true);
                     fdc.loadSelectedDrive(sDiskName, sDiskPath, file);
                 }
                 /*
@@ -65022,7 +65018,7 @@ class FDC extends Component {
 
         if (this.aDiskettes && typeof this.aDiskettes == "string") {
             let fdc = this;
-            let hostName = Web.getHostName();
+            let hostName = WebLib.getHostName();
             let limits = fdc.getDriveLimits();
             let urls = fdc.aDiskettes.split(',');
             let cLoaded = 0, cSuccessful = 0;
@@ -65038,7 +65034,7 @@ class FDC extends Component {
             for (let i = 0; i < urls.length; i++) {
                 let url = urls[i];
                 let sProgress = "Loading " + url + "...";
-                Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
+                WebLib.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
                     let privateURL = url.indexOf("private") >= 0;
                     if (sResponse && !nErrorCode) {
                         try {
@@ -65818,7 +65814,7 @@ class FDC extends Component {
                  */
                 let iDrive = sDrive.charCodeAt(0) - 0x41;
                 if (iDrive >= 0 && iDrive < this.aDrives.length) {
-                    let sDiskName = configDrive['name'] || this.findDisketteByPath(sDiskPath) || Str.getBaseName(sDiskPath, true);
+                    let sDiskName = configDrive['name'] || this.findDisketteByPath(sDiskPath) || StrLib.getBaseName(sDiskPath, true);
                     if (!this.loadDrive(iDrive, sDiskName, sDiskPath, true) && fRemount) {
                         this.setReady(false);
                     }
@@ -65865,7 +65861,7 @@ class FDC extends Component {
     {
         let iDrive;
         let controlDrives = this.bindings["listDrives"];
-        if (controlDrives && !isNaN(iDrive = Str.parseInt(controlDrives.value, 10)) && iDrive >= 0 && iDrive < this.aDrives.length) {
+        if (controlDrives && !isNaN(iDrive = StrLib.parseInt(controlDrives.value, 10)) && iDrive >= 0 && iDrive < this.aDrives.length) {
 
             if (!sDiskPath) {
                 this.unloadDrive(iDrive);
@@ -65892,7 +65888,7 @@ class FDC extends Component {
                     sDiskPath = globals.window.prompt("Enter the URL of a remote disk image.", "") || "";
                 }
                 if (!sDiskPath) return false;
-                sDiskName = Str.getBaseName(sDiskPath);
+                sDiskName = StrLib.getBaseName(sDiskPath);
                 this.printf(MESSAGE.DEBUG, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
             }
 
@@ -65900,7 +65896,7 @@ class FDC extends Component {
                 /*
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
-                if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
+                if (WebLib.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
                     this.printf(MESSAGE.DEBUG, "load cancelled\n");
                     return false;
                 }
@@ -65964,7 +65960,7 @@ class FDC extends Component {
             result = Errors.DOS.INVALID_DRIVE;
         }
         else if (sDiskPath) {
-            sDiskPath = Web.redirectResource(sDiskPath);
+            sDiskPath = WebLib.redirectResource(sDiskPath);
             /*
              * TODO: Machines with saved states may be using lower-case disk image names, whereas we now use
              * UPPER-CASE names for disk images, so we upper-case both before comparing.  The only problem with
@@ -66384,7 +66380,7 @@ class FDC extends Component {
              */
             let drive = this.driveActive;
             let controlDrives = this.bindings["listDrives"];
-            let i, iDriveSelected = Str.parseInt(controlDrives.value, 10);
+            let i, iDriveSelected = StrLib.parseInt(controlDrives.value, 10);
             let sTargetPath = (drive.fLocal? "?" : drive.sDiskPath);
             if (!isNaN(iDriveSelected) && iDriveSelected == iDrive) {
                 for (i = 0; i < controlDisks.options.length; i++) {
@@ -67944,7 +67940,7 @@ FDC.aPortOutput = {
 /*
  * Initialize every Floppy Drive Controller (FDC) module on the page.
  */
-Web.onInit(FDC.init);
+WebLib.onInit(FDC.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/hdc.js (C) 2012-2023 Jeff Parsons
@@ -68045,7 +68041,7 @@ class HDC extends Component {
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
-        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
+        this.fLocalDisks = (!WebLib.isMobile() && 'FileReader' in globals.window);
 
         /*
          * The remainder of HDC initialization now takes place in our initBus() handler.
@@ -68113,7 +68109,7 @@ class HDC extends Component {
                         if (i >= 0) sDiskName = sDiskName.substr(0, i);
                         sDiskName += ".img";
                         if (DEBUG) hdc.printf("saving disk %s...\n", sDiskName);
-                        let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
+                        let sAlert = WebLib.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {
                         hdc.printf(MESSAGE.NOTICE, "Hard drive %d is not available.\n", iDrive);
@@ -68846,7 +68842,7 @@ class HDC extends Component {
             this.printf("loading \"%s\"\n", sDiskName);
         }
         let disk = drive.disk || new Disk(this, drive, drive.mode);
-        sDiskPath = Web.redirectResource(sDiskPath);
+        sDiskPath = WebLib.redirectResource(sDiskPath);
         disk.load(sDiskName, sDiskPath, null, this.doneLoadDisk);
         return false;
     }
@@ -70650,7 +70646,7 @@ class HDC extends Component {
         let readChunk = function(iChunk, offChunk, lenChunk, offBuffer) {
             nChunks++;
             if (copyChunk(null, iChunk, offChunk, lenChunk, offBuffer)) return;
-            Web.getResource(Str.sprintf("%s/x%05d", drive.sDiskPath, iChunk), "arraybuffer", true, function(url, data, error) {
+            WebLib.getResource(StrLib.sprintf("%s/x%05d", drive.sDiskPath, iChunk), "arraybuffer", true, function(url, data, error) {
                 if (data && !error) {
                     copyChunk(data, iChunk, offChunk, lenChunk, offBuffer);
                     return;
@@ -71596,7 +71592,7 @@ HDC.aATCPortOutputSecondary = {
 /*
  * Initialize every Hard Drive Controller (HDC) module on the page.
  */
-Web.onInit(HDC.init);
+WebLib.onInit(HDC.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
@@ -71700,11 +71696,11 @@ class DbgLib extends Component {
              *
              * Note that parseValue() parses variables before numbers, so any variable that looks like a
              * unprefixed hex value (eg, "a5" as opposed to "0xa5") will trump the numeric value.  Unprefixed
-             * hex values are a convenience of parseValue(), which always calls Str.parseInt() with a default
+             * hex values are a convenience of parseValue(), which always calls StrLib.parseInt() with a default
              * base of 16; however, that default be overridden with a variety of explicit prefixes or suffixes
              * (eg, a leading "0o" to indicate octal, a trailing period to indicate decimal, etc.)
              *
-             * See Str.parseInt() for more details about supported numbers.
+             * See StrLib.parseInt() for more details about supported numbers.
              */
             this.aVariables = {};
 
@@ -71831,7 +71827,7 @@ class DbgLib extends Component {
              * associated with a breakpoint), we can no longer perform simplistic splitting.
              *
              *      a = sCmd.split(chSep || ';');
-             *      for (let i = 0; i < a.length; i++) a[i] = Str.trim(a[i]);
+             *      for (let i = 0; i < a.length; i++) a[i] = StrLib.trim(a[i]);
              *
              * We may now split on semi-colons ONLY if they are outside a quoted sequence.
              *
@@ -71864,7 +71860,7 @@ class DbgLib extends Component {
                      * Recall that substring() accepts starting (inclusive) and ending (exclusive)
                      * indexes, whereas substr() accepts a starting index and a length.  We need the former.
                      */
-                    a.push(Str.trim(sCmd.substring(iPrev, i)));
+                    a.push(StrLib.trim(sCmd.substring(iPrev, i)));
                     iPrev = i + 1;
                 }
             }
@@ -72469,7 +72465,7 @@ class DbgLib extends Component {
              * inside symbols, or inside hex values.  So if the default base is NOT 16, then I pre-scan for that suffix
              * and replace all non-symbolic occurrences with an internal shift operator ('^_').
              *
-             * Note that Str.parseInt(), which parseValue() relies on, supports both the MACRO-10 base prefix overrides
+             * Note that StrLib.parseInt(), which parseValue() relies on, supports both the MACRO-10 base prefix overrides
              * and the binary shifting suffix ('B'), but since that suffix can also be a bracketed expression, we have to
              * support it here as well.
              *
@@ -72654,7 +72650,7 @@ class DbgLib extends Component {
                     /*
                      * A feature of MACRO-10 is that any single-digit number is automatically interpreted as base-10.
                      */
-                    value = Str.parseInt(sValue, sValue.length > 1 || this.nBase > 10? this.nBase : 10);
+                    value = StrLib.parseInt(sValue, sValue.length > 1 || this.nBase > 10? this.nBase : 10);
                 }
             }
             if (value != undefined) {
@@ -72829,23 +72825,23 @@ class DbgLib extends Component {
         let s;
         switch(nBase || this.nBase) {
         case 2:
-            s = Str.toBin(n, nBits > 0? nBits : 0, nGrouping);
+            s = StrLib.toBin(n, nBits > 0? nBits : 0, nGrouping);
             break;
         case 8:
-            s = Str.toOct(n, nBits > 0? ((nBits + 2)/3)|0 : 0, !!nGrouping);
+            s = StrLib.toOct(n, nBits > 0? ((nBits + 2)/3)|0 : 0, !!nGrouping);
             break;
         case 10:
             /*
              * The multiplier is actually Math.log(2)/Math.log(10), but an approximation is more than adequate.
              */
-            s = Str.toDec(n, nBits > 0? Math.ceil(nBits * 0.3) : 0);
+            s = StrLib.toDec(n, nBits > 0? Math.ceil(nBits * 0.3) : 0);
             break;
         case 16:
         default:
-            s = Str.toHex(n, nBits > 0? ((nBits + 3) >> 2) : 0, !!nGrouping);
+            s = StrLib.toHex(n, nBits > 0? ((nBits + 3) >> 2) : 0, !!nGrouping);
             break;
         }
-        return (nBits < 0? Str.stripLeadingZeros(s) : s);
+        return (nBits < 0? StrLib.stripLeadingZeros(s) : s);
     }
 
     /**
@@ -73213,7 +73209,7 @@ class DebuggerX86 extends DbgLib {
         let sModule = this.getSZ(dbgAddr);
         let seg = this.getSegment(sel);
         let len = seg? seg.limit + 1 : 0;
-        let sSection = (fCode? "_CODE" : "_DATA") + Str.toHex(nSegment, 2);
+        let sSection = (fCode? "_CODE" : "_DATA") + StrLib.toHex(nSegment, 2);
         if (fPrint) this.printf(MESSAGE.MEM, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
         let off = 0;
         let aSymbols = this.findModuleInfo(sModule, nSegment);
@@ -73277,7 +73273,7 @@ class DebuggerX86 extends DbgLib {
         } else {
             sParent += '!';
         }
-        let sSection = (fCode? "_CODE" : "_DATA") + Str.toHex(nSegment, 2);
+        let sSection = (fCode? "_CODE" : "_DATA") + StrLib.toHex(nSegment, 2);
         if (fPrint) {
             /*
              * Mimics WDEB386 output, except that WDEB386 only displays a linear address, omitting the selector.
@@ -73827,7 +73823,7 @@ class DebuggerX86 extends DbgLib {
 
         case "debugEnter":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickDebugEnter(fRepeat) {
@@ -73845,7 +73841,7 @@ class DebuggerX86 extends DbgLib {
 
         case "step":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickStep(fRepeat) {
@@ -74391,7 +74387,7 @@ class DebuggerX86 extends DbgLib {
     parseAddrReference(s, sAddr)
     {
         let dbgAddr = this.parseAddr(sAddr);
-        return s.replace('[' + sAddr + ']', dbgAddr? Str.toHex(this.getWord(dbgAddr), dbgAddr.fData32? 8 : 4) : "undefined");
+        return s.replace('[' + sAddr + ']', dbgAddr? StrLib.toHex(this.getWord(dbgAddr), dbgAddr.fData32? 8 : 4) : "undefined");
     }
 
     /**
@@ -74428,9 +74424,9 @@ class DebuggerX86 extends DbgLib {
     toHexOffset(off, sel, fAddr32)
     {
         if (sel != undefined) {
-            return Str.toHex(sel, 4) + ':' + Str.toHex(off, (off & ~0xffff) || fAddr32? 8 : 4);
+            return StrLib.toHex(sel, 4) + ':' + StrLib.toHex(off, (off & ~0xffff) || fAddr32? 8 : 4);
         }
-        return Str.toHex(off);
+        return StrLib.toHex(off);
     }
 
     /**
@@ -74446,7 +74442,7 @@ class DebuggerX86 extends DbgLib {
         /*
          * TODO: Revisit the decision to check sel == undefined; I would rather see these decisions based on type.
          */
-        return (dbgAddr.type >= DebuggerX86.ADDRTYPE.LINEAR || dbgAddr.sel == undefined)? (ch + Str.toHex(dbgAddr.addr)) : (ch + this.toHexOffset(dbgAddr.off, dbgAddr.sel, dbgAddr.fAddr32));
+        return (dbgAddr.type >= DebuggerX86.ADDRTYPE.LINEAR || dbgAddr.sel == undefined)? (ch + StrLib.toHex(dbgAddr.addr)) : (ch + this.toHexOffset(dbgAddr.off, dbgAddr.sel, dbgAddr.fAddr32));
     }
 
     /**
@@ -74504,7 +74500,7 @@ class DebuggerX86 extends DbgLib {
                         for (let i in aInfo) {
                             let a = aInfo[i];
                             if (sInfo) sInfo += '\n';
-                            sInfo += a[0] + ": " + a[1] + ' ' + Str.toHex(a[2], 4) + ':' + Str.toHex(a[3], 4) + " len " + Str.toHexWord(a[4]);
+                            sInfo += a[0] + ": " + a[1] + ' ' + StrLib.toHex(a[2], 4) + ':' + StrLib.toHex(a[3], 4) + " len " + StrLib.toHexWord(a[4]);
                         }
                     }
                     componentPrev = component;
@@ -74686,7 +74682,7 @@ class DebuggerX86 extends DbgLib {
      */
     getPageEntry(addrPE, lPE, fPTE)
     {
-        let s = Str.toHex(addrPE) + ' ' + Str.toHex(lPE) + ' ';
+        let s = StrLib.toHex(addrPE) + ' ' + StrLib.toHex(lPE) + ' ';
         s += (fPTE && (lPE & X86.PTE.DIRTY))? 'D' : '-';
         s += (lPE & X86.PTE.ACCESSED)? 'A' : '-';
         s += (lPE & X86.PTE.USER)? 'U' : 'S';
@@ -74755,10 +74751,10 @@ class DebuggerX86 extends DbgLib {
 
         this.printf("linear     PDE addr   PDE             PTE addr   PTE             physical\n");
         this.printf("---------  ---------- --------        ---------- --------        ----------\n");
-        let s = '%' + Str.toHex(addr);
+        let s = '%' + StrLib.toHex(addr);
         s += "  %%" + this.getPageEntry(pageInfo.addrPDE, pageInfo.lPDE);
         s += "  %%" + this.getPageEntry(pageInfo.addrPTE, pageInfo.lPTE, true);
-        s += "  %%" + Str.toHex(pageInfo.addrPhys);
+        s += "  %%" + StrLib.toHex(pageInfo.addrPhys);
         this.printf("%s\n", s);
     }
 
@@ -74816,9 +74812,9 @@ class DebuggerX86 extends DbgLib {
 
         let sDump;
         if (fGate) {
-            sDump = "seg=" + Str.toHexWord(seg.base & 0xffff) + " off=" + Str.toHexWord(seg.limit);
+            sDump = "seg=" + StrLib.toHexWord(seg.base & 0xffff) + " off=" + StrLib.toHexWord(seg.limit);
         } else {
-            sDump = "base=" + Str.toHex(seg.base, this.cchAddr) + " limit=" + this.getLimitString(seg.limit);
+            sDump = "base=" + StrLib.toHex(seg.base, this.cchAddr) + " limit=" + this.getLimitString(seg.limit);
         }
         /*
          * When we dump the EXT word, we mask off the LIMIT1619 and BASE2431 bits, because those have already
@@ -74925,7 +74921,7 @@ class DebuggerX86 extends DbgLib {
                 let sInstruction = this.getInstruction(dbgAddrNew, sComment, nSequence);
 
                 if (dbgAddr.nDebugCycles != null) {
-                    sInstruction += " (" + dbgAddr.nDebugCycles + "," + Str.toHexByte(dbgAddr.nDebugState) + ")";
+                    sInstruction += " (" + dbgAddr.nDebugCycles + "," + StrLib.toHexByte(dbgAddr.nDebugState) + ")";
                 }
 
                 if (!aFilters.length || sInstruction.indexOf(aFilters[0]) >= 0) {
@@ -75001,7 +74997,7 @@ class DebuggerX86 extends DbgLib {
                 v |= this.cpu.probeAddr(addr + 2, 2) << 16;
             }
             if (sDump) sDump += '\n';
-            sDump += Str.toHexWord(off) + ' ' + Str.pad(sField + ':', 11) + Str.toHex(v, cch);
+            sDump += StrLib.toHexWord(off) + ' ' + StrLib.pad(sField + ':', 11) + StrLib.toHex(v, cch);
         }
         if (type == X86.DESC.ACC.TYPE.TSS386) {
             let iPort = 0;
@@ -75012,7 +75008,7 @@ class DebuggerX86 extends DbgLib {
             while (off < seg.offMax && iPort < 0x3ff) {
                 addr = seg.base + off;
                 v = this.cpu.probeAddr(addr, 2);
-                sDump += "\n" + Str.toHexWord(off) + " ports " + Str.toHexWord(iPort) + '-' + Str.toHexWord(iPort+15) + ": " + Str.toBinBytes(v, 2);
+                sDump += "\n" + StrLib.toHexWord(off) + " ports " + StrLib.toHexWord(iPort) + '-' + StrLib.toHexWord(iPort+15) + ": " + StrLib.toBinBytes(v, 2);
                 iPort += 16;
                 off += 2;
             }
@@ -75060,7 +75056,7 @@ class DebuggerX86 extends DbgLib {
         if (aEnable.length) {
             this.bitsMessage = MESSAGE.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
             for (let m in MESSAGE.NAMES) {
-                if (Usr.indexOf(aEnable, m) >= 0) {
+                if (UsrLib.indexOf(aEnable, m) >= 0) {
                     this.bitsMessage += MESSAGE.NAMES[m];
                     this.printf("%s messages enabled\n", m);
                 }
@@ -75101,10 +75097,10 @@ class DebuggerX86 extends DbgLib {
         let i;
         sReg = sReg.toUpperCase();
         if (off == null) {
-            i = Usr.indexOf(DebuggerX86.REGS, sReg);
+            i = UsrLib.indexOf(DebuggerX86.REGS, sReg);
         } else {
-            i = Usr.indexOf(DebuggerX86.REGS, sReg.substr(off, 3));
-            if (i < 0) i = Usr.indexOf(DebuggerX86.REGS, sReg.substr(off, 2));
+            i = UsrLib.indexOf(DebuggerX86.REGS, sReg.substr(off, 3));
+            if (i < 0) i = UsrLib.indexOf(DebuggerX86.REGS, sReg.substr(off, 2));
         }
         return i;
     }
@@ -75169,7 +75165,7 @@ class DebuggerX86 extends DbgLib {
                 break;
             }
         }
-        return cch? Str.toHex(n, cch) : "??";
+        return cch? StrLib.toHex(n, cch) : "??";
     }
 
     /**
@@ -75345,7 +75341,7 @@ class DebuggerX86 extends DbgLib {
         i = 0;
         while ((i = s.indexOf('#', i)) >= 0) {
             sChar = s.substr(i+1, 2);
-            b = Str.parseInt(sChar, 16);
+            b = StrLib.parseInt(sChar, 16);
             if (b != null && b >= 32 && b < 127) {
                 sReplace = sChar + " '" + String.fromCharCode(b) + "'";
                 s = s.replace('#' + sChar, sReplace);
@@ -75398,7 +75394,7 @@ class DebuggerX86 extends DbgLib {
     message(sMessage, bitsMessage = 0)
     {
         if ((bitsMessage & MESSAGE.ADDR) && this.cpu) {
-            let sAddress = Str.sprintf(" at %s (%%%X)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
+            let sAddress = StrLib.sprintf(" at %s (%%%X)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
@@ -76678,7 +76674,7 @@ class DebuggerX86 extends DbgLib {
                     cch = 8;
                     off = this.getLong(dbgAddr, 4);
                 }
-                sOperand = '[' + Str.toHex(off, cch) + ']';
+                sOperand = '[' + StrLib.toHex(off, cch) + ']';
             }
             else if (typeMode == DebuggerX86.TYPE_IMMREL) {
                 if (typeSize == DebuggerX86.TYPE_BYTE) {
@@ -76688,7 +76684,7 @@ class DebuggerX86 extends DbgLib {
                     disp = this.getWord(dbgAddr, true);
                 }
                 off = (dbgAddr.off + disp) & (dbgAddr.fData32? -1 : 0xffff);
-                sOperand = Str.toHex(off, dbgAddr.fData32? 8: 4);
+                sOperand = StrLib.toHex(off, dbgAddr.fData32? 8: 4);
                 let aSymbol = this.findSymbol(this.newAddr(off, dbgAddr.sel));
                 if (aSymbol[0]) sOperand += " (" + aSymbol[0] + ")";
             }
@@ -76722,13 +76718,13 @@ class DebuggerX86 extends DbgLib {
         let sLine = this.toHexAddr(dbgAddrIns) + ' ';
         if (dbgAddrIns.addr !== X86.ADDR_INVALID && dbgAddr.addr !== X86.ADDR_INVALID) {
             do {
-                sBytes += Str.toHex(this.getByte(dbgAddrIns, 1), 2);
+                sBytes += StrLib.toHex(this.getByte(dbgAddrIns, 1), 2);
                 if (dbgAddrIns.addr === X86.ADDR_INVALID || dbgAddrIns.addr == undefined) break;
             } while (dbgAddrIns.addr != dbgAddr.addr);
         }
 
-        sLine += Str.pad(sBytes, dbgAddrIns.fAddr32? 25 : 17);
-        sLine += Str.pad(sOpcode, 8);
+        sLine += StrLib.pad(sBytes, dbgAddrIns.fAddr32? 25 : 17);
+        sLine += StrLib.pad(sOpcode, 8);
         if (sOperands) sLine += ' ' + sOperands;
 
         if (this.cpu.model < DebuggerX86.CPUS[typeCPU]) {
@@ -76736,12 +76732,12 @@ class DebuggerX86 extends DbgLib {
         }
 
         if (sComment && fComplete) {
-            sLine = Str.pad(sLine, dbgAddrIns.fAddr32? 74 : 62) + ';' + sComment;
+            sLine = StrLib.pad(sLine, dbgAddrIns.fAddr32? 74 : 62) + ';' + sComment;
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence >= 0? '=' + nSequence.toString() : "");
             } else {
                 let nCycles = this.cpu.getCycles();
-                sLine += "cycles=" + nCycles.toString() + " cs=" + Str.toHex(this.cpu.nChecksum);
+                sLine += "cycles=" + nCycles.toString() + " cs=" + StrLib.toHex(this.cpu.nChecksum);
             }
         }
 
@@ -76808,20 +76804,20 @@ class DebuggerX86 extends DbgLib {
              * or TYPE_OUT designation (and TYPE_BOTH, as the name implies, includes both).
              */
             if (type & DebuggerX86.TYPE_BOTH) {
-                sOperand = Str.toHex(this.getByte(dbgAddr, 1), 2);
+                sOperand = StrLib.toHex(this.getByte(dbgAddr, 1), 2);
             }
             break;
         case DebuggerX86.TYPE_SBYTE:
-            sOperand = Str.toHex((this.getByte(dbgAddr, 1) << 24) >> 24, dbgAddr.fData32? 8: 4);
+            sOperand = StrLib.toHex((this.getByte(dbgAddr, 1) << 24) >> 24, dbgAddr.fData32? 8: 4);
             break;
         case DebuggerX86.TYPE_WORD:
             if (dbgAddr.fData32) {
-                sOperand = Str.toHex(this.getLong(dbgAddr, 4));
+                sOperand = StrLib.toHex(this.getLong(dbgAddr, 4));
                 break;
             }
             /* falls through */
         case DebuggerX86.TYPE_SHORT:
-            sOperand = Str.toHex(this.getShort(dbgAddr, 2), 4);
+            sOperand = StrLib.toHex(this.getShort(dbgAddr, 2), 4);
             break;
         case DebuggerX86.TYPE_FARP:
             dbgAddr = this.newAddr(this.getWord(dbgAddr, true), this.getShort(dbgAddr, 2), undefined, dbgAddr.type, dbgAddr.fData32, dbgAddr.fAddr32);
@@ -76830,7 +76826,7 @@ class DebuggerX86 extends DbgLib {
             if (aSymbol[0]) sOperand += " (" + aSymbol[0] + ")";
             break;
         default:
-            sOperand = "imm(" + Str.toHexWord(type) + ')';
+            sOperand = "imm(" + StrLib.toHexWord(type) + ')';
             break;
         }
         return sOperand;
@@ -76907,7 +76903,7 @@ class DebuggerX86 extends DbgLib {
          */
         if (!bMod && bBase == 5) {
             if (sOperand) sOperand += '+';
-            sOperand += Str.toHex(this.getLong(dbgAddr, 4));
+            sOperand += StrLib.toHex(this.getLong(dbgAddr, 4));
         }
         return sOperand;
     }
@@ -76946,21 +76942,21 @@ class DebuggerX86 extends DbgLib {
             if (bMod == 1) {
                 disp = this.getByte(dbgAddr, 1);
                 if (!(disp & 0x80)) {
-                    sOperand += '+' + Str.toHex(disp, 2);
+                    sOperand += '+' + StrLib.toHex(disp, 2);
                 }
                 else {
                     disp = ((disp << 24) >> 24);
-                    sOperand += '-' + Str.toHex(-disp, 2);
+                    sOperand += '-' + StrLib.toHex(-disp, 2);
                 }
             }
             else if (bMod == 2) {
                 if (sOperand) sOperand += '+';
                 if (!dbgAddr.fAddr32) {
                     disp = this.getShort(dbgAddr, 2);
-                    sOperand += Str.toHex(disp, 4);
+                    sOperand += StrLib.toHex(disp, 4);
                 } else {
                     disp = this.getLong(dbgAddr, 4);
-                    sOperand += Str.toHex(disp);
+                    sOperand += StrLib.toHex(disp);
                 }
             }
             sOperand = '[' + sOperand + ']';
@@ -77094,7 +77090,7 @@ class DebuggerX86 extends DbgLib {
      */
     getLimitString(l)
     {
-        return Str.toHex(l, (l & ~0xffff)? 8 : 4);
+        return StrLib.toHex(l, (l & ~0xffff)? 8 : 4);
     }
 
     /**
@@ -77122,7 +77118,7 @@ class DebuggerX86 extends DbgLib {
      */
     getSegOutput(seg, fProt)
     {
-        return seg.sName + '=' + Str.toHex(seg.sel, 4) + (fProt? '[' + Str.toHex(seg.base, this.cchAddr) + ',' + this.getLimitString(seg.limit) + ']' : "");
+        return seg.sName + '=' + StrLib.toHex(seg.sel, 4) + (fProt? '[' + StrLib.toHex(seg.base, this.cchAddr) + ',' + this.getLimitString(seg.limit) + ']' : "");
     }
 
     /**
@@ -77137,7 +77133,7 @@ class DebuggerX86 extends DbgLib {
      */
     getDTROutput(sName, sel, addr, addrLimit)
     {
-        return sName + '=' + (sel != null? Str.toHex(sel, 4) : "") + '[' + Str.toHex(addr, this.cchAddr) + ',' + Str.toHex(addrLimit - addr, 4) + ']';
+        return sName + '=' + (sel != null? StrLib.toHex(sel, 4) : "") + '[' + StrLib.toHex(addr, this.cchAddr) + ',' + StrLib.toHex(addrLimit - addr, 4) + ']';
     }
 
     /**
@@ -77202,7 +77198,7 @@ class DebuggerX86 extends DbgLib {
             this.getSegOutput(this.cpu.segES, fProt) + ' ';
 
         if (fProt) {
-            let sTR = "TR=" + Str.toHex(this.cpu.segTSS.sel, 4);
+            let sTR = "TR=" + StrLib.toHex(this.cpu.segTSS.sel, 4);
             let sA20 = "A20=" + (this.bus.getA20()? "ON " : "OFF ");
             if (this.cpu.model < X86.MODEL_80386) {
                 sTR = '\n' + sTR;
@@ -77360,7 +77356,7 @@ class DebuggerX86 extends DbgLib {
                     }
                     symbol['p'] = dbgAddr.addr;
                 }
-                Usr.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
+                UsrLib.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
             }
             if (sAnnotation) symbol['a'] = sAnnotation.replace(/''/g, "\"");
         }
@@ -77453,7 +77449,7 @@ class DebuggerX86 extends DbgLib {
             let len = symbolTable.len;
             if (sel == 0x30) sel = 0x28;        // TODO: Remove this hack once we're able to differentiate Windows 95 ring 0 code and data
             if (sel == dbgAddr.sel && offSymbol >= off && offSymbol < off + len || addr != null && addrSymbol >= addr && addrSymbol < addr + len) {
-                let result = Usr.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
+                let result = UsrLib.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
                 if (result >= 0) {
                     this.returnSymbol(iTable, result, aSymbol);
                 }
@@ -77553,7 +77549,7 @@ class DebuggerX86 extends DbgLib {
     {
         let s = "debugger commands:";
         for (let sCommand in DebuggerX86.COMMANDS) {
-            s += '\n  ' + Str.pad(sCommand, 7) + DebuggerX86.COMMANDS[sCommand];
+            s += '\n  ' + StrLib.pad(sCommand, 7) + DebuggerX86.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -77682,7 +77678,7 @@ class DebuggerX86 extends DbgLib {
             if (!dbgAddr) return;
         }
 
-        sAddr = (dbgAddr.off == null? sAddr : Str.toHexWord(dbgAddr.off));
+        sAddr = (dbgAddr.off == null? sAddr : StrLib.toHexWord(dbgAddr.off));
 
         if (sParm == 'c') {
             if (dbgAddr.off == null) {
@@ -77943,9 +77939,9 @@ class DebuggerX86 extends DbgLib {
                 let b = this.getByte(dbgAddr, 1);
                 data |= (b << (iByte++ << 3));
                 if (iByte == size) {
-                    sData += (this.nBase == 8? Str.toOct(data, size * 3) : Str.toHex(data, size * 2));
+                    sData += (this.nBase == 8? StrLib.toOct(data, size * 3) : StrLib.toHex(data, size * 2));
                     sData += (size == 1? (i == 9? '-' : ' ') : "  ");
-                    if (cchBinary) sChars += Str.toBin(data, cchBinary);
+                    if (cchBinary) sChars += StrLib.toBin(data, cchBinary);
                     data = iByte = 0;
                 }
                 if (!cchBinary) sChars += (b >= 32 && b < 127? String.fromCharCode(b) : (fASCII? '' : '.'));
@@ -77955,7 +77951,7 @@ class DebuggerX86 extends DbgLib {
             if (fASCII) {
                 sDump += sChars;
             } else {
-                sDump += sAddr + "  " + sData + Str.pad(sChars, sChars.length + i * 3 + 1, true);
+                sDump += sAddr + "  " + sData + StrLib.pad(sChars, sChars.length + i * 3 + 1, true);
             }
         }
         if (sDump) this.print(sDump.replace(/\s*$/, "") + "\n");
@@ -77985,7 +77981,7 @@ class DebuggerX86 extends DbgLib {
          */
         if (asArgs[0] == "ev") {
             for (let i = 0; i < 256; i++) {
-                let sHex = Str.toHex(i, 2);
+                let sHex = StrLib.toHex(i, 2);
                 if (i && !(i & 0xf)) this.incAddr(dbgAddr, 64);
                 this.setShort(dbgAddr, (i << 8) | sHex.charCodeAt(0), 2, true);
                 this.setShort(dbgAddr, (i << 8) | sHex.charCodeAt(1), 2, true);
@@ -78024,7 +78020,7 @@ class DebuggerX86 extends DbgLib {
                 for (let j = 1; j < sArg.length; j++) {
                     let ch = sArg[j];
                     if (ch == sArg[0]) break;
-                    asNum.push(Str.toHexByte(ch.charCodeAt(0)));
+                    asNum.push(StrLib.toHexByte(ch.charCodeAt(0)));
                 }
                 asNum.push("");
                 asArgs.splice(i, 1, ...asNum);
@@ -78128,7 +78124,7 @@ class DebuggerX86 extends DbgLib {
      */
     doIf(sCmd, fQuiet)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         if (!this.parseExpression(sCmd)) {
             if (!fQuiet) this.printf("false: %s\n", sCmd);
             return false;
@@ -78279,7 +78275,7 @@ class DebuggerX86 extends DbgLib {
                 if (aSymbol[0]) {
                     sDelta = "";
                     nDelta = dbgAddr.off - aSymbol[1];
-                    if (nDelta) sDelta = " + " + Str.toHex(nDelta, 0, true);
+                    if (nDelta) sDelta = " + " + StrLib.toHex(nDelta, 0, true);
                     s = aSymbol[0] + " (" + this.toHexOffset(aSymbol[1], dbgAddr.sel) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
                     sSymbol = s;
@@ -78287,7 +78283,7 @@ class DebuggerX86 extends DbgLib {
                 if (aSymbol.length > 4 && aSymbol[4]) {
                     sDelta = "";
                     nDelta = aSymbol[5] - dbgAddr.off;
-                    if (nDelta) sDelta = " - " + Str.toHex(nDelta, 0, true);
+                    if (nDelta) sDelta = " - " + StrLib.toHex(nDelta, 0, true);
                     s = aSymbol[4] + " (" + this.toHexOffset(aSymbol[5], dbgAddr.sel) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
                     if (!sSymbol) sSymbol = s;
@@ -78905,12 +78901,12 @@ class DebuggerX86 extends DbgLib {
         for (let i = 0; i < 8; i++) {
             let a = fpu.readFPUStack(i);
             if (!a) break;
-            let sValue = Str.pad(a[2].toFixed(15), 24, true);
+            let sValue = StrLib.pad(a[2].toFixed(15), 24, true);
             this.printf("ST%d: %s  %x,%x  [%d:%s]\n", i, sValue, a[4], a[3], a[0], DebuggerX86.FPU_TAGS[a[1]]);
-            // this.printf("  REG%d %s%s%s\n", a[0], Str.toBin(a[7], 16), Str.toBin(a[6]), Str.toBin(a[5]));
+            // this.printf("  REG%d %s%s%s\n", a[0], StrLib.toBin(a[7], 16), StrLib.toBin(a[6]), StrLib.toBin(a[5]));
         }
         this.printf("    B3SSS210ESPUOZDI               xxxIRRPPIxPUOZDI\n");
-        this.printf("SW: %s (%#06x)  CW: %s (%#06x)\n", Str.toBin(wStatus, 16), wStatus, Str.toBin(wControl, 16), wControl);
+        this.printf("SW: %s (%#06x)  CW: %s (%#06x)\n", StrLib.toBin(wStatus, 16), wStatus, StrLib.toBin(wControl, 16), wControl);
     }
 
     /**
@@ -78947,7 +78943,7 @@ class DebuggerX86 extends DbgLib {
      */
     doPrint(sCmd)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         let a = sCmd.match(/^(['"])(.*?)\1$/);
         if (!a) {
             this.parseExpression(sCmd, false);
@@ -79192,7 +79188,7 @@ class DebuggerX86 extends DbgLib {
                 let a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = Str.pad(sCall, dbgAddrCall.fAddr32? 74 : 62) + ';' + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, dbgAddrCall.fAddr32? 74 : 62) + ';' + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;
@@ -79230,7 +79226,7 @@ class DebuggerX86 extends DbgLib {
             nCycles = nCount;
             nCount = 1;
         }
-        Web.onCountRepeat(
+        WebLib.onCountRepeat(
             nCount,
             function onCountStep() {
                 return dbg.setBusy(true) && dbg.stepCPU(nCycles, fRegs, false);
@@ -79400,7 +79396,7 @@ class DebuggerX86 extends DbgLib {
              * associated with a breakpoint), we can no longer perform simplistic splitting.
              *
              *      asArgs = sCmd.split(chSep);
-             *      for (let i = 0; i < asArgs.length; i++) asArgs[i] = Str.trim(asArgs[i]);
+             *      for (let i = 0; i < asArgs.length; i++) asArgs[i] = StrLib.trim(asArgs[i]);
              *
              * We may now split on semi-colons ONLY if they are outside a quoted sequence.
              *
@@ -79434,7 +79430,7 @@ class DebuggerX86 extends DbgLib {
                      * Recall that substring() accepts starting (inclusive) and ending (exclusive)
                      * indexes, whereas substr() accepts a starting index and a length.  We need the former.
                      */
-                    let s = Str.trim(sCmd.substring(iPrev, i));
+                    let s = StrLib.trim(sCmd.substring(iPrev, i));
                     if (!fQuoted) s = s.toLowerCase();
                     asArgs.push(s);
                     iPrev = i + 1;
@@ -79609,7 +79605,7 @@ class DebuggerX86 extends DbgLib {
                         break;
                     }
                     this.printf("%s version %s (%s%s%s%s%s)\n", (APPNAME || "PCx86"), APPVERSION, this.cpu.model, (COMPILED? ",RELEASE" : (DEBUG? ",DEBUG" : ",NODEBUG")), (PREFETCH? ",PREFETCH" : ",NOPREFETCH"), (TYPEDARRAYS? ",TYPEDARRAYS" : (BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")), (BACKTRACK? ",BACKTRACK" : ",NOBACKTRACK"));
-                    this.printf("%s\n", Web.getUserAgent());
+                    this.printf("%s\n", WebLib.getUserAgent());
                     break;
                 case 'x':
                     this.doExecOptions(asArgs);
@@ -80875,7 +80871,7 @@ if (DEBUGGER) {
     /*
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
-    Web.onInit(DebuggerX86.init);
+    WebLib.onInit(DebuggerX86.init);
 
 }   // endif DEBUGGER
 
@@ -81091,7 +81087,7 @@ class Computer extends Component {
          * localStorage (in other words, it prevents fAllowResume from being true, and forcing resume off).
          */
         let fAllowResume = false;
-        let sState = Web.getURLParm('state');
+        let sState = WebLib.getURLParm('state');
         if (!sState) {
             fAllowResume = true;
             sState = this.getMachineParm('state', parmsComputer);
@@ -81127,7 +81123,7 @@ class Computer extends Component {
             this.setReady();
         } else {
             let sProgress = "Loading " + this.sStateURL + "...";
-            Web.getResource(this.sStateURL, null, true, function(sURL, sResource, nErrorCode) {
+            WebLib.getResource(this.sStateURL, null, true, function(sURL, sResource, nErrorCode) {
                 cmp.doneLoad(sURL, sResource, nErrorCode);
             }, function(nState) {
                 cmp.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
@@ -81205,7 +81201,7 @@ class Computer extends Component {
                          * and we make the change IE-specific because it can have weird side-effects in other browsers (eg,
                          * it makes Safari on iOS over-zoom whenever the textarea receives focus).
                          */
-                        if (Web.isUserAgent("MSIE")) control.style.fontSize = "0";
+                        if (WebLib.isUserAgent("MSIE")) control.style.fontSize = "0";
                         /*
                          * We no longer clear the text, to give the user/system a chance to copy it to the clipboard.
                          *
@@ -81398,7 +81394,7 @@ class Computer extends Component {
      */
     getMachineParm(sParm, parmsComponent)
     {
-        let value = Web.getURLParm(sParm);
+        let value = WebLib.getURLParm(sParm);
         if (value) {
             try {
                 /*
@@ -81501,7 +81497,7 @@ class Computer extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.printf(MESSAGE.NOTICE, "Unable to load machine state (%s) from server (error %d%s)\n", sURL, nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
+            this.printf(MESSAGE.NOTICE, "Unable to load machine state (%s) from server (error %d%s)\n", sURL, nErrorCode, (sStateData? ': ' + StrLib.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -81621,7 +81617,7 @@ class Computer extends Component {
                     this.stateFailSafe.unload();
                 }
 
-                this.stateFailSafe.set(Computer.STATE_TIMESTAMP, Usr.getTimestamp());
+                this.stateFailSafe.set(Computer.STATE_TIMESTAMP, UsrLib.getTimestamp());
                 this.stateFailSafe.store();
 
                 let fValidate = this.resume && !this.fServerState;
@@ -81780,7 +81776,7 @@ class Computer extends Component {
                         if (this.sStatePath && !this.fStateData) {
                             stateComputer.clear();
                             this.resume = Computer.RESUME_NONE;
-                            Web.reloadPage();
+                            WebLib.reloadPage();
                         } else {
                             /*
                              * In all other cases, we set fRestoreError, which should trigger a call to
@@ -81950,10 +81946,10 @@ class Computer extends Component {
             //
             // This is all we can realistically do for now.
             //
-            Web.onError("There may be a problem with your " + APPNAME + " machine.");
+            WebLib.onError("There may be a problem with your " + APPNAME + " machine.");
             //
             // if (Component.confirmUser("There may be a problem with your " + APPNAME + " machine.\n\nTo help us diagnose it, click OK to send this " + APPNAME + " machine state to " + SITEURL + ".")) {
-            //     Web.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
+            //     WebLib.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
             // }
             //
             return true;
@@ -82007,12 +82003,12 @@ class Computer extends Component {
         let stateComputer = new State(this, APPVERSION);
         let stateValidate = new State(this, APPVERSION, Computer.STATE_VALIDATE);
 
-        let sTimestamp = Usr.getTimestamp();
+        let sTimestamp = UsrLib.getTimestamp();
         stateValidate.set(Computer.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(Computer.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(Computer.STATE_VERSION, APPVERSION);
-        stateComputer.set(Computer.STATE_HOSTURL, Web.getHostURL());
-        stateComputer.set(Computer.STATE_BROWSER, Web.getUserAgent());
+        stateComputer.set(Computer.STATE_HOSTURL, WebLib.getHostURL());
+        stateComputer.set(Computer.STATE_BROWSER, WebLib.getUserAgent());
 
         /*
          * Always power the CPU "down" first, just to help insure it doesn't ask other components to do anything
@@ -82215,7 +82211,7 @@ class Computer extends Component {
              * and since pcjs.org is no longer running a Node web server, we disable the feature for that
              * particular host.
              */
-            if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
+            if (StrLib.endsWith(WebLib.getHostName(), "pcjs.org")) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
@@ -82275,7 +82271,7 @@ class Computer extends Component {
      */
     resetUserID()
     {
-        Web.setLocalStorageItem(Computer.STATE_USERID, "");
+        WebLib.setLocalStorageItem(Computer.STATE_USERID, "");
         this.sUserID = null;
     }
 
@@ -82290,7 +82286,7 @@ class Computer extends Component {
     {
         let sUserID = this.sUserID;
         if (!sUserID) {
-            sUserID = Web.getLocalStorageItem(Computer.STATE_USERID);
+            sUserID = WebLib.getLocalStorageItem(Computer.STATE_USERID);
             if (sUserID !== undefined) {
                 if (!sUserID && fPrompt) {
                     /*
@@ -82322,15 +82318,15 @@ class Computer extends Component {
     {
         this.sUserID = null;
         if (DEBUG) this.printf("verifyUserID(%s)\n", sUserID);
-        let sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
-        let response = Web.getResource(sRequest);
+        let sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
+        let response = WebLib.getResource(sRequest);
         let nErrorCode = response[0];
         let sResponse = response[1];
         if (!nErrorCode && sResponse) {
             try {
                 response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
-                    Web.setLocalStorageItem(Computer.STATE_USERID, response.data);
+                    WebLib.setLocalStorageItem(Computer.STATE_USERID, response.data);
                     if (DEBUG) this.printf("%s updated: %s\n" + Computer.STATE_USERID, response.data);
                     this.sUserID = response.data;
                 } else {
@@ -82356,7 +82352,7 @@ class Computer extends Component {
         let sStatePath = null;
         if (this.sUserID) {
             if (DEBUG) this.printf("%s for load: %s\n", Computer.STATE_USERID, this.sUserID);
-            sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
+            sStatePath = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
             if (DEBUG) this.printf("%s unavailable\n", Computer.STATE_USERID);
         }
@@ -82419,11 +82415,11 @@ class Computer extends Component {
         dataPost[UserAPI.QUERY.USER] = sUserID;
         dataPost[UserAPI.QUERY.STATE] = State.getKey(this, APPVERSION);
         dataPost[UserAPI.QUERY.DATA] = sState;
-        let sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
+        let sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT;
         if (!fSync) {
-            Web.getResource(sRequest, dataPost, true);
+            WebLib.getResource(sRequest, dataPost, true);
         } else {
-            let response = Web.getResource(sRequest, dataPost);
+            let response = WebLib.getResource(sRequest, dataPost);
             let sResponse = response[0];
             if (response[1]) {
                 if (sResponse) {
@@ -82507,7 +82503,7 @@ class Computer extends Component {
              * TODO: Make this more graceful, so that we can stop using the reloadPage() sledgehammer.
              */
             if (!fSave && this.sStatePath) {
-                Web.reloadPage();
+                WebLib.reloadPage();
                 return;
             }
             if (!fSave) this.fReload = true;
@@ -82711,7 +82707,7 @@ class Computer extends Component {
     /**
      * Computer.exit()
      *
-     * The Computer is currently the only component that uses an "exit" handler, which Web.onExit() defines as
+     * The Computer is currently the only component that uses an "exit" handler, which WebLib.onExit() defines as
      * either an "unload" or "onbeforeunload" handler.  This gives us the opportunity to save the machine state,
      * using our powerOff() function, before the page goes away.
      *
@@ -82787,9 +82783,9 @@ Computer.UPDATES_PER_SECOND = 2;
 /*
  * Initialize every Computer on the page.
  */
-Web.onInit(Computer.init);
-Web.onShow(Computer.show);
-Web.onExit(Computer.exit);
+WebLib.onInit(Computer.init);
+WebLib.onShow(Computer.show);
+WebLib.onExit(Computer.exit);
 
 /**
  * @copyright https://www.pcjs.org/machines/modules/v2/state.js (C) 2012-2023 Jeff Parsons
@@ -82898,8 +82894,8 @@ class State {
              */
             return true;
         }
-        if (Web.hasLocalStorage()) {
-            let s = Web.getLocalStorageItem(this.key);
+        if (WebLib.hasLocalStorage()) {
+            let s = WebLib.getLocalStorageItem(this.key);
             if (s) {
                 this.json = s;
                 this.fLoaded = true;
@@ -82944,9 +82940,9 @@ class State {
     store()
     {
         let fSuccess = true;
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             let s = JSON.stringify(this.state);
-            if (Web.setLocalStorageItem(this.key, s)) {
+            if (WebLib.setLocalStorageItem(this.key, s)) {
                 if (DEBUG) Component.printf("localStorage(%s): %d bytes stored\n", this.key, s.length);
             } else {
                 /*
@@ -83003,11 +82999,11 @@ class State {
     clear(fAll)
     {
         this.unload();
-        let aKeys = Web.getLocalStorageKeys();
+        let aKeys = WebLib.getLocalStorageKeys();
         for (let i = 0; i < aKeys.length; i++) {
             let sKey = aKeys[i];
             if (sKey && (fAll || sKey.substr(0, this.key.length) == this.key)) {
-                Web.removeLocalStorageItem(sKey);
+                WebLib.removeLocalStorageItem(sKey);
                 Component.printf(MESSAGE.DEBUG, "localStorage(%s) removed\n", sKey);
                 aKeys.splice(i, 1);
                 i = 0;
@@ -83171,8 +83167,8 @@ class State {
  * machine component init() handlers.
  *
  * Also, to prevent those init() handlers from running prematurely, we must disable all page
- * notification events at the start of the embedding process (Web.enablePageEvents(false)) and
- * re-enable them at the end (Web.enablePageEvents(true)).
+ * notification events at the start of the embedding process (WebLib.enablePageEvents(false)) and
+ * re-enable them at the end (WebLib.enablePageEvents(true)).
  */
 var fAsync = true;
 var cAsyncMachines = 0;
@@ -83222,7 +83218,7 @@ function loadXML(sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fReso
         parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fResolve, display, done);
     };
     display("Loading " + sXMLFile + "...");
-    Web.getResource(sXMLFile, null, fAsync, doneLoadXML);
+    WebLib.getResource(sXMLFile, null, fAsync, doneLoadXML);
 }
 
 /**
@@ -83343,7 +83339,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
          * Supposedly, the IE XML DOM parser will throw an exception, but I haven't tested that, and unless all other
          * browsers do that, that's not helpful.
          *
-         * The best I can do at this stage (assuming Web.getResource() didn't drop any error information on the floor)
+         * The best I can do at this stage (assuming WebLib.getResource() didn't drop any error information on the floor)
          * is verify that the requested resource "looks like" valid XML (in other words, it begins with a '<').
          */
         let xmlDoc = null;
@@ -83476,7 +83472,7 @@ function resolveXML(sURL, sXML, display, done)
         };
 
         display("Loading " + sRefFile + "...");
-        Web.getResource(sRefFile, null, fAsync, doneReadXML);
+        WebLib.getResource(sRefFile, null, fAsync, doneReadXML);
         return;
     }
     done(sURL, sXML, "");
@@ -83506,7 +83502,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
     let doneMachine = function() {
 
         if (!--cAsyncMachines) {
-            if (fAsync) Web.enablePageEvents(true);
+            if (fAsync) WebLib.enablePageEvents(true);
         }
     };
 
@@ -83533,7 +83529,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
         return fSuccess;
     }
 
-    if (Web.getURLParm('debugger') == "true" && sXMLFile.indexOf("/debugger") < 0) {
+    if (WebLib.getURLParm('debugger') == "true" && sXMLFile.indexOf("/debugger") < 0) {
         sXMLFile = sXMLFile.replace("/machine.xml", "/debugger/machine.xml");
     }
 
@@ -83567,7 +83563,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
             let aeWarning = (eMachine && Component.getElementsByClass("machine-warning", "", eMachine));
             eWarning = (aeWarning && aeWarning[0]) || eMachine;
         }
-        if (eWarning) eWarning.innerHTML = Str.escapeHTML(sMessage);
+        if (eWarning) eWarning.innerHTML = StrLib.escapeHTML(sMessage);
     };
 
     try {
@@ -83765,7 +83761,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
  */
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("C1Pjs", "osi/c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
 }
 
@@ -83781,7 +83777,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PCx86", "pcx86", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -83797,7 +83793,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PCx80", "pcx80", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -83813,7 +83809,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PDPjs", "dec/pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -83829,7 +83825,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PDPjs", "dec/pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -83897,8 +83893,8 @@ globals.window['embedPDP10']  = embedPDP10;
 globals.window['embedPDP11']  = embedPDP11;
 globals.window['commandMachine'] = commandMachine;
 
-globals.window['enableEvents'] = Web.enablePageEvents;
-globals.window['sendEvent']    = Web.doPageEvent;
+globals.window['enableEvents'] = WebLib.enablePageEvents;
+globals.window['sendEvent']    = WebLib.doPageEvent;
 
 
 /**
@@ -83928,8 +83924,8 @@ function savePC(idMachine, sPCJSFile, callback)
             }
         }
         if (callback && callback({ state: sState, parms: sParms })) return true;
-        Web.getResource(sPCJSFile, null, true, function(sURL, sResponse, nErrorCode) {
-            downloadCSS(sURL, sResponse, nErrorCode, [idMachine, Str.getBaseName(sPCJSFile, true), sParms, sState]);
+        WebLib.getResource(sPCJSFile, null, true, function(sURL, sResponse, nErrorCode) {
+            downloadCSS(sURL, sResponse, nErrorCode, [idMachine, StrLib.getBaseName(sPCJSFile, true), sParms, sState]);
         });
         return true;
     }
@@ -83952,7 +83948,7 @@ function downloadCSS(sURL, sPCJS, nErrorCode, aMachineInfo)
         let res = Component.getMachineResources(aMachineInfo[0]);
         let sCSSFile = null;
         for (let sName in res) {
-            if (Str.endsWith(sName, "components.xsl")) {
+            if (StrLib.endsWith(sName, "components.xsl")) {
                 sCSSFile = sName.replace(".xsl", ".css");
                 break;
             }
@@ -83963,7 +83959,7 @@ function downloadCSS(sURL, sPCJS, nErrorCode, aMachineInfo)
              */
             downloadPC(sURL, "", 0, aMachineInfo);
         } else {
-            Web.getResource(sCSSFile, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sCSSFile, null, true, function(sURL, sResponse, nErrorCode) {
                 downloadPC(sURL, sResponse, nErrorCode, aMachineInfo);
             });
         }
@@ -84026,7 +84022,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
     let res = Component.getMachineResources(idMachine), resNew = {}, sName;
     for (sName in res) {
         let data = res[sName];
-        let sExt = Str.getExtension(sName);
+        let sExt = StrLib.getExtension(sName);
         if (sExt == "xml") {
             /*
              * Look through this resource for <disk> entries whose paths do not appear as one of the
@@ -84043,10 +84039,10 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
                     }
                 }
             }
-            sXMLFile = sName = Str.getBaseName(sName);
+            sXMLFile = sName = StrLib.getBaseName(sName);
         }
         else if (sExt == "xsl") {
-            sXSLFile = sName = Str.getBaseName(sName);
+            sXSLFile = sName = StrLib.getBaseName(sName);
         }
         Component.printf("saving resource: \"%s\" (%d bytes)\n", sName, data.length);
         resNew[sName] = data;
@@ -84083,7 +84079,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
          *      sPCJS = sPCJS.replace(/\u00A9/g, "(C)");    // "&#xA9;" or "&copy;"
          */
 
-        let sAlert = Web.downloadFile(sPCJS, "javascript", false, sScript);
+        let sAlert = WebLib.downloadFile(sPCJS, "javascript", false, sScript);
 
         sAlert += ', copy it to your web server as "' + sScript + '", and then add the following to your web page:\n\n';
         sAlert += '<div id="' + idMachine + '"></div>\n';

@@ -9,7 +9,7 @@
 
 import MESSAGE from "./message.js";
 import X86 from "./x86.js";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 import { COMPILED, DEBUGGER, I386 } from "./defines.js";
 
 /**
@@ -999,7 +999,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
     if (this.messageEnabled(bitsMessage) || fHalt) {
 
         let fRunning = this.flags.running;
-        let sMessage = "Fault " + Str.toHexByte(nFault) + (nError != null? " (" + Str.toHexWord(nError) + ")" : "") + " on opcode " + Str.toHexByte(bOpcode);
+        let sMessage = "Fault " + StrLib.toHexByte(nFault) + (nError != null? " (" + StrLib.toHexWord(nError) + ")" : "") + " on opcode " + StrLib.toHexByte(bOpcode);
         if (fHalt) {
             if (fRunning) sMessage += " (blocked)";
         }

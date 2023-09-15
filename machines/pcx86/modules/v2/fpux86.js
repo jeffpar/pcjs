@@ -10,8 +10,8 @@
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG } from "./defines.js";
 
 /*
@@ -70,7 +70,7 @@ export default class FPUx86 extends Component {
          * is equal to model.
          */
         let stepping = this.parms['stepping'];
-        this.stepping = this.model + (stepping? Str.parseInt(stepping, 16) : 0);
+        this.stepping = this.model + (stepping? StrLib.parseInt(stepping, 16) : 0);
 
         /*
          * Perform a one-time allocation of all floating-point registers.
@@ -3345,4 +3345,4 @@ FPUx86.afnPreserveExceptions = [
 /*
  * Initialize every FPU module on the page
  */
-Web.onInit(FPUx86.init);
+WebLib.onInit(FPUx86.init);

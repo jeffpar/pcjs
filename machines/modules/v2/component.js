@@ -29,7 +29,7 @@
  */
 
 import MESSAGE from "../v2/message.js";
-import Str from "./strlib.js";
+import StrLib from "./strlib.js";
 import { COMPILED, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 
 /**
@@ -271,7 +271,7 @@ export default class Component {
             } else if (bitsMessage == MESSAGE.NOTICE) {
                 alert = true;
             }
-            let sMessage = Str.sprintf(format, ...args).trim();
+            let sMessage = StrLib.sprintf(format, ...args).trim();
             if (!alert) {
                 console.log(sMessage);
             } else {
@@ -1357,7 +1357,7 @@ export default class Component {
             }
         }
         if (this.messageEnabled(bitsMessage)) {
-            let sMessage = Str.sprintf(format, ...args);
+            let sMessage = StrLib.sprintf(format, ...args);
             if (this.dbg && this.dbg.message) {
                 this.dbg.message(sMessage, bitsMessage);
             } else {

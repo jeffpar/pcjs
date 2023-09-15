@@ -8,7 +8,7 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
-import Web from "../../../../modules/v2/weblib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
 /**
@@ -77,4 +77,4 @@ export default class C1PRAM extends Component {
 /*
  * Initialize all the RAM modules on the page.
  */
-Web.onInit(C1PRAM.init);
+WebLib.onInit(C1PRAM.init);

@@ -12,7 +12,7 @@
 
 import DriveController from "./drive.js";
 import MESSAGE from "./message.js";
-import Str from "../../../../modules/v2/strlib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
 import { DEBUG, PDP11 } from "./defines.js";
 
 /**
@@ -239,8 +239,8 @@ export default class RL11 extends DriveController {
              */
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data = b0 | (b1 << 8));
             if (DEBUG && this.messageEnabled(MESSAGE.READ)) {
-                if (!sWords) sWords = Str.toOct(addr) + ": ";
-                sWords += Str.toOct(data) + ' ';
+                if (!sWords) sWords = StrLib.toOct(addr) + ": ";
+                sWords += StrLib.toOct(data) + ' ';
                 if (sWords.length >= 64) {
                     console.log(sWords);
                     sWords = "";
@@ -315,8 +315,8 @@ export default class RL11 extends DriveController {
                 break;
             }
             if (DEBUG && this.messageEnabled(MESSAGE.WRITE)) {
-                if (!sWords) sWords = Str.toOct(addr) + ": ";
-                sWords += Str.toOct(data) + ' ';
+                if (!sWords) sWords = StrLib.toOct(addr) + ": ";
+                sWords += StrLib.toOct(data) + ' ';
                 if (sWords.length >= 64) {
                     console.log(sWords);
                     sWords = "";

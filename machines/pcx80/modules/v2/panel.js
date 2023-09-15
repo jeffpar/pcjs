@@ -9,7 +9,7 @@
 
 import BusX80 from "./bus.js";
 import Component from "../../../modules/v2/component.js";
-import Web from "../../../modules/v2/weblib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUGGER } from "./defines.js";
 
 /**
@@ -157,4 +157,4 @@ export default class PanelX80 extends Component {
 /*
  * Initialize every Panel module on the page.
  */
-Web.onInit(PanelX80.init);
+WebLib.onInit(PanelX80.init);

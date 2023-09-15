@@ -12,8 +12,8 @@ import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DiskAPI from "../../../../modules/v2/diskapi.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /**
@@ -83,7 +83,7 @@ export default class DriveController extends Component {
 
         this.nDrives = configDC.DRIVES;
         this.aDrives = new Array(this.nDrives);
-        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
+        this.fLocalDisks = (!WebLib.isMobile() && 'FileReader' in globals.window);
         this.sDiskSource = DriveController.SOURCE.NONE;
 
         /*
@@ -165,7 +165,7 @@ export default class DriveController extends Component {
              */
             var controlSelect = /** @type {HTMLSelectElement} */ (control);
             control.onchange = function onChangeListDrives(event) {
-                var iDrive = Str.parseInt(controlSelect.value, 10);
+                var iDrive = StrLib.parseInt(controlSelect.value, 10);
                 if (iDrive != null) dc.displayDisk(iDrive);
             };
             return true;
@@ -208,7 +208,7 @@ export default class DriveController extends Component {
             control.onclick = function onClickSaveDrive(event) {
                 var controlDrives = dc.bindings["listDrives"];
                 if (controlDrives && controlDrives.options && dc.aDrives) {
-                    var iDriveSelected = Str.parseInt(controlDrives.value, 10) || 0;
+                    var iDriveSelected = StrLib.parseInt(controlDrives.value, 10) || 0;
                     var drive = dc.aDrives[iDriveSelected];
                     if (drive) {
                         /*
@@ -217,7 +217,7 @@ export default class DriveController extends Component {
                         var disk = drive.disk;
                         if (disk) {
                             if (DEBUG) dc.printf("saving disk %s...\n", disk.sDiskPath);
-                            var sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
+                            var sAlert = WebLib.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
                             dc.printf(MESSAGE.NOTICE, "No disk loaded in drive.\n");
@@ -261,7 +261,7 @@ export default class DriveController extends Component {
                 var file = event.currentTarget[1].files[0];
                 if (file) {
                     var sDiskPath = file.name;
-                    var sDiskName = Str.getBaseName(sDiskPath, true);
+                    var sDiskName = StrLib.getBaseName(sDiskPath, true);
                     dc.loadSelectedDisk(sDiskName, sDiskPath, file);
                 }
                 /*
@@ -723,7 +723,7 @@ export default class DriveController extends Component {
         }
 
         var controlDrives = this.bindings["listDrives"];
-        var iDrive = controlDrives && Str.parseInt(controlDrives.value, 10);
+        var iDrive = controlDrives && StrLib.parseInt(controlDrives.value, 10);
 
         if (iDrive === undefined || iDrive < 0 || iDrive >= this.aDrives.length) {
             this.printf(MESSAGE.NOTICE, "Unable to load the selected drive\n");
@@ -752,7 +752,7 @@ export default class DriveController extends Component {
         if (sDiskPath == DriveController.SOURCE.REMOTE) {
             sDiskPath = globals.window.prompt("Enter the URL of a remote disk image.", "") || "";
             if (!sDiskPath) return false;
-            sDiskName = Str.getBaseName(sDiskPath);
+            sDiskName = StrLib.getBaseName(sDiskPath);
             this.printf(MESSAGE.STATUS, 'Attempting to load %s as "%s"\n', sDiskPath, sDiskName);
             this.sDiskSource = DriveController.SOURCE.REMOTE;
         }
@@ -774,7 +774,7 @@ export default class DriveController extends Component {
     {
         var drive;
         var controlDrives = this.bindings["listDrives"];
-        var iDrive = controlDrives && Str.parseInt(controlDrives.value, 10);
+        var iDrive = controlDrives && StrLib.parseInt(controlDrives.value, 10);
 
         if (iDrive == null || iDrive < 0 || iDrive >= this.aDrives.length || !(drive = this.aDrives[iDrive])) {
             this.printf(MESSAGE.NOTICE, "Unable to boot the selected drive\n");
@@ -989,7 +989,7 @@ export default class DriveController extends Component {
                 if (control.value == sPath) return control.text;
             }
         }
-        return Str.getBaseName(sPath, true);
+        return StrLib.getBaseName(sPath, true);
     }
 
     /**
@@ -1024,7 +1024,7 @@ export default class DriveController extends Component {
                 if (fUpdateDrive) {
                     this.assert(iDrive == drive.iDrive);
                     for (i = 0; i < controlDrives.options.length; i++) {
-                        if (Str.parseInt(controlDrives.options[i].value, 10) == drive.iDrive) {
+                        if (StrLib.parseInt(controlDrives.options[i].value, 10) == drive.iDrive) {
                             if (controlDrives.selectedIndex != i) {
                                 controlDrives.selectedIndex = i;
                             }
@@ -1036,7 +1036,7 @@ export default class DriveController extends Component {
                 /*
                  * Next, make sure the drive whose disk we're updating is the currently selected drive.
                  */
-                var iDriveSelected = Str.parseInt(controlDrives.value, 10);
+                var iDriveSelected = StrLib.parseInt(controlDrives.value, 10);
                 var sTargetPath = (drive.fLocal? DriveController.SOURCE.LOCAL : drive.sDiskPath);
                 if (!isNaN(iDriveSelected) && iDriveSelected == iDrive) {
                     for (i = 0; i < controlDisks.options.length; i++) {
@@ -1071,7 +1071,7 @@ export default class DriveController extends Component {
             var nDrives = controlDrives.options.length;
             for (var i = 0; i < nDrives; i++) {
                 if (controlDrives.options[i].textContent == sDrive) {
-                    var iDrive = Str.parseInt(controlDrives.options[i].value, 10);
+                    var iDrive = StrLib.parseInt(controlDrives.options[i].value, 10);
                     if (iDrive >= 0) {
                         return this.displayDisk(iDrive, true);
                     }

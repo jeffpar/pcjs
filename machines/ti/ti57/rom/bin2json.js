@@ -9,7 +9,7 @@
  */
 
 import fs from "fs";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 
 /**
  * processFile(sFileIn, sFileOut, wordSize, valueSize, littleEndian)
@@ -28,7 +28,7 @@ function processFile(sFileIn, sFileOut, wordSize, valueSize, littleEndian = true
         let valueTotal = bufIn.length / bytesPerValue;
         let valuesPerLine = (valueSize < 16? 32 : (valueSize > 16? 8 : valueSize));
         let sJSON = '{\n  class: "ROM",\n  wordSize: ' + wordSize + ',\n  valueSize: ' + valueSize + ',\n  valueTotal: ' + valueTotal + ',\n';
-        sJSON += '  littleEndian: ' + littleEndian + ',\n  file: "' + Str.getBaseName(sFileIn) + '",\n  reference: "",\n';
+        sJSON += '  littleEndian: ' + littleEndian + ',\n  file: "' + StrLib.getBaseName(sFileIn) + '",\n  reference: "",\n';
         sJSON += '  values: [\n';
         if (fQuoteProps) {
             sJSON = sJSON.replace(/([a-z]+):/gi, '"$1":');

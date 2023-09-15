@@ -11,8 +11,8 @@ import ChipSet from "./chipset.js";
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, COMPILED, DESKPRO386, MAXDEBUG } from "./defines.js";
 
 /**
@@ -405,7 +405,7 @@ export default class ParallelPort extends Component {
                         b = 0x20;       // ASCII code for a space
                     }
                 }
-                this.controlBuffer.value += Str.toASCIICode(b);
+                this.controlBuffer.value += StrLib.toASCIICode(b);
                 this.controlBuffer.scrollTop = this.controlBuffer.scrollHeight;
             }
             fTransmitted = true;
@@ -528,4 +528,4 @@ ParallelPort.aPortOutput = {
 /*
  * Initialize every ParallelPort module on the page.
  */
-Web.onInit(ParallelPort.init);
+WebLib.onInit(ParallelPort.init);

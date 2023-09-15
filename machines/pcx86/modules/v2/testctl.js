@@ -15,8 +15,8 @@
 import MESSAGE from "./message.js";
 import TestMonitor from "./testmon.js";
 import Component from "../../../modules/v2/component.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG } from "./defines.js";
 
 /**
@@ -86,7 +86,7 @@ export default class TestController extends Component {
     {
         let controller = this;
         let sProgress = "Loading " + sURL + "...";
-        Web.getResource(sURL, null, true, function(sURL, sResponse, nErrorCode) {
+        WebLib.getResource(sURL, null, true, function(sURL, sResponse, nErrorCode) {
             controller.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
             controller.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
@@ -251,7 +251,7 @@ export default class TestController extends Component {
      */
     printf(format, ...args)
     {
-        let s = Str.sprintf(format.toString(), ...args);
+        let s = StrLib.sprintf(format.toString(), ...args);
 
         if (this.controlBuffer != null) {
             if (s != '\r') {
@@ -323,4 +323,4 @@ export default class TestController extends Component {
 /*
  * Initialize every TestController module on the page.
  */
-Web.onInit(TestController.init);
+WebLib.onInit(TestController.init);

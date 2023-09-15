@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Str from "./strlib.js";
-import Web from "./weblib.js";
+import StrLib from "./strlib.js";
+import WebLib from "./weblib.js";
 import Component from "./component.js";
 import { APPVERSION, DEBUG, globals } from "./defines.js";
 
@@ -35,8 +35,8 @@ function savePC(idMachine, sPCJSFile, callback)
             }
         }
         if (callback && callback({ state: sState, parms: sParms })) return true;
-        Web.getResource(sPCJSFile, null, true, function(sURL, sResponse, nErrorCode) {
-            downloadCSS(sURL, sResponse, nErrorCode, [idMachine, Str.getBaseName(sPCJSFile, true), sParms, sState]);
+        WebLib.getResource(sPCJSFile, null, true, function(sURL, sResponse, nErrorCode) {
+            downloadCSS(sURL, sResponse, nErrorCode, [idMachine, StrLib.getBaseName(sPCJSFile, true), sParms, sState]);
         });
         return true;
     }
@@ -59,7 +59,7 @@ function downloadCSS(sURL, sPCJS, nErrorCode, aMachineInfo)
         let res = Component.getMachineResources(aMachineInfo[0]);
         let sCSSFile = null;
         for (let sName in res) {
-            if (Str.endsWith(sName, "components.xsl")) {
+            if (StrLib.endsWith(sName, "components.xsl")) {
                 sCSSFile = sName.replace(".xsl", ".css");
                 break;
             }
@@ -70,7 +70,7 @@ function downloadCSS(sURL, sPCJS, nErrorCode, aMachineInfo)
              */
             downloadPC(sURL, "", 0, aMachineInfo);
         } else {
-            Web.getResource(sCSSFile, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sCSSFile, null, true, function(sURL, sResponse, nErrorCode) {
                 downloadPC(sURL, sResponse, nErrorCode, aMachineInfo);
             });
         }
@@ -133,7 +133,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
     let res = Component.getMachineResources(idMachine), resNew = {}, sName;
     for (sName in res) {
         let data = res[sName];
-        let sExt = Str.getExtension(sName);
+        let sExt = StrLib.getExtension(sName);
         if (sExt == "xml") {
             /*
              * Look through this resource for <disk> entries whose paths do not appear as one of the
@@ -150,10 +150,10 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
                     }
                 }
             }
-            sXMLFile = sName = Str.getBaseName(sName);
+            sXMLFile = sName = StrLib.getBaseName(sName);
         }
         else if (sExt == "xsl") {
-            sXSLFile = sName = Str.getBaseName(sName);
+            sXSLFile = sName = StrLib.getBaseName(sName);
         }
         Component.printf("saving resource: \"%s\" (%d bytes)\n", sName, data.length);
         resNew[sName] = data;
@@ -190,7 +190,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
          *      sPCJS = sPCJS.replace(/\u00A9/g, "(C)");    // "&#xA9;" or "&copy;"
          */
 
-        let sAlert = Web.downloadFile(sPCJS, "javascript", false, sScript);
+        let sAlert = WebLib.downloadFile(sPCJS, "javascript", false, sScript);
 
         sAlert += ', copy it to your web server as "' + sScript + '", and then add the following to your web page:\n\n';
         sAlert += '<div id="' + idMachine + '"></div>\n';

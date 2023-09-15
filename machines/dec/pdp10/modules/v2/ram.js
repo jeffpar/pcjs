@@ -11,8 +11,8 @@ import MemoryPDP10 from "./memory.js";
 import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, PDP10 } from "./defines.js";
 
 /**
@@ -55,7 +55,7 @@ export default class RAMPDP10 extends Component {
         this.fAllocated = this.fReset = false;
 
         this.sFilePath = parmsRAM['file'];
-        this.sFileName = Str.getBaseName(this.sFilePath);
+        this.sFileName = StrLib.getBaseName(this.sFilePath);
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
@@ -65,12 +65,12 @@ export default class RAMPDP10 extends Component {
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side converter to return the file in a JSON-compatible format.
              */
-            var sFileExt = Str.getExtension(this.sFileName);
+            var sFileExt = StrLib.getExtension(this.sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
+                sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
             var ram = this;
-            Web.getResource(sFileURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sFileURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
                 ram.finishLoad(sURL, sResponse, nErrorCode);
             });
         }
@@ -159,7 +159,7 @@ export default class RAMPDP10 extends Component {
         }
         else {
             Component.addMachineResource(this.idMachine, sURL, sData);
-            var resource = Web.parseMemoryResource(sURL, sData);
+            var resource = WebLib.parseMemoryResource(sURL, sData);
             if (resource) {
                 this.aData = resource.aData;
                 this.aSymbols = resource.aSymbols;
@@ -310,4 +310,4 @@ export default class RAMPDP10 extends Component {
 /*
  * Initialize all the RAMPDP10 modules on the page.
  */
-Web.onInit(RAMPDP10.init);
+WebLib.onInit(RAMPDP10.init);
