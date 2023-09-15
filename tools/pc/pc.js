@@ -2705,7 +2705,7 @@ function checkArgs(argv, removeArg, removeFlag)
     localDir = defaults['dir'] || localDir;
 
     machineType = defaults['type'] || machineType;
-    systemType = (removeArg('sys', 'string') || defaults['sys'] || systemType).toLowerCase();
+    systemType = (removeArg('sys') || removeArg('system') || defaults['sys'] || systemType).toLowerCase();
     let i = systemType.indexOf(':');
     if (i > 0) {
         /*
@@ -2714,7 +2714,7 @@ function checkArgs(argv, removeArg, removeFlag)
         systemVersion = systemType.slice(i+1);
         systemType = systemType.slice(0, i);
     } else {
-        systemVersion = (removeArg('ver', 'string') || defaults['ver'] || systemVersion);
+        systemVersion = (removeArg('ver') || removeArg('version') || defaults['ver'] || systemVersion);
     }
     systemMBR = removeArg('mbr') || defaults['mbr'] || systemMBR;
     savedMachine = defaults['machine'] || savedMachine;
@@ -2834,7 +2834,7 @@ function main(argc, argv)
             "--start=[machine]":        "start machine configuration file",
         };
         let optionsDisk = {
-            "--boot=[drive]":           "\tselect boot drive (A or C, default is C)",
+            "--boot=[drive]":           "\tselect boot drive (A or C; default is C)",
             "--dir=[directory]":        "use drive directory (default is " + localDir + ")",
             "--disk=[image]":           "\tuse drive disk image (instead of directory)",
             "--drive=[controller]":     "set drive controller (XT, AT, COMPAQ, or PCJS)",
@@ -2845,9 +2845,9 @@ function main(argc, argv)
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--normalize=[boolean]":    "convert text file encoding (default is " + fNormalize + ")",
             "--save=[image]":           "\tsave drive disk image and exit",
-            "--sys=[string]":           "\tset operating system type (default is " + systemType + ")",
+            "--system=[string]":        "set operating system type (default is " + systemType + ")",
             "--target=[nK|nM]":         "set target disk size (default is " + ((kbTarget / 1024)|0) + "M)",
-            "--ver=[#.##]":             "\tset operating system version (default is " + systemVersion + ")"
+            "--version=[#.##]":         "set operating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
             "--bare (-b)":              "\tomit helper binaries from disk",
@@ -2873,7 +2873,9 @@ function main(argc, argv)
         }
         printf("\nnotes:\n\t--drivetype can also specify a drive geometry (eg, --drivetype=306:4:17)\n");
         printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
-        printf("\tAll values should be considered advisory, as it may not be possible to honor them.\n");
+        printf("\t--hidden also disables the use of hidden sectors to work around an old boot sector bug\n");
+        printf("\t--system can also specify a version (eg, --system=pcdos:2.0) for convenience\n\n");
+        printf("\tDrive and FAT values should be considered advisory, as it may not be possible to honor them.\n");
         printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, configFile));
         return;
     }
