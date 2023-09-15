@@ -9,13 +9,13 @@
 
 import ChipSet from "./chipset.js";
 import Interrupts from "./interrupts.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import ROMx86 from "./rom.js";
 import Component from "../../../modules/v2/component.js";
 import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, COMPILED, DEBUG, DESKPRO386, MAXDEBUG } from "./defines.js";
 
 /**
@@ -52,11 +52,11 @@ export default class KbdX86 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, Messages.KBD);
+        super("Keyboard", parmsKbd, MESSAGE.KBD);
 
         this.setModel(parmsKbd['model']);
 
-        this.fMobile = Web.isMobile("!iPad");
+        this.fMobile = WebLib.isMobile("!iPad");
         this.printf("mobile keyboard support: %b\n", this.fMobile);
 
         /*
@@ -66,7 +66,7 @@ export default class KbdX86 extends Component {
          * keys: keys like CAPS-LOCK generate both UP and DOWN events on every press.  On other platforms (eg, macOS),
          * those keys generate only a DOWN event when "locking" and only an UP event when "unlocking".
          */
-        this.fMSWindows = Web.isUserAgent("Windows");
+        this.fMSWindows = WebLib.isUserAgent("Windows");
 
         /*
          * This is count of the number of "soft keyboard" keys present.  At the moment, its only
@@ -263,7 +263,7 @@ export default class KbdX86 extends Component {
                  *
                  *      this.bindings[id] = control;
                  */
-                if (sHTMLType == "textarea" && !Web.isUserAgent("iPhone")) {
+                if (sHTMLType == "textarea" && !WebLib.isUserAgent("iPhone")) {
                     this.controlTextKeyboard = controlText;
                     this.controlTextKeyboard.addEventListener(
                         'copy',
@@ -335,10 +335,10 @@ export default class KbdX86 extends Component {
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
                 if (KbdX86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) this.printf(Messages.LOG, "binding click-code '%s'\n", sCode);
+                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "binding click-code '%s'\n", sCode);
                     controlText.onclick = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingClick(event) {
-                            kbd.printf(Messages.EVENT + Messages.KEY, "%s clicked\n", sKey);
+                            kbd.printf(MESSAGE.EVENT + MESSAGE.KEY, "%s clicked\n", sKey);
                             kbd.updateFocus(event);
                             kbd.sInjectBuffer = "";                 // key events should stop any injection currently in progress
                             kbd.updateShiftState(simCode, true);    // future-proofing if/when any LOCK keys are added to CLICKCODES
@@ -357,7 +357,7 @@ export default class KbdX86 extends Component {
                     }
                     this.cSoftCodes++;
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) this.printf(Messages.LOG, "binding soft-code '%s'\n", sBinding);
+                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "binding soft-code '%s'\n", sBinding);
                     let msLastEvent = 0, nClickState = 0;
                     let fStateKey = (KbdX86.KEYSTATES[KbdX86.SOFTCODES[sBinding]] <= KbdX86.STATE.ALL_MODIFIERS);
                     let fnDown = function(kbd, sKey, simCode) {
@@ -379,7 +379,7 @@ export default class KbdX86 extends Component {
                                 if (nClickState < 8) {
                                     kbd.removeActiveKey(simCode);
                                 } else {
-                                    if (MAXDEBUG) this.printf(Messages.LOG, "soft-locking '%s'\n", sBinding);
+                                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "soft-locking '%s'\n", sBinding);
                                     nClickState = 0;
                                 }
                             }
@@ -610,7 +610,7 @@ export default class KbdX86 extends Component {
         /*
          * TODO: There's more to reset, like LED indicators, default type rate, and emptying the scan code buffer.
          */
-        this.printf(Messages.KBD + Messages.PORT, "keyboard reset\n");
+        this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard reset\n");
         this.abBuffer = [];
         this.setResponse(KbdX86.CMDRES.BAT_OK);
     }
@@ -747,7 +747,7 @@ export default class KbdX86 extends Component {
     {
         let fReset = false;
         if (this.fClock !== fClock) {
-            if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "keyboard clock line changing to %b\n", fClock);
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard clock line changing to %b\n", fClock);
             /*
              * Toggling the clock line low and then high signals a "reset", which we acknowledge once the
              * data line is high as well.
@@ -755,7 +755,7 @@ export default class KbdX86 extends Component {
             this.fClock = this.fResetOnEnable = fClock;
         }
         if (this.fData !== fData) {
-            if (!COMPILED) this.printf(Messages.KBD + Messages.PORT, "keyboard data line changing to %b\n", fData);
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard data line changing to %b\n", fData);
             this.fData = fData;
             if (fData && !this.fResetOnEnable) {
                 this.transmitData(true);
@@ -1259,7 +1259,7 @@ export default class KbdX86 extends Component {
      * operations, multiple dollar signs could eventually get reduced to a single dollar sign BEFORE we get here.
      *
      * To compensate, I've changed a few replace() methods, like MarkOut's convertMDMachineLinks() and HTMLOut's
-     * addFilesToHTML(), from the conventional string replace() to my own Str.replace(), and for situations like the
+     * addFilesToHTML(), from the conventional string replace() to my own StrLib.replace(), and for situations like the
      * embed.js parseXML() function, which needs to use a RegExp-style replace(), I've added a preliminary
      * replace(/\$/g, "$$$$") to the replacement string.
      *
@@ -1280,10 +1280,10 @@ export default class KbdX86 extends Component {
                 if (reSpecial.lastIndex) reSpecial.lastIndex--;
                 switch (match[1]) {
                 case 'date':
-                    sReplace = Str.sprintf("%M-%02D-%04Y", date);
+                    sReplace = StrLib.sprintf("%M-%02D-%04Y", date);
                     break;
                 case 'time':
-                    sReplace = Str.sprintf("%H:%02N:%02S", date);
+                    sReplace = StrLib.sprintf("%H:%02N:%02S", date);
                     break;
                 default:
                     continue;
@@ -1479,7 +1479,7 @@ export default class KbdX86 extends Component {
         let wCode = KbdX86.SIMCODES[simCode] || KbdX86.SIMCODES[simCode += Keys.KEYCODE.ONDOWN];
 
         if (!wCode) {
-            if (!COMPILED) this.printf(Messages.KBD + Messages.KEY, "addActiveKey(%d,%s): unrecognized\n", simCode, (fPress? "press" : "down"));
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "addActiveKey(%d,%s): unrecognized\n", simCode, (fPress? "press" : "down"));
             return false;
         }
 
@@ -1515,7 +1515,7 @@ export default class KbdX86 extends Component {
             }
         }
 
-        if (!COMPILED) this.printf(Messages.KBD + Messages.KEY, "addActiveKey(%d,%s): %s\n", simCode, (fPress? "press" : "down"), (i < 0? "already active" : (i == this.aKeysActive.length? "adding" : "updating")));
+        if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "addActiveKey(%d,%s): %s\n", simCode, (fPress? "press" : "down"), (i < 0? "already active" : (i == this.aKeysActive.length? "adding" : "updating")));
 
         if (i < 0) return false;
 
@@ -1602,7 +1602,7 @@ export default class KbdX86 extends Component {
     removeActiveKey(simCode, fFlush)
     {
         if (!KbdX86.SIMCODES[simCode]) {
-            if (!COMPILED) this.printf(Messages.KBD + Messages.KEY, "removeActiveKey(%d): unrecognized\n", simCode);
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "removeActiveKey(%d): unrecognized\n", simCode);
             return false;
         }
 
@@ -1625,11 +1625,11 @@ export default class KbdX86 extends Component {
         }
 
         if (!COMPILED && !fFlush) {
-            this.printf(Messages.KBD + Messages.KEY, "removeActiveKey(%d): %s\n", simCode, (fRemoved? "removed" : "not active"));
+            this.printf(MESSAGE.KBD + MESSAGE.KEY, "removeActiveKey(%d): %s\n", simCode, (fRemoved? "removed" : "not active"));
         }
 
         if (!this.aKeysActive.length && this.fToggleCapsLock) {
-            if (!COMPILED) this.printf(Messages.KBD + Messages.KEY, "removeActiveKey(): inverting caps-lock now\n");
+            if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "removeActiveKey(): inverting caps-lock now\n");
             this.updateShiftState(KbdX86.SIMCODE.CAPS_LOCK);
             this.fToggleCapsLock = false;
         }
@@ -1655,7 +1655,7 @@ export default class KbdX86 extends Component {
         }
 
         if (!COMPILED) {
-            this.printf(Messages.KBD + Messages.KEY, "updateActiveKey(%d,%dms): %b\n", key.simCode, msTimer, key.fDown);
+            this.printf(MESSAGE.KBD + MESSAGE.KEY, "updateActiveKey(%d,%dms): %b\n", key.simCode, msTimer, key.fDown);
         }
 
         if (msTimer && key.nRepeat < 0) {
@@ -1740,7 +1740,7 @@ export default class KbdX86 extends Component {
     onFocusChange(fFocus)
     {
         if (!COMPILED && this.fHasFocus != fFocus) {
-            this.printf(Messages.EVENT, "onFocusChange(%b)\n", fFocus);
+            this.printf(MESSAGE.EVENT, "onFocusChange(%b)\n", fFocus);
         }
         this.fHasFocus = fFocus;
         /*
@@ -1774,7 +1774,7 @@ export default class KbdX86 extends Component {
          * NOTE: isUserAgent struggles to detect iPadOS because Apple insists on pretending that it be indistinguishable
          * from desktop systems, so be aware that this hack may stop working at some undefined point.
          */
-        if (Web.isUserAgent("iOS") && (this.bitsState & KbdX86.STATE.CTRL)) {
+        if (WebLib.isUserAgent("iOS") && (this.bitsState & KbdX86.STATE.CTRL)) {
             if (keyCode == Keys.KEYCODE.CR) {
                 keyCode = Keys.ASCII.C;
             }
@@ -1804,7 +1804,7 @@ export default class KbdX86 extends Component {
             } else {
                 keyCode = Keys.CODEKEY[code] || 0;
             }
-            this.printf(Messages.EVENT + Messages.KEY, "onKeyActive(%d): remapped using event code '%s'\n", keyCode, code);
+            this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyActive(%d): remapped using event code '%s'\n", keyCode, code);
         }
 
         if (!this.cmp.notifyKbdEvent(event, fDown)) {
@@ -1992,7 +1992,7 @@ export default class KbdX86 extends Component {
             event.preventDefault();
         }
 
-        this.printf(Messages.EVENT + Messages.KEY, "onKeyActive(%d): %b%s\n", keyCode, fDown, (fIgnore? ",ignore" : (fPass? "" : ",consume")));
+        this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyActive(%d): %b%s\n", keyCode, fDown, (fIgnore? ",ignore" : (fPass? "" : ",consume")));
 
         /*
          * Mobile (eg, iOS) keyboards don't fully support onkeydown/onkeyup events; for example, they usually
@@ -2009,7 +2009,7 @@ export default class KbdX86 extends Component {
                  */
                 if (this.fDelayALT && (this.bitsState & KbdX86.STATE.ALTS)) {
                     let simCodeAlt = KbdX86.SIMCODE.ALT;
-                    this.printf(Messages.EVENT, "onKeyActive(%d): simulating ALT down\n", simCodeAlt);
+                    this.printf(MESSAGE.EVENT, "onKeyActive(%d): simulating ALT down\n", simCodeAlt);
                     this.addActiveKey(simCodeAlt);
                 }
                 this.addActiveKey(simCode, fPress);
@@ -2046,7 +2046,7 @@ export default class KbdX86 extends Component {
         if (this.fAllDown) {
             let simCode = this.checkActiveKey();
             if (simCode && this.isAlphaKey(simCode) && this.isAlphaKey(keyCode) && simCode != keyCode) {
-                if (!COMPILED) this.printf(Messages.EVENT + Messages.KEY, "onKeyPress(%d) out of sync with %d, invert caps-lock\n", keyCode, simCode);
+                if (!COMPILED) this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyPress(%d) out of sync with %d, invert caps-lock\n", keyCode, simCode);
                 this.fToggleCapsLock = true;
                 keyCode = simCode;
             }
@@ -2054,7 +2054,7 @@ export default class KbdX86 extends Component {
 
         let fPass = !KbdX86.SIMCODES[keyCode] || !!(this.bitsState & KbdX86.STATE.CMD);
 
-        this.printf(Messages.EVENT + Messages.KEY, "onKeyPress(%d): %b\n", keyCode, fPass);
+        this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyPress(%d): %b\n", keyCode, fPass);
 
         if (!fPass) {
             /*
@@ -2064,7 +2064,7 @@ export default class KbdX86 extends Component {
              */
             if (this.fDelayALT && (this.bitsState & KbdX86.STATE.ALTS)) {
                 let simCodeAlt = KbdX86.SIMCODE.ALT;
-                this.printf(Messages.EVENT, "onKeyPress(%d): simulating ALT down\n", simCodeAlt);
+                this.printf(MESSAGE.EVENT, "onKeyPress(%d): simulating ALT down\n", simCodeAlt);
                 this.addActiveKey(simCodeAlt);
             }
             this.addActiveKey(keyCode, true);
@@ -2264,7 +2264,7 @@ export default class KbdX86 extends Component {
             fSimulated = true;
         }
 
-        if (!COMPILED) this.printf(Messages.KBD + Messages.KEY, "simulateKey(%d,%b): %b\n", simCode, fDown, fSimulated);
+        if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "simulateKey(%d,%b): %b\n", simCode, fDown, fSimulated);
 
         return fSimulated;
     }
@@ -3229,4 +3229,4 @@ KbdX86.INJECTION = {
 /*
  * Initialize every Keyboard module on the page.
  */
-Web.onInit(KbdX86.init);
+WebLib.onInit(KbdX86.init);

@@ -8,11 +8,11 @@
  */
 
 import MemoryX86 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG } from "./defines.js";
 
 /**
@@ -42,7 +42,7 @@ export default class ROMx86 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROMx86", parmsROM, Messages.MEM);
+        super("ROMx86", parmsROM, MESSAGE.MEM);
 
         this.abROM = null;
         this.addrROM = +parmsROM['addr'];       // we allow numbers or strings (JSON strings permit hex)
@@ -92,16 +92,16 @@ export default class ROMx86 extends Component {
         this.sFileURL = this.sFilePath = parmsROM['file'];
 
         if (this.sFileURL) {
-            let sFileName = Str.getBaseName(this.sFileURL);
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", this.sFileURL);
+            let sFileName = StrLib.getBaseName(this.sFileURL);
+            if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", this.sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side ROM converter to return the file in a JSON-compatible format.
              */
-            let sFileExt = Str.getExtension(sFileName);
+            let sFileExt = StrLib.getExtension(sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                this.sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
+                this.sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
         }
     }
@@ -124,10 +124,10 @@ export default class ROMx86 extends Component {
 
         if (this.sFileURL) {
             let rom = this;
-            Web.getResource(this.sFileURL, null, true, function doneROMLoad(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(this.sFileURL, null, true, function doneROMLoad(sURL, sResponse, nErrorCode) {
                 rom.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
-                rom.printf(Messages.PROGRESS, "Loading %s...\n", rom.sFileURL);
+                rom.printf(MESSAGE.PROGRESS, "Loading %s...\n", rom.sFileURL);
             });
         }
     }
@@ -184,7 +184,7 @@ export default class ROMx86 extends Component {
     doneLoad(sURL, sROMData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load system ROM (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(nErrorCode < 0? MESSAGE.STATUS : MESSAGE.NOTICE, "Unable to load system ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -261,7 +261,7 @@ export default class ROMx86 extends Component {
                     return;
                 }
             } catch (e) {
-                this.printf(Messages.NOTICE, "ROM data error: %s\n", e.message);
+                this.printf(MESSAGE.NOTICE, "ROM data error: %s\n", e.message);
                 return;
             }
         }
@@ -274,7 +274,7 @@ export default class ROMx86 extends Component {
             let asHexData = sHexData.split(" ");
             this.abROM = new Array(asHexData.length);
             for (let i = 0; i < asHexData.length; i++) {
-                this.abROM[i] = Str.parseInt(asHexData[i], 16);
+                this.abROM[i] = StrLib.parseInt(asHexData[i], 16);
             }
         }
         this.copyROM();
@@ -309,7 +309,7 @@ export default class ROMx86 extends Component {
                      * good idea to stop the machine in its tracks whenever a setError() occurs, but there may also be
                      * times when we'd like to forge ahead anyway.
                      */
-                    this.setError("ROM size (" + Str.toHexLong(this.abROM.length) + ") does not match specified size (" + Str.toHexLong(this.sizeROM) + ")");
+                    this.setError("ROM size (" + StrLib.toHexLong(this.abROM.length) + ") does not match specified size (" + StrLib.toHexLong(this.sizeROM) + ")");
                 }
                 else if (this.addROM(this.addrROM)) {
 
@@ -332,7 +332,7 @@ export default class ROMx86 extends Component {
                         if (component) {
                             component.onROMLoad(this.abROM, this.aNotifyParms);
                         } else {
-                            this.printf(Messages.NOTICE, "Unable to find component: %s\n", this.idNotify);
+                            this.printf(MESSAGE.NOTICE, "Unable to find component: %s\n", this.idNotify);
                         }
                     }
                     /*
@@ -362,7 +362,7 @@ export default class ROMx86 extends Component {
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX86.TYPE.ROM)) {
-            if (MAXDEBUG) this.printf(Messages.LOG, "addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
+            if (MAXDEBUG) this.printf(MESSAGE.LOG, "addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
             let bto = null;
             for (let off = 0; off < this.abROM.length; off++) {
                 this.bus.setByteDirect(addr + off, this.abROM[off]);
@@ -678,4 +678,4 @@ ROMx86.BIOS = {
 /*
  * Initialize all the ROM modules on the page.
  */
-Web.onInit(ROMx86.init);
+WebLib.onInit(ROMx86.init);

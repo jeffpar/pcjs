@@ -8,12 +8,12 @@
  */
 
 import ChipSetX80 from "./chipset.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, COMPILED, MAXDEBUG, globals } from "./defines.js";
 
 /**
@@ -37,12 +37,12 @@ export default class KeyboardX80 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, Messages.KBD);
+        super("Keyboard", parmsKbd, MESSAGE.KBD);
 
         let model = parmsKbd['model'];
 
         if (model && !KeyboardX80.MODELS[model]) {
-            Component.printf(Messages.NOTICE, "Unrecognized KeyboardX80 model: %s\n", model);
+            Component.printf(MESSAGE.NOTICE, "Unrecognized KeyboardX80 model: %s\n", model);
         }
 
         this.config = KeyboardX80.MODELS[model] || {};
@@ -103,7 +103,7 @@ export default class KeyboardX80 extends Component {
                  *
                  *      this.bindings[id] = control;
                  */
-                if (Web.isUserAgent("iOS")) {
+                if (WebLib.isUserAgent("iOS")) {
                     /*
                      * For iOS devices, it's best to deal only with keypress events.  The main reason is that we don't
                      * get shift-key events, so we have no way of distinguishing between certain keys, such as ':' and
@@ -321,7 +321,7 @@ export default class KeyboardX80 extends Component {
         this.bitsState = 0;
 
         if (this.config.INIT && !this.restore(this.config.INIT)) {
-            this.printf(Messages.NOTICE, "reset error\n");
+            this.printf(MESSAGE.NOTICE, "reset error\n");
         }
     }
 
@@ -388,7 +388,7 @@ export default class KeyboardX80 extends Component {
      */
     setLED(control, f, color)
     {
-        control.style.backgroundColor = (f? ('#' + Str.toHex(color, 6)) : "#000000");
+        control.style.backgroundColor = (f? ('#' + StrLib.toHex(color, 6)) : "#000000");
     }
 
     /**
@@ -508,7 +508,7 @@ export default class KeyboardX80 extends Component {
         let fPass = true;
         let keyCode = event.keyCode;
 
-        this.printf(Messages.KEY, "onKey%s(%d)\n", (fDown? "Down" : "Up"), keyCode);
+        this.printf(MESSAGE.KEY, "onKey%s(%d)\n", (fDown? "Down" : "Up"), keyCode);
 
         /*
          * A note about Firefox: it uses different keyCodes for certain keys; there's a logic to the differences
@@ -584,7 +584,7 @@ export default class KeyboardX80 extends Component {
                 }
             }
         }
-        this.printf(Messages.KEY, "onKey%s(%d): softCode=%s, pass=%b\n", (fDown? "Down" : "Up"), keyCode, softCode, fPass);
+        this.printf(MESSAGE.KEY, "onKey%s(%d): softCode=%s, pass=%b\n", (fDown? "Down" : "Up"), keyCode, softCode, fPass);
         return fPass;
     }
 
@@ -624,7 +624,7 @@ export default class KeyboardX80 extends Component {
                 this.updateLEDs();
             }
         }
-        this.printf(Messages.KEY, "onKeyPress(%d)\n", charCode);
+        this.printf(MESSAGE.KEY, "onKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -659,7 +659,7 @@ export default class KeyboardX80 extends Component {
                 if (!this.indexOfCharMap(bMapping)) {
                     fPass = this.onSoftKeyDown(keyCode, fDown, true);
                     if (event.preventDefault) event.preventDefault();
-                    this.printf(Messages.KEY, "oniOSKey%s(%d): pass=%b\n", (fDown ? "Down" : "Up"), keyCode, fPass);
+                    this.printf(MESSAGE.KEY, "oniOSKey%s(%d): pass=%b\n", (fDown ? "Down" : "Up"), keyCode, fPass);
                 }
             }
         }
@@ -708,7 +708,7 @@ export default class KeyboardX80 extends Component {
                 this.onSoftKeyDown(softCode, true, true);
             }
         }
-        this.printf(Messages.KEY, "oniOSKeyPress(%d)\n", charCode);
+        this.printf(MESSAGE.KEY, "oniOSKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -1427,4 +1427,4 @@ KeyboardX80.VT100.portsOutput = {
 /*
  * Initialize every Keyboard module on the page.
  */
-Web.onInit(KeyboardX80.init);
+WebLib.onInit(KeyboardX80.init);

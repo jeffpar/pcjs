@@ -8,9 +8,9 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
-import Messages from "../../../../modules/v2/messages.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import MESSAGE from "../../../../modules/v2/message.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
@@ -501,7 +501,7 @@ export default class C1PDebugger extends Component {
              * I've replaced the standard "onclick" code with a call to our onClickRepeat() helper in
              * component.js, so that the "Enter" button can be held to repeat, just like the "Step" button.
              */
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control, 500, 100,
                 function(fRepeat) {
                     if (dbg.eDebug) {
@@ -515,7 +515,7 @@ export default class C1PDebugger extends Component {
                         C1PDebugger.input(dbg, sBinding);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
+                    if (DEBUG) dbg.printf(MESSAGE.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -523,7 +523,7 @@ export default class C1PDebugger extends Component {
 
         case "step":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control, 500, 100,
                 function(fRepeat) {
                     var fCompleted = false;
@@ -1005,7 +1005,7 @@ export default class C1PDebugger extends Component {
         if (addr >= this.offMem && addr < this.offLimit) {
             this.cpu.checkReadNotify(addr);
             b = this.abMem[this.offMem + addr];
-            Component.assert((b == (b & 0xff)), "invalid byte (" + b + ") at address: " + Str.toHexWord(addr));
+            Component.assert((b == (b & 0xff)), "invalid byte (" + b + ") at address: " + StrLib.toHexWord(addr));
             b &= 0xff;
         }
         return b;
@@ -1234,14 +1234,14 @@ export default class C1PDebugger extends Component {
      */
     getInstruction(addr, nIns)
     {
-        var sLine = Str.toHex(addr, 4);
+        var sLine = StrLib.toHex(addr, 4);
         var bOpCode = this.getByte(addr++);
         var b = (bOpCode === undefined? 0 : bOpCode);
         var aOpDesc = this.aaOperations[b];
         var abOperand = [];
         var cb = (aOpDesc[1] === undefined? 0 : aOpDesc[1]);
         do {
-            sLine += " " + Str.toHex(b, 2);
+            sLine += " " + StrLib.toHex(b, 2);
             if (!(cb--)) break;
             b = this.getByte(addr++);
             if (b === undefined) break;
@@ -1258,11 +1258,11 @@ export default class C1PDebugger extends Component {
             var bOpMode = aOpDesc[2];
             sOperand = this.aOpModes[bOpMode];
             if (aOpDesc[1] == 1 && bOpMode == this.MODE_DISP) {
-                sOperand = sOperand.replace(/nnnn/, Str.toHex(this.addSignedByte(addr, b = abOperand.pop()), 4));
+                sOperand = sOperand.replace(/nnnn/, StrLib.toHex(this.addSignedByte(addr, b = abOperand.pop()), 4));
             }
             else {
                 while (abOperand.length) {
-                    sOperand = sOperand.replace(/nn/, Str.toHex(b = abOperand.pop(), 2));
+                    sOperand = sOperand.replace(/nn/, StrLib.toHex(b = abOperand.pop(), 2));
                 }
             }
             if (bOpMode == this.MODE_IMM && aOpDesc[1] == 1) {
@@ -1497,12 +1497,12 @@ export default class C1PDebugger extends Component {
      */
     getRegs()
     {
-        return "A=" + Str.toHex(this.cpu.regA, 2) +
-              " X=" + Str.toHex(this.cpu.regX, 2) +
-              " Y=" + Str.toHex(this.cpu.regY, 2) +
-              " P=" + Str.toHex(this.cpu.getRegP(), 2) +
-              " S=" + Str.toHex(this.cpu.regS, 4) +
-              " PC=" + Str.toHex(this.cpu.regPC, 4);
+        return "A=" + StrLib.toHex(this.cpu.regA, 2) +
+              " X=" + StrLib.toHex(this.cpu.regX, 2) +
+              " Y=" + StrLib.toHex(this.cpu.regY, 2) +
+              " P=" + StrLib.toHex(this.cpu.getRegP(), 2) +
+              " S=" + StrLib.toHex(this.cpu.regS, 4) +
+              " PC=" + StrLib.toHex(this.cpu.regPC, 4);
     }
 
     /**
@@ -1728,7 +1728,7 @@ export default class C1PDebugger extends Component {
             for (var i=0; i < 8 && addr < this.offLimit; i++) {
                 var b = this.getByte(addr);
                 if (b === undefined) b = 0;
-                sBytes += Str.toHex(b, 2) + " ";
+                sBytes += StrLib.toHex(b, 2) + " ";
                 sChars += (b >= 32 && b < 127? String.fromCharCode(b) : ".");
                 addr++;
             }
@@ -2069,7 +2069,7 @@ export default class C1PDebugger extends Component {
             this.cpu.update();
         }
         this.printf("%s\n", this.getRegs());
-        if (fIns) this.doUnassemble(Str.toHex(this.nextAddr = this.cpu.regPC, 4));
+        if (fIns) this.doUnassemble(StrLib.toHex(this.nextAddr = this.cpu.regPC, 4));
     }
 
     /**
@@ -2111,7 +2111,7 @@ export default class C1PDebugger extends Component {
     {
         var c = (sCount === undefined? 1 : parseInt(sCount, 10));
         var n = (c == 1? 0 : 1);
-        Web.onCountRepeat(
+        WebLib.onCountRepeat(
             c,
             function(dbg) {
                 return function() {
@@ -2148,7 +2148,7 @@ export default class C1PDebugger extends Component {
         if (dbg.isReady() && !dbg.isBusy(true) && sCmd.length > 0) {
 
             if (dbg.fAssemble) {
-                sCmd = "a " + Str.toHex(dbg.addrAssembleNext, 4) + " " + sCmd;
+                sCmd = "a " + StrLib.toHex(dbg.addrAssembleNext, 4) + " " + sCmd;
             }
             else if (sCmd.length > 1 && sCmd.indexOf(" ") != 1) {
                 /*
@@ -2241,6 +2241,6 @@ if (DEBUGGER) {
     /*
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
-    Web.onInit(C1PDebugger.init);
+    WebLib.onInit(C1PDebugger.init);
 
 }   // endif DEBUGGER

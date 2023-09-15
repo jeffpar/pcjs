@@ -11,7 +11,7 @@ machines:
     config: /machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/machine.xml
     autoMount:
       A:
-        name: COMPAQ MS-DOS 3.31 (Disk 2)
+        name: COMPAQ MS-DOS 3.31D (720K Disk 2)
       B:
         name: VGA Black Book Binaries
 ---

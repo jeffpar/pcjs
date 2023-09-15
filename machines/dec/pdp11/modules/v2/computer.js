@@ -8,13 +8,13 @@
  */
 
 import BusPDP11 from "./bus.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
 import UserAPI from "../../../../modules/v2/userapi.js";
-import Usr from "../../../../modules/v2/usrlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import UsrLib from "../../../../modules/v2/usrlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG, LICENSE, MAXDEBUG, TYPEDARRAYS, globals } from "./defines.js";
 
 /**
@@ -85,14 +85,14 @@ export default class ComputerPDP11 extends Component {
      */
     constructor(parmsComputer, parmsMachine, fSuspended)
     {
-        super("Computer", parmsComputer, Messages.COMPUTER);
+        super("Computer", parmsComputer, MESSAGE.COMPUTER);
 
         this.flags.powered = false;
 
         this.parmsMachine = null;
         this.setMachineParms(parmsMachine);
 
-        this.fAutoPower = this.getMachineParm('autoPower', parmsComputer, Str.TYPES.BOOLEAN);
+        this.fAutoPower = this.getMachineParm('autoPower', parmsComputer, StrLib.TYPES.BOOLEAN);
 
         /*
          * nPowerChange is 0 while the power state is stable, 1 while power is transitioning
@@ -161,11 +161,11 @@ export default class ComputerPDP11 extends Component {
             }
         }
 
-        this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(MESSAGE.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        this.printf(Messages.NONE, "Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");
+        this.printf(MESSAGE.NONE, "Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");
 
-        if (MAXDEBUG) this.printf(Messages.DEBUG, "TYPEDARRAYS: %s\n", TYPEDARRAYS);
+        if (MAXDEBUG) this.printf(MESSAGE.DEBUG, "TYPEDARRAYS: %s\n", TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -238,7 +238,7 @@ export default class ComputerPDP11 extends Component {
             this.setReady();
         } else {
             var cmp = this;
-            Web.getResource(/** @type {string} */ (sStatePath), null, true, function doneStateLoad(sURL, sResource, nErrorCode) {
+            WebLib.getResource(/** @type {string} */ (sStatePath), null, true, function doneStateLoad(sURL, sResource, nErrorCode) {
                 cmp.finishStateLoad(sURL, sResource, nErrorCode);
             });
         }
@@ -308,13 +308,13 @@ export default class ComputerPDP11 extends Component {
      * then attempt to load the 'state' resource to obtain the actual state.
      *
      * TODO: It would be nice if we could tell the Closure Compiler that when a specific type parameter
-     * (eg, Str.TYPES.NUMBER) is used, the return value will be that type; unfortunately, every caller
+     * (eg, StrLib.TYPES.NUMBER) is used, the return value will be that type; unfortunately, every caller
      * must coerce their own return value.
      *
      * @this {ComputerPDP11}
      * @param {string} sParm
      * @param {Object|null} [parmsComponent]
-     * @param {number} [type] (from Str.TYPES)
+     * @param {number} [type] (from StrLib.TYPES)
      * @param {*} [defaultValue]
      * @returns {*}
      */
@@ -327,7 +327,7 @@ export default class ComputerPDP11 extends Component {
          * but there are limits to my paranoia.
          */
         var sParmLC = sParm.toLowerCase();
-        var value = Web.getURLParm(sParm) || Web.getURLParm(sParmLC);
+        var value = WebLib.getURLParm(sParm) || WebLib.getURLParm(sParmLC);
         var resources = globals.window['resources'];
         if (value === undefined && this.parmsMachine) value = this.parmsMachine[sParm];
         if (value === undefined && parmsComponent) value = parmsComponent[sParm];
@@ -335,11 +335,11 @@ export default class ComputerPDP11 extends Component {
         if (value === undefined) value = defaultValue;
         if (typeof value == "string" && type) {
             switch(type) {
-            case Str.TYPES.NUMBER:
+            case StrLib.TYPES.NUMBER:
                 value = +value;
                 if (isNaN(/** @type {number} */(value))) value = defaultValue || 0;
                 break;
-            case Str.TYPES.BOOLEAN:
+            case StrLib.TYPES.BOOLEAN:
                 value = (value == "true");
                 break;
             }
@@ -388,7 +388,7 @@ export default class ComputerPDP11 extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
+            this.printf(MESSAGE.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + StrLib.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -445,7 +445,7 @@ export default class ComputerPDP11 extends Component {
             var sTimestampValidate = stateValidate.get(ComputerPDP11.STATE_TIMESTAMP);
             var sTimestampComputer = stateComputer? stateComputer.get(ComputerPDP11.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
+                this.printf(MESSAGE.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
@@ -512,7 +512,7 @@ export default class ComputerPDP11 extends Component {
                     this.stateFailSafe.unload();
                 }
 
-                this.stateFailSafe.set(ComputerPDP11.STATE_TIMESTAMP, Usr.getTimestamp());
+                this.stateFailSafe.set(ComputerPDP11.STATE_TIMESTAMP, UsrLib.getTimestamp());
                 this.stateFailSafe.store();
 
                 var fValidate = this.resume && !this.fServerState;
@@ -529,7 +529,7 @@ export default class ComputerPDP11 extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
+                                    this.printf(MESSAGE.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
                                     this.printf("%s: %s\n", sCode, sData);
@@ -673,7 +673,7 @@ export default class ComputerPDP11 extends Component {
                     if (this.sStatePath && !this.fStateData) {
                         stateComputer.clear();
                         this.resume = ComputerPDP11.RESUME_NONE;
-                        Web.reloadPage();
+                        WebLib.reloadPage();
                     } else {
                         /*
                          * In all other cases, we set fRestoreError, which should trigger a call to
@@ -699,7 +699,7 @@ export default class ComputerPDP11 extends Component {
                 if (!fRepower && component.comment) {
                     var asComments = component.comment.split("|");
                     for (var i = 0; i < asComments.length; i++) {
-                        component.printf(Messages.STATUS, "%s\n", asComments[i]);
+                        component.printf(MESSAGE.STATUS, "%s\n", asComments[i]);
                     }
                 }
             }
@@ -802,10 +802,10 @@ export default class ComputerPDP11 extends Component {
         //
         // This is all we can realistically do for now.
         //
-        Web.onError("There may be a problem with your " + APPNAME + " machine.");
+        WebLib.onError("There may be a problem with your " + APPNAME + " machine.");
         //
         // if (Component.confirmUser("There may be a problem with your " + APPNAME + " machine.\n\nTo help us diagnose it, click OK to send this " + APPNAME + " machine state to " + SITEURL + ".")) {
-        //     Web.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
+        //     WebLib.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
         // }
         //
     }
@@ -858,12 +858,12 @@ export default class ComputerPDP11 extends Component {
         var stateComputer = new State(this, APPVERSION);
         var stateValidate = new State(this, APPVERSION, ComputerPDP11.STATE_VALIDATE);
 
-        var sTimestamp = Usr.getTimestamp();
+        var sTimestamp = UsrLib.getTimestamp();
         stateValidate.set(ComputerPDP11.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerPDP11.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerPDP11.STATE_VERSION, APPVERSION);
-        stateComputer.set(ComputerPDP11.STATE_HOSTURL, Web.getHostURL());
-        stateComputer.set(ComputerPDP11.STATE_BROWSER, Web.getUserAgent());
+        stateComputer.set(ComputerPDP11.STATE_HOSTURL, WebLib.getHostURL());
+        stateComputer.set(ComputerPDP11.STATE_BROWSER, WebLib.getUserAgent());
 
         /*
          * Always power the CPU "down" first, just to help insure it doesn't ask other components to do anything
@@ -1121,8 +1121,8 @@ export default class ComputerPDP11 extends Component {
              * and since pcjs.org is no longer running a Node web server, we disable the feature for that
              * particular host.
              */
-            if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
+            if (StrLib.endsWith(WebLib.getHostName(), "pcjs.org")) {
+                if (DEBUG) this.printf(MESSAGE.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -1149,7 +1149,7 @@ export default class ComputerPDP11 extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
+                        computer.printf(MESSAGE.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -1181,7 +1181,7 @@ export default class ComputerPDP11 extends Component {
      */
     resetUserID()
     {
-        Web.setLocalStorageItem(ComputerPDP11.STATE_USERID, "");
+        WebLib.setLocalStorageItem(ComputerPDP11.STATE_USERID, "");
         this.sUserID = null;
     }
 
@@ -1196,7 +1196,7 @@ export default class ComputerPDP11 extends Component {
     {
         var sUserID = this.sUserID;
         if (!sUserID) {
-            sUserID = Web.getLocalStorageItem(ComputerPDP11.STATE_USERID);
+            sUserID = WebLib.getLocalStorageItem(ComputerPDP11.STATE_USERID);
             if (sUserID !== undefined) {
                 if (!sUserID && fPrompt) {
                     /*
@@ -1207,11 +1207,11 @@ export default class ComputerPDP11 extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
+                        if (!sUserID) this.printf(MESSAGE.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
+                this.printf(MESSAGE.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -1229,15 +1229,15 @@ export default class ComputerPDP11 extends Component {
         this.sUserID = null;
         var fMessages = DEBUG && this.messageEnabled();
         if (fMessages) this.printf("verifyUserID(%s)\n", sUserID);
-        var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
-        var response = Web.getResource(sRequest);
+        var sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
+        var response = WebLib.getResource(sRequest);
         var nErrorCode = response[0];
         var sResponse = response[1];
         if (!nErrorCode && sResponse) {
             try {
                 response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
-                    Web.setLocalStorageItem(ComputerPDP11.STATE_USERID, response.data);
+                    WebLib.setLocalStorageItem(ComputerPDP11.STATE_USERID, response.data);
                     if (fMessages) this.printf("%s updated: %s\n", ComputerPDP11.STATE_USERID, response.data);
                     this.sUserID = response.data;
                 } else {
@@ -1265,7 +1265,7 @@ export default class ComputerPDP11 extends Component {
             if (DEBUG) {
                 this.printf("%s for load: %s\n", ComputerPDP11.STATE_USERID, this.sUserID);
             }
-            sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
+            sStatePath = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
             if (DEBUG) {
                 this.printf("%s unavailable\n", ComputerPDP11.STATE_USERID);
@@ -1295,7 +1295,7 @@ export default class ComputerPDP11 extends Component {
             }
             var response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.printf(Messages.NOTICE, "Machine state saved to server\n");
+                this.printf(MESSAGE.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 var sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -1303,7 +1303,7 @@ export default class ComputerPDP11 extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.printf(Messages.NOTICE, "%s\n", sError);
+                this.printf(MESSAGE.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {
@@ -1336,11 +1336,11 @@ export default class ComputerPDP11 extends Component {
         dataPost[UserAPI.QUERY.USER] = sUserID;
         dataPost[UserAPI.QUERY.STATE] = State.getKey(this, APPVERSION);
         dataPost[UserAPI.QUERY.DATA] = sState;
-        var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
+        var sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT;
         if (!fSync) {
-            Web.getResource(sRequest, dataPost, true);
+            WebLib.getResource(sRequest, dataPost, true);
         } else {
-            var response = Web.getResource(sRequest, dataPost);
+            var response = WebLib.getResource(sRequest, dataPost);
             var sResponse = response[0];
             if (response[1]) {
                 if (sResponse) {
@@ -1418,7 +1418,7 @@ export default class ComputerPDP11 extends Component {
              * TODO: Make this more graceful, so that we can stop using the reloadPage() sledgehammer.
              */
             if (!fSave && this.sStatePath) {
-                Web.reloadPage();
+                WebLib.reloadPage();
                 return;
             }
             if (!fSave) this.fReload = true;
@@ -1451,7 +1451,7 @@ export default class ComputerPDP11 extends Component {
             if (component.type == sType) return component;
         }
         if (!componentLast && DEBUG && componentPrev !== false) {
-            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
+            this.printf(MESSAGE.WARNING, "Machine component type \"%s\" not found\n", sType);
         }
         return null;
     }
@@ -1579,7 +1579,7 @@ export default class ComputerPDP11 extends Component {
     /**
      * ComputerPDP11.exit()
      *
-     * The Computer is currently the only component that uses an "exit" handler, which Web.onExit() defines as
+     * The Computer is currently the only component that uses an "exit" handler, which WebLib.onExit() defines as
      * either an "unload" or "onbeforeunload" handler.  This gives us the opportunity to save the machine state,
      * using our powerOff() function, before the page goes away.
      *
@@ -1655,6 +1655,6 @@ ComputerPDP11.RESUME_DELETE   =  3;  // same as RESUME_PROMPT but discards ALL m
 /*
  * Initialize every Computer on the page.
  */
-Web.onInit(ComputerPDP11.init);
-Web.onShow(ComputerPDP11.show);
-Web.onExit(ComputerPDP11.exit);
+WebLib.onInit(ComputerPDP11.init);
+WebLib.onShow(ComputerPDP11.show);
+WebLib.onExit(ComputerPDP11.exit);

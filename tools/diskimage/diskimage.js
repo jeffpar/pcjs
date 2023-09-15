@@ -18,6 +18,7 @@ import JSONLib    from "../../machines/modules/v2/jsonlib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import CharSet    from "../../machines/pcx86/modules/v2/charset.js";
 import Device     from "../../machines/modules/v3/device.js";
+import MESSAGE    from "../../machines/modules/v3/message.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getTargetValue, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, normalizeTextFile, printError, printf, readDir, readDiskAsync, readDiskSync, readFileSync, readJSONSync, replaceServerPrefix, setRootDir, sprintf, writeDiskSync, writeFileSync  } from "../modules/disklib.js";
 
@@ -1063,7 +1064,7 @@ function readCollection(argv)
     });
     let messages;
     if (argv['quiet']) {
-        messages = device.setMessages(Device.MESSAGE.WARN + Device.MESSAGE.ERROR, false);
+        messages = device.setMessages(MESSAGE.WARNING + MESSAGE.ERROR, false);
     }
     let aDiskNames = {};        // we use this table of disk names to detect non-unique disk names
     asCollections.forEach(function readAllCollections(collectionFile) {
@@ -1382,10 +1383,10 @@ function main(argc, argv)
     }
 
     if (Device.DEBUG) {
-        device.setMessages(Device.MESSAGE.FILE, true);
+        device.setMessages(MESSAGE.FILE, true);
     }
 
-    device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR, true);
 
     if (argv['help']) {
         let optionsInput = {

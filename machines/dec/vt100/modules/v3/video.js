@@ -9,6 +9,7 @@
 
 import Memory  from "../../../../modules/v3/memory.js";
 import Monitor from "../../../../modules/v3/monitor.js";
+import MESSAGE from "../../../../modules/v3/message.js";
 
 /**
  * @typedef {MonitorConfig} VT100VideoConfig
@@ -70,7 +71,7 @@ export default class VT100Video extends Monitor {
          * Setting the device's "messages" property eliminates the need for printf() calls to include this value;
          * any printf() that omits a MESSAGE parameter will use this value by default.
          */
-        this.messages = VT100Video.MESSAGE.VIDEO;
+        this.messages = MESSAGE.VIDEO;
 
         this.addrBuffer = this.config['bufferAddr'];
         this.fUseRAM = this.config['bufferRAM'];

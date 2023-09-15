@@ -12,6 +12,7 @@ import fs         from "fs";
 import path       from "path";
 import pcjslib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/v3/device.js";
+import MESSAGE    from "../../machines/modules/v3/message.js";
 import netio      from "../../machines/modules/v3/netio.js";
 import strlib     from "../../machines/modules/v2/strlib.js";
 import { device, getLocalPath, printError, printf, sprintf, setRootDir } from "../modules/disklib.js";
@@ -920,10 +921,10 @@ function main(argc, argv)
     }
 
     if (Device.DEBUG) {
-        device.setMessages(Device.MESSAGE.FILE, true);
+        device.setMessages(MESSAGE.FILE, true);
     }
 
-    device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR, true);
 
     let sFile = argv['file'];
     if (typeof sFile != "string") sFile = argv[1] || "";

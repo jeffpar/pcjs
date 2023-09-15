@@ -234,12 +234,11 @@ aMachines.forEach(function(machineID)
             .pipe(gulpForEach(function(stream, file) {
                 aMachinesOutdated.push(machineID);
                 return stream
-                    .pipe(gulpHeader('/**\n * @copyright ' + file.path.replace(/.*[\\/](modules|machines)[\\/](.*)/, "https://www.pcjs.org/$1/$2").replace(/\\/g,'/') + ' (C) 2012-' + pkg.year + ' Jeff Parsons\n */\n\n'))
+                    .pipe(gulpHeader('/**\n * @copyright ' + file.path.replace(/.*[\\/](machines)[\\/](.*)/, "https://www.pcjs.org/$1/$2").replace(/\\/g,'/') + ' (C) 2012-' + pkg.year + ' Jeff Parsons\n */\n\n'))
                     .pipe(gulpReplace(/APPVERSION = "0.00"/g, 'APPVERSION = "' + machineVersion + '"'))
                     .pipe(gulpReplace(/(var\s+VERSION\s*=\s*)"[0-9.]*"/g, '$1"' + machineVersion + '"'))
                     .pipe(gulpReplace(/(^|\n)[ \t]*(['"])use strict\2;?/g, ""))
                     .pipe(gulpReplace(/^import[ \t]+[^\n]*\n/gm, ""))
-                    .pipe(gulpReplace(/^.*?Messages.*?=\s*\{\s*...CommonMessages.*?\};/gm, ""))
                     .pipe(gulpReplace(/^export[ \t]+(.*?;\n|default[ \t]+|\{.*?\}|)/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*var\s+\S+\s*=\s*require\((['"]).*?\1\)[^;]*;/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*(if\s+\(NODE\)\s*|)module\.exports\s*=\s*[^;]*;/gm, ""))
@@ -280,10 +279,10 @@ aMachines.forEach(function(machineID)
                     define: machineDefines,
                     externs: machines.shared.externs,
                     warning_level: 'VERBOSE',
-                    language_in: 'ES6',                          // this is now the default, just documenting our requirements
-                    language_out: 'ES5',                         // this is also the default
+                    language_in: 'UNSTABLE',                    // formerly ES6, but we've since started using ES2022 (v13) features, we must use UNSTABLE now
+                    language_out: 'ES5',                        // this is also the default
                     output_wrapper: '(function(){%output%})()',
-                    js_output_file: machineReleaseFile,           // NOTE: if we go back to doing debugger/non-debugger releases, this must be updated
+                    js_output_file: machineReleaseFile,         // NOTE: if we go back to doing debugger/non-debugger releases, this must be updated
                     create_source_map: true
                   }))
                   .pipe(gulpSourceMaps.write('./'))             // gulp-sourcemaps automatically adds the sourcemap url comment

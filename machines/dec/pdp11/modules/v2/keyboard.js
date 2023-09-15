@@ -7,9 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
-import Web from "../../../../modules/v2/weblib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS } from "./defines.js";
 
 /**
@@ -24,7 +24,7 @@ export default class KeyboardPDP11 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, Messages.KEYBOARD);
+        super("Keyboard", parmsKbd, MESSAGE.KEYBOARD);
 
         this.setReady();
     }
@@ -85,4 +85,4 @@ KeyboardPDP11.MINPRESSTIME = 100;            // 100ms
 /*
  * Initialize every Keyboard module on the page.
  */
-Web.onInit(KeyboardPDP11.init);
+WebLib.onInit(KeyboardPDP11.init);

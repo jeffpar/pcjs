@@ -8,7 +8,7 @@ machines:
     type: vt100
     name: DEC VT100
     config: /machines/dec/vt100/vt100.json
-    layout: /_includes/vt100/vt100-diag.html
+    layout: /_includes/machines/vt100/vt100-diag.html
 ---
 
 Summer has been filled with distractions, but I've finally begun making headway on a

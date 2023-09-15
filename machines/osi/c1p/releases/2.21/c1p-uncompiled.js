@@ -1,5 +1,5 @@
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -128,7 +128,7 @@ const SITEURL = "http://localhost:8088";// this @define is overridden by the Clo
 var LOCALDISKS = false;
 
 /*
- * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
+ * Platform-agnostic way to isolate global variables (both mine and the system's).
  */
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
@@ -148,7 +148,7 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -157,9 +157,9 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
  * NOTE: Because this machine defines more than 32 message categories, some of these message flags
  * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
  */
-const Messages = {
+const MESSAGE = {
     NONE:       0x000000000000,
-    ADDRESS:    0x000000000001,
+    ADDR:       0x000000000001,
     LOG:        0x001000000000,
     STATUS:     0x002000000000,
     NOTICE:     0x004000000000,
@@ -189,9 +189,9 @@ const Messages = {
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-Messages.Categories = {
-    "log":      Messages.LOG,
-    "warn":     Messages.WARNING,
+MESSAGE.NAMES = {
+    "log":      MESSAGE.LOG,
+    "warn":     MESSAGE.WARNING,
     /*
      * Now we turn to message actions rather than message types; for example, setting "halt"
      * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
@@ -199,13 +199,13 @@ Messages.Categories = {
      * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
      * until "m buffer off" is issued.
      */
-    "halt":     Messages.HALT,
-    "buffer":   Messages.BUFFER
+    "halt":     MESSAGE.HALT,
+    "buffer":   MESSAGE.BUFFER
 };
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -216,6 +216,15 @@ let Formatter;
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
 class Format {
+
+    static NamesOfDays = [
+        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+    ];
+    static NamesOfMonths = [
+        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+    ];
+    static HexLowerCase = "0123456789abcdef?";
+    static HexUpperCase = "0123456789ABCDEF?";
 
     /**
      * constructor()
@@ -746,24 +755,8 @@ class Format {
     }
 }
 
-//
-// TODO: Put these definitions inside the class once we have a Closure Compiler that doesn't complain about them:
-//
-//      This language feature is only supported for UNSTABLE mode or better: Public class fields
-//
-// static HexLowerCase = "0123456789abcdef?";
-// static HexUpperCase = "0123456789ABCDEF?";
-// static NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-// static NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-//
-
-Format.HexLowerCase = "0123456789abcdef?";
-Format.HexUpperCase = "0123456789ABCDEF?";
-Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
 /**
- * @copyright https://www.pcjs.org/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -823,7 +816,7 @@ DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
  */
 
 const ReportAPI = {
@@ -846,21 +839,92 @@ const ReportAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
- * @class Str
+ * @class StrLib
  * @unrestricted
  */
-class Str {
+class StrLib {
+    /*
+     * Map special characters to their HTML escape sequences.
+     */
+    static HTMLEscapeMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&apos;',
+        '$': '&dollar;'
+    };
+
+    /*
+     * Map "unprintable" ASCII codes to mnemonics, to more clearly see what's being printed.
+     */
+    static ASCIICodeMap = {
+        0x00:   "NUL",
+        0x01:   "SOH",      // (CTRL_A) Start of Heading
+        0x02:   "STX",      // (CTRL_B) Start of Text
+        0x03:   "ETX",      // (CTRL_C) End of Text
+        0x04:   "EOT",      // (CTRL_D) End of Transmission
+        0x05:   "ENQ",      // (CTRL_E) Enquiry
+        0x06:   "ACK",      // (CTRL_F) Acknowledge
+        0x07:   "BEL",      // (CTRL_G) Bell
+        0x08:   "BS",       // (CTRL_H) Backspace
+        0x09:   "TAB",      // (CTRL_I) Horizontal Tab (aka HT)
+        0x0A:   "LF",       // (CTRL_J) Line Feed (New Line)
+        0x0B:   "VT",       // (CTRL_K) Vertical Tab
+        0x0C:   "FF",       // (CTRL_L) Form Feed (New Page)
+        0x0D:   "CR",       // (CTRL_M) Carriage Return
+        0x0E:   "SO",       // (CTRL_N) Shift Out
+        0x0F:   "SI",       // (CTRL_O) Shift In
+        0x10:   "DLE",      // (CTRL_P) Data Link Escape
+        0x11:   "XON",      // (CTRL_Q) Device Control 1 (aka DC1)
+        0x12:   "DC2",      // (CTRL_R) Device Control 2
+        0x13:   "XOFF",     // (CTRL_S) Device Control 3 (aka DC3)
+        0x14:   "DC4",      // (CTRL_T) Device Control 4
+        0x15:   "NAK",      // (CTRL_U) Negative Acknowledge
+        0x16:   "SYN",      // (CTRL_V) Synchronous Idle
+        0x17:   "ETB",      // (CTRL_W) End of Transmission Block
+        0x18:   "CAN",      // (CTRL_X) Cancel
+        0x19:   "EM",       // (CTRL_Y) End of Medium
+        0x1A:   "SUB",      // (CTRL_Z) Substitute
+        0x1B:   "ESC",      // Escape
+        0x1C:   "FS",       // File Separator
+        0x1D:   "GS",       // Group Separator
+        0x1E:   "RS",       // Record Separator
+        0x1F:   "US",       // Unit Separator
+        0x7F:   "DEL"
+    };
+
+    /*
+     * TODO: Future home of a complete ASCII table.
+     */
+    static ASCII = {
+        LF:     0x0A,
+        CR:     0x0D
+    };
+
+    static TYPES = {
+        NULL:       0,
+        BYTE:       1,
+        WORD:       2,
+        DWORD:      3,
+        NUMBER:     4,
+        STRING:     5,
+        BOOLEAN:    6,
+        OBJECT:     7,
+        ARRAY:      8
+    };
+
     /**
      * isValidInt(s, base)
      *
      * The built-in parseInt() function has the annoying feature of returning a partial value (ie,
      * up to the point where it encounters an invalid character); eg, parseInt("foo", 16) returns 0xf.
      *
-     * So it's best to use our own Str.parseInt() function, which will in turn use this function to
+     * So it's best to use our own StrLib.parseInt() function, which will in turn use this function to
      * validate the entire string.
      *
      * @param {string} s is the string representation of some number
@@ -980,7 +1044,7 @@ class Str {
                     shift = 35 - ((match[2] || 35) & 0xff);
                 }
             }
-            if (Str.isValidInt(s, base) && !isNaN(v = parseInt(s, base))) {
+            if (StrLib.isValidInt(s, base) && !isNaN(v = parseInt(s, base))) {
                 /*
                  * With the need to support larger (eg, 36-bit) integers, truncating to 32 bits is no longer helpful.
                  *
@@ -1091,7 +1155,7 @@ class Str {
                 cch = 36;
             }
         } else if (cch > 36) cch = 36;
-        return Str.toBase(n, 2, cch, "", nGrouping);
+        return StrLib.toBase(n, 2, cch, "", nGrouping);
     }
 
     /**
@@ -1110,7 +1174,7 @@ class Str {
         if (!cb || cb > 4) cb = 4;
         for (let i = 0; i < cb; i++) {
             if (s) s = ',' + s;
-            s = Str.toBin(n & 0xff, 8) + s;
+            s = StrLib.toBin(n & 0xff, 8) + s;
             n >>= 8;
         }
         return (fPrefix? "0b" : "") + s;
@@ -1143,7 +1207,7 @@ class Str {
                 cch = 12;
             }
         } else if (cch > 12) cch = 12;
-        return Str.toBase(n, 8, cch, fPrefix? "0o" : "");
+        return StrLib.toBase(n, 8, cch, fPrefix? "0o" : "");
     }
 
     /**
@@ -1170,7 +1234,7 @@ class Str {
                 cch = 11;
             }
         } else if (cch > 11) cch = 11;
-        return Str.toBase(n, 10, cch);
+        return StrLib.toBase(n, 10, cch);
     }
 
     /**
@@ -1208,46 +1272,46 @@ class Str {
                 cch = 9;
             }
         } else if (cch > 9) cch = 9;
-        return Str.toBase(n, 16, cch, fPrefix? "0x" : "");
+        return StrLib.toBase(n, 16, cch, fPrefix? "0x" : "");
     }
 
     /**
      * toHexByte(b)
      *
-     * Alias for Str.toHex(b, 2, true)
+     * Alias for StrLib.toHex(b, 2, true)
      *
      * @param {number|null|undefined} b is a byte value
      * @returns {string} the hex representation of b
      */
     static toHexByte(b)
     {
-        return Str.toHex(b, 2, true);
+        return StrLib.toHex(b, 2, true);
     }
 
     /**
      * toHexWord(w)
      *
-     * Alias for Str.toHex(w, 4, true)
+     * Alias for StrLib.toHex(w, 4, true)
      *
      * @param {number|null|undefined} w is a word (16-bit) value
      * @returns {string} the hex representation of w
      */
     static toHexWord(w)
     {
-        return Str.toHex(w, 4, true);
+        return StrLib.toHex(w, 4, true);
     }
 
     /**
      * toHexLong(l)
      *
-     * Alias for Str.toHex(l, 8, true)
+     * Alias for StrLib.toHex(l, 8, true)
      *
      * @param {number|null|undefined} l is a dword (32-bit) value
      * @returns {string} the hex representation of w
      */
     static toHexLong(l)
     {
-        return Str.toHex(l, 8, true);
+        return StrLib.toHex(l, 8, true);
     }
 
     /**
@@ -1332,7 +1396,7 @@ class Str {
          */
         return sHTML.replace(/[&<>"'$]/g, function(m)
         {
-            return Str.HTMLEscapeMap[m];
+            return StrLib.HTMLEscapeMap[m];
         });
     }
 
@@ -1382,7 +1446,7 @@ class Str {
     {
         let a = {};
         a[sSearch] = sReplace;
-        return Str.replaceArray(a, s);
+        return StrLib.replaceArray(a, s);
     }
 
     /**
@@ -1487,7 +1551,7 @@ class Str {
     {
         let cch = s.length;
         s = s.replace(/^0+([0-9A-F]+)$/i, "$1");
-        if (fPad) s = Str.pad(s, cch, true);
+        if (fPad) s = StrLib.pad(s, cch, true);
         return s;
     }
 
@@ -1514,8 +1578,8 @@ class Str {
     static toASCIICode(b)
     {
         let s;
-        if (b != Str.ASCII.CR && b != Str.ASCII.LF) {
-            s = Str.ASCIICodeMap[b];
+        if (b != StrLib.ASCII.CR && b != StrLib.ASCII.LF) {
+            s = StrLib.ASCIICodeMap[b];
         }
         if (s) {
             s = '<' + s + '>';
@@ -1526,82 +1590,11 @@ class Str {
     }
 }
 
-/*
- * Map special characters to their HTML escape sequences.
- */
-Str.HTMLEscapeMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&apos;',
-    '$': '&dollar;'
-};
-
-/*
- * Map "unprintable" ASCII codes to mnemonics, to more clearly see what's being printed.
- */
-Str.ASCIICodeMap = {
-    0x00:   "NUL",
-    0x01:   "SOH",      // (CTRL_A) Start of Heading
-    0x02:   "STX",      // (CTRL_B) Start of Text
-    0x03:   "ETX",      // (CTRL_C) End of Text
-    0x04:   "EOT",      // (CTRL_D) End of Transmission
-    0x05:   "ENQ",      // (CTRL_E) Enquiry
-    0x06:   "ACK",      // (CTRL_F) Acknowledge
-    0x07:   "BEL",      // (CTRL_G) Bell
-    0x08:   "BS",       // (CTRL_H) Backspace
-    0x09:   "TAB",      // (CTRL_I) Horizontal Tab (aka HT)
-    0x0A:   "LF",       // (CTRL_J) Line Feed (New Line)
-    0x0B:   "VT",       // (CTRL_K) Vertical Tab
-    0x0C:   "FF",       // (CTRL_L) Form Feed (New Page)
-    0x0D:   "CR",       // (CTRL_M) Carriage Return
-    0x0E:   "SO",       // (CTRL_N) Shift Out
-    0x0F:   "SI",       // (CTRL_O) Shift In
-    0x10:   "DLE",      // (CTRL_P) Data Link Escape
-    0x11:   "XON",      // (CTRL_Q) Device Control 1 (aka DC1)
-    0x12:   "DC2",      // (CTRL_R) Device Control 2
-    0x13:   "XOFF",     // (CTRL_S) Device Control 3 (aka DC3)
-    0x14:   "DC4",      // (CTRL_T) Device Control 4
-    0x15:   "NAK",      // (CTRL_U) Negative Acknowledge
-    0x16:   "SYN",      // (CTRL_V) Synchronous Idle
-    0x17:   "ETB",      // (CTRL_W) End of Transmission Block
-    0x18:   "CAN",      // (CTRL_X) Cancel
-    0x19:   "EM",       // (CTRL_Y) End of Medium
-    0x1A:   "SUB",      // (CTRL_Z) Substitute
-    0x1B:   "ESC",      // Escape
-    0x1C:   "FS",       // File Separator
-    0x1D:   "GS",       // Group Separator
-    0x1E:   "RS",       // Record Separator
-    0x1F:   "US",       // Unit Separator
-    0x7F:   "DEL"
-};
-
-/*
- * TODO: Future home of a complete ASCII table.
- */
-Str.ASCII = {
-    LF:     0x0A,
-    CR:     0x0D
-};
-
-Str.TYPES = {
-    NULL:       0,
-    BYTE:       1,
-    WORD:       2,
-    DWORD:      3,
-    NUMBER:     4,
-    STRING:     5,
-    BOOLEAN:    6,
-    OBJECT:     7,
-    ARRAY:      8
-};
-
-Str.format = new Format();
-Str.sprintf = Str.format.sprintf.bind(Str.format);
+StrLib.format = new Format();
+StrLib.sprintf = StrLib.format.sprintf.bind(StrLib.format);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ mask: number, shift: number }} */
@@ -1611,10 +1604,15 @@ let BitField;
 let BitFields;
 
 /**
- * @class Usr
+ * @class UsrLib
  * @unrestricted
  */
-class Usr {
+class UsrLib {
+
+    static aMonthDays = [
+        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+    ];
+
     /**
      * binarySearch(a, v, fnCompare)
      *
@@ -1660,7 +1658,7 @@ class Usr {
      */
     static binaryInsert(a, v, fnCompare)
     {
-        let index = Usr.binarySearch(a, v, fnCompare);
+        let index = UsrLib.binarySearch(a, v, fnCompare);
         if (index < 0) {
             a.splice(-(index + 1), 0, v);
         }
@@ -1674,7 +1672,7 @@ class Usr {
     static getTimestamp()
     {
         let date = new Date();
-        return Str.sprintf("%T", date);
+        return StrLib.sprintf("%T", date);
     }
 
     /**
@@ -1696,7 +1694,7 @@ class Usr {
      */
     static getMonthDays(nMonth, nYear)
     {
-        let nDays = Usr.aMonthDays[nMonth - 1];
+        let nDays = UsrLib.aMonthDays[nMonth - 1];
         if (nDays == 28) {
             if ((nYear % 4) === 0 && ((nYear % 100) || (nYear % 400) === 0)) {
                 nDays++;
@@ -1755,11 +1753,11 @@ class Usr {
      *
      * Prepares a bit field definition for use with getBitField() and setBitField(); eg:
      *
-     *      let bfs = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
+     *      let bfs = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
      *
      * The above defines a set of bit fields containing four fields: num (bits 0-19), count (bits 20-27), btmod (bit 28), and type (bits 29-31).
      *
-     *      Usr.setBitField(bfs.num, n, 1);
+     *      UsrLib.setBitField(bfs.num, n, 1);
      *
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
@@ -1790,7 +1788,7 @@ class Usr {
         let v = 0, i = 1;
         for (let f in bfs) {
             if (i >= arguments.length) break;
-            v = Usr.setBitField(bfs[f], v, arguments[i++]);
+            v = UsrLib.setBitField(bfs[f], v, arguments[i++]);
         }
         return v;
     }
@@ -1845,10 +1843,8 @@ class Usr {
     }
 }
 
-Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
 /**
- * @copyright https://www.pcjs.org/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -1939,7 +1935,7 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * @class Web
  * @unrestricted
  */
-class Web {
+class WebLib {
     /**
      * getResource(sURL, type, fAsync, done, progress)
      *
@@ -1984,14 +1980,14 @@ class Web {
          * value of the global variable 'LOCALDISKS'; since imported values are immutable, we must look at the global
          * variable, since that's the only one that *might* have been changed at runtime.
          */
-        if (globals.window['LOCALDISKS'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
+        if (globals.window['LOCALDISKS'] && WebLib.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
         } else {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
         if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "reading: %s\n", sURL);
             try {
                 let encoding = (type == "arraybuffer"? null : "utf8");
                 resource = globals.node.readFileSync(sURL, encoding);
@@ -2017,7 +2013,7 @@ class Web {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetching: %s\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -2031,11 +2027,11 @@ class Web {
                 }
             })
             .then(resource => {
-
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
-                Component.printf(Messages.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
                 if (done) done(sURL, resource, nErrorCode);
             });
             return response;
@@ -2074,23 +2070,23 @@ class Web {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
+                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
-            if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-
+            if (resource != null && (request.status == 200 || !request.status && resource.length && WebLib.getHostProtocol() == "file:")) {
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
-                if (!request.status && !Web.fAdBlockerWarning) {
+                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
+                if (!request.status && !WebLib.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
-                        Web.fAdBlockerWarning = true;
-                        Component.alertUser("PCjs was unable to perform a cross-origin resource request to '" + match[1] + "'.\n\nIf you're running an ad blocker, try adding '" + Web.getHostOrigin() + "' to your whitelist (or find a smarter ad blocker).");
+                        WebLib.fAdBlockerWarning = true;
+                        Component.alertUser("PCjs was unable to perform a cross-origin resource request to '" + match[1] + "'.\n\nIf you're running an ad blocker, try adding '" + WebLib.getHostOrigin() + "' to your whitelist (or find a smarter ad blocker).");
                     }
                 }
             }
@@ -2113,12 +2109,12 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "posting: %s (%d bytes)\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "requesting: %s\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -2346,7 +2342,7 @@ class Web {
         dataPost[ReportAPI.QUERY.TYPE] = sType;
         dataPost[ReportAPI.QUERY.DATA] = sReport;
         let sReportURL = (sHostName? sHostName : SITEURL) + ReportAPI.ENDPOINT;
-        Web.getResource(sReportURL, dataPost, true);
+        WebLib.getResource(sReportURL, dataPost, true);
     }
 
     /**
@@ -2422,21 +2418,21 @@ class Web {
      */
     static hasLocalStorage()
     {
-        if (Web.fLocalStorage == null) {
+        if (WebLib.fLocalStorage == null) {
             let f = false;
             if (globals.window.localStorage) {
                 try {
-                    globals.window.localStorage.setItem(Web.sLocalStorageTest, Web.sLocalStorageTest);
-                    f = (globals.window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
-                    globals.window.localStorage.removeItem(Web.sLocalStorageTest);
+                    globals.window.localStorage.setItem(WebLib.sLocalStorageTest, WebLib.sLocalStorageTest);
+                    f = (globals.window.localStorage.getItem(WebLib.sLocalStorageTest) == WebLib.sLocalStorageTest);
+                    globals.window.localStorage.removeItem(WebLib.sLocalStorageTest);
                 } catch (e) {
-                    Web.printLocalStorageError(e);
+                    WebLib.printLocalStorageError(e);
                     f = false;
                 }
             }
-            Web.fLocalStorage = f;
+            WebLib.fLocalStorage = f;
         }
-        return Web.fLocalStorage;
+        return WebLib.fLocalStorage;
     }
 
     /**
@@ -2446,7 +2442,7 @@ class Web {
      */
     static printLocalStorageError(e)
     {
-        Component.printf(Messages.ERROR, "Local storage error: %s\n", e.message);
+        Component.printf(MESSAGE.ERROR, "Local storage error: %s\n", e.message);
     }
 
     /**
@@ -2460,11 +2456,11 @@ class Web {
     static getLocalStorageItem(sKey)
     {
         let sValue;
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 sValue = globals.window.localStorage.getItem(sKey);
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return sValue;
@@ -2479,12 +2475,12 @@ class Web {
      */
     static setLocalStorageItem(sKey, sValue)
     {
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 globals.window.localStorage.setItem(sKey, sValue);
                 return true;
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return false;
@@ -2497,11 +2493,11 @@ class Web {
      */
     static removeLocalStorageItem(sKey)
     {
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 globals.window.localStorage.removeItem(sKey);
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
     }
@@ -2514,13 +2510,13 @@ class Web {
     static getLocalStorageKeys()
     {
         let a = [];
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 for (let i = 0, c = globals.window.localStorage.length; i < c; i++) {
                     a.push(globals.window.localStorage.key(i));
                 }
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return a;
@@ -2568,7 +2564,7 @@ class Web {
     static isUserAgent(s)
     {
         if (globals.window.navigator) {
-            let userAgent = Web.getUserAgent();
+            let userAgent = WebLib.getUserAgent();
             /*
              * Here's one case where we have to be careful with Component, because when isUserAgent() is called by
              * the init code below, component.js hasn't been loaded yet.  The simple solution for now is to remove the call.
@@ -2596,13 +2592,13 @@ class Web {
      */
     static isMobile(sDevice)
     {
-        let sMobile = Web.getURLParm("mobile");
+        let sMobile = WebLib.getURLParm("mobile");
         if (sMobile) return sMobile == "true";
-        if (Web.isUserAgent("Mobi")) {
+        if (WebLib.isUserAgent("Mobi")) {
             if (!sDevice) return true;
             let fInvert = sDevice[0] == '!';
             if (fInvert) sDevice = sDevice.substr(1);
-            return Web.isUserAgent(sDevice) != fInvert;
+            return WebLib.isUserAgent(sDevice) != fInvert;
         }
         return false;
     }
@@ -2626,8 +2622,8 @@ class Web {
     static findProperty(obj, sProp, sSuffix)
     {
         if (obj) {
-            for (let i = 0; i < Web.asBrowserPrefixes.length; i++) {
-                let sName = Web.asBrowserPrefixes[i];
+            for (let i = 0; i < WebLib.asBrowserPrefixes.length; i++) {
+                let sName = WebLib.asBrowserPrefixes[i];
                 if (sSuffix) {
                     sName += sSuffix;
                     let sEvent = sProp + sName;
@@ -2656,10 +2652,10 @@ class Web {
      */
     static getURLParm(sParm)
     {
-        if (!Web.parmsURL) {
-            Web.parmsURL = Web.parseURLParms();
+        if (!WebLib.parmsURL) {
+            WebLib.parmsURL = WebLib.parseURLParms();
         }
-        return Web.parmsURL[sParm] || Web.parmsURL[sParm.toLowerCase()];
+        return WebLib.parmsURL[sParm] || WebLib.parmsURL[sParm.toLowerCase()];
     }
 
     /**
@@ -2731,7 +2727,7 @@ class Web {
                 link.click();
                 document.body.removeChild(link);
                 sAlert = 'Check your Downloads folder for ' + sFileName + '.';
-                // if (Web.isUserAgent("Chrome")) {
+                // if (WebLib.isUserAgent("Chrome")) {
                 //     sAlert += '\n\nIn Chrome, after clicking OK, you may ALSO have to select the "Window" menu, choose "Downloads", and then locate this download and select "Keep".';
                 //     sAlert += '\n\nThis is part of Chrome\'s "Security By Jumping Through Extra Hoops" technology, which is much easier for Google to implement than actually checking for something malicious.';
                 //     sAlert += '\n\nAnd for the record, there is nothing malicious on the PCjs website.';
@@ -2797,7 +2793,7 @@ class Web {
         };
         e.onmousedown = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onMouseDown()\n");
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -2807,7 +2803,7 @@ class Web {
         };
         e.ontouchstart = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onTouchStart()\n");
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -2815,7 +2811,7 @@ class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onMouseUp()/onMouseOut()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -2823,7 +2819,7 @@ class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onTouchEnd()/onTouchCancel()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -2841,7 +2837,7 @@ class Web {
      * addPageEvent(sEvent, fn)
      *
      * For 'load', 'unload', and 'pageshow' events, most callers should NOT use this function, but instead use
-     * Web.onInit(), Web.onShow(), and Web.onExit(), respectively.
+     * WebLib.onInit(), WebLib.onShow(), and WebLib.onExit(), respectively.
      *
      * The only components that should still use addPageEvent() are THIS component (see the bottom of this file)
      * and components that need to capture other events (eg, the 'resize' event in the Video component).
@@ -2865,7 +2861,7 @@ class Web {
      */
     static onInit(fn)
     {
-        Web.aPageEventHandlers['init'].push(fn);
+        WebLib.aPageEventHandlers['init'].push(fn);
     }
 
     /**
@@ -2877,7 +2873,7 @@ class Web {
      */
     static onShow(fn)
     {
-        Web.aPageEventHandlers['show'].push(fn);
+        WebLib.aPageEventHandlers['show'].push(fn);
     }
 
     /**
@@ -2887,7 +2883,7 @@ class Web {
      */
     static onError(sMessage)
     {
-        Component.printf(Messages.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
+        Component.printf(MESSAGE.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
     }
 
     /**
@@ -2899,7 +2895,7 @@ class Web {
      */
     static onExit(fn)
     {
-        Web.aPageEventHandlers['exit'].push(fn);
+        WebLib.aPageEventHandlers['exit'].push(fn);
     }
 
     /**
@@ -2910,14 +2906,14 @@ class Web {
      */
     static doPageEvent(sEvent, browser)
     {
-        let afn = Web.aPageEventHandlers[sEvent];
-        if (afn && Web.fPageEventsEnabled) {
+        let afn = WebLib.aPageEventHandlers[sEvent];
+        if (afn && WebLib.fPageEventsEnabled) {
             try {
                 for (let i = 0; i < afn.length; i++) {
                     afn[i]();
                 }
             } catch (e) {
-                Web.onError("An unexpected error occurred: " + e.message);
+                WebLib.onError("An unexpected error occurred: " + e.message);
             }
         }
     }
@@ -2929,13 +2925,13 @@ class Web {
      */
     static enablePageEvents(fEnable)
     {
-        if (!Web.fPageEventsEnabled && fEnable) {
-            Web.fPageEventsEnabled = true;
-            if (Web.fPageLoaded) Web.doPageEvent('init');
-            if (Web.fPageShowed) Web.doPageEvent('show');
+        if (!WebLib.fPageEventsEnabled && fEnable) {
+            WebLib.fPageEventsEnabled = true;
+            if (WebLib.fPageLoaded) WebLib.doPageEvent('init');
+            if (WebLib.fPageShowed) WebLib.doPageEvent('show');
             return;
         }
-        Web.fPageEventsEnabled = fEnable;
+        WebLib.fPageEventsEnabled = fEnable;
     }
 
     /**
@@ -2943,8 +2939,8 @@ class Web {
      */
     static doPageInit()
     {
-        Web.fPageLoaded = true;
-        Web.doPageEvent('init', true);
+        WebLib.fPageLoaded = true;
+        WebLib.doPageEvent('init', true);
     }
 
     /**
@@ -2952,8 +2948,8 @@ class Web {
      */
     static doPageShow()
     {
-        Web.fPageShowed = true;
-        Web.doPageEvent('show', true);
+        WebLib.fPageShowed = true;
+        WebLib.doPageEvent('show', true);
     }
 
     /**
@@ -2961,7 +2957,7 @@ class Web {
      */
     static doPageExit()
     {
-        Web.doPageEvent('exit', true);
+        WebLib.doPageEvent('exit', true);
     }
 
     /**
@@ -2969,9 +2965,9 @@ class Web {
      */
     static doPageReset()
     {
-        if (Web.fPageLoaded) {
-            Web.fPageLoaded = false;
-            Web.fPageShowed = false;
+        if (WebLib.fPageLoaded) {
+            WebLib.fPageLoaded = false;
+            WebLib.fPageShowed = false;
             /*
              * TODO: Anything else?
              */
@@ -2979,20 +2975,20 @@ class Web {
     }
 }
 
-Web.parmsURL = null;            // initialized on first call to parseURLParms()
+WebLib.parmsURL = null;            // initialized on first call to parseURLParms()
 
-Web.aPageEventHandlers = {
+WebLib.aPageEventHandlers = {
     'init': [],                 // list of 'load' handlers
     'show': [],                 // list of 'pageshow' handlers
     'exit': []                  // list of 'unload' handlers (although we prefer to use 'beforeunload' if possible)
 };
 
-Web.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
+WebLib.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
 
-Web.fPageLoaded = false;        // set once the page's first 'load' event has occurred
-Web.fPageShowed = false;        // set once the page's first 'pageshow' event has occurred
-Web.fPageEventsEnabled = true;  // default is true, set to false (or true) by enablePageEvents()
-Web.fAdBlockerWarning = false;
+WebLib.fPageLoaded = false;        // set once the page's first 'load' event has occurred
+WebLib.fPageShowed = false;        // set once the page's first 'pageshow' event has occurred
+WebLib.fPageEventsEnabled = true;  // default is true, set to false (or true) by enablePageEvents()
+WebLib.fAdBlockerWarning = false;
 
 /**
  * fLocalStorage
@@ -3001,18 +2997,18 @@ Web.fAdBlockerWarning = false;
  *
  * @type {boolean|null}
  */
-Web.fLocalStorage = null;
+WebLib.fLocalStorage = null;
 
 /**
  * TODO: Is there any way to get the Closure Compiler to stop inlining this string?  This isn't cutting it.
  *
  * @const {string}
  */
-Web.sLocalStorageTest = "PCjs.localStorage";
+WebLib.sLocalStorageTest = "PCjs.localStorage";
 
-Web.addPageEvent('load', Web.doPageInit);
-Web.addPageEvent('pageshow', Web.doPageShow);
-Web.addPageEvent(Web.isUserAgent("iOS")? 'pagehide' : (Web.isUserAgent("Opera")? 'unload' : 'beforeunload'), Web.doPageExit);
+WebLib.addPageEvent('load', WebLib.doPageInit);
+WebLib.addPageEvent('pageshow', WebLib.doPageShow);
+WebLib.addPageEvent(WebLib.isUserAgent("iOS")? 'pagehide' : (WebLib.isUserAgent("Opera")? 'unload' : 'beforeunload'), WebLib.doPageExit);
 
 /*
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override DEBUG with a "debug=false" embedded in
@@ -3023,17 +3019,17 @@ Web.addPageEvent(Web.isUserAgent("iOS")? 'pagehide' : (Web.isUserAgent("Opera")?
  * it's low priority, because it would only affect machines that explicitly request un-COMPILED code, and there are very
  * few such machines (eg, /blog/_posts/2015/2015-01-17-pcjs-uncompiled.md).
  *
- * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
+ * Deal with WebLib.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */
 if (DEBUG) {
-    let debug = Web.getURLParm("debug");
+    let debug = WebLib.getURLParm("debug");
     if (debug == "false") {
         globals.window['DEBUG'] = false;
     }
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/component.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -3286,18 +3282,18 @@ class Component {
             bitsMessage = format;
             format = args.shift();
         }
-        if (DEBUG || bitsMessage >= Messages.LOG && bitsMessage <= Messages.ERROR) {
+        if (DEBUG || bitsMessage >= MESSAGE.LOG && bitsMessage <= MESSAGE.ERROR) {
             let alert = false;
-            if (bitsMessage == Messages.ERROR) {
+            if (bitsMessage == MESSAGE.ERROR) {
                 alert = true;
                 format = "Error: " + format;
-            } else if (bitsMessage == Messages.WARNING) {
+            } else if (bitsMessage == MESSAGE.WARNING) {
                 alert = true;
                 format = "Warning: " + format;
-            } else if (bitsMessage == Messages.NOTICE) {
+            } else if (bitsMessage == MESSAGE.NOTICE) {
                 alert = true;
             }
-            let sMessage = Str.sprintf(format, ...args).trim();
+            let sMessage = StrLib.sprintf(format, ...args).trim();
             if (!alert) {
                 console.log(sMessage);
             } else {
@@ -3340,7 +3336,7 @@ class Component {
                 try {
                     throw new Error(s);
                 } catch(e) {
-                    Component.printf(Messages.ERROR, "%s\n", e.stack || e.message);
+                    Component.printf(MESSAGE.ERROR, "%s\n", e.stack || e.message);
                 }
             }
         }
@@ -3353,7 +3349,7 @@ class Component {
      */
     static warning(s)
     {
-        Component.printf(Messages.WARNING, s);
+        Component.printf(MESSAGE.WARNING, s);
     }
 
     /**
@@ -3363,7 +3359,7 @@ class Component {
      */
     static error(s)
     {
-        Component.printf(Messages.ERROR, s);
+        Component.printf(MESSAGE.ERROR, s);
     }
 
     /**
@@ -3506,12 +3502,12 @@ class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.printf(Messages.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
+                                Component.printf(MESSAGE.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.printf(Messages.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
+                            // if (DEBUG) Component.printf(MESSAGE.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
                             break;
                     }
                 }
@@ -3579,7 +3575,7 @@ class Component {
                 }
             }
             if (components.length && idRelated !== false) {
-                Component.printf(Messages.WARNING, "Component ID \"%s\" not found\n", id);
+                Component.printf(MESSAGE.WARNING, "Component ID \"%s\" not found\n", id);
             }
         }
         return null;
@@ -3620,7 +3616,7 @@ class Component {
                 }
             }
             if (MAXDEBUG && componentPrev !== false) {
-                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+                Component.printf(MESSAGE.WARNING, "Component type \"%s\" not found\n", sType);
             }
         }
         return null;
@@ -3721,7 +3717,7 @@ class Component {
             }
         }
         if (!ae.length) {
-            if (MAXDEBUG) Component.printf(Messages.WARNING, "No elements of class \"%s\" found\n", sClass);
+            if (MAXDEBUG) Component.printf(MESSAGE.WARNING, "No elements of class \"%s\" found\n", sClass);
         }
         return ae;
     }
@@ -3850,7 +3846,7 @@ class Component {
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.printf(Messages.SCRIPT, aTokens.join(' '));
+            Component.printf(MESSAGE.SCRIPT, aTokens.join(' '));
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -4028,7 +4024,7 @@ class Component {
                 this.print = function(component, control) {
                     return function printControl(sMessage, bitsMessage = 0) {
                         if (!sMessage) sMessage = "";
-                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == MESSAGE.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -4100,7 +4096,7 @@ class Component {
     setError(s)
     {
         this.flags.error = true;
-        this.printf(Messages.NOTICE, "%s\n", s);
+        this.printf(MESSAGE.NOTICE, "%s\n", s);
     }
 
     /**
@@ -4150,7 +4146,7 @@ class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -4170,7 +4166,7 @@ class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
+                if (MAXDEBUG /* || this.name */) this.printf(MESSAGE.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -4322,7 +4318,7 @@ class Component {
     /**
      * messageEnabled(bitsMessage)
      *
-     * If bitsMessage is Messages.NONE (0), then the component's Messages category is used.
+     * If bitsMessage is MESSAGE.NONE (0), then the component's Messages category is used.
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
@@ -4331,22 +4327,22 @@ class Component {
     messageEnabled(bitsMessage = 0)
     {
         /*
-         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.NONE, because
-         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         * It's important to subtract MESSAGE.ADDR from bitsMessage before testing for MESSAGE.NONE, because
+         * if MESSAGE.ADDR was the ONLY bit specified, we still want to default to the component's message category.
          */
-        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        if (bitsMessage & MESSAGE.ADDR) bitsMessage -= MESSAGE.ADDR;
         bitsMessage = bitsMessage || this.bitsMessage;
         /*
-         * printf() calls that specify Messages.DEBUG should be stripped out of non-DEBUG builds, but just in case
+         * printf() calls that specify MESSAGE.DEBUG should be stripped out of non-DEBUG builds, but just in case
          * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
          */
-        if (DEBUG || !Component.testBits(bitsMessage, Messages.DEBUG)) {
+        if (DEBUG || !Component.testBits(bitsMessage, MESSAGE.DEBUG)) {
             /*
-             * The debugger has the ability to filter any messages listed in Messages.Categories, and that currently
+             * The debugger has the ability to filter any messages listed in MESSAGE.NAMES, and that currently
              * includes message types LOG and WARNING, so if the debugger is loaded, subtract those from the types we allow
              * by default.
              */
-            let allowedMessages = Messages.TYPES - (this.dbg? Messages.LOG + Messages.WARNING : 0);
+            let allowedMessages = MESSAGE.TYPES - (this.dbg? MESSAGE.LOG + MESSAGE.WARNING : 0);
             if (Component.testBits(allowedMessages, bitsMessage) || this.dbg && Component.testBits(this.dbg.bitsMessage, bitsMessage)) {
                 return true;
             }
@@ -4362,7 +4358,7 @@ class Component {
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
      * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
-     * of whether the debugger has enabled it, the caller can use printf(Messages.NONE), and if the caller wants
+     * of whether the debugger has enabled it, the caller can use printf(MESSAGE.NONE), and if the caller wants
      * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
@@ -4373,17 +4369,17 @@ class Component {
     {
         let bitsMessage = 0;
         if (typeof format == "number") {
-            bitsMessage = format || Messages.PROGRESS;
+            bitsMessage = format || MESSAGE.PROGRESS;
             format = args.shift();
-            if (Component.testBits(bitsMessage, Messages.LOG)) {
+            if (Component.testBits(bitsMessage, MESSAGE.LOG)) {
                 format = (this.id || this.type || "log") + ": " + format;
             }
-            else if (Component.testBits(bitsMessage, Messages.STATUS)) {
+            else if (Component.testBits(bitsMessage, MESSAGE.STATUS)) {
                 format = this.type + ": " + format;
             }
         }
         if (this.messageEnabled(bitsMessage)) {
-            let sMessage = Str.sprintf(format, ...args);
+            let sMessage = StrLib.sprintf(format, ...args);
             if (this.dbg && this.dbg.message) {
                 this.dbg.message(sMessage, bitsMessage);
             } else {
@@ -4396,7 +4392,7 @@ class Component {
      * printIO(port, bOut, addrFrom, name, bIn, bitsMessage)
      *
      * If bitsMessage is not specified, the component's Messages category is used,
-     * and if bitsMessage is true, the message is displayed if Messages.PORT is enabled also.
+     * and if bitsMessage is true, the message is displayed if MESSAGE.PORT is enabled also.
      *
      * @this {Component}
      * @param {number} port
@@ -4500,7 +4496,7 @@ if (!Function.prototype.bind) {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -4515,7 +4511,7 @@ const APPNAME = "C1Pjs";        // this @define is the default application name 
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -4618,10 +4614,10 @@ class C1PPanel extends Component {
 /*
  * Initialize every Panel module on the page.
  */
-Web.onInit(C1PPanel.init);
+WebLib.onInit(C1PPanel.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -4660,7 +4656,7 @@ class C1PCPU extends Component {
         this.clearRegs();
         this.flags.powered = false;
         this.flags.running = false;
-        var s = Web.getURLParm('autoStart');
+        var s = WebLib.getURLParm('autoStart');
         if (s == "true" || s == "false") {
             this.fAutoStart = JSON.parse(s);
         } else {
@@ -5242,7 +5238,7 @@ class C1PCPU extends Component {
             }
             this.aReadNotify.push([start, end, component, fn]);
             if (DEBUG) {
-                this.printf(Messages.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+                this.printf(MESSAGE.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
             }
         }
     }
@@ -5280,7 +5276,7 @@ class C1PCPU extends Component {
             this.addrReadLower = aBounds[2];
             this.addrReadUpper = aBounds[3];
             if (DEBUG) {
-                this.printf(Messages.LOG, "removeReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+                this.printf(MESSAGE.LOG, "removeReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
             }
             return true;
         }
@@ -5307,7 +5303,7 @@ class C1PCPU extends Component {
             }
             this.aWriteNotify.push([start, end, component, fn]);
             if (DEBUG) {
-                this.printf(Messages.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+                this.printf(MESSAGE.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
             }
         }
     }
@@ -5345,7 +5341,7 @@ class C1PCPU extends Component {
             this.addrWriteLower = aBounds[2];
             this.addrWriteUpper = aBounds[3];
             if (DEBUG) {
-                this.printf(Messages.LOG, "removeWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+                this.printf(MESSAGE.LOG, "removeWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
             }
             return true;
         }
@@ -8417,7 +8413,7 @@ class C1PCPU extends Component {
                  *
                  *      eg: %A for this.regA, %X for this.regX, etc
                  */
-                s = s.replace(/%A/g, Str.toHex(this.regA, 2)).replace(/%X/g, Str.toHex(this.regX, 2)).replace(/%Y/g, Str.toHex(this.regY, 2));
+                s = s.replace(/%A/g, StrLib.toHex(this.regA, 2)).replace(/%X/g, StrLib.toHex(this.regX, 2)).replace(/%Y/g, StrLib.toHex(this.regY, 2));
                 this.printf("%s\n", s);
                 /*
                  * To make printing "smoother", let's force a yield
@@ -8509,10 +8505,10 @@ class C1PCPU extends Component {
 /*
  * Initialize every CPU module on the page (as IF there's ever going to be more than one ;-))
  */
-Web.onInit(C1PCPU.init);
+WebLib.onInit(C1PCPU.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -8555,12 +8551,12 @@ class C1PROM extends Component {
              * we ask our server-side ROM image converter to return the corresponding JSON-encoded data,
              * in compact form (ie, minimal whitespace, no ASCII data comments, etc).
              */
-            var sFileExt = Str.getExtension(this.sImage);
+            var sFileExt = StrLib.getExtension(this.sImage);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sImage + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
+                sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sImage + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
             }
             var rom = this;
-            Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 rom.convertImage(sURL, sResponse, nErrorCode);
             });
             return;
@@ -8588,7 +8584,7 @@ class C1PROM extends Component {
             this.cbROM = cbROM;
         }
         if (cbROM != this.cbROM) {
-            this.setError("computer-specified ROM size (" + Str.toHexWord(cbROM) + ") does not match component-specified size (" + Str.toHexWord(this.cbROM) + ")");
+            this.setError("computer-specified ROM size (" + StrLib.toHexWord(cbROM) + ") does not match component-specified size (" + StrLib.toHexWord(this.cbROM) + ")");
             return;
         }
         if (cpu) {
@@ -8697,10 +8693,10 @@ class C1PROM extends Component {
             if (this.abImage && this.abMem) {
                 var cbImage = this.abImage.length;
                 if (cbImage != this.cbROM) {
-                    this.setError("ROM image size (" + Str.toHexWord(cbImage) + ") does not match component-specified size (" + Str.toHexWord(this.cbROM) + ")");
+                    this.setError("ROM image size (" + StrLib.toHexWord(cbImage) + ") does not match component-specified size (" + StrLib.toHexWord(this.cbROM) + ")");
                     return;
                 }
-                if (DEBUG) this.printf(Messages.LOG, "copyImage(%#06x): %#06x bytes\n", this.offROM, cbImage);
+                if (DEBUG) this.printf(MESSAGE.LOG, "copyImage(%#06x): %#06x bytes\n", this.offROM, cbImage);
                 for (var i=0; i < cbImage; i++) {
                     this.abMem[this.offROM + i] = this.abImage[i];
                 }
@@ -8732,10 +8728,10 @@ class C1PROM extends Component {
 /*
  * Initialize all the ROM modules on the page.
  */
-Web.onInit(C1PROM.init);
+WebLib.onInit(C1PROM.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -8804,10 +8800,10 @@ class C1PRAM extends Component {
 /*
  * Initialize all the RAM modules on the page.
  */
-Web.onInit(C1PRAM.init);
+WebLib.onInit(C1PRAM.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -9314,8 +9310,8 @@ class C1PKeyboard extends Component {
      */
     setReady(fReady)
     {
-        this.iOS = Web.isUserAgent("iOS");
-        this.fMobile = (this.iOS || Web.isUserAgent("Android"));
+        this.iOS = WebLib.isUserAgent("iOS");
+        this.fMobile = (this.iOS || WebLib.isUserAgent("Android"));
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
             this.dbg.printf("mobile keyboard support: %b (%s)\n", this.fMobile, window.navigator.userAgent);
         }
@@ -9379,7 +9375,7 @@ class C1PKeyboard extends Component {
     injectKeys(sKeyCodes, msDelay)
     {
         this.sInjectBuffer = sKeyCodes;
-        if (DEBUG) this.printf(Messages.LOG, "injectKeys(%s)\n", this.sInjectBuffer.split("\n").join("\\n"));
+        if (DEBUG) this.printf(MESSAGE.LOG, "injectKeys(%s)\n", this.sInjectBuffer.split("\n").join("\\n"));
         this.injectKeysFromBuffer(msDelay || this.msInjectDelay);
     }
 
@@ -9727,7 +9723,7 @@ class C1PKeyboard extends Component {
             this.updateMemory(fPropagate);
             fSimulated = true;
         }
-        if (DEBUG && this.dbg) this.dbg.info("keyEventSimulate(" + Str.toHexByte(charCode) + "," + (fDown?"down":"up") + "," + this.aSimCodeDescs[simCode] + "): " + (fSimulated? "true" : "false"));
+        if (DEBUG && this.dbg) this.dbg.info("keyEventSimulate(" + StrLib.toHexByte(charCode) + "," + (fDown?"down":"up") + "," + this.aSimCodeDescs[simCode] + "): " + (fSimulated? "true" : "false"));
         return fSimulated;
     }
 
@@ -9751,7 +9747,7 @@ class C1PKeyboard extends Component {
         if (DEBUG) {
             if (addrFrom !== undefined) {
                 this.nReadsSinceLastEvent++;
-                if (DEBUG && this.dbg) this.dbg.info("reading kbd " + Str.toHexWord(addr) + " @" + this.cpu.getCycles() + " cycles");
+                if (DEBUG && this.dbg) this.dbg.info("reading kbd " + StrLib.toHexWord(addr) + " @" + this.cpu.getCycles() + " cycles");
             }
         }
     }
@@ -9856,7 +9852,7 @@ class C1PKeyboard extends Component {
             }
         }
         this.bWriteLast = b;
-        if (DEBUG && this.dbg) this.dbg.info("updating kbd " + Str.toHexWord(addr) + " with " + Str.toHexByte(b) + (bWrite !== undefined? (" following write " + Str.toHexByte(bWrite)) : "") + " @" + nCycles + " cycles");
+        if (DEBUG && this.dbg) this.dbg.info("updating kbd " + StrLib.toHexWord(addr) + " with " + StrLib.toHexByte(b) + (bWrite !== undefined? (" following write " + StrLib.toHexByte(bWrite)) : "") + " @" + nCycles + " cycles");
     }
 
     /**
@@ -9895,10 +9891,10 @@ class C1PKeyboard extends Component {
 /*
  * Initialize every Keyboard module on the page.
  */
-Web.onInit(C1PKeyboard.init);
+WebLib.onInit(C1PKeyboard.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/video.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/video.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -10036,7 +10032,7 @@ class C1PVideo extends Component {
          */
         var i, sEvent, asWebPrefixes = ['', 'moz', 'ms', 'webkit'];
         var fSmoothing = parmsVideo['smoothing'];
-        var sSmoothing = Web.getURLParm('smoothing');
+        var sSmoothing = WebLib.getURLParm('smoothing');
         if (sSmoothing) fSmoothing = (sSmoothing == "true");
         if (fSmoothing != null) {
             for (i = 0; i < asWebPrefixes.length; i++) {
@@ -10418,7 +10414,7 @@ class C1PVideo extends Component {
                 var xSrc = xChar % this.imgChars.width;
                 var xDst = col * this.cxCharDst;
                 var yDst = row * this.cyCharDst;
-                // if (DEBUG) this.printf(Messages.LOG, "updateWindow(%d,%d,%#04x): drawing from %d,%d to %d,%d\n", col, row, b, xSrc, ySrc, xDst, yDst);
+                // if (DEBUG) this.printf(MESSAGE.LOG, "updateWindow(%d,%d,%#04x): drawing from %d,%d to %d,%d\n", col, row, b, xSrc, ySrc, xDst, yDst);
                 this.contextScreen.drawImage(this.imgChars, xSrc, ySrc, this.cxChar, this.cyChar, xDst, yDst, this.cxCharDst, this.cyCharDst);
             }
         }
@@ -10478,7 +10474,7 @@ class C1PVideo extends Component {
             eCanvas.setAttribute("autocorrect", "off");
             eCanvas.setAttribute("spellcheck", "false");
 
-            if (Web.getUserAgent().indexOf("MSIE") >= 0) {
+            if (WebLib.getUserAgent().indexOf("MSIE") >= 0) {
                 eCanvas.style.height = (((eVideo.clientWidth * parmsVideo['screenHeight']) / parmsVideo['screenWidth']) | 0) + "px";
                 eVideo['onresize'] = function(eParent, eChild, cx, cy) {
                     return function() {
@@ -10501,7 +10497,7 @@ class C1PVideo extends Component {
             var sCharSet = parmsVideo['fontROM'] || parmsVideo['charSet'];
             imgCharSet.onload = function(video, sCharSet) {
                 return function() {
-                    if (DEBUG) video.printf(Messages.LOG, "onload(): finished loading %s\n", sCharSet);
+                    if (DEBUG) video.printf(MESSAGE.LOG, "onload(): finished loading %s\n", sCharSet);
                     video.setReady();
                 };
             }(video, sCharSet);
@@ -10519,10 +10515,10 @@ class C1PVideo extends Component {
 /*
  * Initialize every Video module on the page.
  */
-Web.onInit(C1PVideo.init);
+WebLib.onInit(C1PVideo.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -10557,7 +10553,7 @@ class C1PSerialPort extends Component {
         this.sDemo = "10 PRINT \"HELLO OSI #" + this.getMachineNum() + "\"\n";
 
         this.autoLoad = C1PSerialPort.AUTOLOAD_NONE;
-        this.autoMount = Web.getURLParm('autoMount') || parmsSerial['autoMount'];
+        this.autoMount = WebLib.getURLParm('autoMount') || parmsSerial['autoMount'];
 
         if (typeof this.autoMount == "string") {
             try {
@@ -10572,7 +10568,7 @@ class C1PSerialPort extends Component {
         if (path) {
             var serial = this;
             this.fDemo = true;
-            Web.getResource(path, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(path, null, true, function(sURL, sResponse, nErrorCode) {
                 serial.loadFile(sURL, sResponse, nErrorCode);
                 serial.sDemo = sResponse;
                 serial.autoMount = null;
@@ -10708,7 +10704,7 @@ class C1PSerialPort extends Component {
                 if (serial.bindings["listSerial"]) {
                     var sFile = serial.bindings["listSerial"].value;
                     // serial.printf("loading %s...\n", sFile);
-                    Web.getResource(sFile, null, true, function(sURL, sResponse, nErrorCode) {
+                    WebLib.getResource(sFile, null, true, function(sURL, sResponse, nErrorCode) {
                         serial.loadFile(sURL, sResponse, nErrorCode);
                     });
                 }
@@ -10720,7 +10716,7 @@ class C1PSerialPort extends Component {
              * Check for non-mobile (desktop) browser and the availability of FileReader
              */
             var controlInput = /** @type {Object} */ (control);
-            if (!Web.isMobile() && window && 'FileReader' in window) {
+            if (!WebLib.isMobile() && window && 'FileReader' in window) {
                 this.bindings[sBinding] = controlInput;
                 /*
                  * Enable "Mount" button only if a file is actually selected
@@ -10748,7 +10744,7 @@ class C1PSerialPort extends Component {
                 };
             }
             else {
-                if (DEBUG) this.printf(Messages.LOG, "Local file support not available\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Local file support not available\n");
                 controlInput.parentNode.removeChild(/** @type {Node} */ (controlInput));
             }
             return true;
@@ -10908,12 +10904,12 @@ class C1PSerialPort extends Component {
                     if (b == 0x0a) b = 0x0d;
                 }
                 this.bInput = b;
-                // if (DEBUG) this.printf(Messages.LOG, "advanceInput(%#04x)\n", b);
+                // if (DEBUG) this.printf(MESSAGE.LOG, "advanceInput(%#04x)\n", b);
             }
             else {
                 this.sInput = "";
                 this.iInput = 0;
-                if (DEBUG) this.printf(Messages.LOG, "advanceInput(): out of data\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "advanceInput(): out of data\n");
                 if (this.autoLoad == C1PSerialPort.AUTOLOAD_BASIC && this.kbd) {
                     this.kbd.injectKeys(" \nRUN\n");
                 }
@@ -10921,7 +10917,7 @@ class C1PSerialPort extends Component {
             }
             this.updateMemory();
         }
-        // else if (DEBUG) this.printf(Messages.LOG, "advanceInput(): no input\n");
+        // else if (DEBUG) this.printf(MESSAGE.LOG, "advanceInput(): no input\n");
     }
 
     /**
@@ -10981,10 +10977,10 @@ C1PSerialPort.AUTOLOAD_6502  = 2;
 /*
  * Initialize every SerialPort module on the page.
  */
-Web.onInit(C1PSerialPort.init);
+WebLib.onInit(C1PSerialPort.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -11652,12 +11648,12 @@ class C1PDiskController extends Component {
                              *
                              * TODO: Convert this code to use the new shared Disk API definitions and weblib functions; eg:
                              *
-                             *      sDiskURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + "?" + DumpAPI.QUERY.DISK + "=" + sDiskPath;
+                             *      sDiskURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + "?" + DumpAPI.QUERY.DISK + "=" + sDiskPath;
                              */
                             sFileURL = "http://" + window.location.host + "/api/v1/dump?disk=" + sFilePath;
                         }
-                        controller.printf("loading  %s...\n", Str.getBaseName(sFilePath));
-                        Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
+                        controller.printf("loading  %s...\n", StrLib.getBaseName(sFilePath));
+                        WebLib.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                             controller.loadDisk(sURL, sResponse, nErrorCode);
                         });
                     }
@@ -12236,10 +12232,10 @@ class C1PDiskController extends Component {
 /*
  * Initialize every DiskController module on the page.
  */
-Web.onInit(C1PDiskController.init);
+WebLib.onInit(C1PDiskController.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -12730,7 +12726,7 @@ class C1PDebugger extends Component {
              * I've replaced the standard "onclick" code with a call to our onClickRepeat() helper in
              * component.js, so that the "Enter" button can be held to repeat, just like the "Step" button.
              */
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control, 500, 100,
                 function(fRepeat) {
                     if (dbg.eDebug) {
@@ -12744,7 +12740,7 @@ class C1PDebugger extends Component {
                         C1PDebugger.input(dbg, sBinding);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
+                    if (DEBUG) dbg.printf(MESSAGE.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -12752,7 +12748,7 @@ class C1PDebugger extends Component {
 
         case "step":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control, 500, 100,
                 function(fRepeat) {
                     var fCompleted = false;
@@ -13463,14 +13459,14 @@ class C1PDebugger extends Component {
      */
     getInstruction(addr, nIns)
     {
-        var sLine = Str.toHex(addr, 4);
+        var sLine = StrLib.toHex(addr, 4);
         var bOpCode = this.getByte(addr++);
         var b = (bOpCode === undefined? 0 : bOpCode);
         var aOpDesc = this.aaOperations[b];
         var abOperand = [];
         var cb = (aOpDesc[1] === undefined? 0 : aOpDesc[1]);
         do {
-            sLine += " " + Str.toHex(b, 2);
+            sLine += " " + StrLib.toHex(b, 2);
             if (!(cb--)) break;
             b = this.getByte(addr++);
             if (b === undefined) break;
@@ -13487,11 +13483,11 @@ class C1PDebugger extends Component {
             var bOpMode = aOpDesc[2];
             sOperand = this.aOpModes[bOpMode];
             if (aOpDesc[1] == 1 && bOpMode == this.MODE_DISP) {
-                sOperand = sOperand.replace(/nnnn/, Str.toHex(this.addSignedByte(addr, b = abOperand.pop()), 4));
+                sOperand = sOperand.replace(/nnnn/, StrLib.toHex(this.addSignedByte(addr, b = abOperand.pop()), 4));
             }
             else {
                 while (abOperand.length) {
-                    sOperand = sOperand.replace(/nn/, Str.toHex(b = abOperand.pop(), 2));
+                    sOperand = sOperand.replace(/nn/, StrLib.toHex(b = abOperand.pop(), 2));
                 }
             }
             if (bOpMode == this.MODE_IMM && aOpDesc[1] == 1) {
@@ -13726,12 +13722,12 @@ class C1PDebugger extends Component {
      */
     getRegs()
     {
-        return "A=" + Str.toHex(this.cpu.regA, 2) +
-              " X=" + Str.toHex(this.cpu.regX, 2) +
-              " Y=" + Str.toHex(this.cpu.regY, 2) +
-              " P=" + Str.toHex(this.cpu.getRegP(), 2) +
-              " S=" + Str.toHex(this.cpu.regS, 4) +
-              " PC=" + Str.toHex(this.cpu.regPC, 4);
+        return "A=" + StrLib.toHex(this.cpu.regA, 2) +
+              " X=" + StrLib.toHex(this.cpu.regX, 2) +
+              " Y=" + StrLib.toHex(this.cpu.regY, 2) +
+              " P=" + StrLib.toHex(this.cpu.getRegP(), 2) +
+              " S=" + StrLib.toHex(this.cpu.regS, 4) +
+              " PC=" + StrLib.toHex(this.cpu.regPC, 4);
     }
 
     /**
@@ -13957,7 +13953,7 @@ class C1PDebugger extends Component {
             for (var i=0; i < 8 && addr < this.offLimit; i++) {
                 var b = this.getByte(addr);
                 if (b === undefined) b = 0;
-                sBytes += Str.toHex(b, 2) + " ";
+                sBytes += StrLib.toHex(b, 2) + " ";
                 sChars += (b >= 32 && b < 127? String.fromCharCode(b) : ".");
                 addr++;
             }
@@ -14298,7 +14294,7 @@ class C1PDebugger extends Component {
             this.cpu.update();
         }
         this.printf("%s\n", this.getRegs());
-        if (fIns) this.doUnassemble(Str.toHex(this.nextAddr = this.cpu.regPC, 4));
+        if (fIns) this.doUnassemble(StrLib.toHex(this.nextAddr = this.cpu.regPC, 4));
     }
 
     /**
@@ -14340,7 +14336,7 @@ class C1PDebugger extends Component {
     {
         var c = (sCount === undefined? 1 : parseInt(sCount, 10));
         var n = (c == 1? 0 : 1);
-        Web.onCountRepeat(
+        WebLib.onCountRepeat(
             c,
             function(dbg) {
                 return function() {
@@ -14377,7 +14373,7 @@ class C1PDebugger extends Component {
         if (dbg.isReady() && !dbg.isBusy(true) && sCmd.length > 0) {
 
             if (dbg.fAssemble) {
-                sCmd = "a " + Str.toHex(dbg.addrAssembleNext, 4) + " " + sCmd;
+                sCmd = "a " + StrLib.toHex(dbg.addrAssembleNext, 4) + " " + sCmd;
             }
             else if (sCmd.length > 1 && sCmd.indexOf(" ") != 1) {
                 /*
@@ -14470,12 +14466,12 @@ if (DEBUGGER) {
     /*
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
-    Web.onInit(C1PDebugger.init);
+    WebLib.onInit(C1PDebugger.init);
 
 }   // endif DEBUGGER
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -14674,7 +14670,7 @@ class C1PComputer extends Component {
          */
         computer.setReady();
 
-        computer.printf(Messages.NONE, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
+        computer.printf(MESSAGE.NONE, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
 
         /*
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to "power" the CPU;
@@ -14800,10 +14796,10 @@ class C1PComputer extends Component {
 /*
  * Initialize every Computer on the page.
  */
-Web.onInit(C1PComputer.init);
+WebLib.onInit(C1PComputer.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -14815,8 +14811,8 @@ Web.onInit(C1PComputer.init);
  * machine component init() handlers.
  *
  * Also, to prevent those init() handlers from running prematurely, we must disable all page
- * notification events at the start of the embedding process (Web.enablePageEvents(false)) and
- * re-enable them at the end (Web.enablePageEvents(true)).
+ * notification events at the start of the embedding process (WebLib.enablePageEvents(false)) and
+ * re-enable them at the end (WebLib.enablePageEvents(true)).
  */
 var fAsync = true;
 var cAsyncMachines = 0;
@@ -14866,7 +14862,7 @@ function loadXML(sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fReso
         parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fResolve, display, done);
     };
     display("Loading " + sXMLFile + "...");
-    Web.getResource(sXMLFile, null, fAsync, doneLoadXML);
+    WebLib.getResource(sXMLFile, null, fAsync, doneLoadXML);
 }
 
 /**
@@ -14987,7 +14983,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
          * Supposedly, the IE XML DOM parser will throw an exception, but I haven't tested that, and unless all other
          * browsers do that, that's not helpful.
          *
-         * The best I can do at this stage (assuming Web.getResource() didn't drop any error information on the floor)
+         * The best I can do at this stage (assuming WebLib.getResource() didn't drop any error information on the floor)
          * is verify that the requested resource "looks like" valid XML (in other words, it begins with a '<').
          */
         let xmlDoc = null;
@@ -15120,7 +15116,7 @@ function resolveXML(sURL, sXML, display, done)
         };
 
         display("Loading " + sRefFile + "...");
-        Web.getResource(sRefFile, null, fAsync, doneReadXML);
+        WebLib.getResource(sRefFile, null, fAsync, doneReadXML);
         return;
     }
     done(sURL, sXML, "");
@@ -15150,7 +15146,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
     let doneMachine = function() {
 
         if (!--cAsyncMachines) {
-            if (fAsync) Web.enablePageEvents(true);
+            if (fAsync) WebLib.enablePageEvents(true);
         }
     };
 
@@ -15177,7 +15173,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
         return fSuccess;
     }
 
-    if (Web.getURLParm('debugger') == "true" && sXMLFile.indexOf("/debugger") < 0) {
+    if (WebLib.getURLParm('debugger') == "true" && sXMLFile.indexOf("/debugger") < 0) {
         sXMLFile = sXMLFile.replace("/machine.xml", "/debugger/machine.xml");
     }
 
@@ -15188,7 +15184,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (match) sError = match[1];
             }
         }
-        Component.printf(Messages.ERROR, "%s\n", sError);
+        Component.printf(MESSAGE.ERROR, "%s\n", sError);
         displayMessage("Error: " + sError + (sURL? " (" + sURL + ")" : ""));
         if (fSuccess) doneMachine();
         fSuccess = false;
@@ -15211,7 +15207,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
             let aeWarning = (eMachine && Component.getElementsByClass("machine-warning", "", eMachine));
             eWarning = (aeWarning && aeWarning[0]) || eMachine;
         }
-        if (eWarning) eWarning.innerHTML = Str.escapeHTML(sMessage);
+        if (eWarning) eWarning.innerHTML = StrLib.escapeHTML(sMessage);
     };
 
     try {
@@ -15409,7 +15405,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
  */
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("C1Pjs", "osi/c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
 }
 
@@ -15425,7 +15421,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PCx86", "pcx86", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -15441,7 +15437,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PCx80", "pcx80", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -15457,7 +15453,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PDPjs", "dec/pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -15473,7 +15469,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PDPjs", "dec/pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -15541,6 +15537,6 @@ globals.window['embedPDP10']  = embedPDP10;
 globals.window['embedPDP11']  = embedPDP11;
 globals.window['commandMachine'] = commandMachine;
 
-globals.window['enableEvents'] = Web.enablePageEvents;
-globals.window['sendEvent']    = Web.doPageEvent;
+globals.window['enableEvents'] = WebLib.enablePageEvents;
+globals.window['sendEvent']    = WebLib.doPageEvent;
 

@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import WebIO from "./webio.js";
+import WebIO   from "./webio.js";
+import MESSAGE from "./message.js";
 
 /**
  * Every device has a 'registers' property that's a hash of register names to Register objects.
@@ -491,7 +492,7 @@ export default class Device extends WebIO {
             if (this.dbg) {
                 this.dbg.notifyMessage(format);
             }
-            if (this.machine.messages & Device.MESSAGE.ADDR) {
+            if (this.machine.messages & MESSAGE.ADDR) {
                 /**
                  * Same rules as above apply here.  Hopefully no message-based printf() calls will arrive with MESSAGE.ADDR
                  * set *before* the CPU device has been initialized.
@@ -539,67 +540,5 @@ export default class Device extends WebIO {
         return false;
     }
 }
-
-/**
- * List of additional message groups, extending the base set defined in webio.js.
- *
- * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
- */
-Device.MESSAGE.ADDR             = 0x000000000001;       // this is a special bit (bit 0) used to append address info to messages
-Device.MESSAGE.BUS              = 0x000000000002;
-Device.MESSAGE.FAULT            = 0x000000000004;
-Device.MESSAGE.MEMORY           = 0x000000000008;
-Device.MESSAGE.PORTS            = 0x000000000010;
-Device.MESSAGE.CHIPS            = 0x000000000020;
-Device.MESSAGE.KBD              = 0x000000000040;
-Device.MESSAGE.SERIAL           = 0x000000000080;
-Device.MESSAGE.MISC             = 0x000000000100;
-Device.MESSAGE.CPU              = 0x000000000200;
-Device.MESSAGE.MMU              = 0x000000000400;
-Device.MESSAGE.INT              = 0x000000000800;
-Device.MESSAGE.TRAP             = 0x000000001000;
-Device.MESSAGE.VIDEO            = 0x000000002000;       // used with video hardware messages (see video.js)
-Device.MESSAGE.MONITOR          = 0x000000004000;       // used with video monitor messages (see monitor.js)
-Device.MESSAGE.SCREEN           = 0x000000008000;       // used with screen-related messages (also monitor.js)
-Device.MESSAGE.DISK             = 0x000000010000;
-Device.MESSAGE.FILE             = 0x000000020000;
-Device.MESSAGE.TIME             = 0x000000040000;
-Device.MESSAGE.TIMER            = 0x000000080000;
-Device.MESSAGE.EVENT            = 0x000000100000;
-Device.MESSAGE.INPUT            = 0x000000200000;
-Device.MESSAGE.KEY              = 0x000000400000;
-Device.MESSAGE.MOUSE            = 0x000000800000;
-Device.MESSAGE.TOUCH            = 0x000001000000;
-Device.MESSAGE.CUSTOM           = 0x000100000000;       // all custom device messages must start here
-
-Device.MESSAGE_NAMES["addr"]    = Device.MESSAGE.ADDR;
-Device.MESSAGE_NAMES["bus"]     = Device.MESSAGE.BUS;
-Device.MESSAGE_NAMES["fault"]   = Device.MESSAGE.FAULT;
-Device.MESSAGE_NAMES["memory"]  = Device.MESSAGE.MEMORY;
-Device.MESSAGE_NAMES["ports"]   = Device.MESSAGE.PORTS;
-Device.MESSAGE_NAMES["chips"]   = Device.MESSAGE.CHIPS;
-Device.MESSAGE_NAMES["kbd"]     = Device.MESSAGE.KBD;
-Device.MESSAGE_NAMES["serial"]  = Device.MESSAGE.SERIAL;
-Device.MESSAGE_NAMES["misc"]    = Device.MESSAGE.MISC;
-Device.MESSAGE_NAMES["cpu"]     = Device.MESSAGE.CPU;
-Device.MESSAGE_NAMES["mmu"]     = Device.MESSAGE.MMU;
-Device.MESSAGE_NAMES["int"]     = Device.MESSAGE.INT;
-Device.MESSAGE_NAMES["trap"]    = Device.MESSAGE.TRAP;
-Device.MESSAGE_NAMES["video"]   = Device.MESSAGE.VIDEO;
-Device.MESSAGE_NAMES["monitor"] = Device.MESSAGE.MONITOR;
-Device.MESSAGE_NAMES["screen"]  = Device.MESSAGE.SCREEN;
-Device.MESSAGE_NAMES["disk"]    = Device.MESSAGE.DISK;
-Device.MESSAGE_NAMES["file"]    = Device.MESSAGE.FILE;
-Device.MESSAGE_NAMES["time"]    = Device.MESSAGE.TIME;
-Device.MESSAGE_NAMES["timer"]   = Device.MESSAGE.TIMER;
-Device.MESSAGE_NAMES["event"]   = Device.MESSAGE.EVENT;
-Device.MESSAGE_NAMES["input"]   = Device.MESSAGE.INPUT;
-Device.MESSAGE_NAMES["key"]     = Device.MESSAGE.KEY;
-Device.MESSAGE_NAMES["mouse"]   = Device.MESSAGE.MOUSE;
-Device.MESSAGE_NAMES["touch"]   = Device.MESSAGE.TOUCH;
-Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
-Device.MESSAGE_NAMES["info"]    = Device.MESSAGE.INFO;
-Device.MESSAGE_NAMES["warn"]    = Device.MESSAGE.WARN;
-Device.MESSAGE_NAMES["error"]   = Device.MESSAGE.ERROR;
 
 Device.CLASSES["Device"] = Device;

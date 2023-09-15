@@ -8,9 +8,9 @@
  */
 
 import MemoryPDP10 from "./memory.js";
-import Messages from "./messages.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Usr from "../../../../modules/v2/usrlib.js";
+import MESSAGE from "./message.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import UsrLib from "../../../../modules/v2/usrlib.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import { DEBUGGER, PDP10 } from "./defines.js";
@@ -29,7 +29,7 @@ import { DEBUGGER, PDP10 } from "./defines.js";
  * @property {BitField} type
  */
 
-var BlockInfoPDP10 = /** @type {BlockInfo} */ (Usr.defineBitFields({num:20, count:8, btmod:1, type:3}));
+var BlockInfoPDP10 = /** @type {BlockInfo} */ (UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3}));
 
 /**
  * BusInfo object definition (returned by scanMemory())
@@ -75,7 +75,7 @@ export default class BusPDP10 extends Component {
      */
     constructor(parmsBus, cpu, dbg)
     {
-        super("Bus", parmsBus, Messages.BUS);
+        super("Bus", parmsBus, MESSAGE.BUS);
 
         this.cpu = cpu;
         this.dbg = dbg;
@@ -292,7 +292,7 @@ export default class BusPDP10 extends Component {
         }
 
         if (sizeLeft <= 0) {
-            this.printf(Messages.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP10.TYPE_NAMES[type], addr);
+            this.printf(MESSAGE.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP10.TYPE_NAMES[type], addr);
             return true;
         }
 
@@ -370,7 +370,7 @@ export default class BusPDP10 extends Component {
             var block = this.aBusBlocks[iBlock];
             info.cbTotal += block.size;
             if (block.size) {
-                info.aBlocks.push(/** @type {BlockInfo} */ (Usr.initBitFields(BlockInfoPDP10, iBlock, 0, 0, block.type)));
+                info.aBlocks.push(/** @type {BlockInfo} */ (UsrLib.initBitFields(BlockInfoPDP10, iBlock, 0, 0, block.type)));
                 info.cBlocks++;
             }
             iBlock++;
@@ -691,7 +691,7 @@ export default class BusPDP10 extends Component {
         this.fFault = true;
         if (!this.nDisableFaults) {
             if (DEBUGGER && this.dbg) {
-                this.dbg.printf(Messages.FAULT + Messages.ADDRESS, "memory fault on %s\n", this.dbg.toStrBase(addr));
+                this.dbg.printf(MESSAGE.FAULT + MESSAGE.ADDR, "memory fault on %s\n", this.dbg.toStrBase(addr));
             }
             this.cpu.haltCPU();
         }
@@ -724,7 +724,7 @@ export default class BusPDP10 extends Component {
      */
     reportError(errNum, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.NONE : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
+        this.printf(fQuiet? MESSAGE.NONE : MESSAGE.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
         return false;
     }
 }

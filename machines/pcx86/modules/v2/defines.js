@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Web from "../../../modules/v2/weblib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL, globals } from "../../../modules/v2/defines.js";
 
 /**
@@ -121,11 +121,11 @@ const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
  *
  * TODO: Consider yet another embedXXX() parameter that would also allow BACKTRACK to be turned off on a page-by-page basis.
  *
- * Deal with Web.getURLParm("debug") in /machines/modules/v2/weblib.js at the same time.
+ * Deal with WebLib.getURLParm("debug") in /machines/modules/v2/weblib.js at the same time.
  */
 
 if (DEBUG) {
-    let backTrack = Web.getURLParm("backtrack");
+    let backTrack = WebLib.getURLParm("backtrack");
     if (backTrack == "false") {
         globals.window['BACKTRACK'] = false;
     }

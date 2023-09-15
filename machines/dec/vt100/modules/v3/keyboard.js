@@ -7,9 +7,10 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../../../modules/v3/device.js";
-import Input  from "../../../../modules/v3/input.js";
-import LED    from "../../../../modules/v3/led.js";
+import Device  from "../../../../modules/v3/device.js";
+import Input   from "../../../../modules/v3/input.js";
+import LED     from "../../../../modules/v3/led.js";
+import MESSAGE from "../../../../modules/v3/message.js";
 
 /**
  * @typedef {Config} VT100KeyboardConfig
@@ -216,7 +217,7 @@ export default class VT100Keyboard extends Device {
             this.bAddress = value;
             this.cpu.requestINTR(1);
         }
-        this.printf(Device.MESSAGE.KBD + Device.MESSAGE.PORTS, "inUARTAddress(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "inUARTAddress(%#04x): %#04x\n", port, value);
         return value;
     }
 
@@ -229,7 +230,7 @@ export default class VT100Keyboard extends Device {
      */
     outUARTStatus(port, value)
     {
-        this.printf(Device.MESSAGE.KBD + Device.MESSAGE.PORTS, "outUARTStatus(%#04x): %#04x\n", port, value);
+        this.printf(MESSAGE.KBD + MESSAGE.PORTS, "outUARTStatus(%#04x): %#04x\n", port, value);
         this.updateLEDs(value, this.bStatus);
         this.bStatus = value;
         this.fUARTBusy = true;

@@ -8,12 +8,12 @@
  */
 
 import MemoryX80 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /**
@@ -78,10 +78,10 @@ export default class VideoX80 extends Component {
      */
     constructor(parmsVideo, canvas, context, textarea, container)
     {
-        super("Video", parmsVideo, Messages.VIDEO);
+        super("Video", parmsVideo, MESSAGE.VIDEO);
 
         let video = this, sProp, sEvent;
-        this.fGecko = Web.isUserAgent("Gecko/");
+        this.fGecko = WebLib.isUserAgent("Gecko/");
 
         this.cxScreen = parmsVideo['screenWidth'];
         this.cyScreen = parmsVideo['screenHeight'];
@@ -108,7 +108,7 @@ export default class VideoX80 extends Component {
             this.rotateBuffer = this.rotateBuffer % 360;
             if (this.rotateBuffer > 0) this.rotateBuffer -= 360;
             if (this.rotateBuffer != -90) {
-                this.printf(Messages.NOTICE, "unsupported buffer rotation: %d\n", this.rotateBuffer);
+                this.printf(MESSAGE.NOTICE, "unsupported buffer rotation: %d\n", this.rotateBuffer);
                 this.rotateBuffer = 0;
             }
         }
@@ -149,10 +149,10 @@ export default class VideoX80 extends Component {
          * that's apparently been added to Chrome.  Sigh.
          */
         let fSmoothing = parmsVideo['smoothing'];
-        let sSmoothing = Web.getURLParm('smoothing');
+        let sSmoothing = WebLib.getURLParm('smoothing');
         if (sSmoothing) fSmoothing = (sSmoothing == "true");
         this.fSmoothing = fSmoothing;
-        this.sSmoothing = Web.findProperty(this.contextScreen, 'imageSmoothingEnabled');
+        this.sSmoothing = WebLib.findProperty(this.contextScreen, 'imageSmoothingEnabled');
 
         this.rotateScreen = parmsVideo['screenRotate'];
         if (this.rotateScreen) {
@@ -163,7 +163,7 @@ export default class VideoX80 extends Component {
              * both is most likely a mistake, but who knows, maybe someone wants to use both for 180-degree rotation?
              */
             if (this.rotateScreen != -90) {
-                this.printf(Messages.NOTICE, "unsupported screen rotation: %d\n", this.rotateScreen);
+                this.printf(MESSAGE.NOTICE, "unsupported screen rotation: %d\n", this.rotateScreen);
                 this.rotateScreen = 0;
             } else {
                 this.contextScreen.translate(0, this.cyScreen);
@@ -180,17 +180,17 @@ export default class VideoX80 extends Component {
          */
         this.container = container;
         if (this.container) {
-            sProp = Web.findProperty(container, 'requestFullscreen') || Web.findProperty(container, 'requestFullScreen');
+            sProp = WebLib.findProperty(container, 'requestFullscreen') || WebLib.findProperty(container, 'requestFullScreen');
             if (sProp) {
                 this.container.doFullScreen = container[sProp];
-                sEvent = Web.findProperty(document, 'on', 'fullscreenchange');
+                sEvent = WebLib.findProperty(document, 'on', 'fullscreenchange');
                 if (sEvent) {
-                    let sFullScreen = Web.findProperty(document, 'fullscreenElement') || Web.findProperty(document, 'fullScreenElement');
+                    let sFullScreen = WebLib.findProperty(document, 'fullscreenElement') || WebLib.findProperty(document, 'fullScreenElement');
                     document.addEventListener(sEvent, function onFullScreenChange() {
                         video.notifyFullScreen(document[sFullScreen] != null);
                     }, false);
                 }
-                sEvent = Web.findProperty(document, 'on', 'fullscreenerror');
+                sEvent = WebLib.findProperty(document, 'on', 'fullscreenerror');
                 if (sEvent) {
                     document.addEventListener(sEvent, function onFullScreenError() {
                         video.notifyFullScreen();
@@ -201,11 +201,11 @@ export default class VideoX80 extends Component {
 
         this.sFontROM = parmsVideo['fontROM'];
         if (this.sFontROM) {
-            let sFileExt = Str.getExtension(this.sFontROM);
+            let sFileExt = StrLib.getExtension(this.sFontROM);
             if (sFileExt != "json") {
-                this.sFontROM = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFontROM + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
+                this.sFontROM = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFontROM + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES;
             }
-            Web.getResource(this.sFontROM, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(this.sFontROM, null, true, function(sURL, sResponse, nErrorCode) {
                 video.doneLoad(sURL, sResponse, nErrorCode);
             });
         }
@@ -350,11 +350,11 @@ export default class VideoX80 extends Component {
             this.bindings[sBinding] = control;
             if (this.container && this.container.doFullScreen) {
                 control.onclick = function onClickFullScreen() {
-                    video.printf(Messages.DEBUG, "fullScreen()\n");
+                    video.printf(MESSAGE.DEBUG, "fullScreen()\n");
                     video.doFullScreen();
                 };
             } else {
-                this.printf(Messages.DEBUG + Messages.LOG, "FullScreen API not available\n");
+                this.printf(MESSAGE.DEBUG + MESSAGE.LOG, "FullScreen API not available\n");
                 control.parentNode.removeChild(/** @type {Node} */ (control));
             }
             return true;
@@ -421,7 +421,7 @@ export default class VideoX80 extends Component {
     doneLoad(sURL, sFontData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -452,12 +452,12 @@ export default class VideoX80 extends Component {
                 this.createFonts();
             }
             else {
-                this.printf(Messages.NOTICE, "Unrecognized font data length (%d)\n", abFontData.length);
+                this.printf(MESSAGE.NOTICE, "Unrecognized font data length (%d)\n", abFontData.length);
                 return;
             }
 
         } catch (e) {
-            this.printf(Messages.NOTICE, "Font ROM data error: %s\n", e.message);
+            this.printf(MESSAGE.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
 
@@ -1390,7 +1390,7 @@ export default class VideoX80 extends Component {
              * The other reason it's good to keep this particular hack limited to IE9/IE10 is that most other
              * browsers don't actually support an 'onresize' handler on anything but the window object.
              */
-            if (Web.getUserAgent().indexOf("MSIE") >= 0) {
+            if (WebLib.getUserAgent().indexOf("MSIE") >= 0) {
                 element['onresize'] = function(eParent, eChild, cx, cy) {
                     return function onResizeVideo() {
                         eChild.style.height = (((eParent.clientWidth * cy) / cx) | 0) + "px";
@@ -1402,17 +1402,17 @@ export default class VideoX80 extends Component {
             /*
              * The following is a related hack that allows the user to force the screen to use a particular aspect
              * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
-             * until we figure out a better UI.  And note that we use our Web.addPageEvent() helper function to make
+             * until we figure out a better UI.  And note that we use our WebLib.addPageEvent() helper function to make
              * sure we don't trample any other 'onresize' handler(s) attached to the window object.
              */
-            let aspect = +(parmsVideo['aspect'] || Web.getURLParm('aspect'));
+            let aspect = +(parmsVideo['aspect'] || WebLib.getURLParm('aspect'));
 
             /*
              * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
              * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
              */
             if (aspect && aspect >= 0.3 && aspect <= 3.33) {
-                Web.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
+                WebLib.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
                     return function onResizeWindow() {
                         /*
                          * Since aspectRatio is the target width/height, we have:
@@ -1468,7 +1468,7 @@ export default class VideoX80 extends Component {
                 * which is not the initial keyboard state that the Keyboard component expects, so hopefully turning off
                 * these "auto" attributes will help.
                 */
-                if (Web.isUserAgent("iOS")) {
+                if (WebLib.isUserAgent("iOS")) {
                     textarea.setAttribute("autocapitalize", "off");
                     textarea.setAttribute("autocorrect", "off");
                     textarea.setAttribute("spellcheck", "false");
@@ -1542,4 +1542,4 @@ VideoX80.VT100 = {
 /*
  * Initialize every Video module on the page.
  */
-Web.onInit(VideoX80.init);
+WebLib.onInit(VideoX80.init);

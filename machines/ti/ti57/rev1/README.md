@@ -9,7 +9,7 @@ machines:
     uncompiled: true
     name: TI-57 Programmable Calculator
     config: /machines/ti/ti57/rev1/ti57.json
-    layout: /_includes/ti57/ti57-diag.html
+    layout: /_includes/machines/ti57/ti57-diag.html
 ---
 
 The TI-57 configuration below is identical to our [Original ROM](../rev0/) configuration, except that

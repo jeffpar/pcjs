@@ -8,7 +8,7 @@ machines:
     type: ti57
     name: TI-57 Programmable Calculator
     config: /machines/ti/ti57/rev0/ti57.json
-    layout: /_includes/ti57/ti57-debug.html
+    layout: /_includes/machines/ti57/ti57-debug.html
 ---
 
 For years, we all assumed that **PCjs** meant "Personal Computers in JavaScript."  Even I thought that.  But now

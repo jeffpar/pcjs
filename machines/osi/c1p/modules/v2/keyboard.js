@@ -8,9 +8,9 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
-import Messages from "../../../../modules/v2/messages.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import MESSAGE from "../../../../modules/v2/message.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
 /**
@@ -517,8 +517,8 @@ export default class C1PKeyboard extends Component {
      */
     setReady(fReady)
     {
-        this.iOS = Web.isUserAgent("iOS");
-        this.fMobile = (this.iOS || Web.isUserAgent("Android"));
+        this.iOS = WebLib.isUserAgent("iOS");
+        this.fMobile = (this.iOS || WebLib.isUserAgent("Android"));
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
             this.dbg.printf("mobile keyboard support: %b (%s)\n", this.fMobile, window.navigator.userAgent);
         }
@@ -582,7 +582,7 @@ export default class C1PKeyboard extends Component {
     injectKeys(sKeyCodes, msDelay)
     {
         this.sInjectBuffer = sKeyCodes;
-        if (DEBUG) this.printf(Messages.LOG, "injectKeys(%s)\n", this.sInjectBuffer.split("\n").join("\\n"));
+        if (DEBUG) this.printf(MESSAGE.LOG, "injectKeys(%s)\n", this.sInjectBuffer.split("\n").join("\\n"));
         this.injectKeysFromBuffer(msDelay || this.msInjectDelay);
     }
 
@@ -930,7 +930,7 @@ export default class C1PKeyboard extends Component {
             this.updateMemory(fPropagate);
             fSimulated = true;
         }
-        if (DEBUG && this.dbg) this.dbg.info("keyEventSimulate(" + Str.toHexByte(charCode) + "," + (fDown?"down":"up") + "," + this.aSimCodeDescs[simCode] + "): " + (fSimulated? "true" : "false"));
+        if (DEBUG && this.dbg) this.dbg.info("keyEventSimulate(" + StrLib.toHexByte(charCode) + "," + (fDown?"down":"up") + "," + this.aSimCodeDescs[simCode] + "): " + (fSimulated? "true" : "false"));
         return fSimulated;
     }
 
@@ -954,7 +954,7 @@ export default class C1PKeyboard extends Component {
         if (DEBUG) {
             if (addrFrom !== undefined) {
                 this.nReadsSinceLastEvent++;
-                if (DEBUG && this.dbg) this.dbg.info("reading kbd " + Str.toHexWord(addr) + " @" + this.cpu.getCycles() + " cycles");
+                if (DEBUG && this.dbg) this.dbg.info("reading kbd " + StrLib.toHexWord(addr) + " @" + this.cpu.getCycles() + " cycles");
             }
         }
     }
@@ -1059,7 +1059,7 @@ export default class C1PKeyboard extends Component {
             }
         }
         this.bWriteLast = b;
-        if (DEBUG && this.dbg) this.dbg.info("updating kbd " + Str.toHexWord(addr) + " with " + Str.toHexByte(b) + (bWrite !== undefined? (" following write " + Str.toHexByte(bWrite)) : "") + " @" + nCycles + " cycles");
+        if (DEBUG && this.dbg) this.dbg.info("updating kbd " + StrLib.toHexWord(addr) + " with " + StrLib.toHexByte(b) + (bWrite !== undefined? (" following write " + StrLib.toHexByte(bWrite)) : "") + " @" + nCycles + " cycles");
     }
 
     /**
@@ -1098,4 +1098,4 @@ export default class C1PKeyboard extends Component {
 /*
  * Initialize every Keyboard module on the page.
  */
-Web.onInit(C1PKeyboard.init);
+WebLib.onInit(C1PKeyboard.init);

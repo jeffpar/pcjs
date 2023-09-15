@@ -7,10 +7,10 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 import { BACKTRACK, BYTEARRAYS, DEBUG, DEBUGGER, I386, PAGEBLOCKS, TYPEDARRAYS } from "./defines.js";
 
 /**
@@ -543,7 +543,7 @@ export default class MemoryX86 {
     printAddr(sMessage)
     {
         if (DEBUG && this.dbg) {
-            this.dbg.printf(Messages.MEM, "%s %%%x #%s\n", this.addr, this.id);
+            this.dbg.printf(MESSAGE.MEM, "%s %%%x #%s\n", this.addr, this.id);
         }
     }
 
@@ -656,7 +656,7 @@ export default class MemoryX86 {
     readNone(off, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to read invalid block %%%x\n", addr);
+            this.dbg.printf(MESSAGE.CPU + MESSAGE.MEM, "attempt to read invalid block %%%x\n", addr);
         }
         return 0xff;
     }
@@ -672,7 +672,7 @@ export default class MemoryX86 {
     writeNone(off, v, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to write %#06x to invalid block %%%x\n", v, addr);
+            this.dbg.printf(MESSAGE.CPU + MESSAGE.MEM, "attempt to write %#06x to invalid block %%%x\n", v, addr);
         }
     }
 

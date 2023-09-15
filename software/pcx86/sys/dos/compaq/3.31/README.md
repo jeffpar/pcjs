@@ -10,9 +10,9 @@ machines:
     config: /machines/pcx86/compaq/deskpro386/ega/2048kb/machine.xml
     autoMount:
       A:
-        name: COMPAQ MS-DOS 3.31 (Disk 1)
+        name: COMPAQ MS-DOS 3.31D (720K Disk 1)
       B:
-        name: COMPAQ MS-DOS 3.31 (Disk 2)
+        name: COMPAQ MS-DOS 3.31D (720K Disk 2)
     autoStart: true
 ---
 
@@ -138,7 +138,7 @@ but, in the interest of preserving all manner of historical curiosities, we have
            60 file(s)     782546 bytes
                           418304 bytes free
 
-### Directory of COMPAQ MS-DOS 3.31 (Disk 1)
+### Directory of COMPAQ MS-DOS 3.31D (720K Disk 1)
 
      Volume in drive A is FASTART
      Directory of A:\
@@ -154,7 +154,7 @@ but, in the interest of preserving all manner of historical curiosities, we have
             8 file(s)     337865 bytes
                           387072 bytes free
 
-### Directory of COMPAQ MS-DOS 3.31 (Disk 2)
+### Directory of COMPAQ MS-DOS 3.31D (720K Disk 2)
 
      Volume in drive A is STARTUP
      Directory of A:\
@@ -183,7 +183,7 @@ but, in the interest of preserving all manner of historical curiosities, we have
            21 file(s)     337505 bytes
                           382976 bytes free
 
-### Directory of COMPAQ MS-DOS 3.31 (Disk 3)
+### Directory of COMPAQ MS-DOS 3.31D (720K Disk 3)
 
      Volume in drive A is OPERATING
      Directory of A:\

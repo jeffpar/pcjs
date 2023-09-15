@@ -12,7 +12,7 @@ machines:
     type: ti55
     name: TI-55 Programmable Calculator
     config: /machines/ti/ti55/ti55.json
-    layout: /_includes/ti55/ti55-full.html
+    layout: /_includes/machines/ti55/ti55-full.html
 ---
 
 Building on the PCjs [TI-57 Emulator](../ti57/), the PCjs TI-55 Emulator is now available,

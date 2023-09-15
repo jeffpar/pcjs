@@ -50,7 +50,7 @@ could contain up to four such drives, which we refer to as RL0 through RL3.  And
 disk, we need to select drive RL0, since the boot code on the disk appears to assume drive 0. 
 
 To automatically boot the [RL02K XXDP+ Diagnostics Disk](/software/dec/pdp11/disks/rl02k/xxdp/) and run the **EKBAD0** diagnostic,
-press: {% include machine/command.html type='button' label='Run EKBAD0' machine='test1170' command='runEKBAD0' %}
+press: {% include machines/command.html type='button' label='Run EKBAD0' machine='test1170' command='runEKBAD0' %}
 
 To test the Front Panel LEDs and the ENABLE/CONT switches,
-press: {% include machine/command.html type='button' label='Test Panel' machine='test1170' command='testPanel' %}
+press: {% include machines/command.html type='button' label='Test Panel' machine='test1170' command='testPanel' %}

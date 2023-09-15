@@ -16,7 +16,7 @@ import url from "url";
  * @class Net
  * @unrestricted
  */
-export default class Net {
+export default class NetLib {
     /**
      * hasParm(sParm, sValue, req)
      *
@@ -25,7 +25,7 @@ export default class Net {
      * @param {Object} [req] is the web server's (ie, Express) request object, if any
      * @returns {boolean} true if the request Object contains the specified parameter/value, false if not
      *
-     * TODO: Consider whether sParm === null should check for the presence of ANY parameter in Net.asPropagate.
+     * TODO: Consider whether sParm === null should check for the presence of ANY parameter in NetLib.asPropagate.
      */
     static hasParm(sParm, sValue, req)
     {
@@ -35,7 +35,7 @@ export default class Net {
     /**
      * propagateParms(sURL, req)
      *
-     * Propagates any "special" query parameters (as listed in Net.asPropagate) from the given
+     * Propagates any "special" query parameters (as listed in NetLib.asPropagate) from the given
      * request object (req) to the given URL (sURL).
      *
      * We do not modify an sURL that already contains a '?' OR that begins with a protocol
@@ -63,8 +63,8 @@ export default class Net {
             }
             let match = sURL.match(/^([a-z])+:(.*)/);
             if (!match && req && req.query) {
-                for (i = 0; i < Net.asPropagate.length; i++) {
-                    let sQuery = Net.asPropagate[i];
+                for (i = 0; i < NetLib.asPropagate.length; i++) {
+                    let sQuery = NetLib.asPropagate[i];
                     let sValue;
                     if ((sValue = req.query[sQuery])) {
                         let sParm = (sURL.indexOf('?') < 0 ? '?' : '&');
@@ -87,7 +87,7 @@ export default class Net {
      *  2) Remap links that begin with "archive/" to the corresponding URL at "http://archive.pcjs.org/"
      *  3) Use decodeURI() to eliminate escape sequences (like "%20") so that encodeURI() won't re-encode the "%"
      *  4) Use encodeURI() to transform all "htmlspecialchars" and reserved characters into the appropriate sequences
-     *  5) Massage the result with Net.propagateParms(), so that any special parameters are passed along
+     *  5) Massage the result with NetLib.propagateParms(), so that any special parameters are passed along
      *
      * @param {string} sURL
      * @param {Object} req is the web server's (ie, Express) request object, if any
@@ -112,7 +112,7 @@ export default class Net {
              * calling decodeURI() first will eliminate them, preventing encodeURI() from converting leading
              * "%" into "%25" and corrupting sequences like "%20" by turning them into "%2520".
              */
-            return Net.propagateParms(encodeURI(decodeURI(sURL)), req);
+            return NetLib.propagateParms(encodeURI(decodeURI(sURL)), req);
         }
         return sURL;
     }
@@ -302,7 +302,7 @@ export default class Net {
     {
         let nErrorCode = -1, sResource = null, response = null;
 
-        if (Net.isRemote(sURL)) {
+        if (NetLib.isRemote(sURL)) {
             /*
              * TODO: This code is nothing more than a band-aid.  It assumes the URL uses "http:"
              * (hence the call to getFile(), which only supports HTTP GET operations), it assumes
@@ -313,14 +313,14 @@ export default class Net {
              * But, it gets the job done for what little we actually ask of it, when our machines
              * are running in the Node environment.
              */
-            Net.getFile(sURL, "utf8", function(err, status, data) {
+            NetLib.getFile(sURL, "utf8", function(err, status, data) {
                 if (done) done(sURL, data, err? status : 0);
             });
         } else {
-            if (!Net.sServerRoot) {
-                Net.sServerRoot = path.join(path.dirname(fs.realpathSync(__filename)), "../../../");
+            if (!NetLib.sServerRoot) {
+                NetLib.sServerRoot = path.join(path.dirname(fs.realpathSync(__filename)), "../../../");
             }
-            let sFile = path.join(Net.sServerRoot, sURL);
+            let sFile = path.join(NetLib.sServerRoot, sURL);
             if (fAsync) {
                 fs.readFile(sFile, {encoding: "utf8"}, function(err, s)
                 {
@@ -360,22 +360,22 @@ export default class Net {
  *      http://www.pcjs.org/?gort=debug
  *
  * hasParm() detects the presence of the specified command, and propagateParms() is a URL filter that ensures
- * any commands listed in Net.asPropagate are passed through to all other URLs on the same page; using any of these
+ * any commands listed in NetLib.asPropagate are passed through to all other URLs on the same page; using any of these
  * commands also forces the page to be rebuilt and not cached (since we would never want a cached "index.html" to
  * contain/expose any of these commands).
  */
-Net.GORT_COMMAND    = "gort";
-Net.GORT_DEBUG      = "debug";          // use this to force uncompiled JavaScript even on a Release server
-Net.GORT_NODEBUG    = "nodebug";        // use this to force uncompiled JavaScript but with DEBUG code disabled
-Net.GORT_RELEASE    = "release";        // use this to force the use of compiled JavaScript even on a Debug server
-Net.GORT_REBUILD    = "rebuild";        // use this to force the "index.html" in the current directory to be rebuilt
+NetLib.GORT_COMMAND    = "gort";
+NetLib.GORT_DEBUG      = "debug";          // use this to force uncompiled JavaScript even on a Release server
+NetLib.GORT_NODEBUG    = "nodebug";        // use this to force uncompiled JavaScript but with DEBUG code disabled
+NetLib.GORT_RELEASE    = "release";        // use this to force the use of compiled JavaScript even on a Debug server
+NetLib.GORT_REBUILD    = "rebuild";        // use this to force the "index.html" in the current directory to be rebuilt
 
-Net.REVEAL_COMMAND  = "reveal";
-Net.REVEAL_PDFS     = "pdfs";
+NetLib.REVEAL_COMMAND  = "reveal";
+NetLib.REVEAL_PDFS     = "pdfs";
 
 /*
  * This is a list of the URL parameters that propagateParms() will propagate from the requester's URL to
  * other URLs provided by the requester.
  */
-Net.asPropagate     = [Net.GORT_COMMAND, "autostart"];
-Net.sServerRoot     = null;
+NetLib.asPropagate     = [NetLib.GORT_COMMAND, "autostart"];
+NetLib.sServerRoot     = null;

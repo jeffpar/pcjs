@@ -7,11 +7,11 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, globals } from "./defines.js";
 
 /**
@@ -36,12 +36,12 @@ export default class ChipSetX80 extends Component {
      */
     constructor(parmsChipSet)
     {
-        super("ChipSet", parmsChipSet, Messages.CHIPSET);
+        super("ChipSet", parmsChipSet, MESSAGE.CHIPSET);
 
         let model = parmsChipSet['model'];
 
         if (model && !ChipSetX80.MODELS[model]) {
-            Component.printf(Messages.NOTICE, "Unrecognized ChipSet model: %s\n", model);
+            Component.printf(MESSAGE.NOTICE, "Unrecognized ChipSet model: %s\n", model);
         }
 
         this.config = ChipSetX80.MODELS[model] || {};
@@ -49,7 +49,7 @@ export default class ChipSetX80 extends Component {
         this.bSwitches = this.parseDIPSwitches(parmsChipSet['swDIP']);
 
         /*
-         * Here, I'm finally getting around to trying the Web Audio API.  Fortunately, based on what little I know about
+         * Here, I'm finally getting around to trying the WebLib Audio API.  Fortunately, based on what little I know about
          * sound generation, using the API to make the same noises as the IBM PC speaker seems straightforward.
          *
          * To start, we create an audio context, unless the 'sound' parameter has been explicitly set to false.
@@ -58,7 +58,7 @@ export default class ChipSetX80 extends Component {
          *
          *      http://developer.apple.com/library/safari/#documentation/AudioVideo/Conceptual/Using_HTML5_Audio_Video/PlayingandSynthesizingSounds/PlayingandSynthesizingSounds.html
          *
-         * "Similar to how HTML5 canvas requires a context on which lines and curves are drawn, Web Audio requires an audio context
+         * "Similar to how HTML5 canvas requires a context on which lines and curves are drawn, WebLib Audio requires an audio context
          *  on which sounds are played and manipulated. This context will be the parent object of further audio objects to come....
          *  Your audio context is typically created when your page initializes and should be long-lived. You can play multiple sounds
          *  coming from multiple sources within the same context, so it is unnecessary to create more than one audio context per page."
@@ -70,7 +70,7 @@ export default class ChipSetX80 extends Component {
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
-                this.printf(Messages.DEBUG + Messages.LOG, "AudioContext not available\n");
+                this.printf(MESSAGE.DEBUG + MESSAGE.LOG, "AudioContext not available\n");
             }
         }
 
@@ -141,7 +141,7 @@ export default class ChipSetX80 extends Component {
         if (DEBUGGER) {
             if (dbg) {
                 let chipset = this;
-                dbg.messageDump(Messages.NVR, function onDumpNVR() {
+                dbg.messageDump(MESSAGE.NVR, function onDumpNVR() {
                     chipset.dumpNVR();
                 });
             }
@@ -194,7 +194,7 @@ export default class ChipSetX80 extends Component {
                 if (sDump) {
                     sDump += (iWord && (iWord % 10)? ", " : ",\n");
                 }
-                sDump += Str.toHexWord(this.aNVRWords[iWord]);
+                sDump += StrLib.toHexWord(this.aNVRWords[iWord]);
             }
             this.dbg.printf("%s\n", sDump);
         }
@@ -208,7 +208,7 @@ export default class ChipSetX80 extends Component {
     reset()
     {
         if (this.config.INIT && !this.restore(this.config.INIT)) {
-            this.printf(Messages.NOTICE, "reset error\n");
+            this.printf(MESSAGE.NOTICE, "reset error\n");
         }
     }
 
@@ -1223,4 +1223,4 @@ ChipSetX80.VT100.INIT = [
 /*
  * Initialize every ChipSet module on the page.
  */
-Web.onInit(ChipSetX80.init);
+WebLib.onInit(ChipSetX80.init);

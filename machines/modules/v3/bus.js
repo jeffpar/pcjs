@@ -7,8 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "./device.js";
-import Memory from "./memory.js";
+import Device  from "./device.js";
+import Memory  from "./memory.js";
+import MESSAGE from "./message.js";
 
 /**
  * @typedef {Config} BusConfig
@@ -284,7 +285,7 @@ export default class Bus extends Device {
              * We must call the Debugger's printf() instead of our own in order to use its custom formatters (eg, %n).
              */
             if (this.dbg) {
-                this.dbg.printf(Device.MESSAGE.FAULT, "bus fault (%d) at %n\n", reason, addr);
+                this.dbg.printf(MESSAGE.FAULT, "bus fault (%d) at %n\n", reason, addr);
             }
             if (this.faultHandler) {
                 this.faultHandler(addr, reason);

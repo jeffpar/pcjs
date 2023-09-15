@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Memory from "./memory.js";
+import Memory  from "./memory.js";
+import MESSAGE from "./message.js";
 
 /**
  * @typedef {Config} PortsConfig
@@ -147,7 +148,7 @@ export default class Ports extends Memory {
         }
         if (!read) {
             this.bus.fault(port, 0);
-            this.printf(Memory.MESSAGE.PORTS + Memory.MESSAGE.MISC, "readNone(%#04x): unknown port\n", port);
+            this.printf(MESSAGE.PORTS + MESSAGE.MISC, "readNone(%#04x): unknown port\n", port);
             value = super.readNone(offset);
         }
         return value;
@@ -197,7 +198,7 @@ export default class Ports extends Memory {
         }
         if (!written) {
             this.bus.fault(port, 1);
-            this.printf(Memory.MESSAGE.PORTS + Memory.MESSAGE.MISC, "writeNone(%#04x,%#04x): unknown port\n", port, value);
+            this.printf(MESSAGE.PORTS + MESSAGE.MISC, "writeNone(%#04x,%#04x): unknown port\n", port, value);
             super.writeNone(offset, value);
         }
     }

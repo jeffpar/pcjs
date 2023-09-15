@@ -32,7 +32,7 @@ Generally, our PC XT machines use 10Mb drives, configured as XT drive type 3.  S
 
 ### IBM PC AT Drive Types
 
-The IBM PC AT introduced a new drive controller and defined many new drive types.  You can find a listing of them in the PCjs [HDC](/machines/pcx86/modules/v2/hdc.js) component (see **aDriveTypes**).
+The IBM PC AT introduced a new drive controller and defined many new drive types.  You can find a listing of them in the PCjs [driveinfo.js](/machines/pcx86/modules/v2/driveinfo.js) component.
 
 Generally, our PC AT machines only use a few common sizes, corresponding to the following AT drive types:
 

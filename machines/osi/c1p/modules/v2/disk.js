@@ -8,8 +8,8 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
 /**
@@ -677,12 +677,12 @@ export default class C1PDiskController extends Component {
                              *
                              * TODO: Convert this code to use the new shared Disk API definitions and weblib functions; eg:
                              *
-                             *      sDiskURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + "?" + DumpAPI.QUERY.DISK + "=" + sDiskPath;
+                             *      sDiskURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + "?" + DumpAPI.QUERY.DISK + "=" + sDiskPath;
                              */
                             sFileURL = "http://" + window.location.host + "/api/v1/dump?disk=" + sFilePath;
                         }
-                        controller.printf("loading  %s...\n", Str.getBaseName(sFilePath));
-                        Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
+                        controller.printf("loading  %s...\n", StrLib.getBaseName(sFilePath));
+                        WebLib.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                             controller.loadDisk(sURL, sResponse, nErrorCode);
                         });
                     }
@@ -1261,4 +1261,4 @@ export default class C1PDiskController extends Component {
 /*
  * Initialize every DiskController module on the page.
  */
-Web.onInit(C1PDiskController.init);
+WebLib.onInit(C1PDiskController.init);

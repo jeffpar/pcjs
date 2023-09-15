@@ -9,7 +9,7 @@ machines:
     uncompiled: true
     name: TI-55 Programmable Calculator
     config: /machines/ti/ti55/ti55.json
-    layout: /_includes/ti55/ti55-diag.html
+    layout: /_includes/machines/ti55/ti55-diag.html
 ---
 
 The TI-55 configuration below is identical to our [Original](../) configuration, except that

@@ -25,12 +25,12 @@
  */
 
 import BusPDP11 from "./bus.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DiskAPI from "../../../../modules/v2/diskapi.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { DEBUG } from "./defines.js";
 
 /**
@@ -92,7 +92,7 @@ export default class DiskPDP11 extends Component {
      */
     constructor(controller, drive, mode)
     {
-        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, Messages.DISK);
+        super("Disk", {'id': controller.idMachine + ".disk" + StrLib.toHex(++DiskPDP11.nDisks, 4)}, MESSAGE.DISK);
 
         /*
          * Route all non-Debugger messages (eg, print() calls) through this.controller
@@ -223,18 +223,18 @@ export default class DiskPDP11 extends Component {
         var sDiskURL = sDiskPath;
 
         if (DEBUG) {
-            this.controller.printf(Messages.LOG, "load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
+            this.controller.printf(MESSAGE.LOG, "load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
             this.printf("load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
         }
 
         if (this.fnNotify) {
-            if (DEBUG) this.controller.printf(Messages.LOG, "too many load requests for \"%s\" (%s)\n", sDiskName, sDiskPath);
+            if (DEBUG) this.controller.printf(MESSAGE.LOG, "too many load requests for \"%s\" (%s)\n", sDiskName, sDiskPath);
             return true;
         }
 
         this.sDiskName = sDiskName;
         this.sDiskPath = sDiskPath;
-        this.sDiskFile = Str.getBaseName(sDiskPath);
+        this.sDiskFile = StrLib.getBaseName(sDiskPath);
 
         var disk = this;
         this.fnNotify = fnNotify;
@@ -259,7 +259,7 @@ export default class DiskPDP11 extends Component {
              * JSON-encoded disk image, so we load it as-is; otherwise, we ask our server-side disk image
              * converter to return the corresponding JSON-encoded data.
              */
-            var sDiskExt = Str.getExtension(sDiskPath);
+            var sDiskExt = StrLib.getExtension(sDiskPath);
             if (sDiskExt == DumpAPI.FORMAT.JSON || sDiskExt == DumpAPI.FORMAT.JSON_GZ) {
                 sDiskURL = encodeURI(sDiskPath);
             } else {
@@ -289,13 +289,13 @@ export default class DiskPDP11 extends Component {
                 if (!sDiskPath.indexOf("http:") || !sDiskPath.indexOf("ftp:") || ["dsk", "ima", "img", "360", "720", "12", "144"].indexOf(sDiskExt) >= 0) {
                     sDiskParm = DumpAPI.QUERY.DISK;
                     sSizeParm = '&' + DumpAPI.QUERY.MBHD + "=0";
-                } else if (Str.endsWith(sDiskPath, '/')) {
+                } else if (StrLib.endsWith(sDiskPath, '/')) {
                     sDiskParm = DumpAPI.QUERY.DIR;
                 }
-                sDiskURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sDiskParm + '=' + encodeURIComponent(sDiskPath) + (this.fRemovable ? "" : sSizeParm) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
+                sDiskURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sDiskParm + '=' + encodeURIComponent(sDiskPath) + (this.fRemovable ? "" : sSizeParm) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
             }
         }
-        return !!Web.getResource(sDiskURL, null, true, function(sURL, sResponse, nErrorCode) {
+        return !!WebLib.getResource(sDiskURL, null, true, function(sURL, sResponse, nErrorCode) {
             disk.doneLoad(sURL, sResponse, nErrorCode);
         });
     }
@@ -345,7 +345,7 @@ export default class DiskPDP11 extends Component {
             this.dwChecksum = dwChecksum;
             disk = this;
         } else {
-            this.printf(Messages.NOTICE, "Unrecognized disk format (%d bytes)\n", cbDiskData);
+            this.printf(MESSAGE.NOTICE, "Unrecognized disk format (%d bytes)\n", cbDiskData);
         }
 
         if (this.fnNotify) {
@@ -380,7 +380,7 @@ export default class DiskPDP11 extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.controller.printf(Messages.NOTICE, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
+            this.controller.printf(MESSAGE.NOTICE, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
             if (DEBUG) {
                 this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
@@ -398,7 +398,7 @@ export default class DiskPDP11 extends Component {
                  * TODO: Provide some UI for turning write-protection on/off for disks at will, and provide
                  * an XML-based solution (ie, a per-disk XML configuration option) for controlling it as well.
                  */
-                var sBaseName = Str.getBaseName(this.sDiskFile, true).toLowerCase();
+                var sBaseName = StrLib.getBaseName(this.sDiskFile, true).toLowerCase();
                 if (sBaseName.indexOf("-readonly") > 0) {
                     this.fWriteProtected = true;
                 } else {
@@ -479,7 +479,7 @@ export default class DiskPDP11 extends Component {
                  * conversion to a forward-compatible 'data' array.
                  */
                 else {
-                    if (DEBUG && this.messageEnabled(Messages.DISK | Messages.BUFFER)) {
+                    if (DEBUG && this.messageEnabled(MESSAGE.DISK | MESSAGE.BUFFER)) {
                         var sCylinders = aDiskData.length + " track" + (aDiskData.length > 1 ? "s" : "");
                         var nHeads = aDiskData[0].length;
                         var sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
@@ -1078,7 +1078,7 @@ export default class DiskPDP11 extends Component {
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
-                this.controller.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
+                this.controller.printf(MESSAGE.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
             if (DEBUG) {
@@ -1198,7 +1198,7 @@ export default class DiskPDP11 extends Component {
             for (var i = 0; i < cbSector; i++) {
                 if ((i % 16) === 0) {
                     if (sDump) sDump += sBytes + ' ' + sChars + '\n';
-                    sDump += Str.toHex(i, 4) + ": ";
+                    sDump += StrLib.toHex(i, 4) + ": ";
                     sBytes = sChars = "";
                 }
                 if ((i % 4) === 0) {
@@ -1207,7 +1207,7 @@ export default class DiskPDP11 extends Component {
                 }
                 var b = dw & 0xff;
                 dw >>>= 8;
-                sBytes += Str.toHex(b, 2) + (i % 16 == 7? "-" : " ");
+                sBytes += StrLib.toHex(b, 2) + (i % 16 == 7? "-" : " ");
                 sChars += (b >= 32 && b < 128? String.fromCharCode(b) : ".");
             }
             if (sBytes) sDump += sBytes + ' ' + sChars;

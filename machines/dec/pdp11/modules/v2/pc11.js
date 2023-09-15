@@ -7,12 +7,12 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { CSSCLASS, DEBUG, PDP11, globals } from "./defines.js";
 
 /**
@@ -45,7 +45,7 @@ export default class PC11 extends Component {
      */
     constructor(parms)
     {
-        super("PC11", parms, Messages.PC11);
+        super("PC11", parms, MESSAGE.PC11);
 
         this.sDevice = "PTR";                   // TODO: Make the device name configurable
 
@@ -80,7 +80,7 @@ export default class PC11 extends Component {
          * when this flag is set, setBinding() allows local tape bindings and informs initBus() to update the
          * "listTapes" binding accordingly.
          */
-        this.fLocalTapes = (!Web.isMobile() && 'FileReader' in globals.window);
+        this.fLocalTapes = (!WebLib.isMobile() && 'FileReader' in globals.window);
 
         this.irqReader = null;
         this.timerReader = -1;
@@ -183,7 +183,7 @@ export default class PC11 extends Component {
             var controlInput = /** @type {Object} */ (control);
 
             if (!this.fLocalTapes) {
-                if (DEBUG) this.printf(Messages.LOG, "Local tape support not available\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Local tape support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -211,7 +211,7 @@ export default class PC11 extends Component {
                 var file = event.currentTarget[1].files[0];
                 if (file) {
                     var sTapePath = file.name;
-                    var sTapeName = Str.getBaseName(sTapePath, true);
+                    var sTapeName = StrLib.getBaseName(sTapePath, true);
                     /*
                      * TODO: Provide a way to mount tapes into MEMORY as well as READER.
                      */
@@ -265,7 +265,7 @@ export default class PC11 extends Component {
             }
         }
 
-        this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, Messages.PC11);
+        this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, MESSAGE.PC11);
 
         this.timerReader = this.cpu.addTimer(function readyReader() {
             pc11.advanceReader();
@@ -377,7 +377,7 @@ export default class PC11 extends Component {
         }
 
         if (sTapePath == PC11.SOURCE.LOCAL) {
-            this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local tape.\n");
+            this.printf(MESSAGE.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local tape.\n");
             return;
         }
 
@@ -393,8 +393,8 @@ export default class PC11 extends Component {
         if (sTapePath == PC11.SOURCE.REMOTE) {
             sTapePath = globals.window.prompt("Enter the URL of a remote tape image.", "") || "";
             if (!sTapePath) return;
-            sTapeName = Str.getBaseName(sTapePath);
-            this.printf(Messages.STATUS, 'Attempting to load %s as "%s"\n', sTapePath, sTapeName);
+            sTapeName = StrLib.getBaseName(sTapePath);
+            this.printf(MESSAGE.STATUS, 'Attempting to load %s as "%s"\n', sTapePath, sTapeName);
             this.sTapeSource = PC11.SOURCE.REMOTE;
         }
         else {
@@ -427,10 +427,10 @@ export default class PC11 extends Component {
             this.unloadTape(true);
 
             if (this.flags.busy) {
-                this.printf(Messages.NOTICE, "PC11 busy\n");
+                this.printf(MESSAGE.NOTICE, "PC11 busy\n");
             }
             else {
-                // this.printf(Messages.STATUS, "tape queued: %s\n", sTapeName);
+                // this.printf(MESSAGE.STATUS, "tape queued: %s\n", sTapeName);
                 if (fAutoMount) {
                     this.cAutoMount++;
                     this.printf("auto-loading tape \"%s\"\n", sTapeName);
@@ -447,7 +447,7 @@ export default class PC11 extends Component {
              * Now that we're calling parseTape() again (so that the current tape can either be restarted on
              * the reader or reloaded into RAM), we can also rely on it to display an appropriate status message, too.
              *
-             *      this.printf(Messages.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape loaded" : "tape read");
+             *      this.printf(MESSAGE.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape loaded" : "tape read");
              */
             this.parseTape(this.sTapeName, this.sTapePath, this.nTapeTarget, this.aBytes, this.addrLoad, this.addrExec);
         }
@@ -493,16 +493,16 @@ export default class PC11 extends Component {
              * JSON-encoded tape image, so we load it as-is; otherwise, we ask our server-side tape image
              * converter to return the corresponding JSON-encoded data.
              */
-            var sTapeExt = Str.getExtension(sTapePath);
+            var sTapeExt = StrLib.getExtension(sTapePath);
             if (sTapeExt == DumpAPI.FORMAT.JSON || sTapeExt == DumpAPI.FORMAT.JSON_GZ) {
                 sTapeURL = encodeURI(sTapePath);
             } else {
                 var sTapeParm = DumpAPI.QUERY.PATH;
-                sTapeURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sTapeParm + '=' + encodeURIComponent(sTapePath) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
+                sTapeURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sTapeParm + '=' + encodeURIComponent(sTapePath) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
             }
         }
 
-        return !!Web.getResource(sTapeURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
+        return !!WebLib.getResource(sTapeURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
             pc11.finishLoad(sTapeName, sTapePath, nTapeTarget, sResponse, sURL, nErrorCode);
         });
     }
@@ -530,14 +530,14 @@ export default class PC11 extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.printf(Messages.NOTICE, "Unable to load tape \"%s\" (error %d: %s)\n", sTapeName, nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load tape \"%s\" (error %d: %s)\n", sTapeName, nErrorCode, sURL);
         }
         else {
             if (DEBUG) {
                 this.printf("finishLoad(\"%s\")\n", sTapePath);
             }
             Component.addMachineResource(this.idMachine, sURL, sTapeData);
-            var resource = Web.parseMemoryResource(sURL, sTapeData);
+            var resource = WebLib.parseMemoryResource(sURL, sTapeData);
             if (resource) {
                 this.parseTape(sTapeName, sTapePath, nTapeTarget, resource.aBytes, resource.addrLoad, resource.addrExec);
             }
@@ -615,7 +615,7 @@ export default class PC11 extends Component {
                 if (control.value == sPath) return control.text;
             }
         }
-        return Str.getBaseName(sPath, true);
+        return StrLib.getBaseName(sPath, true);
     }
 
     /**
@@ -652,7 +652,7 @@ export default class PC11 extends Component {
         if (nPercent !== this.nLastPercent) {
             var control = this.bindings[PC11.BINDING.READ_PROGRESS];
             if (control) {
-                var aeControls = Component.getElementsByClass(control, PC11.CSSCLASS.PROGRESS_BAR);
+                var aeControls = Component.getElementsByClass(PC11.CSSCLASS.PROGRESS_BAR, "", control);
                 var controlBar = aeControls && aeControls[0];
                 if (controlBar && controlBar.style) {
                     controlBar.style.width = nPercent + "%";
@@ -706,10 +706,10 @@ export default class PC11 extends Component {
                  *      this.sTapeSource = PC11.SOURCE.NONE;
                  *      this.nTapeTarget = PC11.TARGET.NONE;
                  */
-                this.printf(Messages.NOTICE, "No valid memory address for tape \"%s\"\n", sTapeName);
+                this.printf(MESSAGE.NOTICE, "No valid memory address for tape \"%s\"\n", sTapeName);
                 return;
             }
-            this.printf(Messages.STATUS, 'Read tape "%s"\n', sTapeName);
+            this.printf(MESSAGE.STATUS, 'Read tape "%s"\n', sTapeName);
             return;
         }
 
@@ -717,7 +717,7 @@ export default class PC11 extends Component {
         this.aTapeData = aBytes;
         this.regPRS &= ~PDP11.PC11.PRS.ERROR;
 
-        this.printf(Messages.STATUS, 'Loaded tape "%s" (%d bytes)\n', sTapeName, aBytes.length);
+        this.printf(MESSAGE.STATUS, 'Loaded tape "%s" (%d bytes)\n', sTapeName, aBytes.length);
         this.displayProgress(0);
     }
 
@@ -736,7 +736,7 @@ export default class PC11 extends Component {
              * Avoid any unnecessary hysteresis regarding the display if this unload is merely a prelude to another load.
              */
             if (!fLoading) {
-                if (this.nTapeTarget) this.printf(Messages.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
+                if (this.nTapeTarget) this.printf(MESSAGE.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
                 this.sTapeSource = PC11.SOURCE.NONE;
                 this.nTapeTarget = PC11.TARGET.NONE;
                 this.displayTape();

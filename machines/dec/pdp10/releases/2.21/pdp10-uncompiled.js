@@ -1,5 +1,5 @@
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -128,7 +128,7 @@ const SITEURL = "http://localhost:8088";// this @define is overridden by the Clo
 var LOCALDISKS = false;
 
 /*
- * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
+ * Platform-agnostic way to isolate global variables (both mine and the system's).
  */
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
@@ -148,7 +148,7 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -157,9 +157,9 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
  * NOTE: Because this machine defines more than 32 message categories, some of these message flags
  * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
  */
-const Messages = {
+const MESSAGE = {
     NONE:       0x000000000000,
-    ADDRESS:    0x000000000001,
+    ADDR:       0x000000000001,
     LOG:        0x001000000000,
     STATUS:     0x002000000000,
     NOTICE:     0x004000000000,
@@ -189,9 +189,9 @@ const Messages = {
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-Messages.Categories = {
-    "log":      Messages.LOG,
-    "warn":     Messages.WARNING,
+MESSAGE.NAMES = {
+    "log":      MESSAGE.LOG,
+    "warn":     MESSAGE.WARNING,
     /*
      * Now we turn to message actions rather than message types; for example, setting "halt"
      * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
@@ -199,13 +199,13 @@ Messages.Categories = {
      * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
      * until "m buffer off" is issued.
      */
-    "halt":     Messages.HALT,
-    "buffer":   Messages.BUFFER
+    "halt":     MESSAGE.HALT,
+    "buffer":   MESSAGE.BUFFER
 };
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -216,6 +216,15 @@ let Formatter;
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
 class Format {
+
+    static NamesOfDays = [
+        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+    ];
+    static NamesOfMonths = [
+        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+    ];
+    static HexLowerCase = "0123456789abcdef?";
+    static HexUpperCase = "0123456789ABCDEF?";
 
     /**
      * constructor()
@@ -746,24 +755,8 @@ class Format {
     }
 }
 
-//
-// TODO: Put these definitions inside the class once we have a Closure Compiler that doesn't complain about them:
-//
-//      This language feature is only supported for UNSTABLE mode or better: Public class fields
-//
-// static HexLowerCase = "0123456789abcdef?";
-// static HexUpperCase = "0123456789ABCDEF?";
-// static NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-// static NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-//
-
-Format.HexLowerCase = "0123456789abcdef?";
-Format.HexUpperCase = "0123456789ABCDEF?";
-Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
 /**
- * @copyright https://www.pcjs.org/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -823,7 +816,7 @@ DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
  */
 
 const ReportAPI = {
@@ -846,7 +839,7 @@ const ReportAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/userapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/userapi.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -888,14 +881,14 @@ const UserAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/keys.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/keys.js (C) 2012-2023 Jeff Parsons
  */
 
 const Keys = {
     /*
      * Keys and/or key combinations that generate common ASCII codes.
      *
-     * NOTE: If you're looking for a general-purpose ASCII code table, see Str.ASCII in strlib.js;
+     * NOTE: If you're looking for a general-purpose ASCII code table, see StrLib.ASCII in strlib.js;
      * if something's missing, that's probably the more appropriate table to add it to.
      *
      * TODO: The Closure Compiler doesn't inline all references to these values, at least those with
@@ -1205,21 +1198,92 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
- * @class Str
+ * @class StrLib
  * @unrestricted
  */
-class Str {
+class StrLib {
+    /*
+     * Map special characters to their HTML escape sequences.
+     */
+    static HTMLEscapeMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&apos;',
+        '$': '&dollar;'
+    };
+
+    /*
+     * Map "unprintable" ASCII codes to mnemonics, to more clearly see what's being printed.
+     */
+    static ASCIICodeMap = {
+        0x00:   "NUL",
+        0x01:   "SOH",      // (CTRL_A) Start of Heading
+        0x02:   "STX",      // (CTRL_B) Start of Text
+        0x03:   "ETX",      // (CTRL_C) End of Text
+        0x04:   "EOT",      // (CTRL_D) End of Transmission
+        0x05:   "ENQ",      // (CTRL_E) Enquiry
+        0x06:   "ACK",      // (CTRL_F) Acknowledge
+        0x07:   "BEL",      // (CTRL_G) Bell
+        0x08:   "BS",       // (CTRL_H) Backspace
+        0x09:   "TAB",      // (CTRL_I) Horizontal Tab (aka HT)
+        0x0A:   "LF",       // (CTRL_J) Line Feed (New Line)
+        0x0B:   "VT",       // (CTRL_K) Vertical Tab
+        0x0C:   "FF",       // (CTRL_L) Form Feed (New Page)
+        0x0D:   "CR",       // (CTRL_M) Carriage Return
+        0x0E:   "SO",       // (CTRL_N) Shift Out
+        0x0F:   "SI",       // (CTRL_O) Shift In
+        0x10:   "DLE",      // (CTRL_P) Data Link Escape
+        0x11:   "XON",      // (CTRL_Q) Device Control 1 (aka DC1)
+        0x12:   "DC2",      // (CTRL_R) Device Control 2
+        0x13:   "XOFF",     // (CTRL_S) Device Control 3 (aka DC3)
+        0x14:   "DC4",      // (CTRL_T) Device Control 4
+        0x15:   "NAK",      // (CTRL_U) Negative Acknowledge
+        0x16:   "SYN",      // (CTRL_V) Synchronous Idle
+        0x17:   "ETB",      // (CTRL_W) End of Transmission Block
+        0x18:   "CAN",      // (CTRL_X) Cancel
+        0x19:   "EM",       // (CTRL_Y) End of Medium
+        0x1A:   "SUB",      // (CTRL_Z) Substitute
+        0x1B:   "ESC",      // Escape
+        0x1C:   "FS",       // File Separator
+        0x1D:   "GS",       // Group Separator
+        0x1E:   "RS",       // Record Separator
+        0x1F:   "US",       // Unit Separator
+        0x7F:   "DEL"
+    };
+
+    /*
+     * TODO: Future home of a complete ASCII table.
+     */
+    static ASCII = {
+        LF:     0x0A,
+        CR:     0x0D
+    };
+
+    static TYPES = {
+        NULL:       0,
+        BYTE:       1,
+        WORD:       2,
+        DWORD:      3,
+        NUMBER:     4,
+        STRING:     5,
+        BOOLEAN:    6,
+        OBJECT:     7,
+        ARRAY:      8
+    };
+
     /**
      * isValidInt(s, base)
      *
      * The built-in parseInt() function has the annoying feature of returning a partial value (ie,
      * up to the point where it encounters an invalid character); eg, parseInt("foo", 16) returns 0xf.
      *
-     * So it's best to use our own Str.parseInt() function, which will in turn use this function to
+     * So it's best to use our own StrLib.parseInt() function, which will in turn use this function to
      * validate the entire string.
      *
      * @param {string} s is the string representation of some number
@@ -1339,7 +1403,7 @@ class Str {
                     shift = 35 - ((match[2] || 35) & 0xff);
                 }
             }
-            if (Str.isValidInt(s, base) && !isNaN(v = parseInt(s, base))) {
+            if (StrLib.isValidInt(s, base) && !isNaN(v = parseInt(s, base))) {
                 /*
                  * With the need to support larger (eg, 36-bit) integers, truncating to 32 bits is no longer helpful.
                  *
@@ -1450,7 +1514,7 @@ class Str {
                 cch = 36;
             }
         } else if (cch > 36) cch = 36;
-        return Str.toBase(n, 2, cch, "", nGrouping);
+        return StrLib.toBase(n, 2, cch, "", nGrouping);
     }
 
     /**
@@ -1469,7 +1533,7 @@ class Str {
         if (!cb || cb > 4) cb = 4;
         for (let i = 0; i < cb; i++) {
             if (s) s = ',' + s;
-            s = Str.toBin(n & 0xff, 8) + s;
+            s = StrLib.toBin(n & 0xff, 8) + s;
             n >>= 8;
         }
         return (fPrefix? "0b" : "") + s;
@@ -1502,7 +1566,7 @@ class Str {
                 cch = 12;
             }
         } else if (cch > 12) cch = 12;
-        return Str.toBase(n, 8, cch, fPrefix? "0o" : "");
+        return StrLib.toBase(n, 8, cch, fPrefix? "0o" : "");
     }
 
     /**
@@ -1529,7 +1593,7 @@ class Str {
                 cch = 11;
             }
         } else if (cch > 11) cch = 11;
-        return Str.toBase(n, 10, cch);
+        return StrLib.toBase(n, 10, cch);
     }
 
     /**
@@ -1567,46 +1631,46 @@ class Str {
                 cch = 9;
             }
         } else if (cch > 9) cch = 9;
-        return Str.toBase(n, 16, cch, fPrefix? "0x" : "");
+        return StrLib.toBase(n, 16, cch, fPrefix? "0x" : "");
     }
 
     /**
      * toHexByte(b)
      *
-     * Alias for Str.toHex(b, 2, true)
+     * Alias for StrLib.toHex(b, 2, true)
      *
      * @param {number|null|undefined} b is a byte value
      * @returns {string} the hex representation of b
      */
     static toHexByte(b)
     {
-        return Str.toHex(b, 2, true);
+        return StrLib.toHex(b, 2, true);
     }
 
     /**
      * toHexWord(w)
      *
-     * Alias for Str.toHex(w, 4, true)
+     * Alias for StrLib.toHex(w, 4, true)
      *
      * @param {number|null|undefined} w is a word (16-bit) value
      * @returns {string} the hex representation of w
      */
     static toHexWord(w)
     {
-        return Str.toHex(w, 4, true);
+        return StrLib.toHex(w, 4, true);
     }
 
     /**
      * toHexLong(l)
      *
-     * Alias for Str.toHex(l, 8, true)
+     * Alias for StrLib.toHex(l, 8, true)
      *
      * @param {number|null|undefined} l is a dword (32-bit) value
      * @returns {string} the hex representation of w
      */
     static toHexLong(l)
     {
-        return Str.toHex(l, 8, true);
+        return StrLib.toHex(l, 8, true);
     }
 
     /**
@@ -1691,7 +1755,7 @@ class Str {
          */
         return sHTML.replace(/[&<>"'$]/g, function(m)
         {
-            return Str.HTMLEscapeMap[m];
+            return StrLib.HTMLEscapeMap[m];
         });
     }
 
@@ -1741,7 +1805,7 @@ class Str {
     {
         let a = {};
         a[sSearch] = sReplace;
-        return Str.replaceArray(a, s);
+        return StrLib.replaceArray(a, s);
     }
 
     /**
@@ -1846,7 +1910,7 @@ class Str {
     {
         let cch = s.length;
         s = s.replace(/^0+([0-9A-F]+)$/i, "$1");
-        if (fPad) s = Str.pad(s, cch, true);
+        if (fPad) s = StrLib.pad(s, cch, true);
         return s;
     }
 
@@ -1873,8 +1937,8 @@ class Str {
     static toASCIICode(b)
     {
         let s;
-        if (b != Str.ASCII.CR && b != Str.ASCII.LF) {
-            s = Str.ASCIICodeMap[b];
+        if (b != StrLib.ASCII.CR && b != StrLib.ASCII.LF) {
+            s = StrLib.ASCIICodeMap[b];
         }
         if (s) {
             s = '<' + s + '>';
@@ -1885,82 +1949,11 @@ class Str {
     }
 }
 
-/*
- * Map special characters to their HTML escape sequences.
- */
-Str.HTMLEscapeMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&apos;',
-    '$': '&dollar;'
-};
-
-/*
- * Map "unprintable" ASCII codes to mnemonics, to more clearly see what's being printed.
- */
-Str.ASCIICodeMap = {
-    0x00:   "NUL",
-    0x01:   "SOH",      // (CTRL_A) Start of Heading
-    0x02:   "STX",      // (CTRL_B) Start of Text
-    0x03:   "ETX",      // (CTRL_C) End of Text
-    0x04:   "EOT",      // (CTRL_D) End of Transmission
-    0x05:   "ENQ",      // (CTRL_E) Enquiry
-    0x06:   "ACK",      // (CTRL_F) Acknowledge
-    0x07:   "BEL",      // (CTRL_G) Bell
-    0x08:   "BS",       // (CTRL_H) Backspace
-    0x09:   "TAB",      // (CTRL_I) Horizontal Tab (aka HT)
-    0x0A:   "LF",       // (CTRL_J) Line Feed (New Line)
-    0x0B:   "VT",       // (CTRL_K) Vertical Tab
-    0x0C:   "FF",       // (CTRL_L) Form Feed (New Page)
-    0x0D:   "CR",       // (CTRL_M) Carriage Return
-    0x0E:   "SO",       // (CTRL_N) Shift Out
-    0x0F:   "SI",       // (CTRL_O) Shift In
-    0x10:   "DLE",      // (CTRL_P) Data Link Escape
-    0x11:   "XON",      // (CTRL_Q) Device Control 1 (aka DC1)
-    0x12:   "DC2",      // (CTRL_R) Device Control 2
-    0x13:   "XOFF",     // (CTRL_S) Device Control 3 (aka DC3)
-    0x14:   "DC4",      // (CTRL_T) Device Control 4
-    0x15:   "NAK",      // (CTRL_U) Negative Acknowledge
-    0x16:   "SYN",      // (CTRL_V) Synchronous Idle
-    0x17:   "ETB",      // (CTRL_W) End of Transmission Block
-    0x18:   "CAN",      // (CTRL_X) Cancel
-    0x19:   "EM",       // (CTRL_Y) End of Medium
-    0x1A:   "SUB",      // (CTRL_Z) Substitute
-    0x1B:   "ESC",      // Escape
-    0x1C:   "FS",       // File Separator
-    0x1D:   "GS",       // Group Separator
-    0x1E:   "RS",       // Record Separator
-    0x1F:   "US",       // Unit Separator
-    0x7F:   "DEL"
-};
-
-/*
- * TODO: Future home of a complete ASCII table.
- */
-Str.ASCII = {
-    LF:     0x0A,
-    CR:     0x0D
-};
-
-Str.TYPES = {
-    NULL:       0,
-    BYTE:       1,
-    WORD:       2,
-    DWORD:      3,
-    NUMBER:     4,
-    STRING:     5,
-    BOOLEAN:    6,
-    OBJECT:     7,
-    ARRAY:      8
-};
-
-Str.format = new Format();
-Str.sprintf = Str.format.sprintf.bind(Str.format);
+StrLib.format = new Format();
+StrLib.sprintf = StrLib.format.sprintf.bind(StrLib.format);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ mask: number, shift: number }} */
@@ -1970,10 +1963,15 @@ let BitField;
 let BitFields;
 
 /**
- * @class Usr
+ * @class UsrLib
  * @unrestricted
  */
-class Usr {
+class UsrLib {
+
+    static aMonthDays = [
+        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+    ];
+
     /**
      * binarySearch(a, v, fnCompare)
      *
@@ -2019,7 +2017,7 @@ class Usr {
      */
     static binaryInsert(a, v, fnCompare)
     {
-        let index = Usr.binarySearch(a, v, fnCompare);
+        let index = UsrLib.binarySearch(a, v, fnCompare);
         if (index < 0) {
             a.splice(-(index + 1), 0, v);
         }
@@ -2033,7 +2031,7 @@ class Usr {
     static getTimestamp()
     {
         let date = new Date();
-        return Str.sprintf("%T", date);
+        return StrLib.sprintf("%T", date);
     }
 
     /**
@@ -2055,7 +2053,7 @@ class Usr {
      */
     static getMonthDays(nMonth, nYear)
     {
-        let nDays = Usr.aMonthDays[nMonth - 1];
+        let nDays = UsrLib.aMonthDays[nMonth - 1];
         if (nDays == 28) {
             if ((nYear % 4) === 0 && ((nYear % 100) || (nYear % 400) === 0)) {
                 nDays++;
@@ -2114,11 +2112,11 @@ class Usr {
      *
      * Prepares a bit field definition for use with getBitField() and setBitField(); eg:
      *
-     *      let bfs = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
+     *      let bfs = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
      *
      * The above defines a set of bit fields containing four fields: num (bits 0-19), count (bits 20-27), btmod (bit 28), and type (bits 29-31).
      *
-     *      Usr.setBitField(bfs.num, n, 1);
+     *      UsrLib.setBitField(bfs.num, n, 1);
      *
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
@@ -2149,7 +2147,7 @@ class Usr {
         let v = 0, i = 1;
         for (let f in bfs) {
             if (i >= arguments.length) break;
-            v = Usr.setBitField(bfs[f], v, arguments[i++]);
+            v = UsrLib.setBitField(bfs[f], v, arguments[i++]);
         }
         return v;
     }
@@ -2204,10 +2202,8 @@ class Usr {
     }
 }
 
-Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
 /**
- * @copyright https://www.pcjs.org/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -2298,7 +2294,7 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
  * @class Web
  * @unrestricted
  */
-class Web {
+class WebLib {
     /**
      * getResource(sURL, type, fAsync, done, progress)
      *
@@ -2343,14 +2339,14 @@ class Web {
          * value of the global variable 'LOCALDISKS'; since imported values are immutable, we must look at the global
          * variable, since that's the only one that *might* have been changed at runtime.
          */
-        if (globals.window['LOCALDISKS'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
+        if (globals.window['LOCALDISKS'] && WebLib.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
         } else {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
         if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "reading: %s\n", sURL);
             try {
                 let encoding = (type == "arraybuffer"? null : "utf8");
                 resource = globals.node.readFileSync(sURL, encoding);
@@ -2376,7 +2372,7 @@ class Web {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetching: %s\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -2390,11 +2386,11 @@ class Web {
                 }
             })
             .then(resource => {
-
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
-                Component.printf(Messages.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
                 if (done) done(sURL, resource, nErrorCode);
             });
             return response;
@@ -2433,23 +2429,23 @@ class Web {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
+                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
-            if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-
+            if (resource != null && (request.status == 200 || !request.status && resource.length && WebLib.getHostProtocol() == "file:")) {
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
-                if (!request.status && !Web.fAdBlockerWarning) {
+                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
+                if (!request.status && !WebLib.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
-                        Web.fAdBlockerWarning = true;
-                        Component.alertUser("PCjs was unable to perform a cross-origin resource request to '" + match[1] + "'.\n\nIf you're running an ad blocker, try adding '" + Web.getHostOrigin() + "' to your whitelist (or find a smarter ad blocker).");
+                        WebLib.fAdBlockerWarning = true;
+                        Component.alertUser("PCjs was unable to perform a cross-origin resource request to '" + match[1] + "'.\n\nIf you're running an ad blocker, try adding '" + WebLib.getHostOrigin() + "' to your whitelist (or find a smarter ad blocker).");
                     }
                 }
             }
@@ -2472,12 +2468,12 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "posting: %s (%d bytes)\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "requesting: %s\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -2705,7 +2701,7 @@ class Web {
         dataPost[ReportAPI.QUERY.TYPE] = sType;
         dataPost[ReportAPI.QUERY.DATA] = sReport;
         let sReportURL = (sHostName? sHostName : SITEURL) + ReportAPI.ENDPOINT;
-        Web.getResource(sReportURL, dataPost, true);
+        WebLib.getResource(sReportURL, dataPost, true);
     }
 
     /**
@@ -2781,21 +2777,21 @@ class Web {
      */
     static hasLocalStorage()
     {
-        if (Web.fLocalStorage == null) {
+        if (WebLib.fLocalStorage == null) {
             let f = false;
             if (globals.window.localStorage) {
                 try {
-                    globals.window.localStorage.setItem(Web.sLocalStorageTest, Web.sLocalStorageTest);
-                    f = (globals.window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
-                    globals.window.localStorage.removeItem(Web.sLocalStorageTest);
+                    globals.window.localStorage.setItem(WebLib.sLocalStorageTest, WebLib.sLocalStorageTest);
+                    f = (globals.window.localStorage.getItem(WebLib.sLocalStorageTest) == WebLib.sLocalStorageTest);
+                    globals.window.localStorage.removeItem(WebLib.sLocalStorageTest);
                 } catch (e) {
-                    Web.printLocalStorageError(e);
+                    WebLib.printLocalStorageError(e);
                     f = false;
                 }
             }
-            Web.fLocalStorage = f;
+            WebLib.fLocalStorage = f;
         }
-        return Web.fLocalStorage;
+        return WebLib.fLocalStorage;
     }
 
     /**
@@ -2805,7 +2801,7 @@ class Web {
      */
     static printLocalStorageError(e)
     {
-        Component.printf(Messages.ERROR, "Local storage error: %s\n", e.message);
+        Component.printf(MESSAGE.ERROR, "Local storage error: %s\n", e.message);
     }
 
     /**
@@ -2819,11 +2815,11 @@ class Web {
     static getLocalStorageItem(sKey)
     {
         let sValue;
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 sValue = globals.window.localStorage.getItem(sKey);
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return sValue;
@@ -2838,12 +2834,12 @@ class Web {
      */
     static setLocalStorageItem(sKey, sValue)
     {
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 globals.window.localStorage.setItem(sKey, sValue);
                 return true;
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return false;
@@ -2856,11 +2852,11 @@ class Web {
      */
     static removeLocalStorageItem(sKey)
     {
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 globals.window.localStorage.removeItem(sKey);
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
     }
@@ -2873,13 +2869,13 @@ class Web {
     static getLocalStorageKeys()
     {
         let a = [];
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             try {
                 for (let i = 0, c = globals.window.localStorage.length; i < c; i++) {
                     a.push(globals.window.localStorage.key(i));
                 }
             } catch (e) {
-                Web.printLocalStorageError(e);
+                WebLib.printLocalStorageError(e);
             }
         }
         return a;
@@ -2927,7 +2923,7 @@ class Web {
     static isUserAgent(s)
     {
         if (globals.window.navigator) {
-            let userAgent = Web.getUserAgent();
+            let userAgent = WebLib.getUserAgent();
             /*
              * Here's one case where we have to be careful with Component, because when isUserAgent() is called by
              * the init code below, component.js hasn't been loaded yet.  The simple solution for now is to remove the call.
@@ -2955,13 +2951,13 @@ class Web {
      */
     static isMobile(sDevice)
     {
-        let sMobile = Web.getURLParm("mobile");
+        let sMobile = WebLib.getURLParm("mobile");
         if (sMobile) return sMobile == "true";
-        if (Web.isUserAgent("Mobi")) {
+        if (WebLib.isUserAgent("Mobi")) {
             if (!sDevice) return true;
             let fInvert = sDevice[0] == '!';
             if (fInvert) sDevice = sDevice.substr(1);
-            return Web.isUserAgent(sDevice) != fInvert;
+            return WebLib.isUserAgent(sDevice) != fInvert;
         }
         return false;
     }
@@ -2985,8 +2981,8 @@ class Web {
     static findProperty(obj, sProp, sSuffix)
     {
         if (obj) {
-            for (let i = 0; i < Web.asBrowserPrefixes.length; i++) {
-                let sName = Web.asBrowserPrefixes[i];
+            for (let i = 0; i < WebLib.asBrowserPrefixes.length; i++) {
+                let sName = WebLib.asBrowserPrefixes[i];
                 if (sSuffix) {
                     sName += sSuffix;
                     let sEvent = sProp + sName;
@@ -3015,10 +3011,10 @@ class Web {
      */
     static getURLParm(sParm)
     {
-        if (!Web.parmsURL) {
-            Web.parmsURL = Web.parseURLParms();
+        if (!WebLib.parmsURL) {
+            WebLib.parmsURL = WebLib.parseURLParms();
         }
-        return Web.parmsURL[sParm] || Web.parmsURL[sParm.toLowerCase()];
+        return WebLib.parmsURL[sParm] || WebLib.parmsURL[sParm.toLowerCase()];
     }
 
     /**
@@ -3090,7 +3086,7 @@ class Web {
                 link.click();
                 document.body.removeChild(link);
                 sAlert = 'Check your Downloads folder for ' + sFileName + '.';
-                // if (Web.isUserAgent("Chrome")) {
+                // if (WebLib.isUserAgent("Chrome")) {
                 //     sAlert += '\n\nIn Chrome, after clicking OK, you may ALSO have to select the "Window" menu, choose "Downloads", and then locate this download and select "Keep".';
                 //     sAlert += '\n\nThis is part of Chrome\'s "Security By Jumping Through Extra Hoops" technology, which is much easier for Google to implement than actually checking for something malicious.';
                 //     sAlert += '\n\nAnd for the record, there is nothing malicious on the PCjs website.';
@@ -3156,7 +3152,7 @@ class Web {
         };
         e.onmousedown = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onMouseDown()\n");
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -3166,7 +3162,7 @@ class Web {
         };
         e.ontouchstart = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onTouchStart()\n");
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -3174,7 +3170,7 @@ class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onMouseUp()/onMouseOut()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3182,7 +3178,7 @@ class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            //
+            // Component.printf(MESSAGE.DEBUG, "onTouchEnd()/onTouchCancel()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3200,7 +3196,7 @@ class Web {
      * addPageEvent(sEvent, fn)
      *
      * For 'load', 'unload', and 'pageshow' events, most callers should NOT use this function, but instead use
-     * Web.onInit(), Web.onShow(), and Web.onExit(), respectively.
+     * WebLib.onInit(), WebLib.onShow(), and WebLib.onExit(), respectively.
      *
      * The only components that should still use addPageEvent() are THIS component (see the bottom of this file)
      * and components that need to capture other events (eg, the 'resize' event in the Video component).
@@ -3224,7 +3220,7 @@ class Web {
      */
     static onInit(fn)
     {
-        Web.aPageEventHandlers['init'].push(fn);
+        WebLib.aPageEventHandlers['init'].push(fn);
     }
 
     /**
@@ -3236,7 +3232,7 @@ class Web {
      */
     static onShow(fn)
     {
-        Web.aPageEventHandlers['show'].push(fn);
+        WebLib.aPageEventHandlers['show'].push(fn);
     }
 
     /**
@@ -3246,7 +3242,7 @@ class Web {
      */
     static onError(sMessage)
     {
-        Component.printf(Messages.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
+        Component.printf(MESSAGE.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
     }
 
     /**
@@ -3258,7 +3254,7 @@ class Web {
      */
     static onExit(fn)
     {
-        Web.aPageEventHandlers['exit'].push(fn);
+        WebLib.aPageEventHandlers['exit'].push(fn);
     }
 
     /**
@@ -3269,14 +3265,14 @@ class Web {
      */
     static doPageEvent(sEvent, browser)
     {
-        let afn = Web.aPageEventHandlers[sEvent];
-        if (afn && Web.fPageEventsEnabled) {
+        let afn = WebLib.aPageEventHandlers[sEvent];
+        if (afn && WebLib.fPageEventsEnabled) {
             try {
                 for (let i = 0; i < afn.length; i++) {
                     afn[i]();
                 }
             } catch (e) {
-                Web.onError("An unexpected error occurred: " + e.message);
+                WebLib.onError("An unexpected error occurred: " + e.message);
             }
         }
     }
@@ -3288,13 +3284,13 @@ class Web {
      */
     static enablePageEvents(fEnable)
     {
-        if (!Web.fPageEventsEnabled && fEnable) {
-            Web.fPageEventsEnabled = true;
-            if (Web.fPageLoaded) Web.doPageEvent('init');
-            if (Web.fPageShowed) Web.doPageEvent('show');
+        if (!WebLib.fPageEventsEnabled && fEnable) {
+            WebLib.fPageEventsEnabled = true;
+            if (WebLib.fPageLoaded) WebLib.doPageEvent('init');
+            if (WebLib.fPageShowed) WebLib.doPageEvent('show');
             return;
         }
-        Web.fPageEventsEnabled = fEnable;
+        WebLib.fPageEventsEnabled = fEnable;
     }
 
     /**
@@ -3302,8 +3298,8 @@ class Web {
      */
     static doPageInit()
     {
-        Web.fPageLoaded = true;
-        Web.doPageEvent('init', true);
+        WebLib.fPageLoaded = true;
+        WebLib.doPageEvent('init', true);
     }
 
     /**
@@ -3311,8 +3307,8 @@ class Web {
      */
     static doPageShow()
     {
-        Web.fPageShowed = true;
-        Web.doPageEvent('show', true);
+        WebLib.fPageShowed = true;
+        WebLib.doPageEvent('show', true);
     }
 
     /**
@@ -3320,7 +3316,7 @@ class Web {
      */
     static doPageExit()
     {
-        Web.doPageEvent('exit', true);
+        WebLib.doPageEvent('exit', true);
     }
 
     /**
@@ -3328,9 +3324,9 @@ class Web {
      */
     static doPageReset()
     {
-        if (Web.fPageLoaded) {
-            Web.fPageLoaded = false;
-            Web.fPageShowed = false;
+        if (WebLib.fPageLoaded) {
+            WebLib.fPageLoaded = false;
+            WebLib.fPageShowed = false;
             /*
              * TODO: Anything else?
              */
@@ -3338,20 +3334,20 @@ class Web {
     }
 }
 
-Web.parmsURL = null;            // initialized on first call to parseURLParms()
+WebLib.parmsURL = null;            // initialized on first call to parseURLParms()
 
-Web.aPageEventHandlers = {
+WebLib.aPageEventHandlers = {
     'init': [],                 // list of 'load' handlers
     'show': [],                 // list of 'pageshow' handlers
     'exit': []                  // list of 'unload' handlers (although we prefer to use 'beforeunload' if possible)
 };
 
-Web.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
+WebLib.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
 
-Web.fPageLoaded = false;        // set once the page's first 'load' event has occurred
-Web.fPageShowed = false;        // set once the page's first 'pageshow' event has occurred
-Web.fPageEventsEnabled = true;  // default is true, set to false (or true) by enablePageEvents()
-Web.fAdBlockerWarning = false;
+WebLib.fPageLoaded = false;        // set once the page's first 'load' event has occurred
+WebLib.fPageShowed = false;        // set once the page's first 'pageshow' event has occurred
+WebLib.fPageEventsEnabled = true;  // default is true, set to false (or true) by enablePageEvents()
+WebLib.fAdBlockerWarning = false;
 
 /**
  * fLocalStorage
@@ -3360,18 +3356,18 @@ Web.fAdBlockerWarning = false;
  *
  * @type {boolean|null}
  */
-Web.fLocalStorage = null;
+WebLib.fLocalStorage = null;
 
 /**
  * TODO: Is there any way to get the Closure Compiler to stop inlining this string?  This isn't cutting it.
  *
  * @const {string}
  */
-Web.sLocalStorageTest = "PCjs.localStorage";
+WebLib.sLocalStorageTest = "PCjs.localStorage";
 
-Web.addPageEvent('load', Web.doPageInit);
-Web.addPageEvent('pageshow', Web.doPageShow);
-Web.addPageEvent(Web.isUserAgent("iOS")? 'pagehide' : (Web.isUserAgent("Opera")? 'unload' : 'beforeunload'), Web.doPageExit);
+WebLib.addPageEvent('load', WebLib.doPageInit);
+WebLib.addPageEvent('pageshow', WebLib.doPageShow);
+WebLib.addPageEvent(WebLib.isUserAgent("iOS")? 'pagehide' : (WebLib.isUserAgent("Opera")? 'unload' : 'beforeunload'), WebLib.doPageExit);
 
 /*
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override DEBUG with a "debug=false" embedded in
@@ -3382,17 +3378,17 @@ Web.addPageEvent(Web.isUserAgent("iOS")? 'pagehide' : (Web.isUserAgent("Opera")?
  * it's low priority, because it would only affect machines that explicitly request un-COMPILED code, and there are very
  * few such machines (eg, /blog/_posts/2015/2015-01-17-pcjs-uncompiled.md).
  *
- * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
+ * Deal with WebLib.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */
 if (DEBUG) {
-    let debug = Web.getURLParm("debug");
+    let debug = WebLib.getURLParm("debug");
     if (debug == "false") {
         globals.window['DEBUG'] = false;
     }
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/component.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -3645,18 +3641,18 @@ class Component {
             bitsMessage = format;
             format = args.shift();
         }
-        if (DEBUG || bitsMessage >= Messages.LOG && bitsMessage <= Messages.ERROR) {
+        if (DEBUG || bitsMessage >= MESSAGE.LOG && bitsMessage <= MESSAGE.ERROR) {
             let alert = false;
-            if (bitsMessage == Messages.ERROR) {
+            if (bitsMessage == MESSAGE.ERROR) {
                 alert = true;
                 format = "Error: " + format;
-            } else if (bitsMessage == Messages.WARNING) {
+            } else if (bitsMessage == MESSAGE.WARNING) {
                 alert = true;
                 format = "Warning: " + format;
-            } else if (bitsMessage == Messages.NOTICE) {
+            } else if (bitsMessage == MESSAGE.NOTICE) {
                 alert = true;
             }
-            let sMessage = Str.sprintf(format, ...args).trim();
+            let sMessage = StrLib.sprintf(format, ...args).trim();
             if (!alert) {
                 console.log(sMessage);
             } else {
@@ -3699,7 +3695,7 @@ class Component {
                 try {
                     throw new Error(s);
                 } catch(e) {
-                    Component.printf(Messages.ERROR, "%s\n", e.stack || e.message);
+                    Component.printf(MESSAGE.ERROR, "%s\n", e.stack || e.message);
                 }
             }
         }
@@ -3712,7 +3708,7 @@ class Component {
      */
     static warning(s)
     {
-        Component.printf(Messages.WARNING, s);
+        Component.printf(MESSAGE.WARNING, s);
     }
 
     /**
@@ -3722,7 +3718,7 @@ class Component {
      */
     static error(s)
     {
-        Component.printf(Messages.ERROR, s);
+        Component.printf(MESSAGE.ERROR, s);
     }
 
     /**
@@ -3865,12 +3861,12 @@ class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.printf(Messages.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
+                                Component.printf(MESSAGE.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.printf(Messages.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
+                            // if (DEBUG) Component.printf(MESSAGE.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
                             break;
                     }
                 }
@@ -3938,7 +3934,7 @@ class Component {
                 }
             }
             if (components.length && idRelated !== false) {
-                Component.printf(Messages.WARNING, "Component ID \"%s\" not found\n", id);
+                Component.printf(MESSAGE.WARNING, "Component ID \"%s\" not found\n", id);
             }
         }
         return null;
@@ -3979,7 +3975,7 @@ class Component {
                 }
             }
             if (MAXDEBUG && componentPrev !== false) {
-                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+                Component.printf(MESSAGE.WARNING, "Component type \"%s\" not found\n", sType);
             }
         }
         return null;
@@ -4080,7 +4076,7 @@ class Component {
             }
         }
         if (!ae.length) {
-            if (MAXDEBUG) Component.printf(Messages.WARNING, "No elements of class \"%s\" found\n", sClass);
+            if (MAXDEBUG) Component.printf(MESSAGE.WARNING, "No elements of class \"%s\" found\n", sClass);
         }
         return ae;
     }
@@ -4209,7 +4205,7 @@ class Component {
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.printf(Messages.SCRIPT, aTokens.join(' '));
+            Component.printf(MESSAGE.SCRIPT, aTokens.join(' '));
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -4387,7 +4383,7 @@ class Component {
                 this.print = function(component, control) {
                     return function printControl(sMessage, bitsMessage = 0) {
                         if (!sMessage) sMessage = "";
-                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == MESSAGE.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -4459,7 +4455,7 @@ class Component {
     setError(s)
     {
         this.flags.error = true;
-        this.printf(Messages.NOTICE, "%s\n", s);
+        this.printf(MESSAGE.NOTICE, "%s\n", s);
     }
 
     /**
@@ -4509,7 +4505,7 @@ class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -4529,7 +4525,7 @@ class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
+                if (MAXDEBUG /* || this.name */) this.printf(MESSAGE.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -4681,7 +4677,7 @@ class Component {
     /**
      * messageEnabled(bitsMessage)
      *
-     * If bitsMessage is Messages.NONE (0), then the component's Messages category is used.
+     * If bitsMessage is MESSAGE.NONE (0), then the component's Messages category is used.
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
@@ -4690,22 +4686,22 @@ class Component {
     messageEnabled(bitsMessage = 0)
     {
         /*
-         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.NONE, because
-         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         * It's important to subtract MESSAGE.ADDR from bitsMessage before testing for MESSAGE.NONE, because
+         * if MESSAGE.ADDR was the ONLY bit specified, we still want to default to the component's message category.
          */
-        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        if (bitsMessage & MESSAGE.ADDR) bitsMessage -= MESSAGE.ADDR;
         bitsMessage = bitsMessage || this.bitsMessage;
         /*
-         * printf() calls that specify Messages.DEBUG should be stripped out of non-DEBUG builds, but just in case
+         * printf() calls that specify MESSAGE.DEBUG should be stripped out of non-DEBUG builds, but just in case
          * any of those calls slipped through the cracks, we ensure that DEBUG messages are only printed in DEBUG builds.
          */
-        if (DEBUG || !Component.testBits(bitsMessage, Messages.DEBUG)) {
+        if (DEBUG || !Component.testBits(bitsMessage, MESSAGE.DEBUG)) {
             /*
-             * The debugger has the ability to filter any messages listed in Messages.Categories, and that currently
+             * The debugger has the ability to filter any messages listed in MESSAGE.NAMES, and that currently
              * includes message types LOG and WARNING, so if the debugger is loaded, subtract those from the types we allow
              * by default.
              */
-            let allowedMessages = Messages.TYPES - (this.dbg? Messages.LOG + Messages.WARNING : 0);
+            let allowedMessages = MESSAGE.TYPES - (this.dbg? MESSAGE.LOG + MESSAGE.WARNING : 0);
             if (Component.testBits(allowedMessages, bitsMessage) || this.dbg && Component.testBits(this.dbg.bitsMessage, bitsMessage)) {
                 return true;
             }
@@ -4721,7 +4717,7 @@ class Component {
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
      * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
-     * of whether the debugger has enabled it, the caller can use printf(Messages.NONE), and if the caller wants
+     * of whether the debugger has enabled it, the caller can use printf(MESSAGE.NONE), and if the caller wants
      * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
@@ -4732,17 +4728,17 @@ class Component {
     {
         let bitsMessage = 0;
         if (typeof format == "number") {
-            bitsMessage = format || Messages.PROGRESS;
+            bitsMessage = format || MESSAGE.PROGRESS;
             format = args.shift();
-            if (Component.testBits(bitsMessage, Messages.LOG)) {
+            if (Component.testBits(bitsMessage, MESSAGE.LOG)) {
                 format = (this.id || this.type || "log") + ": " + format;
             }
-            else if (Component.testBits(bitsMessage, Messages.STATUS)) {
+            else if (Component.testBits(bitsMessage, MESSAGE.STATUS)) {
                 format = this.type + ": " + format;
             }
         }
         if (this.messageEnabled(bitsMessage)) {
-            let sMessage = Str.sprintf(format, ...args);
+            let sMessage = StrLib.sprintf(format, ...args);
             if (this.dbg && this.dbg.message) {
                 this.dbg.message(sMessage, bitsMessage);
             } else {
@@ -4755,7 +4751,7 @@ class Component {
      * printIO(port, bOut, addrFrom, name, bIn, bitsMessage)
      *
      * If bitsMessage is not specified, the component's Messages category is used,
-     * and if bitsMessage is true, the message is displayed if Messages.PORT is enabled also.
+     * and if bitsMessage is true, the message is displayed if MESSAGE.PORT is enabled also.
      *
      * @this {Component}
      * @param {number} port
@@ -4859,7 +4855,7 @@ if (!Function.prototype.bind) {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
@@ -4960,11 +4956,11 @@ class DbgLib extends Component {
              *
              * Note that parseValue() parses variables before numbers, so any variable that looks like a
              * unprefixed hex value (eg, "a5" as opposed to "0xa5") will trump the numeric value.  Unprefixed
-             * hex values are a convenience of parseValue(), which always calls Str.parseInt() with a default
+             * hex values are a convenience of parseValue(), which always calls StrLib.parseInt() with a default
              * base of 16; however, that default be overridden with a variety of explicit prefixes or suffixes
              * (eg, a leading "0o" to indicate octal, a trailing period to indicate decimal, etc.)
              *
-             * See Str.parseInt() for more details about supported numbers.
+             * See StrLib.parseInt() for more details about supported numbers.
              */
             this.aVariables = {};
 
@@ -5091,7 +5087,7 @@ class DbgLib extends Component {
              * associated with a breakpoint), we can no longer perform simplistic splitting.
              *
              *      a = sCmd.split(chSep || ';');
-             *      for (let i = 0; i < a.length; i++) a[i] = Str.trim(a[i]);
+             *      for (let i = 0; i < a.length; i++) a[i] = StrLib.trim(a[i]);
              *
              * We may now split on semi-colons ONLY if they are outside a quoted sequence.
              *
@@ -5124,7 +5120,7 @@ class DbgLib extends Component {
                      * Recall that substring() accepts starting (inclusive) and ending (exclusive)
                      * indexes, whereas substr() accepts a starting index and a length.  We need the former.
                      */
-                    a.push(Str.trim(sCmd.substring(iPrev, i)));
+                    a.push(StrLib.trim(sCmd.substring(iPrev, i)));
                     iPrev = i + 1;
                 }
             }
@@ -5729,7 +5725,7 @@ class DbgLib extends Component {
              * inside symbols, or inside hex values.  So if the default base is NOT 16, then I pre-scan for that suffix
              * and replace all non-symbolic occurrences with an internal shift operator ('^_').
              *
-             * Note that Str.parseInt(), which parseValue() relies on, supports both the MACRO-10 base prefix overrides
+             * Note that StrLib.parseInt(), which parseValue() relies on, supports both the MACRO-10 base prefix overrides
              * and the binary shifting suffix ('B'), but since that suffix can also be a bracketed expression, we have to
              * support it here as well.
              *
@@ -5914,7 +5910,7 @@ class DbgLib extends Component {
                     /*
                      * A feature of MACRO-10 is that any single-digit number is automatically interpreted as base-10.
                      */
-                    value = Str.parseInt(sValue, sValue.length > 1 || this.nBase > 10? this.nBase : 10);
+                    value = StrLib.parseInt(sValue, sValue.length > 1 || this.nBase > 10? this.nBase : 10);
                 }
             }
             if (value != undefined) {
@@ -6089,23 +6085,23 @@ class DbgLib extends Component {
         let s;
         switch(nBase || this.nBase) {
         case 2:
-            s = Str.toBin(n, nBits > 0? nBits : 0, nGrouping);
+            s = StrLib.toBin(n, nBits > 0? nBits : 0, nGrouping);
             break;
         case 8:
-            s = Str.toOct(n, nBits > 0? ((nBits + 2)/3)|0 : 0, !!nGrouping);
+            s = StrLib.toOct(n, nBits > 0? ((nBits + 2)/3)|0 : 0, !!nGrouping);
             break;
         case 10:
             /*
              * The multiplier is actually Math.log(2)/Math.log(10), but an approximation is more than adequate.
              */
-            s = Str.toDec(n, nBits > 0? Math.ceil(nBits * 0.3) : 0);
+            s = StrLib.toDec(n, nBits > 0? Math.ceil(nBits * 0.3) : 0);
             break;
         case 16:
         default:
-            s = Str.toHex(n, nBits > 0? ((nBits + 3) >> 2) : 0, !!nGrouping);
+            s = StrLib.toHex(n, nBits > 0? ((nBits + 3) >> 2) : 0, !!nGrouping);
             break;
         }
-        return (nBits < 0? Str.stripLeadingZeros(s) : s);
+        return (nBits < 0? StrLib.stripLeadingZeros(s) : s);
     }
 
     /**
@@ -6212,7 +6208,7 @@ DbgLib.EVENTS = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -6438,28 +6434,28 @@ const PDP10 = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/message.js (C) 2012-2023 Jeff Parsons
  */
 
-Messages.CPU        = 0x00000002;
-Messages.TRAP       = 0x00000004;
-Messages.FAULT      = 0x00000008;
-Messages.INT        = 0x00000010;
-Messages.BUS        = 0x00000020;
-Messages.MEMORY     = 0x00000040;
-Messages.MMU        = 0x00000080;
-Messages.ROM        = 0x00000100;
-Messages.DEVICE     = 0x00000200;
-Messages.PANEL      = 0x00000400;
-Messages.KEYBOARD   = 0x00000800;
-Messages.KEYS       = 0x00001000;
-Messages.PAPER      = 0x00002000;
-Messages.READ       = 0x00004000;
-Messages.WRITE      = 0x00008000;
-Messages.SERIAL     = 0x00010000;
-Messages.TIMER      = 0x00020000;
-Messages.SPEAKER    = 0x00040000;
-Messages.COMPUTER   = 0x00080000;
+MESSAGE.CPU         = 0x00000002;
+MESSAGE.TRAP        = 0x00000004;
+MESSAGE.FAULT       = 0x00000008;
+MESSAGE.INT         = 0x00000010;
+MESSAGE.BUS         = 0x00000020;
+MESSAGE.MEMORY      = 0x00000040;
+MESSAGE.MMU         = 0x00000080;
+MESSAGE.ROM         = 0x00000100;
+MESSAGE.DEVICE      = 0x00000200;
+MESSAGE.PANEL       = 0x00000400;
+MESSAGE.KEYBOARD    = 0x00000800;
+MESSAGE.KEYS        = 0x00001000;
+MESSAGE.PAPER       = 0x00002000;
+MESSAGE.READ        = 0x00004000;
+MESSAGE.WRITE       = 0x00008000;
+MESSAGE.SERIAL      = 0x00010000;
+MESSAGE.TIMER       = 0x00020000;
+MESSAGE.SPEAKER     = 0x00040000;
+MESSAGE.COMPUTER    = 0x00080000;
 
 /*
  * Message categories supported by the messageEnabled() function and other assorted message
@@ -6475,29 +6471,29 @@ Messages.COMPUTER   = 0x00080000;
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-Messages.Categories["cpu"]      = Messages.CPU;
-Messages.Categories["trap"]     = Messages.TRAP;
-Messages.Categories["fault"]    = Messages.FAULT;
-Messages.Categories["int"]      = Messages.INT;
-Messages.Categories["bus"]      = Messages.BUS;
-Messages.Categories["memory"]   = Messages.MEMORY;
-Messages.Categories["mmu"]      = Messages.MMU;
-Messages.Categories["rom"]      = Messages.ROM;
-Messages.Categories["device"]   = Messages.DEVICE;
-Messages.Categories["panel"]    = Messages.PANEL;
-Messages.Categories["keyboard"] = Messages.KEYBOARD;       // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
-Messages.Categories["key"]      = Messages.KEYS;           // using "key" instead of "keys", since the latter is a method on JavasScript objects
-Messages.Categories["paper"]    = Messages.PAPER;
-Messages.Categories["read"]     = Messages.READ;
-Messages.Categories["write"]    = Messages.WRITE;
-Messages.Categories["serial"]   = Messages.SERIAL;
-Messages.Categories["timer"]    = Messages.TIMER;
-Messages.Categories["speaker"]  = Messages.SPEAKER;
-Messages.Categories["computer"] = Messages.COMPUTER;
+MESSAGE.NAMES["cpu"]        = MESSAGE.CPU;
+MESSAGE.NAMES["trap"]       = MESSAGE.TRAP;
+MESSAGE.NAMES["fault"]      = MESSAGE.FAULT;
+MESSAGE.NAMES["int"]        = MESSAGE.INT;
+MESSAGE.NAMES["bus"]        = MESSAGE.BUS;
+MESSAGE.NAMES["memory"]     = MESSAGE.MEMORY;
+MESSAGE.NAMES["mmu"]        = MESSAGE.MMU;
+MESSAGE.NAMES["rom"]        = MESSAGE.ROM;
+MESSAGE.NAMES["device"]     = MESSAGE.DEVICE;
+MESSAGE.NAMES["panel"]      = MESSAGE.PANEL;
+MESSAGE.NAMES["keyboard"]   = MESSAGE.KEYBOARD;     // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
+MESSAGE.NAMES["key"]        = MESSAGE.KEYS;         // using "key" instead of "keys", since the latter is a method on JavasScript objects
+MESSAGE.NAMES["paper"]      = MESSAGE.PAPER;
+MESSAGE.NAMES["read"]       = MESSAGE.READ;
+MESSAGE.NAMES["write"]      = MESSAGE.WRITE;
+MESSAGE.NAMES["serial"]     = MESSAGE.SERIAL;
+MESSAGE.NAMES["timer"]      = MESSAGE.TIMER;
+MESSAGE.NAMES["speaker"]    = MESSAGE.SPEAKER;
+MESSAGE.NAMES["computer"]   = MESSAGE.COMPUTER;
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -6537,7 +6533,7 @@ class PanelPDP10 extends Component {
      */
     constructor(parmsPanel, fBindings)
     {
-        super("Panel", parmsPanel, Messages.PANEL);
+        super("Panel", parmsPanel, MESSAGE.PANEL);
 
         /*
          * If there are any live registers, LEDs, etc, to display, this will provide a count.
@@ -7039,7 +7035,7 @@ class PanelPDP10 extends Component {
             var nBase = this.dbg && this.dbg.nBase || 8;
             nValue = nValue || 0;
             if (!this.cpu.isRunning() || this.fDisplayLiveRegs) {
-                sVal = nBase == 8? Str.toOct(nValue, cch) : Str.toHex(nValue, cch);
+                sVal = nBase == 8? StrLib.toOct(nValue, cch) : StrLib.toHex(nValue, cch);
             } else {
                 sVal = "--------".substr(0, cch || 4);
             }
@@ -7090,7 +7086,7 @@ class PanelPDP10 extends Component {
     setSwitch(sBinding, sValue)
     {
         if (sBinding == "SR") {
-            return this.setSRSwitches(Str.parseInt(sValue, 8));
+            return this.setSRSwitches(StrLib.parseInt(sValue, 8));
         }
         var sw = this.switches[sBinding];
         if (sw) {
@@ -7706,10 +7702,10 @@ PanelPDP10.SWITCH = {
 /*
  * Initialize every Panel module on the page.
  */
-Web.onInit(PanelPDP10.init);
+WebLib.onInit(PanelPDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -7719,7 +7715,7 @@ Web.onInit(PanelPDP10.init);
 /** @typedef {{ num: BitField, count: BitField, btmod: BitField, type: BitField }} */
 let BlockInfo;
 
-var BlockInfoPDP10 = /** @type {BlockInfo} */ (Usr.defineBitFields({num:20, count:8, btmod:1, type:3}));
+var BlockInfoPDP10 = /** @type {BlockInfo} */ (UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3}));
 
 /** @typedef {{ cbTotal: number, cBlocks: number, aBlocks: Array.<BlockInfo> }} */
 let BusInfo;
@@ -7755,7 +7751,7 @@ class BusPDP10 extends Component {
      */
     constructor(parmsBus, cpu, dbg)
     {
-        super("Bus", parmsBus, Messages.BUS);
+        super("Bus", parmsBus, MESSAGE.BUS);
 
         this.cpu = cpu;
         this.dbg = dbg;
@@ -7972,7 +7968,7 @@ class BusPDP10 extends Component {
         }
 
         if (sizeLeft <= 0) {
-            this.printf(Messages.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP10.TYPE_NAMES[type], addr);
+            this.printf(MESSAGE.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP10.TYPE_NAMES[type], addr);
             return true;
         }
 
@@ -8050,7 +8046,7 @@ class BusPDP10 extends Component {
             var block = this.aBusBlocks[iBlock];
             info.cbTotal += block.size;
             if (block.size) {
-                info.aBlocks.push(/** @type {BlockInfo} */ (Usr.initBitFields(BlockInfoPDP10, iBlock, 0, 0, block.type)));
+                info.aBlocks.push(/** @type {BlockInfo} */ (UsrLib.initBitFields(BlockInfoPDP10, iBlock, 0, 0, block.type)));
                 info.cBlocks++;
             }
             iBlock++;
@@ -8371,7 +8367,7 @@ class BusPDP10 extends Component {
         this.fFault = true;
         if (!this.nDisableFaults) {
             if (DEBUGGER && this.dbg) {
-                this.dbg.printf(Messages.FAULT + Messages.ADDRESS, "memory fault on %s\n", this.dbg.toStrBase(addr));
+                this.dbg.printf(MESSAGE.FAULT + MESSAGE.ADDR, "memory fault on %s\n", this.dbg.toStrBase(addr));
             }
             this.cpu.haltCPU();
         }
@@ -8404,7 +8400,7 @@ class BusPDP10 extends Component {
      */
     reportError(errNum, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.NONE : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
+        this.printf(fQuiet? MESSAGE.NONE : MESSAGE.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
         return false;
     }
 }
@@ -8415,7 +8411,7 @@ BusPDP10.ERROR = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/device.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/device.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -8430,7 +8426,7 @@ class DevicePDP10 extends Component {
      */
     constructor(parmsDevice)
     {
-        super("Device", parmsDevice, Messages.DEVICE);
+        super("Device", parmsDevice, MESSAGE.DEVICE);
     }
 
     /**
@@ -8550,10 +8546,10 @@ class DevicePDP10 extends Component {
 /*
  * Initialize all the DevicePDP10 modules on the page.
  */
-Web.onInit(DevicePDP10.init);
+WebLib.onInit(DevicePDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/memory.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/memory.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -8847,7 +8843,7 @@ class MemoryPDP10 {
     printAddr(sMessage)
     {
         if (DEBUG && this.dbg) {
-            this.dbg.printf(Messages.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
+            this.dbg.printf(MESSAGE.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
         }
     }
 
@@ -8931,7 +8927,7 @@ class MemoryPDP10 {
     readNone(off, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
+            this.dbg.printf(MESSAGE.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
         return PDP10.WORD_INVALID;
@@ -8948,7 +8944,7 @@ class MemoryPDP10 {
     writeNone(v, off, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
+            this.dbg.printf(MESSAGE.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
     }
@@ -9061,7 +9057,7 @@ MemoryPDP10.afnChecked = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -9102,7 +9098,7 @@ class CPUPDP10 extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, Messages.CPU);
+        super("CPU", parmsCPU, MESSAGE.CPU);
 
         var nCycles = +parmsCPU['cycles'] || nCyclesDefault;
 
@@ -9262,7 +9258,7 @@ class CPUPDP10 extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init(this.flags.autoStart);
             } else {
-                this.printf(Messages.STATUS, "No debugger detected\n");
+                this.printf(MESSAGE.STATUS, "No debugger detected\n");
             }
             if (!this.flags.autoStart) {
                 this.printf("CPU will not be auto-started %s\n", (this.panel? "(click Run to start)" : "(type 'go' to start)"));
@@ -9880,7 +9876,7 @@ class CPUPDP10 extends Component {
         this.nCyclesRecalc += this.nCyclesThisRun;
 
         if (DEBUG && msRemainsThisRun) {
-            this.printf(Messages.LOG + Messages.BUFFER, "calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
+            this.printf(MESSAGE.LOG + MESSAGE.BUFFER, "calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
         }
 
         this.msEndThisRun += msRemainsThisRun;
@@ -10177,7 +10173,7 @@ class CPUPDP10 extends Component {
             if (fUpdateFocus) this.cmp.setFocus(true);
             this.cmp.start(this.msStartRun, this.getCycles());
         }
-        if (!this.dbg) this.printf(Messages.STATUS, "Started\n");
+        if (!this.dbg) this.printf(MESSAGE.STATUS, "Started\n");
         setTimeout(this.onRunTimeout, 0);
         return true;
     }
@@ -10222,7 +10218,7 @@ class CPUPDP10 extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
             }
             fStopped = true;
-            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
+            if (!this.dbg) this.printf(MESSAGE.STATUS, "Stopped\n");
         }
         this.flags.complete = fComplete;
         return fStopped;
@@ -10269,7 +10265,7 @@ CPUPDP10.YIELDS_PER_STATUS      = 15;           // every 15 yields (ie, twice pe
 CPUPDP10.BUTTONS = ["power", "reset"];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpustate.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/cpustate.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -10391,7 +10387,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      */
     reset()
     {
-        this.printf(Messages.STATUS, "Model %s\n", this.model);
+        this.printf(MESSAGE.STATUS, "Model %s\n", this.model);
         if (this.flags.running) this.stopCPU();
         this.initCPU();
         this.resetCycles();
@@ -10873,7 +10869,7 @@ class CPUStatePDP10 extends CPUPDP10 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
+            this.printf(irq.message + MESSAGE.INT + MESSAGE.ADDR, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -10887,7 +10883,7 @@ class CPUStatePDP10 extends CPUPDP10 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
+            this.printf(irq.message + MESSAGE.INT + MESSAGE.ADDR, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -11212,10 +11208,10 @@ class CPUStatePDP10 extends CPUPDP10 {
 /*
  * Initialize every CPU module on the page
  */
-Web.onInit(CPUStatePDP10.init);
+WebLib.onInit(CPUStatePDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpuops.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/cpuops.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -18850,7 +18846,7 @@ PDP10.aOpIO_KA10 = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -19154,7 +19150,7 @@ class DebuggerPDP10 extends DbgLib {
          * Update aOpReserved as appropriate for the current model
          */
 
-        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(MESSAGE.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
 
         this.setReady();
     }
@@ -19211,7 +19207,7 @@ class DebuggerPDP10 extends DbgLib {
 
         case "debugEnter":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickDebugEnter(fRepeat) {
@@ -19221,7 +19217,7 @@ class DebuggerPDP10 extends DbgLib {
                         dbg.doCommands(sCmd, true);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
+                    if (DEBUG) dbg.printf(MESSAGE.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -19229,7 +19225,7 @@ class DebuggerPDP10 extends DbgLib {
 
         case "step":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickStep(fRepeat) {
@@ -19676,7 +19672,7 @@ class DebuggerPDP10 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = Messages.FAULT | Messages.WARNING;
+        this.bitsMessage = this.bitsWarning = MESSAGE.FAULT | MESSAGE.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*
@@ -19685,9 +19681,9 @@ class DebuggerPDP10 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, ',');
         if (aEnable.length) {
-            for (var m in Messages.Categories) {
-                if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= Messages.Categories[m];
+            for (var m in MESSAGE.NAMES) {
+                if (UsrLib.indexOf(aEnable, m) >= 0) {
+                    this.bitsMessage |= MESSAGE.NAMES[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
@@ -19704,8 +19700,8 @@ class DebuggerPDP10 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in Messages.Categories) {
-            if (bitMessage == Messages.Categories[m]) {
+        for (var m in MESSAGE.NAMES) {
+            if (bitMessage == MESSAGE.NAMES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -19856,7 +19852,7 @@ class DebuggerPDP10 extends DbgLib {
     message(sMessage, bitsMessage)
     {
         var sAddress, fRunning;
-        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+        if ((bitsMessage & MESSAGE.ADDR) && this.cpu) {
             sAddress = " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
@@ -19864,12 +19860,12 @@ class DebuggerPDP10 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.bitsMessage & Messages.BUFFER) {
+        if (this.bitsMessage & MESSAGE.BUFFER) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
 
-        if ((this.bitsMessage & Messages.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
+        if ((this.bitsMessage & MESSAGE.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
             if (fRunning) sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -20247,7 +20243,7 @@ class DebuggerPDP10 extends DbgLib {
                     }
                     sStopped += this.nCycles + " cycles, " + msTotal + " ms, " + nCyclesPerSecond + " hz)";
                 } else {
-                    if (this.messageEnabled(Messages.HALT)) {
+                    if (this.messageEnabled(MESSAGE.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -20328,7 +20324,7 @@ class DebuggerPDP10 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling Messages.INT messages.
+         * well, OK, and a few other things now, like enabling MESSAGE.INT messages.
          */
         if (nState >= 0 && this.aInstructionHistory.length) {
             this.cInstructions++;
@@ -20395,7 +20391,7 @@ class DebuggerPDP10 extends DbgLib {
             if (!opNum) sOperation = "";
         } else {
             if (!opNum) {
-                sOperation = Str.pad(sOperation, 8) + this.toStrWord(opCode);
+                sOperation = StrLib.pad(sOperation, 8) + this.toStrWord(opCode);
             } else {
                 var n, sOperand;
                 if (opMask == PDP10.OPCODE.OPIO) {
@@ -20415,7 +20411,7 @@ class DebuggerPDP10 extends DbgLib {
                         }
                     }
                 }
-                sOperation = Str.pad(sOperation, 8) + (sOperand? sOperand + ',' : "");
+                sOperation = StrLib.pad(sOperation, 8) + (sOperand? sOperand + ',' : "");
                 if (opCode & PDP10.OPCODE.I_FIELD) sOperation += '@';
                 sOperation += this.toStrBase(opCode & PDP10.OPCODE.Y_MASK, -1);
                 var i = (opCode >> PDP10.OPCODE.X_SHIFT) & PDP10.OPCODE.X_MASK;
@@ -20452,15 +20448,15 @@ class DebuggerPDP10 extends DbgLib {
             } while (dbgAddrOp.addr != dbgAddr.addr);
         }
 
-        sLine += Str.pad(sOpcodes, 16) + sOperation;
+        sLine += StrLib.pad(sOpcodes, 16) + sOperation;
 
         if (sComment) {
-            sLine = Str.pad(sLine, 48) + ';' + (sComment || "");
+            sLine = StrLib.pad(sLine, 48) + ';' + (sComment || "");
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
                 var nCycles = this.cpu.getCycles();
-                sLine += "cycles=" + nCycles.toString() + " cs=" + Str.toHex(this.cpu.nChecksum);
+                sLine += "cycles=" + nCycles.toString() + " cs=" + StrLib.toHex(this.cpu.nChecksum);
             }
         }
         return sLine;
@@ -20726,8 +20722,8 @@ class DebuggerPDP10 extends DbgLib {
      */
     undefinedInstruction(opCode)
     {
-        if (this.messageEnabled(Messages.CPU)) {
-            this.printf(Messages.CPU + Messages.ADDRESS, "undefined opcode %s\n", this.toStrBase(opCode));
+        if (this.messageEnabled(MESSAGE.CPU)) {
+            this.printf(MESSAGE.CPU + MESSAGE.ADDR, "undefined opcode %s\n", this.toStrBase(opCode));
             return this.stopInstruction();  // allow the caller to step over it if they really want a trap generated
         }
         return false;
@@ -21095,7 +21091,7 @@ class DebuggerPDP10 extends DbgLib {
      */
     getAccOutput(iAcc)
     {
-        var sReg = Str.toOct(iAcc, 2);
+        var sReg = StrLib.toOct(iAcc, 2);
         this.setAddr(this.dbgAddrAcc, iAcc);
         sReg += '=' + this.toStrBase(this.getWord(this.dbgAddrAcc), 36) + ' ';
         return sReg;
@@ -21255,7 +21251,7 @@ class DebuggerPDP10 extends DbgLib {
             var offSymbol = symbol['o'];
             var sAnnotation = symbol['a'];
             if (offSymbol !== undefined) {
-                Usr.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
+                UsrLib.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
             }
             if (sAnnotation) symbol['a'] = sAnnotation.replace(/''/g, "\"");
         }
@@ -21316,7 +21312,7 @@ class DebuggerPDP10 extends DbgLib {
             var len = symbolTable.len;
             if (addrSymbol >= addr && addrSymbol < addr + len) {
                 var offSymbol = addrSymbol - addr;
-                var result = Usr.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
+                var result = UsrLib.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
                 if (result >= 0) {
                     this.returnSymbol(iTable, result, aSymbol);
                 }
@@ -21441,7 +21437,7 @@ class DebuggerPDP10 extends DbgLib {
     {
         var s = "commands:";
         for (var sCommand in DebuggerPDP10.COMMANDS) {
-            s += '\n' + Str.pad(sCommand, 9) + DebuggerPDP10.COMMANDS[sCommand];
+            s += '\n' + StrLib.pad(sCommand, 9) + DebuggerPDP10.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -21673,7 +21669,7 @@ class DebuggerPDP10 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers = sDumpers + m;
@@ -21717,7 +21713,7 @@ class DebuggerPDP10 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -21872,7 +21868,7 @@ class DebuggerPDP10 extends DbgLib {
      */
     doIf(sCmd, fQuiet)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         if (!this.parseExpression(sCmd)) {
             if (!fQuiet) this.printf("false: %s\n", sCmd);
             return false;
@@ -21958,7 +21954,7 @@ class DebuggerPDP10 extends DbgLib {
             if (aSymbol[0]) {
                 sDelta = "";
                 nDelta = dbgAddr.addr - aSymbol[1];
-                if (nDelta) sDelta = " + " + Str.toHexWord(nDelta);
+                if (nDelta) sDelta = " + " + StrLib.toHexWord(nDelta);
                 s = aSymbol[0] + " (" + this.toStrOffset(aSymbol[1]) + ')' + sDelta;
                 if (fPrint) this.printf("%s\n", s);
                 sSymbol = s;
@@ -21966,7 +21962,7 @@ class DebuggerPDP10 extends DbgLib {
             if (aSymbol.length > 4 && aSymbol[4]) {
                 sDelta = "";
                 nDelta = aSymbol[5] - dbgAddr.addr;
-                if (nDelta) sDelta = " - " + Str.toHexWord(nDelta);
+                if (nDelta) sDelta = " - " + StrLib.toHexWord(nDelta);
                 s = aSymbol[4] + " (" + this.toStrOffset(aSymbol[5]) + ')' + sDelta;
                 if (fPrint) this.printf("%s\n", s);
                 if (!sSymbol) sSymbol = s;
@@ -21993,7 +21989,7 @@ class DebuggerPDP10 extends DbgLib {
         if (sCategory !== undefined) {
             var bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.LOG);
+                bitsMessage = (0xffffffff|0) & ~(MESSAGE.HALT | MESSAGE.KEYS | MESSAGE.LOG);
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -22008,9 +22004,9 @@ class DebuggerPDP10 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in Messages.Categories) {
+                for (m in MESSAGE.NAMES) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.Categories[m];
+                        bitsMessage = MESSAGE.NAMES[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
@@ -22028,7 +22024,7 @@ class DebuggerPDP10 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage &= ~bitsMessage;
                     fCriteria = false;
-                    if (bitsMessage == Messages.BUFFER) {
+                    if (bitsMessage == MESSAGE.BUFFER) {
                         var i = this.aMessageBuffer.length >= 1000? this.aMessageBuffer.length - 1000 : 0;
                         while (i < this.aMessageBuffer.length) {
                             this.printf("%s\n", this.aMessageBuffer[i++]);
@@ -22044,9 +22040,9 @@ class DebuggerPDP10 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in Messages.Categories) {
+        for (m in MESSAGE.NAMES) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = Messages.Categories[m];
+                var bitMessage = MESSAGE.NAMES[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -22066,7 +22062,7 @@ class DebuggerPDP10 extends DbgLib {
 
         this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
 
-        this.historyInit();     // call this just in case Messages.INT was turned on
+        this.historyInit();     // call this just in case MESSAGE.INT was turned on
     }
 
     /**
@@ -22238,7 +22234,7 @@ class DebuggerPDP10 extends DbgLib {
      */
     doPrint(sCmd)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         var a = sCmd.match(/^(['"])(.*?)\1$/);
         if (!a) {
             this.parseExpression(sCmd, false);
@@ -22387,7 +22383,7 @@ class DebuggerPDP10 extends DbgLib {
                 var a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = Str.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;
@@ -22446,7 +22442,7 @@ class DebuggerPDP10 extends DbgLib {
         }
         this.sCmdTracePrev = sCmd;
 
-        Web.onCountRepeat(
+        WebLib.onCountRepeat(
             nCount,
             function onCountStep() {
                 return dbg.setBusy(true) && dbg.stepCPU(nCycles, fRegs, false);
@@ -22715,7 +22711,7 @@ class DebuggerPDP10 extends DbgLib {
                     }
                     if (asArgs[0] == "ver") {
                         this.printf("%s version %s (%s%s)\n", (APPNAME || "PDP10"), APPVERSION, this.cpu.model, (COMPILED? ",RELEASE" : (DEBUG? ",DEBUG" : ",NODEBUG")));
-                        this.printf("%s\n", Web.getUserAgent());
+                        this.printf("%s\n", WebLib.getUserAgent());
                         break;
                     }
                     fError = true;
@@ -22807,7 +22803,7 @@ class DebuggerPDP10 extends DbgLib {
             }
             for (sOperation in ops) {
                 op = ops[sOperation];
-                this.printf("%s%s\n", Str.pad(sOperation + ":", 8), this.toStrWord(op * Math.pow(2, 21)));
+                this.printf("%s%s\n", StrLib.pad(sOperation + ":", 8), this.toStrWord(op * Math.pow(2, 21)));
                 //
                 // The following code leveraged the disassembler to generate opcode handlers.
                 //
@@ -22829,8 +22825,8 @@ class DebuggerPDP10 extends DbgLib {
             // for (opXXX = 0o000; opXXX <= 0o777; opXXX++) {
             //     sOperation = aOpXXX[opXXX];
             //     sOperation = sOperation? ("    PDP10.op" + sOperation + ",") : "    PDP10.opUndefined,";
-            //     sOperation = Str.pad(sOperation, 32);
-            //     sOperation += "// " + Str.toOct(opXXX, 3, true) + "xxx";
+            //     sOperation = StrLib.pad(sOperation, 32);
+            //     sOperation += "// " + StrLib.toOct(opXXX, 3, true) + "xxx";
             //     this.printf("%s\n", sOperation);
             // }
             // this.printf("];\n");
@@ -23138,12 +23134,12 @@ if (DEBUGGER) {
     /*
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
-    Web.onInit(DebuggerPDP10.init);
+    WebLib.onInit(DebuggerPDP10.init);
 
 }   // endif DEBUGGER
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -23171,7 +23167,7 @@ class ROMPDP10 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROM", parmsROM, Messages.ROM);
+        super("ROM", parmsROM, MESSAGE.ROM);
 
         this.abInit = null;
         this.aSymbols = null;
@@ -23197,22 +23193,22 @@ class ROMPDP10 extends Component {
         }
 
         this.sFilePath = parmsROM['file'];
-        this.sFileName = Str.getBaseName(this.sFilePath);
+        this.sFileName = StrLib.getBaseName(this.sFilePath);
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
+            if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side ROM converter to return the file in a JSON-compatible format.
              */
-            var sFileExt = Str.getExtension(this.sFileName);
+            var sFileExt = StrLib.getExtension(this.sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
+                sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
             var rom = this;
-            Web.getResource(sFileURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sFileURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
                 rom.finishLoad(sURL, sResponse, nErrorCode);
             });
         }
@@ -23287,12 +23283,12 @@ class ROMPDP10 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
             Component.addMachineResource(this.idMachine, sURL, sData);
-            var resource = Web.parseMemoryResource(sURL, sData);
+            var resource = WebLib.parseMemoryResource(sURL, sData);
             if (resource) {
                 this.abInit = resource.aBytes;
                 this.aSymbols = resource.aSymbols;
@@ -23334,7 +23330,7 @@ class ROMPDP10 extends Component {
                      * good idea to stop the machine in its tracks whenever a setError() occurs, but there may also be
                      * times when we'd like to forge ahead anyway.
                      */
-                    this.setError("ROM size (" + Str.toHexLong(this.abInit.length) + ") does not match specified size (" + Str.toHexLong(this.sizeROM) + ")");
+                    this.setError("ROM size (" + StrLib.toHexLong(this.abInit.length) + ") does not match specified size (" + StrLib.toHexLong(this.sizeROM) + ")");
                 }
                 else if (this.addROM(this.addrROM)) {
 
@@ -23377,7 +23373,7 @@ class ROMPDP10 extends Component {
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryPDP10.TYPE.ROM)) {
             if (DEBUG) {
-                this.printf(Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
+                this.printf(MESSAGE.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
             }
             for (let i = 0; i < this.abInit.length; i++) {
                 this.bus.setWordDirect(addr + i, this.abInit[i]);
@@ -23446,10 +23442,10 @@ class ROMPDP10 extends Component {
 /*
  * Initialize all the ROMPDP10 modules on the page.
  */
-Web.onInit(ROMPDP10.init);
+WebLib.onInit(ROMPDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -23492,22 +23488,22 @@ class RAMPDP10 extends Component {
         this.fAllocated = this.fReset = false;
 
         this.sFilePath = parmsRAM['file'];
-        this.sFileName = Str.getBaseName(this.sFilePath);
+        this.sFileName = StrLib.getBaseName(this.sFilePath);
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
+            if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side converter to return the file in a JSON-compatible format.
              */
-            var sFileExt = Str.getExtension(this.sFileName);
+            var sFileExt = StrLib.getExtension(this.sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
+                sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
             var ram = this;
-            Web.getResource(sFileURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sFileURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
                 ram.finishLoad(sURL, sResponse, nErrorCode);
             });
         }
@@ -23591,12 +23587,12 @@ class RAMPDP10 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
             Component.addMachineResource(this.idMachine, sURL, sData);
-            var resource = Web.parseMemoryResource(sURL, sData);
+            var resource = WebLib.parseMemoryResource(sURL, sData);
             if (resource) {
                 this.aData = resource.aData;
                 this.aSymbols = resource.aSymbols;
@@ -23640,9 +23636,9 @@ class RAMPDP10 extends Component {
                 if (!this.aData) return;
 
                 if (this.loadImage(this.aData, this.addrLoad, this.addrExec, this.addrRAM)) {
-                    this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
+                    this.printf(MESSAGE.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
-                    this.printf(Messages.STATUS, 'Error loading image "%s"\n', this.sFileName);
+                    this.printf(MESSAGE.STATUS, 'Error loading image "%s"\n', this.sFileName);
                 }
 
                 /*
@@ -23747,10 +23743,10 @@ class RAMPDP10 extends Component {
 /*
  * Initialize all the RAMPDP10 modules on the page.
  */
-Web.onInit(RAMPDP10.init);
+WebLib.onInit(RAMPDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -23802,7 +23798,7 @@ class SerialPortPDP10 extends Component {
      */
     constructor(parmsSerial)
     {
-        super("SerialPort", parmsSerial, Messages.SERIAL);
+        super("SerialPort", parmsSerial, MESSAGE.SERIAL);
 
         this.iAdapter = +parmsSerial['adapter'];
         this.fUpperCase = parmsSerial['upperCase'];
@@ -24047,9 +24043,9 @@ class SerialPortPDP10 extends Component {
             if (sConnection) {
                 var asParts = sConnection.split('->');
                 if (asParts.length == 2) {
-                    var sSourceID = Str.trim(asParts[0]);
+                    var sSourceID = StrLib.trim(asParts[0]);
                     if (sSourceID != this.idComponent) return;  // this connection string is intended for another instance
-                    var sTargetID = Str.trim(asParts[1]);
+                    var sTargetID = StrLib.trim(asParts[1]);
                     this.connection = Component.getComponentByID(sTargetID);
                     if (this.connection) {
                         var exports = this.connection['exports'];
@@ -24060,7 +24056,7 @@ class SerialPortPDP10 extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
+                                this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
@@ -24069,7 +24065,7 @@ class SerialPortPDP10 extends Component {
                 /*
                  * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
+                this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }
@@ -24206,9 +24202,9 @@ class SerialPortPDP10 extends Component {
                  * we convert them to CRs below.  Windows may do something different, but in the worst case,
                  * even if we receive CR/LF pairs, this code should keep the CRs and lose the LFs.
                  */
-                if (bASCII == Str.ASCII.LF) {
-                    if (bASCIIPrev == Str.ASCII.CR) continue;
-                    bASCII = Str.ASCII.CR;
+                if (bASCII == StrLib.ASCII.LF) {
+                    if (bASCIIPrev == StrLib.ASCII.CR) continue;
+                    bASCII = StrLib.ASCII.CR;
                 }
                 this.abReceive.push(bASCII);
             }
@@ -24321,13 +24317,13 @@ class SerialPortPDP10 extends Component {
                  * CTRL_C characters, which we capture below and render as <ETX>.  RT-11 does this for other keys
                  * as well, such as CTRL_K (<VT>) and CTRL_L (<FF>).
                  */
-                var s = Str.toASCIICode(b); // formerly: String.fromCharCode(b);
+                var s = StrLib.toASCIICode(b); // formerly: String.fromCharCode(b);
                 var nChars = s.length;      // formerly: (b >= 0x20? 1 : 0);
                 if (b < 0x20 && nChars == 1) nChars = 0;
                 if (b == 0x09) {
                     var tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
-                    if (this.tabSize) s = Str.pad("", nChars);
+                    if (this.tabSize) s = StrLib.pad("", nChars);
                 }
                 if (this.charBOL && !this.iLogicalCol && nChars) s = String.fromCharCode(this.charBOL) + s;
                 this.controlBuffer.value += s;
@@ -24373,10 +24369,10 @@ class SerialPortPDP10 extends Component {
 /*
  * Initialize every SerialPort module on the page.
  */
-Web.onInit(SerialPortPDP10.init);
+WebLib.onInit(SerialPortPDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/macro10.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/macro10.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -24705,7 +24701,7 @@ class Macro10 {
         var macro10 = this;
         var sURL = this.aURLs[this.iURL];
 
-        this.dbg.printf("loading %s\n", Str.getBaseName(sURL));
+        this.dbg.printf("loading %s\n", StrLib.getBaseName(sURL));
 
         /*
          * We know that local resources ending with ".MAC" are actually stored with a ".txt" extension.
@@ -24715,13 +24711,13 @@ class Macro10 {
             if (".MAC.KLM".indexOf(sExt) >= 0) sURL += ".txt";
         }
 
-        Web.getResource(sURL, null, true, function processMacro10(sFile, sResource, nErrorCode) {
+        WebLib.getResource(sURL, null, true, function processMacro10(sFile, sResource, nErrorCode) {
             if (nErrorCode) {
                 if (macro10.done) macro10.done(nErrorCode, sFile);
                 return;
             }
             var sText = sResource;
-            if (Str.endsWith(sFile, ".html")) {
+            if (StrLib.endsWith(sFile, ".html")) {
                 /*
                  * We want to parse ONLY the text between <PRE>...</PRE> tags, and eliminate any HTML entities.
                  */
@@ -25538,7 +25534,7 @@ class Macro10 {
                 break;
             }
         }
-        return Str.getBaseName(this.aURLs[iURL] + " line " + nLine);
+        return StrLib.getBaseName(this.aURLs[iURL] + " line " + nLine);
     }
 
     /**
@@ -25826,7 +25822,7 @@ class Macro10 {
              */
             this.chMacroOpen = '[';
             this.chMacroClose = ']';
-            name = '?' + Str.toDec(++this.nLiteral, 5);
+            name = '?' + StrLib.toDec(++this.nLiteral, 5);
             if (this.tblMacros[name] !== undefined) {
                 this.error("literal symbol '" + name + "' redefined");
             }
@@ -26331,7 +26327,7 @@ class Macro10 {
     {
         var w = this.dbg.truncate(value || 0, 36, true);
         if (value < -PDP10.INT_LIMIT || value >= PDP10.WORD_LIMIT) {
-            this.warning("truncated value " + Str.toOct(value) + " at location " + Str.toOct(nLocation) + " to " + Str.toOct(w));
+            this.warning("truncated value " + StrLib.toOct(value) + " at location " + StrLib.toOct(nLocation) + " to " + StrLib.toOct(w));
         }
         return w;
     }
@@ -26421,7 +26417,7 @@ Macro10.MACRO_OP = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -26492,14 +26488,14 @@ class ComputerPDP10 extends Component {
      */
     constructor(parmsComputer, parmsMachine, fSuspended)
     {
-        super("Computer", parmsComputer, Messages.COMPUTER);
+        super("Computer", parmsComputer, MESSAGE.COMPUTER);
 
         this.flags.powered = false;
 
         this.parmsMachine = null;
         this.setMachineParms(parmsMachine);
 
-        this.fAutoPower = this.getMachineParm('autoPower', parmsComputer, Str.TYPES.BOOLEAN);
+        this.fAutoPower = this.getMachineParm('autoPower', parmsComputer, StrLib.TYPES.BOOLEAN);
 
         /*
          * nPowerChange is 0 while the power state is stable, 1 while power is transitioning to "on",
@@ -26568,7 +26564,7 @@ class ComputerPDP10 extends Component {
             }
         }
 
-        this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(MESSAGE.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -26641,7 +26637,7 @@ class ComputerPDP10 extends Component {
             this.setReady();
         } else {
             var cmp = this;
-            Web.getResource(/** @type {string} */ (sStatePath), null, true, function doneStateLoad(sURL, sResource, nErrorCode) {
+            WebLib.getResource(/** @type {string} */ (sStatePath), null, true, function doneStateLoad(sURL, sResource, nErrorCode) {
                 cmp.finishStateLoad(sURL, sResource, nErrorCode);
             });
         }
@@ -26711,13 +26707,13 @@ class ComputerPDP10 extends Component {
      * then attempt to load the 'state' resource to obtain the actual state.
      *
      * TODO: It would be nice if we could tell the Closure Compiler that when a specific type parameter
-     * (eg, Str.TYPES.NUMBER) is used, the return value will be that type; unfortunately, every caller
+     * (eg, StrLib.TYPES.NUMBER) is used, the return value will be that type; unfortunately, every caller
      * must coerce their own return value.
      *
      * @this {ComputerPDP10}
      * @param {string} sParm
      * @param {Object|null} [parmsComponent]
-     * @param {number} [type] (from Str.TYPES)
+     * @param {number} [type] (from StrLib.TYPES)
      * @param {*} [defaultValue]
      * @returns {*}
      */
@@ -26730,7 +26726,7 @@ class ComputerPDP10 extends Component {
          * but there are limits to my paranoia.
          */
         var sParmLC = sParm.toLowerCase();
-        var value = Web.getURLParm(sParm) || Web.getURLParm(sParmLC);
+        var value = WebLib.getURLParm(sParm) || WebLib.getURLParm(sParmLC);
         var resources = globals.window['resources'];
         if (value === undefined && this.parmsMachine) value = this.parmsMachine[sParm];
         if (value === undefined && parmsComponent) value = parmsComponent[sParm];
@@ -26738,11 +26734,11 @@ class ComputerPDP10 extends Component {
         if (value === undefined) value = defaultValue;
         if (typeof value == "string" && type) {
             switch(type) {
-            case Str.TYPES.NUMBER:
+            case StrLib.TYPES.NUMBER:
                 value = +value;
                 if (isNaN(/** @type {number} */(value))) value = defaultValue || 0;
                 break;
-            case Str.TYPES.BOOLEAN:
+            case StrLib.TYPES.BOOLEAN:
                 value = (value == "true");
                 break;
             }
@@ -26791,7 +26787,7 @@ class ComputerPDP10 extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
+            this.printf(MESSAGE.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + StrLib.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -26848,7 +26844,7 @@ class ComputerPDP10 extends Component {
             var sTimestampValidate = stateValidate.get(ComputerPDP10.STATE_TIMESTAMP);
             var sTimestampComputer = stateComputer? stateComputer.get(ComputerPDP10.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
+                this.printf(MESSAGE.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
@@ -26915,7 +26911,7 @@ class ComputerPDP10 extends Component {
                     this.stateFailSafe.unload();
                 }
 
-                this.stateFailSafe.set(ComputerPDP10.STATE_TIMESTAMP, Usr.getTimestamp());
+                this.stateFailSafe.set(ComputerPDP10.STATE_TIMESTAMP, UsrLib.getTimestamp());
                 this.stateFailSafe.store();
 
                 var fValidate = this.resume && !this.fServerState;
@@ -26932,7 +26928,7 @@ class ComputerPDP10 extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
+                                    this.printf(MESSAGE.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
                                     this.printf("%s: %s\n", sCode, sData);
@@ -27074,7 +27070,7 @@ class ComputerPDP10 extends Component {
                     if (this.sStatePath && !this.fStateData) {
                         stateComputer.clear();
                         this.resume = ComputerPDP10.RESUME_NONE;
-                        Web.reloadPage();
+                        WebLib.reloadPage();
                     } else {
                         /*
                          * In all other cases, we set fRestoreError, which should trigger a call to
@@ -27100,7 +27096,7 @@ class ComputerPDP10 extends Component {
                 if (!fRepower && component.comment) {
                     var asComments = component.comment.split("|");
                     for (var i = 0; i < asComments.length; i++) {
-                        component.printf(Messages.STATUS, "%s\n", asComments[i]);
+                        component.printf(MESSAGE.STATUS, "%s\n", asComments[i]);
                     }
                 }
             }
@@ -27203,10 +27199,10 @@ class ComputerPDP10 extends Component {
         //
         // This is all we can realistically do for now.
         //
-        Web.onError("There may be a problem with your " + APPNAME + " machine.");
+        WebLib.onError("There may be a problem with your " + APPNAME + " machine.");
         //
         // if (Component.confirmUser("There may be a problem with your " + APPNAME + " machine.\n\nTo help us diagnose it, click OK to send this " + APPNAME + " machine state to " + SITEURL + ".")) {
-        //     Web.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
+        //     WebLib.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
         // }
         //
     }
@@ -27259,12 +27255,12 @@ class ComputerPDP10 extends Component {
         var stateComputer = new State(this, APPVERSION);
         var stateValidate = new State(this, APPVERSION, ComputerPDP10.STATE_VALIDATE);
 
-        var sTimestamp = Usr.getTimestamp();
+        var sTimestamp = UsrLib.getTimestamp();
         stateValidate.set(ComputerPDP10.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerPDP10.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(ComputerPDP10.STATE_VERSION, APPVERSION);
-        stateComputer.set(ComputerPDP10.STATE_HOSTURL, Web.getHostURL());
-        stateComputer.set(ComputerPDP10.STATE_BROWSER, Web.getUserAgent());
+        stateComputer.set(ComputerPDP10.STATE_HOSTURL, WebLib.getHostURL());
+        stateComputer.set(ComputerPDP10.STATE_BROWSER, WebLib.getUserAgent());
 
         /*
          * Always power the CPU "down" first, just to help insure it doesn't ask other components to do anything
@@ -27522,8 +27518,8 @@ class ComputerPDP10 extends Component {
              * and since pcjs.org is no longer running a Node web server, we disable the feature for that
              * particular host.
              */
-            if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available");
+            if (StrLib.endsWith(WebLib.getHostName(), "pcjs.org")) {
+                if (DEBUG) this.printf(MESSAGE.LOG, "Remote user API not available");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -27550,7 +27546,7 @@ class ComputerPDP10 extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
+                        computer.printf(MESSAGE.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -27582,7 +27578,7 @@ class ComputerPDP10 extends Component {
      */
     resetUserID()
     {
-        Web.setLocalStorageItem(ComputerPDP10.STATE_USERID, "");
+        WebLib.setLocalStorageItem(ComputerPDP10.STATE_USERID, "");
         this.sUserID = null;
     }
 
@@ -27597,7 +27593,7 @@ class ComputerPDP10 extends Component {
     {
         var sUserID = this.sUserID;
         if (!sUserID) {
-            sUserID = Web.getLocalStorageItem(ComputerPDP10.STATE_USERID);
+            sUserID = WebLib.getLocalStorageItem(ComputerPDP10.STATE_USERID);
             if (sUserID !== undefined) {
                 if (!sUserID && fPrompt) {
                     /*
@@ -27608,11 +27604,11 @@ class ComputerPDP10 extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
+                        if (!sUserID) this.printf(MESSAGE.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
+                this.printf(MESSAGE.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -27630,15 +27626,15 @@ class ComputerPDP10 extends Component {
         this.sUserID = null;
         var fMessages = DEBUG && this.messageEnabled();
         if (fMessages) this.printf("verifyUserID(%s)\n", sUserID);
-        var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
-        var response = Web.getResource(sRequest);
+        var sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
+        var response = WebLib.getResource(sRequest);
         var nErrorCode = response[0];
         var sResponse = response[1];
         if (!nErrorCode && sResponse) {
             try {
                 response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
-                    Web.setLocalStorageItem(ComputerPDP10.STATE_USERID, response.data);
+                    WebLib.setLocalStorageItem(ComputerPDP10.STATE_USERID, response.data);
                     if (fMessages) this.printf("%s updated: %s\n", ComputerPDP10.STATE_USERID, response.data);
                     this.sUserID = response.data;
                 } else {
@@ -27666,7 +27662,7 @@ class ComputerPDP10 extends Component {
             if (DEBUG) {
                 this.printf("%s for load: %s\n", ComputerPDP10.STATE_USERID, this.sUserID);
             }
-            sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
+            sStatePath = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
             if (DEBUG) {
                 this.printf("%s unavailable\n", ComputerPDP10.STATE_USERID);
@@ -27696,7 +27692,7 @@ class ComputerPDP10 extends Component {
             }
             var response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.printf(Messages.NOTICE, "Machine state saved to server\n");
+                this.printf(MESSAGE.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 var sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -27704,7 +27700,7 @@ class ComputerPDP10 extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.printf(Messages.NOTICE, "%s\n", sError);
+                this.printf(MESSAGE.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {
@@ -27737,11 +27733,11 @@ class ComputerPDP10 extends Component {
         dataPost[UserAPI.QUERY.USER] = sUserID;
         dataPost[UserAPI.QUERY.STATE] = State.getKey(this, APPVERSION);
         dataPost[UserAPI.QUERY.DATA] = sState;
-        var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
+        var sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT;
         if (!fSync) {
-            Web.getResource(sRequest, dataPost, true);
+            WebLib.getResource(sRequest, dataPost, true);
         } else {
-            var response = Web.getResource(sRequest, dataPost);
+            var response = WebLib.getResource(sRequest, dataPost);
             var sResponse = response[0];
             if (response[1]) {
                 if (sResponse) {
@@ -27819,7 +27815,7 @@ class ComputerPDP10 extends Component {
              * TODO: Make this more graceful, so that we can stop using the reloadPage() sledgehammer.
              */
             if (!fSave && this.sStatePath) {
-                Web.reloadPage();
+                WebLib.reloadPage();
                 return;
             }
             if (!fSave) this.fReload = true;
@@ -27852,7 +27848,7 @@ class ComputerPDP10 extends Component {
             if (component.type == sType) return component;
         }
         if (!componentLast && DEBUG && componentPrev !== false) {
-            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
+            this.printf(MESSAGE.WARNING, "Machine component type \"%s\" not found\n", sType);
         }
         return null;
     }
@@ -27980,7 +27976,7 @@ class ComputerPDP10 extends Component {
     /**
      * ComputerPDP10.exit()
      *
-     * The Computer is currently the only component that uses an "exit" handler, which Web.onExit() defines as
+     * The Computer is currently the only component that uses an "exit" handler, which WebLib.onExit() defines as
      * either an 'load' or 'beforeunload' handler.  This gives us the opportunity to save the machine state,
      * using our powerOff() function, before the page goes away.
      *
@@ -28056,12 +28052,12 @@ ComputerPDP10.RESUME_DELETE   =  3;  // same as RESUME_PROMPT but discards ALL m
 /*
  * Initialize every Computer on the page.
  */
-Web.onInit(ComputerPDP10.init);
-Web.onShow(ComputerPDP10.show);
-Web.onExit(ComputerPDP10.exit);
+WebLib.onInit(ComputerPDP10.init);
+WebLib.onShow(ComputerPDP10.show);
+WebLib.onExit(ComputerPDP10.exit);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/state.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/state.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -28116,7 +28112,7 @@ class State {
         try {
             this.state[id] = data;
         } catch(e) {
-            Component.printf(Messages.ERROR, e.message);
+            Component.printf(MESSAGE.ERROR, e.message);
         }
     }
 
@@ -28167,8 +28163,8 @@ class State {
              */
             return true;
         }
-        if (Web.hasLocalStorage()) {
-            let s = Web.getLocalStorageItem(this.key);
+        if (WebLib.hasLocalStorage()) {
+            let s = WebLib.getLocalStorageItem(this.key);
             if (s) {
                 this.json = s;
                 this.fLoaded = true;
@@ -28213,9 +28209,9 @@ class State {
     store()
     {
         let fSuccess = true;
-        if (Web.hasLocalStorage()) {
+        if (WebLib.hasLocalStorage()) {
             let s = JSON.stringify(this.state);
-            if (Web.setLocalStorageItem(this.key, s)) {
+            if (WebLib.setLocalStorageItem(this.key, s)) {
                 if (DEBUG) Component.printf("localStorage(%s): %d bytes stored\n", this.key, s.length);
             } else {
                 /*
@@ -28224,7 +28220,7 @@ class State {
                  * think of some way to notify the user that there's a problem, and offer a way of cleaning
                  * up old states.
                  */
-                Component.printf(Messages.ERROR, "Unable to store %d bytes in browser local storage\n", s.length);
+                Component.printf(MESSAGE.ERROR, "Unable to store %d bytes in browser local storage\n", s.length);
                 fSuccess = false;
             }
         }
@@ -28272,12 +28268,12 @@ class State {
     clear(fAll)
     {
         this.unload();
-        let aKeys = Web.getLocalStorageKeys();
+        let aKeys = WebLib.getLocalStorageKeys();
         for (let i = 0; i < aKeys.length; i++) {
             let sKey = aKeys[i];
             if (sKey && (fAll || sKey.substr(0, this.key.length) == this.key)) {
-                Web.removeLocalStorageItem(sKey);
-
+                WebLib.removeLocalStorageItem(sKey);
+                Component.printf(MESSAGE.DEBUG, "localStorage(%s) removed\n", sKey);
                 aKeys.splice(i, 1);
                 i = 0;
             }
@@ -28428,7 +28424,7 @@ class State {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
  */
 
 /*
@@ -28440,8 +28436,8 @@ class State {
  * machine component init() handlers.
  *
  * Also, to prevent those init() handlers from running prematurely, we must disable all page
- * notification events at the start of the embedding process (Web.enablePageEvents(false)) and
- * re-enable them at the end (Web.enablePageEvents(true)).
+ * notification events at the start of the embedding process (WebLib.enablePageEvents(false)) and
+ * re-enable them at the end (WebLib.enablePageEvents(true)).
  */
 var fAsync = true;
 var cAsyncMachines = 0;
@@ -28491,7 +28487,7 @@ function loadXML(sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fReso
         parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass, fResolve, display, done);
     };
     display("Loading " + sXMLFile + "...");
-    Web.getResource(sXMLFile, null, fAsync, doneLoadXML);
+    WebLib.getResource(sXMLFile, null, fAsync, doneLoadXML);
 }
 
 /**
@@ -28612,7 +28608,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
          * Supposedly, the IE XML DOM parser will throw an exception, but I haven't tested that, and unless all other
          * browsers do that, that's not helpful.
          *
-         * The best I can do at this stage (assuming Web.getResource() didn't drop any error information on the floor)
+         * The best I can do at this stage (assuming WebLib.getResource() didn't drop any error information on the floor)
          * is verify that the requested resource "looks like" valid XML (in other words, it begins with a '<').
          */
         let xmlDoc = null;
@@ -28745,7 +28741,7 @@ function resolveXML(sURL, sXML, display, done)
         };
 
         display("Loading " + sRefFile + "...");
-        Web.getResource(sRefFile, null, fAsync, doneReadXML);
+        WebLib.getResource(sRefFile, null, fAsync, doneReadXML);
         return;
     }
     done(sURL, sXML, "");
@@ -28775,7 +28771,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
     let doneMachine = function() {
 
         if (!--cAsyncMachines) {
-            if (fAsync) Web.enablePageEvents(true);
+            if (fAsync) WebLib.enablePageEvents(true);
         }
     };
 
@@ -28802,7 +28798,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
         return fSuccess;
     }
 
-    if (Web.getURLParm('debugger') == "true" && sXMLFile.indexOf("/debugger") < 0) {
+    if (WebLib.getURLParm('debugger') == "true" && sXMLFile.indexOf("/debugger") < 0) {
         sXMLFile = sXMLFile.replace("/machine.xml", "/debugger/machine.xml");
     }
 
@@ -28813,7 +28809,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (match) sError = match[1];
             }
         }
-        Component.printf(Messages.ERROR, "%s\n", sError);
+        Component.printf(MESSAGE.ERROR, "%s\n", sError);
         displayMessage("Error: " + sError + (sURL? " (" + sURL + ")" : ""));
         if (fSuccess) doneMachine();
         fSuccess = false;
@@ -28836,7 +28832,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
             let aeWarning = (eMachine && Component.getElementsByClass("machine-warning", "", eMachine));
             eWarning = (aeWarning && aeWarning[0]) || eMachine;
         }
-        if (eWarning) eWarning.innerHTML = Str.escapeHTML(sMessage);
+        if (eWarning) eWarning.innerHTML = StrLib.escapeHTML(sMessage);
     };
 
     try {
@@ -29034,7 +29030,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
  */
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("C1Pjs", "osi/c1p", idMachine, sXMLFile, sXSLFile, undefined, sClass);
 }
 
@@ -29050,7 +29046,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PCx86", "pcx86", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -29066,7 +29062,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PCx80", "pcx80", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -29082,7 +29078,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PDPjs", "dec/pdp10", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -29098,7 +29094,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  */
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
-    if (fAsync) Web.enablePageEvents(false);
+    if (fAsync) WebLib.enablePageEvents(false);
     return embedMachine("PDPjs", "dec/pdp11", idMachine, sXMLFile, sXSLFile, sParms, sClass);
 }
 
@@ -29166,6 +29162,6 @@ globals.window['embedPDP10']  = embedPDP10;
 globals.window['embedPDP11']  = embedPDP11;
 globals.window['commandMachine'] = commandMachine;
 
-globals.window['enableEvents'] = Web.enablePageEvents;
-globals.window['sendEvent']    = Web.doPageEvent;
+globals.window['enableEvents'] = WebLib.enablePageEvents;
+globals.window['sendEvent']    = WebLib.doPageEvent;
 

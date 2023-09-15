@@ -12,11 +12,11 @@
  * our 'binding' property indicates, if any.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import TestMonitor from "./testmon.js";
 import Component from "../../../modules/v2/component.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG } from "./defines.js";
 
 /**
@@ -86,10 +86,10 @@ export default class TestController extends Component {
     {
         let controller = this;
         let sProgress = "Loading " + sURL + "...";
-        Web.getResource(sURL, null, true, function(sURL, sResponse, nErrorCode) {
+        WebLib.getResource(sURL, null, true, function(sURL, sResponse, nErrorCode) {
             controller.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
-            controller.printf(Messages.PROGRESS, "%s\n", sProgress);
+            controller.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
         });
 
     }
@@ -105,7 +105,7 @@ export default class TestController extends Component {
     doneLoad(sURL, sTestData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load tests (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(nErrorCode < 0? MESSAGE.STATUS : MESSAGE.NOTICE, "Unable to load tests (error %d: %s)\n", nErrorCode, sURL);
         }
         else {
             try {
@@ -116,7 +116,7 @@ export default class TestController extends Component {
                 }
                 Component.addMachineResource(this.idMachine, sURL, sTestData);
             } catch (err) {
-                this.printf(Messages.NOTICE, "Test parsing error: %s\n", err.message);
+                this.printf(MESSAGE.NOTICE, "Test parsing error: %s\n", err.message);
             }
         }
         this.setReady();
@@ -251,7 +251,7 @@ export default class TestController extends Component {
      */
     printf(format, ...args)
     {
-        let s = Str.sprintf(format.toString(), ...args);
+        let s = StrLib.sprintf(format.toString(), ...args);
 
         if (this.controlBuffer != null) {
             if (s != '\r') {
@@ -323,4 +323,4 @@ export default class TestController extends Component {
 /*
  * Initialize every TestController module on the page.
  */
-Web.onInit(TestController.init);
+WebLib.onInit(TestController.init);

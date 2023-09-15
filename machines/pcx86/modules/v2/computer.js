@@ -9,13 +9,13 @@
 
 import BusX86 from "./bus.js";
 import FPUx86 from "./fpux86.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 import UserAPI from "../../../modules/v2/userapi.js";
-import Usr from "../../../modules/v2/usrlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import UsrLib from "../../../modules/v2/usrlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, MAXDEBUG, PREFETCH, TYPEDARRAYS, globals } from "./defines.js";
 
 /**
@@ -81,7 +81,7 @@ export default class Computer extends Component {
      */
     constructor(parmsComputer, parmsMachine, fSuspended)
     {
-        super("Computer", parmsComputer, Messages.COMPUTER);
+        super("Computer", parmsComputer, MESSAGE.COMPUTER);
 
         let cmp = this;
         this.setMachineParms(parmsMachine);
@@ -178,9 +178,9 @@ export default class Computer extends Component {
             this.enableDiagnostics();
         }
 
-        this.printf(Messages.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(MESSAGE.NONE, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        if (MAXDEBUG) this.printf(Messages.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
+        if (MAXDEBUG) this.printf(MESSAGE.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -226,7 +226,7 @@ export default class Computer extends Component {
          * localStorage (in other words, it prevents fAllowResume from being true, and forcing resume off).
          */
         let fAllowResume = false;
-        let sState = Web.getURLParm('state');
+        let sState = WebLib.getURLParm('state');
         if (!sState) {
             fAllowResume = true;
             sState = this.getMachineParm('state', parmsComputer);
@@ -262,10 +262,10 @@ export default class Computer extends Component {
             this.setReady();
         } else {
             let sProgress = "Loading " + this.sStateURL + "...";
-            Web.getResource(this.sStateURL, null, true, function(sURL, sResource, nErrorCode) {
+            WebLib.getResource(this.sStateURL, null, true, function(sURL, sResource, nErrorCode) {
                 cmp.doneLoad(sURL, sResource, nErrorCode);
             }, function(nState) {
-                cmp.printf(Messages.PROGRESS, "%s\n", sProgress);
+                cmp.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
             });
         }
 
@@ -340,7 +340,7 @@ export default class Computer extends Component {
                          * and we make the change IE-specific because it can have weird side-effects in other browsers (eg,
                          * it makes Safari on iOS over-zoom whenever the textarea receives focus).
                          */
-                        if (Web.isUserAgent("MSIE")) control.style.fontSize = "0";
+                        if (WebLib.isUserAgent("MSIE")) control.style.fontSize = "0";
                         /*
                          * We no longer clear the text, to give the user/system a chance to copy it to the clipboard.
                          *
@@ -385,11 +385,11 @@ export default class Computer extends Component {
                         cmp.notifyKbdEvent();
                     };
                 }(this), 2000);
-                this.printf(Messages.NONE, "Initialization complete\n");
+                this.printf(MESSAGE.NONE, "Initialization complete\n");
             }
             if (this.nDiagnostics == 2) {
                 this.nDiagnostics += 2;
-                this.printf(Messages.NONE, "Initialization complete, press a key to continue...\n");
+                this.printf(MESSAGE.NONE, "Initialization complete, press a key to continue...\n");
             }
             if (this.nDiagnostics == 3 || this.nDiagnostics == 4) {
                 /*
@@ -419,7 +419,7 @@ export default class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == MESSAGE.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -447,7 +447,7 @@ export default class Computer extends Component {
         let nDiagnostics = this.nDiagnostics;
         if (event && event.keyCode == 16 && this.nDiagnostics == 3) {
             this.nDiagnostics++;        // if we're waiting for a timeout and a shift key was pressed, wait for another key
-            this.printf(Messages.NONE, "Machine paused, press another key to continue...\n");
+            this.printf(MESSAGE.NONE, "Machine paused, press another key to continue...\n");
             event = null;
         }
         if (!event && this.nDiagnostics == 3 || event && fDown && this.nDiagnostics == 4) {
@@ -533,7 +533,7 @@ export default class Computer extends Component {
      */
     getMachineParm(sParm, parmsComponent)
     {
-        let value = Web.getURLParm(sParm);
+        let value = WebLib.getURLParm(sParm);
         if (value) {
             try {
                 /*
@@ -636,7 +636,7 @@ export default class Computer extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.printf(Messages.NOTICE, "Unable to load machine state (%s) from server (error %d%s)\n", sURL, nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
+            this.printf(MESSAGE.NOTICE, "Unable to load machine state (%s) from server (error %d%s)\n", sURL, nErrorCode, (sStateData? ': ' + StrLib.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -693,7 +693,7 @@ export default class Computer extends Component {
             let sTimestampValidate = stateValidate.get(Computer.STATE_TIMESTAMP);
             let sTimestampComputer = stateComputer ? stateComputer.get(Computer.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
+                this.printf(MESSAGE.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
@@ -756,7 +756,7 @@ export default class Computer extends Component {
                     this.stateFailSafe.unload();
                 }
 
-                this.stateFailSafe.set(Computer.STATE_TIMESTAMP, Usr.getTimestamp());
+                this.stateFailSafe.set(Computer.STATE_TIMESTAMP, UsrLib.getTimestamp());
                 this.stateFailSafe.store();
 
                 let fValidate = this.resume && !this.fServerState;
@@ -773,10 +773,10 @@ export default class Computer extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
+                                    this.printf(MESSAGE.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
-                                    this.printf(Messages.DEBUG, "%s: %s\n", sCode, sData);
+                                    this.printf(MESSAGE.DEBUG, "%s: %s\n", sCode, sData);
                                 }
                                 /*
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the
@@ -902,7 +902,7 @@ export default class Computer extends Component {
                 if (!component.powerUp(data, fRepower) && data) {
 
                     if (!this.flags.unloading) {
-                        this.printf(Messages.NOTICE, "Unable to restore hardware state\n");
+                        this.printf(MESSAGE.NOTICE, "Unable to restore hardware state\n");
                         /*
                          * If this is a resume error for a machine that also has a predefined state
                          * AND we're not restoring from that state, then throw away the current state,
@@ -915,7 +915,7 @@ export default class Computer extends Component {
                         if (this.sStatePath && !this.fStateData) {
                             stateComputer.clear();
                             this.resume = Computer.RESUME_NONE;
-                            Web.reloadPage();
+                            WebLib.reloadPage();
                         } else {
                             /*
                              * In all other cases, we set fRestoreError, which should trigger a call to
@@ -946,7 +946,7 @@ export default class Computer extends Component {
             if (!fRepower && component.comment) {
                 let asComments = component.comment.split("|");
                 for (let i = 0; i < asComments.length; i++) {
-                    component.printf(Messages.STATUS, "%s\n", asComments[i]);
+                    component.printf(MESSAGE.STATUS, "%s\n", asComments[i]);
                 }
             }
         }
@@ -1056,7 +1056,7 @@ export default class Computer extends Component {
         }
         if (iComponent == aComponents.length) component = this;
         let status = (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet");
-        Component.printf(Messages.NOTICE, "The %s component (%s) is not %s\n", component.type, component.id, status);
+        Component.printf(MESSAGE.NOTICE, "The %s component (%s) is not %s\n", component.type, component.id, status);
         return false;
     }
 
@@ -1085,10 +1085,10 @@ export default class Computer extends Component {
             //
             // This is all we can realistically do for now.
             //
-            Web.onError("There may be a problem with your " + APPNAME + " machine.");
+            WebLib.onError("There may be a problem with your " + APPNAME + " machine.");
             //
             // if (Component.confirmUser("There may be a problem with your " + APPNAME + " machine.\n\nTo help us diagnose it, click OK to send this " + APPNAME + " machine state to " + SITEURL + ".")) {
-            //     Web.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
+            //     WebLib.sendReport(APPNAME, APPVERSION, this.url, this.getUserID(), ReportAPI.TYPE.BUG, stateComputer.toString());
             // }
             //
             return true;
@@ -1142,12 +1142,12 @@ export default class Computer extends Component {
         let stateComputer = new State(this, APPVERSION);
         let stateValidate = new State(this, APPVERSION, Computer.STATE_VALIDATE);
 
-        let sTimestamp = Usr.getTimestamp();
+        let sTimestamp = UsrLib.getTimestamp();
         stateValidate.set(Computer.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(Computer.STATE_TIMESTAMP, sTimestamp);
         stateComputer.set(Computer.STATE_VERSION, APPVERSION);
-        stateComputer.set(Computer.STATE_HOSTURL, Web.getHostURL());
-        stateComputer.set(Computer.STATE_BROWSER, Web.getUserAgent());
+        stateComputer.set(Computer.STATE_HOSTURL, WebLib.getHostURL());
+        stateComputer.set(Computer.STATE_BROWSER, WebLib.getUserAgent());
 
         /*
          * Always power the CPU "down" first, just to help insure it doesn't ask other components to do anything
@@ -1350,8 +1350,8 @@ export default class Computer extends Component {
              * and since pcjs.org is no longer running a Node web server, we disable the feature for that
              * particular host.
              */
-            if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
+            if (StrLib.endsWith(WebLib.getHostName(), "pcjs.org")) {
+                if (DEBUG) this.printf(MESSAGE.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -1378,7 +1378,7 @@ export default class Computer extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
+                        computer.printf(MESSAGE.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -1410,7 +1410,7 @@ export default class Computer extends Component {
      */
     resetUserID()
     {
-        Web.setLocalStorageItem(Computer.STATE_USERID, "");
+        WebLib.setLocalStorageItem(Computer.STATE_USERID, "");
         this.sUserID = null;
     }
 
@@ -1425,7 +1425,7 @@ export default class Computer extends Component {
     {
         let sUserID = this.sUserID;
         if (!sUserID) {
-            sUserID = Web.getLocalStorageItem(Computer.STATE_USERID);
+            sUserID = WebLib.getLocalStorageItem(Computer.STATE_USERID);
             if (sUserID !== undefined) {
                 if (!sUserID && fPrompt) {
                     /*
@@ -1436,11 +1436,11 @@ export default class Computer extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
+                        if (!sUserID) this.printf(MESSAGE.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
+                this.printf(MESSAGE.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -1457,15 +1457,15 @@ export default class Computer extends Component {
     {
         this.sUserID = null;
         if (DEBUG) this.printf("verifyUserID(%s)\n", sUserID);
-        let sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
-        let response = Web.getResource(sRequest);
+        let sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
+        let response = WebLib.getResource(sRequest);
         let nErrorCode = response[0];
         let sResponse = response[1];
         if (!nErrorCode && sResponse) {
             try {
                 response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
-                    Web.setLocalStorageItem(Computer.STATE_USERID, response.data);
+                    WebLib.setLocalStorageItem(Computer.STATE_USERID, response.data);
                     if (DEBUG) this.printf("%s updated: %s\n" + Computer.STATE_USERID, response.data);
                     this.sUserID = response.data;
                 } else {
@@ -1491,7 +1491,7 @@ export default class Computer extends Component {
         let sStatePath = null;
         if (this.sUserID) {
             if (DEBUG) this.printf("%s for load: %s\n", Computer.STATE_USERID, this.sUserID);
-            sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
+            sStatePath = WebLib.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
             if (DEBUG) this.printf("%s unavailable\n", Computer.STATE_USERID);
         }
@@ -1517,7 +1517,7 @@ export default class Computer extends Component {
             if (DEBUG) this.printf("size of server state: %d bytes\n", sState.length);
             let response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.printf(Messages.NOTICE, "Machine state saved to server\n");
+                this.printf(MESSAGE.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 let sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -1525,7 +1525,7 @@ export default class Computer extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.printf(Messages.NOTICE, "%s\n", sError);
+                this.printf(MESSAGE.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {
@@ -1554,11 +1554,11 @@ export default class Computer extends Component {
         dataPost[UserAPI.QUERY.USER] = sUserID;
         dataPost[UserAPI.QUERY.STATE] = State.getKey(this, APPVERSION);
         dataPost[UserAPI.QUERY.DATA] = sState;
-        let sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT;
+        let sRequest = WebLib.getHostOrigin() + UserAPI.ENDPOINT;
         if (!fSync) {
-            Web.getResource(sRequest, dataPost, true);
+            WebLib.getResource(sRequest, dataPost, true);
         } else {
-            let response = Web.getResource(sRequest, dataPost);
+            let response = WebLib.getResource(sRequest, dataPost);
             let sResponse = response[0];
             if (response[1]) {
                 if (sResponse) {
@@ -1642,7 +1642,7 @@ export default class Computer extends Component {
              * TODO: Make this more graceful, so that we can stop using the reloadPage() sledgehammer.
              */
             if (!fSave && this.sStatePath) {
-                Web.reloadPage();
+                WebLib.reloadPage();
                 return;
             }
             if (!fSave) this.fReload = true;
@@ -1676,7 +1676,7 @@ export default class Computer extends Component {
             if (component.type == sType) return component;
         }
         if (!componentLast && DEBUG && componentPrev !== false) {
-            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
+            this.printf(MESSAGE.WARNING, "Machine component type \"%s\" not found\n", sType);
         }
         return null;
     }
@@ -1846,7 +1846,7 @@ export default class Computer extends Component {
     /**
      * Computer.exit()
      *
-     * The Computer is currently the only component that uses an "exit" handler, which Web.onExit() defines as
+     * The Computer is currently the only component that uses an "exit" handler, which WebLib.onExit() defines as
      * either an "unload" or "onbeforeunload" handler.  This gives us the opportunity to save the machine state,
      * using our powerOff() function, before the page goes away.
      *
@@ -1922,6 +1922,6 @@ Computer.UPDATES_PER_SECOND = 2;
 /*
  * Initialize every Computer on the page.
  */
-Web.onInit(Computer.init);
-Web.onShow(Computer.show);
-Web.onExit(Computer.exit);
+WebLib.onInit(Computer.init);
+WebLib.onShow(Computer.show);
+WebLib.onExit(Computer.exit);

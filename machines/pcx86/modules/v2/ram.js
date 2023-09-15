@@ -10,11 +10,11 @@
 import ChipSet from "./chipset.js";
 import { Controller } from "./bus.js";
 import MemoryX86 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import ROMx86 from "./rom.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Web from "../../../modules/v2/weblib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DESKPRO386, MAXDEBUG } from "./defines.js";
 
 /**
@@ -234,7 +234,7 @@ export default class RAMx86 extends Component {
                  * for these components, which the Computer component will display as it "powers up" components.
                  */
                 if (MAXDEBUG && !this.addrRAM && this.fInstalled) {
-                    this.printf(Messages.STATUS, "specified size overrides SW1\n");
+                    this.printf(MESSAGE.STATUS, "specified size overrides SW1\n");
                 }
 
                 /*
@@ -270,7 +270,7 @@ export default class RAMx86 extends Component {
                  * memory storage tests. See rom.js for more RBDA definitions.
                  */
                 if (MAXDEBUG) {
-                    this.printf(Messages.STATUS, "ROM BIOS memory test has been disabled\n");
+                    this.printf(MESSAGE.STATUS, "ROM BIOS memory test has been disabled\n");
                 }
                 this.bus.setShortDirect(ROMx86.BIOS.RESET_FLAG.ADDR, ROMx86.BIOS.RESET_FLAG.WARMBOOT);
             }
@@ -527,7 +527,7 @@ class CompaqController extends Controller {
     {
         let b = this.controller.getByte(off);
         if (DEBUG) {
-            this.controller.ram.printf(Messages.MEM + Messages.ADDRESS, "CompaqController.readByte(%#06x) returned %#04x\n", off, b);
+            this.controller.ram.printf(MESSAGE.MEM + MESSAGE.ADDR, "CompaqController.readByte(%#06x) returned %#04x\n", off, b);
         }
         return b;
     }
@@ -553,7 +553,7 @@ class CompaqController extends Controller {
          * All bits in 0x80C00001 and 0x80C00003 are reserved, so we can simply ignore those writes.
          */
         if (DEBUG) {
-            this.controller.ram.printf(Messages.MEM + Messages.ADDRESS, "CompaqController.writeByte(%#06x,%#04x)\n", off, b);
+            this.controller.ram.printf(MESSAGE.MEM + MESSAGE.ADDR, "CompaqController.writeByte(%#06x,%#04x)\n", off, b);
         }
     }
 }
@@ -657,4 +657,4 @@ CompaqController.ACCESS = [CompaqController.readByte, CompaqController.writeByte
 /*
  * Initialize all the RAM modules on the page.
  */
-Web.onInit(RAMx86.init);
+WebLib.onInit(RAMx86.init);

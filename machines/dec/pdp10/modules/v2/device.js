@@ -9,10 +9,10 @@
 
 import BusPDP10 from "./bus.js";
 import MemoryPDP10 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
-import Web from "../../../../modules/v2/weblib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUGGER, PDP10 } from "./defines.js";
 
 /**
@@ -27,7 +27,7 @@ export default class DevicePDP10 extends Component {
      */
     constructor(parmsDevice)
     {
-        super("Device", parmsDevice, Messages.DEVICE);
+        super("Device", parmsDevice, MESSAGE.DEVICE);
     }
 
     /**
@@ -147,4 +147,4 @@ export default class DevicePDP10 extends Component {
 /*
  * Initialize all the DevicePDP10 modules on the page.
  */
-Web.onInit(DevicePDP10.init);
+WebLib.onInit(DevicePDP10.init);

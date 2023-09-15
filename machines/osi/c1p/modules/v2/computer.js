@@ -7,9 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "../../../../modules/v2/messages.js";
+import MESSAGE from "../../../../modules/v2/message.js";
 import Component from "../../../../modules/v2/component.js";
-import Web from "../../../../modules/v2/weblib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG } from "./defines.js";
 
 /**
@@ -208,7 +208,7 @@ export default class C1PComputer extends Component {
          */
         computer.setReady();
 
-        computer.printf(Messages.NONE, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
+        computer.printf(MESSAGE.NONE, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
 
         /*
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to "power" the CPU;
@@ -334,4 +334,4 @@ export default class C1PComputer extends Component {
 /*
  * Initialize every Computer on the page.
  */
-Web.onInit(C1PComputer.init);
+WebLib.onInit(C1PComputer.init);

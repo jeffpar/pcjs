@@ -8,12 +8,21 @@
  */
 
 import MemoryX80 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Usr from "../../../modules/v2/usrlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import UsrLib from "../../../modules/v2/usrlib.js";
 import { DEBUGGER, MAXDEBUG } from "./defines.js";
+
+/**
+ * BusInfoX80 object definition (returned by scanMemory())
+ *
+ * @typedef {Object} BusInfoX80
+ * @property {number} cbTotal           (total bytes allocated)
+ * @property {number} cBlocks           (total Memory blocks allocated)
+ * @property {Array.<number>} aBlocks   (array of allocated Memory block numbers)
+ */
 
 /**
  * TODO: The Closure Compiler treats ES6 classes as 'struct' rather than 'dict' by default,
@@ -24,6 +33,19 @@ import { DEBUGGER, MAXDEBUG } from "./defines.js";
  * @unrestricted
  */
 export default class BusX80 extends Component {
+
+    static ERROR = {
+        ADD_MEM_INUSE:      1,
+        ADD_MEM_BADRANGE:   2,
+        SET_MEM_BADRANGE:   4,
+        REM_MEM_BADRANGE:   5
+    };
+
+    /**
+     * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
+     */
+    static BlockInfo = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
+
     /**
      * BusX80(cpu, dbg)
      *
@@ -256,7 +278,7 @@ export default class BusX80 extends Component {
         }
 
         if (sizeLeft <= 0) {
-            this.printf(Messages.STATUS, "%dKb %s at 0x%04X\n", Math.floor(size / 1024), MemoryX80.TYPE.NAMES[type], addr);
+            this.printf(MESSAGE.STATUS, "%dKb %s at 0x%04X\n", Math.floor(size / 1024), MemoryX80.TYPE.NAMES[type], addr);
             return true;
         }
 
@@ -314,7 +336,7 @@ export default class BusX80 extends Component {
             let block = this.aMemBlocks[iBlock];
             info.cbTotal += block.size;
             if (block.size) {
-                info.aBlocks.push(Usr.initBitFields(BusX80.BlockInfo, iBlock, 0, 0, block.type));
+                info.aBlocks.push(UsrLib.initBitFields(/** @type {BitFields} */ (BusX80.BlockInfo), iBlock, 0, 0, block.type));
                 info.cBlocks++;
             }
             iBlock++;
@@ -698,11 +720,11 @@ export default class BusX80 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortInputNotify[port] !== undefined) {
-                    Component.warning("Input port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("Input port " + StrLib.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.printf(Messages.LOG, "addPortInputNotify(%#06x)\n", port);
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "addPortInputNotify(%#06x)\n", port);
             }
         }
     }
@@ -838,11 +860,11 @@ export default class BusX80 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortOutputNotify[port] !== undefined) {
-                    Component.warning("Output port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("Output port " + StrLib.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.printf(Messages.LOG, "addPortOutputNotify(%#06x)\n", port);
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "addPortOutputNotify(%#06x)\n", port);
             }
         }
     }
@@ -982,50 +1004,7 @@ export default class BusX80 extends Component {
      */
     reportError(op, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.NONE : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", op, addr, size);
+        this.printf(fQuiet? MESSAGE.NONE : MESSAGE.ERROR, "Memory block error (%d: %#x,%#x)\n", op, addr, size);
         return false;
     }
 }
-
-BusX80.ERROR = {
-    ADD_MEM_INUSE:      1,
-    ADD_MEM_BADRANGE:   2,
-    SET_MEM_BADRANGE:   4,
-    REM_MEM_BADRANGE:   5
-};
-
-/*
- * Data types used by scanMemory()
- */
-
-/**
- * @typedef {number}
- */
-var BlockInfo;
-
-/**
- * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
- *
- * @typedef {{
- *  num:    BitField,
- *  count:  BitField,
- *  btmod:  BitField,
- *  type:   BitField
- * }}
- */
-BusX80.BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
-
-/**
- * BusInfoX80 object definition (returned by scanMemory())
- *
- *  cbTotal:    total bytes allocated
- *  cBlocks:    total Memory blocks allocated
- *  aBlocks:    array of allocated Memory block numbers
- *
- * @typedef {{
- *  cbTotal:    number,
- *  cBlocks:    number,
- *  aBlocks:    Array.<BlockInfo>
- * }}
- */
-var BusInfoX80;

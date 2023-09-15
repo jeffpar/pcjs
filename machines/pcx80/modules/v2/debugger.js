@@ -9,14 +9,14 @@
 
 import CPUDefX80 from "./cpudef.js";
 import MemoryX80 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DbgLib from "../../../modules/v2/dbglib.js";
 import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Usr from "../../../modules/v2/usrlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import UsrLib from "../../../modules/v2/usrlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, BYTEARRAYS, COMPILED, DEBUG, DEBUGGER, MAXDEBUG, TYPEDARRAYS, globals } from "./defines.js";
 
 /**
@@ -171,7 +171,7 @@ export default class DebuggerX80 extends DbgLib {
 
         this.aaOpDescs = DebuggerX80.aaOpDescs;
 
-        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(MESSAGE.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
 
         this.setReady();
     }
@@ -228,7 +228,7 @@ export default class DebuggerX80 extends DbgLib {
 
         case "debugEnter":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickDebugEnter(fRepeat) {
@@ -238,7 +238,7 @@ export default class DebuggerX80 extends DbgLib {
                         dbg.doCommands(sCmds, true);
                         return true;
                     }
-                    dbg.printf(Messages.DEBUG + Messages.LOG, "no debugger input buffer\n");
+                    dbg.printf(MESSAGE.DEBUG + MESSAGE.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -246,7 +246,7 @@ export default class DebuggerX80 extends DbgLib {
 
         case "step":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickStep(fRepeat) {
@@ -516,7 +516,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     toHexOffset(off)
     {
-        return Str.toHex(off, 4);
+        return StrLib.toHex(off, 4);
     }
 
     /**
@@ -740,7 +740,7 @@ export default class DebuggerX80 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = Messages.WARNING;
+        this.bitsMessage = this.bitsWarning = MESSAGE.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*
@@ -749,9 +749,9 @@ export default class DebuggerX80 extends DbgLib {
          */
         let aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, ',');
         if (aEnable.length) {
-            for (let m in Messages.Categories) {
-                if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= Messages.Categories[m];
+            for (let m in MESSAGE.NAMES) {
+                if (UsrLib.indexOf(aEnable, m) >= 0) {
+                    this.bitsMessage |= MESSAGE.NAMES[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
@@ -768,8 +768,8 @@ export default class DebuggerX80 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (let m in Messages.Categories) {
-            if (bitMessage == Messages.Categories[m]) {
+        for (let m in MESSAGE.NAMES) {
+            if (bitMessage == MESSAGE.NAMES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -790,10 +790,10 @@ export default class DebuggerX80 extends DbgLib {
         let i;
         sReg = sReg.toUpperCase();
         if (off == null) {
-            i = Usr.indexOf(DebuggerX80.REGS, sReg);
+            i = UsrLib.indexOf(DebuggerX80.REGS, sReg);
         } else {
-            i = Usr.indexOf(DebuggerX80.REGS, sReg.substr(off, 2));
-            if (i < 0) i = Usr.indexOf(DebuggerX80.REGS, sReg.substr(off, 1));
+            i = UsrLib.indexOf(DebuggerX80.REGS, sReg.substr(off, 2));
+            if (i < 0) i = UsrLib.indexOf(DebuggerX80.REGS, sReg.substr(off, 1));
         }
         return i;
     }
@@ -832,7 +832,7 @@ export default class DebuggerX80 extends DbgLib {
                 break;
             }
         }
-        return cch? Str.toHex(n, cch) : "??";
+        return cch? StrLib.toHex(n, cch) : "??";
     }
 
     /**
@@ -933,7 +933,7 @@ export default class DebuggerX80 extends DbgLib {
         i = 0;
         while ((i = s.indexOf('#', i)) >= 0) {
             sChar = s.substr(i+1, 2);
-            b = Str.parseInt(sChar, 16);
+            b = StrLib.parseInt(sChar, 16);
             if (b != null && b >= 32 && b < 127) {
                 sReplace = sChar + " '" + String.fromCharCode(b) + "'";
                 s = s.replace('#' + sChar, sReplace);
@@ -990,12 +990,12 @@ export default class DebuggerX80 extends DbgLib {
      */
     message(sMessage, bitsMessage)
     {
-        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+        if ((bitsMessage & MESSAGE.ADDR) && this.cpu) {
             let sAddress = " @" + this.toHexAddr(this.newAddr(this.cpu.getPC()));
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
-        if (this.bitsMessage & Messages.BUFFER) {
+        if (this.bitsMessage & MESSAGE.BUFFER) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
@@ -1003,7 +1003,7 @@ export default class DebuggerX80 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.bitsMessage & Messages.HALT) {
+        if (this.bitsMessage & MESSAGE.HALT) {
             sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -1038,7 +1038,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     messageIO(component, port, bOut, addrFrom, name, bIn, bitsMessage)
     {
-        bitsMessage |= Messages.PORT;
+        bitsMessage |= MESSAGE.PORT;
         if (name == null || (this.bitsMessage & bitsMessage) == bitsMessage) {
             this.printf("%s.%s(%#06x,%s=%#04x): %#04x @%#06x\n", component.idComponent, bOut != null? "outPort" : "inPort", port, name || "unknown", bOut, bIn, addrFrom);
         }
@@ -1379,7 +1379,7 @@ export default class DebuggerX80 extends DbgLib {
                     }
                     sStopped += this.nCycles + " cycles, " + msTotal + " ms, " + nCyclesPerSecond + " hz)";
                 } else {
-                    if (this.messageEnabled(Messages.HALT)) {
+                    if (this.messageEnabled(MESSAGE.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -1443,7 +1443,7 @@ export default class DebuggerX80 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling Messages.INT messages.
+         * well, OK, and a few other things now, like enabling MESSAGE.INT messages.
          */
         if (nState >= 0 && this.aaOpcodeCounts.length) {
             this.cOpcodes++;
@@ -1925,23 +1925,23 @@ export default class DebuggerX80 extends DbgLib {
         let sLine = this.toHexAddr(dbgAddrIns) + ' ';
         if (dbgAddrIns.addr !== CPUDefX80.ADDR_INVALID && dbgAddr.addr !== CPUDefX80.ADDR_INVALID) {
             do {
-                sBytes += Str.toHex(this.getByte(dbgAddrIns, 1), 2);
+                sBytes += StrLib.toHex(this.getByte(dbgAddrIns, 1), 2);
                 if (dbgAddrIns.addr == null) break;
             } while (dbgAddrIns.addr != dbgAddr.addr);
         }
 
-        sLine += Str.pad(sBytes, 10);
+        sLine += StrLib.pad(sBytes, 10);
         sLine += (type & DebuggerX80.TYPE_UNDOC)? '*' : ' ';
-        sLine += Str.pad(sOpcode, 7);
+        sLine += StrLib.pad(sOpcode, 7);
         if (sOperands) sLine += ' ' + sOperands;
 
         if (sComment) {
-            sLine = Str.pad(sLine, 40) + ';' + sComment;
+            sLine = StrLib.pad(sLine, 40) + ';' + sComment;
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
                 let nCycles = this.cpu.getCycles();
-                sLine += "cycles=" + nCycles.toString() + " cs=" + Str.toHex(this.cpu.nChecksum);
+                sLine += "cycles=" + nCycles.toString() + " cs=" + StrLib.toHex(this.cpu.nChecksum);
             }
         }
         return sLine;
@@ -1962,16 +1962,16 @@ export default class DebuggerX80 extends DbgLib {
 
         switch (typeSize) {
         case DebuggerX80.TYPE_BYTE:
-            sOperand = Str.toHex(this.getByte(dbgAddr, 1), 2);
+            sOperand = StrLib.toHex(this.getByte(dbgAddr, 1), 2);
             break;
         case DebuggerX80.TYPE_SBYTE:
-            sOperand = Str.toHex((this.getByte(dbgAddr, 1) << 24) >> 24, 4);
+            sOperand = StrLib.toHex((this.getByte(dbgAddr, 1) << 24) >> 24, 4);
             break;
         case DebuggerX80.TYPE_WORD:
-            sOperand = Str.toHex(this.getShort(dbgAddr, 2), 4);
+            sOperand = StrLib.toHex(this.getShort(dbgAddr, 2), 4);
             break;
         default:
-            return "imm(" + Str.toHexWord(type) + ')';
+            return "imm(" + StrLib.toHexWord(type) + ')';
         }
         if (this.style == DebuggerX80.STYLE_8086 && (type & DebuggerX80.TYPE_MEM)) {
             sOperand = '[' + sOperand + ']';
@@ -2200,7 +2200,7 @@ export default class DebuggerX80 extends DbgLib {
             let offSymbol = symbol['o'];
             let sAnnotation = symbol['a'];
             if (offSymbol !== undefined) {
-                Usr.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
+                UsrLib.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
             }
             if (sAnnotation) symbol['a'] = sAnnotation.replace(/''/g, "\"");
         }
@@ -2261,7 +2261,7 @@ export default class DebuggerX80 extends DbgLib {
             let len = symbolTable.len;
             if (addrSymbol >= addr && addrSymbol < addr + len) {
                 let offSymbol = addrSymbol - addr;
-                let result = Usr.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
+                let result = UsrLib.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
                 if (result >= 0) {
                     this.returnSymbol(iTable, result, aSymbol);
                 }
@@ -2352,7 +2352,7 @@ export default class DebuggerX80 extends DbgLib {
     {
         let s = "commands:";
         for (let sCommand in DebuggerX80.COMMANDS) {
-            s += '\n' + Str.pad(sCommand, 9) + DebuggerX80.COMMANDS[sCommand];
+            s += '\n' + StrLib.pad(sCommand, 9) + DebuggerX80.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -2485,7 +2485,7 @@ export default class DebuggerX80 extends DbgLib {
             if (!dbgAddr) return;
         }
 
-        sAddr = Str.toHexWord(dbgAddr.addr);
+        sAddr = StrLib.toHexWord(dbgAddr.addr);
 
         if (sParm == 'c') {
             if (dbgAddr.addr == null) {
@@ -2560,7 +2560,7 @@ export default class DebuggerX80 extends DbgLib {
 
         if (sAddr == '?') {
             let sDumpers = "";
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers = sDumpers + m;
@@ -2605,7 +2605,7 @@ export default class DebuggerX80 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (asArgs[1] == m) {
                     let fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -2653,7 +2653,7 @@ export default class DebuggerX80 extends DbgLib {
                 let b = this.getByte(dbgAddr, 1);
                 data |= (b << (iByte++ << 3));
                 if (iByte == size) {
-                    sData += Str.toHex(data, size * 2);
+                    sData += StrLib.toHex(data, size * 2);
                     sData += (size == 1? (i == 9? '-' : ' ') : "  ");
                     data = iByte = 0;
                 }
@@ -2797,7 +2797,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     doIf(sCmd, fQuiet)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         if (!this.parseExpression(sCmd)) {
             if (!fQuiet) this.printf("false: %s\n", sCmd);
             return false;
@@ -2815,7 +2815,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     doInfo(asArgs)
     {
-        this.printf(Messages.DEBUG, "msPerYield: %d\nnCyclesPerYield: %d\n", this.cpu.msPerYield, this.cpu.nCyclesPerYield);
+        this.printf(MESSAGE.DEBUG, "msPerYield: %d\nnCyclesPerYield: %d\n", this.cpu.msPerYield, this.cpu.nCyclesPerYield);
         return DEBUG;
     }
 
@@ -2931,7 +2931,7 @@ export default class DebuggerX80 extends DbgLib {
                 if (aSymbol[0]) {
                     sDelta = "";
                     nDelta = dbgAddr.addr - aSymbol[1];
-                    if (nDelta) sDelta = " + " + Str.toHexWord(nDelta);
+                    if (nDelta) sDelta = " + " + StrLib.toHexWord(nDelta);
                     s = aSymbol[0] + " (" + this.toHexOffset(aSymbol[1]) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
                     sSymbol = s;
@@ -2939,7 +2939,7 @@ export default class DebuggerX80 extends DbgLib {
                 if (aSymbol.length > 4 && aSymbol[4]) {
                     sDelta = "";
                     nDelta = aSymbol[5] - dbgAddr.addr;
-                    if (nDelta) sDelta = " - " + Str.toHexWord(nDelta);
+                    if (nDelta) sDelta = " - " + StrLib.toHexWord(nDelta);
                     s = aSymbol[4] + " (" + this.toHexOffset(aSymbol[5]) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
                     if (!sSymbol) sSymbol = s;
@@ -2970,7 +2970,7 @@ export default class DebuggerX80 extends DbgLib {
         if (sCategory !== undefined) {
             let bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = Messages.ALL - Messages.HALT - Messages.BUFFER;
+                bitsMessage = MESSAGE.ALL - MESSAGE.HALT - MESSAGE.BUFFER;
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -2979,9 +2979,9 @@ export default class DebuggerX80 extends DbgLib {
                 fCriteria = false;
                 sCategory = null;
             } else {
-                for (m in Messages.Categories) {
+                for (m in MESSAGE.NAMES) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.Categories[m];
+                        bitsMessage = MESSAGE.NAMES[m];
                         fCriteria = Component.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
@@ -2999,7 +2999,7 @@ export default class DebuggerX80 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage = Component.clearBits(this.bitsMessage, bitsMessage);
                     fCriteria = false;
-                    if (bitsMessage == Messages.BUFFER) {
+                    if (bitsMessage == MESSAGE.BUFFER) {
                         this.printf("%s\n", this.aMessageBuffer.join(""));
                         this.aMessageBuffer = [];
                     }
@@ -3012,9 +3012,9 @@ export default class DebuggerX80 extends DbgLib {
          */
         let n = 0;
         let sCategories = "";
-        for (m in Messages.Categories) {
+        for (m in MESSAGE.NAMES) {
             if (!sCategory || sCategory == m) {
-                let bitsMessage = Messages.Categories[m];
+                let bitsMessage = MESSAGE.NAMES[m];
                 let fEnabled = Component.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -3029,7 +3029,7 @@ export default class DebuggerX80 extends DbgLib {
 
         this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
 
-        this.historyInit();     // call this just in case Messages.INT was turned on
+        this.historyInit();     // call this just in case MESSAGE.INT was turned on
     }
 
     /**
@@ -3287,7 +3287,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     doPrint(sCmd)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         let a = sCmd.match(/^(['"])(.*?)\1$/);
         if (!a) {
             this.parseExpression(sCmd, false);
@@ -3432,7 +3432,7 @@ export default class DebuggerX80 extends DbgLib {
                 let a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = Str.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;
@@ -3470,7 +3470,7 @@ export default class DebuggerX80 extends DbgLib {
             nCycles = nCount;
             nCount = 1;
         }
-        Web.onCountRepeat(
+        WebLib.onCountRepeat(
             nCount,
             function onCountStep() {
                 return dbg.setBusy(true) && dbg.stepCPU(nCycles, fRegs, false);
@@ -3623,7 +3623,7 @@ export default class DebuggerX80 extends DbgLib {
                      * Recall that substring() accepts starting (inclusive) and ending (exclusive)
                      * indexes, whereas substr() accepts a starting index and a length.  We need the former.
                      */
-                    a.push(Str.trim(sCmd.substring(iPrev, i)));
+                    a.push(StrLib.trim(sCmd.substring(iPrev, i)));
                     iPrev = i + 1;
                 }
             }
@@ -3794,7 +3794,7 @@ export default class DebuggerX80 extends DbgLib {
                         break;
                     }
                     this.printf("%s version %s (%s%s%s)\n", (APPNAME || "PCx80"), APPVERSION, this.cpu.model, (COMPILED? ",RELEASE" : (DEBUG? ",DEBUG" : ",NODEBUG")), (TYPEDARRAYS? ",TYPEDARRAYS" : (BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")));
-                    this.printf("%s\n", Web.getUserAgent());
+                    this.printf("%s\n", WebLib.getUserAgent());
                     break;
                 case '?':
                     if (asArgs[1]) {
@@ -4317,6 +4317,6 @@ if (DEBUGGER) {
     /*
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
-    Web.onInit(DebuggerX80.init);
+    WebLib.onInit(DebuggerX80.init);
 
 }   // endif DEBUGGER

@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import { DEBUG, DEBUGGER, PDP10 } from "./defines.js";
 
@@ -302,7 +302,7 @@ export default class MemoryPDP10 {
     printAddr(sMessage)
     {
         if (DEBUG && this.dbg) {
-            this.dbg.printf(Messages.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
+            this.dbg.printf(MESSAGE.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
         }
     }
 
@@ -386,7 +386,7 @@ export default class MemoryPDP10 {
     readNone(off, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
+            this.dbg.printf(MESSAGE.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
         return PDP10.WORD_INVALID;
@@ -403,7 +403,7 @@ export default class MemoryPDP10 {
     writeNone(v, off, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
+            this.dbg.printf(MESSAGE.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
     }

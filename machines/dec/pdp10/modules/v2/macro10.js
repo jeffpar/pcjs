@@ -8,8 +8,8 @@
  */
 
 import DebuggerPDP10 from "./debugger.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { MAXDEBUG, PDP10 } from "./defines.js";
 
 /**
@@ -338,7 +338,7 @@ export default class Macro10 {
         var macro10 = this;
         var sURL = this.aURLs[this.iURL];
 
-        this.dbg.printf("loading %s\n", Str.getBaseName(sURL));
+        this.dbg.printf("loading %s\n", StrLib.getBaseName(sURL));
 
         /*
          * We know that local resources ending with ".MAC" are actually stored with a ".txt" extension.
@@ -348,13 +348,13 @@ export default class Macro10 {
             if (".MAC.KLM".indexOf(sExt) >= 0) sURL += ".txt";
         }
 
-        Web.getResource(sURL, null, true, function processMacro10(sFile, sResource, nErrorCode) {
+        WebLib.getResource(sURL, null, true, function processMacro10(sFile, sResource, nErrorCode) {
             if (nErrorCode) {
                 if (macro10.done) macro10.done(nErrorCode, sFile);
                 return;
             }
             var sText = sResource;
-            if (Str.endsWith(sFile, ".html")) {
+            if (StrLib.endsWith(sFile, ".html")) {
                 /*
                  * We want to parse ONLY the text between <PRE>...</PRE> tags, and eliminate any HTML entities.
                  */
@@ -1171,7 +1171,7 @@ export default class Macro10 {
                 break;
             }
         }
-        return Str.getBaseName(this.aURLs[iURL] + " line " + nLine);
+        return StrLib.getBaseName(this.aURLs[iURL] + " line " + nLine);
     }
 
     /**
@@ -1459,7 +1459,7 @@ export default class Macro10 {
              */
             this.chMacroOpen = '[';
             this.chMacroClose = ']';
-            name = '?' + Str.toDec(++this.nLiteral, 5);
+            name = '?' + StrLib.toDec(++this.nLiteral, 5);
             if (this.tblMacros[name] !== undefined) {
                 this.error("literal symbol '" + name + "' redefined");
             }
@@ -1964,7 +1964,7 @@ export default class Macro10 {
     {
         var w = this.dbg.truncate(value || 0, 36, true);
         if (value < -PDP10.INT_LIMIT || value >= PDP10.WORD_LIMIT) {
-            this.warning("truncated value " + Str.toOct(value) + " at location " + Str.toOct(nLocation) + " to " + Str.toOct(w));
+            this.warning("truncated value " + StrLib.toOct(value) + " at location " + StrLib.toOct(nLocation) + " to " + StrLib.toOct(w));
         }
         return w;
     }

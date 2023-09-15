@@ -7,12 +7,12 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import Keys from "../../../../modules/v2/keys.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, MAXDEBUG } from "./defines.js";
 
 /**
@@ -64,7 +64,7 @@ export default class SerialPortPDP10 extends Component {
      */
     constructor(parmsSerial)
     {
-        super("SerialPort", parmsSerial, Messages.SERIAL);
+        super("SerialPort", parmsSerial, MESSAGE.SERIAL);
 
         this.iAdapter = +parmsSerial['adapter'];
         this.fUpperCase = parmsSerial['upperCase'];
@@ -309,9 +309,9 @@ export default class SerialPortPDP10 extends Component {
             if (sConnection) {
                 var asParts = sConnection.split('->');
                 if (asParts.length == 2) {
-                    var sSourceID = Str.trim(asParts[0]);
+                    var sSourceID = StrLib.trim(asParts[0]);
                     if (sSourceID != this.idComponent) return;  // this connection string is intended for another instance
-                    var sTargetID = Str.trim(asParts[1]);
+                    var sTargetID = StrLib.trim(asParts[1]);
                     this.connection = Component.getComponentByID(sTargetID);
                     if (this.connection) {
                         var exports = this.connection['exports'];
@@ -322,7 +322,7 @@ export default class SerialPortPDP10 extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
+                                this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
@@ -331,7 +331,7 @@ export default class SerialPortPDP10 extends Component {
                 /*
                  * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
+                this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }
@@ -468,9 +468,9 @@ export default class SerialPortPDP10 extends Component {
                  * we convert them to CRs below.  Windows may do something different, but in the worst case,
                  * even if we receive CR/LF pairs, this code should keep the CRs and lose the LFs.
                  */
-                if (bASCII == Str.ASCII.LF) {
-                    if (bASCIIPrev == Str.ASCII.CR) continue;
-                    bASCII = Str.ASCII.CR;
+                if (bASCII == StrLib.ASCII.LF) {
+                    if (bASCIIPrev == StrLib.ASCII.CR) continue;
+                    bASCII = StrLib.ASCII.CR;
                 }
                 this.abReceive.push(bASCII);
             }
@@ -583,13 +583,13 @@ export default class SerialPortPDP10 extends Component {
                  * CTRL_C characters, which we capture below and render as <ETX>.  RT-11 does this for other keys
                  * as well, such as CTRL_K (<VT>) and CTRL_L (<FF>).
                  */
-                var s = Str.toASCIICode(b); // formerly: String.fromCharCode(b);
+                var s = StrLib.toASCIICode(b); // formerly: String.fromCharCode(b);
                 var nChars = s.length;      // formerly: (b >= 0x20? 1 : 0);
                 if (b < 0x20 && nChars == 1) nChars = 0;
                 if (b == 0x09) {
                     var tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
-                    if (this.tabSize) s = Str.pad("", nChars);
+                    if (this.tabSize) s = StrLib.pad("", nChars);
                 }
                 if (this.charBOL && !this.iLogicalCol && nChars) s = String.fromCharCode(this.charBOL) + s;
                 this.controlBuffer.value += s;
@@ -635,4 +635,4 @@ export default class SerialPortPDP10 extends Component {
 /*
  * Initialize every SerialPort module on the page.
  */
-Web.onInit(SerialPortPDP10.init);
+WebLib.onInit(SerialPortPDP10.init);

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Provides printf() and sprintf() functionality for Node apps
+ * @fileoverview Provides platform-independent printf() and sprintf() functionality
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -8,6 +8,7 @@
  */
 
 import strlib from "./strlib.js";
+import { globals } from "./defines.js";
 
 let sprintf = strlib.sprintf;
 
@@ -19,7 +20,11 @@ let sprintf = strlib.sprintf;
  */
 export default function printf(format, ...args)
 {
-    process.stdout.write(sprintf(format, ...args));
+    if (globals.node['process']) {
+        process.stdout.write(sprintf(format, ...args));
+    } else {
+        console.log(sprintf(format, ...args));
+    }
 }
 
 export { printf, sprintf };

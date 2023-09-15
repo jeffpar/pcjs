@@ -11,7 +11,7 @@ The PCjs PDP-10 emulator is currently comprised of the following components, as 
   - [defines.js](modules/v2/defines.js)
   - [device.js](modules/v2/device.js)
   - [memory.js](modules/v2/memory.js)
-  - [messages.js](modules/v2/messages.js)
+  - [message.js](modules/v2/message.js)
   - [panel.js](modules/v2/panel.js)
   - [ram.js](modules/v2/ram.js)
   - [rom.js](modules/v2/rom.js)

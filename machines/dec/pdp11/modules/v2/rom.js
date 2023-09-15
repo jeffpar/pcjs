@@ -9,11 +9,11 @@
 
 import BusPDP11 from "./bus.js";
 import MemoryPDP11 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG } from "./defines.js";
 
 /**
@@ -41,7 +41,7 @@ export default class ROMPDP11 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROM", parmsROM, Messages.ROM);
+        super("ROM", parmsROM, MESSAGE.ROM);
 
         this.abInit = null;
         this.aSymbols = null;
@@ -67,22 +67,22 @@ export default class ROMPDP11 extends Component {
         }
 
         this.sFilePath = parmsROM['file'];
-        this.sFileName = Str.getBaseName(this.sFilePath);
+        this.sFileName = StrLib.getBaseName(this.sFilePath);
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
+            if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side ROM converter to return the file in a JSON-compatible format.
              */
-            var sFileExt = Str.getExtension(this.sFileName);
+            var sFileExt = StrLib.getExtension(this.sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
+                sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
             var rom = this;
-            Web.getResource(sFileURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sFileURL, null, true, function doneLoad(sURL, sResponse, nErrorCode) {
                 rom.finishLoad(sURL, sResponse, nErrorCode);
             });
         }
@@ -157,12 +157,12 @@ export default class ROMPDP11 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
             Component.addMachineResource(this.idMachine, sURL, sData);
-            var resource = Web.parseMemoryResource(sURL, sData);
+            var resource = WebLib.parseMemoryResource(sURL, sData);
             if (resource) {
                 this.abInit = resource.aBytes;
                 this.aSymbols = resource.aSymbols;
@@ -204,7 +204,7 @@ export default class ROMPDP11 extends Component {
                      * good idea to stop the machine in its tracks whenever a setError() occurs, but there may also be
                      * times when we'd like to forge ahead anyway.
                      */
-                    this.setError("ROM size (" + Str.toHexLong(this.abInit.length) + ") does not match specified size (" + Str.toHexLong(this.sizeROM) + ")");
+                    this.setError("ROM size (" + StrLib.toHexLong(this.abInit.length) + ") does not match specified size (" + StrLib.toHexLong(this.sizeROM) + ")");
                 }
                 else if (this.addROM(this.addrROM)) {
 
@@ -261,14 +261,14 @@ export default class ROMPDP11 extends Component {
                 [addr]: [ROMPDP11.prototype.readROMByte, ROMPDP11.prototype.writeROMByte, null, null, null, this.sizeROM >> 1]
             };
             if (this.bus.addIOTable(this, IOTable)) {
-                this.printf(Messages.STATUS, "Added %d-byte ROM at %o\n", this.sizeROM, addr);
+                this.printf(MESSAGE.STATUS, "Added %d-byte ROM at %o\n", this.sizeROM, addr);
                 this.fRetainROM = true;
                 return true;
             }
         }
         else if (this.bus.addMemory(addr, this.sizeROM, MemoryPDP11.TYPE.ROM)) {
             if (DEBUG) {
-                this.printf(Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
+                this.printf(MESSAGE.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
             }
             for (let i = 0; i < this.abInit.length; i++) {
                 this.bus.setByteDirect(addr + i, this.abInit[i]);
@@ -367,4 +367,4 @@ export default class ROMPDP11 extends Component {
 /*
  * Initialize all the ROMPDP11 modules on the page.
  */
-Web.onInit(ROMPDP11.init);
+WebLib.onInit(ROMPDP11.init);

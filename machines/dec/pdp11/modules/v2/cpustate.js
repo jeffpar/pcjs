@@ -13,11 +13,11 @@
 import BusPDP11 from "./bus.js";
 import CPUPDP11 from "./cpu.js";
 import MemoryPDP11 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, PDP11 } from "./defines.js";
 
 /*
@@ -241,7 +241,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      */
     reset()
     {
-        this.printf(Messages.STATUS, "Model %d\n", this.model);
+        this.printf(MESSAGE.STATUS, "Model %d\n", this.model);
         if (this.flags.running) this.stopCPU();
         this.initCPU();
         this.resetCycles();
@@ -1080,7 +1080,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
+            this.printf(irq.message + MESSAGE.INT + MESSAGE.ADDR, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -1094,7 +1094,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
+            this.printf(irq.message + MESSAGE.INT + MESSAGE.ADDR, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -1572,9 +1572,9 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     trap(vector, flag, reason)
     {
         if (DEBUG && this.dbg) {
-            if (this.messageEnabled(Messages.TRAP)) {
+            if (this.messageEnabled(MESSAGE.TRAP)) {
                 var sReason = reason < 0? PDP11.REASONS[-reason] : this.dbg.toStrBase(reason);
-                this.printf(Messages.TRAP + Messages.ADDRESS, "trap to vector %s (%s)\n", this.dbg.toStrBase(vector, 8), sReason);
+                this.printf(MESSAGE.TRAP + MESSAGE.ADDR, "trap to vector %s (%s)\n", this.dbg.toStrBase(vector, 8), sReason);
             }
         }
 
@@ -3063,4 +3063,4 @@ export default class CPUStatePDP11 extends CPUPDP11 {
 /*
  * Initialize every CPU module on the page
  */
-Web.onInit(CPUStatePDP11.init);
+WebLib.onInit(CPUStatePDP11.init);

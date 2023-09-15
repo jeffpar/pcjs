@@ -71,12 +71,12 @@ Step-by-step instructions for running EKBAD0 can be found below.
 
 ### Instructions For Running EKBAD0
 
-1. Select drive RL0 {% include machine/command.html type='button' label='Do It' machine='test1170' command='script' value='selectDrive RL11 RL0' %}
-2. Select disk "XXDP+ Diagnostics" for drive RL0 {% include machine/command.html type='button' label='Do It' machine='test1170' command='script' value='select RL11 listDisks "XXDP+ Diagnostics"' %}
-3. Click `Load` to load the disk {% include machine/command.html type='button' label='Do It' machine='test1170' command='script' value='loadDisk RL11' %}
-4. Wait for message `Loaded disk "XXDP+ Diagnostics" in drive RL0` {% include machine/command.html type='button' label='Do It' machine='test1170' command='script' value='wait RL11' %}
-5. Click `Boot` to boot the disk {% include machine/command.html type='button' label='Do It' machine='test1170' command='script' value='bootDisk RL11' %}
-6. Wait for a date prompt and then press *Return* {% include machine/command.html type='button' label='Do It' machine='test1170' command='script' value='sleep 1000; receiveData SerialPort "\r"' %}
-7. Wait for a `.` prompt and then type `R EKBAD0` and press *Return* {% include machine/command.html type='button' label='Do It' machine='test1170' command='script' value='sleep 500; receiveData SerialPort "R EKBAD0\r"' %}
+1. Select drive RL0 {% include machines/command.html type='button' label='Do It' machine='test1170' command='script' value='selectDrive RL11 RL0' %}
+2. Select disk "XXDP+ Diagnostics" for drive RL0 {% include machines/command.html type='button' label='Do It' machine='test1170' command='script' value='select RL11 listDisks "XXDP+ Diagnostics"' %}
+3. Click `Load` to load the disk {% include machines/command.html type='button' label='Do It' machine='test1170' command='script' value='loadDisk RL11' %}
+4. Wait for message `Loaded disk "XXDP+ Diagnostics" in drive RL0` {% include machines/command.html type='button' label='Do It' machine='test1170' command='script' value='wait RL11' %}
+5. Click `Boot` to boot the disk {% include machines/command.html type='button' label='Do It' machine='test1170' command='script' value='bootDisk RL11' %}
+6. Wait for a date prompt and then press *Return* {% include machines/command.html type='button' label='Do It' machine='test1170' command='script' value='sleep 1000; receiveData SerialPort "\r"' %}
+7. Wait for a `.` prompt and then type `R EKBAD0` and press *Return* {% include machines/command.html type='button' label='Do It' machine='test1170' command='script' value='sleep 500; receiveData SerialPort "R EKBAD0\r"' %}
 
-To automatically perform all of the above, click this button: {% include machine/command.html type='button' label='Run EKBAD0' machine='test1170' command='runEKBAD0' %}
+To automatically perform all of the above, click this button: {% include machines/command.html type='button' label='Run EKBAD0' machine='test1170' command='runEKBAD0' %}

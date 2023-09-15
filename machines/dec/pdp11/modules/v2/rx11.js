@@ -11,8 +11,8 @@
  */
 
 import DriveController from "./drive.js";
-import Messages from "./messages.js";
-import Str from "../../../../modules/v2/strlib.js";
+import MESSAGE from "./message.js";
+import StrLib from "../../../../modules/v2/strlib.js";
 import { DEBUG, PDP11 } from "./defines.js";
 
 /**
@@ -37,7 +37,7 @@ export default class RX11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RX11", parms, Messages.RX11, PDP11.RX11, PDP11.RX11.RX01, RX11.UNIBUS_IOTABLE);
+        super("RX11", parms, MESSAGE.RX11, PDP11.RX11, PDP11.RX11.RX01, RX11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -162,7 +162,7 @@ export default class RX11 extends DriveController {
         this.regRXCS &= ~(RX11.RXCS.GO | RX11.RXCS.TR | RX11.RXCS.DONE | RX11.RXCS.ERR);
         this.cpu.clearIRQ(this.irq);
 
-        this.printf(Messages.ADDRESS, "%s.processCommand(%s)\n", this.type, RX11.FUNCS[this.funCode >> 1]);
+        this.printf(MESSAGE.ADDR, "%s.processCommand(%s)\n", this.type, RX11.FUNCS[this.funCode >> 1]);
 
         switch(this.funCode) {
 
@@ -239,7 +239,7 @@ export default class RX11 extends DriveController {
         var disk = drive.disk;
         var sector = null, ibSector;
 
-        this.printf(Messages.ADDRESS, "%s.readData(%d:%d:%d) %o-%o\n", this.type, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
+        this.printf(MESSAGE.ADDR, "%s.readData(%d:%d:%d) %o-%o\n", this.type, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
         if (!disk) {
             nError = drive.iDrive?  RX11.ERROR.HOME1 : RX11.ERROR.HOME0;
@@ -274,9 +274,9 @@ export default class RX11 extends DriveController {
             }
             var data = b0 | (b1 << 8);
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data);
-            if (DEBUG && this.messageEnabled(Messages.READ)) {
-                if (!sWords) sWords = Str.toOct(addr) + ": ";
-                sWords += Str.toOct(data) + ' ';
+            if (DEBUG && this.messageEnabled(MESSAGE.READ)) {
+                if (!sWords) sWords = StrLib.toOct(addr) + ": ";
+                sWords += StrLib.toOct(data) + ' ';
                 if (sWords.length >= 64) {
                     console.log(sWords);
                     sWords = "";
@@ -307,7 +307,7 @@ export default class RX11 extends DriveController {
 
         if (disk) {
             this.regRXES |= RX11.RXES.DRDY;
-            this.printf(Messages.ADDRESS, "%s.readSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
+            this.printf(MESSAGE.ADDR, "%s.readSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
             this.assert(nSector);       // RX sector numbers (unlike RK and RL) are supposed to be 1-based
             var sector = disk.seek(iCylinder, iHead, nSector, true);
             if (sector) {
@@ -348,7 +348,7 @@ export default class RX11 extends DriveController {
 
         if (disk) {
             this.regRXES |= RX11.RXES.DRDY;
-            this.printf(Messages.ADDRESS, "%s.writeSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
+            this.printf(MESSAGE.ADDR, "%s.writeSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
             this.assert(nSector);       // RX sector numbers (unlike RK and RL) are supposed to be 1-based
             var sector = disk.seek(iCylinder, iHead, nSector, true);
             if (sector) {
@@ -482,7 +482,7 @@ export default class RX11 extends DriveController {
                     this.regRXCS &= ~RX11.RXCS.TR;
                     this.assert(this.iBuffer < this.abBuffer.length);
                     this.regRXDB = this.abBuffer[this.iBuffer] & 0xff;
-                    this.printf(Messages.ADDRESS, "%s.readByte(%d): %#04x\n", this.type, this.iBuffer, this.regRXDB);
+                    this.printf(MESSAGE.ADDR, "%s.readByte(%d): %#04x\n", this.type, this.iBuffer, this.regRXDB);
                     if (++this.iBuffer >= this.abBuffer.length) {
                         this.doneCommand();
                     }
@@ -509,7 +509,7 @@ export default class RX11 extends DriveController {
                 this.regRXCS &= ~RX11.RXCS.TR;
                 this.assert(this.iBuffer < this.abBuffer.length);
                 this.abBuffer[this.iBuffer] = data & 0xff;
-                this.printf(Messages.ADDRESS, "%s.writeByte(%d,%#04x)\n", this.type, this.iBuffer, data);
+                this.printf(MESSAGE.ADDR, "%s.writeByte(%d,%#04x)\n", this.type, this.iBuffer, data);
                 if (++this.iBuffer >= this.abBuffer.length) {
                     this.doneCommand();
                 }

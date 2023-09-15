@@ -11,8 +11,8 @@
  */
 
 import DriveController from "./drive.js";
-import Messages from "./messages.js";
-import Str from "../../../../modules/v2/strlib.js";
+import MESSAGE from "./message.js";
+import StrLib from "../../../../modules/v2/strlib.js";
 import { DEBUG, PDP11 } from "./defines.js";
 
 /**
@@ -38,7 +38,7 @@ export default class RK11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RK11", parms, Messages.RK11, PDP11.RK11, PDP11.RK11.RK05, RK11.UNIBUS_IOTABLE);
+        super("RK11", parms, MESSAGE.RK11, PDP11.RK11, PDP11.RK11.RK05, RK11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -147,7 +147,7 @@ export default class RK11 extends DriveController {
             addr = (((this.regRKCS & RK11.RKCS.MEX)) << (16 - RK11.RKCS.SHIFT.MEX)) | this.regRKBA;
             inc = (this.regRKCS & RK11.RKCS.IBA)? 0 : 2;
 
-            this.printf(Messages.ADDRESS, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
+            this.printf(MESSAGE.ADDR, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
             if (iCylinder >= drive.nCylinders) {
                 this.regRKER |= RK11.RKER.NXC;
@@ -248,9 +248,9 @@ export default class RK11 extends DriveController {
             if (!fCheck) {
                 var data = b0 | (b1 << 8);
                 this.bus.setWordDirect(this.cpu.mapUnibus(addr), data);
-                if (DEBUG && this.messageEnabled(Messages.READ)) {
-                    if (!sWords) sWords = Str.toOct(addr) + ": ";
-                    sWords += Str.toOct(data) + ' ';
+                if (DEBUG && this.messageEnabled(MESSAGE.READ)) {
+                    if (!sWords) sWords = StrLib.toOct(addr) + ": ";
+                    sWords += StrLib.toOct(data) + ' ';
                     if (sWords.length >= 64) {
                         console.log(sWords);
                         sWords = "";

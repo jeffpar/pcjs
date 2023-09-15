@@ -9,14 +9,14 @@
 
 import BusPDP11 from "./bus.js";
 import MemoryPDP11 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DbgLib from "../../../../modules/v2/dbglib.js";
 import Keys from "../../../../modules/v2/keys.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Usr from "../../../../modules/v2/usrlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import UsrLib from "../../../../modules/v2/usrlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COMPILED, DEBUG, DEBUGGER, PDP11, globals } from "./defines.js";
 
 /**
@@ -286,7 +286,7 @@ export default class DebuggerPDP11 extends DbgLib {
             this.aOpReserved = this.aOpReserved.concat(DebuggerPDP11.OP1145);
         }
 
-        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(MESSAGE.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
 
         this.setReady();
     }
@@ -343,7 +343,7 @@ export default class DebuggerPDP11 extends DbgLib {
 
         case "debugEnter":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickDebugEnter(fRepeat) {
@@ -353,7 +353,7 @@ export default class DebuggerPDP11 extends DbgLib {
                         dbg.doCommands(sCmd, true);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer");
+                    if (DEBUG) dbg.printf(MESSAGE.LOG, "no debugger input buffer");
                     return false;
                 }
             );
@@ -361,7 +361,7 @@ export default class DebuggerPDP11 extends DbgLib {
 
         case "step":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickStep(fRepeat) {
@@ -820,7 +820,7 @@ export default class DebuggerPDP11 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = Messages.WARNING;
+        this.bitsMessage = this.bitsWarning = MESSAGE.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*
@@ -829,9 +829,9 @@ export default class DebuggerPDP11 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, ',');
         if (aEnable.length) {
-            for (var m in Messages.Categories) {
-                if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= Messages.Categories[m];
+            for (var m in MESSAGE.NAMES) {
+                if (UsrLib.indexOf(aEnable, m) >= 0) {
+                    this.bitsMessage |= MESSAGE.NAMES[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
@@ -848,8 +848,8 @@ export default class DebuggerPDP11 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in Messages.Categories) {
-            if (bitMessage == Messages.Categories[m]) {
+        for (var m in MESSAGE.NAMES) {
+            if (bitMessage == MESSAGE.NAMES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -983,7 +983,7 @@ export default class DebuggerPDP11 extends DbgLib {
     message(sMessage, bitsMessage)
     {
         var sAddress, fRunning;
-        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+        if ((bitsMessage & MESSAGE.ADDR) && this.cpu) {
             sAddress = " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
@@ -991,12 +991,12 @@ export default class DebuggerPDP11 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.bitsMessage & Messages.BUFFER) {
+        if (this.bitsMessage & MESSAGE.BUFFER) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
 
-        if ((this.bitsMessage & Messages.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
+        if ((this.bitsMessage & MESSAGE.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
             if (fRunning) sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -1382,7 +1382,7 @@ export default class DebuggerPDP11 extends DbgLib {
                     }
                     sStopped += this.nCycles + " cycles, " + msTotal + " ms, " + nCyclesPerSecond + " hz)";
                 } else {
-                    if (this.messageEnabled(Messages.HALT)) {
+                    if (this.messageEnabled(MESSAGE.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -1491,7 +1491,7 @@ export default class DebuggerPDP11 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling Messages.INT messages.
+         * well, OK, and a few other things now, like enabling MESSAGE.INT messages.
          */
         if (nState >= 0 && this.aInstructionHistory.length) {
             this.cInstructions++;
@@ -1543,8 +1543,8 @@ export default class DebuggerPDP11 extends DbgLib {
      */
     undefinedInstruction(opCode)
     {
-        if (this.messageEnabled(Messages.CPU)) {
-            this.printf(Messages.CPU + Messages.ADDRESS, "undefined opcode %s\n", this.toStrBase(opCode));
+        if (this.messageEnabled(MESSAGE.CPU)) {
+            this.printf(MESSAGE.CPU + MESSAGE.ADDR, "undefined opcode %s\n", this.toStrBase(opCode));
             return this.stopInstruction();  // allow the caller to step over it if they really want a trap generated
         }
         return false;
@@ -2000,17 +2000,17 @@ export default class DebuggerPDP11 extends DbgLib {
             } while (dbgAddrOp.addr != dbgAddr.addr);
         }
 
-        sLine += Str.pad(sOpCodes, 24);
-        sLine += Str.pad(sOpName, 5);
+        sLine += StrLib.pad(sOpCodes, 24);
+        sLine += StrLib.pad(sOpName, 5);
         if (sOperands) sLine += ' ' + sOperands;
 
         if (sComment || sTarget) {
-            sLine = Str.pad(sLine, 60) + ';' + (sComment || "");
+            sLine = StrLib.pad(sLine, 60) + ';' + (sComment || "");
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
                 var nCycles = this.cpu.getCycles();
-                sLine += "cycles=" + nCycles.toString() + " cs=" + Str.toHex(this.cpu.nChecksum);
+                sLine += "cycles=" + nCycles.toString() + " cs=" + StrLib.toHex(this.cpu.nChecksum);
             }
             if (sTarget) {
                 if (sLine.slice(-1) != ';') sLine += ' ';
@@ -2411,7 +2411,7 @@ export default class DebuggerPDP11 extends DbgLib {
             var offSymbol = symbol['o'];
             var sAnnotation = symbol['a'];
             if (offSymbol !== undefined) {
-                Usr.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
+                UsrLib.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
             }
             if (sAnnotation) symbol['a'] = sAnnotation.replace(/''/g, "\"");
         }
@@ -2472,7 +2472,7 @@ export default class DebuggerPDP11 extends DbgLib {
             var len = symbolTable.len;
             if (addrSymbol >= addr && addrSymbol < addr + len) {
                 var offSymbol = addrSymbol - addr;
-                var result = Usr.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
+                var result = UsrLib.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
                 if (result >= 0) {
                     this.returnSymbol(iTable, result, aSymbol);
                 }
@@ -2564,7 +2564,7 @@ export default class DebuggerPDP11 extends DbgLib {
     {
         var s = "commands:";
         for (var sCommand in DebuggerPDP11.COMMANDS) {
-            s += '\n' + Str.pad(sCommand, 9) + DebuggerPDP11.COMMANDS[sCommand];
+            s += '\n' + StrLib.pad(sCommand, 9) + DebuggerPDP11.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -2749,7 +2749,7 @@ export default class DebuggerPDP11 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers += m;
@@ -2796,7 +2796,7 @@ export default class DebuggerPDP11 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -2843,18 +2843,18 @@ export default class DebuggerPDP11 extends DbgLib {
              */
             var fPhysical = (dbgAddr.fPhysical || dbgAddr.addr > 0xffff);
             var a = this.cpu.getAddrInfo(dbgAddr.addr || 0, fPhysical);
-            this.printf("%s%s  %08o\n", Str.pad("", fPhysical? 12: 19), Str.toBin(dbgAddr.addr, fPhysical? 22 : 17, 3), dbgAddr.addr);
+            this.printf("%s%s  %08o\n", StrLib.pad("", fPhysical? 12: 19), StrLib.toBin(dbgAddr.addr, fPhysical? 22 : 17, 3), dbgAddr.addr);
             if (a.length < 6) {
                 if (a.length > 2) {
-                    this.printf("    OFFSET:             %s  %08o\n", Str.toBin(a[3], 13, 3), a[3]);
-                    this.printf("UNIMAP[%s]: %s  %08o\n", Str.toDec(a[1], 2), Str.toBin(a[2], 22, 3), a[2]);
+                    this.printf("    OFFSET:             %s  %08o\n", StrLib.toBin(a[3], 13, 3), a[3]);
+                    this.printf("UNIMAP[%s]: %s  %08o\n", StrLib.toDec(a[1], 2), StrLib.toBin(a[2], 22, 3), a[2]);
                 }
-                this.printf("  PHYSICAL: %s  %08o\n", Str.toBin(a[0], 22, 3), a[0]);
+                this.printf("  PHYSICAL: %s  %08o\n", StrLib.toBin(a[0], 22, 3), a[0]);
             } else {
-                this.printf("    OFFSET:             %s  %08o\n", Str.toBin(a[1], 13, 3), a[1]);
-                this.printf("+   %sPAR%s: %s  %08o\n", DebuggerPDP11.MODES[a[2]], a[3], Str.toBin(a[4], 22, 3), a[4]);
-                this.printf("&  MMUMASK: %s  %08o\n", Str.toBin(a[5], 22, 3), a[5]);
-                this.printf("= PHYSICAL: %s  %08o\n", Str.toBin(a[0], 22, 3), a[0]);
+                this.printf("    OFFSET:             %s  %08o\n", StrLib.toBin(a[1], 13, 3), a[1]);
+                this.printf("+   %sPAR%s: %s  %08o\n", DebuggerPDP11.MODES[a[2]], a[3], StrLib.toBin(a[4], 22, 3), a[4]);
+                this.printf("&  MMUMASK: %s  %08o\n", StrLib.toBin(a[5], 22, 3), a[5]);
+                this.printf("= PHYSICAL: %s  %08o\n", StrLib.toBin(a[0], 22, 3), a[0]);
             }
             return;
         }
@@ -2910,7 +2910,7 @@ export default class DebuggerPDP11 extends DbgLib {
                 if (shift == size) {
                     if (fJSON) {
                         if (sData) sData += ",";
-                        sData += "0x"+ Str.toHex(data, size << 1);
+                        sData += "0x"+ StrLib.toHex(data, size << 1);
                     } else {
                         sData += this.toStrBase(data, size << 3);
                         sData += (size == 1? (i == 9? '-' : ' ') : "  ");
@@ -2981,7 +2981,7 @@ export default class DebuggerPDP11 extends DbgLib {
             if (vNew & ~mask) {
                 this.printf("warning: %x exceeds %s-byte value\n", vNew, size);
             }
-            this.printf("changing %s%s to %s\n", this.toStrAddr(dbgAddr), (this.messageEnabled(Messages.BUS)? "" : (" from " + this.toStrBase(fnGet.call(this, dbgAddr), size << 3))), this.toStrBase(vNew, size << 3));
+            this.printf("changing %s%s to %s\n", this.toStrAddr(dbgAddr), (this.messageEnabled(MESSAGE.BUS)? "" : (" from " + this.toStrBase(fnGet.call(this, dbgAddr), size << 3))), this.toStrBase(vNew, size << 3));
             fnSet.call(this, dbgAddr, vNew, size);
         }
     }
@@ -3021,7 +3021,7 @@ export default class DebuggerPDP11 extends DbgLib {
      */
     doIf(sCmd, fQuiet)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         if (!this.parseExpression(sCmd)) {
             if (!fQuiet) this.printf("false: %s\n", sCmd);
             return false;
@@ -3108,7 +3108,7 @@ export default class DebuggerPDP11 extends DbgLib {
                 if (aSymbol[0]) {
                     sDelta = "";
                     nDelta = dbgAddr.addr - aSymbol[1];
-                    if (nDelta) sDelta = " + " + Str.toHexWord(nDelta);
+                    if (nDelta) sDelta = " + " + StrLib.toHexWord(nDelta);
                     s = aSymbol[0] + " (" + this.toStrOffset(aSymbol[1]) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
                     sSymbol = s;
@@ -3116,7 +3116,7 @@ export default class DebuggerPDP11 extends DbgLib {
                 if (aSymbol.length > 4 && aSymbol[4]) {
                     sDelta = "";
                     nDelta = aSymbol[5] - dbgAddr.addr;
-                    if (nDelta) sDelta = " - " + Str.toHexWord(nDelta);
+                    if (nDelta) sDelta = " - " + StrLib.toHexWord(nDelta);
                     s = aSymbol[4] + " (" + this.toStrOffset(aSymbol[5]) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
                     if (!sSymbol) sSymbol = s;
@@ -3144,7 +3144,7 @@ export default class DebuggerPDP11 extends DbgLib {
         if (sCategory !== undefined) {
             var bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.BUFFER);
+                bitsMessage = (0xffffffff|0) & ~(MESSAGE.HALT | MESSAGE.KEYS | MESSAGE.BUFFER);
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -3159,9 +3159,9 @@ export default class DebuggerPDP11 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in Messages.Categories) {
+                for (m in MESSAGE.NAMES) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.Categories[m];
+                        bitsMessage = MESSAGE.NAMES[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
@@ -3179,7 +3179,7 @@ export default class DebuggerPDP11 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage &= ~bitsMessage;
                     fCriteria = false;
-                    if (bitsMessage == Messages.BUFFER) {
+                    if (bitsMessage == MESSAGE.BUFFER) {
                         var i = this.aMessageBuffer.length >= 1000? this.aMessageBuffer.length - 1000 : 0;
                         while (i < this.aMessageBuffer.length) {
                             this.printf("%s\n", this.aMessageBuffer[i++]);
@@ -3195,9 +3195,9 @@ export default class DebuggerPDP11 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in Messages.Categories) {
+        for (m in MESSAGE.NAMES) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = Messages.Categories[m];
+                var bitMessage = MESSAGE.NAMES[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -3217,7 +3217,7 @@ export default class DebuggerPDP11 extends DbgLib {
 
         this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
 
-        this.historyInit();     // call this just in case Messages.INT was turned on
+        this.historyInit();     // call this just in case MESSAGE.INT was turned on
     }
 
     /**
@@ -3452,7 +3452,7 @@ export default class DebuggerPDP11 extends DbgLib {
      */
     doPrint(sCmd)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         var a = sCmd.match(/^(['"])(.*?)\1$/);
         if (!a) {
             this.parseExpression(sCmd, false);
@@ -3616,7 +3616,7 @@ export default class DebuggerPDP11 extends DbgLib {
                 var a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = Str.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;
@@ -3675,7 +3675,7 @@ export default class DebuggerPDP11 extends DbgLib {
         }
         this.sCmdTracePrev = sCmd;
 
-        Web.onCountRepeat(
+        WebLib.onCountRepeat(
             nCount,
             function onCountStep() {
                 return dbg.setBusy(true) && dbg.stepCPU(nCycles, fRegs, false);
@@ -3920,7 +3920,7 @@ export default class DebuggerPDP11 extends DbgLib {
                     }
                     if (asArgs[0] == "ver") {
                         this.printf("%s version %s (%s%s%s)\n", (APPNAME || "PDP11"), APPVERSION, this.cpu.model, (PDP11.COMPILED? ",RELEASE" : (PDP11.DEBUG? ",DEBUG" : ",NODEBUG")), (PDP11.TYPEDARRAYS? ",TYPEDARRAYS" : (PDP11.BYTEARRAYS? ",BYTEARRAYS" : ",LONGARRAYS")));
-                        this.printf("%s\n", Web.getUserAgent());
+                        this.printf("%s\n", WebLib.getUserAgent());
                         break;
                     }
                     fError = true;
@@ -4309,6 +4309,6 @@ if (DEBUGGER) {
     /*
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
-    Web.onInit(DebuggerPDP11.init);
+    WebLib.onInit(DebuggerPDP11.init);
 
 }   // endif DEBUGGER

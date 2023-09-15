@@ -11,7 +11,7 @@ import CPUx80 from "./cpu.js";
 import CPUDefX80 from "./cpudef.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Web from "../../../modules/v2/weblib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUGGER } from "./defines.js";
 
 /**
@@ -1151,4 +1151,4 @@ export default class CPUStateX80 extends CPUx80 {
 /*
  * Initialize every CPU module on the page
  */
-Web.onInit(CPUStateX80.init);
+WebLib.onInit(CPUStateX80.init);

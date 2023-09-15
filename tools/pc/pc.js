@@ -15,13 +15,13 @@ import JSON5         from 'json5';
 import path          from "path";
 import xml2js        from "xml2js";
 import DbgLib        from "../../machines/modules/v2/dbglib.js";
-import Messages      from "../../machines/modules/v2/messages.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib        from "../../machines/modules/v2/strlib.js";
 import Device        from "../../machines/modules/v3/device.js";
 import CharSet       from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo      from "../../machines/pcx86/modules/v3/diskinfo.js";
-import { Defines, MESSAGE } from "../../machines/modules/v3/defines.js";
+import { MAXDEBUG }  from "../../machines/modules/v3/defines.js";
+import MESSAGE       from "../../machines/modules/v3/message.js";
 import { device, existsDir, existsFile, getDiskSector, getTargetValue, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
 import pcjslib       from "../modules/pcjslib.js";
 
@@ -239,11 +239,11 @@ async function loadModules(factory, modules, done)
                     bitsMessage = format;
                     format = args.shift();
                 }
-                if (Component.testBits(bitsMessage, Messages.ERROR)) {
+                if (Component.testBits(bitsMessage, MESSAGE.ERROR)) {
                     format = "error: " + format + "\n";
                     bitsMessage = 0;
                 }
-                if (Component.testBits(bitsMessage, Messages.WARNING)) {
+                if (Component.testBits(bitsMessage, MESSAGE.WARNING)) {
                     format = "warning: " + format + "\n";
                     bitsMessage = 0;
                 }
@@ -359,6 +359,7 @@ function initMachine(args)
  */
 function intVideo(addr)
 {
+    let count = 1, s;
     let maxRows = 25, maxCols = 80;     // TODO: update these to reflect active video mode
     let CX = (this.regECX & 0xffff);
     let AH = ((this.regEAX >> 8) & 0xff), AL = (this.regEAX & 0xff);
@@ -408,34 +409,40 @@ function intVideo(addr)
         break;
     case 0x09:                          // write raw char/attr (AL/BL) with count (CX)
     case 0x0A:                          // write raw char (AL) with count (CX)
+        /*
+         * NOTE: I don't think the IBM BIOS handled CX == 0 very well (it looped 65536 times instead),
+         * so we're not going to emulate/risk that.  Also, this function isn't supposed to move the
+         * cursor, but when it's used with a count of 1, the caller usually plans to move the cursor
+         * themselves anyway, so we assume they will; otherwise, we should "backspace" an equal number
+         * of times afterward.
+         */
+        count = CX || 1;
+        if (count != 1) {
+            // printf("%s%s", s.repeat(count), "\b".repeat(count));
+            break;
+        }
         /* falls through */
     case 0x0E:                          // write TTY char (AL)
         /*
          * By default, fromCP437() does NOT translate control characters to UTF-8, which is the proper
          * thing to do for TTY control characters (ie, BEL, BS, LF, and CR) that the TTY function (0x0E)
          * wants to handle, but all other characters must be translated (including ESC or 0x1B, which
-         * BASIC uses to display a left-arrow symbol).  And when non-TTY output is being performed, there
-         * are no exceptions (ie, translate everything).
+         * BASIC uses to display a left-arrow symbol).
          */
-        let s = CharSet.fromCP437(AL, AH != 0x0E || [0x07, 0x08, 0x0A, 0x0D].indexOf(AL) < 0);
-        /*
-         * NOTE: I don't think the BIOS actually handled CX == 0 very well (it looped 65536 times instead),
-         * but we're not going to emulate/risk that.
-         */
-        if (AH == 0x0E || !CX) CX = 1;
-        printf("%s", s.repeat(CX));
+        s = CharSet.fromCP437(AL, AH != 0x0E || [0x07, 0x08, 0x0A, 0x0D].indexOf(AL) < 0);
+        printf("%s", s.repeat(count));
         if (s == '\r') {
             machine.colCursor = 0;
         } else if (s == '\n') {
-            while (machine.rowCursor < maxRows && CX--) {
+            while (machine.rowCursor < maxRows && count--) {
                 machine.rowCursor++;
             }
         } else if (s == '\b') {
-            while (machine.colCursor > 0 && CX--) {
+            while (machine.colCursor > 0 && count--) {
                 machine.colCursor--;
             }
         } else {
-            while (machine.colCursor < maxCols && CX--) {
+            while (machine.colCursor < maxCols && count--) {
                 machine.colCursor++;
             }
         }
@@ -2579,7 +2586,7 @@ function readInput(stdin, stdout)
 
     stdin.on("data", function(data) {
         let code = data.charCodeAt(0);
-        if (Defines.MAXDEBUG) {
+        if (MAXDEBUG) {
             printf("key(s): %j\n", data);
         }
         if (code == 0x04 && !debugMode) {               // check for CTRL-D when NOT in debug mode
@@ -2595,7 +2602,7 @@ function readInput(stdin, stdout)
             data = functionKeys[data] || data;
             data = data.replace(/\x7f/g, "\b");         // convert DEL to BS
             if (machine.kbd) {
-                if (Defines.MAXDEBUG) {
+                if (MAXDEBUG) {
                     printf("injecting key(s): %s\n", data);
                 }
                 machine.kbd.injectKeys.call(machine.kbd, data, 0);
@@ -2669,8 +2676,8 @@ function checkArgs(argv, removeArg, removeFlag)
     fTest = removeFlag('test') || fTest;
 
     device.setDebug(fDebug);
-    device.setMessages(MESSAGE.DISK + MESSAGE.WARN + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
-    messagesFilter = fDebug? Messages.ALL + Messages.TYPES + Messages.ADDRESS : Messages.ALERTS;
+    device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
+    messagesFilter = fDebug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
 
     let arg0 = argv[0].split(' ');
     rootDir = path.join(path.dirname(arg0[0]), "../..");
@@ -2698,7 +2705,7 @@ function checkArgs(argv, removeArg, removeFlag)
     localDir = defaults['dir'] || localDir;
 
     machineType = defaults['type'] || machineType;
-    systemType = (removeArg('sys', 'string') || defaults['sys'] || systemType).toLowerCase();
+    systemType = (removeArg('sys') || removeArg('system') || defaults['sys'] || systemType).toLowerCase();
     let i = systemType.indexOf(':');
     if (i > 0) {
         /*
@@ -2707,7 +2714,7 @@ function checkArgs(argv, removeArg, removeFlag)
         systemVersion = systemType.slice(i+1);
         systemType = systemType.slice(0, i);
     } else {
-        systemVersion = (removeArg('ver', 'string') || defaults['ver'] || systemVersion);
+        systemVersion = (removeArg('ver') || removeArg('version') || defaults['ver'] || systemVersion);
     }
     systemMBR = removeArg('mbr') || defaults['mbr'] || systemMBR;
     savedMachine = defaults['machine'] || savedMachine;
@@ -2827,7 +2834,7 @@ function main(argc, argv)
             "--start=[machine]":        "start machine configuration file",
         };
         let optionsDisk = {
-            "--boot=[drive]":           "\tselect boot drive (A or C, default is C)",
+            "--boot=[drive]":           "\tselect boot drive (A or C; default is C)",
             "--dir=[directory]":        "use drive directory (default is " + localDir + ")",
             "--disk=[image]":           "\tuse drive disk image (instead of directory)",
             "--drive=[controller]":     "set drive controller (XT, AT, COMPAQ, or PCJS)",
@@ -2838,9 +2845,9 @@ function main(argc, argv)
             "--maxfiles=[number]":      "set maximum local files (default is " + maxFiles + ")",
             "--normalize=[boolean]":    "convert text file encoding (default is " + fNormalize + ")",
             "--save=[image]":           "\tsave drive disk image and exit",
-            "--sys=[string]":           "\tset operating system type (default is " + systemType + ")",
+            "--system=[string]":        "set operating system type (default is " + systemType + ")",
             "--target=[nK|nM]":         "set target disk size (default is " + ((kbTarget / 1024)|0) + "M)",
-            "--ver=[#.##]":             "\tset operating system version (default is " + systemVersion + ")"
+            "--version=[#.##]":         "set operating system version (default is " + systemVersion + ")"
         };
         let optionsOther = {
             "--bare (-b)":              "\tomit helper binaries from disk",
@@ -2866,7 +2873,9 @@ function main(argc, argv)
         }
         printf("\nnotes:\n\t--drivetype can also specify a drive geometry (eg, --drivetype=306:4:17)\n");
         printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
-        printf("\tAll values should be considered advisory, as it may not be possible to honor them.\n");
+        printf("\t--hidden also disables the use of hidden sectors to work around an old boot sector bug\n");
+        printf("\t--system can also specify a version (eg, --system=pcdos:2.0) for convenience\n\n");
+        printf("\tDrive and FAT values should be considered advisory, as it may not be possible to honor them.\n");
         printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, configFile));
         return;
     }

@@ -275,13 +275,13 @@ So that kind of answers the question: *maybe* use FAT12 if the volume is 4Mb or 
 
 With respect to question #2, there's no sign of "the table" that DOS used to choose cluster size.  In DOS 2.00, as we saw above, there was only a series of disk size comparisons, which can be summarized in a table:
 
-    Disk Size   Cluster Size        Root Directory Size
-    ---------   ------------        -------------------
-    <= 256K     512-byte clusters     64 root entries
-    <= 1Mb      1K clusters          112 root entries
-    <= 4Mb      2K clusters          256 root entries
-    <= 16Mb     4K clusters          512 root entries
-     > 16Mb     8K clusters         1024 root entries
+    Disk Size    Cluster Size    Root Directory Size
+    ---------    ------------    -------------------
+     <= 256Kb       1 sector         64 root entries
+     <=   1Mb       2 sectors       112 root entries
+     <=   4Mb       4 sectors       256 root entries
+     <=  16Mb       8 sectors       512 root entries
+      >  16Mb      16 sectors      1024 root entries
 
 And starting with DOS 3.00, since FAT16 was now preferred, "the table" for FAT12 was reduced to a single entry that *always* selected 4K clusters and was used *only* if the disk contained 32680 (0x7FA8) sectors or less (approximately 16Mb).
 
@@ -299,7 +299,7 @@ Aaron had a long and legendary career at Microsoft, working on DOS 1.1 and subse
 
 My path occasionally crossed Aaron's while we were both working on Windows 95, and I even share credit with him on the "Common Name Space For Long And Short Filenames" Patent ([No. 5,579,517](https://patents.google.com/patent/US5579517A/en)) -- although to be honest, my contribution to that "invention" was pretty minimal.  All I recall are hallway conversations about the viability of combinations of attribute bits, including the volume label bit, to hide long filename entries from previous versions of DOS.
 
-Aaron was very smart, opinionated, and intense.  One way that intensity came out was a tendency to really "hammer" on certain points, probably because he was tired of seeing other people repeatedly making common mistakes.  And there are passages in the [FAT: General Overview of On-Disk Format](/documents/papers/microsoft/MS_FAT_OVERVIEW_103-2000-12-06.pdf) document strike me as "vintage Aaron Reynolds".
+Aaron was very smart, opinionated, and intense.  One way that intensity came out was a tendency to really "hammer" on certain points, probably because he was tired of seeing other people repeatedly making common mistakes.  And there are passages in the [FAT: General Overview of On-Disk Format](/documents/papers/microsoft/MS_FAT_OVERVIEW_103-2000-12-06.pdf) document that strike me as "vintage Aaron Reynolds".
 
 For example:
 

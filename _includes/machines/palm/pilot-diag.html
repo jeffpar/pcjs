@@ -1,0 +1,22 @@
+<div id="{{ include.id }}" class="pcjs-chassis-clear">
+  <div class="pcjs-controls-right">
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="powerPilot">Power</button></div>
+    <div class="pcjs-block-control"><button class="pcjs-block-button" id="zoomPilot">Full Screen</button></div>
+  </div>
+  <div class="pcjs-chassis-image">
+    <img title="Palm Pilot" src="/machines/palm/pilot/images/pilot-off.png">
+    <div id="monitorPilot" class="pcjs-monitor" style="width:64%; height:43%; top:13%; left:19%;"></div>
+  </div>
+</div>
+<div class="pcjs-diagnostics">
+  <div>
+    <label>Diagnostics<br>
+      <textarea id="printPilot" class="pcjs-console" cols="128" rows="20"></textarea>
+    </label>
+  </div>
+  <button id="resetPilot">Reset</button>
+  <button id="runPilot">Run</button>
+  <button id="stepPilot">Step</button>
+  <button id="clearPilot">Clear</button>
+  <span id="speedPilot" style="font-size:small">Stopped</span>
+</div>

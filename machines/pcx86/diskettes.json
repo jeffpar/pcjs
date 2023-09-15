@@ -1410,33 +1410,48 @@
 						"@bootable": true,
 						"@media": [
 							{
-								"@title": "COMPAQ MS-DOS 3.31 (Disk 1)",
-								"@diskette": "COMPAQ-DOS331-DISK1.json",
+								"@title": "COMPAQ MS-DOS 3.31D (360K Disk 1)",
+								"@diskette": "COMPAQ-DOS331-REVD-360K-DISK1.json",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "COMPAQ MS-DOS 3.31D (360K Disk 2)",
+								"@diskette": "COMPAQ-DOS331-REVD-360K-DISK2.json",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "COMPAQ MS-DOS 3.31D (360K Disk 3)",
+								"@diskette": "COMPAQ-DOS331-REVD-360K-DISK3.json",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "COMPAQ MS-DOS 3.31D (720K Disk 1)",
+								"@diskette": "COMPAQ-DOS331-REVD-720K-DISK1.json",
 								"@format": "PC720K"
 							},
 							{
-								"@title": "COMPAQ MS-DOS 3.31 (Disk 2)",
-								"@diskette": "COMPAQ-DOS331-DISK2.json",
+								"@title": "COMPAQ MS-DOS 3.31D (720K Disk 2)",
+								"@diskette": "COMPAQ-DOS331-REVD-720K-DISK2.json",
 								"@format": "PC720K"
 							},
 							{
-								"@title": "COMPAQ MS-DOS 3.31 (Disk 3)",
-								"@diskette": "COMPAQ-DOS331-DISK3.json",
+								"@title": "COMPAQ MS-DOS 3.31D (720K Disk 3)",
+								"@diskette": "COMPAQ-DOS331-REVD-720K-DISK3.json",
 								"@format": "PC720K"
 							},
 							{
 								"@title": "COMPAQ MS-DOS 3.31G (Disk 1)",
-								"@diskette": "COMPAQ-DOS331-REVG-DISK1.json",
+								"@diskette": "COMPAQ-DOS331-REVG-720K-DISK1.json",
 								"@format": "PC720K"
 							},
 							{
 								"@title": "COMPAQ MS-DOS 3.31G (Disk 2)",
-								"@diskette": "COMPAQ-DOS331-REVG-DISK2.json",
+								"@diskette": "COMPAQ-DOS331-REVG-720K-DISK2.json",
 								"@format": "PC720K"
 							},
 							{
 								"@title": "COMPAQ MS-DOS 3.31G (Disk 3)",
-								"@diskette": "COMPAQ-DOS331-REVG-DISK3.json",
+								"@diskette": "COMPAQ-DOS331-REVG-720K-DISK3.json",
 								"@format": "PC720K"
 							},
 							{
@@ -2032,6 +2047,15 @@
 								"@title": "MS-DOS 2.00 OEM (Disk 5)",
 								"@diskette": "MSDOS200-OEM-DISK5.json",
 								"@format": "PC160K"
+							}
+						],
+						"@documents": [
+							{
+								"@title": "Microsoft MS-DOS 2.00 User's Guide",
+								"@file": "MSDOS_200_USERS_GUIDE-1983.pdf",
+								"@link": "https://archive.org/details/msdos-200-users-guide-1983",
+								"@cover": "jpg",
+								"@source": "PCjs"
 							}
 						]
 					},

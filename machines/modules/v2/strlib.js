@@ -10,17 +10,88 @@
 import Format from "../v2/format.js";
 
 /**
- * @class Str
+ * @class StrLib
  * @unrestricted
  */
-export default class Str {
+export default class StrLib {
+    /*
+     * Map special characters to their HTML escape sequences.
+     */
+    static HTMLEscapeMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&apos;',
+        '$': '&dollar;'
+    };
+
+    /*
+     * Map "unprintable" ASCII codes to mnemonics, to more clearly see what's being printed.
+     */
+    static ASCIICodeMap = {
+        0x00:   "NUL",
+        0x01:   "SOH",      // (CTRL_A) Start of Heading
+        0x02:   "STX",      // (CTRL_B) Start of Text
+        0x03:   "ETX",      // (CTRL_C) End of Text
+        0x04:   "EOT",      // (CTRL_D) End of Transmission
+        0x05:   "ENQ",      // (CTRL_E) Enquiry
+        0x06:   "ACK",      // (CTRL_F) Acknowledge
+        0x07:   "BEL",      // (CTRL_G) Bell
+        0x08:   "BS",       // (CTRL_H) Backspace
+        0x09:   "TAB",      // (CTRL_I) Horizontal Tab (aka HT)
+        0x0A:   "LF",       // (CTRL_J) Line Feed (New Line)
+        0x0B:   "VT",       // (CTRL_K) Vertical Tab
+        0x0C:   "FF",       // (CTRL_L) Form Feed (New Page)
+        0x0D:   "CR",       // (CTRL_M) Carriage Return
+        0x0E:   "SO",       // (CTRL_N) Shift Out
+        0x0F:   "SI",       // (CTRL_O) Shift In
+        0x10:   "DLE",      // (CTRL_P) Data Link Escape
+        0x11:   "XON",      // (CTRL_Q) Device Control 1 (aka DC1)
+        0x12:   "DC2",      // (CTRL_R) Device Control 2
+        0x13:   "XOFF",     // (CTRL_S) Device Control 3 (aka DC3)
+        0x14:   "DC4",      // (CTRL_T) Device Control 4
+        0x15:   "NAK",      // (CTRL_U) Negative Acknowledge
+        0x16:   "SYN",      // (CTRL_V) Synchronous Idle
+        0x17:   "ETB",      // (CTRL_W) End of Transmission Block
+        0x18:   "CAN",      // (CTRL_X) Cancel
+        0x19:   "EM",       // (CTRL_Y) End of Medium
+        0x1A:   "SUB",      // (CTRL_Z) Substitute
+        0x1B:   "ESC",      // Escape
+        0x1C:   "FS",       // File Separator
+        0x1D:   "GS",       // Group Separator
+        0x1E:   "RS",       // Record Separator
+        0x1F:   "US",       // Unit Separator
+        0x7F:   "DEL"
+    };
+
+    /*
+     * TODO: Future home of a complete ASCII table.
+     */
+    static ASCII = {
+        LF:     0x0A,
+        CR:     0x0D
+    };
+
+    static TYPES = {
+        NULL:       0,
+        BYTE:       1,
+        WORD:       2,
+        DWORD:      3,
+        NUMBER:     4,
+        STRING:     5,
+        BOOLEAN:    6,
+        OBJECT:     7,
+        ARRAY:      8
+    };
+
     /**
      * isValidInt(s, base)
      *
      * The built-in parseInt() function has the annoying feature of returning a partial value (ie,
      * up to the point where it encounters an invalid character); eg, parseInt("foo", 16) returns 0xf.
      *
-     * So it's best to use our own Str.parseInt() function, which will in turn use this function to
+     * So it's best to use our own StrLib.parseInt() function, which will in turn use this function to
      * validate the entire string.
      *
      * @param {string} s is the string representation of some number
@@ -140,7 +211,7 @@ export default class Str {
                     shift = 35 - ((match[2] || 35) & 0xff);
                 }
             }
-            if (Str.isValidInt(s, base) && !isNaN(v = parseInt(s, base))) {
+            if (StrLib.isValidInt(s, base) && !isNaN(v = parseInt(s, base))) {
                 /*
                  * With the need to support larger (eg, 36-bit) integers, truncating to 32 bits is no longer helpful.
                  *
@@ -251,7 +322,7 @@ export default class Str {
                 cch = 36;
             }
         } else if (cch > 36) cch = 36;
-        return Str.toBase(n, 2, cch, "", nGrouping);
+        return StrLib.toBase(n, 2, cch, "", nGrouping);
     }
 
     /**
@@ -270,7 +341,7 @@ export default class Str {
         if (!cb || cb > 4) cb = 4;
         for (let i = 0; i < cb; i++) {
             if (s) s = ',' + s;
-            s = Str.toBin(n & 0xff, 8) + s;
+            s = StrLib.toBin(n & 0xff, 8) + s;
             n >>= 8;
         }
         return (fPrefix? "0b" : "") + s;
@@ -303,7 +374,7 @@ export default class Str {
                 cch = 12;
             }
         } else if (cch > 12) cch = 12;
-        return Str.toBase(n, 8, cch, fPrefix? "0o" : "");
+        return StrLib.toBase(n, 8, cch, fPrefix? "0o" : "");
     }
 
     /**
@@ -330,7 +401,7 @@ export default class Str {
                 cch = 11;
             }
         } else if (cch > 11) cch = 11;
-        return Str.toBase(n, 10, cch);
+        return StrLib.toBase(n, 10, cch);
     }
 
     /**
@@ -368,46 +439,46 @@ export default class Str {
                 cch = 9;
             }
         } else if (cch > 9) cch = 9;
-        return Str.toBase(n, 16, cch, fPrefix? "0x" : "");
+        return StrLib.toBase(n, 16, cch, fPrefix? "0x" : "");
     }
 
     /**
      * toHexByte(b)
      *
-     * Alias for Str.toHex(b, 2, true)
+     * Alias for StrLib.toHex(b, 2, true)
      *
      * @param {number|null|undefined} b is a byte value
      * @returns {string} the hex representation of b
      */
     static toHexByte(b)
     {
-        return Str.toHex(b, 2, true);
+        return StrLib.toHex(b, 2, true);
     }
 
     /**
      * toHexWord(w)
      *
-     * Alias for Str.toHex(w, 4, true)
+     * Alias for StrLib.toHex(w, 4, true)
      *
      * @param {number|null|undefined} w is a word (16-bit) value
      * @returns {string} the hex representation of w
      */
     static toHexWord(w)
     {
-        return Str.toHex(w, 4, true);
+        return StrLib.toHex(w, 4, true);
     }
 
     /**
      * toHexLong(l)
      *
-     * Alias for Str.toHex(l, 8, true)
+     * Alias for StrLib.toHex(l, 8, true)
      *
      * @param {number|null|undefined} l is a dword (32-bit) value
      * @returns {string} the hex representation of w
      */
     static toHexLong(l)
     {
-        return Str.toHex(l, 8, true);
+        return StrLib.toHex(l, 8, true);
     }
 
     /**
@@ -492,7 +563,7 @@ export default class Str {
          */
         return sHTML.replace(/[&<>"'$]/g, function(m)
         {
-            return Str.HTMLEscapeMap[m];
+            return StrLib.HTMLEscapeMap[m];
         });
     }
 
@@ -542,7 +613,7 @@ export default class Str {
     {
         let a = {};
         a[sSearch] = sReplace;
-        return Str.replaceArray(a, s);
+        return StrLib.replaceArray(a, s);
     }
 
     /**
@@ -647,7 +718,7 @@ export default class Str {
     {
         let cch = s.length;
         s = s.replace(/^0+([0-9A-F]+)$/i, "$1");
-        if (fPad) s = Str.pad(s, cch, true);
+        if (fPad) s = StrLib.pad(s, cch, true);
         return s;
     }
 
@@ -674,8 +745,8 @@ export default class Str {
     static toASCIICode(b)
     {
         let s;
-        if (b != Str.ASCII.CR && b != Str.ASCII.LF) {
-            s = Str.ASCIICodeMap[b];
+        if (b != StrLib.ASCII.CR && b != StrLib.ASCII.LF) {
+            s = StrLib.ASCIICodeMap[b];
         }
         if (s) {
             s = '<' + s + '>';
@@ -686,76 +757,5 @@ export default class Str {
     }
 }
 
-/*
- * Map special characters to their HTML escape sequences.
- */
-Str.HTMLEscapeMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&apos;',
-    '$': '&dollar;'
-};
-
-/*
- * Map "unprintable" ASCII codes to mnemonics, to more clearly see what's being printed.
- */
-Str.ASCIICodeMap = {
-    0x00:   "NUL",
-    0x01:   "SOH",      // (CTRL_A) Start of Heading
-    0x02:   "STX",      // (CTRL_B) Start of Text
-    0x03:   "ETX",      // (CTRL_C) End of Text
-    0x04:   "EOT",      // (CTRL_D) End of Transmission
-    0x05:   "ENQ",      // (CTRL_E) Enquiry
-    0x06:   "ACK",      // (CTRL_F) Acknowledge
-    0x07:   "BEL",      // (CTRL_G) Bell
-    0x08:   "BS",       // (CTRL_H) Backspace
-    0x09:   "TAB",      // (CTRL_I) Horizontal Tab (aka HT)
-    0x0A:   "LF",       // (CTRL_J) Line Feed (New Line)
-    0x0B:   "VT",       // (CTRL_K) Vertical Tab
-    0x0C:   "FF",       // (CTRL_L) Form Feed (New Page)
-    0x0D:   "CR",       // (CTRL_M) Carriage Return
-    0x0E:   "SO",       // (CTRL_N) Shift Out
-    0x0F:   "SI",       // (CTRL_O) Shift In
-    0x10:   "DLE",      // (CTRL_P) Data Link Escape
-    0x11:   "XON",      // (CTRL_Q) Device Control 1 (aka DC1)
-    0x12:   "DC2",      // (CTRL_R) Device Control 2
-    0x13:   "XOFF",     // (CTRL_S) Device Control 3 (aka DC3)
-    0x14:   "DC4",      // (CTRL_T) Device Control 4
-    0x15:   "NAK",      // (CTRL_U) Negative Acknowledge
-    0x16:   "SYN",      // (CTRL_V) Synchronous Idle
-    0x17:   "ETB",      // (CTRL_W) End of Transmission Block
-    0x18:   "CAN",      // (CTRL_X) Cancel
-    0x19:   "EM",       // (CTRL_Y) End of Medium
-    0x1A:   "SUB",      // (CTRL_Z) Substitute
-    0x1B:   "ESC",      // Escape
-    0x1C:   "FS",       // File Separator
-    0x1D:   "GS",       // Group Separator
-    0x1E:   "RS",       // Record Separator
-    0x1F:   "US",       // Unit Separator
-    0x7F:   "DEL"
-};
-
-/*
- * TODO: Future home of a complete ASCII table.
- */
-Str.ASCII = {
-    LF:     0x0A,
-    CR:     0x0D
-};
-
-Str.TYPES = {
-    NULL:       0,
-    BYTE:       1,
-    WORD:       2,
-    DWORD:      3,
-    NUMBER:     4,
-    STRING:     5,
-    BOOLEAN:    6,
-    OBJECT:     7,
-    ARRAY:      8
-};
-
-Str.format = new Format();
-Str.sprintf = Str.format.sprintf.bind(Str.format);
+StrLib.format = new Format();
+StrLib.sprintf = StrLib.format.sprintf.bind(StrLib.format);

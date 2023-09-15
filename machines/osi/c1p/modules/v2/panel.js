@@ -8,7 +8,7 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
-import Web from "../../../../modules/v2/weblib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
 /**
@@ -111,4 +111,4 @@ export default class C1PPanel extends Component {
 /*
  * Initialize every Panel module on the page.
  */
-Web.onInit(C1PPanel.init);
+WebLib.onInit(C1PPanel.init);

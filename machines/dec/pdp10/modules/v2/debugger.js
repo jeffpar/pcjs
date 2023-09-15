@@ -10,14 +10,14 @@
 import BusPDP10 from "./bus.js";
 import Macro10 from "./macro10.js";
 import MemoryPDP10 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DbgLib from "../../../../modules/v2/dbglib.js";
 import Keys from "../../../../modules/v2/keys.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Usr from "../../../../modules/v2/usrlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import UsrLib from "../../../../modules/v2/usrlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COMPILED, DEBUG, DEBUGGER, MAXDEBUG, PDP10, globals } from "./defines.js";
 
 /**
@@ -321,7 +321,7 @@ export default class DebuggerPDP10 extends DbgLib {
          * Update aOpReserved as appropriate for the current model
          */
 
-        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(MESSAGE.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
 
         this.setReady();
     }
@@ -378,7 +378,7 @@ export default class DebuggerPDP10 extends DbgLib {
 
         case "debugEnter":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickDebugEnter(fRepeat) {
@@ -388,7 +388,7 @@ export default class DebuggerPDP10 extends DbgLib {
                         dbg.doCommands(sCmd, true);
                         return true;
                     }
-                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
+                    if (DEBUG) dbg.printf(MESSAGE.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -396,7 +396,7 @@ export default class DebuggerPDP10 extends DbgLib {
 
         case "step":
             this.bindings[sBinding] = control;
-            Web.onClickRepeat(
+            WebLib.onClickRepeat(
                 control,
                 500, 100,
                 function onClickStep(fRepeat) {
@@ -843,7 +843,7 @@ export default class DebuggerPDP10 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = Messages.FAULT | Messages.WARNING;
+        this.bitsMessage = this.bitsWarning = MESSAGE.FAULT | MESSAGE.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*
@@ -852,9 +852,9 @@ export default class DebuggerPDP10 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, ',');
         if (aEnable.length) {
-            for (var m in Messages.Categories) {
-                if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= Messages.Categories[m];
+            for (var m in MESSAGE.NAMES) {
+                if (UsrLib.indexOf(aEnable, m) >= 0) {
+                    this.bitsMessage |= MESSAGE.NAMES[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
@@ -871,8 +871,8 @@ export default class DebuggerPDP10 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in Messages.Categories) {
-            if (bitMessage == Messages.Categories[m]) {
+        for (var m in MESSAGE.NAMES) {
+            if (bitMessage == MESSAGE.NAMES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -1023,7 +1023,7 @@ export default class DebuggerPDP10 extends DbgLib {
     message(sMessage, bitsMessage)
     {
         var sAddress, fRunning;
-        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+        if ((bitsMessage & MESSAGE.ADDR) && this.cpu) {
             sAddress = " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
@@ -1031,12 +1031,12 @@ export default class DebuggerPDP10 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.bitsMessage & Messages.BUFFER) {
+        if (this.bitsMessage & MESSAGE.BUFFER) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
 
-        if ((this.bitsMessage & Messages.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
+        if ((this.bitsMessage & MESSAGE.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
             if (fRunning) sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -1414,7 +1414,7 @@ export default class DebuggerPDP10 extends DbgLib {
                     }
                     sStopped += this.nCycles + " cycles, " + msTotal + " ms, " + nCyclesPerSecond + " hz)";
                 } else {
-                    if (this.messageEnabled(Messages.HALT)) {
+                    if (this.messageEnabled(MESSAGE.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -1495,7 +1495,7 @@ export default class DebuggerPDP10 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling Messages.INT messages.
+         * well, OK, and a few other things now, like enabling MESSAGE.INT messages.
          */
         if (nState >= 0 && this.aInstructionHistory.length) {
             this.cInstructions++;
@@ -1562,7 +1562,7 @@ export default class DebuggerPDP10 extends DbgLib {
             if (!opNum) sOperation = "";
         } else {
             if (!opNum) {
-                sOperation = Str.pad(sOperation, 8) + this.toStrWord(opCode);
+                sOperation = StrLib.pad(sOperation, 8) + this.toStrWord(opCode);
             } else {
                 var n, sOperand;
                 if (opMask == PDP10.OPCODE.OPIO) {
@@ -1582,7 +1582,7 @@ export default class DebuggerPDP10 extends DbgLib {
                         }
                     }
                 }
-                sOperation = Str.pad(sOperation, 8) + (sOperand? sOperand + ',' : "");
+                sOperation = StrLib.pad(sOperation, 8) + (sOperand? sOperand + ',' : "");
                 if (opCode & PDP10.OPCODE.I_FIELD) sOperation += '@';
                 sOperation += this.toStrBase(opCode & PDP10.OPCODE.Y_MASK, -1);
                 var i = (opCode >> PDP10.OPCODE.X_SHIFT) & PDP10.OPCODE.X_MASK;
@@ -1619,15 +1619,15 @@ export default class DebuggerPDP10 extends DbgLib {
             } while (dbgAddrOp.addr != dbgAddr.addr);
         }
 
-        sLine += Str.pad(sOpcodes, 16) + sOperation;
+        sLine += StrLib.pad(sOpcodes, 16) + sOperation;
 
         if (sComment) {
-            sLine = Str.pad(sLine, 48) + ';' + (sComment || "");
+            sLine = StrLib.pad(sLine, 48) + ';' + (sComment || "");
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
                 var nCycles = this.cpu.getCycles();
-                sLine += "cycles=" + nCycles.toString() + " cs=" + Str.toHex(this.cpu.nChecksum);
+                sLine += "cycles=" + nCycles.toString() + " cs=" + StrLib.toHex(this.cpu.nChecksum);
             }
         }
         return sLine;
@@ -1893,8 +1893,8 @@ export default class DebuggerPDP10 extends DbgLib {
      */
     undefinedInstruction(opCode)
     {
-        if (this.messageEnabled(Messages.CPU)) {
-            this.printf(Messages.CPU + Messages.ADDRESS, "undefined opcode %s\n", this.toStrBase(opCode));
+        if (this.messageEnabled(MESSAGE.CPU)) {
+            this.printf(MESSAGE.CPU + MESSAGE.ADDR, "undefined opcode %s\n", this.toStrBase(opCode));
             return this.stopInstruction();  // allow the caller to step over it if they really want a trap generated
         }
         return false;
@@ -2262,7 +2262,7 @@ export default class DebuggerPDP10 extends DbgLib {
      */
     getAccOutput(iAcc)
     {
-        var sReg = Str.toOct(iAcc, 2);
+        var sReg = StrLib.toOct(iAcc, 2);
         this.setAddr(this.dbgAddrAcc, iAcc);
         sReg += '=' + this.toStrBase(this.getWord(this.dbgAddrAcc), 36) + ' ';
         return sReg;
@@ -2422,7 +2422,7 @@ export default class DebuggerPDP10 extends DbgLib {
             var offSymbol = symbol['o'];
             var sAnnotation = symbol['a'];
             if (offSymbol !== undefined) {
-                Usr.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
+                UsrLib.binaryInsert(aOffsets, [offSymbol >>> 0, sSymbol], this.comparePairs);
             }
             if (sAnnotation) symbol['a'] = sAnnotation.replace(/''/g, "\"");
         }
@@ -2483,7 +2483,7 @@ export default class DebuggerPDP10 extends DbgLib {
             var len = symbolTable.len;
             if (addrSymbol >= addr && addrSymbol < addr + len) {
                 var offSymbol = addrSymbol - addr;
-                var result = Usr.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
+                var result = UsrLib.binarySearch(symbolTable.aOffsets, [offSymbol], this.comparePairs);
                 if (result >= 0) {
                     this.returnSymbol(iTable, result, aSymbol);
                 }
@@ -2608,7 +2608,7 @@ export default class DebuggerPDP10 extends DbgLib {
     {
         var s = "commands:";
         for (var sCommand in DebuggerPDP10.COMMANDS) {
-            s += '\n' + Str.pad(sCommand, 9) + DebuggerPDP10.COMMANDS[sCommand];
+            s += '\n' + StrLib.pad(sCommand, 9) + DebuggerPDP10.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -2840,7 +2840,7 @@ export default class DebuggerPDP10 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers = sDumpers + m;
@@ -2884,7 +2884,7 @@ export default class DebuggerPDP10 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in Messages.Categories) {
+            for (m in MESSAGE.NAMES) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -3039,7 +3039,7 @@ export default class DebuggerPDP10 extends DbgLib {
      */
     doIf(sCmd, fQuiet)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         if (!this.parseExpression(sCmd)) {
             if (!fQuiet) this.printf("false: %s\n", sCmd);
             return false;
@@ -3125,7 +3125,7 @@ export default class DebuggerPDP10 extends DbgLib {
             if (aSymbol[0]) {
                 sDelta = "";
                 nDelta = dbgAddr.addr - aSymbol[1];
-                if (nDelta) sDelta = " + " + Str.toHexWord(nDelta);
+                if (nDelta) sDelta = " + " + StrLib.toHexWord(nDelta);
                 s = aSymbol[0] + " (" + this.toStrOffset(aSymbol[1]) + ')' + sDelta;
                 if (fPrint) this.printf("%s\n", s);
                 sSymbol = s;
@@ -3133,7 +3133,7 @@ export default class DebuggerPDP10 extends DbgLib {
             if (aSymbol.length > 4 && aSymbol[4]) {
                 sDelta = "";
                 nDelta = aSymbol[5] - dbgAddr.addr;
-                if (nDelta) sDelta = " - " + Str.toHexWord(nDelta);
+                if (nDelta) sDelta = " - " + StrLib.toHexWord(nDelta);
                 s = aSymbol[4] + " (" + this.toStrOffset(aSymbol[5]) + ')' + sDelta;
                 if (fPrint) this.printf("%s\n", s);
                 if (!sSymbol) sSymbol = s;
@@ -3160,7 +3160,7 @@ export default class DebuggerPDP10 extends DbgLib {
         if (sCategory !== undefined) {
             var bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.LOG);
+                bitsMessage = (0xffffffff|0) & ~(MESSAGE.HALT | MESSAGE.KEYS | MESSAGE.LOG);
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -3175,9 +3175,9 @@ export default class DebuggerPDP10 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in Messages.Categories) {
+                for (m in MESSAGE.NAMES) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.Categories[m];
+                        bitsMessage = MESSAGE.NAMES[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
@@ -3195,7 +3195,7 @@ export default class DebuggerPDP10 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage &= ~bitsMessage;
                     fCriteria = false;
-                    if (bitsMessage == Messages.BUFFER) {
+                    if (bitsMessage == MESSAGE.BUFFER) {
                         var i = this.aMessageBuffer.length >= 1000? this.aMessageBuffer.length - 1000 : 0;
                         while (i < this.aMessageBuffer.length) {
                             this.printf("%s\n", this.aMessageBuffer[i++]);
@@ -3211,9 +3211,9 @@ export default class DebuggerPDP10 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in Messages.Categories) {
+        for (m in MESSAGE.NAMES) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = Messages.Categories[m];
+                var bitMessage = MESSAGE.NAMES[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -3233,7 +3233,7 @@ export default class DebuggerPDP10 extends DbgLib {
 
         this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
 
-        this.historyInit();     // call this just in case Messages.INT was turned on
+        this.historyInit();     // call this just in case MESSAGE.INT was turned on
     }
 
     /**
@@ -3405,7 +3405,7 @@ export default class DebuggerPDP10 extends DbgLib {
      */
     doPrint(sCmd)
     {
-        sCmd = Str.trim(sCmd);
+        sCmd = StrLib.trim(sCmd);
         var a = sCmd.match(/^(['"])(.*?)\1$/);
         if (!a) {
             this.parseExpression(sCmd, false);
@@ -3554,7 +3554,7 @@ export default class DebuggerPDP10 extends DbgLib {
                 var a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = Str.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;
@@ -3613,7 +3613,7 @@ export default class DebuggerPDP10 extends DbgLib {
         }
         this.sCmdTracePrev = sCmd;
 
-        Web.onCountRepeat(
+        WebLib.onCountRepeat(
             nCount,
             function onCountStep() {
                 return dbg.setBusy(true) && dbg.stepCPU(nCycles, fRegs, false);
@@ -3882,7 +3882,7 @@ export default class DebuggerPDP10 extends DbgLib {
                     }
                     if (asArgs[0] == "ver") {
                         this.printf("%s version %s (%s%s)\n", (APPNAME || "PDP10"), APPVERSION, this.cpu.model, (COMPILED? ",RELEASE" : (DEBUG? ",DEBUG" : ",NODEBUG")));
-                        this.printf("%s\n", Web.getUserAgent());
+                        this.printf("%s\n", WebLib.getUserAgent());
                         break;
                     }
                     fError = true;
@@ -3974,7 +3974,7 @@ export default class DebuggerPDP10 extends DbgLib {
             }
             for (sOperation in ops) {
                 op = ops[sOperation];
-                this.printf("%s%s\n", Str.pad(sOperation + ":", 8), this.toStrWord(op * Math.pow(2, 21)));
+                this.printf("%s%s\n", StrLib.pad(sOperation + ":", 8), this.toStrWord(op * Math.pow(2, 21)));
                 //
                 // The following code leveraged the disassembler to generate opcode handlers.
                 //
@@ -3996,8 +3996,8 @@ export default class DebuggerPDP10 extends DbgLib {
             // for (opXXX = 0o000; opXXX <= 0o777; opXXX++) {
             //     sOperation = aOpXXX[opXXX];
             //     sOperation = sOperation? ("    PDP10.op" + sOperation + ",") : "    PDP10.opUndefined,";
-            //     sOperation = Str.pad(sOperation, 32);
-            //     sOperation += "// " + Str.toOct(opXXX, 3, true) + "xxx";
+            //     sOperation = StrLib.pad(sOperation, 32);
+            //     sOperation += "// " + StrLib.toOct(opXXX, 3, true) + "xxx";
             //     this.printf("%s\n", sOperation);
             // }
             // this.printf("];\n");
@@ -4305,6 +4305,6 @@ if (DEBUGGER) {
     /*
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
-    Web.onInit(DebuggerPDP10.init);
+    WebLib.onInit(DebuggerPDP10.init);
 
 }   // endif DEBUGGER

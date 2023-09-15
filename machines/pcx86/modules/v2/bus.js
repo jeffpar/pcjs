@@ -8,12 +8,32 @@
  */
 
 import MemoryX86 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Usr from "../../../modules/v2/usrlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import UsrLib from "../../../modules/v2/usrlib.js";
 import { BACKTRACK, DEBUGGER, MAXDEBUG, PAGEBLOCKS } from "./defines.js";
+
+
+/**
+ * BusInfo object definition (returned by scanMemory())
+ *
+ * @typedef {Object} BusInfo
+ * @property {number} cbTotal           (total bytes allocated)
+ * @property {number} cBlocks           (total Memory blocks allocated)
+ * @property {Array.<number>} aBlocks   (array of allocated Memory block numbers)
+ */
+
+/**
+ * BackTrack object definition
+ *
+ * @typedef {Object} BackTrack
+ * @property {Object} obj   (reference to the source object (eg, ROM object, Sector object))
+ * @property {number} off   (the offset within the source object that this object refers to)
+ * @property {number} slot  (the slot (+1) in abtObjects which this object currently occupies)
+ * @property {number} refs  (the number of memory references, as recorded by writeBackTrack())
+ */
 
 /**
  * Think of this Controller class definition as an interface definition, implemented by the Video Card
@@ -52,6 +72,69 @@ export class Controller {
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class BusX86 extends Component {
+    /*
+     * BackTrack indexes are 31-bit values, where bits 0-8 store an object offset (0-511) and bits 16-30 store
+     * an object number (1-32767).  Object number 0 is reserved for dynamic data (ie, data created independent
+     * of any source); examples include zero values produced by instructions such as "SUB AX,AX" or "XOR AX,AX".
+     * We must special-case instructions like that, because even though AX will almost certainly contain some source
+     * data prior to the instruction, the result no longer has any connection to the source.  Similarly, "SBB AX,AX"
+     * may produce 0 or -1, depending on carry, but since we don't track the source of individual bits (including the
+     * carry flag), AX is now source-less.  TODO: This is an argument for maintaining source info on selected flags,
+     * even though it would be rather expensive.
+     *
+     * The 7 middle bits (9-15) record type and access information, as follows:
+     *
+     *      bit 15: set to indicate a "data" byte, clear to indicate a "code" byte
+     *
+     * All bytes start out as "data" bytes; only once they've been executed do they become "code" bytes.  For code
+     * bytes, the remaining 6 middle bits (9-14) represent an execution count that starts at 1 (on the byte's initial
+     * transition from data to code) and tops out at 63.
+     *
+     * For data bytes, the remaining middle bits indicate any transformations the data has undergone; eg:
+     *
+     *      bit 14: ADD/SUB/INC/DEC
+     *      bit 13: MUL/DIV
+     *      bit 12: OR/AND/XOR/NOT
+     *
+     * We make no attempt to record the original data or the transformation data, only that the transformation occurred.
+     *
+     * Other middle bits indicate whether the data was ever read and/or written:
+     *
+     *      bit 11: READ
+     *      bit 10: WRITE
+     *
+     * Bit 9 is reserved for now.
+     */
+    static BTINFO = {
+        SLOT_MAX:       32768,
+        SLOT_SHIFT:     16,
+        TYPE_DATA:      0x8000,
+        TYPE_ADDSUB:    0x4000,
+        TYPE_MULDIV:    0x2000,
+        TYPE_LOGICAL:   0x1000,
+        TYPE_READ:      0x0800,
+        TYPE_WRITE:     0x0400,
+        TYPE_COUNT_INC: 0x0200,
+        TYPE_COUNT_MAX: 0x7E00,
+        TYPE_MASK:      0xFE00,
+        TYPE_SHIFT:     9,
+        OFF_MAX:        512,
+        OFF_MASK:       0x1FF
+    };
+
+    static ERROR = {
+        ADD_MEM_INUSE:      1,
+        ADD_MEM_BADRANGE:   2,
+        SET_MEM_NOCTRL:     3,
+        SET_MEM_BADRANGE:   4,
+        REM_MEM_BADRANGE:   5
+    };
+
+    /*
+     * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
+     */
+    static BlockInfo = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
+
     /**
      * BusX86(cpu, dbg)
      *
@@ -337,7 +420,7 @@ export default class BusX86 extends Component {
             if (!this.cpu.isRunning()) {        // allocation messages at "run time" are bit too much
                 let kb = (size / 1024)|0;
                 let sb = kb? (kb + "Kb") : (size + " bytes");
-                this.printf(Messages.STATUS, "%s %s at 0x%X\n", sb, MemoryX86.TYPE.NAMES[type], addr);
+                this.printf(MESSAGE.STATUS, "%s %s at 0x%X\n", sb, MemoryX86.TYPE.NAMES[type], addr);
             }
             return true;
         }
@@ -396,7 +479,7 @@ export default class BusX86 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 let btmod = (BACKTRACK && block.modBackTrack(false)? 1 : 0);
-                info.aBlocks.push(Usr.initBitFields(BusX86.BlockInfo, iBlock, 0, btmod, block.type));
+                info.aBlocks.push(UsrLib.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, 0, btmod, block.type));
                 info.cBlocks++;
             }
             iBlock++;
@@ -947,10 +1030,10 @@ export default class BusX86 extends Component {
                 if (btiPrev && slotPrev) {
                     let btoPrev = this.abtObjects[slotPrev-1];
                     if (!btoPrev) {
-                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to empty slot (%d)\n", addr, bti, btiPrev, slotPrev);
+                        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to empty slot (%d)\n", addr, bti, btiPrev, slotPrev);
                     }
                     else if (btoPrev.refs <= 0) {
-                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
+                        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
                         /*
                          * We used to just slam a null into the previous slot and consider it gone, but there may still
                          * be "weak references" to that slot (ie, it may still be associated with a register bti).
@@ -1078,7 +1161,7 @@ export default class BusX86 extends Component {
                 }
                 if (!fSymbol || fNearest) {
                     if (bto.obj.idComponent) {
-                        return bto.obj.idComponent + '+' + Str.toHex(bto.off + off, 0, true);
+                        return bto.obj.idComponent + '+' + StrLib.toHex(bto.off + off, 0, true);
                     }
                 }
             }
@@ -1248,11 +1331,11 @@ export default class BusX86 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortInputNotify[port] !== undefined) {
-                    Component.warning("input port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("input port " + StrLib.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.printf(Messages.LOG, "addPortInputNotify(%#06x)\n", port);
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "addPortInputNotify(%#06x)\n", port);
             }
         }
     }
@@ -1390,11 +1473,11 @@ export default class BusX86 extends Component {
         if (fn !== undefined) {
             for (let port = start; port <= end; port++) {
                 if (this.aPortOutputNotify[port] !== undefined) {
-                    Component.warning("output port " + Str.toHexWord(port) + " already registered");
+                    Component.warning("output port " + StrLib.toHexWord(port) + " already registered");
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.printf(Messages.LOG, "addPortOutputNotify(%#06x)\n", port);
+                if (MAXDEBUG) this.printf(MESSAGE.LOG, "addPortOutputNotify(%#06x)\n", port);
             }
         }
     }
@@ -1494,7 +1577,7 @@ export default class BusX86 extends Component {
      */
     reportError(op, addr, size, fQuiet)
     {
-        this.printf(fQuiet? Messages.DEBUG : Messages.NONE, "Memory block error (%d: %x,%x)\n", op, addr, size);
+        this.printf(fQuiet? MESSAGE.DEBUG : MESSAGE.NONE, "Memory block error (%d: %x,%x)\n", op, addr, size);
         return false;
     }
 
@@ -1636,95 +1719,3 @@ export default class BusX86 extends Component {
      }
      */
 }
-
-/*
- * Data types used by scanMemory()
- */
-
-/**
- * @typedef {number} BlockInfo
- */
-
-/**
- * BusInfo object definition (returned by scanMemory())
- *
- * @typedef {Object} BusInfo
- * @property {number} cbTotal           (total bytes allocated)
- * @property {number} cBlocks           (total Memory blocks allocated)
- * @property Array.<BlockInfo> aBlocks  (array of allocated Memory block numbers)
- */
-
-/*
- * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
- */
-BusX86.BlockInfo = Usr.defineBitFields({num:20, count:8, btmod:1, type:3});
-
-/**
- * BackTrack object definition
- *
- * @typedef {Object} BackTrack
- * @property {Object} obj   (reference to the source object (eg, ROM object, Sector object))
- * @property {number} off   (the offset within the source object that this object refers to)
- * @property {number} slot  (the slot (+1) in abtObjects which this object currently occupies)
- * @property {number} refs  (the number of memory references, as recorded by writeBackTrack())
- */
-
-if (BACKTRACK) {
-    /*
-     * BackTrack indexes are 31-bit values, where bits 0-8 store an object offset (0-511) and bits 16-30 store
-     * an object number (1-32767).  Object number 0 is reserved for dynamic data (ie, data created independent
-     * of any source); examples include zero values produced by instructions such as "SUB AX,AX" or "XOR AX,AX".
-     * We must special-case instructions like that, because even though AX will almost certainly contain some source
-     * data prior to the instruction, the result no longer has any connection to the source.  Similarly, "SBB AX,AX"
-     * may produce 0 or -1, depending on carry, but since we don't track the source of individual bits (including the
-     * carry flag), AX is now source-less.  TODO: This is an argument for maintaining source info on selected flags,
-     * even though it would be rather expensive.
-     *
-     * The 7 middle bits (9-15) record type and access information, as follows:
-     *
-     *      bit 15: set to indicate a "data" byte, clear to indicate a "code" byte
-     *
-     * All bytes start out as "data" bytes; only once they've been executed do they become "code" bytes.  For code
-     * bytes, the remaining 6 middle bits (9-14) represent an execution count that starts at 1 (on the byte's initial
-     * transition from data to code) and tops out at 63.
-     *
-     * For data bytes, the remaining middle bits indicate any transformations the data has undergone; eg:
-     *
-     *      bit 14: ADD/SUB/INC/DEC
-     *      bit 13: MUL/DIV
-     *      bit 12: OR/AND/XOR/NOT
-     *
-     * We make no attempt to record the original data or the transformation data, only that the transformation occurred.
-     *
-     * Other middle bits indicate whether the data was ever read and/or written:
-     *
-     *      bit 11: READ
-     *      bit 10: WRITE
-     *
-     * Bit 9 is reserved for now.
-     */
-    BusX86.BTINFO = {
-        SLOT_MAX:       32768,
-        SLOT_SHIFT:     16,
-        TYPE_DATA:      0x8000,
-        TYPE_ADDSUB:    0x4000,
-        TYPE_MULDIV:    0x2000,
-        TYPE_LOGICAL:   0x1000,
-        TYPE_READ:      0x0800,
-        TYPE_WRITE:     0x0400,
-        TYPE_COUNT_INC: 0x0200,
-        TYPE_COUNT_MAX: 0x7E00,
-        TYPE_MASK:      0xFE00,
-        TYPE_SHIFT:     9,
-        OFF_MAX:        512,
-        OFF_MASK:       0x1FF
-    };
-}
-
-BusX86.ERROR = {
-    ADD_MEM_INUSE:      1,
-    ADD_MEM_BADRANGE:   2,
-    SET_MEM_NOCTRL:     3,
-    SET_MEM_BADRANGE:   4,
-    REM_MEM_BADRANGE:   5
-};

@@ -8,11 +8,11 @@
  */
 
 import MemoryX80 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG } from "./defines.js";
 
 /**
@@ -65,22 +65,22 @@ export default class ROMx80 extends Component {
         this.addrAlias = parmsROM['alias'];
 
         this.sFilePath = parmsROM['file'];
-        this.sFileName = Str.getBaseName(this.sFilePath);
+        this.sFileName = StrLib.getBaseName(this.sFilePath);
 
         if (this.sFilePath) {
             let sFileURL = this.sFilePath;
-            this.printf(Messages.DEBUG + Messages.LOG, "load(\"%s\"\n", sFileURL);
+            this.printf(MESSAGE.DEBUG + MESSAGE.LOG, "load(\"%s\"\n", sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side ROM converter to return the file in a JSON-compatible format.
              */
-            let sFileExt = Str.getExtension(this.sFileName);
+            let sFileExt = StrLib.getExtension(this.sFileName);
             if (sFileExt != DumpAPI.FORMAT.JSON && sFileExt != DumpAPI.FORMAT.HEX) {
-                sFileURL = Web.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
+                sFileURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + DumpAPI.QUERY.FILE + '=' + this.sFilePath + '&' + DumpAPI.QUERY.FORMAT + '=' + DumpAPI.FORMAT.BYTES + '&' + DumpAPI.QUERY.DECIMAL + '=true';
             }
             let rom = this;
-            Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
+            WebLib.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 rom.doneLoad(sURL, sResponse, nErrorCode);
             });
         }
@@ -155,7 +155,7 @@ export default class ROMx80 extends Component {
     doneLoad(sURL, sROMData, nErrorCode)
     {
         if (nErrorCode) {
-            this.printf(Messages.NOTICE, "Unable to load system ROM (error %d: %s)\n", nErrorCode, sURL);
+            this.printf(MESSAGE.NOTICE, "Unable to load system ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -229,7 +229,7 @@ export default class ROMx80 extends Component {
                     return;
                 }
             } catch (e) {
-                this.printf(Messages.NOTICE, "ROM data error: %s\n", e.message);
+                this.printf(MESSAGE.NOTICE, "ROM data error: %s\n", e.message);
                 return;
             }
         }
@@ -242,7 +242,7 @@ export default class ROMx80 extends Component {
             let asHexData = sHexData.split(" ");
             this.abROM = new Array(asHexData.length);
             for (let i = 0; i < asHexData.length; i++) {
-                this.abROM[i] = Str.parseInt(asHexData[i], 16);
+                this.abROM[i] = StrLib.parseInt(asHexData[i], 16);
             }
         }
         this.copyROM();
@@ -277,7 +277,7 @@ export default class ROMx80 extends Component {
                      * good idea to stop the machine in its tracks whenever a setError() occurs, but there may also be
                      * times when we'd like to forge ahead anyway.
                      */
-                    this.setError("ROM size (" + Str.toHexLong(this.abROM.length) + ") does not match specified size (" + Str.toHexLong(this.sizeROM) + ")");
+                    this.setError("ROM size (" + StrLib.toHexLong(this.abROM.length) + ") does not match specified size (" + StrLib.toHexLong(this.sizeROM) + ")");
                 }
                 else if (this.addROM(this.addrROM)) {
 
@@ -317,7 +317,7 @@ export default class ROMx80 extends Component {
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX80.TYPE.ROM)) {
-            this.printf(Messages.DEBUG + Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abROM.length);
+            this.printf(MESSAGE.DEBUG + MESSAGE.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abROM.length);
             for (let i = 0; i < this.abROM.length; i++) {
                 this.bus.setByteDirect(addr + i, this.abROM[i]);
             }
@@ -384,4 +384,4 @@ export default class ROMx80 extends Component {
 /*
  * Initialize all the ROMx80 modules on the page.
  */
-Web.onInit(ROMx80.init);
+WebLib.onInit(ROMx80.init);

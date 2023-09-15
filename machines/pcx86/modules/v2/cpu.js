@@ -7,9 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
-import Str from "../../../modules/v2/strlib.js";
+import StrLib from "../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
@@ -64,7 +64,7 @@ export default class CPULib extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, Messages.CPU);
+        super("CPU", parmsCPU, MESSAGE.CPU);
 
         let nCycles = parmsCPU['cycles'] || nCyclesDefault;
 
@@ -270,7 +270,7 @@ export default class CPULib extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init();
             } else {
-                this.printf(Messages.NONE, "No debugger detected\n");
+                this.printf(MESSAGE.NONE, "No debugger detected\n");
             }
         }
         /*
@@ -333,7 +333,7 @@ export default class CPULib extends Component {
     isPowered()
     {
         if (!this.flags.powered) {
-            this.printf(Messages.NONE, "%s not powered\n", this.toString());
+            this.printf(MESSAGE.NONE, "%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -461,7 +461,7 @@ export default class CPULib extends Component {
             }
             let sVal;
             if (!this.flags.running || this.flags.displayLiveRegs) {
-                sVal = Str.toHex(nValue, cch);
+                sVal = StrLib.toHex(nValue, cch);
             } else {
                 sVal = "--------".substr(0, cch);
             }
@@ -760,7 +760,7 @@ export default class CPULib extends Component {
                 let sSpeed = this.getSpeedTarget();
                 let controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.printf(Messages.NONE, "target speed: %s\n", sSpeed);
+                this.printf(MESSAGE.NONE, "target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.updateFocus();
         }
@@ -921,7 +921,7 @@ export default class CPULib extends Component {
              * Every time the browser gives us another chance to run, we want to display our targets for that run
              * here, followed by what we accomplished in that run.
              */
-            this.printf(Messages.CPU, "%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
+            this.printf(MESSAGE.CPU, "%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
                 msElapsedThisRun,
                 msRemainsThisRun,
                 this.nCyclesThisRun,
@@ -1143,14 +1143,14 @@ export default class CPULib extends Component {
             timer[1] -= nCycles;
             if (timer[1] <= 0) {
                 if (DEBUG) {
-                    this.printf(Messages.CPU + Messages.TIMER, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
+                    this.printf(MESSAGE.CPU + MESSAGE.TIMER, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
                 }
                 timer[1] = -1;      // zero is technically an "active" value, so ensure the timer is dormant now
                 timer[3]();         // safe to invoke the callback function now
                 if (timer[2]) {
                     this.setTimer(iTimer, timer[2]);
                     if (DEBUG) {
-                        this.printf(Messages.CPU + Messages.TIMER, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
+                        this.printf(MESSAGE.CPU + MESSAGE.TIMER, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
                     }
                 }
             }
@@ -1305,7 +1305,7 @@ export default class CPULib extends Component {
             return false;
         }
         if (this.flags.running) {
-            if (!fQuiet) this.printf(Messages.NONE, "%s busy\n", this.toString());
+            if (!fQuiet) this.printf(MESSAGE.NONE, "%s busy\n", this.toString());
             return false;
         }
         if (this.idRunTimeout) {
@@ -1375,7 +1375,7 @@ export default class CPULib extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
                 this.cmp.updateStatus(true);
             }
-            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
+            if (!this.dbg) this.printf(MESSAGE.STATUS, "Stopped\n");
             fStopped = true;
         }
         this.flags.complete = fComplete;

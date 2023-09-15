@@ -43,14 +43,14 @@ The second feature is a generalized method for sending commands to components wi
 want to send some serial data to a machine:
 
 {% raw %}
-	{% include machine/command.html type='button' label='Try It!' machine='test1170' component='SerialPort' command='receiveData' value='HELP\r' %}
+	{% include machines/command.html type='button' label='Try It!' machine='test1170' component='SerialPort' command='receiveData' value='HELP\r' %}
 {% endraw %}
 
 which should translate into a control that looks like this:
 
 	<button type="button" onclick="commandMachine('test1170','SerialPort','receiveData','HELP\r')">Try It!</button>
 
-In fact, let's try it now. {% include machine/command.html type='button' label='Try It!' machine='test1170' component='SerialPort' command='receiveData' value='HELP\r' %}
+In fact, let's try it now. {% include machines/command.html type='button' label='Try It!' machine='test1170' component='SerialPort' command='receiveData' value='HELP\r' %}
 
 Obviously, every component we want to control will need to be updated to export the necessary "command" functions.
 

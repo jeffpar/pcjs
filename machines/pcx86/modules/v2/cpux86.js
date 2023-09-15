@@ -9,13 +9,13 @@
 
 import CPULib from "./cpu.js";
 import MemoryX86 from "./memory.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import SegX86 from "./segx86.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
-import Str from "../../../modules/v2/strlib.js";
-import Web from "../../../modules/v2/weblib.js";
+import StrLib from "../../../modules/v2/strlib.js";
+import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, BACKTRACK, BUGS_8086, DEBUG, DEBUGGER, I386, MAXDEBUG, PAGEBLOCKS, PREFETCH } from "./defines.js";
 
 /**
@@ -86,7 +86,7 @@ export default class CPUx86 extends CPULib {
          * is equal to model.
          */
         let stepping = parmsCPU['stepping'];
-        this.stepping = model + (stepping? Str.parseInt(stepping, 16) : 0);
+        this.stepping = model + (stepping? StrLib.parseInt(stepping, 16) : 0);
 
         /*
          * Initialize processor operation to match the requested model
@@ -1525,7 +1525,7 @@ export default class CPUx86 extends CPULib {
          * of messages on and off, is good enough.
          */
         if (DEBUGGER && this.flags.debugCheck) {
-            if (this.messageEnabled(Messages.INT) && this.dbg.messageInt(nInt, this.regLIP) && MAXDEBUG) {
+            if (this.messageEnabled(MESSAGE.INT) && this.dbg.messageInt(nInt, this.regLIP) && MAXDEBUG) {
                 this.addIntReturn(this.regLIP, function(cpu, nCycles) {
                     return function onIntReturn(nLevel) {
                         cpu.dbg.messageIntReturn(nInt, nLevel, cpu.getCycles() - nCycles);
@@ -1750,7 +1750,7 @@ export default class CPUx86 extends CPULib {
             fV86 = this.isV86Mode();
         }
         if (DEBUG && (fProt != this.isProtMode() || fV86 != this.isV86Mode())) {
-            this.printf(Messages.ADDRESS, "CPU switching to %s-mode\n", (fProt? (fV86? "v86" : "protected") : "real"));
+            this.printf(MESSAGE.ADDR, "CPU switching to %s-mode\n", (fProt? (fV86? "v86" : "protected") : "real"));
         }
         this.aOpGrp6 = (fProt && !fV86? X86.aOpGrp6Prot : X86.aOpGrp6Real);
         this.segCS.updateMode(false, fProt, fV86);
@@ -3019,7 +3019,7 @@ export default class CPUx86 extends CPULib {
             }
         }
         if (bitsPorts) {
-            this.printf(Messages.IOPM + Messages.ADDRESS, "checkIOPM(%#06x,%d,%s): trapped\n", port, nPorts, (fInput? "input" : "output"));
+            this.printf(MESSAGE.IOPM + MESSAGE.ADDR, "checkIOPM(%#06x,%d,%s): trapped\n", port, nPorts, (fInput? "input" : "output"));
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return false;
         }
@@ -4432,7 +4432,7 @@ export default class CPUx86 extends CPULib {
          * One exception I make here is when you've asked the Debugger to display PIC messages, the idea being that
          * if you're watching the PIC that closely, then you want to hardware interrupts to occur regardless.
          */
-        if (!nMinCycles && !this.messageEnabled(Messages.PIC)) this.opFlags |= X86.OPFLAG.NOINTR;
+        if (!nMinCycles && !this.messageEnabled(MESSAGE.PIC)) this.opFlags |= X86.OPFLAG.NOINTR;
 
         do {
             let opPrefixes = this.opFlags & X86.OPFLAG_PREFIXES;
@@ -4609,4 +4609,4 @@ CPUx86.PAGEBLOCKS_CACHE = 512;      // TODO: This seems adequate for 4Mb of RAM,
 /*
  * Initialize every CPU module on the page
  */
-Web.onInit(CPUx86.init);
+WebLib.onInit(CPUx86.init);

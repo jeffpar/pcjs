@@ -12,7 +12,7 @@ machines:
     type: ti42
     name: TI-42 Programmable Calculator
     config: /machines/ti/ti42/ti42.json
-    layout: /_includes/ti42/ti42-full.html
+    layout: /_includes/machines/ti42/ti42-full.html
 ---
 
 The TI MBA "electronic business calculator" was produced in 1977 and marketed by Texas Instruments in the

@@ -24,7 +24,7 @@ import { globals } from "./defines.js";
  * Additionally, we must update any globals that depend on DEBUGGER (currently, BACKTRACK and SYMBOLS).
  *
  * NOTE: Unlike the runtime tweaks of globals in /machines/pcx86/modules/v2/defines.js and /machines/modules/v2/weblib.js
- * (see the calls to Web.getURLParm()), we *could* modify those globals directly, because this file is not compiled by the
+ * (see the calls to WebLib.getURLParm()), we *could* modify those globals directly, because this file is not compiled by the
  * Closure Compiler (it is dynamically added to pages by the Node web server only as needed); however, in order to avoid
  * linting errors, we again use the "window" syntax.
  */

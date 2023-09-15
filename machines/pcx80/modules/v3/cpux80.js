@@ -9,6 +9,7 @@
 
 import CPU      from "../../../modules/v3/cpu.js";
 import Debugger from "../../../modules/v3/debugger.js";
+import MESSAGE  from "../../../modules/v3/message.js";
 
 /**
  * Emulation of the 8080 CPU
@@ -1588,7 +1589,7 @@ export default class CPUx80 extends CPU {
          * NMI generation mechanism for this CPU), so let's stop the CPU; similarly, if the HALT message
          * category is enabled, then the Debugger must want us to stop the CPU.
          */
-        if (!this.getIF() || this.isMessageOn(CPU.MESSAGE.HALT)) {
+        if (!this.getIF() || this.isMessageOn(MESSAGE.HALT)) {
             let addr = this.getPC() - 1;
             this.setPC(addr);           // this is purely for the Debugger's benefit, to show the HLT
             this.time.stop();

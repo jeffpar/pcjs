@@ -7,9 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
-import Str from "../../../../modules/v2/strlib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
@@ -50,7 +50,7 @@ export default class CPUPDP10 extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, Messages.CPU);
+        super("CPU", parmsCPU, MESSAGE.CPU);
 
         var nCycles = +parmsCPU['cycles'] || nCyclesDefault;
 
@@ -210,7 +210,7 @@ export default class CPUPDP10 extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init(this.flags.autoStart);
             } else {
-                this.printf(Messages.STATUS, "No debugger detected\n");
+                this.printf(MESSAGE.STATUS, "No debugger detected\n");
             }
             if (!this.flags.autoStart) {
                 this.printf("CPU will not be auto-started %s\n", (this.panel? "(click Run to start)" : "(type 'go' to start)"));
@@ -828,7 +828,7 @@ export default class CPUPDP10 extends Component {
         this.nCyclesRecalc += this.nCyclesThisRun;
 
         if (DEBUG && msRemainsThisRun) {
-            this.printf(Messages.LOG + Messages.BUFFER, "calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
+            this.printf(MESSAGE.LOG + MESSAGE.BUFFER, "calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
         }
 
         this.msEndThisRun += msRemainsThisRun;
@@ -1125,7 +1125,7 @@ export default class CPUPDP10 extends Component {
             if (fUpdateFocus) this.cmp.setFocus(true);
             this.cmp.start(this.msStartRun, this.getCycles());
         }
-        if (!this.dbg) this.printf(Messages.STATUS, "Started\n");
+        if (!this.dbg) this.printf(MESSAGE.STATUS, "Started\n");
         setTimeout(this.onRunTimeout, 0);
         return true;
     }
@@ -1170,7 +1170,7 @@ export default class CPUPDP10 extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
             }
             fStopped = true;
-            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
+            if (!this.dbg) this.printf(MESSAGE.STATUS, "Stopped\n");
         }
         this.flags.complete = fComplete;
         return fStopped;

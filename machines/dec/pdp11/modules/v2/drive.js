@@ -8,12 +8,12 @@
  */
 
 import DiskPDP11 from "./disk.js";
-import Messages from "./messages.js";
+import MESSAGE from "./message.js";
 import Component from "../../../../modules/v2/component.js";
 import DiskAPI from "../../../../modules/v2/diskapi.js";
 import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /**
@@ -83,7 +83,7 @@ export default class DriveController extends Component {
 
         this.nDrives = configDC.DRIVES;
         this.aDrives = new Array(this.nDrives);
-        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
+        this.fLocalDisks = (!WebLib.isMobile() && 'FileReader' in globals.window);
         this.sDiskSource = DriveController.SOURCE.NONE;
 
         /*
@@ -165,7 +165,7 @@ export default class DriveController extends Component {
              */
             var controlSelect = /** @type {HTMLSelectElement} */ (control);
             control.onchange = function onChangeListDrives(event) {
-                var iDrive = Str.parseInt(controlSelect.value, 10);
+                var iDrive = StrLib.parseInt(controlSelect.value, 10);
                 if (iDrive != null) dc.displayDisk(iDrive);
             };
             return true;
@@ -191,7 +191,7 @@ export default class DriveController extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -208,7 +208,7 @@ export default class DriveController extends Component {
             control.onclick = function onClickSaveDrive(event) {
                 var controlDrives = dc.bindings["listDrives"];
                 if (controlDrives && controlDrives.options && dc.aDrives) {
-                    var iDriveSelected = Str.parseInt(controlDrives.value, 10) || 0;
+                    var iDriveSelected = StrLib.parseInt(controlDrives.value, 10) || 0;
                     var drive = dc.aDrives[iDriveSelected];
                     if (drive) {
                         /*
@@ -217,13 +217,13 @@ export default class DriveController extends Component {
                         var disk = drive.disk;
                         if (disk) {
                             if (DEBUG) dc.printf("saving disk %s...\n", disk.sDiskPath);
-                            var sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
+                            var sAlert = WebLib.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
-                            dc.printf(Messages.NOTICE, "No disk loaded in drive.\n");
+                            dc.printf(MESSAGE.NOTICE, "No disk loaded in drive.\n");
                         }
                     } else {
-                        dc.printf(Messages.NOTICE, "No disk drive selected.\n");
+                        dc.printf(MESSAGE.NOTICE, "No disk drive selected.\n");
                     }
                 }
             };
@@ -233,7 +233,7 @@ export default class DriveController extends Component {
             var controlInput = /** @type {Object} */ (control);
 
             if (!this.fLocalDisks) {
-                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
+                if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -261,7 +261,7 @@ export default class DriveController extends Component {
                 var file = event.currentTarget[1].files[0];
                 if (file) {
                     var sDiskPath = file.name;
-                    var sDiskName = Str.getBaseName(sDiskPath, true);
+                    var sDiskName = StrLib.getBaseName(sDiskPath, true);
                     dc.loadSelectedDisk(sDiskName, sDiskPath, file);
                 }
                 /*
@@ -698,7 +698,7 @@ export default class DriveController extends Component {
                     continue;
                 }
             }
-            this.printf(Messages.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDisk));
+            this.printf(MESSAGE.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDisk));
         }
         return !!this.cAutoMount;
     }
@@ -723,10 +723,10 @@ export default class DriveController extends Component {
         }
 
         var controlDrives = this.bindings["listDrives"];
-        var iDrive = controlDrives && Str.parseInt(controlDrives.value, 10);
+        var iDrive = controlDrives && StrLib.parseInt(controlDrives.value, 10);
 
         if (iDrive === undefined || iDrive < 0 || iDrive >= this.aDrives.length) {
-            this.printf(Messages.NOTICE, "Unable to load the selected drive\n");
+            this.printf(MESSAGE.NOTICE, "Unable to load the selected drive\n");
             return false;
         }
 
@@ -736,7 +736,7 @@ export default class DriveController extends Component {
         }
 
         if (sDiskPath == DriveController.SOURCE.LOCAL) {
-            this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk.\n");
+            this.printf(MESSAGE.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk.\n");
             return false;
         }
 
@@ -752,8 +752,8 @@ export default class DriveController extends Component {
         if (sDiskPath == DriveController.SOURCE.REMOTE) {
             sDiskPath = globals.window.prompt("Enter the URL of a remote disk image.", "") || "";
             if (!sDiskPath) return false;
-            sDiskName = Str.getBaseName(sDiskPath);
-            this.printf(Messages.STATUS, 'Attempting to load %s as "%s"\n', sDiskPath, sDiskName);
+            sDiskName = StrLib.getBaseName(sDiskPath);
+            this.printf(MESSAGE.STATUS, 'Attempting to load %s as "%s"\n', sDiskPath, sDiskName);
             this.sDiskSource = DriveController.SOURCE.REMOTE;
         }
         else {
@@ -774,15 +774,15 @@ export default class DriveController extends Component {
     {
         var drive;
         var controlDrives = this.bindings["listDrives"];
-        var iDrive = controlDrives && Str.parseInt(controlDrives.value, 10);
+        var iDrive = controlDrives && StrLib.parseInt(controlDrives.value, 10);
 
         if (iDrive == null || iDrive < 0 || iDrive >= this.aDrives.length || !(drive = this.aDrives[iDrive])) {
-            this.printf(Messages.NOTICE, "Unable to boot the selected drive\n");
+            this.printf(MESSAGE.NOTICE, "Unable to boot the selected drive\n");
             return false;
         }
 
         if (!drive.disk) {
-            this.printf(Messages.NOTICE, "Load a disk into the drive first\n");
+            this.printf(MESSAGE.NOTICE, "Load a disk into the drive first\n");
             return false;
         }
 
@@ -797,7 +797,7 @@ export default class DriveController extends Component {
 
         var err = this.readData(drive, drive.iCylinderBoot, drive.iHeadBoot, drive.iSectorBoot, drive.cbSectorBoot, 0x0000, 2);
         if (err) {
-            this.printf(Messages.NOTICE, "Unable to read the boot sector (%s)\n", err);
+            this.printf(MESSAGE.NOTICE, "Unable to read the boot sector (%s)\n", err);
             return false;
         }
         return true;
@@ -844,10 +844,10 @@ export default class DriveController extends Component {
             this.unloadDrive(iDrive, true);
 
             if (drive.fBusy) {
-                this.printf(Messages.NOTICE, "%s busy\n", this.type);
+                this.printf(MESSAGE.NOTICE, "%s busy\n", this.type);
             }
             else {
-                // this.printf(Messages.STATUS, "disk queued: %s\n", sDiskName);
+                // this.printf(MESSAGE.STATUS, "disk queued: %s\n", sDiskName);
                 drive.fBusy = true;
                 if (fAutoMount) {
                     drive.fAutoMount = true;
@@ -886,7 +886,7 @@ export default class DriveController extends Component {
              * have done this itself, since we passed our Drive object to it (it already knows the drive's limits).
              */
             if (disk.nCylinders > drive.nCylinders || disk.nHeads > drive.nHeads /* || disk.nSectors > drive.nSectors */) {
-                this.printf(Messages.NOTICE, "Disk \"%s\" too large for drive %s\n", sDiskName, this.getDriveName(drive.iDrive));
+                this.printf(MESSAGE.NOTICE, "Disk \"%s\" too large for drive %s\n", sDiskName, this.getDriveName(drive.iDrive));
                 disk = null;
             }
         }
@@ -919,7 +919,7 @@ export default class DriveController extends Component {
              * With the addition of notify(), users are now "alerted" whenever a disk has finished loading;
              * notify() is selective about its output, using print() if a print window is open, alert() otherwise.
              */
-            this.printf(Messages.NOTICE, "Loaded disk \"%s\" in drive %s\n", sDiskName, this.getDriveName(drive.iDrive));
+            this.printf(MESSAGE.NOTICE, "Loaded disk \"%s\" in drive %s\n", sDiskName, this.getDriveName(drive.iDrive));
 
             /*
              * Since you usually want the Computer to have focus again after loading a new disk, let's try automatically
@@ -989,7 +989,7 @@ export default class DriveController extends Component {
                 if (control.value == sPath) return control.text;
             }
         }
-        return Str.getBaseName(sPath, true);
+        return StrLib.getBaseName(sPath, true);
     }
 
     /**
@@ -1024,7 +1024,7 @@ export default class DriveController extends Component {
                 if (fUpdateDrive) {
                     this.assert(iDrive == drive.iDrive);
                     for (i = 0; i < controlDrives.options.length; i++) {
-                        if (Str.parseInt(controlDrives.options[i].value, 10) == drive.iDrive) {
+                        if (StrLib.parseInt(controlDrives.options[i].value, 10) == drive.iDrive) {
                             if (controlDrives.selectedIndex != i) {
                                 controlDrives.selectedIndex = i;
                             }
@@ -1036,7 +1036,7 @@ export default class DriveController extends Component {
                 /*
                  * Next, make sure the drive whose disk we're updating is the currently selected drive.
                  */
-                var iDriveSelected = Str.parseInt(controlDrives.value, 10);
+                var iDriveSelected = StrLib.parseInt(controlDrives.value, 10);
                 var sTargetPath = (drive.fLocal? DriveController.SOURCE.LOCAL : drive.sDiskPath);
                 if (!isNaN(iDriveSelected) && iDriveSelected == iDrive) {
                     for (i = 0; i < controlDisks.options.length; i++) {
@@ -1071,7 +1071,7 @@ export default class DriveController extends Component {
             var nDrives = controlDrives.options.length;
             for (var i = 0; i < nDrives; i++) {
                 if (controlDrives.options[i].textContent == sDrive) {
-                    var iDrive = Str.parseInt(controlDrives.options[i].value, 10);
+                    var iDrive = StrLib.parseInt(controlDrives.options[i].value, 10);
                     if (iDrive >= 0) {
                         return this.displayDisk(iDrive, true);
                     }
@@ -1152,7 +1152,7 @@ export default class DriveController extends Component {
             drive.fLocal = false;
 
             if (!fLoading) {
-                this.printf(Messages.NOTICE, "Drive %s unloaded\n", this.getDriveName(iDrive));
+                this.printf(MESSAGE.NOTICE, "Drive %s unloaded\n", this.getDriveName(iDrive));
                 this.sDiskSource = DriveController.SOURCE.NONE;
                 this.displayDisk(iDrive);
             }

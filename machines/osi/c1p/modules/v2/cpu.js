@@ -8,9 +8,9 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
-import Messages from "../../../../modules/v2/messages.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import MESSAGE from "../../../../modules/v2/message.js";
+import StrLib from "../../../../modules/v2/strlib.js";
+import WebLib from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 
 /**
@@ -49,7 +49,7 @@ export default class C1PCPU extends Component {
         this.clearRegs();
         this.flags.powered = false;
         this.flags.running = false;
-        var s = Web.getURLParm('autoStart');
+        var s = WebLib.getURLParm('autoStart');
         if (s == "true" || s == "false") {
             this.fAutoStart = JSON.parse(s);
         } else {
@@ -631,7 +631,7 @@ export default class C1PCPU extends Component {
             }
             this.aReadNotify.push([start, end, component, fn]);
             if (DEBUG) {
-                this.printf(Messages.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+                this.printf(MESSAGE.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
             }
         }
     }
@@ -669,7 +669,7 @@ export default class C1PCPU extends Component {
             this.addrReadLower = aBounds[2];
             this.addrReadUpper = aBounds[3];
             if (DEBUG) {
-                this.printf(Messages.LOG, "removeReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+                this.printf(MESSAGE.LOG, "removeReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
             }
             return true;
         }
@@ -696,7 +696,7 @@ export default class C1PCPU extends Component {
             }
             this.aWriteNotify.push([start, end, component, fn]);
             if (DEBUG) {
-                this.printf(Messages.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+                this.printf(MESSAGE.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
             }
         }
     }
@@ -734,7 +734,7 @@ export default class C1PCPU extends Component {
             this.addrWriteLower = aBounds[2];
             this.addrWriteUpper = aBounds[3];
             if (DEBUG) {
-                this.printf(Messages.LOG, "removeWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+                this.printf(MESSAGE.LOG, "removeWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
             }
             return true;
         }
@@ -1337,9 +1337,9 @@ export default class C1PCPU extends Component {
      */
     getByte(addr)
     {
-        Component.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: " + Str.toHexWord(addr));
+        Component.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: " + StrLib.toHexWord(addr));
         var b = this.abMem[addr];
-        Component.assert(!(b & ~0xff), "invalid byte (" + b + ") at address " + Str.toHexWord(addr));
+        Component.assert(!(b & ~0xff), "invalid byte (" + b + ") at address " + StrLib.toHexWord(addr));
         return b;
     }
 
@@ -1350,9 +1350,9 @@ export default class C1PCPU extends Component {
      */
     getWord(addr)
     {
-        Component.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: " + Str.toHexWord(addr));
+        Component.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: " + StrLib.toHexWord(addr));
         var w = this.abMem[addr] | (this.abMem[addr+1] << 8);
-        Component.assert(!(w & ~0xffff), "invalid word (" + w + ") at address " + Str.toHexWord(addr));
+        Component.assert(!(w & ~0xffff), "invalid word (" + w + ") at address " + StrLib.toHexWord(addr));
         return w;
     }
 
@@ -1363,8 +1363,8 @@ export default class C1PCPU extends Component {
      */
     setByte(addr, b)
     {
-        Component.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: " + Str.toHexWord(addr));
-        Component.assert(!(b & ~0xff), "invalid byte (" + b + ") at address " + Str.toHexWord(addr));
+        Component.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: " + StrLib.toHexWord(addr));
+        Component.assert(!(b & ~0xff), "invalid byte (" + b + ") at address " + StrLib.toHexWord(addr));
         this.abMem[addr] = b;
     }
 
@@ -3806,7 +3806,7 @@ export default class C1PCPU extends Component {
                  *
                  *      eg: %A for this.regA, %X for this.regX, etc
                  */
-                s = s.replace(/%A/g, Str.toHex(this.regA, 2)).replace(/%X/g, Str.toHex(this.regX, 2)).replace(/%Y/g, Str.toHex(this.regY, 2));
+                s = s.replace(/%A/g, StrLib.toHex(this.regA, 2)).replace(/%X/g, StrLib.toHex(this.regX, 2)).replace(/%Y/g, StrLib.toHex(this.regY, 2));
                 this.printf("%s\n", s);
                 /*
                  * To make printing "smoother", let's force a yield
@@ -3898,4 +3898,4 @@ export default class C1PCPU extends Component {
 /*
  * Initialize every CPU module on the page (as IF there's ever going to be more than one ;-))
  */
-Web.onInit(C1PCPU.init);
+WebLib.onInit(C1PCPU.init);

@@ -478,6 +478,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "--target=40M"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/test",
       "stopOnEntry": false,
@@ -555,9 +556,11 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5160",
-        "dir"
+        "load a: pc dos 2.0 disk 1",
+        "--sys=pcdos",
+        "--ver=2.00"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
+      "cwd": "${workspaceFolder}/tools/pc/disks/test",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -576,7 +579,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml",
-        "disks/msdos320",
+        "disks/test",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -598,10 +601,9 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--target=30M",
-        "--halt"
+        "--disk=https://harddisks.pcjs.org/pcx86/20mb/IBMOS210-EGA.json"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -622,7 +624,7 @@
         "ibm5170",
         "--driveclass=pcjs",
         "--drivesize=27",
-        "disks/msdos330",
+        "disks/test",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -645,7 +647,7 @@
       "args": [
         "ibm5170",
         "--drivetype=200:4:17",
-        "disks/msdos330",
+        "disks/test",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -670,7 +672,7 @@
         "--ver=3.31",
         "--drivesize=40"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
+      "cwd": "${workspaceFolder}/tools/pc/disks/test",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -774,7 +776,7 @@
       "args": [
         "--sys=compaq",
         "--ver=3.31",
-        "disks/MSDOS320",
+        "disks/test",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -797,7 +799,7 @@
       "args": [
         "--sys=pcdos",
         "--ver=2.00",
-        "disks/MSDOS320",
+        "disks/test",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -821,7 +823,7 @@
         "--sys=pcdos",
         "--ver=2.00",
         "--drivesize=20mb",
-        "disks/MSDOS320",
+        "disks/test",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -844,7 +846,7 @@
       "args": [
         "--sys=pcdos",
         "--ver=3.10",
-        "disks/MSDOS320",
+        "disks/test",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -869,7 +871,7 @@
         "--ver=3.10",
         "--drivesize=20mb",
         "ibm5170",
-        "disks/MSDOS320",
+        "disks/test",
         "dir *.*",
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -917,7 +919,7 @@
         "--sys=compaq",
         "--ver=3.31"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC/MBR",
+      "cwd": "${workspaceFolder}/tools/pc/disks/test",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1685,7 +1687,7 @@
         "--target=10M",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MSDOS330/SRC",
+      "cwd": "${workspaceFolder}/tools/pc/disks/test",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

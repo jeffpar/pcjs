@@ -7,13 +7,13 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import NumIO from "./numio.js";
+import StdLib from "./stdlib.js";
 import Format from "../v2/format.js";
 
 /**
  * @class StdIO
  */
-export default class StdIO extends NumIO {
+export default class StdIO extends StdLib {
     /**
      * StdIO()
      *

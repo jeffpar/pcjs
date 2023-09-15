@@ -8,7 +8,7 @@ machines:
     config: /machines/pcx86/compaq/deskpro386/vga/4096kb/machine.xml
     autoMount:
       A:
-        name: COMPAQ MS-DOS 3.31 (Disk 2)
+        name: COMPAQ MS-DOS 3.31D (720K Disk 2)
       B:
         name: SPY 386 Monitor 0.1
     autoType: \r\rB:\rDIR\r\SPY\r
