@@ -8,7 +8,7 @@
 	<ram id="ramExt" addr="0x100000" size="0x100000" comment="Extended memory at 0x100000"/>
 	<rom id="romBIOS" addr="0xf0000" size="0x10000" alias="[0xffff0000]" file="/machines/pcx86/progressive/pro386/rom/1986-04-25/PRO386.json5"/>
 	<video ref="/machines/pcx86/ibm/video/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml"/>
-	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A: {name: "COMPAQ MS-DOS 3.31 (Disk 1)"}, B: {name: "None"}}'/>
+	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A: {name: "COMPAQ MS-DOS 3.31D (720K Disk 1)"}, B: {name: "None"}}'/>
 	<hdc ref="/machines/pcx86/ibm/hdc/47mb/unformatted-at5.xml"/>
 	<keyboard ref="/machines/pcx86/ibm/keyboard/us84-softkeys.xml"/>
 	<chipset id="chipset" model="5170" floppies="[1200,1200]"/>
