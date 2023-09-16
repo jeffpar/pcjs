@@ -1634,7 +1634,14 @@ export default class DiskInfo {
             let cFileSectors = aFileData[0]? Math.trunc(aFileData[0].size / cbSector) + 1 : 0;
             let adjustTotalSectors = function() {
                 let fAdjusted = false;
-                if (cFileSectors) {
+                /*
+                 * We skip the hidden sectors adjustment if we weren't given any boot files OR we were given a DOS
+                 * version that is >= 3.31; the COMPAQ DOS 3.31 boot sector reads the BIOS a sector at a time, not a
+                 * track at a time, and this bug was actually semi-fixed in MS-DOS 3.30, but they only fixed the boot
+                 * sector written by SYS and FORMAT, not the boot sector that's actually present on the MS-DOS 3.30
+                 * boot diskette itself.
+                 */
+                if (cFileSectors && (!driveInfo.verDOS || driveInfo.verDOS < 3.31)) {
                     let maxAdjustments = driveInfo.hiddenSectors? 0 : cSectorsPerTrack;
                     while (maxAdjustments--) {
                         let cInitSectors = cHiddenSectors + cReservedSectors + cFATs * cFATSectors + cRootSectors;
