@@ -2244,11 +2244,10 @@ class WebIO extends StdIO {
     /**
      * getURLParms(sParms)
      *
-     * @this {WebIO}
-     * @param {string} [sParms] containing the parameter portion of a URL (ie, after the '?')
-     * @returns {Object} containing properties for each parameter found
+     * @param {string} [sParms] (optional string containing the parameter portion of a URL (ie, after the '?'))
+     * @returns {Object} (containing properties for each parameter found)
      */
-    getURLParms(sParms)
+    static getURLParms(sParms)
     {
         let parms = WebIO.URLParms;
         if (!parms) {
@@ -2257,9 +2256,9 @@ class WebIO extends StdIO {
                 if (!sParms) {
                     /**
                      * Note that window.location.href returns the entire URL, whereas window.location.search
-                     * returns only parameters, if any (starting with the '?', which we skip over with a substr() call).
+                     * returns only parameters, if any (starting with the '?', which we skip over with a slice() call).
                      */
-                    sParms = window.location.search.substr(1);
+                    sParms = window.location.search.slice(1);
                 }
                 let match;
                 let pl = /\+/g; // RegExp for replacing addition symbol with a space
@@ -3371,7 +3370,7 @@ class Device extends WebIO {
          */
         overrides = config['overrides'] || overrides;
         if (overrides.length) {
-            let parms = this.getURLParms();
+            let parms = WebIO.getURLParms();
             for (let prop in parms) {
                 if (overrides.indexOf(prop) >= 0) {
                     let s = parms[prop];

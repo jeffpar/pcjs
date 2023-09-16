@@ -8,12 +8,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import child_process from "child_process";
-import fs            from "fs";
-import glob          from "glob";
-import JSON5         from 'json5';
-import path          from "path";
-import xml2js        from "xml2js";
+import { node }      from "../modules/nodeapi.js";
 import DbgLib        from "../../machines/modules/v2/dbglib.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib        from "../../machines/modules/v2/strlib.js";
@@ -24,6 +19,8 @@ import { MAXDEBUG }  from "../../machines/modules/v3/defines.js";
 import MESSAGE       from "../../machines/modules/v3/message.js";
 import { device, existsDir, existsFile, getDiskSector, getTargetValue, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
 import pcjslib       from "../modules/pcjslib.js";
+
+await node.import("child_process", "fs", "glob", "json5", "path", "xml2js");
 
 let fBare = false;
 let fDebug = false;
@@ -202,7 +199,7 @@ async function loadModules(factory, modules, done)
          *      "..\..\..\machines\modules\v2\defines.js" is not a valid package name ....
          *
          * which seems bizarre, since backslash is actually Windows' preferred path separator
-         * and is precisely what Node's path.sep returns on Windows. ¯\_(ツ)_/¯
+         * and is precisely what Node's node.path.sep returns on Windows. ¯\_(ツ)_/¯
          *
          * Moreover, we cannot join modulePath with rootDir, because rootDir will start with
          * a drive letter (eg, "C:") on Windows, which then fails with the following error:
@@ -212,9 +209,9 @@ async function loadModules(factory, modules, done)
          *
          * so we join it with a relative directory instead (ie, "../..").
          */
-        modulePath = path.join("../..", modulePath).replace(/\\/g, '/');
+        modulePath = node.path.join("../..", modulePath).replace(/\\/g, '/');
         if (fDebug) printf("loading: %s\n", modulePath.replace(/\.\.\/\.\.\//g, '/'));
-        let name = path.basename(modulePath, ".js");
+        let name = node.path.basename(modulePath, ".js");
         if (name == "embed") {
             let { [factory]: embed } = await import(modulePath);
             embedMachine = embed;
@@ -846,7 +843,7 @@ function checkMachine(sFile)
             break;
         }
         if (sFile.indexOf('.') > 0) {
-            let s = path.join(pcjsDir, sFile);
+            let s = node.path.join(pcjsDir, sFile);
             sVerify = existsFile(s, false)? s: "";
         } else {
             const exts = [".json", ".json5", ".xml"];
@@ -856,7 +853,7 @@ function checkMachine(sFile)
                     sVerify = s;
                     break;
                 }
-                s = path.join(pcjsDir, s);
+                s = node.path.join(pcjsDir, s);
                 if (existsFile(s, false)) {
                     sVerify = s;
                     break;
@@ -1051,7 +1048,7 @@ function loadMachine(sFile)
                 let disk, name;
                 if (fFloppy) {
                     disk = localDisk;
-                    name = (path.basename(localDir).toUpperCase() || "User-defined") + " Diskette";
+                    name = (node.path.basename(localDir).toUpperCase() || "User-defined") + " Diskette";
                 } else {
                     disk = getSystemDisk(systemType, systemVersion);
                     name = systemType.toUpperCase() + ' ' + sprintf("%.2f", parseFloat(systemVersion));
@@ -1064,7 +1061,7 @@ function loadMachine(sFile)
         }
 
         if (sFile.endsWith(savedMachine) && config['computer'] && savedState) {
-            config['computer']['state'] = path.join(pcjsDir, savedState);
+            config['computer']['state'] = node.path.join(pcjsDir, savedState);
         }
 
         let args = JSON.stringify(config);
@@ -1152,7 +1149,7 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
     try {
         xml._resolving++;
         let sXML = await readFileAsync(sFile);
-        let parser = new xml2js.Parser({attrkey: idAttrs});
+        let parser = new node.xml2js.Parser({attrkey: idAttrs});
         parser.parseString(sXML, function parseXML(err, xmlNode) {
             if (!aTags) {
                 xml[sNode] = xmlNode[sNode];
@@ -1265,9 +1262,9 @@ function checkCommand(sDir, sCommand)
                 sProgram += ".{COM,EXE,BAT}";
             }
             if (sProgram.indexOf('/') < 0 && sProgram.indexOf('\\') < 0) {
-                sProgram = path.join(sDir, "**", sProgram);
+                sProgram = node.path.join(sDir, "**", sProgram);
             }
-            let aFiles = glob.sync(sProgram);
+            let aFiles = node.glob.sync(sProgram);
             if (!aFiles.length) {
                 sCommand = "";
             } else {
@@ -1394,8 +1391,8 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
     }
 
     let sSystemMBR = systemMBR;
-    if (sSystemMBR.indexOf(path.sep) < 0) {
-        sSystemMBR = path.join(pcjsDir, sSystemMBR);
+    if (sSystemMBR.indexOf(node.path.sep) < 0) {
+        sSystemMBR = node.path.join(pcjsDir, sSystemMBR);
     }
 
     let dbMBR = readFileSync(sSystemMBR, null);
@@ -1477,7 +1474,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
      * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
      */
     let attr = DiskInfo.ATTR.ARCHIVE;
-    let data = readFileSync(path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
+    let data = readFileSync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
     if (data) {
         if (verDOS >= 3.30 && !data.indexOf("ECHO OFF")) {
             data = '@' + data;
@@ -1626,9 +1623,9 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
              * currently that's the only way to to pass a disk image to the HDC component.
              */
             if (!sDisk) {
-                localDisk = localDisk.replace(path.basename(localDisk), di.getName() + ".json");
+                localDisk = localDisk.replace(node.path.basename(localDisk), di.getName() + ".json");
             } else {
-                localDisk = sDisk.indexOf(path.sep) < 0? path.join(pcjsDir, "disks", sDisk) : sDisk;
+                localDisk = sDisk.indexOf(node.path.sep) < 0? node.path.join(pcjsDir, "disks", sDisk) : sDisk;
             }
             if (sDisk || fLog) printf("building drive: %s\n", localDisk);
             if (writeDiskSync(localDisk, di, false, 0, true, true)) {
@@ -1649,7 +1646,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
 
-    readDir(sDir, 0, 0, diskLabel == "."? path.basename(sDir) : diskLabel, null, fNormalize, kbCapacity, maxFiles, false, driveInfo, done);
+    readDir(sDir, 0, 0, diskLabel == "."? node.path.basename(sDir) : diskLabel, null, fNormalize, kbCapacity, maxFiles, false, driveInfo, done);
 
     return driveManifest? "" : "unable to build drive";
 }
@@ -1694,7 +1691,7 @@ function readDiskIndex()
 function readFileIndex(diskIndex)
 {
     let total = 0;
-    let pathIndex = path.join(pcjsDir, "files.json");
+    let pathIndex = node.path.join(pcjsDir, "files.json");
     let fileIndex = readFileSync(pathIndex, "utf8", true);
     if (fileIndex) {
         fileIndex = JSON.parse(fileIndex);
@@ -1729,7 +1726,7 @@ function readFileIndex(diskIndex)
             }
         }
         printf("total diskettes read: %d\n", total);
-        fs.writeFileSync(pathIndex, JSON.stringify(fileIndex));
+        node.fs.writeFileSync(pathIndex, JSON.stringify(fileIndex));
     }
     return fileIndex;
 }
@@ -1780,7 +1777,7 @@ function updateDriveInfo(di)
  */
 function mapDir(machineDir)
 {
-    let newDir = path.join(localDir, machineDir.replace(/\\/g, path.sep));
+    let newDir = node.path.join(localDir, machineDir.replace(/\\/g, node.path.sep));
     if (driveManifest) {
         machineDir = machineDir.replace(/\\/g, '/');
         if (machineDir[0] != '/') machineDir = '/' + machineDir;
@@ -1860,10 +1857,10 @@ function saveDisk(sDir, sDrive)
                         newItemDir = newItem.path.slice(0, i) || "/";
                         newItemName = newItem.path.slice(i + 1);
                         if (!curMappings[newItemDir]) {
-                            newItemPath = path.join(sDir, newItem.path);
+                            newItemPath = node.path.join(sDir, newItem.path);
                             if (fDebug) printf("joining: %s => %s\n", newItem.path, newItemPath);
                         } else {
-                            newItemPath = path.join(curMappings[newItemDir], newItemName);
+                            newItemPath = node.path.join(curMappings[newItemDir], newItemName);
                             if (newItemDir == "/") newItemDir = "";
                             if (fDebug) printf("mapping: %s/%s => %s\n", newItemDir, newItemName, newItemPath);
                         }
@@ -1890,14 +1887,14 @@ function saveDisk(sDir, sDrive)
                              * and a file with the same name created in its place.
                              */
                             try {
-                                fs.chmodSync(newItemPath, (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666);
+                                node.fs.chmodSync(newItemPath, (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666);
                             } catch (err) {
                                 printf("%s\n", err);
                             }
                         }
                         if (oldDate.getTime() != newDate.getTime()) {
                             try {
-                                fs.utimesSync(newItemPath, newDate, newDate);
+                                node.fs.utimesSync(newItemPath, newDate, newDate);
                             } catch (err) {
                                 printf("%s\n", err);
                             }
@@ -1913,13 +1910,13 @@ function saveDisk(sDir, sDrive)
                          * So instead, we simply queue the directory for removal later.
                          */
                         if (!(oldAttr & (DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.VOLUME))) {
-                            let oldItemPath = oldItem.origin || path.join(sDir, oldItem.path);
+                            let oldItemPath = oldItem.origin || node.path.join(sDir, oldItem.path);
                             if (oldAttr & DiskInfo.ATTR.SUBDIR) {
                                 removedDirs.push(oldItemPath);
                             } else {
                                 if (fDebug) printf("removing: %s\n", oldItemPath);
                                 try {
-                                    fs.unlinkSync(oldItemPath);
+                                    node.fs.unlinkSync(oldItemPath);
                                 } catch(err) {
                                     printf("%s\n", err.message);
                                 }
@@ -1930,13 +1927,13 @@ function saveDisk(sDir, sDrive)
                         if (fDebug) printf("creating: %s\n", newItemPath);
                         try {
                             if (newAttr & DiskInfo.ATTR.SUBDIR) {
-                                fs.mkdirSync(newItemPath);
+                                node.fs.mkdirSync(newItemPath);
                             } else {
                                 writeFileSync(newItemPath, newItem.contents, true, false);
                             }
-                            fs.utimesSync(newItemPath, newDate, newDate);
+                            node.fs.utimesSync(newItemPath, newDate, newDate);
                             if (newAttr & DiskInfo.ATTR.READONLY) {
-                                fs.chmodSync(newItemPath, 0o444);
+                                node.fs.chmodSync(newItemPath, 0o444);
                             }
                         } catch(err) {
                             printf("%s\n", err.message);
@@ -1948,7 +1945,7 @@ function saveDisk(sDir, sDrive)
                     let dir = removedDirs.pop();
                     if (fDebug) printf("removing: %s\n", dir);
                     try {
-                        fs.rmdirSync(dir);
+                        node.fs.rmdirSync(dir);
                     } catch(err) {
                         printf("%s\n", err.message);
                     }
@@ -1956,7 +1953,7 @@ function saveDisk(sDir, sDrive)
             }
             if (sDir != localDir) {
                 if (sDir.indexOf('.') < 0) sDir += ".img";
-                if (sDir.indexOf(path.sep) < 0) sDir = path.join(pcjsDir, "disks", sDir);
+                if (sDir.indexOf(node.path.sep) < 0) sDir = node.path.join(pcjsDir, "disks", sDir);
                 printf("saving drive as %s\n", sDir);
                 writeDiskSync(sDir, di, false, 0, true, true);
             }
@@ -2316,7 +2313,7 @@ function doCommand(s, reload = false)
              * I've tweaked execSync() a bit to make it work with both Node and Bun....  I've also tried
              * spawnSync(app, argv, ...), but that doesn't work as well.
              */
-            child = child_process.execSync(args, {
+            child = node.child_process.execSync(args, {
                 stdio: [
                     "inherit", // process.stdin,
                     "inherit", // process.stdout,
@@ -2471,9 +2468,9 @@ async function processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
 
     let verifyDir = function(s) {
         if (s[0] == '~') {
-            s = path.join(process.env.HOME, s.slice(1));
+            s = node.path.join(process.env.HOME, s.slice(1));
         } else {
-            s = path.resolve(s);
+            s = node.path.resolve(s);
         }
         return existsDir(s, false)? s : "";
     };
@@ -2483,8 +2480,8 @@ async function processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
             localDisk = "";
             savedState = "";
         } else {
-            if (sDisk.indexOf(path.sep) < 0 && !existsFile(sDisk, false)) {
-                sDisk = path.join(pcjsDir, "disks", sDisk);
+            if (sDisk.indexOf(node.path.sep) < 0 && !existsFile(sDisk, false)) {
+                sDisk = node.path.join(pcjsDir, "disks", sDisk);
             }
             localDisk = sDisk;
             let di = await readDiskAsync(localDisk);
@@ -2498,7 +2495,7 @@ async function processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
         }
         localDir = "";
     } else {
-        localDisk = path.join(pcjsDir, localDisk);
+        localDisk = node.path.join(pcjsDir, localDisk);
     }
 
     if (sDirectory == "none") {
@@ -2680,8 +2677,8 @@ function checkArgs(argv, removeArg, removeFlag)
     messagesFilter = fDebug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
 
     let arg0 = argv[0].split(' ');
-    rootDir = path.join(path.dirname(arg0[0]), "../..");
-    pcjsDir = path.join(rootDir, "/tools/pc");
+    rootDir = node.path.join(node.path.dirname(arg0[0]), "../..");
+    pcjsDir = node.path.join(rootDir, "/tools/pc");
     setRootDir(rootDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
 
     if (!argv[1] || fDebug || fTest) {
@@ -2694,7 +2691,7 @@ function checkArgs(argv, removeArg, removeFlag)
     }
 
     machines = JSON.parse(readFileSync("/machines/machines.json") || "{}");
-    configJSON = JSON5.parse(readFileSync(path.join(pcjsDir, configFile) || {}));
+    configJSON = node.json5.parse(readFileSync(node.path.join(pcjsDir, configFile) || {}));
     let defaults = configJSON['defaults'] || {};
 
     fBare = removeFlag('bare') || fBare;
@@ -2876,7 +2873,7 @@ function main(argc, argv)
         printf("\t--hidden also disables the use of hidden sectors to work around an old boot sector bug\n");
         printf("\t--system can also specify a version (eg, --system=pcdos:2.0) for convenience\n\n");
         printf("\tDrive and FAT values should be considered advisory, as it may not be possible to honor them.\n");
-        printf("\npc.js configuration settings are stored in %s\n", path.join(pcjsDir, configFile));
+        printf("\npc.js configuration settings are stored in %s\n", node.path.join(pcjsDir, configFile));
         return;
     }
 

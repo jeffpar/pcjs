@@ -160,7 +160,7 @@ export default class Device extends WebIO {
          */
         overrides = config['overrides'] || overrides;
         if (overrides.length) {
-            let parms = this.getURLParms();
+            let parms = WebIO.getURLParms();
             for (let prop in parms) {
                 if (overrides.indexOf(prop) >= 0) {
                     let s = parms[prop];

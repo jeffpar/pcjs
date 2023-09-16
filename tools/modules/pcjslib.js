@@ -7,6 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import { node } from "./nodeapi.js";
+
 /**
  * @class PCJSLib
  */
@@ -168,4 +170,4 @@ export default class PCJSLib
     }
 }
 
-[PCJSLib.argc, PCJSLib.argv] = PCJSLib.parseArgs(process.argv);
+[PCJSLib.argc, PCJSLib.argv] = PCJSLib.parseArgs(node.process.argv);

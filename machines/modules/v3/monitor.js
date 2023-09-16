@@ -9,6 +9,7 @@
 
 import Device  from "./device.js";
 import MESSAGE from "./message.js";
+import WebIO   from "./webio.js";
 
 /**
  * @typedef {Config} MonitorConfig
@@ -133,7 +134,7 @@ export default class Monitor extends Device {
          * until we figure out a better UI.  And note that we use our onPageEvent() helper function to make sure
          * we don't trample any other 'resize' handler(s) attached to the window object.
          */
-        let aspect = +(this.config['aspect'] || this.getURLParms()['aspect']);
+        let aspect = +(this.config['aspect'] || WebIO.getURLParms()['aspect']);
 
         /**
          * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
@@ -268,7 +269,7 @@ export default class Monitor extends Device {
          * that's apparently been added to Chrome.  Sigh.
          */
         let fSmoothing = this.config['smoothing'];
-        let sSmoothing = this.getURLParms()['smoothing'];
+        let sSmoothing = WebIO.getURLParms()['smoothing'];
         if (sSmoothing) fSmoothing = (sSmoothing == "true");
         this.fSmoothing = fSmoothing;
         this.sSmoothing = this.findProperty(context, 'imageSmoothingEnabled');

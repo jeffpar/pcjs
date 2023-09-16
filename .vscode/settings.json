@@ -1807,6 +1807,7 @@
     "NMOS",
     "NOBACKTRACK",
     "NOCTRL",
+    "nodeapi",
     "nodebug",
     "NODEBUG",
     "nodebugger",

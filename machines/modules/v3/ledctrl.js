@@ -10,6 +10,7 @@
 import CPU   from "./cpu.js";
 import Input from "./input.js";
 import LED   from "./led.js";
+import WebIO from "./webio.js";
 
 /**
  * @typedef {Config} LEDCtrlConfig
@@ -883,7 +884,7 @@ export default class LEDCtrl extends CPU {
             this.printf("Controller state error: %s\n", err.message);
             return false;
         }
-        if (!this.getURLParms()['message'] && !this.getURLParms()['pattern'] && !this.getURLParms()[LEDCtrl.BINDING.IMAGE_SELECTION]) {
+        if (!WebIO.getURLParms()['message'] && !WebIO.getURLParms()['pattern'] && !WebIO.getURLParms()[LEDCtrl.BINDING.IMAGE_SELECTION]) {
             let stateLEDs = state['stateLEDs'] || state[1];
             if (stateLEDs && this.leds) {
                 if (!this.leds.loadState(stateLEDs)) return false;
