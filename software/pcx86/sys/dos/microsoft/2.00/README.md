@@ -130,6 +130,7 @@ CHM's original archive suffer from similar timestamp alterations is hard to say 
     
     5.   Documentation.  Features of 2.0 are documented on this disk.
 
+<!-- Documentation -->
 
 {% include gallery/documents.html width="200" height="280" %}
 

@@ -6,7 +6,6 @@ machines:
   - id: deskpro386
     type: pcx86
     config: /machines/pcx86/compaq/deskpro386/ega/2048kb/machine.xml
-    autoGen: true
     autoMount:
       A: "COMPAQ MS-DOS 3.20A (Disk 1)"
     autoType: \r\r

@@ -1,13 +1,11 @@
 ---
 layout: page
-title: IBM Macro Assembler 1.00
-permalink: /software/pcx86/lang/ibm/masm/1.00/
-redirect_from: /disks/pcx86/tools/ibm/masm/1.00/
+title: IBM Macro Assembler 1.00 (with Debugger)
+permalink: /software/pcx86/lang/ibm/masm/1.00/debugger/
 machines:
   - id: ibm5150-mda
     type: pcx86
-    config: /machines/pcx86/ibm/5150/mda/64kb/machine.json
-    debugger: available
+    config: /machines/pcx86/ibm/5150/mda/64kb/debugger/machine.json
     autoMount:
       B: "IBM Macro Assembler 1.00"
     autoType: $date\rB:\rDIR\r

@@ -138,6 +138,92 @@ but, in the interest of preserving all manner of historical curiosities, we have
            60 file(s)     782546 bytes
                           418304 bytes free
 
+### Directory of COMPAQ MS-DOS 3.31D (360K Disk 1)
+
+     Volume in drive A is STARTUP
+     Directory of A:\
+
+    IBMBIO   COM*    23591  10-03-88  12:00p
+    IBMDOS   COM*    30648  10-03-88  12:00p
+    ANSI     SYS      1709  10-03-88  12:00p
+    CLOCK    SYS      1787  10-03-88  12:00p
+    COMMAND  COM     25332  10-03-88  12:00p
+    COUNTRY  SYS     11254  10-03-88  12:00p
+    DISKCOPY COM      6264  10-03-88  12:00p
+    DISKINIT EXE     55795  10-03-88  12:00p
+    DISPLAY  SYS     11651  10-03-88  12:00p
+    DRIVER   SYS      1385  10-03-88  12:00p
+    ENHDISK  SYS      3441  10-03-88  12:00p
+    FASTOPEN EXE      3888  10-03-88  12:00p
+    FDISK    COM     45052  10-03-88  12:00p
+    FORMAT   COM     13675  10-03-88  12:00p
+    KEYB     COM     10974  10-03-88  12:00p
+    KEYBOARD SYS     41144  10-03-88  12:00p
+    MODE     COM     15188  10-03-88  12:00p
+    PRINTER  SYS     13559  10-03-88  12:00p
+    SYS      COM      6193  10-03-88  12:00p
+    VDISK    SYS      3759  10-03-88  12:00p
+    XCOPY    EXE     11216  10-03-88  12:00p
+           21 file(s)     337505 bytes
+                           15360 bytes free
+
+### Directory of COMPAQ MS-DOS 3.31D (360K Disk 2)
+
+     Volume in drive A is OPERATING#1
+     Directory of A:\
+
+    APPEND   EXE      5794  10-03-88  12:00p
+    ASSIGN   COM      1530  10-03-88  12:00p
+    ATTRIB   EXE     10656  10-03-88  12:00p
+    BACKUP   COM     30048  10-03-88  12:00p
+    CHKDSK   COM     11939  10-03-88  12:00p
+    COMMAND  COM     25332  10-03-88  12:00p
+    COMP     COM      4183  10-03-88  12:00p
+    DEBUG    COM     16000  10-03-88  12:00p
+    DISKCOMP COM      5848  10-03-88  12:00p
+    DISKCOPY COM      6264  10-03-88  12:00p
+    EDLIN    COM      7495  10-03-88  12:00p
+    EXE2BIN  EXE      3050  10-03-88  12:00p
+    FIND     EXE      6403  10-03-88  12:00p
+    FORMAT   COM     13675  10-03-88  12:00p
+    GRAFTABL COM      6272  10-03-88  12:00p
+    GRAPHICS COM      7576  10-03-88  12:00p
+    JOIN     EXE      9612  10-03-88  12:00p
+    LABEL    COM      2346  10-03-88  12:00p
+    LINK     EXE     39076  10-03-88  12:00p
+    MORE     COM       282  10-03-88  12:00p
+    PRINT    COM      8995  10-03-88  12:00p
+    RECOVER  COM      5385  10-03-88  12:00p
+    RESTORE  COM     35720  10-03-88  12:00p
+    SHARE    EXE      8664  10-03-88  12:00p
+    SORT     EXE      1946  10-03-88  12:00p
+    SUBST    EXE     10552  10-03-88  12:00p
+    TREE     COM      3540  10-03-88  12:00p
+    XCOPY    EXE     11216  10-03-88  12:00p
+    WORDS              660  10-03-88  12:00p
+           29 file(s)     300059 bytes
+                           47104 bytes free
+
+### Directory of COMPAQ MS-DOS 3.31D (360K Disk 3)
+
+     Volume in drive A is OPERATING#2
+     Directory of A:\
+
+    BASIC    COM      3532  10-03-88  12:00p
+    BASICA   COM      3532  10-03-88  12:00p
+    BASICA   EXE     79304  10-03-88  12:00p
+    COMMAND  COM     25332  10-03-88  12:00p
+    NLSFUNC  EXE      3029  10-03-88  12:00p
+    REPLACE  EXE     13886  10-03-88  12:00p
+    SELECT   COM      4188  10-03-88  12:00p
+    SETCLOCK COM      3715  10-03-88  12:00p
+    INTEREST BAS       384  10-03-88  12:00p
+    4201     CPI     17089  10-03-88  12:00p
+    5202     CPI       459  10-03-88  12:00p
+    EGA      CPI     49065  10-03-88  12:00p
+           12 file(s)     203515 bytes
+                          153600 bytes free
+
 ### Directory of COMPAQ MS-DOS 3.31D (720K Disk 1)
 
      Volume in drive A is FASTART
@@ -231,10 +317,9 @@ but, in the interest of preserving all manner of historical curiosities, we have
            40 file(s)     478242 bytes
                           231424 bytes free
 
-COMPAQ MS-DOS 3.31 (Rev. G)
----------------------------
+## COMPAQ MS-DOS 3.31 (Rev. G)
 
-### Directory of COMPAQ MS-DOS 3.31G (Disk 1)
+### Directory of COMPAQ MS-DOS 3.31G (720K Disk 1)
 
      Volume in drive A is FASTART
      Directory of A:\
@@ -249,7 +334,7 @@ COMPAQ MS-DOS 3.31 (Rev. G)
             7 file(s)     317483 bytes
                           408576 bytes free
 
-### Directory of COMPAQ MS-DOS 3.31G (Disk 2)
+### Directory of COMPAQ MS-DOS 3.31G (720K Disk 2)
 
      Volume in drive A is STARTUP
      Directory of A:\
@@ -277,7 +362,7 @@ COMPAQ MS-DOS 3.31 (Rev. G)
            20 file(s)     299738 bytes
                           421888 bytes free
 
-### Directory of COMPAQ MS-DOS 3.31G (Disk 3)
+### Directory of COMPAQ MS-DOS 3.31G (720K Disk 3)
 
      Volume in drive A is OPERATING
      Directory of A:\
