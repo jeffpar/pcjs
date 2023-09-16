@@ -1412,17 +1412,20 @@
 							{
 								"@title": "COMPAQ MS-DOS 3.31D (360K Disk 1)",
 								"@diskette": "COMPAQ-DOS331-REVD-360K-DISK1.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@source": "https://archive.org/details/compaqpersonalcomputermsdosv331revd"
 							},
 							{
 								"@title": "COMPAQ MS-DOS 3.31D (360K Disk 2)",
 								"@diskette": "COMPAQ-DOS331-REVD-360K-DISK2.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@source": "https://archive.org/details/compaqpersonalcomputermsdosv331revd"
 							},
 							{
 								"@title": "COMPAQ MS-DOS 3.31D (360K Disk 3)",
 								"@diskette": "COMPAQ-DOS331-REVD-360K-DISK3.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@source": "https://archive.org/details/compaqpersonalcomputermsdosv331revd"
 							},
 							{
 								"@title": "COMPAQ MS-DOS 3.31D (720K Disk 1)",
@@ -1458,6 +1461,72 @@
 								"@title": "COMPAQ MS-DOS 3.31 (1987)",
 								"@diskette": "COMPAQ-DOS331-1987.json",
 								"@format": "PC1200K"
+							}
+						]
+					},
+					"4.01": {
+						"@title": "COMPAQ MS-DOS 4.01",
+						"@bootable": true,
+						"@media": [
+							{
+								"@title": "COMPAQ MS-DOS 4.01D (360K Disk 1)",
+								"@diskette": "COMPAQ-DOS401-REVD-360K-DISK1.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/ms-dos/4x"
+							},
+							{
+								"@title": "COMPAQ MS-DOS 4.01D (360K Disk 2)",
+								"@diskette": "COMPAQ-DOS401-REVD-360K-DISK2.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/ms-dos/4x"
+							},
+							{
+								"@title": "COMPAQ MS-DOS 4.01D (360K Disk 3)",
+								"@diskette": "COMPAQ-DOS401-REVD-360K-DISK3.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/ms-dos/4x"
+							},
+							{
+								"@title": "COMPAQ MS-DOS 4.01D (360K Disk 4)",
+								"@diskette": "COMPAQ-DOS401-REVD-360K-DISK4.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/ms-dos/4x"
+							},
+							{
+								"@title": "COMPAQ MS-DOS 4.01D (360K Disk 5)",
+								"@diskette": "COMPAQ-DOS401-REVD-360K-DISK5.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/ms-dos/4x"
+							}
+						]
+					},
+					"5.00": {
+						"@title": "COMPAQ MS-DOS 5.00",
+						"@bootable": true,
+						"@media": [
+							{
+								"@title": "COMPAQ MS-DOS 5.00A (Disk 1)",
+								"@diskette": "COMPAQ-DOS500-REVA-DISK1.json",
+								"@format": "PC1440K",
+								"@source": "https://winworldpc.com/product/ms-dos/50"
+							},
+							{
+								"@title": "COMPAQ MS-DOS 5.00A (Disk 2)",
+								"@diskette": "COMPAQ-DOS500-REVA-DISK2.json",
+								"@format": "PC1440K",
+								"@source": "https://winworldpc.com/product/ms-dos/50"
+							},
+							{
+								"@title": "COMPAQ MS-DOS 5.00A (Disk 3)",
+								"@diskette": "COMPAQ-DOS500-REVA-DISK3.json",
+								"@format": "PC1440K",
+								"@source": "https://winworldpc.com/product/ms-dos/50"
+							},
+							{
+								"@title": "COMPAQ MS-DOS 5.00A (Disk 4)",
+								"@diskette": "COMPAQ-DOS500-REVA-DISK4.json",
+								"@format": "PC1440K",
+								"@source": "https://winworldpc.com/product/ms-dos/50"
 							}
 						]
 					}

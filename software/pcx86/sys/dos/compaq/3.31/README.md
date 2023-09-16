@@ -167,6 +167,8 @@ but, in the interest of preserving all manner of historical curiosities, we have
            21 file(s)     337505 bytes
                            15360 bytes free
 
+[[Source](https://archive.org/details/compaqpersonalcomputermsdosv331revd)]
+
 ### Directory of COMPAQ MS-DOS 3.31D (360K Disk 2)
 
      Volume in drive A is OPERATING#1
@@ -204,6 +206,8 @@ but, in the interest of preserving all manner of historical curiosities, we have
            29 file(s)     300059 bytes
                            47104 bytes free
 
+[[Source](https://archive.org/details/compaqpersonalcomputermsdosv331revd)]
+
 ### Directory of COMPAQ MS-DOS 3.31D (360K Disk 3)
 
      Volume in drive A is OPERATING#2
@@ -223,6 +227,8 @@ but, in the interest of preserving all manner of historical curiosities, we have
     EGA      CPI     49065  10-03-88  12:00p
            12 file(s)     203515 bytes
                           153600 bytes free
+
+[[Source](https://archive.org/details/compaqpersonalcomputermsdosv331revd)]
 
 ### Directory of COMPAQ MS-DOS 3.31D (720K Disk 1)
 
