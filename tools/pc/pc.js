@@ -8,19 +8,22 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { node }      from "../modules/nodeapi.js";
 import DbgLib        from "../../machines/modules/v2/dbglib.js";
-import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 import StrLib        from "../../machines/modules/v2/strlib.js";
 import Device        from "../../machines/modules/v3/device.js";
 import CharSet       from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo      from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { MAXDEBUG }  from "../../machines/modules/v3/defines.js";
 import MESSAGE       from "../../machines/modules/v3/message.js";
-import { device, existsDir, existsFile, getDiskSector, getTargetValue, makeFileDesc, readDir, readDiskAsync, readFileAsync, readFileSync, setRootDir, writeDiskSync, writeFileSync } from "../modules/disklib.js";
-import pcjslib       from "../modules/pcjslib.js";
-
+import DiskLib       from "../modules/disklib.js";
+import PCjsLib       from "../modules/pcjslib.js";
+import { node }      from "../modules/nodeapi.js";
 await node.import("child_process", "fs", "glob", "json5", "path", "xml2js");
+
+let device = new Device("node");
+let printf = device.printf.bind(device);
+let sprintf = device.sprintf.bind(device);
+let diskLib = new DiskLib(device);
 
 let fBare = false;
 let fDebug = false;
@@ -838,23 +841,23 @@ function checkMachine(sFile)
         if (sFile.indexOf("http") == 0) {
             break;
         }
-        if (existsFile(sFile, false) && !existsDir(sFile, false)) {
+        if (diskLib.existsFile(sFile, false) && !diskLib.existsDir(sFile, false)) {
             sVerify = sFile;
             break;
         }
         if (sFile.indexOf('.') > 0) {
             let s = node.path.join(pcjsDir, sFile);
-            sVerify = existsFile(s, false)? s: "";
+            sVerify = diskLib.existsFile(s, false)? s: "";
         } else {
             const exts = [".json", ".json5", ".xml"];
             for (let ext of exts) {
                 let s = sFile + ext;
-                if (existsFile(s, false)) {
+                if (diskLib.existsFile(s, false)) {
                     sVerify = s;
                     break;
                 }
                 s = node.path.join(pcjsDir, s);
-                if (existsFile(s, false)) {
+                if (diskLib.existsFile(s, false)) {
                     sVerify = s;
                     break;
                 }
@@ -865,7 +868,7 @@ function checkMachine(sFile)
     }
     if (sVerify) {
         if (sVerify.endsWith(".json")) {
-            config = JSON.parse(readFileSync(sVerify, "utf8", true) || "{}");
+            config = JSON.parse(diskLib.readFileSync(sVerify, "utf8", true) || "{}");
             let machine = config['machine'];
             machineType = machine['type'] || machineType;
             sFile = machine? sVerify : "";
@@ -1118,7 +1121,7 @@ async function readJSON(sFile, done)
 {
     let result = "";
     try {
-        let sConfig = await readFileAsync(sFile);
+        let sConfig = await diskLib.readFileAsync(sFile);
         /*
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
@@ -1148,7 +1151,7 @@ async function readXML(sFile, xml, sNode, aTags, iTag, done)
     let idAttrs = '@';
     try {
         xml._resolving++;
-        let sXML = await readFileAsync(sFile);
+        let sXML = await diskLib.readFileAsync(sFile);
         let parser = new node.xml2js.Parser({attrkey: idAttrs});
         parser.parseString(sXML, function parseXML(err, xmlNode) {
             if (!aTags) {
@@ -1385,7 +1388,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
         return "DOS 2.0 or greater required (otherwise use --floppy)";
     }
 
-    let diSystem = await readDiskAsync(sSystemDisk);
+    let diSystem = await diskLib.readDiskAsync(sSystemDisk);
     if (!diSystem) {
         return "missing " + systemType + " system diskette: " + sSystemDisk;
     }
@@ -1395,7 +1398,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
         sSystemMBR = node.path.join(pcjsDir, sSystemMBR);
     }
 
-    let dbMBR = readFileSync(sSystemMBR, null);
+    let dbMBR = diskLib.readFileSync(sSystemMBR, null);
     if (!dbMBR || dbMBR.length < 512) {
         return "invalid system MBR: " + sSystemMBR;
     }
@@ -1430,7 +1433,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
      * determine if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
      */
     if (!fBare) {
-        driveInfo.files.push(makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+        driveInfo.files.push(diskLib.makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
     }
 
     /*
@@ -1439,7 +1442,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
      * to look for any changes and then terminate the machine.
      */
     if (!fBare) {
-        driveInfo.files.push(makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+        driveInfo.files.push(diskLib.makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
     }
 
     /*
@@ -1462,7 +1465,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
             for (let j = 0; j < appName.length; j++) {
                 appContents.push(appName.charCodeAt(j));
             }
-            driveInfo.files.push(makeFileDesc(sDir, appFile, appContents, attrHidden));
+            driveInfo.files.push(diskLib.makeFileDesc(sDir, appFile, appContents, attrHidden));
         }
     }
 
@@ -1474,7 +1477,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
      * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
      */
     let attr = DiskInfo.ATTR.ARCHIVE;
-    let data = readFileSync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
+    let data = diskLib.readFileSync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
     if (data) {
         if (verDOS >= 3.30 && !data.indexOf("ECHO OFF")) {
             data = '@' + data;
@@ -1508,7 +1511,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
          * Automatically normalize all line-endings in AUTOEXEC.BAT.
          */
         let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
-        driveInfo.files.push(makeFileDesc(sDir, "AUTOEXEC.BAT", dataNew, attr));
+        driveInfo.files.push(diskLib.makeFileDesc(sDir, "AUTOEXEC.BAT", dataNew, attr));
     }
 
     /*
@@ -1522,7 +1525,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
      * work with third-party MBRs, some of which may have trashed DL.
      */
     let verBPB = 0;
-    let dbBoot = getDiskSector(diSystem, 0);
+    let dbBoot = diskLib.getDiskSector(diSystem, 0);
     if (verDOS < 2.0) {
         /*
          * So to get this far, fFloppy had to be true, so in addition to setting the correct
@@ -1628,7 +1631,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
                 localDisk = sDisk.indexOf(node.path.sep) < 0? node.path.join(pcjsDir, "disks", sDisk) : sDisk;
             }
             if (sDisk || fLog) printf("building drive: %s\n", localDisk);
-            if (writeDiskSync(localDisk, di, false, 0, true, true)) {
+            if (diskLib.writeDiskSync(localDisk, di, false, 0, true, true)) {
                 updateDriveInfo(di);
                 /*
                  * I've deferred the minimum version check until now, because even if we can't (well, shouldn't)
@@ -1646,7 +1649,7 @@ async function buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
     if (!sDir.endsWith('/')) sDir += '/';
     if (fLog) printf("reading files: %s\n", sDir);
 
-    readDir(sDir, 0, 0, diskLabel == "."? node.path.basename(sDir) : diskLabel, null, fNormalize, kbCapacity, maxFiles, false, driveInfo, done);
+    diskLib.readDir(sDir, 0, 0, diskLabel == "."? node.path.basename(sDir) : diskLabel, null, fNormalize, kbCapacity, maxFiles, false, driveInfo, done);
 
     return driveManifest? "" : "unable to build drive";
 }
@@ -1692,14 +1695,14 @@ function readFileIndex(diskIndex)
 {
     let total = 0;
     let pathIndex = node.path.join(pcjsDir, "files.json");
-    let fileIndex = readFileSync(pathIndex, "utf8", true);
+    let fileIndex = diskLib.readFileSync(pathIndex, "utf8", true);
     if (fileIndex) {
         fileIndex = JSON.parse(fileIndex);
     } else {
         fileIndex = {};
         for (let diskName in diskIndex) {
             let diskPath = diskIndex[diskName]['path'];
-            let diskJSON = readFileSync(diskPath, "utf8", true);
+            let diskJSON = diskLib.readFileSync(diskPath, "utf8", true);
             if (diskJSON) {
                 let disk = JSON.parse(diskJSON);
                 let fileTable = disk['fileTable'];
@@ -1877,7 +1880,7 @@ function saveDisk(sDir, sDrive)
                              */
                             if (!compareContents(oldItem, newItem)) {
                                 if (fDebug) printf("updating: %s\n", newItemPath);
-                                writeFileSync(newItemPath, newItem.contents, false, true);
+                                diskLib.writeFileSync(newItemPath, newItem.contents, false, true);
                             } else {
                                 // if (fDebug) printf("skipping: %s\n", newItemPath);
                             }
@@ -1929,7 +1932,7 @@ function saveDisk(sDir, sDrive)
                             if (newAttr & DiskInfo.ATTR.SUBDIR) {
                                 node.fs.mkdirSync(newItemPath);
                             } else {
-                                writeFileSync(newItemPath, newItem.contents, true, false);
+                                diskLib.writeFileSync(newItemPath, newItem.contents, true, false);
                             }
                             node.fs.utimesSync(newItemPath, newDate, newDate);
                             if (newAttr & DiskInfo.ATTR.READONLY) {
@@ -1955,7 +1958,7 @@ function saveDisk(sDir, sDrive)
                 if (sDir.indexOf('.') < 0) sDir += ".img";
                 if (sDir.indexOf(node.path.sep) < 0) sDir = node.path.join(pcjsDir, "disks", sDir);
                 printf("saving drive as %s\n", sDir);
-                writeDiskSync(sDir, di, false, 0, true, true);
+                diskLib.writeDiskSync(sDir, di, false, 0, true, true);
             }
             return true;
         }
@@ -2472,7 +2475,7 @@ async function processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
         } else {
             s = node.path.resolve(s);
         }
-        return existsDir(s, false)? s : "";
+        return diskLib.existsDir(s, false)? s : "";
     };
 
     if (sDisk) {
@@ -2480,11 +2483,11 @@ async function processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
             localDisk = "";
             savedState = "";
         } else {
-            if (sDisk.indexOf(node.path.sep) < 0 && !existsFile(sDisk, false)) {
+            if (sDisk.indexOf(node.path.sep) < 0 && !diskLib.existsFile(sDisk, false)) {
                 sDisk = node.path.join(pcjsDir, "disks", sDisk);
             }
             localDisk = sDisk;
-            let di = await readDiskAsync(localDisk);
+            let di = await diskLib.readDiskAsync(localDisk);
             if (di) {
                 updateDriveInfo(di);
                 driveOverride = true;
@@ -2672,14 +2675,14 @@ function checkArgs(argv, removeArg, removeFlag)
     fVerbose = removeFlag('verbose') || fVerbose;
     fTest = removeFlag('test') || fTest;
 
-    device.setDebug(fDebug);
+    Device.setDebug(fDebug);
     device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR + (fDebug && fVerbose? MESSAGE.DEBUG : 0) + (fVerbose? MESSAGE.INFO : 0), true);
     messagesFilter = fDebug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
 
     let arg0 = argv[0].split(' ');
     rootDir = node.path.join(node.path.dirname(arg0[0]), "../..");
     pcjsDir = node.path.join(rootDir, "/tools/pc");
-    setRootDir(rootDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
+    diskLib.setRootDir(rootDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
 
     if (!argv[1] || fDebug || fTest) {
         let options = arg0.slice(1).join(' ');
@@ -2690,8 +2693,8 @@ function checkArgs(argv, removeArg, removeFlag)
         return false;
     }
 
-    machines = JSON.parse(readFileSync("/machines/machines.json") || "{}");
-    configJSON = node.json5.parse(readFileSync(node.path.join(pcjsDir, configFile) || {}));
+    machines = JSON.parse(diskLib.readFileSync("/machines/machines.json") || "{}");
+    configJSON = node.json5.parse(diskLib.readFileSync(node.path.join(pcjsDir, configFile) || {}));
     let defaults = configJSON['defaults'] || {};
 
     fBare = removeFlag('bare') || fBare;
@@ -2733,13 +2736,13 @@ function checkArgs(argv, removeArg, removeFlag)
             driveInfo.driveCtrl = driveCtrl.toUpperCase();
             driveOverride = true;
         }
-        kbTarget = getTargetValue(defaults['target']);
+        kbTarget = diskLib.getTargetValue(defaults['target']);
         maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || maxFiles;
         driveInfo.partitioned = true;
         bootSelect = (removeArg('boot') || defaults['boot'] || bootSelect).toUpperCase();
     }
 
-    kbTarget = getTargetValue(removeArg('target')) || kbTarget;
+    kbTarget = diskLib.getTargetValue(removeArg('target')) || kbTarget;
     if (removeFlag('trim')) driveInfo.trimFAT = true;
 
     let typeDrive = removeArg('drivetype');
@@ -2819,11 +2822,11 @@ function checkArgs(argv, removeArg, removeFlag)
 function main(argc, argv)
 {
     let removeArg = function(arg) {
-        return pcjslib.removeArg(argv, arg, "string");
+        return PCjsLib.removeArg(argv, arg, "string");
     };
 
     let removeFlag = function(arg) {
-        return pcjslib.removeArg(argv, arg, "boolean");
+        return PCjsLib.removeArg(argv, arg, "boolean");
     };
 
     if (!checkArgs(argv, removeArg, removeFlag)) {
@@ -2870,7 +2873,7 @@ function main(argc, argv)
         }
         printf("\nnotes:\n\t--drivetype can also specify a drive geometry (eg, --drivetype=306:4:17)\n");
         printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
-        printf("\t--hidden also disables the use of hidden sectors to work around an old boot sector bug\n");
+        printf("\t--hidden also disables the use of hidden sectors to work around boot sector bugs\n");
         printf("\t--system can also specify a version (eg, --system=pcdos:2.0) for convenience\n\n");
         printf("\tDrive and FAT values should be considered advisory, as it may not be possible to honor them.\n");
         printf("\npc.js configuration settings are stored in %s\n", node.path.join(pcjsDir, configFile));
@@ -2895,7 +2898,7 @@ function main(argc, argv)
     readInput(process.stdin, process.stdout);
 }
 
-main(...pcjslib.getArgs({
+main(...PCjsLib.getArgs({
     '?': "help",
     'b': "bare",
     'd': "debug",

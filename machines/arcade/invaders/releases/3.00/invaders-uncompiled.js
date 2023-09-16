@@ -7,11 +7,25 @@
  */
 class Defines {
     /**
+     * Defines()
+     *
+     * We preemptively define idDevice here; it's actually initialized by the Device constructor,
+     * but StdIO needs to inspect it.
+     *
+     * @this {Defines}
+     */
+    constructor()
+    {
+        this.idDevice = "";
+    }
+
+    /**
      * setDebug(debug)
      *
+     * @this {Defines}
      * @param {boolean} debug
      */
-    setDebug(debug)
+    static setDebug(debug)
     {
         Defines.DEBUG = debug;
     }
@@ -150,6 +164,7 @@ Defines.VERSION         = VERSION;
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
     node: (typeof window != "undefined")? {} : global,
+    process: (typeof process != "undefined")? process : {},
     window: (typeof window != "undefined")? window : global,
     document: (typeof document != "undefined")? document : {},
     pcjs: { 'machines': {}, 'components': [], 'commands': {} }
@@ -160,6 +175,9 @@ if (globals.window['PCjs']) {
 } else {
     globals.window['PCjs'] = globals.pcjs;
 }
+
+Defines.globals = globals;
+Defines.process = globals.process;
 
 /**
  * Machines is a global object whose properties are machine IDs and whose values are arrays of Devices.
@@ -1532,23 +1550,30 @@ class StdIO extends StdLib {
      */
     print(s, fBuffer)
     {
-        let i = s.lastIndexOf('\n');
+        let length = s.length;
+        let eol = s.lastIndexOf('\n');
         if (!fBuffer) {
-            if (i >= 0) {
-                console.log(StdIO.PrintBuffer + s.substr(0, i));
-                StdIO.PrintBuffer = "";
-                s = s.substr(i + 1);
+            if (this.idDevice == "node") {
+                StdIO.process.stdout.write(s);
+                s = "";
+            } else {
+                if (eol >= 0) {
+                    console.log(StdIO.PrintBuffer + s.slice(0, eol));
+                    StdIO.PrintBuffer = "";
+                    s = s.slice(eol + 1);
+                }
+                StdIO.PrintTime = null;
             }
-            StdIO.PrintTime = null;
         } else {
-            if (i >= 0) {
+            if (eol >= 0) {
                 let now = Date.now();
                 if (!StdIO.PrintTime) StdIO.PrintTime = now;
                 s = ((now - StdIO.PrintTime) / 1000).toFixed(3) + ": " + s;
+                length = s.length;
             }
         }
         StdIO.PrintBuffer += s;
-        return s.length;
+        return length;
     }
 
     /**

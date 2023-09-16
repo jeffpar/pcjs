@@ -562,7 +562,7 @@ export default class BASFile {
         ];
         const key2 = [
             0x1E, 0x1D, 0xC4, 0x77, 0x26, 0x97, 0xE0, 0x74, 0x59, 0x88, 0x7C
-        ]
+        ];
         if (db.readUInt8(0) == 0xFE) {                  // 0xFE: protected GW-BASIC signature byte
             let index = 0;
             let dbNew = new DataBuffer(db.length);
