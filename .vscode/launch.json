@@ -1190,7 +1190,7 @@
       "name": "IBM Macro Assembler 1.00",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/software/pcx86/lang/ibm/masm/1.00/?sizeRAM=256&autoMount={A:{name:%22Jeff's PC DOS 1.00 with MASM%22}}&autoStart=true&autoType=$date\\r",
+      "url": "http://localhost:4000/software/pcx86/lang/ibm/masm/1.00/",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,

@@ -1395,12 +1395,12 @@
 						"@media": [
 							{
 								"@title": "COMPAQ MS-DOS 3.20A (Disk 1)",
-								"@diskette": "COMPAQ-DOS320A-DISK1.json",
+								"@diskette": "COMPAQ-DOS320-REVA-DISK1.json",
 								"@format": "PC360K"
 							},
 							{
 								"@title": "COMPAQ MS-DOS 3.20A (Disk 2)",
-								"@diskette": "COMPAQ-DOS320A-DISK2.json",
+								"@diskette": "COMPAQ-DOS320-REVA-DISK2.json",
 								"@format": "PC360K"
 							}
 						]
@@ -1440,17 +1440,17 @@
 								"@format": "PC720K"
 							},
 							{
-								"@title": "COMPAQ MS-DOS 3.31G (Disk 1)",
+								"@title": "COMPAQ MS-DOS 3.31G (720K Disk 1)",
 								"@diskette": "COMPAQ-DOS331-REVG-720K-DISK1.json",
 								"@format": "PC720K"
 							},
 							{
-								"@title": "COMPAQ MS-DOS 3.31G (Disk 2)",
+								"@title": "COMPAQ MS-DOS 3.31G (720K Disk 2)",
 								"@diskette": "COMPAQ-DOS331-REVG-720K-DISK2.json",
 								"@format": "PC720K"
 							},
 							{
-								"@title": "COMPAQ MS-DOS 3.31G (Disk 3)",
+								"@title": "COMPAQ MS-DOS 3.31G (720K Disk 3)",
 								"@diskette": "COMPAQ-DOS331-REVG-720K-DISK3.json",
 								"@format": "PC720K"
 							},
