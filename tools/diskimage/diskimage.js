@@ -11,7 +11,8 @@
 import fs         from "fs";
 import glob       from "glob";
 import path       from "path";
-import pcjslib    from "../modules/pcjslib.js";
+import DiskLib    from "../modules/disklib.js";
+import PCjsLib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import JSONLib    from "../../machines/modules/v2/jsonlib.js";
@@ -20,8 +21,11 @@ import CharSet    from "../../machines/pcx86/modules/v2/charset.js";
 import Device     from "../../machines/modules/v3/device.js";
 import MESSAGE    from "../../machines/modules/v3/message.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
-import { device, convertBASICFile, existsFile, getArchiveFiles, getHash, getLocalPath, getTargetValue, getServerPath, getServerPrefix, isArchiveFile, isBASICFile, isTextFile, makeDir, normalizeTextFile, printError, printf, readDir, readDiskAsync, readDiskSync, readFileSync, readJSONSync, replaceServerPrefix, setRootDir, sprintf, writeDiskSync, writeFileSync  } from "../modules/disklib.js";
 
+let device = new Device("node");
+let printf = device.printf.bind(device);
+let sprintf = device.sprintf.bind(device);
+let diskLib = new DiskLib(device);
 let rootDir, sFileIndexCache, aHiddenDirs = [];
 
 /**
@@ -36,8 +40,8 @@ function compareDisks(sDisk1, sDisk2)
     /*
      * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
      */
-    let db1 = readFileSync(sDisk1, null);
-    let db2 = readFileSync(sDisk2, null);
+    let db1 = diskLib.readFileSync(sDisk1, null);
+    let db2 = diskLib.readFileSync(sDisk2, null);
     return db1 && db2 && db1.compare(db2) || false;
 }
 
@@ -75,7 +79,7 @@ function createDisk(diskFile, diskette, argv, done)
         } else {
             sArchiveFile = path.join(path.dirname(sArchiveFile), diskette.archive) + (diskette.archive.indexOf(".") < 0 && !diskette.archive.endsWith(path.sep)? path.sep : "");
         }
-    } else if (!existsFile(sArchiveFile)) {
+    } else if (!diskLib.existsFile(sArchiveFile)) {
         /*
          * Try automatically switching from a "--disk" to a "--dir" operation if there's no IMG file.
          */
@@ -110,11 +114,11 @@ function createDisk(diskFile, diskette, argv, done)
         let label = diskette.label || argv['label'];
         let password = argv['password'];
         let normalize = diskette.normalize || argv['normalize'];
-        let target = getTargetValue(diskette.format);
+        let target = diskLib.getTargetValue(diskette.format);
         let verbose = argv['verbose'];
-        readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, driveInfo, done);
+        diskLib.readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, driveInfo, done);
     } else {
-        done(readDiskSync(sArchiveFile, false, driveInfo));
+        done(diskLib.readDiskSync(sArchiveFile, false, driveInfo));
     }
 }
 
@@ -175,7 +179,7 @@ function createDriveInfo(argv, diskette)
 
     driveInfo.sectorIDs = diskette && diskette.argv['sectorID'] || argv['sectorID'];
     driveInfo.sectorErrors = diskette && diskette.argv['sectorError'] || argv['sectorError'];
-    driveInfo.suppData = readFileSync(diskette && diskette.argv['suppData'] || argv['suppData']);
+    driveInfo.suppData = diskLib.readFileSync(diskette && diskette.argv['suppData'] || argv['suppData']);
 
     return driveInfo;
 }
@@ -257,14 +261,14 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, all
 
     let fSuccess = false;
     let dir = path.dirname(sPath);
-    makeDir(getLocalPath(dir), true, argv['overwrite']);
+    diskLib.makeDir(diskLib.getLocalPath(dir), true, argv['overwrite']);
     if (attr & DiskInfo.ATTR.SUBDIR) {
-        fSuccess = makeDir(getLocalPath(sPath), true);
+        fSuccess = diskLib.makeDir(diskLib.getLocalPath(sPath), true);
     } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
         let fPrinted = false;
         let fQuiet = argv['quiet'];
         if (argv['expand'] && allowExpand) {
-            let arcType = isArchiveFile(sFile);
+            let arcType = diskLib.isArchiveFile(sFile);
             if (arcType) {
                 if (!fQuiet) printf("expanding: %s\n", sFile);
                 if (arcType == StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
@@ -288,13 +292,13 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, all
                     printfDebug: printf,
                     holdErrors: true
                 }).on('ready', () => {
-                    let aFileData = getArchiveFiles(zip, argv['verbose']);
+                    let aFileData = diskLib.getArchiveFiles(zip, argv['verbose']);
                     for (let file of aFileData) {
                         extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
                     }
                     zip.close();
                 }).on('error', (err) => {
-                    printError(err, sFile);
+                    diskLib.printError(err, sFile);
                     /*
                      * Since this implies a failure to extract anything from the archive, we'll call ourselves
                      * back with allowExpand not set, so that we simply extract the archive without expanding it.
@@ -309,7 +313,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, all
                 return true;
             }
         }
-        if (argv['collection'] && existsFile(sPath) && !argv['overwrite']) {
+        if (argv['collection'] && diskLib.existsFile(sPath) && !argv['overwrite']) {
             if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
             return true;
         }
@@ -326,22 +330,22 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, all
              * normalize()), tokenized (which we convert to ASCII and automatically normalize in the process),
              * and protected (which we decrypt and then de-tokenize).
              */
-            if (isBASICFile(sPath)) {
+            if (diskLib.isBASICFile(sPath)) {
                 /*
                  * In addition to "de-tokenizing", we're also setting convertBASICFile()'s normalize parameter
                  * to true, to convert characters from CP437 to UTF-8, revert line-endings, and omit EOF.  We're
                  * currently combining both features as part of the "normalize" process.
                  */
-                db = convertBASICFile(db, true, sPath);
+                db = diskLib.convertBASICFile(db, true, sPath);
             }
-            else if (isTextFile(sPath)) {
-                db = normalizeTextFile(db);
+            else if (diskLib.isTextFile(sPath)) {
+                db = diskLib.normalizeTextFile(db);
             }
         }
-        fSuccess = writeFileSync(getLocalPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
+        fSuccess = diskLib.writeFileSync(diskLib.getLocalPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
     }
     if (fSuccess) {
-        fs.utimesSync(getLocalPath(sPath), date, date);
+        fs.utimesSync(diskLib.getLocalPath(sPath), date, date);
         if (files) {
             for (let file of files) {
                 if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, true, false, file.files)) {
@@ -425,7 +429,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                  * opening and searching all the other disk images, even when they DO contain pre-generated file tables.
                  */
                 if (sFileIndexCache === undefined) {
-                    sFileIndexCache = readFileSync(argv['index']);
+                    sFileIndexCache = diskLib.readFileSync(argv['index']);
                     if (!sFileIndexCache) sFileIndexCache = null;
                 }
                 let cMatches = 0;
@@ -539,7 +543,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             extractName = sExtraction.toUpperCase();
         }
         if (argv['collection'] && !extractDir) {
-            extractFolder = getLocalPath(path.join(path.dirname(diskFile), "archive", extractFolder));
+            extractFolder = diskLib.getLocalPath(path.join(path.dirname(diskFile), "archive", extractFolder));
             if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
                 extractFolder = extractFolder.replace("/disks/archive", "/archive");
             }
@@ -574,7 +578,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
 
             if (fExtractAll || extractName == name) {
                 if (!fExtractToFile) {
-                    if (!fExtractAll || isTextFile(sPath)) {
+                    if (!fExtractAll || diskLib.isTextFile(sPath)) {
                         printf("\n%s:\n%s\n", sPath, CharSet.fromCP437(db.buffer));
                     }
                 } else {
@@ -585,7 +589,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
     }
 
     if (argv['manifest']) {
-        let manifest = di.getFileManifest(getHash, argv['sorted'], argv['metadata']);
+        let manifest = di.getFileManifest(diskLib.getHash, argv['sorted'], argv['metadata']);
         printManifest(diskFile, di.getName(), manifest);
     }
 
@@ -594,7 +598,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
      */
     if (argv['rewrite']) {
         if (StrLib.getExtension(diskFile) == "json") {
-            writeDiskSync(diskFile, di, argv['legacy'], 0, true, argv['quiet'], undefined, argv['source']);
+            diskLib.writeDiskSync(diskFile, di, argv['legacy'], 0, true, argv['quiet'], undefined, argv['source']);
         }
     }
 
@@ -624,13 +628,13 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                 if (diTemp) {
                     let sTempJSON = path.join(rootDir, "disks", "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                     diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
-                    writeDiskSync(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
+                    diskLib.writeDiskSync(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
                     let warning = false;
                     if (StrLib.getExtension(diskette.archive) == "img") {
                         let json = diTemp.getJSON();
                         diTemp.buildDiskFromJSON(json);
                         let sTempIMG = sTempJSON.replace(".json",".img");
-                        writeDiskSync(sTempIMG, diTemp, true, 0, true, true, undefined, diskette.source);
+                        diskLib.writeDiskSync(sTempIMG, diTemp, true, 0, true, true, undefined, diskette.source);
                         if (!compareDisks(sTempIMG, diskette.archive)) {
                             printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
                             warning = true;
@@ -641,7 +645,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                     if (!warning) {
                         if (argv['rebuild']) {
                             printf("rebuilding %s\n", diskFile);
-                            fs.renameSync(sTempJSON, getLocalPath(diskFile));
+                            fs.renameSync(sTempJSON, diskLib.getLocalPath(diskFile));
                         } else {
                             fs.unlinkSync(sTempJSON);
                         }
@@ -693,9 +697,9 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
         let sHeading = "\n### Directory of " + diskette.name + "\n";
-        let sIndexFile = path.join(path.dirname(replaceServerPrefix(diskFile, "/software/")), "README.md");
-        if (existsFile(sIndexFile)) {
-            sIndex = sIndexNew = readFileSync(sIndexFile);
+        let sIndexFile = path.join(path.dirname(diskLib.replaceServerPrefix(diskFile, "/software/")), "README.md");
+        if (diskLib.existsFile(sIndexFile)) {
+            sIndex = sIndexNew = diskLib.readFileSync(sIndexFile);
             sAction = "updated";
         } else {
             if (diskette.title) {
@@ -770,7 +774,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                     return aPossibleOptions[0];
                 };
                 let findConfig = function(configPath) {
-                    configPath = getLocalPath(configPath);
+                    configPath = diskLib.getLocalPath(configPath);
                     let configPossible;
                     let aPossibleConfigs = glob.sync(configPath);
                     let optionMemory = findOption(["kb"]);
@@ -844,11 +848,11 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
          *      ![MS C 1.03 Beta (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg)
          */
         let sDiskPic = diskette.path.replace(".json", ".jpg");
-        if (!existsFile(sDiskPic)) {
+        if (!diskLib.existsFile(sDiskPic)) {
             sDiskPic = diskette.path.replace(".json", ".png");
         }
-        if (existsFile(sDiskPic)) {
-            let sDiskServer = getServerPrefix(sDiskPic);
+        if (diskLib.existsFile(sDiskPic)) {
+            let sDiskServer = diskLib.getServerPrefix(sDiskPic);
             if (sDiskServer) {
                 sListing += "\n![" + diskette.name + "]({{ site.software." + sDiskServer.replace("disks/", "") + ".server }}" + sDiskPic.slice(sDiskServer.length + 1) + ")\n";
             }
@@ -863,7 +867,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                     match = sFrontMatter.match(/\npermalink:.*\n/);
                     if (match) {
                         let n = match.index + match[0].length;
-                        sDiskPic = getServerPath(sDiskPic, true);
+                        sDiskPic = diskLib.getServerPath(sDiskPic, true);
                         sFrontMatter = sFrontMatter.slice(0, n) + "preview: " + sDiskPic + "\n" + sFrontMatter.slice(n);
                         sIndexNew = sFrontMatter + sIndexNew.slice(matchFrontMatter[0].length);
                     }
@@ -928,10 +932,10 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
          */
         let samples = "";
         if (diskFile.indexOf("/pcsig/") >= 0) {
-            let sampleSpec = path.join(path.dirname(getLocalPath(diskette.path)), "archive", "**", "*.{ASM,BAS,DOC,TXT}");
+            let sampleSpec = path.join(path.dirname(diskLib.getLocalPath(diskette.path)), "archive", "**", "*.{ASM,BAS,DOC,TXT}");
             let sampleFiles = glob.sync(sampleSpec);
             for (let sampleFile of sampleFiles) {
-                let sample = readFileSync(sampleFile);
+                let sample = diskLib.readFileSync(sampleFile);
                 if (sample) {
                     if (CharSet.isText(sample)) {
                         let fileType = StrLib.getExtension(sampleFile) == "BAS"? "bas" : "";
@@ -1010,7 +1014,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         }
         else if (sIndexNew != sIndex) {
             if (argv['rebuild']) {
-                if (writeFileSync(getLocalPath(sIndexFile), sIndexNew, true, true)) {
+                if (diskLib.writeFileSync(diskLib.getLocalPath(sIndexFile), sIndexNew, true, true)) {
                     printf("\t%s index for \"%s\": %s\n", sAction, diskette.title, sIndexFile);
                 }
             } else {
@@ -1026,7 +1030,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
      */
     if (!diskette) {
         if (argv['boot']) {
-            di.updateBootSector(readFileSync(argv['boot'], null));
+            di.updateBootSector(diskLib.readFileSync(argv['boot'], null));
         }
         let output = argv['output'];
         if (!output || typeof output == "boolean") {
@@ -1037,7 +1041,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             if (Array.isArray(output)) {
                 output.forEach((outputFile) => {
                     let file = outputFile.replace("%d", path.dirname(diskFile));
-                    writeDiskSync(file, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
+                    diskLib.writeDiskSync(file, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
                 });
             } else {
                 printf("missing output file(s)\n");
@@ -1070,7 +1074,7 @@ function readCollection(argv)
     asCollections.forEach(function readAllCollections(collectionFile) {
         collectionFile = collectionFile.substr(rootDir.length);
         if (argv['verbose']) printf("reading collection %s...\n", collectionFile);
-        let library = readJSONSync(collectionFile);
+        let library = diskLib.readJSONSync(collectionFile);
         if (library) {
             let aDiskettes = [];
             JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
@@ -1080,7 +1084,7 @@ function readCollection(argv)
                 if (!diskette.args) {
                     diskette.args = "";
                 } else {
-                    [diskette.argc, diskette.argv] = pcjslib.getArgs(diskette.args);
+                    [diskette.argc, diskette.argv] = PCjsLib.getArgs(diskette.args);
                     diskette.args = " " + diskette.args;
                 }
                 /*
@@ -1106,13 +1110,13 @@ function readCollection(argv)
                 let done = function(di, fWrite = true) {
                     if (di) {
                         if (fWrite) {
-                            writeDiskSync(diskFile, di, false, 0, undefined, undefined, undefined, diskette.source);
+                            diskLib.writeDiskSync(diskFile, di, false, 0, undefined, undefined, undefined, diskette.source);
                         }
                         processDisk(di, diskFile, argv, diskette);
                         cDisks++;
                     }
                 };
-                let di = readDiskSync(diskFile);
+                let di = diskLib.readDiskSync(diskFile);
                 if (di) {
                     done(di, false);
                 } else {
@@ -1165,7 +1169,7 @@ function getArchiveOffset(sArchive, arcType, sOffset)
     } else {
         if (arcType == StreamZip.TYPE_ARC && sArchive.toUpperCase().endsWith(".EXE")) {
             offset = -1;
-            let data = readFileSync(sArchive, null);
+            let data = diskLib.readFileSync(sArchive, null);
             if (data) {
                 let sizeArc = -1, sizeFile;
                 let max = 512;      // limit the search to the last 512 bytes of the file
@@ -1195,7 +1199,7 @@ function getArchiveOffset(sArchive, arcType, sOffset)
 async function processDiskAsync(input, argv, fSingle = false)
 {
     let driveInfo = createDriveInfo(argv);
-    let di = await readDiskAsync(input, argv['forceBPB'], driveInfo);
+    let di = await diskLib.readDiskAsync(input, argv['forceBPB'], driveInfo);
     if (di) {
         processDisk(di, input, argv, null, fSingle);
     }
@@ -1211,7 +1215,7 @@ function processAll(all, argv)
 {
     if (all && typeof all == "string") {
         let max = +argv['max'] || 0;
-        let asFiles = glob.sync(getLocalPath(all));
+        let asFiles = glob.sync(diskLib.getLocalPath(all));
         if (asFiles.length) {
             let outdir = argv['output'];                // if specified, --output is assumed to be a directory
             let type =  argv['type'] || "json";         // if specified, --type should be a known file extension
@@ -1279,7 +1283,7 @@ function processArgs(argv, fSingle = false)
             processDisk(di, input, argv, null, fSingle);
             return true;
         }
-        if (input) printf("warning: %s is not a supported disk image\n", input);
+        if (input) printf("unable to process %s\n", input);
         return false;
     };
 
@@ -1309,7 +1313,7 @@ function processArgs(argv, fSingle = false)
                         if (input.endsWith('/')) {
                             fDir = true;
                         } else {
-                            arcType = isArchiveFile(input);
+                            arcType = diskLib.isArchiveFile(input);
                         }
                     }
                 } else {
@@ -1327,12 +1331,12 @@ function processArgs(argv, fSingle = false)
             printf("error: %s is not a supported archive file\n", input);
             return true;
         }
-        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], driveInfo, done);
+        diskLib.readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], diskLib.getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], driveInfo, done);
         return true;
     }
 
     if (input) {
-        return done(readDiskSync(input, argv['forceBPB'], driveInfo));
+        return done(diskLib.readDiskSync(input, argv['forceBPB'], driveInfo));
     }
 
     return false;
@@ -1374,7 +1378,7 @@ function main(argc, argv)
     let options = arg0.slice(1).join(' ');
 
     rootDir = path.join(path.dirname(arg0[0]), "../..");
-    setRootDir(rootDir, argv['local']? true : (argv['remote']? false : null));
+    diskLib.setRootDir(rootDir, argv['local']? true : (argv['remote']? false : null));
 
     Device.DEBUG = !!argv['debug'];
 
@@ -1466,7 +1470,7 @@ function main(argc, argv)
     printf("nothing to do\n");
 }
 
-main(...pcjslib.getArgs({
+main(...PCjsLib.getArgs({
     '?': "help",
     'e': "extract",
     'l': "list",

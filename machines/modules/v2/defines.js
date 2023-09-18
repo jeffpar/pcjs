@@ -138,6 +138,7 @@ var LOCALDISKS = false;
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
     node: (typeof window != "undefined")? {} : global,
+    process: (typeof process != "undefined")? process : {},
     window: (typeof window != "undefined")? window : global,
     document: (typeof document != "undefined")? document : {},
     pcjs: { 'machines': {}, 'components': [], 'commands': {} }

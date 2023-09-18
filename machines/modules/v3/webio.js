@@ -72,6 +72,8 @@ export default class WebIO extends StdIO {
     {
         let webIO = this;
 
+        this.bindings[binding] = element;
+
         switch(binding) {
 
         case WebIO.BINDING.CLEAR:
@@ -81,8 +83,8 @@ export default class WebIO extends StdIO {
         case WebIO.BINDING.PRINT:
             this.disableAuto(element);
             /**
-             * An onKeyDown handler has been added to this element to intercept special (non-printable) keys, such as
-             * the UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
+             * An onKeyDown handler has been added to this element to intercept special (non-printable) keys,
+             * such as UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
              */
             element.addEventListener(
                 'keydown',
@@ -169,7 +171,6 @@ export default class WebIO extends StdIO {
             }
             let element = document.getElementById(id);
             if (element) {
-                this.bindings[binding] = element;
                 this.addBinding(binding, element);
                 continue;
             }
@@ -671,11 +672,10 @@ export default class WebIO extends StdIO {
     /**
      * getURLParms(sParms)
      *
-     * @this {WebIO}
-     * @param {string} [sParms] containing the parameter portion of a URL (ie, after the '?')
-     * @returns {Object} containing properties for each parameter found
+     * @param {string} [sParms] (optional string containing the parameter portion of a URL (ie, after the '?'))
+     * @returns {Object} (containing properties for each parameter found)
      */
-    getURLParms(sParms)
+    static getURLParms(sParms)
     {
         let parms = WebIO.URLParms;
         if (!parms) {
@@ -684,9 +684,9 @@ export default class WebIO extends StdIO {
                 if (!sParms) {
                     /**
                      * Note that window.location.href returns the entire URL, whereas window.location.search
-                     * returns only parameters, if any (starting with the '?', which we skip over with a substr() call).
+                     * returns only parameters, if any (starting with the '?', which we skip over with a slice() call).
                      */
-                    sParms = window.location.search.substr(1);
+                    sParms = window.location.search.slice(1);
                 }
                 let match;
                 let pl = /\+/g; // RegExp for replacing addition symbol with a space

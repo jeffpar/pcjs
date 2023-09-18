@@ -5,7 +5,6 @@
  */
 
 import fs from 'fs';
-import util from 'util';
 import path from 'path';
 import events from 'events';
 import zlib from 'zlib';
@@ -293,7 +292,7 @@ export default class StreamZip extends events.EventEmitter {
     {
         let readFileDone = function(archive) {
             if (archive.arcType == StreamZip.TYPE_ARC) {
-                archive.readArcEntries()
+                archive.readArcEntries();
             } else {
                 archive.readCentralDirectory();
             }
@@ -590,7 +589,7 @@ export default class StreamZip extends events.EventEmitter {
             this.op.win = {
                 buffer: this.buffer,
                 position: 0
-            }
+            };
             this.readEntriesCallback(null, this.fileSize);
         } else {
             this.op.win = new FileWindowBuffer(this, "readEntries");
@@ -1265,6 +1264,7 @@ const propZip = Symbol('zip');
 
 StreamZip.async = class StreamZipAsync extends events.EventEmitter
 {
+    // eslint-disable-next-line require-jsdoc
     constructor(config)
     {
         super();
@@ -1283,28 +1283,33 @@ StreamZip.async = class StreamZipAsync extends events.EventEmitter
         });
     }
 
+    // eslint-disable-next-line require-jsdoc
     get entriesCount()
     {
         return this[propZip].then((zip) => zip.entriesCount);
     }
 
+    // eslint-disable-next-line require-jsdoc
     get comment()
     {
         return this[propZip].then((zip) => zip.comment);
     }
 
+    // eslint-disable-next-line require-jsdoc
     async entry(name)
     {
         const zip = await this[propZip];
         return zip.entry(name);
     }
 
+    // eslint-disable-next-line require-jsdoc
     async entries()
     {
         const zip = await this[propZip];
         return zip.entries();
     }
 
+    // eslint-disable-next-line require-jsdoc
     async stream(entry)
     {
         const zip = await this[propZip];
@@ -1319,6 +1324,7 @@ StreamZip.async = class StreamZipAsync extends events.EventEmitter
         });
     }
 
+    // eslint-disable-next-line require-jsdoc
     async entryData(entry)
     {
         const stm = await this.stream(entry);
@@ -1335,6 +1341,7 @@ StreamZip.async = class StreamZipAsync extends events.EventEmitter
         });
     }
 
+    // eslint-disable-next-line require-jsdoc
     async extract(entry, outPath)
     {
         const zip = await this[propZip];
@@ -1349,6 +1356,7 @@ StreamZip.async = class StreamZipAsync extends events.EventEmitter
         });
     }
 
+    // eslint-disable-next-line require-jsdoc
     async close()
     {
         const zip = await this[propZip];
@@ -1362,10 +1370,12 @@ StreamZip.async = class StreamZipAsync extends events.EventEmitter
             });
         });
     }
-}
+};
 
+// eslint-disable-next-line require-jsdoc
 class CentralDirectoryHeader
 {
+    // eslint-disable-next-line require-jsdoc
     read(data) {
         StreamZip.CentralEndHeader.setData(data);
         StreamZip.CentralEndHeader.verifyField('signature', 'ENDSIG');
@@ -1373,8 +1383,10 @@ class CentralDirectoryHeader
     }
 }
 
+// eslint-disable-next-line require-jsdoc
 class CentralDirectoryLoc64Header
 {
+    // eslint-disable-next-line require-jsdoc
     read(data)
     {
         StreamZip.CentralEndLocator64.setData(data);
@@ -1383,8 +1395,10 @@ class CentralDirectoryLoc64Header
     }
 }
 
+// eslint-disable-next-line require-jsdoc
 class CentralDirectoryZip64Header
 {
+    // eslint-disable-next-line require-jsdoc
     read(data)
     {
         StreamZip.Central64EndHeader.setData(data);
@@ -1393,8 +1407,10 @@ class CentralDirectoryZip64Header
     }
 }
 
+// eslint-disable-next-line require-jsdoc
 class Entry
 {
+    // eslint-disable-next-line require-jsdoc
     constructor(streamZip)
     {
         this.streamZip = streamZip;
@@ -1404,11 +1420,13 @@ class Entry
         this.holdErrors = streamZip.config.holdErrors;
     }
 
+    // eslint-disable-next-line require-jsdoc
     reset()
     {
         this.messages = [];
     }
 
+    // eslint-disable-next-line require-jsdoc
     message(err, type = "")
     {
         let msg;
@@ -1427,17 +1445,20 @@ class Entry
         }
     }
 
+    // eslint-disable-next-line require-jsdoc
     error(msg)
     {
         this.message(msg, "error");
         this.errors++;
     }
 
+    // eslint-disable-next-line require-jsdoc
     warning(msg)
     {
         this.message(msg, "warning");
     }
 
+    // eslint-disable-next-line require-jsdoc
     validateName()
     {
         if ((/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/).test(this.name)) {
@@ -1445,19 +1466,23 @@ class Entry
         }
     }
 
+    // eslint-disable-next-line require-jsdoc
     get encrypted()
     {
         return (this.flags & StreamZip.LocalHeader.flags.ENC) === StreamZip.LocalHeader.flags.ENC;
     }
 
+    // eslint-disable-next-line require-jsdoc
     get isFile()
     {
         return !this.isDirectory;
     }
 }
 
+// eslint-disable-next-line require-jsdoc
 class ArcEntry extends Entry
 {
+    // eslint-disable-next-line require-jsdoc
     getArcHeader(data, offset, length)
     {
         /*
@@ -1500,8 +1525,10 @@ class ArcEntry extends Entry
     }
 }
 
+// eslint-disable-next-line require-jsdoc
 class ZipEntry extends Entry
 {
+    // eslint-disable-next-line require-jsdoc
     getLocalHeader(data, offset)
     {
         StreamZip.LocalHeader.setData(data, offset);
@@ -1523,6 +1550,7 @@ class ZipEntry extends Entry
         StreamZip.LocalHeader.assignField(this, ["fnameLen", "extraLen"]);
     }
 
+    // eslint-disable-next-line require-jsdoc
     getCentralHeader(data, offset)
     {
         StreamZip.CentralHeader.setData(data, offset);
@@ -1535,6 +1563,7 @@ class ZipEntry extends Entry
         StreamZip.CentralHeader.assignField(this, ["crc", "compressedSize", "size", "fnameLen", "extraLen", "comLen", "diskStart", "intAttr", "attr", "offset"]);
     }
 
+    // eslint-disable-next-line require-jsdoc
     getEntryName(data, offset, textDecoder)
     {
         const nameData = data.slice(offset, (offset += this.fnameLen));
@@ -1549,6 +1578,7 @@ class ZipEntry extends Entry
         this.comment = this.comLen? data.slice(offset, offset + this.comLen).toString() : null;
     }
 
+    // eslint-disable-next-line require-jsdoc
     getEntryExtra(data, offset)
     {
         let signature, size;
@@ -1565,6 +1595,7 @@ class ZipEntry extends Entry
         }
     }
 
+    // eslint-disable-next-line require-jsdoc
     getZip64Extra(data, offset, length)
     {
         if (length >= 8 && this.size === StreamZip.EF_ZIP64_OR_32) {
@@ -1604,8 +1635,10 @@ class ZipEntry extends Entry
     }
 }
 
+// eslint-disable-next-line require-jsdoc
 class FsRead
 {
+    // eslint-disable-next-line require-jsdoc
     constructor(streamZip, descriptor, buffer, offset, length, position, callback)
     {
         this.streamZip = streamZip;
@@ -1620,6 +1653,7 @@ class FsRead
         this.waiting = false;
     }
 
+    // eslint-disable-next-line require-jsdoc
     read(sync)
     {
         this.streamZip.printfDebug('read("%s", len=%#x, pos=%#x, bytesRead=%#x)\n', this.descriptor, this.length - this.bytesRead, this.position + this.bytesRead, this.bytesRead);
@@ -1651,6 +1685,7 @@ class FsRead
         }
     }
 
+    // eslint-disable-next-line require-jsdoc
     readCallback(sync, err, bytesRead)
     {
         if (typeof bytesRead === 'number') {
@@ -1665,8 +1700,10 @@ class FsRead
     }
 }
 
+// eslint-disable-next-line require-jsdoc
 class FileWindowBuffer
 {
+    // eslint-disable-next-line require-jsdoc
     constructor(streamZip, descriptor)
     {
         this.streamZip = streamZip;
@@ -1678,6 +1715,7 @@ class FileWindowBuffer
         this.fsOp = null;
     }
 
+    // eslint-disable-next-line require-jsdoc
     checkOp()
     {
         if (this.fsOp && this.fsOp.waiting) {
@@ -1685,6 +1723,7 @@ class FileWindowBuffer
         }
     }
 
+    // eslint-disable-next-line require-jsdoc
     read(pos, length, callback)
     {
         this.checkOp();
@@ -1703,6 +1742,7 @@ class FileWindowBuffer
         ).read();
     }
 
+    // eslint-disable-next-line require-jsdoc
     expandLeft(length, callback)
     {
         this.checkOp();
@@ -1722,6 +1762,7 @@ class FileWindowBuffer
         ).read();
     }
 
+    // eslint-disable-next-line require-jsdoc
     expandRight(length, callback)
     {
         this.checkOp();
@@ -1738,6 +1779,7 @@ class FileWindowBuffer
         ).read();
     }
 
+    // eslint-disable-next-line require-jsdoc
     moveRight(shift, callback)
     {
         this.checkOp();
@@ -1764,8 +1806,10 @@ class FileWindowBuffer
     }
 }
 
+// eslint-disable-next-line require-jsdoc
 class EntryDataReaderStream extends stream.Readable
 {
+    // eslint-disable-next-line require-jsdoc
     constructor(streamZip, descriptor, offset, length)
     {
         super();
@@ -1778,6 +1822,7 @@ class EntryDataReaderStream extends stream.Readable
         this.readCallback = this.readCallback.bind(this);
     }
 
+    // eslint-disable-next-line require-jsdoc
     _read(n)
     {
         const buffer = Buffer.alloc(Math.min(n, this.length - this.pos));
@@ -1789,6 +1834,7 @@ class EntryDataReaderStream extends stream.Readable
         }
     }
 
+    // eslint-disable-next-line require-jsdoc
     readCallback(err, bytesRead, buffer)
     {
         this.pos += bytesRead;
@@ -1806,8 +1852,10 @@ class EntryDataReaderStream extends stream.Readable
     }
 }
 
+// eslint-disable-next-line require-jsdoc
 class EntryVerifyStream extends stream.Transform
 {
+    // eslint-disable-next-line require-jsdoc
     constructor(baseStm, entry)
     {
         super();
@@ -1817,6 +1865,7 @@ class EntryVerifyStream extends stream.Transform
         });
     }
 
+    // eslint-disable-next-line require-jsdoc
     _transform(data, encoding, callback)
     {
         let err;
@@ -1829,8 +1878,10 @@ class EntryVerifyStream extends stream.Transform
     }
 }
 
+// eslint-disable-next-line require-jsdoc
 class CRCVerify
 {
+    // eslint-disable-next-line require-jsdoc
     constructor(entry)
     {
         this.entry = entry;
@@ -1840,6 +1891,7 @@ class CRCVerify
         };
     }
 
+    // eslint-disable-next-line require-jsdoc
     data(data)
     {
         const crcTable = this.getCRCTable();
@@ -1861,6 +1913,7 @@ class CRCVerify
         }
     }
 
+    // eslint-disable-next-line require-jsdoc
     getCRCTable()
     {
         let crcTable = CRCVerify.crcTable;

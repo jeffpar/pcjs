@@ -7,11 +7,25 @@
  */
 class Defines {
     /**
+     * Defines()
+     *
+     * We preemptively define idDevice here; it's actually initialized by the Device constructor,
+     * but StdIO needs to inspect it.
+     *
+     * @this {Defines}
+     */
+    constructor()
+    {
+        this.idDevice = "";
+    }
+
+    /**
      * setDebug(debug)
      *
+     * @this {Defines}
      * @param {boolean} debug
      */
-    setDebug(debug)
+    static setDebug(debug)
     {
         Defines.DEBUG = debug;
     }
@@ -150,6 +164,7 @@ Defines.VERSION         = VERSION;
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
     node: (typeof window != "undefined")? {} : global,
+    process: (typeof process != "undefined")? process : {},
     window: (typeof window != "undefined")? window : global,
     document: (typeof document != "undefined")? document : {},
     pcjs: { 'machines': {}, 'components': [], 'commands': {} }
@@ -160,6 +175,9 @@ if (globals.window['PCjs']) {
 } else {
     globals.window['PCjs'] = globals.pcjs;
 }
+
+Defines.globals = globals;
+Defines.process = globals.process;
 
 /**
  * Machines is a global object whose properties are machine IDs and whose values are arrays of Devices.
@@ -1532,23 +1550,30 @@ class StdIO extends StdLib {
      */
     print(s, fBuffer)
     {
-        let i = s.lastIndexOf('\n');
+        let length = s.length;
+        let eol = s.lastIndexOf('\n');
         if (!fBuffer) {
-            if (i >= 0) {
-                console.log(StdIO.PrintBuffer + s.substr(0, i));
-                StdIO.PrintBuffer = "";
-                s = s.substr(i + 1);
+            if (this.idDevice == "node") {
+                StdIO.process.stdout.write(s);
+                s = "";
+            } else {
+                if (eol >= 0) {
+                    console.log(StdIO.PrintBuffer + s.slice(0, eol));
+                    StdIO.PrintBuffer = "";
+                    s = s.slice(eol + 1);
+                }
+                StdIO.PrintTime = null;
             }
-            StdIO.PrintTime = null;
         } else {
-            if (i >= 0) {
+            if (eol >= 0) {
                 let now = Date.now();
                 if (!StdIO.PrintTime) StdIO.PrintTime = now;
                 s = ((now - StdIO.PrintTime) / 1000).toFixed(3) + ": " + s;
+                length = s.length;
             }
         }
         StdIO.PrintBuffer += s;
-        return s.length;
+        return length;
     }
 
     /**
@@ -1645,6 +1670,8 @@ class WebIO extends StdIO {
     {
         let webIO = this;
 
+        this.bindings[binding] = element;
+
         switch(binding) {
 
         case WebIO.BINDING.CLEAR:
@@ -1654,8 +1681,8 @@ class WebIO extends StdIO {
         case WebIO.BINDING.PRINT:
             this.disableAuto(element);
             /**
-             * An onKeyDown handler has been added to this element to intercept special (non-printable) keys, such as
-             * the UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
+             * An onKeyDown handler has been added to this element to intercept special (non-printable) keys,
+             * such as UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
              */
             element.addEventListener(
                 'keydown',
@@ -1742,7 +1769,6 @@ class WebIO extends StdIO {
             }
             let element = document.getElementById(id);
             if (element) {
-                this.bindings[binding] = element;
                 this.addBinding(binding, element);
                 continue;
             }
@@ -2244,11 +2270,10 @@ class WebIO extends StdIO {
     /**
      * getURLParms(sParms)
      *
-     * @this {WebIO}
-     * @param {string} [sParms] containing the parameter portion of a URL (ie, after the '?')
-     * @returns {Object} containing properties for each parameter found
+     * @param {string} [sParms] (optional string containing the parameter portion of a URL (ie, after the '?'))
+     * @returns {Object} (containing properties for each parameter found)
      */
-    getURLParms(sParms)
+    static getURLParms(sParms)
     {
         let parms = WebIO.URLParms;
         if (!parms) {
@@ -2257,9 +2282,9 @@ class WebIO extends StdIO {
                 if (!sParms) {
                     /**
                      * Note that window.location.href returns the entire URL, whereas window.location.search
-                     * returns only parameters, if any (starting with the '?', which we skip over with a substr() call).
+                     * returns only parameters, if any (starting with the '?', which we skip over with a slice() call).
                      */
-                    sParms = window.location.search.substr(1);
+                    sParms = window.location.search.slice(1);
                 }
                 let match;
                 let pl = /\+/g; // RegExp for replacing addition symbol with a space
@@ -3371,7 +3396,7 @@ class Device extends WebIO {
          */
         overrides = config['overrides'] || overrides;
         if (overrides.length) {
-            let parms = this.getURLParms();
+            let parms = WebIO.getURLParms();
             for (let prop in parms) {
                 if (overrides.indexOf(prop) >= 0) {
                     let s = parms[prop];
@@ -20198,11 +20223,8 @@ class PC11 extends Device {
                 return false;
             };
             break;
-
-        default:
-            super.addBinding(binding, element);
-            break;
         }
+        super.addBinding(binding, element);
     }
 
     /**

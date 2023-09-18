@@ -478,7 +478,6 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--target=40M"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/test",
       "stopOnEntry": false,

@@ -171,11 +171,8 @@ export default class PC11 extends Device {
                 return false;
             };
             break;
-
-        default:
-            super.addBinding(binding, element);
-            break;
         }
+        super.addBinding(binding, element);
     }
 
     /**

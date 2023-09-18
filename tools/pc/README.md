@@ -3,11 +3,21 @@ layout: page
 title: PCjs Machine Utility
 permalink: /tools/pc/
 redirect_from: /machines/pcx86/modules/bin/
+modules_init:
+  - import PC from "/tools/pc/pc.js";
+  - new PC("terminal");
 ---
 
 This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console, along with an automatically generated hard disk containing all the files in your current (or other specified) directory.
 
 ### Basic Usage
+
+First, some prerequisites:
+
+  1. Install [Node and NPM](https://nodejs.org)
+  2. Clone the [pcjs](https://github.com/jeffpar/pcjs) repository (eg, `git clone https://github.com/jeffpar/pcjs.git`)
+  3. CD into `pcjs` and run `npm install`
+  4. From the `pcjs` directory, CD to the `tools/pc` directory
 
 The format of a `pc.js` command (as `--help` will also tell you) is:
 
@@ -15,7 +25,7 @@ The format of a `pc.js` command (as `--help` will also tell you) is:
 
 The first argument is the name of a PCjs machine configuration files, such as [ibm5160.json](ibm5160.json) or [ibm5170.xml](ibm5170.xml), and the second is the name of a folder (eg, `disks/empty`) containing files to copy to the machine's hard disk:
 
-	% pc.js ibm5156 disks/empty
+	% pc.js ibm5160 disks/empty
 
 If your operating system doesn't automatically associate `.js` files with [Node](https://nodejs.org/en), then use:
 
@@ -31,9 +41,9 @@ For "bare" machine names, `pc.js` looks for a JSON or XML file in its own `/tool
 
 	% pc.js https://www.pcjs.org/machines/dec/pdp11/1120/basic/debugger/machine.xml
 
-Alternatively, you can use `--start` anywhere on the command-line to specify a machine, as in:
+Alternatively, you can use `--select` anywhere on the command-line to select a machine, as in:
 
-    % pc.js disks/empty --start=ibm5160
+    % pc.js disks/empty --select=ibm5160
     [Press CTRL-D to enter command mode]
     C>
 
@@ -280,6 +290,12 @@ See "[Loading Diskettes](https://www.pcjs.org/blog/2023/07/15/#loading-diskettes
 ### Shutting Down
 
 Another utility that `pc.js` provides is `QUIT.COM`, which makes it easy to shut down the machine.  `QUIT.COM` also supports a switch (`/R`) to reboot the machine instead of shutting it down.
+
+### Playground
+
+This space is a work-in-progress, to provide a web-based demonstration of what `pc.js` can do from the command-line.  It's not functional yet, so use a *real* command-line to give to `pc.js` a try.  Thanks.
+
+{% include web/textarea.html id="terminal" %}
 
 ### More Information
 

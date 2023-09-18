@@ -12,11 +12,25 @@
  */
 export default class Defines {
     /**
+     * Defines()
+     *
+     * We preemptively define idDevice here; it's actually initialized by the Device constructor,
+     * but StdIO needs to inspect it.
+     *
+     * @this {Defines}
+     */
+    constructor()
+    {
+        this.idDevice = "";
+    }
+
+    /**
      * setDebug(debug)
      *
+     * @this {Defines}
      * @param {boolean} debug
      */
-    setDebug(debug)
+    static setDebug(debug)
     {
         Defines.DEBUG = debug;
     }
@@ -155,6 +169,7 @@ Defines.VERSION         = VERSION;
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
     node: (typeof window != "undefined")? {} : global,
+    process: (typeof process != "undefined")? process : {},
     window: (typeof window != "undefined")? window : global,
     document: (typeof document != "undefined")? document : {},
     pcjs: { 'machines': {}, 'components': [], 'commands': {} }
@@ -165,6 +180,9 @@ if (globals.window['PCjs']) {
 } else {
     globals.window['PCjs'] = globals.pcjs;
 }
+
+Defines.globals = globals;
+Defines.process = globals.process;
 
 /**
  * Machines is a global object whose properties are machine IDs and whose values are arrays of Devices.

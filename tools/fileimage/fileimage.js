@@ -10,12 +10,17 @@
 
 import fs         from "fs";
 import path       from "path";
-import pcjslib    from "../modules/pcjslib.js";
+import DiskLib    from "../modules/disklib.js";
+import PCjsLib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import MESSAGE    from "../../machines/modules/v3/message.js";
 import netio      from "../../machines/modules/v3/netio.js";
 import strlib     from "../../machines/modules/v2/strlib.js";
-import { device, getLocalPath, printError, printf, sprintf, setRootDir } from "../modules/disklib.js";
+
+let device = new Device("node");
+let printf = device.printf.bind(device);
+let sprintf = device.sprintf.bind(device);
+let diskLib = new DiskLib(device);
 
 /**
  * @class FileImage
@@ -93,7 +98,7 @@ class FileImage {
             encoding = "utf8";
         }
         let options = {encoding: encoding};
-        let sFilePath = getLocalPath(sFile);
+        let sFilePath = diskLib.getLocalPath(sFile);
 
         if (!this.sFilePath) {
             this.sFilePath = sFilePath;
@@ -105,7 +110,7 @@ class FileImage {
         if (netio.isRemote(sFilePath)) {
             netio.getFile(sFilePath, options.encoding, function(err, status, buf) {
                 if (err) {
-                    printError(err);
+                    diskLib.printError(err);
                     done(err);
                     return;
                 }
@@ -115,7 +120,7 @@ class FileImage {
         } else {
             fs.readFile(sFilePath, options, function(err, buf) {
                 if (err) {
-                    printError(err);
+                    diskLib.printError(err);
                     done(err);
                     return;
                 }
@@ -196,7 +201,7 @@ class FileImage {
                     // json = JSON.parse(buf);
                     json = /** @type {Object} */ (eval("(" + buf + ")"));
                 } catch (err) {
-                    printError(err);
+                    diskLib.printError(err);
                     json = null;
                 }
                 if (json) {
@@ -463,7 +468,7 @@ class FileImage {
                          * a warning.  In any case, this is also why the first done() callback below always passes null for
                          * the Error parameter.
                          *
-                         printError(err);
+                         diskLib.printError(err);
                          */
                     }
                     else {
@@ -717,7 +722,7 @@ class FileImage {
             this.buildJSON();
             this.loadMap(this.sFilePath || sOutputFile, function(err, str) {
                 if (err) {
-                    printError(err);
+                    diskLib.printError(err);
                 } else {
                     obj.outputFile(sOutputFile, fOverwrite);
                 }
@@ -757,7 +762,7 @@ class FileImage {
                     printf("%d-byte %s file saved as %s\n", data.length, sFormat, sOutputFile);
                 }
             } catch(err) {
-                printError(err);
+                diskLib.printError(err);
             }
         } else {
             /*
@@ -912,7 +917,7 @@ function main(argc, argv)
     let argv0 = argv[0].split(' ');
     let options = argv0.slice(1).join(' ');
 
-    setRootDir(path.join(path.dirname(argv0[0]), "../.."), argv['local']);
+    diskLib.setRootDir(path.join(path.dirname(argv0[0]), "../.."), argv['local']);
 
     Device.DEBUG = !!argv['debug'];
 
@@ -937,7 +942,7 @@ function main(argc, argv)
 
         let sFormat = FileImage.validateFormat(argv['format'] || strlib.getExtension(sOutputFile));
         if (sFormat === false) {
-            printError(new Error("unrecognized format"));
+            diskLib.printError(new Error("unrecognized format"));
             return;
         }
 
@@ -983,4 +988,4 @@ function main(argc, argv)
     printf("nothing to do\n");
 }
 
-main(...pcjslib.getArgs());
+main(...PCjsLib.getArgs());
