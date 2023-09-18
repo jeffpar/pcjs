@@ -12,7 +12,14 @@ import { globals } from "../../machines/modules/v3/defines.js";
 
 let node = {
     process: globals.node.process || {
-        argv: WebIO.getURLParms()
+        argv: function(parms) {
+            let argv = [];
+            let keys = Object.keys(parms);
+            for (let i = 0; i < keys.length; i++) {
+                argv.push(keys[i] + '=' + parms[keys[i]]);
+            }
+            return argv;
+        }(WebIO.getURLParms())
     }
 };
 
@@ -28,7 +35,13 @@ node.import = async function(...modules) {
         return;
     }
     for (let module of modules) {
-        node[module] = (await import(module)).default;
+        let basename = module;
+        let match = basename.match(/([^\/]+)\.js$/);
+        if (match) {
+            basename = match[1];
+            module = module.toLowerCase();
+        }
+        node[basename] = (await import(module)).default;
     }
 };
 

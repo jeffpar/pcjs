@@ -7,20 +7,15 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import crypto     from "crypto";
-import fs         from "fs";
-import glob       from "glob";
-import os         from "os";
-import path       from "path";
-import BASFile    from "../modules/basfile.js";
-import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
-import FileLib    from "../../machines/modules/v2/filelib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import MESSAGE    from "../../machines/modules/v3/message.js";
 import CharSet    from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
+import { node }   from "./nodeapi.js";
+
+await node.import("crypto", "fs", "glob", "os", "path", "./BASFile.js", "./StreamZip.js", "../../machines/modules/v2/FileLib.js");
 
 /**
  * @class {DiskLib}
@@ -68,7 +63,7 @@ export default class DiskLib {
     printError(err, filename)
     {
         let msg = err.message || err.stack;
-        if (filename) msg = path.basename(filename) + ": " + msg;
+        if (filename) msg = node.path.basename(filename) + ": " + msg;
         this.printf("%s\n", msg);
     }
 
@@ -109,7 +104,7 @@ export default class DiskLib {
      */
     isBASICFile(sFile)
     {
-        let ext = path.parse(sFile).ext;
+        let ext = node.path.parse(sFile).ext;
         return ext && ext.toUpperCase() == ".BAS";
     }
 
@@ -124,7 +119,7 @@ export default class DiskLib {
      */
     convertBASICFile(db, toUTF8, sPath)
     {
-        let basfile = new BASFile(db, toUTF8, sPath, this.printf);
+        let basfile = new node.BASFile(db, toUTF8, sPath, this.printf);
         return basfile.convert();
     }
 
@@ -140,7 +135,7 @@ export default class DiskLib {
     {
         try {
             sDir = this.getLocalPath(sDir);
-            let stat = fs.statSync(sDir);
+            let stat = node.fs.statSync(sDir);
             return stat.isDirectory();
         } catch(err) {
             if (fError) this.printError(err);
@@ -162,7 +157,7 @@ export default class DiskLib {
     {
         try {
             sFile = this.getLocalPath(sFile);
-            return fs.existsSync(sFile);
+            return node.fs.existsSync(sFile);
         } catch(err) {
             if (fError) this.printError(err);
         }
@@ -212,7 +207,7 @@ export default class DiskLib {
         } else {
             db = new DataBuffer(data);
         }
-        return crypto.createHash(type).update(db.buffer).digest('hex');
+        return node.crypto.createHash(type).update(db.buffer).digest('hex');
     }
 
     /**
@@ -225,10 +220,10 @@ export default class DiskLib {
     getLocalPath(sFile)
     {
         if (sFile[0] == '~') {
-            sFile = os.homedir() + sFile.substr(1);
+            sFile = node.os.homedir() + sFile.substr(1);
         }
         else {
-            sFile = FileLib.getLocalPath(sFile);
+            sFile = node.FileLib.getLocalPath(sFile);
         }
         return sFile;
     }
@@ -284,7 +279,7 @@ export default class DiskLib {
      */
     isArchiveFile(sFile)
     {
-        let sExt = path.parse(sFile).ext.toUpperCase();
+        let sExt = node.path.parse(sFile).ext.toUpperCase();
         return DiskLib.asArchiveFileExts.indexOf(sExt) + 1;
     }
 
@@ -324,7 +319,7 @@ export default class DiskLib {
         let success = true;
         if (this.existsFile(sDir, false) && !this.existsDir(sDir, false) && deleteFile) {
             try {
-                fs.unlinkSync(sDir);
+                node.fs.unlinkSync(sDir);
             } catch(err) {
                 this.printError(err);
                 success = false;
@@ -332,7 +327,7 @@ export default class DiskLib {
         }
         if (success && !this.existsFile(sDir, false)) {
             try {
-                fs.mkdirSync(sDir, {recursive});
+                node.fs.mkdirSync(sDir, {recursive});
             } catch(err) {
                 this.printError(err);
                 success = false;
@@ -352,17 +347,17 @@ export default class DiskLib {
      */
     addMetaData(di, sDir, sPath, aFiles)
     {
-        sPath = path.join(sDir, sPath);
+        sPath = node.path.join(sDir, sPath);
         let sArchiveDir = this.checkArchive(sPath, true);
         if (sArchiveDir) {
             let sArchiveFile = this.checkArchive(sArchiveDir);
             if (sArchiveFile) {
                 let aArchiveData = [];
-                let aArchiveFiles = glob.sync(path.join(sArchiveDir, "**"));
+                let aArchiveFiles = node.glob.sync(node.path.join(sArchiveDir, "**"));
                 for (let j = 0; j < aArchiveFiles.length; j++) {
                     let sPath = aArchiveFiles[j];
-                    let sName = path.basename(sPath);
-                    let stats = fs.statSync(sPath);
+                    let sName = node.path.basename(sPath);
+                    let stats = node.fs.statSync(sPath);
                     if (!stats.isDirectory()) {
                         let data = this.readFileSync(sPath, null);
                         if (!data) continue;
@@ -403,7 +398,7 @@ export default class DiskLib {
     makeFileDesc(sDir, name, data, attr = DiskInfo.ATTR.ARCHIVE, date = new Date())
     {
         return {
-            [DiskInfo.FILEDESC.PATH]: path.join(sDir, name),
+            [DiskInfo.FILEDESC.PATH]: node.path.join(sDir, name),
             [DiskInfo.FILEDESC.NAME]: name,
             [DiskInfo.FILEDESC.ATTR]: this.sprintf("%#0bx", attr),
             [DiskInfo.FILEDESC.DATE]: this.sprintf("%T", date),
@@ -422,7 +417,7 @@ export default class DiskLib {
      */
     normalizeTextFile(db)
     {
-        return BASFile.normalize(db, true);
+        return node.BASFile.normalize(db, true);
     }
 
     /**
@@ -445,13 +440,13 @@ export default class DiskLib {
     {
         let di;
         let diskLib = this;
-        let diskName = path.basename(sDir);
+        let diskName = node.path.basename(sDir);
         if (sDir.endsWith('/')) {
             if (!sLabel) {
                 sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
             }
         } else if (!arcType) {
-            diskName = path.basename(path.dirname(sDir));
+            diskName = node.path.basename(node.path.dirname(sDir));
             /*
              * When we're given a list of files, we don't pick a default label; use --label if you want one.
              */
@@ -520,7 +515,7 @@ export default class DiskLib {
 
         let asFiles;
         if (sDir.endsWith('/')) {
-            asFiles = fs.readdirSync(sDir);
+            asFiles = node.fs.readdirSync(sDir);
             /*
              * Node typically returns directory entries in sorted order (at least on macOS, perhaps not on Windows);
              * however, I have noticed that other runtimes (eg, Bun) don't necessarily return sorted results, so for
@@ -528,15 +523,15 @@ export default class DiskLib {
              */
             asFiles.sort();
             for (let i = 0; i < asFiles.length; i++) {
-                asFiles[i] = path.join(sDir, asFiles[i]);
+                asFiles[i] = node.path.join(sDir, asFiles[i]);
             }
         } else {
             asFiles = sDir.split(',');
             sDir = ".";
             for (let i = 0; i < asFiles.length; i++) {
-                let sDirFile = path.dirname(asFiles[i]);
+                let sDirFile = node.path.dirname(asFiles[i]);
                 if (sDirFile != ".") sDir = sDirFile;
-                asFiles[i] = path.join(sDir, path.basename(asFiles[i]));
+                asFiles[i] = node.path.join(sDir, node.path.basename(asFiles[i]));
             }
         }
 
@@ -564,7 +559,7 @@ export default class DiskLib {
          * By default, I prefer a hard-coded date/time, because it avoids creating different disk images every time this is run.
          */
         if (sLabel && (!driveInfo || driveInfo.verDOS >= 2)) {
-            let sPath = '/' + path.basename(sLabel);
+            let sPath = '/' + node.path.basename(sLabel);
             let file = {path: sPath, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel || new Date(), size: 0};
             aFileData.push(file);
         }
@@ -572,16 +567,16 @@ export default class DiskLib {
         let iFile;
         for (iFile = 0; iFile < asFiles.length && this.nMaxCount > 0; iFile++, this.nMaxCount--) {
             /*
-             * fs.readdirSync() already excludes "." and ".." but there are also a variety of hidden
+             * node.fs.readdirSync() already excludes "." and ".." but there are also a variety of hidden
              * files on *nix systems that begin with a period, which in general we should ignore, too.
              *
              * TODO: Consider an override option that will allow hidden file(s) to be included as well.
              */
             let sPath = asFiles[iFile];
-            let sName = path.basename(sPath);
+            let sName = node.path.basename(sPath);
             if (sName.charAt(0) == '.') continue;
             let file = {path: (sPath[0] != '/' && sPath[1] != ':'? '/' : '') + sPath, name: sName, nameEncoding: "utf8"};
-            let stats = fs.statSync(sPath);
+            let stats = node.fs.statSync(sPath);
             file.date = stats.mtime;
             if (stats.isDirectory()) {
                 if (driveInfo && driveInfo.verDOS < 2) {
@@ -670,7 +665,7 @@ export default class DiskLib {
         let entries = Object.values(zip.entries());
         for (let entry of entries) {
 
-            let file = {path: entry.name, name: path.basename(entry.name), nameEncoding: "cp437"};
+            let file = {path: entry.name, name: node.path.basename(entry.name), nameEncoding: "cp437"};
             /*
              * The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
              * because file times stored in a ZIP file are *local* times.
@@ -691,7 +686,7 @@ export default class DiskLib {
              */
             let files = aFiles, subDir = "";
             let sep = file.path.indexOf('/') >= 0? '/' : '\\';
-            let dirs = (entry.isDirectory? file.path : path.dirname(file.path)).split(sep);
+            let dirs = (entry.isDirectory? file.path : node.path.dirname(file.path)).split(sep);
             for (let dir of dirs) {
                 if (!dir || dir == '.') continue;
                 subDir += dir + '/';
@@ -752,7 +747,7 @@ export default class DiskLib {
                 let filesize = file.size || 0;
                 if (filesize < 0) {
                     filesize = 0;
-                    filename += path.sep;
+                    filename += node.path.sep;
                 }
                 let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
                 if (entry.encrypted) method += '*';
@@ -760,10 +755,10 @@ export default class DiskLib {
                 if (entry.errors) filesize = -1;
                 if (!Device.DEBUG) {
                     this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
-                        filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
+                        filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc);
                 } else {
                     this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %#08x\n",
-                        filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc, entry.offset);
+                        filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc, entry.offset);
                 }
             }
         }
@@ -812,7 +807,7 @@ export default class DiskLib {
     readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbose, done)
     {
         let diskLib = this;
-        let zip = new StreamZip({
+        let zip = new node.StreamZip({
             file: sArchive,
             password: sPassword,
             arcType: arcType,
@@ -844,7 +839,7 @@ export default class DiskLib {
     {
         let db, di;
         try {
-            let diskName = path.basename(diskFile);
+            let diskName = node.path.basename(diskFile);
             di = new DiskInfo(this.device, diskName);
             if (StrLib.getExtension(diskName) == "json") {
                 diskFile = this.getServerPath(diskFile);
@@ -897,7 +892,7 @@ export default class DiskLib {
     {
         let db, di;
         try {
-            let diskName = path.basename(diskFile);
+            let diskName = node.path.basename(diskFile);
             di = new DiskInfo(this.device, diskName);
             if (StrLib.getExtension(diskName) == "json") {
                 db = this.readFileSync(diskFile);
@@ -924,8 +919,8 @@ export default class DiskLib {
             }
             if (di) {
                 let sDir = this.getLocalPath(diskFile.replace(/\.[a-z]+$/i, ""));
-                // sDir = path.join(path.dirname(sDir), "archive", path.basename(sDir));
-                let aDiskFiles = glob.sync(path.join(sDir, "**"));
+                // sDir = node.path.join(node.path.dirname(sDir), "archive", node.path.basename(sDir));
+                let aDiskFiles = node.glob.sync(node.path.join(sDir, "**"));
                 for (let i = 0; i < aDiskFiles.length; i++) {
                     this.addMetaData(di, sDir, aDiskFiles[i].slice(sDir.length));
                 }
@@ -948,7 +943,7 @@ export default class DiskLib {
     {
         sFile = this.getLocalPath(sFile);
         return new Promise((resolve, reject) => {
-            fs.readFile(sFile, encoding, (err, data) => {
+            node.fs.readFile(sFile, encoding, (err, data) => {
                 if (err) reject(err);
                 resolve(data);
             });
@@ -995,7 +990,7 @@ export default class DiskLib {
         if (sFile) {
             try {
                 sFile = this.getLocalPath(sFile);
-                data = FileLib.readFileSync(sFile, encoding);
+                data = node.FileLib.readFileSync(sFile, encoding);
             } catch(err) {
                 if (!quiet) this.printError(err);
             }
@@ -1038,7 +1033,7 @@ export default class DiskLib {
      */
     writeDiskSync(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fQuiet = false, fWritable = false, source = "")
     {
-        let diskName = path.basename(diskFile);
+        let diskName = node.path.basename(diskFile);
         try {
             let fExists = this.existsFile(diskFile);
             if (!fExists || fOverwrite) {
@@ -1053,11 +1048,11 @@ export default class DiskLib {
                 if (data) {
                     if (!fQuiet) this.printf("writing %s...\n", diskFile);
                     diskFile = this.getLocalPath(diskFile);
-                    let sDir = path.dirname(diskFile);
+                    let sDir = node.path.dirname(diskFile);
                     this.makeDir(sDir, true);
-                    if (fExists) fs.unlinkSync(diskFile);
-                    fs.writeFileSync(diskFile, data);
-                    if (diskFileLC.endsWith(".img") && !fWritable) fs.chmodSync(diskFile, 0o444);
+                    if (fExists) node.fs.unlinkSync(diskFile);
+                    node.fs.writeFileSync(diskFile, data);
+                    if (diskFileLC.endsWith(".img") && !fWritable) node.fs.chmodSync(diskFile, 0o444);
                     return true;
                 }
                 this.printf("%s not written, no data\n", diskName);
@@ -1096,12 +1091,12 @@ export default class DiskLib {
                     data = new DataBuffer(data).buffer;
                 }
                 if (fCreateDir) {
-                    let sDir = path.dirname(sFile);
+                    let sDir = node.path.dirname(sFile);
                     this.makeDir(sDir, true);
                 }
                 if (!this.existsFile(sFile) || fOverwrite) {
-                    fs.writeFileSync(sFile, data);
-                    if (fReadOnly) fs.chmodSync(sFile, 0o444);
+                    node.fs.writeFileSync(sFile, data);
+                    if (fReadOnly) node.fs.chmodSync(sFile, 0o444);
                     return true;
                 }
                 if (!fQuiet) this.printf("warning: %s exists, use --overwrite to replace\n", sFile);
@@ -1121,6 +1116,6 @@ export default class DiskLib {
      */
     setRootDir(sDir, fLocalDisks = false)
     {
-        FileLib.setRootDir(sDir, fLocalDisks);
+        node.FileLib.setRootDir(sDir, fLocalDisks);
     }
 }

@@ -20,7 +20,7 @@ export default class PCJSLib
     /**
      * getArgs(s)
      *
-     * @param {string|object} [s]
+     * @param {Object|string} [s]
      * @returns {Array} [argc, argv]
      */
     static getArgs(s)

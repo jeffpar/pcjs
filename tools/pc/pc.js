@@ -13,8 +13,9 @@ import StrLib        from "../../machines/modules/v2/strlib.js";
 import Device        from "../../machines/modules/v3/device.js";
 import CharSet       from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo      from "../../machines/pcx86/modules/v3/diskinfo.js";
-import { MAXDEBUG }  from "../../machines/modules/v3/defines.js";
+import { MAXDEBUG, globals }  from "../../machines/modules/v3/defines.js";
 import MESSAGE       from "../../machines/modules/v3/message.js";
+import WebIO         from "../../machines/modules/v3/webio.js";
 import DiskLib       from "../modules/disklib.js";
 import PCjsLib       from "../modules/pcjslib.js";
 import { node }      from "../modules/nodeapi.js";
@@ -33,7 +34,7 @@ let configJSON = {}, machines = null;
 /**
  * @class {PC}
  */
-export default class PC {
+export default class PC extends PCjsLib {
 
     fBare = false;
     fDebug = false;
@@ -106,14 +107,50 @@ export default class PC {
         "\u001b[24~":   "$f12"
     };
 
+    static optionMap = {
+        '?': "help",
+        'b': "bare",
+        'd': "debug",
+        'f': "floppy",
+        'h': "halt",
+        'l': "local",
+        't': "test",
+        'v': "verbose"
+    };
+
     /**
      * PC()
      *
      * @this {PC}
+     * @param {string} [idTerminal]
      */
-    constructor()
+    constructor(idTerminal)
     {
+        super();
         this.machine = this.newMachine();
+        if (idTerminal) {
+            this.terminal = document.querySelector('#' + idTerminal);
+            if (this.terminal) {
+                device.addBinding(WebIO.BINDING.PRINT, this.terminal);
+                this.terminal.addEventListener("keypress", this.onKeyPress.bind(this));
+            }
+            try {
+                this.main(...PC.getArgs(PC.optionMap));
+            } catch(err) {
+                printf("exception: %s\n", err.message);
+            }
+        }
+    }
+
+    /**
+     * onKeyPress(event)
+     *
+     * @this {PC}
+     * @param {Event} event
+     */
+    onKeyPress(event)
+    {
+        console.log(event);
     }
 
     /**
@@ -2338,8 +2375,10 @@ export default class PC {
                         "build\tbuild disk to run specified command(s)\n" +
                         "exec\texecute a local command\n" +
                         "load\tload drive with the specified diskette\n" +
-                        "save\tsave disk as a local disk image\n" +
-                        "start\tstart a new machine\n" +
+                        "save\tsave disk to directory or as disk image\n" +
+                        "select\tselect a new machine (eg, ibm5170)\n" +
+                        "start\tstart new machine\n" +
+                        "stop\tstop current machine (use save first)\n" +
                         "quit\tsave all changed files and terminate\n";
             if (machine.dbg) {
                 result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
@@ -2360,7 +2399,7 @@ export default class PC {
             break;
         case "build":
             if (this.machine.cpu) {
-                result = "machine already running";
+                result = "machine already started";
                 break;
             }
             arg = this.checkCommand(this.localDir, args);
@@ -2444,10 +2483,33 @@ export default class PC {
                 result = "no disk in drive " + sDrive;
             }
             break;
+        case "select":
+            if (this.machine.cpu) {
+                result = "machine already started";
+                break;
+            }
+            arg = aTokens[0];
+            if (arg) {
+                let sFile = this.checkMachine(arg);
+                if (sFile) {
+                    this.localMachine = sFile;
+                    result = "machine selected: " + sFile;
+                    break;
+                } else {
+                    result = "unrecognized machine: " + arg;
+                }
+            } else {
+                result = "missing machine file";
+            }
+            break;
         case "start":
+            if (this.machine.cpu) {
+                result = "machine already started";
+                break;
+            }
             arg = aTokens[0];
             if (!arg && !this.machine.cpu) {
-                arg = this.savedMachine;
+                arg = this.localMachine || this.savedMachine;
             }
             if (arg) {
                 let sFile = this.checkMachine(arg);
@@ -2463,6 +2525,14 @@ export default class PC {
                 }
             } else {
                 result = "missing machine file";
+            }
+            break;
+        case "stop":
+            if (this.machine.cpu) {
+                this.machine = this.newMachine();
+                result = "machine destroyed";
+            } else {
+                result = "no machine started";
             }
             break;
         case "q":
@@ -2489,7 +2559,7 @@ export default class PC {
                                 this.setDebugMode(DbgLib.EVENTS.EXIT);
                             }
                         } else {
-                            result = "no machine loaded";
+                            result = "no machine started";
                         }
                         break;
                     default:
@@ -2914,16 +2984,16 @@ export default class PC {
     main(argc, argv)
     {
         let removeArg = function(arg) {
-            return PCjsLib.removeArg(argv, arg, "string");
+            return PC.removeArg(argv, arg, "string");
         };
 
         let removeFlag = function(arg) {
-            return PCjsLib.removeArg(argv, arg, "boolean");
+            return PC.removeArg(argv, arg, "boolean");
         };
 
         if (!this.checkArgs(argv, removeArg, removeFlag)) {
             let optionsMain = {
-                "--start=[machine]":        "start machine configuration file",
+                "--select=[machine]":       "select machine configuration file",
             };
             let optionsDisk = {
                 "--boot=[drive]":           "\tselect boot drive (A or C; default is C)",
@@ -2972,7 +3042,7 @@ export default class PC {
             return;
         }
 
-        this.processArgs(argv, removeArg('start'), removeArg('disk'), removeArg('dir'), removeArg('save'));
+        this.processArgs(argv, removeArg('select'), removeArg('disk'), removeArg('dir'), removeArg('save'));
 
         let args = Object.keys(argv);
         for (let arg of args) {
@@ -2991,15 +3061,7 @@ export default class PC {
     }
 }
 
-let pc = new PC();
-
-pc.main(...PCjsLib.getArgs({
-    '?': "help",
-    'b': "bare",
-    'd': "debug",
-    'f': "floppy",
-    'h': "halt",
-    'l': "local",
-    't': "test",
-    'v': "verbose"
-}));
+if (!globals.browser) {
+    let pc = new PC();
+    pc.main(...PC.getArgs(PC.optionMap));
+}

@@ -72,6 +72,8 @@ export default class WebIO extends StdIO {
     {
         let webIO = this;
 
+        this.bindings[binding] = element;
+
         switch(binding) {
 
         case WebIO.BINDING.CLEAR:
@@ -81,8 +83,8 @@ export default class WebIO extends StdIO {
         case WebIO.BINDING.PRINT:
             this.disableAuto(element);
             /**
-             * An onKeyDown handler has been added to this element to intercept special (non-printable) keys, such as
-             * the UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
+             * An onKeyDown handler has been added to this element to intercept special (non-printable) keys,
+             * such as UP and DOWN arrow keys, which are used to implement a simple command history/recall feature.
              */
             element.addEventListener(
                 'keydown',
@@ -169,7 +171,6 @@ export default class WebIO extends StdIO {
             }
             let element = document.getElementById(id);
             if (element) {
-                this.bindings[binding] = element;
                 this.addBinding(binding, element);
                 continue;
             }
