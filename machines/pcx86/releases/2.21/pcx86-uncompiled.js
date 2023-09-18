@@ -4044,6 +4044,39 @@ if (DEBUG) {
  * @unrestricted
  */
 class Component {
+    /*
+    * Types recognized and supported by selected functions (eg, Computer.getMachineParm())
+    */
+    static TYPE = {
+        NUMBER:     "number",
+        OBJECT:     "object",
+        STRING:     "string"
+    };
+
+    /*
+    * Every component created on the current page is recorded in this array (see Component.add()),
+    * enabling any component to locate another component by ID (see Component.getComponentByID())
+    * or by type (see Component.getComponentByType()).
+    *
+    * Every machine on the page are now recorded as well, by their machine ID.  We then record the
+    * various resources used by that machine.
+    */
+
+    static asyncCommands = [
+        'hold', 'sleep', 'wait'
+    ];
+
+    static globalCommands = {
+        'alert': Component.scriptAlert,
+        'sleep': Component.scriptSleep
+    };
+
+    static componentCommands = {
+        'select':   Component.scriptSelect
+    };
+
+    static lastUID = 0;
+
     /**
      * Component(type, parms, bitsMessage)
      *
@@ -4072,6 +4105,7 @@ class Component {
         this.name = parms['name'];
         this.comment = parms['comment'];
         this.parms = parms;
+        this.uid = ++Component.lastUID;
 
         /*
          * The following Component properties need to be accessible by other machines and/or command scripts;
@@ -5375,35 +5409,6 @@ class Component {
         }
     }
 }
-
-/*
- * Types recognized and supported by selected functions (eg, Computer.getMachineParm())
- */
-Component.TYPE = {
-    NUMBER:     "number",
-    OBJECT:     "object",
-    STRING:     "string"
-};
-
-/*
- * Every component created on the current page is recorded in this array (see Component.add()),
- * enabling any component to locate another component by ID (see Component.getComponentByID())
- * or by type (see Component.getComponentByType()).
- *
- * Every machine on the page are now recorded as well, by their machine ID.  We then record the
- * various resources used by that machine.
- */
-
-Component.asyncCommands = [
-    'hold', 'sleep', 'wait'
-];
-Component.globalCommands = {
-    'alert': Component.scriptAlert,
-    'sleep': Component.scriptSleep
-};
-Component.componentCommands = {
-    'select':   Component.scriptSelect
-};
 
 /*
  * The following polyfills provide ES5 functionality that's missing in older browsers (eg, IE8),
@@ -61490,6 +61495,188 @@ TestMonitor.COMMANDS = [
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Mouse extends Component {
+
+    static INTERFACE = {
+        BUS:    "bus",
+        INPORT: "inport",
+        SERIAL: "serial"
+    };
+
+    static BUTTON = {
+        LEFT:   0,
+        RIGHT:  2
+    };
+
+    /*
+     * The Microsoft Bus Mouse supported only one base address: 0x23C.
+     *
+     * NOTE: Windows v1.01 probes ports 0x23D and 0x23F immediately prior to probing COM2 (and then COM1)
+     * for a serial mouse.
+     */
+    static BUS = {
+        DATA: {                     // Mouse Data Register
+            PORT:   0x23C
+        },
+        TPPI: {                     // 8255 (PPI) Test Register
+            PORT:   0x23D
+        },
+        CTRL: {                     // Mouse Control Register
+            PORT:   0x23E
+        },
+        CPPI: {                     // 8255 (PPI) Control Register
+            PORT:   0x23F
+        }
+    };
+
+    /*
+     * The retail Microsoft InPort card supported two base addresses, 0x23C and 0x238, through the primary and
+     * secondary jumpers, respectively.  However, OEMs may have had InPorts on other base addresses.
+     *
+     * Here's a typical InPort Mouse detection sequence:
+     *
+     *      S = IN(Mouse.INPORT.ID.PORT)
+     *      ...
+     *      VERIFY THAT S EQUALS Mouse.INPORT.ID.CHIP
+     *      T = IN(Mouse.INPORT.ID.PORT)
+     *      ...
+     *      VERIFY ADDITIONAL PAIRS OF READS RETURN MATCHING S AND T VALUES
+     *
+     * Here's a typical InPort Mouse interrupt sequence:
+     *
+     *      OUT(Mouse.INPORT.ADDR.PORT, Mouse.INPORT.ADDR.MODE)
+     *      OUT(Mouse.INPORT.DATA.PORT, IN(Mouse.INPORT.DATA.PORT) | Mouse.INPORT.DATA.MODE.HOLD)
+     *      ...
+     *      OUT(Mouse.INPORT.ADDR.PORT, Mouse.INPORT.ADDR.X)
+     *      X = IN(Mouse.INPORT.DATA.PORT)
+     *      OUT(Mouse.INPORT.ADDR.PORT, Mouse.INPORT.ADDR.Y)
+     *      Y = IN(Mouse.INPORT.DATA.PORT)
+     *      OUT(Mouse.INPORT.ADDR.PORT, Mouse.INPORT.ADDR.STATUS)
+     *      B = IN(Mouse.INPORT.DATA.PORT) & (Mouse.INPORT.DATA.STATUS.B1 | Mouse.INPORT.DATA.STATUS.B2 | Mouse.INPORT.DATA.STATUS.B3)
+     *      ...
+     *      OUT(Mouse.INPORT.ADDR.PORT, Mouse.INPORT.ADDR.MODE)
+     *      OUT(Mouse.INPORT.DATA.PORT, IN(Mouse.INPORT.DATA.PORT) & ~Mouse.INPORT.DATA.MODE.HOLD)
+     */
+    static INPORT = {
+        ADDR: {
+            PORT:       0x23C,
+            STATUS:     0x00,       // InPort Status Register
+            X:          0x01,       // InPort X Movement Register
+            Y:          0x02,       // InPort Y Movement Register
+            ISTAT:      0x05,       // InPort Interface Status Register
+            ICTRL:      0x06,       // InPort Interface Control Register
+            MODE:       0x07        // InPort Mode Register
+        },
+        DATA: {
+            /*
+             * The internal register read or written via this port is determined by the value written to ADDR.PORT
+             */
+            PORT:       0x23D,
+            STATUS:     {           // InPort Status Register (0)
+                B3:     0x01,       // Status button 3
+                B2:     0x02,       // Status button 2
+                B1:     0x04,       // Status button 1
+                DB3:    0x08,       // Delta button 3
+                DB2:    0x10,       // Delta button 2
+                DB1:    0x20,       // Delta button 1
+                MOVE:   0x40,       // Movement
+                PACKET: 0x80        // Packet complete
+            },
+            MODE: {                 // InPort Mode Register (7)
+                HOLD:   0x20        // hold the status for reading
+            }
+        },
+        ID: {
+            /*
+             * The initial read returns the Chip ID; alternate reads return a byte containing the InPort revision number
+             * in the low nibble and the InPort version number in the high nibble.
+             */
+            PORT:       0x23E,
+            CHIP:       0xDE        // InPort Chip ID
+        },
+        TEST: {
+            PORT:       0x23F
+        }
+    };
+
+    /*
+     * From http://paulbourke.net/dataformats/serialmouse:
+     *
+     *      The old MicroSoft serial mouse, while no longer in general use, can be employed to provide a low cost input device,
+     *      for example, coupling the internal mechanism to other moving objects. The serial protocol for the mouse is:
+     *
+     *          1200 baud, 7 bit, 1 stop bit, no parity.
+     *
+     *      The pinout of the connector follows the standard serial interface, as shown below:
+     *
+     *          Pin     Abbr    Description
+     *          1       DCD     Data Carrier Detect
+     *          2       RD      Receive Data            [serial data from mouse to host]
+     *          3       TD      Transmit Data
+     *          4       DTR     Data Terminal Ready     [used to provide positive voltage to mouse, plus reset/detection]
+     *          5       SG      Signal Ground
+     *          6       DSR     Data Set Ready
+     *          7       RTS     Request To Send         [used to provide positive voltage to mouse]
+     *          8       CTS     Clear To Send
+     *          9       RI      Ring
+     *
+     *      Every time the mouse changes state (moved or button pressed) a three byte "packet" is sent to the serial interface.
+     *      For reasons known only to the engineers, the data is arranged as follows, most notably the two high order bits for the
+     *      x and y coordinates share the first byte with the button status.
+     *
+     *                      D6  D5  D4  D3  D2  D1  D0
+     *          1st byte    1   LB  RB  Y7  Y6  X7  X6
+     *          2nd byte    0   X5  X4  X3  X2  X1  X0
+     *          3rd byte    0   Y5  Y4  Y3  Y2  Y1  Y0
+     *
+     *      where:
+     *
+     *          LB is the state of the left button, 1 = pressed, 0 = released.
+     *          RB is the state of the right button, 1 = pressed, 0 = released
+     *          X0-7 is movement of the mouse in the X direction since the last packet. Positive movement is toward the right.
+     *          Y0-7 is movement of the mouse in the Y direction since the last packet. Positive movement is back, toward the user.
+     *
+     * From http://www.kryslix.com/nsfaq/Q.12.html:
+     *
+     *      The Microsoft serial mouse is the most popular 2-button mouse. It is supported by all major operating systems.
+     *      The maximum tracking rate for a Microsoft mouse is 40 reports/second * 127 counts per report, in other words, 5080 counts
+     *      per second. The most common range for mice is is 100 to 400 CPI (counts per inch) but can be up to 1000 CPI. A 100 CPI mouse
+     *      can discriminate motion up to 50.8 inches/second while a 400 CPI mouse can only discriminate motion up to 12.7 inches/second.
+     *
+     *          9-pin  25-pin    Line    Comments
+     *          shell  1         GND
+     *          3      2         TD      Serial data from host to mouse (only for power)
+     *          2      3         RD      Serial data from mouse to host
+     *          7      4         RTS     Positive voltage to mouse
+     *          8      5         CTS
+     *          6      6         DSR
+     *          5      7         SGND
+     *          4      20        DTR     Positive voltage to mouse and reset/detection
+     *
+     *      To function correctly, both the RTS and DTR lines must be positive. DTR/DSR and RTS/CTS must NOT be shorted.
+     *      RTS may be toggled negative for at least 100ms to reset the mouse. (After a cold boot, the RTS line is usually negative.
+     *      This provides an automatic toggle when RTS is brought positive). When DTR is toggled the mouse should send a single byte
+     *      (0x4D, ASCII 'M').
+     *
+     *      Serial data parameters: 1200bps, 7 data bits, 1 stop bit
+     *
+     *      Data is sent in 3 byte packets for each event (a button is pressed or released, or the mouse moves):
+     *
+     *                  D7  D6  D5  D4  D3  D2  D1  D0
+     *          Byte 1  X   1   LB  RB  Y7  Y6  X7  X6
+     *          Byte 2  X   0   X5  X4  X3  X2  X1  X0
+     *          Byte 3  X   0   Y5  Y4  Y3  Y2  Y1  Y0
+     *
+     *      LB is the state of the left button (1 means down).
+     *      RB is the state of the right button (1 means down).
+     *      X7-X0 movement in X direction since last packet (signed byte).
+     *      Y7-Y0 movement in Y direction since last packet (signed byte).
+     *      The high order bit of each byte (D7) is ignored. Bit D6 indicates the start of an event, which allows the software to
+     *      synchronize with the mouse.
+     */
+    static SERIAL = {
+        ID:     0x4D
+    };
+
     /**
      * Mouse(parmsMouse)
      *
@@ -61533,8 +61720,8 @@ class Mouse extends Component {
 
         this.iAdapter = parmsMouse['adapter'] || 0;
         this.idDevice = parmsMouse['serial'] || parmsMouse['binding'];
-        this.sType = parmsMouse['type'] || (this.idDevice? Mouse.TYPE.SERIAL : Mouse.TYPE.BUS);
-        this.typeDevice = (this.sType == Mouse.TYPE.SERIAL? "SerialPort" : null);
+        this.sType = parmsMouse['type'] || (this.idDevice? Mouse.INTERFACE.SERIAL : Mouse.INTERFACE.BUS);
+        this.typeDevice = (this.sType == Mouse.INTERFACE.SERIAL? "SerialPort" : null);
         this.componentDevice = null;
 
         this.scale = parmsMouse['scaleMouse'];
@@ -61571,7 +61758,7 @@ class Mouse extends Component {
         for (let video = null; (video = cmp.getMachineComponent("Video", video));) {
             this.aVideo.push(video);
         }
-        if (this.sType == Mouse.TYPE.BUS) {
+        if (this.sType == Mouse.INTERFACE.BUS) {
             bus.addPortInputTable(this, Mouse.aBusInput, Mouse.BUS.DATA.PORT);
             bus.addPortOutputTable(this, Mouse.aBusOutput, Mouse.BUS.DATA.PORT);
         }
@@ -62230,38 +62417,6 @@ class Mouse extends Component {
     }
 }
 
-Mouse.TYPE = {
-    BUS:        "bus",
-    INPORT:     "inport",
-    SERIAL:     "serial"
-};
-
-Mouse.BUTTON = {
-    LEFT:   0,
-    RIGHT:  2
-};
-
-/*
- * The Microsoft Bus Mouse supported only one base address: 0x23C.
- *
- * NOTE: Windows v1.01 probes ports 0x23D and 0x23F immediately prior to probing COM2 (and then COM1)
- * for a serial mouse.
- */
-Mouse.BUS = {
-    DATA: {                     // Mouse Data Register
-        PORT:       0x23C
-    },
-    TPPI: {                     // 8255 (PPI) Test Register
-        PORT:       0x23D
-    },
-    CTRL: {                     // Mouse Control Register
-        PORT:       0x23E
-    },
-    CPPI: {                     // 8255 (PPI) Control Register
-        PORT:       0x23F
-    }
-};
-
 Mouse.aBusInput = {
     0x0:    Mouse.prototype.inBusData,
     0x1:    Mouse.prototype.inBusTPPI,
@@ -62274,155 +62429,6 @@ Mouse.aBusOutput = {
     0x1:    Mouse.prototype.outBusTPPI,
     0x2:    Mouse.prototype.outBusCtrl,
     0x3:    Mouse.prototype.outBusCPPI
-};
-
-/*
- * The retail Microsoft InPort card supported two base addresses, 0x23C and 0x238, through the primary and
- * secondary jumpers, respectively.  However, OEMs may have had InPorts on other base addresses.
- *
- * Here's a typical InPort Mouse detection sequence:
- *
- *      S = IN(Mouse.INPORT.ID.PORT)
- *      ...
- *      VERIFY THAT S EQUALS Mouse.INPORT.ID.CHIP
- *      T = IN(Mouse.INPORT.ID.PORT)
- *      ...
- *      VERIFY ADDITIONAL PAIRS OF READS RETURN MATCHING S AND T VALUES
- *
- * Here's a typical InPort Mouse interrupt sequence:
- *
- *      OUT(Mouse.INPORT.ADDR.PORT, Mouse.INPORT.ADDR.MODE)
- *      OUT(Mouse.INPORT.DATA.PORT, IN(Mouse.INPORT.DATA.PORT) | Mouse.INPORT.DATA.MODE.HOLD)
- *      ...
- *      OUT(Mouse.INPORT.ADDR.PORT, Mouse.INPORT.ADDR.X)
- *      X = IN(Mouse.INPORT.DATA.PORT)
- *      OUT(Mouse.INPORT.ADDR.PORT, Mouse.INPORT.ADDR.Y)
- *      Y = IN(Mouse.INPORT.DATA.PORT)
- *      OUT(Mouse.INPORT.ADDR.PORT, Mouse.INPORT.ADDR.STATUS)
- *      B = IN(Mouse.INPORT.DATA.PORT) & (Mouse.INPORT.DATA.STATUS.B1 | Mouse.INPORT.DATA.STATUS.B2 | Mouse.INPORT.DATA.STATUS.B3)
- *      ...
- *      OUT(Mouse.INPORT.ADDR.PORT, Mouse.INPORT.ADDR.MODE)
- *      OUT(Mouse.INPORT.DATA.PORT, IN(Mouse.INPORT.DATA.PORT) & ~Mouse.INPORT.DATA.MODE.HOLD)
- */
-Mouse.INPORT = {
-    ADDR: {
-        PORT:       0x23C,
-        STATUS:     0x00,       // InPort Status Register
-        X:          0x01,       // InPort X Movement Register
-        Y:          0x02,       // InPort Y Movement Register
-        ISTAT:      0x05,       // InPort Interface Status Register
-        ICTRL:      0x06,       // InPort Interface Control Register
-        MODE:       0x07        // InPort Mode Register
-    },
-    DATA: {
-        /*
-         * The internal register read or written via this port is determined by the value written to ADDR.PORT
-         */
-        PORT:       0x23D,
-        STATUS:     {           // InPort Status Register (0)
-            B3:     0x01,       // Status button 3
-            B2:     0x02,       // Status button 2
-            B1:     0x04,       // Status button 1
-            DB3:    0x08,       // Delta button 3
-            DB2:    0x10,       // Delta button 2
-            DB1:    0x20,       // Delta button 1
-            MOVE:   0x40,       // Movement
-            PACKET: 0x80        // Packet complete
-        },
-        MODE: {                 // InPort Mode Register (7)
-            HOLD:   0x20        // hold the status for reading
-        }
-    },
-    ID: {
-        /*
-         * The initial read returns the Chip ID; alternate reads return a byte containing the InPort revision number
-         * in the low nibble and the InPort version number in the high nibble.
-         */
-        PORT:       0x23E,
-        CHIP:       0xDE        // InPort Chip ID
-    },
-    TEST: {
-        PORT:       0x23F
-    }
-};
-
-/*
- * From http://paulbourke.net/dataformats/serialmouse:
- *
- *      The old MicroSoft serial mouse, while no longer in general use, can be employed to provide a low cost input device,
- *      for example, coupling the internal mechanism to other moving objects. The serial protocol for the mouse is:
- *
- *          1200 baud, 7 bit, 1 stop bit, no parity.
- *
- *      The pinout of the connector follows the standard serial interface, as shown below:
- *
- *          Pin     Abbr    Description
- *          1       DCD     Data Carrier Detect
- *          2       RD      Receive Data            [serial data from mouse to host]
- *          3       TD      Transmit Data
- *          4       DTR     Data Terminal Ready     [used to provide positive voltage to mouse, plus reset/detection]
- *          5       SG      Signal Ground
- *          6       DSR     Data Set Ready
- *          7       RTS     Request To Send         [used to provide positive voltage to mouse]
- *          8       CTS     Clear To Send
- *          9       RI      Ring
- *
- *      Every time the mouse changes state (moved or button pressed) a three byte "packet" is sent to the serial interface.
- *      For reasons known only to the engineers, the data is arranged as follows, most notably the two high order bits for the
- *      x and y coordinates share the first byte with the button status.
- *
- *                      D6  D5  D4  D3  D2  D1  D0
- *          1st byte    1   LB  RB  Y7  Y6  X7  X6
- *          2nd byte    0   X5  X4  X3  X2  X1  X0
- *          3rd byte    0   Y5  Y4  Y3  Y2  Y1  Y0
- *
- *      where:
- *
- *          LB is the state of the left button, 1 = pressed, 0 = released.
- *          RB is the state of the right button, 1 = pressed, 0 = released
- *          X0-7 is movement of the mouse in the X direction since the last packet. Positive movement is toward the right.
- *          Y0-7 is movement of the mouse in the Y direction since the last packet. Positive movement is back, toward the user.
- *
- * From http://www.kryslix.com/nsfaq/Q.12.html:
- *
- *      The Microsoft serial mouse is the most popular 2-button mouse. It is supported by all major operating systems.
- *      The maximum tracking rate for a Microsoft mouse is 40 reports/second * 127 counts per report, in other words, 5080 counts
- *      per second. The most common range for mice is is 100 to 400 CPI (counts per inch) but can be up to 1000 CPI. A 100 CPI mouse
- *      can discriminate motion up to 50.8 inches/second while a 400 CPI mouse can only discriminate motion up to 12.7 inches/second.
- *
- *          9-pin  25-pin    Line    Comments
- *          shell  1         GND
- *          3      2         TD      Serial data from host to mouse (only for power)
- *          2      3         RD      Serial data from mouse to host
- *          7      4         RTS     Positive voltage to mouse
- *          8      5         CTS
- *          6      6         DSR
- *          5      7         SGND
- *          4      20        DTR     Positive voltage to mouse and reset/detection
- *
- *      To function correctly, both the RTS and DTR lines must be positive. DTR/DSR and RTS/CTS must NOT be shorted.
- *      RTS may be toggled negative for at least 100ms to reset the mouse. (After a cold boot, the RTS line is usually negative.
- *      This provides an automatic toggle when RTS is brought positive). When DTR is toggled the mouse should send a single byte
- *      (0x4D, ASCII 'M').
- *
- *      Serial data parameters: 1200bps, 7 data bits, 1 stop bit
- *
- *      Data is sent in 3 byte packets for each event (a button is pressed or released, or the mouse moves):
- *
- *                  D7  D6  D5  D4  D3  D2  D1  D0
- *          Byte 1  X   1   LB  RB  Y7  Y6  X7  X6
- *          Byte 2  X   0   X5  X4  X3  X2  X1  X0
- *          Byte 3  X   0   Y5  Y4  Y3  Y2  Y1  Y0
- *
- *      LB is the state of the left button (1 means down).
- *      RB is the state of the right button (1 means down).
- *      X7-X0 movement in X direction since last packet (signed byte).
- *      Y7-Y0 movement in Y direction since last packet (signed byte).
- *      The high order bit of each byte (D7) is ignored. Bit D6 indicates the start of an event, which allows the software to
- *      synchronize with the mouse.
- */
-Mouse.SERIAL = {
-    ID:     0x4D
 };
 
 /*

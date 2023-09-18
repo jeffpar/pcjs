@@ -478,9 +478,6 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "chkdsk",
-        "--target=40M",
-        "--system=compaq:3.31D"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/test",
       "stopOnEntry": false,

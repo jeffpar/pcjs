@@ -3441,6 +3441,39 @@ if (DEBUG) {
  * @unrestricted
  */
 class Component {
+    /*
+    * Types recognized and supported by selected functions (eg, Computer.getMachineParm())
+    */
+    static TYPE = {
+        NUMBER:     "number",
+        OBJECT:     "object",
+        STRING:     "string"
+    };
+
+    /*
+    * Every component created on the current page is recorded in this array (see Component.add()),
+    * enabling any component to locate another component by ID (see Component.getComponentByID())
+    * or by type (see Component.getComponentByType()).
+    *
+    * Every machine on the page are now recorded as well, by their machine ID.  We then record the
+    * various resources used by that machine.
+    */
+
+    static asyncCommands = [
+        'hold', 'sleep', 'wait'
+    ];
+
+    static globalCommands = {
+        'alert': Component.scriptAlert,
+        'sleep': Component.scriptSleep
+    };
+
+    static componentCommands = {
+        'select':   Component.scriptSelect
+    };
+
+    static lastUID = 0;
+
     /**
      * Component(type, parms, bitsMessage)
      *
@@ -3469,6 +3502,7 @@ class Component {
         this.name = parms['name'];
         this.comment = parms['comment'];
         this.parms = parms;
+        this.uid = ++Component.lastUID;
 
         /*
          * The following Component properties need to be accessible by other machines and/or command scripts;
@@ -4772,35 +4806,6 @@ class Component {
         }
     }
 }
-
-/*
- * Types recognized and supported by selected functions (eg, Computer.getMachineParm())
- */
-Component.TYPE = {
-    NUMBER:     "number",
-    OBJECT:     "object",
-    STRING:     "string"
-};
-
-/*
- * Every component created on the current page is recorded in this array (see Component.add()),
- * enabling any component to locate another component by ID (see Component.getComponentByID())
- * or by type (see Component.getComponentByType()).
- *
- * Every machine on the page are now recorded as well, by their machine ID.  We then record the
- * various resources used by that machine.
- */
-
-Component.asyncCommands = [
-    'hold', 'sleep', 'wait'
-];
-Component.globalCommands = {
-    'alert': Component.scriptAlert,
-    'sleep': Component.scriptSleep
-};
-Component.componentCommands = {
-    'select':   Component.scriptSelect
-};
 
 /*
  * The following polyfills provide ES5 functionality that's missing in older browsers (eg, IE8),
