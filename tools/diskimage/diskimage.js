@@ -213,152 +213,6 @@ function dumpSector(di, sector, offset = 0, limit = -1)
 }
 
 /**
- * extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
- *
- * @param {string} sDir
- * @param {string} subDir
- * @param {string} sPath
- * @param {number} attr
- * @param {Date} date
- * @param {Buffer} db
- * @param {Object} argv
- * @param {boolean} [allowExpand]
- * @param {boolean} [allowHidden]
- * @param {Array.<fileData>} [files]
- */
-function extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
-{
-    /*
-     * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
-     * it mounts, so if we see any of those remnants (which we use to limit to "(attr & DiskInfo.ATTR.HIDDEN)"
-     * but no longer assume they always will hidden), then we ignore them.
-     *
-     * This is why I make all my IMG files read-only and also write-protect physical diskettes before inserting
-     * them into a drive.  Other operating systems pose similar threats.  For example, Windows 9x likes to modify
-     * the 8-byte OEM signature field of a diskette's boot sector with unique volume-tracking identifiers.
-     */
-    if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) {
-        return true;
-    }
-
-    if (!allowHidden) {
-        if (attr & DiskInfo.ATTR.HIDDEN) {
-            if (attr & DiskInfo.ATTR.SUBDIR) {
-                aHiddenDirs.push(sPath + '/');
-            }
-            return false;
-        } else {
-            for (let i = 0; i < aHiddenDirs.length; i++) {
-                if (sPath.indexOf(aHiddenDirs[i]) == 0) {
-                    return false;
-                }
-            }
-        }
-    }
-
-    sPath = path.join(sDir, subDir, sPath);
-    let sFile = sPath.substr(sDir != '.' && sDir.length? sDir.length + 1 : 0);
-
-    let fSuccess = false;
-    let dir = path.dirname(sPath);
-    diskLib.makeDir(diskLib.getLocalPath(dir), true, argv['overwrite']);
-    if (attr & DiskInfo.ATTR.SUBDIR) {
-        fSuccess = diskLib.makeDir(diskLib.getLocalPath(sPath), true);
-    } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
-        let fPrinted = false;
-        let fQuiet = argv['quiet'];
-        if (argv['expand'] && allowExpand) {
-            let arcType = diskLib.isArchiveFile(sFile);
-            if (arcType) {
-                if (!fQuiet) printf("expanding: %s\n", sFile);
-                if (arcType == StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
-                    /*
-                     * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
-                     */
-                    arcType = StreamZip.TYPE_ARC;
-                    printf("warning: overriding %s as type ARC (%d)\n", sFile, arcType);
-                }
-                if (arcType == StreamZip.TYPE_ZIP && db.readUInt32LE(0) == 0x08074B50) {
-                    // db = db.slice(0, db.length - 4);
-                    printf("warning: ZIP extended header signature detected (%#08x)\n", 0x08074B50);
-                }
-                let zip = new StreamZip({
-                    file: sFile,
-                    password: argv['password'],
-                    buffer: db.buffer,
-                    arcType: arcType,
-                    storeEntries: true,
-                    nameEncoding: "ascii",
-                    printfDebug: printf,
-                    holdErrors: true
-                }).on('ready', () => {
-                    let aFileData = diskLib.getArchiveFiles(zip, argv['verbose']);
-                    for (let file of aFileData) {
-                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
-                    }
-                    zip.close();
-                }).on('error', (err) => {
-                    diskLib.printError(err, sFile);
-                    /*
-                     * Since this implies a failure to extract anything from the archive, we'll call ourselves
-                     * back with allowExpand not set, so that we simply extract the archive without expanding it.
-                     */
-                    extractFile(sDir, subDir, sFile, attr, date, db, argv);
-                });
-                zip.open();
-                /*
-                 * If we 'expand' the contents of an archive, then we likely don't want to also save the
-                 * archive itself, so we return now.  If you do want both, we'll have to add a new option.
-                 */
-                return true;
-            }
-        }
-        if (argv['collection'] && diskLib.existsFile(sPath) && !argv['overwrite']) {
-            if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
-            return true;
-        }
-        if (!fQuiet) printf("extracting: %s\n", sFile);
-        /*
-         * Originally, "normalize" was just an import option (to fix line endings of known text files on
-         * disks we created); however, I'm going to make it an export option as well, and not just to revert
-         * line endings, but to also address the fact that there are a lot of old "tokenized" BASIC files out
-         * in the world, and they are much easier to work with locally in their "de-tokenized" form.
-         */
-        if (argv['normalize']) {
-            /*
-             * BASIC files are dealt with separately, because there are 3 kinds: ASCII (for which we call
-             * normalize()), tokenized (which we convert to ASCII and automatically normalize in the process),
-             * and protected (which we decrypt and then de-tokenize).
-             */
-            if (diskLib.isBASICFile(sPath)) {
-                /*
-                 * In addition to "de-tokenizing", we're also setting convertBASICFile()'s normalize parameter
-                 * to true, to convert characters from CP437 to UTF-8, revert line-endings, and omit EOF.  We're
-                 * currently combining both features as part of the "normalize" process.
-                 */
-                db = diskLib.convertBASICFile(db, true, sPath);
-            }
-            else if (diskLib.isTextFile(sPath)) {
-                db = diskLib.normalizeTextFile(db);
-            }
-        }
-        fSuccess = diskLib.writeFileSync(diskLib.getLocalPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
-    }
-    if (fSuccess) {
-        fs.utimesSync(diskLib.getLocalPath(sPath), date, date);
-        if (files) {
-            for (let file of files) {
-                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, true, false, file.files)) {
-                    fSuccess = false;
-                    break;
-                }
-            }
-        }
-    }
-    return fSuccess;
-}
-
-/**
  * printFileDesc(diskFile, diskName, desc)
  *
  * @param {string} diskFile
@@ -528,7 +382,6 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         } else if (diskFile.indexOf("http") != 0) {
             extractDir = extractDir.replace("%d", path.dirname(diskFile));
         }
-
         let extractName = "", extractFolder = "";
         if (fExtractAll) {
             /*
@@ -548,44 +401,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                 extractFolder = extractFolder.replace("/disks/archive", "/archive");
             }
         }
-
-        aHiddenDirs = [];
-        let manifest = di.getFileManifest(null);                // add true for sorted manifest
-        manifest.forEach(function extractDiskFile(desc) {
-            /*
-             * Parse each file descriptor in much the same way that buildFileTableFromJSON() does.  That function
-             * doesn't get the file's CONTENTS, because it's working with the file descriptors that have been stored
-             * in a JSON file (where CONTENTS would be redundant and a waste of space).  Here, we call getFileManifest(),
-             * which calls getFileDesc(true), which returns a complete file descriptor that includes CONTENTS.
-             */
-            let sPath = desc[DiskInfo.FILEDESC.PATH];
-            if (sPath[0] == '/') sPath = sPath.substr(1);       // PATH should ALWAYS start with a slash, but let's be safe
-            let name = path.basename(sPath).toUpperCase();
-            let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
-            let attr = +desc[DiskInfo.FILEDESC.ATTR];
-
-            /*
-             * We call parseDate() requesting a *local* date from the timestamp, because that's exactly how we're going
-             * to use it: as a local file modification time.  We used to deal exclusively in UTC dates, unpolluted
-             * by timezone information, but here we don't really have a choice.  Trying to fix the date after the fact,
-             * by adding Date.getTimezoneOffset(), doesn't always work either, probably due to Daylight Savings Time issues;
-             * best not to go down that rabbit hole.
-             */
-            let date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
-            let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
-            let db = new DataBuffer(contents);
-            device.assert(size == db.length);
-
-            if (fExtractAll || extractName == name) {
-                if (!fExtractToFile) {
-                    if (!fExtractAll || diskLib.isTextFile(sPath)) {
-                        printf("\n%s:\n%s\n", sPath, CharSet.fromCP437(db.buffer));
-                    }
-                } else {
-                    extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv, true, argv['hidden'] || !fExtractAll);
-                }
-            }
-        });
+        diskLib.extractFiles(di, argv, extractName, path.join(extractDir, extractFolder), argv['hidden'] || !fExtractAll, fExtractToFile);
     }
 
     if (argv['manifest']) {

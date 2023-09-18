@@ -2374,6 +2374,7 @@ export default class PC extends PCjsLib {
                         "abort\tterminate without saving\n" +
                         "build\tbuild disk to run specified command(s)\n" +
                         "exec\texecute a local command\n" +
+                        "fetch\tread disk image and extract to directory\n" +
                         "load\tload drive with the specified diskette\n" +
                         "save\tsave disk to directory or as disk image\n" +
                         "select\tselect a new machine (eg, ibm5170)\n" +
@@ -2445,6 +2446,19 @@ export default class PC extends PCjsLib {
             if (reload) {
                 result = this.reloadMachine();
                 if (typeof result != "string") result = "";
+            }
+            break;
+        case "fetch":
+            arg = aTokens[0];
+            if (arg) {
+                diskLib.readDiskAsync(arg)
+                .then((di) => {
+                    if (!di) throw new Error("invalid disk image: " + arg);
+                    diskLib.extractFiles(di, {}, "", aTokens[1] || "", false);
+                })
+                .catch((err) => {
+                    printf("%s\n", err.message);
+                });
             }
             break;
         case "load":
