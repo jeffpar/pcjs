@@ -2091,7 +2091,7 @@ export default class PC {
             diskPath = diskPath || pc.diskIndexCache[diskName]['path'];
             if (diskPath) {
                 let done = function(disk, error) {
-                    if (error == this.Errors.DOS.INVALID_DRIVE) {
+                    if (error == pc.Errors.DOS.INVALID_DRIVE) {
                         result = "invalid drive (" + sDrive + ")";
                     } else {
                         result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error || 0);
@@ -2150,12 +2150,14 @@ export default class PC {
                     return result;
                 }
             }
-            this.diskItems = [];
+
             let criteria = 'disk';
             let cTokens = 0;
             let dateParts = [];
             let diskNameParts = [];
             let fileNameParts = [];
+            this.diskItems = [];
+
             for (let token of aTokens) {
                 let matchDash = token.match(/^-+(.*)$/);
                 if (matchDash) {
@@ -2227,7 +2229,7 @@ export default class PC {
                     let index = this.diskIndexCache;
                     let itemNames = this.diskIndexKeys;
                     let itemParts = diskNameParts;
-                    if (fileNameParts.length && fileIndexKeys.length) {
+                    if (fileNameParts.length && this.fileIndexKeys.length) {
                         index = this.fileIndexCache;
                         itemNames = this.fileIndexKeys;
                         itemParts = fileNameParts;
@@ -2236,7 +2238,7 @@ export default class PC {
                         let matches = [];
                         try {
                             let pattern = parts.join('.*');
-                            if (this.fDebug) printf("searching for \"%s\"...\n", pattern);
+                            if (pc.fDebug) printf("searching for \"%s\"...\n", pattern);
                             let re = new RegExp(pattern, 'i');
                             for (let name of names) {
                                 let match = name.match(re);
