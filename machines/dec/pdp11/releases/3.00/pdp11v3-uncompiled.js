@@ -2099,10 +2099,9 @@ class WebIO extends StdIO {
      *
      * This is like getHostName() but with the port number, if any.
      *
-     * @this {WebIO}
      * @returns {string}
      */
-    getHost()
+    static getHost()
     {
         return (window? window.location.host : "localhost");
     }
@@ -2110,32 +2109,29 @@ class WebIO extends StdIO {
     /**
      * getHostName()
      *
-     * @this {WebIO}
      * @returns {string}
      */
-    getHostName()
+    static getHostName()
     {
-        return (window? window.location.hostname : this.getHost());
+        return (window? window.location.hostname : WebIO.getHost());
     }
 
     /**
      * getHostOrigin()
      *
-     * @this {WebIO}
      * @returns {string}
      */
-    getHostOrigin()
+    static getHostOrigin()
     {
-        return (window? window.location.origin : this.getHost());
+        return (window? window.location.origin : WebIO.getHost());
     }
 
     /**
      * getHostPath()
      *
-     * @this {WebIO}
      * @returns {string|null}
      */
-    getHostPath()
+    static getHostPath()
     {
         return (window? window.location.pathname : null);
     }
@@ -2143,10 +2139,9 @@ class WebIO extends StdIO {
     /**
      * getHostProtocol()
      *
-     * @this {WebIO}
      * @returns {string}
      */
-    getHostProtocol()
+    static getHostProtocol()
     {
         return (window? window.location.protocol : "file:");
     }
@@ -2154,10 +2149,9 @@ class WebIO extends StdIO {
     /**
      * getHostURL()
      *
-     * @this {WebIO}
      * @returns {string|null}
      */
-    getHostURL()
+    static getHostURL()
     {
         return (window? window.location.href : null);
     }
@@ -2254,7 +2248,7 @@ class WebIO extends StdIO {
              * The normal "success" case is an HTTP status code of 200, but when testing with files loaded
              * from the local file system (ie, when using the "file:" protocol), we have to be a bit more "flexible".
              */
-            if (xmlHTTP.status == 200 || !xmlHTTP.status && sResource.length && webIO.getHostProtocol() == "file:") {
+            if (xmlHTTP.status == 200 || !xmlHTTP.status && sResource.length && WebIO.getHostProtocol() == "file:") {
                 // if (MAXDEBUG) WebLib.printf("xmlHTTP.onreadystatechange(%s): returned %d bytes\n", url, sResource.length);
             }
             else {

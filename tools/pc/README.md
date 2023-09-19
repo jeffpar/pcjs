@@ -295,7 +295,7 @@ Another utility that `pc.js` provides is `QUIT.COM`, which makes it easy to shut
 
 This space is a work-in-progress, to provide a web-based demonstration of what `pc.js` can do from the command-line.  It's not functional yet, so use a *real* command-line to give to `pc.js` a try.  Thanks.
 
-{% include web/textarea.html id="terminal" %}
+{% include web/textarea.html id="terminal" style="font-size: medium" %}
 
 ### More Information
 

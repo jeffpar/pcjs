@@ -134,11 +134,9 @@ export default class PC extends PCjsLib {
                 device.addBinding(WebIO.BINDING.PRINT, this.terminal);
                 this.terminal.addEventListener("keypress", this.onKeyPress.bind(this));
             }
-            try {
-                this.main(...PC.getArgs(PC.optionMap));
-            } catch(err) {
+            this.main(...PC.getArgs(PC.optionMap)).catch((err) => {
                 printf("exception: %s\n", err.message);
-            }
+            });
         }
     }
 
@@ -2408,7 +2406,8 @@ export default class PC extends PCjsLib {
                 result = "bad command or file name: " + args;
                 break;
             }
-            this.buildDisk(this.localDir, arg, "", true).then(function(result) {
+            this.buildDisk(this.localDir, arg, "", true)
+            .then(function(result) {
                 if (result) printf("%s\n", result);
             });
             break;
@@ -2693,7 +2692,7 @@ export default class PC extends PCjsLib {
             }
         }
 
-        if (!error) {                               // last but not least, check for a DOS command or program name
+        if (!error && !this.terminal) {             // last but not least, check for a DOS command or program name
             if (this.machineType == "pcx86" && (argv[1] || this.localDir)) {
                 let args = argv.slice(1).join(' ');
                 let sCommand = this.checkCommand(this.localDir, args);
@@ -2711,7 +2710,7 @@ export default class PC extends PCjsLib {
             }
             if (!error) {
                 if (!this.localMachine) {
-                    this.localMachine = this.checkMachine(this.savedMachine) || this.savedMachine;
+                    this.localMachine = this.checkMachine(this.savedMachine);
                 }
                 error = this.loadMachine(this.localMachine);
                 if (!error) {
@@ -2837,7 +2836,7 @@ export default class PC extends PCjsLib {
      * @param {function()} removeFlag
      * @returns {boolean} (true if we should continue, false if we should exit)
      */
-    checkArgs(argv, removeArg, removeFlag)
+    async checkArgs(argv, removeArg, removeFlag)
     {
         this.fDebug = removeFlag('debug') || this.fDebug;
         this.fVerbose = removeFlag('verbose') || this.fVerbose;
@@ -2854,11 +2853,14 @@ export default class PC extends PCjsLib {
         }
 
         if (!machines) {
+            let db;
             rootDir = node.path.join(node.path.dirname(arg0[0]), "../..");
             pcjsDir = node.path.join(rootDir, "/tools/pc");
             diskLib.setRootDir(rootDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
-            machines = JSON.parse(diskLib.readFileSync("/machines/machines.json") || "{}");
-            configJSON = node.json5.parse(diskLib.readFileSync(node.path.join(pcjsDir, configFile) || {}));
+            db = await diskLib.readFileAsync("/machines/machines.json");
+            machines = JSON.parse(db || "{}");
+            db = await diskLib.readFileAsync(node.path.join(pcjsDir, configFile));
+            configJSON = node.json5.parse(db || "{}");
         }
 
         let defaults = configJSON['defaults'] || {};
@@ -2995,7 +2997,7 @@ export default class PC extends PCjsLib {
      * @param {number} argc
      * @param {Array} argv
      */
-    main(argc, argv)
+    async main(argc, argv)
     {
         let removeArg = function(arg) {
             return PC.removeArg(argv, arg, "string");
@@ -3005,7 +3007,9 @@ export default class PC extends PCjsLib {
             return PC.removeArg(argv, arg, "boolean");
         };
 
-        if (!this.checkArgs(argv, removeArg, removeFlag)) {
+        let success = await this.checkArgs(argv, removeArg, removeFlag);
+
+        if (!success) {
             let optionsMain = {
                 "--select=[machine]":       "select machine configuration file",
             };
@@ -3056,7 +3060,9 @@ export default class PC extends PCjsLib {
             return;
         }
 
-        this.processArgs(argv, removeArg('select'), removeArg('disk'), removeArg('dir'), removeArg('save'));
+        await this.processArgs(argv, removeArg('select'), removeArg('disk'), removeArg('dir'), removeArg('save')).catch((err) => {
+            printf("exception: %s\n", err.message);
+        });
 
         let args = Object.keys(argv);
         for (let arg of args) {
@@ -3077,5 +3083,7 @@ export default class PC extends PCjsLib {
 
 if (!globals.browser) {
     let pc = new PC();
-    pc.main(...PC.getArgs(PC.optionMap));
+    await pc.main(...PC.getArgs(PC.optionMap)).catch((err) => {
+        printf("exception: %s\n", err.message);
+    });
 }

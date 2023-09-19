@@ -529,6 +529,18 @@
       }
     },
     {
+      "name": "PC.js Playground",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/tools/pc/#playground",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
       "name": "PC.js ibm5150",
       "type": "node",
       "request": "launch",
@@ -1885,9 +1897,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--disk",
-        "https://harddisks.pcjs.org/pcx86/10mb/MSDOS320-C400.json",
-        "--extract"
+        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0001/archive/DISK0001.ZIP",
+        "--list",
+        "--extract",
+        "--extdir=foo",
+        "--normalize"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,

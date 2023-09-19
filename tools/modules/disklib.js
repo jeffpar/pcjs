@@ -440,7 +440,8 @@ export default class DiskLib {
     getServerPath(diskFile, fRemote)
     {
         if (fRemote || !this.existsFile(this.getLocalPath(diskFile))) {
-            diskFile = diskFile.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$2.pcjs.org/");
+            diskFile = diskFile.replace(/^\/(machines|software|tools)\//, "https://www.pcjs.org/$1/");
+            diskFile = diskFile.replace(/^\/(disks\/|)(machines|software|tools|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$2.pcjs.org/");
         }
         return diskFile;
     }
