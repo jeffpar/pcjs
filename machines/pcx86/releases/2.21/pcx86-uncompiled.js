@@ -830,6 +830,7 @@ class DataBuffer {
                 }
                 this.length = init.length;
             }
+            this.buffer = new Uint8Array(this.ab);
         }
     }
 

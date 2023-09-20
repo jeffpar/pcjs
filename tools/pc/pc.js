@@ -1574,7 +1574,7 @@ export default class PC extends PCjsLib {
             sSystemMBR = node.path.join(pcjsDir, sSystemMBR);
         }
 
-        let dbMBR = diskLib.readFileSync(sSystemMBR, null);
+        let dbMBR = await diskLib.readFileAsync(sSystemMBR, null);
         if (!dbMBR || dbMBR.length < 512) {
             return "invalid system MBR: " + sSystemMBR;
         }
@@ -1590,6 +1590,7 @@ export default class PC extends PCjsLib {
         this.driveInfo.files = [];
         this.driveInfo.verDOS = verDOS;
         this.driveInfo.bootDrive = bootDrive;
+        this.driveInfo.partitioned = !this.fFloppy;
 
         let attrHidden = verDOSMajor > 2 && !this.fBare? DiskInfo.ATTR.HIDDEN : 0;
         let aSystemFiles = this.getSystemFiles();
@@ -1654,7 +1655,7 @@ export default class PC extends PCjsLib {
          * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
          */
         let attr = DiskInfo.ATTR.ARCHIVE;
-        let data = diskLib.readFileSync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
+        let data = await diskLib.readFileAsync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
         if (data) {
             if (verDOS >= 3.30 && !data.indexOf("ECHO OFF")) {
                 data = '@' + data;
@@ -1939,6 +1940,11 @@ export default class PC extends PCjsLib {
             }
             if (driveInfo.rootEntries && driveInfo.rootEntries != volume.rootEntries) {
                 printf("%d root entries replaced with %d root entries\n", driveInfo.rootEntries, volume.rootEntries);
+            }
+            driveInfo.partitioned = (volume.lbaStart > 0);      // alternatively, check for volume.iPartition !== undefined
+            if (!driveInfo.partitioned) {
+                this.fFloppy = true;                            // if a non-partitioned disk was loaded, that's an implicit floppy boot
+                this.bootSelect = 'A';
             }
         }
     }
@@ -2981,7 +2987,6 @@ export default class PC extends PCjsLib {
             this.savedState = "";
             this.kbTarget = this.maxFiles = 0;
             this.driveInfo.driveCtrl = "FDC";
-            this.driveInfo.partitioned = false;
             this.driveOverride = true;
             this.bootSelect = 'A';
         } else {
@@ -2992,7 +2997,6 @@ export default class PC extends PCjsLib {
             }
             this.kbTarget = diskLib.getTargetValue(defaults['target']);
             this.maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || this.maxFiles;
-            this.driveInfo.partitioned = true;
             this.bootSelect = (removeArg('boot') || defaults['boot'] || this.bootSelect).toUpperCase();
         }
 

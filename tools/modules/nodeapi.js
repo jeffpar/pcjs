@@ -28,6 +28,7 @@ let node = {
             return sFile;
         },
         readFileSync: function(sFile, encoding = "utf8") {
+            console.log("FileLib.readFileSync(" + sFile + "): unimplemented");
         },
         setRootDir(sRoot, sHome, fLocalDisks) {
             node.rootDir = sRoot;
@@ -36,11 +37,20 @@ let node = {
         }
     },
     fs: {
+        chmodSync: function(sFile, mode) {
+            console.log("fs.chmodSync(" + sFile + "): unimplemented");
+        },
         existsSync: function(sFile) {
             return sFile.indexOf(node.rootDir) == 0;
         },
-        readFile: function() {
-            console.log("fs.readFile() not implemented");
+        readdirSync: function(sDir) {
+            return [];
+        },
+        readFile: function(sFile, encoding) {
+            console.log("fs.readFile(" + sFile + "): unimplemented");
+        },
+        readFileSync: function(sFile, encoding) {
+            console.log("fs.readFileSync(" + sFile +"): unimplemented");
         },
         statSync: function(sFile) {
             return {
@@ -48,6 +58,12 @@ let node = {
                     return !sFile.match(/\.[^\/]+$/);
                 }
             };
+        },
+        unlinkSync: function(sFile) {
+            console.log("fs.unlinkSync(" + sFile + "): unimplemented");
+        },
+        writeFileSync: function(sFile, data) {
+            console.log("fs.writeFileSync(" + sFile + "): unimplemented");
         }
     },
     json5: {
@@ -58,7 +74,7 @@ let node = {
     path: {
         basename: function(s, ext) {
             let name = "";
-            let match = s.match(/([^\/\\]+)$/);
+            let match = s.match(/([^\/\\]+)\/?$/);
             if (match) {
                 name = match[1];
                 if (ext) name = name.replace(ext, '');

@@ -408,7 +408,7 @@ export default class DiskLib {
         } else {
             db = new DataBuffer(data);
         }
-        return node.crypto.createHash(type).update(db.buffer).digest('hex');
+        return node.crypto? node.crypto.createHash(type).update(db.buffer).digest('hex') : "";
     }
 
     /**
@@ -1153,13 +1153,15 @@ export default class DiskLib {
     }
 
     /**
-     * readFileAsync(sFile, encoding)
+     * readFileAsync(sFile, encoding, quiet)
      *
      * @this {DiskLib}
      * @param {string} sFile
      * @param {string|null} [encoding]
+     * @param {boolean} [quiet]
+     * @returns {DataBuffer|string|undefined}
      */
-    async readFileAsync(sFile, encoding = "utf8")
+    async readFileAsync(sFile, encoding = "utf8", quiet = false)
     {
         let db;
         sFile = this.getServerPath(sFile);
@@ -1167,12 +1169,17 @@ export default class DiskLib {
         if (sFile.startsWith("http")) {
             try {
                 let response = await fetch(sFile);
-                db = await response.text();
+                if (encoding) {
+                    db = await response.text();
+                } else {
+                    db = await response.arrayBuffer();
+                    if (!encoding) db = new DataBuffer(db);
+                }
             } catch(err) {
-                this.printError(err);
+                if (!quiet) this.printError(err);
             }
         } else {
-            db = await this.readFile(sFile);
+            db = await this.readFile(sFile, encoding);
         }
         return db;
     }
