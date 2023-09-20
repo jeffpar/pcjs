@@ -352,9 +352,6 @@ export default class PC extends PCjsLib {
              * Below are the set of classes that we need access to (eg, their static methods, constants, etc).
              */
             switch(name) {
-            case "weblib":
-                this.Web = module.default;
-                break;
             case "component":
                 this.Component = module.default;
                 /*
@@ -379,11 +376,17 @@ export default class PC extends PCjsLib {
                     }
                 };
                 break;
+            case "defines":
+                module.globals.browser = false;
+                break;
             case "errors":
                 this.Errors = module.default;
                 break;
             case "interrupts":
                 this.Interrupts = module.default;
+                break;
+            case "weblib":
+                this.Web = module.default;
                 break;
             }
             /*

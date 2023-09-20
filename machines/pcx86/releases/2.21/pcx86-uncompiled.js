@@ -131,7 +131,7 @@ var LOCALDISKS = false;
  * Platform-agnostic way to isolate global variables (both mine and the system's).
  */
 let globals = {
-    browser: (typeof window != "undefined")? {} : null,
+    browser: (typeof window != "undefined"),
     node: (typeof window != "undefined")? {} : global,
     process: (typeof process != "undefined")? process : {},
     window: (typeof window != "undefined")? window : global,
@@ -4679,16 +4679,18 @@ class Component {
          * Use the browser's built-in getElementsByClassName() if it appears to be available
          * (for example, it's not available in IE8, but it should be available in IE9 and up)
          */
-        if (element.getElementsByClassName) {
-            ae = element.getElementsByClassName(sClass);
-        }
-        else if (element.getElementsByTagName) {
-            let i, j;
-            let aeAll = element.getElementsByTagName("*");
-            let re = new RegExp('(^| )' + sClass + '( |$)');
-            for (i = 0, j = aeAll.length; i < j; i++) {
-                if (re.test(aeAll[i].className)) {
-                    ae.push(aeAll[i]);
+        if (globals.browser) {
+            if (element.getElementsByClassName) {
+                ae = element.getElementsByClassName(sClass);
+            }
+            else if (element.getElementsByTagName) {
+                let i, j;
+                let aeAll = element.getElementsByTagName("*");
+                let re = new RegExp('(^| )' + sClass + '( |$)');
+                for (i = 0, j = aeAll.length; i < j; i++) {
+                    if (re.test(aeAll[i].className)) {
+                        ae.push(aeAll[i]);
+                    }
                 }
             }
         } else {
@@ -82561,14 +82563,14 @@ class Computer extends Component {
      */
     updateFocus(fScroll)
     {
-        if (this.aVideo.length) {
+        if (globals.browser && this.aVideo.length) {
             /*
              * This seems to be recommended work-around to prevent the browser from scrolling the focused element
              * into view.  The CPU is not a visual component, so when the CPU wants to set focus, the primary intent
              * is to ensure that keyboard input is fielded properly.
              */
             let x = 0, y = 0;
-            if (!fScroll && globals.browser) {
+            if (!fScroll) {
                 x = globals.window.scrollX;
                 y = globals.window.scrollY;
             }
@@ -82906,7 +82908,7 @@ class State {
             if (s) {
                 this.json = s;
                 this.fLoaded = true;
-                if (DEBUG) Component.printf("localStorage(%s): %d bytes loaded\n", this.key, s.length);
+                Component.printf(MESSAGE.DEBUG, "localStorage(%s): %d bytes loaded\n", this.key, s.length);
                 return true;
             }
         }
@@ -82950,7 +82952,7 @@ class State {
         if (WebLib.hasLocalStorage()) {
             let s = JSON.stringify(this.state);
             if (WebLib.setLocalStorageItem(this.key, s)) {
-                if (DEBUG) Component.printf("localStorage(%s): %d bytes stored\n", this.key, s.length);
+                Component.printf(MESSAGE.DEBUG, "localStorage(%s): %d bytes stored\n", this.key, s.length);
             } else {
                 /*
                  * WARNING: Because browsers tend to disable all alerts() during an "unload" operation,

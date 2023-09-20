@@ -120,7 +120,7 @@ export default class State {
             if (s) {
                 this.json = s;
                 this.fLoaded = true;
-                if (DEBUG) Component.printf("localStorage(%s): %d bytes loaded\n", this.key, s.length);
+                Component.printf(MESSAGE.DEBUG, "localStorage(%s): %d bytes loaded\n", this.key, s.length);
                 return true;
             }
         }
@@ -164,7 +164,7 @@ export default class State {
         if (WebLib.hasLocalStorage()) {
             let s = JSON.stringify(this.state);
             if (WebLib.setLocalStorageItem(this.key, s)) {
-                if (DEBUG) Component.printf("localStorage(%s): %d bytes stored\n", this.key, s.length);
+                Component.printf(MESSAGE.DEBUG, "localStorage(%s): %d bytes stored\n", this.key, s.length);
             } else {
                 /*
                  * WARNING: Because browsers tend to disable all alerts() during an "unload" operation,
