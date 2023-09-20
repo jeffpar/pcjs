@@ -89,6 +89,22 @@ export default class PC extends PCjsLib {
     };
 
     static functionKeys = {
+        "ArrowUp":      "$up",
+        "ArrowDown":    "$down",
+        "ArrowRight":   "$right",
+        "ArrowLeft":    "$left",
+        "F1":           "$f1",
+        "F2":           "$f2",
+        "F3":           "$f3",
+        "F4":           "$f4",
+        "F5":           "$f5",
+        "F6":           "$f6",
+        "F7":           "$f7",
+        "F8":           "$f8",
+        "F9":           "$f9",
+        "F10":          "$f10",
+        "F11":          "$f11",
+        "F12":          "$f12",
         "\u001b[A":     "$up",
         "\u001b[B":     "$down",
         "\u001b[C":     "$right",
@@ -127,12 +143,29 @@ export default class PC extends PCjsLib {
     constructor(idTerminal)
     {
         super();
+        let pc = this;
         this.machine = this.newMachine();
+        this.onTerminalData = null;
+        this.terminalEncoding = "";
+        this.terminalRawMode = false;
         if (idTerminal) {
             this.terminal = document.querySelector('#' + idTerminal);
             if (this.terminal) {
-                device.addBinding(WebIO.BINDING.PRINT, this.terminal);
-                this.terminal.addEventListener("keypress", this.onKeyPress.bind(this));
+                device.addBinding(WebIO.BINDING.PRINT, this.terminal, this.onTerminalInput.bind(this));
+                node.process.stdin = {
+                    resume: function() {},
+                    setEncoding: function(encoding) {
+                        pc.terminalEncoding = encoding;
+                    },
+                    setRawMode: function(rawMode) {
+                        pc.terminalRawMode = rawMode;
+                    },
+                    on: function(event, fn) {
+                        if (event == "data") {
+                            pc.onTerminalData = fn;
+                        }
+                    }
+                };
             }
             this.main(...PC.getArgs(PC.optionMap)).catch((err) => {
                 printf("exception: %s\n", err.message);
@@ -141,14 +174,50 @@ export default class PC extends PCjsLib {
     }
 
     /**
-     * onKeyPress(event)
+     * onTerminalInput(event, down)
      *
      * @this {PC}
      * @param {Event} event
+     * @param {boolean} [down] (true if keydown, false if keyup, undefined if keypress)
+     * @returns {boolean} (true to consume the event, false to pass it on)
      */
-    onKeyPress(event)
+    onTerminalInput(event, down)
     {
-        console.log(event);
+        if (this.onTerminalData && this.terminalRawMode) {
+            let data;
+            if (event.type == "keydown") {
+                switch(event.key) {
+                case "Backspace":
+                case "Delete":
+                    data = "\b";
+                    break;
+                case "Enter":
+                    data = "\r";
+                    break;
+                case "Escape":
+                    data = "\x1b";
+                    break;
+                case "Tab":
+                    data = "\t";
+                    break;
+                default:
+                    if (event.ctrlKey && event.key >= "a" && event.key <= "z") {
+                        data = String.fromCharCode(event.key.charCodeAt(0) - 96);
+                        break;
+                    }
+                    data = event.key;
+                    break;
+                }
+            } else if (event.type == "keypress") {
+                data = event.key;
+            }
+            if (data) {
+                console.log(event.type + ": '" + data + "'");
+                this.onTerminalData(data);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -2416,10 +2485,10 @@ export default class PC extends PCjsLib {
                 this.saveDisk(sDir);
                 this.machine = this.newMachine();
             }
-            curDir = process.cwd();
+            curDir = node.process.cwd();
             try {
                 let app, argv, appConfig, child;
-                process.chdir(this.mapDir(this.machineDir));
+                node.process.chdir(this.mapDir(this.machineDir));
                 argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
                 appConfig = configJSON['apps']?.[app];
                 if (appConfig && appConfig['exec']) {
@@ -2433,15 +2502,15 @@ export default class PC extends PCjsLib {
                  */
                 child = node.child_process.execSync(args, {
                     stdio: [
-                        "inherit", // process.stdin,
-                        "inherit", // process.stdout,
-                        "inherit"  // process.stderr
+                        "inherit", // node.process.stdin,
+                        "inherit", // node.process.stdout,
+                        "inherit"  // node.process.stderr
                     ]
                 });
             } catch(err) {
                 printf("%s\n", err.message);
             }
-            process.chdir(curDir);
+            node.process.chdir(curDir);
             if (reload) {
                 result = this.reloadMachine();
                 if (typeof result != "string") result = "";
@@ -2631,7 +2700,7 @@ export default class PC extends PCjsLib {
 
         let verifyDir = function(s) {
             if (s[0] == '~') {
-                s = node.path.join(process.env.HOME, s.slice(1));
+                s = node.path.join(node.process.env.HOME, s.slice(1));
             } else {
                 s = node.path.resolve(s);
             }
@@ -2763,8 +2832,8 @@ export default class PC extends PCjsLib {
                 pc.exit(3);
                 return;
             }
+            data = PC.functionKeys[data] || data;
             if (!pc.debugMode) {
-                data = PC.functionKeys[data] || data;
                 data = data.replace(/\x7f/g, "\b");         // convert DEL to BS
                 if (machine.kbd) {
                     if (MAXDEBUG) {
@@ -2786,10 +2855,10 @@ export default class PC extends PCjsLib {
             if (code == 0x01 && pc.commandPrev) {
                 data = pc.commandPrev + '\r';               // implement CTRL-A as a command repeat action
             }
-            else if (data == "\x1b[A" && !pc.command.length) {
+            else if (data == "$up" && !pc.command.length) {
                 data = pc.commandPrev;                      // implement UP ARROW ourselves (since we're in "raw" mode)
             }
-            else if (code < 0x20 && code != 0x0d) {
+            else if (code < 0x20 && code != 0x0d || data.length > 1) {
                 return;                                     // anything else (including any ESC codes) is ignored
             }
             printf("%s", data);
@@ -2822,9 +2891,9 @@ export default class PC extends PCjsLib {
     {
         if (code == 3) printf("terminating...\n");
         if (code != 1) this.saveDisk(this.localDir);
-        process.stdin.setRawMode(false);
+        node.process.stdin.setRawMode(false);
         if (this.fTest) printf("\n");
-        process.exit(code);
+        node.process.exit(code);
     }
 
     /**
@@ -2856,7 +2925,7 @@ export default class PC extends PCjsLib {
             let db;
             rootDir = node.path.join(node.path.dirname(arg0[0]), "../..");
             pcjsDir = node.path.join(rootDir, "/tools/pc");
-            diskLib.setRootDir(rootDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
+            diskLib.setRootDir(rootDir, pcjsDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
             db = await diskLib.readFileAsync("/machines/machines.json");
             machines = JSON.parse(db || "{}");
             db = await diskLib.readFileAsync(node.path.join(pcjsDir, configFile));
@@ -3077,7 +3146,7 @@ export default class PC extends PCjsLib {
             }
         }
 
-        this.readInput(process.stdin, process.stdout);
+        this.readInput(node.process.stdin, node.process.stdout);
     }
 }
 

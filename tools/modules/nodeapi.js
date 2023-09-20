@@ -12,6 +12,7 @@ import { globals } from "../../machines/modules/v3/defines.js";
 
 let node = {
     rootDir: "",
+    homeDir: "",
     FileLib: {
         getLocalPath: function(sFile) {
             let root = node.rootDir;
@@ -28,8 +29,9 @@ let node = {
         readFileSync: function(sFile, encoding = "utf8") {
 
         },
-        setRootDir(sDir, fLocalDisks) {
-            node.rootDir = sDir;
+        setRootDir(sRoot, sHome, fLocalDisks) {
+            node.rootDir = sRoot;
+            node.homeDir = sHome;
             globals.window['LOCALDISKS'] = fLocalDisks;
         }
     },
@@ -39,6 +41,13 @@ let node = {
         },
         readFile: function() {
             console.log("fs.readFile() not implemented");
+        },
+        statSync: function(sFile) {
+            return {
+                isDirectory: function() {
+                    return true;
+                }
+            };
         }
     },
     json5: {
@@ -59,6 +68,9 @@ let node = {
                 s = t;
             } while (true);
             return s;
+        },
+        resolve: function(s) {
+            return node.homeDir;
         }
     },
     process: globals.node.process || {

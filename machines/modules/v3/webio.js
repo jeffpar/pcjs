@@ -62,13 +62,14 @@ export default class WebIO extends StdIO {
     }
 
     /**
-     * addBinding(binding, element)
+     * addBinding(binding, element, onEvent)
      *
      * @this {WebIO}
      * @param {string} binding
      * @param {Element} element
+     * @param {function(Event, (boolean|undefined))} [onEvent]
      */
-    addBinding(binding, element)
+    addBinding(binding, element, onEvent)
     {
         let webIO = this;
 
@@ -89,20 +90,20 @@ export default class WebIO extends StdIO {
             element.addEventListener(
                 'keydown',
                 function onKeyDown(event) {
-                    webIO.onCommandEvent(event, true);
+                    webIO.onCommandEvent(event, true, onEvent);
                 }
             );
             /**
-             * One purpose of the onKeyPress handler for this element is to stop event propagation, so that if the
-             * element has been explicitly given focus, any key presses won't be picked up by the Input device (which,
-             * as that device's constructor explains, is monitoring key presses for the entire document).
+             * One purpose of the onKeyPress handler for this element is to stop event propagation, so that if
+             * the element has been explicitly given focus, any key presses won't be picked up by the Input device
+             * (which, as that device's constructor explains, is monitoring key presses for the entire document).
              *
              * The other purpose is to support the entry of commands and pass them on to parseCommands().
              */
             element.addEventListener(
                 'keypress',
                 function onKeyPress(event) {
-                    webIO.onCommandEvent(event);
+                    webIO.onCommandEvent(event, undefined, onEvent);
                 }
             );
             break;
@@ -800,16 +801,23 @@ export default class WebIO extends StdIO {
     }
 
     /**
-     * onCommandEvent(event, down)
+     * onCommandEvent(event, down, onEvent)
      *
      * @this {WebIO}
      * @param {Event} event
      * @param {boolean} [down] (true if keydown, false if keyup, undefined if keypress)
+     * @param {function(Event, (boolean|undefined))} [onEvent]
      */
-    onCommandEvent(event, down)
+    onCommandEvent(event, down, onEvent)
     {
         event = event || window.event;
         let keyCode = event.which || event.keyCode;
+        if (onEvent) {
+            if (onEvent(event, down)) {
+                event.preventDefault();
+                return;
+            }
+        }
         if (keyCode) {
             let machine = this.machine;
             let element = /** @type {HTMLTextAreaElement} */ (event.target);
@@ -1064,14 +1072,28 @@ export default class WebIO extends StdIO {
             fBuffer = this.isMessageOn(MESSAGE.BUFFER);
         }
         if (!fBuffer) {
+            let len = s.length;
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
             if (element) {
                 /**
-                 * To help avoid situations where the element can get overwhelmed by the same repeated string,
+                 * To help avoid situations where the element can get overwhelmed by the same repeated line,
                  * don't add the string if it already appears at the end.
                  */
-                if (element.value.substr(-s.length) != s) {
-                    element.value += s;
+                if (s.slice(-1) != '\n' || element.value.slice(-s.length) != s) {
+                    if (s.indexOf('\b') >= 0) {
+                        len = 0;
+                        for (let i = 0; i < s.length; i++) {
+                            if (s[i] == '\b') {
+                                element.value = element.value.slice(0, -1);
+                                len--;
+                            } else {
+                                element.value += s[i];
+                                len++;
+                            }
+                        }
+                    } else {
+                        element.value += s;
+                    }
                     /**
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
@@ -1092,7 +1114,7 @@ export default class WebIO extends StdIO {
                         element.setSelectionRange(element.value.length, element.value.length);
                     }
                 }
-                return s.length;
+                return len;
             }
         }
         return super.print(s, fBuffer);

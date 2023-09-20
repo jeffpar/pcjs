@@ -26,7 +26,7 @@ let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 let diskLib = new DiskLib(device);
-let rootDir, sFileIndexCache, aHiddenDirs = [];
+let rootDir, sFileIndexCache;
 
 /**
  * compareDisks(sDisk1, sDisk2)
@@ -1194,7 +1194,7 @@ function main(argc, argv)
     let options = arg0.slice(1).join(' ');
 
     rootDir = path.join(path.dirname(arg0[0]), "../..");
-    diskLib.setRootDir(rootDir, argv['local']? true : (argv['remote']? false : null));
+    diskLib.setRootDir(rootDir, rootDir, argv['local']? true : (argv['remote']? false : null));
 
     Device.DEBUG = !!argv['debug'];
 

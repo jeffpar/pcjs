@@ -1310,14 +1310,15 @@ export default class DiskLib {
     }
 
     /**
-     * setRootDir(sDir, fLocalDisks)
+     * setRootDir(sRoot, sHome, fLocalDisks)
      *
      * @this {DiskLib}
-     * @param {string} sDir
+     * @param {string} sRoot
+     * @param {string} sHome
      * @param {boolean} [fLocalDisks]
      */
-    setRootDir(sDir, fLocalDisks = false)
+    setRootDir(sRoot, sHome, fLocalDisks = false)
     {
-        node.FileLib.setRootDir(sDir, fLocalDisks);
+        node.FileLib.setRootDir(sRoot, sHome, fLocalDisks);
     }
 }
