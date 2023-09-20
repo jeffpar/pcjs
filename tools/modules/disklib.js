@@ -1042,32 +1042,29 @@ export default class DiskLib {
         let db, di;
         try {
             let diskName = node.path.basename(diskFile);
-            di = new DiskInfo(this.device, diskName);
-            if (StrLib.getExtension(diskName) == "json") {
-                diskFile = this.getServerPath(diskFile);
-                if (Device.DEBUG) this.printf("reading: %s\n", diskFile);
-                if (diskFile.startsWith("http")) {
-                    let response = await fetch(diskFile);
-                    db = await response.text();
-                } else {
-                    db = await this.readFile(diskFile);
+            let ext = StrLib.getExtension(diskName);
+            diskFile = this.getServerPath(diskFile);
+            this.printf(MESSAGE.DEBUG, "reading: %s\n", diskFile);
+            if (diskFile.startsWith("http")) {
+                let response = await fetch(diskFile);
+                if (response.ok) {
+                    if (ext == "json") {
+                        db = await response.text();
+                    } else {
+                        db = await response.arrayBuffer();
+                    }
                 }
-                if (!db) {
-                    di = null;
-                } else {
+            } else {
+                db = await this.readFile(diskFile, ext == "json"? "utf8" : null);
+            }
+            if (db) {
+                di = new DiskInfo(this.device, diskName);
+                if (ext == "json") {
                     if (!di.buildDiskFromJSON(db)) di = null;
                 }
-            }
-            else {
-                /*
-                 * Passing null for the encoding parameter tells readFile() to return a buffer instead of a string.
-                 */
-                db = await this.readFile(diskFile, null);
-                if (!db) {
-                    di = null;
-                } else {
+                else {
                     db = new DataBuffer(db);
-                    if (StrLib.getExtension(diskName) == "psi") {
+                    if (ext == "psi") {
                         if (!di.buildDiskFromPSI(db)) di = null;
                     } else {
                         if (!di.buildDiskFromBuffer(db, forceBPB, this.getHash, driveInfo)) di = null;
@@ -1165,15 +1162,17 @@ export default class DiskLib {
     {
         let db;
         sFile = this.getServerPath(sFile);
-        if (Device.DEBUG) this.printf("reading: %s\n", sFile);
+        this.printf(MESSAGE.DEBUG, "reading: %s\n", sFile);
         if (sFile.startsWith("http")) {
             try {
                 let response = await fetch(sFile);
-                if (encoding) {
-                    db = await response.text();
-                } else {
-                    db = await response.arrayBuffer();
-                    if (!encoding) db = new DataBuffer(db);
+                if (response.ok) {
+                    if (encoding) {
+                        db = await response.text();
+                    } else {
+                        db = await response.arrayBuffer();
+                        db = new DataBuffer(db);
+                    }
                 }
             } catch(err) {
                 if (!quiet) this.printError(err);
