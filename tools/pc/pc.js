@@ -201,9 +201,16 @@ export default class PC extends PCjsLib {
                 case "Tab":
                     data = "\t";
                     break;
+                case "Control":
+                case "Shift":
+                case "Alt":
+                case "Meta":
+                    break;
                 default:
-                    if (event.ctrlKey && event.key >= "a" && event.key <= "z") {
-                        data = String.fromCharCode(event.key.charCodeAt(0) - 96);
+                    if (event.ctrlKey) {
+                        if (event.key >= "a" && event.key <= "z") {
+                            data = String.fromCharCode(event.key.charCodeAt(0) - 96);
+                        }
                         break;
                     }
                     data = event.key;
@@ -1855,11 +1862,11 @@ export default class PC extends PCjsLib {
                 diskIndex[diskName] = {'path': diskPath};
                 total++;
                 if (total % 100 == 0) {
-                    printf("diskettes available: %d\r", total);
+                    printf(MESSAGE.DEBUG, "diskettes available: %d\r", total);
                 }
             }
         }
-        printf("total diskettes available: %d\n", total);
+        printf(MESSAGE.DEBUG, "total diskettes available: %d\n", total);
         return diskIndex;
     }
 
