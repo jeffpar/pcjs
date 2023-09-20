@@ -437,9 +437,9 @@ export default class DiskLib {
      * @param {boolean} [fRemote] (true to return remote address)
      * @returns {string}
      */
-    getServerPath(diskFile, fRemote)
+    getServerPath(diskFile, fRemote = node.remote)
     {
-        if (fRemote || !this.existsFile(this.getLocalPath(diskFile))) {
+        if (fRemote || !this.existsFile(diskFile)) {
             diskFile = diskFile.replace(/^\/(machines|software|tools)\//, "https://www.pcjs.org/$1/");
             diskFile = diskFile.replace(/^\/(disks\/|)(machines|software|tools|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$2.pcjs.org/");
         }

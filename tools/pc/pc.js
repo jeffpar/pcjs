@@ -59,6 +59,7 @@ export default class PC extends PCjsLib {
     machineDir = "";            // current directory *inside* the machine
     maxFiles = 1024;            // default disk file limit
     kbTarget = 10 * 1024;       // default disk capacity, in kilobytes (Kb)
+    shutdown = false;
 
     messagesFilter; debugMode;
     prompt = ">"; command = ""; commandPrev = "";
@@ -212,7 +213,6 @@ export default class PC extends PCjsLib {
                 data = event.key;
             }
             if (data) {
-                console.log(event.type + ": '" + data + "'");
                 this.onTerminalData(data);
                 return true;
             }
@@ -349,7 +349,7 @@ export default class PC extends PCjsLib {
             }
             let module = await import(modulePath);
             /*
-             * Below are the set of classes that we need access to (eg, static methods, constants, etc).
+             * Below are the set of classes that we need access to (eg, their static methods, constants, etc).
              */
             switch(name) {
             case "weblib":
@@ -1009,14 +1009,23 @@ export default class PC extends PCjsLib {
             break;
         }
         if (sVerify) {
+            /*
+             * This "pre-read" of the machine file isn't strictly necessary, it just helps confirm
+             * the machine type (eg, pcx86, pdp11), which we can also infer from the filename/path, so
+             * in the case running remotely, we dispense with it, to avoid another async read.
+             */
             if (sVerify.endsWith(".json")) {
-                config = JSON.parse(diskLib.readFileSync(sVerify, "utf8", true) || "{}");
-                let machine = config['machine'];
-                if (machine) {
-                    this.machineType = machine['type'] || this.machineType;
+                if (node.remote) {
                     sFile = sVerify;
                 } else {
-                    sFile = "";
+                    config = JSON.parse(diskLib.readFileSync(sVerify, "utf8", true) || "{}");
+                    let machine = config['machine'];
+                    if (machine) {
+                        this.machineType = machine['type'] || this.machineType;
+                        sFile = sVerify;
+                    } else {
+                        sFile = "";
+                    }
                 }
             } else {
                 sFile = sVerify;
@@ -2868,13 +2877,17 @@ export default class PC extends PCjsLib {
                 if (i < 0) break;
                 let s = pc.command.slice(0, i);
                 printf("\n");
-                let result = pc.doCommand(s);
-                printf(result);
-                if (machine.cpu && machine.cpu.isRunning()) {
+                pc.command = pc.command.slice(i+1);
+                try {
+                    let result = pc.doCommand(s);
+                    printf(result);
+                } catch(err) {
+                    printf("exception: %s\n", err.message);
+                }
+                if (machine.cpu && machine.cpu.isRunning() || this.shutdown) {
                     break;
                 }
                 printf("%s> ", pc.prompt);
-                pc.command = pc.command.slice(i+1);
             } while (pc.command.length);
         });
     }
@@ -2889,7 +2902,8 @@ export default class PC extends PCjsLib {
      */
     exit(code = 0)
     {
-        if (code == 3) printf("terminating...\n");
+        this.shutdown = true;
+        printf("shutting down...\n");
         if (code != 1) this.saveDisk(this.localDir);
         node.process.stdin.setRawMode(false);
         if (this.fTest) printf("\n");

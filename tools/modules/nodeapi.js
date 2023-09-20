@@ -11,6 +11,7 @@ import WebIO from "../../machines/modules/v3/webio.js";
 import { globals } from "../../machines/modules/v3/defines.js";
 
 let node = {
+    remote: false,
     rootDir: "",
     homeDir: "",
     FileLib: {
@@ -27,7 +28,6 @@ let node = {
             return sFile;
         },
         readFileSync: function(sFile, encoding = "utf8") {
-
         },
         setRootDir(sRoot, sHome, fLocalDisks) {
             node.rootDir = sRoot;
@@ -37,7 +37,7 @@ let node = {
     },
     fs: {
         existsSync: function(sFile) {
-            return false;
+            return sFile.indexOf(node.rootDir) == 0;
         },
         readFile: function() {
             console.log("fs.readFile() not implemented");
@@ -45,7 +45,7 @@ let node = {
         statSync: function(sFile) {
             return {
                 isDirectory: function() {
-                    return true;
+                    return !sFile.match(/\.[^\/]+$/);
                 }
             };
         }
@@ -56,6 +56,15 @@ let node = {
         }
     },
     path: {
+        basename: function(s, ext) {
+            let name = "";
+            let match = s.match(/([^\/\\]+)$/);
+            if (match) {
+                name = match[1];
+                if (ext) name = name.replace(ext, '');
+            }
+            return name;
+        },
         dirname: function(s) {
             let i = s.lastIndexOf('/');
             return i >= 0? s.slice(0, i) : s;
@@ -81,12 +90,15 @@ let node = {
                 argv.push(keys[i] + '=' + parms[keys[i]]);
             }
             return argv;
-        }(WebIO.getHostOrigin() + WebIO.getHostPath(), WebIO.getURLParms())
+        }(WebIO.getHostOrigin() + WebIO.getHostPath(), WebIO.getURLParms()),
+        "exit": function() {
+        }
     }
 };
 
 node.import = async function(...modules) {
     if (globals.browser) {
+        node.remote = true;
         return;
     }
     for (let module of modules) {
