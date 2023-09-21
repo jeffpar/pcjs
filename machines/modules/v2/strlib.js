@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Format from "../v2/format.js";
+import Format from "./format.js";
 
 /**
  * @class StrLib

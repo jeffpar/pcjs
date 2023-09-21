@@ -28,7 +28,7 @@
  * default parameters.
  */
 
-import MESSAGE from "../v2/message.js";
+import MESSAGE from "./message.js";
 import StrLib from "./strlib.js";
 import { COMPILED, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 

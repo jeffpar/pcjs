@@ -15,7 +15,6 @@ let node = {
     remote: false,
     rootDir: "",
     homeDir: "",
-    pcfs: new PCFS(),
     FileLib: {
         getLocalPath: function(sFile) {
             let root = node.rootDir;
@@ -27,8 +26,8 @@ let node = {
                 }
                 sFile = node.path.join(root, match[2], match[3]);
             }
-            else if (sFile.indexOf(root) && !node.pcfs.isPCFS(sFile)) {
-                sFile = node.path.join("/pcfs", sFile);
+            else if (sFile.indexOf(root) && !PCFS.isPCFS(sFile)) {
+                sFile = node.path.join(PCFS.root, sFile);
             }
             return sFile;
         },
@@ -46,11 +45,11 @@ let node = {
             console.log("fs.chmodSync(" + sFile + "): unimplemented");
         },
         existsSync: function(sFile) {
-            return node.pcfs.getItem(sFile) || sFile.indexOf(node.rootDir) == 0;
+            return PCFS.getItem(sFile) || sFile.indexOf(node.rootDir) == 0;
         },
         mkdirSync: function(sDir, options) {
-            if (node.pcfs.isPCFS(sDir)) {
-                node.pcfs.getItem(sDir, true, true);
+            if (PCFS.isPCFS(sDir)) {
+                PCFS.getItem(sDir, true, true);
             }
         },
         readdirSync: function(sDir) {
@@ -63,8 +62,8 @@ let node = {
             console.log("fs.readFileSync(" + sFile +"): unimplemented");
         },
         statSync: function(sFile) {
-            if (node.pcfs.isPCFS(sFile)) {
-                let item = node.pcfs.getItem(sFile);
+            if (PCFS.isPCFS(sFile)) {
+                let item = PCFS.getItem(sFile);
                 return {
                     isDirectory: function() {
                         return item && item.files;
@@ -79,12 +78,12 @@ let node = {
             }
         },
         unlinkSync: function(sFile) {
-            node.pcfs.getItem(sFile, false);
+            PCFS.getItem(sFile, false);
         },
         writeFileSync: function(sFile, data) {
-            let item = node.pcfs.getItem(sFile, true);
+            let item = PCFS.getItem(sFile, true);
             if (item) {
-                node.pcfs.setItem(item, data);
+                PCFS.setItem(item, data);
             }
         }
     },

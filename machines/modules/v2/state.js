@@ -7,10 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MESSAGE from "../v2/message.js";
+import MESSAGE from "./message.js";
 import WebLib from "./weblib.js";
 import Component from "./component.js";
-import { DEBUG } from "./defines.js";
 
 /**
  * @class State
