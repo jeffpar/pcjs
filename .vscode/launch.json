@@ -535,7 +535,7 @@
       "name": "PC.js Playground",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/tools/pc/?floppy=true#playground",
+      "url": "http://localhost:4000/tools/pc/?target=512K&drive=pcjs#playground",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
