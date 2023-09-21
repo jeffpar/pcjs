@@ -103,7 +103,11 @@ let node = {
             let argv = ["browser", url];
             let keys = Object.keys(parms);
             for (let i = 0; i < keys.length; i++) {
-                argv.push(keys[i] + '=' + parms[keys[i]]);
+                let arg = keys[i];
+                if (parms[keys[i]]) {
+                    arg = "--" + arg + '=' + parms[keys[i]];
+                }
+                argv.push(arg);
             }
             return argv;
         }(WebIO.getHostOrigin() + WebIO.getHostPath(), WebIO.getURLParms()),

@@ -478,8 +478,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "dir",
+        "--target=512K",
+        "--drive=pcjs"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/test",
+      "cwd": "${workspaceFolder}/tools/pc/disks/empty",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -532,7 +535,7 @@
       "name": "PC.js Playground",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/tools/pc/#playground",
+      "url": "http://localhost:4000/tools/pc/?floppy=true#playground",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,

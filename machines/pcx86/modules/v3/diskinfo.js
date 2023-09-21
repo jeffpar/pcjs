@@ -4551,7 +4551,7 @@ export default class DiskInfo {
                         nSectors += 23;         // start with 17, then 40, then 63
                         if (nSectors > 63) return false;
                         nTracks = Math.trunc(nTargetSectors / nSectors);
-                        nHeads = Math.trunc(nTracks / 1024);
+                        nHeads = Math.trunc(nTracks / 1024) || 1;
                         nHeads += nHeads & 1;   // an odd number of heads seems pretty, um, odd, so let's avoid it
                         nCylinders = Math.trunc(nTracks / nHeads);
                     } while (nHeads > 256 || nCylinders > 1024);

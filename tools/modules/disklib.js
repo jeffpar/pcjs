@@ -1163,22 +1163,24 @@ export default class DiskLib {
         let db;
         sFile = this.getServerPath(sFile);
         this.printf(MESSAGE.DEBUG, "reading: %s\n", sFile);
-        if (sFile.startsWith("http")) {
-            try {
+        try {
+            if (sFile.startsWith("http")) {
                 let response = await fetch(sFile);
                 if (response.ok) {
                     if (encoding) {
                         db = await response.text();
                     } else {
                         db = await response.arrayBuffer();
-                        db = new DataBuffer(db);
                     }
                 }
-            } catch(err) {
-                if (!quiet) this.printError(err);
+            } else {
+                db = await this.readFile(sFile, encoding);
             }
-        } else {
-            db = await this.readFile(sFile, encoding);
+        } catch(err) {
+            if (!quiet) this.printError(err);
+        }
+        if (db && !encoding) {
+            db = new DataBuffer(db);
         }
         return db;
     }

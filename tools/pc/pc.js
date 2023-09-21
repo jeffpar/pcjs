@@ -86,7 +86,9 @@ export default class PC extends PCjsLib {
         verDOS:         0,
         trimFAT:        false,
         partitioned:    undefined,
-        files:          []
+        files:          [],
+        disk:           null,   // cached DiskInfo object, for debugging purposes
+        volume:         null    // cached VolInfo object, for debugging purposes
     };
 
     static functionKeys = {
@@ -384,6 +386,11 @@ export default class PC extends PCjsLib {
                 };
                 break;
             case "defines":
+                /*
+                 * Whereas OUR "globals.browser" value reflects whether WE are running in a browser, we always
+                 * want the machine's "globals.browser" value to indicate that it is NOT running in a browser, so that
+                 * Component.getElementsByClass() will always build fake HTML elements for the machine's initialization.
+                 */
                 module.globals.browser = false;
                 break;
             case "errors":
@@ -895,7 +902,7 @@ export default class PC extends PCjsLib {
     {
         let text = "\n";
         if (this.machine.id) {
-            text += sprintf(" %s machine ID %s\n", this.machine.type, this.machine.id);
+            text += sprintf("%s machine ID %s\n", this.machine.type, this.machine.id);
         }
         if (this.driveManifest || this.driveInfo.driveType >= 0) {
             let driveInfo = this.driveInfo;
@@ -909,7 +916,7 @@ export default class PC extends PCjsLib {
                 clusterSize: driveInfo.clusterSize,
                 driveSize: driveInfo.driveSize.toFixed(1) + "Mb"
             };
-            text += sprintf(" %s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
+            text += sprintf("%s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
             let vol = driveInfo.volume;
             if (vol) {
                 info.sectorSize = vol.cbSector;
@@ -930,13 +937,13 @@ export default class PC extends PCjsLib {
                 info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
                 info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
                 info.usageFinalFAT = (vol.cbSector - (Math.ceil(vol.clusTotal * info.typeFAT / 8) % vol.cbSector)) / vol.cbSector * 100;
-                text += sprintf(" %d hidden sectors, %d reserved sectors\n", info.sectorsHidden, info.sectorsReserved);
-                text += sprintf(" %d-bit FAT, %d-byte clusters, %d clusters\n", info.typeFAT, info.clusterSize, info.clustersTotal);
-                text += sprintf(" %d FAT sectors (x%d), %d root sectors (%d entries)\n", info.sectorsFAT, info.totalFATs, info.sectorsRoot, info.sizeRoot);
-                text += sprintf(" %d total sectors, %d data sectors, %d data bytes\n", info.sectorsTotal, info.sectorsData, info.bytesTotal);
+                text += sprintf("%d hidden sectors, %d reserved sectors\n", info.sectorsHidden, info.sectorsReserved);
+                text += sprintf("%d-bit FAT, %d-byte clusters, %d clusters\n", info.typeFAT, info.clusterSize, info.clustersTotal);
+                text += sprintf("%d FAT sectors (x%d), %d root sectors (%d entries)\n", info.sectorsFAT, info.totalFATs, info.sectorsRoot, info.sizeRoot);
+                text += sprintf("%d total sectors, %d data sectors, %d data bytes\n", info.sectorsTotal, info.sectorsData, info.bytesTotal);
             }
         }
-        return text;
+        return text.trim()? text : "use build to create disk image first\n";
     }
 
     /**
@@ -1306,7 +1313,7 @@ export default class PC extends PCjsLib {
             done(config);
         }
         catch(err) {
-            result = err.message;
+            printf("unable to process %s\n%s\n", sFile, err.message);
         }
         return result;
     }
@@ -1595,6 +1602,8 @@ export default class PC extends PCjsLib {
          * "helper binaries" we add to the disk image (and for COMMAND.COM itself).
          */
         this.driveInfo.files = [];
+        this.driveInfo.disk = null;
+        this.driveInfo.volume = null;
         this.driveInfo.verDOS = verDOS;
         this.driveInfo.bootDrive = bootDrive;
         this.driveInfo.partitioned = !this.fFloppy;
@@ -1841,6 +1850,37 @@ export default class PC extends PCjsLib {
     }
 
     /**
+     * dumpDisk(lba)
+     *
+     * @this {PC}
+     * @param {number} lba
+     */
+    dumpDisk(lba)
+    {
+        if (this.driveInfo.disk) {
+            let db = diskLib.getDiskSector(this.driveInfo.disk, +lba);
+            if (db) {
+                for (let i = 0; i < db.length; i += 16) {
+                    let s = sprintf("%04X: ", i);
+                    for (let j = 0; j < 16; j++) {
+                        s += sprintf("%02X ", db.readUInt8(i + j));
+                    }
+                    s += " ";
+                    for (let j = 0; j < 16; j++) {
+                        let ch = db.readUInt8(i + j);
+                        s += (ch >= 32 && ch < 127)? String.fromCharCode(ch) : '.';
+                    }
+                    printf("%s\n", s);
+                }
+            } else {
+                printf("error reading sector %s\n", lba);
+            }
+        } else {
+            printf("no disk built\n");
+        }
+    }
+
+    /**
      * readDiskIndex()
      *
      * Returns diskIndex object (properties are disk names).
@@ -1936,6 +1976,7 @@ export default class PC extends PCjsLib {
                 printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
             }
         }
+        driveInfo.disk = di;
         let volume = di.volTable[0];
         if (volume) {
             driveInfo.volume = volume;
@@ -2464,10 +2505,10 @@ export default class PC extends PCjsLib {
         let help = function(machine) {
             let result = "pc.js internal commands:\n\n" +
                         "abort\tterminate without saving\n" +
-                        "build\tbuild disk to run specified command(s)\n" +
+                        "build\tbuild disk for specified drive type\n" +
                         "exec\texecute a local command\n" +
                         "fetch\tread disk image and extract to directory\n" +
-                        "load\tload drive with the specified diskette\n" +
+                        "load\tload drive with specified diskette\n" +
                         "save\tsave disk to directory or as disk image\n" +
                         "select\tselect a new machine (eg, ibm5170)\n" +
                         "start\tstart new machine\n" +
@@ -2495,15 +2536,27 @@ export default class PC extends PCjsLib {
                 result = "machine already started";
                 break;
             }
-            arg = this.checkCommand(this.localDir, args);
-            if (!arg && args) {
-                result = "bad command or file name: " + args;
-                break;
+            /*
+             * For convenience (and to avoid having another command, such as "drivetype"), you can specify a drive type
+             * here, instead of a command for buildDisk() to run.
+             */
+            if (this.parseDriveType(args)) {
+                arg = "";
+            } else {
+                arg = this.checkCommand(this.localDir, args);
+                if (!arg && args) {
+                    result = "bad command or file name: " + args;
+                    break;
+                }
             }
             this.buildDisk(this.localDir, arg, "", true)
             .then(function(result) {
                 if (result) printf("%s\n", result);
             });
+            break;
+        case "d":
+        case "dump":
+            this.dumpDisk(...aTokens);
             break;
         case "exec":
             if (reload) {
@@ -2558,7 +2611,7 @@ export default class PC extends PCjsLib {
             arg = aTokens[0];
             if (arg) {
                 if (arg == "/i" || arg == "info") {
-                    result = this.getDriveInfo();
+                    result = this.getDriveInfo().trim();
                 } else {
                     let matchDrive = arg.match(/^([a-z]:?)$/i);
                     if (matchDrive) {
@@ -2690,7 +2743,68 @@ export default class PC extends PCjsLib {
     }
 
     /**
-     * processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
+     * parseDriveType(typeDrive)
+     *
+     * @param {string} typeDrive
+     * @returns {string} (error, if any)
+     */
+    parseDriveType(typeDrive)
+    {
+        let result = "";
+        let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
+        if (match) {
+            let nCylinders = +match[1];
+            let nHeads = +match[2];
+            let nSectors = +match[3];
+            let cbSector = +match[4] || 512;
+            if (nCylinders < 1 || nCylinders > 1024 ||
+                nHeads < 1 || nHeads > 256 ||
+                nSectors < 1 || nSectors > 63 ||
+                cbSector < 128 || cbSector > 1024 || (cbSector & (cbSector - 1))) {
+                match = null;
+            } else {
+                this.kbTarget = 0;
+                if (!this.fFloppy) {
+                    this.driveInfo.driveCtrl = "PCJS";      // pseudo drive controller used for custom drive geometries
+                }
+                this.driveInfo.driveType = 0;
+                this.driveInfo.nCylinders = nCylinders;
+                this.driveInfo.nHeads = nHeads;
+                this.driveInfo.nSectors = nSectors;
+                this.driveInfo.cbSector = cbSector;
+                if (cbSector != 512) {
+                    printf("warning: %d-byte sectors are not known to work with any version of DOS\n", cbSector);
+                }
+                this.driveOverride = true;
+            }
+        } else if (!this.fFloppy) {
+            match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i);
+            if (match) {
+                let driveCtrl = match[1] || this.driveInfo.driveCtrl;
+                let driveType = +match[2];
+                /*
+                 * WARNING: This code may not validate the type correctly if you didn't specify a controller (eg, "XT:1"),
+                 * because the default controller is "COMPAQ" (because our default machine is a COMPAQ) and the code in
+                 * checkMachine() that attempts to detect/update the appropriate controller for your particular machine hasn't
+                 * run yet (this is too early).
+                 */
+                if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
+                    this.driveInfo.driveCtrl = driveCtrl;
+                    this.driveInfo.driveType = driveType;
+                    this.driveOverride = !!match[1];
+                } else {
+                    match = null;
+                }
+            }
+        }
+        if (!match) {
+            result = "invalid drive type: " + typeDrive;
+        }
+        return result;
+    }
+
+    /**
+     * processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, fAutoBuild)
      *
      * Arguments that either the shell consumes (like *.*) or that we consume (like --help) can be
      * problematic if those are actually arguments you want to pass along with a command to buildDisk().
@@ -2703,8 +2817,9 @@ export default class PC extends PCjsLib {
      * @param {string} [sDisk]
      * @param {string} [sDirectory]
      * @param {string} [sLocalDisk]
+     * @param {boolean} [fAutoBuild]
      */
-    async processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
+    async processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, fAutoBuild = !this.terminal)
     {
         let loading = false;
         let error = "", warning = "";
@@ -2786,7 +2901,7 @@ export default class PC extends PCjsLib {
             }
         }
 
-        if (!error && !this.terminal) {             // last but not least, check for a DOS command or program name
+        if (!error && fAutoBuild) {                 // last but not least, check for a DOS command or program name
             if (this.machineType == "pcx86" && (argv[1] || this.localDir)) {
                 let args = argv.slice(1).join(' ');
                 let sCommand = this.checkCommand(this.localDir, args);
@@ -2946,7 +3061,7 @@ export default class PC extends PCjsLib {
         this.messagesFilter = this.fDebug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
 
         let arg0 = argv[0].split(' ');
-        if (!argv[1] || this.fDebug || this.fTest) {
+        if (!argv[1] || this.fDebug || this.fTest || globals.browser) {
             let options = arg0.slice(1).join(' ');
             printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
         }
@@ -3019,55 +3134,7 @@ export default class PC extends PCjsLib {
 
         let typeDrive = removeArg('drivetype');
         if (typeDrive) {
-            let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
-            if (match) {
-                let nCylinders = +match[1];
-                let nHeads = +match[2];
-                let nSectors = +match[3];
-                let cbSector = +match[4] || 512;
-                if (nCylinders < 1 || nCylinders > 1024 ||
-                    nHeads < 1 || nHeads > 256 ||
-                    nSectors < 1 || nSectors > 63 ||
-                    cbSector < 128 || cbSector > 1024 || (cbSector & (cbSector - 1))) {
-                    match = null;
-                } else {
-                    this.kbTarget = 0;
-                    if (!this.fFloppy) {
-                        this.driveInfo.driveCtrl = "PCJS";      // this pseudo drive controller is required for custom drive geometries
-                    }
-                    this.driveInfo.driveType = 0;
-                    this.driveInfo.nCylinders = nCylinders;
-                    this.driveInfo.nHeads = nHeads;
-                    this.driveInfo.nSectors = nSectors;
-                    this.driveInfo.cbSector = cbSector;
-                    if (cbSector != 512) {
-                        printf("warning: %d-byte sectors are not known to work with any version of DOS\n", cbSector);
-                    }
-                    this.driveOverride = true;
-                }
-            } else if (!this.fFloppy) {
-                match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i);
-                if (match) {
-                    let driveCtrl = match[1] || driveInfo.driveCtrl;
-                    let driveType = +match[2];
-                    /*
-                     * WARNING: This code may not validate the type correctly if you didn't specify a controller (eg, "XT:1"),
-                     * because the default controller is "COMPAQ" (because our default machine is a COMPAQ) and the code in
-                     * checkMachine() that attempts to detect/update the appropriate controller for your particular machine hasn't
-                     * run yet (this is too early).
-                     */
-                    if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
-                        this.driveInfo.driveCtrl = driveCtrl;
-                        this.driveInfo.driveType = driveType;
-                        this.driveOverride = !!match[1];
-                    } else {
-                        match = null;
-                    }
-                }
-            }
-            if (!match) {
-                printf("error: invalid drive type (%s)\n", typeDrive);
-            }
+            printf(this.parseDriveType(typeDrive));
         }
 
         let typeFAT = removeArg('fat');
@@ -3157,7 +3224,8 @@ export default class PC extends PCjsLib {
             return;
         }
 
-        await this.processArgs(argv, removeArg('select'), removeArg('disk'), removeArg('dir'), removeArg('save')).catch((err) => {
+        let autoBuild = removeFlag('auto');
+        await this.processArgs(argv, removeArg('select'), removeArg('disk'), removeArg('dir'), removeArg('save'), autoBuild).catch((err) => {
             printf("exception: %s\n", err.message);
         });
 

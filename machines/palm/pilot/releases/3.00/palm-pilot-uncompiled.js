@@ -2695,8 +2695,9 @@ class WebIO extends StdIO {
                     /**
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
-                    if (!WebIO.DEBUG && element.value.length > 8192) {
-                        element.value = element.value.substr(element.value.length - 4096);
+                    if (!WebIO.DEBUG && element.value.length >= 65536) {
+                        let excess = (element.value.length - 65536) + 4096;
+                        element.value = element.value.slice(excess);
                     }
                     element.scrollTop = element.scrollHeight;
                     /**
