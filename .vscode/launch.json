@@ -478,8 +478,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "dir",
+        "--target=512K",
+        "--drive=pcjs"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/test",
+      "cwd": "${workspaceFolder}/tools/pc/disks/empty",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -522,6 +525,18 @@
       // The arguments to pass to the `bun` executable, if any.
       // Unlike `args`, these are passed to the executable itself, not the program.
       "runtimeArgs": [],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "PC.js Playground",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/tools/pc/?target=512K&drive=pcjs#playground",
+      "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
         "group": "machines",
@@ -872,6 +887,28 @@
         "ibm5170",
         "disks/test",
         "dir *.*",
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "PC.js dir --disk=PCDOS200-DISK1.json",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--disk=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json",
+        "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -1885,9 +1922,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--disk",
-        "https://harddisks.pcjs.org/pcx86/10mb/MSDOS320-C400.json",
-        "--extract"
+        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0001/archive/DISK0001.ZIP",
+        "--list",
+        "--extract",
+        "--extdir=foo",
+        "--normalize"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,

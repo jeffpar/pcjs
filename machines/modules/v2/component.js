@@ -694,16 +694,18 @@ export default class Component {
          * Use the browser's built-in getElementsByClassName() if it appears to be available
          * (for example, it's not available in IE8, but it should be available in IE9 and up)
          */
-        if (element.getElementsByClassName) {
-            ae = element.getElementsByClassName(sClass);
-        }
-        else if (element.getElementsByTagName) {
-            let i, j;
-            let aeAll = element.getElementsByTagName("*");
-            let re = new RegExp('(^| )' + sClass + '( |$)');
-            for (i = 0, j = aeAll.length; i < j; i++) {
-                if (re.test(aeAll[i].className)) {
-                    ae.push(aeAll[i]);
+        if (globals.browser) {
+            if (element.getElementsByClassName) {
+                ae = element.getElementsByClassName(sClass);
+            }
+            else if (element.getElementsByTagName) {
+                let i, j;
+                let aeAll = element.getElementsByTagName("*");
+                let re = new RegExp('(^| )' + sClass + '( |$)');
+                for (i = 0, j = aeAll.length; i < j; i++) {
+                    if (re.test(aeAll[i].className)) {
+                        ae.push(aeAll[i]);
+                    }
                 }
             }
         } else {

@@ -59,6 +59,7 @@ export default class PC extends PCjsLib {
     machineDir = "";            // current directory *inside* the machine
     maxFiles = 1024;            // default disk file limit
     kbTarget = 10 * 1024;       // default disk capacity, in kilobytes (Kb)
+    shutdown = false;
 
     messagesFilter; debugMode;
     prompt = ">"; command = ""; commandPrev = "";
@@ -85,10 +86,28 @@ export default class PC extends PCjsLib {
         verDOS:         0,
         trimFAT:        false,
         partitioned:    undefined,
-        files:          []
+        files:          [],
+        disk:           null,   // cached DiskInfo object, for debugging purposes
+        volume:         null    // cached VolInfo object, for debugging purposes
     };
 
     static functionKeys = {
+        "ArrowUp":      "$up",
+        "ArrowDown":    "$down",
+        "ArrowRight":   "$right",
+        "ArrowLeft":    "$left",
+        "F1":           "$f1",
+        "F2":           "$f2",
+        "F3":           "$f3",
+        "F4":           "$f4",
+        "F5":           "$f5",
+        "F6":           "$f6",
+        "F7":           "$f7",
+        "F8":           "$f8",
+        "F9":           "$f9",
+        "F10":          "$f10",
+        "F11":          "$f11",
+        "F12":          "$f12",
         "\u001b[A":     "$up",
         "\u001b[B":     "$down",
         "\u001b[C":     "$right",
@@ -127,30 +146,87 @@ export default class PC extends PCjsLib {
     constructor(idTerminal)
     {
         super();
+        let pc = this;
         this.machine = this.newMachine();
+        this.onTerminalData = null;
+        this.terminalEncoding = "";
+        this.terminalRawMode = false;
         if (idTerminal) {
             this.terminal = document.querySelector('#' + idTerminal);
             if (this.terminal) {
-                device.addBinding(WebIO.BINDING.PRINT, this.terminal);
-                this.terminal.addEventListener("keypress", this.onKeyPress.bind(this));
+                device.addBinding(WebIO.BINDING.PRINT, this.terminal, this.onTerminalInput.bind(this));
+                node.process.stdin = {
+                    resume: function() {},
+                    setEncoding: function(encoding) {
+                        pc.terminalEncoding = encoding;
+                    },
+                    setRawMode: function(rawMode) {
+                        pc.terminalRawMode = rawMode;
+                    },
+                    on: function(event, fn) {
+                        if (event == "data") {
+                            pc.onTerminalData = fn;
+                        }
+                    }
+                };
             }
-            try {
-                this.main(...PC.getArgs(PC.optionMap));
-            } catch(err) {
+            this.main(...PC.getArgs(PC.optionMap)).catch((err) => {
                 printf("exception: %s\n", err.message);
-            }
+            });
         }
     }
 
     /**
-     * onKeyPress(event)
+     * onTerminalInput(event, down)
      *
      * @this {PC}
      * @param {Event} event
+     * @param {boolean} [down] (true if keydown, false if keyup, undefined if keypress)
+     * @returns {boolean} (true to consume the event, false to pass it on)
      */
-    onKeyPress(event)
+    onTerminalInput(event, down)
     {
-        console.log(event);
+        if (this.onTerminalData && this.terminalRawMode) {
+            let data;
+            if (event.type == "keydown") {
+                switch(event.key) {
+                case "Backspace":
+                case "Delete":
+                    data = "\b";
+                    break;
+                case "Enter":
+                    data = "\r";
+                    break;
+                case "Escape":
+                    data = "\x1b";
+                    break;
+                case "Tab":
+                    data = "\t";
+                    break;
+                case "Control":
+                case "Shift":
+                case "Alt":
+                case "Meta":
+                    break;
+                default:
+                    if (event.ctrlKey) {
+                        if (event.key >= "a" && event.key <= "z") {
+                            data = String.fromCharCode(event.key.charCodeAt(0) - 96);
+                        }
+                        break;
+                    }
+                    data = event.key;
+                    break;
+                }
+            } else if (event.type == "keypress") {
+                data = event.key;
+            }
+            if (data) {
+                this.onTerminalData(data);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -282,12 +358,9 @@ export default class PC extends PCjsLib {
             }
             let module = await import(modulePath);
             /*
-             * Below are the set of classes that we need access to (eg, static methods, constants, etc).
+             * Below are the set of classes that we need access to (eg, their static methods, constants, etc).
              */
             switch(name) {
-            case "weblib":
-                this.Web = module.default;
-                break;
             case "component":
                 this.Component = module.default;
                 /*
@@ -312,11 +385,22 @@ export default class PC extends PCjsLib {
                     }
                 };
                 break;
+            case "defines":
+                /*
+                 * Whereas OUR "globals.browser" value reflects whether WE are running in a browser, we always
+                 * want the machine's "globals.browser" value to indicate that it is NOT running in a browser, so that
+                 * Component.getElementsByClass() will always build fake HTML elements for the machine's initialization.
+                 */
+                module.globals.browser = false;
+                break;
             case "errors":
                 this.Errors = module.default;
                 break;
             case "interrupts":
                 this.Interrupts = module.default;
+                break;
+            case "weblib":
+                this.Web = module.default;
                 break;
             }
             /*
@@ -817,8 +901,8 @@ export default class PC extends PCjsLib {
     getDriveInfo()
     {
         let text = "\n";
-        if (this.machine.id) {
-            text += sprintf(" %s machine ID %s\n", this.machine.type, this.machine.id);
+        if (this.fDebug && this.machine.id) {
+            text += sprintf("%s machine ID %s\n", this.machine.type, this.machine.id);
         }
         if (this.driveManifest || this.driveInfo.driveType >= 0) {
             let driveInfo = this.driveInfo;
@@ -832,7 +916,7 @@ export default class PC extends PCjsLib {
                 clusterSize: driveInfo.clusterSize,
                 driveSize: driveInfo.driveSize.toFixed(1) + "Mb"
             };
-            text += sprintf(" %s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
+            text += sprintf("%s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
             let vol = driveInfo.volume;
             if (vol) {
                 info.sectorSize = vol.cbSector;
@@ -853,13 +937,13 @@ export default class PC extends PCjsLib {
                 info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
                 info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
                 info.usageFinalFAT = (vol.cbSector - (Math.ceil(vol.clusTotal * info.typeFAT / 8) % vol.cbSector)) / vol.cbSector * 100;
-                text += sprintf(" %d hidden sectors, %d reserved sectors\n", info.sectorsHidden, info.sectorsReserved);
-                text += sprintf(" %d-bit FAT, %d-byte clusters, %d clusters\n", info.typeFAT, info.clusterSize, info.clustersTotal);
-                text += sprintf(" %d FAT sectors (x%d), %d root sectors (%d entries)\n", info.sectorsFAT, info.totalFATs, info.sectorsRoot, info.sizeRoot);
-                text += sprintf(" %d total sectors, %d data sectors, %d data bytes\n", info.sectorsTotal, info.sectorsData, info.bytesTotal);
+                text += sprintf("%d hidden sectors, %d reserved sectors\n", info.sectorsHidden, info.sectorsReserved);
+                text += sprintf("%d-bit FAT, %d-byte clusters, %d clusters\n", info.typeFAT, info.clusterSize, info.clustersTotal);
+                text += sprintf("%d FAT sectors (x%d), %d root sectors (%d entries)\n", info.sectorsFAT, info.totalFATs, info.sectorsRoot, info.sizeRoot);
+                text += sprintf("%d total sectors, %d data sectors, %d data bytes\n", info.sectorsTotal, info.sectorsData, info.bytesTotal);
             }
         }
-        return text;
+        return text.trim()? text : "use build to create disk image first\n";
     }
 
     /**
@@ -942,14 +1026,23 @@ export default class PC extends PCjsLib {
             break;
         }
         if (sVerify) {
+            /*
+             * This "pre-read" of the machine file isn't strictly necessary, it just helps confirm
+             * the machine type (eg, pcx86, pdp11), which we can also infer from the filename/path, so
+             * in the case running remotely, we dispense with it, to avoid another async read.
+             */
             if (sVerify.endsWith(".json")) {
-                config = JSON.parse(diskLib.readFileSync(sVerify, "utf8", true) || "{}");
-                let machine = config['machine'];
-                if (machine) {
-                    this.machineType = machine['type'] || this.machineType;
+                if (node.remote) {
                     sFile = sVerify;
                 } else {
-                    sFile = "";
+                    config = JSON.parse(diskLib.readFileSync(sVerify, "utf8", true) || "{}");
+                    let machine = config['machine'];
+                    if (machine) {
+                        this.machineType = machine['type'] || this.machineType;
+                        sFile = sVerify;
+                    } else {
+                        sFile = "";
+                    }
                 }
             } else {
                 sFile = sVerify;
@@ -1220,7 +1313,7 @@ export default class PC extends PCjsLib {
             done(config);
         }
         catch(err) {
-            result = err.message;
+            printf("unable to process %s\n%s\n", sFile, err.message);
         }
         return result;
     }
@@ -1495,7 +1588,7 @@ export default class PC extends PCjsLib {
             sSystemMBR = node.path.join(pcjsDir, sSystemMBR);
         }
 
-        let dbMBR = diskLib.readFileSync(sSystemMBR, null);
+        let dbMBR = await diskLib.readFileAsync(sSystemMBR, null);
         if (!dbMBR || dbMBR.length < 512) {
             return "invalid system MBR: " + sSystemMBR;
         }
@@ -1509,8 +1602,11 @@ export default class PC extends PCjsLib {
          * "helper binaries" we add to the disk image (and for COMMAND.COM itself).
          */
         this.driveInfo.files = [];
+        this.driveInfo.disk = null;
+        this.driveInfo.volume = null;
         this.driveInfo.verDOS = verDOS;
         this.driveInfo.bootDrive = bootDrive;
+        this.driveInfo.partitioned = !this.fFloppy;
 
         let attrHidden = verDOSMajor > 2 && !this.fBare? DiskInfo.ATTR.HIDDEN : 0;
         let aSystemFiles = this.getSystemFiles();
@@ -1575,7 +1671,7 @@ export default class PC extends PCjsLib {
          * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
          */
         let attr = DiskInfo.ATTR.ARCHIVE;
-        let data = diskLib.readFileSync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
+        let data = await diskLib.readFileAsync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
         if (data) {
             if (verDOS >= 3.30 && !data.indexOf("ECHO OFF")) {
                 data = '@' + data;
@@ -1754,6 +1850,37 @@ export default class PC extends PCjsLib {
     }
 
     /**
+     * dumpDisk(lba)
+     *
+     * @this {PC}
+     * @param {number} lba
+     */
+    dumpDisk(lba)
+    {
+        if (this.driveInfo.disk) {
+            let db = diskLib.getDiskSector(this.driveInfo.disk, +lba);
+            if (db) {
+                for (let i = 0; i < db.length; i += 16) {
+                    let s = sprintf("%04X: ", i);
+                    for (let j = 0; j < 16; j++) {
+                        s += sprintf("%02X ", db.readUInt8(i + j));
+                    }
+                    s += " ";
+                    for (let j = 0; j < 16; j++) {
+                        let ch = db.readUInt8(i + j);
+                        s += (ch >= 32 && ch < 127)? String.fromCharCode(ch) : '.';
+                    }
+                    printf("%s\n", s);
+                }
+            } else {
+                printf("error reading sector %s\n", lba);
+            }
+        } else {
+            printf("no disk built\n");
+        }
+    }
+
+    /**
      * readDiskIndex()
      *
      * Returns diskIndex object (properties are disk names).
@@ -1775,11 +1902,11 @@ export default class PC extends PCjsLib {
                 diskIndex[diskName] = {'path': diskPath};
                 total++;
                 if (total % 100 == 0) {
-                    printf("diskettes available: %d\r", total);
+                    printf(MESSAGE.DEBUG, "diskettes available: %d\r", total);
                 }
             }
         }
-        printf("total diskettes available: %d\n", total);
+        printf(MESSAGE.DEBUG, "total diskettes available: %d\n", total);
         return diskIndex;
     }
 
@@ -1849,6 +1976,7 @@ export default class PC extends PCjsLib {
                 printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
             }
         }
+        driveInfo.disk = di;
         let volume = di.volTable[0];
         if (volume) {
             driveInfo.volume = volume;
@@ -1860,6 +1988,11 @@ export default class PC extends PCjsLib {
             }
             if (driveInfo.rootEntries && driveInfo.rootEntries != volume.rootEntries) {
                 printf("%d root entries replaced with %d root entries\n", driveInfo.rootEntries, volume.rootEntries);
+            }
+            driveInfo.partitioned = (volume.lbaStart > 0);      // alternatively, check for volume.iPartition !== undefined
+            if (!driveInfo.partitioned) {
+                this.fFloppy = true;                            // if a non-partitioned disk was loaded, that's an implicit floppy boot
+                this.bootSelect = 'A';
             }
         }
     }
@@ -2372,9 +2505,10 @@ export default class PC extends PCjsLib {
         let help = function(machine) {
             let result = "pc.js internal commands:\n\n" +
                         "abort\tterminate without saving\n" +
-                        "build\tbuild disk to run specified command(s)\n" +
+                        "build\tbuild disk for specified drive type\n" +
                         "exec\texecute a local command\n" +
-                        "load\tload drive with the specified diskette\n" +
+                        "fetch\tread disk image and extract to directory\n" +
+                        "load\tload drive with specified diskette\n" +
                         "save\tsave disk to directory or as disk image\n" +
                         "select\tselect a new machine (eg, ibm5170)\n" +
                         "start\tstart new machine\n" +
@@ -2402,24 +2536,37 @@ export default class PC extends PCjsLib {
                 result = "machine already started";
                 break;
             }
-            arg = this.checkCommand(this.localDir, args);
-            if (!arg && args) {
-                result = "bad command or file name: " + args;
-                break;
+            /*
+             * For convenience (and to avoid having another command, such as "drivetype"), you can specify a drive type
+             * here, instead of a command for buildDisk() to run.
+             */
+            if (this.parseDriveType(args)) {
+                arg = "";
+            } else {
+                arg = this.checkCommand(this.localDir, args);
+                if (!arg && args) {
+                    result = "bad command or file name: " + args;
+                    break;
+                }
             }
-            this.buildDisk(this.localDir, arg, "", true).then(function(result) {
+            this.buildDisk(this.localDir, arg, "", true)
+            .then(function(result) {
                 if (result) printf("%s\n", result);
             });
+            break;
+        case "d":
+        case "dump":
+            this.dumpDisk(...aTokens);
             break;
         case "exec":
             if (reload) {
                 this.saveDisk(sDir);
                 this.machine = this.newMachine();
             }
-            curDir = process.cwd();
+            curDir = node.process.cwd();
             try {
                 let app, argv, appConfig, child;
-                process.chdir(this.mapDir(this.machineDir));
+                node.process.chdir(this.mapDir(this.machineDir));
                 argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
                 appConfig = configJSON['apps']?.[app];
                 if (appConfig && appConfig['exec']) {
@@ -2433,25 +2580,38 @@ export default class PC extends PCjsLib {
                  */
                 child = node.child_process.execSync(args, {
                     stdio: [
-                        "inherit", // process.stdin,
-                        "inherit", // process.stdout,
-                        "inherit"  // process.stderr
+                        "inherit", // node.process.stdin,
+                        "inherit", // node.process.stdout,
+                        "inherit"  // node.process.stderr
                     ]
                 });
             } catch(err) {
                 printf("%s\n", err.message);
             }
-            process.chdir(curDir);
+            node.process.chdir(curDir);
             if (reload) {
                 result = this.reloadMachine();
                 if (typeof result != "string") result = "";
+            }
+            break;
+        case "fetch":
+            arg = aTokens[0];
+            if (arg) {
+                diskLib.readDiskAsync(arg)
+                .then((di) => {
+                    if (!di) throw new Error("invalid disk image: " + arg);
+                    diskLib.extractFiles(di, {}, "", aTokens[1] || "", false);
+                })
+                .catch((err) => {
+                    printf("%s\n", err.message);
+                });
             }
             break;
         case "load":
             arg = aTokens[0];
             if (arg) {
                 if (arg == "/i" || arg == "info") {
-                    result = this.getDriveInfo();
+                    result = this.getDriveInfo().trim();
                 } else {
                     let matchDrive = arg.match(/^([a-z]:?)$/i);
                     if (matchDrive) {
@@ -2583,7 +2743,68 @@ export default class PC extends PCjsLib {
     }
 
     /**
-     * processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
+     * parseDriveType(typeDrive)
+     *
+     * @param {string} typeDrive
+     * @returns {string} (error, if any)
+     */
+    parseDriveType(typeDrive)
+    {
+        let result = "";
+        let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
+        if (match) {
+            let nCylinders = +match[1];
+            let nHeads = +match[2];
+            let nSectors = +match[3];
+            let cbSector = +match[4] || 512;
+            if (nCylinders < 1 || nCylinders > 1024 ||
+                nHeads < 1 || nHeads > 256 ||
+                nSectors < 1 || nSectors > 63 ||
+                cbSector < 128 || cbSector > 1024 || (cbSector & (cbSector - 1))) {
+                match = null;
+            } else {
+                this.kbTarget = 0;
+                if (!this.fFloppy) {
+                    this.driveInfo.driveCtrl = "PCJS";      // pseudo drive controller used for custom drive geometries
+                }
+                this.driveInfo.driveType = 0;
+                this.driveInfo.nCylinders = nCylinders;
+                this.driveInfo.nHeads = nHeads;
+                this.driveInfo.nSectors = nSectors;
+                this.driveInfo.cbSector = cbSector;
+                if (cbSector != 512) {
+                    printf("warning: %d-byte sectors are not known to work with any version of DOS\n", cbSector);
+                }
+                this.driveOverride = true;
+            }
+        } else if (!this.fFloppy) {
+            match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i);
+            if (match) {
+                let driveCtrl = match[1] || this.driveInfo.driveCtrl;
+                let driveType = +match[2];
+                /*
+                 * WARNING: This code may not validate the type correctly if you didn't specify a controller (eg, "XT:1"),
+                 * because the default controller is "COMPAQ" (because our default machine is a COMPAQ) and the code in
+                 * checkMachine() that attempts to detect/update the appropriate controller for your particular machine hasn't
+                 * run yet (this is too early).
+                 */
+                if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
+                    this.driveInfo.driveCtrl = driveCtrl;
+                    this.driveInfo.driveType = driveType;
+                    this.driveOverride = !!match[1];
+                } else {
+                    match = null;
+                }
+            }
+        }
+        if (!match) {
+            result = "invalid drive type: " + typeDrive;
+        }
+        return result;
+    }
+
+    /**
+     * processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, fAutoBuild)
      *
      * Arguments that either the shell consumes (like *.*) or that we consume (like --help) can be
      * problematic if those are actually arguments you want to pass along with a command to buildDisk().
@@ -2596,8 +2817,9 @@ export default class PC extends PCjsLib {
      * @param {string} [sDisk]
      * @param {string} [sDirectory]
      * @param {string} [sLocalDisk]
+     * @param {boolean} [fAutoBuild]
      */
-    async processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk)
+    async processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, fAutoBuild = !this.terminal)
     {
         let loading = false;
         let error = "", warning = "";
@@ -2618,7 +2840,7 @@ export default class PC extends PCjsLib {
 
         let verifyDir = function(s) {
             if (s[0] == '~') {
-                s = node.path.join(process.env.HOME, s.slice(1));
+                s = node.path.join(node.process.env.HOME, s.slice(1));
             } else {
                 s = node.path.resolve(s);
             }
@@ -2679,7 +2901,7 @@ export default class PC extends PCjsLib {
             }
         }
 
-        if (!error) {                               // last but not least, check for a DOS command or program name
+        if (!error && fAutoBuild) {                 // last but not least, check for a DOS command or program name
             if (this.machineType == "pcx86" && (argv[1] || this.localDir)) {
                 let args = argv.slice(1).join(' ');
                 let sCommand = this.checkCommand(this.localDir, args);
@@ -2697,7 +2919,7 @@ export default class PC extends PCjsLib {
             }
             if (!error) {
                 if (!this.localMachine) {
-                    this.localMachine = this.checkMachine(this.savedMachine) || this.savedMachine;
+                    this.localMachine = this.checkMachine(this.savedMachine);
                 }
                 error = this.loadMachine(this.localMachine);
                 if (!error) {
@@ -2750,8 +2972,8 @@ export default class PC extends PCjsLib {
                 pc.exit(3);
                 return;
             }
+            data = PC.functionKeys[data] || data;
             if (!pc.debugMode) {
-                data = PC.functionKeys[data] || data;
                 data = data.replace(/\x7f/g, "\b");         // convert DEL to BS
                 if (machine.kbd) {
                     if (MAXDEBUG) {
@@ -2773,10 +2995,10 @@ export default class PC extends PCjsLib {
             if (code == 0x01 && pc.commandPrev) {
                 data = pc.commandPrev + '\r';               // implement CTRL-A as a command repeat action
             }
-            else if (data == "\x1b[A" && !pc.command.length) {
+            else if (data == "$up" && !pc.command.length) {
                 data = pc.commandPrev;                      // implement UP ARROW ourselves (since we're in "raw" mode)
             }
-            else if (code < 0x20 && code != 0x0d) {
+            else if (code < 0x20 && code != 0x0d || data.length > 1) {
                 return;                                     // anything else (including any ESC codes) is ignored
             }
             printf("%s", data);
@@ -2786,13 +3008,17 @@ export default class PC extends PCjsLib {
                 if (i < 0) break;
                 let s = pc.command.slice(0, i);
                 printf("\n");
-                let result = pc.doCommand(s);
-                printf(result);
-                if (machine.cpu && machine.cpu.isRunning()) {
+                pc.command = pc.command.slice(i+1);
+                try {
+                    let result = pc.doCommand(s);
+                    printf(result);
+                } catch(err) {
+                    printf("exception: %s\n", err.message);
+                }
+                if (machine.cpu && machine.cpu.isRunning() || this.shutdown) {
                     break;
                 }
                 printf("%s> ", pc.prompt);
-                pc.command = pc.command.slice(i+1);
             } while (pc.command.length);
         });
     }
@@ -2807,11 +3033,12 @@ export default class PC extends PCjsLib {
      */
     exit(code = 0)
     {
-        if (code == 3) printf("terminating...\n");
+        this.shutdown = true;
+        printf("shutting down...\n");
         if (code != 1) this.saveDisk(this.localDir);
-        process.stdin.setRawMode(false);
+        node.process.stdin.setRawMode(false);
         if (this.fTest) printf("\n");
-        process.exit(code);
+        node.process.exit(code);
     }
 
     /**
@@ -2823,7 +3050,7 @@ export default class PC extends PCjsLib {
      * @param {function()} removeFlag
      * @returns {boolean} (true if we should continue, false if we should exit)
      */
-    checkArgs(argv, removeArg, removeFlag)
+    async checkArgs(argv, removeArg, removeFlag)
     {
         this.fDebug = removeFlag('debug') || this.fDebug;
         this.fVerbose = removeFlag('verbose') || this.fVerbose;
@@ -2834,17 +3061,20 @@ export default class PC extends PCjsLib {
         this.messagesFilter = this.fDebug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
 
         let arg0 = argv[0].split(' ');
-        if (!argv[1] || this.fDebug || this.fTest) {
+        if (!argv[1] || this.fDebug || this.fTest || globals.browser) {
             let options = arg0.slice(1).join(' ');
             printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
         }
 
         if (!machines) {
+            let db;
             rootDir = node.path.join(node.path.dirname(arg0[0]), "../..");
             pcjsDir = node.path.join(rootDir, "/tools/pc");
-            diskLib.setRootDir(rootDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
-            machines = JSON.parse(diskLib.readFileSync("/machines/machines.json") || "{}");
-            configJSON = node.json5.parse(diskLib.readFileSync(node.path.join(pcjsDir, configFile) || {}));
+            diskLib.setRootDir(rootDir, pcjsDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
+            db = await diskLib.readFileAsync("/machines/machines.json");
+            machines = JSON.parse(db || "{}");
+            db = await diskLib.readFileAsync(node.path.join(pcjsDir, configFile));
+            configJSON = node.json5.parse(db || "{}");
         }
 
         let defaults = configJSON['defaults'] || {};
@@ -2879,7 +3109,6 @@ export default class PC extends PCjsLib {
             this.savedState = "";
             this.kbTarget = this.maxFiles = 0;
             this.driveInfo.driveCtrl = "FDC";
-            this.driveInfo.partitioned = false;
             this.driveOverride = true;
             this.bootSelect = 'A';
         } else {
@@ -2890,7 +3119,6 @@ export default class PC extends PCjsLib {
             }
             this.kbTarget = diskLib.getTargetValue(defaults['target']);
             this.maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || this.maxFiles;
-            this.driveInfo.partitioned = true;
             this.bootSelect = (removeArg('boot') || defaults['boot'] || this.bootSelect).toUpperCase();
         }
 
@@ -2906,55 +3134,7 @@ export default class PC extends PCjsLib {
 
         let typeDrive = removeArg('drivetype');
         if (typeDrive) {
-            let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
-            if (match) {
-                let nCylinders = +match[1];
-                let nHeads = +match[2];
-                let nSectors = +match[3];
-                let cbSector = +match[4] || 512;
-                if (nCylinders < 1 || nCylinders > 1024 ||
-                    nHeads < 1 || nHeads > 256 ||
-                    nSectors < 1 || nSectors > 63 ||
-                    cbSector < 128 || cbSector > 1024 || (cbSector & (cbSector - 1))) {
-                    match = null;
-                } else {
-                    this.kbTarget = 0;
-                    if (!this.fFloppy) {
-                        this.driveInfo.driveCtrl = "PCJS";      // this pseudo drive controller is required for custom drive geometries
-                    }
-                    this.driveInfo.driveType = 0;
-                    this.driveInfo.nCylinders = nCylinders;
-                    this.driveInfo.nHeads = nHeads;
-                    this.driveInfo.nSectors = nSectors;
-                    this.driveInfo.cbSector = cbSector;
-                    if (cbSector != 512) {
-                        printf("warning: %d-byte sectors are not known to work with any version of DOS\n", cbSector);
-                    }
-                    this.driveOverride = true;
-                }
-            } else if (!this.fFloppy) {
-                match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i);
-                if (match) {
-                    let driveCtrl = match[1] || driveInfo.driveCtrl;
-                    let driveType = +match[2];
-                    /*
-                     * WARNING: This code may not validate the type correctly if you didn't specify a controller (eg, "XT:1"),
-                     * because the default controller is "COMPAQ" (because our default machine is a COMPAQ) and the code in
-                     * checkMachine() that attempts to detect/update the appropriate controller for your particular machine hasn't
-                     * run yet (this is too early).
-                     */
-                    if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
-                        this.driveInfo.driveCtrl = driveCtrl;
-                        this.driveInfo.driveType = driveType;
-                        this.driveOverride = !!match[1];
-                    } else {
-                        match = null;
-                    }
-                }
-            }
-            if (!match) {
-                printf("error: invalid drive type (%s)\n", typeDrive);
-            }
+            printf(this.parseDriveType(typeDrive));
         }
 
         let typeFAT = removeArg('fat');
@@ -2981,7 +3161,7 @@ export default class PC extends PCjsLib {
      * @param {number} argc
      * @param {Array} argv
      */
-    main(argc, argv)
+    async main(argc, argv)
     {
         let removeArg = function(arg) {
             return PC.removeArg(argv, arg, "string");
@@ -2991,7 +3171,9 @@ export default class PC extends PCjsLib {
             return PC.removeArg(argv, arg, "boolean");
         };
 
-        if (!this.checkArgs(argv, removeArg, removeFlag)) {
+        let success = await this.checkArgs(argv, removeArg, removeFlag);
+
+        if (!success) {
             let optionsMain = {
                 "--select=[machine]":       "select machine configuration file",
             };
@@ -3042,7 +3224,10 @@ export default class PC extends PCjsLib {
             return;
         }
 
-        this.processArgs(argv, removeArg('select'), removeArg('disk'), removeArg('dir'), removeArg('save'));
+        let autoBuild = removeFlag('auto');
+        await this.processArgs(argv, removeArg('select'), removeArg('disk'), removeArg('dir'), removeArg('save'), autoBuild).catch((err) => {
+            printf("exception: %s\n", err.message);
+        });
 
         let args = Object.keys(argv);
         for (let arg of args) {
@@ -3057,11 +3242,13 @@ export default class PC extends PCjsLib {
             }
         }
 
-        this.readInput(process.stdin, process.stdout);
+        this.readInput(node.process.stdin, node.process.stdout);
     }
 }
 
 if (!globals.browser) {
     let pc = new PC();
-    pc.main(...PC.getArgs(PC.optionMap));
+    await pc.main(...PC.getArgs(PC.optionMap)).catch((err) => {
+        printf("exception: %s\n", err.message);
+    });
 }

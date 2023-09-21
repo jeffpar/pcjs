@@ -20,7 +20,7 @@ let sprintf = strlib.sprintf;
  */
 export default function printf(format, ...args)
 {
-    if (globals.node['process']) {
+    if (globals.process.stdout) {
         process.stdout.write(sprintf(format, ...args));
     } else {
         console.log(sprintf(format, ...args));

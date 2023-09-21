@@ -54,16 +54,14 @@ export default class DataBuffer {
         }
         else {
             if (init instanceof ArrayBuffer) {
-                this.ab = init;
+                this.ab = init.slice(start || 0, end || init.byteLength);
                 this.length = this.ab.byteLength;
                 this.dv = new DataView(this.ab, 0, this.length);
             }
             else if (init instanceof DataBuffer) {
-                this.ab = init.ab;
-                if (start == undefined) start = 0;
-                if (end == undefined) end = init.length;
-                this.length = end - start;
-                this.dv = new DataView(this.ab, start, this.length);
+                this.ab = init.ab.slice(start || 0, end || init.length);
+                this.length = this.ab.byteLength;
+                this.dv = new DataView(this.ab, 0, this.length);
             }
             else {
                 if (typeof init == "string") {
@@ -77,6 +75,7 @@ export default class DataBuffer {
                 }
                 this.length = init.length;
             }
+            this.buffer = new Uint8Array(this.ab);
         }
     }
 

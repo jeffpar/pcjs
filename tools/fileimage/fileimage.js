@@ -917,7 +917,8 @@ function main(argc, argv)
     let argv0 = argv[0].split(' ');
     let options = argv0.slice(1).join(' ');
 
-    diskLib.setRootDir(path.join(path.dirname(argv0[0]), "../.."), argv['local']);
+    let rootDir = path.join(path.dirname(argv0[0]), "../..");
+    diskLib.setRootDir(rootDir, rootDir, argv['local']);
 
     Device.DEBUG = !!argv['debug'];
 

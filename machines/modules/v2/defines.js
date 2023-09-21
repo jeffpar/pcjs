@@ -136,7 +136,7 @@ var LOCALDISKS = false;
  * Platform-agnostic way to isolate global variables (both mine and the system's).
  */
 let globals = {
-    browser: (typeof window != "undefined")? {} : null,
+    browser: (typeof window != "undefined"),
     node: (typeof window != "undefined")? {} : global,
     process: (typeof process != "undefined")? process : {},
     window: (typeof window != "undefined")? window : global,
