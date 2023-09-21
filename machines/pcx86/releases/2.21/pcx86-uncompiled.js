@@ -136,7 +136,7 @@ let globals = {
     process: (typeof process != "undefined")? process : {},
     window: (typeof window != "undefined")? window : global,
     document: (typeof document != "undefined")? document : {},
-    pcjs: { 'machines': {}, 'components': [], 'commands': {} }
+    pcjs: { 'machines': {}, 'components': [], 'commands': {}, 'files': [] }
 };
 
 if (globals.window['PCjs']) {
@@ -791,9 +791,9 @@ class DataBuffer {
     {
         this.node = (typeof Buffer != "undefined");
         if (typeof init == "number") {
-            this.new(init);
+            init = new ArrayBuffer(init);
         }
-        else if (this.node) {
+        if (this.node) {
             if (Buffer.isBuffer(init)) {
                 this.buffer = init;
             }
@@ -806,13 +806,11 @@ class DataBuffer {
             this.length = this.buffer.length;
         }
         else {
+            if (init instanceof DataBuffer) {
+                init = init.ab;
+            }
             if (init instanceof ArrayBuffer) {
                 this.ab = init.slice(start || 0, end || init.byteLength);
-                this.length = this.ab.byteLength;
-                this.dv = new DataView(this.ab, 0, this.length);
-            }
-            else if (init instanceof DataBuffer) {
-                this.ab = init.ab.slice(start || 0, end || init.length);
                 this.length = this.ab.byteLength;
                 this.dv = new DataView(this.ab, 0, this.length);
             }

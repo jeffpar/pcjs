@@ -7,6 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import PCFS from "../../machines/modules/v2/pcfs.js";
 import WebIO from "../../machines/modules/v3/webio.js";
 import { globals } from "../../machines/modules/v3/defines.js";
 
@@ -14,6 +15,7 @@ let node = {
     remote: false,
     rootDir: "",
     homeDir: "",
+    pcfs: new PCFS(),
     FileLib: {
         getLocalPath: function(sFile) {
             let root = node.rootDir;
@@ -24,6 +26,9 @@ let node = {
                     match[2] = "";
                 }
                 sFile = node.path.join(root, match[2], match[3]);
+            }
+            else if (sFile.indexOf(root) && !node.pcfs.isPCFS(sFile)) {
+                sFile = node.path.join("/pcfs", sFile);
             }
             return sFile;
         },
@@ -41,7 +46,12 @@ let node = {
             console.log("fs.chmodSync(" + sFile + "): unimplemented");
         },
         existsSync: function(sFile) {
-            return sFile.indexOf(node.rootDir) == 0;
+            return node.pcfs.getItem(sFile) || sFile.indexOf(node.rootDir) == 0;
+        },
+        mkdirSync: function(sDir, options) {
+            if (node.pcfs.isPCFS(sDir)) {
+                node.pcfs.getItem(sDir, true, true);
+            }
         },
         readdirSync: function(sDir) {
             return [];
@@ -53,17 +63,29 @@ let node = {
             console.log("fs.readFileSync(" + sFile +"): unimplemented");
         },
         statSync: function(sFile) {
-            return {
-                isDirectory: function() {
-                    return !sFile.match(/\.[^\/]+$/);
-                }
-            };
+            if (node.pcfs.isPCFS(sFile)) {
+                let item = node.pcfs.getItem(sFile);
+                return {
+                    isDirectory: function() {
+                        return item && item.files;
+                    }
+                };
+            } else {
+                return {
+                    isDirectory: function() {
+                        return !sFile.match(/\.[^\/]+$/);
+                    }
+                };
+            }
         },
         unlinkSync: function(sFile) {
-            console.log("fs.unlinkSync(" + sFile + "): unimplemented");
+            node.pcfs.getItem(sFile, false);
         },
         writeFileSync: function(sFile, data) {
-            console.log("fs.writeFileSync(" + sFile + "): unimplemented");
+            let item = node.pcfs.getItem(sFile, true);
+            if (item) {
+                node.pcfs.setItem(item, data);
+            }
         }
     },
     json5: {

@@ -141,7 +141,7 @@ let globals = {
     process: (typeof process != "undefined")? process : {},
     window: (typeof window != "undefined")? window : global,
     document: (typeof document != "undefined")? document : {},
-    pcjs: { 'machines': {}, 'components': [], 'commands': {} }
+    pcjs: { 'machines': {}, 'components': [], 'commands': {}, 'files': [] }
 };
 
 if (globals.window['PCjs']) {

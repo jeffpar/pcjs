@@ -38,9 +38,9 @@ export default class DataBuffer {
     {
         this.node = (typeof Buffer != "undefined");
         if (typeof init == "number") {
-            this.new(init);
+            init = new ArrayBuffer(init);
         }
-        else if (this.node) {
+        if (this.node) {
             if (Buffer.isBuffer(init)) {
                 this.buffer = init;
             }
@@ -53,13 +53,11 @@ export default class DataBuffer {
             this.length = this.buffer.length;
         }
         else {
+            if (init instanceof DataBuffer) {
+                init = init.ab;
+            }
             if (init instanceof ArrayBuffer) {
                 this.ab = init.slice(start || 0, end || init.byteLength);
-                this.length = this.ab.byteLength;
-                this.dv = new DataView(this.ab, 0, this.length);
-            }
-            else if (init instanceof DataBuffer) {
-                this.ab = init.ab.slice(start || 0, end || init.length);
                 this.length = this.ab.byteLength;
                 this.dv = new DataView(this.ab, 0, this.length);
             }

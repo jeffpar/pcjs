@@ -16,13 +16,13 @@ import path from "path";
 import glob from "glob";
 import mkdirp from "mkdirp";
 import crypto from "crypto";
-import net from "../../../../machines/modules/v2/netlib.js";
 import str from "../../../../machines/modules/v2/strlib.js";
 import web from "../../../../machines/modules/v2/weblib.js";
 import DiskAPI from "../../../../machines/modules/v2/diskapi.js";
 import DumpAPI from "../../../../machines/modules/v2/dumpapi.js";
 import X86 from "../../../../machines/pcx86/modules/v2/x86.js";
 import { COPYRIGHT } from "../../../../machines/modules/v2/defines.js";
+import netlib from "../../../modules/netlib.js";
 import pcjslib from "../../../modules/pcjslib.js";
 
 var NODE = true;
@@ -356,7 +356,7 @@ function DiskDump(sDiskPath, asExclude, sFormat, fComments, sSize, sServerRoot, 
     console.log(this.argv);
     this.sDiskPath = sDiskPath;
     this.sServerRoot = sServerRoot || "";
-    if (this.sServerRoot && !net.isRemote(sDiskPath) && sDiskPath[0] == '/' && sDiskPath.indexOf(';') < 0) {
+    if (this.sServerRoot && !netlib.isRemote(sDiskPath) && sDiskPath[0] == '/' && sDiskPath.indexOf(';') < 0) {
         this.sDiskPath = path.join(this.sServerRoot, sDiskPath);
     }
     this.asExclude = asExclude || DiskDump.asExclusions;
@@ -1190,7 +1190,7 @@ DiskDump.logWarning = function(s)
  */
 DiskDump.getStat = function(sPath, done)
 {
-    net.isRemote(sPath)? net.getStat(sPath, done) : fs.stat(sPath, done);   // jshint ignore:line
+    netlib.isRemote(sPath)? netlib.getStat(sPath, done) : fs.stat(sPath, done);   // jshint ignore:line
 };
 
 /**
@@ -1205,11 +1205,11 @@ DiskDump.getStat = function(sPath, done)
 DiskDump.readFile = function(sPath, sEncoding, done)
 {
     if (NODE) {
-        if (net.isRemote(sPath)) {
+        if (netlib.isRemote(sPath)) {
             /*
              * Just a quick verification that the getStat() function works...
              *
-             net.getStat(sPath, function(err, stats) {
+             netlib.getStat(sPath, function(err, stats) {
                 if (!err) {
                     DiskDump.logConsole(stats);
                 } else {
@@ -1217,7 +1217,7 @@ DiskDump.readFile = function(sPath, sEncoding, done)
                 }
             });
              */
-            net.getFile(sPath, sEncoding, function doneReadFileRemote(err, status, buf) {
+            netlib.getFile(sPath, sEncoding, function doneReadFileRemote(err, status, buf) {
                 done(err, buf);
             });
         } else {
@@ -1933,7 +1933,7 @@ DiskDump.prototype.readPath = function(sPath, done)
              * The DiskDump constructor joins the beginning of sPath with sServerRoot,
              * but if there are any intermediate paths, we have to join them ourselves.
              */
-            if (iFile > 0 && !net.isRemote(sDefaultPath)) {
+            if (iFile > 0 && !netlib.isRemote(sDefaultPath)) {
                 sDefaultPath = path.join(this.sServerRoot, sDefaultPath);
             }
             sFileName = sFileName.substr(i+1);
@@ -2756,7 +2756,7 @@ DiskDump.prototype.buildImageFromFiles = function(aFiles, done)
  */
 DiskDump.prototype.readSuppData = function()
 {
-    let suppData = {}
+    let suppData = {};
     if (this.argv['suppData']) {
         let sData;
         try {
@@ -2777,7 +2777,7 @@ DiskDump.prototype.readSuppData = function()
                     let dataMark = parseInt(metaData[5], 16);
                     let headCRC = parseInt(metaData[6], 16);
                     let headError = metaData[7].toLowerCase() != "ok";
-                    let dataCRC = parseInt(metaData[8], 16)
+                    let dataCRC = parseInt(metaData[8], 16);
                     let dataError = (metaData[9].toLowerCase() == "ok")? 0 : -1;
                     let matchData, reData = /([0-9A-F]+)\|([^|]*)\|/g;
                     while ((matchData = reData.exec(aSectorData[i]))) {
@@ -3528,7 +3528,7 @@ DiskDump.prototype.convertPSItoJSON = function()
         if (!chunkID) break;
     }
     return data.length && JSON.stringify(data) || null;
-}
+};
 
 /**
  * convertOSIDiskToJSON()
