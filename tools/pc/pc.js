@@ -215,6 +215,7 @@ export default class PC extends PCjsLib {
                         }
                         break;
                     }
+                    if (event.altKey || event.metaKey) break;
                     data = event.key;
                     break;
                 }
@@ -1208,7 +1209,7 @@ export default class PC extends PCjsLib {
                     }
                     drives[0] = {
                         'type': driveType,
-                        'name': (driveInfo.driveSize|0) + "Mb Hard Disk"
+                        'name': driveInfo.driveSize.toFixed(1) + "Mb Hard Disk"
                     };
                     if (pc.driveManifest || !pc.localDir && pc.localDisk) {
                         drives[0]['path'] = pc.localDisk;
@@ -2540,7 +2541,7 @@ export default class PC extends PCjsLib {
              * For convenience (and to avoid having another command, such as "drivetype"), you can specify a drive type
              * here, instead of a command for buildDisk() to run.
              */
-            if (this.parseDriveType(args)) {
+            if (!this.parseDriveType(args)) {
                 arg = "";
             } else {
                 arg = this.checkCommand(this.localDir, args);
@@ -2750,7 +2751,7 @@ export default class PC extends PCjsLib {
      */
     parseDriveType(typeDrive)
     {
-        let result = "";
+        let error = "";
         let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
         if (match) {
             let nCylinders = +match[1];
@@ -2798,9 +2799,9 @@ export default class PC extends PCjsLib {
             }
         }
         if (!match) {
-            result = "invalid drive type: " + typeDrive;
+            error = "invalid drive type: " + typeDrive + "\n";
         }
-        return result;
+        return error;
     }
 
     /**
@@ -2866,6 +2867,9 @@ export default class PC extends PCjsLib {
                 }
             }
             this.localDir = "";
+        }
+        else if (globals.browser) {
+            this.localDisk = diskLib.getLocalPath(this.localDisk);
         } else {
             this.localDisk = node.path.join(pcjsDir, this.localDisk);
         }

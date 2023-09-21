@@ -7,6 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import PCFS from "../../machines/modules/v2/pcfs.js";
 import WebIO from "../../machines/modules/v3/webio.js";
 import { globals } from "../../machines/modules/v3/defines.js";
 
@@ -25,6 +26,9 @@ let node = {
                 }
                 sFile = node.path.join(root, match[2], match[3]);
             }
+            else if (sFile.indexOf(root) && !PCFS.isPCFS(sFile)) {
+                sFile = node.path.join(PCFS.root, sFile);
+            }
             return sFile;
         },
         readFileSync: function(sFile, encoding = "utf8") {
@@ -41,7 +45,12 @@ let node = {
             console.log("fs.chmodSync(" + sFile + "): unimplemented");
         },
         existsSync: function(sFile) {
-            return sFile.indexOf(node.rootDir) == 0;
+            return PCFS.getItem(sFile) || sFile.indexOf(node.rootDir) == 0;
+        },
+        mkdirSync: function(sDir, options) {
+            if (PCFS.isPCFS(sDir)) {
+                PCFS.getItem(sDir, true, true);
+            }
         },
         readdirSync: function(sDir) {
             return [];
@@ -53,17 +62,29 @@ let node = {
             console.log("fs.readFileSync(" + sFile +"): unimplemented");
         },
         statSync: function(sFile) {
-            return {
-                isDirectory: function() {
-                    return !sFile.match(/\.[^\/]+$/);
-                }
-            };
+            if (PCFS.isPCFS(sFile)) {
+                let item = PCFS.getItem(sFile);
+                return {
+                    isDirectory: function() {
+                        return item && item.files;
+                    }
+                };
+            } else {
+                return {
+                    isDirectory: function() {
+                        return !sFile.match(/\.[^\/]+$/);
+                    }
+                };
+            }
         },
         unlinkSync: function(sFile) {
-            console.log("fs.unlinkSync(" + sFile + "): unimplemented");
+            PCFS.getItem(sFile, false);
         },
         writeFileSync: function(sFile, data) {
-            console.log("fs.writeFileSync(" + sFile + "): unimplemented");
+            let item = PCFS.getItem(sFile, true);
+            if (item) {
+                PCFS.setItem(item, data);
+            }
         }
     },
     json5: {

@@ -10,10 +10,10 @@
 import fs from "fs";
 import path from "path";
 import mkdirp from "mkdirp";
-import net from "../../../../machines/modules/v2/netlib.js";
 import str from "../../../../machines/modules/v2/strlib.js";
 import DumpAPI from "../../../../machines/modules/v2/dumpapi.js";
 import { COPYRIGHT } from "../../../../machines/modules/v2/defines.js";
+import netlib from "../../../modules/netlib.js";
 import pcjslib from "../../../modules/pcjslib.js";
 
 /**
@@ -65,7 +65,7 @@ import pcjslib from "../../../modules/pcjslib.js";
  *
  * TODO: Consider adding a "map" option that allows the user to supply a MAP filename (via a "map" API parameter
  * or a "--map" command-line option), which in turn triggers a call to loadMap().  Note that loadMap() will need to
- * be a bit more general and use a worker function that calls either net.getFile() or fs.readFile(), similar to
+ * be a bit more general and use a worker function that calls either netlib.getFile() or fs.readFile(), similar to
  * what the loadFile() function already does.
  *
  * @constructor
@@ -293,13 +293,13 @@ FileDump.prototype.loadFile = function(sFile, iStart, nSkip, done)
         encoding = "utf8";
     }
     let options = {encoding: encoding};
-    let sFilePath = (!this.sServerRoot || net.isRemote(sFile))? sFile : path.join(this.sServerRoot, sFile);
+    let sFilePath = (!this.sServerRoot || netlib.isRemote(sFile))? sFile : path.join(this.sServerRoot, sFile);
 
     if (!this.sFilePath) this.sFilePath = sFilePath;
     if (this.fDebug) console.log("loadFile(" + sFilePath + "," + iStart + "," + nSkip + ")");
 
-    if (net.isRemote(sFilePath)) {
-        net.getFile(sFilePath, options.encoding, function(err, status, buf) {
+    if (netlib.isRemote(sFilePath)) {
+        netlib.getFile(sFilePath, options.encoding, function(err, status, buf) {
             if (err) {
                 FileDump.logError(err);
                 done(err);

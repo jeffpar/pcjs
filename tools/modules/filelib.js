@@ -7,10 +7,11 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import fs from "fs";
-import path from "path";
-import { globals } from "./defines.js";
-import DataBuffer from "./databuffer.js";
+import { globals } from "../../machines/modules/v2/defines.js";
+import DataBuffer from "../../machines/modules/v2/databuffer.js";
+import { node }   from "./nodeapi.js";
+
+await node.import("fs", "path");
 
 /**
  * @class FileLib
@@ -39,7 +40,7 @@ export default class FileLib {
             if (match[2] != "machines" && match[2] != "software" && match[2] != "tools") {
                 if (FileLib.localDisks !== false) subDir = "disks";
             }
-            sFile = path.join(FileLib.rootDir, subDir, match[2], match[3]);
+            sFile = node.path.join(FileLib.rootDir, subDir, match[2], match[3]);
         }
         return sFile;
     }
@@ -56,7 +57,7 @@ export default class FileLib {
         let data;
         if (sFile) {
             sFile = FileLib.getLocalPath(sFile);
-            data = fs.readFileSync(sFile, encoding);
+            data = node.fs.readFileSync(sFile, encoding);
             if (!encoding) data = new DataBuffer(data);
         }
         return data;

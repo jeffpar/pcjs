@@ -15,7 +15,7 @@ import CharSet    from "../../machines/pcx86/modules/v2/charset.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import { node }   from "./nodeapi.js";
 
-await node.import("crypto", "fs", "glob", "os", "path", "./BASFile.js", "./StreamZip.js", "../../machines/modules/v2/FileLib.js");
+await node.import("crypto", "fs", "glob", "os", "path", "./BASFile.js", "./FileLib.js", "./StreamZip.js");
 
 /**
  * @class {DiskLib}

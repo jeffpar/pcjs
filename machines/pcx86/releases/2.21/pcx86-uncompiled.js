@@ -136,7 +136,7 @@ let globals = {
     process: (typeof process != "undefined")? process : {},
     window: (typeof window != "undefined")? window : global,
     document: (typeof document != "undefined")? document : {},
-    pcjs: { 'machines': {}, 'components': [], 'commands': {} }
+    pcjs: { 'machines': {}, 'components': [], 'commands': {}, 'files': [] }
 };
 
 if (globals.window['PCjs']) {
@@ -791,9 +791,9 @@ class DataBuffer {
     {
         this.node = (typeof Buffer != "undefined");
         if (typeof init == "number") {
-            this.new(init);
+            init = new ArrayBuffer(init);
         }
-        else if (this.node) {
+        if (this.node) {
             if (Buffer.isBuffer(init)) {
                 this.buffer = init;
             }
@@ -806,13 +806,11 @@ class DataBuffer {
             this.length = this.buffer.length;
         }
         else {
+            if (init instanceof DataBuffer) {
+                init = init.ab;
+            }
             if (init instanceof ArrayBuffer) {
                 this.ab = init.slice(start || 0, end || init.byteLength);
-                this.length = this.ab.byteLength;
-                this.dv = new DataView(this.ab, 0, this.length);
-            }
-            else if (init instanceof DataBuffer) {
-                this.ab = init.ab.slice(start || 0, end || init.length);
                 this.length = this.ab.byteLength;
                 this.dv = new DataView(this.ab, 0, this.length);
             }
@@ -1799,6 +1797,121 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_DASH]   = Keys.ASCII['_'];
 Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_EQUALS] = Keys.ASCII['+'];
 Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
 
+
+/**
+ * @copyright https://www.pcjs.org/machines/modules/v2/pcfs.js (C) 2012-2023 Jeff Parsons
+ */
+
+/** @typedef {{ name: string, size: number, date: Date, data: *, files: (Array|null) }} */
+let PCFSItem;
+
+/**
+ * @class PCFS
+ */
+class PCFS {
+
+    static root = "/pcfs/";
+
+    /**
+     * isPCFS(path)
+     *
+     * @param {string} path
+     * @returns {boolean}
+     */
+    static isPCFS(path)
+    {
+        return path.indexOf(PCFS.root) == 0;
+    }
+
+    /**
+     * getRoot(path)
+     *
+     * @param {string} path
+     * @returns {Array|null}
+     */
+    static getRoot(path)
+    {
+        return PCFS.isPCFS(path)? globals.pcjs['files'] : null;
+    }
+
+    /**
+     * getNodes(path)
+     *
+     * @param {string} path
+     * @returns {Array}
+     */
+    static getNodes(path)
+    {
+        return path.slice(6).split('/');
+    }
+
+    /**
+     * getItem(path, fCreate, fDirectory)
+     *
+     * @param {string} path
+     * @param {boolean} [fCreate] (true to create, false to remove, undefined if don't care)
+     * @param {boolean} [fDirectory]
+     * @returns {PCFSItem|null}
+     */
+    static getItem(path, fCreate, fDirectory)
+    {
+        let item = null;
+        let dir = PCFS.getRoot(path);
+        if (dir) {
+            let nodes = PCFS.getNodes(path);
+            let i, j;
+            for (i = 0; i < nodes.length; i++) {
+                let name = nodes[i], match = false;
+                for (j = 0; j < dir.length; j++) {
+                    let next = dir[j];
+                    if (next.name == name) {
+                        if (i == nodes.length - 1) {
+                            item = next;
+                            break;
+                        }
+                        if (next.files) {
+                            dir = next.files;
+                            match = true;
+                            break;
+                        }
+                    }
+                }
+                if (item) break;
+                if (match) continue;
+                if (i < nodes.length - 1) {
+                    if (fCreate) {
+                        let sub = {name, size: 0, date: new Date(), files: []};
+                        dir.push(sub);
+                        dir = sub.files;
+                        continue;
+                    }
+                    break;
+                }
+            }
+            if (!item && i == nodes.length) {
+                if (fCreate) {
+                    item = dir[dir.length] = {name: nodes[nodes.length-1], size: 0, date: new Date(), files: fDirectory? [] : null};
+                } else if (fCreate === false) {
+                    dir.splice(j, 1);
+                }
+            }
+        }
+        return item;
+    }
+
+    /**
+     * setItem(item, data)
+     *
+     * @param {PCFSItem} item
+     * @param {*} data
+     */
+    static setItem(item, data)
+    {
+        item.data = data;
+        item.size = data.length;
+        item.date = new Date();
+    }
+}
 
 /**
  * @copyright https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
@@ -2948,6 +3061,11 @@ class WebLib {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
+        /*
+         * globals.node.readFileSync exists only when another module has import filelib.js, which means we're
+         * running under Node.js, and we can use Node's file system to read local files.  Note that filelib.js only
+         * offers readFileSync() at the moment.
+         */
         if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
             Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "reading: %s\n", sURL);
             try {
@@ -2964,6 +3082,19 @@ class WebLib {
                 nErrorCode = err['errno'];
             }
             if (resource !== undefined) {
+                if (done) done(sURL, resource, nErrorCode);
+                return [resource, nErrorCode];
+            }
+        }
+
+        /*
+         * If PCjs is simulating a command-line environment inside a browser, PCFS (the PCjs File System) can be used
+         * to simulate a local file system.  So we check for that next.
+         */
+        if (PCFS.isPCFS(sURL)) {
+            let item = PCFS.getItem(sURL);
+            if (item) {
+                resource = item.data;
                 if (done) done(sURL, resource, nErrorCode);
                 return [resource, nErrorCode];
             }

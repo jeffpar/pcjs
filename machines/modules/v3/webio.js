@@ -1075,6 +1075,16 @@ export default class WebIO extends StdIO {
             let len = s.length;
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
             if (element) {
+                if (s == '\r') {
+                    let i = element.value.lastIndexOf('\n');
+                    if (i >= 0) {
+                        element.setSelectionRange(i + 1, i + 1);
+                        s = "";
+                    }
+                }
+                if (s == '\n') {
+                    s = '\r\n';
+                }
                 /**
                  * To help avoid situations where the element can get overwhelmed by the same repeated line,
                  * don't add the string if it already appears at the end.
@@ -1097,8 +1107,8 @@ export default class WebIO extends StdIO {
                     /**
                      * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                      */
-                    if (!WebIO.DEBUG && element.value.length >= 65536) {
-                        let excess = (element.value.length - 65536) + 4096;
+                    if (!WebIO.DEBUG && element.value.length >= 8192) {
+                        let excess = (element.value.length - 8192) + 4096;
                         element.value = element.value.slice(excess);
                     }
                     element.scrollTop = element.scrollHeight;

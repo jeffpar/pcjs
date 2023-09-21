@@ -10,8 +10,8 @@
 import fs from "fs";
 import path from "path";
 import mkdirp from "mkdirp";
-import net from "../../../../machines/modules/v2/netlib.js";
 import str from "../../../../machines/modules/v2/strlib.js";
+import netlib from "../../../modules/netlib.js";
 import pcjslib from "../../../modules/pcjslib.js";
 
 /**
@@ -126,14 +126,14 @@ TextOut.prototype.loadFile = function(sFile, done)
 {
     var obj = this;
     var options = {encoding: "utf8"};
-    var sFilePath = net.isRemote(sFile)? sFile : path.join(this.sServerRoot, sFile);
+    var sFilePath = netlib.isRemote(sFile)? sFile : path.join(this.sServerRoot, sFile);
 
     if (!this.sFilePath) this.sFilePath = sFilePath;
 
     if (this.fDebug) console.log("loadFile(" + sFilePath + ")");
 
-    if (net.isRemote(sFilePath)) {
-        net.getFile(sFilePath, options.encoding, function(err, status, buf) {
+    if (netlib.isRemote(sFilePath)) {
+        netlib.getFile(sFilePath, options.encoding, function(err, status, buf) {
             if (err) {
                 TextOut.logError(err);
                 done(err);

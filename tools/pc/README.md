@@ -293,7 +293,7 @@ Another utility that `pc.js` provides is `QUIT.COM`, which makes it easy to shut
 
 ### Playground
 
-This space is a work-in-progress, to provide a web-based demonstration of what `pc.js` can do from the command-line.  It's not functional yet, so use a *real* command-line to give to `pc.js` a try.  Thanks.
+This space is a work-in-progress and provides a web-based demonstration of how `pc.js` works.  However, because it runs in a browser, it has limited access to files, and there is currently no provision for saving your work, so the best way to use `pc.js` will always be from a *real* command-line.
 
 {% include web/textarea.html id="terminal" style="font-size: medium" %}
 
@@ -304,3 +304,5 @@ For more discussion and examples of how to use `pc.js`, check out these other bl
   - [Running DOS Software from the Command-Line](https://www.pcjs.org/blog/2023/07/15/)
   - [Building DOS-Compatible Hard Disks](https://www.pcjs.org/blog/2023/08/10)
   - [Wrapping Up Support for FAT](https://www.pcjs.org/blog/2023/09/05/)
+
+Enjoy!

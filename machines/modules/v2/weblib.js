@@ -7,7 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MESSAGE from "../v2/message.js";
+import PCFS from "./pcfs.js";
+import MESSAGE from "./message.js";
 import Component from "./component.js";
 import ReportAPI from "./reportapi.js";
 import { DEBUG, SITEURL, globals } from "./defines.js";
@@ -151,6 +152,11 @@ export default class WebLib {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
+        /*
+         * globals.node.readFileSync exists only when another module has import filelib.js, which means we're
+         * running under Node.js, and we can use Node's file system to read local files.  Note that filelib.js only
+         * offers readFileSync() at the moment.
+         */
         if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
             Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "reading: %s\n", sURL);
             try {
@@ -167,6 +173,19 @@ export default class WebLib {
                 nErrorCode = err['errno'];
             }
             if (resource !== undefined) {
+                if (done) done(sURL, resource, nErrorCode);
+                return [resource, nErrorCode];
+            }
+        }
+
+        /*
+         * If PCjs is simulating a command-line environment inside a browser, PCFS (the PCjs File System) can be used
+         * to simulate a local file system.  So we check for that next.
+         */
+        if (PCFS.isPCFS(sURL)) {
+            let item = PCFS.getItem(sURL);
+            if (item) {
+                resource = item.data;
                 if (done) done(sURL, resource, nErrorCode);
                 return [resource, nErrorCode];
             }
