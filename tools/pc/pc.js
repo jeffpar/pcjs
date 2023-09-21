@@ -901,7 +901,7 @@ export default class PC extends PCjsLib {
     getDriveInfo()
     {
         let text = "\n";
-        if (this.machine.id) {
+        if (this.fDebug && this.machine.id) {
             text += sprintf("%s machine ID %s\n", this.machine.type, this.machine.id);
         }
         if (this.driveManifest || this.driveInfo.driveType >= 0) {
