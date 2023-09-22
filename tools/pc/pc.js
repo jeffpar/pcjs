@@ -142,11 +142,13 @@ export default class PC extends PCjsLib {
      *
      * @this {PC}
      * @param {string} [idTerminal]
+     * @param {string} [sCommands]
      */
-    constructor(idTerminal)
+    constructor(idTerminal, sCommands = "")
     {
         super();
         let pc = this;
+        this.commands = sCommands;
         this.machine = this.newMachine();
         this.onTerminalData = null;
         this.terminalEncoding = "";
@@ -2488,7 +2490,7 @@ export default class PC extends PCjsLib {
      * @param {boolean} [reload]
      * @returns {string} (result of command)
      */
-    doCommand(s, reload = false)
+    async doCommand(s, reload = false)
     {
         let aTokens = s.split(' ');
         let cmd = aTokens[0].toLowerCase();
@@ -2550,10 +2552,7 @@ export default class PC extends PCjsLib {
                     break;
                 }
             }
-            this.buildDisk(this.localDir, arg, "", true)
-            .then(function(result) {
-                if (result) printf("%s\n", result);
-            });
+            result = await this.buildDisk(this.localDir, arg, "", true);
             break;
         case "d":
         case "dump":
@@ -2564,9 +2563,9 @@ export default class PC extends PCjsLib {
                 this.saveDisk(sDir);
                 this.machine = this.newMachine();
             }
-            curDir = node.process.cwd();
             try {
                 let app, argv, appConfig, child;
+                curDir = node.process.cwd();
                 node.process.chdir(this.mapDir(this.machineDir));
                 argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
                 appConfig = configJSON['apps']?.[app];
@@ -2591,8 +2590,7 @@ export default class PC extends PCjsLib {
             }
             node.process.chdir(curDir);
             if (reload) {
-                result = this.reloadMachine();
-                if (typeof result != "string") result = "";
+                result = await this.reloadMachine();
             }
             break;
         case "fetch":
@@ -2601,7 +2599,7 @@ export default class PC extends PCjsLib {
                 diskLib.readDiskAsync(arg)
                 .then((di) => {
                     if (!di) throw new Error("invalid disk image: " + arg);
-                    diskLib.extractFiles(di, {}, "", aTokens[1] || "", false);
+                    diskLib.extractFiles(di, {quiet: true}, "", aTokens[1] || "", false);
                 })
                 .catch((err) => {
                     printf("%s\n", err.message);
@@ -2676,7 +2674,7 @@ export default class PC extends PCjsLib {
                 let sFile = this.checkMachine(arg);
                 if (sFile) {
                     this.machine = this.newMachine();
-                    printf("loading machine: %s\n", sFile);
+                    printf("machine loading: %s\n", sFile);
                     result = this.loadMachine(sFile);
                     if (!result) {
                         this.localMachine = sFile;
@@ -2805,247 +2803,6 @@ export default class PC extends PCjsLib {
     }
 
     /**
-     * processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, fAutoBuild)
-     *
-     * Arguments that either the shell consumes (like *.*) or that we consume (like --help) can be
-     * problematic if those are actually arguments you want to pass along with a command to buildDisk().
-     *
-     * So in those cases, you should simply put quotes around the entire command (eg, pc.js "dir *.* /p").
-     *
-     * @this {PC}
-     * @param {Array.<string>} argv
-     * @param {string} [sMachine]
-     * @param {string} [sDisk]
-     * @param {string} [sDirectory]
-     * @param {string} [sLocalDisk]
-     * @param {boolean} [fAutoBuild]
-     */
-    async processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, fAutoBuild = !this.terminal)
-    {
-        let loading = false;
-        let error = "", warning = "";
-
-        let splice = false;
-        if (!sMachine) {
-            sMachine = argv[1];                     // for convenience, we also allow a bare machine name
-            if (sMachine) splice = true;
-        }
-        if (sMachine) {
-            this.localMachine = this.checkMachine(sMachine);
-            if (this.localMachine) {
-                if (splice) argv.splice(1, 1);
-            } else if (sMachine.endsWith(".json") || !splice) {
-                error = "unknown machine: " + sMachine;
-            }
-        }
-
-        let verifyDir = function(s) {
-            if (s[0] == '~') {
-                s = node.path.join(node.process.env.HOME, s.slice(1));
-            } else {
-                s = node.path.resolve(s);
-            }
-            return diskLib.existsDir(s, false)? s : "";
-        };
-
-        if (sDisk) {
-            if (sDisk.toLowerCase() == "none") {    // --disk=none disables any prebuilt disk
-                this.localDisk = "";
-                this.savedState = "";
-            } else {
-                if (sDisk.indexOf(node.path.sep) < 0 && !diskLib.existsFile(sDisk, false)) {
-                    sDisk = node.path.join(pcjsDir, "disks", sDisk);
-                }
-                this.localDisk = sDisk;
-                let di = await diskLib.readDiskAsync(this.localDisk);
-                if (di) {
-                    this.updateDriveInfo(di);
-                    this.driveOverride = true;
-                    this.kbTarget = 0;
-                } else {
-                    error = "invalid disk";
-                }
-            }
-            this.localDir = "";
-        }
-        else if (globals.browser) {
-            this.localDisk = diskLib.getLocalPath(this.localDisk);
-        } else {
-            this.localDisk = node.path.join(pcjsDir, this.localDisk);
-        }
-
-        if (sDirectory == "none") {
-            this.localDir = "";                     // --dir=none is synonymous with --disk=none
-            this.localDisk = "";
-            this.savedState = "";
-        }
-
-        if (this.localDir) {                        // --dir is allowed only if --disk has not been used
-            let sDir = "";
-            if (!error) {
-                splice = false;
-                sDir = sDirectory;
-                if (!sDir) {
-                    sDir = argv[1];                 // for convenience, we also allow a bare directory name
-                    if (sDir) splice = true;
-                }
-                if (sDir) {
-                    let newDir = verifyDir(sDir);
-                    if (newDir) {
-                        this.localDir = newDir;
-                        if (splice) argv.splice(1, 1);
-                    } else {
-                        if (!splice) error = "invalid directory: " + sDir;
-                        sDir = "";
-                    }
-                }
-            }
-            if (!sDir) {
-                this.localDir = verifyDir(this.localDir);
-            }
-        }
-
-        if (!error && fAutoBuild) {                 // last but not least, check for a DOS command or program name
-            if (this.machineType == "pcx86" && (argv[1] || this.localDir)) {
-                let args = argv.slice(1).join(' ');
-                let sCommand = this.checkCommand(this.localDir, args);
-                if (!sCommand && args) {
-                    error = "command not found: " + args;
-                } else if (!this.localDir) {
-                    warning = "unable to execute command '" + sCommand + "' with prebuilt disk";
-                } else {
-                    error = await this.buildDisk(this.localDir, sCommand, sLocalDisk);
-                    if (!error && sLocalDisk) {
-                        if (this.fTest) printf(this.getDriveInfo());
-                        this.exit();
-                    }
-                }
-            }
-            if (!error) {
-                if (!this.localMachine) {
-                    this.localMachine = this.checkMachine(this.savedMachine);
-                }
-                error = this.loadMachine(this.localMachine);
-                if (!error) {
-                    loading = true;
-                } else {
-                    this.localMachine = "";
-                }
-            }
-        }
-
-        if (warning) {
-            printf("warning: %s\n", warning);
-        }
-
-        if (error) {
-            printf("error: %s\n", error);
-            this.exit(1);
-        }
-
-        if (!loading) this.setDebugMode(DbgLib.EVENTS.READY);
-    }
-
-    /**
-     * readInput(stdin, stdout)
-     *
-     * @this {PC}
-     * @param {Object} stdin
-     * @param {Object} stdout
-     */
-    readInput(stdin, stdout)
-    {
-        let pc = this;
-
-        stdin.resume();
-        stdin.setEncoding("utf8");
-        stdin.setRawMode(true);
-
-        stdin.on("data", function(data) {
-            let machine = pc.machine;
-            let code = data.charCodeAt(0);
-            if (MAXDEBUG) {
-                printf("key(s): %j\n", data);
-            }
-            if (code == 0x04 && !pc.debugMode) {            // check for CTRL-D when NOT in debug mode
-                if (machine.cpu) machine.cpu.stopCPU();
-                pc.setDebugMode(DbgLib.EVENTS.READY);
-                return;
-            }
-            if (code == 0x03 && pc.debugMode) {             // check for CTRL-C when in debug mode
-                pc.exit(3);
-                return;
-            }
-            data = PC.functionKeys[data] || data;
-            if (!pc.debugMode) {
-                data = data.replace(/\x7f/g, "\b");         // convert DEL to BS
-                if (machine.kbd) {
-                    if (MAXDEBUG) {
-                        printf("injecting key(s): %s\n", data);
-                    }
-                    machine.kbd.injectKeys.call(machine.kbd, data, 0);
-                } else {
-                    pc.sendSerial(code);
-                }
-                return;
-            }
-            if (code == 0x08 || code == 0x7f) {             // implement BS/DEL ourselves (since we're in "raw" mode)
-                if (pc.command.length) {                    // (Windows generates BS, macOS generates DEL)
-                    pc.command = pc.command.slice(0, -1);
-                    printf("\b \b");                        // by converting it to BS + SPACE + BS
-                }
-                return;
-            }
-            if (code == 0x01 && pc.commandPrev) {
-                data = pc.commandPrev + '\r';               // implement CTRL-A as a command repeat action
-            }
-            else if (data == "$up" && !pc.command.length) {
-                data = pc.commandPrev;                      // implement UP ARROW ourselves (since we're in "raw" mode)
-            }
-            else if (code < 0x20 && code != 0x0d || data.length > 1) {
-                return;                                     // anything else (including any ESC codes) is ignored
-            }
-            printf("%s", data);
-            pc.command += data;
-            do {
-                let i = pc.command.indexOf("\r");
-                if (i < 0) break;
-                let s = pc.command.slice(0, i);
-                printf("\n");
-                pc.command = pc.command.slice(i+1);
-                try {
-                    let result = pc.doCommand(s);
-                    printf(result);
-                } catch(err) {
-                    printf("exception: %s\n", err.message);
-                }
-                if (machine.cpu && machine.cpu.isRunning() || this.shutdown) {
-                    break;
-                }
-                printf("%s> ", pc.prompt);
-            } while (pc.command.length);
-        });
-    }
-
-    /**
-     * exit(code)
-     *
-     * Code 1 is used to abort without saving the disk, and code 3 is when terminating from debug mode; default code is 0.
-     *
-     * @this {PC}
-     * @param {number} code (exit code)
-     */
-    exit(code = 0)
-    {
-        this.shutdown = true;
-        printf("shutting down...\n");
-        if (code != 1) this.saveDisk(this.localDir);
-        node.process.stdin.setRawMode(false);
-        if (this.fTest) printf("\n");
-        node.process.exit(code);
-    }
-
-    /**
      * checkArgs(argv, removeArg, removeFlag)
      *
      * @this {PC}
@@ -3159,6 +2916,272 @@ export default class PC extends PCjsLib {
     }
 
     /**
+     * processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, sCommands)
+     *
+     * Arguments that either the shell consumes (like *.*) or that we consume (like --help) can be
+     * problematic if those are actually arguments you want to pass along with a command to buildDisk().
+     *
+     * So in those cases, you should simply put quotes around the entire command (eg, pc.js "dir *.* /p").
+     *
+     * @this {PC}
+     * @param {Array.<string>} argv
+     * @param {string} [sMachine]
+     * @param {string} [sDisk]
+     * @param {string} [sDirectory]
+     * @param {string} [sLocalDisk]
+     * @param {string} [sCommands]
+     */
+    async processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, sCommands)
+    {
+        let loading = false;
+        let error = "", warning = "";
+
+        let splice = false;
+        if (!sMachine) {
+            sMachine = argv[1];                     // for convenience, we also allow a bare machine name
+            if (sMachine) splice = true;
+        }
+        if (sMachine) {
+            this.localMachine = this.checkMachine(sMachine);
+            if (this.localMachine) {
+                if (splice) argv.splice(1, 1);
+            } else if (sMachine.endsWith(".json") || !splice) {
+                error = "unknown machine: " + sMachine;
+            }
+        }
+
+        let verifyDir = function(s) {
+            if (s[0] == '~') {
+                s = node.path.join(node.process.env.HOME, s.slice(1));
+            } else {
+                s = node.path.resolve(s);
+            }
+            return diskLib.existsDir(s, false)? s : "";
+        };
+
+        if (sDisk) {
+            if (sDisk.toLowerCase() == "none") {    // --disk=none disables any prebuilt disk
+                this.localDisk = "";
+                this.savedState = "";
+            } else {
+                if (sDisk.indexOf(node.path.sep) < 0 && !diskLib.existsFile(sDisk, false)) {
+                    sDisk = node.path.join(pcjsDir, "disks", sDisk);
+                }
+                this.localDisk = sDisk;
+                let di = await diskLib.readDiskAsync(this.localDisk);
+                if (di) {
+                    this.updateDriveInfo(di);
+                    this.driveOverride = true;
+                    this.kbTarget = 0;
+                } else {
+                    error = "invalid disk";
+                }
+            }
+            this.localDir = "";
+        }
+        else if (globals.browser) {
+            this.localDisk = diskLib.getLocalPath(this.localDisk);
+        } else {
+            this.localDisk = node.path.join(pcjsDir, this.localDisk);
+        }
+
+        if (sDirectory == "none") {
+            this.localDir = "";                     // --dir=none is synonymous with --disk=none
+            this.localDisk = "";
+            this.savedState = "";
+        }
+
+        if (this.localDir) {                        // --dir is allowed only if --disk has not been used
+            let sDir = "";
+            if (!error) {
+                splice = false;
+                sDir = sDirectory;
+                if (!sDir) {
+                    sDir = argv[1];                 // for convenience, we also allow a bare directory name
+                    if (sDir) splice = true;
+                }
+                if (sDir) {
+                    let newDir = verifyDir(sDir);
+                    if (newDir) {
+                        this.localDir = newDir;
+                        if (splice) argv.splice(1, 1);
+                    } else {
+                        if (!splice) error = "invalid directory: " + sDir;
+                        sDir = "";
+                    }
+                }
+            }
+            if (!sDir) {
+                this.localDir = verifyDir(this.localDir);
+            }
+        }
+
+        if (!error && !sCommands) {                 // last but not least, check for a DOS command or program name
+            if (this.machineType == "pcx86" && (argv[1] || this.localDir)) {
+                let args = argv.slice(1).join(' ');
+                let sCommand = this.checkCommand(this.localDir, args);
+                if (!sCommand && args) {
+                    error = "command not found: " + args;
+                } else if (!this.localDir) {
+                    warning = "unable to execute command '" + sCommand + "' with prebuilt disk";
+                } else {
+                    error = await this.buildDisk(this.localDir, sCommand, sLocalDisk);
+                    if (!error && sLocalDisk) {
+                        if (this.fTest) printf(this.getDriveInfo());
+                        this.exit();
+                    }
+                }
+            }
+            if (!error) {
+                if (!this.localMachine) {
+                    this.localMachine = this.checkMachine(this.savedMachine);
+                }
+                error = this.loadMachine(this.localMachine);
+                if (!error) {
+                    loading = true;
+                } else {
+                    this.localMachine = "";
+                }
+            }
+        }
+
+        if (warning) {
+            printf("warning: %s\n", warning);
+        }
+
+        if (error) {
+            printf("error: %s\n", error);
+            this.exit(1);
+        }
+
+        if (!loading) {
+            this.setDebugMode(DbgLib.EVENTS.READY);
+            this.processCommands(sCommands);
+        }
+    }
+
+    /**
+     * processCommands(sCommands)
+     *
+     * @param {string} sCommands
+     */
+    async processCommands(sCommands)
+    {
+        let aCommands = sCommands.split(';');
+        for (let i = 0; i < aCommands.length; i++) {
+            let s = aCommands[i].trim();
+            if (s) {
+                printf("%s\n", s);
+                let result = await this.doCommand(s);
+                if (result) {
+                    printf(result);
+                }
+                printf("%s> ", this.prompt);
+            }
+        }
+    }
+
+    /**
+     * readInput(stdin, stdout)
+     *
+     * @this {PC}
+     * @param {Object} stdin
+     * @param {Object} stdout
+     */
+    readInput(stdin, stdout)
+    {
+        let pc = this;
+
+        stdin.resume();
+        stdin.setEncoding("utf8");
+        stdin.setRawMode(true);
+
+        stdin.on("data", function(data) {
+            let machine = pc.machine;
+            let code = data.charCodeAt(0);
+            if (MAXDEBUG) {
+                printf("key(s): %j\n", data);
+            }
+            if (code == 0x04 && !pc.debugMode) {            // check for CTRL-D when NOT in debug mode
+                if (machine.cpu) machine.cpu.stopCPU();
+                pc.setDebugMode(DbgLib.EVENTS.READY);
+                return;
+            }
+            if (code == 0x03 && pc.debugMode) {             // check for CTRL-C when in debug mode
+                pc.exit(3);
+                return;
+            }
+            data = PC.functionKeys[data] || data;
+            if (!pc.debugMode) {
+                data = data.replace(/\x7f/g, "\b");         // convert DEL to BS
+                if (machine.kbd) {
+                    if (MAXDEBUG) {
+                        printf("injecting key(s): %s\n", data);
+                    }
+                    machine.kbd.injectKeys.call(machine.kbd, data, 0);
+                } else {
+                    pc.sendSerial(code);
+                }
+                return;
+            }
+            if (code == 0x08 || code == 0x7f) {             // implement BS/DEL ourselves (since we're in "raw" mode)
+                if (pc.command.length) {                    // (Windows generates BS, macOS generates DEL)
+                    pc.command = pc.command.slice(0, -1);
+                    printf("\b \b");                        // by converting it to BS + SPACE + BS
+                }
+                return;
+            }
+            if (code == 0x01 && pc.commandPrev) {
+                data = pc.commandPrev + '\r';               // implement CTRL-A as a command repeat action
+            }
+            else if (data == "$up" && !pc.command.length) {
+                data = pc.commandPrev;                      // implement UP ARROW ourselves (since we're in "raw" mode)
+            }
+            else if (code < 0x20 && code != 0x0d || data.length > 1) {
+                return;                                     // anything else (including any ESC codes) is ignored
+            }
+            printf("%s", data);
+            pc.command += data;
+            do {
+                let i = pc.command.indexOf("\r");
+                if (i < 0) break;
+                let s = pc.command.slice(0, i);
+                printf("\n");
+                pc.command = pc.command.slice(i+1);
+                try {
+                    let result = pc.doCommand(s).then((result) => {
+                        printf(result);
+                        if (this.shutdown) return;
+                        if (!machine.cpu || !machine.cpu.isRunning()) {
+                            printf("%s> ", pc.prompt);
+                        }
+                    });
+                } catch(err) {
+                    printf("exception: %s\n", err.message);
+                }
+            } while (pc.command.length);
+        });
+    }
+
+    /**
+     * exit(code)
+     *
+     * Code 1 is used to abort without saving the disk, and code 3 is when terminating from debug mode; default code is 0.
+     *
+     * @this {PC}
+     * @param {number} code (exit code)
+     */
+    exit(code = 0)
+    {
+        this.shutdown = true;
+        printf("shutting down...\n");
+        if (code != 1) this.saveDisk(this.localDir);
+        node.process.stdin.setRawMode(false);
+        if (this.fTest) printf("\n");
+        node.process.exit(code);
+    }
+
+    /**
      * main(argc, argv)
      *
      * @this {PC}
@@ -3228,8 +3251,8 @@ export default class PC extends PCjsLib {
             return;
         }
 
-        let autoBuild = removeFlag('auto');
-        await this.processArgs(argv, removeArg('select'), removeArg('disk'), removeArg('dir'), removeArg('save'), autoBuild).catch((err) => {
+        let commands = removeArg('commands') || this.commands;
+        await this.processArgs(argv, removeArg('select'), removeArg('disk'), removeArg('dir'), removeArg('save'), commands).catch((err) => {
             printf("exception: %s\n", err.message);
         });
 

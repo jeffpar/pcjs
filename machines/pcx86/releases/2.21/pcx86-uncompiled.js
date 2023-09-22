@@ -1851,7 +1851,7 @@ class PCFS {
      * @param {string} path
      * @param {boolean} [fCreate] (true to create, false to remove, undefined if don't care)
      * @param {boolean} [fDirectory]
-     * @returns {PCFSItem|null}
+     * @returns {PCFSItem|Array|null}
      */
     static getItem(path, fCreate, fDirectory)
     {
@@ -1862,6 +1862,10 @@ class PCFS {
             let i, j;
             for (i = 0; i < nodes.length; i++) {
                 let name = nodes[i], match = false;
+                if (!name) {
+                    item = dir;
+                    break;
+                }
                 for (j = 0; j < dir.length; j++) {
                     let next = dir[j];
                     if (next.name == name) {
@@ -1902,14 +1906,16 @@ class PCFS {
     /**
      * setItem(item, data)
      *
-     * @param {PCFSItem} item
+     * @param {PCFSItem|Array} item
      * @param {*} data
      */
     static setItem(item, data)
     {
-        item.data = data;
-        item.size = data.length;
-        item.date = new Date();
+        if (!Array.isArray(item)) {
+            item.data = data;
+            item.size = data.length;
+            item.date = new Date();
+        }
     }
 }
 

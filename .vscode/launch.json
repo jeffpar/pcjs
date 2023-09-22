@@ -535,7 +535,7 @@
       "name": "PC.js Playground",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/tools/pc/?target=512K&drive=pcjs#playground",
+      "url": "http://localhost:4000/tools/pc/?target=512K&drive=pcjs&commands=fetch%20https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json#playground",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
