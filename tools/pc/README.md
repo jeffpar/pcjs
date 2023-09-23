@@ -5,7 +5,7 @@ permalink: /tools/pc/
 redirect_from: /machines/pcx86/modules/bin/
 modules_init:
   - import PC from "/tools/pc/pc.js";
-  - new PC("terminal", "help");
+  - new PC("terminal", "fetch https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json msdos;build msdos chkdsk;start");
 ---
 
 This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console, along with an automatically generated hard disk containing all the files in your current (or other specified) directory.

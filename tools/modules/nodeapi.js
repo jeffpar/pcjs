@@ -7,6 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import PCFS from "../../machines/modules/v2/pcfs.js";
 import WebIO from "../../machines/modules/v3/webio.js";
 import { globals } from "../../machines/modules/v3/defines.js";
@@ -32,7 +33,9 @@ let node = {
             return sFile;
         },
         readFileSync: function(sFile, encoding = "utf8") {
-            return node.fs.readFileSync(sFile, encoding);
+            let data = node.fs.readFileSync(sFile, encoding);
+            if (!encoding) data = new DataBuffer(data);
+            return data;
         },
         setRootDir(sRoot, sHome, fLocalDisks) {
             node.rootDir = sRoot;
@@ -56,8 +59,8 @@ let node = {
         },
         readdirSync: function(sDir) {
             let item = PCFS.getItem(sDir);
-            if (item && Array.isArray(item)) {
-                return item.map(function(item) {
+            if (item && item.files) {
+                return item.files.map(function(item) {
                     return item.name;
                 });
             }
@@ -67,7 +70,7 @@ let node = {
             if (PCFS.isPCFS(sFile)) {
                 let item = PCFS.getItem(sFile);
                 if (item) {
-                    if (!Array.isArray(item)) {
+                    if (!item.files) {
                         let data = item.data;
                         if (encoding) {
                             // If there's an encoding, we assume it's "utf8", which is the default for TextDecoder()
@@ -96,9 +99,10 @@ let node = {
             if (PCFS.isPCFS(sFile)) {
                 let item = PCFS.getItem(sFile);
                 return {
+                    size: item.size,
                     mtime: item.date,
                     isDirectory: function() {
-                        return Array.isArray(item);
+                        return !!(item && item.files);
                     }
                 };
             } else {
