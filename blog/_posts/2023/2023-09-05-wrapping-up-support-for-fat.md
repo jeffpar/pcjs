@@ -72,15 +72,14 @@ The IBM PC XT, IBM PC AT, and COMPAQ DeskPro 386 are three examples of machines 
     % pc.js ibm5170 --drivetype=2 
     [Press CTRL-D to enter command mode]
 
-    C:\>load/i
+    C:\>load info
 
-     pcx86 machine ID ibm5170
-     AT drive type 2, CHS 615:4:17, 20.4Mb
-     16-bit FAT, 2048-byte clusters, 10398 clusters
-     82 FAT sectors (x2), 64 root sectors (1024 entries)
-     41752 total sectors, 41523 data sectors, 21295104 data bytes
+    AT drive type 2, CHS 615:4:17, 20.4Mb
+    16-bit FAT, 2048-byte clusters, 10398 clusters
+    82 FAT sectors (x2), 64 root sectors (1024 entries)
+    41752 total sectors, 41523 data sectors, 21295104 data bytes
 
-NOTE: `load/i` is a variation of the `load` command that displays information about the built-in disk image.  I had considered making a separate `info` utility to do that, since the purpose of the `load` utility is loading diskette images into drives A: and B:, but I was lazy.
+NOTE: `load info` is a variation of the `load` command that displays information about the built-in disk image.  I had considered making a separate `info` utility to do that, since the purpose of the `load` utility is loading diskette images into drives A: and B:, but I was lazy.
 
 If you don't remember your favorite PC AT drive type, you can just give `pc.js` a target size and let it search the machine's drive table for the closest match:
 
@@ -88,22 +87,20 @@ If you don't remember your favorite PC AT drive type, you can just give `pc.js` 
     warning: 62 FAT sectors allocated, but only 61 are required
     [Press CTRL-D to enter command mode]
 
-    C:\>load/i
+    C:\>load info
 
-     pcx86 machine ID ibm5170
-     AT drive type 3, CHS 615:6:17, 30.6Mb
-     16-bit FAT, 2048-byte clusters, 15608 clusters
-     124 FAT sectors (x2), 64 root sectors (1024 entries)
-     62628 total sectors, 62315 data sectors, 31965184 data bytes
+    AT drive type 3, CHS 615:6:17, 30.6Mb
+    16-bit FAT, 2048-byte clusters, 15608 clusters
+    124 FAT sectors (x2), 64 root sectors (1024 entries)
+    62628 total sectors, 62315 data sectors, 31965184 data bytes
 
 Note that the drive tables of AT-class machines usually didn't define any drives smaller than 10Mb, and the smallest drive type the PC XT defined was 5Mb, so using `--target` with smaller sizes won't give you smaller drives on those machines.  To do that, you must bypass the machine's drive table by adding `--drive=pcjs` to the command-line.  For example:
 
-    % pc.js load/i --sys=pcdos --ver=3.0 --drive=pcjs --target=1M
+    % pc.js load info --sys=pcdos --ver=3.0 --drive=pcjs --target=1M
     [Press CTRL-D to enter command mode]
 
     C>ECHO OFF
 
-    pcx86 machine ID compaq386
     PCJS drive type 0, CHS 61:2:17, 1.0Mb
     12-bit FAT, 1024-byte clusters, 1012 clusters
     3 FAT sectors (x2), 7 root sectors (112 entries)
@@ -118,13 +115,12 @@ For example:
     % pc.js ibm5170 --drivetype=615:5:17
     [Press CTRL-D to enter command mode]
     
-    C:\>load/i
+    C:\>load info
     
-     pcx86 machine ID ibm5170
-     PCJS drive type 0, CHS 615:5:17, 25.5Mb
-     16-bit FAT, 2048-byte clusters, 13003 clusters
-     102 FAT sectors (x2), 64 root sectors (1024 entries)
-     52190 total sectors, 51921 data sectors, 26630144 data bytes
+    PCJS drive type 0, CHS 615:5:17, 25.5Mb
+    16-bit FAT, 2048-byte clusters, 13003 clusters
+    102 FAT sectors (x2), 64 root sectors (1024 entries)
+    52190 total sectors, 51921 data sectors, 26630144 data bytes
 
     C:\>chkdsk
     Volume TEST        created Aug 30, 2023 11:10a
@@ -333,15 +329,14 @@ To test this, I ran `pc.js` in a directory with a small number of files, request
     warning: 16-bit FAT replaced with 12-bit FAT
     [Press CTRL-D to enter command mode]
 
-    C:\>load/i
+    C:\>load info
 
-     pcx86 machine ID ibm5170
-     AT drive type 1, CHS 306:4:17, 10.2Mb
-     12-bit FAT, 4096-byte clusters, 2586 clusters
-     8 FAT sectors (x2), 32 root sectors (512 entries)
-     20740 total sectors, 20691 data sectors, 10592256 data bytes
+    AT drive type 1, CHS 306:4:17, 10.2Mb
+    12-bit FAT, 4096-byte clusters, 2586 clusters
+    8 FAT sectors (x2), 32 root sectors (512 entries)
+    20740 total sectors, 20691 data sectors, 10592256 data bytes
 
-You can see we successfully booted to a `C:\>` prompt, but `load/i` told us that the disk was built as FAT12 instead of FAT16.  This was because `pc.js` tries to stick to historical defaults, and 10Mb disks were "historically" formatted as FAT12.
+You can see we successfully booted to a `C:\>` prompt, but `load info` told us that the disk was built as FAT12 instead of FAT16.  This was because `pc.js` tries to stick to historical defaults, and 10Mb disks were "historically" formatted as FAT12.
 
 You may recall that the [FAT: General Overview of On-Disk Format](/documents/papers/microsoft/MS_FAT_OVERVIEW_103-2000-12-06.pdf) said:
 
@@ -359,13 +354,11 @@ Anyway, we can force `pc.js` to build a FAT16 disk.  We just have to *also* spec
     SS=9E98 DS=0070 ES=9C72 PS=0246 V0 D0 I1 T0 S0 Z1 A0 P1 C0 
     &017D:4159 0000             ADD      [BX+SI],AL
     [Type help for list of commands, CTRL-C to terminate]
-    >> load/i
-
-     pcx86 machine ID ibm5170
-     AT drive type 1, CHS 306:4:17, 10.2Mb
-     16-bit FAT, 2048-byte clusters, 5164 clusters
-     21 FAT sectors (x2), 32 root sectors (512 entries)
-     20740 total sectors, 20665 data sectors, 10575872 data bytes
+    >> load info
+    AT drive type 1, CHS 306:4:17, 10.2Mb
+    16-bit FAT, 2048-byte clusters, 5164 clusters
+    21 FAT sectors (x2), 32 root sectors (512 entries)
+    20740 total sectors, 20665 data sectors, 10575872 data bytes
 
 And the machine "crashes" (well, it executes a suspicious instruction at 17D:4159, so the PCjs debugger stops it).
 
