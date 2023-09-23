@@ -7,6 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import PCFS from "../../machines/modules/v2/pcfs.js";
 import WebIO from "../../machines/modules/v3/webio.js";
 import { globals } from "../../machines/modules/v3/defines.js";
@@ -32,7 +33,9 @@ let node = {
             return sFile;
         },
         readFileSync: function(sFile, encoding = "utf8") {
-            console.log("FileLib.readFileSync(" + sFile + "): unimplemented");
+            let data = node.fs.readFileSync(sFile, encoding);
+            if (!encoding) data = new DataBuffer(data);
+            return data;
         },
         setRootDir(sRoot, sHome, fLocalDisks) {
             node.rootDir = sRoot;
@@ -40,12 +43,14 @@ let node = {
             globals.window['LOCALDISKS'] = fLocalDisks;
         }
     },
+    child_process: {
+    },
     fs: {
         chmodSync: function(sFile, mode) {
             console.log("fs.chmodSync(" + sFile + "): unimplemented");
         },
         existsSync: function(sFile) {
-            return PCFS.getItem(sFile) || sFile.indexOf(node.rootDir) == 0;
+            return !!PCFS.getItem(sFile) || sFile.indexOf(node.rootDir) == 0;
         },
         mkdirSync: function(sDir, options) {
             if (PCFS.isPCFS(sDir)) {
@@ -53,20 +58,51 @@ let node = {
             }
         },
         readdirSync: function(sDir) {
+            let item = PCFS.getItem(sDir);
+            if (item && item.files) {
+                return item.files.map(function(item) {
+                    return item.name;
+                });
+            }
             return [];
         },
-        readFile: function(sFile, encoding) {
+        readFile: function(sFile, encoding, callback) {
+            if (PCFS.isPCFS(sFile)) {
+                let item = PCFS.getItem(sFile);
+                if (item) {
+                    if (!item.files) {
+                        let data = item.data;
+                        if (encoding) {
+                            // If there's an encoding, we assume it's "utf8", which is the default for TextDecoder()
+                            data = new TextDecoder().decode(data);
+                        }
+                        callback(null, data);
+                    } else {
+                        callback(new Error(sFile + " is a directory"), null);
+                    }
+                } else {
+                    callback(new Error(sFile + " does not exist"), null);
+                }
+                return;
+            }
             console.log("fs.readFile(" + sFile + "): unimplemented");
         },
         readFileSync: function(sFile, encoding) {
-            console.log("fs.readFileSync(" + sFile +"): unimplemented");
+            let data;
+            node.fs.readFile(sFile, encoding, function(err, result) {
+                if (err) throw err;
+                data = result;
+            });
+            return data;
         },
         statSync: function(sFile) {
             if (PCFS.isPCFS(sFile)) {
                 let item = PCFS.getItem(sFile);
                 return {
+                    size: item.size,
+                    mtime: item.date,
                     isDirectory: function() {
-                        return item && item.files;
+                        return !!(item && item.files);
                     }
                 };
             } else {
@@ -79,6 +115,9 @@ let node = {
         },
         unlinkSync: function(sFile) {
             PCFS.getItem(sFile, false);
+        },
+        utimesSync: function(sFile, atime, mtime) {
+            console.log("fs.utimesSync(" + sFile + "): unimplemented");
         },
         writeFileSync: function(sFile, data) {
             let item = PCFS.getItem(sFile, true);
@@ -104,19 +143,46 @@ let node = {
         },
         dirname: function(s) {
             let i = s.lastIndexOf('/');
-            return i >= 0? s.slice(0, i) : s;
+            return i >= 0? s.slice(0, i) : "";
         },
         join: function(...args) {
-            let s = args.join("/").replace(/([^:]\/)\//g, "$1");
+            let s = "";
+            for (let arg of args) {
+                if (!arg || arg == '.') continue;
+                if (s) s += "/";
+                s += arg;
+            }
             do {
-                let t = s.replace(/\/[^\/.]+\/\.\./, "");
+                let t = s.replace(/\/[^\/.]+\/\.\./, "").replace(/([^:]\/)\//g, "$1");
                 if (t == s) break;
                 s = t;
             } while (true);
             return s;
         },
+        parse: function(s) {
+            //
+            // Example:
+            //      path.parse('/home/user/dir/file.txt');
+            //
+            // Returns:
+            // {
+            //      root: '/',
+            //      dir: '/home/user/dir',
+            //      base: 'file.txt',
+            //      ext: '.txt',
+            //      name: 'file'
+            // }
+            //
+            let ext = "";
+            let i = s.lastIndexOf('.');
+            if (i >= 0) {
+                ext = s.slice(i);
+            }
+
+            return { ext };
+        },
         resolve: function(s) {
-            return node.homeDir;
+            return node.FileLib.getLocalPath(s);
         }
     },
     process: globals.node.process || {
@@ -132,7 +198,12 @@ let node = {
             }
             return argv;
         }(WebIO.getHostOrigin() + WebIO.getHostPath(), WebIO.getURLParms()),
-        "exit": function() {
+        chdir: function() {
+        },
+        cwd: function() {
+            return "";
+        },
+        exit: function() {
         }
     }
 };

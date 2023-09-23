@@ -142,11 +142,13 @@ export default class PC extends PCjsLib {
      *
      * @this {PC}
      * @param {string} [idTerminal]
+     * @param {string} [sCommands]
      */
-    constructor(idTerminal)
+    constructor(idTerminal, sCommands = "")
     {
         super();
         let pc = this;
+        this.commands = sCommands;
         this.machine = this.newMachine();
         this.onTerminalData = null;
         this.terminalEncoding = "";
@@ -1455,17 +1457,19 @@ export default class PC extends PCjsLib {
                 if (sProgram.indexOf('/') < 0 && sProgram.indexOf('\\') < 0) {
                     sProgram = node.path.join(sDir, "**", sProgram);
                 }
-                let aFiles = node.glob.sync(sProgram);
-                if (!aFiles.length) {
-                    sCommand = "";
-                } else {
-                    let sArguments = sCommand.slice(aParts[0].length);
-                    sCommand = aFiles[0];
-                    if (sCommand.indexOf(sDir) == 0) {
-                        sCommand = sCommand.slice(sDir.length);
+                if (node.glob) {
+                    let aFiles = node.glob.sync(sProgram);
+                    if (!aFiles.length) {
+                        sCommand = "";
+                    } else {
+                        let sArguments = sCommand.slice(aParts[0].length);
+                        sCommand = aFiles[0];
+                        if (sCommand.indexOf(sDir) == 0) {
+                            sCommand = sCommand.slice(sDir.length);
+                        }
+                        sCommand = sCommand.replace(/\//g, '\\');
+                        sCommand = (sCommand[0] != '\\'? '\\' : '') + sCommand + sArguments;
                     }
-                    sCommand = sCommand.replace(/\//g, '\\');
-                    sCommand = (sCommand[0] != '\\'? '\\' : '') + sCommand + sArguments;
                 }
             }
         }
@@ -2488,7 +2492,7 @@ export default class PC extends PCjsLib {
      * @param {boolean} [reload]
      * @returns {string} (result of command)
      */
-    doCommand(s, reload = false)
+    async doCommand(s, reload = false)
     {
         let aTokens = s.split(' ');
         let cmd = aTokens[0].toLowerCase();
@@ -2537,23 +2541,22 @@ export default class PC extends PCjsLib {
                 result = "machine already started";
                 break;
             }
-            /*
-             * For convenience (and to avoid having another command, such as "drivetype"), you can specify a drive type
-             * here, instead of a command for buildDisk() to run.
-             */
-            if (!this.parseDriveType(args)) {
-                arg = "";
-            } else {
-                arg = this.checkCommand(this.localDir, args);
-                if (!arg && args) {
-                    result = "bad command or file name: " + args;
-                    break;
+            args = this.checkBuildArgs(args);
+            if (args) {
+                aTokens = args.split(' ');
+                arg = this.verifyDir(aTokens[0]);
+                if (arg) {
+                    this.localDir = arg;
+                    aTokens.splice(0, 1);
                 }
+                args = aTokens.join(' ').trim();
             }
-            this.buildDisk(this.localDir, arg, "", true)
-            .then(function(result) {
-                if (result) printf("%s\n", result);
-            });
+            arg = this.checkCommand(this.localDir, args);
+            if (!arg && args) {
+                result = "bad command or file name: " + args;
+                break;
+            }
+            result = await this.buildDisk(this.localDir, arg, "", true);
             break;
         case "d":
         case "dump":
@@ -2564,9 +2567,9 @@ export default class PC extends PCjsLib {
                 this.saveDisk(sDir);
                 this.machine = this.newMachine();
             }
-            curDir = node.process.cwd();
             try {
                 let app, argv, appConfig, child;
+                curDir = node.process.cwd();
                 node.process.chdir(this.mapDir(this.machineDir));
                 argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
                 appConfig = configJSON['apps']?.[app];
@@ -2591,21 +2594,20 @@ export default class PC extends PCjsLib {
             }
             node.process.chdir(curDir);
             if (reload) {
-                result = this.reloadMachine();
-                if (typeof result != "string") result = "";
+                result = await this.reloadMachine();
             }
             break;
         case "fetch":
             arg = aTokens[0];
             if (arg) {
-                diskLib.readDiskAsync(arg)
-                .then((di) => {
-                    if (!di) throw new Error("invalid disk image: " + arg);
-                    diskLib.extractFiles(di, {}, "", aTokens[1] || "", false);
-                })
-                .catch((err) => {
-                    printf("%s\n", err.message);
-                });
+                let di = await diskLib.readDiskAsync(arg);
+                if (di) {
+                    diskLib.extractFiles(di, {quiet: true}, "", aTokens[1] || "", false);
+                } else {
+                    result = "invalid disk image: " + arg;
+                }
+            } else {
+                result = "usage: fetch [disk image] [directory]";
             }
             break;
         case "load":
@@ -2668,6 +2670,8 @@ export default class PC extends PCjsLib {
                 result = "machine already started";
                 break;
             }
+            args = this.checkMachineArgs(args);
+            aTokens = args.split(' ');
             arg = aTokens[0];
             if (!arg && !this.machine.cpu) {
                 arg = this.localMachine || this.savedMachine;
@@ -2676,7 +2680,7 @@ export default class PC extends PCjsLib {
                 let sFile = this.checkMachine(arg);
                 if (sFile) {
                     this.machine = this.newMachine();
-                    printf("loading machine: %s\n", sFile);
+                    printf("machine loading: %s\n", sFile);
                     result = this.loadMachine(sFile);
                     if (!result) {
                         this.localMachine = sFile;
@@ -2805,7 +2809,189 @@ export default class PC extends PCjsLib {
     }
 
     /**
-     * processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, fAutoBuild)
+     * checkArgs(argv)
+     *
+     * @this {PC}
+     * @param {Object} argv
+     * @returns {boolean} (true if we should continue, false if we should exit)
+     */
+    async checkArgs(argv)
+    {
+        this.fDebug = PC.removeFlag(argv, 'debug', this.fDebug);
+        this.fVerbose = PC.removeFlag(argv, 'verbose', this.fVerbose);
+        this.fTest = PC.removeFlag(argv, 'test', this.fTest);
+
+        Device.setDebug(this.fDebug);
+        device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR + (this.fDebug && this.fVerbose? MESSAGE.DEBUG : 0) + (this.fVerbose? MESSAGE.INFO : 0), true);
+        this.messagesFilter = this.fDebug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
+
+        let arg0 = argv[0].split(' ');
+        if (!argv[1] || this.fDebug || this.fTest || globals.browser) {
+            let options = arg0.slice(1).join(' ');
+            printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
+        }
+        if (!machines) {
+            let db;
+            rootDir = node.path.join(node.path.dirname(arg0[0]), "../..");
+            pcjsDir = node.path.join(rootDir, "/tools/pc");
+            diskLib.setRootDir(rootDir, pcjsDir, PC.removeFlag(argv, 'local')? true : (PC.removeFlag(argv, 'remote')? false : null));
+            db = await diskLib.readFileAsync("/machines/machines.json");
+            machines = JSON.parse(db || "{}");
+            db = await diskLib.readFileAsync(node.path.join(pcjsDir, configFile));
+            configJSON = node.json5.parse(db || "{}");
+        }
+        let defaults = configJSON['defaults'] || {};
+        this.localDir = defaults['dir'] || this.localDir;
+        this.machineType = defaults['type'] || this.machineType;
+        this.savedMachine = defaults['machine'] || this.savedMachine;
+        this.savedState = defaults['state'] || this.savedState;
+        this.checkBuildArgs(argv);
+        this.checkMachineArgs(argv);
+        /*
+         * Now that we have most of the system defaults, we can process --help (since it displays some of them).
+         */
+        return !PC.removeFlag(argv, 'help');
+    }
+
+    /**
+     * checkBuildArgs
+     *
+     * @this {PC}
+     * @param {Object|string} argv
+     * @returns {string}
+     */
+    checkBuildArgs(argv)
+    {
+        let argc = 0;
+        if (typeof argv == "string") {
+            if (!argv) return "";
+            [argc, argv] = PCjsLib.getArgs(argv);
+            argc = 1;
+        }
+        let defaults = configJSON['defaults'] || {};
+        this.fBare = PC.removeFlag(argv, 'bare', this.fBare);
+        this.fFloppy = PC.removeFlag(argv, 'floppy', this.fFloppy);
+        this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);
+        this.fNormalize = PC.removeFlag(argv, 'normalize', this.fNormalize);
+        this.systemType = PC.removeArg(argv, 'system', defaults['sys'] || this.systemType).toLowerCase();
+
+        let i = this.systemType.indexOf(':');
+        if (i > 0) {
+            /*
+             * We allow the version to be included with the system argument (eg, --sys=pcdos:2.0), for convenience.
+             */
+            this.systemVersion = this.systemType.slice(i+1);
+            this.systemType = this.systemType.slice(0, i);
+        } else {
+            this.systemVersion = PC.removeArg(argv, 'version', defaults['ver'] || this.systemVersion);
+        }
+        this.systemMBR = PC.removeArg(argv, 'mbr', defaults['mbr'] || this.systemMBR);
+
+        /*
+         * When using --floppy, certain other options are disallowed (eg, drivectrl).
+         */
+        if (this.fFloppy) {
+            this.savedState = "";
+            this.kbTarget = this.maxFiles = 0;
+            this.driveInfo.driveCtrl = "FDC";
+            this.driveOverride = true;
+            this.bootSelect = 'A';
+        } else {
+            let driveCtrl = PC.removeArg(argv, 'drive');
+            if (driveCtrl) {
+                this.driveInfo.driveCtrl = driveCtrl.toUpperCase();
+                this.driveOverride = true;
+            }
+            this.kbTarget = diskLib.getTargetValue(defaults['target']);
+            this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || this.maxFiles);
+            this.bootSelect = PC.removeArg(argv, 'boot', defaults['boot'] || this.bootSelect).toUpperCase();
+        }
+
+        this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target')) || this.kbTarget;
+        if (PC.removeFlag(argv, 'trim')) this.driveInfo.trimFAT = true;
+
+        let typeDrive = PC.removeArg(argv, 'drivetype');
+        if (typeDrive) {
+            printf(this.parseDriveType(typeDrive));
+        }
+
+        let typeFAT = PC.removeArg(argv, 'fat');
+        if (typeFAT) {
+            let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
+            if (match) {
+                this.driveInfo.typeFAT = +match[1];
+                if (match[2]) this.driveInfo.clusterSize = +match[2] || 0;
+                if (match[3]) this.driveInfo.rootEntries = +match[3] || 0;
+            }
+        }
+
+        let hiddenSectors = PC.removeArg(argv, 'hidden');
+        if (hiddenSectors) {
+            this.driveInfo.hiddenSectors = +hiddenSectors || 0;
+        }
+        return argc? this.checkRemainingArgs(argv) : "";
+    }
+
+    /**
+     * checkMachineArgs
+     *
+     * @this {PC}
+     * @param {Object|string} argv
+     * @returns {string}
+     */
+    checkMachineArgs(argv)
+    {
+        let argc = 0;
+        if (typeof argv == "string") {
+            if (!argv) return "";
+            [argc, argv] = PCjsLib.getArgs(argv);
+            argc = 1;
+        }
+        this.fHalt = PC.removeFlag(argv, 'halt', this.fHalt);
+        return argc? this.checkRemainingArgs(argv) : "";
+    }
+
+    /**
+     * checkRemainingArgs(argv)
+     *
+     * @param {Object} argv
+     * @returns {string}
+     */
+    checkRemainingArgs(argv)
+    {
+        let args = Object.keys(argv);
+        for (let arg of args) {
+            if (!arg.match(/^[0-9]*$/)) {
+                let value = argv[arg];
+                if (typeof value != "string") {
+                    value = "";
+                } else {
+                    value = "=" + value;
+                }
+                printf("invalid option: %s%s\n", arg, value);
+            }
+        }
+        return argv.join(' ').trim();
+    }
+
+    /**
+     * verifyDir(sDir)
+     *
+     * @param {string} sDir
+     * @returns {string}
+     */
+    verifyDir(sDir)
+    {
+        if (sDir[0] == '~') {
+            sDir = node.path.join(node.process.env.HOME, sDir.slice(1));
+        } else {
+            sDir = node.path.resolve(sDir);
+        }
+        return diskLib.existsDir(sDir, false)? sDir : "";
+    }
+
+    /**
+     * processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, sCommands)
      *
      * Arguments that either the shell consumes (like *.*) or that we consume (like --help) can be
      * problematic if those are actually arguments you want to pass along with a command to buildDisk().
@@ -2818,9 +3004,9 @@ export default class PC extends PCjsLib {
      * @param {string} [sDisk]
      * @param {string} [sDirectory]
      * @param {string} [sLocalDisk]
-     * @param {boolean} [fAutoBuild]
+     * @param {string} [sCommands]
      */
-    async processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, fAutoBuild = !this.terminal)
+    async processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, sCommands)
     {
         let loading = false;
         let error = "", warning = "";
@@ -2838,15 +3024,6 @@ export default class PC extends PCjsLib {
                 error = "unknown machine: " + sMachine;
             }
         }
-
-        let verifyDir = function(s) {
-            if (s[0] == '~') {
-                s = node.path.join(node.process.env.HOME, s.slice(1));
-            } else {
-                s = node.path.resolve(s);
-            }
-            return diskLib.existsDir(s, false)? s : "";
-        };
 
         if (sDisk) {
             if (sDisk.toLowerCase() == "none") {    // --disk=none disables any prebuilt disk
@@ -2890,7 +3067,7 @@ export default class PC extends PCjsLib {
                     if (sDir) splice = true;
                 }
                 if (sDir) {
-                    let newDir = verifyDir(sDir);
+                    let newDir = this.verifyDir(sDir);
                     if (newDir) {
                         this.localDir = newDir;
                         if (splice) argv.splice(1, 1);
@@ -2901,11 +3078,11 @@ export default class PC extends PCjsLib {
                 }
             }
             if (!sDir) {
-                this.localDir = verifyDir(this.localDir);
+                this.localDir = this.verifyDir(this.localDir);
             }
         }
 
-        if (!error && fAutoBuild) {                 // last but not least, check for a DOS command or program name
+        if (!error && !sCommands) {                 // last but not least, check for a DOS command or program name
             if (this.machineType == "pcx86" && (argv[1] || this.localDir)) {
                 let args = argv.slice(1).join(' ');
                 let sCommand = this.checkCommand(this.localDir, args);
@@ -2943,7 +3120,31 @@ export default class PC extends PCjsLib {
             this.exit(1);
         }
 
-        if (!loading) this.setDebugMode(DbgLib.EVENTS.READY);
+        if (!loading) {
+            this.setDebugMode(DbgLib.EVENTS.READY);
+            this.processCommands(sCommands);
+        }
+    }
+
+    /**
+     * processCommands(sCommands)
+     *
+     * @param {string} sCommands
+     */
+    async processCommands(sCommands)
+    {
+        let aCommands = sCommands.split(';');
+        for (let i = 0; i < aCommands.length; i++) {
+            let s = aCommands[i].trim();
+            if (s) {
+                printf("%s\n", s);
+                let result = await this.doCommand(s);
+                if (result) {
+                    printf(result);
+                }
+                printf("%s> ", this.prompt);
+            }
+        }
     }
 
     /**
@@ -3014,15 +3215,16 @@ export default class PC extends PCjsLib {
                 printf("\n");
                 pc.command = pc.command.slice(i+1);
                 try {
-                    let result = pc.doCommand(s);
-                    printf(result);
+                    let result = pc.doCommand(s).then((result) => {
+                        printf(result);
+                        if (this.shutdown) return;
+                        if (!machine.cpu || !machine.cpu.isRunning()) {
+                            printf("%s> ", pc.prompt);
+                        }
+                    });
                 } catch(err) {
                     printf("exception: %s\n", err.message);
                 }
-                if (machine.cpu && machine.cpu.isRunning() || this.shutdown) {
-                    break;
-                }
-                printf("%s> ", pc.prompt);
             } while (pc.command.length);
         });
     }
@@ -3046,119 +3248,6 @@ export default class PC extends PCjsLib {
     }
 
     /**
-     * checkArgs(argv, removeArg, removeFlag)
-     *
-     * @this {PC}
-     * @param {Object} argv
-     * @param {function()} removeArg
-     * @param {function()} removeFlag
-     * @returns {boolean} (true if we should continue, false if we should exit)
-     */
-    async checkArgs(argv, removeArg, removeFlag)
-    {
-        this.fDebug = removeFlag('debug') || this.fDebug;
-        this.fVerbose = removeFlag('verbose') || this.fVerbose;
-        this.fTest = removeFlag('test') || this.fTest;
-
-        Device.setDebug(this.fDebug);
-        device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR + (this.fDebug && this.fVerbose? MESSAGE.DEBUG : 0) + (this.fVerbose? MESSAGE.INFO : 0), true);
-        this.messagesFilter = this.fDebug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
-
-        let arg0 = argv[0].split(' ');
-        if (!argv[1] || this.fDebug || this.fTest || globals.browser) {
-            let options = arg0.slice(1).join(' ');
-            printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
-        }
-
-        if (!machines) {
-            let db;
-            rootDir = node.path.join(node.path.dirname(arg0[0]), "../..");
-            pcjsDir = node.path.join(rootDir, "/tools/pc");
-            diskLib.setRootDir(rootDir, pcjsDir, removeFlag('local')? true : (removeFlag('remote')? false : null));
-            db = await diskLib.readFileAsync("/machines/machines.json");
-            machines = JSON.parse(db || "{}");
-            db = await diskLib.readFileAsync(node.path.join(pcjsDir, configFile));
-            configJSON = node.json5.parse(db || "{}");
-        }
-
-        let defaults = configJSON['defaults'] || {};
-
-        this.fBare = removeFlag('bare') || this.fBare;
-        this.fHalt = removeFlag('halt') || this.fHalt;
-        this.fFloppy = removeFlag('floppy') || this.fFloppy;
-        this.diskLabel = removeArg('label') || defaults['label'] || this.diskLabel;
-        this.fNormalize = removeFlag('normalize') || this.fNormalize;
-        this.localDir = defaults['dir'] || this.localDir;
-
-        this.machineType = defaults['type'] || this.machineType;
-        this.systemType = (removeArg('sys') || removeArg('system') || defaults['sys'] || this.systemType).toLowerCase();
-        let i = this.systemType.indexOf(':');
-        if (i > 0) {
-            /*
-             * We allow the version to be included with the system argument (eg, --sys=pcdos:2.0), for convenience.
-             */
-            this.systemVersion = this.systemType.slice(i+1);
-            this.systemType = this.systemType.slice(0, i);
-        } else {
-            this.systemVersion = (removeArg('ver') || removeArg('version') || defaults['ver'] || this.systemVersion);
-        }
-        this.systemMBR = removeArg('mbr') || defaults['mbr'] || this.systemMBR;
-        this.savedMachine = defaults['machine'] || this.savedMachine;
-        this.savedState = defaults['state'] || this.savedState;
-
-        /*
-         * When using --floppy, certain other options are disallowed (eg, drivectrl).
-         */
-        if (this.fFloppy) {
-            this.savedState = "";
-            this.kbTarget = this.maxFiles = 0;
-            this.driveInfo.driveCtrl = "FDC";
-            this.driveOverride = true;
-            this.bootSelect = 'A';
-        } else {
-            let driveCtrl = removeArg('drive');
-            if (driveCtrl) {
-                this.driveInfo.driveCtrl = driveCtrl.toUpperCase();
-                this.driveOverride = true;
-            }
-            this.kbTarget = diskLib.getTargetValue(defaults['target']);
-            this.maxFiles = +removeArg('maxfiles') || defaults['maxfiles'] || this.maxFiles;
-            this.bootSelect = (removeArg('boot') || defaults['boot'] || this.bootSelect).toUpperCase();
-        }
-
-        this.kbTarget = diskLib.getTargetValue(removeArg('target')) || this.kbTarget;
-        if (removeFlag('trim')) this.driveInfo.trimFAT = true;
-
-        /*
-         * Now that we have most of the system defaults, we can process --help (since it displays some of them).
-         */
-        if (removeFlag('help')) {
-            return false;
-        }
-
-        let typeDrive = removeArg('drivetype');
-        if (typeDrive) {
-            printf(this.parseDriveType(typeDrive));
-        }
-
-        let typeFAT = removeArg('fat');
-        if (typeFAT) {
-            let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
-            if (match) {
-                this.driveInfo.typeFAT = +match[1];
-                if (match[2]) this.driveInfo.clusterSize = +match[2] || 0;
-                if (match[3]) this.driveInfo.rootEntries = +match[3] || 0;
-            }
-        }
-
-        let hiddenSectors = removeArg('hidden');
-        if (hiddenSectors) {
-            this.driveInfo.hiddenSectors = +hiddenSectors || 0;
-        }
-        return true;
-    }
-
-    /**
      * main(argc, argv)
      *
      * @this {PC}
@@ -3167,15 +3256,7 @@ export default class PC extends PCjsLib {
      */
     async main(argc, argv)
     {
-        let removeArg = function(arg) {
-            return PC.removeArg(argv, arg, "string");
-        };
-
-        let removeFlag = function(arg) {
-            return PC.removeArg(argv, arg, "boolean");
-        };
-
-        let success = await this.checkArgs(argv, removeArg, removeFlag);
+        let success = await this.checkArgs(argv);
 
         if (!success) {
             let optionsMain = {
@@ -3228,23 +3309,12 @@ export default class PC extends PCjsLib {
             return;
         }
 
-        let autoBuild = removeFlag('auto');
-        await this.processArgs(argv, removeArg('select'), removeArg('disk'), removeArg('dir'), removeArg('save'), autoBuild).catch((err) => {
+        let commands = PC.removeArg(argv, 'commands', this.commands);
+        await this.processArgs(argv, PC.removeArg(argv, 'select'), PC.removeArg(argv, 'disk'), PC.removeArg(argv, 'dir'), PC.removeArg(argv, 'save'), commands).catch((err) => {
             printf("exception: %s\n", err.message);
         });
 
-        let args = Object.keys(argv);
-        for (let arg of args) {
-            if (!arg.match(/^[0-9]*$/)) {
-                let value = argv[arg];
-                if (typeof value != "string") {
-                    value = "";
-                } else {
-                    value = "=" + value;
-                }
-                printf("invalid option: %s%s\n", arg, value);
-            }
-        }
+        this.checkRemainingArgs(argv);
 
         this.readInput(node.process.stdin, node.process.stdout);
     }

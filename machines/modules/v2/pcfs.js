@@ -18,12 +18,16 @@ import { globals } from "./defines.js";
  * @property {Array|null} files (null if not a directory, else an array of zero or more PCFSItem objects)
  */
 
+if (!globals.pcjs['files']) {
+    globals.pcjs['files'] = { name: "", size: 0, date: new Date(), files: [] };
+}
+
 /**
  * @class PCFS
  */
 export default class PCFS {
 
-    static root = "/pcfs/";
+    static root = "/pcfs";
 
     /**
      * isPCFS(path)
@@ -55,14 +59,14 @@ export default class PCFS {
      */
     static getNodes(path)
     {
-        return path.slice(6).split('/');
+        return path.slice(PCFS.root.length+1).split('/');
     }
 
     /**
      * getItem(path, fCreate, fDirectory)
      *
      * @param {string} path
-     * @param {boolean} [fCreate] (true to create, false to remove, undefined if don't care)
+     * @param {boolean} [fCreate] (true to create, false to remove)
      * @param {boolean} [fDirectory]
      * @returns {PCFSItem|null}
      */
@@ -75,15 +79,19 @@ export default class PCFS {
             let i, j;
             for (i = 0; i < nodes.length; i++) {
                 let name = nodes[i], match = false;
-                for (j = 0; j < dir.length; j++) {
-                    let next = dir[j];
+                if (!name) {
+                    item = dir;
+                    break;
+                }
+                for (j = 0; j < dir.files.length; j++) {
+                    let next = dir.files[j];
                     if (next.name == name) {
                         if (i == nodes.length - 1) {
                             item = next;
                             break;
                         }
                         if (next.files) {
-                            dir = next.files;
+                            dir = next;
                             match = true;
                             break;
                         }
@@ -91,11 +99,11 @@ export default class PCFS {
                 }
                 if (item) break;
                 if (match) continue;
-                if (i < nodes.length - 1) {
+                if (i < nodes.length-1) {
                     if (fCreate) {
                         let sub = {name, size: 0, date: new Date(), files: []};
-                        dir.push(sub);
-                        dir = sub.files;
+                        dir.files.push(sub);
+                        dir = sub;
                         continue;
                     }
                     break;
@@ -103,9 +111,9 @@ export default class PCFS {
             }
             if (!item && i == nodes.length) {
                 if (fCreate) {
-                    item = dir[dir.length] = {name: nodes[nodes.length-1], size: 0, date: new Date(), files: fDirectory? [] : null};
+                    item = dir.files[dir.files.length] = {name: nodes[nodes.length-1], size: 0, date: new Date(), files: fDirectory? [] : null};
                 } else if (fCreate === false) {
-                    dir.splice(j, 1);
+                    dir.files.splice(j, 1);
                 }
             }
         }
@@ -120,8 +128,10 @@ export default class PCFS {
      */
     static setItem(item, data)
     {
-        item.data = data;
-        item.size = data.length;
-        item.date = new Date();
+        if (!item.files) {
+            item.data = data;
+            item.size = data.length;
+            item.date = new Date();
+        }
     }
 }

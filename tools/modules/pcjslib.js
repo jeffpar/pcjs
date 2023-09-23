@@ -144,7 +144,7 @@ export default class PCJSLib
     }
 
     /**
-     * removeArg(argv, arg, type)
+     * removeArg(argv, arg, def, type)
      *
      * This provides a means of removing arguments as they are processed, so that we can look at
      * what's left over and determine if any unrecognized arguments were passed.  Primarily, this
@@ -152,21 +152,33 @@ export default class PCJSLib
      *
      * @param {Array} argv
      * @param {string} arg
+     * @param {string|boolean|number} [def]
      * @param {string} [type]
      * @returns {string|undefined}
      */
-    static removeArg(argv, arg, type = "")
+    static removeArg(argv, arg, def, type = "string")
     {
         arg = arg.toLowerCase();
         let value = argv[arg];
-        if (value != undefined) {
-            if (type && typeof value == type) {
-                delete argv[arg];
-            } else {
-                value = undefined;
-            }
+        if (value != undefined && typeof value == type) {
+            delete argv[arg];
+        } else {
+            value = def;
         }
         return value;
+    }
+
+    /**
+     * removeFlag(argv, arg, def)
+     *
+     * @param {Array} argv
+     * @param {string} arg
+     * @param {boolean} [def]
+     * @returns {boolean|undefined}
+     */
+    static removeFlag(argv, arg, def)
+    {
+        return PCJSLib.removeArg(argv, arg, def, "boolean");
     }
 }
 
