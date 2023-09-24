@@ -151,28 +151,30 @@ export default class PCJSLib
      * is a means of catching command-line typos.
      *
      * @param {Array} argv
-     * @param {string} arg
+     * @param {Array|string} arg
      * @param {string|boolean|number} [def]
      * @param {string} [type]
      * @returns {string|undefined}
      */
     static removeArg(argv, arg, def, type = "string")
     {
-        arg = arg.toLowerCase();
-        let value = argv[arg];
-        if (value != undefined && typeof value == type) {
-            delete argv[arg];
-        } else {
-            value = def;
+        let args = (typeof arg == "string"? [arg] : arg);
+        for (let arg of args) {
+            arg = arg.toLowerCase();
+            let value = argv[arg];
+            if (value != undefined && typeof value == type) {
+                delete argv[arg];
+                return value;
+            }
         }
-        return value;
+        return def;
     }
 
     /**
      * removeFlag(argv, arg, def)
      *
      * @param {Array} argv
-     * @param {string} arg
+     * @param {Array|string} arg
      * @param {boolean} [def]
      * @returns {boolean|undefined}
      */
