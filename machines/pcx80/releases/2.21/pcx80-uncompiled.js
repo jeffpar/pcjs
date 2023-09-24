@@ -1272,7 +1272,7 @@ class PCFS {
                 }
                 for (j = 0; j < dir.files.length; j++) {
                     let next = dir.files[j];
-                    if (next.name == name) {
+                    if (next.name.toLowerCase() == name.toLowerCase()) {
                         if (i == nodes.length - 1) {
                             item = next;
                             break;
@@ -1308,17 +1308,21 @@ class PCFS {
     }
 
     /**
-     * setItem(item, data)
+     * setItem(item, data, date)
      *
      * @param {PCFSItem} item
-     * @param {*} data
+     * @param {*} [data]
+     * @param {Date} [date]
      */
-    static setItem(item, data)
+    static setItem(item, data, date)
     {
-        if (!item.files) {
+        if (!item.files && data) {
             item.data = data;
             item.size = data.length;
-            item.date = new Date();
+            if (!date) date = new Date();
+        }
+        if (date) {
+            item.date = date;
         }
     }
 }

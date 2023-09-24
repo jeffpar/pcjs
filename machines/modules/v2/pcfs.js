@@ -1,5 +1,5 @@
 /**
- * @fileoverview PCFS: The PCjs File System (simulates a *very* simple file system in the browser)
+ * @fileoverview PCFS: PCjs File System (simulates a very simple file system in the browser)
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
