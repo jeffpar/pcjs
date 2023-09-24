@@ -2765,12 +2765,13 @@ export default class PC extends PCjsLib {
      * doFSCommand(cmd, aTokens)
      *
      * We mimic a small number of *nix-style file system commands in PCjs command mode.  These are
-     * intended to be used when pc.js is running in a browser and we are simulating a file system with PCfs,
-     * because there's no other way to easily examine the contents of PCfs, other than dumping the contents
+     * intended to be used when pc.js is running in a browser and we are simulating a file system with PCFS,
+     * because there's no other way to easily examine the contents of PCFS, other than dumping the contents
      * of "globals.pcjs.files" with a debugger.
      *
-     * These commands should work fine within Node as well, but in that case, you'll probably prefer real *nix
-     * commands, either from inside pc.js via the "exec" command, or outside pc.js in another terminal window.
+     * These commands should also work fine when running pc.s with Node, but in that case, you'll probably
+     * prefer real *nix commands, either via DOS commands (eg, "ls -l") that have been mapped to external commands
+     * via "exec", or via the internal "exec" command directly (eg, "exec ls -l"), or via another terminal window.
      *
      * @param {string} cmd
      * @param {Array} aTokens
@@ -2938,7 +2939,7 @@ export default class PC extends PCjsLib {
         this.fFloppy = PC.removeFlag(argv, 'floppy', this.fFloppy);
         this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);
         this.fNormalize = PC.removeFlag(argv, 'normalize', this.fNormalize);
-        this.systemType = PC.removeArg(argv, 'system', defaults['sys'] || this.systemType).toLowerCase();
+        this.systemType = PC.removeArg(argv, ['system','sys'], defaults['sys'] || this.systemType).toLowerCase();
 
         let i = this.systemType.indexOf(':');
         if (i > 0) {
@@ -2948,7 +2949,7 @@ export default class PC extends PCjsLib {
             this.systemVersion = this.systemType.slice(i+1);
             this.systemType = this.systemType.slice(0, i);
         } else {
-            this.systemVersion = PC.removeArg(argv, 'version', defaults['ver'] || this.systemVersion);
+            this.systemVersion = PC.removeArg(argv, ['version', 'ver'], defaults['ver'] || this.systemVersion);
         }
         this.systemMBR = PC.removeArg(argv, 'mbr', defaults['mbr'] || this.systemMBR);
 

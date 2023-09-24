@@ -10,9 +10,15 @@ modules_init:
 
 This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console, along with an automatically generated hard disk containing all the files in your current (or other specified) directory.
 
+### Playground
+
+Below is a web-based demonstration of how `pc.js` works, using a simulated command prompt and a simulated file system ([PCFS](/machines/modules/v2/pcfs.js)).  Since it runs in a browser, it does not have access to your local files, and there is no provision for saving your work.
+
+{% include web/textarea.html id="terminal" style="font-size: medium" %}
+
 ### Basic Usage
 
-First, some prerequisites:
+The best way to use `pc.js` is from a *real* command-line.  Here are the prerequisites:
 
   1. Install [Node and NPM](https://nodejs.org)
   2. Clone the [pcjs](https://github.com/jeffpar/pcjs) repository (eg, `git clone https://github.com/jeffpar/pcjs.git`)
@@ -22,6 +28,57 @@ First, some prerequisites:
 The format of a `pc.js` command (as `--help` will also tell you) is:
 
     [node] pc.js [machine file] [local directory] [DOS command] [options]
+
+Here is the complete help text:
+
+    pc.js v3.00
+    Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
+    Options: --help
+
+    usage:
+            [node] pc.js [machine file] [local directory] [DOS command] [options]
+
+    machine options:
+
+            --boot=[drive]          select boot drive (A or C; default is C)
+            --select=[machine]      select machine configuration file
+
+    disk options:
+
+            --dir=[directory]       use drive directory (default is .)
+            --disk=[image]          use drive disk image (instead of directory)
+            --drive=[controller]    set drive controller (XT, AT, COMPAQ, or PCJS)
+            --drivetype=[value]     set drive type or C:H:S (eg, 306:4:17)
+            --fat=[number]          set hard disk FAT type (12 or 16)
+            --hidden=[number]       set hidden sectors (default is 1)
+            --label=[label]         set volume label of disk image
+            --maxfiles=[number]     set maximum local files (default is 1024)
+            --normalize=[boolean]   convert text file encoding (default is true)
+            --save=[image]          save drive disk image and exit
+            --system=[string]       set operating system type (default is msdos)
+            --target=[nK|nM]        set target disk size (default is 10M)
+            --version=[#.##]        set operating system version (default is 3.30)
+
+    other options:
+
+            --bare (-b)             omit helper binaries from disk
+            --debug (-d)            enable DEBUG messages
+            --floppy (-f)           build floppy instead of hard disk
+            --halt (-h)             halt machine on startup
+            --help (-?)             display command-line usage
+            --local (-l)            use local diskette images
+            --test (-t)             enable test mode (non-interactive)
+            --verbose (-v)          enable verbose mode
+
+    notes:
+            --drivetype can also specify a drive geometry (eg, --drivetype=306:4:17)
+            --fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)
+            --hidden also disables the use of hidden sectors to work around boot sector bugs
+            --system can also specify a version (eg, --system=pcdos:2.0) for convenience
+
+            Drive and FAT values should be considered advisory, as it may not be possible to honor them.
+
+    pc.js configuration settings are stored in /Users/jeff/Sites/pcjs/tools/pc/pc.json5
 
 The first argument is the name of a PCjs machine configuration files, such as [ibm5160.json](ibm5160.json) or [ibm5170.xml](ibm5170.xml), and the second is the name of a folder (eg, `disks/empty`) containing files to copy to the machine's hard disk:
 
@@ -286,12 +343,6 @@ See "[Loading Diskettes](https://www.pcjs.org/blog/2023/07/15/#loading-diskettes
 ### Shutting Down
 
 Another utility that `pc.js` provides is `QUIT.COM`, which makes it easy to shut down the machine.  `QUIT.COM` also supports a switch (`/R`) to reboot the machine instead of shutting it down.
-
-### Playground
-
-This space is a work-in-progress and provides a web-based demonstration of how `pc.js` works.  However, because it runs in a browser, it has limited access to files, and there is currently no provision for saving your work, so the best way to use `pc.js` will always be from a *real* command-line.
-
-{% include web/textarea.html id="terminal" style="font-size: medium" %}
 
 ### More Information
 
