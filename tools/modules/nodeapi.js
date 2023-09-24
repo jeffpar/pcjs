@@ -117,7 +117,10 @@ let node = {
             PCFS.getItem(sFile, false);
         },
         utimesSync: function(sFile, atime, mtime) {
-            console.log("fs.utimesSync(" + sFile + "): unimplemented");
+            let item = PCFS.getItem(sFile);
+            if (item) {
+                PCFS.setItem(item, undefined, mtime);
+            }
         },
         writeFileSync: function(sFile, data) {
             let item = PCFS.getItem(sFile, true);
