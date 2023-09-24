@@ -881,6 +881,10 @@ export default class PC extends PCjsLib {
                 }
             }
             else {                          // INT 20h assumed to have come from a hidden PCJS command app (eg, LS.COM)
+                if (globals.browser) {      // if running in a browser, display the same error as the "exec" command
+                    printf("external commands disabled in browser\n");
+                    return true;
+                }
                 let pc = this;
                 let off = cpu.getIP()+6;
                 let len = cpu.getSOByte(cpu.segDS, off++);
@@ -2537,6 +2541,11 @@ export default class PC extends PCjsLib {
         case "help":
             result = help(this.machine);
             break;
+        case "cd":
+        case "ls":
+        case "rm":
+            result = this.doFSCommand(cmd, aTokens);
+            break;
         case "build":
             if (this.machine.cpu) {
                 result = "machine already started";
@@ -2564,6 +2573,10 @@ export default class PC extends PCjsLib {
             this.dumpDisk(...aTokens);
             break;
         case "exec":
+            if (globals.browser) {
+                result = "external commands disabled in browser";
+                break;
+            }
             if (reload) {
                 this.saveDisk(sDir);
                 this.machine = this.newMachine();
@@ -2746,6 +2759,57 @@ export default class PC extends PCjsLib {
         }
         this.commandPrev = s;
         return result? result + "\n" : "";
+    }
+
+    /**
+     * doFSCommand(cmd, aTokens)
+     *
+     * We mimic a small number of *nix-style file system commands in PCjs command mode.  These are
+     * intended to be used when pc.js is running in a browser and we are simulating a file system with PCfs,
+     * because there's no other way to easily examine the contents of PCfs, other than dumping the contents
+     * of "globals.pcjs.files" with a debugger.
+     *
+     * These commands should work fine within Node as well, but in that case, you'll probably prefer real *nix
+     * commands, either from inside pc.js via the "exec" command, or outside pc.js in another terminal window.
+     *
+     * @param {string} cmd
+     * @param {Array} aTokens
+     * @returns {string} (result of command)
+     */
+    doFSCommand(cmd, aTokens)
+    {
+        let result = "", asFiles, sDir;
+
+        switch(cmd) {
+        case "cd":
+            sDir = aTokens[0];
+            if (!sDir) {
+                result = "current directory: " + this.localDir;
+                break;
+            }
+            if (sDir[0] != '/') {
+                sDir = node.path.join(this.localDir, sDir);
+            }
+            if (node.fs.existsSync(sDir)) {
+                result = "new directory: " + sDir;
+                this.localDir = sDir;
+            } else {
+                result = "directory does not exist: " + aTokens[0];
+            }
+            break;
+        case "ls":
+            asFiles = node.fs.readdirSync(this.localDir);
+            for (let sFile of asFiles) {
+                let sPath = node.path.join(this.localDir, sFile);
+                let stat = node.fs.statSync(sPath);
+                result += sprintf("%-6d  %.3F %-2D %Y  %-2G:%02N%A  %s\n", stat.size, stat.mtime, stat.mtime, stat.mtime, stat.mtime, stat.mtime, stat.mtime, sFile);
+            }
+            break;
+        default:
+            result = "unsupported command: " + cmd;
+            break;
+        }
+        return result;
     }
 
     /**
