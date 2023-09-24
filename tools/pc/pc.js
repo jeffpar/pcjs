@@ -721,6 +721,7 @@ export default class PC extends PCjsLib {
                 let args = getString(cpu.segDS, 0x81, len).trim();
                 if (!args) {                // if there were no arguments, then simply "quit"
                     this.exit();
+                    return false;
                 }
                 if (args.toLowerCase() != "/r") {
                     printf("unrecognized option: %s\n", args);
@@ -2507,8 +2508,8 @@ export default class PC extends PCjsLib {
         let arg, args = aTokens.join(' ').trim();
         let result = "", curDir = "", sDir = this.localDir, sDrive = "";
 
-        let help = function(machine) {
-            let result = "pc.js internal commands:\n\n" +
+        let help = function(machine, options = "") {
+            let result = "internal commands:\n\n" +
                         "abort\tterminate without saving\n" +
                         "build\tbuild disk for specified drive type\n" +
                         "exec\texecute a local command\n" +
@@ -2517,7 +2518,7 @@ export default class PC extends PCjsLib {
                         "save\tsave disk to directory or as disk image\n" +
                         "select\tselect a new machine (eg, ibm5170)\n" +
                         "start\tstart new machine\n" +
-                        "stop\tstop current machine (use save first)\n" +
+                        "stop\tstop current machine (does not save)\n" +
                         "quit\tsave all changed files and terminate\n";
             if (machine.dbg) {
                 result += "\ntype \"?\" for a list of debugger commands (eg, \"g\" to continue running)";
@@ -2904,7 +2905,6 @@ export default class PC extends PCjsLib {
             }
             this.kbTarget = diskLib.getTargetValue(defaults['target']);
             this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || this.maxFiles);
-            this.bootSelect = PC.removeArg(argv, 'boot', defaults['boot'] || this.bootSelect).toUpperCase();
         }
 
         this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target')) || this.kbTarget;
@@ -2947,7 +2947,9 @@ export default class PC extends PCjsLib {
             [argc, argv] = PCjsLib.getArgs(argv);
             argc = 1;
         }
+        let defaults = configJSON['defaults'] || {};
         this.fHalt = PC.removeFlag(argv, 'halt', this.fHalt);
+        this.bootSelect = PC.removeArg(argv, 'boot', defaults['boot'] || this.bootSelect).toUpperCase();
         return argc? this.checkRemainingArgs(argv) : "";
     }
 
@@ -3239,6 +3241,10 @@ export default class PC extends PCjsLib {
      */
     exit(code = 0)
     {
+        if (globals.browser) {
+            printf("shutdown disabled in browser\n");
+            return;
+        }
         this.shutdown = true;
         printf("shutting down...\n");
         if (code != 1) this.saveDisk(this.localDir);
@@ -3260,10 +3266,10 @@ export default class PC extends PCjsLib {
 
         if (!success) {
             let optionsMain = {
+                "--boot=[drive]":           "\tselect boot drive (A or C; default is C)",
                 "--select=[machine]":       "select machine configuration file",
             };
             let optionsDisk = {
-                "--boot=[drive]":           "\tselect boot drive (A or C; default is C)",
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
                 "--disk=[image]":           "\tuse drive disk image (instead of directory)",
                 "--drive=[controller]":     "set drive controller (XT, AT, COMPAQ, or PCJS)",

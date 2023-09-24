@@ -2670,60 +2670,71 @@ class WebIO extends StdIO {
             fBuffer = this.isMessageOn(MESSAGE.BUFFER);
         }
         if (!fBuffer) {
-            let len = s.length;
             let element = this.findBinding(WebIO.BINDING.PRINT, true);
             if (element) {
-                if (s == '\r') {
-                    let i = element.value.lastIndexOf('\n');
-                    if (i >= 0) {
-                        element.setSelectionRange(i + 1, i + 1);
-                        s = "";
+                let insert = element.selectionStart;
+                let parts = s.split(/([\n\r\b])/);
+                for (let i = 0; i < parts.length; i++) {
+                    let s = parts[i];
+                    if (!s) continue;
+                    if (s == '\b' || s == '\r') {
+                        while (insert > 0) {
+                            let chPrev = element.value.slice(insert - 1, insert);
+                            if (chPrev == '\n') break;
+                            insert--;
+                            if (s == '\b') break;
+                        }
                     }
-                }
-                if (s == '\n') {
-                    s = '\r\n';
-                }
-                /**
-                 * To help avoid situations where the element can get overwhelmed by the same repeated line,
-                 * don't add the string if it already appears at the end.
-                 */
-                if (s.slice(-1) != '\n' || element.value.slice(-s.length) != s) {
-                    if (s.indexOf('\b') >= 0) {
-                        len = 0;
-                        for (let i = 0; i < s.length; i++) {
-                            if (s[i] == '\b') {
-                                element.value = element.value.slice(0, -1);
-                                len--;
-                            } else {
-                                element.value += s[i];
-                                len++;
-                            }
+                    else if (s == '\n') {
+                        let chInsert = "";
+                        while (insert < element.value.length) {
+                            chInsert = element.value[insert];
+                            insert++;
+                            if (chInsert == '\n') break;
+                        }
+                        if (chInsert != '\n') {
+                            element.value += "\r\n";
+                            insert = element.value.length;
                         }
                     } else {
-                        element.value += s;
-                    }
-                    /**
-                     * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
-                     */
-                    if (!WebIO.DEBUG && element.value.length >= 8192) {
-                        let excess = (element.value.length - 8192) + 4096;
-                        element.value = element.value.slice(excess);
-                    }
-                    element.scrollTop = element.scrollHeight;
-                    /**
-                     * Safari requires this, to keep the caret at the end; Chrome and Firefox, not so much.  Go figure.
-                     *
-                     * However, if I do this in Safari on iPadOS WHILE the app is full-screen, Safari cancels full-screen
-                     * mode.  Argh.  And if printf() is called during the full-screen mode change, setSelectionRange() may
-                     * trigger the iPad's soft keyboard, even if the machine does not require it (eg, Space Invaders).
-                     *
-                     * So this Safari-specific hack is now performed ONLY on non-iOS devices.
-                     */
-                    if (!this.isUserAgent("iOS")) {
-                        element.setSelectionRange(element.value.length, element.value.length);
+                        /*
+                         * The default behavior here is "overwrite" as opposed to "insert", thanks to the
+                         * "insert + s.length" of the second slice(), so if you want a textarea to operate
+                         * in "insert" mode, we'll have to add some mechanism to enable that.
+                         */
+                        element.value = element.value.slice(0, insert) + s + element.value.slice(insert + s.length);
+                        insert += s.length;
                     }
                 }
-                return len;
+                /**
+                 * Strangely, setSelectionRange() won't remain in effect unless the element also has focus.
+                 */
+                element.focus();
+                element.setSelectionRange(insert, insert);
+                /**
+                 * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
+                 */
+                if (!WebIO.DEBUG && element.value.length >= 8192) {
+                    let excess = (element.value.length - 8192) + 4096;
+                    element.value = element.value.slice(excess);
+                }
+                element.scrollTop = element.scrollHeight;
+                /**
+                 * Safari required this, to keep the caret at the end; Chrome and Firefox, not so much.  Go figure.
+                 *
+                 * However, if I did this in Safari on iPadOS WHILE the app was full-screen, Safari canceled full-screen
+                 * mode.  Argh.  And if printf() was called during the full-screen mode change, setSelectionRange() could
+                 * trigger the iPad's soft keyboard, even if the machine did not require it (eg, Space Invaders).
+                 *
+                 * So this Safari-specific hack was performed ONLY on non-iOS devices.  But now I avoid the hack entirely,
+                 * because otherwise it would ruin all the code I've since added above to carefully simulate backspace (\b)
+                 * and carriage return (\r) characters.
+                 *
+                 *      if (!this.isUserAgent("iOS")) {
+                 *          element.setSelectionRange(element.value.length, element.value.length);
+                 *      }
+                 */
+                return s.length;
             }
         }
         return super.print(s, fBuffer);
