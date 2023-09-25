@@ -2410,10 +2410,12 @@ export default class PC extends PCjsLib {
                     let index = this.diskIndexCache;
                     let itemNames = this.diskIndexKeys;
                     let itemParts = diskNameParts;
-                    if (fileNameParts.length && this.fileIndexKeys.length) {
-                        index = this.fileIndexCache;
-                        itemNames = this.fileIndexKeys;
+                    if (fileNameParts.length) {
                         itemParts = fileNameParts;
+                        if (this.fileIndexKeys.length) {
+                            index = this.fileIndexCache;
+                            itemNames = this.fileIndexKeys;
+                        }
                     }
                     let searchNames = function(names, parts, index) {
                         let matches = [];
