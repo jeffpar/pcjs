@@ -1441,12 +1441,8 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
  * @copyright https://www.pcjs.org/machines/modules/v2/pcfs.js (C) 2012-2023 Jeff Parsons
  */
 
-/** @typedef {{ name: string, size: number, date: Date, data: *, files: (Array|null) }} */
+/** @typedef {{ name: string, size: number, attr: number, date: Date, data: *, files: (Array|null) }} */
 let PCFSItem;
-
-if (!globals.pcjs['files']) {
-    globals.pcjs['files'] = { name: "", size: 0, date: new Date(), files: [] };
-}
 
 /**
  * @class PCFS
@@ -1454,6 +1450,16 @@ if (!globals.pcjs['files']) {
 class PCFS {
 
     static root = "/pcfs";
+
+    static ATTR = {                 // copied from /machines/pcx86/modules/v3/diskinfo.js (DiskInfo.ATTR.*)
+        READONLY:       0x01,       // PC DOS 2.0 and up
+        HIDDEN:         0x02,
+        SYSTEM:         0x04,
+        VOLUME:         0x08,       // PC DOS 2.0 and up
+        LFN:            0x0f,       // combination used by Windows 95 (MS-DOS 7.0) and up, indicating a long filename (LFN) DIRENT
+        SUBDIR:         0x10,       // PC DOS 2.0 and up
+        ARCHIVE:        0x20,       // PC DOS 2.0 and up
+    };
 
     /**
      * isPCFS(path)
@@ -1527,7 +1533,7 @@ class PCFS {
                 if (match) continue;
                 if (i < nodes.length-1) {
                     if (fCreate) {
-                        let sub = {name, size: 0, date: new Date(), files: []};
+                        let sub = {name, size: 0, attr: PCFS.ATTR.SUBDIR, date: new Date(), files: []};
                         dir.files.push(sub);
                         dir = sub;
                         continue;
@@ -1537,7 +1543,8 @@ class PCFS {
             }
             if (!item && i == nodes.length) {
                 if (fCreate) {
-                    item = dir.files[dir.files.length] = {name: nodes[nodes.length-1], size: 0, date: new Date(), files: fDirectory? [] : null};
+                    let attr = fDirectory? PCFS.ATTR.SUBDIR : PCFS.ATTR.ARCHIVE;
+                    item = dir.files[dir.files.length] = {name: nodes[nodes.length-1], size: 0, attr: attr, date: new Date(), files: fDirectory? [] : null};
                 } else if (fCreate === false) {
                     dir.files.splice(j, 1);
                 }
@@ -1547,13 +1554,14 @@ class PCFS {
     }
 
     /**
-     * setItem(item, data, date)
+     * setItem(item, data, date, attr)
      *
      * @param {PCFSItem} item
      * @param {*} [data]
      * @param {Date} [date]
+     * @param {number} [attr]
      */
-    static setItem(item, data, date)
+    static setItem(item, data, date, attr)
     {
         if (!item.files && data) {
             item.data = data;
@@ -1563,7 +1571,14 @@ class PCFS {
         if (date) {
             item.date = date;
         }
+        if (attr !== undefined) {
+            item.attr = attr;
+        }
     }
+}
+
+if (!globals.pcjs['files']) {
+    globals.pcjs['files'] = { name: "", size: 0, attr: PCFS.ATTR.SUBDIR, date: new Date(), files: [] };
 }
 
 /**

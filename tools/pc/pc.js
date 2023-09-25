@@ -478,7 +478,7 @@ export default class PC extends PCjsLib {
                 if (exports) {
                     var fnSetConnection = exports['setConnection'];
                     if (fnSetConnection) {
-                        if (fnSetConnection.call(machine.serial, null, receiveSerial)) {
+                        if (fnSetConnection.call(machine.serial, null, this.receiveSerial)) {
                             machine.fnSendSerial = exports['receiveData'];
                         }
                     }
@@ -982,6 +982,7 @@ export default class PC extends PCjsLib {
      */
     sendSerial(b)
     {
+        let machine = this.machine;
         if (machine.serial && machine.fnSendSerial) {
             machine.fnSendSerial.call(machine.serial, b);
         }
@@ -2542,6 +2543,7 @@ export default class PC extends PCjsLib {
             result = help(this.machine);
             break;
         case "cd":
+        case "dir":
         case "ls":
         case "rm":
             result = this.doFSCommand(cmd, aTokens);
@@ -2616,7 +2618,7 @@ export default class PC extends PCjsLib {
             if (arg) {
                 let di = await diskLib.readDiskAsync(arg);
                 if (di) {
-                    diskLib.extractFiles(di, {quiet: true}, "", aTokens[1] || "", false);
+                    diskLib.extractFiles(di, {quiet: args.indexOf("--verbose") < 0}, "", aTokens[1] || "", args.indexOf("--hidden") >= 0);
                 } else {
                     result = "invalid disk image: " + arg;
                 }
@@ -2770,8 +2772,8 @@ export default class PC extends PCjsLib {
      * of "globals.pcjs.files" with a debugger.
      *
      * These commands should also work fine when running pc.s with Node, but in that case, you'll probably
-     * prefer real *nix commands, either via DOS commands (eg, "ls -l") that have been mapped to external commands
-     * via "exec", or via the internal "exec" command directly (eg, "exec ls -l"), or via another terminal window.
+     * prefer real *nix commands, either with DOS commands (eg, "ls -l") that have been mapped to external commands
+     * via "exec", or with the internal "exec" command directly (eg, "exec ls -l"), or another terminal window.
      *
      * @param {string} cmd
      * @param {Array} aTokens
@@ -2779,7 +2781,7 @@ export default class PC extends PCjsLib {
      */
     doFSCommand(cmd, aTokens)
     {
-        let result = "", asFiles, sDir;
+        let result = "", asFiles, sDir, count = 0;
 
         switch(cmd) {
         case "cd":
@@ -2795,16 +2797,31 @@ export default class PC extends PCjsLib {
                 result = "new directory: " + sDir;
                 this.localDir = sDir;
             } else {
-                result = "directory does not exist: " + aTokens[0];
+                result = "invalid directory: " + aTokens[0];
             }
             break;
+        case "dir":
         case "ls":
             asFiles = node.fs.readdirSync(this.localDir);
             for (let sFile of asFiles) {
                 let sPath = node.path.join(this.localDir, sFile);
-                let stat = node.fs.statSync(sPath);
-                result += sprintf("%-6d  %.3F %-2D %Y  %-2G:%02N%A  %s\n", stat.size, stat.mtime, stat.mtime, stat.mtime, stat.mtime, stat.mtime, stat.mtime, sFile);
+                let stats = node.fs.statSync(sPath);
+                let attr = stats.attr;
+                if (attr === undefined) {
+                    attr = stats.mode;
+                    if (attr & 0o200) {
+                        attr = DiskInfo.ATTR.ARCHIVE;
+                    } else {
+                        attr = DiskInfo.ATTR.READONLY;
+                    }
+                    if (stats.isDirectory()) {
+                        attr |= DiskInfo.ATTR.SUBDIR;
+                    }
+                }
+                result += sprintf("%-6d  %.3F %-2D %Y  %-2G:%02N%A  %#04x  %s%s\n", stats.size, stats.mtime, stats.mtime, stats.mtime, stats.mtime, stats.mtime, stats.mtime, attr, sFile, (attr & DiskInfo.ATTR.SUBDIR)? '/' : '');
+                count++;
             }
+            result += sprintf("%d file%s", count, count == 1? "" : "s");
             break;
         default:
             result = "unsupported command: " + cmd;
@@ -2911,8 +2928,8 @@ export default class PC extends PCjsLib {
         this.machineType = defaults['type'] || this.machineType;
         this.savedMachine = defaults['machine'] || this.savedMachine;
         this.savedState = defaults['state'] || this.savedState;
-        this.checkBuildArgs(argv);
-        this.checkMachineArgs(argv);
+        this.checkBuildArgs(argv, defaults);
+        this.checkMachineArgs(argv, defaults);
         /*
          * Now that we have most of the system defaults, we can process --help (since it displays some of them).
          */
@@ -2920,13 +2937,14 @@ export default class PC extends PCjsLib {
     }
 
     /**
-     * checkBuildArgs
+     * checkBuildArgs(argv, defaults)
      *
      * @this {PC}
      * @param {Object|string} argv
+     * @param {Object} [defaults]
      * @returns {string}
      */
-    checkBuildArgs(argv)
+    checkBuildArgs(argv, defaults = {})
     {
         let argc = 0;
         if (typeof argv == "string") {
@@ -2934,7 +2952,6 @@ export default class PC extends PCjsLib {
             [argc, argv] = PCjsLib.getArgs(argv);
             argc = 1;
         }
-        let defaults = configJSON['defaults'] || {};
         this.fBare = PC.removeFlag(argv, 'bare', this.fBare);
         this.fFloppy = PC.removeFlag(argv, 'floppy', this.fFloppy);
         this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);
@@ -2998,13 +3015,14 @@ export default class PC extends PCjsLib {
     }
 
     /**
-     * checkMachineArgs
+     * checkMachineArgs(argv, defaults)
      *
      * @this {PC}
      * @param {Object|string} argv
+     * @param {Object} [defaults]
      * @returns {string}
      */
-    checkMachineArgs(argv)
+    checkMachineArgs(argv, defaults = {})
     {
         let argc = 0;
         if (typeof argv == "string") {
@@ -3012,7 +3030,6 @@ export default class PC extends PCjsLib {
             [argc, argv] = PCjsLib.getArgs(argv);
             argc = 1;
         }
-        let defaults = configJSON['defaults'] || {};
         this.fHalt = PC.removeFlag(argv, 'halt', this.fHalt);
         this.bootSelect = PC.removeArg(argv, 'boot', defaults['boot'] || this.bootSelect).toUpperCase();
         return argc? this.checkRemainingArgs(argv) : "";

@@ -296,7 +296,7 @@ export default class DiskLib {
                     db = this.normalizeTextFile(db);
                 }
             }
-            fSuccess = this.writeFileSync(this.getLocalPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
+            fSuccess = this.writeFileSync(this.getLocalPath(sPath), db, true, argv['overwrite'], attr, argv['quiet']);
         }
         if (fSuccess) {
             node.fs.utimesSync(this.getLocalPath(sPath), date, date);
@@ -778,6 +778,10 @@ export default class DiskLib {
             let sName = node.path.basename(sPath);
             if (sName.charAt(0) == '.') continue;
             let file = {path: (sPath[0] != '/' && sPath[1] != ':'? '/' : '') + sPath, name: sName, nameEncoding: "utf8"};
+            /*
+             * When statSync() is being handled by PCFS, it may include an "attr" property if the file or directory
+             * originated from a DOS disk image or DOS archive.  Otherwise, we rely on the standard "mode" property.
+             */
             let stats = node.fs.statSync(sPath);
             file.date = stats.mtime;
             if (stats.isDirectory()) {
@@ -789,7 +793,7 @@ export default class DiskLib {
                     // this.printf("warning: skipping directory matching archive: %s\n", sArchive);
                     continue;
                 }
-                file.attr = DiskInfo.ATTR.SUBDIR;
+                file.attr = DiskInfo.ATTR.SUBDIR | (stats.attr|0);
                 file.size = -1;
                 file.data = new DataBuffer();
                 file.files = this.readDirFiles(sPath + '/', null, fNormalize, iLevel + 1, driveInfo);
@@ -829,7 +833,14 @@ export default class DiskLib {
                         this.printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
                     }
                 }
-                file.attr = DiskInfo.ATTR.ARCHIVE;
+                file.attr = stats.attr;
+                if (file.attr === undefined) {
+                    if (stats.mode & 0o200) {
+                        file.attr = DiskInfo.ATTR.ARCHIVE;
+                    } else {
+                        file.attr = DiskInfo.ATTR.READONLY;
+                    }
+                }
                 file.size = data.length;
                 file.data = data;
             }
@@ -1277,18 +1288,18 @@ export default class DiskLib {
     }
 
     /**
-     * writeFileSync(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
+     * writeFileSync(sFile, data, fCreateDir, fOverwrite, attr, fQuiet)
      *
      * @this {DiskLib}
      * @param {string} sFile
      * @param {DataBuffer|Array|string|undefined} data
      * @param {boolean} [fCreateDir]
      * @param {boolean} [fOverwrite]
-     * @param {boolean} [fReadOnly]
+     * @param {number} [attr]
      * @param {boolean} [fQuiet]
      * @returns {boolean}
      */
-    writeFileSync(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
+    writeFileSync(sFile, data, fCreateDir, fOverwrite, attr = undefined, fQuiet = false)
     {
         if (sFile) {
             try {
@@ -1306,7 +1317,10 @@ export default class DiskLib {
                 }
                 if (!this.existsFile(sFile) || fOverwrite) {
                     node.fs.writeFileSync(sFile, data);
-                    if (fReadOnly) node.fs.chmodSync(sFile, 0o444);
+                    if (attr !== undefined) {
+                        let mode = (attr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666;
+                        node.fs.chmodSync(sFile, mode, attr);
+                    }
                     return true;
                 }
                 if (!fQuiet) this.printf("warning: %s exists, use --overwrite to replace\n", sFile);

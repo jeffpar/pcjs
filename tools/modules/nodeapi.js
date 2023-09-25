@@ -46,8 +46,11 @@ let node = {
     child_process: {
     },
     fs: {
-        chmodSync: function(sFile, mode) {
-            console.log("fs.chmodSync(" + sFile + "): unimplemented");
+        chmodSync: function(sFile, mode, attr) {
+            let item = PCFS.getItem(sFile);
+            if (item) {
+                PCFS.setItem(item, undefined, undefined, attr);
+            }
         },
         existsSync: function(sFile) {
             return !!PCFS.getItem(sFile) || sFile.indexOf(node.rootDir) == 0;
@@ -99,6 +102,7 @@ let node = {
             if (PCFS.isPCFS(sFile)) {
                 let item = PCFS.getItem(sFile);
                 return {
+                    attr: item.attr,            // PCFS-specific
                     size: item.size,
                     mtime: item.date,
                     isDirectory: function() {
@@ -181,7 +185,6 @@ let node = {
             if (i >= 0) {
                 ext = s.slice(i);
             }
-
             return { ext };
         },
         resolve: function(s) {
