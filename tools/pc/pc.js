@@ -478,7 +478,7 @@ export default class PC extends PCjsLib {
                 if (exports) {
                     var fnSetConnection = exports['setConnection'];
                     if (fnSetConnection) {
-                        if (fnSetConnection.call(machine.serial, null, receiveSerial)) {
+                        if (fnSetConnection.call(machine.serial, null, this.receiveSerial)) {
                             machine.fnSendSerial = exports['receiveData'];
                         }
                     }
@@ -982,6 +982,7 @@ export default class PC extends PCjsLib {
      */
     sendSerial(b)
     {
+        let machine = this.machine;
         if (machine.serial && machine.fnSendSerial) {
             machine.fnSendSerial.call(machine.serial, b);
         }
