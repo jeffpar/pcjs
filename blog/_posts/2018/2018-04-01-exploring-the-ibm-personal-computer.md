@@ -41,6 +41,26 @@ the ROM subtracts CX from DX to calculate the number of rows and columns to scro
 with negative values, which it then treats as large positive numbers instead, and proceeds to erase a large swath of memory
 past the bottom of the screen.
 
+You can debug this yourself using the [PCjs Debugger](/software/pcx86/demo/ibm/exploring/1.00-MDA/?debugger=true)
+and setting a breakpoint on the above instruction (`BP 2C1:6A4`).  Here are the relevant instructions leading up to that point:
+
+    &02C1:068C 58               POP      AX
+    &02C1:068D 8AE0             MOV      AH,AL
+    &02C1:068F 80C406           ADD      AH,06
+    &02C1:0692 59               POP      CX
+    &02C1:0693 8AC1             MOV      AL,CL
+    &02C1:0695 5B               POP      BX
+    &02C1:0696 8ACB             MOV      CL,BL      ; should be MOV DL,BL (8A D3)
+    &02C1:0698 5B               POP      BX
+    &02C1:0699 8AEB             MOV      CH,BL      ; should be MOV DH,BL (8A F3)
+    &02C1:069B 5B               POP      BX
+    &02C1:069C 8AD3             MOV      DL,BL      ; should be MOV CL,BL (8A CB)
+    &02C1:069E 5B               POP      BX
+    &02C1:069F 8AF3             MOV      DH,BL      ; should be MOV CH,BL (8A EB)
+    &02C1:06A1 5B               POP      BX
+    &02C1:06A2 8AFB             MOV      BH,BL
+    &02C1:06A4 CD10             INT      10
+
 So why, on a *real* PC, was the screen still being successfully erased?  Because the monochrome video card's 4K buffer
 can be addressed not only at B000:0000, but also at B000:1000, B000:2000, and so on, all the way up to B000:7000.
 
