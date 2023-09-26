@@ -1065,6 +1065,9 @@ export default class PC extends PCjsLib {
             if (config) {
                 if (config['hdc']) {
                     driveCtrl = config['hdc']['type'];
+                } else {
+                    if (!this.bootSelect) this.bootSelect = 'A';
+                    this.localDir = "none";
                 }
                 if (config['chipset'] && config['chipset']['model'] == "deskpro386") {
                     driveCtrl = "COMPAQ";
@@ -1073,7 +1076,10 @@ export default class PC extends PCjsLib {
                 /*
                  * If we can't crack open the config, we'll have to make inferences from the machine filename.
                  */
-                if (sFile.indexOf("5160") >= 0) {
+                if (sFile.indexOf("5150") >= 0) {
+                    if (!this.bootSelect) this.bootSelect = 'A';
+                    this.localDir = "none";
+                } else if (sFile.indexOf("5160") >= 0) {
                     driveCtrl = "XT";
                 } else if (sFile.indexOf("5170") >= 0) {
                     driveCtrl = "AT";
@@ -1241,7 +1247,7 @@ export default class PC extends PCjsLib {
                     if (pc.fFloppy) {
                         disk = pc.localDisk;
                         name = (node.path.basename(pc.localDir).toUpperCase() || "User-defined") + " Diskette";
-                    } else {
+                    } else if (pc.localDir) {
                         disk = pc.getSystemDisk();
                         name = pc.systemType.toUpperCase() + ' ' + sprintf("%.2f", parseFloat(pc.systemVersion));
                     }
@@ -2804,8 +2810,10 @@ export default class PC extends PCjsLib {
             break;
         case "dir":
         case "ls":
+            result = "contents of " + this.localDir + ":\n";
             asFiles = node.fs.readdirSync(this.localDir);
             for (let sFile of asFiles) {
+                if (sFile[0] == '.') continue;
                 let sPath = node.path.join(this.localDir, sFile);
                 let stats = node.fs.statSync(sPath);
                 let attr = stats.attr;
@@ -2819,10 +2827,10 @@ export default class PC extends PCjsLib {
                         }
                     }
                 }
-                result += sprintf("%-6d  %.3F %-2D %Y  %-2G:%02N%A  %#04x  %s%s\n", stats.size, stats.mtime, stats.mtime, stats.mtime, stats.mtime, stats.mtime, stats.mtime, attr, sFile, (attr & DiskInfo.ATTR.SUBDIR)? '/' : '');
+                result += sprintf("%-8d  %.3F %-2D %Y  %-2G:%02N%A  %#04x  %s%s\n", stats.size, stats.mtime, stats.mtime, stats.mtime, stats.mtime, stats.mtime, stats.mtime, attr, sFile, (attr & DiskInfo.ATTR.SUBDIR)? '/' : '');
                 count++;
             }
-            result += sprintf("%d file%s", count, count == 1? "" : "s");
+            result += sprintf("%-8d item%s", count, count == 1? "" : "s");
             break;
         default:
             result = "unsupported command: " + cmd;
@@ -3136,7 +3144,7 @@ export default class PC extends PCjsLib {
             this.localDisk = node.path.join(pcjsDir, this.localDisk);
         }
 
-        if (sDirectory == "none") {
+        if (sDirectory == "none" || this.localDir == "none") {
             this.localDir = "";                     // --dir=none is synonymous with --disk=none
             this.localDisk = "";
             this.savedState = "";
@@ -3221,7 +3229,7 @@ export default class PC extends PCjsLib {
         let aCommands = sCommands.split(';');
         for (let i = 0; i < aCommands.length; i++) {
             let s = aCommands[i].trim();
-            if (s) {
+            if (s && s != "none") {
                 printf("%s\n", s);
                 let result = await this.doCommand(s);
                 if (result) {
@@ -3349,7 +3357,8 @@ export default class PC extends PCjsLib {
 
         if (!success) {
             let optionsMain = {
-                "--boot=[drive]":           "\tselect boot drive (A or C; default is C)",
+                "--boot=[drive]":           "\tselect boot drive (A, C, or none)",
+                "--commands=[...]":         "execute zero or more internal commands",
                 "--select=[machine]":       "select machine configuration file",
             };
             let optionsDisk = {
@@ -3398,7 +3407,7 @@ export default class PC extends PCjsLib {
             return;
         }
 
-        let commands = PC.removeArg(argv, 'commands', this.commands);
+        let commands = PC.removeFlag(argv, 'commands')? "none" : PC.removeArg(argv, 'commands', this.commands);
         await this.processArgs(argv, PC.removeArg(argv, 'select'), PC.removeArg(argv, 'disk'), PC.removeArg(argv, 'dir'), PC.removeArg(argv, 'save'), commands).catch((err) => {
             printf("exception: %s\n", err.message);
         });

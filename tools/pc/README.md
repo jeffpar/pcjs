@@ -90,7 +90,7 @@ If your operating system doesn't automatically associate `.js` files with [Node]
 
 > NOTE: On Windows, the first time you attempt to run a `.js` file from the command-line, Windows may prompt you to associate a program with it (eg, "C:\Program Files\nodejs\node.exe"), and while this will eliminate the need to type `node`, the association may not automatically pass along any command-line arguments.
 > 
-> If that happens, you may be able to fix it by running `REGEDIT` and appending ` %*` to the default value for `HKEY_CLASSES_ROOT\Applications\node.exe\shell\open\command`:
+> If that happens, you may be able to fix it by running `REGEDIT` and appending ` %*` (space, percent, asterisk) to the default value for `HKEY_CLASSES_ROOT\Applications\node.exe\shell\open\command`:
 > 
 >     "C:\Program Files\nodejs\node.exe" "%1" %*
 

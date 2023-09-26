@@ -19,42 +19,31 @@ Previously, I went over how `pc.js` can automatically build a hard disk image co
 
     $ pc.js dir
 
-If you want a small collection of DOS files to start with, try this:
+If you want a small collection of DOS files to start with, `pc.js` can fetch those for you:
 
-    $ diskimage.js --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --extract
-    DiskImage v3.00
+    $ pc.js --commands
+    pc.js v3.00
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
-    Options: --disk https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --extract
-    processing: MSDOS330-C400 (10653696 bytes, checksum 1534502417, hash 896210a58e39e33ec0156b9b3b37c3cc)
-    extracting: AUTOEXEC.BAT
-    extracting: CONFIG.SYS
-    extracting: DOS/4201.CPI
-    extracting: DOS/5202.CPI
-    extracting: DOS/ANSI.SYS
-    extracting: DOS/APPEND.EXE
-    extracting: DOS/ASSIGN.COM
-    extracting: DOS/ATTRIB.EXE
-    extracting: DOS/BACKUP.COM
-    extracting: DOS/CHKDSK.COM
-    extracting: DOS/COMMAND.COM
-    ...
+    Options: --commands
+    [Type help for list of commands, CTRL-C to terminate]
+    >> fetch https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json disks/msdos
+    >> quit
 
-This should create a folder named `MSDOS330-C400` containing a variety of DOS utilities and programs, which you can then pass to `pc.js`, along with an initial DOS command:
+This should create a folder named `disks/msdos` containing a variety of DOS utilities and programs, which you can then pass to `pc.js`, along with an initial DOS command:
 
-    $ pc.js MSDOS330-C400 dir
-    Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
+    $ pc.js disks/msdos dir
+    [Press CTRL-D to enter command mode]
 
-     Volume in drive C is PCJS       
+     Volume in drive C is MSDOS      
      Directory of  C:\
 
-    AUTOEXEC BAT      190   8-09-23   4:10p
-    CONFIG   SYS       58   1-01-80  12:03a
-    DOS          <DIR>      8-09-23   4:08p
-    PUZZLED      <DIR>      8-09-23   4:08p
+    AUTOEXEC BAT      190   7-26-23  10:36a
+    CONFIG   SYS       22   1-01-80  12:03a
+    DOS          <DIR>      7-26-23  10:05a
+    PUZZLED      <DIR>      7-26-23  10:05a
     TMP          <DIR>      1-01-80  12:13a
-    TOOLS        <DIR>      8-09-23   4:08p
-            6 File(s)   5828608 bytes free
-    C:\>
+    TOOLS        <DIR>      7-26-23  10:05a
+            6 File(s)   5820416 bytes free
 
 Next, let's look at [pc.json5](https://github.com/jeffpar/pcjs/blob/master/tools/pc/pc.json5), the configuration file for `pc.js`:
 
@@ -123,7 +112,7 @@ These settings control what happens whenever `pc.js` builds (or rebuilds) a hard
 
 To change those defaults, you can either edit `pc.json5` or pass command-line overrides; for example:
 
-    $ cd MSDOS330-C400
+    $ cd disks/msdos
     $ pc.js ibm5170 --target=20M --fat=12 --maxfiles=2048 dir
 
 This changes the default machine from a `compaq386` to an `ibm5170`, sets the target drive size to 20Mb, forces the default FAT size to 12-bit (which would otherwise be 16-bit for a 20Mb disk), and allows up to 2048 local files to be included in the disk image.

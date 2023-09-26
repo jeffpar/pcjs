@@ -17,10 +17,10 @@ For the examples below, I'm using Ubuntu Linux (hence the `$` prompt), but I've 
 
 I also recommend adding the "pcjs/tools/pc" and "pcjs/tools/diskimage" directories to your PATH, so that you can run `pc.js` and `diskimage.js` from any location.  Alternatively, you can always use relative paths, like I've used in the examples.
 
-The first example is a simple use case that doesn't involve any disks, just running some BASIC commands from the original IBM PC's built-in BASIC interpreter.
+The first example uses an original IBM PC (Model 5150), which didn't support hard disks, and since we've also disabled booting from a floppy with `--boot=none`, all we can do is run some BASIC commands from the machine's built-in BASIC interpreter:
 
     $ cd tools/pc
-    $ pc.js ibm5150 --nofloppy
+    $ pc.js ibm5150 --boot=none
     Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
 
     1LIST   2RUN←   3LOAD"  4SAVE"  5CONT←  6,"LPT1 7TRON←  8TROFF← 9KEY    0SCREEN 
@@ -65,81 +65,81 @@ Getting back to the first example above, let's press CTRL-D for the `pc.js` comm
     SS=0060 DS=0040 ES=0060 PS=F046 V0 D0 I0 T0 S0 Z1 A0 P1 C0 
     &F000:E850 74F3             JZ       E845 (romBIOS+0x0845)
     >> help
-    pc.js commands:
-      build [command]
-      exec [local command]
-      load [drive] [search options]
-      save [local disk image]
-      start [machine]
-      quit
+    internal commands:
+
+    abort   terminate without saving
+    build   build disk for specified drive type
+    exec    execute a local command
+    fetch   read disk image and extract to directory
+    load    load drive with specified diskette
+    save    save disk to directory or as disk image
+    select  select a new machine (eg, ibm5170)
+    start   start new machine
+    stop    stop current machine (does not save)
+    quit    save all changed files and terminate
+
     type "?" for a list of debugger commands (eg, "g" to continue running)
     >> quit
     $
 
 ### Working With Files
 
-Now let's dive into a much more interesting example.  Imagine we have small collection of DOS files and programs that we'd like to run.  There's a PCjs hard disk image we can use for this demonstration, so let's download and extract it using the PCjs [diskimage.js](/tools/diskimage/) utility:
+Now let's dive into a much more interesting example.  Imagine we have a small collection of DOS files and programs.  There's a PCjs hard disk image we can use for this demonstration, so we'll start by running `pc.js` in interactive mode (`--commands`) and then use the `fetch`, `build` and `start` commands to extract all the files from that hard disk image, build a local hard disk image from those files, and then boot from that disk image using our default machine (a COMPAQ DeskPro 386):
 
-    $ ../diskimage/diskimage.js --disk https://harddisks.pcjs.org/pcx86/10mb/MSDOS320-C400.json --extract
-    DiskImage v3.00
+    $ pc.js --commands
+    pc.js v3.00
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
-    Options: --disk https://harddisks.pcjs.org/pcx86/10mb/MSDOS320-C400.json --extract
-    processing: MSDOS320-C400 (10653696 bytes, checksum 3014829503, hash none)
-    extracting: CONFIG.SYS
-    extracting: COMMAND.COM
-    extracting: AUTOEXEC.BAT
-    extracting: DOS/ANSI.SYS
-    extracting: DOS/APPEND.COM
-    extracting: DOS/ASSIGN.COM
-    extracting: DOS/ATTRIB.EXE
-    extracting: DOS/CHKDSK.EXE
-    ...
+    Options: --commands
+    [Type help for list of commands, CTRL-C to terminate]
+    >> fetch https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json disks/msdos
+    >> build disks/msdos chkdsk
+    reading files: /Users/jeff/Sites/pcjs/tools/pc/disks/msdos/
+    building drive: /Users/jeff/Sites/pcjs/tools/pc/disks/msdos.json
+    >> start
+    loading machine: compaq386.json
+    >> [Press CTRL-D to enter command mode]
+    Volume MSDOS       created Jun 26, 2023 10:05a
 
-All the files and folders are extracted into a directory with the same name as the disk image, so let's change to that directory now:
-
-    $ cd MSDOS320-C400
-    $ ls
-    AUTOEXEC.BAT  COMMAND.COM  CONFIG.SYS  DOS  PUZZLED  TMP  TOOLS
-    $ 
-
-To run a program from that folder, such as the DOS `CHKDSK` utility, just run `pc.js` with name of the program, including any arguments it might need:
-
-    $ ../pc.js chkdsk
-    Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
-
-    C>ECHO OFF
-    Volume PCJS        created Sep 27, 1989 3:00a
-
-     10592256 bytes total disk space
-        77824 bytes in 6 hidden files
+     10588160 bytes total disk space
+       106496 bytes in 9 hidden files
         86016 bytes in 21 directories
-      4341760 bytes in 244 user files
-      6086656 bytes available on disk
+      4575232 bytes in 252 user files
+      5820416 bytes available on disk
 
        655360 bytes total memory
-       588672 bytes free
-
+       586256 bytes free
     C:\>
+
+To run a program from the `disks/msdos` folder, such as the DOS `CHKDSK` utility, just run `pc.js` with name of the program, including any arguments it might need:
+
+    $ pc.js disks/msdos chkdsk
+    [Press CTRL-D to enter command mode]
+    Volume MSDOS       created Jun 26, 2023 10:15a
+
+     10588160 bytes total disk space
+       106496 bytes in 9 hidden files
+        86016 bytes in 21 directories
+      4575232 bytes in 252 user files
+      5820416 bytes available on disk
+
+       655360 bytes total memory
+       586256 bytes free
 
 If the DOS command you want to run includes wildcards (eg, `DIR *.*`), put it in quotes to prevent your shell from expanding them:
 
-    $ ../pc.js "dir *.*"
-    Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
+    $ pc.js disks/msdos "dir *.*"
+    [Press CTRL-D to enter command mode]
 
-    C>ECHO OFF
+     Volume in drive C is MSDOS      
+     Directory of  C:\
 
-    Volume in drive C is PCJS       
-    Directory of  C:\
-
-    AUTOEXEC BAT      193   7-15-23   9:44a
-    CONFIG   SYS       58   1-01-80  12:03a
-    DOS          <DIR>      7-15-23   9:23a
-    PUZZLED      <DIR>      7-15-23   9:23a
+    AUTOEXEC BAT      194   6-26-23  10:18a
+    CONFIG   SYS       22   1-01-80  12:03a
+    DOS          <DIR>      6-26-23  10:05a
+    PUZZLED      <DIR>      6-26-23  10:05a
     TMP          <DIR>      1-01-80  12:13a
-    TOOLS        <DIR>      7-15-23   9:23a
-            6 File(s)   6086656 bytes free
-
-    C:\>
+    TOOLS        <DIR>      6-26-23  10:05a
+            6 File(s)   5820416 bytes free
 
 This collection of files also includes a Microsoft C Compiler, so we can try compiling and running some C demo programs:
 
@@ -147,7 +147,7 @@ This collection of files also includes a Microsoft C Compiler, so we can try com
 
     C:\TOOLS>dir
 
-    Volume in drive C is PCJS       
+    Volume in drive C is MSDOS      
     Directory of  C:\TOOLS
 
     .            <DIR>      7-15-23   9:23a
@@ -171,7 +171,7 @@ This collection of files also includes a Microsoft C Compiler, so we can try com
 
     C:\TOOLS\C4DEMO>dir
 
-    Volume in drive C is PCJS       
+    Volume in drive C is MSDOS      
     Directory of  C:\TOOLS\C4DEMO
 
     .            <DIR>      7-15-23   9:23a
@@ -221,7 +221,7 @@ This collection of files also includes a Microsoft C Compiler, so we can try com
 
     C:\TOOLS\C4DEMO>dir
 
-    Volume in drive C is PCJS       
+    Volume in drive C is MSDOS      
     Directory of  C:\TOOLS\C4DEMO
 
     .            <DIR>      7-15-23   9:23a
@@ -260,12 +260,10 @@ Whenever you run `pc.js` with a DOS command or program name, it automatically bu
 
 Let's say we want to load "PC-SIG Library Disk #1234" into the machine's A: drive.  Start `pc.js` with any DOS command to automatically build and start a machine (I used the DOS `ver` command this time) and then type `load a: pc-sig 1234` to load the matching diskette into drive A:
 
-    $ ../pc.js ver
-    Press CTRL-D to enter command mode, CTRL-C to terminate pc.js
+    $ pc.js disks/msdos ver
+    [Press CTRL-D to enter command mode]
 
-    C>ECHO OFF
-
-    MS-DOS Version 3.20
+    MS-DOS Version 3.30    
 
     C:\>load a: pc-sig 1234
     loading "PC-SIG Library Disk #1234" in drive A:
