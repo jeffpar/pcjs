@@ -2698,7 +2698,7 @@ export default class PC extends PCjsLib {
                 let sFile = this.checkMachine(arg);
                 if (sFile) {
                     this.machine = this.newMachine();
-                    printf("machine loading: %s\n", sFile);
+                    printf("loading machine: %s\n", sFile);
                     result = this.loadMachine(sFile);
                     if (!result) {
                         this.localMachine = sFile;
