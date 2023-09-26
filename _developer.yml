@@ -17,8 +17,9 @@ url: "http://localhost:4000"
 # of unbundled modules (yet), and since the server does not offer any means of controlling XSL rendering (yet),
 # the <machine> tag of each XML file must set 'uncompiled' to "true" in order to use uncompiled scripts.
 #
-# 'site.pcjs.localdisks' can be turned if on you have local copies of PCjs disk images; see
-# https://github.com/jeffpar/pcjs/wiki/Using-a-Local-Web-Server#accessing-disk-images-locally for more information.
+# 'site.pcjs.localdisks' can be turned if on you have local copies of PCjs disk images; be sure to remove
+# '/disks' from the "exclude" section below as well.  See https://github.com/jeffpar/pcjs/wiki/Using-a-Local-Web-Server#accessing-disk-images-locally
+# for more information.
 #
 pcjs:
   localdisks: false
@@ -39,10 +40,8 @@ exclude:
   - /package*.json
   - /.history
   - /.vscode
-  - /node_modules
-  - /documents
   - /disks
-  - /software
+  - /node_modules
   - /software/pcx86/sys/dos/microsoft/1.25/src
   - /software/pcx86/sys/dos/microsoft/2.11/src
   - /tools/pc/disks

@@ -7,18 +7,19 @@ redirect_from:
   - /disks/pcx86/dos/microsoft/6.00/1440K/
   - /disks/pcx86/dos/microsoft/6.00/
 machines:
-  - id: ibm5170-msdos600
+  - id: compaq386-msdos600
     type: pcx86
-    config: /machines/pcx86/ibm/5170/ega/640kb/rev1/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/vga/2048kb/machine.xml
     autoMount:
-      A:
-        name: MS-DOS 6.00 (1.2M Disk 1)
+      A: None
+      B: MS-DOS 6.00 (1.2M Disk 1)
+    drives: '[{name:"128Mb Hard Disk",type:35,path:"/harddisks/pcx86/128mb/MSDOS600.json"}]'
 ---
 
 Directory listings of the [four 1.2M](#directory-of-ms-dos-600-12m-disk-1) and [three 1.44M](#directory-of-ms-dos-600-144m-disk-1)
 distribution diskettes are provided below.
 
-{% include machine.html id="ibm5170-msdos600" %}
+{% include machine.html id="compaq386-msdos600" %}
 
 ### Directory of MS-DOS 6.00 (1.2M Disk 1)
 
