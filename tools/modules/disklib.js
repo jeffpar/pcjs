@@ -835,10 +835,9 @@ export default class DiskLib {
                 }
                 file.attr = stats.attr;
                 if (file.attr === undefined) {
-                    if (stats.mode & 0o200) {
-                        file.attr = DiskInfo.ATTR.ARCHIVE;
-                    } else {
-                        file.attr = DiskInfo.ATTR.READONLY;
+                    file.attr = DiskInfo.ATTR.ARCHIVE;
+                    if (!(stats.mode & 0o200)) {
+                        file.attr |= DiskInfo.ATTR.READONLY;
                     }
                 }
                 file.size = data.length;

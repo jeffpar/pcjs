@@ -7224,7 +7224,7 @@ const DRIVE_TYPES = [
         32: [905,  9, 25],      // Sep 1986 DeskPro 386 TechRef: [966, 3, 34]
         33: [832,  8, 33],      // Sep 1986 DeskPro 386 TechRef: [966, 5, 34]; May 1987 80286 TechRef: [748, 8, 34]
         34: [966,  7, 34],
-        35: [966,  8, 34],
+        35: [966,  8, 34],      // 128Mb (eg, https://harddisks.pcjs.org/pcx86/128mb/MSDOS600.json)
         36: [966,  9, 34],
         37: [966,  5, 34],
         38: [612, 16, 63],      // Sep 1986 DeskPro 386 TechRef: [1023, 9, 33]; May 1987 80286 TechRef: [611, 16, 63]

@@ -2410,10 +2410,12 @@ export default class PC extends PCjsLib {
                     let index = this.diskIndexCache;
                     let itemNames = this.diskIndexKeys;
                     let itemParts = diskNameParts;
-                    if (fileNameParts.length && this.fileIndexKeys.length) {
-                        index = this.fileIndexCache;
-                        itemNames = this.fileIndexKeys;
+                    if (fileNameParts.length) {
                         itemParts = fileNameParts;
+                        if (this.fileIndexKeys.length) {
+                            index = this.fileIndexCache;
+                            itemNames = this.fileIndexKeys;
+                        }
                     }
                     let searchNames = function(names, parts, index) {
                         let matches = [];
@@ -2808,14 +2810,13 @@ export default class PC extends PCjsLib {
                 let stats = node.fs.statSync(sPath);
                 let attr = stats.attr;
                 if (attr === undefined) {
-                    attr = stats.mode;
-                    if (attr & 0o200) {
-                        attr = DiskInfo.ATTR.ARCHIVE;
-                    } else {
-                        attr = DiskInfo.ATTR.READONLY;
-                    }
                     if (stats.isDirectory()) {
-                        attr |= DiskInfo.ATTR.SUBDIR;
+                        attr = DiskInfo.ATTR.SUBDIR;
+                    } else {
+                        attr = DiskInfo.ATTR.ARCHIVE;
+                        if (!(stats.mode & 0o200)) {
+                            attr |= DiskInfo.ATTR.READONLY;
+                        }
                     }
                 }
                 result += sprintf("%-6d  %.3F %-2D %Y  %-2G:%02N%A  %#04x  %s%s\n", stats.size, stats.mtime, stats.mtime, stats.mtime, stats.mtime, stats.mtime, stats.mtime, attr, sFile, (attr & DiskInfo.ATTR.SUBDIR)? '/' : '');
