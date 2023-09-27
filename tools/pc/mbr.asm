@@ -47,6 +47,24 @@ drv_sectors	db	?	; 0x1AC, 0x1BC
 drv_reserved	db	?
 drv_parms	ends
 
+;
+; Why do we ORG at RELOC (7E00h) when this code is always loaded at 7C00h?
+; Because 7E00h is where the code immediately relocates itself (see rep movsw
+; below); the code has to move itself before loading the next boot sector.
+;
+; Also, note that an ORG of 7E00h with a size of 200h bytes will result
+; in the binary being 32K bytes long, so after linking and running EXE2BIN,
+; you must also chop off the first 7E00h bytes, which you can do with DEBUG:
+;
+;   DEBUG MBR.BIN
+;   -M 7F00 80FF 100
+;   -RCX
+;   :200
+;   -N PCJS.MBR
+;   -W
+;   Writing 0200 bytes
+;   -Q
+;
 RELOC		equ	7E00h
 
 BOOTSEG	segment word public 'CODE'
@@ -71,18 +89,18 @@ BOOTSEG	segment word public 'CODE'
 start:	cli
 	xor	ax,ax
 	mov	ss,ax
-	mov	sp,7C00h
+	mov	sp,7C00h	; put the stack below 7C00h
 	mov	ds,ax
 	mov	es,ax
-	ASSUME	DS:BOOTSEG, ES:BOOTSEG
+	ASSUME	DS:BOOTSEG, ES:BOOTSEG, SS:BOOTSEG
 	sti
 	cld
-	mov	si,sp
-	mov	di,offset start
+	mov	si,sp		; src = 7C00h
+	mov	di,offset start	; dst = 7E00h
 	mov	cx,100h
-	rep	movsw
+	rep	movsw		; move 200h bytes
 	mov	bx,offset chk0
-	jmp	bx
+	jmp	bx		; jump to where the rest of the code is ORG'ed
 ;
 ; Now let's get to the whole reason for this MBR's existence: checking
 ; for internal drive parameter table(s), and if they exist, copying them
@@ -128,19 +146,25 @@ load:	test	di,di		; did we already find an ACTIVE partition?
 read:	mov	bp,5		; BP = retries
 	mov	bx,sp		; BX = 7C00h (nothing has been pushed)
 	xchg	cx,ax		; CX and DX contain cylinder/head/sector
-retry:	mov	ax,0201h	; AH = 02h, AL = 01h
-	int	13h
+retry:	mov	ax,0201h	; AH = 2 (read), AL = 1 (# sectors)
+	int	13h		; read 1 sector
 	jnc	verify
-	xor	ax,ax
-	int	13h
+	xor	ax,ax		; AH = 0 (drive reset)
+	int	13h		; perform drive reset and then retry
 	dec	bp
 	jnz	retry
 	mov	si,offset err_msg
-
+;
+; Print the null-terminated error message at DS:SI and then stop.
+; NOTE: BIOS INT 10h function 0Eh was changed in the IBM PC XT (Model 5160)
+; to ignore BX (at least in text modes), but just in case you're somehow
+; running this code on a PC (Model 5150), we set BX to a sane value.
+;
 print:	lodsb
 	test	al,al
 hang:	jz	hang
 	mov	ah,0Eh
+	mov	bx,0007h	; BH = page 0, BL = attr 07h
 	int	10h
 	jmp	print
 
@@ -177,10 +201,10 @@ inv_msg	db	"Invalid partition table",0
 err_msg	db	"Error loading operating system",0
 mis_msg	db	"Missing operating system",0
 
-	org	RELOC + 0199h
-	db	"PCJS",0
+	org	RELOC + 0199h	; put "PCJS" signature here
+	db	"PCJS",0	; to signal that drive tables follow
 ;
-; When PCjs builds the MBR, if any drives are using a custom drive
+; When PCjs writes the MBR, if any drives are using a custom drive
 ; geometry instead of a pre-configured drive type, then it will fill in
 ; these drive tables at build time.  We just need to reserve the space.
 ;
