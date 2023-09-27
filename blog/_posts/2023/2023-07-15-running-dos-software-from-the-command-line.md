@@ -108,7 +108,6 @@ Now let's dive into a much more interesting example.  Imagine we have a small co
 
        655360 bytes total memory
        586256 bytes free
-    C:\>
 
 To run a program from the `disks/msdos` folder, such as the DOS `CHKDSK` utility, just run `pc.js` with name of the program, including any arguments it might need:
 

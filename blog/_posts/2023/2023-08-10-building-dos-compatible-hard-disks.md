@@ -119,7 +119,7 @@ This changes the default machine from a `compaq386` to an `ibm5170`, sets the ta
 
 You can also use `--drivetype` for even more control of the virtual hard disk image, but make sure the values you specify are valid for the machine being used.  By default, `pc.js` loads a [compaq386](/tools/pc/compaq386.json) machine, which also uses a saved machine state (`state386.json`) that bypasses the system startup tests and floppy drive checks, so that it can start booting from the virtual hard disk immediately.  But the COMPAQ DeskPro 386 has a drive type table in ROM that differs significantly from the drive types defined by the IBM PC AT, so if you're using an AT-specific drive type (eg, `--drivetype=AT:6`), then you should also specify an IBM 5170 machine configuration.  An [ibm5170.xml](/tools/pc/ibm5170.xml) file is included in the `pc.js` folder to make this easier:
 
-    $ pc.js ibm5170 --drivetype=AT:6 MSDOS330-C400 dir
+    $ pc.js ibm5170 --drivetype=AT:6 dir
 
 ### Some Caveats Regarding Disk Formats
 

@@ -7,11 +7,11 @@ preview: /blog/images/reynolds-wrap.jpg
 description: "In this PCjs blog post, I wrap up my work on the PC.js command-line utility and give a little a nod to Aaron Reynolds."
 ---
 
-This will probably be the final post in my "[trilogy](/blog/2023/08/10/)" of posts about the `pc.js` command-line utility, now that I've (hopefully) finished ironing out most of the wrinkles.  I've improved FAT12 and FAT16 support, so when `pc.js` builds either a standard *or* custom FAT disk image, it should be compatible with whatever version of PC DOS, MS-DOS, or COMPAQ DOS you select.
+This will probably be the final post in my "[trilogy](/blog/2023/08/10/)" of posts about the [PC.js](/tools/pc/) command-line utility, now that I've (hopefully) finished ironing out most of the wrinkles.  I've improved FAT12 and FAT16 support, so when `pc.js` builds either a standard *or* custom FAT disk image, it should be compatible with whatever version of PC DOS, MS-DOS, or COMPAQ DOS you select.
 
 BTW, there's no FAT32 support.  FAT32 arrived on the scene in 1996, and my focus here at "PCjs HQ" is generally on stuff older than that and/or stuff that personally interests me.  So, apologies in advance.
 
-Let's start with a quick recap of what you can now do with `pc.js`:
+Let's start with a quick recap of what you can now do with [PC.js](/tools/pc/):
 
   - Start IBM 5150/5160/5170 and COMPAQ DeskPro 386 machines from the command-line
   - Start any machine that has a PCjs XML configuration file, like this [IBM PC XT](https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml) or this [PDP-11/20](https://www.pcjs.org/machines/dec/pdp11/1120/basic/debugger/machine.xml)
