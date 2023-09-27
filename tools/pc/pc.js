@@ -3358,7 +3358,7 @@ export default class PC extends PCjsLib {
         if (!success) {
             let optionsMain = {
                 "--boot=[drive]":           "\tselect boot drive (A, C, or none)",
-                "--commands=[...]":         "execute zero or more internal commands",
+                "--commands[=...]":         "execute commands, separated by semicolons",
                 "--select=[machine]":       "select machine configuration file",
             };
             let optionsDisk = {
@@ -3402,7 +3402,7 @@ export default class PC extends PCjsLib {
             printf("\t--fat can also specify cluster and root directory sizes (eg, --fat=16:2048:512)\n");
             printf("\t--hidden also disables the use of hidden sectors to work around boot sector bugs\n");
             printf("\t--system can also specify a version (eg, --system=pcdos:2.0) for convenience\n\n");
-            printf("\tDrive and FAT values should be considered advisory, as it may not be possible to honor them.\n");
+            printf("\tFAT values should be considered advisory, as it may not be possible to honor them.\n");
             printf("\npc.js configuration settings are stored in %s\n", node.path.join(pcjsDir, configFile));
             return;
         }
