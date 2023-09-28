@@ -38,6 +38,7 @@
 					<li><a href="/about/">About</a></li>
 					<li><a href="https://www.pcjs.org/blog/">Blog</a></li>
 					<li><a href="https://github.com/jeffpar/pcjs">Repository</a></li>
+					<li><a href="/tools/">Tools</a></li>
 				</ul>
 			</div>
 		</div>
