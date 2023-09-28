@@ -927,24 +927,24 @@ export default class PC extends PCjsLib {
             text += sprintf("%s drive type %d, CHS %d:%d:%d, %s\n", info.controller, info.type, info.cylinders, info.heads, info.sectorsPerTrack, info.driveSize);
             let vol = driveInfo.volume;
             if (vol) {
-                info.sectorSize = vol.cbSector;
+                info.sectorSize = vol.cbSector || info.sectorSize;
                 info.mediaID = sprintf("%#04x", vol.idMedia);
                 let sectorsFAT = (vol.vbaRoot - vol.vbaFAT);
                 info.typeFAT = vol.nFATBits || vol.idFAT;
-                info.totalFATs = (sectorsFAT / Math.ceil(Math.ceil(vol.clusTotal * info.typeFAT / 8) / vol.cbSector))|0;
+                info.totalFATs = (sectorsFAT / Math.ceil(Math.ceil(vol.clusTotal * info.typeFAT / 8) / info.sectorSize))|0;
                 info.sizeRoot = vol.rootEntries || vol.rootTotal;
                 info.sectorsHidden = vol.lbaStart;
                 info.sectorsReserved = vol.vbaFAT;
                 info.sectorsFAT = (sectorsFAT / info.totalFATs)|0;
-                info.sectorsRoot = Math.ceil((info.sizeRoot * 32) / vol.cbSector);
+                info.sectorsRoot = Math.ceil((info.sizeRoot * 32) / info.sectorSize);
                 info.sectorsTotal = vol.lbaTotal;
                 info.sectorsData = info.sectorsTotal - info.sectorsReserved - sectorsFAT - info.sectorsRoot;
-                info.clusterSize = vol.clusSecs * vol.cbSector;
+                info.clusterSize = vol.clusSecs * info.sectorSize;
                 info.clustersTotal = vol.clusTotal;
                 info.clustersFree = vol.clusFree;
-                info.bytesTotal = vol.clusTotal * vol.clusSecs * vol.cbSector;
-                info.bytesFree = vol.clusFree * vol.clusSecs * vol.cbSector;
-                info.usageFinalFAT = (vol.cbSector - (Math.ceil(vol.clusTotal * info.typeFAT / 8) % vol.cbSector)) / vol.cbSector * 100;
+                info.bytesTotal = info.clustersTotal * info.clusterSize;
+                info.bytesFree = info.clustersFree * info.clusterSize;
+                info.usageFinalFAT = (info.sectorSize - (Math.ceil(info.clustersTotal * info.typeFAT / 8) % info.sectorSize)) / info.sectorSize * 100;
                 text += sprintf("%d hidden sectors, %d reserved sectors\n", info.sectorsHidden, info.sectorsReserved);
                 text += sprintf("%d-bit FAT, %d-byte clusters, %d clusters\n", info.typeFAT, info.clusterSize, info.clustersTotal);
                 text += sprintf("%d FAT sectors (x%d), %d root sectors (%d entries)\n", info.sectorsFAT, info.totalFATs, info.sectorsRoot, info.sizeRoot);
@@ -1870,10 +1870,11 @@ export default class PC extends PCjsLib {
      * dumpDisk(lba)
      *
      * @this {PC}
-     * @param {number} lba
+     * @param {string} lba
      */
     dumpDisk(lba)
     {
+        let result = "";
         if (this.driveInfo.disk) {
             let db = diskLib.getDiskSector(this.driveInfo.disk, +lba);
             if (db) {
@@ -1887,14 +1888,16 @@ export default class PC extends PCjsLib {
                         let ch = db.readUInt8(i + j);
                         s += (ch >= 32 && ch < 127)? String.fromCharCode(ch) : '.';
                     }
-                    printf("%s\n", s);
+                    if (result) result += "\n";
+                    result += s;
                 }
             } else {
-                printf("error reading sector %s\n", lba);
+                result = "error reading sector " + lba;
             }
         } else {
-            printf("no disk built\n");
+            result = "no disk built";
         }
+        return result;
     }
 
     /**
@@ -2578,9 +2581,12 @@ export default class PC extends PCjsLib {
             }
             result = await this.buildDisk(this.localDir, arg, "", true);
             break;
-        case "d":
         case "dump":
-            this.dumpDisk(...aTokens);
+            if (!aTokens.length) {
+                result = "usage: dump [logical sector number]";
+                break;
+            }
+            result = this.dumpDisk(...aTokens);
             break;
         case "exec":
             if (globals.browser) {
