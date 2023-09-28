@@ -29,37 +29,40 @@ the block characters around the border of the screen.
 
 ![Exploring the IBM PC (Bug)](/blog/images/exploring-the-ibm-pc-intro-bug.png)
 
-This was due to a bug in certain calls to the ROM's INT 10h "Scroll Up" function:
+This was due to a bug in certain calls to the program's "scroll" function, which uses ROM BIOS INT 10h function 06h
+to perform the scroll operation.  Also note that when the caller of this code passes 0 for the number of lines to scroll,
+the operation becomes a "clear" instead of a "scroll":
 
     &02C1:068C 58               POP      AX
     &02C1:068D 8AE0             MOV      AH,AL
     &02C1:068F 80C406           ADD      AH,06
-    &02C1:0692 59               POP      CX
-    &02C1:0693 8AC1             MOV      AL,CL
-    &02C1:0695 5B               POP      BX         ; pop scroll parameter for CL
-    &02C1:0696 8ACB             MOV      CL,BL
-    &02C1:0698 5B               POP      BX         ; pop scroll parameter for CH
-    &02C1:0699 8AEB             MOV      CH,BL
-    &02C1:069B 5B               POP      BX         ; pop scroll parameter for DL
-    &02C1:069C 8AD3             MOV      DL,BL
-    &02C1:069E 5B               POP      BX         ; pop scroll parameter for DH
-    &02C1:069F 8AF3             MOV      DH,BL
+    &02C1:0692 59               POP      CX         ; pop number of lines to scroll
+    &02C1:0693 8AC1             MOV      AL,CL      ; move to AL (0 means erase instead of scroll)
+    &02C1:0695 5B               POP      BX         ; pop top left column into BX
+    &02C1:0696 8ACB             MOV      CL,BL      ; move to CL
+    &02C1:0698 5B               POP      BX         ; pop top left row into BX
+    &02C1:0699 8AEB             MOV      CH,BL      ; move to CH
+    &02C1:069B 5B               POP      BX         ; pop bottom right column into BX
+    &02C1:069C 8AD3             MOV      DL,BL      ; move to DL
+    &02C1:069E 5B               POP      BX         ; pop bottom right row into BX
+    &02C1:069F 8AF3             MOV      DH,BL      ; move to DH
     &02C1:06A1 5B               POP      BX
     &02C1:06A2 8AFB             MOV      BH,BL
     AX=0600 BX=0707 CX=184F DX=0000 SP=0100 BP=00FA SI=1E39 DI=01F6 
     SS=0FDF DS=0439 ES=0439 PS=F006 V0 D0 I1 T0 S0 Z0 A0 P1 C0 
     &02C1:06A4 CD10             INT      10
 
-which must place the coordinates of the top left corner of the scroll operation in CX and the bottom right coordinates
-in DX.  However, as you can see above, they sometimes store the top values in DX and the bottom values in CX, so when
-the ROM subtracts CX from DX to calculate the number of rows and columns to scroll (or in this case, to clear),
-it ends up with negative values, which it then treats as large positive numbers instead, and proceeds to erase a large
-swath of memory past the bottom of the screen.
+To operate properly, the caller must push the bottom right coordinates and then the top left coordinates, which are then
+popped into the CX and DX registers, respectively.  However, as you can see above, the caller sometimes pushes the parameters
+in the wrong order, so that the top values end up in DX and the bottom values end up in CX.  So when the ROM subtracts CX
+from DX to calculate the number of rows and columns to scroll (or in this case, to clear), it ends up with negative values,
+which it then treats as large positive numbers instead, and proceeds to erase a large swath of memory past the bottom of the
+screen.
 
 You can debug this yourself using the [PCjs Debugger](/software/pcx86/demo/ibm/exploring/1.00-MDA/?debugger=true)
-and setting a breakpoint on the above INT 10h instruction (`BP 2C1:6A4`).  However, tracking down the particular call that pushes
-the wrong scroll parameters is an exercise left for the student, because the program was built using FORTH88, which generates
-an intermediate "p-code" to push parameters and call functions -- not the most fun thing to debug.
+and setting a breakpoint on the above INT 10h instruction (`BP 2C1:6A4`).  However, tracking down the particular call that
+pushes the wrong scroll parameters is an exercise left for the student, because the program was built using FORTH88, which
+generates an intermediate "p-code" to push parameters and call functions -- not the most fun thing to debug.
 
 So why, on a *real* PC, was the screen still being successfully erased?  Because the monochrome video card's 4K buffer
 can be addressed not only at B000:0000, but also at B000:1000, B000:2000, and so on, all the way up to B000:7000.
