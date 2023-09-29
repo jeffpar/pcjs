@@ -33,24 +33,25 @@ This was due to a bug in certain calls to the program's "scroll" function, which
 to perform the scroll operation.  Also note that when the caller of this code passes 0 for the number of lines to scroll,
 the operation becomes a "clear" instead of a "scroll":
 
-    &02C1:068C 58               POP      AX
-    &02C1:068D 8AE0             MOV      AH,AL
-    &02C1:068F 80C406           ADD      AH,06
-    &02C1:0692 59               POP      CX         ; pop number of lines to scroll
-    &02C1:0693 8AC1             MOV      AL,CL      ; move to AL (0 means erase instead of scroll)
-    &02C1:0695 5B               POP      BX         ; pop top left column into BX
-    &02C1:0696 8ACB             MOV      CL,BL      ; move to CL
-    &02C1:0698 5B               POP      BX         ; pop top left row into BX
-    &02C1:0699 8AEB             MOV      CH,BL      ; move to CH
-    &02C1:069B 5B               POP      BX         ; pop bottom right column into BX
-    &02C1:069C 8AD3             MOV      DL,BL      ; move to DL
-    &02C1:069E 5B               POP      BX         ; pop bottom right row into BX
-    &02C1:069F 8AF3             MOV      DH,BL      ; move to DH
-    &02C1:06A1 5B               POP      BX
-    &02C1:06A2 8AFB             MOV      BH,BL
+    &02C1:068C 58               POP     AX
+    &02C1:068D 8AE0             MOV     AH,AL
+    &02C1:068F 80C406           ADD     AH,06
+    &02C1:0692 59               POP     CX          ; pop number of lines to scroll
+    &02C1:0693 8AC1             MOV     AL,CL       ; move to AL (0 means erase instead of scroll)
+    &02C1:0695 5B               POP     BX          ; pop top left column into BX
+    &02C1:0696 8ACB             MOV     CL,BL       ; move to CL
+    &02C1:0698 5B               POP     BX          ; pop top left row into BX
+    &02C1:0699 8AEB             MOV     CH,BL       ; move to CH
+    &02C1:069B 5B               POP     BX          ; pop bottom right column into BX
+    &02C1:069C 8AD3             MOV     DL,BL       ; move to DL
+    &02C1:069E 5B               POP     BX          ; pop bottom right row into BX
+    &02C1:069F 8AF3             MOV     DH,BL       ; move to DH
+    &02C1:06A1 5B               POP     BX
+    &02C1:06A2 8AFB             MOV     BH,BL
+    
     AX=0600 BX=0707 CX=184F DX=0000 SP=0100 BP=00FA SI=1E39 DI=01F6 
     SS=0FDF DS=0439 ES=0439 PS=F006 V0 D0 I1 T0 S0 Z0 A0 P1 C0 
-    &02C1:06A4 CD10             INT      10
+    &02C1:06A4 CD10             INT     10
 
 To operate properly, the caller must push the bottom right coordinates and then the top left coordinates, which are then
 popped into the CX and DX registers, respectively.  However, as you can see above, the caller sometimes pushes the parameters
@@ -60,9 +61,44 @@ which it then treats as large positive numbers instead, and proceeds to erase a 
 screen.
 
 You can debug this yourself using the [PCjs Debugger](/software/pcx86/demo/ibm/exploring/1.00-MDA/?debugger=true)
-and setting a breakpoint on the above INT 10h instruction (`BP 2C1:6A4`).  However, tracking down the particular call that
-pushes the wrong scroll parameters is an exercise left for the student, because the program was built using FORTH88, which
-generates an intermediate "p-code" to push parameters and call functions -- not the most fun thing to debug.
+and setting a breakpoint on the above INT 10h instruction (`BP 2C1:6A4`).  However, tracking down the particular call(s) that
+push the parameters in the wrong order is an exercise left for the student, because the program was built using FORTH-88, which
+generates a mixture of native code and "p-code" that is interpreted at run-time to execute sequences of native code, using
+these instructions throughout the entire program as "connective tissue":
+
+    &02C1:1141 AD               LODSW
+    &02C1:1142 8BD8             MOV      BX,AX
+    &02C1:1144 FF27             JMP      WORD [BX]
+
+Dumping the strings in `COMMAND.COM` (the name of the program on the "Exploring" diskette), we can find a little more
+information about compiler and author:
+
+    FORTH-88 V 1.0q
+    FORTH88 for the IBM Personal Computer
+    Copyright 1981,1982,1983, William S. Price, Jr.
+    Version 1.1 compiled
+
+But so far, I've not yet found any more information about either FORTH-88 (aka FORTH88) or William S. Price, Jr.
+
+Anyway, I found a simpler solution to the problem: rewrite the "scroll" function above so that is uses 6 fewer bytes, and
+then use those 6 bytes to swap CX and DX whenever they appear to be reversed:
+
+    &02C1:068C 59               POP     CX 
+    &02C1:068D 58               POP     AX 
+    &02C1:068E 80C106           ADD     CL,06 
+    &02C1:0691 88CC             MOV     AH,CL 
+    &02C1:0693 59               POP     CX 
+    &02C1:0694 5B               POP     BX 
+    &02C1:0695 88DD             MOV     CH,BL 
+    &02C1:0697 5A               POP     DX 
+    &02C1:0698 5B               POP     BX 
+    &02C1:0699 88DE             MOV     DH,BL 
+    &02C1:069B 5B               POP     BX 
+    &02C1:069C 88DF             MOV     BH,BL 
+    &02C1:069E 38F5             CMP     CH,DH       ; is the top row > the bottom row?
+    &02C1:06A0 7602             JBE     06A4        ; no
+    &02C1:06A2 87CA             XCHG    CX,DX       ; yes, so swap CX and DX
+    &02C1:06A4 CD10             INT     10 
 
 So why, on a *real* PC, was the screen still being successfully erased?  Because the monochrome video card's 4K buffer
 can be addressed not only at B000:0000, but also at B000:1000, B000:2000, and so on, all the way up to B000:7000.
