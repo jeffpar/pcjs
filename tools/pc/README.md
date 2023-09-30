@@ -14,6 +14,8 @@ This directory contains the PCjs machine command-line utility [pc.js](pc.js), wh
 
 Below is a web-based demonstration of how `pc.js` works, using a simulated command prompt and a simulated file system ([PCFS](/machines/modules/v2/pcfs.js)).  Since it runs in a browser, it does not have access to your local files, and there is no provision for saving your work.
 
+It automatically performs `fetch`, `build`, and `start` commands, so you can interact with this `pc.js` demo after those commands have finished and AUTOEXEC.BAT has run `CHKDSK`.
+
 {% include web/textarea.html id="terminal" style="font-size: medium" %}
 
 ### Basic Usage
@@ -41,6 +43,7 @@ Here is the complete help text:
     machine options:
 
             --boot=[drive]          select boot drive (A or C; default is C)
+            --commands[=...]        execute commands, separated by semicolons
             --select=[machine]      select machine configuration file
 
     disk options:
@@ -76,9 +79,9 @@ Here is the complete help text:
             --hidden also disables the use of hidden sectors to work around boot sector bugs
             --system can also specify a version (eg, --system=pcdos:2.0) for convenience
 
-            Drive and FAT values should be considered advisory, as it may not be possible to honor them.
+            FAT values should be considered advisory, as it may not be possible to honor them.
 
-    pc.js configuration settings are stored in /Users/jeff/Sites/pcjs/tools/pc/pc.json5
+    pc.js configuration settings are stored in pc.json5
 
 The first argument is the name of a PCjs machine configuration files, such as [ibm5160.json](ibm5160.json) or [ibm5170.xml](ibm5170.xml), and the second is the name of a folder (eg, `disks/empty`) containing files to copy to the machine's hard disk:
 
