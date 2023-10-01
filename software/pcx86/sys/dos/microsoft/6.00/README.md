@@ -14,6 +14,7 @@ machines:
       A: None
       B: MS-DOS 6.00 (1.2M Disk 1)
     drives: '[{name:"128Mb Hard Disk",type:35,path:"/harddisks/pcx86/128mb/MSDOS600.json"}]'
+    autoType: DBLSPACE\r
 ---
 
 Directory listings of the [four 1.2M](#directory-of-ms-dos-600-12m-disk-1) and [three 1.44M](#directory-of-ms-dos-600-144m-disk-1)
