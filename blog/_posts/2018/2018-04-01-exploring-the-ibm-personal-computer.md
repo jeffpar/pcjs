@@ -10,6 +10,8 @@ A rather ~~ghastly~~ quaint piece of early IBM PC software was a program called
 and marketed by IBM, it was designed to walk you through the "ins and outs" of your shiny new IBM PC, and it came in
 two flavors: Monochrome and Color.
 
+In this post, I'm "exploring" the Monochrome version.
+
 ![Exploring the IBM PC (Intro](/blog/images/exploring-the-ibm-pc-intro.jpg)
 
 After playing some truly awful "music" through the PC's speaker -- for which I must also apologize, because the limited
@@ -80,7 +82,7 @@ information about compiler and author:
 
 But so far, I've not yet found any more information about either FORTH-88 (aka FORTH88) or William S. Price, Jr.
 
-Anyway, I found a simpler solution to the problem: rewrite the "scroll" function above so that is uses 6 fewer bytes, and
+Anyway, I found a simple solution to the problem: rewrite the "scroll" function above so that is uses 6 fewer bytes, and
 then use those 6 bytes to swap CX and DX whenever they appear to be reversed:
 
     &02C1:068C 59               POP     CX 
@@ -100,8 +102,13 @@ then use those 6 bytes to swap CX and DX whenever they appear to be reversed:
     &02C1:06A2 87CA             XCHG    CX,DX       ; yes, so swap CX and DX
     &02C1:06A4 CD10             INT     10 
 
-So why, on a *real* PC, was the screen still being successfully erased?  Because the monochrome video card's 4K buffer
-can be addressed not only at B000:0000, but also at B000:1000, B000:2000, and so on, all the way up to B000:7000.
+So why, on a *real* PC, was the screen still being successfully erased?  Because the Monochrome Display Adapter (MDA)
+frame buffer can be addressed not only at B000:0000, but also at B000:1000, B000:2000, and so on, all the way up to B000:7000.  So a scroll or clear operation that writes past the bottom of the screen will begin writing at the top of the screen again.
+
+NOTE: Even on a real PC, if you used an EGA video card with a monochrome monitor, your screen would *not* be properly erased,
+because the EGA only mapped the frame buffer into memory once, at the standard location for monochrome text (B000:0000).
+The EGA provided impressive compatibility with non-EGA hardware *and* software, but there were also a few minor differences,
+and this was one of them.
 
 This was an easy fix for the PCjs Video component, because the Bus component already supports aliasing blocks of memory
 to other addresses.  Unfortunately, this required the Bus default block size to be no larger than 4K, and for machines
