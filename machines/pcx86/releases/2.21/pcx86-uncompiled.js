@@ -67243,7 +67243,19 @@ class FDC extends Component {
          *
          * TODO: Technically, interrupt request status should be cleared by the FDC.REG_DATA.CMD.SENSE_INT command; in fact,
          * if that command is issued and no interrupt was pending, then FDC.REG_DATA.RES.INVALID should be returned (via ST0).
+         *
+         * NOTE: When the COMPAQ DeskPro 386 BIOS attempts to read from an empty diskette drive, it waits quite a while
+         * before giving up waiting for an interrupt, which results in a rather lengthy boot time.  That's probably my fault,
+         * but without an actual DeskPro 386 to play with, I'm not sure what I might be doing wrong.
+         *
+         * However, it turns out there's a simple work-around: always deliver an interrupt after the READ command on the
+         * the DeskPro 386, because it appears to actually pay attention to the NOT_READY bit in the ST0 result byte.  On
+         * IBM machines, I still do not deliver an interrupt in the NOT_READY case, because for the IBM BIOS to return
+         * a "not ready" (aka TIME_OUT) error, its WAIT_INT function has to actually time out (ie, no interrupt can occur).
          */
+        if (!drive || (drive.resCode & FDC.REG_DATA.RES.NOT_READY) && this.chipset.model < ChipSet.MODEL_COMPAQ_DESKPRO386) {
+            fIRQ = false;
+        }
 
         /*
          * When the Windows 95 HSFLOP ("High-Speed Floppy") VxD performs its diskette change-line detection logic
@@ -67268,15 +67280,13 @@ class FDC extends Component {
          * limiting the delay to the READ_ID command.
          *
          * UPDATE: Those aforementioned issues with Football and TopView may have been entirely due to a problem
-         * with the initial version of requestInterrupt(), which had an additional fCondition parameter into which I
+         * with an earlier version of requestInterrupt(), which had an additional fCondition parameter into which I
          * was passing the entire "drive && fIRQ && !(drive.resCode & FDC.REG_DATA.RES.NOT_READY)" expression.  Note
          * that if "drive" was undefined, the entire expression would be "undefined", which I assumed would translate
          * to a "falsy" fCondition, but the fCondition parameter was also declared with a default value of true,
-         * and default values are used not only when NO value is supplied but ALSO when an "undefined" value is supplied.
-         *
-         * Oops.
+         * and default values are used whenever NO value is supplied OR an "undefined" value is supplied.  Oops.
          */
-        if (drive && fIRQ && !(drive.resCode & FDC.REG_DATA.RES.NOT_READY)) {
+        if (fIRQ) {
             this.requestInterrupt(bCmdMasked == FDC.REG_DATA.CMD.READ_ID? 16 : 0);
         }
     }
