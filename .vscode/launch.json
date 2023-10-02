@@ -490,6 +490,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "--disk=https://harddisks.pcjs.org/pcx86/128mb/MSDOS600.json",
+        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,

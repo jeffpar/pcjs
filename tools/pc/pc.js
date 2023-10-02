@@ -3136,6 +3136,18 @@ export default class PC extends PCjsLib {
                 let di = await diskLib.readDiskAsync(this.localDisk);
                 if (di) {
                     this.updateDriveInfo(di);
+                    /*
+                     * The safe thing to do would be to simply NEVER used a saved state with ANY prebuilt disk,
+                     * but we happen to know that our default saved state (state386.json) was built for a machine
+                     * with drive type 1, so if that's also the type of the prebuilt disk, we'll allow it.
+                     *
+                     * TODO: I think we could also allow a saved state with any prebuilt disk that uses the PCJS
+                     * MBR along with a custom drive table, because in that case, our MBR will update the machine's
+                     * drive parameters.
+                     */
+                    if (this.driveInfo.driveType != 1) {
+                        this.savedState = "";
+                    }
                     this.driveOverride = true;
                     this.kbTarget = 0;
                 } else {
