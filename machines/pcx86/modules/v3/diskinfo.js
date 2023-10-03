@@ -4596,6 +4596,20 @@ export default class DiskInfo {
             let driveCtrl = this.driveCtrl || driveInfo.driveCtrl;;
             let driveType = this.driveType;
             if (driveType < 0) {
+                /*
+                 * If this disk has a PCJS MBR with a non-zero drive parameter table entry, we prefer to use that.
+                 */
+                let sectorMBR = this.getSector(0);
+                let sig = sectorMBR && this.getSectorData(sectorMBR, DiskInfo.MBR.PCJS_SIG, 4);
+                if (sig == DiskInfo.PCJS_VALUE) {
+                    let nCylinders = this.getSectorData(sectorMBR, DiskInfo.MBR.DRIVE0PARMS.CYLS, 2);
+                    if (nCylinders) {
+                        this.assert(this.nCylinders == nCylinders);
+                        this.assert(this.nHeads == this.getSectorData(sectorMBR, DiskInfo.MBR.DRIVE0PARMS.HEADS, 1));
+                        this.assert(this.nSectors == this.getSectorData(sectorMBR, DiskInfo.MBR.DRIVE0PARMS.SECTORS, 1));
+                        driveCtrl = "";         // force use of "PCJS" controller with drive type of zero
+                    }
+                }
                 let iCtrl = DRIVE_CTRLS.indexOf(driveCtrl);
                 if (iCtrl >= 0) {
                     let driveTypes = Object.keys(DRIVE_TYPES[iCtrl]);
