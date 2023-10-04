@@ -4,7 +4,7 @@ tagline: Home of the original IBM PC emulator for browsers.
 description: >
   PCjs offers a variety of online machine emulators written in JavaScript. Run DOS, Windows, OS/2 and other vintage PC
   applications in a web browser on your desktop computer, iPhone, or iPad. An assortment of microcomputers, minicomputers, terminals,
-  programmable calculators, and arcade machines are available, along with an archive of historical software and documentation.
+  programmable calculators, and arcade machines are also available, along with an archive of historical software and documentation.
 author: Jeff Parsons
 author_url: https://github.com/jeffpar
 logo: /assets/img/logo-home.png

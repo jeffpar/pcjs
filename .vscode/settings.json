@@ -2325,6 +2325,7 @@
     "RSET",
     "RSHIFT",
     "RSTPWCH",
+    "rstrip",
     "rsts",
     "RTCFAIL",
     "RTCUP",
