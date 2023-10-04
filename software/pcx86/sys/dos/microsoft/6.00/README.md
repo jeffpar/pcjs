@@ -17,10 +17,26 @@ machines:
     autoType: DBLSPACE\r
 ---
 
-Directory listings of the [four 1.2M](#directory-of-ms-dos-600-12m-disk-1) and [three 1.44M](#directory-of-ms-dos-600-144m-disk-1)
-distribution diskettes are provided below.
+In March 1993, Microsoft released MS-DOS 6.00, the next major release of MS-DOS after 5.00 shipped in June 1991.
+
+In addition to several new powerful utilities, like `DEFRAG` to defragment your hard disk (licensed from Symantec),
+`MSBACKUP` to efficiently backup your hard disk (also licensed from Symantec), and `MSAV` to check for viruses (licensed
+from Central Point Software), there were a number of new command-line programs, such as `CHOICE`, `DELTREE`, `MOVE`,
+`MSCDEX`, and `SMARTDRV`.
+
+But the biggest addition to MS-DOS 6.00 was a new feature called **DoubleSpace** (dubbed "MagicDrive" internally) that
+automatically compressed everything on your hard disk, providing up to "double" the amount of effective disk space -- or more,
+or less, depending on how compressible your files were overall.
+
+See this [blog post](/blog/2023/10/04/) for more information -- and some personal trivia -- regarding MS-DOS 6.00.
 
 {% include machine.html id="compaq386-msdos600" %}
+
+NOTE: The machine above is configured with a 128Mb hard disk, with MS-DOS 6.00 preinstalled, but the disk is uncompressed.
+The same machine with a [compressed disk](compressed/) is also available.
+
+Directory listings of the [four 1.2M](#directory-of-ms-dos-600-12m-disk-1) and [three 1.44M](#directory-of-ms-dos-600-144m-disk-1)
+distribution diskettes are provided below.
 
 ### Directory of MS-DOS 6.00 (1.2M Disk 1)
 
