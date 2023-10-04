@@ -127,7 +127,7 @@ while LZ77 compression was fine, and hashing was fine, apparently the *combinati
 
 So we were initially tasked with writing a compressor based on **Miller-Wegman**, an algorithm that was either not patented or
 that Microsoft owned or licensed.  When that turned out to be too slow, we instead built a compressor (internally known as XCFR or
-the "Rashid Search Algorithm") that avoided hashing by using a 256x8 look-up table along with 256-entry LRU table, and also
+the "Rashid Search Algorithm") that avoided hashing by using a 256x8 look-up table along with a 256-entry LRU table, and also
 incorporated a new Microsoft Realtime Compression Format (MRCF) for outputting the raw bytes and offset-length pairs.  That,
 of course, meant that the decompressor had to be rewritten as well.
 
