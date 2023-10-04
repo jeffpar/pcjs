@@ -9,10 +9,11 @@ redirect_from:
 machines:
   - id: ibm5170-msdos500
     type: pcx86
-    config: /machines/pcx86/ibm/5170/ega/640kb/rev1/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml
     autoMount:
-      A:
-        name: MS-DOS 5.00 (360K Disk 1)
+      A: None
+      B: MS-DOS 5.00 (360K Disk 1)
+    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/MSDOS500.json"}]'
 ---
 
 Directory listings of the [five 360Kb](#directory-of-ms-dos-500-360k-disk-1) and [three 720Kb](#directory-of-ms-dos-500-720k-disk-1)

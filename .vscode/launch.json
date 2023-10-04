@@ -1366,10 +1366,34 @@
       }
     },
     {
+      "name": "Microsoft MS-DOS 5.00 [Debugger]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/dos/microsoft/5.00/?debugger=true",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
       "name": "Microsoft MS-DOS 6.00 [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/dos/microsoft/6.00/?debugger=true",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
+      "name": "Microsoft MS-DOS 6.00 (Compressed) [Debugger]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/dos/microsoft/6.00/compressed/?debugger=true",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
