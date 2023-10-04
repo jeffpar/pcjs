@@ -103,7 +103,8 @@ then use those 6 bytes to swap CX and DX whenever they appear to be reversed:
     &02C1:06A4 CD10             INT     10 
 
 So why, on a *real* PC, was the screen still being successfully erased?  Because the Monochrome Display Adapter (MDA)
-frame buffer can be addressed not only at B000:0000, but also at B000:1000, B000:2000, and so on, all the way up to B000:7000.  So a scroll or clear operation that writes past the bottom of the screen will begin writing at the top of the screen again.
+frame buffer can be addressed not only at B000:0000, but also at B000:1000, B000:2000, and so on, all the way up to B000:7000.
+So a scroll or clear operation that writes past the bottom of the screen will begin writing at the top of the screen again.
 
 NOTE: Even on a real PC, if you used an EGA video card with a monochrome monitor, your screen would *not* be properly erased,
 because the EGA only mapped the frame buffer into memory once, at the standard location for monochrome text (B000:0000).

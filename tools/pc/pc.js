@@ -1812,14 +1812,16 @@ export default class PC extends PCjsLib {
                      * geometry has been specified, then we need to use an *extra* special volume number
                      * (-2) to ensure that our MBR's drive parameter table is updated, too.
                      *
-                     * TODO: I used to update the MBR drive parameter table ONLY when driveCtrl is "PCJS",
-                     * but for some reason, it's also needed for some "COMPAQ" configurations.  For example:
+                     * NOTE: I used to update the MBR drive parameter table ONLY when driveCtrl is "PCJS",
+                     * but it's also needed for "COMPAQ" configurations.  For example:
                      *
                      *      pc.js --sys=compaq:3.31 --target=40M
                      *
                      * will fail even though we're supposedly using a standard COMPAQ drive type (13) and
-                     * not a custom geometry.  One possible explanation is that my HDC component is not
-                     * setting the drive type in CMOS in the manner that the COMPAQ BIOS expects.
+                     * not a custom geometry.  I believe this is because when I'm using the saved machine
+                     * state for the COMPAQ machine (state386.json), the machine is already expecting drive
+                     * type 1, so our options are either 1) do NOT use the saved state, or 2) use our MBR
+                     * in order to dynamically update the drive parameters for drive type 1.  I go with #2.
                      */
                     let iVolume = -1;
                     if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && (pc.driveInfo.driveCtrl == "PCJS" || pc.driveInfo.driveCtrl == "COMPAQ")) {
@@ -3136,6 +3138,18 @@ export default class PC extends PCjsLib {
                 let di = await diskLib.readDiskAsync(this.localDisk);
                 if (di) {
                     this.updateDriveInfo(di);
+                    /*
+                     * The safe thing to do would be to simply NEVER used a saved state with ANY prebuilt disk,
+                     * but we happen to know that our default saved state (state386.json) was built for a machine
+                     * with drive type 1, so if that's also the type of the prebuilt disk, we'll allow it.
+                     *
+                     * Also, I've updated DiskInfo.getDriveType() to check for a PCJS MBR with a custom drive
+                     * parameter table.  If if finds one, it will set driveCtrl to "PCJS", which our COMPAQ machine
+                     * should support with or without a saved state, so again we'll allow it.
+                     */
+                    if (this.driveInfo.driveCtrl != "PCJS" && this.driveInfo.driveType != 1) {
+                        this.savedState = "";
+                    }
                     this.driveOverride = true;
                     this.kbTarget = 0;
                 } else {

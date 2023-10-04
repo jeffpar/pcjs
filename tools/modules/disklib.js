@@ -178,6 +178,7 @@ export default class DiskLib {
      * @param {boolean} [allowExpand]
      * @param {boolean} [allowHidden]
      * @param {Array.<fileData>} [files]
+     * @returns {boolean}
      */
     extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
     {
@@ -219,7 +220,7 @@ export default class DiskLib {
             fSuccess = this.makeDir(this.getLocalPath(sPath), true);
         } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
             let fPrinted = false;
-            let fQuiet = argv['quiet'];
+            let fQuiet = !argv['verbose'];
             if (argv['expand'] && allowExpand) {
                 let arcType = this.isArchiveFile(sFile);
                 if (arcType) {
@@ -325,6 +326,7 @@ export default class DiskLib {
      */
     extractFiles(di, argv, extractName, extractDir, allowHidden = false, fExtractToFile = true)
     {
+        let total = 0;
         this.aHiddenDirs = [];
         let diskLib = this, device = this.device;
         let manifest = di.getFileManifest(null);                // add true for sorted manifest
@@ -361,8 +363,10 @@ export default class DiskLib {
                 } else {
                     diskLib.extractFile(extractDir, "", sPath, attr, date, db, argv, true, allowHidden);
                 }
+                total++;
             }
         });
+        if (fExtractToFile) this.printf("%d file(s) extracted to %s\n", total, extractDir);
     }
 
     /**
@@ -1314,10 +1318,14 @@ export default class DiskLib {
                     let sDir = node.path.dirname(sFile);
                     this.makeDir(sDir, true);
                 }
-                if (!this.existsFile(sFile) || fOverwrite) {
+                let fExists = this.existsFile(sFile);
+                if (fExists && fOverwrite) {
+                    node.fs.chmodSync(sFile, 0o644);
+                }
+                if (!fExists || fOverwrite) {
                     node.fs.writeFileSync(sFile, data);
                     if (attr !== undefined) {
-                        let mode = (attr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666;
+                        let mode = (attr & DiskInfo.ATTR.READONLY)? 0o444 : 0o644;
                         node.fs.chmodSync(sFile, mode, attr);
                     }
                     return true;

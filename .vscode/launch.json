@@ -490,8 +490,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "--sys=compaq:3.31",
+        "--target=40M"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks",
+      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -516,7 +518,7 @@
         "--halt"
       ],
       // The working directory of the program.
-      "cwd": "${workspaceFolder}/tools/pc/disks/test",
+      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
       // The environment variables to pass to the program.
       "env": {},
       // If the environment variables should not be inherited from the parent process.
@@ -583,7 +585,7 @@
         "--sys=pcdos",
         "--ver=2.00"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/test",
+      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -602,7 +604,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml",
-        "disks/test",
+        "disks/msdos",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -647,7 +649,7 @@
         "ibm5170",
         "--driveclass=pcjs",
         "--drivesize=27",
-        "disks/test",
+        "disks/msdos",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -670,7 +672,7 @@
       "args": [
         "ibm5170",
         "--drivetype=200:4:17",
-        "disks/test",
+        "disks/msdos",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -695,7 +697,7 @@
         "--ver=3.31",
         "--drivesize=40"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/test",
+      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -799,7 +801,7 @@
       "args": [
         "--sys=compaq",
         "--ver=3.31",
-        "disks/test",
+        "disks/msdos",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -822,7 +824,7 @@
       "args": [
         "--sys=pcdos",
         "--ver=2.00",
-        "disks/test",
+        "disks/msdos",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -846,7 +848,7 @@
         "--sys=pcdos",
         "--ver=2.00",
         "--drivesize=20mb",
-        "disks/test",
+        "disks/msdos",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -869,7 +871,7 @@
       "args": [
         "--sys=pcdos",
         "--ver=3.10",
-        "disks/test",
+        "disks/msdos",
         "dir"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -894,7 +896,7 @@
         "--ver=3.10",
         "--drivesize=20mb",
         "ibm5170",
-        "disks/test",
+        "disks/msdos",
         "dir *.*",
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -964,7 +966,7 @@
         "--sys=compaq",
         "--ver=3.31"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/test",
+      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1364,10 +1366,34 @@
       }
     },
     {
+      "name": "Microsoft MS-DOS 5.00 [Debugger]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/dos/microsoft/5.00/?debugger=true",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
       "name": "Microsoft MS-DOS 6.00 [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/dos/microsoft/6.00/?debugger=true",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
+      "name": "Microsoft MS-DOS 6.00 (Compressed) [Debugger]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/dos/microsoft/6.00/compressed/?debugger=true",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1756,7 +1782,7 @@
         "--target=10M",
         "--overwrite"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/test",
+      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
