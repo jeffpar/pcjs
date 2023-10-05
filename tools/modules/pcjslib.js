@@ -18,27 +18,33 @@ export default class PCJSLib
     static argv = [];
 
     /**
-     * getArgs(s)
+     * getArgs(args)
      *
-     * @param {Object|string} [s]
+     * @param {string} [args]
      * @returns {Array} [argc, argv]
      */
-    static getArgs(s)
+    static getArgs(args)
     {
-        if (s) {
-            if (typeof s == "string") {
-                let args = s.split(' ');
-                return PCJSLib.parseArgs(args, 0);
-            }
-            /*
-             * If a map of option aliases is provided, then we copy any aliased options as needed.
-             */
-            for (let arg in s) {
-                if (s.hasOwnProperty(arg)) {
-                    if (PCJSLib.argv[arg] !== undefined && PCJSLib.argv[s[arg]] === undefined) {
-                        PCJSLib.argv[s[arg]] = PCJSLib.argv[arg];
-                        delete PCJSLib.argv[arg];
-                    }
+        if (args) {
+            args = args.split(' ');
+            return PCJSLib.parseArgs(args, 0);
+        }
+        return [PCJSLib.argc, PCJSLib.argv];
+    }
+
+    /**
+     * mapArgs(options)
+     *
+     * @param {Object} options
+     * @returns {Array} [argc, argv]
+     */
+    static mapArgs(options)
+    {
+        for (let arg in options) {
+            if (options.hasOwnProperty(arg)) {
+                if (PCJSLib.argv[arg] !== undefined && PCJSLib.argv[options[arg]] === undefined) {
+                    PCJSLib.argv[options[arg]] = PCJSLib.argv[arg];
+                    delete PCJSLib.argv[arg];
                 }
             }
         }

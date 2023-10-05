@@ -14,7 +14,7 @@ import str from "../../../../machines/modules/v2/strlib.js";
 import DumpAPI from "../../../../machines/modules/v2/dumpapi.js";
 import { COPYRIGHT } from "../../../../machines/modules/v2/defines.js";
 import netlib from "../../../modules/netlib.js";
-import pcjslib from "../../../modules/pcjslib.js";
+import PCJSLib from "../../../modules/pcjslib.js";
 
 /**
  * FileDump()
@@ -169,7 +169,7 @@ FileDump.asBadExts = [
  */
 FileDump.CLI = function()
 {
-    let [argc, argv] = pcjslib.getArgs();
+    let [argc, argv] = PCJSLib.getArgs();
 
     if (!argc) {
         console.log("usage: filedump --file=({path}|{URL}) [--merge=({path}|{url})] [--format=(json|longs|hex|octal|bytes|words|rom)] [--comments] [--decimal] [--offset={number}] [--width={number}] [--output={path}] [--overwrite]");

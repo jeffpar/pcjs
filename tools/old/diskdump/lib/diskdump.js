@@ -23,7 +23,7 @@ import DumpAPI from "../../../../machines/modules/v2/dumpapi.js";
 import X86 from "../../../../machines/pcx86/modules/v2/x86.js";
 import { COPYRIGHT } from "../../../../machines/modules/v2/defines.js";
 import netlib from "../../../modules/netlib.js";
-import pcjslib from "../../../modules/pcjslib.js";
+import PCJSLib from "../../../modules/pcjslib.js";
 
 var NODE = true;
 
@@ -698,7 +698,7 @@ DiskDump.asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".ASM", ".LRF", ".MAK",
 DiskDump.CLI = function()
 {
     let err = null;
-    let [argc, argv] = pcjslib.getArgs();
+    let [argc, argv] = PCJSLib.getArgs();
 
     fConsole = true;
 

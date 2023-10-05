@@ -12,10 +12,10 @@ import fs from "fs";
 import glob from "glob";
 import os from "os";
 import path from "path";
-import pcjslib from "../modules/pcjslib.js";
+import PCJSLib from "../modules/pcjslib.js";
 import { printf } from "../../machines/modules/v2/printf.js";
 
-let [argc, argv] = pcjslib.getArgs();
+let [argc, argv] = PCJSLib.getArgs();
 let sRootDir = "../..";
 let remappings = {
     "/tests/pcx86/testmon": "/software/pcx86/test/testmon"

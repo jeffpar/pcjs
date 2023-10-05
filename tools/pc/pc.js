@@ -17,7 +17,7 @@ import { MAXDEBUG, globals }  from "../../machines/modules/v3/defines.js";
 import MESSAGE       from "../../machines/modules/v3/message.js";
 import WebIO         from "../../machines/modules/v3/webio.js";
 import DiskLib       from "../modules/disklib.js";
-import PCjsLib       from "../modules/pcjslib.js";
+import PCJSLib       from "../modules/pcjslib.js";
 import { node }      from "../modules/nodeapi.js";
 
 await node.import("child_process", "fs", "glob", "json5", "path", "xml2js");
@@ -34,7 +34,7 @@ let configJSON = {}, machines = null;
 /**
  * @class {PC}
  */
-export default class PC extends PCjsLib {
+export default class PC extends PCJSLib {
 
     fBare = false;
     fDebug = false;
@@ -172,7 +172,7 @@ export default class PC extends PCjsLib {
                     }
                 };
             }
-            this.main(...PC.getArgs(PC.optionMap)).catch((err) => {
+            this.main(...PC.mapArgs(PC.optionMap)).catch((err) => {
                 printf("exception: %s\n", err.message);
             });
         }
@@ -1818,9 +1818,9 @@ export default class PC extends PCjsLib {
                      *      pc.js --sys=compaq:3.31 --target=40M
                      *
                      * will fail even though we're supposedly using a standard COMPAQ drive type (13) and
-                     * not a custom geometry.  I believe this is because when I'm using the saved machine
-                     * state for the COMPAQ machine (state386.json), the machine is already expecting drive
-                     * type 1, so our options are either 1) do NOT use the saved state, or 2) use our MBR
+                     * not a custom geometry.  I believe the failure is because we're using a saved machine
+                     * state for the COMPAQ machine (state386.json), so the machine is already expecting drive
+                     * type 1, and so our options are either 1) do NOT use the saved state, or 2) use our MBR
                      * in order to dynamically update the drive parameters for drive type 1.  I go with #2.
                      */
                     let iVolume = -1;
@@ -2966,7 +2966,7 @@ export default class PC extends PCjsLib {
         let argc = 0;
         if (typeof argv == "string") {
             if (!argv) return "";
-            [argc, argv] = PCjsLib.getArgs(argv);
+            [argc, argv] = PC.getArgs(argv);
             argc = 1;
         }
         this.fBare = PC.removeFlag(argv, 'bare', this.fBare);
@@ -3044,7 +3044,7 @@ export default class PC extends PCjsLib {
         let argc = 0;
         if (typeof argv == "string") {
             if (!argv) return "";
-            [argc, argv] = PCjsLib.getArgs(argv);
+            [argc, argv] = PC.getArgs(argv);
             argc = 1;
         }
         this.fHalt = PC.removeFlag(argv, 'halt', this.fHalt);
@@ -3440,7 +3440,7 @@ export default class PC extends PCjsLib {
 
 if (!globals.browser) {
     let pc = new PC();
-    await pc.main(...PC.getArgs(PC.optionMap)).catch((err) => {
+    await pc.main(...PC.mapArgs(PC.optionMap)).catch((err) => {
         printf("exception: %s\n", err.message);
     });
 }

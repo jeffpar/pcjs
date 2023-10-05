@@ -9,13 +9,16 @@
  */
 
 import fs         from "fs";
-import pcjslib    from "../modules/pcjslib.js";
+import PCJSLib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/v3/device.js";
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 
+/**
+ * parseListing(listing, inventory, filter, exclude, target)
+ */
 function parseListing(listing, inventory, filter, exclude, target)
 {
     let cwd = "";
@@ -98,4 +101,4 @@ function main(argc, argv)
     }
 }
 
-main(...pcjslib.getArgs());
+main(...PCJSLib.getArgs());

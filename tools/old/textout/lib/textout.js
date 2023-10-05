@@ -12,7 +12,7 @@ import path from "path";
 import mkdirp from "mkdirp";
 import str from "../../../../machines/modules/v2/strlib.js";
 import netlib from "../../../modules/netlib.js";
-import pcjslib from "../../../modules/pcjslib.js";
+import PCJSLib from "../../../modules/pcjslib.js";
 
 /**
  * TextOut()
@@ -66,7 +66,7 @@ TextOut.asTargetRefs = ["call", "jmp", "jz", "jnz", "jc", "jnc", "ja", "jna", "j
  */
 TextOut.CLI = function()
 {
-    var [argc, argv] = pcjslib.getArgs();
+    var [argc, argv] = PCJSLib.getArgs();
 
     if (!argc) {
         console.log("usage: textout --file=({path}|{URL}) [--nasm]");

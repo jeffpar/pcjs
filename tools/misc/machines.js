@@ -12,10 +12,10 @@ import fs from "fs";
 import glob from "glob";
 import path from "path";
 import xml2js from "xml2js";
-import pcjslib from "../modules/pcjslib.js";
+import PCJSLib from "../modules/pcjslib.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
-let [argc, argv] = pcjslib.getArgs();
+let [argc, argv] = PCJSLib.getArgs();
 let idAttrs = '@';
 let sRootDir = "../..";
 

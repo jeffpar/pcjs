@@ -11,10 +11,10 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
-import pcjslib from "../modules/pcjslib.js";
+import PCJSLib from "../modules/pcjslib.js";
 import { printf } from "../../machines/modules/v2/printf.js";
 
-var [argc, argv] = pcjslib.getArgs();
+var [argc, argv] = PCJSLib.getArgs();
 
 /**
  * findFile(buf, name)
