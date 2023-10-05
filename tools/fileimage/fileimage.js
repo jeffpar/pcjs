@@ -11,7 +11,7 @@
 import fs         from "fs";
 import path       from "path";
 import DiskLib    from "../modules/disklib.js";
-import PCjsLib    from "../modules/pcjslib.js";
+import PCJSLib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import MESSAGE    from "../../machines/modules/v3/message.js";
 import netio      from "../../machines/modules/v3/netio.js";
@@ -989,4 +989,4 @@ function main(argc, argv)
     printf("nothing to do\n");
 }
 
-main(...PCjsLib.getArgs());
+main(...PCJSLib.getArgs());

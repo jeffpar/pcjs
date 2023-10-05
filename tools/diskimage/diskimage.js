@@ -12,9 +12,8 @@ import fs         from "fs";
 import glob       from "glob";
 import path       from "path";
 import DiskLib    from "../modules/disklib.js";
-import PCjsLib    from "../modules/pcjslib.js";
+import PCJSLib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
-import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import JSONLib    from "../../machines/modules/v2/jsonlib.js";
 import StrLib     from "../../machines/modules/v2/strlib.js";
 import CharSet    from "../../machines/pcx86/modules/v2/charset.js";
@@ -900,7 +899,7 @@ function readCollection(argv)
                 if (!diskette.args) {
                     diskette.args = "";
                 } else {
-                    [diskette.argc, diskette.argv] = PCjsLib.getArgs(diskette.args);
+                    [diskette.argc, diskette.argv] = PCJSLib.getArgs(diskette.args);
                     diskette.args = " " + diskette.args;
                 }
                 /*
@@ -1286,7 +1285,7 @@ function main(argc, argv)
     printf("nothing to do\n");
 }
 
-main(...PCjsLib.getArgs({
+main(...PCJSLib.mapArgs({
     '?': "help",
     'e': "extract",
     'l': "list",

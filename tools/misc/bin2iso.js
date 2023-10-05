@@ -9,10 +9,10 @@
  */
 
 import fs from "fs";
-import pcjslib from "../modules/pcjslib.js";
+import PCJSLib from "../modules/pcjslib.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
-var [argc, argv] = pcjslib.getArgs();
+var [argc, argv] = PCJSLib.getArgs();
 
 /**
  * dumpBytes(buffer, offset, length, desc)

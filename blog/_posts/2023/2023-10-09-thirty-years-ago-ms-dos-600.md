@@ -10,7 +10,7 @@ description: "A retrospective on MS-DOS 6.00 and my small contributions to the p
 Over 30 years ago, in March 1993, Microsoft released [MS-DOS 6.00](/software/pcx86/sys/dos/microsoft/6.00/compressed),
 the next major release of MS-DOS after 5.00 shipped in June 1991.
 
-In addition to several new powerful utilities, like `DEFRAG` to defragment your hard disk (licensed from Symantec),
+In addition to several new full-screen utilities, like `DEFRAG` to defragment your hard disk (licensed from Symantec),
 `MSBACKUP` to efficiently backup your hard disk (also licensed from Symantec), and `MSAV` to check for viruses (licensed
 from Central Point Software), there were a number of new command-line programs, such as `CHOICE`, `DELTREE`, `MOVE`,
 `MSCDEX`, and `SMARTDRV`.

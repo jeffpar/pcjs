@@ -10,13 +10,16 @@
 
 import fs from "fs";
 import pdf from "pdf-parse";
-import pcjslib from "../modules/pcjslib.js";
+import PCJSLib from "../modules/pcjslib.js";
 import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
-const [argc, argv] = pcjslib.getArgs();
+const [argc, argv] = PCJSLib.getArgs();
 
 let dataBuffer;
 
+/**
+ * renderSheet(pageData)
+ */
 function renderSheet(pageData)
 {
     let fDebug = argv['debug'];
@@ -114,6 +117,9 @@ function renderSheet(pageData)
     });
 }
 
+/**
+ * renderPage(pageData)
+ */
 function renderPage(pageData)
 {
     let fDebug = argv['debug'];
