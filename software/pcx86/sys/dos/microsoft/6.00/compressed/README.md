@@ -32,7 +32,7 @@ See this [blog post](/blog/2023/10/04/) for more information -- and some persona
 
 {% include machine.html id="compaq386-msdos600" %}
 
-NOTE: The machine above is configured with a 128Mb hard disk, with MS-DOS 6.00 preinstalled, and the disk has already been
+NOTE: The machine above is configured with a 20Mb hard disk, with MS-DOS 6.00 preinstalled, and the disk has already been
 compressed.  The same machine with an [uncompressed disk](../) is also available.
 
 Directory listings of the [four 1.2M](#directory-of-ms-dos-600-12m-disk-1) and [three 1.44M](#directory-of-ms-dos-600-144m-disk-1)
