@@ -2857,6 +2857,9 @@ export default class PC extends PCJSLib {
                 this.driveInfo.driveType = 0;
                 this.driveInfo.nCylinders = nCylinders;
                 this.driveInfo.nHeads = nHeads;
+                if (nHeads > 16) {
+                    printf("warning: %d heads may not be supported by the drive controller\n", nHeads);
+                }
                 this.driveInfo.nSectors = nSectors;
                 this.driveInfo.cbSector = cbSector;
                 if (cbSector != 512) {

@@ -4538,8 +4538,8 @@ export default class DiskInfo {
                 /*
                  * The "PCJS" pseudo-controller allows for any geometry.  If nTargetSectors is non-zero, then we
                  * create a geometry that matches the number as closely as possible.  Working within the limits of
-                 * the CHS-based INT 13h interface, nCylinders must be <= 1024, nHeads must be <= 256, and nSectors
-                 * must be <= 63.
+                 * the CHS-based INT 13h interface and ST506 controllers, nCylinders must be <= 1024, nHeads must
+                 * be <= 16, and nSectors must be <= 63.
                  *
                  * We now use trunc() instead of ceil() for our calculations, so that you get a drive slightly smaller
                  * than requested rather than slightly larger; otherwise, you could be puzzled why a request for a 32Mb
@@ -4554,7 +4554,7 @@ export default class DiskInfo {
                         nHeads = Math.trunc(nTracks / 1024) || 1;
                         nHeads += nHeads & 1;   // an odd number of heads seems pretty, um, odd, so let's avoid it
                         nCylinders = Math.trunc(nTracks / nHeads);
-                    } while (nHeads > 256 || nCylinders > 1024);
+                    } while (nHeads > 16 || nCylinders > 1024);
                     let cbSector = 512;
                     let cbTotal = nCylinders * nHeads * nSectors * cbSector;
                     driveInfo.driveType = 0;
