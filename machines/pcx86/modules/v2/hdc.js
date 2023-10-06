@@ -1849,9 +1849,6 @@ export default class HDC extends Component {
              * The importance of SECCNT (nSectors) and DRVHD (nHeads) is controlling how multi-sector operations
              * advance to the next sector; see advanceSector().
              */
-            // this.assert(drive.nHeads == nHead + 1);
-            // this.assert(drive.nSectors == nSectors);
-            // drive.nCylinders = nCylinder + 1;
             drive.nHeads = nHead + 1;
             drive.nSectors = nSectors;
             fInterrupt = fProcessed = true;
