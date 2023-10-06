@@ -113,7 +113,7 @@ For me, life quickly changed on February 13, 1993, when I received this email:
     Could you both meet with Rick Rashid as early as possible on Monday to get this
     effort under way as soon as is possible. Thanks.
 
-The next several weeks were probably some of the most stressful weeks I'd experienced at Microsoft.  Looking back, it's amazing
+The next several weeks were probably some of the most stressful that I'd experienced at Microsoft.  Looking back, it's amazing
 to me that with all the critical-path code that was being rewritten at that late date, MS-DOS 6.00 still shipped the following
 month, in March 1993.
 
@@ -151,6 +151,20 @@ to which I replied:
     Subject: RE: Bug in DBLSPACE decompress
 
     well... shit!
+
+This bug was only in the 80386 code path, but that wasn't much consolation.  And it was one of at least a half-dozen or so DoubleSpace bugs that Microsoft was aware by June of 1993.  Other bugs included:
+
+  - A particular series of reads, writes, and undeletes may cause an undelete to fail (FAT is marked USED, but MDFAT is left marked FREE; note that MDFAT refers to the "MagicDrive" FAT internal to the CVF)
+  - A particular series of operations followed by undelete may cause a cross link (not taking into account data that may be in buffers)
+  - Read into video memory in planar VGA modes results in garbage display (decompression depends on being able to read previously decompressed data, but VGA memory in these video modes does not read back what was written to it)
+  - If a disk error occurs while updating a cluster, a cross link may be created (error would be on writing to a part of the sector heap that we had not used previously)
+  - When Metro Software's LaserTwin 5.0 TSR is loaded, it intercepts write operations and breaks them up into smaller writes; however, sometimes those smaller writes can end up being ZERO bytes long, which DOS correctly treats as a truncate operation.  If that happens when the system is writing to the DoubleSpace CVF, the compressed volume will be truncated (not really a DoubleSpace bug, but a bug with severe consequences)
+
+I don't know if the video memory bug was ever fixed.  Wikipedia's article on [DriveSpace](https://en.wikipedia.org/wiki/DriveSpace) (which was the new name for DoubleSpace as of MS-DOS 6.22) alludes to the problem:
+
+> A few computer programs, particularly games, were incompatible with DoubleSpace because they effectively bypassed the DoubleSpace driver.
+
+But I'm not aware of any problems with games that involved "bypassing" the driver.  Any game-related problems were almost certainly due to DoubleSpace decompressing data directly into video memory while the video card's write and read modes differed.
 
 ## Introducing MultiConfig
 
