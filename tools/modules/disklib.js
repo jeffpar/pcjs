@@ -382,7 +382,7 @@ export default class DiskLib {
                 }
             }
         }
-        if (fExtractToFile) this.printf("%d items(s) extracted to %s\n", total, extractDir);
+        if (fExtractToFile) this.printf("%d item(s) extracted to %s\n", total, extractDir);
         return total;
     }
 

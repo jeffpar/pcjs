@@ -490,7 +490,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--commands=\"fetch /harddisks/pcx86/20mb/MSDOS600-COMPRESSED.json msdos600 --hidden --verbose;build msdos600 --system=msdos:6;build msdos600 --system=msdos:6 --target=20M\""
+        "--disk=msdos600.json",
+        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
