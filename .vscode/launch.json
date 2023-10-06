@@ -490,10 +490,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--sys=compaq:3.31",
-        "--target=40M"
+        "--commands=\"fetch /harddisks/pcx86/20mb/MSDOS600-COMPRESSED.json msdos600 --hidden --verbose;build msdos600 --system=msdos:6;build msdos600 --system=msdos:6 --target=20M\""
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
+      "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1667,10 +1666,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json",
-        "--extract",
-        "--extdir",
-        "foo"
+        "/harddisks/pcx86/10mb/MSDOS320-C400.json",
+        "--extract"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,

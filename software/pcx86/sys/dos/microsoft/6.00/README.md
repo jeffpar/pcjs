@@ -13,7 +13,7 @@ machines:
     autoMount:
       A: None
       B: MS-DOS 6.00 (1.2M Disk 1)
-    drives: '[{name:"128Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/MSDOS600.json"}]'
+    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/MSDOS600.json"}]'
     autoType: DBLSPACE\r
 ---
 
