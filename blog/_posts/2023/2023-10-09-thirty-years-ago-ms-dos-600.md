@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Thirty Years Ago: MS-DOS 6.00"
+title: "Thirty Years Ago: MS-DOS 6.00, DoubleSpace, and MultiConfig"
 date: 2023-10-04 08:00:00
 permalink: /blog/2023/10/04/
 preview: /blog/images/msdos600-dblspace.png
