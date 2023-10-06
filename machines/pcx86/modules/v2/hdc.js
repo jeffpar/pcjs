@@ -821,8 +821,10 @@ export default class HDC extends Component {
                         this.printf(MESSAGE.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
                     }
                 }
-                drive.nCylinders = nCylinders;
-                drive.nHeads = nHeads;
+                if (!drive.nCylinders || this.sType.indexOf("PCJS") < 0) {
+                    drive.nCylinders = nCylinders;
+                    drive.nHeads = nHeads;
+                }
                 if (drive.disk == null) {
                     drive.disk = new Disk(this, drive, drive.mode);
                 }
@@ -1001,7 +1003,12 @@ export default class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                if (this.sType.indexOf("PCJS") < 0) {   // skip the warning if pc.js custom-built this disk
+                if (this.sType.indexOf("PCJS") == 0) {          // if pc.js custom-built this disk...
+                    drive.nCylinders = aDiskInfo[0];
+                    drive.nHeads = aDiskInfo[1];
+                    drive.nSectors = aDiskInfo[2];
+                    drive.cbSector = aDiskInfo[3];
+                } else {
                     this.printf(MESSAGE.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], DRIVE_CTRLS[this.iDriveCtrl], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
                 }
             }
