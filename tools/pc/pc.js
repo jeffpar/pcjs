@@ -2114,7 +2114,7 @@ export default class PC extends PCJSLib {
                         }
 
                         if (oldItem.path == newItem.path) {
-                            if (oldAttr == newAttr) {
+                            if ((oldAttr & (DiskInfo.ATTR.SUBDIR | DiskInfo.ATTR.VOLUME)) == (newAttr & (DiskInfo.ATTR.SUBDIR | DiskInfo.ATTR.VOLUME))) {
                                 /*
                                  * Even if both entries are SUBDIR or VOLUME, that's OK, because those entries don't have
                                  * contents, so the compare will succeed and writeFileSync() will be bypassed.
@@ -2130,15 +2130,18 @@ export default class PC extends PCJSLib {
                                  * Here's where things get complicated, because we could have scenarios like a directory removed
                                  * and a file with the same name created in its place.
                                  */
-                                try {
-                                    node.fs.chmodSync(newItemPath, (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o666);
-                                } catch (err) {
-                                    printf("%s\n", err);
-                                }
+                                printf("warning: %s was changed to a %s entry (unsupported)\n", newItemPath, newAttr & DiskInfo.ATTR.SUBDIR? "directory" : (newAttr & DiskInfo.ATTR.VOLUME? "volume" : "file"));
                             }
                             if (oldDate.getTime() != newDate.getTime()) {
                                 try {
                                     node.fs.utimesSync(newItemPath, newDate, newDate);
+                                } catch (err) {
+                                    printf("%s\n", err);
+                                }
+                            }
+                            if ((oldAttr & DiskInfo.ATTR.READONLY) != (newAttr & DiskInfo.ATTR.READONLY)) {
+                                try {
+                                    node.fs.chmodSync(newItemPath, (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o644);
                                 } catch (err) {
                                     printf("%s\n", err);
                                 }
