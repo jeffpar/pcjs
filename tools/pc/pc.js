@@ -69,27 +69,7 @@ export default class PC extends PCJSLib {
     diskItems = [];
     diskIndexCache = null; diskIndexKeys = [];
     fileIndexCache = null; fileIndexKeys = [];
-    driveManifest = null; driveOverride = false; geometryOverride = false;
-
-    driveInfo = {
-        driveCtrl:      "COMPAQ",
-        driveType:      -1,
-        nCylinders:     0,
-        nHeads:         0,
-        nSectors:       0,
-        cbSector:       0,
-        driveSize:      0,
-        typeFAT:        0,      // set this to 12 or 16 to request a specific FAT type
-        clusterSize:    0,      // set this to a specific cluster size (in bytes) if desired
-        rootEntries:    0,      // set this to a specific number of root directory entries if desired
-        hiddenSectors:  0,      // set this to a specific number of hidden sectors if desired
-        verDOS:         0,
-        trimFAT:        false,
-        partitioned:    undefined,
-        files:          [],
-        disk:           null,   // cached DiskInfo object, for debugging purposes
-        volume:         null    // cached VolInfo object, for debugging purposes
-    };
+    driveInfo = {}; driveManifest = null; driveOverride = false; geometryOverride = false;
 
     static functionKeys = {
         "ArrowUp":      "$up",
@@ -129,6 +109,7 @@ export default class PC extends PCJSLib {
     static optionMap = {
         '?': "help",
         'b': "bare",
+        'c': "commands",
         'd': "debug",
         'f': "floppy",
         'h': "halt",
@@ -2513,6 +2494,7 @@ export default class PC extends PCJSLib {
      */
     async doCommand(s, reload = false)
     {
+        let argc, argv;
         let aTokens = s.split(' ');
         let cmd = aTokens[0].toLowerCase();
 
@@ -2600,7 +2582,7 @@ export default class PC extends PCJSLib {
                 this.machine = this.newMachine();
             }
             try {
-                let app, argv, appConfig, child;
+                let app, appConfig, child;
                 curDir = node.process.cwd();
                 node.process.chdir(this.mapDir(this.machineDir));
                 argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
@@ -2630,13 +2612,13 @@ export default class PC extends PCJSLib {
             }
             break;
         case "fetch":
-            arg = aTokens[0];
-            if (arg) {
-                let di = await diskLib.readDiskAsync(arg);
+            [argc, argv] = PC.getArgs(args);
+            if (argv[0]) {
+                let di = await diskLib.readDiskAsync(argv[0]);
                 if (di) {
-                    diskLib.extractFiles(di, {quiet: args.indexOf("--verbose") < 0}, "", aTokens[1] || "", args.indexOf("--hidden") >= 0);
+                    diskLib.extractFiles(di, {quiet: !argv['verbose']}, "", argv[1] || "", argv['hidden']);
                 } else {
-                    result = "invalid disk image: " + arg;
+                    result = "invalid disk image: " + argv[0];
                 }
             } else {
                 result = "usage: fetch [disk image] [directory]";
@@ -2838,7 +2820,7 @@ export default class PC extends PCJSLib {
                 result += sprintf("%-8d  %.3F %-2D %Y  %-2G:%02N%A  %#04x  %s%s\n", stats.size, stats.mtime, stats.mtime, stats.mtime, stats.mtime, stats.mtime, stats.mtime, attr, sFile, (attr & DiskInfo.ATTR.SUBDIR)? '/' : '');
                 count++;
             }
-            result += sprintf("%-8d item%s", count, count == 1? "" : "s");
+            result += sprintf("%-8d item(s)", count);
             break;
         default:
             result = "unsupported command: " + cmd;
@@ -2969,6 +2951,27 @@ export default class PC extends PCJSLib {
             [argc, argv] = PC.getArgs(argv);
             argc = 1;
         }
+
+        this.driveInfo = {
+            driveCtrl:      "COMPAQ",
+            driveType:      -1,
+            nCylinders:     0,
+            nHeads:         0,
+            nSectors:       0,
+            cbSector:       0,
+            driveSize:      0,
+            typeFAT:        0,      // set this to 12 or 16 to request a specific FAT type
+            clusterSize:    0,      // set this to a specific cluster size (in bytes) if desired
+            rootEntries:    0,      // set this to a specific number of root directory entries if desired
+            hiddenSectors:  0,      // set this to a specific number of hidden sectors if desired
+            verDOS:         0,
+            trimFAT:        false,
+            partitioned:    undefined,
+            files:          [],
+            disk:           null,   // cached DiskInfo object, for debugging purposes
+            volume:         null    // cached VolInfo object, for debugging purposes
+        };
+
         this.fBare = PC.removeFlag(argv, 'bare', this.fBare);
         this.fFloppy = PC.removeFlag(argv, 'floppy', this.fFloppy);
         this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);

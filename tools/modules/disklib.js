@@ -178,7 +178,7 @@ export default class DiskLib {
      * @param {boolean} [allowExpand]
      * @param {boolean} [allowHidden]
      * @param {Array.<fileData>} [files]
-     * @returns {boolean}
+     * @returns {number} (number of items extracted, or -1 if an error occurred)
      */
     extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
     {
@@ -192,7 +192,7 @@ export default class DiskLib {
          * the 8-byte OEM signature field of a diskette's boot sector with unique volume-tracking identifiers.
          */
         if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) {
-            return true;
+            return 0;
         }
 
         if (!allowHidden) {
@@ -200,11 +200,11 @@ export default class DiskLib {
                 if (attr & DiskInfo.ATTR.SUBDIR) {
                     this.aHiddenDirs.push(sPath + '/');
                 }
-                return false;
+                return -1;
             } else {
                 for (let i = 0; i < this.aHiddenDirs.length; i++) {
                     if (sPath.indexOf(this.aHiddenDirs[i]) == 0) {
-                        return false;
+                        return -1;
                     }
                 }
             }
@@ -213,12 +213,16 @@ export default class DiskLib {
         sPath = node.path.join(sDir, subDir, sPath);
         let sFile = sPath.substr(sDir != '.' && sDir.length? sDir.length + 1 : 0);
 
-        let fSuccess = false;
         let dir = node.path.dirname(sPath);
         this.makeDir(this.getLocalPath(dir), true, argv['overwrite']);
+
+        let total = 0;
+        let fUpdate = false;
+
         if (attr & DiskInfo.ATTR.SUBDIR) {
-            fSuccess = this.makeDir(this.getLocalPath(sPath), true);
-        } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
+            fUpdate = this.makeDir(this.getLocalPath(sPath), true);
+        }
+        else if (!(attr & DiskInfo.ATTR.VOLUME)) {
             let fPrinted = false;
             let fQuiet = !argv['verbose'];
             if (argv['expand'] && allowExpand) {
@@ -249,7 +253,9 @@ export default class DiskLib {
                     }).on('ready', () => {
                         let aFileData = diskLib.getArchiveFiles(zip, argv['verbose']);
                         for (let file of aFileData) {
-                            diskLib.extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
+                            let t = diskLib.extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
+                            if (t < 0) break;
+                            total += t;
                         }
                         zip.close();
                     }).on('error', (err) => {
@@ -258,19 +264,21 @@ export default class DiskLib {
                          * Since this implies a failure to extract anything from the archive, we'll call ourselves
                          * back with allowExpand not set, so that we simply extract the archive without expanding it.
                          */
-                        diskLib.extractFile(sDir, subDir, sFile, attr, date, db, argv);
+                        if (diskLib.extractFile(sDir, subDir, sFile, attr, date, db, argv)) {
+                            total++;
+                        }
                     });
                     zip.open();
                     /*
                      * If we 'expand' the contents of an archive, then we likely don't want to also save the
                      * archive itself, so we return now.  If you do want both, we'll have to add a new option.
                      */
-                    return true;
+                    return total;
                 }
             }
             if (argv['collection'] && this.existsFile(sPath) && !argv['overwrite']) {
                 if (!fPrinted && !fQuiet) this.printf("extracted: %s\n", sFile);
-                return true;
+                return ++total;
             }
             if (!fQuiet) this.printf("extracting: %s\n", sFile);
             /*
@@ -297,20 +305,25 @@ export default class DiskLib {
                     db = this.normalizeTextFile(db);
                 }
             }
-            fSuccess = this.writeFileSync(this.getLocalPath(sPath), db, true, argv['overwrite'], attr, argv['quiet']);
+            fUpdate = this.writeFileSync(this.getLocalPath(sPath), db, true, argv['overwrite'], attr, argv['quiet']);
+            if (fUpdate) {
+                total++;
+            }
         }
-        if (fSuccess) {
+        if (fUpdate) {
             node.fs.utimesSync(this.getLocalPath(sPath), date, date);
             if (files) {
                 for (let file of files) {
-                    if (!this.extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, true, false, file.files)) {
-                        fSuccess = false;
+                    let t = this.extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
+                    if (t < 0) {
+                        total = t;
                         break;
                     }
+                    total += t;
                 }
             }
         }
-        return fSuccess;
+        return total;
     }
 
     /**
@@ -323,6 +336,7 @@ export default class DiskLib {
      * @param {string} extractDir
      * @param {boolean} [allowHidden]
      * @param {boolean} [fExtractToFile]
+     * @returns {number}
      */
     extractFiles(di, argv, extractName, extractDir, allowHidden = false, fExtractToFile = true)
     {
@@ -330,7 +344,8 @@ export default class DiskLib {
         this.aHiddenDirs = [];
         let diskLib = this, device = this.device;
         let manifest = di.getFileManifest(null);                // add true for sorted manifest
-        manifest.forEach(function extractDiskFile(desc) {
+        for (let i = 0; i < manifest.length; i++) {
+            let desc = manifest[i];
             /*
              * Parse each file descriptor in much the same way that buildFileTableFromJSON() does.  That function
              * doesn't get the file's CONTENTS, because it's working with the file descriptors that have been stored
@@ -359,14 +374,16 @@ export default class DiskLib {
                 if (!fExtractToFile) {
                     if (extractName || diskLib.isTextFile(sPath)) {
                         diskLib.printf("\n%s:\n%s\n", sPath, CharSet.fromCP437(db.buffer));
+                        total++;
                     }
                 } else {
-                    diskLib.extractFile(extractDir, "", sPath, attr, date, db, argv, true, allowHidden);
+                    let t = diskLib.extractFile(extractDir, "", sPath, attr, date, db, argv, true, allowHidden);
+                    if (t > 0) total += t;
                 }
-                total++;
             }
-        });
-        if (fExtractToFile) this.printf("%d file(s) extracted to %s\n", total, extractDir);
+        }
+        if (fExtractToFile) this.printf("%d items(s) extracted to %s\n", total, extractDir);
+        return total;
     }
 
     /**
