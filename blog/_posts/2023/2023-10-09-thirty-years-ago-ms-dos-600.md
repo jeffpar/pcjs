@@ -65,8 +65,8 @@ and tells the operating system to mount the *real* drive C: as drive H: instead,
 So our original hard disk, a 128Mb drive, now appears to be almost twice as large -- thanks to DoubleSpace.
 
 Aside from the new `DBLSPACE.BIN` driver, the other main piece of DoubleSpace functionality resided in `DBLSPACE.EXE`, which
-operated as both a setup and a maintenance program.  It provided a friendly UI, making it easy to create additional CVFs,
-as well as resize, defragment, reformat, unmount, remount, and more.
+operated as both a setup and a maintenance program.  It provided a friendly full-screen interface, making it easy to create
+additional CVFs, as well as resize, defragment, reformat, unmount, remount, and more.
 
 ![MS-DOS 6.00 DoubleSpace](/blog/images/msdos600-dblspace.png)
 
@@ -152,7 +152,7 @@ to which I replied:
 
     well... shit!
 
-This bug was only in the 80386 code path, but that wasn't much consolation.  And it was one of at least a half-dozen or so DoubleSpace bugs that Microsoft was aware by June of 1993.  Other bugs included:
+That bug was only in the 80386 code path, so it could be avoided by adding an undocumented "ENABLE386=0" to `DBLSPACE.INI`, but that wasn't much consolation.  And it was one of at least a half-dozen or so DoubleSpace bugs that Microsoft was aware by June of 1993.  Other bugs included:
 
   - A particular series of reads, writes, and undeletes may cause an undelete to fail (FAT is marked USED, but MDFAT is left marked FREE; note that MDFAT refers to the "MagicDrive" FAT internal to the CVF)
   - A particular series of operations followed by undelete may cause a cross link (not taking into account data that may be in buffers)
@@ -160,11 +160,11 @@ This bug was only in the 80386 code path, but that wasn't much consolation.  And
   - If a disk error occurs while updating a cluster, a cross link may be created (error would be on writing to a part of the sector heap that we had not used previously)
   - When Metro Software's LaserTwin 5.0 TSR is loaded, it intercepts write operations and breaks them up into smaller writes; however, sometimes those smaller writes can end up being ZERO bytes long, which DOS correctly treats as a truncate operation.  If that happens when the system is writing to the DoubleSpace CVF, the compressed volume will be truncated (not really a DoubleSpace bug, but a bug with severe consequences)
 
-I don't know if the video memory bug was ever fixed.  Wikipedia's article on [DriveSpace](https://en.wikipedia.org/wiki/DriveSpace) (which was the new name for DoubleSpace as of MS-DOS 6.22) alludes to the problem:
+I don't know if the video memory issue was ever fixed.  Wikipedia's article on [DriveSpace](https://en.wikipedia.org/wiki/DriveSpace) (which was the new name for DoubleSpace as of MS-DOS 6.22) alludes to the problem:
 
 > A few computer programs, particularly games, were incompatible with DoubleSpace because they effectively bypassed the DoubleSpace driver.
 
-But I'm not aware of any problems with games that involved "bypassing" the driver.  Any game-related problems were almost certainly due to DoubleSpace decompressing data directly into video memory while the video card's write and read modes differed.
+But I'm not aware of any problems that involved "bypassing" the driver.  Any game-related problems were almost certainly due to DoubleSpace decompressing data directly into video memory when the video card's read and write modes differed.
 
 ## Introducing MultiConfig
 
