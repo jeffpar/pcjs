@@ -557,81 +557,70 @@
         "@documents": [
           {
             "@title": "PC Disk Magazine Vol. 1 No. 1",
-            "@file": "PC-DISK-MAG-VOL1-NO1.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqYSeCoXKlzL6H11pA?e=v306gD",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N01.pdf",
+            "@cover": "PCDM-V01N01.jpg",
             "@source": "PCjs",
             "@tags": "norton"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 2",
-            "@file": "PC-DISK-MAG-VOL1-NO2.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqYRr0Q7wLXUGnj2Xg?e=0cdeTk",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N02.pdf",
+            "@cover": "PCDM-V01N02.jpg",
             "@source": "PCjs",
             "@tags": "norton"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 3",
-            "@file": "PC-DISK-MAG-VOL1-NO3.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqYQrTt5mhvb4-rUOA?e=CHuwsK",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N03.pdf",
+            "@cover": "PCDM-V01N03.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 4",
-            "@file": "PC-DISK-MAG-VOL1-NO4.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqYTxo40Dp1rhT1zYQ?e=l2RjTi",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N04.pdf",
+            "@cover": "PCDM-V01N04.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 5",
-            "@file": "PC-DISK-MAG-VOL1-NO5.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqYU6ckonKErhNnsLQ?e=VHHY4u",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N05.pdf",
+            "@cover": "PCDM-V01N05.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 6",
-            "@file": "PC-DISK-MAG-VOL1-NO6.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqYVLQi9UE-cWHWh2A?e=rTwOER",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N06.pdf",
+            "@cover": "PCDM-V01N06.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 7",
-            "@file": "PC-DISK-MAG-VOL1-NO7.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqYWgm_0GTM-B7Y7kw?e=p3cCfZ",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N07.pdf",
+            "@cover": "PCDM-V01N07.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 8",
-            "@file": "PC-DISK-MAG-VOL1-NO8.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9ivlMqOcXXZhxMljyrA?e=qSV0Uc",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N08.pdf",
+            "@cover": "PCDM-V01N08.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 8 Demo",
-            "@file": "PC-DISK-MAG-VOL1-NO8-DEMO.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9ivlZB9tS13_IIVAA4A?e=jde81M",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N08.pdf",
+            "@cover": "PCDM-V01N08-DEMO.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 9",
-            "@file": "PC-DISK-MAG-VOL1-NO9.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9ivlYo0hC-tRbLC0bqA?e=Eb3DBo",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N09.pdf",
+            "@cover": "PCDM-V01N09.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "PC Disk Magazine Vol. 1 No. 10",
-            "@file": "PC-DISK-MAG-VOL1-NO10.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9ivla_sQN4TK7ticzhQ?e=HlLDCB",
-            "@cover": "jpg",
+            "@link": "https://archive.org/download/pc-disk-magazine/PCDM-V01N10.pdf",
+            "@cover": "PCDM-V01N10.jpg",
             "@source": "PCjs"
           }
         ]
