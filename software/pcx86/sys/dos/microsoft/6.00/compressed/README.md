@@ -35,6 +35,15 @@ See this [blog post](/blog/2023/10/04/) for more information -- and some persona
 NOTE: The machine above is configured with a 20Mb hard disk, with MS-DOS 6.00 preinstalled, and the disk has already been
 compressed.  The same machine with an [uncompressed disk](../) is also available.
 
+If you're interested in stepping through the actual DoubleSpace compression or decompression code using the PCjs Debugger,
+here are some handy breakpoints to get you started:
+
+  - For compression, set a breakpoint at 2DB:54D5 (`BP 2DB:54D5`); you should see a `MOV DH,ES:[SI]` instruction
+  - For decompression, set a breakpoint at 2DB:2CB0 (`BP 2DB:2CB0`); you should see a `CMP AX,5344` instruction
+
+The compression breakpoint is at the start of the compressor, whereas the decompression breakpoint is where a signature word
+(`DS`) is being checked before entering the bowels of the decompressor.
+
 Directory listings of the [four 1.2M](#directory-of-ms-dos-600-12m-disk-1) and [three 1.44M](#directory-of-ms-dos-600-144m-disk-1)
 distribution diskettes are provided below.
 
