@@ -20,4 +20,4 @@ open-source project on [GitHub]({{ site.github.owner_url }}).
 {% include web/highlights.html %}
 
 Thanks for visiting!  
---<a rel="me" href="https://mastodon.sdf.org/@jeffpar">Jeff</a>
+--<a href="mailto:Jeff@pcjs.org">Jeff</a>

@@ -530,16 +530,14 @@
         "@documents": [
           {
             "@title": "Microsoft Systems Journal, October 1986",
-            "@file": "MSJ-1986-10.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBHidFCsM8Qqpe85A?e=mDNkx5",
-            "@cover": "jpg",
+            "@link": "https://archive.org/details/msj-1986-10",
+            "@cover": "MSJ-1986-10.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "Microsoft Systems Journal, May 1987",
-            "@file": "MSJ-1987-05.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBKnUMosucNTyYcCA?e=W0xlkB",
-            "@cover": "jpg",
+            "@link": "https://archive.org/details/msj-1987-05",
+            "@cover": "MSJ-1987-05.jpg",
             "@source": "PCjs"
           },
           {
