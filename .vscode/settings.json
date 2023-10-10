@@ -1349,6 +1349,7 @@
     "JNLE",
     "JRST",
     "JRSTF",
+    "jsmachines",
     "jsonlib",
     "juku",
     "JUMPA",

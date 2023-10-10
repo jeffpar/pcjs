@@ -249,7 +249,7 @@ On the other hand, I think DOS 2.00 *could* have made an effort to validate the 
 
 ### Overview of the FAT File System
 
-Before diving into more examples of how picky DOS was about mounting FAT disks, I want to take a step back for a minute and talk about a document that Microsoft first released in the late 1990s called [FAT: General Overview of On-Disk Format](/documents/papers/microsoft/MS_FAT_OVERVIEW_103-2000-12-06.pdf).  The version here (1.03) is from 2000, but as far as FAT12 and FAT16 support is concerned, there are no substantives differences between it and the 1999 (1.02) version.  Of course, in [typical fashion](/blog/2017/10/13/), Microsoft no longer makes *any* version of the document available.
+Before diving into more examples of how picky DOS was about mounting FAT disks, I want to take a step back for a minute and talk about a document that Microsoft first released in the late 1990s called [FAT: General Overview of On-Disk Format](/documents/papers/microsoft/MS_FAT_OVERVIEW_103-2000-12-06.pdf).  The version here (1.03) is from 2000, but as far as FAT12 and FAT16 support is concerned, there are no substantive differences between it and the 1999 (1.02) version.  Of course, in [typical fashion](/blog/2017/10/13/), Microsoft no longer makes *any* version of the document available.
 
 Anyway, while working on `pc.js`, I referred extensively to the FAT12 and FAT16 sections of that document.  It reinforced some very important rules, such as:
 
@@ -257,7 +257,7 @@ Anyway, while working on `pc.js`, I referred extensively to the FAT12 and FAT16 
 
 This document was as close to a "gold standard" for the FAT file system as the world ever got -- at least from Microsoft.  Even so, it does gloss over some important details.
 
-One such detail is when and how should a volume be formatted with FAT12 or FAT16.  Actually, let's break that question into smaller questions:
+One such detail is when and how a volume should be formatted with FAT12 or FAT16.  Actually, let's break that question into smaller questions:
 
   1. When formatting a disk, when should you choose FAT12 or FAT16?
   2. When formatting a disk with FAT12, how should you select cluster size?
