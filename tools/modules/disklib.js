@@ -342,7 +342,6 @@ export default class DiskLib {
     {
         let total = 0;
         this.aHiddenDirs = [];
-        let diskLib = this, device = this.device;
         let manifest = di.getFileManifest(null);                // add true for sorted manifest
         for (let i = 0; i < manifest.length; i++) {
             let desc = manifest[i];
@@ -365,19 +364,28 @@ export default class DiskLib {
              * by adding Date.getTimezoneOffset(), doesn't always work either, probably due to Daylight Savings Time issues;
              * best not to go down that rabbit hole.
              */
-            let date = device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
+            let date = this.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
-            device.assert(size == db.length);
+            this.device.assert(size == db.length);
 
             if (!extractName || extractName == name) {
                 if (!fExtractToFile) {
-                    if (extractName || diskLib.isTextFile(sPath)) {
-                        diskLib.printf("\n%s:\n%s\n", sPath, CharSet.fromCP437(db.buffer));
+                    if (extractName || this.isTextFile(sPath)) {
+                        /*
+                         * We assume normalization whenever the file is to be displayed instead of extracted to a file;
+                         * in other words, --type implies --normalize.
+                         *
+                         * This DOES duplicate the normalization logic in extractFile(), and it might be preferable
+                         * to pass and process fExtractToFile inside that function instead, but I'm not sure this feature
+                         * warrants making extractFile() more complicated.
+                         */
+                        db = this.isBASICFile(sPath)? this.convertBASICFile(db, true, sPath) : this.normalizeTextFile(db);
+                        this.printf("\n%s:\n%s\n", sPath, db.toString());
                         total++;
                     }
                 } else {
-                    let t = diskLib.extractFile(extractDir, "", sPath, attr, date, db, argv, true, allowHidden);
+                    let t = this.extractFile(extractDir, "", sPath, attr, date, db, argv, true, allowHidden);
                     if (t > 0) total += t;
                 }
             }
