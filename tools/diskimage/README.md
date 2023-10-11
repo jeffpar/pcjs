@@ -185,63 +185,60 @@ The `--output` option is available with all of the above commands as well, but t
 
 ### Examining PCjs Disk Images
 
-Both local and remote diskette images can be examined.  To examine a remote image, you *must* use the `--disk` option,
-with either an explicit URL, as in:
+A disk image must either be the first argument or specified using the `--disk` option.  It can either be a local disk image:
 
-    diskimage.js --disk=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
-or with one of PCjs' implicit diskette paths, such as `/diskettes`, which currently maps to disk server `https://diskettes.pcjs.org`:
+or a remote disk image:
 
-    diskimage.js --disk=/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
-The list of implicit paths for PC disks currently includes (but is not limited to):
+Note that the PCjs web server automatically maps certain implicit diskette paths, such as `/diskettes`, to specific disk servers,
+such as `https://diskettes.pcjs.org`.  The list of implicit paths for PC disks currently includes (but is not limited to):
 
-  - [/disks/diskettes](https://github.com/jeffpar/pcjs-diskettes)
-  - [/disks/gamedisks](https://github.com/jeffpar/pcjs-gamedisks)
-  - [/disks/miscdisks](https://github.com/jeffpar/pcjs-miscdisks)
-  - [/disks/pcsigdisks](https://github.com/jeffpar/pcjs-pcsigdisks)
-  - [/disks/harddisks](https://harddisks.pcjs.org)
-  - [/disks/cdroms/cds001](https://cds001.pcjs.org)
+  - [/diskettes](https://github.com/jeffpar/pcjs-diskettes)
+  - [/gamedisks](https://github.com/jeffpar/pcjs-gamedisks)
+  - [/miscdisks](https://github.com/jeffpar/pcjs-miscdisks)
+  - [/pcsigdisks](https://github.com/jeffpar/pcjs-pcsigdisks)
+  - [/harddisks](https://harddisks.pcjs.org)
+  - [/cdroms/cds001](https://cds001.pcjs.org)
 
-NOTE: Implicit disk paths should normally begin with `/disks`, because when [running PCjs locally](https://github.com/jeffpar/pcjs/wiki/Running-PCjs-locally), that's where any local copies of PCjs disk repositories are assumed to exist; however, all PCjs machines and the DiskImage utility will allow you to omit that portion, for convenience (and backward compatibility).  In other words, `/diskettes` will be automatically mapped to `/disks/diskettes` for local access and `https://diskettes.pcjs.org` for remote access.
+However, `diskimage.js` does not perform any local-to-remote mapping.  Instead, whenever it sees an implicit path, it will look for that path inside the `/disks` folder in the PCjs repository, which is the recommended location for all PCjs disk repositories when [running PCjs locally](https://github.com/jeffpar/pcjs/wiki/Using-a-Local-Web-Server).  If you want `diskimage.js` to use a remote image, you must provide a complete URL.
 
-### Commonly Used DiskImage Options
+### Examples of Common DiskImage Operations
 
 To get a DOS-compatible directory listing of a disk image:
 
-    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list
 
 To display all the unused bytes of a disk image (JSON-encoded disk images only):
 
-    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list=unused
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list=unused
 
-NOTE: Unused bytes are a superset of free bytes.  Free bytes are always measured in terms of unused clusters,
-multiplied by the cluster size, whereas unused bytes are the combination of all completely unused cluster space *plus* any partially
-unused cluster space.  Being able to see all the unused bytes on a disk can be useful for studying disk image usage, or simply making
-sure that a disk is free of any unwanted data.
+NOTE: Unused bytes are a superset of free bytes.  Free bytes are always measured in terms of unused clusters, multiplied by the cluster size, whereas unused bytes are the combination of all completely unused cluster space *plus* any partially unused cluster space.  Being able to see all the unused bytes on a disk can be useful for studying disk image usage, or simply making sure that a disk is free of any unwanted data.
 
 TODO: Update the unused byte report to include unused bytes, if any, in all FAT sectors and directory sectors.
 
 To extract all the files from a disk image:
 
-    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract
 
 To extract a specific file from a disk image:
 
-    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract=COMMAND.COM
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract=COMMAND.COM
 
 To display the contents of a specific file in a disk image:
 
-    diskimage.js /diskettes/pcx86/sys/dos/ibm/3.00/PCDOS300-DISK2.json --type=VDISK.LST
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/3.00/PCDOS300-DISK2.json --type=VDISK.LST
 
 To extract files from a disk image into a specific directory (eg, tmp):
 
-    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract --extdir=tmp
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract --extdir=tmp
 
 To dump a specific (C:H:S) sector from a disk image:
 
-    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1
 
 To dump multiple (C:H:S) sectors from a disk image track, follow the C:H:S values with a sector count; eg:
 
-    diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1:4
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1:4
