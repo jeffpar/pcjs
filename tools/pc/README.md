@@ -12,7 +12,7 @@ This directory contains the PCjs machine command-line utility [pc.js](https://gi
 
 ### Playground
 
-Below is a web-based demonstration of how `pc.js` works, using a simulated command prompt and a simulated file system ([PCFS](/machines/modules/v2/pcfs.js)).  Since it runs in a browser, it does not have access to your local files, and there is no provision for saving your work.
+Below is a web-based demonstration of how `pc.js` works, using a simulated command prompt and a simulated file system ([PCFS](https://github.com/jeffpar/pcjs/blob/master/machines/modules/v2/pcfs.js)).  Since it runs in a browser, it does not have access to your local files, and there is no provision for saving your work.
 
 It automatically performs `fetch`, `build`, and `start` commands, so you can interact with this `pc.js` demo after those commands have finished and AUTOEXEC.BAT has run `CHKDSK`.
 
