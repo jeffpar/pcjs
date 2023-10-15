@@ -5,7 +5,7 @@ permalink: /documents/manuals/intel/80286/rep_restart/
 redirect_from: /pubs/pc/reference/intel/80286/rep_restart/
 ---
 
-[The following information is from an Intel document titled "[80286 REP MOVS and REP INS Restartability, 15 October 1984](/documents/manuals/intel/80286/files/80286_B2_B3_REP-1984-10-15.pdf)"]
+[The following information is from an Intel document titled "[80286 REP MOVS and REP INS Restartability, 15 October 1984](https://docs.pcjs.org/manuals/intel/80286/80286_B2_B3_REP-1984-10-15.pdf)"]
 
 ### 80286 REP MOVS and REP INS Restartability
 
