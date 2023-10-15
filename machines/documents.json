@@ -1131,7 +1131,7 @@
           {
             "@title": "Intel 80286 LOADALL Instruction",
             "@link": "/documents/manuals/intel/80286/loadall/",
-            "@file": "/documents/manuals/intel/80286/files/80286_LOADALL.pdf",
+            "@file": "https://docs.pcjs.org/manuals/intel/80286/80286_LOADALL.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/80286_LOADALL.jpg",
             "@source": "PCjs",
             "@tags": "80286,loadall"
@@ -1139,7 +1139,7 @@
           {
             "@title": "Intel 80286 ARPL and Overlength Instructions (Oct 15, 1984)",
             "@link": "/documents/manuals/intel/80286/arpl/",
-            "@file": "/documents/manuals/intel/80286/files/80286_ARPL-1984-10-15.pdf",
+            "@file": "https://docs.pcjs.org/manuals/intel/80286/80286_ARPL-1984-10-15.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/80286_ARPL-1984-10-15.jpg",
             "@source": "PCjs",
             "@tags": "80286,arpl,errata"
@@ -1147,7 +1147,7 @@
           {
             "@title": "Intel 80286 REP MOVS and REP INS Restartability (Oct 15, 1984)",
             "@link": "/documents/manuals/intel/80286/rep_restart/",
-            "@file": "/documents/manuals/intel/80286/files/80286_B2_B3_REP-1984-10-15.pdf",
+            "@file": "https://docs.pcjs.org/manuals/intel/80286/80286_B2_B3_REP-1984-10-15.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/80286_B2_B3_REP-1984-10-15.jpg",
             "@source": "PCjs",
             "@tags": "80286,rep,errata"
@@ -1155,14 +1155,14 @@
           {
             "@title": "Intel 80286 B2/B3 Errata (Nov 21, 1984)",
             "@link": "/documents/manuals/intel/80286/b2_b3_info/",
-            "@file": "/documents/manuals/intel/80286/files/80286_B2_B3_Errata-1984-11-21.pdf",
+            "@file": "https://docs.pcjs.org/manuals/intel/80286/80286_B2_B3_Errata-1984-11-21.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/80286_B2_B3_Errata-1984-11-21.jpg",
             "@source": "PCjs",
             "@tags": "80286,b2,errata"
           },
           {
             "@title": "Intel 80286 C2 Errata (Nov 21, 1984)",
-            "@link": "/documents/manuals/intel/80286/files/80286_C2_Errata-1984-11-21.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80286/80286_C2_Errata-1984-11-21.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/80286_C2_Errata-1984-11-21.jpg",
             "@source": "PCjs",
             "@tags": "80286,c2,errata"
@@ -1198,79 +1198,77 @@
           {
             "@title": "Intel 80386 LOADALL Instruction",
             "@link": "/documents/manuals/intel/80386/loadall/",
-            "@file": "/documents/manuals/intel/80386/files/80386_LOADALL.pdf",
+            "@file": "https://docs.pcjs.org/manuals/intel/80386/80386_LOADALL.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_LOADALL.jpg",
             "@source": "PCjs",
             "@tags": "80386,correspondence"
           },
           {
             "@title": "Intel 80386 Returning to Real Mode (Jan 8, 1986)",
-            "@link": "/documents/manuals/intel/80386/files/80386_Returning_To_Real_Mode-1986-01-08.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80386/80386_Returning_To_Real_Mode-1986-01-08.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_Returning_To_Real_Mode-1986-01-08.jpg",
             "@source": "PCjs",
             "@tags": "80386,correspondence"
           },
           {
             "@title": "Intel 80386 Virtual I/O Bit Map (Jan 20, 1986)",
-            "@link": "/documents/manuals/intel/80386/files/80386_Virtual_IO_Bit_Map-1986-01-20.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80386/80386_Virtual_IO_Bit_Map-1986-01-20.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_Virtual_IO_Bit_Map-1986-01-20.jpg",
             "@source": "PCjs",
             "@tags": "80386,correspondence"
           },
           {
             "@title": "Intel 80386 B1 Stepping (Dec 17, 1986)",
-            "@link": "/documents/manuals/intel/80386/files/80386_B1-1986-12-17.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80386/80386_B1-1986-12-17.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_B1-1986-12-17.jpg",
             "@source": "PCjs",
             "@tags": "80386,errata"
           },
           {
             "@title": "Intel 80386 B1 Stepping (Mar 26, 1987)",
-            "@link": "/documents/manuals/intel/80386/files/80386_B1-1987-03-26.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80386/80386_B1-1987-03-26.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_B1-1987-03-26.jpg",
             "@source": "PCjs",
             "@tags": "80386,errata"
           },
           {
             "@title": "Intel 80386 B1 Stepping (Apr 30, 1987)",
-            "@link": "/documents/manuals/intel/80386/files/80386_B1-1987-04-30.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80386/80386_B1-1987-04-30.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_B1-1987-04-30.jpg",
             "@source": "PCjs",
             "@tags": "80386,errata"
           },
           {
             "@title": "Intel 80386 B1 Stepping (Sep 1, 1987)",
-            "@link": "/documents/manuals/intel/80386/files/80386_B1-1987-09-01.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80386/80386_B1-1987-09-01.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_B1-1987-09-01.jpg",
             "@source": "PCjs",
             "@tags": "80386,errata"
           },
           {
             "@title": "Intel 80386 C0 Stepping (Mar 30, 1987)",
-            "@link": "/documents/manuals/intel/80386/files/80386_C0-1987-03-30.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80386/80386_C0-1987-03-30.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_C0-1987-03-30.jpg",
             "@source": "PCjs",
             "@tags": "80386,errata"
           },
           {
             "@title": "Intel 80386 Target Specification (Jun 14, 1985)",
-            "@link": "/documents/manuals/intel/80386/",
-            "@file": "80386_Target_Specification-1985-06-14.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80386/80386_Target_Specification-1985-06-14.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_Target_Specification-1985-06-14.jpg",
             "@source": "PCjs",
             "@tags": "80386,specs"
           },
           {
             "@title": "Intel 80386 Architecture Specification (Jun 15, 1985)",
-            "@link": "/documents/manuals/intel/80386/",
-            "@file": "80386_Architecture_Specification-1985-06-15.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80386/80386_Architecture_Specification-1985-06-15.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_Architecture_Specification-1985-06-15.jpg",
             "@source": "PCjs",
             "@tags": "80386,specs"
           },
           {
             "@title": "Intel 80386 Slides (Undated)",
-            "@link": "/documents/manuals/intel/80386/files/80386_Intel_Slides.pdf",
+            "@link": "https://docs.pcjs.org/manuals/intel/80386/80386_Intel_Slides.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386_Intel_Slides.jpg",
             "@source": "PCjs",
             "@tags": "80386,specs"

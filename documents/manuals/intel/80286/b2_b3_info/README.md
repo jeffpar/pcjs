@@ -5,7 +5,7 @@ permalink: /documents/manuals/intel/80286/b2_b3_info/
 redirect_from: /pubs/pc/reference/intel/80286/b2_b3_info/
 ---
 
-[The following information is from a 7-page Intel document titled "[80286(B-2/B-3) Information Sheet, 21 November 1984](/documents/manuals/intel/80286/files/80286_B2_B3_Errata-1984-11-21.pdf)"]
+[The following information is from a 7-page Intel document titled "[80286(B-2/B-3) Information Sheet, 21 November 1984](https://docs.pcjs.org/manuals/intel/80286/80286_B2_B3_Errata-1984-11-21.pdf)"]
 
 ### 80286 B-2/B-3 Steppings
 
