@@ -159,7 +159,7 @@ export default class FileInfo {
         this.cluster = cluster;
         this.aLBA = aLBA;
         this.device = disk.device;
-        if (Device.DEBUG && cluster >= 0) {
+        if (Device.MAXDEBUG && cluster >= 0) {
             this.device.printf(MESSAGE.FILE, '"%d:%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', iVolume, path, size, attr, date, cluster, aLBA);
         }
     }

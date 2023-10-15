@@ -339,6 +339,11 @@ will match any file with `PKUNZIP` in the name (eg, `PKUNZIP.COM`, `PKUNZIP.EXE`
 
 will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EXE`, `PKUNZIP2.EXE`).  There is no support for wildcards, since multiple search terms provide largely the same capability.
 
+Another option is to load a diskette image directly, using the `--path` option; it supports both local and remote PCjs (.json) disk images and raw (.img) disk images:
+
+    load a: --path /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    load a: --path https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+
 Note that the `load` command is also available from `pc.js` command mode, which you access by pressing CTRL-D.  Type "help" at the `>>` command mode prompt for list of all available commands.
 
 See "[Loading Diskettes](https://www.pcjs.org/blog/2023/07/15/#loading-diskettes)" in this [blog post](https://www.pcjs.org/blog/2023/07/15/) for more examples of the `load` command.

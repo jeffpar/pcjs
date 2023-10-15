@@ -481,6 +481,15 @@ export default class Format {
                  * and we honor precision, if any, as the minimum number of digits to print.
                  */
                 arg = Math.trunc(arg);
+                /**
+                 * Since we now use division instead of shifts to reduce the value as we extract digits (in order to support
+                 * values > 32 bits), negative numbers may not render properly.  We can easily fix that by converting the value
+                 * to a positive number with the unsigned right-shift operator (>>>), but since that is a 32-bit operation,
+                 * we can only do that if the value appears to be 32 bits or less.
+                 */
+                if (arg < 0 && (arg|0) == arg) {
+                    arg >>>= 0;
+                }
                 if (precision >= 0) {
                     zeroPad = true;
                     if (width < precision) width = precision;
