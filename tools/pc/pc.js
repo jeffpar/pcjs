@@ -2318,7 +2318,7 @@ export default class PC extends PCJSLib {
                             this.diskItems = diskItem['others'];
                             this.diskItems.unshift(diskItem);
                             delete diskItem['others'];
-                            result = displayItems(sDrive, this.diskItems, "multiple disks with identical file (use \"load a: 1\" to load original selection)");
+                            result = displayItems(sDrive, this.diskItems, "multiple disks with identical file (use \"load " + sDrive + " 1\" to load original selection)");
                         }
                     } else {
                         result = "invalid diskette number (" + aTokens[0] + ")";

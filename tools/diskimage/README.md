@@ -113,11 +113,11 @@ Here's an example of `--zip` in action:
 
     diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
 
-    DiskImage v2.11
+    DiskImage v3.00
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
-    options: --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
+    Options: --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
+    reading: /Volumes/PCSIG_13B/BBS/DISK0042.ZIP
 
-    /Volumes/PCSIG_13B/BBS/DISK0042.ZIP
     Filename        Length   Method      Size  Ratio   Date       Time       CRC
     --------        ------   ------      ----  -----   ----       ----       ---
     MSVIBM.EXE      131392   Implode    73651    44%   1990-02-19 19:30:30   ac9163ba
@@ -128,6 +128,7 @@ Here's an example of `--zip` in action:
     GO.BAT              40   Shrink        38     5%   1980-01-01 06:00:08   75d72756
     FILE0042.TXT      3870   Implode      896    77%   1990-11-12 01:46:16   3a817bda
     GO.TXT            1002   Implode      307    69%   1990-11-09 06:21:54   e64455e9
+    
     processing DISK0042: 327680 bytes (checksum -1217186896, hash bba045788185bc8284f5e4cde0929b70)
     writing DISK0042.json...
 
