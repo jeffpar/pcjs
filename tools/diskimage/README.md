@@ -128,7 +128,7 @@ Here's an example of `--zip` in action:
     GO.BAT              40   Shrink        38     5%   1980-01-01 06:00:08   75d72756
     FILE0042.TXT      3870   Implode      896    77%   1990-11-12 01:46:16   3a817bda
     GO.TXT            1002   Implode      307    69%   1990-11-09 06:21:54   e64455e9
-    
+
     processing DISK0042: 327680 bytes (checksum -1217186896, hash bba045788185bc8284f5e4cde0929b70)
     writing DISK0042.json...
 
@@ -209,6 +209,10 @@ However, `diskimage.js` does not perform any local-to-remote mapping.  Instead, 
 To get a DOS-compatible directory listing of a disk image:
 
     diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list
+
+To list only files matching a file specification (eg, `*.EXE`):
+
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list="*.EXE"
 
 To display all the unused bytes of a disk image (JSON-encoded disk images only):
 
