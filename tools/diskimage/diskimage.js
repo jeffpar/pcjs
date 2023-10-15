@@ -262,8 +262,8 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         }
     }
 
-    if (argv['collection'] || argv['verbose']) {
-        printf("processing: %s (%d bytes, checksum %d, hash %s)\n", di.getName(), di.getSize(), di.getChecksum(), di.getHash());
+    if (argv['all'] || argv['collection'] || argv['verbose']) {
+        printf("processing: %s (%d bytes, hash %s)\n", di.getName(), di.getSize(), di.getHash());
     }
 
     let sFindName = argv['file'];
@@ -1040,6 +1040,7 @@ function processAll(all, argv)
             for (let sFile of asFiles) {
                 if (filter && !filter.test(sFile)) continue;
                 let args = [argv[0], sFile];
+                args['all'] = true;
                 if (outdir) {
                     args['output'] = path.join(outdir.replace("%d", path.dirname(sFile)), path.parse(sFile).name + type);
                 }

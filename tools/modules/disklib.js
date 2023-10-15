@@ -229,19 +229,19 @@ export default class DiskLib {
                 let arcType = this.isArchiveFile(sFile);
                 if (arcType) {
                     if (!fQuiet) this.printf("expanding: %s\n", sFile);
-                    if (arcType == StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
+                    if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
                         /*
                          * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
                          */
-                        arcType = StreamZip.TYPE_ARC;
+                        arcType = node.StreamZip.TYPE_ARC;
                         this.printf("warning: overriding %s as type ARC (%d)\n", sFile, arcType);
                     }
-                    if (arcType == StreamZip.TYPE_ZIP && db.readUInt32LE(0) == 0x08074B50) {
+                    if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
                         // db = db.slice(0, db.length - 4);
-                        this.printf("warning: ZIP extended header signature detected (%#08x)\n", 0x08074B50);
+                        this.printf("warning: ZIP extended header signature detected (%#010x)\n", node.StreamZip.ExtHeader.signature.EXTSIG);
                     }
                     let diskLib = this;
-                    let zip = new StreamZip({
+                    let zip = new node.StreamZip({
                         file: sFile,
                         password: argv['password'],
                         buffer: db.buffer,
@@ -898,7 +898,7 @@ export default class DiskLib {
     {
         let aFiles = [];
         if (verbose) {
-            this.printf("reading: %s\n", zip.fileName);
+            this.printf("reading: %s\n\n", zip.fileName);
             this.printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
             this.printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
         }
@@ -998,12 +998,13 @@ export default class DiskLib {
                     this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
                         filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc);
                 } else {
-                    this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %#08x\n",
+                    this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %#010x\n",
                         filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc, entry.offset);
                 }
             }
         }
         if (messages) this.printf("%s", messages);
+        if (verbose) this.printf("\n");
         return aFiles;
     }
 

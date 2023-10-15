@@ -3298,6 +3298,8 @@ export default class DiskInfo {
     /**
      * getFileListing(iVolume, indent, options)
      *
+     * If options is something other than "sorted" or "metadata", then it's assumed to be a file specification.
+     *
      * @this {DiskInfo}
      * @param {number} [iVolume] (-1 to list contents of ALL volumes in image)
      * @param {number} [indent]
@@ -3315,6 +3317,7 @@ export default class DiskInfo {
                 nVolumes = 1;
             }
             let sIndent = " ".repeat(indent);
+            let fileSpec = (typeof options == "string" && options != "sorted" && options != "metadata")? new RegExp("^" + options.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i") : null;
             while (iVolume < this.volTable.length && nVolumes-- > 0) {
                 let vol = this.volTable[iVolume];
                 let curVol = -1;
@@ -3340,12 +3343,22 @@ export default class DiskInfo {
                  * Do a preliminary scan for a volume label, and don't look beyond root directory entries;
                  * since those are all at the beginning of the file table, we can stop as soon as we see a SUBDIR.
                  */
+                let subDirs = false;
+                let fileMatch = !fileSpec;
                 for (i = 0; i < fileTable.length; i++) {
                     let file = fileTable[i];
                     if (file.iVolume > iVolume) break;
                     if (file.iVolume != iVolume) continue;
-                    if (file.path.lastIndexOf('\\') > 0) break;
-                    if (file.attr & DiskInfo.ATTR.VOLUME) {
+                    if (!fileMatch && file.name != "." && file.name != "..") {
+                        if (file.name.match(fileSpec)) {
+                            fileMatch = true;
+                        }
+                    }
+                    if (file.path.lastIndexOf('\\') > 0) {
+                        subDirs = true;
+                        if (!fileSpec) break;
+                    }
+                    if ((file.attr & DiskInfo.ATTR.VOLUME) && !subDirs) {
                         /*
                          * Volume labels are displayed slightly differently from all other directory entries;
                          * specifically, they may contain non-standard characters (eg, extra periods, lower-case letters),
@@ -3355,7 +3368,7 @@ export default class DiskInfo {
                         break;
                     }
                 }
-                for (i = 0; i < fileTable.length; i++) {
+                for (i = 0; i < fileTable.length && fileMatch; i++) {
                     let file = fileTable[i];
                     if (file.iVolume != iVolume) continue;
                     if (file.attr & DiskInfo.ATTR.VOLUME) continue;
@@ -3394,6 +3407,9 @@ export default class DiskInfo {
                     if (file.attr & DiskInfo.ATTR.SUBDIR) {
                         sSize = "<DIR>    ";
                     } else {
+                        if (fileSpec && !file.name.match(fileSpec)) {
+                            continue;
+                        }
                         sSize = this.device.sprintf("%9d", file.size);
                         cbDir += file.size;
                         cbTotal += file.size;
@@ -3419,20 +3435,25 @@ export default class DiskInfo {
                      */
                     nFiles++;
                 }
-                sListing += getTotal(nFiles, cbDir);
-                if (nTotal > nFiles) {
-                    sListing += "\n" + sIndent + "Total files listed:\n";
-                    sListing += getTotal(nTotal, cbTotal);
+                if (fileMatch) {
+                    sListing += getTotal(nFiles, cbDir);
+                    if (nTotal > nFiles) {
+                        sListing += "\n" + sIndent + "Total files listed:\n";
+                        sListing += getTotal(nTotal, cbTotal);
+                    }
+                    /*
+                    * This calculation used to use vol.cbSector, but we don't really support volumes with (default) sector sizes that
+                    * that differ from the disk's (default) sector size, nor do we export per-volume sector sizes in the VOLDESC structure,
+                    * so the only code that can rely on vol.cbSector is buildTables(), buildVolume(), and any other code that follows
+                    * those calls -- and if we've reconstituted the disk and all its tables using buildDiskFromJSON(), that doesn't happen
+                    * automatically.
+                    */
+                    sListing += this.device.sprintf("%s%28d bytes free\n", sIndent, vol.clusFree * vol.clusSecs * this.cbSector);
                 }
-                /*
-                 * This calculation used to use vol.cbSector, but we don't really support volumes with (default) sector sizes that
-                 * that differ from the disk's (default) sector size, nor do we export per-volume sector sizes in the VOLDESC structure,
-                 * so the only code that can rely on vol.cbSector is buildTables(), buildVolume(), and any other code that follows
-                 * those calls -- and if we've reconstituted the disk and all its tables using buildDiskFromJSON(), that doesn't happen
-                 * automatically.
-                 */
-                sListing += this.device.sprintf("%s%28d bytes free\n", sIndent, vol.clusFree * vol.clusSecs * this.cbSector);
                 iVolume++;
+            }
+            if (!sListing && fileSpec) {
+                sListing = "file not found: " + options + "\n";
             }
         }
         return sListing;

@@ -1669,8 +1669,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/harddisks/pcx86/10mb/MSDOS320-C400.json",
-        "--extract"
+        "--all=/Volumes/PC_SIG_12_90/**/DISK1111.ZIP",
+        "--extract",
+        "--expand"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
