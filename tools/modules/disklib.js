@@ -251,7 +251,7 @@ export default class DiskLib {
                         printfDebug: diskLib.printf,
                         holdErrors: true
                     }).on('ready', () => {
-                        let aFileData = diskLib.getArchiveFiles(zip, argv['verbose']);
+                        let aFileData = diskLib.getArchiveFiles(zip, null, argv['verbose']);
                         for (let file of aFileData) {
                             let t = diskLib.extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
                             if (t < 0) break;
@@ -676,12 +676,34 @@ export default class DiskLib {
             if (!sLabel) {
                 sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
             }
-        } else if (!arcType) {
+        } else if (arcType) {
+            if (!sLabel) {
+                sLabel = diskName.replace(/\.[^.]*$/, "");
+            }
+        } else {
             diskName = node.path.basename(node.path.dirname(sDir));
             /*
              * When we're given a list of files, we don't pick a default label; use --label if you want one.
              */
         }
+
+        /*
+         * There are two special label strings you can pass on the command-line:
+         *
+         *      "--label none" (for no volume label at all)
+         *      "--label default" (for our default volume label; currently "PCJS")
+         *
+         * Any other string following "--label" will be used as-is, and if no "--label" is specified at all,
+         * we build a volume label from the basename of the directory.
+         */
+        let dateLabel;
+        if (sLabel == "none") {
+            sLabel = "";
+        } else if (sLabel == "default") {
+            sLabel = DiskInfo.PCJS_LABEL;
+            dateLabel = new Date(1989, 8, 27, 3, 0, 0);
+        }
+
         sDir = this.getLocalPath(sDir);
         let readDone = function(aFileData) {
             if (aFileData) {
@@ -719,7 +741,7 @@ export default class DiskLib {
         try {
             this.nMaxInit = this.nMaxCount = nMax || this.nMaxDefault;
             if (!arcType) {
-                this.readDirFiles(sDir, sLabel, fNormalize, 0, driveInfo, readDone);
+                this.readDirFiles(sDir, sLabel, dateLabel, fNormalize, 0, driveInfo, readDone);
             } else {
                 this.readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, verbose, readDone);
             }
@@ -729,22 +751,22 @@ export default class DiskLib {
     }
 
     /**
-     * readDirFiles(sDir, sLabel, fNormalize, iLevel, driveInfo, done)
+     * readDirFiles(sDir, sLabel, dateLabel, fNormalize, iLevel, driveInfo, done)
      *
      * @this {DiskLib}
      * @param {string} sDir (slash-terminated directory name OR comma-delimited list of files)
-     * @param {boolean|null} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
+     * @param {string|null} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
+     * @param {Date|null} [dateLabel] (optional volume date)
      * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
      * @param {number} [iLevel] (current directory level, primarily for diagnostic purposes only; zero if unspecified)
      * @param {DriveInfo} [driveInfo] (custom drive parameters, if any)
      * @param {function(Array.<FileData>)} [done] (optional function to call on completion)
      * @returns {Array.<FileData>}
      */
-    readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0, driveInfo, done)
+    readDirFiles(sDir, sLabel, dateLabel, fNormalize = false, iLevel = 0, driveInfo, done)
     {
-        let aFileData = [];
-
         let asFiles;
+        let aFiles = [];
         if (sDir.endsWith('/')) {
             asFiles = node.fs.readdirSync(sDir);
             /*
@@ -767,23 +789,6 @@ export default class DiskLib {
         }
 
         /*
-         * There are two special label strings you can pass on the command-line:
-         *
-         *      "--label none" (for no volume label at all)
-         *      "--label default" (for our default volume label; currently "PCJS")
-         *
-         * Any other string following "--label" will be used as-is, and if no "--label" is specified at all,
-         * we build a volume label from the basename of the directory.
-         */
-        let dateLabel;
-        if (sLabel == "none") {
-            sLabel = "";
-        } else if (sLabel == "default") {
-            sLabel = DiskInfo.PCJS_LABEL;
-            dateLabel = new Date(1989, 8, 27, 3, 0, 0);
-        }
-
-        /*
          * The label, if any, will always be first in the list; this shouldn't be a concern since there is currently
          * no support for building "bootable" disks from a set of files.
          *
@@ -792,7 +797,7 @@ export default class DiskLib {
         if (sLabel && (!driveInfo || driveInfo.verDOS >= 2)) {
             let sPath = '/' + node.path.basename(sLabel);
             let file = {path: sPath, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel || new Date(), size: 0};
-            aFileData.push(file);
+            aFiles.push(file);
         }
 
         let iFile;
@@ -825,7 +830,7 @@ export default class DiskLib {
                 file.attr = DiskInfo.ATTR.SUBDIR | (stats.attr|0);
                 file.size = -1;
                 file.data = new DataBuffer();
-                file.files = this.readDirFiles(sPath + '/', null, fNormalize, iLevel + 1, driveInfo);
+                file.files = this.readDirFiles(sPath + '/', null, null, fNormalize, iLevel + 1, driveInfo);
             } else {
                 /*
                  * To properly deal with normalization of BASIC files, we first read the file into
@@ -872,7 +877,7 @@ export default class DiskLib {
                 file.size = data.length;
                 file.data = data;
             }
-            aFileData.push(file);
+            aFiles.push(file);
         }
         if (iFile < asFiles.length) {
             if (this.nMaxCount >= 0) {
@@ -881,20 +886,21 @@ export default class DiskLib {
             }
         }
         if (done) {
-            done(aFileData);
+            done(aFiles);
         }
-        return aFileData;
+        return aFiles;
     }
 
     /**
-     * getArchiveFiles(zip, verbose)
+     * getArchiveFiles(zip, sLabel, verbose)
      *
      * @this {DiskLib}
      * @param {StreamZip} zip
-     * @param {boolean} verbose
+     * @param {string} [sLabel]
+     * @param {boolean} [verbose]
      * @returns {Array.<FileData>}
      */
-    getArchiveFiles(zip, verbose)
+    getArchiveFiles(zip, sLabel, verbose = false)
     {
         let aFiles = [];
         if (verbose) {
@@ -904,6 +910,15 @@ export default class DiskLib {
         }
         let messages = "";
         let entries = Object.values(zip.entries());
+
+        if (sLabel) {
+            /*
+             * TODO: Consider passing the date of the ZIP file as the date of the volume label.
+             */
+            let file = {path: '/' + sLabel, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: new Date(), size: 0};
+            aFiles.push(file);
+        }
+
         for (let entry of entries) {
 
             let file = {path: entry.name, name: node.path.basename(entry.name), nameEncoding: "cp437"};
@@ -1060,7 +1075,7 @@ export default class DiskLib {
             holdErrors: true
         });
         zip.on('ready', function readArchiveFilesReady() {
-            let aFileData = diskLib.getArchiveFiles(zip, verbose);
+            let aFileData = diskLib.getArchiveFiles(zip, sLabel, verbose);
             zip.close();
             done(aFileData);
         });

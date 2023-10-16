@@ -1669,9 +1669,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--all=/Volumes/PC_SIG_12_90/**/DISK1111.ZIP",
-        "--extract",
-        "--expand"
+        "--zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP",
+        "--verbose",
+        "--list"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,

@@ -404,7 +404,7 @@ export default class Format {
             case 'j':
                 /**
                  * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
-                 * the caller is providing an Object that should be rendered as JSON.  If a width is included
+                 * the caller is providing an object that should be rendered as JSON.  If a width is included
                  * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
                  */
                 buffer += JSON.stringify(arg, null, width || undefined);
@@ -483,9 +483,9 @@ export default class Format {
                 arg = Math.trunc(arg);
                 /**
                  * Since we now use division instead of shifts to reduce the value as we extract digits (in order to support
-                 * values > 32 bits), negative numbers may not render properly.  We can easily fix that by converting the value
+                 * values > 32 bits), negative numbers will not render properly.  That's easily fixed by converting the value
                  * to a positive number with the unsigned right-shift operator (>>>), but since that is a 32-bit operation,
-                 * we can only do that if the value appears to be 32 bits or less.
+                 * we do that only if the value appears to be 32 bits or less.
                  */
                 if (arg < 0 && (arg|0) == arg) {
                     arg >>>= 0;
@@ -497,7 +497,7 @@ export default class Format {
                 }
                 if (zeroPad && !width) {
                     /**
-                     * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
+                     * When zero padding is specified without a width (eg, "%0x"), auto-select a width.
                      */
                     if (length == 'b') {
                         width = 2;      // if an 8-bit length was specified (eg, "%0bx"), then default to 2
