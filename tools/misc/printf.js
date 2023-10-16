@@ -23,6 +23,7 @@ var onCommand = function (cmd, context, filename, callback)
 {
     var result = false;
     var args = cmd.trim().split(',');
+    args[0] = args[0].trim() + "\n";
     result = printf(...args);
     if (callback) callback(null, result);
 };
@@ -30,9 +31,9 @@ var onCommand = function (cmd, context, filename, callback)
 let t = 3;
 let n = 0x1234;
 let pi = 3.14159;
-printf("%8.2f %.3f", pi);
-printf("%d %6d %6.3d", t);
-printf("'%d' '%6d' '%6.3d' '%6.9d'", n);
+printf("%8.2f %.3f\n", pi);
+printf("%d %6d %6.3d\n", t);
+printf("'%d' '%6d' '%6.3d' '%6.9d'\n", n);
 
 repl.start({
     prompt: "printf> ",

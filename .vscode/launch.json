@@ -2418,7 +2418,7 @@
       "name": "printf.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/machines/modules/bin/printf.js",
+      "program": "${workspaceFolder}/tools/misc/printf.js",
       "args": [
       ],
       "cwd": "${workspaceFolder}",
