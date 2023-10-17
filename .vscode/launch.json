@@ -1669,9 +1669,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP",
+        "/Volumes/PC_SIG_12_90/1301_400/DISK1370/DISK1370.ZIP",
         "--verbose",
-        "--list"
+        "--extract",
+        "--expand",
+        "--normalize"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,

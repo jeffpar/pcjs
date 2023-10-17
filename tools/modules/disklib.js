@@ -210,17 +210,17 @@ export default class DiskLib {
             }
         }
 
-        sPath = node.path.join(sDir, subDir, sPath);
-        let sFile = sPath.substr(sDir != '.' && sDir.length? sDir.length + 1 : 0);
+        let sFullPath = node.path.join(sDir, subDir, sPath);
+        let sFile = sFullPath.slice(sDir != '.' && sDir.length? sDir.length + 1 : 0);
 
-        let dir = node.path.dirname(sPath);
-        this.makeDir(this.getLocalPath(dir), true, argv['overwrite']);
+        let dir = this.getLocalPath(node.path.dirname(sFullPath));
+        this.makeDir(dir, true, argv['overwrite']);
 
         let total = 0;
         let fUpdate = false;
 
         if (attr & DiskInfo.ATTR.SUBDIR) {
-            fUpdate = this.makeDir(this.getLocalPath(sPath), true);
+            fUpdate = this.makeDir(this.getLocalPath(sFullPath), true);
         }
         else if (!(attr & DiskInfo.ATTR.VOLUME)) {
             let fPrinted = false;
@@ -251,13 +251,14 @@ export default class DiskLib {
                         printfDebug: diskLib.printf,
                         holdErrors: true
                     }).on('ready', () => {
-                        let aFileData = diskLib.getArchiveFiles(zip, null, argv['verbose']);
+                        let aFileData = diskLib.getArchiveFiles(zip, null, date, argv['verbose']);
                         for (let file of aFileData) {
                             let t = diskLib.extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
                             if (t < 0) break;
                             total += t;
                         }
                         zip.close();
+                        node.fs.utimesSync(this.getLocalPath(sFullPath), date, date);
                     }).on('error', (err) => {
                         diskLib.printError(err, sFile);
                         /*
@@ -276,7 +277,7 @@ export default class DiskLib {
                     return total;
                 }
             }
-            if (argv['collection'] && this.existsFile(sPath) && !argv['overwrite']) {
+            if (argv['collection'] && this.existsFile(sFullPath) && !argv['overwrite']) {
                 if (!fPrinted && !fQuiet) this.printf("extracted: %s\n", sFile);
                 return ++total;
             }
@@ -293,25 +294,24 @@ export default class DiskLib {
                  * normalize()), tokenized (which we convert to ASCII and automatically normalize in the process),
                  * and protected (which we decrypt and then de-tokenize).
                  */
-                if (this.isBASICFile(sPath)) {
+                if (this.isBASICFile(sFullPath)) {
                     /*
                      * In addition to "de-tokenizing", we're also setting convertBASICFile()'s normalize parameter
                      * to true, to convert characters from CP437 to UTF-8, revert line-endings, and omit EOF.  We're
                      * currently combining both features as part of the "normalize" process.
                      */
-                    db = this.convertBASICFile(db, true, sPath);
+                    db = this.convertBASICFile(db, true, sFullPath);
                 }
-                else if (this.isTextFile(sPath)) {
+                else if (this.isTextFile(sFullPath)) {
                     db = this.normalizeTextFile(db);
                 }
             }
-            fUpdate = this.writeFileSync(this.getLocalPath(sPath), db, true, argv['overwrite'], attr, argv['quiet']);
+            fUpdate = this.writeFileSync(this.getLocalPath(sFullPath), db, true, argv['overwrite'], attr, argv['quiet']);
             if (fUpdate) {
                 total++;
             }
         }
         if (fUpdate) {
-            node.fs.utimesSync(this.getLocalPath(sPath), date, date);
             if (files) {
                 for (let file of files) {
                     let t = this.extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
@@ -322,6 +322,7 @@ export default class DiskLib {
                     total += t;
                 }
             }
+            node.fs.utimesSync(this.getLocalPath(sFullPath), date, date);
         }
         return total;
     }
@@ -671,21 +672,6 @@ export default class DiskLib {
     {
         let di;
         let diskLib = this;
-        let diskName = node.path.basename(sDir);
-        if (sDir.endsWith('/')) {
-            if (!sLabel) {
-                sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
-            }
-        } else if (arcType) {
-            if (!sLabel) {
-                sLabel = diskName.replace(/\.[^.]*$/, "");
-            }
-        } else {
-            diskName = node.path.basename(node.path.dirname(sDir));
-            /*
-             * When we're given a list of files, we don't pick a default label; use --label if you want one.
-             */
-        }
 
         /*
          * There are two special label strings you can pass on the command-line:
@@ -697,11 +683,27 @@ export default class DiskLib {
          * we build a volume label from the basename of the directory.
          */
         let dateLabel;
-        if (sLabel == "none") {
+        if (sLabel == "none" || sLabel == false) {
             sLabel = "";
-        } else if (sLabel == "default") {
+        } else if (sLabel == "default" || sLabel == true) {
             sLabel = DiskInfo.PCJS_LABEL;
             dateLabel = new Date(1989, 8, 27, 3, 0, 0);
+        }
+
+        let diskName = node.path.basename(sDir);
+        if (sDir.endsWith('/')) {
+            if (sLabel == undefined) {
+                sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
+            }
+        } else if (arcType) {
+            if (sLabel == undefined) {
+                sLabel = diskName.replace(/\.[^.]*$/, "");
+            }
+        } else {
+            diskName = node.path.basename(node.path.dirname(sDir));
+            /*
+             * When we're given a list of files, we don't pick a default label; use --label if you want one.
+             */
         }
 
         sDir = this.getLocalPath(sDir);
@@ -892,15 +894,16 @@ export default class DiskLib {
     }
 
     /**
-     * getArchiveFiles(zip, sLabel, verbose)
+     * getArchiveFiles(zip, sLabel, date, verbose)
      *
      * @this {DiskLib}
      * @param {StreamZip} zip
      * @param {string} [sLabel]
+     * @param {Date} [date]
      * @param {boolean} [verbose]
      * @returns {Array.<FileData>}
      */
-    getArchiveFiles(zip, sLabel, verbose = false)
+    getArchiveFiles(zip, sLabel, date, verbose = false)
     {
         let aFiles = [];
         if (verbose) {
@@ -912,10 +915,7 @@ export default class DiskLib {
         let entries = Object.values(zip.entries());
 
         if (sLabel) {
-            /*
-             * TODO: Consider passing the date of the ZIP file as the date of the volume label.
-             */
-            let file = {path: '/' + sLabel, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: new Date(), size: 0};
+            let file = {path: '/' + sLabel, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date, size: 0};
             aFiles.push(file);
         }
 
@@ -948,7 +948,7 @@ export default class DiskLib {
                 subDir += dir + '/';
                 let file = files.find(function(file) { return file.name == dir && file.attr == DiskInfo.ATTR.SUBDIR; });
                 if (!file) {
-                    file = {path: subDir, name: dir, attr: DiskInfo.ATTR.SUBDIR, size: -1, data: new DataBuffer(), files: []};
+                    file = {path: subDir, name: dir, attr: DiskInfo.ATTR.SUBDIR, size: -1, date, data: new DataBuffer(), files: []};
                     files.push(file);
                 }
                 files = file.files;
@@ -1064,6 +1064,7 @@ export default class DiskLib {
     readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbose, done)
     {
         let diskLib = this;
+        let stats = node.fs.statSync(sArchive);
         let zip = new node.StreamZip({
             file: sArchive,
             password: sPassword,
@@ -1075,7 +1076,7 @@ export default class DiskLib {
             holdErrors: true
         });
         zip.on('ready', function readArchiveFilesReady() {
-            let aFileData = diskLib.getArchiveFiles(zip, sLabel, verbose);
+            let aFileData = diskLib.getArchiveFiles(zip, sLabel, stats.mtime, verbose);
             zip.close();
             done(aFileData);
         });

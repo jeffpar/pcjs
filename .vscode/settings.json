@@ -19,7 +19,7 @@
     }
   },
   "eslint.validate": ["javascript"],
-  "[javascript]": {
+  "[javascript][c]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
     "files.trimTrailingWhitespace": true,

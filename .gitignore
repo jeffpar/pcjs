@@ -1,6 +1,7 @@
 *.img
 *.log
 *.obj
+*.out
 .DS_Store
 .history
 .jekyll-metadata
