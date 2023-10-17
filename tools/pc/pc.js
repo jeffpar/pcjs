@@ -41,7 +41,7 @@ export default class PC extends PCJSLib {
     fHalt = false;
     fFloppy = false;
     bootSelect = "";
-    fNormalize = true;
+    fNormalize = false;
     fTest = false;
     fVerbose = false;
     autoStart = false;
@@ -2989,7 +2989,7 @@ export default class PC extends PCJSLib {
         this.fBare = PC.removeFlag(argv, 'bare', this.fBare);
         this.fFloppy = PC.removeFlag(argv, 'floppy', this.fFloppy);
         this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);
-        this.fNormalize = PC.removeFlag(argv, 'normalize', this.fNormalize);
+        this.fNormalize = PC.removeFlag(argv, 'normalize', defaults['normalize'] || this.fNormalize);
         this.systemType = PC.removeArg(argv, ['system','sys'], defaults['sys'] || this.systemType).toLowerCase();
 
         let i = this.systemType.indexOf(':');

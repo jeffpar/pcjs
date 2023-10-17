@@ -10,7 +10,8 @@
     "maxfiles": 1024,
     "machine": "compaq386.json",
     "state": "state386.json",
-    "messages": "int,hdc",       // a list of debugger message categories to enable when --halt is used
+    "messages": "int,hdc",      // a list of debugger message categories to enable when --halt is used
+    "normalize": false,         // false is preferred for DOS compatibility (use true to enable UTF8 conversions)
   },
   "apps": {
     "cp": {},
