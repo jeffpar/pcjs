@@ -2261,9 +2261,10 @@ export default class PC extends PCJSLib {
         let pc = this;
         let result = "";
 
+        sDrive = sDrive.toUpperCase();
+        let iDrive = sDrive.charCodeAt(0) - 'A'.charCodeAt(0);
+
         let doLoad = function(sDrive, diskName, diskPath) {
-            sDrive = sDrive.toUpperCase();
-            let iDrive = sDrive.charCodeAt(0) - 'A'.charCodeAt(0);
             diskPath = diskPath || pc.diskIndexCache[diskName]['path'];
             if (diskPath) {
                 let done = function(disk, error) {
@@ -2305,7 +2306,14 @@ export default class PC extends PCJSLib {
         if (this.machine.fdc) {
             let sPath;
             if (aTokens.length) {
-                if (aTokens[0] == "--path" && (sPath = aTokens[1]) || (sPath = aTokens[0]).indexOf("http") == 0) {
+                if (aTokens[0] == "none") {
+                    result = pc.machine.fdc.unloadDrive(iDrive)? "drive unloaded" : "drive not loaded";
+                    return result;
+                }
+                if (aTokens[0].match(/(^https?:|\.json$|\.img$)/)) {
+                    sPath = aTokens[0];
+                }
+                if (sPath || aTokens[0] == "--path" && (sPath = aTokens[1])) {
                     doLoad(sDrive, sPath, sPath);
                     return result;
                 }
