@@ -89,7 +89,7 @@ You can add or remove programs from the `apps` section, and the next time you ru
 
 Aside from the commands listed in the `apps` section, two other programs are always included on the virtual hard disk: `LOAD.COM`, which makes it easy to load PCjs diskette images into drive A: or B:, and `QUIT.COM`, which shuts down the machine and returns to your local prompt (alternatively, you can press `CTRL-D` and type `quit`).
 
-See [Loading Diskettes Into Machines](/tools/pc/#loading-diskettes-into-machines) for more information and examples of the `LOAD` command (the internal `LOAD` command operates the same as the external `LOAD.COM` program).
+See [Loading Diskettes from the DOS Prompt](/tools/pc/#loading-diskettes-from-the-dos-prompt) for more information and examples of the `LOAD` command (the internal `LOAD` command operates the same as the external `LOAD.COM` program).
 
 ### Building Hard Disk Images
 

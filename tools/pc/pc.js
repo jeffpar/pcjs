@@ -2359,7 +2359,7 @@ export default class PC extends PCJSLib {
                 }
                 if (!isNaN(+criteria)) {
                     criteria = 'disk';
-                    if (args[0].match(/\.[A-Z][A-Z][A-Z]$/)) {
+                    if (args[0].match(/\.[A-Z][A-Z][A-Z]$/i)) {
                         criteria = 'file';
                     }
                 }
