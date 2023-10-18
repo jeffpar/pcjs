@@ -2198,6 +2198,10 @@ class WebLib {
             }
         }
 
+        if (!sURL.match(/^[A-Z]:/i)) {          // don't encode Windows paths (TODO: sufficient?)
+            sURL = encodeURI(sURL);
+        }
+
         let request;
         if (globals.window.XMLHttpRequest) {
             request = new globals.window.XMLHttpRequest();

@@ -331,11 +331,11 @@ Use `--disk` and `--file` to enter a mix of search criteria.  `--disk` is assume
 
 is equivalent to `load a: --file pkunzip.exe`, but `--file` can also be useful for casting a wider search net.  For example:
 
-    load a: --file pkunzip
+    load a: --file=pkunzip
 
 will match any file with `PKUNZIP` in the name (eg, `PKUNZIP.COM`, `PKUNZIP.EXE`), and:
 
-    load a: --file pkunzip exe
+    load a: --file="pkunzip exe"
 
 will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EXE`, `PKUNZIP2.EXE`).  There is no support for wildcards, since multiple search terms provide largely the same capability.
 
@@ -343,6 +343,10 @@ Another option is to load a diskette image directly, using the `--path` option; 
 
     load a: --path /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
     load a: --path https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+
+and if the file name ends with a `.json` or `.img` extension, then `--path` is assumed.  Just be sure to wrap the entire file name with quotes if it contains spaces; eg:
+
+    load a: "my disk image.json"
 
 Note that the `load` command is also available from `pc.js` command mode, which you access by pressing CTRL-D.  Type "help" at the `>>` command mode prompt for list of all available commands.
 

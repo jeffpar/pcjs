@@ -557,9 +557,15 @@ export default class Disk extends Component {
              */
             let sDiskExt = StrLib.getExtension(sDiskPath);
             if (sDiskExt == DumpAPI.FORMAT.JSON || sDiskExt == DumpAPI.FORMAT.JSON_GZ) {
-                if (!sDiskPath.match(/^[A-Z]:/i)) {
-                    sDiskURL = encodeURI(sDiskPath);    // don't encode Windows paths (TODO: sufficient?)
-                }
+                /*
+                 * This code has been moved to getResource() in weblib.js, because if the path is a local file,
+                 * then it's premature to call encodeURI() here, and moreover, why would we want to limit encoding
+                 * to JSON files?
+                 *
+                 *      if (!sDiskPath.match(/^[A-Z]:/i)) {
+                 *          sDiskURL = encodeURI(sDiskPath)     // don't encode Windows paths (TODO: sufficient?)
+                 *      }
+                 */
             } else {
                 if (this.mode == DiskAPI.MODE.DEMANDRW || this.mode == DiskAPI.MODE.DEMANDRO) {
                     sDiskURL = this.connectRemoteDisk(sDiskPath);

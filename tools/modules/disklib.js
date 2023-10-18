@@ -993,6 +993,11 @@ export default class DiskLib {
                 let methodsARC = [
                     "Store", "Pack", "Squeeze", "Crunch5", "Crunch", "Crunch7", "Crush", "Squash"
                 ];
+                /*
+                 * Deflate is the modern zlib standard (not sure about Deflate64); the rest are "legacy" methods.
+                 * I'm also not sure when Deflate came into existence; it's certainly not used by ANY of the thousands
+                 * of PC-SIG 9th edition ZIP files.
+                 */
                 let methodsZIP = [
                     "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
                 ];
