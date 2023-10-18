@@ -2433,7 +2433,10 @@ export default class PC extends PCJSLib {
                         try {
                             let pattern = parts.join('.*');
                             if (pc.fDebug) printf("searching for \"%s\"...\n", pattern);
-                            let re = new RegExp(pattern, 'i');
+                            let re = new RegExp(pattern, 'i'), reDisk;
+                            if (diskNameParts.length) {
+                                reDisk = new RegExp(diskNameParts.join('.*'), 'i');
+                            }
                             for (let name of names) {
                                 let match = name.match(re);
                                 if (match) {
@@ -2449,6 +2452,7 @@ export default class PC extends PCJSLib {
                                         let hashIndex = {};
                                         for (let i = 0; i < a.length; i++) {
                                             let item = a[i];
+                                            if (reDisk && !item['disk'].match(reDisk)) continue;
                                             let diskItem = {'disk': item['disk'], 'file': name, 'size': item['size'], 'date': item['date']};
                                             let prevItem = hashIndex[item['hash']];
                                             if (prevItem) {
