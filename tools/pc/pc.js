@@ -845,12 +845,13 @@ export default class PC extends PCJSLib {
             let args = getString(cpu.segDS, 0x81, len).trim();
             if (cpu.getIP() == 0x102) {     // INT 20h appears to have come from LOAD.COM
                 let [argc, argv] = PC.getArgs(args);
-                let matchDrive = argv[0].match(/^([a-z]:?)$/i);
+                let arg = argv[0] || "";
+                let matchDrive = arg.match(/^([a-z]:?)$/i);
                 if (matchDrive) {
                     argv.splice(0, 1);
                     printf("%s\n", this.loadDiskette(matchDrive[1], argv));
                 } else {
-                    let arg = argv[0].toLowerCase();
+                    arg = arg.toLowerCase();
                     if (arg == "info") {
                         printf(this.getDriveInfo());
                     } else if (args) {
@@ -2525,7 +2526,7 @@ export default class PC extends PCJSLib {
             argv.unshift(cmd.slice(i));
             cmd = cmd.slice(0, i);
         }
-        let arg = argv[0];
+        let arg = argv[0] || "";
         let args = s.split(' ').slice(1).join(' ').trim();
         let result = "", curDir = "", sDir = this.localDir, sDrive = "";
 
