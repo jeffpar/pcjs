@@ -2207,7 +2207,11 @@ export default class PC extends PCJSLib {
      *
      * is equivalent to:
      *
-     *      load a: --disk="pc dos"
+     *      load a: --disk=pc --disk=dos
+     *
+     * or this regular expression:
+     *
+     *      load a: --disk="pc.*dos"
      *
      * whereas:
      *
@@ -2220,6 +2224,9 @@ export default class PC extends PCJSLib {
      * You can also combine criteria to further narrow the list of matching diskettes:
      *
      *      load a: --disk="pc dos" --file=chkdsk --date=1982
+     *
+     * Note that by putting "pc dos" in quotes, the entire quoted string must match some portion of the disk name,
+     * whereas if the string is unquoted, then the disk name must simply contain "pc" followed at some point by "dos".
      *
      * The two primary criteria are disk and file criteria.  Other criteria are secondary; for example, any date criteria
      * will be applied only after any file criteria.
@@ -2237,7 +2244,7 @@ export default class PC extends PCJSLib {
      *      load a: --path=/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
      *      load a: --path=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
      *
-     * and if the file name ends with a `.json` or `.img` extension, then `--path` is assumed.  Just be sure to wrap the entire
+     * and if the file name ends with a `.json` or `.img` extension, then `--path` is assumed.  Be sure to wrap the entire
      * file name with quotes if it contains any spaces; eg:
      *
      *      load a: "my disk image.json"
@@ -2338,7 +2345,20 @@ export default class PC extends PCJSLib {
             for (let criteria in argv) {
                 let args = argv[criteria];
                 if (!Array.isArray(args)) {
-                    args = args.split(' ');
+                    /*
+                     * Thanks to unified argument processing, quoted arguments containing spaces are now
+                     * allowed, so if you went to the trouble of doing that, we preserve spaces instead of
+                     * splitting them.
+                     *
+                     *      args = args.split(' ');
+                     *
+                     * If you still want spaces to separate search terms, then simply don't quote them.
+                     *
+                     * That works great for disk criteria, since that's the default, but for file criteria,
+                     * you'll have to either use multiple file criteria (eg, "load a: --file=pk --file=exe")
+                     * or use a RegExp (eg, "load a: --file=pk.*exe"); the latter is recommended.
+                     */
+                    args = [args];
                 }
                 if (!isNaN(+criteria)) {
                     criteria = 'disk';

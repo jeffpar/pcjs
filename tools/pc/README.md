@@ -335,16 +335,16 @@ is equivalent to `load a: --file pkunzip.exe`, but `--file` can also be useful f
 
 will match any file with `PKUNZIP` in the name (eg, `PKUNZIP.COM`, `PKUNZIP.EXE`), and:
 
-    load a: --file="pkunzip exe"
+    load a: --file="pkunzip.*exe"
 
-will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EXE`, `PKUNZIP2.EXE`).  There is no support for wildcards, since multiple search terms provide largely the same capability.
+will match any file with *both* `PKUNZIP` and `EXE` in the name (eg, `PKUNZIP.EXE`, `PKUNZIP2.EXE`), since regular expressions are used internally to perform the matching.
 
 Another option is to load a diskette image directly, using the `--path` option; it supports both local and remote PCjs (.json) disk images and raw (.img) disk images:
 
     load a: --path /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
     load a: --path https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
-and if the file name ends with a `.json` or `.img` extension, then `--path` is assumed.  Just be sure to wrap the entire file name with quotes if it contains spaces; eg:
+and if the file name ends with a `.json` or `.img` extension, then `--path` is assumed.  Be sure to wrap the entire file name with quotes if it contains spaces; eg:
 
     load a: "my disk image.json"
 
