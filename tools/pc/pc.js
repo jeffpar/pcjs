@@ -844,23 +844,9 @@ export default class PC extends PCJSLib {
             let len = cpu.getSOByte(cpu.segDS, 0x80);
             let args = getString(cpu.segDS, 0x81, len).trim();
             if (cpu.getIP() == 0x102) {     // INT 20h appears to have come from LOAD.COM
-                let [argc, argv] = PC.getArgs(args);
-                let arg = argv[0] || "";
-                let matchDrive = arg.match(/^([a-z]:?)$/i);
-                if (matchDrive) {
-                    argv.splice(0, 1);
-                    printf("%s\n", this.loadDiskette(matchDrive[1], argv));
-                } else {
-                    arg = arg.toLowerCase();
-                    if (arg == "info") {
-                        printf(this.getDriveInfo());
-                    } else if (args) {
-                        printf("invalid load command: \"%s\"\n", args);
-                    }
-                    else {
-                        printf("usage: load [drive] [search options]\n");
-                    }
-                }
+                this.doCommand("load " + args).then(function(result) {
+                    printf(result);
+                });
             }
             else {                          // INT 20h assumed to have come from a hidden PCJS command app (eg, LS.COM)
                 if (globals.browser) {      // if running in a browser, display the same error as the "exec" command
