@@ -52,7 +52,6 @@ export default class PC extends PCJSLib {
     savedMachine = "compaq386.json";
     savedState = "state386.json";
     localMachine = "";          // current machine config file
-    localCommand = "";          // current command issued from machine
     localDir = ".";             // local directory used to build localDisk
     localDisk = "disks/PCJS.json";
     diskLabel = "default";
@@ -755,14 +754,14 @@ export default class PC extends PCJSLib {
              * initialization code in IO.SYS, I saw that when it loads the entire FAT into the top of available
              * memory, it calculates how many paragraphs all the FAT sectors will need, and it does so by shifting
              * the FAT sector count left 5 times.  Well, that only works for 512-byte sectors, because log2(512)
-             * is 9 and log2(16) is 4, and 9 - 4 == 5.   This code begins at 70:2CA2 (look for the INT 12h memory
+             * is 9 and log2(16) is 4, and 9 - 4 == 5.   The code begins at 70:2CA2 (look for the INT 12h memory
              * size call).
              *
              * When I tested MS-DOS 3.30 with a boot floppy formatted 40:2:5:1024, which contained only one FAT
              * sector, IO.SYS tried to read that one 1K FAT sector into segment 9FE0.  At most, only 512 bytes
-             * could be returned, since there's no RAM at A000, and even if 512 bytes of FAT was all IO.SYS needed
-             * in order continue loading the operating system, there was a second problem, which is that the
-             * request spans a 64K DMA boundary, so the call will always return an error.
+             * (0x20 paragraphs) could be returned, since there's no RAM at A000, and even if 512 bytes of FAT was
+             * all IO.SYS needed in order continue loading the operating system, there was a second problem,
+             * which is that the request spans a 64K DMA boundary, so the call will always return an error.
              *
              * Well, let's see how far we get if we shave 1K off available RAM.  That should at least avoid the
              * DMA boundary problem....
@@ -800,13 +799,11 @@ export default class PC extends PCJSLib {
              * offset for the next read (BX).  So it is effectively adding CX * 256 to BX -- or rather # sectors * 512,
              * thanks to the earlier shift -- which of course only works for 512-byte sectors.
              *
-             * At this point, it's clear this is a pointless exercise -- at least for MS-DOS 3.30.  If earlier versions
-             * were truly sector-size-agnostic, then the question becomes: had the developers forgotten about that "feature"
-             * or were they consciously blowing it off?  If the latter, they certainly weren't blowing it off in a very
-             * user-friendly manner.
+             * At this point, it's clear this is a pointless exercise -- at least for MS-DOS 3.30.
              *
-             * UPDATE: I took a quick look at PC DOS 2.0, and its boot sector immediately makes bad assumptions about sector
-             * size.  Here's how it calculates the number of directory sectors from the number of root directory entries:
+             * UPDATE: I took a quick look at PC DOS 2.0, and its boot sector immediately makes hard-coded assumptions
+             * about sector size.  Here's how it calculates the number of directory sectors from the number of root directory
+             * entries:
              *
              *      (entries * 32 + 0x1FF) / 0x200
              *
@@ -848,7 +845,7 @@ export default class PC extends PCJSLib {
                     printf(result);
                 });
             }
-            else {                          // INT 20h assumed to have come from a hidden PCJS command app (eg, LS.COM)
+            else {                          // INT 20h assumed to come from a hidden PCJS command app (eg, LS.COM)
                 if (globals.browser) {      // if running in a browser, display the same error as the "exec" command
                     printf("external commands disabled in browser\n");
                     return true;
@@ -858,9 +855,8 @@ export default class PC extends PCJSLib {
                 let len = cpu.getSOByte(cpu.segDS, off++);
                 let appName = getString(cpu.segDS, off, len).trim();
                 this.machineDir = getString(cpu.segDS, 0x120, -1);
-                this.localCommand = appName + " " + args;
                 setTimeout(function() {
-                    pc.doCommand("exec " + pc.localCommand, !!pc.driveManifest);
+                    pc.doCommand("exec " + appName + " " + args, !!pc.driveManifest);
                 }, 0);
                 return false;               // returning false should bypass the INT 20h and fall into the JMP $-2;
             }                               // we want the machine to spin its wheels until it has been unloaded/reloaded

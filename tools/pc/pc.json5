@@ -4,14 +4,14 @@
     "sys": "msdos",             // alternatives: "pcdos", "compaq" (see "systems" below)
     "ver": "3.30",              // alternatives: (see "versions" below)
     "mbr": "pcjs.mbr",          // alternatives: "DOS.mbr"
-    "target": "10M",            // alternatives: "160K", "320K", "180K", "360K", "1200K", "1440K", "20M", "30M", "40M", etc.
+    "target": "10M",            // alternatives: "160K", "320K", "180K", "360K", "1200K", "1440K", "20M", "30M", etc.
     "label": ".",               // alternatives: "default"
     "dir": ".",
     "maxfiles": 1024,
     "machine": "compaq386.json",
     "state": "state386.json",
     "messages": "int,hdc",      // a list of debugger message categories to enable when --halt is used
-    "normalize": false,         // false is preferred for DOS compatibility (use true to enable UTF8 conversions)
+    "normalize": false,         // false is preferred for DOS compatibility (true enables UTF8 and other conversions)
   },
   "apps": {
     "cp": {},
@@ -25,7 +25,7 @@
     "compaq": {
       "vendor": "compaq",
       "product": "compaq-dos",
-      "versions": {
+      "versions": {             // early versions of COMPAQ DOS used unusual system file names
         "1.10": {
           "disk": "COMPAQ-DOS110B",
           "files": ["IOSYS.COM", "MSDOS.COM", "COMMAND.COM"]
