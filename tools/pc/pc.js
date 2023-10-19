@@ -3197,6 +3197,7 @@ export default class PC extends PCJSLib {
                     if (sDir) splice = true;
                 }
                 if (sDir) {
+                    sDirectory = sDir;
                     let newDir = this.verifyDir(sDir);
                     if (newDir) {
                         this.localDir = newDir;
@@ -3212,14 +3213,19 @@ export default class PC extends PCJSLib {
             }
         }
 
-        if (!error && !sCommands) {                 // last but not least, check for a DOS command or program name
+        /*
+         * If --commands (or -c) has been specified, we want to avoid automatically building a disk
+         * or starting a machine... UNLESS sDirectory indicates that a directory was specified, in which
+         * case we assume that the user still wants a disk automatically built (but nothing more).
+         */
+        if (!error && (!sCommands || sDirectory)) {
             if (this.machineType == "pcx86" && (argv[1] || this.localDir)) {
                 let args = argv.slice(1).join(' ');
                 let sCommand = this.checkCommand(this.localDir, args);
                 if (!sCommand && args) {
                     error = "command not found: " + args;
                 } else if (!this.localDir) {
-                    warning = "unable to execute command '" + sCommand + "' with prebuilt disk";
+                    warning = "unable to add command '" + sCommand + "' to prebuilt disk";
                 } else {
                     error = await this.buildDisk(this.localDir, sCommand, sLocalDisk);
                     if (!error && sLocalDisk) {
@@ -3228,7 +3234,7 @@ export default class PC extends PCJSLib {
                     }
                 }
             }
-            if (!error) {
+            if (!error && !sCommands) {
                 if (!this.localMachine) {
                     this.localMachine = this.checkMachine(this.savedMachine);
                 }

@@ -3157,7 +3157,11 @@ class WebLib {
             }
         }
 
-        if (!sURL.match(/^[A-Z]:/i)) {          // don't encode Windows paths (TODO: sufficient?)
+        /*
+         * Don't encode Windows paths (although frankly, that should never happen and I don't recall under what circumstances
+         * it apparently did) or URLs with components (which the caller should have already encoded with encodeURIComponent()).
+         */
+        if (!sURL.match(/^[A-Z]:/i) && sURL.indexOf('?') < 0) {
             sURL = encodeURI(sURL);
         }
 
@@ -63103,55 +63107,13 @@ class Disk extends Component {
              * converter to return the corresponding JSON-encoded data.
              */
             let sDiskExt = StrLib.getExtension(sDiskPath);
-            if (sDiskExt == DumpAPI.FORMAT.JSON || sDiskExt == DumpAPI.FORMAT.JSON_GZ) {
-                /*
-                 * This code has been moved to getResource() in weblib.js, because if the path is a local file,
-                 * then it's premature to call encodeURI() here, and moreover, why would we want to limit encoding
-                 * to JSON files?
-                 *
-                 *      if (!sDiskPath.match(/^[A-Z]:/i)) {
-                 *          sDiskURL = encodeURI(sDiskPath)     // don't encode Windows paths (TODO: sufficient?)
-                 *      }
-                 */
-            } else {
+            if (sDiskExt != DumpAPI.FORMAT.JSON && sDiskExt != DumpAPI.FORMAT.JSON_GZ) {
                 if (this.mode == DiskAPI.MODE.DEMANDRW || this.mode == DiskAPI.MODE.DEMANDRO) {
                     sDiskURL = this.connectRemoteDisk(sDiskPath);
                     this.fOnDemand = true;
                 } else {
                     this.sFormat = "arraybuffer";
                 }
-                // else {
-                //     let sDiskParm = DumpAPI.QUERY.PATH;
-                //     let sSizeParm = '&' + DumpAPI.QUERY.MBHD + "=10";
-                //     /*
-                //      * 'mbhd' is a new parm added for hard drive support.  In the case of 'file' or 'dir' requests,
-                //      * 'mbhd' informs DumpAPI.ENDPOINT that it should create a hard disk image, and one not larger than
-                //      * the specified size (eg, 10mb).  In fact, until DumpAPI.ENDPOINT is changed to create custom hard
-                //      * disk BPBs, you'll always get a standard PC XT 10mb disk image, so if the 'file' or 'dir' contains
-                //      * more than 10mb of data, the request will fail.  Ultimately, I want to honor the controller's
-                //      * driveConfig 'size' parm, or to match the capacity required by the driveConfig 'type' parameter.
-                //      *
-                //      * If a 'disk' is specified, we pass mbhd=0, because the actual size will depend on the image.
-                //      * However, I don't currently have any "dsk" or "img" files containing hard disk images; those formats
-                //      * were really intended for floppy disk images.  If I never create any hard disk image files, then
-                //      * we can simply eliminate sSizeParm in the 'disk' case.
-                //      *
-                //      * Added more extensions to the list of paths-treated-as-disk-images, so that URLs to files located here:
-                //      *
-                //      *      ftp://ftp.oldskool.org/pub/TOPBENCH/dskimage/
-                //      *
-                //      * can be used as-is.  TODO: There's a TODO in netlib.getFile() regarding remote support that needs
-                //      * to be resolved first; DiskDump relies on that function for its remote requests, and it currently
-                //      * supports only HTTP.
-                //      */
-                //     if (!sDiskPath.indexOf("http:") || !sDiskPath.indexOf("ftp:") || ["dsk", "ima", "img", "360", "720", "12", "144"].indexOf(sDiskExt) >= 0) {
-                //         sDiskParm = DumpAPI.QUERY.DISK;
-                //         sSizeParm = '&' + DumpAPI.QUERY.MBHD + "=0";
-                //     } else if (StrLib.endsWith(sDiskPath, '/')) {
-                //         sDiskParm = DumpAPI.QUERY.DIR;
-                //     }
-                //     sDiskURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sDiskParm + '=' + encodeURIComponent(sDiskPath) + (this.fRemovable ? "" : sSizeParm) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
-                // }
             }
         }
         let sProgress = "Loading " + sDiskURL + "...";
@@ -68641,7 +68603,7 @@ class HDC extends Component {
             this.drive = this.aDrives[this.iDrive];
         }
 
-        this.printf("HDC initialized for %d drive(s)\n", this.aDrives.length);
+        if (fHard) this.printf("HDC initialized for %d drive(s)\n", this.aDrives.length);
         return fSuccess;
     }
 

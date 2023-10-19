@@ -2796,7 +2796,11 @@ class WebLib {
             }
         }
 
-        if (!sURL.match(/^[A-Z]:/i)) {          // don't encode Windows paths (TODO: sufficient?)
+        /*
+         * Don't encode Windows paths (although frankly, that should never happen and I don't recall under what circumstances
+         * it apparently did) or URLs with components (which the caller should have already encoded with encodeURIComponent()).
+         */
+        if (!sURL.match(/^[A-Z]:/i) && sURL.indexOf('?') < 0) {
             sURL = encodeURI(sURL);
         }
 
@@ -20154,9 +20158,7 @@ class PC11 extends Component {
              * converter to return the corresponding JSON-encoded data.
              */
             var sTapeExt = StrLib.getExtension(sTapePath);
-            if (sTapeExt == DumpAPI.FORMAT.JSON || sTapeExt == DumpAPI.FORMAT.JSON_GZ) {
-                sTapeURL = encodeURI(sTapePath);
-            } else {
+            if (sTapeExt != DumpAPI.FORMAT.JSON && sTapeExt != DumpAPI.FORMAT.JSON_GZ) {
                 var sTapeParm = DumpAPI.QUERY.PATH;
                 sTapeURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sTapeParm + '=' + encodeURIComponent(sTapePath) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
             }
@@ -20911,9 +20913,7 @@ class DiskPDP11 extends Component {
              * converter to return the corresponding JSON-encoded data.
              */
             var sDiskExt = StrLib.getExtension(sDiskPath);
-            if (sDiskExt == DumpAPI.FORMAT.JSON || sDiskExt == DumpAPI.FORMAT.JSON_GZ) {
-                sDiskURL = encodeURI(sDiskPath);
-            } else {
+            if (sDiskExt != DumpAPI.FORMAT.JSON && sDiskExt != DumpAPI.FORMAT.JSON_GZ) {
                 var sDiskParm = DumpAPI.QUERY.PATH;
                 var sSizeParm = '&' + DumpAPI.QUERY.MBHD + "=10";
                 /*
