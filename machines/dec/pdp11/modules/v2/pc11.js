@@ -494,9 +494,7 @@ export default class PC11 extends Component {
              * converter to return the corresponding JSON-encoded data.
              */
             var sTapeExt = StrLib.getExtension(sTapePath);
-            if (sTapeExt == DumpAPI.FORMAT.JSON || sTapeExt == DumpAPI.FORMAT.JSON_GZ) {
-                sTapeURL = encodeURI(sTapePath);
-            } else {
+            if (sTapeExt != DumpAPI.FORMAT.JSON && sTapeExt != DumpAPI.FORMAT.JSON_GZ) {
                 var sTapeParm = DumpAPI.QUERY.PATH;
                 sTapeURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sTapeParm + '=' + encodeURIComponent(sTapePath) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
             }

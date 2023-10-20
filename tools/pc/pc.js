@@ -41,7 +41,7 @@ export default class PC extends PCJSLib {
     fHalt = false;
     fFloppy = false;
     bootSelect = "";
-    fNormalize = true;
+    fNormalize = false;
     fTest = false;
     fVerbose = false;
     autoStart = false;
@@ -52,7 +52,6 @@ export default class PC extends PCJSLib {
     savedMachine = "compaq386.json";
     savedState = "state386.json";
     localMachine = "";          // current machine config file
-    localCommand = "";          // current command issued from machine
     localDir = ".";             // local directory used to build localDisk
     localDisk = "disks/PCJS.json";
     diskLabel = "default";
@@ -511,27 +510,30 @@ export default class PC extends PCJSLib {
             if (DL >= maxCols || DH >= maxRows) {
                 break;                      // ignore "off-screen" positions
             }
-            if (DL < machine.colCursor) {
-                if (!DL) {
-                    printf('\r');
-                } else {
-                    let s = "";
-                    while (DL + s.length < machine.colCursor) {
-                        s += '\b';
-                    }
-                    printf(s);
-                }
-            }
-            if (DH != machine.rowCursor) {
+            if (DH > machine.rowCursor || DH < machine.rowCursor && DL < machine.colCursor) {
                 printf('\n');
-            } else if (DL > machine.colCursor) {
-                /*
-                 * When BASIC/BASICA erases a character (in response to a BS/DEL key), it wants to redraw
-                 * the entire line (eg, with spaces if there was nothing past the character being deleted);
-                 * in that situation, it seems best (well, certainly easiest) to simply ignore the cursor
-                 * updates and let the spaces ("chips") fall where they may.
-                 */
-                break;
+            }
+            else if (DH == machine.rowCursor) {
+                if (DL < machine.colCursor) {
+                    if (!DL) {
+                        printf('\r');
+                    } else {
+                        let s = "";
+                        while (DL + s.length < machine.colCursor) {
+                            s += '\b';
+                        }
+                        printf(s);
+                    }
+                }
+                else if (DL > machine.colCursor) {
+                    /*
+                     * When BASIC/BASICA erases a character (in response to a BS/DEL key), it wants to redraw
+                     * the entire line (eg, with spaces if there was nothing past the character being deleted);
+                     * in that situation, it seems best (well, certainly easiest) to simply ignore the cursor
+                     * updates and let the spaces ("chips") fall where they may.
+                     */
+                    break;
+                }
             }
             machine.rowCursor = DH;
             machine.colCursor = DL;
@@ -582,6 +584,7 @@ export default class PC extends PCJSLib {
             }
             break;
         }
+
         /*
          * Originally, we only hooked the IRET if a TTY function (0x0E) was being performed, because that
          * was the only time we wanted to ignore nested INT 0x10 calls, but since we're also handling INT 0x6D
@@ -755,14 +758,14 @@ export default class PC extends PCJSLib {
              * initialization code in IO.SYS, I saw that when it loads the entire FAT into the top of available
              * memory, it calculates how many paragraphs all the FAT sectors will need, and it does so by shifting
              * the FAT sector count left 5 times.  Well, that only works for 512-byte sectors, because log2(512)
-             * is 9 and log2(16) is 4, and 9 - 4 == 5.   This code begins at 70:2CA2 (look for the INT 12h memory
+             * is 9 and log2(16) is 4, and 9 - 4 == 5.   The code begins at 70:2CA2 (look for the INT 12h memory
              * size call).
              *
              * When I tested MS-DOS 3.30 with a boot floppy formatted 40:2:5:1024, which contained only one FAT
              * sector, IO.SYS tried to read that one 1K FAT sector into segment 9FE0.  At most, only 512 bytes
-             * could be returned, since there's no RAM at A000, and even if 512 bytes of FAT was all IO.SYS needed
-             * in order continue loading the operating system, there was a second problem, which is that the
-             * request spans a 64K DMA boundary, so the call will always return an error.
+             * (0x20 paragraphs) could be returned, since there's no RAM at A000, and even if 512 bytes of FAT was
+             * all IO.SYS needed in order continue loading the operating system, there was a second problem,
+             * which is that the request spans a 64K DMA boundary, so the call will always return an error.
              *
              * Well, let's see how far we get if we shave 1K off available RAM.  That should at least avoid the
              * DMA boundary problem....
@@ -800,13 +803,11 @@ export default class PC extends PCJSLib {
              * offset for the next read (BX).  So it is effectively adding CX * 256 to BX -- or rather # sectors * 512,
              * thanks to the earlier shift -- which of course only works for 512-byte sectors.
              *
-             * At this point, it's clear this is a pointless exercise -- at least for MS-DOS 3.30.  If earlier versions
-             * were truly sector-size-agnostic, then the question becomes: had the developers forgotten about that "feature"
-             * or were they consciously blowing it off?  If the latter, they certainly weren't blowing it off in a very
-             * user-friendly manner.
+             * At this point, it's clear this is a pointless exercise -- at least for MS-DOS 3.30.
              *
-             * UPDATE: I took a quick look at PC DOS 2.0, and its boot sector immediately makes bad assumptions about sector
-             * size.  Here's how it calculates the number of directory sectors from the number of root directory entries:
+             * UPDATE: I took a quick look at PC DOS 2.0, and its boot sector immediately makes hard-coded assumptions
+             * about sector size.  Here's how it calculates the number of directory sectors from the number of root directory
+             * entries:
              *
              *      (entries * 32 + 0x1FF) / 0x200
              *
@@ -844,24 +845,11 @@ export default class PC extends PCJSLib {
             let len = cpu.getSOByte(cpu.segDS, 0x80);
             let args = getString(cpu.segDS, 0x81, len).trim();
             if (cpu.getIP() == 0x102) {     // INT 20h appears to have come from LOAD.COM
-                let aTokens = args.split(' ');
-                let matchDrive = aTokens[0].match(/^([a-z]:?)$/i);
-                if (matchDrive) {
-                    aTokens.splice(0, 1);
-                    printf("%s\n", this.loadDiskette(matchDrive[1], aTokens));
-                } else {
-                    let arg = aTokens[0].toLowerCase();
-                    if (arg == "/i" || arg == "info") {
-                        printf(this.getDriveInfo());
-                    } else if (args) {
-                        printf("invalid load command: \"%s\"\n", args);
-                    }
-                    else {
-                        printf("usage: load [drive] [search options]\n");
-                    }
-                }
+                this.doCommand("load " + args).then(function(result) {
+                    printf(result);
+                });
             }
-            else {                          // INT 20h assumed to have come from a hidden PCJS command app (eg, LS.COM)
+            else {                          // INT 20h assumed to come from a hidden PCJS command app (eg, LS.COM)
                 if (globals.browser) {      // if running in a browser, display the same error as the "exec" command
                     printf("external commands disabled in browser\n");
                     return true;
@@ -871,9 +859,8 @@ export default class PC extends PCJSLib {
                 let len = cpu.getSOByte(cpu.segDS, off++);
                 let appName = getString(cpu.segDS, off, len).trim();
                 this.machineDir = getString(cpu.segDS, 0x120, -1);
-                this.localCommand = appName + " " + args;
                 setTimeout(function() {
-                    pc.doCommand("exec " + pc.localCommand, !!pc.driveManifest);
+                    pc.doCommand("exec " + appName + " " + args, !!pc.driveManifest);
                 }, 0);
                 return false;               // returning false should bypass the INT 20h and fall into the JMP $-2;
             }                               // we want the machine to spin its wheels until it has been unloaded/reloaded
@@ -2211,24 +2198,39 @@ export default class PC extends PCJSLib {
     }
 
     /**
-     * loadDiskette(sDrive, aTokens)
+     * loadDiskette(sDrive, argv)
      *
      * When then "load" command is followed by a drive-letter and colon (eg, "load a:"), this function is called
-     * with all the remaining tokens on the command-line.  Those tokens determine which disk(s) to display for selection
-     * and subsequent loading.
+     * with all the remaining arguments on the command-line.  Those arguments determine which disk(s) to display for
+     * selection and subsequent loading.
      *
-     * Tokens fall into two categories: dash tokens (eg, "--disk", "--file") and non-dash tokens.  Non-dash tokens simply
-     * add to the search criteria of whichever dash token is in effect; initially, "--disk" is in effect, which means that:
+     * Arguments fall into two categories: dashed (eg, "--disk", "--file") and non-dashed.  Non-dashed arguments are
+     * treated as disk arguments UNLESS they appear to be a file name (eg, a string with a file extension).  For example:
      *
      *      load a: pc dos
      *
      * is equivalent to:
      *
-     *      load a: --disk pc dos
+     *      load a: --disk=pc --disk=dos
+     *
+     * or this regular expression:
+     *
+     *      load a: --disk="pc.*dos"
+     *
+     * whereas:
+     *
+     *      load a: pkunzip.exe
+     *
+     * is equivalent to:
+     *
+     *      load a: --file=pkunzip.exe
      *
      * You can also combine criteria to further narrow the list of matching diskettes:
      *
-     *      load a: --disk pc dos --file chkdsk --date 1982
+     *      load a: --disk="pc dos" --file=chkdsk --date=1982
+     *
+     * Note that by putting "pc dos" in quotes, the entire quoted string must match some portion of the disk name,
+     * whereas if the string is unquoted, then the disk name must simply contain "pc" followed at some point by "dos".
      *
      * The two primary criteria are disk and file criteria.  Other criteria are secondary; for example, any date criteria
      * will be applied only after any file criteria.
@@ -2240,11 +2242,16 @@ export default class PC extends PCJSLib {
      *
      * will load the corresponding diskette.
      *
-     * Another option is to load a diskette image directly, using the "--path" option; it supports both PCjs (.json) disk
-     * images and raw (.img) disk images:
+     * Another option is to load a diskette image directly, using the "--path" option; it supports both local and remote
+     * PCjs (.json) disk images and raw (.img) disk images:
      *
-     *      load a: --path /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
-     *      load a: --path https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+     *      load a: --path=/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+     *      load a: --path=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+     *
+     * and if the file name ends with a `.json` or `.img` extension, then `--path` is assumed.  Be sure to wrap the entire
+     * file name with quotes if it contains any spaces; eg:
+     *
+     *      load a: "my disk image.json"
      *
      * Note that the "load" command is always available from pc.js "command mode", and it is also available from a DOS command
      * prompt IF the machine was launched with a locally built hard drive containing our hidden LOAD.COM utility (see buildDisk()).
@@ -2253,17 +2260,18 @@ export default class PC extends PCJSLib {
      *
      * @this {PC}
      * @param {string} sDrive ('A:' through 'Z:')
-     * @param {Array.<string>} aTokens
+     * @param {Array.<string>} argv
      * @returns {string} (result of command)
      */
-    loadDiskette(sDrive, aTokens)
+    loadDiskette(sDrive, argv)
     {
         let pc = this;
         let result = "";
 
+        sDrive = sDrive.toUpperCase();
+        let iDrive = sDrive.charCodeAt(0) - 'A'.charCodeAt(0);
+
         let doLoad = function(sDrive, diskName, diskPath) {
-            sDrive = sDrive.toUpperCase();
-            let iDrive = sDrive.charCodeAt(0) - 'A'.charCodeAt(0);
             diskPath = diskPath || pc.diskIndexCache[diskName]['path'];
             if (diskPath) {
                 let done = function(disk, error) {
@@ -2303,86 +2311,101 @@ export default class PC extends PCJSLib {
         };
 
         if (this.machine.fdc) {
-            let sPath;
-            if (aTokens.length) {
-                if (aTokens[0] == "--path" && (sPath = aTokens[1]) || (sPath = aTokens[0]).indexOf("http") == 0) {
-                    doLoad(sDrive, sPath, sPath);
-                    return result;
-                }
-                if (this.diskItems && aTokens.length == 1 && aTokens[0].match(/^\d+$/)) {
-                    let diskItem = this.diskItems[+aTokens[0] - 1];
-                    if (diskItem) {
-                        if (!diskItem['others']) {
-                            doLoad(sDrive, diskItem['disk']);
-                        } else {
-                            this.diskItems = diskItem['others'];
-                            this.diskItems.unshift(diskItem);
-                            delete diskItem['others'];
-                            result = displayItems(sDrive, this.diskItems, "multiple disks with identical file (use \"load " + sDrive + " 1\" to load original selection)");
-                        }
+
+            let sPath = PC.removeArg(argv, 'path');
+            if (!sPath && argv[0] && argv[0].match(/(^https?:|\.json$|\.img$)/)) {
+                sPath = argv[0];
+            }
+            if (sPath) {
+                doLoad(sDrive, sPath, sPath);
+                return result;
+            }
+            if (argv[0] == "none") {
+                result = pc.machine.fdc.unloadDrive(iDrive)? "drive unloaded" : "drive not loaded";
+                return result;
+            }
+            if (this.diskItems && argv.length == 1 && argv[0].match(/^\d+$/)) {
+                let diskItem = this.diskItems[+argv[0] - 1];
+                if (diskItem) {
+                    if (!diskItem['others']) {
+                        doLoad(sDrive, diskItem['disk']);
                     } else {
-                        result = "invalid diskette number (" + aTokens[0] + ")";
+                        this.diskItems = diskItem['others'];
+                        this.diskItems.unshift(diskItem);
+                        delete diskItem['others'];
+                        result = displayItems(sDrive, this.diskItems, "multiple disks with identical file (use \"load " + sDrive + " 1\" to load original selection)");
                     }
-                    return result;
+                } else {
+                    result = "invalid diskette number (" + argv[0] + ")";
                 }
+                return result;
             }
 
-            let criteria = 'disk';
-            let cTokens = 0;
             let dateParts = [];
             let diskNameParts = [];
             let fileNameParts = [];
             this.diskItems = [];
 
-            for (let token of aTokens) {
-                let matchDash = token.match(/^-+(.*)$/);
-                if (matchDash) {
-                    criteria = matchDash[1].toLowerCase();
-                } else {
-                    token = token.toUpperCase();
-                    if (!cTokens && token.match(/\.[A-Z][A-Z][A-Z]$/)) {
-                        /*
-                         * If no criteria has been specified, and the token looks like a filename, then assume it's a file.
-                         */
+            for (let criteria in argv) {
+                let args = argv[criteria];
+                if (!Array.isArray(args)) {
+                    /*
+                     * Thanks to unified argument processing, quoted arguments containing spaces are now
+                     * allowed, so if you went to the trouble of doing that, we preserve spaces instead of
+                     * splitting them.
+                     *
+                     *      args = args.split(' ');
+                     *
+                     * If you still want spaces to separate search terms, then simply don't quote them.
+                     *
+                     * That works great for disk criteria, since that's the default, but for file criteria,
+                     * you'll have to either use multiple file criteria (eg, "load a: --file=pk --file=exe")
+                     * or use a RegExp (eg, "load a: --file=pk.*exe"); the latter is recommended.
+                     */
+                    args = [args];
+                }
+                if (!isNaN(+criteria)) {
+                    criteria = 'disk';
+                    if (args[0].match(/\.[A-Z][A-Z][A-Z]$/i)) {
                         criteria = 'file';
                     }
+                }
+                for (let arg of args) {
                     /*
-                     * Instead of trying to prevent the user from using regex characters:
-                     *
-                     *      token = token.replace(/([().\[\]])/g, '\\$1');
-                     *
-                     * we now embrace them.  Unfortunately, when using our DOS "LOAD" utility, the DOS command interpreter
-                     * likes to chop commands up whenever it sees the "pipe" operator, so we have two options: allow the user
-                     * to put quotes around regex expressions containing pipes, or let them use commas instead of pipes.
-                     *
-                     * I prefer the latter but also allow the former.  So all these commands are equivalent:
-                     *
-                     *      load a: --file arc (com,exe)
-                     *      load a: --file arc "(com|exe)"
-                     *      load a: --file "arc.*(com|exe)"
-                     *
-                     * NOTE: If you want the base filename to end with "ARC", (eg, "ARC.EXE" or "LHARC.EXE" but not "SEARCH.EXE"),
-                     * then use a period preceded by a backslash:
-                     *
-                     *      load a: --file "arc\.(com|exe)"
-                     */
-                    token = token.replace(/^"([^"]*)"$/, '$1').replace(/,/g, '|');
-                    switch (criteria) {
+                    * Instead of trying to prevent the user from using regex characters:
+                    *
+                    *      arg = arg.replace(/([().\[\]])/g, '\\$1');
+                    *
+                    * we now embrace them.  Unfortunately, when using our DOS "LOAD" utility, the DOS command interpreter
+                    * likes to chop commands up whenever it sees the "pipe" operator, so we have two options: allow the user
+                    * to put quotes around regex expressions containing pipes, or let them use commas instead of pipes.
+                    *
+                    * I prefer the latter but also allow the former.  So these commands are equivalent:
+                    *
+                    *      load a: --file="arc.*(com,exe)"
+                    *      load a: --file="arc.*(com|exe)"
+                    *
+                    * NOTE: If you want the base filename to end with "ARC", (eg, "ARC.EXE" or "LHARC.EXE" but not "SEARCH.EXE"),
+                    * then use a period preceded by a backslash:
+                    *
+                    *      load a: --file="arc\.(com|exe)"
+                    */
+                    arg = arg.replace(/^"([^"]*)"$/, '$1').replace(/,/g, '|');
+                    switch (criteria.toLowerCase()) {
                     case 'date':
-                        dateParts.push(token);
+                        dateParts.push(arg);
                         break;
                     case 'disk':
-                        diskNameParts.push(token);
+                        diskNameParts.push(arg);
                         break;
                     case 'file':
-                        fileNameParts.push(token);
+                        fileNameParts.push(arg);
                         break;
                     default:
                         printf("unknown criteria: %s\n", criteria);
                         break;
                     }
                 }
-                cTokens++;
             }
             if (diskNameParts.length || fileNameParts.length) {
                 if (!this.diskIndexCache) {
@@ -2417,7 +2440,10 @@ export default class PC extends PCJSLib {
                         try {
                             let pattern = parts.join('.*');
                             if (pc.fDebug) printf("searching for \"%s\"...\n", pattern);
-                            let re = new RegExp(pattern, 'i');
+                            let re = new RegExp(pattern, 'i'), reDisk;
+                            if (diskNameParts.length) {
+                                reDisk = new RegExp(diskNameParts.join('.*'), 'i');
+                            }
                             for (let name of names) {
                                 let match = name.match(re);
                                 if (match) {
@@ -2433,6 +2459,7 @@ export default class PC extends PCJSLib {
                                         let hashIndex = {};
                                         for (let i = 0; i < a.length; i++) {
                                             let item = a[i];
+                                            if (reDisk && !item['disk'].match(reDisk)) continue;
                                             let diskItem = {'disk': item['disk'], 'file': name, 'size': item['size'], 'date': item['date']};
                                             let prevItem = hashIndex[item['hash']];
                                             if (prevItem) {
@@ -2497,18 +2524,16 @@ export default class PC extends PCJSLib {
      */
     async doCommand(s, reload = false)
     {
-        let argc, argv;
-        let aTokens = s.split(' ');
-        let cmd = aTokens[0].toLowerCase();
-
-        aTokens.splice(0, 1);
+        let [argc, argv] = PC.getArgs(s);
+        let cmd = (argv[0] || "").toLowerCase();
+        argv.splice(0, 1);
         let i = cmd.indexOf('/');
         if (i > 0) {
-            aTokens.unshift(cmd.slice(i));
+            argv.unshift(cmd.slice(i));
             cmd = cmd.slice(0, i);
         }
-
-        let arg, args = aTokens.join(' ').trim();
+        let arg = argv[0] || "";
+        let args = s.split(' ').slice(1).join(' ').trim();
         let result = "", curDir = "", sDir = this.localDir, sDrive = "";
 
         let help = function(machine, options = "") {
@@ -2544,36 +2569,35 @@ export default class PC extends PCJSLib {
         case "dir":
         case "ls":
         case "rm":
-            result = this.doFSCommand(cmd, aTokens);
+            result = this.doFSCommand(cmd, argv);
             break;
         case "build":
             if (this.machine.cpu) {
                 result = "machine already started";
-                break;
-            }
-            args = this.checkBuildArgs(args);
-            if (args) {
-                aTokens = args.split(' ');
-                arg = this.verifyDir(aTokens[0]);
+            } else {
+                this.checkBuildArgs(argv);
                 if (arg) {
-                    this.localDir = arg;
-                    aTokens.splice(0, 1);
+                    arg = this.verifyDir(arg);
+                    if (arg) {
+                        this.localDir = arg;
+                        argv.splice(0, 1);
+                    }
                 }
-                args = aTokens.join(' ').trim();
+                args = argv.join(' ').trim();
+                arg = this.checkCommand(this.localDir, args);
+                if (!arg && args) {
+                    result = "bad command or file name: " + args;
+                } else {
+                    result = await this.buildDisk(this.localDir, arg, "", true);
+                }
             }
-            arg = this.checkCommand(this.localDir, args);
-            if (!arg && args) {
-                result = "bad command or file name: " + args;
-                break;
-            }
-            result = await this.buildDisk(this.localDir, arg, "", true);
             break;
         case "dump":
-            if (!aTokens.length) {
+            if (!argv.length) {
                 result = "usage: dump [logical sector number]";
                 break;
             }
-            result = this.dumpDisk(...aTokens);
+            result = this.dumpDisk(...argv);
             break;
         case "exec":
             if (globals.browser) {
@@ -2585,19 +2609,16 @@ export default class PC extends PCJSLib {
                 this.machine = this.newMachine();
             }
             try {
-                let app, appConfig, child;
+                let appConfig, child;
                 curDir = node.process.cwd();
                 node.process.chdir(this.mapDir(this.machineDir));
-                argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
-                appConfig = configJSON['apps']?.[app];
+                appConfig = configJSON['apps']?.[arg];
                 if (appConfig && appConfig['exec']) {
-                    args = argv.join(' ').trim();
                     args = appConfig['exec'].replace(/\$\*/, args);
-                    argv = args.split(' '); app = argv[0]; argv.splice(0, 1);
                 }
                 /*
                  * I've tweaked execSync() a bit to make it work with both Node and Bun....  I've also tried
-                 * spawnSync(app, argv, ...), but that doesn't work as well.
+                 * spawnSync(arg, argv, ...), but that doesn't work as well.
                  */
                 child = node.child_process.execSync(args, {
                     stdio: [
@@ -2615,28 +2636,26 @@ export default class PC extends PCJSLib {
             }
             break;
         case "fetch":
-            [argc, argv] = PC.getArgs(args);
-            if (argv[0]) {
-                let di = await diskLib.readDiskAsync(argv[0]);
+            if (arg) {
+                let di = await diskLib.readDiskAsync(arg);
                 if (di) {
-                    diskLib.extractFiles(di, {quiet: !argv['verbose']}, "", argv[1] || "", argv['hidden']);
+                    diskLib.extractFiles(di, {quiet: true, verbose: argv['verbose']}, "", argv[1] || "", argv['hidden']);
                 } else {
-                    result = "invalid disk image: " + argv[0];
+                    result = "invalid disk image: " + arg;
                 }
             } else {
                 result = "usage: fetch [disk image] [directory]";
             }
             break;
         case "load":
-            arg = aTokens[0];
             if (arg) {
-                if (arg == "/i" || arg == "info") {
+                if (arg == "info") {
                     result = this.getDriveInfo().trim();
                 } else {
                     let matchDrive = arg.match(/^([a-z]:?)$/i);
                     if (matchDrive) {
-                        aTokens.splice(0, 1);
-                        result = this.loadDiskette(matchDrive[1], aTokens);
+                        argv.splice(0, 1);
+                        result = this.loadDiskette(matchDrive[1], argv);
                     } else {
                         result = "invalid diskette drive: " + arg;
                     }
@@ -2646,13 +2665,13 @@ export default class PC extends PCJSLib {
             }
             break;
         case "save":
-            if (aTokens[0]) {
-                sDir = aTokens[0];
-                let matchDrive = aTokens[0].match(/^([a-z]):?$/i);
+            if (arg) {
+                sDir = arg;
+                let matchDrive = sDir.match(/^([a-z]):?$/i);
                 if (matchDrive) {
                     sDrive = matchDrive[1].toUpperCase() + ':';
-                    aTokens.splice(0, 1);
-                    sDir = aTokens[0];
+                    argv.splice(0, 1);
+                    sDir = argv[0];
                     if (!sDir) {
                         result = "specify a disk image for drive " + sDrive;
                         break;
@@ -2666,10 +2685,8 @@ export default class PC extends PCJSLib {
         case "select":
             if (this.machine.cpu) {
                 result = "machine already started";
-                break;
             }
-            arg = aTokens[0];
-            if (arg) {
+            else if (arg) {
                 let sFile = this.checkMachine(arg);
                 if (sFile) {
                     this.localMachine = sFile;
@@ -2685,28 +2702,26 @@ export default class PC extends PCJSLib {
         case "start":
             if (this.machine.cpu) {
                 result = "machine already started";
-                break;
-            }
-            args = this.checkMachineArgs(args);
-            aTokens = args.split(' ');
-            arg = aTokens[0];
-            if (!arg && !this.machine.cpu) {
-                arg = this.localMachine || this.savedMachine;
-            }
-            if (arg) {
-                let sFile = this.checkMachine(arg);
-                if (sFile) {
-                    this.machine = this.newMachine();
-                    printf("loading machine: %s\n", sFile);
-                    result = this.loadMachine(sFile);
-                    if (!result) {
-                        this.localMachine = sFile;
+            } else {
+                this.checkMachineArgs(argv);
+                if (!arg && !this.machine.cpu) {
+                    arg = this.localMachine || this.savedMachine;
+                }
+                if (arg) {
+                    let sFile = this.checkMachine(arg);
+                    if (sFile) {
+                        this.machine = this.newMachine();
+                        printf("loading machine: %s\n", sFile);
+                        result = this.loadMachine(sFile);
+                        if (!result) {
+                            this.localMachine = sFile;
+                        }
+                    } else {
+                        result = "unrecognized machine: " + arg;
                     }
                 } else {
-                    result = "unrecognized machine: " + arg;
+                    result = "missing machine file";
                 }
-            } else {
-                result = "missing machine file";
             }
             break;
         case "stop":
@@ -2719,8 +2734,8 @@ export default class PC extends PCJSLib {
             break;
         case "q":
         case "quit":
-            if (aTokens[0]) {
-                printf("unsupported option: %s\n", args);
+            if (arg) {
+                printf("unsupported option: %s\n", arg);
                 break;
             }
             this.exit();
@@ -2765,7 +2780,7 @@ export default class PC extends PCJSLib {
     }
 
     /**
-     * doFSCommand(cmd, aTokens)
+     * doFSCommand(cmd, argv)
      *
      * We mimic a small number of *nix-style file system commands in PCjs command mode.  These are
      * intended to be used when pc.js is running in a browser and we are simulating a file system with PCFS,
@@ -2776,17 +2791,17 @@ export default class PC extends PCJSLib {
      * prefer real *nix commands, either with DOS commands (eg, "ls -l") that have been mapped to external commands
      * via "exec", or with the internal "exec" command directly (eg, "exec ls -l"), or another terminal window.
      *
-     * @param {string} cmd
-     * @param {Array} aTokens
+     * @param {string} cmd (command to execute)
+     * @param {Array} argv (arguments with command removed)
      * @returns {string} (result of command)
      */
-    doFSCommand(cmd, aTokens)
+    doFSCommand(cmd, argv)
     {
         let result = "", asFiles, sDir, count = 0;
 
         switch(cmd) {
         case "cd":
-            sDir = aTokens[0];
+            sDir = argv[0];
             if (!sDir) {
                 result = "current directory: " + this.localDir;
                 break;
@@ -2798,7 +2813,7 @@ export default class PC extends PCJSLib {
                 result = "new directory: " + sDir;
                 this.localDir = sDir;
             } else {
-                result = "invalid directory: " + aTokens[0];
+                result = "invalid directory: " + argv[0];
             }
             break;
         case "dir":
@@ -2913,14 +2928,14 @@ export default class PC extends PCJSLib {
         device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR + (this.fDebug && this.fVerbose? MESSAGE.DEBUG : 0) + (this.fVerbose? MESSAGE.INFO : 0), true);
         this.messagesFilter = this.fDebug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
 
-        let arg0 = argv[0].split(' ');
+        let args = argv[0].split(' ');
         if (!argv[1] || this.fDebug || this.fTest || globals.browser) {
-            let options = arg0.slice(1).join(' ');
+            let options = args.slice(1).join(' ');
             printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
         }
         if (!machines) {
             let db;
-            rootDir = node.path.join(node.path.dirname(arg0[0]), "../..");
+            rootDir = node.path.join(node.path.dirname(args[0]), "../..");
             pcjsDir = node.path.join(rootDir, "/tools/pc");
             diskLib.setRootDir(rootDir, pcjsDir, PC.removeFlag(argv, 'local')? true : (PC.removeFlag(argv, 'remote')? false : null));
             db = await diskLib.readFileAsync("/machines/machines.json");
@@ -2947,17 +2962,14 @@ export default class PC extends PCJSLib {
      * @this {PC}
      * @param {Object|string} argv
      * @param {Object} [defaults]
-     * @returns {string}
      */
-    checkBuildArgs(argv, defaults = {})
+    checkBuildArgs(argv, defaults)
     {
-        let argc = 0;
-        if (typeof argv == "string") {
-            if (!argv) return "";
-            [argc, argv] = PC.getArgs(argv);
-            argc = 1;
+        let checkRemaining;
+        if (!defaults) {
+            defaults = {};
+            checkRemaining = true;
         }
-
         this.driveInfo = {
             driveCtrl:      "COMPAQ",
             driveType:      -1,
@@ -2981,7 +2993,7 @@ export default class PC extends PCJSLib {
         this.fBare = PC.removeFlag(argv, 'bare', this.fBare);
         this.fFloppy = PC.removeFlag(argv, 'floppy', this.fFloppy);
         this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);
-        this.fNormalize = PC.removeFlag(argv, 'normalize', this.fNormalize);
+        this.fNormalize = PC.removeFlag(argv, 'normalize', defaults['normalize'] || this.fNormalize);
         this.systemType = PC.removeArg(argv, ['system','sys'], defaults['sys'] || this.systemType).toLowerCase();
 
         let i = this.systemType.indexOf(':');
@@ -3037,7 +3049,9 @@ export default class PC extends PCJSLib {
         if (hiddenSectors) {
             this.driveInfo.hiddenSectors = +hiddenSectors || 0;
         }
-        return argc? this.checkRemainingArgs(argv) : "";
+        if (checkRemaining) {
+            this.checkRemainingArgs(argv);
+        }
     }
 
     /**
@@ -3046,26 +3060,25 @@ export default class PC extends PCJSLib {
      * @this {PC}
      * @param {Object|string} argv
      * @param {Object} [defaults]
-     * @returns {string}
      */
-    checkMachineArgs(argv, defaults = {})
+    checkMachineArgs(argv, defaults)
     {
-        let argc = 0;
-        if (typeof argv == "string") {
-            if (!argv) return "";
-            [argc, argv] = PC.getArgs(argv);
-            argc = 1;
+        let checkRemaining;
+        if (!defaults) {
+            defaults = {};
+            checkRemaining = true;
         }
         this.fHalt = PC.removeFlag(argv, 'halt', this.fHalt);
         this.bootSelect = PC.removeArg(argv, 'boot', defaults['boot'] || this.bootSelect).toUpperCase();
-        return argc? this.checkRemainingArgs(argv) : "";
+        if (checkRemaining) {
+            this.checkRemainingArgs(argv);
+        }
     }
 
     /**
      * checkRemainingArgs(argv)
      *
      * @param {Object} argv
-     * @returns {string}
      */
     checkRemainingArgs(argv)
     {
@@ -3081,7 +3094,6 @@ export default class PC extends PCJSLib {
                 printf("invalid option: %s%s\n", arg, value);
             }
         }
-        return argv.join(' ').trim();
     }
 
     /**
@@ -3189,6 +3201,7 @@ export default class PC extends PCJSLib {
                     if (sDir) splice = true;
                 }
                 if (sDir) {
+                    sDirectory = sDir;
                     let newDir = this.verifyDir(sDir);
                     if (newDir) {
                         this.localDir = newDir;
@@ -3204,14 +3217,19 @@ export default class PC extends PCJSLib {
             }
         }
 
-        if (!error && !sCommands) {                 // last but not least, check for a DOS command or program name
+        /*
+         * If --commands (or -c) has been specified, we want to avoid automatically building a disk
+         * or starting a machine... UNLESS sDirectory indicates that a directory was specified, in which
+         * case we assume that the user still wants a disk automatically built (but nothing more).
+         */
+        if (!error && (!sCommands || sDirectory)) {
             if (this.machineType == "pcx86" && (argv[1] || this.localDir)) {
                 let args = argv.slice(1).join(' ');
                 let sCommand = this.checkCommand(this.localDir, args);
                 if (!sCommand && args) {
                     error = "command not found: " + args;
                 } else if (!this.localDir) {
-                    warning = "unable to execute command '" + sCommand + "' with prebuilt disk";
+                    warning = "unable to add command '" + sCommand + "' to prebuilt disk";
                 } else {
                     error = await this.buildDisk(this.localDir, sCommand, sLocalDisk);
                     if (!error && sLocalDisk) {
@@ -3220,7 +3238,7 @@ export default class PC extends PCJSLib {
                     }
                 }
             }
-            if (!error) {
+            if (!error && !sCommands) {
                 if (!this.localMachine) {
                     this.localMachine = this.checkMachine(this.savedMachine);
                 }

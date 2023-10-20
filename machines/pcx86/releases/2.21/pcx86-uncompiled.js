@@ -386,6 +386,7 @@ class Format {
             } else {
                 arg = args[args.length-1];
             }
+            let signed = false;
             let flags = aParts[iPart+1];
             let hash = flags.indexOf('#') >= 0;
             let zeroPad = flags.indexOf('0') >= 0;
@@ -597,7 +598,7 @@ class Format {
             case 'j':
                 /**
                  * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
-                 * the caller is providing an Object that should be rendered as JSON.  If a width is included
+                 * the caller is providing an object that should be rendered as JSON.  If a width is included
                  * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
                  */
                 buffer += JSON.stringify(arg, null, width || undefined);
@@ -672,16 +673,34 @@ class Format {
                 /**
                  * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
                  * and we honor precision, if any, as the minimum number of digits to print.
+                 *
+                 * NOTE: In spite of what I mentioned above, Math.trunc() fails on some string values, most notably
+                 * signed prefixed values (eg, "-0x1234").  So we deal with that below.
                  */
+                if (typeof arg == "string") {
+                    if (arg[0] == '-') {
+                        signed = true;
+                        arg = arg.slice(1);
+                    }
+                }
                 arg = Math.trunc(arg);
+                if (signed) arg = -arg;
                 /**
                  * Since we now use division instead of shifts to reduce the value as we extract digits (in order to support
-                 * values > 32 bits), negative numbers may not render properly.  We can easily fix that by converting the value
-                 * to a positive number with the unsigned right-shift operator (>>>), but since that is a 32-bit operation,
-                 * we can only do that if the value appears to be 32 bits or less.
+                 * values > 32 bits), negative numbers will not render properly.  That's easily fixed for 32-bit values with
+                 * the unsigned 32-bit right-shift operator (>>>).  For larger values, we add 2^53 to the value, which gives us
+                 * the two's complement of the value as a positive number.  And if the value is larger than 2^53, well, you've
+                 * exceeded the integer precision of JavaScript's Number type, so you're out of luck.
+                 *
+                 * Example: Let's say you calculated 1 - 0x123456789, resulting in -0x123456788.  By adding 0x2000000000000 to
+                 * it, we get 0x1FFFEDCBA9878, which is the 53-bit representation of -0x123456788 as a positive number.
                  */
-                if (arg < 0 && (arg|0) == arg) {
-                    arg >>>= 0;
+                if (arg < 0) {
+                    if ((arg|0) == arg) {
+                        arg >>>= 0;
+                    } else if (Math.abs(arg) <= Math.pow(2, 53)) {
+                        arg += Math.pow(2, 53);
+                    }
                 }
                 if (precision >= 0) {
                     zeroPad = true;
@@ -690,7 +709,7 @@ class Format {
                 }
                 if (zeroPad && !width) {
                     /**
-                     * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
+                     * When zero padding is specified without a width (eg, "%0x"), auto-select a width.
                      */
                     if (length == 'b') {
                         width = 2;      // if an 8-bit length was specified (eg, "%0bx"), then default to 2
@@ -3136,6 +3155,14 @@ class WebLib {
                 if (done) done(sURL, resource, nErrorCode);
                 return [resource, nErrorCode];
             }
+        }
+
+        /*
+         * Don't encode Windows paths (although frankly, that should never happen and I don't recall under what circumstances
+         * it apparently did) or URLs with components (which the caller should have already encoded with encodeURIComponent()).
+         */
+        if (!sURL.match(/^[A-Z]:/i) && sURL.indexOf('?') < 0) {
+            sURL = encodeURI(sURL);
         }
 
         let request;
@@ -63080,49 +63107,13 @@ class Disk extends Component {
              * converter to return the corresponding JSON-encoded data.
              */
             let sDiskExt = StrLib.getExtension(sDiskPath);
-            if (sDiskExt == DumpAPI.FORMAT.JSON || sDiskExt == DumpAPI.FORMAT.JSON_GZ) {
-                if (!sDiskPath.match(/^[A-Z]:/i)) {
-                    sDiskURL = encodeURI(sDiskPath);    // don't encode Windows paths (TODO: sufficient?)
-                }
-            } else {
+            if (sDiskExt != DumpAPI.FORMAT.JSON && sDiskExt != DumpAPI.FORMAT.JSON_GZ) {
                 if (this.mode == DiskAPI.MODE.DEMANDRW || this.mode == DiskAPI.MODE.DEMANDRO) {
                     sDiskURL = this.connectRemoteDisk(sDiskPath);
                     this.fOnDemand = true;
                 } else {
                     this.sFormat = "arraybuffer";
                 }
-                // else {
-                //     let sDiskParm = DumpAPI.QUERY.PATH;
-                //     let sSizeParm = '&' + DumpAPI.QUERY.MBHD + "=10";
-                //     /*
-                //      * 'mbhd' is a new parm added for hard drive support.  In the case of 'file' or 'dir' requests,
-                //      * 'mbhd' informs DumpAPI.ENDPOINT that it should create a hard disk image, and one not larger than
-                //      * the specified size (eg, 10mb).  In fact, until DumpAPI.ENDPOINT is changed to create custom hard
-                //      * disk BPBs, you'll always get a standard PC XT 10mb disk image, so if the 'file' or 'dir' contains
-                //      * more than 10mb of data, the request will fail.  Ultimately, I want to honor the controller's
-                //      * driveConfig 'size' parm, or to match the capacity required by the driveConfig 'type' parameter.
-                //      *
-                //      * If a 'disk' is specified, we pass mbhd=0, because the actual size will depend on the image.
-                //      * However, I don't currently have any "dsk" or "img" files containing hard disk images; those formats
-                //      * were really intended for floppy disk images.  If I never create any hard disk image files, then
-                //      * we can simply eliminate sSizeParm in the 'disk' case.
-                //      *
-                //      * Added more extensions to the list of paths-treated-as-disk-images, so that URLs to files located here:
-                //      *
-                //      *      ftp://ftp.oldskool.org/pub/TOPBENCH/dskimage/
-                //      *
-                //      * can be used as-is.  TODO: There's a TODO in netlib.getFile() regarding remote support that needs
-                //      * to be resolved first; DiskDump relies on that function for its remote requests, and it currently
-                //      * supports only HTTP.
-                //      */
-                //     if (!sDiskPath.indexOf("http:") || !sDiskPath.indexOf("ftp:") || ["dsk", "ima", "img", "360", "720", "12", "144"].indexOf(sDiskExt) >= 0) {
-                //         sDiskParm = DumpAPI.QUERY.DISK;
-                //         sSizeParm = '&' + DumpAPI.QUERY.MBHD + "=0";
-                //     } else if (StrLib.endsWith(sDiskPath, '/')) {
-                //         sDiskParm = DumpAPI.QUERY.DIR;
-                //     }
-                //     sDiskURL = WebLib.getHostOrigin() + DumpAPI.ENDPOINT + '?' + sDiskParm + '=' + encodeURIComponent(sDiskPath) + (this.fRemovable ? "" : sSizeParm) + "&" + DumpAPI.QUERY.FORMAT + "=" + DumpAPI.FORMAT.JSON;
-                // }
             }
         }
         let sProgress = "Loading " + sDiskURL + "...";
@@ -66657,6 +66648,7 @@ class FDC extends Component {
      * @param {number} iDrive (pre-validated)
      * @param {boolean} [fAutoUnload] is true if this unload is being forced as part of an automount and/or restored mount
      * @param {boolean} [fQuiet]
+     * @returns {boolean} true if diskette unloaded, false if not
      */
     unloadDrive(iDrive, fAutoUnload, fQuiet)
     {
@@ -66688,7 +66680,9 @@ class FDC extends Component {
             if (!fAutoUnload && !fQuiet) {
                 this.displayDiskette(iDrive);
             }
+            return true;
         }
+        return false;
     }
 
     /**
@@ -68609,7 +68603,7 @@ class HDC extends Component {
             this.drive = this.aDrives[this.iDrive];
         }
 
-        this.printf("HDC initialized for %d drive(s)\n", this.aDrives.length);
+        if (fHard) this.printf("HDC initialized for %d drive(s)\n", this.aDrives.length);
         return fSuccess;
     }
 

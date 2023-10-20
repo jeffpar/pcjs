@@ -191,6 +191,14 @@ export default class WebLib {
             }
         }
 
+        /*
+         * Don't encode Windows paths (although frankly, that should never happen and I don't recall under what circumstances
+         * it apparently did) or URLs with components (which the caller should have already encoded with encodeURIComponent()).
+         */
+        if (!sURL.match(/^[A-Z]:/i) && sURL.indexOf('?') < 0) {
+            sURL = encodeURI(sURL);
+        }
+
         let request;
         if (globals.window.XMLHttpRequest) {
             request = new globals.window.XMLHttpRequest();

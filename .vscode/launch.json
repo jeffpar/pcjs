@@ -491,7 +491,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "msdos600",
-        "--system=msdos:6",
+        "--sys=msdos:6",
         "--target=20M",
         "--debug"
       ],
@@ -1669,9 +1669,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--all=/Volumes/PC_SIG_12_90/**/DISK1111.ZIP",
+        "/Volumes/PC_SIG_12_90/1301_400/DISK1370/DISK1370.ZIP",
+        "--verbose",
         "--extract",
-        "--expand"
+        "--expand",
+        "--normalize"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,
@@ -2418,7 +2420,7 @@
       "name": "printf.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/machines/modules/bin/printf.js",
+      "program": "${workspaceFolder}/tools/misc/printf.js",
       "args": [
       ],
       "cwd": "${workspaceFolder}",

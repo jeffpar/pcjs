@@ -260,9 +260,7 @@ export default class DiskPDP11 extends Component {
              * converter to return the corresponding JSON-encoded data.
              */
             var sDiskExt = StrLib.getExtension(sDiskPath);
-            if (sDiskExt == DumpAPI.FORMAT.JSON || sDiskExt == DumpAPI.FORMAT.JSON_GZ) {
-                sDiskURL = encodeURI(sDiskPath);
-            } else {
+            if (sDiskExt != DumpAPI.FORMAT.JSON && sDiskExt != DumpAPI.FORMAT.JSON_GZ) {
                 var sDiskParm = DumpAPI.QUERY.PATH;
                 var sSizeParm = '&' + DumpAPI.QUERY.MBHD + "=10";
                 /*

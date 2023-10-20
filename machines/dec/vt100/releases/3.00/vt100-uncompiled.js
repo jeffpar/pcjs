@@ -472,6 +472,7 @@ class Format {
             } else {
                 arg = args[args.length-1];
             }
+            let signed = false;
             let flags = aParts[iPart+1];
             let hash = flags.indexOf('#') >= 0;
             let zeroPad = flags.indexOf('0') >= 0;
@@ -683,7 +684,7 @@ class Format {
             case 'j':
                 /**
                  * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
-                 * the caller is providing an Object that should be rendered as JSON.  If a width is included
+                 * the caller is providing an object that should be rendered as JSON.  If a width is included
                  * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
                  */
                 buffer += JSON.stringify(arg, null, width || undefined);
@@ -758,16 +759,34 @@ class Format {
                 /**
                  * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
                  * and we honor precision, if any, as the minimum number of digits to print.
+                 *
+                 * NOTE: In spite of what I mentioned above, Math.trunc() fails on some string values, most notably
+                 * signed prefixed values (eg, "-0x1234").  So we deal with that below.
                  */
+                if (typeof arg == "string") {
+                    if (arg[0] == '-') {
+                        signed = true;
+                        arg = arg.slice(1);
+                    }
+                }
                 arg = Math.trunc(arg);
+                if (signed) arg = -arg;
                 /**
                  * Since we now use division instead of shifts to reduce the value as we extract digits (in order to support
-                 * values > 32 bits), negative numbers may not render properly.  We can easily fix that by converting the value
-                 * to a positive number with the unsigned right-shift operator (>>>), but since that is a 32-bit operation,
-                 * we can only do that if the value appears to be 32 bits or less.
+                 * values > 32 bits), negative numbers will not render properly.  That's easily fixed for 32-bit values with
+                 * the unsigned 32-bit right-shift operator (>>>).  For larger values, we add 2^53 to the value, which gives us
+                 * the two's complement of the value as a positive number.  And if the value is larger than 2^53, well, you've
+                 * exceeded the integer precision of JavaScript's Number type, so you're out of luck.
+                 *
+                 * Example: Let's say you calculated 1 - 0x123456789, resulting in -0x123456788.  By adding 0x2000000000000 to
+                 * it, we get 0x1FFFEDCBA9878, which is the 53-bit representation of -0x123456788 as a positive number.
                  */
-                if (arg < 0 && (arg|0) == arg) {
-                    arg >>>= 0;
+                if (arg < 0) {
+                    if ((arg|0) == arg) {
+                        arg >>>= 0;
+                    } else if (Math.abs(arg) <= Math.pow(2, 53)) {
+                        arg += Math.pow(2, 53);
+                    }
                 }
                 if (precision >= 0) {
                     zeroPad = true;
@@ -776,7 +795,7 @@ class Format {
                 }
                 if (zeroPad && !width) {
                     /**
-                     * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
+                     * When zero padding is specified without a width (eg, "%0x"), auto-select a width.
                      */
                     if (length == 'b') {
                         width = 2;      // if an 8-bit length was specified (eg, "%0bx"), then default to 2

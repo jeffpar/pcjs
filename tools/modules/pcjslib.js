@@ -18,15 +18,32 @@ export default class PCJSLib
     static argv = [];
 
     /**
-     * getArgs(args)
+     * getArgs(s)
      *
-     * @param {string} [args]
+     * @param {string} [s]
      * @returns {Array} [argc, argv]
      */
-    static getArgs(args)
+    static getArgs(s)
     {
-        if (args) {
-            args = args.split(' ');
+        if (s != undefined) {
+            let inQuotes = false;
+            let args = [], arg = "";
+            for (let i = 0; i < s.length; i++) {
+                let ch = s.charAt(i);
+                if (ch == " " && !inQuotes) {
+                    if (arg.length) {
+                        args.push(arg);
+                        arg = "";
+                    }
+                } else if ((ch == '"' || ch == "'") && (i == 0 || s.charAt(i - 1) != '\\')) {
+                    inQuotes = !inQuotes;
+                } else {
+                    arg += ch;
+                }
+            }
+            if (arg.length) {
+                args.push(arg);
+            }
             return PCJSLib.parseArgs(args, 0);
         }
         return [PCJSLib.argc, PCJSLib.argv];

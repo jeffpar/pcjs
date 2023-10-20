@@ -337,7 +337,7 @@ If your search criteria matches more than one diskette in the library, a numbere
 
 You can also search for files by *filename*.  For example, if you want to find and load a diskette with a program containing `ARC` in the name, use the `--file` search option.  You can even use regular expressions, but you will need to quote them if you use any characters (such as `|`) that are also parsed by the DOS command interpreter:
 
-    C:\>load a: -file "arc\.(com|exe)"
+    C:\>load a: --file="arc\.(com|exe)"
       1: ARC.EXE         32128 1979-11-30  "PC-SIG Library Disk #4198"
       2: ARC.EXE         29824 1985-08-22  "PC-SIG Library Disk #0539"
       3: ARC.EXE         32051 1986-01-31  "PC-SIG Library Disk #0976"

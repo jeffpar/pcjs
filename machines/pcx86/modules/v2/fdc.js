@@ -1908,6 +1908,7 @@ export default class FDC extends Component {
      * @param {number} iDrive (pre-validated)
      * @param {boolean} [fAutoUnload] is true if this unload is being forced as part of an automount and/or restored mount
      * @param {boolean} [fQuiet]
+     * @returns {boolean} true if diskette unloaded, false if not
      */
     unloadDrive(iDrive, fAutoUnload, fQuiet)
     {
@@ -1939,7 +1940,9 @@ export default class FDC extends Component {
             if (!fAutoUnload && !fQuiet) {
                 this.displayDiskette(iDrive);
             }
+            return true;
         }
+        return false;
     }
 
     /**

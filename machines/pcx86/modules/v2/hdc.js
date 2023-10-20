@@ -530,7 +530,7 @@ export default class HDC extends Component {
             this.drive = this.aDrives[this.iDrive];
         }
 
-        this.printf("HDC initialized for %d drive(s)\n", this.aDrives.length);
+        if (fHard) this.printf("HDC initialized for %d drive(s)\n", this.aDrives.length);
         return fSuccess;
     }
 
