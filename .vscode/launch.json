@@ -490,8 +490,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "empty",
-        "--commands"
+        "msdos600",
+        "--sys=msdos:6",
+        "--target=20M",
+        "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,

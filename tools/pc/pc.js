@@ -510,27 +510,30 @@ export default class PC extends PCJSLib {
             if (DL >= maxCols || DH >= maxRows) {
                 break;                      // ignore "off-screen" positions
             }
-            if (DL < machine.colCursor) {
-                if (!DL) {
-                    printf('\r');
-                } else {
-                    let s = "";
-                    while (DL + s.length < machine.colCursor) {
-                        s += '\b';
-                    }
-                    printf(s);
-                }
-            }
-            if (DH != machine.rowCursor) {
+            if (DH > machine.rowCursor || DH < machine.rowCursor && DL < machine.colCursor) {
                 printf('\n');
-            } else if (DL > machine.colCursor) {
-                /*
-                 * When BASIC/BASICA erases a character (in response to a BS/DEL key), it wants to redraw
-                 * the entire line (eg, with spaces if there was nothing past the character being deleted);
-                 * in that situation, it seems best (well, certainly easiest) to simply ignore the cursor
-                 * updates and let the spaces ("chips") fall where they may.
-                 */
-                break;
+            }
+            else if (DH == machine.rowCursor) {
+                if (DL < machine.colCursor) {
+                    if (!DL) {
+                        printf('\r');
+                    } else {
+                        let s = "";
+                        while (DL + s.length < machine.colCursor) {
+                            s += '\b';
+                        }
+                        printf(s);
+                    }
+                }
+                else if (DL > machine.colCursor) {
+                    /*
+                     * When BASIC/BASICA erases a character (in response to a BS/DEL key), it wants to redraw
+                     * the entire line (eg, with spaces if there was nothing past the character being deleted);
+                     * in that situation, it seems best (well, certainly easiest) to simply ignore the cursor
+                     * updates and let the spaces ("chips") fall where they may.
+                     */
+                    break;
+                }
             }
             machine.rowCursor = DH;
             machine.colCursor = DL;
@@ -581,6 +584,7 @@ export default class PC extends PCJSLib {
             }
             break;
         }
+
         /*
          * Originally, we only hooked the IRET if a TTY function (0x0E) was being performed, because that
          * was the only time we wanted to ignore nested INT 0x10 calls, but since we're also handling INT 0x6D
