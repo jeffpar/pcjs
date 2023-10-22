@@ -845,9 +845,7 @@ export default class PC extends PCJSLib {
             let len = cpu.getSOByte(cpu.segDS, 0x80);
             let args = getString(cpu.segDS, 0x81, len).trim();
             if (cpu.getIP() == 0x102) {     // INT 20h appears to have come from LOAD.COM
-                this.doCommand("load " + args).then(function(result) {
-                    printf(result);
-                });
+                printf("\n%s\n", this.doLoad(args));
             }
             else {                          // INT 20h assumed to come from a hidden PCJS command app (eg, LS.COM)
                 if (globals.browser) {      // if running in a browser, display the same error as the "exec" command
@@ -2652,21 +2650,7 @@ export default class PC extends PCJSLib {
             }
             break;
         case "load":
-            if (arg) {
-                if (arg == "info") {
-                    result = this.getDriveInfo().trim();
-                } else {
-                    let matchDrive = arg.match(/^([a-z]:?)$/i);
-                    if (matchDrive) {
-                        argv.splice(0, 1);
-                        result = this.loadDiskette(matchDrive[1], argv);
-                    } else {
-                        result = "invalid diskette drive: " + arg;
-                    }
-                }
-            } else {
-                result = "usage: load [drive] [search options]";
-            }
+            result = this.doLoad(args);
             break;
         case "save":
             if (arg) {
@@ -2781,6 +2765,41 @@ export default class PC extends PCJSLib {
         }
         this.commandPrev = s;
         return result? result + "\n" : "";
+    }
+
+    /**
+     * doLoad(args)
+     *
+     * When called from doCommand(), it would have been simpler to pass argv, but this also needs work from intLoad().
+     *
+     * NOTE: I originally had intLoad() call doCommand(), because it was cleaner, but that introduced another problem;
+     * namely, doCommand() is an async function, whereas intLoad() wants to run synchronously, to preserve the illusion
+     * that "load" is also a DOS utility.  So I extracted the "load" logic out of doCommand() and into this function.
+     *
+     * @param {string} args
+     * @returns {string}
+     */
+    doLoad(args)
+    {
+        let result;
+        let [argc, argv] = PC.getArgs(args);
+        let arg = argv[0];
+        if (arg) {
+            if (arg == "info") {
+                result = this.getDriveInfo().trim();
+            } else {
+                let matchDrive = arg.match(/^([a-z]:?)$/i);
+                if (matchDrive) {
+                    argv.splice(0, 1);
+                    result = this.loadDiskette(matchDrive[1], argv);
+                } else {
+                    result = "invalid diskette drive: " + arg;
+                }
+            }
+        } else {
+            result = "usage: load [drive] [search options]";
+        }
+        return result;
     }
 
     /**
