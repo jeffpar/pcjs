@@ -704,7 +704,7 @@ export default class PC extends PCJSLib {
                 let len = cpu.getSOByte(cpu.segDS, 0x80);
                 let args = getString(cpu.segDS, 0x81, len).trim();
                 if (!args) {                // if there were no arguments, then simply "quit"
-                    this.exit();
+                    this.exit(0);
                     return false;
                 }
                 if (args.toLowerCase() != "/r") {
@@ -1516,7 +1516,7 @@ export default class PC extends PCJSLib {
     }
 
     /**
-     * buildDisk(sDir, sCommand, sDisk, fLog)
+     * buildDisk(sDir, sCommand, sLocalDisk, fLog)
      *
      * Builds a bootable floppy or hard disk image containing all files in the current directory.
      *
@@ -1538,11 +1538,11 @@ export default class PC extends PCJSLib {
      * @this {PC}
      * @param {string} sDir
      * @param {string} [sCommand] (eg, "COPY A:*.COM C:"; multiple commands can be separated by commas or semicolons)
-     * @param {string} [sDisk]
+     * @param {string} [sLocalDisk] (optional location for built disk image; default location is in the pc.js "disks" folder)
      * @param {boolean} [fLog]
      * @returns {string} (error message, if any)
      */
-    async buildDisk(sDir, sCommand = "", sDisk = "", fLog = false)
+    async buildDisk(sDir, sCommand = "", sLocalDisk = "", fLog = false)
     {
         let kbCapacity = this.kbTarget;
         let system = configJSON['systems']?.[this.systemType];
@@ -1807,12 +1807,12 @@ export default class PC extends PCJSLib {
                  * (preferably JSON, since that tells us more about the disk, its layout, and its contents) because
                  * currently that's the only way to to pass a disk image to the HDC component.
                  */
-                if (!sDisk) {
+                if (!sLocalDisk) {
                     pc.localDisk = pc.localDisk.replace(node.path.basename(pc.localDisk), di.getName() + ".json");
                 } else {
-                    pc.localDisk = sDisk.indexOf(node.path.sep) < 0? node.path.join(pcjsDir, "disks", sDisk) : sDisk;
+                    pc.localDisk = sLocalDisk.indexOf(node.path.sep) < 0? node.path.join(pcjsDir, "disks", sLocalDisk) : sLocalDisk;
                 }
-                if (sDisk || fLog) printf("building drive: %s\n", pc.localDisk);
+                if (sLocalDisk || fLog) printf("building drive: %s\n", pc.localDisk);
                 if (diskLib.writeDiskSync(pc.localDisk, di, false, 0, true, true)) {
                     pc.updateDriveInfo(di);
                     /*
@@ -2253,6 +2253,10 @@ export default class PC extends PCJSLib {
      *
      *      load a: "my disk image.json"
      *
+     * Lastly, to *unload* a diskette drive, specify "none" as the diskette name, as in:
+     *
+     *     load a: none
+     *
      * Note that the "load" command is always available from pc.js "command mode", and it is also available from a DOS command
      * prompt IF the machine was launched with a locally built hard drive containing our hidden LOAD.COM utility (see buildDisk()).
      *
@@ -2560,7 +2564,7 @@ export default class PC extends PCJSLib {
 
         switch(cmd) {
         case "abort":
-            this.exit(1);
+            this.exit(2);
             break;
         case "help":
             result = help(this.machine);
@@ -2738,7 +2742,7 @@ export default class PC extends PCJSLib {
                 printf("unsupported option: %s\n", arg);
                 break;
             }
-            this.exit();
+            this.exit(1);
             break;
         default:
             if (s) {
@@ -3116,17 +3120,26 @@ export default class PC extends PCJSLib {
      * processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, sCommands)
      *
      * Arguments that either the shell consumes (like *.*) or that we consume (like --help) can be
-     * problematic if those are actually arguments you want to pass along with a command to buildDisk().
+     * problematic if those are actually arguments you want to pass along as a command to buildDisk().
      *
-     * So in those cases, you should simply put quotes around the entire command (eg, pc.js "dir *.* /p").
+     * So in those cases, you should simply put quotes around the entire buildDisk() command string
+     * (eg, pc.js "dir *.* /p;chkdsk").
+     *
+     * NOTE: The above refers to any command you want executed inside the the machine, via AUTOEXEC.BAT
+     * inside the built disk image.  Don't confuse those with sCommands, which are optional "internal"
+     * pc.js commands you can specify via the --commands option.  The latter also prevent machine startup,
+     * to ensure that those commands run first; include a "start" command to manually start a machine.
+     *
+     * Also, since --commands prevents automatic machine startup, specifying --commands (aka -c) without
+     * any commands simply drops you into command mode.
      *
      * @this {PC}
      * @param {Array.<string>} argv
-     * @param {string} [sMachine]
-     * @param {string} [sDisk]
-     * @param {string} [sDirectory]
-     * @param {string} [sLocalDisk]
-     * @param {string} [sCommands]
+     * @param {string} [sMachine] (optional machine configuration file)
+     * @param {string} [sDisk] (optional source disk image)
+     * @param {string} [sDirectory] (optional source directory)
+     * @param {string} [sLocalDisk] (optional target disk image, passed to buildDisk())
+     * @param {string} [sCommands] (optional list of internal commands)
      */
     async processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, sCommands)
     {
@@ -3232,9 +3245,13 @@ export default class PC extends PCJSLib {
                     warning = "unable to add command '" + sCommand + "' to prebuilt disk";
                 } else {
                     error = await this.buildDisk(this.localDir, sCommand, sLocalDisk);
+                    /*
+                     * If a target disk image was specified (via --save), then we assume that's all the
+                     * user wanted us to do.  We'll also the display drive info if --test was specified.
+                     */
                     if (!error && sLocalDisk) {
                         if (this.fTest) printf(this.getDriveInfo());
-                        this.exit();
+                        this.exit(0);
                     }
                 }
             }
@@ -3257,7 +3274,7 @@ export default class PC extends PCJSLib {
 
         if (error) {
             printf("error: %s\n", error);
-            this.exit(1);
+            this.exit(2);
         }
 
         if (!loading) {
@@ -3372,7 +3389,7 @@ export default class PC extends PCJSLib {
     /**
      * exit(code)
      *
-     * Code 1 is used to abort without saving the disk, and code 3 is when terminating from debug mode; default code is 0.
+     * Code 2 is used to abort without saving the disk, and code 3 is when terminating from debug mode; default code is 0.
      *
      * @this {PC}
      * @param {number} code (exit code)
@@ -3384,8 +3401,12 @@ export default class PC extends PCJSLib {
             return;
         }
         this.shutdown = true;
-        printf("shutting down...\n");
-        if (code != 1) this.saveDisk(this.localDir);
+        if (code) printf("shutting down (%d)\n", code);
+        if (code != 2) {
+            this.saveDisk(this.localDir);
+        } else if (this.driveManifest) {
+            printf("warning: any changes to disk not saved\n");
+        }
         node.process.stdin.setRawMode(false);
         if (this.fTest) printf("\n");
         node.process.exit(code);
