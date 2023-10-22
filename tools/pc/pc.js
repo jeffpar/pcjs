@@ -6,6 +6,14 @@
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
+ *
+ * Test examples:
+ *
+ *      cd disks
+ *      diskimage.js /diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-REVG-720K-DISK1.json --extract --extdir=compaq331
+ *      diskimage.js /diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-REVG-720K-DISK2.json --extract --extdir=compaq331
+ *      diskimage.js /diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-REVG-720K-DISK3.json --extract --extdir=compaq331
+ *      for ((t=1; t<=99; t++)); do pc.js compaq331 "load info;chkdsk" --drivetype=$t --sys=compaq:3.31g --test; if [ $? -ne 0 ]; then break; fi; done
  */
 
 import DbgLib        from "../../machines/modules/v2/dbglib.js";
@@ -1788,6 +1796,10 @@ export default class PC extends PCJSLib {
                      * state for the COMPAQ machine (state386.json), so the machine is already expecting drive
                      * type 1, and so our options are either 1) do NOT use the saved state, or 2) use our MBR
                      * in order to dynamically update the drive parameters for drive type 1.  I go with #2.
+                     *
+                     *      if (pc.driveInfo.driveCtrl != "PCJS" && pc.driveInfo.driveType != 1) {
+                     *          pc.savedState = "";
+                     *      }
                      */
                     let iVolume = -1;
                     if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && (pc.driveInfo.driveCtrl == "PCJS" || pc.driveInfo.driveCtrl == "COMPAQ")) {
@@ -2577,20 +2589,22 @@ export default class PC extends PCJSLib {
             if (this.machine.cpu) {
                 result = "machine already started";
             } else {
-                this.checkBuildArgs(argv);
-                if (arg) {
-                    arg = this.verifyDir(arg);
+                result = this.checkBuildArgs(argv);
+                if (!result) {
                     if (arg) {
-                        this.localDir = arg;
-                        argv.splice(0, 1);
+                        arg = this.verifyDir(arg);
+                        if (arg) {
+                            this.localDir = arg;
+                            argv.splice(0, 1);
+                        }
                     }
-                }
-                args = argv.join(' ').trim();
-                arg = this.checkCommand(this.localDir, args);
-                if (!arg && args) {
-                    result = "bad command or file name: " + args;
-                } else {
-                    result = await this.buildDisk(this.localDir, arg, "", true);
+                    args = argv.join(' ').trim();
+                    arg = this.checkCommand(this.localDir, args);
+                    if (!arg && args) {
+                        result = "bad command or file name: " + args;
+                    } else {
+                        result = await this.buildDisk(this.localDir, arg, "", true);
+                    }
                 }
             }
             break;
@@ -2726,7 +2740,7 @@ export default class PC extends PCJSLib {
                 printf("unsupported option: %s\n", arg);
                 break;
             }
-            this.exit(1);
+            this.exit(0);
             break;
         default:
             if (s) {
@@ -2929,7 +2943,7 @@ export default class PC extends PCJSLib {
             }
         }
         if (!match) {
-            error = "invalid drive type: " + typeDrive + "\n";
+            error = "invalid drive type: " + typeDrive;
         }
         return error;
     }
@@ -2966,12 +2980,17 @@ export default class PC extends PCJSLib {
             db = await diskLib.readFileAsync(node.path.join(pcjsDir, configFile));
             configJSON = node.json5.parse(db || "{}");
         }
+        let result;
         let defaults = configJSON['defaults'] || {};
         this.localDir = defaults['dir'] || this.localDir;
         this.machineType = defaults['type'] || this.machineType;
         this.savedMachine = defaults['machine'] || this.savedMachine;
         this.savedState = defaults['state'] || this.savedState;
-        this.checkBuildArgs(argv, defaults);
+        result = this.checkBuildArgs(argv, defaults);
+        if (result) {
+            printf("error: %s\n", result);
+            this.exit(1);
+        }
         this.checkMachineArgs(argv, defaults);
         /*
          * Now that we have most of the system defaults, we can process --help (since it displays some of them).
@@ -2985,14 +3004,18 @@ export default class PC extends PCJSLib {
      * @this {PC}
      * @param {Object|string} argv
      * @param {Object} [defaults]
+     * @returns {string} (error message, if any)
      */
     checkBuildArgs(argv, defaults)
     {
+        let result = "";
         let checkRemaining;
+
         if (!defaults) {
             defaults = {};
             checkRemaining = true;
         }
+
         this.driveInfo = {
             driveCtrl:      "COMPAQ",
             driveType:      -1,
@@ -3055,7 +3078,7 @@ export default class PC extends PCJSLib {
 
         let typeDrive = PC.removeArg(argv, 'drivetype');
         if (typeDrive) {
-            printf(this.parseDriveType(typeDrive));
+            result = this.parseDriveType(typeDrive);
         }
 
         let typeFAT = PC.removeArg(argv, 'fat');
@@ -3072,9 +3095,12 @@ export default class PC extends PCJSLib {
         if (hiddenSectors) {
             this.driveInfo.hiddenSectors = +hiddenSectors || 0;
         }
+
         if (checkRemaining) {
             this.checkRemainingArgs(argv);
         }
+
+        return result;
     }
 
     /**
@@ -3293,7 +3319,7 @@ export default class PC extends PCJSLib {
 
         if (error) {
             printf("error: %s\n", error);
-            this.exit(2);
+            this.exit(1);
         }
 
         if (!loading) {
@@ -3408,7 +3434,8 @@ export default class PC extends PCJSLib {
     /**
      * exit(code)
      *
-     * Code 2 is used to abort without saving the disk, and code 3 is when terminating from debug mode; default code is 0.
+     * Code 1 is a general error code, code 2 is used to abort without saving any changes to local the disk,
+     * and code 3 is when terminating from debug mode; default code is 0 (ie, no error).
      *
      * @this {PC}
      * @param {number} code (exit code)
