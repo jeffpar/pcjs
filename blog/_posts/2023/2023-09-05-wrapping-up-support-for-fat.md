@@ -260,7 +260,7 @@ This document was as close to a "gold standard" for the FAT file system as the w
 One such detail is when and how a volume should be formatted with FAT12 or FAT16.  Actually, let's break that question into smaller questions:
 
   1. When formatting a disk, when should you choose FAT12 or FAT16?
-  2. When formatting a disk with FAT12, how should you select cluster size?
+  2. When formatting a disk with FAT12 or FAT16, how should you select cluster size?
   3. When mounting a disk, how do you *tell* whether it's FAT12 or FAT16?
 
 Regarding question #1, the document does say this:
@@ -269,7 +269,7 @@ Regarding question #1, the document does say this:
 
 So that kind of answers the question: *maybe* use FAT12 if the volume is 4Mb or smaller.
 
-With respect to question #2, there's no sign of "the table" that DOS used to choose cluster size.  In DOS 2.00, as we saw above, there was only a series of disk size comparisons, which can be summarized in a table:
+With respect to question #2, there's no sign of "the table" that DOS used to choose cluster size for FAT12.  In DOS 2.00, as we saw above, there was only a series of disk size comparisons, which can be summarized in a table:
 
     Disk Size    Cluster Size    Root Directory Size
     ---------    ------------    -------------------
@@ -279,7 +279,23 @@ With respect to question #2, there's no sign of "the table" that DOS used to cho
      <=  16Mb       8 sectors       512 root entries
       >  16Mb      16 sectors      1024 root entries
 
-And starting with DOS 3.00, since FAT16 was now preferred, "the table" for FAT12 was reduced to a single entry that *always* selected 4K clusters and was used *only* if the disk contained 32680 (0x7FA8) sectors or less (approximately 16Mb).
+And starting with DOS 3.00, since FAT16 was now preferred, "the table" for FAT12 was reduced to a single entry that *always* selected 4K clusters and was used *only* if the disk contained 32680 (0x7FA8) sectors or less (ie, 16340Kb or approximately 16Mb).
+
+As for FAT16 cluster sizes, the document does provide a table:
+
+    Disk Size     Cluster Size    Root Directory Size
+    ----------    ------------    -------------------
+    <=  4200Kb             N/A              Use FAT12
+    <= 16340Kb       2 sectors       512 root entries
+    <=   128Mb       4 sectors       512 root entries
+    <=   256Mb       8 sectors       512 root entries
+    <=   512Mb      16 sectors       512 root entries
+    <=  1024Mb      32 sectors       512 root entries
+    <=  2048Mb      64 sectors       512 root entries
+
+And except for the fact that DOS always used FAT12 in the second case as well, that table more or less matches the criteria that DOS *eventually* used, once disks with those sizes became available.
+
+Note that when DOS 3.00 introduced FAT16 in 1984, the PC BIOS could not support drives with more than 1024 cylinders, 16 heads, and 63 sectors per track, imposing an upper limit of 504Mb.  On top of that, DOS versions 2.00 through 3.30 couldn't support partitions with more 64K sectors, which imposed a volume limit of 32Mb.  This is why DOS 3.00 didn't perform any cluster size calculations: if the disk was big enough to warrant FAT16, then it simply *always* used 2K clusters.  However, as demand for larger disks grew, techniques like CHS translation (that allowed a maximum of 256 *logical* heads without requiring any changes to the PC BIOS interface) provided support for much larger disks (up to 8192Mb or 8Gb), and then when DOS 3.31 added support for volumes with more than 64K sectors, later versions of DOS had to make more judicious decisions about cluster size.
 
 Question #3 is never really discussed. You might *assume* the rule is simply that if the partition type in the MBR is 01h, the partition is FAT12, and if it's 04h (or 06h for disks with more than 64K sectors), the partition is FAT16.  But it's not that simple, and sadly, no one ever thought to add anything to the BPB to clearly indicate the type of FAT -- a rather vital piece of information.  I've learned the *hard* way that a 10Mb disk formatted with FAT16 *and* more than 4084 clusters *and* clearly marked with partition type 04h will *still* be treated by DOS 3.x as a FAT12 volume by default.  More on that later.
 
@@ -344,7 +360,7 @@ You may recall that the [FAT: General Overview of On-Disk Format](/documents/pap
 
 Except that PC DOS 2.00 *did* bother with FAT12 on a 10Mb disk -- because, well, FAT12 was all it could do.  But even when PC DOS 3.00 introduced FAT16, it would *still* format a 10Mb disk as FAT12.  It had to use 4K clusters in order to keep total clusters under 4085, but it preferred FAT12 over 2K clusters -- future recommendations notwithstanding.
 
-Anyway, we can force `pc.js` to build a FAT16 disk.  We just have to *also* specify a cluster size that will produce too many clusters for FAT12 to handle, forcing the use of FAT16:
+Anyway, we can force `pc.js` to build a FAT16 disk.  We just have to *also* specify a cluster size (2K) that will produce too many clusters for FAT12 to handle, forcing the use of FAT16:
 
     % pc.js ibm5170 --sys=pcdos --ver=3.00 --fat=16:2048            
     [Press CTRL-D to enter command mode]
@@ -393,11 +409,13 @@ Here's the code where PC DOS 3.00 inspects the MBR and then the BPB in the boot 
     &0070:1479 72D5             JC       1450               ; if so, jump (error)
     &0070:147B 894508           MOV      [DI+08],AX         ; (stash total sectors)
     ;
-    ; Change from DOS 2.00: Read the partition's boot sector so we can access the BPB.  What follows is a bunch
-    ; of instructions that should have been a subroutine (ie, to convert the partition's starting LBA to C:H:S values).
+    ; Change from DOS 2.00: Read the partition's boot sector so we can access the BPB.
+    ; What follows is a bunch of instructions that should have been a subroutine (ie, to
+    ; convert the partition's starting LBA to C:H:S values).
     ;
-    ; Also, it's a bit unfortunate that the volume's boot sector is already sitting in memory.  Of course, that's
-    ; only true for the first disk drive, but in the case of the first drive, this code is a complete waste of time.
+    ; Also, it's a bit unfortunate that the volume's boot sector is already sitting in memory.
+    ; Of course, that's only true for the first disk drive, but in the case of the first drive,
+    ; this code is a complete waste of time.
     ;
     &0070:147E 50               PUSH     AX                 
     &0070:147F 52               PUSH     DX
@@ -427,7 +445,7 @@ Here's the code where PC DOS 3.00 inspects the MBR and then the BPB in the boot 
     ; At this point, the partition's boot sector should be at ES:0 (since BX was zero);
     ; these instructions could have been a bit smaller if they had used ES:BX addressing.
     ;
-    &0070:14AE 26813E03004942   CMP      ES:[0003],4249     ; does the BPB's OEM signature start with  "IB"?
+    &0070:14AE 26813E03004942   CMP      ES:[0003],4249     ; does the OEM signature start with  "IB"?
     &0070:14B5 751C             JNZ      14D3               ; no
     &0070:14B7 26813E05004D20   CMP      ES:[0005],204D     ; does it continue with "M "?
     &0070:14BE 7513             JNZ      14D3               ; no
@@ -439,17 +457,18 @@ Here's the code where PC DOS 3.00 inspects the MBR and then the BPB in the boot 
     &0070:14D3 EB4C             JMP      1521
     &0070:14D5 90               NOP     
     ;
-    ; This code is prepared to deal with a signature of "IBM  3.0" and jump to 14E7 just as previous
-    ; code did for "IBM  2.0", but technically, that will never happen, because previous code already
-    ; gave up when the signature didn't contain "2.".
+    ; This code is prepared to deal with a signature of "IBM  3.0" and jump to 14E7
+    ; just as previous code did for "IBM  2.0", but technically, that will never happen,
+    ; because previous code already gave up when the signature didn't contain "2.".
     ;
     &0070:14D6 26813E0800332E   CMP      ES:[0008],2E33
     &0070:14DD 75F4             JNZ      14D3
     &0070:14DF 26803E0A0030     CMP      ES:[000A],30
     &0070:14E5 75EC             JNZ      14D3
     ;
-    ; This code is executed ONLY if the OEM signature contained "IBM  2.0" (well, technically, the
-    ; previous code didn't care what came before the "2"; normally it's a space but it could be anything).
+    ; This code is executed ONLY if the OEM signature contained "IBM  2.0"
+    ; (well, technically, the previous code didn't care what came before the "2";
+    ; normally it's a space but it could be anything).
     ;
     ; Anyway, this is the only code that actually honors the BPB values.
     ;
@@ -499,7 +518,8 @@ Here's the code where PC DOS 3.00 inspects the MBR and then the BPB in the boot 
     &0070:1540 F606CC1040       TEST     [10CC],40          ; FAT16?
     &0070:1545 7525             JNZ      156C               ; yes
     ;
-    ; FAT12 "sectors per FAT" are performed identically to DOS 2.00 (see the code at 70:099C from DOS 2.00, above):
+    ; FAT12 "sectors per FAT" calculation is performed identically to DOS 2.00
+    ; (see the code at 70:099C from DOS 2.00, above)
     ;
     &0070:1547 33DB             XOR      BX,BX
     &0070:1549 8ADD             MOV      BL,CH

@@ -47,7 +47,9 @@ Guide.  This "signature page", shown below, has since been added to the PDF abov
 
 #### Fixed Disk Drive Parameter Table Values
 
-The first table comes from pages 4-119 and 4-120 of the DeskPro 386/16 Technical Reference Guide (Volume I), dated September 1986 (1st Edition).  These are the values used by PCjs in [driveinfo.js](/machines/pcx86/modules/v2/driveinfo.js) for COMPAQ machines.
+The first table comes from pages 4-119 and 4-120 of the DeskPro 386/16 Technical Reference Guide (Volume I), dated September 1986 (First Edition).  These are the values used by PCjs in [driveinfo.js](/machines/pcx86/modules/v2/driveinfo.js) for COMPAQ machines.
+
+Note that COMPAQ calculated raw capacity by multiplying cylinders, heads, and sectors per track by 512 bytes per sector and then dividing the total by 1,000,000, a common industry practice that "inflated" disk capacity.  PCjs considers 1 megabyte (Mb) to be 1,048,576 bytes (1024 x 1024), so any capacity calculations that PCjs reports will be smaller than the values shown below.
 
                                           Landing
                               Pre-comp.    Zone
@@ -101,9 +103,9 @@ The first table comes from pages 4-119 and 4-120 of the DeskPro 386/16 Technical
      45      768       4         No         768        26        40.89
      46      768       2         No         768        26        20.45
      47      966       5        128         966        25        61.82
-    -------------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------
 
-The next table comes from pages 4-189 and 4-190 of the DeskPro 386/25 Technical Reference Guide (Volume I).  Note that the table is identical to the earlier version above, except for drive types marked by `*`.  There are also 3 entries marked by `**` that warrant further investigation, because they specify more than 1024 cylinders, which the INT 13H BIOS interface at that time did not support.
+The next table comes from pages 4-189 and 4-190 of the DeskPro 386/25 Technical Reference Guide (Volume I), dated August 1988 (First Edition).  Note that the table is largely identical to the earlier version above, except for drive types marked by `*`.  There are also 3 entries marked by `**` that warrant further investigation, because they specify more than 1024 cylinders, which the INT 13H BIOS interface at that time did not support.
 
                                                  Landing
                                      Pre-comp.    Zone
@@ -157,12 +159,12 @@ The next table comes from pages 4-189 and 4-190 of the DeskPro 386/25 Technical 
      45* (note 3)   748       8         -1         748        33       101.11
      46*            748       6         -1         748        33        75.83
      47  (note 3)   966       5        128         966        25        61.82
-    -------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------
     NOTES: 1.  A value of -1 means that no write precompensation is used.
            2.  These values are not used by the COMPAQ DESKPRO 386/25 system, which
                automatically retracts and locks the heads in a non-data landing zone
                at power-down.
            3.  Drive types supported by Compaq.
-    -------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------
 
 {% include gallery/documents.html width="200" height="200" %}
