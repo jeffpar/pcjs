@@ -2,7 +2,9 @@
 layout: page
 title: OS/2 SIZZLE Boot Disk (v7.68.18)
 permalink: /software/pcx86/sys/os2/misc/87007/
-redirect_from: /disks/pcx86/os2/misc/cpdos/87007/
+redirect_from:
+  - /disks/pcx86/os2/misc/cpdos/87007/
+  - /disks/pc/os2/misc/cpdos/87007/
 machines:
   - id: ibm5170
     type: pcx86
@@ -28,14 +30,14 @@ When this disk boots, the following version banner is displayed:
 	
 	SIZZLE Internal revision 7.68.18, 86/12/12
 
-A directory listing of this disk is provided [below](#directory-of-os2-sizzle-boot-disk-v76818).
+A directory listing of this disk is provided [below](#directory-of-os2-sizzle-v76818).
 
 ### OS/2 SIZZLE Boot Disk (v7.68.18 DEBUG)
 
 A second disk contained a *DEBUG* pre-1.0 version of OS/2 built on January 7, 1987, and
-it is largely identical to the [OS/2 SIZZLE Boot Disk (v7.68.18)](#directory-of-os2-sizzle-boot-disk-v76818), with
+it is largely identical to the [OS/2 SIZZLE Boot Disk (v7.68.18)](#directory-of-os2-sizzle-v76818), with
 the exception of a debug kernel (with built-in debugger) and a different assortment of tools. 
-A directory listing of the second disk is provided [below](#directory-of-os2-sizzle-boot-disk-v76818-debug).
+A directory listing of the second disk is provided [below](#directory-of-os2-sizzle-v76818-debug).
 
 {% include machine.html id="ibm5170" %}
 

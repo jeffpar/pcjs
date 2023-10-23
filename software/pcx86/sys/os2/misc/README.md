@@ -5,6 +5,8 @@ permalink: /software/pcx86/sys/os2/misc/
 redirect_from:
   - /disks/pcx86/os2/misc/cpdos/
   - /disks/pcx86/os2/misc/
+  - /disks/pc/os2/misc/cpdos/
+  - /disks/pc/os2/misc/
 ---
 
 This collection of historical OS/2 diskettes is from the [PCjs Software Archive](/software/pcjs/).
@@ -37,4 +39,3 @@ it was originally assigned version number 1.3, this version of OS/2 would ultima
 The [OS/2 1.0 Debugger Disk](88286/) contained a version of OS/2 1.0 built on
 October 12, 1988, which included the built-in kernel debugger used by Microsoft and IBM for internal development,
 along with a rudimentary program selector.  For more details, see the [OS/2 1.0](/blog/2014/12/04/) blog post.
-

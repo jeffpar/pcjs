@@ -348,6 +348,10 @@ and if the file name ends with a `.json` or `.img` extension, then `--path` is a
 
     load a: "my disk image.json"
 
+Lastly, to *unload* a diskette drive, specify "none" as the diskette name, as in:
+
+    load a: none
+
 Note that the `load` command is also available from `pc.js` command mode, which you access by pressing CTRL-D.  Type "help" at the `>>` command mode prompt for list of all available commands.
 
 See "[Loading Diskettes](https://www.pcjs.org/blog/2023/07/15/#loading-diskettes)" in this [blog post](https://www.pcjs.org/blog/2023/07/15/) for more examples of the `load` command.

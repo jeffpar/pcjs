@@ -2,7 +2,9 @@
 layout: page
 title: "OS/2 FOOTBALL Boot Disk (v4.41.00)"
 permalink: /software/pcx86/sys/os2/misc/87357/
-redirect_from: /disks/pcx86/os2/misc/football/87357/
+redirect_from:
+  - /disks/pcx86/os2/misc/football/87357/
+  - /disks/pc/os2/misc/football/87357/
 machines:
   - id: deskpro386
     type: pcx86
@@ -30,7 +32,7 @@ The numbering of revisions must have been, um, revised, because despite the lowe
 it *is* newer than the 7.68.17 prototype.  This is confirmed by the boot message (12/02/87), the file dates (12-23-87)
 and the higher version number (1.3).
 
-A directory listing of this disk is provided [below](#directory-of-os2-football-boot-disk-v44100).
+A directory listing of this disk is provided [below](#directory-of-os2-football-v44100).
 
 {% include machine.html id="deskpro386" %}
 
