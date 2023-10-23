@@ -137,10 +137,20 @@ Stick with DOS versions 2.x or 3.x for now.  Support for other versions hasn't b
 
 it failed to boot for several reasons.
 
-The first problem was one described in this OS/2 Museum [blog post](http://www.os2museum.com/wp/hang-with-early-dos-boot-sector/) from 2011: the boot sector would read `IO.SYS` a track at a time, and if the final sector(s) of `IO.SYS` were located near the beginning of a track instead of the end of that track, the boot sector might read too much data and trash itself.  This problem cropped up more often on disks with large tracks, but clearly it could also occur on disks with only 17 sectors/track.  And even though I was using MS-DOS 3.30, which contained a [fix](https://www.os2museum.com/wp/dos-boot-hang-update/), that fix was only present in the `FORMAT.COM` and `SYS.COM` utilities, *not* in the diskettes' actual boot sector--which is what `pc.js` relies on.
+The first problem was one described in this OS/2 Museum [blog post](http://www.os2museum.com/wp/hang-with-early-dos-boot-sector/) from 2011: DOS 2.x and 3.x boot sectors read `IO.SYS`/`IBMBIO.COM` a track at a time, and if the final sector(s) of `IO.SYS`/`IBMBIO.COM` are located near the beginning of a track instead of the end of that track, the boot sector might read too much data and trash itself.  This problem cropped up more often on disks with large tracks, but it could *definitely* also occur on disks with only 17 sectors/track.  And even though I was using MS-DOS 3.30, which contained a [fix](https://www.os2museum.com/wp/dos-boot-hang-update/), that fix was only present in the `FORMAT.COM` and `SYS.COM` utilities, *not* in the diskettes' actual boot sector--which is what `pc.js` relies on.
 
 `pc.js` now works around this bug by carefully adjusting the start of the partition, pushing the final sectors of `IO.SYS` to the end of a track.
 
-However, that wasn't the end of the story.  A second problem occurred when `IO.SYS` examined the Master Boot Record (MBR) and DOS boot sector.  The code would honor the MBR partition type *and* boot sector BPB values *only* if the OEM signature in the BPB contained the string "3.1" or greater.  Otherwise, it would fall back to the assumption that *any* disk with only 32680 (0x7FA8) or fewer sectors *must* be using a 12-bit FAT, 4K clusters, 512 directory entries, etc.
+However, that wasn't the end of the story.  A second problem occurs when `IO.SYS`/`IBMBIO.COM` examines the Master Boot Record (MBR) and DOS boot sector.  DOS versions 3.10 and higher honor the MBR partition type *and* boot sector BPB values *only* if the OEM signature in the BPB contains the string "3.1" or greater.  Otherwise, they fall back to the assumption that *any* disk with only 32680 (0x7FA8) or fewer sectors *must* be using a 12-bit FAT, 4K clusters, 512 directory entries, etc.
 
 So, `pc.js` now ensures that any disk using a 16-bit FAT also contains an "IBM  3.1" OEM signature in its boot sector.
+
+Finally, while testing `pc.js` with COMPAQ DOS 3.31, I discovered yet another problem.  During testing, I forced the creation of a 16-bit FAT with 16K clusters:
+
+    pc.js --fat:16:16384 --sys=compaq:3.31g --halt
+
+and discovered that COMPAQ DOS 3.31 crashes in a manner reminiscent of the earlier boot sector bug.  In this case, after the boot sector carefully reads `IBMBIO.COM` one sector at a time (instead of one track a time), `IBMBIO.COM` then reads the entire FAT into memory (starting at 0:8000h), and then for reasons unknown, *re-reads* the final clusters of itself into memory again.
+
+Note that `IBMBIO.COM` must fit completely between 0:0700h (its starting address) and 0:7B00h (where the system stack resides at this point).  This is a 29K region, and `IBMBIO.COM` fits comfortably within that region.  However, because the code that is *re-reading* `IBMBIO.COM` is reading whole clusters, when it reads the final cluster, it reads many more sectors than `IBMBIO.COM` actually uses, overrunning the region and trashing the stack.
+
+The crash is ironic, because it's identical to the boot sector crash that was finally *fixed* in this same release, except that instead of trashing itself with an entire (partially used) track, the code trashes itself with an entire (partially used) cluster.
