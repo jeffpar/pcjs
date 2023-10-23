@@ -2,7 +2,9 @@
 layout: page
 title: OS/2 1.0 Debugger Boot Disk
 permalink: /software/pcx86/sys/os2/misc/88286/
-redirect_from: /disks/pcx86/os2/misc/1.0/88286/
+redirect_from:
+  - /disks/pcx86/os2/misc/1.0/88286/
+  - /disks/pc/os2/misc/1.0/88286/
 machines:
   - id: ibm5170
     type: pcx86
@@ -29,7 +31,7 @@ banner is displayed:
 The 5-digit number indicates the day the files were built.  The first 2 digits (88) are the year and the 3 remaining
 digits (286) are the day of the year (October 12).
 
-A directory listing of this disk is provided [below](#directory-of-os2-10-debugger-boot-disk).
+A directory listing of this disk is provided [below](#directory-of-os2-10-debugger-1988).
 
 {% include machine.html id="ibm5170" %}
 

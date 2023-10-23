@@ -2,7 +2,9 @@
 layout: page
 title: OS/2 CP-DOS Boot Disk (v7.68)
 permalink: /software/pcx86/sys/os2/misc/86295/
-redirect_from: /disks/pcx86/os2/misc/cpdos/86295/
+redirect_from:
+  - /disks/pcx86/os2/misc/cpdos/86295/
+  - /disks/pc/os2/misc/cpdos/86295/
 machines:
   - id: ibm5170
     type: pcx86
@@ -30,7 +32,7 @@ and after it finishes processing CONFIG.SYS, displays "Start A Program", and you
 	
 	A]
 
-A directory listing of this disk is provided [below](#directory-of-os2-cpdos-boot-disk-v768).
+A directory listing of this disk is provided [below](#directory-of-os2-cp-dos-v768).
 
 {% include machine.html id="ibm5170" %}
 

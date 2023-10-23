@@ -2,7 +2,9 @@
 layout: page
 title: "OS/2 FOOTBALL Boot Disk (v7.68.17)"
 permalink: /software/pcx86/sys/os2/misc/87058/
-redirect_from: /disks/pcx86/os2/misc/football/87058/
+redirect_from:
+  - /disks/pcx86/os2/misc/football/87058/
+  - /disks/pc/os2/misc/football/87058/
 machines:
   - id: deskpro386
     type: pcx86
@@ -44,8 +46,7 @@ A directory listing of this disk is provided [below](#directory-of-os2-football-
 
 {% include machine.html id="deskpro386" %}
 
-Booting FOOTBALL
-----------------
+## Booting FOOTBALL
 
 Click the "Run" button on the [COMPAQ DeskPro 386](/machines/pcx86/compaq/deskpro386/) above to the start
 the machine and begin the boot process.
@@ -178,8 +179,7 @@ PCjs soft keyboard, and then click the `Sys` key in the top right corner of that
            37 file(s)     652025 bytes
                           549888 bytes free
 
-FOOTBALL Design Document
-------------------------
+## FOOTBALL Design Document
 
 From the PCjs Archives: the following text is from an email titled "3xBox Design Document" sent to the
 Microsoft *football* alias on Saturday, February 28, 1987, at 5:02pm.
