@@ -490,6 +490,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "--disk=PCDOS200-C400.json",
         "msdos"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
@@ -640,14 +641,13 @@
       }
     },
     {
-      "name": "PC.js ibm5170 --drivesize=27 dir",
+      "name": "PC.js ibm5170 --target=27M dir",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5170",
-        "--driveclass=pcjs",
-        "--drivesize=27",
+        "--target=27M",
         "disks/msdos",
         "dir"
       ],
@@ -694,7 +694,7 @@
       "args": [
         "--sys=compaq",
         "--ver=3.31",
-        "--drivesize=40"
+        "--target=40M"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
       "stopOnEntry": false,
@@ -839,14 +839,14 @@
       }
     },
     {
-      "name": "PC.js dir --sys=pcdos --ver=2.00 --drivesize=20mb",
+      "name": "PC.js dir --sys=pcdos --ver=2.00 --target=20M",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--sys=pcdos",
         "--ver=2.00",
-        "--drivesize=20mb",
+        "--target=20M",
         "disks/msdos",
         "dir"
       ],
@@ -886,14 +886,14 @@
       }
     },
     {
-      "name": "PC.js dir --sys=pcdos --ver=3.10 --drivesize=20mb",
+      "name": "PC.js dir --sys=pcdos --ver=3.10 --target=20M",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--sys=pcdos",
         "--ver=3.10",
-        "--drivesize=20mb",
+        "--target=20M",
         "ibm5170",
         "disks/msdos",
         "dir *.*",

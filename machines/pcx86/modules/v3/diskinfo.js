@@ -5059,7 +5059,7 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
-     * @param {number} [iVolume] (default is first volume; -1 for MBR, -2 for PCJS MBR)
+     * @param {number} [iVolume] (default is 0 for first volume; -1 for MBR)
      * @param {number} [verBPB] (default is 0; see above)
      * @returns {boolean} (true if successful, false otherwise)
      */
@@ -5127,27 +5127,52 @@ export default class DiskInfo {
                         } else {
                             if (lbaBoot == 0) {
                                 if (off >= DiskInfo.MBR.PARTITIONS.OFFSET) continue;
-                                if (iVolume == -2) {
+                                if (verBPB >= 0) {
                                     /*
-                                     * The caller has indicated we're using the PCJS MBR, which supports up to 2 drive
-                                     * parameter tables.  We only ever use the first table, although in the future, perhaps
-                                     * we'll allow iVolume == -3 to fill in the second table.
+                                     * When iVolume is -1, verBPB serves a completely purpose.  It is either -1,
+                                     * indicating this a normal MBR, or it is 0 or 1, indicating that we should update
+                                     * the corresponding drive table in the MBR.  It's assumed we're using the PCJS MBR,
+                                     * which supports up to 2 drive parameter tables.
                                      *
-                                     * TODO: It might also be wise to verify the "PCJS" signature at offset 0x199 of the MBR.
+                                     * TODO: It might be wise to verify that this actually IS a PCJS MBR, by verifying
+                                     * the "PCJS" signature at offset 0x199 (MBR.PCJS_SIG) of the MBR, too.
                                      */
+                                    let i = -1, n;
                                     switch(off) {
+                                    case DiskInfo.MBR.DRIVE1PARMS.CYLS:
+                                        i++;
+                                        /* falls through */
                                     case DiskInfo.MBR.DRIVE0PARMS.CYLS:
-                                        b = this.nCylinders & 0xff;
+                                        i++;
+                                        n = this.nCylinders & 0xff;
                                         break;
+                                    case DiskInfo.MBR.DRIVE1PARMS.CYLS + 1:
+                                        i++;
+                                        /* falls through */
                                     case DiskInfo.MBR.DRIVE0PARMS.CYLS + 1:
-                                        b = (this.nCylinders >> 8) & 0xff;
+                                        i++;
+                                        n = (this.nCylinders >> 8) & 0xff;
                                         break;
+                                    case DiskInfo.MBR.DRIVE1PARMS.HEADS:
+                                        i++;
+                                        /* falls through */
                                     case DiskInfo.MBR.DRIVE0PARMS.HEADS:
-                                        b = this.nHeads;
+                                        i++;
+                                        n = this.nHeads;
                                         break;
+                                    case DiskInfo.MBR.DRIVE1PARMS.SECTORS:
+                                        i++;
+                                        /* falls through */
                                     case DiskInfo.MBR.DRIVE0PARMS.SECTORS:
-                                        b = this.nSectors;
+                                        i++;
+                                        n = this.nSectors;
                                         break;
+                                    }
+                                    /*
+                                     * Leave MBR byte b unchanged unless we fell into one of the above cases.
+                                     */
+                                    if (i == verBPB) {
+                                        b = n;
                                     }
                                 }
                             }
