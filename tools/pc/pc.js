@@ -3500,13 +3500,13 @@ export default class PC extends PCJSLib {
             return;
         }
         this.shutdown = true;
-        if (code) printf("shutting down (%d)\n", code);
         if (code != 2) {
             this.saveDisk(this.localDir);
         } else if (this.drives[this.driveBuild].driveManifest) {
             printf("warning: any changes to disk not saved\n");
         }
         node.process.stdin.setRawMode(false);
+        if (code) printf("shutting down (%d)\n", code);
         if (this.fTest) printf("\n");
         node.process.exit(code);
     }
@@ -3530,15 +3530,15 @@ export default class PC extends PCJSLib {
             };
             let optionsDisk = {
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
-                "--disk=[file]":           "\tuse drive disk image (instead of directory)",
+                "--disk=[filename]":        "use drive disk image (instead of directory)",
                 "--controller=[id]":        "set drive controller (XT, AT, COMPAQ, or PCJS)",
-                "--drivetype=[n]":          "set drive type or C:H:S (eg, 306:4:17)",
-                "--fat=[number(s)]":        "\tset hard disk FAT type (12 or 16)",
+                "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
+                "--fat=[value(s)]":         "set FAT type (12 or 16), cluster size, etc",
                 "--hidden=[number]":        "set hidden sectors (default is 1)",
-                "--label=[string]":          "\tset volume label of disk image",
+                "--label=[string]":         "set volume label of disk image",
                 "--maxfiles=[number]":      "set maximum local files (default is " + this.maxFiles + ")",
                 "--normalize=[boolean]":    "convert text file encoding (default is " + this.fNormalize + ")",
-                "--save=[file]":            "\tsave drive disk image and exit",
+                "--save=[filename]":        "save drive disk image and exit",
                 "--system=[string]":        "set operating system type (default is " + this.systemType + ")",
                 "--target=[nK|nM]":         "set target disk size (default is " + ((this.kbTarget / 1024)|0) + "M)",
                 "--version=[#.##]":         "set operating system version (default is " + this.systemVersion + ")"
