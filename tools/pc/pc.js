@@ -2371,7 +2371,7 @@ export default class PC extends PCJSLib {
                              * because there is no longer a connection between that disk drive and your local files.  That's one
                              * of the downsides of removable media.
                              */
-                            if (pc.fFloppy && !iDrive) pc.drives[this.buildDrive].driveManifest = null;
+                            if (pc.fFloppy && !iDrive) pc.drives[0].driveManifest = null;
                         }
                     }
                 };
