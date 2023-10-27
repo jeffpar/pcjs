@@ -16,6 +16,7 @@
  *      for ((t=1; t<=99; t++)); do pc.js compaq331 "load info;chkdsk" --drivetype=$t --sys=compaq:3.31g --test; if [ $? -ne 0 ]; then break; fi; done
  */
 
+import DataBuffer    from "../../machines/modules/v2/databuffer.js";
 import DbgLib        from "../../machines/modules/v2/dbglib.js";
 import StrLib        from "../../machines/modules/v2/strlib.js";
 import Device        from "../../machines/modules/v3/device.js";
@@ -127,6 +128,7 @@ export default class PC extends PCJSLib {
         'f': "floppy",
         'h': "halt",
         'l': "local",
+        'n': "normalize",
         't': "test",
         'v': "verbose"
     };
@@ -1245,7 +1247,7 @@ export default class PC extends PCJSLib {
                         }
                         drives[i] = {
                             'type': driveType,
-                            'name': driveInfo.driveSize.toFixed(1) + "Mb Hard Disk"
+                            'name': Math.round(driveInfo.driveSize) + "Mb Hard Disk (" + String.fromCharCode(67+i) + ":)",
                         };
                         if (driveInfo.localDisk) {
                             drives[i]['path'] = driveInfo.localDisk;
@@ -1260,9 +1262,6 @@ export default class PC extends PCJSLib {
                     }
                 }
                 config['hdc']['drives'] = drives;
-                if (drives.length > 1) {
-                    pc.savedState = "";
-                }
             }
 
             if (config['fdc']) {
@@ -2115,11 +2114,11 @@ export default class PC extends PCJSLib {
             controller = this.machine.fdc;
             iDrive = sDrive.charCodeAt(0) - 'A'.charCodeAt(0);
             if (iDrive > 1) {
-                if (iDrive != 2) {
+                if (iDrive > 3) {
                     return false;
                 }
                 controller = this.machine.hdc;
-                iDrive = 0;
+                iDrive -= 2;
             }
         } else {
             controller = this.fFloppy? this.machine.fdc : this.machine.hdc;
@@ -2182,8 +2181,12 @@ export default class PC extends PCJSLib {
                                  * contents, so the compare will succeed and writeFileSync() will be bypassed.
                                  */
                                 if (!compareContents(oldItem, newItem)) {
+                                    let db = newItem.contents;
                                     if (this.fDebug) printf("updating: %s\n", newItemPath);
-                                    diskLib.writeFileSync(newItemPath, newItem.contents, false, true);
+                                    if (this.fNormalize && diskLib.isTextFile(newItemPath)) {
+                                        db = diskLib.normalizeTextFile(new DataBuffer(db));
+                                    }
+                                    diskLib.writeFileSync(newItemPath, db, false, true);
                                 } else {
                                     // if (this.fDebug) printf("skipping: %s\n", newItemPath);
                                 }
@@ -2238,7 +2241,11 @@ export default class PC extends PCJSLib {
                                 if (newAttr & DiskInfo.ATTR.SUBDIR) {
                                     node.fs.mkdirSync(newItemPath);
                                 } else {
-                                    diskLib.writeFileSync(newItemPath, newItem.contents, true, false);
+                                    let db = newItem.contents;
+                                    if (this.fNormalize && diskLib.isTextFile(newItemPath)) {
+                                        db = diskLib.normalizeTextFile(new DataBuffer(db));
+                                    }
+                                    diskLib.writeFileSync(newItemPath, db, true, false);
                                 }
                                 node.fs.utimesSync(newItemPath, newDate, newDate);
                                 if (newAttr & DiskInfo.ATTR.READONLY) {

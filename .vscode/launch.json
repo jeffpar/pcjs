@@ -490,8 +490,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--disk=PCDOS200-C400.json",
-        "msdos"
+        "--disk",
+        "msdos.json",
+        "../../../../basicdos/software/pcx86/bdsrc",
+        "--normalize"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,

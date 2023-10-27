@@ -91,7 +91,7 @@
     "id": "hdcAT",
     "name": "Hard Disk Controller",
     "type": "AT",
-    "drives": [{"name":"Hard Disk","type":1}]
+    "drives": [{"name":"10Mb Hard Disk (C:)","type":1},{"name":"10Mb Hard Disk (D:)","type":1}]
   },
   "chipset": {
     "id": "chipset",
