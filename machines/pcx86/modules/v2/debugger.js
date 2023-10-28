@@ -31,7 +31,6 @@ import { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BYTEARRAYS, COMPILED, DEBUG, 
  * @property {boolean}  [fAddr32]
  * @property {boolean}  [fData32Orig]
  * @property {boolean}  [fAddr32Orig]
- * @property {number}   [cOverrides]
  * @property {boolean}  [fComplete]
  * @property {boolean}  [fTempBreak]
  * @property {string}   [sCmd]
@@ -1285,13 +1284,15 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Packs a DbgAddrX86 object into an Array suitable for saving in a machine state object.
      *
+     * NOTE: Element 6 was previously used to maintain an override count; that's no longer needed, hence the 0.
+     *
      * @this {DebuggerX86}
      * @param {DbgAddrX86} dbgAddr
      * @returns {Array}
      */
     packAddr(dbgAddr)
     {
-        return [dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.fTempBreak, dbgAddr.fData32, dbgAddr.fAddr32, dbgAddr.cOverrides, dbgAddr.fComplete];
+        return [dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.fTempBreak, dbgAddr.fData32, dbgAddr.fAddr32, 0, dbgAddr.fComplete];
     }
 
     /**
@@ -1305,7 +1306,7 @@ export default class DebuggerX86 extends DbgLib {
      */
     unpackAddr(aAddr)
     {
-        return {off: aAddr[0], sel: aAddr[1], addr: aAddr[2], fTempBreak: aAddr[3], fData32: aAddr[4], fAddr32: aAddr[5], cOverrides: aAddr[6], fComplete: aAddr[7]};
+        return {off: aAddr[0], sel: aAddr[1], addr: aAddr[2], fTempBreak: aAddr[3], fData32: aAddr[4], fAddr32: aAddr[5], fComplete: aAddr[7]};
     }
 
     /**
@@ -2015,14 +2016,6 @@ export default class DebuggerX86 extends DbgLib {
                     sBuffer += (sBuffer? '\n' : '') + sInstruction;
                 }
 
-                /*
-                 * If there were OPERAND or ADDRESS overrides on the previous instruction, getInstruction()
-                 * will have automatically disassembled additional bytes, so skip additional history entries.
-                 */
-                if (dbgAddrNew.cOverrides) {
-                    iHistory += dbgAddrNew.cOverrides; nLines -= dbgAddrNew.cOverrides; nPrev -= dbgAddrNew.cOverrides;
-                }
-
                 if (iHistory >= aHistory.length) iHistory = 0;
                 this.nextHistory = nPrev;
                 cHistory++;
@@ -2727,14 +2720,16 @@ export default class DebuggerX86 extends DbgLib {
         if (!this.checkCPU()) return false;
 
         this.nCycles = 0;
+        let fCheck = !nCycles;
         do {
-            if (!nCycles) {
+            if (fCheck) {
                 /*
                  * When single-stepping, the CPU won't call checkInstruction(), which is good for
                  * avoiding breakpoints, but bad for instruction data collection if checks are enabled.
                  * So we call checkInstruction() ourselves.
                  */
                 if (this.checksEnabled()) this.checkInstruction(this.cpu.regLIP, 0);
+                fCheck = false;     // only check once per instruction
             }
             /*
              * For our typically tiny bursts (usually single instructions), mimic what runCPU() does.
@@ -3105,6 +3100,17 @@ export default class DebuggerX86 extends DbgLib {
                 this.aaOpcodeCounts[bOpcode][1]++;
                 let dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];
                 this.setAddr(dbgAddr, cpu.getIP(), cpu.getCS());
+
+                /*
+                 * This was added to collapse repeated instructions into a single entry in the history buffer.
+                 */
+                let iPrevHistory = this.iOpcodeHistory? this.iOpcodeHistory - 1 : this.aOpcodeHistory.length - 1;
+                let dbgPrev = this.aOpcodeHistory[iPrevHistory];
+                if (dbgPrev.off == dbgAddr.off && dbgPrev.sel == dbgAddr.sel) {
+                    this.iOpcodeHistory = iPrevHistory;
+                    dbgAddr = dbgPrev;
+                }
+
                 dbgAddr.nCPUCycles = cpu.getCycles();
                 /*
                  * For debugging timer issues, we can snap cycles remaining in the current burst, and the state of
@@ -3610,41 +3616,51 @@ export default class DebuggerX86 extends DbgLib {
      */
     getInstruction(dbgAddr, sComment, nSequence)
     {
-        let dbgAddrIns = this.newAddr(dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.type);
-
-        let bOpcode = this.getByte(dbgAddr, 1);
-
-        /*
-         * Incorporate OPERAND and ADDRESS size prefixes into the current instruction.
-         *
-         * And the verdict is in: redundant OPERAND and ADDRESS prefixes must be ignored;
-         * see opOS() and opAS() for details.  We limit the amount of redundancy to something
-         * reasonable (ie, 4).
-         */
-        let cMaxOverrides = 4, cOverrides = 0;
-        let fDataPrefix = false, fAddrPrefix = false;
-
-        while ((bOpcode == X86.OPCODE.OS || bOpcode == X86.OPCODE.AS) && cMaxOverrides--) {
-            if (bOpcode == X86.OPCODE.OS) {
-                if (!fDataPrefix) {
-                    dbgAddr.fData32 = !dbgAddr.fData32;
-                    fDataPrefix = true;
-                }
-                cOverrides++;
-            } else {
-                if (!fAddrPrefix) {
-                    dbgAddr.fAddr32 = !dbgAddr.fAddr32;
-                    fAddrPrefix = true;
-                }
-                cOverrides++;
-            }
-            bOpcode = this.getByte(dbgAddr, 1);
-        }
-
         let bModRM = -1;
         let asOpcodes = DebuggerX86.INS_NAMES;
-        let aOpDesc = this.aaOpDescs[bOpcode];
-        let iIns = aOpDesc[0];
+        let dbgAddrIns = this.newAddr(dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.type);
+
+        /*
+         * Incorporate segment, operand size, and address size overrides into the current instruction.
+         *
+         * Note that redundant prefixes must be ignored;  see opOS() and opAS() for details.  We limit the
+         * total number of overrides to something reasonable (ie, 8).
+         */
+        let cMaxOverrides = 8;
+        let fDataPrefix = false, fAddrPrefix = false;
+        let bOpcode, aOpDesc, iIns, sPrefix = "", sSegment = "";
+
+        do {
+            bOpcode = this.getByte(dbgAddr, 1);
+            aOpDesc = this.aaOpDescs[bOpcode];
+            iIns = aOpDesc[0];
+            let type = aOpDesc[1];
+            if (type == DebuggerX86.TYPE_PREFIX) {
+                if (bOpcode >= X86.OPCODE.LOCK) {
+                    sPrefix = asOpcodes[iIns];
+                } else {
+                    sSegment = asOpcodes[iIns]; // eg, ES:, CS:, SS:, DS:
+                }
+            }
+            else if (type == (DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386)) {
+                if (this.cpu.model < X86.MODEL_80386) break;
+                if (bOpcode == X86.OPCODE.OS) {
+                    if (!fDataPrefix) {
+                        dbgAddr.fData32 = !dbgAddr.fData32;
+                        fDataPrefix = true;
+                    }
+                } else if (bOpcode == X86.OPCODE.AS) {
+                    if (!fAddrPrefix) {
+                        dbgAddr.fAddr32 = !dbgAddr.fAddr32;
+                        fAddrPrefix = true;
+                    }
+                } else {
+                    sSegment = asOpcodes[iIns]; // eg, FS:, GS:
+                }
+            } else {
+                break;
+            }
+        } while (cMaxOverrides--);
 
         if (iIns == DebuggerX86.INS.OP0F) {
             let b = this.getByte(dbgAddr, 1);
@@ -3675,15 +3691,16 @@ export default class DebuggerX86 extends DbgLib {
 
         if (dbgAddr.fData32) {
             if (iIns == DebuggerX86.INS.CBW) {
-                sOpcode = "CWDE";           // sign-extend AX into EAX, instead of AL into AX
+                sOpcode = "CWDE";       // sign-extend AX into EAX, instead of AL into AX
             }
             else if (iIns == DebuggerX86.INS.CWD) {
-                sOpcode = "CDQ";            // sign-extend EAX into EDX:EAX, instead of AX into DX:AX
+                sOpcode = "CDQ";        // sign-extend EAX into EDX:EAX, instead of AX into DX:AX
             }
             else if (iIns >= DebuggerX86.INS.POPA && iIns <= DebuggerX86.INS.PUSHA) {
-                sOpcode += 'D';             // transform POPA/POPF/PUSHF/PUSHA to POPAD/POPFD/PUSHFD/PUSHAD as appropriate
+                sOpcode += 'D';         // transform POPA/POPF/PUSHF/PUSHA to POPAD/POPFD/PUSHFD/PUSHAD as appropriate
             }
         }
+
         if (this.isStringIns(bOpcode)) {
             cOperands = 0;              // suppress operands for string instructions, and add 'D' suffix as appropriate
             if (dbgAddr.fData32 && sOpcode.slice(-1) == 'W') sOpcode = sOpcode.slice(0, -1) + 'D';
@@ -3705,7 +3722,14 @@ export default class DebuggerX86 extends DbgLib {
                 if (typeCPU == DebuggerX86.CPU_80286) {
                     sOperands = "[%800]";
                 } else if (typeCPU == DebuggerX86.CPU_80386) {
-                    sOperands = "ES:[" + (dbgAddr.fAddr32? 'E':'') + "DI]";
+                    /*
+                     * NOTE: The 80386 LOADALL documentation, such as it is, doesn't suggest that segment
+                     * overrides are allowed, but then again, it doesn't say they're not; we'll disassemble
+                     * it as is, because chances are all legitimate uses of LOADALL in the known universe
+                     * don't use an override, and if any do, then presumably that's because it works (or is
+                     * ignored).
+                     */
+                    sOperands = (sSegment || "ES:") + "[" + (dbgAddr.fAddr32? 'E':'') + "DI]";
                 }
             }
 
@@ -3730,7 +3754,7 @@ export default class DebuggerX86 extends DbgLib {
                      * like "LEA AX,BX", it will actually do something (on some if not all processors), so
                      * there's probably some diagnostic value in allowing those cases to be disassembled.
                      */
-                    sOperand = this.getModRMOperand(sOpcode, bModRM, type, cOperands, dbgAddr);
+                    sOperand = this.getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr);
                 }
                 else if (typeMode == DebuggerX86.TYPE_MODREG) {
                     /*
@@ -3761,7 +3785,7 @@ export default class DebuggerX86 extends DbgLib {
                     cch = 8;
                     off = this.getLong(dbgAddr, 4);
                 }
-                sOperand = '[' + StrLib.toHex(off, cch) + ']';
+                sOperand = sSegment + '[' + StrLib.toHex(off, cch) + ']';
             }
             else if (typeMode == DebuggerX86.TYPE_IMMREL) {
                 if (typeSize == DebuggerX86.TYPE_BYTE) {
@@ -3788,10 +3812,10 @@ export default class DebuggerX86 extends DbgLib {
                 sOperand = this.getRegOperand((type & DebuggerX86.TYPE_IREG) >> 8, DebuggerX86.TYPE_SEGREG, dbgAddr);
             }
             else if (typeMode == DebuggerX86.TYPE_DSSI) {
-                sOperand = "DS:[SI]";
+                sOperand = (sSegment || "DS:") + "[SI]";
             }
             else if (typeMode == DebuggerX86.TYPE_ESDI) {
-                sOperand = "ES:[DI]";
+                sOperand = (sSegment || "ES:") + "[DI]";
             }
             if (!sOperand || !sOperand.length) {
                 sOperands = "INVALID";
@@ -3810,7 +3834,26 @@ export default class DebuggerX86 extends DbgLib {
             } while (dbgAddrIns.addr != dbgAddr.addr);
         }
 
-        sLine += StrLib.pad(sBytes, dbgAddrIns.fAddr32? 25 : 17);
+        sLine += StrLib.pad(sBytes, dbgAddrIns.fAddr32? 21 : 17);
+
+        if (sPrefix.indexOf("REP") == 0) {
+            /*
+             * For MOVS, STOS, OUTS, INS (and perhaps also LODS, although that doesn't seem useful), REPZ (0xF3) becomes
+             * REP, because the Z flag is ignored.  And apparently, the same is true for REPNZ (0xF2); ie, either prefix can
+             * be used.  I considered leaving REPNZ alone, to highlight the uncommon use of that prefix with those instructions,
+             * but it doesn't seem that interesting.
+             *
+             * So, unless the instruction is CMPS or SCAS, just display a simple REP prefix.
+             */
+            if (bOpcode != X86.OPCODE.CMPSB && bOpcode != X86.OPCODE.CMPSW && bOpcode != X86.OPCODE.SCASB && bOpcode != X86.OPCODE.SCASW) {
+                sPrefix = "REP";
+            }
+        }
+        if (sPrefix) {
+            sOperands = sOpcode + ' ' + sOperands;
+            sOpcode = sPrefix;
+        }
+
         sLine += StrLib.pad(sOpcode, 8);
         if (sOperands) sLine += ' ' + sOperands;
 
@@ -3828,7 +3871,7 @@ export default class DebuggerX86 extends DbgLib {
             }
         }
 
-        this.initAddrSize(dbgAddr, fComplete, cOverrides);
+        this.initAddrSize(dbgAddr, fComplete);
         return sLine;
     }
 
@@ -3996,17 +4039,18 @@ export default class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * getModRMOperand(sOpcode, bModRM, type, cOperands, dbgAddr)
+     * getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr)
      *
      * @this {DebuggerX86}
      * @param {string} sOpcode
+     * @param {string} sSegment
      * @param {number} bModRM
      * @param {number} type
      * @param {number} cOperands (if 1, memory operands are prefixed with the size; otherwise, size can be inferred)
      * @param {DbgAddrX86} dbgAddr
      * @returns {string} operand
      */
-    getModRMOperand(sOpcode, bModRM, type, cOperands, dbgAddr)
+    getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr)
     {
         let sOperand = "";
         let bMod = bModRM >> 6;
@@ -4046,57 +4090,57 @@ export default class DebuggerX86 extends DbgLib {
                     sOperand += StrLib.toHex(disp);
                 }
             }
-            sOperand = '[' + sOperand + ']';
+            sOperand = sSegment + '[' + sOperand + ']';
             if (cOperands == 1) {
-                let sPrefix = "";
+                let sType = "";
                 type &= DebuggerX86.TYPE_SIZE;
                 if (type == DebuggerX86.TYPE_WORD) {
                     type = (dbgAddr.fData32? DebuggerX86.TYPE_LONG : DebuggerX86.TYPE_SHORT);
                 }
                 switch(type) {
                 case DebuggerX86.TYPE_FARP:
-                    sPrefix = "FAR";
+                    sType = "FAR";
                     break;
                 case DebuggerX86.TYPE_BYTE:
-                    sPrefix = "BYTE";
+                    sType = "BYTE";
                     break;
                 case DebuggerX86.TYPE_SHORT:
                     if (fInteger) {
-                        sPrefix = "INT16";
+                        sType = "INT16";
                         break;
                     }
                     /* falls through */
-                    sPrefix = "WORD";
+                    sType = "WORD";
                     break;
                 case DebuggerX86.TYPE_LONG:
-                    sPrefix = "DWORD";
+                    sType = "DWORD";
                     break;
                 case DebuggerX86.TYPE_SINT:
                     if (fInteger) {
-                        sPrefix = "INT32";
+                        sType = "INT32";
                         break;
                     }
                     /* falls through */
                 case DebuggerX86.TYPE_SREAL:
-                    sPrefix = "REAL32";
+                    sType = "REAL32";
                     break;
                 case DebuggerX86.TYPE_LINT:
                     if (fInteger) {
-                        sPrefix = "INT64";
+                        sType = "INT64";
                         break;
                     }
                     /* falls through */
                 case DebuggerX86.TYPE_LREAL:
-                    sPrefix = "REAL64";
+                    sType = "REAL64";
                     break;
                 case DebuggerX86.TYPE_TREAL:
-                    sPrefix = "REAL80";
+                    sType = "REAL80";
                     break;
                 case DebuggerX86.TYPE_BCD80:
-                    sPrefix = "BCD80";
+                    sType = "BCD80";
                     break;
                 }
-                if (sPrefix) sOperand = sPrefix + ' ' + sOperand;
+                if (sType) sOperand = sType + ' ' + sOperand;
             }
         }
         else {
@@ -6331,14 +6375,13 @@ export default class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * initAddrSize(dbgAddr, fComplete, cOverrides)
+     * initAddrSize(dbgAddr, fComplete)
      *
      * @this {DebuggerX86}
      * @param {DbgAddrX86} dbgAddr
      * @param {boolean} fComplete
-     * @param {number} [cOverrides]
      */
-    initAddrSize(dbgAddr, fComplete, cOverrides)
+    initAddrSize(dbgAddr, fComplete)
     {
         /*
          * We use dbgAddr.fComplete to record whether or not the caller (ie, getInstruction())
@@ -6359,10 +6402,6 @@ export default class DebuggerX86 extends DbgLib {
             dbgAddr.fData32Orig = dbgAddr.fData32;
             dbgAddr.fAddr32Orig = dbgAddr.fAddr32;
         }
-        /*
-         * Use cOverrides to record whether we previously processed any OPERAND or ADDRESS overrides.
-         */
-        dbgAddr.cOverrides = cOverrides || 0;
     }
 
     /**
@@ -7097,8 +7136,8 @@ if (DEBUGGER) {
     DebuggerX86.TYPE_FPU       = 0x000F;        //     FPU SAVE (save/restore; 94 bytes in real-mode, 108 bytes in protected-mode)
 
     /*
-     * TYPE_MODE values.  Order is somewhat important, as all values implying
-     * the presence of a ModRM byte are assumed to be >= TYPE_MODRM.
+     * TYPE_MODE values.  Order is somewhat important, as all values implying the presence
+     * of a ModRM byte are assumed to be >= TYPE_MODRM.
      */
     DebuggerX86.TYPE_IMM       = 0x0000;        // (I) immediate data
     DebuggerX86.TYPE_ONE       = 0x0010;        //     implicit 1 (eg, shifts/rotates)

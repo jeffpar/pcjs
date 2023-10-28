@@ -94,9 +94,9 @@ If you don't remember your favorite PC AT drive type, you can just give `pc.js` 
     124 FAT sectors (x2), 64 root sectors (1024 entries)
     62628 total sectors, 62315 data sectors, 31965184 data bytes
 
-Note that the drive tables of AT-class machines usually didn't define any drives smaller than 10Mb, and the smallest drive type the PC XT defined was 5Mb, so using `--target` with smaller sizes won't give you smaller drives on those machines.  To do that, you must bypass the machine's drive table by adding `--drive=pcjs` to the command-line.  For example:
+Note that the drive tables of AT-class machines usually didn't define any drives smaller than 10Mb, and the smallest drive type the PC XT defined was 5Mb, so using `--target` with smaller sizes won't give you smaller drives on those machines.  To do that, you must bypass the machine's drive table by adding `--controller=pcjs` to the command-line.  For example:
 
-    % pc.js load info --sys=pcdos --ver=3.0 --drive=pcjs --target=1M
+    % pc.js load info --sys=pcdos --ver=3.0 --controller=pcjs --target=1M
     [Press CTRL-D to enter command mode]
 
     C>ECHO OFF
@@ -108,7 +108,7 @@ Note that the drive tables of AT-class machines usually didn't define any drives
 
 `pc.js` will calculate a drive geometry that matches your target size as closely as possible (1Mb in this case), and then set up a custom `PCJS` drive type.
 
-Finally, for complete control of a custom drive type, you can choose any drive geometry you want by passing a "cylinders:heads:sectors" (CHS) triplet to the `--drivetype` parameter, and since that automatically uses a `PCJS` drive type, you don't need to include `--drive=pcjs`.
+Finally, for complete control of a custom drive type, you can choose any drive geometry you want by passing a "cylinders:heads:sectors" (CHS) triplet to the `--drivetype` parameter, and since that automatically uses a `PCJS` drive type, you don't need to include `--controller=pcjs`.
 
 For example:
 

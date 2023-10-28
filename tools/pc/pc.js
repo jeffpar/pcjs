@@ -16,6 +16,7 @@
  *      for ((t=1; t<=99; t++)); do pc.js compaq331 "load info;chkdsk" --drivetype=$t --sys=compaq:3.31g --test; if [ $? -ne 0 ]; then break; fi; done
  */
 
+import DataBuffer    from "../../machines/modules/v2/databuffer.js";
 import DbgLib        from "../../machines/modules/v2/dbglib.js";
 import StrLib        from "../../machines/modules/v2/strlib.js";
 import Device        from "../../machines/modules/v3/device.js";
@@ -76,7 +77,13 @@ export default class PC extends PCJSLib {
     diskItems = [];
     diskIndexCache = null; diskIndexKeys = [];
     fileIndexCache = null; fileIndexKeys = [];
-    driveInfo = {}; driveManifest = null; driveOverride = false; geometryOverride = false;
+
+    /*
+     * Each entry in drives[] is a driveInfo object, created by newDrive().
+     */
+    drives = [];
+    driveBuild = 0;             // by default, the drive we build, if any, will be drive 0
+    geometryOverride = false;
 
     static functionKeys = {
         "ArrowUp":      "$up",
@@ -121,6 +128,7 @@ export default class PC extends PCJSLib {
         'f': "floppy",
         'h': "halt",
         'l': "local",
+        'n': "normalize",
         't': "test",
         'v': "verbose"
     };
@@ -329,7 +337,7 @@ export default class PC extends PCJSLib {
              *      "..\..\..\machines\modules\v2\defines.js" is not a valid package name ....
              *
              * which seems bizarre, since backslash is actually Windows' preferred path separator
-             * and is precisely what Node's node.path.sep returns on Windows. ¯\_(ツ)_/¯
+             * and is precisely what Node's path.sep returns on Windows. ¯\_(ツ)_/¯
              *
              * Moreover, we cannot join modulePath with rootDir, because rootDir will start with
              * a drive letter (eg, "C:") on Windows, which then fails with the following error:
@@ -645,40 +653,43 @@ export default class PC extends PCJSLib {
         if (this.geometryOverride) {
             let cpu = this.machine.cpu;
             /*
-             * We do basically the same thing our custom MBR does: build a drive table in unused
-             * interrupt vector space (16 bytes spanning vectors 0xC0 to 0xC3) and then point the
-             * drive table vector at 0x41 to that space.
-             *
-             * Unlike our custom MBR (see MBR.ASM), we need only do this for the primary drive,
-             * because we don't currently support building or overriding additional drives.  Otherwise,
-             * we would also need to build a secondary drive table (eg, in the space spanning vectors
-             * 0xC4 to 0xC7) and update the secondary drive table vector at 0x46.
+             * We do basically the same thing our custom MBR does: build drive tables in unused
+             * interrupt vector space (16 bytes spanning vectors 0xC0 to 0xC3 for drive 0, and 16
+             * bytes spanning vectors 0xC4 to 0xC7 for drive 1) and then update the drive table
+             * address at vector 0x41 and/or 0x46 as appropriate.
              *
              * I don't relish altering the machine state like this (using the custom MBR is much
              * cleaner and should actually be compatible with real hardware), but in order to ALSO
              * test the operating system's ability to initialize and format drives with custom
              * geometries from scratch, this seems the best alternative.
              */
-            for (let off = 0; off < 16; off++) {
-                let b = 0;
-                switch(off) {
-                case 0x00:
-                    b = this.driveInfo.nCylinders & 0xff;
-                    break;
-                case 0x01:
-                    b = (this.driveInfo.nCylinders >> 8) & 0xff;
-                    break;
-                case 0x02:
-                    b = this.driveInfo.nHeads;
-                    break;
-                case 0x0E:
-                    b = this.driveInfo.nSectors;
-                    break;
+            for (let i = 0; i <= 1; i++) {
+                if (!this.drives[i]) break;
+                if (this.drives[i].drivetype == 0) {
+                    let vec = 0xC0 + i * 4;
+                    for (let off = 0; off < 16; off++) {
+                        let b = 0;
+                        switch(off) {
+                        case 0x00:
+                            b = this.drives[i].nCylinders & 0xff;
+                            break;
+                        case 0x01:
+                            b = (this.drives[i].nCylinders >> 8) & 0xff;
+                            break;
+                        case 0x02:
+                            b = this.drives[i].nHeads;
+                            break;
+                        case 0x0E:
+                            b = this.drives[i].nSectors;
+                            break;
+                        }
+                        cpu.setByte(vec * 4 + off, b);
+                    }
+                    vec = (i == 0)? 0x41 : 0x46;
+                    cpu.setShort(vec * 4, (0xC0 + i * 4) * 4);
+                    cpu.setShort(vec * 4 + 2, 0);
                 }
-                cpu.setByte(0xC0 * 4 + off, b);
             }
-            cpu.setShort(0x41 * 4, 0xC0 * 4);
-            cpu.setShort(0x41 * 4 + 2, 0);
             this.geometryOverride = false;
         }
         return true;
@@ -733,7 +744,7 @@ export default class PC extends PCJSLib {
          * install our own drive tables now, they would immediately be replaced.  So instead we set a flag
          * (geometryOverride) telling our intDisk() handler to install new table(s) on the next INT 13h call.
          */
-        if (this.driveInfo.driveCtrl == "PCJS" && this.driveInfo.driveType == 0) {
+        if (this.drives[0].driveType == 0 || this.drives[1] && this.drives[1].driveType == 0) {
             this.geometryOverride = true;
         }
 
@@ -748,7 +759,7 @@ export default class PC extends PCJSLib {
          * wrote to deal with custom hard disk geometries.  It should be a trivial change, since most DOS boot
          * sectors already copy the DPT to RAM in order tweak other non-geometric parameters (eg, stepping rate).
          */
-        if (!this.driveInfo.partitioned && this.driveInfo.cbSector && this.driveInfo.cbSector != 512) {
+        if (!this.drives[0].partitioned && this.drives[0].cbSector && this.drives[0].cbSector != 512) {
             let fpDPT = cpu.getLong(0x1E * 4);                      // get the DPT address from interrupt vector 0x1E
             let addrDPT = ((fpDPT >>> 16) << 4) + (fpDPT & 0xffff); // convert real-mode far pointer to physical address
 
@@ -758,8 +769,8 @@ export default class PC extends PCJSLib {
              * the value to write is log2(cbSector) - log2(128).  We also update the EOT value in the 5th byte
              * (at offset 4), but that appears to be less critical.
              */
-            cpu.bus.setByteDirect(addrDPT + 3, Math.log2(this.driveInfo.cbSector) - 7);
-            cpu.bus.setByteDirect(addrDPT + 4, this.driveInfo.nSectors);
+            cpu.bus.setByteDirect(addrDPT + 3, Math.log2(this.drives[0].cbSector) - 7);
+            cpu.bus.setByteDirect(addrDPT + 4, this.drives[0].nSectors);
 
             /*
              * Unfortunately, this all seems to be for naught, because while stepping through the MS-DOS 3.30
@@ -866,7 +877,7 @@ export default class PC extends PCJSLib {
                 let appName = getString(cpu.segDS, off, len).trim();
                 this.machineDir = getString(cpu.segDS, 0x120, -1);
                 setTimeout(function() {
-                    pc.doCommand("exec " + appName + " " + args, !!pc.driveManifest);
+                    pc.doCommand("exec " + appName + " " + args, !!pc.drives[pc.driveBuild].driveManifest);
                 }, 0);
                 return false;               // returning false should bypass the INT 20h and fall into the JMP $-2;
             }                               // we want the machine to spin its wheels until it has been unloaded/reloaded
@@ -886,8 +897,8 @@ export default class PC extends PCJSLib {
         if (this.fDebug && this.machine.id) {
             text += sprintf("%s machine ID %s\n", this.machine.type, this.machine.id);
         }
-        if (this.driveManifest || this.driveInfo.driveType >= 0) {
-            let driveInfo = this.driveInfo;
+        let driveInfo = this.drives[this.driveBuild];
+        if (driveInfo.driveManifest || driveInfo.driveType >= 0) {
             let info = {
                 controller: driveInfo.driveCtrl,
                 type: driveInfo.driveType < 0? 0 : driveInfo.driveType,
@@ -1033,6 +1044,7 @@ export default class PC extends PCJSLib {
         }
         if (sFile) {
             let driveCtrl;
+            let driveInfo = this.drives[this.driveBuild];
             if (sFile.indexOf("pdp11") >= 0) {
                 this.machineType = "pdp11";
             }
@@ -1070,11 +1082,47 @@ export default class PC extends PCJSLib {
                     this.kbTarget = 360;
                 }
             }
-            if (driveCtrl && !this.driveOverride) {
-                this.driveInfo.driveCtrl = driveCtrl;
+            if (driveCtrl && !driveInfo.driveOverride) {
+                driveInfo.driveCtrl = driveCtrl;
             }
         }
         return sFile;
+    }
+
+    /**
+     * newDrive(iDrive)
+     *
+     * @this {PC}
+     * @param {number} iDrive
+     * @returns {DriveInfo}
+     */
+    newDrive(iDrive)
+    {
+        let driveInfo = this.drives[iDrive] = {
+            driveNumber:    iDrive,
+            driveCtrl:      "COMPAQ",
+            driveType:      -1,
+            nCylinders:     0,
+            nHeads:         0,
+            nSectors:       0,
+            cbSector:       0,
+            driveSize:      0,
+            typeFAT:        0,      // set this to 12 or 16 to request a specific FAT type
+            clusterSize:    0,      // set this to a specific cluster size (in bytes) if desired
+            rootEntries:    0,      // set this to a specific number of root directory entries if desired
+            hiddenSectors:  0,      // set this to a specific number of hidden sectors if desired
+            verDOS:         0,
+            trimFAT:        false,
+            partitioned:    undefined,
+            files:          [],
+            disk:           null,   // cached DiskInfo object, for debugging purposes
+            volume:         null,   // cached VolInfo object, for debugging purposes
+            driveManifest:  null,
+            driveOverride:  false,
+            localDir:       this.localDir,
+            localDisk:      this.localDisk
+        };
+        return driveInfo;
     }
 
     /**
@@ -1125,7 +1173,6 @@ export default class PC extends PCJSLib {
         let getFactory = function(config) {
 
             let machine = pc.machine;
-            let driveInfo = pc.driveInfo;
             let typeMachine = config['type'] || (config['machine'] && config['machine']['type']) || pc.machineType;
 
             machine.id = "";
@@ -1153,7 +1200,7 @@ export default class PC extends PCJSLib {
 
             pc.fHalt = false;
 
-            if (config['hdc'] && driveInfo.partitioned) {
+            if (config['hdc']) {
                 let typeCtrl = config['hdc']['type'];
                 let drives = config['hdc']['drives'];
                 if (typeof drives == "string") {
@@ -1164,50 +1211,54 @@ export default class PC extends PCJSLib {
                     }
                 }
                 if (!drives) drives = [];
-                if (driveInfo.driveCtrl != "PCJS") {
-                    let driveCtrl = driveInfo.driveCtrl;
-                    if (driveCtrl == "COMPAQ") driveCtrl = "AT";    // COMPAQ is AT-compatible, so suppress the warning
-                    if (driveCtrl != typeCtrl) {
-                        printf("warning: drive controller (%s) does not match actual controller (%s)\n", driveCtrl, typeCtrl);
-                    }
-                }
-                /*
-                 * If we don't have a drive type (eg, if no drive was built and no drive type was explicitly set),
-                 * we would still like to match the target capacity with a drive.  Convert the capacity from Mb to
-                 * sectors and then give it a go.
-                 *
-                 * And even if we do have a drive type, findDriveType() should simply verify that the type is valid.
-                 */
-                if (DiskInfo.findDriveType(driveInfo, (pc.kbTarget * 1024 / (driveInfo.cbSector || 512))|0, device)) {
-                    if (pc.fVerbose) {
-                        printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
-                    }
-                }
-                if (driveInfo.driveType >= 0) {
-                    let driveType = driveInfo.driveType;
-                    if (!driveType && driveInfo.driveCtrl == "PCJS") {
-                        /*
-                         * When a custom geometry is being used, we need to set the drive type to the FIRST type used
-                         * by the current drive controller (the PC XT started with type 0, while the PC AT started with 1).
-                         */
-                        driveType = (typeCtrl == "XT")? 0 : 1;
-                        if (typeCtrl == "XT" && driveInfo.nSectors != 17) {
-                            printf("warning: XT controller requires 17 sectors/track\n");
+                for (let i = 0; i <= 1; i++) {
+                    let driveInfo = pc.drives[i];
+                    if (!driveInfo || !driveInfo.partitioned) continue;
+                    if (driveInfo.driveCtrl != "PCJS") {
+                        let driveCtrl = driveInfo.driveCtrl;
+                        if (driveCtrl == "COMPAQ") driveCtrl = "AT";    // COMPAQ is AT-compatible, so suppress the warning
+                        if (driveCtrl != typeCtrl) {
+                            printf("warning: drive controller (%s) does not match actual controller (%s)\n", driveCtrl, typeCtrl);
                         }
                     }
-                    drives[0] = {
-                        'type': driveType,
-                        'name': driveInfo.driveSize.toFixed(1) + "Mb Hard Disk"
-                    };
-                    if (pc.driveManifest || !pc.localDir && pc.localDisk) {
-                        drives[0]['path'] = pc.localDisk;
-                    }
-                    if (pc.driveOverride) {
-                        let type = driveInfo.driveCtrl;
-                        if (driveInfo.driveCtrl == "PCJS") {
-                            type = driveInfo.driveCtrl + '-' + typeCtrl;
+                    /*
+                    * If we don't have a drive type (eg, if no drive was built and no drive type was explicitly set),
+                    * we would still like to match the target capacity with a drive.  Convert the capacity from Mb to
+                    * sectors and then give it a go.
+                    *
+                    * And even if we do have a drive type, findDriveType() should simply verify that the type is valid.
+                    */
+                    if (DiskInfo.findDriveType(driveInfo, (pc.kbTarget * 1024 / (driveInfo.cbSector || 512))|0, device)) {
+                        if (pc.fVerbose) {
+                            printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
                         }
-                        config['hdc']['type'] = type;
+                    }
+                    if (driveInfo.driveType >= 0) {
+                        let driveType = driveInfo.driveType;
+                        if (!driveType && driveInfo.driveCtrl == "PCJS") {
+                            /*
+                            * When a custom geometry is being used, we need to set the drive type to the FIRST type used
+                            * by the current drive controller (the PC XT started with type 0, while the PC AT started with 1).
+                            */
+                            driveType = (typeCtrl == "XT")? 0 : 1;
+                            if (typeCtrl == "XT" && driveInfo.nSectors != 17) {
+                                printf("warning: XT controller requires 17 sectors/track\n");
+                            }
+                        }
+                        drives[i] = {
+                            'type': driveType,
+                            'name': Math.round(driveInfo.driveSize) + "Mb Hard Disk (" + String.fromCharCode(67+i) + ":)",
+                        };
+                        if (driveInfo.localDisk) {
+                            drives[i]['path'] = driveInfo.localDisk;
+                        }
+                        if (driveInfo.driveOverride) {
+                            let type = driveInfo.driveCtrl;
+                            if (driveInfo.driveCtrl == "PCJS") {
+                                type = driveInfo.driveCtrl + '-' + typeCtrl;
+                            }
+                            config['hdc']['type'] = type;
+                        }
                     }
                 }
                 config['hdc']['drives'] = drives;
@@ -1218,8 +1269,9 @@ export default class PC extends PCJSLib {
                     config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
                 } else {
                     let disk, name;
+                    let driveInfo = pc.drives[pc.driveBuild];
                     if (pc.fFloppy) {
-                        disk = pc.localDisk;
+                        disk = driveInfo.localDisk;
                         name = (node.path.basename(pc.localDir).toUpperCase() || "User-defined") + " Diskette";
                     } else if (pc.localDir) {
                         disk = pc.getSystemDisk();
@@ -1271,7 +1323,7 @@ export default class PC extends PCJSLib {
     async reloadMachine()
     {
         let result = "";
-        if (this.driveManifest) {
+        if (this.drives[this.driveBuild].driveManifest) {
             result = await this.buildDisk(this.localDir);
             if (!result) {
                 this.loadMachine(this.localMachine);
@@ -1550,7 +1602,6 @@ export default class PC extends PCJSLib {
      */
     async buildDisk(sDir, sCommand = "", sLocalDisk = "", fLog = false)
     {
-        let kbCapacity = this.kbTarget;
         let system = configJSON['systems']?.[this.systemType];
         if (!system) {
             return "unsupported system type: " + this.systemType;
@@ -1583,30 +1634,39 @@ export default class PC extends PCJSLib {
         if (!dbMBR || dbMBR.length < 512) {
             return "invalid system MBR: " + sSystemMBR;
         }
+        /*
+         * Normal boot sectors (both Master and OS Boot Records) are one sector in size (eg, 512 bytes),
+         * but at one point, I was using the PCJS MBR as built, which was 32K bytes due to its ORG address.
+         * I've since chopped off those unused bytes, but this will also chop them off if need be.
+         */
         if (dbMBR.length > 512) dbMBR = dbMBR.slice(dbMBR.length - 512);
 
         let bootDrive = this.fFloppy? 0x00 : 0x80;
         let bootLetter = this.fFloppy? 'A' : 'C';
 
+        let kbCapacity = this.kbTarget;
+        let driveInfo = this.drives[this.driveBuild];
+        let bare = this.fBare;
         /*
          * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for any
          * "helper binaries" we add to the disk image (and for COMMAND.COM itself).
          */
-        this.driveInfo.files = [];
-        this.driveInfo.disk = null;
-        this.driveInfo.volume = null;
-        this.driveInfo.verDOS = verDOS;
-        this.driveInfo.bootDrive = bootDrive;
-        this.driveInfo.partitioned = !this.fFloppy;
+        let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
 
-        let attrHidden = verDOSMajor > 2 && !this.fBare? DiskInfo.ATTR.HIDDEN : 0;
+        driveInfo.files = [];
+        driveInfo.disk = null;
+        driveInfo.volume = null;
+        driveInfo.verDOS = verDOS;
+        driveInfo.bootDrive = bootDrive;
+        driveInfo.partitioned = !this.fFloppy;
+
         let aSystemFiles = this.getSystemFiles();
         for (let name of aSystemFiles) {
             let desc = diSystem.findFile(name);
             if (desc) {
                 desc.attr = +desc.attr;
                 desc.attr |= attrHidden;
-                this.driveInfo.files.push(desc);
+                driveInfo.files.push(desc);
             } else {
                 return "missing system file: " + name;
             }
@@ -1617,8 +1677,8 @@ export default class PC extends PCJSLib {
          * immediately exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it,
          * determine if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
          */
-        if (!this.fBare) {
-            this.driveInfo.files.push(diskLib.makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+        if (!bare) {
+            driveInfo.files.push(diskLib.makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
         }
 
         /*
@@ -1626,8 +1686,8 @@ export default class PC extends PCJSLib {
          * machine. Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDisk()
          * to look for any changes and then terminate the machine.
          */
-        if (!this.fBare) {
-            this.driveInfo.files.push(diskLib.makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+        if (!bare) {
+            driveInfo.files.push(diskLib.makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
         }
 
         /*
@@ -1638,7 +1698,7 @@ export default class PC extends PCJSLib {
          *
          * NOTE: When I say these binaries will be hidden, well, that depends on the attrHidden setting (see above).
          */
-        if (!this.fBare) {
+        if (!bare) {
             let apps = configJSON['apps'] || {};
             let appNames = Object.keys(apps);
             for (let appName of appNames) {
@@ -1650,7 +1710,7 @@ export default class PC extends PCJSLib {
                 for (let j = 0; j < appName.length; j++) {
                     appContents.push(appName.charCodeAt(j));
                 }
-                this.driveInfo.files.push(diskLib.makeFileDesc(sDir, appFile, appContents, attrHidden));
+                driveInfo.files.push(diskLib.makeFileDesc(sDir, appFile, appContents, attrHidden));
             }
         }
 
@@ -1696,7 +1756,7 @@ export default class PC extends PCJSLib {
              * Automatically normalize all line-endings in AUTOEXEC.BAT.
              */
             let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
-            this.driveInfo.files.push(diskLib.makeFileDesc(sDir, "AUTOEXEC.BAT", dataNew, attr));
+            driveInfo.files.push(diskLib.makeFileDesc(sDir, "AUTOEXEC.BAT", dataNew, attr));
         }
 
         /*
@@ -1772,7 +1832,8 @@ export default class PC extends PCJSLib {
         }
 
         let pc = this;
-        this.driveManifest = null;
+        driveInfo.driveManifest = null;
+
         let done = function(di) {
             if (di) {
                 /*
@@ -1795,17 +1856,19 @@ export default class PC extends PCJSLib {
                      * not a custom geometry.  I believe the failure is because we're using a saved machine
                      * state for the COMPAQ machine (state386.json), so the machine is already expecting drive
                      * type 1, and so our options are either 1) do NOT use the saved state, or 2) use our MBR
-                     * in order to dynamically update the drive parameters for drive type 1.  I go with #2.
+                     * in order to dynamically update the drive parameters if we are NOT using drive type 1.
                      *
-                     *      if (pc.driveInfo.driveCtrl != "PCJS" && pc.driveInfo.driveType != 1) {
+                     * I'm going with option #2.
+                     *
+                     *      if (driveInfo.driveCtrl != "PCJS" && driveInfo.driveType != 1) {
                      *          pc.savedState = "";
                      *      }
                      */
-                    let iVolume = -1;
-                    if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && (pc.driveInfo.driveCtrl == "PCJS" || pc.driveInfo.driveCtrl == "COMPAQ")) {
-                        iVolume = -2;
+                    let iDriveTable = -1;
+                    if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && (driveInfo.driveCtrl == "PCJS" || driveInfo.driveType != 1)) {
+                        iDriveTable = driveInfo.driveNumber;
                     }
-                    di.updateBootSector(dbMBR, iVolume);
+                    di.updateBootSector(dbMBR, -1, iDriveTable);
                 }
                 /*
                  * Now update the volume boot record (VBR) for the boot drive; for that, the volume number
@@ -1818,22 +1881,22 @@ export default class PC extends PCJSLib {
                  * currently that's the only way to to pass a disk image to the HDC component.
                  */
                 if (!sLocalDisk) {
-                    pc.localDisk = pc.localDisk.replace(node.path.basename(pc.localDisk), di.getName() + ".json");
+                    driveInfo.localDisk = pc.localDisk.replace(node.path.basename(pc.localDisk), di.getName() + ".json");
                 } else {
-                    pc.localDisk = sLocalDisk.indexOf(node.path.sep) < 0? node.path.join(pcjsDir, "disks", sLocalDisk) : sLocalDisk;
+                    driveInfo.localDisk = sLocalDisk.indexOf(node.path.sep) < 0? node.path.join(pcjsDir, "disks", sLocalDisk) : sLocalDisk;
                 }
-                if (sLocalDisk || fLog) printf("building drive: %s\n", pc.localDisk);
-                if (diskLib.writeDiskSync(pc.localDisk, di, false, 0, true, true)) {
+                if (sLocalDisk || fLog) printf("building drive: %s\n", driveInfo.localDisk);
+                if (diskLib.writeDiskSync(driveInfo.localDisk, di, false, 0, true, true)) {
                     pc.updateDriveInfo(di);
                     /*
                      * I've deferred the minimum version check until now, because even if we can't (well, shouldn't)
                      * use the drive image, I'd still like to be able to inspect it.
                      */
                     if (di.minDOSVersion && di.minDOSVersion > verDOS) {
-                        printf("error: %s drive type %d (%.2fMb) requires DOS %s or later\n", pc.driveInfo.driveCtrl, pc.driveInfo.driveType, pc.driveInfo.driveSize, di.minDOSVersion.toFixed(2));
+                        printf("error: %s drive type %d (%.2fMb) requires DOS %s or later\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.driveSize, di.minDOSVersion.toFixed(2));
                         return;
                     }
-                    pc.driveManifest = manifest;
+                    driveInfo.driveManifest = manifest;
                 }
             }
         };
@@ -1841,9 +1904,9 @@ export default class PC extends PCJSLib {
         if (!sDir.endsWith('/')) sDir += '/';
         if (fLog) printf("reading files: %s\n", sDir);
 
-        diskLib.readDir(sDir, 0, 0, this.diskLabel == "."? node.path.basename(sDir) : this.diskLabel, null, this.fNormalize, kbCapacity, this.maxFiles, false, this.driveInfo, done);
+        diskLib.readDir(sDir, 0, 0, this.diskLabel == "."? node.path.basename(sDir) : this.diskLabel, null, this.fNormalize, kbCapacity, this.maxFiles, false, driveInfo, done);
 
-        return this.driveManifest? "" : "unable to build drive";
+        return driveInfo.driveManifest? "" : "unable to build drive";
     }
 
     /**
@@ -1855,8 +1918,8 @@ export default class PC extends PCJSLib {
     dumpDisk(lba)
     {
         let result = "";
-        if (this.driveInfo.disk) {
-            let db = diskLib.getDiskSector(this.driveInfo.disk, +lba);
+        if (this.drives[this.driveBuild].disk) {
+            let db = diskLib.getDiskSector(this.drives[this.driveBuild].disk, +lba);
             if (db) {
                 for (let i = 0; i < db.length; i += 16) {
                     let s = sprintf("%04X: ", i);
@@ -1970,7 +2033,7 @@ export default class PC extends PCJSLib {
      */
     updateDriveInfo(di)
     {
-        let driveInfo = this.driveInfo;
+        let driveInfo = this.drives[this.driveBuild];
         if (di.getDriveType(driveInfo)) {
             if (this.fVerbose) {
                 printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
@@ -2018,11 +2081,12 @@ export default class PC extends PCJSLib {
     mapDir(machineDir)
     {
         let newDir = node.path.join(this.localDir, machineDir.replace(/\\/g, node.path.sep));
-        if (this.driveManifest) {
+        let driveManifest = this.drives[this.driveBuild].driveManifest;
+        if (driveManifest) {
             machineDir = machineDir.replace(/\\/g, '/');
             if (machineDir[0] != '/') machineDir = '/' + machineDir;
-            for (let i = 0; i < this.driveManifest.length; i++) {
-                let item = this.driveManifest[i];
+            for (let i = 0; i < driveManifest.length; i++) {
+                let item = driveManifest[i];
                 if (!(item.attr & DiskInfo.ATTR.SUBDIR)) continue;
                 if (item.path == machineDir) {
                     newDir = item.origin;
@@ -2045,16 +2109,16 @@ export default class PC extends PCJSLib {
      */
     saveDisk(sDir, sDrive)
     {
-        let controller, iDrive = 0;
+        let controller, iDrive = this.driveBuild;
         if (sDrive) {
             controller = this.machine.fdc;
             iDrive = sDrive.charCodeAt(0) - 'A'.charCodeAt(0);
             if (iDrive > 1) {
-                if (iDrive != 2) {
+                if (iDrive > 3) {
                     return false;
                 }
                 controller = this.machine.hdc;
-                iDrive = 0;
+                iDrive -= 2;
             }
         } else {
             controller = this.fFloppy? this.machine.fdc : this.machine.hdc;
@@ -2063,8 +2127,8 @@ export default class PC extends PCJSLib {
         if (imageData) {
             let di = new DiskInfo(device, "PCJS");
             if (di.buildDiskFromJSON(imageData, true)) {
-                if (this.driveManifest && sDir == this.localDir) {
-                    let oldManifest = this.driveManifest;
+                if (this.drives[this.driveBuild].driveManifest && sDir == this.localDir) {
+                    let oldManifest = this.drives[this.driveBuild].driveManifest;
                     let newManifest = di.getFileManifest(null, true);
                     /*
                      * We now have the old and new manifests, and both should be sorted; time to look for differences.
@@ -2117,8 +2181,12 @@ export default class PC extends PCJSLib {
                                  * contents, so the compare will succeed and writeFileSync() will be bypassed.
                                  */
                                 if (!compareContents(oldItem, newItem)) {
+                                    let db = newItem.contents;
                                     if (this.fDebug) printf("updating: %s\n", newItemPath);
-                                    diskLib.writeFileSync(newItemPath, newItem.contents, false, true);
+                                    if (this.fNormalize && diskLib.isTextFile(newItemPath)) {
+                                        db = diskLib.normalizeTextFile(new DataBuffer(db));
+                                    }
+                                    diskLib.writeFileSync(newItemPath, db, false, true);
                                 } else {
                                     // if (this.fDebug) printf("skipping: %s\n", newItemPath);
                                 }
@@ -2173,7 +2241,11 @@ export default class PC extends PCJSLib {
                                 if (newAttr & DiskInfo.ATTR.SUBDIR) {
                                     node.fs.mkdirSync(newItemPath);
                                 } else {
-                                    diskLib.writeFileSync(newItemPath, newItem.contents, true, false);
+                                    let db = newItem.contents;
+                                    if (this.fNormalize && diskLib.isTextFile(newItemPath)) {
+                                        db = diskLib.normalizeTextFile(new DataBuffer(db));
+                                    }
+                                    diskLib.writeFileSync(newItemPath, db, true, false);
                                 }
                                 node.fs.utimesSync(newItemPath, newDate, newDate);
                                 if (newAttr & DiskInfo.ATTR.READONLY) {
@@ -2299,7 +2371,7 @@ export default class PC extends PCJSLib {
                              * because there is no longer a connection between that disk drive and your local files.  That's one
                              * of the downsides of removable media.
                              */
-                            if (pc.fFloppy && !iDrive) pc.driveManifest = null;
+                            if (pc.fFloppy && !iDrive) pc.drives[0].driveManifest = null;
                         }
                     }
                 };
@@ -2784,7 +2856,7 @@ export default class PC extends PCJSLib {
     /**
      * doLoad(args)
      *
-     * When called from doCommand(), it would have been simpler to pass argv, but this also needs work from intLoad().
+     * When called from doCommand(), it would have been simpler to pass argv, but this must also work from intLoad().
      *
      * NOTE: I originally had intLoad() call doCommand(), because it was cleaner, but that introduced another problem;
      * namely, doCommand() is an async function, whereas intLoad() wants to run synchronously, to preserve the illusion
@@ -2893,6 +2965,7 @@ export default class PC extends PCJSLib {
     parseDriveType(typeDrive)
     {
         let error = "";
+        let driveInfo = this.drives[this.driveBuild];
         let match = typeDrive.match(/^([0-9]+):([0-9]+):([0-9]+):?([0-9]*)$/i);
         if (match) {
             let nCylinders = +match[1];
@@ -2907,25 +2980,25 @@ export default class PC extends PCJSLib {
             } else {
                 this.kbTarget = 0;
                 if (!this.fFloppy) {
-                    this.driveInfo.driveCtrl = "PCJS";      // pseudo drive controller used for custom drive geometries
+                    driveInfo.driveCtrl = "PCJS";      // pseudo drive controller used for custom drive geometries
                 }
-                this.driveInfo.driveType = 0;
-                this.driveInfo.nCylinders = nCylinders;
-                this.driveInfo.nHeads = nHeads;
+                driveInfo.driveType = 0;
+                driveInfo.nCylinders = nCylinders;
+                driveInfo.nHeads = nHeads;
                 if (nHeads > 16) {
                     printf("warning: %d heads may not be supported by the drive controller\n", nHeads);
                 }
-                this.driveInfo.nSectors = nSectors;
-                this.driveInfo.cbSector = cbSector;
+                driveInfo.nSectors = nSectors;
+                driveInfo.cbSector = cbSector;
                 if (cbSector != 512) {
                     printf("warning: %d-byte sectors are not known to work with any version of DOS\n", cbSector);
                 }
-                this.driveOverride = true;
+                driveInfo.driveOverride = true;
             }
         } else if (!this.fFloppy) {
             match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i);
             if (match) {
-                let driveCtrl = match[1] || this.driveInfo.driveCtrl;
+                let driveCtrl = match[1] || driveInfo.driveCtrl;
                 let driveType = +match[2];
                 /*
                  * WARNING: This code may not validate the type correctly if you didn't specify a controller (eg, "XT:1"),
@@ -2934,9 +3007,9 @@ export default class PC extends PCJSLib {
                  * run yet (this is too early).
                  */
                 if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
-                    this.driveInfo.driveCtrl = driveCtrl;
-                    this.driveInfo.driveType = driveType;
-                    this.driveOverride = !!match[1];
+                    driveInfo.driveCtrl = driveCtrl;
+                    driveInfo.driveType = driveType;
+                    driveInfo.driveOverride = !!match[1];
                 } else {
                     match = null;
                 }
@@ -3016,25 +3089,7 @@ export default class PC extends PCJSLib {
             checkRemaining = true;
         }
 
-        this.driveInfo = {
-            driveCtrl:      "COMPAQ",
-            driveType:      -1,
-            nCylinders:     0,
-            nHeads:         0,
-            nSectors:       0,
-            cbSector:       0,
-            driveSize:      0,
-            typeFAT:        0,      // set this to 12 or 16 to request a specific FAT type
-            clusterSize:    0,      // set this to a specific cluster size (in bytes) if desired
-            rootEntries:    0,      // set this to a specific number of root directory entries if desired
-            hiddenSectors:  0,      // set this to a specific number of hidden sectors if desired
-            verDOS:         0,
-            trimFAT:        false,
-            partitioned:    undefined,
-            files:          [],
-            disk:           null,   // cached DiskInfo object, for debugging purposes
-            volume:         null    // cached VolInfo object, for debugging purposes
-        };
+        let driveInfo = this.newDrive(this.driveBuild);
 
         this.fBare = PC.removeFlag(argv, 'bare', this.fBare);
         this.fFloppy = PC.removeFlag(argv, 'floppy', this.fFloppy);
@@ -3060,21 +3115,21 @@ export default class PC extends PCJSLib {
         if (this.fFloppy) {
             this.savedState = "";
             this.kbTarget = this.maxFiles = 0;
-            this.driveInfo.driveCtrl = "FDC";
-            this.driveOverride = true;
+            driveInfo.driveCtrl = "FDC";
+            driveInfo.driveOverride = true;
             this.bootSelect = 'A';
         } else {
-            let driveCtrl = PC.removeArg(argv, 'drive');
+            let driveCtrl = PC.removeArg(argv, 'controller');
             if (driveCtrl) {
-                this.driveInfo.driveCtrl = driveCtrl.toUpperCase();
-                this.driveOverride = true;
+                driveInfo.driveCtrl = driveCtrl.toUpperCase();
+                driveInfo.driveOverride = true;
             }
             this.kbTarget = diskLib.getTargetValue(defaults['target']);
             this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || this.maxFiles);
         }
 
         this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target')) || this.kbTarget;
-        if (PC.removeFlag(argv, 'trim')) this.driveInfo.trimFAT = true;
+        if (PC.removeFlag(argv, 'trim')) driveInfo.trimFAT = true;
 
         let typeDrive = PC.removeArg(argv, 'drivetype');
         if (typeDrive) {
@@ -3085,15 +3140,15 @@ export default class PC extends PCJSLib {
         if (typeFAT) {
             let match = typeFAT.match(/^([0-9]+):?([0-9]*):?([0-9]*)$/i);
             if (match) {
-                this.driveInfo.typeFAT = +match[1];
-                if (match[2]) this.driveInfo.clusterSize = +match[2] || 0;
-                if (match[3]) this.driveInfo.rootEntries = +match[3] || 0;
+                driveInfo.typeFAT = +match[1];
+                if (match[2]) driveInfo.clusterSize = +match[2] || 0;
+                if (match[3]) driveInfo.rootEntries = +match[3] || 0;
             }
         }
 
         let hiddenSectors = PC.removeArg(argv, 'hidden');
         if (hiddenSectors) {
-            this.driveInfo.hiddenSectors = +hiddenSectors || 0;
+            driveInfo.hiddenSectors = +hiddenSectors || 0;
         }
 
         if (checkRemaining) {
@@ -3213,9 +3268,14 @@ export default class PC extends PCJSLib {
                 if (sDisk.indexOf(node.path.sep) < 0 && !diskLib.existsFile(sDisk, false)) {
                     sDisk = node.path.join(pcjsDir, "disks", sDisk);
                 }
-                this.localDisk = sDisk;
-                let di = await diskLib.readDiskAsync(this.localDisk);
+                let di = await diskLib.readDiskAsync(sDisk);
                 if (di) {
+                    /*
+                     * By default, any prebuilt disk will be used in the first drive.  So any drive-related
+                     * settings are propagated to the next drive, and then a new DriveInfo object is created.
+                     */
+                    this.drives[1] = this.drives[0];
+                    let driveInfo = this.newDrive(0);
                     this.updateDriveInfo(di);
                     /*
                      * The safe thing to do would be to simply NEVER used a saved state with ANY prebuilt disk,
@@ -3226,16 +3286,16 @@ export default class PC extends PCJSLib {
                      * parameter table.  If if finds one, it will set driveCtrl to "PCJS", which our COMPAQ machine
                      * should support with or without a saved state, so again we'll allow it.
                      */
-                    if (this.driveInfo.driveCtrl != "PCJS" && this.driveInfo.driveType != 1) {
+                    if (driveInfo.driveCtrl != "PCJS" && driveInfo.driveType != 1) {
                         this.savedState = "";
                     }
-                    this.driveOverride = true;
-                    this.kbTarget = 0;
+                    driveInfo.localDisk = sDisk;
+                    driveInfo.driveOverride = true;
+                    this.driveBuild++;
                 } else {
                     error = "invalid disk";
                 }
             }
-            this.localDir = "";
         }
         else if (globals.browser) {
             this.localDisk = diskLib.getLocalPath(this.localDisk);
@@ -3447,13 +3507,13 @@ export default class PC extends PCJSLib {
             return;
         }
         this.shutdown = true;
-        if (code) printf("shutting down (%d)\n", code);
         if (code != 2) {
             this.saveDisk(this.localDir);
-        } else if (this.driveManifest) {
+        } else if (this.drives[this.driveBuild].driveManifest) {
             printf("warning: any changes to disk not saved\n");
         }
         node.process.stdin.setRawMode(false);
+        if (code) printf("shutting down (%d)\n", code);
         if (this.fTest) printf("\n");
         node.process.exit(code);
     }
@@ -3477,15 +3537,15 @@ export default class PC extends PCJSLib {
             };
             let optionsDisk = {
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
-                "--disk=[image]":           "\tuse drive disk image (instead of directory)",
-                "--drive=[controller]":     "set drive controller (XT, AT, COMPAQ, or PCJS)",
+                "--disk=[filename]":        "use drive disk image (instead of directory)",
+                "--controller=[id]":        "set drive controller (XT, AT, COMPAQ, or PCJS)",
                 "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
-                "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
+                "--fat=[value(s)]":         "set FAT type (12 or 16), cluster size, etc",
                 "--hidden=[number]":        "set hidden sectors (default is 1)",
-                "--label=[label]":          "\tset volume label of disk image",
+                "--label=[string]":         "set volume label of disk image",
                 "--maxfiles=[number]":      "set maximum local files (default is " + this.maxFiles + ")",
                 "--normalize=[boolean]":    "convert text file encoding (default is " + this.fNormalize + ")",
-                "--save=[image]":           "\tsave drive disk image and exit",
+                "--save=[filename]":        "save drive disk image and exit",
                 "--system=[string]":        "set operating system type (default is " + this.systemType + ")",
                 "--target=[nK|nM]":         "set target disk size (default is " + ((this.kbTarget / 1024)|0) + "M)",
                 "--version=[#.##]":         "set operating system version (default is " + this.systemVersion + ")"

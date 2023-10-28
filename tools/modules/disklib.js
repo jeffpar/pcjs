@@ -34,7 +34,7 @@ export default class DiskLib {
      * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isText() on all
      * these file contents first.
      */
-    static asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
+    static asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".INC", ".LRF", ".MAK", ".TXT", ".XML"];
 
     /**
      * DiskLib(device)
@@ -303,6 +303,7 @@ export default class DiskLib {
                     db = this.convertBASICFile(db, true, sFullPath);
                 }
                 else if (this.isTextFile(sFullPath)) {
+                    // if (!fQuiet) this.printf("normalizing: %s\n", sFile);
                     db = this.normalizeTextFile(db);
                 }
             }
