@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
+<machine id="ibm5160" type="pcx86" border="1" pos="center" background="default">
+	<name pos="center">IBM PC XT, 640Kb RAM, 10Mb Hard Disk (Formatted), IBM VGA</name>
+	<computer id="xt-vga-640k" name="IBM PC XT"/>
+	<ram id="ramLow" addr="0x00000" test="false" size="0xa0000" comment="0xa0000 (640Kb) size overrides SW1|ROM BIOS memory test has been disabled"/>
+	<rom id="romHDC" addr="0xc8000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json5"/>
+	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5160/rom/basic/BASIC110.json5"/>
+	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/bios/1982-11-08/XTBIOS-REV1.json5"/>
+	<video ref="/machines/pcx86/ibm/video/vga/1986-10-27/ibm-vga-autolockfs.xml"/>
+	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A:{name:"PC DOS 3.20 (Disk 1)"},B:{name:"PC DOS 3.20 (Disk 2)"}}'/>
+	<hdc ref="/machines/pcx86/ibm/hdc/10mb/pcdos200-empty-xt3.xml"/>
+	<keyboard ref="/machines/pcx86/ibm/keyboard/us83-softkeys.xml"/>
+	<cpu id="cpu8088" model="8088"/>
+	<debugger id="debugger"/>
+	<panel ref="/machines/pcx86/panel/wide.xml"/>
+	<chipset id="chipset" model="5160" sw1="01001101" pos="left" padLeft="8px" padBottom="8px">
+		<control type="switches" label="SW1" binding="sw1" left="0px"/>
+		<control type="description" binding="swdesc" left="0px"/>
+	</chipset>
+	<serial id="com1" adapter="1" binding="print"/>
+	<serial id="com2" adapter="2"/>
+	<mouse serial="com2"/>
+</machine>

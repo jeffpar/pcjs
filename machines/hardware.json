@@ -249,6 +249,9 @@
           "@title": "Monochrome Display",
           "@redirect_from": "/devices/pcx86/machine/5160/mda/256kb/"
         },
+        "vga": {
+          "@title": "VGA Display"
+        },
         "@documents": [
           {
             "@title": "IBM 5160 Guide to Operations (Apr 1984)",
@@ -370,12 +373,12 @@
           {
             "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter (Aug 1984)",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqENe6VOosR1hAu0Qg?e=rn4aJb",
-            "@cover": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1984-08.jpg",
+            "@cover": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1984-08.jpg"
           },
           {
             "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter (Aug 1986)",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEON8qBHJZmbQ5fGw?e=6iAC5s",
-            "@cover": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1986-08.jpg",
+            "@cover": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1986-08.jpg"
           },
           {
             "@title": "IBM 5170 20MB Fixed Disk Drive",

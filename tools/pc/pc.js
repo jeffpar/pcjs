@@ -2856,7 +2856,7 @@ export default class PC extends PCJSLib {
     /**
      * doLoad(args)
      *
-     * When called from doCommand(), it would have been simpler to pass argv, but this also needs work from intLoad().
+     * When called from doCommand(), it would have been simpler to pass argv, but this must also work from intLoad().
      *
      * NOTE: I originally had intLoad() call doCommand(), because it was cleaner, but that introduced another problem;
      * namely, doCommand() is an async function, whereas intLoad() wants to run synchronously, to preserve the illusion
