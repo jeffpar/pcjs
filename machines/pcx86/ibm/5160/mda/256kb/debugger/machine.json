@@ -19,21 +19,21 @@
       "id": "debugger",
       "class": "debugger"
     },
-    "/machines/pcx86/ibm/5160/rom-basic-110.json",
-    "/machines/pcx86/ibm/5160/rom-bios-rev1.json",
-    "/machines/pcx86/ibm/5160/rom-hdc.json",
-    "/machines/pcx86/ibm/5150/video-mda.json",
-    "/machines/pcx86/ibm/5160/fdc.json",
+    "/machines/pcx86/ibm/5160/rom/basic/rom-basic-110.json",
+    "/machines/pcx86/ibm/5160/rom/bios/rom-bios-rev1.json",
+    "/machines/pcx86/ibm/5160/rom/hdc/rom-hdc.json",
+    "/machines/pcx86/ibm/video/mda/video-mda.json",
+    "/machines/pcx86/ibm/fdc/5160.json",
     "/machines/pcx86/ibm/5160/hdc.json",
     {
       "config": "/machines/pcx86/ibm/5160/ram.json",
       "test": "false"
     },
-    "/machines/pcx86/ibm/5150/cpu.json",
-    "/machines/pcx86/ibm/5150/keyboard.json",
-    "/machines/pcx86/ibm/5150/panel.json",
+    "/machines/pcx86/ibm/chipset/cpu.json",
+    "/machines/pcx86/ibm/keyboard/keyboard-us83.json",
+    "/machines/pcx86/ibm/chipset/panel.json",
     {
-      "config": "/machines/pcx86/ibm/5160/chipset.json",
+      "config": "/machines/pcx86/ibm/chipset/5160-cga-max.json",
       "sw1": "01000001"
     },
     {
