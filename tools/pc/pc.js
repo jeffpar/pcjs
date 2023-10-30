@@ -1881,7 +1881,7 @@ export default class PC extends PCJSLib {
                  * currently that's the only way to to pass a disk image to the HDC component.
                  */
                 if (!sLocalDisk) {
-                    driveInfo.localDisk = pc.localDisk.replace(node.path.basename(pc.localDisk), di.getName() + ".json");
+                    driveInfo.localDisk = node.path.join(pcjsDir, "disks", di.getName() + ".json");
                 } else {
                     driveInfo.localDisk = sLocalDisk.indexOf(node.path.sep) < 0? node.path.join(pcjsDir, "disks", sLocalDisk) : sLocalDisk;
                 }
