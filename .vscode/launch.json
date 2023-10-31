@@ -1668,11 +1668,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/Volumes/PC_SIG_12_90/1301_400/DISK1370/DISK1370.ZIP",
-        "--verbose",
-        "--extract",
-        "--expand",
-        "--normalize"
+        "https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json",
+        "tools.json"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
       "stopOnEntry": false,

@@ -3292,6 +3292,7 @@ export default class PC extends PCJSLib {
                     driveInfo.localDisk = sDisk;
                     driveInfo.driveOverride = true;
                     this.driveBuild++;
+                    this.localDir = "";
                 } else {
                     error = "invalid disk";
                 }
@@ -3309,30 +3310,28 @@ export default class PC extends PCJSLib {
             this.savedState = "";
         }
 
-        if (this.localDir) {                        // --dir is allowed only if --disk has not been used
-            let sDir = "";
-            if (!error) {
-                splice = false;
-                sDir = sDirectory;
-                if (!sDir) {
-                    sDir = argv[1];                 // for convenience, we also allow a bare directory name
-                    if (sDir) splice = true;
-                }
-                if (sDir) {
-                    sDirectory = sDir;
-                    let newDir = this.verifyDir(sDir);
-                    if (newDir) {
-                        this.localDir = newDir;
-                        if (splice) argv.splice(1, 1);
-                    } else {
-                        if (!splice) error = "invalid directory: " + sDir;
-                        sDir = "";
-                    }
-                }
-            }
+        let sDir = "";
+        if (!error) {
+            splice = false;
+            sDir = sDirectory;
             if (!sDir) {
-                this.localDir = this.verifyDir(this.localDir);
+                sDir = argv[1];                 // for convenience, we also allow a bare directory name
+                if (sDir) splice = true;
             }
+            if (sDir) {
+                sDirectory = sDir;
+                let newDir = this.verifyDir(sDir);
+                if (newDir) {
+                    this.localDir = newDir;
+                    if (splice) argv.splice(1, 1);
+                } else {
+                    if (!splice) error = "invalid directory: " + sDir;
+                    sDir = this.localDir = "";
+                }
+            }
+        }
+        if (!sDir && this.localDir) {
+            this.localDir = this.verifyDir(this.localDir);
         }
 
         /*
