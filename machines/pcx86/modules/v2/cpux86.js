@@ -2473,6 +2473,10 @@ export default class CPUx86 extends CPULib {
         this.resultLogic = value;
         if (carry) this.setCF(); else this.clearCF();
         if (overflow) this.setOF(); else this.clearOF();
+        /*
+         * Apparently the actual hardware clears AF on logical instructions (at least AND, OR, TEST) so we will, too.
+         */
+        this.clearAF();
         return value;
     }
 

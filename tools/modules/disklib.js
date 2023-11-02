@@ -1115,6 +1115,8 @@ export default class DiskLib {
                     } else {
                         db = await response.arrayBuffer();
                     }
+                } else {
+                    throw new Error("error reading " + diskFile + " (" + response.status + ")");
                 }
             } else {
                 db = await this.readFile(diskFile, ext == "json"? "utf8" : null);
