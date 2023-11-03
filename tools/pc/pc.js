@@ -3109,12 +3109,20 @@ export default class PC extends PCJSLib {
         }
         this.systemMBR = PC.removeArg(argv, 'mbr', defaults['mbr'] || this.systemMBR);
 
+        this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target', defaults['target'] || this.kbTarget));
+        this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || this.maxFiles);
+
+        if ([160, 180, 320, 360, 720, 1200, 1440, 2880].indexOf(this.kbTarget) >= 0) {
+            this.fFloppy = true;
+        } else if (this.fFloppy) {
+            this.kbTarget = this.maxFiles = 0;
+        }
+
         /*
          * When using --floppy, certain other options are disallowed (eg, drivectrl).
          */
         if (this.fFloppy) {
             this.savedState = "";
-            this.kbTarget = this.maxFiles = 0;
             driveInfo.driveCtrl = "FDC";
             driveInfo.driveOverride = true;
             this.bootSelect = 'A';
@@ -3124,11 +3132,8 @@ export default class PC extends PCJSLib {
                 driveInfo.driveCtrl = driveCtrl.toUpperCase();
                 driveInfo.driveOverride = true;
             }
-            this.kbTarget = diskLib.getTargetValue(defaults['target']);
-            this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || this.maxFiles);
         }
 
-        this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target')) || this.kbTarget;
         if (PC.removeFlag(argv, 'trim')) driveInfo.trimFAT = true;
 
         let typeDrive = PC.removeArg(argv, 'drivetype');
