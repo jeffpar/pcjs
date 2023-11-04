@@ -2474,7 +2474,19 @@ export default class CPUx86 extends CPULib {
         if (carry) this.setCF(); else this.clearCF();
         if (overflow) this.setOF(); else this.clearOF();
         /*
-         * Apparently the actual hardware clears AF on logical instructions (at least AND, OR, TEST) so we will, too.
+         * Limited testing on actual hardware (the Intel Core i5 in my Mac Mini) as well as test
+         * results from another user (https://github.com/jeffpar/pcjs/issues/81) suggest that AF is
+         * cleared by logic ops (at least AND/OR/TEST/XOR; see https://sandpile.org/x86/flags.htm).
+         *
+         * The official Intel stance on AF in these circumstances is that it's "undefined", but we all
+         * know that's just code for "we don't want to document how it ACTUALLY behaves".  Clearing AF
+         * seems, um, "clearly" better than just letting it float, but that's all we can say for now.
+         *
+         * In particular, real-world tests with shift and rotate instructions are needed, because unlike
+         * AND/OR/TEST/XOR, those alter carry in very specific ways, so why not "auxiliary carry" as well?
+         *
+         * In other words, clearAF() is not the end of the story; the original TODO above is still
+         * very much a "to do".
          */
         this.clearAF();
         return value;

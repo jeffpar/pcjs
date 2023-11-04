@@ -1881,7 +1881,7 @@ export default class PC extends PCJSLib {
                  * currently that's the only way to to pass a disk image to the HDC component.
                  */
                 if (!sLocalDisk) {
-                    driveInfo.localDisk = node.path.join(pcjsDir, "disks", di.getName() + ".json");
+                    driveInfo.localDisk = driveInfo.localDisk.replace(node.path.basename(driveInfo.localDisk), di.getName() + ".json");
                 } else {
                     driveInfo.localDisk = sLocalDisk.indexOf(node.path.sep) < 0? node.path.join(pcjsDir, "disks", sLocalDisk) : sLocalDisk;
                 }
@@ -3109,7 +3109,7 @@ export default class PC extends PCJSLib {
         }
         this.systemMBR = PC.removeArg(argv, 'mbr', defaults['mbr'] || this.systemMBR);
 
-        this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target', defaults['target'] || this.kbTarget));
+        this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target', defaults['target'])) || this.kbTarget;
         this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || this.maxFiles);
 
         if ([160, 180, 320, 360, 720, 1200, 1440, 2880].indexOf(this.kbTarget) >= 0) {
@@ -3320,7 +3320,7 @@ export default class PC extends PCJSLib {
             splice = false;
             sDir = sDirectory;
             if (!sDir) {
-                sDir = argv[1];                 // for convenience, we also allow a bare directory name
+                sDir = argv[1];                     // for convenience, we also allow a bare directory name
                 if (sDir) splice = true;
             }
             if (sDir) {
