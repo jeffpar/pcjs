@@ -8991,11 +8991,19 @@
 						"@format": "PC360K"
 					},
 					{
-						"@title": "Jeff's PC DOS 1.00 with MASM",
-						"@diskette": "JEFFPAR-PCDOS100-MASM100-160K.img",
-						"@link": "/software/pcjs/JEFFPAR-PCDOS100-MASM100-160K.img",
-						"@localonly": true,
-						"@format": "PC160K"
+						"@title": "WOW Reversi MIPS Demo (Disk 1)",
+						"@diskette": "JEFFPAR-WOW-REVERSI-MIPS-DISK1.json",
+						"@format": "PC1200K"
+					},
+					{
+						"@title": "WOW Reversi MIPS Demo (Disk 2)",
+						"@diskette": "JEFFPAR-WOW-REVERSI-MIPS-DISK2.json",
+						"@format": "PC1200K"
+					},
+					{
+						"@title": "WOW Reversi MIPS Demo (Disk 3)",
+						"@diskette": "JEFFPAR-WOW-REVERSI-MIPS-DISK3.json",
+						"@format": "PC1200K"
 					}
 				]
 			}
