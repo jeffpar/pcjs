@@ -5057,6 +5057,9 @@ export default class DiskInfo {
      *      1: Only a subset of the BPB that doesn't interfere with DOS 1.x is preserved
      *      2: Only a subset of the BPB used by DOS 2.x is preserved
      *
+     * Also, if iVolume is -1, then we update the master boot record (MBR) instead, and verBPB
+     * is actually a drive table entry number (0 or 1; pass -1 to leave drive table alone).
+     *
      * @this {DiskInfo}
      * @param {DataBuffer} dbBoot (DataBuffer containing new boot sector)
      * @param {number} [iVolume] (default is 0 for first volume; -1 for MBR)

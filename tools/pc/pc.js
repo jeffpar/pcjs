@@ -62,7 +62,7 @@ export default class PC extends PCJSLib {
     savedState = "state386.json";
     localMachine = "";          // current machine config file
     localDir = ".";             // local directory used to build localDisk
-    localDisk = "disks/PCJS.json";
+    localDisk = "PCJS.json";
     diskLabel = "default";
     machineDir = "";            // current directory *inside* the machine
     maxFiles = 1024;            // default disk file limit
@@ -1843,9 +1843,11 @@ export default class PC extends PCJSLib {
                 if (di.volTable[0] && di.volTable[0].iPartition >= 0) {
                     /*
                      * Since the disk is partitioned, we need to update the Master Boot Record (MBR),
-                     * hence the special volume number (-1).  However, if the MBR is ours AND a custom
-                     * geometry has been specified, then we need to use an *extra* special volume number
-                     * (-2) to ensure that our MBR's drive parameter table is updated, too.
+                     * hence the special volume number (-1).
+                     *
+                     * In addition, if the MBR is ours AND a custom geometry has been specified, then
+                     * we need to pass a second parameter (iDriveTable) to ensure that the appropriate
+                     * MBR drive parameter table is updated, too; otherwise, pass -1.
                      *
                      * NOTE: I used to update the MBR drive parameter table ONLY when driveCtrl is "PCJS",
                      * but it's also needed for "COMPAQ" configurations.  For example:
@@ -1880,12 +1882,17 @@ export default class PC extends PCJSLib {
                  * (preferably JSON, since that tells us more about the disk, its layout, and its contents) because
                  * currently that's the only way to to pass a disk image to the HDC component.
                  */
-                if (!sLocalDisk) {
-                    driveInfo.localDisk = driveInfo.localDisk.replace(node.path.basename(driveInfo.localDisk), di.getName() + ".json");
+                if (sLocalDisk) {
+                    driveInfo.localDisk = sLocalDisk;
                 } else {
-                    driveInfo.localDisk = sLocalDisk.indexOf(node.path.sep) < 0? node.path.join(pcjsDir, "disks", sLocalDisk) : sLocalDisk;
+                    driveInfo.localDisk = driveInfo.localDisk.replace(node.path.basename(driveInfo.localDisk), di.getName() + ".json");
                 }
-                if (sLocalDisk || fLog) printf("building drive: %s\n", driveInfo.localDisk);
+                if (driveInfo.localDisk.indexOf(node.path.sep) < 0) {
+                    driveInfo.localDisk = node.path.join(pcjsDir, "disks", driveInfo.localDisk);
+                }
+                if (sLocalDisk || fLog) {
+                    printf("building drive: %s\n", driveInfo.localDisk);
+                }
                 if (diskLib.writeDiskSync(driveInfo.localDisk, di, false, 0, true, true)) {
                     pc.updateDriveInfo(di);
                     /*
@@ -1902,8 +1909,9 @@ export default class PC extends PCJSLib {
         };
 
         if (!sDir.endsWith('/')) sDir += '/';
-        if (fLog) printf("reading files: %s\n", sDir);
-
+        if (fLog) {
+            printf("reading files: %s\n", sDir);
+        }
         diskLib.readDir(sDir, 0, 0, this.diskLabel == "."? node.path.basename(sDir) : this.diskLabel, null, this.fNormalize, kbCapacity, this.maxFiles, false, driveInfo, done);
 
         return driveInfo.driveManifest? "" : "unable to build drive";
