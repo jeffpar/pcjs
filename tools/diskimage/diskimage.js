@@ -301,11 +301,14 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
 
     let chs = argv['dump'];
     if (chs) {
-        if (typeof chs != "string") {
+        let iCylinder, iHead, idSector, nSectors;
+        if (typeof chs == "string") {
+            let values = chs.split(':');
+            iCylinder = +values[0], iHead = +values[1], idSector = +values[2], nSectors = +values[3] || 1;
+        }
+        if (isNaN(iCylinder) || isNaN(iHead) || !idSector) {
             printf("specify --dump=C:H:S[:N]\n");
         } else {
-            let values = chs.split(':');
-            let iCylinder = +values[0], iHead = +values[1], idSector = +values[2], nSectors = +values[3] || 1;
             while (nSectors-- > 0) {
                 let sector = di.seek(iCylinder, iHead, idSector);
                 if (!sector) {
@@ -362,7 +365,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
     }
 
     /*
-     * Similar to --extract, I've added --type as another form of extraction (ie, to extract file(s) to the console).
+     * Similar to --extract, --type is another form of extraction (ie, extract file(s) to the console).
      */
     let sExtraction, fExtractToFile;
     if (argv['type']) {

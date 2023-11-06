@@ -108,7 +108,7 @@ You may have noticed the `defaults` section in the [pc.json5](https://github.com
   }
 ```
 
-These settings control what happens whenever `pc.js` builds (or rebuilds) a hard disk image from a specified folder.  First and foremost, `pc.js` wants to create a *bootable* hard disk image, so it fetches the corresponding system diskette image from PCjs (eg, [MSDOS330-DISK1](https://diskettes.pcjs.org/pcx86/sys/dos/microsoft/3.30/MSDOS330-DISK1.json)), extracts the boot sector and system files (ie, `IO.SYS` and `MSDOS.SYS`) from the diskette, and then based on the `capacity`, `maxfiles`, and other settings, it builds a hard disk image, which is stored in the PCjs `/tools/pc/disks` folder by default.
+These settings control what happens whenever `pc.js` builds (or rebuilds) a hard disk image from a specified folder.  First and foremost, `pc.js` wants to create a *bootable* hard disk image, so it fetches the corresponding system diskette image from PCjs (eg, [MSDOS330-DISK1](https://diskettes.pcjs.org/pcx86/sys/dos/microsoft/3.30/MSDOS330-DISK1.json)), extracts the boot sector and system files (ie, `IO.SYS` and `MSDOS.SYS`) from the diskette, and then based on `target`, `maxfiles`, and other settings, it builds a hard disk image, which is stored in the PCjs `/tools/pc/disks` folder by default.
 
 To change those defaults, you can either edit `pc.json5` or pass command-line overrides; for example:
 
@@ -125,7 +125,7 @@ You can also use `--drivetype` for even more control of the virtual hard disk im
 
 With great disk-creating power comes great responsibility -- or at least some basic knowledge of the limitations of various versions of DOS.  For example, if you want to build a disk that uses a 16-bit FAT (perhaps because you want a smaller cluster size), then you must *also* build it with PC DOS or MS-DOS 3.0 or higher, since version 2.x only understood disks using a 12-bit FAT.
 
-You can override the `sys` and `ver` defaults with command-line options `--sys` and `--ver`; eg:
+You can override the `sys` and `ver` defaults with command-line options `--sys` (short for `--system`) and `--ver` (short for `--version`); eg:
 
     $ pc.js --sys=pcdos --ver=3.00 dir
 
