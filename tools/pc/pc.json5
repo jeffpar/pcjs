@@ -22,6 +22,26 @@
     }
   },
   "systems": {
+    "bd": {
+      "vendor": "pcjs.org",
+      "product": "basic-dos",
+      "versions": {
+        "2.00A": {
+          "dir": "$basicdos/software/pcx86/src",
+          "boot": "bd/boot/OBJ/BOOT.COM",
+          "bootOffset": 0x550,
+          "extraOffset": 0x760,
+          "files": [
+            "bd/dev/OBJ/IBMBIO.COM",
+            "bd/dos/OBJ/IBMDOS.COM",
+            "bd/cmd/OBJ/COMMAND.COM",
+            "conf/200A/CONFIG.SYS",
+            "conf/200A/AUTOEXEC.BAT"
+          ],
+          "target": "BASIC-DOS-200A"
+        }
+      }
+    },
     "compaq": {
       "vendor": "compaq",
       "product": "compaq-dos",

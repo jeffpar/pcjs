@@ -1275,7 +1275,7 @@ export default class PC extends PCJSLib {
                         disk = driveInfo.localDisk;
                         name = (node.path.basename(pc.localDir).toUpperCase() || "User-defined") + " Diskette";
                     } else if (pc.localDir) {
-                        disk = pc.getSystemDisk();
+                        disk = pc.getSystemValue("disk");
                         name = pc.systemType.toUpperCase() + ' ' + sprintf("%.2f", parseFloat(pc.systemVersion));
                     }
                     if (disk) {
@@ -1516,62 +1516,59 @@ export default class PC extends PCJSLib {
     }
 
     /**
-     * getSystemDisk(type, version)
+     * getSystemValue(key, type, version)
      *
-     * If we don't recognized the system type (eg, "pcdos", "msdos"), or there is no version information,
-     * we return an empty string.  If we recognize the version, we return the name of the system diskette;
-     * otherwise, we return an array of available versions.
+     * For "disk" keys, if we don't recognized the system type (eg, "pcdos", "msdos"), or there is no version
+     * information, we return an empty string, and if we DO recognize the version, we return the name of the system
+     * diskette, else we return an array of available versions.
      *
      * @this {PC}
+     * @param {string} key
      * @param {string} [type]
      * @param {string} [version]
-     * @returns {string}
+     * @returns {string|Array.<string>|undefined}
      */
-    getSystemDisk(type = this.systemType, version = this.systemVersion)
+    getSystemValue(key, type = this.systemType, version = this.systemVersion)
     {
-        let sSystemDisk = "";
+        let value, versionInfo, verNumber;
         let system = configJSON['systems']?.[type];
         if (system && system.versions) {
-            let verNumber = sprintf("%.2f", +parseFloat(version));
-            let versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
-            if (versionInfo) {
+            verNumber = sprintf("%.2f", +parseFloat(version));
+            versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
+        }
+        if (versionInfo) {
+            if (key == "disk") {
                 let sSystemPath = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + verNumber + "/";
                 if (typeof versionInfo == "string") {
-                    sSystemDisk += sSystemPath + versionInfo + ".json";
+                    value = sSystemPath + versionInfo + ".json";
+                } else if (versionInfo[key]) {
+                    value = sSystemPath + versionInfo[key] + ".json";
                 } else {
-                    sSystemDisk = sSystemPath + versionInfo.disk + ".json";
+                    value = versionInfo['dir'] || "";
+                    /*
+                     * When a "dir" is specified in lieu of a "disk", we check for a leading '$', which signals
+                     * that this is a path to a repository alongside the pcjs repository.
+                     */
+                    if (value[0] == '$') {
+                        value = node.path.join(pcjsDir, "../../..", value.slice(1));
+                    }
+                    if (value && !value.endsWith("/")) value += "/";
                 }
             } else {
-                return Object.keys(system.versions);
-            }
-        }
-        return sSystemDisk;
-    }
-
-    /**
-     * getSystemFiles(type, version)
-     *
-     * @this {PC}
-     * @param {string} [type]
-     * @param {string} [version]
-     * @returns {Array.<string>}
-     */
-    getSystemFiles(type = this.systemType, version = this.systemVersion)
-    {
-        let aSystemFiles = [];
-        let system = configJSON['systems']?.[type];
-        if (system && system.versions) {
-            let verNumber = sprintf("%.2f", +parseFloat(version));
-            let versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
-            if (versionInfo) {
                 if (typeof versionInfo == "string") {
-                    aSystemFiles = system.files;
+                    value = system[key];
                 } else {
-                    aSystemFiles = versionInfo.files;
+                    value = versionInfo[key];
                 }
             }
+        } else {
+            if (key == "disk") {
+                value = system.versions? Object.keys(system.versions) : "";
+            } else {
+                value = [];
+            }
         }
-        return aSystemFiles;
+        return value;
     }
 
     /**
@@ -1608,7 +1605,7 @@ export default class PC extends PCJSLib {
             return "unsupported system type: " + this.systemType;
         }
 
-        let sSystemDisk = this.getSystemDisk();
+        let sSystemDisk = this.getSystemValue("disk");
         if (!sSystemDisk) {
             return "unknown " + this.systemType + " version: " + this.systemVersion;
         } else if (typeof sSystemDisk != "string") {
@@ -1621,12 +1618,10 @@ export default class PC extends PCJSLib {
             return "DOS 2.0 or greater required (otherwise use --floppy)";
         }
 
-        let diSystem = await diskLib.readDiskAsync(sSystemDisk);
-        if (!diSystem) {
-            return "missing " + this.systemType + " system diskette: " + sSystemDisk;
-        }
-
         let sSystemMBR, dbMBR;
+        let bootDrive = this.floppy? 0 : 0x80;
+        let bootLetter = this.floppy? 'A' : 'C';
+
         if (!this.floppy) {
             sSystemMBR = this.systemMBR;
             if (sSystemMBR.indexOf(node.path.sep) < 0) {
@@ -1637,25 +1632,15 @@ export default class PC extends PCJSLib {
                 return "invalid system MBR: " + sSystemMBR;
             }
             /*
-             * Normal boot sectors (both Master and OS Boot Records) are one sector in size (eg, 512 bytes),
+             * Normal boot sectors (both master and OS boot records) are one sector in size (eg, 512 bytes),
              * but at one point, I was using the PCJS MBR as built, which was 32K bytes due to its ORG address.
              * I've since chopped off those unused bytes, but this will also chop them off if need be.
              */
             if (dbMBR.length > 512) dbMBR = dbMBR.slice(dbMBR.length - 512);
         }
 
-        let bootDrive = this.floppy? 0x00 : 0x80;
-        let bootLetter = this.floppy? 'A' : 'C';
-
         let kbCapacity = this.kbTarget;
         let driveInfo = this.drives[this.driveBuild];
-        let bare = this.bare;
-
-        /*
-         * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for any
-         * "helper binaries" we add to the disk image (and for COMMAND.COM itself).
-         */
-        let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
 
         driveInfo.files = [];
         driveInfo.disk = null;
@@ -1664,16 +1649,88 @@ export default class PC extends PCJSLib {
         driveInfo.bootDrive = bootDrive;
         driveInfo.partitioned = !this.floppy;
 
-        let aSystemFiles = this.getSystemFiles();
-        for (let name of aSystemFiles) {
-            let desc = diSystem.findFile(name);
-            if (desc) {
-                desc.attr = +desc.attr;
-                desc.attr |= attrHidden;
-                driveInfo.files.push(desc);
-            } else {
-                return "missing system file: " + name;
+        let diSystem;
+        if (!sSystemDisk.endsWith("/")) {
+            diSystem = await diskLib.readDiskAsync(sSystemDisk);
+            if (!diSystem) {
+                return "missing " + this.systemType + " system diskette: " + sSystemDisk;
             }
+        }
+
+        /*
+         * Load the boot sector from the system diskette we just read, and use it to update the boot
+         * sector on the disk image.
+         *
+         * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register to
+         * contain the boot drive # (0x00 for floppy drive, 0x80 for hard drive), even though the BIOS
+         * passes that information to the master boot record (MBR) and the DOS MBR preserves and passes
+         * it on to the boot sector.  And perhaps the key point is "DOS MBR", because DOS also had to
+         * work with third-party MBRs, some of which may have trashed DL.
+         */
+        let dbBoot, dbExtra, verBPB = 0;
+        if (diSystem) {
+            dbBoot = diskLib.getDiskSector(diSystem, 0);
+            if (this.bootSector) {
+                /*
+                * Load alternate boot sector from the specified file; if it fails, we'll stick with the
+                * boot sector from the system diskette we already loaded.
+                */
+                let sBootSector = this.bootSector;
+                let db = await diskLib.readFileAsync(sBootSector, null);
+                if (db) {
+                    dbBoot = db;
+                }
+            }
+        } else {
+            let sSystemBoot = node.path.join(sSystemDisk, this.getSystemValue("boot"));
+            dbBoot = await diskLib.readFileAsync(sSystemBoot, null);
+            if (!dbBoot || dbBoot.length < 512) {
+                return "invalid system boot file: " + sSystemBoot;
+            }
+            let bootOffset = this.getSystemValue("bootOffset");
+            if (bootOffset) {
+                let extraOffset = this.getSystemValue("extraOffset");
+                if (extraOffset) {
+                    dbExtra = dbBoot.slice(extraOffset);
+                }
+                dbBoot = dbBoot.slice(bootOffset, bootOffset + 512);
+            }
+        }
+
+        /*
+         * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for any
+         * "helper binaries" we add to the disk image (and for COMMAND.COM itself).
+         */
+        let aSystemFiles = this.getSystemValue("files");
+        let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
+        for (let name of aSystemFiles) {
+            let desc, data, attr;
+            if (!diSystem) {
+                name = node.path.join(sSystemDisk, name);
+                let dbFile = await diskLib.readFileAsync(name, null);
+                if (dbFile) {
+                    if (dbExtra) {
+                        let dbCombined = new DataBuffer(dbExtra.length + dbFile.length);
+                        dbExtra.copy(dbCombined, 0);
+                        dbFile.copy(dbCombined, dbExtra.length);
+                        dbFile = dbCombined;
+                        dbExtra = null;
+                    }
+                    attr = DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
+                    desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr);
+                    driveInfo.files.push(desc);
+                    continue;
+                }
+            } else {
+                desc = diSystem.findFile(name);
+                if (desc) {
+                    desc.attr = +desc.attr;
+                    desc.attr |= attrHidden;
+                    driveInfo.files.push(desc);
+                    continue;
+                }
+            }
+            return "missing system file: " + name;
         }
 
         /*
@@ -1681,7 +1738,7 @@ export default class PC extends PCJSLib {
          * immediately exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it,
          * determine if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
          */
-        if (!bare) {
+        if (!this.bare) {
             driveInfo.files.push(diskLib.makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
         }
 
@@ -1690,7 +1747,7 @@ export default class PC extends PCJSLib {
          * machine. Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDisk()
          * to look for any changes and then terminate the machine.
          */
-        if (!bare) {
+        if (!this.bare) {
             driveInfo.files.push(diskLib.makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
         }
 
@@ -1702,7 +1759,7 @@ export default class PC extends PCJSLib {
          *
          * NOTE: When I say these binaries will be hidden, well, that depends on the attrHidden setting (see above).
          */
-        if (!bare) {
+        if (!this.bare) {
             let apps = configJSON['apps'] || {};
             let appNames = Object.keys(apps);
             for (let appName of appNames) {
@@ -1761,30 +1818,6 @@ export default class PC extends PCJSLib {
              */
             let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
             driveInfo.files.push(diskLib.makeFileDesc(sDir, "AUTOEXEC.BAT", dataNew, attr));
-        }
-
-        /*
-         * Load the boot sector from the system diskette we read above, and use it to update the boot
-         * sector on the disk image.
-         *
-         * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register to
-         * contain the boot drive # (0x00 for floppy drive, 0x80 for hard drive), even though the BIOS
-         * passes that information to the master boot record (MBR) and the DOS MBR preserves and passes
-         * it on to the boot sector.  And perhaps the key point is "DOS MBR", because DOS also had to
-         * work with third-party MBRs, some of which may have trashed DL.
-         */
-        let verBPB = 0;
-        let dbBoot = diskLib.getDiskSector(diSystem, 0);
-        if (this.bootSector) {
-            /*
-             * Load alternate boot sector from the specified file; if it fails, we'll stick with the
-             * boot sector from the system diskette we already loaded.
-             */
-            let sBootSector = this.bootSector;
-            let db = await diskLib.readFileAsync(sBootSector, null);
-            if (db) {
-                dbBoot = db;
-            }
         }
 
         if (verDOS < 2.0) {
@@ -1889,7 +1922,7 @@ export default class PC extends PCJSLib {
                         }
                         di.updateBootSector(dbMBR, -1, iDriveTable);
                     } else {
-                        printf("warning: missing MBR for hard disk\n");
+                        printf("warning: missing MBR for partitioned disk\n");
                     }
                 }
                 /*
@@ -1905,7 +1938,7 @@ export default class PC extends PCJSLib {
                 if (sLocalDisk) {
                     driveInfo.localDisk = sLocalDisk;
                 } else {
-                    driveInfo.localDisk = driveInfo.localDisk.replace(node.path.basename(driveInfo.localDisk), di.getName() + ".json");
+                    driveInfo.localDisk = driveInfo.localDisk.replace(node.path.basename(driveInfo.localDisk), (pc.getSystemValue("target") || di.getName()) + ".json");
                 }
                 if (driveInfo.localDisk.indexOf(node.path.sep) < 0) {
                     driveInfo.localDisk = node.path.join(pcjsDir, "disks", driveInfo.localDisk);
@@ -3302,9 +3335,8 @@ export default class PC extends PCJSLib {
         }
 
         if (sDisk) {
-            if (sDisk.toLowerCase() == "none") {    // --disk=none disables any prebuilt disk
-                this.localDisk = "";
-                this.savedState = "";
+            if (sDisk == "none") {                  // --disk=none disables any prebuilt disk
+                this.localDisk = this.savedState = "";
             } else {
                 if (sDisk.indexOf(node.path.sep) < 0 && !diskLib.existsFile(sDisk, false)) {
                     sDisk = node.path.join(pcjsDir, "disks", sDisk);
@@ -3342,13 +3374,12 @@ export default class PC extends PCJSLib {
         else if (globals.browser) {
             this.localDisk = diskLib.getLocalPath(this.localDisk);
         } else {
-            this.localDisk = node.path.join(pcjsDir, this.localDisk);
+            this.localDisk = node.path.join(pcjsDir, "disks", this.localDisk);
         }
 
         if (sDirectory == "none" || this.localDir == "none") {
-            this.localDir = "";                     // --dir=none is synonymous with --disk=none
-            this.localDisk = "";
-            this.savedState = "";
+            sDirectory = "";                        // --dir=none is synonymous with --disk=none
+            this.localDir = this.localDisk = this.savedState = "";
         }
 
         let sDir = "";
