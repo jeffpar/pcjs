@@ -24,9 +24,9 @@
   "systems": {
     "bd": {
       "vendor": "pcjs.org",
-      "product": "basic-dos",
+      "product": "basic-dos",   // see https://github.com/jeffpar/basicdos
       "versions": {
-        "2.00A": {
+        "2.00A": {              // BASIC-DOS 2.00 currently requires the "v2" branch (until/unless it's merged into "master")
           "dir": "$basicdos/software/pcx86/src",
           "boot": "bd/boot/OBJ/BOOT.COM",
           "bootOffset": 0x550,
