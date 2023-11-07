@@ -45,14 +45,15 @@ let configJSON = {}, machines = null;
  */
 export default class PC extends PCJSLib {
 
-    fBare = false;
-    fDebug = false;
-    fHalt = false;
-    fFloppy = false;
+    bare = false;
+    debug = false;
+    halt = false;
+    floppy = false;
+    bootSector = "";
     bootSelect = "";
-    fNormalize = false;
-    fTest = false;
-    fVerbose = false;
+    normalize = false;
+    test = false;
+    verbose = false;
     autoStart = false;
     machineType = "pcx86";
     systemType = "msdos";
@@ -62,7 +63,7 @@ export default class PC extends PCJSLib {
     savedState = "state386.json";
     localMachine = "";          // current machine config file
     localDir = ".";             // local directory used to build localDisk
-    localDisk = "disks/PCJS.json";
+    localDisk = "PCJS.json";
     diskLabel = "default";
     machineDir = "";            // current directory *inside* the machine
     maxFiles = 1024;            // default disk file limit
@@ -238,7 +239,7 @@ export default class PC extends PCJSLib {
     {
         let prevMode = this.debugMode;
         if (!nEvent && this.debugMode != nEvent) {
-            if (!this.fTest) printf("[Press CTRL-D to enter command mode]\n");
+            if (!this.test) printf("[Press CTRL-D to enter command mode]\n");
         }
         this.debugMode = nEvent;
         if (this.debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
@@ -348,7 +349,7 @@ export default class PC extends PCJSLib {
              * so we join it with a relative directory instead (ie, "../..").
              */
             modulePath = node.path.join("../..", modulePath).replace(/\\/g, '/');
-            if (this.fDebug) printf("loading: %s\n", modulePath.replace(/\.\.\/\.\.\//g, '/'));
+            if (this.debug) printf("loading: %s\n", modulePath.replace(/\.\.\/\.\.\//g, '/'));
             let name = node.path.basename(modulePath, ".js");
             if (name == "embed") {
                 let { [factory]: embed } = await import(modulePath);
@@ -363,7 +364,7 @@ export default class PC extends PCJSLib {
             case "component":
                 this.Component = module.default;
                 /*
-                 * We override Component.printf() in order to replace its DEBUG check with our own fDebug check.
+                 * We override Component.printf() in order to replace its DEBUG check with our own debug check.
                  */
                 this.Component.printf = function(format, ...args) {
                     let bitsMessage = 0;
@@ -379,7 +380,7 @@ export default class PC extends PCJSLib {
                         format = "warning: " + format + "\n";
                         bitsMessage = 0;
                     }
-                    if (pc.fDebug || !bitsMessage) {
+                    if (pc.debug || !bitsMessage) {
                         printf(format, ...args);
                     }
                 };
@@ -407,7 +408,7 @@ export default class PC extends PCJSLib {
              */
             if (module.default && module.default.prototype) {
                 module.default.prototype.print = function print(s, bitsMessage) {
-                    if ((pc.debugMode || !pc.autoStart) && !bitsMessage || (bitsMessage || pc.fDebug) && pc.Component.testBits(pc.messagesFilter, bitsMessage)) {
+                    if ((pc.debugMode || !pc.autoStart) && !bitsMessage || (bitsMessage || pc.debug) && pc.Component.testBits(pc.messagesFilter, bitsMessage)) {
                         printf(s);
                     }
                 };
@@ -894,7 +895,7 @@ export default class PC extends PCJSLib {
     getDriveInfo()
     {
         let text = "\n";
-        if (this.fDebug && this.machine.id) {
+        if (this.debug && this.machine.id) {
             text += sprintf("%s machine ID %s\n", this.machine.type, this.machine.id);
         }
         let driveInfo = this.drives[this.driveBuild];
@@ -1073,7 +1074,7 @@ export default class PC extends PCJSLib {
                     driveCtrl = "COMPAQ";
                 }
             }
-            if (this.fFloppy) {
+            if (this.floppy) {
                 /*
                  * And even if we *can* crack open the config, our configs don't currently tell us the maximum diskette
                  * capacity, so we have to infer that as well.
@@ -1182,7 +1183,7 @@ export default class PC extends PCJSLib {
             }
 
             if (config['cpu']) {
-                if (pc.fHalt) {
+                if (pc.halt) {
                     config['cpu']['autoStart'] = 0;
                 }
                 pc.autoStart = config['cpu']['autoStart'];
@@ -1191,14 +1192,14 @@ export default class PC extends PCJSLib {
                 }
             }
 
-            if (config['debugger'] && pc.fHalt) {
+            if (config['debugger'] && pc.halt) {
                 let messages = configJSON['defaults'] && configJSON['defaults']['messages'];
                 if (messages) {
                     config['debugger']['messages'] = messages;
                 }
             }
 
-            pc.fHalt = false;
+            pc.halt = false;
 
             if (config['hdc']) {
                 let typeCtrl = config['hdc']['type'];
@@ -1229,7 +1230,7 @@ export default class PC extends PCJSLib {
                     * And even if we do have a drive type, findDriveType() should simply verify that the type is valid.
                     */
                     if (DiskInfo.findDriveType(driveInfo, (pc.kbTarget * 1024 / (driveInfo.cbSector || 512))|0, device)) {
-                        if (pc.fVerbose) {
+                        if (pc.verbose) {
                             printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
                         }
                     }
@@ -1265,16 +1266,16 @@ export default class PC extends PCJSLib {
             }
 
             if (config['fdc']) {
-                if (pc.bootSelect != 'A') {
+                if (pc.bootSelect[0] != 'A') {
                     config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
                 } else {
                     let disk, name;
                     let driveInfo = pc.drives[pc.driveBuild];
-                    if (pc.fFloppy) {
+                    if (pc.floppy) {
                         disk = driveInfo.localDisk;
                         name = (node.path.basename(pc.localDir).toUpperCase() || "User-defined") + " Diskette";
                     } else if (pc.localDir) {
-                        disk = pc.getSystemDisk();
+                        disk = pc.getSystemValue("disk");
                         name = pc.systemType.toUpperCase() + ' ' + sprintf("%.2f", parseFloat(pc.systemVersion));
                     }
                     if (disk) {
@@ -1515,66 +1516,63 @@ export default class PC extends PCJSLib {
     }
 
     /**
-     * getSystemDisk(type, version)
+     * getSystemValue(key, type, version)
      *
-     * If we don't recognized the system type (eg, "pcdos", "msdos"), or there is no version information,
-     * we return an empty string.  If we recognize the version, we return the name of the system diskette;
-     * otherwise, we return an array of available versions.
+     * For "disk" keys, if we don't recognized the system type (eg, "pcdos", "msdos"), or there is no version
+     * information, we return an empty string, and if we DO recognize the version, we return the name of the system
+     * diskette, else we return an array of available versions.
      *
      * @this {PC}
+     * @param {string} key
      * @param {string} [type]
      * @param {string} [version]
-     * @returns {string}
+     * @returns {string|Array.<string>|undefined}
      */
-    getSystemDisk(type = this.systemType, version = this.systemVersion)
+    getSystemValue(key, type = this.systemType, version = this.systemVersion)
     {
-        let sSystemDisk = "";
+        let value, versionInfo, verNumber;
         let system = configJSON['systems']?.[type];
         if (system && system.versions) {
-            let verNumber = sprintf("%.2f", +parseFloat(version));
-            let versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
-            if (versionInfo) {
+            verNumber = sprintf("%.2f", +parseFloat(version));
+            versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
+        }
+        if (versionInfo) {
+            if (key == "disk") {
                 let sSystemPath = "/diskettes/pcx86/sys/dos/" + system.vendor + "/" + verNumber + "/";
                 if (typeof versionInfo == "string") {
-                    sSystemDisk += sSystemPath + versionInfo + ".json";
+                    value = sSystemPath + versionInfo + ".json";
+                } else if (versionInfo[key]) {
+                    value = sSystemPath + versionInfo[key] + ".json";
                 } else {
-                    sSystemDisk = sSystemPath + versionInfo.disk + ".json";
+                    value = versionInfo['dir'] || "";
+                    /*
+                     * When a "dir" is specified in lieu of a "disk", we check for a leading '$', which signals
+                     * that this is a path to a repository alongside the pcjs repository.
+                     */
+                    if (value[0] == '$') {
+                        value = node.path.join(pcjsDir, "../../..", value.slice(1));
+                    }
+                    if (value && !value.endsWith("/")) value += "/";
                 }
             } else {
-                return Object.keys(system.versions);
-            }
-        }
-        return sSystemDisk;
-    }
-
-    /**
-     * getSystemFiles(type, version)
-     *
-     * @this {PC}
-     * @param {string} [type]
-     * @param {string} [version]
-     * @returns {Array.<string>}
-     */
-    getSystemFiles(type = this.systemType, version = this.systemVersion)
-    {
-        let aSystemFiles = [];
-        let system = configJSON['systems']?.[type];
-        if (system && system.versions) {
-            let verNumber = sprintf("%.2f", +parseFloat(version));
-            let versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
-            if (versionInfo) {
                 if (typeof versionInfo == "string") {
-                    aSystemFiles = system.files;
+                    value = system[key];
                 } else {
-                    aSystemFiles = versionInfo.files;
+                    value = versionInfo[key];
                 }
             }
+        } else {
+            if (key == "disk") {
+                value = system.versions? Object.keys(system.versions) : "";
+            } else {
+                value = [];
+            }
         }
-        return aSystemFiles;
+        return value;
     }
 
     /**
-     * buildDisk(sDir, sCommand, sLocalDisk, fLog)
+     * buildDisk(sDir, sCommand, sLocalDisk, log)
      *
      * Builds a bootable floppy or hard disk image containing all files in the current directory.
      *
@@ -1597,17 +1595,17 @@ export default class PC extends PCJSLib {
      * @param {string} sDir
      * @param {string} [sCommand] (eg, "COPY A:*.COM C:"; multiple commands can be separated by commas or semicolons)
      * @param {string} [sLocalDisk] (optional location for built disk image; default location is in the pc.js "disks" folder)
-     * @param {boolean} [fLog]
+     * @param {boolean} [log]
      * @returns {string} (error message, if any)
      */
-    async buildDisk(sDir, sCommand = "", sLocalDisk = "", fLog = false)
+    async buildDisk(sDir, sCommand = "", sLocalDisk = "", log = false)
     {
         let system = configJSON['systems']?.[this.systemType];
         if (!system) {
             return "unsupported system type: " + this.systemType;
         }
 
-        let sSystemDisk = this.getSystemDisk();
+        let sSystemDisk = this.getSystemValue("disk");
         if (!sSystemDisk) {
             return "unknown " + this.systemType + " version: " + this.systemVersion;
         } else if (typeof sSystemDisk != "string") {
@@ -1616,60 +1614,123 @@ export default class PC extends PCJSLib {
 
         let verDOS = +parseFloat(this.systemVersion);   // parseFloat() is forgiving of any non-numeric suffix, the "+" operator is not
         let verDOSMajor = verDOS | 0;
-        if (verDOSMajor < 2 && !this.fFloppy) {
+        if (verDOSMajor < 2 && !this.floppy) {
             return "DOS 2.0 or greater required (otherwise use --floppy)";
         }
 
-        let diSystem = await diskLib.readDiskAsync(sSystemDisk);
-        if (!diSystem) {
-            return "missing " + this.systemType + " system diskette: " + sSystemDisk;
-        }
+        let sSystemMBR, dbMBR;
+        let bootDrive = this.floppy? 0 : 0x80;
+        let bootLetter = this.floppy? 'A' : 'C';
 
-        let sSystemMBR = this.systemMBR;
-        if (sSystemMBR.indexOf(node.path.sep) < 0) {
-            sSystemMBR = node.path.join(pcjsDir, sSystemMBR);
+        if (!this.floppy) {
+            sSystemMBR = this.systemMBR;
+            if (sSystemMBR.indexOf(node.path.sep) < 0) {
+                sSystemMBR = node.path.join(pcjsDir, sSystemMBR);
+            }
+            dbMBR = await diskLib.readFileAsync(sSystemMBR, null);
+            if (!dbMBR || dbMBR.length < 512) {
+                return "invalid system MBR: " + sSystemMBR;
+            }
+            /*
+             * Normal boot sectors (both master and OS boot records) are one sector in size (eg, 512 bytes),
+             * but at one point, I was using the PCJS MBR as built, which was 32K bytes due to its ORG address.
+             * I've since chopped off those unused bytes, but this will also chop them off if need be.
+             */
+            if (dbMBR.length > 512) dbMBR = dbMBR.slice(dbMBR.length - 512);
         }
-
-        let dbMBR = await diskLib.readFileAsync(sSystemMBR, null);
-        if (!dbMBR || dbMBR.length < 512) {
-            return "invalid system MBR: " + sSystemMBR;
-        }
-        /*
-         * Normal boot sectors (both Master and OS Boot Records) are one sector in size (eg, 512 bytes),
-         * but at one point, I was using the PCJS MBR as built, which was 32K bytes due to its ORG address.
-         * I've since chopped off those unused bytes, but this will also chop them off if need be.
-         */
-        if (dbMBR.length > 512) dbMBR = dbMBR.slice(dbMBR.length - 512);
-
-        let bootDrive = this.fFloppy? 0x00 : 0x80;
-        let bootLetter = this.fFloppy? 'A' : 'C';
 
         let kbCapacity = this.kbTarget;
         let driveInfo = this.drives[this.driveBuild];
-        let bare = this.fBare;
-        /*
-         * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for any
-         * "helper binaries" we add to the disk image (and for COMMAND.COM itself).
-         */
-        let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
 
         driveInfo.files = [];
         driveInfo.disk = null;
         driveInfo.volume = null;
         driveInfo.verDOS = verDOS;
         driveInfo.bootDrive = bootDrive;
-        driveInfo.partitioned = !this.fFloppy;
+        driveInfo.partitioned = !this.floppy;
 
-        let aSystemFiles = this.getSystemFiles();
-        for (let name of aSystemFiles) {
-            let desc = diSystem.findFile(name);
-            if (desc) {
-                desc.attr = +desc.attr;
-                desc.attr |= attrHidden;
-                driveInfo.files.push(desc);
-            } else {
-                return "missing system file: " + name;
+        let diSystem;
+        if (!sSystemDisk.endsWith("/")) {
+            diSystem = await diskLib.readDiskAsync(sSystemDisk);
+            if (!diSystem) {
+                return "missing " + this.systemType + " system diskette: " + sSystemDisk;
             }
+        }
+
+        /*
+         * Load the boot sector from the system diskette we just read, and use it to update the boot
+         * sector on the disk image.
+         *
+         * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register to
+         * contain the boot drive # (0x00 for floppy drive, 0x80 for hard drive), even though the BIOS
+         * passes that information to the master boot record (MBR) and the DOS MBR preserves and passes
+         * it on to the boot sector.  And perhaps the key point is "DOS MBR", because DOS also had to
+         * work with third-party MBRs, some of which may have trashed DL.
+         */
+        let dbBoot, dbExtra, verBPB = 0;
+        if (diSystem) {
+            dbBoot = diskLib.getDiskSector(diSystem, 0);
+            if (this.bootSector) {
+                /*
+                * Load alternate boot sector from the specified file; if it fails, we'll stick with the
+                * boot sector from the system diskette we already loaded.
+                */
+                let sBootSector = this.bootSector;
+                let db = await diskLib.readFileAsync(sBootSector, null);
+                if (db) {
+                    dbBoot = db;
+                }
+            }
+        } else {
+            let sSystemBoot = node.path.join(sSystemDisk, this.getSystemValue("boot"));
+            dbBoot = await diskLib.readFileAsync(sSystemBoot, null);
+            if (!dbBoot || dbBoot.length < 512) {
+                return "invalid system boot file: " + sSystemBoot;
+            }
+            let bootOffset = this.getSystemValue("bootOffset");
+            if (bootOffset) {
+                let extraOffset = this.getSystemValue("extraOffset");
+                if (extraOffset) {
+                    dbExtra = dbBoot.slice(extraOffset);
+                }
+                dbBoot = dbBoot.slice(bootOffset, bootOffset + 512);
+            }
+        }
+
+        /*
+         * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for any
+         * "helper binaries" we add to the disk image (and for COMMAND.COM itself).
+         */
+        let aSystemFiles = this.getSystemValue("files");
+        let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
+        for (let name of aSystemFiles) {
+            let desc, data, attr;
+            if (!diSystem) {
+                name = node.path.join(sSystemDisk, name);
+                let dbFile = await diskLib.readFileAsync(name, null);
+                if (dbFile) {
+                    if (dbExtra) {
+                        let dbCombined = new DataBuffer(dbExtra.length + dbFile.length);
+                        dbExtra.copy(dbCombined, 0);
+                        dbFile.copy(dbCombined, dbExtra.length);
+                        dbFile = dbCombined;
+                        dbExtra = null;
+                    }
+                    attr = DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
+                    desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr);
+                    driveInfo.files.push(desc);
+                    continue;
+                }
+            } else {
+                desc = diSystem.findFile(name);
+                if (desc) {
+                    desc.attr = +desc.attr;
+                    desc.attr |= attrHidden;
+                    driveInfo.files.push(desc);
+                    continue;
+                }
+            }
+            return "missing system file: " + name;
         }
 
         /*
@@ -1677,7 +1738,7 @@ export default class PC extends PCJSLib {
          * immediately exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it,
          * determine if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
          */
-        if (!bare) {
+        if (!this.bare) {
             driveInfo.files.push(diskLib.makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
         }
 
@@ -1686,7 +1747,7 @@ export default class PC extends PCJSLib {
          * machine. Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDisk()
          * to look for any changes and then terminate the machine.
          */
-        if (!bare) {
+        if (!this.bare) {
             driveInfo.files.push(diskLib.makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
         }
 
@@ -1698,14 +1759,14 @@ export default class PC extends PCJSLib {
          *
          * NOTE: When I say these binaries will be hidden, well, that depends on the attrHidden setting (see above).
          */
-        if (!bare) {
+        if (!this.bare) {
             let apps = configJSON['apps'] || {};
             let appNames = Object.keys(apps);
             for (let appName of appNames) {
                 if (appName[0] == '.') continue;
                 let appFile = appName.toUpperCase() + ".COM";
                 let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53];
-                if (this.fFloppy) appContents[3] = 0x01;
+                if (this.floppy) appContents[3] = 0x01;
                 appContents.push(appName.length);
                 for (let j = 0; j < appName.length; j++) {
                     appContents.push(appName.charCodeAt(j));
@@ -1747,7 +1808,7 @@ export default class PC extends PCJSLib {
                 data += command + "\n";
             }
         }
-        if (this.fTest) {
+        if (this.test) {
             data += "quit\n";
         }
         if (this.machineDir) data += "CD " + this.machineDir + "\n";
@@ -1759,21 +1820,9 @@ export default class PC extends PCJSLib {
             driveInfo.files.push(diskLib.makeFileDesc(sDir, "AUTOEXEC.BAT", dataNew, attr));
         }
 
-        /*
-         * Load the boot sector from the system diskette we read above, and use it to update the boot
-         * sector on the disk image.
-         *
-         * NOTE: It seems that many (if not all) DOS boot sectors did NOT rely on the DL register to
-         * contain the boot drive # (0x00 for floppy drive, 0x80 for hard drive), even though the BIOS
-         * passes that information to the master boot record (MBR) and the DOS MBR preserves and passes
-         * it on to the boot sector.  And perhaps the key point is "DOS MBR", because DOS also had to
-         * work with third-party MBRs, some of which may have trashed DL.
-         */
-        let verBPB = 0;
-        let dbBoot = diskLib.getDiskSector(diSystem, 0);
         if (verDOS < 2.0) {
             /*
-             * So to get this far, fFloppy had to be true, so in addition to setting the correct
+             * So to get this far, floppy had to be true, so in addition to setting the correct
              * BPB version, we should also set kbCapacity to 160 for 1.0 or 320 for 1.1.
              */
             verBPB = 1;
@@ -1808,12 +1857,12 @@ export default class PC extends PCJSLib {
         }
         else if (verDOS >= 2.0 && verDOS < 3.2) {
             verBPB = 2;
-            if (this.fFloppy) {
+            if (this.floppy) {
                 kbCapacity ||= 360;
             }
         }
         else {
-            if (this.fFloppy) {
+            if (this.floppy) {
                 kbCapacity ||= (verDOS < 3.3? 720 : 1440);
             }
             if (verDOS >= 3.2 && verDOS < 4.0) {
@@ -1843,9 +1892,11 @@ export default class PC extends PCJSLib {
                 if (di.volTable[0] && di.volTable[0].iPartition >= 0) {
                     /*
                      * Since the disk is partitioned, we need to update the Master Boot Record (MBR),
-                     * hence the special volume number (-1).  However, if the MBR is ours AND a custom
-                     * geometry has been specified, then we need to use an *extra* special volume number
-                     * (-2) to ensure that our MBR's drive parameter table is updated, too.
+                     * hence the special volume number (-1).
+                     *
+                     * In addition, if the MBR is ours AND a custom geometry has been specified, then
+                     * we need to pass a second parameter (iDriveTable) to ensure that the appropriate
+                     * MBR drive parameter table is updated, too; otherwise, pass -1.
                      *
                      * NOTE: I used to update the MBR drive parameter table ONLY when driveCtrl is "PCJS",
                      * but it's also needed for "COMPAQ" configurations.  For example:
@@ -1864,11 +1915,15 @@ export default class PC extends PCJSLib {
                      *          pc.savedState = "";
                      *      }
                      */
-                    let iDriveTable = -1;
-                    if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && (driveInfo.driveCtrl == "PCJS" || driveInfo.driveType != 1)) {
-                        iDriveTable = driveInfo.driveNumber;
+                    if (dbMBR) {
+                        let iDriveTable = -1;
+                        if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && (driveInfo.driveCtrl == "PCJS" || driveInfo.driveType != 1)) {
+                            iDriveTable = driveInfo.driveNumber;
+                        }
+                        di.updateBootSector(dbMBR, -1, iDriveTable);
+                    } else {
+                        printf("warning: missing MBR for partitioned disk\n");
                     }
-                    di.updateBootSector(dbMBR, -1, iDriveTable);
                 }
                 /*
                  * Now update the volume boot record (VBR) for the boot drive; for that, the volume number
@@ -1880,12 +1935,17 @@ export default class PC extends PCJSLib {
                  * (preferably JSON, since that tells us more about the disk, its layout, and its contents) because
                  * currently that's the only way to to pass a disk image to the HDC component.
                  */
-                if (!sLocalDisk) {
-                    driveInfo.localDisk = driveInfo.localDisk.replace(node.path.basename(driveInfo.localDisk), di.getName() + ".json");
+                if (sLocalDisk) {
+                    driveInfo.localDisk = sLocalDisk;
                 } else {
-                    driveInfo.localDisk = sLocalDisk.indexOf(node.path.sep) < 0? node.path.join(pcjsDir, "disks", sLocalDisk) : sLocalDisk;
+                    driveInfo.localDisk = driveInfo.localDisk.replace(node.path.basename(driveInfo.localDisk), (pc.getSystemValue("target") || di.getName()) + ".json");
                 }
-                if (sLocalDisk || fLog) printf("building drive: %s\n", driveInfo.localDisk);
+                if (driveInfo.localDisk.indexOf(node.path.sep) < 0) {
+                    driveInfo.localDisk = node.path.join(pcjsDir, "disks", driveInfo.localDisk);
+                }
+                if (sLocalDisk || log) {
+                    printf("building drive: %s\n", driveInfo.localDisk);
+                }
                 if (diskLib.writeDiskSync(driveInfo.localDisk, di, false, 0, true, true)) {
                     pc.updateDriveInfo(di);
                     /*
@@ -1902,9 +1962,10 @@ export default class PC extends PCJSLib {
         };
 
         if (!sDir.endsWith('/')) sDir += '/';
-        if (fLog) printf("reading files: %s\n", sDir);
-
-        diskLib.readDir(sDir, 0, 0, this.diskLabel == "."? node.path.basename(sDir) : this.diskLabel, null, this.fNormalize, kbCapacity, this.maxFiles, false, driveInfo, done);
+        if (log) {
+            printf("reading files: %s\n", sDir);
+        }
+        diskLib.readDir(sDir, 0, 0, this.diskLabel == "."? node.path.basename(sDir) : this.diskLabel, null, this.normalize, kbCapacity, this.maxFiles, false, driveInfo, done);
 
         return driveInfo.driveManifest? "" : "unable to build drive";
     }
@@ -2035,7 +2096,7 @@ export default class PC extends PCJSLib {
     {
         let driveInfo = this.drives[this.driveBuild];
         if (di.getDriveType(driveInfo)) {
-            if (this.fVerbose) {
+            if (this.verbose) {
                 printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
             }
         }
@@ -2054,7 +2115,7 @@ export default class PC extends PCJSLib {
             }
             driveInfo.partitioned = (volume.lbaStart > 0);      // alternatively, check for volume.iPartition !== undefined
             if (!driveInfo.partitioned) {
-                this.fFloppy = true;                            // if a non-partitioned disk was loaded, that's an implicit floppy boot
+                this.floppy = true;                             // if a non-partitioned disk was loaded, that's an implicit floppy boot
                 this.bootSelect = 'A';
             }
         }
@@ -2121,7 +2182,7 @@ export default class PC extends PCJSLib {
                 iDrive -= 2;
             }
         } else {
-            controller = this.fFloppy? this.machine.fdc : this.machine.hdc;
+            controller = this.floppy? this.machine.fdc : this.machine.hdc;
         }
         let imageData = controller && controller.aDrives && controller.aDrives.length && controller.aDrives[iDrive].disk;
         if (imageData) {
@@ -2163,11 +2224,11 @@ export default class PC extends PCJSLib {
                             newItemName = newItem.path.slice(i + 1);
                             if (!curMappings[newItemDir]) {
                                 newItemPath = node.path.join(sDir, newItem.path);
-                                if (this.fDebug) printf("joining: %s => %s\n", newItem.path, newItemPath);
+                                if (this.debug) printf("joining: %s => %s\n", newItem.path, newItemPath);
                             } else {
                                 newItemPath = node.path.join(curMappings[newItemDir], newItemName);
                                 if (newItemDir == "/") newItemDir = "";
-                                if (this.fDebug) printf("mapping: %s/%s => %s\n", newItemDir, newItemName, newItemPath);
+                                if (this.debug) printf("mapping: %s/%s => %s\n", newItemDir, newItemName, newItemPath);
                             }
                             if ((newAttr & DiskInfo.ATTR.SUBDIR) && !curMappings[newItem.path]) {
                                 curMappings[newItem.path] = newItemPath;
@@ -2182,13 +2243,13 @@ export default class PC extends PCJSLib {
                                  */
                                 if (!compareContents(oldItem, newItem)) {
                                     let db = newItem.contents;
-                                    if (this.fDebug) printf("updating: %s\n", newItemPath);
-                                    if (this.fNormalize && diskLib.isTextFile(newItemPath)) {
+                                    if (this.debug) printf("updating: %s\n", newItemPath);
+                                    if (this.normalize && diskLib.isTextFile(newItemPath)) {
                                         db = diskLib.normalizeTextFile(new DataBuffer(db));
                                     }
                                     diskLib.writeFileSync(newItemPath, db, false, true);
                                 } else {
-                                    // if (this.fDebug) printf("skipping: %s\n", newItemPath);
+                                    // if (this.debug) printf("skipping: %s\n", newItemPath);
                                 }
                             } else {
                                 /*
@@ -2226,7 +2287,7 @@ export default class PC extends PCJSLib {
                                 if (oldAttr & DiskInfo.ATTR.SUBDIR) {
                                     removedDirs.push(oldItemPath);
                                 } else {
-                                    if (this.fDebug) printf("removing: %s\n", oldItemPath);
+                                    if (this.debug) printf("removing: %s\n", oldItemPath);
                                     try {
                                         node.fs.unlinkSync(oldItemPath);
                                     } catch(err) {
@@ -2236,13 +2297,13 @@ export default class PC extends PCJSLib {
                             }
                             iOld++;
                         } else {
-                            if (this.fDebug) printf("creating: %s\n", newItemPath);
+                            if (this.debug) printf("creating: %s\n", newItemPath);
                             try {
                                 if (newAttr & DiskInfo.ATTR.SUBDIR) {
                                     node.fs.mkdirSync(newItemPath);
                                 } else {
                                     let db = newItem.contents;
-                                    if (this.fNormalize && diskLib.isTextFile(newItemPath)) {
+                                    if (this.normalize && diskLib.isTextFile(newItemPath)) {
                                         db = diskLib.normalizeTextFile(new DataBuffer(db));
                                     }
                                     diskLib.writeFileSync(newItemPath, db, true, false);
@@ -2259,7 +2320,7 @@ export default class PC extends PCJSLib {
                     }
                     while (removedDirs.length) {
                         let dir = removedDirs.pop();
-                        if (this.fDebug) printf("removing: %s\n", dir);
+                        if (this.debug) printf("removing: %s\n", dir);
                         try {
                             node.fs.rmdirSync(dir);
                         } catch(err) {
@@ -2371,7 +2432,7 @@ export default class PC extends PCJSLib {
                              * because there is no longer a connection between that disk drive and your local files.  That's one
                              * of the downsides of removable media.
                              */
-                            if (pc.fFloppy && !iDrive) pc.drives[0].driveManifest = null;
+                            if (pc.floppy && !iDrive) pc.drives[0].driveManifest = null;
                         }
                     }
                 };
@@ -2525,7 +2586,7 @@ export default class PC extends PCJSLib {
                         let matches = [];
                         try {
                             let pattern = parts.join('.*');
-                            if (pc.fDebug) printf("searching for \"%s\"...\n", pattern);
+                            if (pc.debug) printf("searching for \"%s\"...\n", pattern);
                             let re = new RegExp(pattern, 'i'), reDisk;
                             if (diskNameParts.length) {
                                 reDisk = new RegExp(diskNameParts.join('.*'), 'i');
@@ -2896,7 +2957,7 @@ export default class PC extends PCJSLib {
      * because there's no other way to easily examine the contents of PCFS, other than dumping the contents
      * of "globals.pcjs.files" with a debugger.
      *
-     * These commands should also work fine when running pc.s with Node, but in that case, you'll probably
+     * These commands should also work fine when running pc.js with Node, but in that case, you'll probably
      * prefer real *nix commands, either with DOS commands (eg, "ls -l") that have been mapped to external commands
      * via "exec", or with the internal "exec" command directly (eg, "exec ls -l"), or another terminal window.
      *
@@ -2979,7 +3040,7 @@ export default class PC extends PCJSLib {
                 match = null;
             } else {
                 this.kbTarget = 0;
-                if (!this.fFloppy) {
+                if (!this.floppy) {
                     driveInfo.driveCtrl = "PCJS";      // pseudo drive controller used for custom drive geometries
                 }
                 driveInfo.driveType = 0;
@@ -2995,7 +3056,7 @@ export default class PC extends PCJSLib {
                 }
                 driveInfo.driveOverride = true;
             }
-        } else if (!this.fFloppy) {
+        } else if (!this.floppy) {
             match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i);
             if (match) {
                 let driveCtrl = match[1] || driveInfo.driveCtrl;
@@ -3030,16 +3091,16 @@ export default class PC extends PCJSLib {
      */
     async checkArgs(argv)
     {
-        this.fDebug = PC.removeFlag(argv, 'debug', this.fDebug);
-        this.fVerbose = PC.removeFlag(argv, 'verbose', this.fVerbose);
-        this.fTest = PC.removeFlag(argv, 'test', this.fTest);
+        this.debug = PC.removeFlag(argv, 'debug', this.debug);
+        this.verbose = PC.removeFlag(argv, 'verbose', this.verbose);
+        this.test = PC.removeFlag(argv, 'test', this.test);
 
-        Device.setDebug(this.fDebug);
-        device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR + (this.fDebug && this.fVerbose? MESSAGE.DEBUG : 0) + (this.fVerbose? MESSAGE.INFO : 0), true);
-        this.messagesFilter = this.fDebug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
+        Device.setDebug(this.debug);
+        device.setMessages(MESSAGE.DISK + MESSAGE.WARNING + MESSAGE.ERROR + (this.debug && this.verbose? MESSAGE.DEBUG : 0) + (this.verbose? MESSAGE.INFO : 0), true);
+        this.messagesFilter = this.debug? MESSAGE.ALL + MESSAGE.TYPES + MESSAGE.ADDR : MESSAGE.ALERTS;
 
         let args = argv[0].split(' ');
-        if (!argv[1] || this.fDebug || this.fTest || globals.browser) {
+        if (!argv[1] || this.debug || this.test || globals.browser) {
             let options = args.slice(1).join(' ');
             printf("pc.js v%s\n%s\n%s", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s\n", options) : ""));
         }
@@ -3091,10 +3152,10 @@ export default class PC extends PCJSLib {
 
         let driveInfo = this.newDrive(this.driveBuild);
 
-        this.fBare = PC.removeFlag(argv, 'bare', this.fBare);
-        this.fFloppy = PC.removeFlag(argv, 'floppy', this.fFloppy);
+        this.bare = PC.removeFlag(argv, 'bare', this.bare);
+        this.floppy = PC.removeFlag(argv, 'floppy', this.floppy);
         this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);
-        this.fNormalize = PC.removeFlag(argv, 'normalize', defaults['normalize'] || this.fNormalize);
+        this.normalize = PC.removeFlag(argv, 'normalize', defaults['normalize'] || this.normalize);
         this.systemType = PC.removeArg(argv, ['system','sys'], defaults['sys'] || this.systemType).toLowerCase();
 
         let i = this.systemType.indexOf(':');
@@ -3113,15 +3174,15 @@ export default class PC extends PCJSLib {
         this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || this.maxFiles);
 
         if ([160, 180, 320, 360, 720, 1200, 1440, 2880].indexOf(this.kbTarget) >= 0) {
-            this.fFloppy = true;
-        } else if (this.fFloppy) {
+            this.floppy = true;
+        } else if (this.floppy) {
             this.kbTarget = this.maxFiles = 0;
         }
 
         /*
          * When using --floppy, certain other options are disallowed (eg, drivectrl).
          */
-        if (this.fFloppy) {
+        if (this.floppy) {
             this.savedState = "";
             driveInfo.driveCtrl = "FDC";
             driveInfo.driveOverride = true;
@@ -3177,8 +3238,16 @@ export default class PC extends PCJSLib {
             defaults = {};
             checkRemaining = true;
         }
-        this.fHalt = PC.removeFlag(argv, 'halt', this.fHalt);
-        this.bootSelect = PC.removeArg(argv, 'boot', defaults['boot'] || this.bootSelect).toUpperCase();
+        this.halt = PC.removeFlag(argv, 'halt', this.halt);
+        /*
+         * --boot can now be used to EITHER select the boot drive OR specify a custom boot sector.
+         */
+        let boot = PC.removeArg(argv, 'boot', defaults['boot'] || this.bootSelect);
+        if (boot.length <= 1 || boot.length == 2 && boot[1] == ':') {
+            this.bootSelect = boot.toUpperCase();
+        } else {
+            this.bootSector = boot;
+        }
         if (checkRemaining) {
             this.checkRemainingArgs(argv);
         }
@@ -3266,9 +3335,8 @@ export default class PC extends PCJSLib {
         }
 
         if (sDisk) {
-            if (sDisk.toLowerCase() == "none") {    // --disk=none disables any prebuilt disk
-                this.localDisk = "";
-                this.savedState = "";
+            if (sDisk == "none") {                  // --disk=none disables any prebuilt disk
+                this.localDisk = this.savedState = "";
             } else {
                 if (sDisk.indexOf(node.path.sep) < 0 && !diskLib.existsFile(sDisk, false)) {
                     sDisk = node.path.join(pcjsDir, "disks", sDisk);
@@ -3306,13 +3374,12 @@ export default class PC extends PCJSLib {
         else if (globals.browser) {
             this.localDisk = diskLib.getLocalPath(this.localDisk);
         } else {
-            this.localDisk = node.path.join(pcjsDir, this.localDisk);
+            this.localDisk = node.path.join(pcjsDir, "disks", this.localDisk);
         }
 
         if (sDirectory == "none" || this.localDir == "none") {
-            this.localDir = "";                     // --dir=none is synonymous with --disk=none
-            this.localDisk = "";
-            this.savedState = "";
+            sDirectory = "";                        // --dir=none is synonymous with --disk=none
+            this.localDir = this.localDisk = this.savedState = "";
         }
 
         let sDir = "";
@@ -3359,7 +3426,7 @@ export default class PC extends PCJSLib {
                      * user wanted us to do.  We'll also the display drive info if --test was specified.
                      */
                     if (!error && sLocalDisk) {
-                        if (this.fTest) printf(this.getDriveInfo());
+                        if (this.test) printf(this.getDriveInfo());
                         this.exit(0);
                     }
                 }
@@ -3518,7 +3585,7 @@ export default class PC extends PCJSLib {
         }
         node.process.stdin.setRawMode(false);
         if (code) printf("shutting down (%d)\n", code);
-        if (this.fTest) printf("\n");
+        if (this.test) printf("\n");
         node.process.exit(code);
     }
 
@@ -3548,7 +3615,7 @@ export default class PC extends PCJSLib {
                 "--hidden=[number]":        "set hidden sectors (default is 1)",
                 "--label=[string]":         "set volume label of disk image",
                 "--maxfiles=[number]":      "set maximum local files (default is " + this.maxFiles + ")",
-                "--normalize=[boolean]":    "convert text file encoding (default is " + this.fNormalize + ")",
+                "--normalize=[boolean]":    "convert text file encoding (default is " + this.normalize + ")",
                 "--save=[filename]":        "save drive disk image and exit",
                 "--system=[string]":        "set operating system type (default is " + this.systemType + ")",
                 "--target=[nK|nM]":         "set target disk size (default is " + ((this.kbTarget / 1024)|0) + "M)",

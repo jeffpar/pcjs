@@ -37,6 +37,7 @@ Some disks from this collection include:
   - [The Norton Utilities 4.00 (Standard Edition)](/software/pcx86/util/norton/4.00/)
   - [The Norton Utilities 4.00 (Advanced Edition)](/software/pcx86/util/norton/4.00/advanced/)
   - [Early OS/2 Prototypes](/software/pcx86/sys/os2/misc/) (eg, CP-DOS and FOOTBALL)
+  - [Early WOW Development Files/Notes](#early-wow-development-filesnotes)
 
 You can probably find most or all of these disks on other software sites now, just as software from many other sites has found its way here, thanks to the continuous motion of bits on the Internet.
 
@@ -166,3 +167,130 @@ configured as the activation key sequence. *--[Jeff]({{ site.author_url }})*
     IBMBIO   COM     16369  12-30-85  12:00p
            28 file(s)     303245 bytes
                            47104 bytes free
+
+## Early WOW Development Files/Notes
+
+[![Win16 Apps on Win32 (WOW)](files/Windows_16_Apps_on_Win32_WOW.jpg)](files/Windows_16_Apps_on_Win32_WOW.pdf)
+
+### Directory of WOW Reversi MIPS Demo (Disk 1)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    NT       ZIP   1128366   4-04-91   5:34p
+    DEBUG    CMD       111   3-29-91   8:55a
+    PKZIP    EXE     31342   7-21-89   1:01a
+    PKUNZIP  EXE     21440   7-21-89   1:01a
+            4 file(s)    1181259 bytes
+
+     Directory of A:\NT.ZIP
+
+    KD       EXE    218334   3-09-91  12:30a
+    MIPSKD   EXE    218934   3-29-91   6:32p
+    NTOS2    CFG      6251   4-03-91   9:53p
+    NTOSKRNL EXE   2096041   4-01-91   7:55p
+    SMSS     EXE     42496   4-01-91   7:55p
+            5 file(s)    2582056 bytes
+
+    Total files listed:
+            9 file(s)    3763315 bytes
+                           31744 bytes free
+
+### Directory of WOW Reversi MIPS Demo (Disk 2)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    NTBIN    ZIP    267010   4-04-91   5:50p
+    NTBIN86  ZIP    478904   4-04-91   5:51p
+    NTSUBSYS ZIP      9871   4-04-91   5:53p
+    NTWIN    ZIP     48398   4-04-91   5:54p
+            4 file(s)     804183 bytes
+
+     Directory of A:\NTBIN.ZIP
+
+    CMD      EXE    158720   4-02-91  11:39p
+    MAZE     EXE     11776   4-01-91  11:00p
+    PLGBLT   EXE     14336   4-03-91   1:20a
+    TESTIT   EXE     95744   4-03-91  12:49a
+    X86      EXE    382464   4-04-91   8:36p
+            5 file(s)     663040 bytes
+
+     Directory of A:\NTBIN86.ZIP
+
+    DOS500   DSK    368648  12-21-90   7:05p
+    REVERSI  HOT    657448   1-01-85   8:03a
+    WOW      DSK    368648   3-21-91   5:56p
+            3 file(s)    1394744 bytes
+
+     Directory of A:\NTSUBSYS.ZIP
+
+    CSRSS    EXE      5120   4-01-91   7:55p
+    DBGSS    EXE     19968   4-01-91   7:55p
+            2 file(s)      25088 bytes
+
+     Directory of A:\NTWIN.ZIP\FONTS
+
+    COURE08  FNT      3968   2-20-91  10:24p
+    COURE10  FNT      8246   2-20-91  10:24p
+    COURE12  FNT     10050   2-20-91  10:24p
+    HELVE08  FNT      4043   2-20-91  10:24p
+    HELVE10  FNT      5523   2-20-91  10:24p
+    HELVE12  FNT      8107   2-20-91  10:24p
+    HELVE14  FNT      9979   2-20-91  10:24p
+    HELVE18  FNT     12859   2-20-91  10:24p
+    HELVE24  FNT     22487   2-20-91  10:24p
+    TMSRE08  FNT      4016   2-20-91  10:24p
+    TMSRE10  FNT      5426   2-20-91  10:24p
+    TMSRE12  FNT      6650   2-20-91  10:24p
+    TMSRE14  FNT      8691   2-20-91  10:24p
+    TMSRE18  FNT     12150   2-20-91  10:24p
+    TMSRE24  FNT     19296   2-20-91  10:24p
+    VGASYS   FNT      5461   3-01-91   3:36a
+           16 file(s)     146952 bytes
+
+     Directory of A:\NTWIN.ZIP
+
+    WIN      INI      3670   4-03-91   9:57p
+            1 file(s)       3670 bytes
+
+    Total files listed:
+           31 file(s)    3037677 bytes
+                          408576 bytes free
+
+### Directory of WOW Reversi MIPS Demo (Disk 3)
+
+     Volume in drive A has no label
+     Directory of A:\
+    
+    NTDLL    ZIP    717080   4-04-91   5:52p
+            1 file(s)     717080 bytes
+    
+     Directory of A:\NTDLL.ZIP
+    
+    BASE     DLL    103424   4-01-91   8:32p
+    BASERTL  DLL      6656   4-01-91   8:32p
+    BASESRV  DLL     24576   4-01-91   8:32p
+    BMFD     DLL     28160   4-02-91   4:52a
+    CONSOLE  DLL     24576   4-02-91   6:49p
+    CONSRV   DLL    105984   4-02-91   6:49p
+    CSR      DLL     15872   4-01-91   7:55p
+    CSRRTL   DLL      2560   4-01-91   7:55p
+    CSRSRV   DLL     38912   4-01-91   7:55p
+    DBGDLL   DLL     10240   4-01-91   7:56p
+    GDI      DLL     13312   4-02-91   4:52a
+    GDISRV   DLL     13824   4-02-91   4:52a
+    GRE      DLL    332288   4-03-91   6:57a
+    JAZZ     DLL     25600   4-03-91   6:00a
+    NETAPI   DLL     91136   4-01-91   7:56p
+    NTDLL    DLL    180224   4-02-91   6:25p
+    SERVICES DLL     61440   4-02-91   4:52a
+    USER     DLL    118272   4-03-91  11:39p
+    USERRTL  DLL     15872   4-03-91   9:45p
+    USERSRV  DLL    425472   4-03-91  11:27p
+    WINNET   DLL     14848   4-01-91   8:33p
+           21 file(s)    1653248 bytes
+    
+    Total files listed:
+           22 file(s)    2370328 bytes
+                          496640 bytes free

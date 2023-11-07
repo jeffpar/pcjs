@@ -189,7 +189,8 @@ let node = {
         },
         resolve: function(s) {
             return node.FileLib.getLocalPath(s);
-        }
+        },
+        sep: '/'
     },
     process: globals.node.process || {
         argv: function(url, parms) {
