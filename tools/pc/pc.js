@@ -1674,7 +1674,7 @@ export default class PC extends PCJSLib {
          * it on to the boot sector.  And perhaps the key point is "DOS MBR", because DOS also had to
          * work with third-party MBRs, some of which may have trashed DL.
          */
-        let dbBoot, dbExtra, verBPB = 0;
+        let dbBoot, dbBoot2, verBPB = 0;
         if (diSystem) {
             dbBoot = diskLib.getDiskSector(diSystem, 0);
             if (this.bootSector) {
@@ -1684,9 +1684,7 @@ export default class PC extends PCJSLib {
                 */
                 let sBootSector = this.bootSector;
                 let db = await diskLib.readFileAsync(sBootSector, null);
-                if (db) {
-                    dbBoot = db;
-                }
+                if (db) dbBoot = db;
             }
         } else {
             let sSystemBoot = node.path.join(sSystemDisk, this.getSystemValue("boot"));
@@ -1694,13 +1692,17 @@ export default class PC extends PCJSLib {
             if (!dbBoot || dbBoot.length < 512) {
                 return "invalid system boot file: " + sSystemBoot;
             }
-            let bootOffset = this.getSystemValue("bootOffset");
-            if (bootOffset) {
-                let extraOffset = this.getSystemValue("extraOffset");
-                if (extraOffset) {
-                    dbExtra = dbBoot.slice(extraOffset);
+            let boot1Offset = this.getSystemValue("boot1Offset");
+            if (boot1Offset) {
+                let boot2Offset = this.getSystemValue("boot2Offset");
+                if (boot2Offset) {
+                    dbBoot2 = dbBoot.slice(boot2Offset);
                 }
-                dbBoot = dbBoot.slice(bootOffset, bootOffset + 512);
+                if (dbBoot.length >= boot1Offset + 512) {
+                    dbBoot = dbBoot.slice(boot1Offset, boot1Offset + 512);
+                } else {
+                    printf("warning: boot sector (%#0x) too small to slice at %#0x\n", dbBoot.length, boot1Offset);
+                }
             }
         }
 
@@ -1716,12 +1718,12 @@ export default class PC extends PCJSLib {
                 name = node.path.join(sSystemDisk, name);
                 let dbFile = await diskLib.readFileAsync(name, null);
                 if (dbFile) {
-                    if (dbExtra) {
-                        let dbCombined = new DataBuffer(dbExtra.length + dbFile.length);
-                        dbExtra.copy(dbCombined, 0);
-                        dbFile.copy(dbCombined, dbExtra.length);
+                    if (dbBoot2 && dbBoot2.length) {
+                        let dbCombined = new DataBuffer(dbBoot2.length + dbFile.length);
+                        dbBoot2.copy(dbCombined, 0);
+                        dbFile.copy(dbCombined, dbBoot2.length);
                         dbFile = dbCombined;
-                        dbExtra = null;
+                        dbBoot2 = null;
                     }
                     attr = DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
                     desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr);

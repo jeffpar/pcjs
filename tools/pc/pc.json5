@@ -29,8 +29,8 @@
         "2.00A": {              // BASIC-DOS 2.00 currently requires the "v2" branch (until/unless it's merged into "master")
           "dir": "$basicdos/software/pcx86/src",
           "boot": "bd/boot/OBJ/BOOT.COM",
-          "bootOffset": 0x550,
-          "extraOffset": 0x760,
+          "boot1Offset": 0x550, // offset of ORG'ed boot code in BOOT.COM (alternatively, use BOOT1.COM)
+          "boot2Offset": 0,     // use 0x760 if IBMBIO.COM does NOT already contain boot code from BOOT2.COM)
           "files": [
             "bd/dev/OBJ/IBMBIO.COM",
             "bd/dos/OBJ/IBMDOS.COM",
