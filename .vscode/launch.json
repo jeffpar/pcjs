@@ -541,14 +541,36 @@
       }
     },
     {
-      "name": "PC.js for BASIC-DOS",
+      "name": "PC.js BASIC-DOS build",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--disk=tools.json",
+        "--dir=$basicdos/software/pcx86/src",
+        "--normalize"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "PC.js BASIC-DOS boot",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5160",
         "--floppy",
-        "--system=bd:2.00A",
+        "--system=bd:2A",
         "--dir=disks/empty"
       ],
       "cwd": "${workspaceFolder}/tools/pc",

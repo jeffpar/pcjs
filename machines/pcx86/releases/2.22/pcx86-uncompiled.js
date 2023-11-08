@@ -73056,14 +73056,15 @@ class DbgLib extends Component {
     }
 
     /**
-     * notifyEvent(nEvent)
+     * notifyEvent(nEvent, dataEvent)
      *
      * @param {number} nEvent (see DbgLib.EVENTS)
+     * @param {number} [dataEvent] (optional data for event)
      */
-    notifyEvent(nEvent)
+    notifyEvent(nEvent, dataEvent)
     {
         for (let i = 0; i < this.afnNotify.length; i++) {
-            this.afnNotify[i](nEvent);
+            this.afnNotify[i](nEvent, dataEvent);
         }
     }
 }
@@ -76070,11 +76071,13 @@ class DebuggerX86 extends DbgLib {
      */
     start(ms, nCycles)
     {
-        if (!this.nStep) this.printf("running\n");
         this.flags.running = true;
         this.msStart = ms;
         this.nCyclesStart = nCycles;
-        this.notifyEvent(DbgLib.EVENTS.EXIT);
+        if (!this.nStep) {
+            this.printf("running\n");
+        }
+        this.notifyEvent(DbgLib.EVENTS.EXIT, this.nStep);
     }
 
     /**
@@ -76089,10 +76092,11 @@ class DebuggerX86 extends DbgLib {
     stop(ms, nCycles)
     {
         if (this.flags.running) {
+            let nStep = this.nStep;
             this.flags.running = false;
             this.nCycles = nCycles - this.nCyclesStart;
-            this.notifyEvent(DbgLib.EVENTS.ENTER);
-            if (!this.nStep) {
+            this.notifyEvent(DbgLib.EVENTS.ENTER, nStep);
+            if (!nStep) {
                 let sStopped = "stopped";
                 if (this.nCycles) {
                     let msTotal = ms - this.msStart;
@@ -76148,7 +76152,7 @@ class DebuggerX86 extends DbgLib {
             this.updateStatus(true);
             this.updateFocus();
             this.clearTempBreakpoint(this.cpu.regLIP);
-            this.notifyEvent(DbgLib.EVENTS.READY);
+            this.notifyEvent(DbgLib.EVENTS.READY, nStep);
         }
     }
 

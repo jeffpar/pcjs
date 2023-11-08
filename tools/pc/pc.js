@@ -230,21 +230,22 @@ export default class PC extends PCJSLib {
     }
 
     /**
-     * setDebugMode(nEvent)
+     * setDebugMode(nEvent, dataEvent)
      *
      * @this {PC}
-     * @param {number} nEvent (eg, DbgLib.EVENTS.ENTER, DbgLib.EVENTS.READY, DbgLib.EVENTS.EXIT)
+     * @param {number} nEvent (eg, DbgLib.EVENTS.EXIT (0), DbgLib.EVENTS.ENTER (1), DbgLib.EVENTS.READY (2))
+     * @param {number} [dataEvent] (non-zero if debugger is stepping; we want to avoid unnecessary output in that case)
      */
-    setDebugMode(nEvent)
+    setDebugMode(nEvent, dataEvent)
     {
         let prevMode = this.debugMode;
         if (!nEvent && this.debugMode != nEvent) {
-            if (!this.test) printf("[Press CTRL-D to enter command mode]\n");
+            if (!dataEvent && !this.test) printf("[Press CTRL-D to enter command mode]\n");
         }
         this.debugMode = nEvent;
         if (this.debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
             this.command = "";
-            printf('[' + (this.commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
+            if (!dataEvent) printf('[' + (this.commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
             printf("%s> ", this.prompt);
         }
     }
@@ -1533,7 +1534,13 @@ export default class PC extends PCJSLib {
         let value, versionInfo, verNumber;
         let system = configJSON['systems']?.[type];
         if (system && system.versions) {
-            verNumber = sprintf("%.2f", +parseFloat(version));
+            /*
+             * We'll first try using the version string as-is, but as a backup, we also
+             * convert it to a "X.XX" string with optional suffix (eg, "2A" => "2.00A").
+             */
+            verNumber = sprintf("%.2f", parseFloat(version) || 0);
+            let match = version.match(/([A-Z])$/i);
+            if (match) verNumber += match[1].toUpperCase();
             versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
         }
         if (versionInfo) {
@@ -3256,6 +3263,7 @@ export default class PC extends PCJSLib {
     /**
      * checkRemainingArgs(argv)
      *
+     * @this {PC}
      * @param {Object} argv
      */
     checkRemainingArgs(argv)
@@ -3277,6 +3285,7 @@ export default class PC extends PCJSLib {
     /**
      * verifyDir(sDir)
      *
+     * @this {PC}
      * @param {string} sDir
      * @returns {string}
      */
@@ -3284,6 +3293,12 @@ export default class PC extends PCJSLib {
     {
         if (sDir[0] == '~') {
             sDir = node.path.join(node.process.env.HOME, sDir.slice(1));
+        } else if (sDir[0] == '$') {
+            /*
+             * Like we do for 'dir' values in getSystemValue(), we check for a leading '$',
+             * which signals that this is a path to a repository alongside the pcjs repository.
+             */
+            sDir = node.path.join(pcjsDir, "../../..", sDir.slice(1));
         } else {
             sDir = node.path.resolve(sDir);
         }
