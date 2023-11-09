@@ -1104,6 +1104,7 @@ export default class DiskInfo {
             }
         }
 
+        offTrack = 0;
         if (!nHeads) {
             /*
              * Next, check for a DSK header (an old private format I used to use, which begins with either
@@ -1156,7 +1157,7 @@ export default class DiskInfo {
              * Output the disk data as an array of cylinders, each containing an array of tracks (one track per head),
              * and each track containing an array of sectors.
              */
-            iTrack = offTrack = 0;
+            iTrack = 0;
             cbTrack = nSectorsPerTrack * cbSector;
             let suppObj = this.parseSuppData(driveInfo.suppData);
             this.aDiskData = new Array(nCylinders);
