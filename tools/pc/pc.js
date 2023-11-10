@@ -1871,7 +1871,7 @@ export default class PC extends PCJSLib {
              */
             verBPB = 1;
             if (verDOS < 1.1) {
-                kbCapacity ||= 160;
+                if (!kbCapacity || kbCapacity > 160) kbCapacity = 160;
             }
             else {
                 /*
@@ -1886,7 +1886,7 @@ export default class PC extends PCJSLib {
                  *
                  * See /software/pcx86/sys/dos/ibm/1.10/debugger/README.md for more details.
                  */
-                kbCapacity ||= 320;
+                if (!kbCapacity || kbCapacity > 320) kbCapacity = 320;
                 if (kbCapacity == 320 && dbBoot.readUInt16LE(0x0003) == 0x0008 && dbBoot.readUInt16LE(0x0005) == 0x0014) {
                     dbBoot.writeUInt16LE(0x0103, 0x0003);
                     /*
@@ -1902,12 +1902,13 @@ export default class PC extends PCJSLib {
         else if (verDOS >= 2.0 && verDOS < 3.2) {
             verBPB = 2;
             if (this.floppy) {
-                kbCapacity ||= 360;
+                if (!kbCapacity || kbCapacity > 360) kbCapacity = 360;
             }
         }
         else {
             if (this.floppy) {
-                kbCapacity ||= (verDOS < 3.3? 720 : 1440);
+                let capacity = (verDOS < 3.3? 720 : 1440);
+                if (!kbCapacity || kbCapacity > capacity) kbCapacity = capacity;
             }
             if (verDOS >= 3.2 && verDOS < 4.0) {
                 /*

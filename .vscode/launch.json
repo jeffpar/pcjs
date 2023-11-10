@@ -604,7 +604,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ibm5150"
+        "ibm5150",
+        "disks/empty",
+        "--floppy",
+        "--system=pcdos",
+        "--version=1.0",
+        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
