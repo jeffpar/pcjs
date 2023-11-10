@@ -490,10 +490,6 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--disk=tools.json",
-        "disks/msdos",
-        "--target=30M",
-        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,

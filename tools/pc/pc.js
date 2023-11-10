@@ -57,7 +57,7 @@ export default class PC extends PCJSLib {
     test = false;               // true if --test specified
     verbose = false;            // true if --verbose specified
     autoStart = false;
-    training = 0;               // training message count
+    training = 4;               // training message count
     machineType = "pcx86";
     systemType = "msdos";
     systemVersion = "3.30";
@@ -244,20 +244,20 @@ export default class PC extends PCJSLib {
         /*
          * Once the user has been sufficiently trained, we no longer display the helpful "training" messages.
          */
-        let training = this.training <= 4 && !dataEvent;
+        let message = this.training > 0 && !dataEvent;
         let prevMode = this.debugMode;
         if (!nEvent && this.debugMode != nEvent) {
-            if (training && !this.test) {
+            if (message && !this.test) {
                 printf("[Press CTRL-D to enter command mode]\n");
-                this.training++;
+                this.training--;
             }
         }
         this.debugMode = nEvent;
         if (this.debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
             this.command = "";
-            if (training) {
+            if (message) {
                 printf('[' + (this.commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
-                this.training++;
+                this.training--;
             }
             printf("%s> ", this.prompt);
         }
@@ -1120,16 +1120,22 @@ export default class PC extends PCJSLib {
     }
 
     /**
-     * newDrive(iDrive)
+     * newDrive(shift)
      *
      * @this {PC}
-     * @param {number} iDrive
+     * @param {boolean} [shift]
      * @returns {DriveInfo}
      */
-    newDrive(iDrive)
+    newDrive(shift)
     {
-        let driveInfo = this.drives[iDrive] = {
-            driveNumber:    iDrive,
+        let i = this.driveBuild;
+        let driveInfo = this.drives[i];
+        if (driveInfo && shift) {
+            this.drives[i+1] = driveInfo;
+            this.drives[i+1].driveNumber = this.driveBuild = i+1;
+        }
+        driveInfo = {
+            driveNumber:    i,
             driveCtrl:      "COMPAQ",
             driveType:      -1,
             nCylinders:     0,
@@ -1152,6 +1158,7 @@ export default class PC extends PCJSLib {
             localDir:       this.localDir,
             localDisk:      this.localDisk
         };
+        this.drives[i] = driveInfo;
         return driveInfo;
     }
 
@@ -1920,13 +1927,13 @@ export default class PC extends PCJSLib {
         let pc = this;
         driveInfo.driveManifest = null;
 
-        let done = function(di) {
-            if (di) {
+        let done = function(diskInfo) {
+            if (diskInfo) {
                 /*
                  * This is where I would normally perform the minimum version check (see below).
                  */
-                let manifest = di.getFileManifest(null, true);
-                if (di.volTable[0] && di.volTable[0].iPartition >= 0) {
+                let manifest = diskInfo.getFileManifest(null, true);
+                if (diskInfo.volTable[0] && diskInfo.volTable[0].iPartition >= 0) {
                     /*
                      * Since the disk is partitioned, we need to update the Master Boot Record (MBR),
                      * hence the special volume number (-1).
@@ -1940,31 +1947,39 @@ export default class PC extends PCJSLib {
                      *
                      *      pc.js --sys=compaq:3.31 --target=40M
                      *
-                     * will fail even though we're supposedly using a standard COMPAQ drive type (13) and
-                     * not a custom geometry.  I believe the failure is because we're using a saved machine
-                     * state for the COMPAQ machine (state386.json), so the machine is already expecting drive
-                     * type 1, and so our options are either 1) do NOT use the saved state, or 2) use our MBR
-                     * in order to dynamically update the drive parameters if we are NOT using drive type 1.
+                     * can fail even though we're supposedly using a standard COMPAQ drive type (13) and
+                     * not a custom geometry.
                      *
-                     * I'm going with option #2.
-                     *
-                     *      if (driveInfo.driveCtrl != "PCJS" && driveInfo.driveType != 1) {
-                     *          pc.savedState = "";
-                     *      }
+                     * That failure occurs when we're using a saved machine state for the COMPAQ machine
+                     * (state386.json), because the machine is already expecting drive type 1, and so our
+                     * options are either 1) do NOT use the saved state, or 2) specify a custom drive table
+                     * in our MBR in order to dynamically update the drive parameters.
                      */
                     if (dbMBR) {
                         let iDriveTable = -1;
                         if (sSystemMBR.indexOf("pcjs.mbr") >= 0) {
                             /*
+                             * One case where we CANNOT use a saved machine state is building a secondary drive
+                             * image (ie, driveNumber > 0) AND the driveType is NOT 1.  That's because the MBR code
+                             * on a secondary drive is not run (only the MBR's partition table is used), and so any
+                             * custom drive table we insert into that MBR will be ignored.
+                             */
+                            if (pc.savedState && driveInfo.driveNumber != 0 && driveInfo.driveType != 1) {
+                                pc.savedState = "";
+                                if (driveInfo.driveCtrl == "PCJS") {
+                                    printf("warning: secondary drive (%d) with non-standard drive type (%d) not currently supported\n", driveInfo.driveNumber, driveInfo.driveType);
+                                }
+                            }
+                            /*
                              * WARNING: If the driveNumber of the drive we're building is NOT zero, then the system
                              * won't be booting from it, which means the MBR won't run, and so any drive tables in the
                              * MBR will be moot.
                              */
-                            if (driveInfo.driveCtrl == "PCJS" || pc.savedState && driveInfo.driveNumber == 0 && driveInfo.driveType != 1) {
+                            if (driveInfo.driveCtrl == "PCJS" || pc.savedState && driveInfo.driveType != 1) {
                                 iDriveTable = driveInfo.driveNumber;
                             }
                         }
-                        di.updateBootSector(dbMBR, -1, iDriveTable);
+                        diskInfo.updateBootSector(dbMBR, -1, iDriveTable);
                     } else {
                         printf("warning: missing MBR for partitioned disk\n");
                     }
@@ -1973,7 +1988,7 @@ export default class PC extends PCJSLib {
                  * Now update the volume boot record (VBR) for the boot drive; for that, the volume number
                  * is always zero because pc.js only builds one volume per drive.
                  */
-                di.updateBootSector(dbBoot, 0, verBPB);
+                diskInfo.updateBootSector(dbBoot, 0, verBPB);
                 /*
                  * Time to update the name of localDisk and then write the disk.  We must create a physical file
                  * (preferably JSON, since that tells us more about the disk, its layout, and its contents) because
@@ -1982,7 +1997,7 @@ export default class PC extends PCJSLib {
                 if (sLocalDisk) {
                     driveInfo.localDisk = sLocalDisk;
                 } else {
-                    driveInfo.localDisk = driveInfo.localDisk.replace(node.path.basename(driveInfo.localDisk), (pc.getSystemValue("target") || di.getName()) + ".json");
+                    driveInfo.localDisk = driveInfo.localDisk.replace(node.path.basename(driveInfo.localDisk), (pc.getSystemValue("target") || diskInfo.getName()) + ".json");
                 }
                 if (driveInfo.localDisk.indexOf(node.path.sep) < 0) {
                     driveInfo.localDisk = node.path.join(pcjsDir, "disks", driveInfo.localDisk);
@@ -1990,14 +2005,14 @@ export default class PC extends PCJSLib {
                 if (sLocalDisk || log) {
                     printf("building drive: %s\n", driveInfo.localDisk);
                 }
-                if (diskLib.writeDiskSync(driveInfo.localDisk, di, false, 0, true, true)) {
-                    pc.updateDriveInfo(di);
+                if (diskLib.writeDiskSync(driveInfo.localDisk, diskInfo, false, 0, true, true)) {
+                    pc.updateDriveInfo(driveInfo, diskInfo);
                     /*
                      * I've deferred the minimum version check until now, because even if we can't (well, shouldn't)
                      * use the drive image, I'd still like to be able to inspect it.
                      */
-                    if (di.minDOSVersion && di.minDOSVersion > verDOS) {
-                        printf("error: %s drive type %d (%.2fMb) requires DOS %s or later\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.driveSize, di.minDOSVersion.toFixed(2));
+                    if (diskInfo.minDOSVersion && diskInfo.minDOSVersion > verDOS) {
+                        printf("error: %s drive type %d (%.2fMb) requires DOS %s or later\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.driveSize, diskInfo.minDOSVersion.toFixed(2));
                         return;
                     }
                     driveInfo.driveManifest = manifest;
@@ -2131,21 +2146,21 @@ export default class PC extends PCJSLib {
     }
 
     /**
-     * updateDriveInfo(di)
+     * updateDriveInfo(driveInfo, diskInfo)
      *
      * @this {PC}
-     * @param {DiskInfo} di
+     * @param {DriveInfo} driveInfo
+     * @param {DiskInfo} diskInfo
      */
-    updateDriveInfo(di)
+    updateDriveInfo(driveInfo, diskInfo)
     {
-        let driveInfo = this.drives[this.driveBuild];
-        if (di.getDriveType(driveInfo)) {
+        if (diskInfo.getDriveType(driveInfo)) {
             if (this.verbose) {
                 printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
             }
         }
-        driveInfo.disk = di;
-        let volume = di.volTable[0];
+        driveInfo.disk = diskInfo;
+        let volume = diskInfo.volTable[0];
         if (volume) {
             driveInfo.volume = volume;
             if (driveInfo.typeFAT && driveInfo.typeFAT != volume.nFATBits) {
@@ -2230,11 +2245,11 @@ export default class PC extends PCJSLib {
         }
         let imageData = controller && controller.aDrives && controller.aDrives.length && controller.aDrives[iDrive].disk;
         if (imageData) {
-            let di = new DiskInfo(device, "PCJS");
-            if (di.buildDiskFromJSON(imageData, true)) {
+            let diskInfo = new DiskInfo(device, "PCJS");
+            if (diskInfo.buildDiskFromJSON(imageData, true)) {
                 if (this.drives[this.driveBuild].driveManifest && sDir == this.localDir) {
                     let oldManifest = this.drives[this.driveBuild].driveManifest;
-                    let newManifest = di.getFileManifest(null, true);
+                    let newManifest = diskInfo.getFileManifest(null, true);
                     /*
                      * We now have the old and new manifests, and both should be sorted; time to look for differences.
                      */
@@ -2376,7 +2391,7 @@ export default class PC extends PCJSLib {
                     if (sDir.indexOf('.') < 0) sDir += ".img";
                     if (sDir.indexOf(node.path.sep) < 0) sDir = node.path.join(pcjsDir, "disks", sDir);
                     printf("saving drive as %s\n", sDir);
-                    diskLib.writeDiskSync(sDir, di, false, 0, true, true);
+                    diskLib.writeDiskSync(sDir, diskInfo, false, 0, true, true);
                 }
                 return true;
             }
@@ -2830,9 +2845,9 @@ export default class PC extends PCJSLib {
             break;
         case "fetch":
             if (arg) {
-                let di = await diskLib.readDiskAsync(arg);
-                if (di) {
-                    diskLib.extractFiles(di, {quiet: true, verbose: argv['verbose']}, "", argv[1] || "", argv['hidden']);
+                let diskInfo = await diskLib.readDiskAsync(arg);
+                if (diskInfo) {
+                    diskLib.extractFiles(diskInfo, {quiet: true, verbose: argv['verbose']}, "", argv[1] || "", argv['hidden']);
                 } else {
                     result = "invalid disk image: " + arg;
                 }
@@ -3194,8 +3209,7 @@ export default class PC extends PCJSLib {
             checkRemaining = true;
         }
 
-        let driveInfo = this.newDrive(this.driveBuild);
-
+        let driveInfo = this.newDrive();
         this.bare = PC.removeFlag(argv, 'bare', this.bare);
         this.floppy = PC.removeFlag(argv, 'floppy', this.floppy);
         this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);
@@ -3401,16 +3415,14 @@ export default class PC extends PCJSLib {
                 if (sDisk.indexOf(node.path.sep) < 0 && !diskLib.existsFile(sDisk, false)) {
                     sDisk = node.path.join(pcjsDir, "disks", sDisk);
                 }
-                let di = await diskLib.readDiskAsync(sDisk);
-                if (di) {
+                let diskInfo = await diskLib.readDiskAsync(sDisk);
+                if (diskInfo) {
                     /*
                      * By default, any prebuilt disk will be used in the first drive.  So any drive-related
                      * settings are propagated to the next drive, and then a new DriveInfo object is created.
                      */
-                    this.drives[1] = this.drives[0];
-                    this.drives[1].driveNumber++;
-                    let driveInfo = this.newDrive(this.driveBuild);
-                    this.updateDriveInfo(di);
+                    let driveInfo = this.newDrive(true);
+                    this.updateDriveInfo(driveInfo, diskInfo);
                     /*
                      * The safe thing to do would be to simply NEVER used a saved state with ANY prebuilt disk,
                      * but we happen to know that our default saved state (state386.json) was built for a machine
@@ -3425,7 +3437,6 @@ export default class PC extends PCJSLib {
                     }
                     driveInfo.localDisk = sDisk;
                     driveInfo.driveOverride = true;
-                    this.driveBuild++;
                     this.localDir = "";
                 } else {
                     error = "invalid disk";
