@@ -45,16 +45,19 @@ let configJSON = {}, machines = null;
  */
 export default class PC extends PCJSLib {
 
-    bare = false;
-    debug = false;
-    halt = false;
-    floppy = false;
+    bare = false;               // true if --bare specified
+    debug = false;              // true if --debug specified
+    halt = false;               // true if --halt specified
+    floppy = false;             // true if --floppy specified
     bootSector = "";
     bootSelect = "";
-    normalize = false;
-    test = false;
-    verbose = false;
+    serial = false;             // true if --serial specified
+    useSerial = false;
+    normalize = false;          // true if --normalize specified
+    test = false;               // true if --test specified
+    verbose = false;            // true if --verbose specified
     autoStart = false;
+    training = 0;               // training message count
     machineType = "pcx86";
     systemType = "msdos";
     systemVersion = "3.30";
@@ -238,14 +241,24 @@ export default class PC extends PCJSLib {
      */
     setDebugMode(nEvent, dataEvent)
     {
+        /*
+         * Once the user has been sufficiently trained, we no longer display the helpful "training" messages.
+         */
+        let training = this.training <= 4 && !dataEvent;
         let prevMode = this.debugMode;
         if (!nEvent && this.debugMode != nEvent) {
-            if (!dataEvent && !this.test) printf("[Press CTRL-D to enter command mode]\n");
+            if (training && !this.test) {
+                printf("[Press CTRL-D to enter command mode]\n");
+                this.training++;
+            }
         }
         this.debugMode = nEvent;
         if (this.debugMode == DbgLib.EVENTS.READY && prevMode != DbgLib.EVENTS.READY) {
             this.command = "";
-            if (!dataEvent) printf('[' + (this.commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
+            if (training) {
+                printf('[' + (this.commandPrev? "Press CTRL-A to repeat last command" : "Type help for list of commands") + ", CTRL-C to terminate]\n");
+                this.training++;
+            }
             printf("%s> ", this.prompt);
         }
     }
@@ -470,14 +483,25 @@ export default class PC extends PCJSLib {
              */
             machine.kbd = Component.getComponentByType("Keyboard");
 
-            machine.serial = Component.getComponentByType("SerialPort");
-            if (machine.serial) {
-                let exports = machine.serial['exports'];
-                if (exports) {
-                    var fnSetConnection = exports['setConnection'];
-                    if (fnSetConnection) {
-                        if (fnSetConnection.call(machine.serial, null, this.receiveSerial)) {
-                            machine.fnSendSerial = exports['receiveData'];
+            /*
+             * Establish a serial connection for console I/O if --serial was specified OR there's
+             * no keyboard device (as in the case of our PDP-11 machines).
+             */
+            if (this.serial || !machine.kbd) {
+                machine.serial = Component.getComponentByType("SerialPort");
+                if (machine.serial) {
+                    let exports = machine.serial['exports'];
+                    if (exports) {
+                        /*
+                         * The PDP-11 serial.js component exports a "setConnection" function, whereas the
+                         * PC serial.js component exports a "bind" function.  TODO: Bring the PDP-11 and PC
+                         * serial interfaces into alignment.
+                         */
+                        let fnSetConnection = exports['bind'] || exports['setConnection'];
+                        if (fnSetConnection) {
+                            if (fnSetConnection.call(machine.serial, this, this.receiveSerial)) {
+                                machine.fnSendSerial = exports['receiveData'];
+                            }
                         }
                     }
                 }
@@ -959,6 +983,7 @@ export default class PC extends PCJSLib {
             s = String.fromCharCode(b);
         }
         printf(s);
+        this.useSerial = true;
     }
 
     /**
@@ -1086,6 +1111,9 @@ export default class PC extends PCJSLib {
             }
             if (driveCtrl && !driveInfo.driveOverride) {
                 driveInfo.driveCtrl = driveCtrl;
+            }
+            if (driveCtrl != "COMPAQ") {
+                this.savedState = "";
             }
         }
         return sFile;
@@ -1224,12 +1252,12 @@ export default class PC extends PCJSLib {
                         }
                     }
                     /*
-                    * If we don't have a drive type (eg, if no drive was built and no drive type was explicitly set),
-                    * we would still like to match the target capacity with a drive.  Convert the capacity from Mb to
-                    * sectors and then give it a go.
-                    *
-                    * And even if we do have a drive type, findDriveType() should simply verify that the type is valid.
-                    */
+                     * If we don't have a drive type (eg, if no drive was built and no drive type was explicitly set),
+                     * we would still like to match the target capacity with a drive.  Convert the capacity from Mb to
+                     * sectors and then give it a go.
+                     *
+                     * And even if we do have a drive type, findDriveType() should simply verify that the type is valid.
+                     */
                     if (DiskInfo.findDriveType(driveInfo, (pc.kbTarget * 1024 / (driveInfo.cbSector || 512))|0, device)) {
                         if (pc.verbose) {
                             printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
@@ -1239,9 +1267,9 @@ export default class PC extends PCJSLib {
                         let driveType = driveInfo.driveType;
                         if (!driveType && driveInfo.driveCtrl == "PCJS") {
                             /*
-                            * When a custom geometry is being used, we need to set the drive type to the FIRST type used
-                            * by the current drive controller (the PC XT started with type 0, while the PC AT started with 1).
-                            */
+                             * When a custom geometry is being used, we need to set the drive type to the FIRST type used
+                             * by the current drive controller (the PC XT started with type 0, while the PC AT started with 1).
+                             */
                             driveType = (typeCtrl == "XT")? 0 : 1;
                             if (typeCtrl == "XT" && driveInfo.nSectors != 17) {
                                 printf("warning: XT controller requires 17 sectors/track\n");
@@ -1926,8 +1954,15 @@ export default class PC extends PCJSLib {
                      */
                     if (dbMBR) {
                         let iDriveTable = -1;
-                        if (sSystemMBR.indexOf("pcjs.mbr") >= 0 && (driveInfo.driveCtrl == "PCJS" || driveInfo.driveType != 1)) {
-                            iDriveTable = driveInfo.driveNumber;
+                        if (sSystemMBR.indexOf("pcjs.mbr") >= 0) {
+                            /*
+                             * WARNING: If the driveNumber of the drive we're building is NOT zero, then the system
+                             * won't be booting from it, which means the MBR won't run, and so any drive tables in the
+                             * MBR will be moot.
+                             */
+                            if (driveInfo.driveCtrl == "PCJS" || pc.savedState && driveInfo.driveNumber == 0 && driveInfo.driveType != 1) {
+                                iDriveTable = driveInfo.driveNumber;
+                            }
                         }
                         di.updateBootSector(dbMBR, -1, iDriveTable);
                     } else {
@@ -3257,6 +3292,7 @@ export default class PC extends PCJSLib {
         } else {
             this.bootSector = boot;
         }
+        this.serial = PC.removeFlag(argv, 'serial', defaults['serial'] || this.serial);
         if (checkRemaining) {
             this.checkRemainingArgs(argv);
         }
@@ -3267,9 +3303,11 @@ export default class PC extends PCJSLib {
      *
      * @this {PC}
      * @param {Object} argv
+     * @returns {boolean}
      */
     checkRemainingArgs(argv)
     {
+        let success = true;
         let args = Object.keys(argv);
         for (let arg of args) {
             if (!arg.match(/^[0-9]*$/)) {
@@ -3280,8 +3318,10 @@ export default class PC extends PCJSLib {
                     value = "=" + value;
                 }
                 printf("invalid option: %s%s\n", arg, value);
+                success = false;
             }
         }
+        return success;
     }
 
     /**
@@ -3339,20 +3379,23 @@ export default class PC extends PCJSLib {
 
         let splice = false;
         if (!sMachine) {
-            sMachine = argv[1];                     // for convenience, we also allow a bare machine name
+            sMachine = argv[1];                 // for convenience, we also allow a bare machine name
             if (sMachine) splice = true;
         }
         if (sMachine) {
             this.localMachine = this.checkMachine(sMachine);
             if (this.localMachine) {
                 if (splice) argv.splice(1, 1);
-            } else if (sMachine.endsWith(".json") || !splice) {
-                error = "unknown machine: " + sMachine;
+            } else {
+                if (sMachine.endsWith(".json") || !splice) {
+                    error = "unknown machine: " + sMachine;
+                }
+                sMachine = "";
             }
         }
 
         if (sDisk) {
-            if (sDisk == "none") {                  // --disk=none disables any prebuilt disk
+            if (sDisk == "none") {              // --disk=none disables any prebuilt disk
                 this.localDisk = this.savedState = "";
             } else {
                 if (sDisk.indexOf(node.path.sep) < 0 && !diskLib.existsFile(sDisk, false)) {
@@ -3365,7 +3408,8 @@ export default class PC extends PCJSLib {
                      * settings are propagated to the next drive, and then a new DriveInfo object is created.
                      */
                     this.drives[1] = this.drives[0];
-                    let driveInfo = this.newDrive(0);
+                    this.drives[1].driveNumber++;
+                    let driveInfo = this.newDrive(this.driveBuild);
                     this.updateDriveInfo(di);
                     /*
                      * The safe thing to do would be to simply NEVER used a saved state with ANY prebuilt disk,
@@ -3395,31 +3439,31 @@ export default class PC extends PCJSLib {
         }
 
         if (sDirectory == "none" || this.localDir == "none") {
-            sDirectory = "";                        // --dir=none is synonymous with --disk=none
+            sDirectory = "";                    // --dir=none is synonymous with --disk=none
             this.localDir = this.localDisk = this.savedState = "";
         }
 
-        let sDir = "";
         if (!error) {
             splice = false;
-            sDir = sDirectory;
-            if (!sDir) {
-                sDir = argv[1];                     // for convenience, we also allow a bare directory name
-                if (sDir) splice = true;
+            if (!sDirectory) {
+                sDirectory = argv[1];           // for convenience, we also allow a bare directory name
+                if (sDirectory) splice = true;
             }
-            if (sDir) {
-                sDirectory = sDir;
-                let newDir = this.verifyDir(sDir);
+            if (sDirectory) {
+                let newDir = this.verifyDir(sDirectory);
                 if (newDir) {
                     this.localDir = newDir;
                     if (splice) argv.splice(1, 1);
                 } else {
-                    if (!splice) error = "invalid directory: " + sDir;
-                    sDir = this.localDir = "";
+                    if (!splice) {
+                        error = "invalid directory: " + sDirectory;
+                        this.localDir = "";
+                    }
+                    sDirectory = "";
                 }
             }
         }
-        if (!sDir && this.localDir) {
+        if (!sDirectory && this.localDir) {
             this.localDir = this.verifyDir(this.localDir);
         }
 
@@ -3530,7 +3574,7 @@ export default class PC extends PCJSLib {
             data = PC.functionKeys[data] || data;
             if (!pc.debugMode) {
                 data = data.replace(/\x7f/g, "\b");         // convert DEL to BS
-                if (machine.kbd) {
+                if (machine.kbd && !pc.useSerial) {
                     if (MAXDEBUG) {
                         printf("injecting key(s): %s\n", data);
                     }
@@ -3646,6 +3690,7 @@ export default class PC extends PCJSLib {
                 "--help (-?)":              "\tdisplay command-line usage",
                 "--local (-l)":             "\tuse local diskette images",
                 "--test (-t)":              "\tenable test mode (non-interactive)",
+                "--serial (s)":             "\tuse serial port instead of keyboard",
                 "--verbose (-v)":           "\tenable verbose mode"
             };
             let optionGroups = {
@@ -3674,7 +3719,9 @@ export default class PC extends PCJSLib {
             printf("exception: %s\n", err.message);
         });
 
-        this.checkRemainingArgs(argv);
+        if (!this.checkRemainingArgs(argv)) {
+            this.exit(1);
+        }
 
         this.readInput(node.process.stdin, node.process.stdout);
     }

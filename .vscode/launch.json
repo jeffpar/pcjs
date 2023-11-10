@@ -490,6 +490,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "--disk=tools.json",
+        "disks/msdos",
+        "--target=30M",
+        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -570,6 +574,7 @@
       "args": [
         "ibm5160",
         "--floppy",
+        "--serial",
         "--system=bd:2A",
         "--dir=disks/empty"
       ],
@@ -780,7 +785,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=test386",
+        "--select=test386",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -796,12 +801,12 @@
       }
     },
     {
-      "name": "PC.js --start=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
+      "name": "PC.js --select=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml"
+        "--select=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -816,12 +821,12 @@
       }
     },
     {
-      "name": "PC.js --start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
+      "name": "PC.js --select=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml"
+        "--select=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -1008,7 +1013,7 @@
         "--sys=compaq",
         "--ver=3.31"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
+      "cwd": "${workspaceFolder}/tools/pc/disks/empty",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1026,7 +1031,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/dec/pdp11/1120/basic/machine.xml",
+        "--select=/machines/dec/pdp11/1120/basic/machine.xml",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -1047,7 +1052,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/dec/pdp11/1120/basic/debugger/machine.xml",
+        "--select=/machines/dec/pdp11/1120/basic/debugger/machine.xml",
+        "--dir=none",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -1068,7 +1074,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
+        "--select=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
