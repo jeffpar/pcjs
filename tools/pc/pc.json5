@@ -27,7 +27,7 @@
       "product": "basic-dos",   // see https://github.com/jeffpar/basicdos
       "versions": {
         "2.00A": {              // BASIC-DOS 2.00 requires the "v2" branch (until it's merged into "master")
-          "dir": "$basicdos/software/pcx86/src",
+          "dir": "%basicdos/software/pcx86/src",
           "boot": "bd/boot/OBJ/BOOT.COM",
           "boot1Offset": 0x550, // offset of ORG'ed boot code in BOOT.COM (alternatively, use BOOT1.COM)
           "boot2Offset": 0,     // use 0x760 if IBMBIO.COM does NOT already contain boot code from BOOT2.COM)
@@ -36,7 +36,9 @@
             "bd/dos/OBJ/IBMDOS.COM",
             "bd/cmd/OBJ/COMMAND.COM",
             "conf/200A/CONFIG.SYS",
-            "conf/200A/AUTOEXEC.BAT"
+            "conf/200A/AUTOEXEC.BAT",
+            "test/PRIMES.BAS",
+            "test/PRIMES.BAT"
           ],
           "target": "bd200a"
         }

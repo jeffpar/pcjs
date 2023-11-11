@@ -60542,7 +60542,7 @@ class SerialPort extends Component {
              *
              * TODO: Determine if we should also flush/zero bTHR after transmission.
              */
-            this.cpu.nonCPU(function() {
+            this.cpu.nonCPU(function transmitByteUnclocked() {
                 return serial.transmitByte(bOut);
             });
             this.cpu.setTimer(this.timerTransmitNext, this.getBaudTimeout());

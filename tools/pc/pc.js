@@ -133,6 +133,7 @@ export default class PC extends PCJSLib {
         'h': "halt",
         'l': "local",
         'n': "normalize",
+        's': "serial",
         't': "test",
         'v': "verbose"
     };
@@ -1588,10 +1589,10 @@ export default class PC extends PCJSLib {
                 } else {
                     value = versionInfo['dir'] || "";
                     /*
-                     * When a "dir" is specified in lieu of a "disk", we check for a leading '$', which signals
+                     * When a "dir" is specified in lieu of a "disk", we check for a leading '%', which signals
                      * that this is a path to a repository alongside the pcjs repository.
                      */
-                    if (value[0] == '$') {
+                    if (value[0] == '%') {
                         value = node.path.join(pcjsDir, "../../..", value.slice(1));
                     }
                     if (value && !value.endsWith("/")) value += "/";
@@ -1745,13 +1746,14 @@ export default class PC extends PCJSLib {
          * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for any
          * "helper binaries" we add to the disk image (and for COMMAND.COM itself).
          */
+        let count = 0;
         let aSystemFiles = this.getSystemValue("files");
         let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
         for (let name of aSystemFiles) {
             let desc, data, attr;
             if (!diSystem) {
                 name = node.path.join(sSystemDisk, name);
-                let dbFile = await diskLib.readFileAsync(name, null);
+                let dbFile = await diskLib.readFileAsync(name, null, true);
                 if (dbFile) {
                     if (dbBoot2 && dbBoot2.length) {
                         let dbCombined = new DataBuffer(dbBoot2.length + dbFile.length);
@@ -1763,6 +1765,7 @@ export default class PC extends PCJSLib {
                     attr = DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
                     desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr);
                     driveInfo.files.push(desc);
+                    count++;
                     continue;
                 }
             } else {
@@ -1771,10 +1774,15 @@ export default class PC extends PCJSLib {
                     desc.attr = +desc.attr;
                     desc.attr |= attrHidden;
                     driveInfo.files.push(desc);
+                    count++;
                     continue;
                 }
             }
-            return "missing system file: " + name;
+            let error = "missing system file: " + name;
+            if (count < 3) {
+                return error;           // in general, the first 3 system files are critical, others less so
+            }
+            printf("warning: %s\n", error);
         }
 
         /*
@@ -1954,7 +1962,7 @@ export default class PC extends PCJSLib {
                      * That failure occurs when we're using a saved machine state for the COMPAQ machine
                      * (state386.json), because the machine is already expecting drive type 1, and so our
                      * options are either 1) do NOT use the saved state, or 2) specify a custom drive table
-                     * in our MBR in order to dynamically update the drive parameters.
+                     * in our MBR in order to dynamically alter the drive parameters for type 1.
                      */
                     if (dbMBR) {
                         let iDriveTable = -1;
@@ -1962,7 +1970,7 @@ export default class PC extends PCJSLib {
                             /*
                              * One case where we CANNOT use a saved machine state is building a secondary drive
                              * image (ie, driveNumber > 0) AND the driveType is NOT 1.  That's because the MBR code
-                             * on a secondary drive is not run (only the MBR's partition table is used), and so any
+                             * on a secondary drive is not run (only the MBR's partition table is examined), so any
                              * custom drive table we insert into that MBR will be ignored.
                              */
                             if (pc.savedState && driveInfo.driveNumber != 0 && driveInfo.driveType != 1) {
@@ -3350,9 +3358,9 @@ export default class PC extends PCJSLib {
     {
         if (sDir[0] == '~') {
             sDir = node.path.join(node.process.env.HOME, sDir.slice(1));
-        } else if (sDir[0] == '$') {
+        } else if (sDir[0] == '%') {
             /*
-             * Like we do for 'dir' values in getSystemValue(), we check for a leading '$',
+             * Like we do for 'dir' values in getSystemValue(), we check for a leading '%',
              * which signals that this is a path to a repository alongside the pcjs repository.
              */
             sDir = node.path.join(pcjsDir, "../../..", sDir.slice(1));

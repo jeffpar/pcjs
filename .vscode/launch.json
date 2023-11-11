@@ -490,6 +490,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "disks/msdos"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -548,7 +549,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--disk=tools.json",
-        "--dir=$basicdos/software/pcx86/src",
+        "--dir=%basicdos/software/pcx86/src",
         "--normalize"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
