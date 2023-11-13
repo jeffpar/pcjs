@@ -571,10 +571,11 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5160",
+        "%basicdos/software/pcx86/src/configs/200A",
+        "--system=bd",
+        "--version=2.00A",
         "--floppy",
-        "--serial",
-        "--system=bd:2A",
-        "--dir=disks/empty"
+        "--serial"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
