@@ -294,3 +294,136 @@ configured as the activation key sequence. *--[Jeff]({{ site.author_url }})*
     Total files listed:
            22 file(s)    2370328 bytes
                           496640 bytes free
+
+### Directory of X86 Emulator Source Code (1990-1996)
+
+     Volume in drive A has no label
+     Directory of A:\
+    
+    MAKEFILE         24347   3-12-96   3:35p
+    OBJ          <DIR>      11-14-23  12:24p
+    README   TXT       350  11-14-23   1:25p
+    TEST         <DIR>       7-01-96   5:44p
+    VMDISK   ASM     10982   7-30-91   9:52a
+    WINMEM32 DLL      4320   3-22-92   7:10p
+    WLDR         <DIR>       7-01-96   5:43p
+    X86      C        9689   2-18-93   1:54a
+    X86      H       29815   2-18-93   2:07a
+    X86      ICO       766   7-30-91   5:10a
+    X86      INC      8715   2-18-93   4:25a
+    X86      PPT     17412  10-17-91   4:14a
+    X86      RC       2080   3-08-92  12:15p
+    X86PM    ICO      1056   7-30-91   5:10a
+    X86PM    RC         47   7-30-91   5:10a
+    XASM     ASM     28487   3-08-92  10:21a
+    XASM     H       10789  10-04-91   5:17a
+    XASM     INC      6730   1-20-92   4:59a
+    XBIOS    C        5653  11-13-92   7:43a
+    XBIOS    H        4101   7-30-91   9:48a
+    XBIOSDSK C       16766   3-12-96   4:07p
+    XBIOSDSK H        9416  11-13-92   7:18a
+    XBIOSKBD C        2771   2-18-93   3:25a
+    XBIOSKBD H         820   7-30-91   9:48a
+    XBIOSVID C        4348  10-12-91   6:58p
+    XBIOSVID H        1775  10-01-91  11:14a
+    XDOS6    C        2154  11-12-91   7:33a
+    XDOS6    H        2779  11-12-91   7:25a
+    XERR     C        5079   2-18-93   2:05a
+    XERR     H        2718   2-18-93   1:56a
+    XGUEST   C       63405  11-13-92   6:22a
+    XGUEST   H       38830   6-15-92   6:50a
+    XGUEST   INC     16382   6-15-92   6:57a
+    XGUEST1  C        8478  10-07-91   8:09a
+    XGUEST1  H        1580   8-08-91   8:46a
+    XGUEST2  C       38030  11-12-91   7:32a
+    XGUEST2  H        3961   8-08-91   8:48a
+    XGUESTBP C        7346   8-18-91   4:09p
+    XGUESTBP H        2040   8-08-91   7:17a
+    XGUESTDB C       25319   3-09-92   3:05a
+    XGUESTDB H        1121   7-30-91   9:48a
+    XGUESTEM C       30453   6-16-92   9:01a
+    XGUESTEM H        5690   8-31-91   4:45p
+    XGUESTWP C        4918   8-18-91   4:10p
+    XGUESTWP H        1387   8-08-91   7:20a
+    XHOST    C       13373   8-18-91   4:15p
+    XHOST    H        7930   7-30-91   9:49a
+    XHOST    INC      3141   1-20-92   4:59a
+    XHOSTDB  C       12161   6-16-92   8:49a
+    XHOSTDB  H        1044   8-08-91   7:19a
+    XHOSTEM  C        7290   8-18-91   4:11p
+    XHOSTEM  H         789   7-30-91   9:49a
+    XHOSTOP  C        2719   8-18-91   4:11p
+    XHOSTOP  H         861   7-30-91   9:49a
+    XLIB     C        7255   3-08-92  10:32a
+    XLIB     H        1986   3-09-92  12:40a
+    XSTATS   C        6157   8-18-91   4:23p
+    XSTATS   H        1549   7-30-91   9:49a
+    XTRANS1  C       94417  10-14-91   6:29p
+    XTRANS1  H       20019   3-08-92  10:07a
+    XTRANS2  C       59293  10-14-91   3:04a
+    XTRANS2  H        2311  10-07-91   8:14a
+    XWIN     C       16549   6-16-92   9:05a
+    XWIN     H        1082   8-19-91   9:30a
+    XWINCON  C       25141   4-03-92   5:30a
+    XWINCON  H        6976  10-01-91  11:11a
+           66 file(s)     754948 bytes
+    
+     Directory of A:\OBJ
+    
+    .            <DIR>      11-14-23  12:24p
+    ..           <DIR>      11-14-23  12:24p
+    286          <DIR>       7-01-96   5:43p
+            3 file(s)          0 bytes
+    
+     Directory of A:\OBJ\286
+    
+    .            <DIR>       7-01-96   5:43p
+    ..           <DIR>       7-01-96   5:43p
+    X86      EXE     66799   2-18-93   4:19a
+    X86      LRF       446   2-18-93   4:19a
+    X86      MAP     38529   2-18-93   4:19a
+    X86      SYM      8900   2-18-93   4:19a
+            6 file(s)     114674 bytes
+    
+     Directory of A:\TEST
+    
+    .            <DIR>       7-01-96   5:44p
+    ..           <DIR>       7-01-96   5:44p
+    ADD      ASM     40147   7-30-91   5:10a
+    ADD      COM      8166   7-30-91   5:10a
+    AND      ASM     40147   7-30-91   5:10a
+    AND      COM      8166   7-30-91   5:10a
+    CMP      ASM     40147   7-30-91   5:10a
+    CMP      COM      8166   7-30-91   5:10a
+    OR       ASM     40147   7-30-91   5:10a
+    OR       COM      8166   7-30-91   5:10a
+    SUB      ASM     40147   7-30-91   5:10a
+    SUB      COM      8166   7-30-91   5:10a
+    XOR      ASM     40147   7-30-91   5:10a
+    XOR      COM      8166   7-30-91   5:10a
+           14 file(s)     289878 bytes
+    
+     Directory of A:\WLDR
+    
+    .            <DIR>       7-01-96   5:43p
+    ..           <DIR>       7-01-96   5:43p
+    MAKEFILE          1707   7-30-91   5:10a
+    WLDR     C       24032   7-30-91   5:10a
+    WLDR     H        6964   7-30-91   5:10a
+    WLDR     OBJ      9198   1-21-92   7:21a
+    WLDRASM  ASM      1206   1-21-92   7:25a
+    WLDRGDI  C       35300   7-30-91   5:10a
+    WLDRKBD  C        7876   7-30-91   5:10a
+    WLDRKRN  C       22081   7-30-91   5:10a
+    WLDROVL  C        2127   7-30-91   5:10a
+    WLDRSND  C        1765   7-30-91   5:10a
+    WLDRUSR  C       47801   7-30-91   5:10a
+           13 file(s)     160057 bytes
+    
+    Total files listed:
+          102 file(s)    1319557 bytes
+                          111104 bytes free
+
+#### Screenshot from October 1991 PowerPoint File
+
+![X86 PowerPoint Presentation](files/X86_PPT_Screenshot.png)
