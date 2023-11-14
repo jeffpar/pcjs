@@ -423,3 +423,7 @@ configured as the activation key sequence. *--[Jeff]({{ site.author_url }})*
     Total files listed:
           102 file(s)    1319557 bytes
                           111104 bytes free
+
+#### Screenshot from October 1991 PowerPoint File
+
+![X86 PowerPoint Presentation](files/X86_PPT_Screenshot.png)
