@@ -19655,14 +19655,15 @@ class DbgLib extends Component {
     }
 
     /**
-     * notifyEvent(nEvent)
+     * notifyEvent(nEvent, dataEvent)
      *
      * @param {number} nEvent (see DbgLib.EVENTS)
+     * @param {number} [dataEvent] (optional data for event)
      */
-    notifyEvent(nEvent)
+    notifyEvent(nEvent, dataEvent)
     {
         for (let i = 0; i < this.afnNotify.length; i++) {
-            this.afnNotify[i](nEvent);
+            this.afnNotify[i](nEvent, dataEvent);
         }
     }
 }

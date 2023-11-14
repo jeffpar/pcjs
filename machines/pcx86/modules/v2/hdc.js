@@ -1991,7 +1991,7 @@ export default class HDC extends Component {
             bDataStatus = HDC.XTC.DATA.STATUS.OK;
             if (!drive && this.iDriveAllowFail == iDrive) {
                 this.iDriveAllowFail = -1;
-                if (DEBUG) this.printf("%s.doXTC(): fake failure triggered\n", this.idComponent);
+                if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doXTC(): fake failure triggered\n", this.idComponent);
                 bDataStatus = HDC.XTC.DATA.STATUS.ERROR;
             }
             this.beginResult(bDataStatus | bDrive);
@@ -2028,7 +2028,7 @@ export default class HDC extends Component {
             case HDC.XTC.DATA.CMD.RECALIBRATE:      // 0x01
                 drive.bControl = bControl;
                 if (DEBUG) {
-                    this.printf("%s.doXTC(): drive %d control byte: %#04x\n", this.idComponent, iDrive, bControl);
+                    this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doXTC(): drive %d control byte: %#04x\n", this.idComponent, iDrive, bControl);
                 }
                 this.beginResult(HDC.XTC.DATA.STATUS.OK | bDrive);
                 break;
@@ -2141,7 +2141,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be ASKING for data, not GIVING us data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printf("%s.doDMARead(): invalid DMA acknowledgement\n", this.idComponent);
+        if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMARead(): invalid DMA acknowledgement\n", this.idComponent);
         done(-1, false);
     }
 
@@ -2161,7 +2161,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printf("%s.doDMAWrite(): invalid DMA acknowledgement\n", this.idComponent);
+        if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMAWrite(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -2181,7 +2181,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printf("%s.doDMAWriteBuffer(): invalid DMA acknowledgement\n", this.idComponent);
+        if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMAWriteBuffer(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -2201,7 +2201,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printf("%s.doDMAWriteFormat(): invalid DMA acknowledgement\n", this.idComponent);
+        if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMAWriteFormat(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -2216,7 +2216,7 @@ export default class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        this.printf("%s.doRead(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
+        this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doRead(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
 
         if (drive.disk) {
             drive.sector = null;
@@ -2258,7 +2258,7 @@ export default class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        this.printf("%s.doWrite(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
+        this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doWrite(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
 
         if (drive.disk) {
             drive.sector = null;
@@ -2307,7 +2307,7 @@ export default class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (DEBUG) this.printf("%s.doWriteBuffer()\n", this.idComponent);
+        if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doWriteBuffer()\n", this.idComponent);
 
         this.initBuffer(drive);
 
@@ -2571,7 +2571,7 @@ export default class HDC extends Component {
             drive.nBytes = 128 << drive.abFormat[3];// N (0 => 128, 1 => 256, 2 => 512, 3 => 1024)
             drive.cbFormat = 0;
 
-            this.printf("%s.writeFormat(%d:%d:%d:%d)\n", this.idComponent, drive.wCylinder, drive.bHead, drive.bSector, drive.nBytes);
+            this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.writeFormat(%d:%d:%d:%d)\n", this.idComponent, drive.wCylinder, drive.bHead, drive.bSector, drive.nBytes);
 
             for (let i = 0; i < drive.nBytes; i++) {
                 if (this.writeData(drive, drive.bFiller) < 0) {

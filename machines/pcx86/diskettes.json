@@ -9004,6 +9004,11 @@
 						"@title": "WOW Reversi MIPS Demo (Disk 3)",
 						"@diskette": "JEFFPAR-WOW-REVERSI-MIPS-DISK3.json",
 						"@format": "PC1200K"
+					},
+					{
+						"@title": "X86 Emulator Source Code (1990-1996)",
+						"@diskette": "JEFFPAR-X86SRC.json",
+						"@format": "PC1440K"
 					}
 				]
 			}

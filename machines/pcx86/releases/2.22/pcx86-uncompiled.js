@@ -60542,7 +60542,7 @@ class SerialPort extends Component {
              *
              * TODO: Determine if we should also flush/zero bTHR after transmission.
              */
-            this.cpu.nonCPU(function() {
+            this.cpu.nonCPU(function transmitByteUnclocked() {
                 return serial.transmitByte(bOut);
             });
             this.cpu.setTimer(this.timerTransmitNext, this.getBaudTimeout());
@@ -70080,7 +70080,7 @@ class HDC extends Component {
             bDataStatus = HDC.XTC.DATA.STATUS.OK;
             if (!drive && this.iDriveAllowFail == iDrive) {
                 this.iDriveAllowFail = -1;
-                if (DEBUG) this.printf("%s.doXTC(): fake failure triggered\n", this.idComponent);
+                if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doXTC(): fake failure triggered\n", this.idComponent);
                 bDataStatus = HDC.XTC.DATA.STATUS.ERROR;
             }
             this.beginResult(bDataStatus | bDrive);
@@ -70117,7 +70117,7 @@ class HDC extends Component {
             case HDC.XTC.DATA.CMD.RECALIBRATE:      // 0x01
                 drive.bControl = bControl;
                 if (DEBUG) {
-                    this.printf("%s.doXTC(): drive %d control byte: %#04x\n", this.idComponent, iDrive, bControl);
+                    this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doXTC(): drive %d control byte: %#04x\n", this.idComponent, iDrive, bControl);
                 }
                 this.beginResult(HDC.XTC.DATA.STATUS.OK | bDrive);
                 break;
@@ -70230,7 +70230,7 @@ class HDC extends Component {
         /*
          * The DMA controller should be ASKING for data, not GIVING us data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printf("%s.doDMARead(): invalid DMA acknowledgement\n", this.idComponent);
+        if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMARead(): invalid DMA acknowledgement\n", this.idComponent);
         done(-1, false);
     }
 
@@ -70250,7 +70250,7 @@ class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printf("%s.doDMAWrite(): invalid DMA acknowledgement\n", this.idComponent);
+        if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMAWrite(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -70270,7 +70270,7 @@ class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printf("%s.doDMAWriteBuffer(): invalid DMA acknowledgement\n", this.idComponent);
+        if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMAWriteBuffer(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -70290,7 +70290,7 @@ class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printf("%s.doDMAWriteFormat(): invalid DMA acknowledgement\n", this.idComponent);
+        if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMAWriteFormat(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -70305,7 +70305,7 @@ class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        this.printf("%s.doRead(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
+        this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doRead(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
 
         if (drive.disk) {
             drive.sector = null;
@@ -70347,7 +70347,7 @@ class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        this.printf("%s.doWrite(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
+        this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doWrite(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
 
         if (drive.disk) {
             drive.sector = null;
@@ -70396,7 +70396,7 @@ class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (DEBUG) this.printf("%s.doWriteBuffer()\n", this.idComponent);
+        if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doWriteBuffer()\n", this.idComponent);
 
         this.initBuffer(drive);
 
@@ -70660,7 +70660,7 @@ class HDC extends Component {
             drive.nBytes = 128 << drive.abFormat[3];// N (0 => 128, 1 => 256, 2 => 512, 3 => 1024)
             drive.cbFormat = 0;
 
-            this.printf("%s.writeFormat(%d:%d:%d:%d)\n", this.idComponent, drive.wCylinder, drive.bHead, drive.bSector, drive.nBytes);
+            this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.writeFormat(%d:%d:%d:%d)\n", this.idComponent, drive.wCylinder, drive.bHead, drive.bSector, drive.nBytes);
 
             for (let i = 0; i < drive.nBytes; i++) {
                 if (this.writeData(drive, drive.bFiller) < 0) {
@@ -73056,14 +73056,15 @@ class DbgLib extends Component {
     }
 
     /**
-     * notifyEvent(nEvent)
+     * notifyEvent(nEvent, dataEvent)
      *
      * @param {number} nEvent (see DbgLib.EVENTS)
+     * @param {number} [dataEvent] (optional data for event)
      */
-    notifyEvent(nEvent)
+    notifyEvent(nEvent, dataEvent)
     {
         for (let i = 0; i < this.afnNotify.length; i++) {
-            this.afnNotify[i](nEvent);
+            this.afnNotify[i](nEvent, dataEvent);
         }
     }
 }
@@ -76070,11 +76071,13 @@ class DebuggerX86 extends DbgLib {
      */
     start(ms, nCycles)
     {
-        if (!this.nStep) this.printf("running\n");
         this.flags.running = true;
         this.msStart = ms;
         this.nCyclesStart = nCycles;
-        this.notifyEvent(DbgLib.EVENTS.EXIT);
+        if (!this.nStep) {
+            this.printf("running\n");
+        }
+        this.notifyEvent(DbgLib.EVENTS.EXIT, this.nStep);
     }
 
     /**
@@ -76089,10 +76092,11 @@ class DebuggerX86 extends DbgLib {
     stop(ms, nCycles)
     {
         if (this.flags.running) {
+            let nStep = this.nStep;
             this.flags.running = false;
             this.nCycles = nCycles - this.nCyclesStart;
-            this.notifyEvent(DbgLib.EVENTS.ENTER);
-            if (!this.nStep) {
+            this.notifyEvent(DbgLib.EVENTS.ENTER, nStep);
+            if (!nStep) {
                 let sStopped = "stopped";
                 if (this.nCycles) {
                     let msTotal = ms - this.msStart;
@@ -76148,7 +76152,7 @@ class DebuggerX86 extends DbgLib {
             this.updateStatus(true);
             this.updateFocus();
             this.clearTempBreakpoint(this.cpu.regLIP);
-            this.notifyEvent(DbgLib.EVENTS.READY);
+            this.notifyEvent(DbgLib.EVENTS.READY, nStep);
         }
     }
 

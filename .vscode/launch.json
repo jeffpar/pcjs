@@ -490,6 +490,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "disks/msdos"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -511,12 +512,13 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       // The arguments to pass to the program, if any.
       "args": [
+        "disks/msdos",
         "--target=32M",
         "--sys=msdos:3.31",
         "--halt"
       ],
       // The working directory of the program.
-      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
+      "cwd": "${workspaceFolder}/tools/pc",
       // The environment variables to pass to the program.
       "env": {},
       // If the environment variables should not be inherited from the parent process.
@@ -541,15 +543,39 @@
       }
     },
     {
-      "name": "PC.js for BASIC-DOS",
+      "name": "PC.js BASIC-DOS build",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--disk=tools.json",
+        "--dir=%basicdos/software/pcx86/src",
+        "--normalize"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "PC.js BASIC-DOS boot",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5160",
+        "%basicdos/software/pcx86/src/configs/200A",
+        "--system=bd",
+        "--version=2.00A",
         "--floppy",
-        "--system=bd:2.00A",
-        "--dir=disks/empty"
+        "--serial"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -581,7 +607,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "ibm5150"
+        "ibm5150",
+        "disks/empty",
+        "--floppy",
+        "--system=pcdos",
+        "--version=1.0",
+        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -602,11 +633,12 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5160",
+        "disks/msdos",
         "load a: pc dos 2.0 disk 1",
         "--sys=pcdos",
         "--ver=2.00"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -713,34 +745,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "disks/msdos",
         "--sys=compaq",
         "--ver=3.31",
         "--target=40M"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js compaq386 MBR331",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "compaq386",
-        "--disk=MBR331.img",
-        "--nofloppy",
-        "--halt"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc/disks",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -758,7 +768,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=test386",
+        "--select=test386",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -774,12 +784,13 @@
       }
     },
     {
-      "name": "PC.js --start=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
+      "name": "PC.js --select=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml"
+        "--select=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
+        "disks/msdos"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -794,12 +805,13 @@
       }
     },
     {
-      "name": "PC.js --start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
+      "name": "PC.js --select=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml"
+        "--select=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
+        "disks/msdos"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -981,12 +993,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
+        "disks/empty",
         "dir",
         "--drivetype=80:2:18",
         "--sys=compaq",
         "--ver=3.31"
       ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/msdos",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -1004,7 +1017,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/dec/pdp11/1120/basic/machine.xml",
+        "--select=/machines/dec/pdp11/1120/basic/machine.xml",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -1025,7 +1038,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/dec/pdp11/1120/basic/debugger/machine.xml",
+        "--select=/machines/dec/pdp11/1120/basic/debugger/machine.xml",
+        "--dir=none",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -1046,7 +1060,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--start=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
+        "--select=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pc",

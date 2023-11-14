@@ -1,10 +1,13 @@
 {
   "files.exclude": {
+    "_site/": true,
+    ".fseventsd": true,
     ".history": true,
     ".sass-cache": true,
+    ".Trashes": true,
+    "CNAME": true,
     "node_modules": true,
-    ".fseventsd": true,
-    ".Trashes": true
+    "out/": true
   },
   "editor.wordWrap": "off",
   "editor.rulers": [127],
@@ -2798,6 +2801,7 @@
     "unbootable",
     "unbundle",
     "uncapitalize",
+    "Unclocked",
     "uncoded",
     "uncomp",
     "uncompiled",

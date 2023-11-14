@@ -11,34 +11,32 @@
     "machine": "compaq386.json",
     "state": "state386.json",
     "messages": "int,hdc",      // a list of debugger message categories to enable when --halt is used
-    "normalize": false,         // false is preferred for DOS compatibility (true enables UTF8 and other conversions)
+    "normalize": false,         // use false for disks that are already DOS-compatible (true converts LF to CR/LF and more)
   },
   "apps": {
-    "cp": {},
-    "ls": {},
-    "vi": {},
-    ".edit": {
-      "exec": "vi $*"
-    }
+    "cp": {},                   // create CP.COM
+    "ls": {},                   // create LS.COM
+    "vi": {},                   // create VI.COM
+    // ".edit": {               // create EDIT.COM that launches "vi" instead
+    //   "exec": "vi $*"
+    // }
   },
   "systems": {
     "bd": {
       "vendor": "pcjs.org",
-      "product": "basic-dos",
+      "product": "basic-dos",   // see https://github.com/jeffpar/basicdos
       "versions": {
-        "2.00A": {
-          "dir": "$basicdos/software/pcx86/src",
-          "boot": "bd/boot/OBJ/BOOT.COM",
-          "bootOffset": 0x550,
-          "extraOffset": 0x760,
+        "2.00A": {              // BASIC-DOS 2.00 requires the "v2" branch (until it's merged into "master")
+          "dir": "%basicdos/software/pcx86/src",
+          "boot": "os/boot/OBJ/BOOT.COM",
+          "boot1Offset": 0x550, // offset of ORG'ed boot code in BOOT.COM (alternatively, use BOOT1.COM)
+          "boot2Offset": 0,     // use 0x760 if BASDEV.COM does NOT already contain boot code from BOOT2.COM)
           "files": [
-            "bd/dev/OBJ/IBMBIO.COM",
-            "bd/dos/OBJ/IBMDOS.COM",
-            "bd/cmd/OBJ/COMMAND.COM",
-            "conf/200A/CONFIG.SYS",
-            "conf/200A/AUTOEXEC.BAT"
+            "os/dev/OBJ/BASDEV.COM",
+            "os/dos/OBJ/BASDOS.COM",
+            "os/cmd/OBJ/COMMAND.COM"
           ],
-          "target": "BASIC-DOS-200A"
+          "target": "bd200a"
         }
       }
     },
