@@ -16,7 +16,7 @@
 		<control type="button" binding="reset">Reset</control>
 		<control type="button" binding="setSpeed">Speed</control>
 	</cpu>
-	<chipset id="chipset" model="5160" sw1="01001101"/>
+	<chipset id="chipset" model="5160" sw1="01001100"/>
 	<serial id="com1" adapter="1"/>
 	<serial id="com2" adapter="2"/>
 	<mouse serial="com2"/>
