@@ -317,6 +317,30 @@
       }
     },
     {
+      "name": "IBM PC XT with VGA",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/ibm/5160/vga/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "hardware",
+        "order": 10
+      }
+    },
+    {
+      "name": "IBM PC XT with VGA [Debugger]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/ibm/5160/vga/debugger/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "hardware",
+        "order": 10
+      }
+    },
+    {
       "name": "IBM PC AT with CGA [Debugger*]",
       "type": "chrome",
       "request": "launch",

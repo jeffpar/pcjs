@@ -14,7 +14,7 @@
 	<cpu id="cpu8088" model="8088"/>
 	<debugger id="debugger"/>
 	<panel ref="/machines/pcx86/panel/wide.xml"/>
-	<chipset id="chipset" model="5160" sw1="01001101" pos="left" padLeft="8px" padBottom="8px">
+	<chipset id="chipset" model="5160" sw1="01001100" pos="left" padLeft="8px" padBottom="8px">
 		<control type="switches" label="SW1" binding="sw1" left="0px"/>
 		<control type="description" binding="swdesc" left="0px"/>
 	</chipset>
