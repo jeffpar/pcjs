@@ -1052,55 +1052,55 @@
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (720K Disk 1)",
+							"@title": "Windows SDK 3.00 (720K Disk 01)",
 							"@diskette": "WIN30SDK-720K-DISK01.json",
 							"@format": "PC720K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (720K Disk 2)",
+							"@title": "Windows SDK 3.00 (720K Disk 02)",
 							"@diskette": "WIN30SDK-720K-DISK02.json",
 							"@format": "PC720K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (720K Disk 3)",
+							"@title": "Windows SDK 3.00 (720K Disk 03)",
 							"@diskette": "WIN30SDK-720K-DISK03.json",
 							"@format": "PC720K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (720K Disk 4)",
+							"@title": "Windows SDK 3.00 (720K Disk 04)",
 							"@diskette": "WIN30SDK-720K-DISK04.json",
 							"@format": "PC720K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (720K Disk 5)",
+							"@title": "Windows SDK 3.00 (720K Disk 05)",
 							"@diskette": "WIN30SDK-720K-DISK05.json",
 							"@format": "PC720K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (720K Disk 6)",
+							"@title": "Windows SDK 3.00 (720K Disk 06)",
 							"@diskette": "WIN30SDK-720K-DISK06.json",
 							"@format": "PC720K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (720K Disk 7)",
+							"@title": "Windows SDK 3.00 (720K Disk 07)",
 							"@diskette": "WIN30SDK-720K-DISK07.json",
 							"@format": "PC720K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (720K Disk 8)",
+							"@title": "Windows SDK 3.00 (720K Disk 08)",
 							"@diskette": "WIN30SDK-720K-DISK08.json",
 							"@format": "PC720K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (720K Disk 9)",
+							"@title": "Windows SDK 3.00 (720K Disk 09)",
 							"@diskette": "WIN30SDK-720K-DISK09.json",
 							"@format": "PC720K",
 							"@photo": "jpg"
@@ -1117,55 +1117,55 @@
 					"@title": "Windows SDK 3.10",
 					"@media": [
 						{
-							"@title": "Windows SDK 3.10 (Disk 1)",
+							"@title": "Windows SDK 3.10 (Disk 01)",
 							"@diskette": "WIN31SDK-DISK01.json",
 							"@format": "PC1440K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 2)",
+							"@title": "Windows SDK 3.10 (Disk 02)",
 							"@diskette": "WIN31SDK-DISK02.json",
 							"@format": "PC1440K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 3)",
+							"@title": "Windows SDK 3.10 (Disk 03)",
 							"@diskette": "WIN31SDK-DISK03.json",
 							"@format": "PC1440K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 4)",
+							"@title": "Windows SDK 3.10 (Disk 04)",
 							"@diskette": "WIN31SDK-DISK04.json",
 							"@format": "PC1440K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 5)",
+							"@title": "Windows SDK 3.10 (Disk 05)",
 							"@diskette": "WIN31SDK-DISK05.json",
 							"@format": "PC1440K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 6)",
+							"@title": "Windows SDK 3.10 (Disk 06)",
 							"@diskette": "WIN31SDK-DISK06.json",
 							"@format": "PC1440K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 7)",
+							"@title": "Windows SDK 3.10 (Disk 07)",
 							"@diskette": "WIN31SDK-DISK07.json",
 							"@format": "PC1440K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 8)",
+							"@title": "Windows SDK 3.10 (Disk 08)",
 							"@diskette": "WIN31SDK-DISK08.json",
 							"@format": "PC1440K",
 							"@photo": "jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 9)",
+							"@title": "Windows SDK 3.10 (Disk 09)",
 							"@diskette": "WIN31SDK-DISK09.json",
 							"@format": "PC1440K",
 							"@photo": "jpg"
@@ -7965,33 +7965,38 @@
 						"@title": "Macro Assembler 5.10 (Feb 1988)",
 						"@media": [
 							{
-								"@title": "MS MASM 5.10 (Feb 1988 Disk 1)",
+								"@title": "MS Macro Assembler 5.10 (Feb 1988 #1)",
 								"@diskette": "MASM51X-01510-DISK1.json",
 								"@format": "PC360K",
+								"@localonly": true,
 								"@source": "PCjs"
 							},
 							{
-								"@title": "MS MASM 5.10 (Feb 1988 Disk 2)",
+								"@title": "MS Macro Assembler 5.10 (Feb 1988 #2)",
 								"@diskette": "MASM51X-01511-DISK2.json",
 								"@format": "PC360K",
+								"@localonly": true,
 								"@source": "PCjs"
 							},
 							{
-								"@title": "MS MASM 5.10 (Feb 1988 Disk 3)",
+								"@title": "MS Macro Assembler 5.10 (Feb 1988 #3)",
 								"@diskette": "MASM51X-01512-DISK3.json",
 								"@format": "PC360K",
+								"@localonly": true,
 								"@source": "PCjs"
 							},
 							{
-								"@title": "MS MASM 5.10 (Feb 1988 Disk 4)",
+								"@title": "MS Macro Assembler 5.10 (Feb 1988 #4)",
 								"@diskette": "MASM51X-01514-DISK4.json",
 								"@format": "PC360K",
+								"@localonly": true,
 								"@source": "PCjs"
 							},
 							{
-								"@title": "MS MASM 5.10 (Feb 1988 Disk 5)",
+								"@title": "MS Macro Assembler 5.10 (Feb 1988 #5)",
 								"@diskette": "MASM51X-03159-DISK5.json",
 								"@format": "PC1200K",
+								"@localonly": true,
 								"@source": "PCjs"
 							},
 							{
@@ -8635,6 +8640,47 @@
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.1-update-1988.pdf"
 							}
 						]
+					},
+					"6.00a": {
+						"@title": "Microsoft C Compiler 6.00a",
+						"@media": [
+							{
+								"@title": "MS C 6.00a (DISK 1: COMPILER1)",
+								"@diskette": "MSC600A-DISK1-COMPILER1.json",
+								"@format": "PC1200K"
+							},
+							{
+								"@title": "MS C 6.00a (DISK 2: COMPILER2)",
+								"@diskette": "MSC600A-DISK2-COMPILER2.json",
+								"@format": "PC1200K"
+							},
+							{
+								"@title": "MS C 6.00a (DISK 3: LIBRARIES)",
+								"@diskette": "MSC600A-DISK3-LIBRARIES.json",
+								"@format": "PC1200K"
+							},
+							{
+								"@title": "MS C 6.00a (DISK 4: WBUTILS)",
+								"@diskette": "MSC600A-DISK4-WBUTILS.json",
+								"@format": "PC1200K"
+							},
+							{
+								"@title": "MS C 6.00a (DISK 5: WBUTILS-OS2)",
+								"@diskette": "MSC600A-DISK5-WBUTILS-OS2.json",
+								"@format": "PC1200K"
+							},
+							{
+								"@title": "MS C 6.00a (DISK 6: REFERENCE)",
+								"@diskette": "MSC600A-DISK6-REFERENCE.json",
+								"@format": "PC1200K"
+							},
+							{
+								"@title": "MS C 6.00a (DISK 7: LIBS-OS2)",
+								"@diskette": "MSC600A-DISK7-LIBS-OS2.json",
+								"@format": "PC1200K"
+							}
+						],
+						"@source": "https://winworldpc.com/product/microsoft-c-c/6x"
 					},
 					"qcwin": {
 						"@title": "Microsoft QuickC for Windows 1.00",
