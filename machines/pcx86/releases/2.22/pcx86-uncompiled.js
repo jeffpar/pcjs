@@ -55266,15 +55266,19 @@ class VideoX86 extends Component {
      */
     getFontDiff(iFont, iFontPrev)
     {
-        let i;
-        if (iFont == iFontPrev) return [];
-        if (iFont < iFontPrev) {
-            i = iFont;
-            iFont = iFontPrev;
-            iFontPrev = i;
+        let a = [];
+        if (iFont != iFontPrev) {
+            let i;
+            if (iFont < iFontPrev) {
+                i = iFont;
+                iFont = iFontPrev;
+                iFontPrev = i;
+            }
+            i = ((iFont * (iFont - 1)) >> 1) + iFontPrev;
+            a = this.aFontDiff[i];
+
         }
-        i = ((iFont * (iFont - 1)) >> 1) + iFontPrev;
-        return this.aFontDiff[i];
+        return a;
     }
 
     /**

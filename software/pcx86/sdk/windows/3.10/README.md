@@ -9,7 +9,7 @@ machines:
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B: "Windows SDK 3.10 (Disk 1)"
+      B: "Windows SDK 3.10 (Disk 01)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
