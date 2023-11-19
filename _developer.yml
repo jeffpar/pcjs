@@ -18,8 +18,10 @@ url: "http://localhost:4000"
 # the <machine> tag of each XML file must set 'uncompiled' to "true" in order to use uncompiled scripts.
 #
 # 'site.pcjs.localdisks' can be turned if on you have local copies of PCjs disk images; be sure to remove
-# '/disks' from the "exclude" section below as well.  See https://github.com/jeffpar/pcjs/wiki/Using-a-Local-Web-Server#accessing-disk-images-locally
-# for more information.
+# '/disks' from the "exclude" section below as well.
+#
+# See https://github.com/jeffpar/pcjs/wiki/Using-a-Local-Web-Server#accessing-disk-images-locally for more
+# information.
 #
 pcjs:
   localdisks: false
