@@ -3118,13 +3118,14 @@ class WebLib {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
+        Component.printf(MESSAGE.DEBUG, "getResource(%s)\n", sURL);
+
         /*
          * globals.node.readFileSync exists only when another module has import filelib.js, which means we're
          * running under Node.js, and we can use Node's file system to read local files.  Note that filelib.js only
          * offers readFileSync() at the moment.
          */
         if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "reading: %s\n", sURL);
             try {
                 let encoding = (type == "arraybuffer"? null : "utf8");
                 resource = globals.node.readFileSync(sURL, encoding);
@@ -3171,7 +3172,7 @@ class WebLib {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetching: %s\n", sURL);
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.fetch(%s)\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -3185,11 +3186,11 @@ class WebLib {
                 }
             })
             .then(resource => {
-                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.fetch(%s): %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
-                Component.printf(MESSAGE.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.LOG, "getResource.fetch(%s) error: %d\n", sURL, nErrorCode);
                 if (done) done(sURL, resource, nErrorCode);
             });
             return response;
@@ -3197,7 +3198,7 @@ class WebLib {
 
         let fArrayBuffer = false, fXHR2 = (typeof request.responseType === 'string');
 
-        let callback = function() {
+        let callback = function getResourceDone() {
             if (request.readyState !== 4) {
                 if (progress) progress(1);
                 return null;
@@ -3228,18 +3229,18 @@ class WebLib {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
+                Component.printf(MESSAGE.LOG, "getResource.done(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && WebLib.getHostProtocol() == "file:")) {
-                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.done(%s): %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.DEBUG, "getResource.done(%s) error: %d\n", sURL, nErrorCode);
                 if (!request.status && !WebLib.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
@@ -3267,12 +3268,12 @@ class WebLib {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "posting: %s (%d bytes)\n", sURL, sPost.length);
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.post(%s): %d bytes\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "requesting: %s\n", sURL);
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.get(%s)\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -60329,7 +60330,7 @@ class SerialPort extends Component {
     }
 
     /**
-     * receiveData(data)
+     * receiveData(data, flush)
      *
      * This replaces the old sendRBR() function, which expected an Array of bytes.  We still support that,
      * but in order to support connections with other SerialPort components (ie, the PCx80 SerialPort), we
@@ -60338,10 +60339,24 @@ class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {number|string|Array} [data]
+     * @param {boolean} [flush]
      * @returns {boolean} true if received, false if not
      */
-    receiveData(data)
+    receiveData(data, flush)
     {
+        if (flush) {
+            /*
+             * Technically, this component is only emulating an 8250 (not a 16550), so the hardware
+             * only has a 1-byte buffer (not a 16-byte buffer), but for debugging/development purposes,
+             * I have historically buffered ALL received data.  Unfortunately, that internal buffer can
+             * screw up serial mouse hardware detection, so I've added a flush parameter just for the
+             * mouse component.
+             *
+             * Ultimately, we should decide which chip we want to emulate and faithfully implement its
+             * buffer, FIFO control register (if any), etc, and get rid of this "infinite" internal buffer.
+             */
+            this.abReceive = [];
+        }
         if (data != null) {
             if (typeof data == "number") {
                 this.abReceive.push(data);
@@ -62474,7 +62489,7 @@ class Mouse extends Component {
                      * bytes on a reset.  This doesn't seem to adversely affect serial mouse emulation for Windows 1.01, so
                      * I'm calling this good enough for now.
                      */
-                    this.componentDevice.receiveData([Mouse.SERIAL.ID, Mouse.SERIAL.ID]);
+                    this.componentDevice.receiveData([Mouse.SERIAL.ID, Mouse.SERIAL.ID], true);
                     this.printf("serial mouse ID sent\n");
                 }
                 this.captureAll();
@@ -63022,7 +63037,7 @@ class Disk extends Component {
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
 
-            this.printf(MESSAGE.DEBUG, "blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
+            this.printf(MESSAGE.DISK, "blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
 
             let aCylinders = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
@@ -63078,10 +63093,10 @@ class Disk extends Component {
     {
         let sDiskURL = sDiskPath;
 
-        this.printf(MESSAGE.DEBUG, 'load("%s","%s")\n', sDiskName, sDiskPath);
+        this.printf(MESSAGE.DISK, 'load("%s","%s")\n', sDiskName, sDiskPath);
 
         if (this.fnNotify) {
-            this.printf(MESSAGE.DEBUG, 'too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
+            this.printf(MESSAGE.DISK, 'too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
             return true;
         }
 
@@ -63252,7 +63267,7 @@ class Disk extends Component {
         if (this.fOnDemand) {
             if (!nErrorCode) {
                 disk = this;
-                this.printf(MESSAGE.DEBUG, "doneLoad(\"%s\")\n", this.sDiskPath);
+                this.printf(MESSAGE.DISK, "doneLoad(\"%s\")\n", this.sDiskPath);
                 this.fRemote = true;
             } else {
                 this.printf(idMessage, "Unable to connect to disk \"%s\" (error %d: %s)\n", this.sDiskPath, nErrorCode, imageData);
@@ -63268,7 +63283,7 @@ class Disk extends Component {
              */
             this.printf(idMessage, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
-            this.printf(MESSAGE.DEBUG, "doneLoad(\"%s\")\n", this.sDiskPath);
+            this.printf(MESSAGE.DISK, "doneLoad(\"%s\")\n", this.sDiskPath);
 
             /*
              * If we received binary data instead of JSON, we can use the same buildDisk() function that

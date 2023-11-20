@@ -565,7 +565,7 @@ export default class SerialPort extends Component {
     }
 
     /**
-     * receiveData(data)
+     * receiveData(data, flush)
      *
      * This replaces the old sendRBR() function, which expected an Array of bytes.  We still support that,
      * but in order to support connections with other SerialPort components (ie, the PCx80 SerialPort), we
@@ -574,10 +574,24 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {number|string|Array} [data]
+     * @param {boolean} [flush]
      * @returns {boolean} true if received, false if not
      */
-    receiveData(data)
+    receiveData(data, flush)
     {
+        if (flush) {
+            /*
+             * Technically, this component is only emulating an 8250 (not a 16550), so the hardware
+             * only has a 1-byte buffer (not a 16-byte buffer), but for debugging/development purposes,
+             * I have historically buffered ALL received data.  Unfortunately, that internal buffer can
+             * screw up serial mouse hardware detection, so I've added a flush parameter just for the
+             * mouse component.
+             *
+             * Ultimately, we should decide which chip we want to emulate and faithfully implement its
+             * buffer, FIFO control register (if any), etc, and get rid of this "infinite" internal buffer.
+             */
+            this.abReceive = [];
+        }
         if (data != null) {
             if (typeof data == "number") {
                 this.abReceive.push(data);

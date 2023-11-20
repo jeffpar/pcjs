@@ -152,13 +152,14 @@ export default class WebLib {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
+        Component.printf(MESSAGE.DEBUG, "getResource(%s)\n", sURL);
+
         /*
          * globals.node.readFileSync exists only when another module has import filelib.js, which means we're
          * running under Node.js, and we can use Node's file system to read local files.  Note that filelib.js only
          * offers readFileSync() at the moment.
          */
         if (globals.node.readFileSync && sURL.indexOf("http") != 0) {
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "reading: %s\n", sURL);
             try {
                 let encoding = (type == "arraybuffer"? null : "utf8");
                 resource = globals.node.readFileSync(sURL, encoding);
@@ -205,7 +206,7 @@ export default class WebLib {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetching: %s\n", sURL);
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.fetch(%s)\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -219,11 +220,11 @@ export default class WebLib {
                 }
             })
             .then(resource => {
-                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "fetch %s complete: %d bytes\n", sURL, resource.length);
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.fetch(%s): %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
-                Component.printf(MESSAGE.LOG, "fetch %s error: %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.LOG, "getResource.fetch(%s) error: %d\n", sURL, nErrorCode);
                 if (done) done(sURL, resource, nErrorCode);
             });
             return response;
@@ -231,7 +232,7 @@ export default class WebLib {
 
         let fArrayBuffer = false, fXHR2 = (typeof request.responseType === 'string');
 
-        let callback = function() {
+        let callback = function getResourceDone() {
             if (request.readyState !== 4) {
                 if (progress) progress(1);
                 return null;
@@ -262,18 +263,18 @@ export default class WebLib {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
+                Component.printf(MESSAGE.LOG, "getResource.done(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && WebLib.getHostProtocol() == "file:")) {
-                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.done(%s): %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Component.printf(MESSAGE.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.DEBUG, "getResource.done(%s) error: %d\n", sURL, nErrorCode);
                 if (!request.status && !WebLib.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
@@ -301,12 +302,12 @@ export default class WebLib {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "posting: %s (%d bytes)\n", sURL, sPost.length);
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.post(%s): %d bytes\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "requesting: %s\n", sURL);
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.get(%s)\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
