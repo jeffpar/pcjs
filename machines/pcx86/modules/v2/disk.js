@@ -451,7 +451,7 @@ export default class Disk extends Component {
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
 
-            this.printf(MESSAGE.DEBUG, "blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
+            this.printf(MESSAGE.DISK, "blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
 
             let aCylinders = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
@@ -507,10 +507,10 @@ export default class Disk extends Component {
     {
         let sDiskURL = sDiskPath;
 
-        this.printf(MESSAGE.DEBUG, 'load("%s","%s")\n', sDiskName, sDiskPath);
+        this.printf(MESSAGE.DISK, 'load("%s","%s")\n', sDiskName, sDiskPath);
 
         if (this.fnNotify) {
-            this.printf(MESSAGE.DEBUG, 'too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
+            this.printf(MESSAGE.DISK, 'too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
             return true;
         }
 
@@ -681,7 +681,7 @@ export default class Disk extends Component {
         if (this.fOnDemand) {
             if (!nErrorCode) {
                 disk = this;
-                this.printf(MESSAGE.DEBUG, "doneLoad(\"%s\")\n", this.sDiskPath);
+                this.printf(MESSAGE.DISK, "doneLoad(\"%s\")\n", this.sDiskPath);
                 this.fRemote = true;
             } else {
                 this.printf(idMessage, "Unable to connect to disk \"%s\" (error %d: %s)\n", this.sDiskPath, nErrorCode, imageData);
@@ -697,7 +697,7 @@ export default class Disk extends Component {
              */
             this.printf(idMessage, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
-            this.printf(MESSAGE.DEBUG, "doneLoad(\"%s\")\n", this.sDiskPath);
+            this.printf(MESSAGE.DISK, "doneLoad(\"%s\")\n", this.sDiskPath);
 
             /*
              * If we received binary data instead of JSON, we can use the same buildDisk() function that

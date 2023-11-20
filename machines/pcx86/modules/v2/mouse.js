@@ -781,7 +781,7 @@ export default class Mouse extends Component {
                      * bytes on a reset.  This doesn't seem to adversely affect serial mouse emulation for Windows 1.01, so
                      * I'm calling this good enough for now.
                      */
-                    this.componentDevice.receiveData([Mouse.SERIAL.ID, Mouse.SERIAL.ID]);
+                    this.componentDevice.receiveData([Mouse.SERIAL.ID, Mouse.SERIAL.ID], true);
                     this.printf("serial mouse ID sent\n");
                 }
                 this.captureAll();
