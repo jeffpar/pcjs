@@ -206,7 +206,7 @@ export default class WebLib {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.fetch(%s)\n", sURL);
+            // Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.fetch(%s)\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -220,11 +220,11 @@ export default class WebLib {
                 }
             })
             .then(resource => {
-                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.fetch(%s): %d bytes\n", sURL, resource.length);
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource(%s): fetched %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
-                Component.printf(MESSAGE.LOG, "getResource.fetch(%s) error: %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.LOG, "getResource(%s) fetch error: %d\n", sURL, nErrorCode);
                 if (done) done(sURL, resource, nErrorCode);
             });
             return response;
@@ -263,18 +263,18 @@ export default class WebLib {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                Component.printf(MESSAGE.LOG, "getResource.done(%s) exception: %s\n", sURL, err.message);
+                Component.printf(MESSAGE.LOG, "getResource(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && WebLib.getHostProtocol() == "file:")) {
-                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.done(%s): %d bytes\n", sURL, resource.length);
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Component.printf(MESSAGE.DEBUG, "getResource.done(%s) error: %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.DEBUG, "getResource(%s) error: %d\n", sURL, nErrorCode);
                 if (!request.status && !WebLib.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
@@ -302,12 +302,12 @@ export default class WebLib {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.post(%s): %d bytes\n", sURL, sPost.length);
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource(%s): posted %d bytes\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.get(%s)\n", sURL);
+            // Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.get(%s)\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
