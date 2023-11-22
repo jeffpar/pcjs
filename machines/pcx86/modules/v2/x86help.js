@@ -958,10 +958,18 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
      * of 0x5F).  Windows doesn't really care if its IDT is too small, because it has to simulate all software
      * interrupts in V86-mode regardless (they generate a GP_FAULT if IOPL < 3, and even when IOPL == 3, only
      * the protected-mode IDT handler gets to run).
+     *
+     * Ditto for I/O instructions, which may generate a GP_FAULT depending on the IOPL and/or the IOPM.
      */
     if (this.regPS & X86.PS.VM) {
         if (nFault == X86.EXCEPTION.UD_FAULT && bOpcode == X86.OPCODE.ARPL ||
-            nFault == X86.EXCEPTION.GP_FAULT && bOpcode == X86.OPCODE.INTN) {
+            nFault == X86.EXCEPTION.GP_FAULT && (
+                bOpcode == X86.OPCODE.PUSHF || bOpcode == X86.OPCODE.POPF ||
+                bOpcode == X86.OPCODE.INTN || bOpcode == X86.OPCODE.IRET ||
+                bOpcode >= X86.OPCODE.INB && bOpcode <= X86.OPCODE.OUTW ||
+                bOpcode >= X86.OPCODE.INDXB && bOpcode <= X86.OPCODE.OUTDXW ||
+                bOpcode == X86.OPCODE.CLI || bOpcode == X86.OPCODE.STI
+            )) {
             fHalt = false;
         }
     }
