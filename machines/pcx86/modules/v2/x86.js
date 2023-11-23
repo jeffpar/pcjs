@@ -457,6 +457,8 @@ const X86 = {
         ENTER:      0xC8,       // opENTER()    (80186 and up)
         LEAVE:      0xC9,       // opLEAVE()    (80186 and up)
         CALLF:      0x9A,       // opCALLF()
+        PUSHF:      0x9C,       // opPUSHF()
+        POPF:       0x9D,       // opPOPF()
         MOVSB:      0xA4,       // opMOVSb()
         MOVSW:      0xA5,       // opMOVSw()
         CMPSB:      0xA6,       // opCMPSb()
@@ -482,10 +484,18 @@ const X86 = {
         LOOPNZ:     0xE0,       // opLOOPNZ()
         LOOPZ:      0xE1,       // opLOOPZ()
         LOOP:       0xE2,       // opLOOP()
+        INB:        0xE4,       // opINb()
+        INW:        0xE5,       // opINw()
+        OUTB:       0xE6,       // opOUTb()
+        OUTW:       0xE7,       // opOUTw()
         CALL:       0xE8,       // opCALL()
         JMP:        0xE9,       // opJMP()      (2-byte displacement)
         JMPF:       0xEA,       // opJMPF()
         JMPS:       0xEB,       // opJMPs()     (1-byte displacement)
+        INDXB:      0xEC,       // opINDXb()
+        INDXW:      0xED,       // opINDXw()
+        OUTDXB:     0xEE,       // opOUTDXb()
+        OUTDXW:     0xEF,       // opOUTDXw()
         LOCK:       0xF0,       // opLOCK()
         INT1:       0xF1,       // opINT1()
         REPNZ:      0xF2,       // opREPNZ()
@@ -584,7 +594,7 @@ const X86 = {
 
                             Condition Code (CC) values following a Remainder
 
-            Q1 0  Q0 Q2     Complete reduction (he three low bits of the quotient stored in C0, C3, and C1)
+            Q1 0  Q0 Q2     Complete reduction (three low bits of quotient stored in C0, C3, and C1)
             ?  1  ?  ?      Incomplete reduction
          */
     },

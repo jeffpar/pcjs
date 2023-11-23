@@ -3172,7 +3172,7 @@ class WebLib {
         } else if (globals.window.ActiveXObject) {
             request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
         } else if (globals.window.fetch) {
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.fetch(%s)\n", sURL);
+            // Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.fetch(%s)\n", sURL);
             fetch(sURL)
             .then(response => {
                 switch(type) {
@@ -3186,11 +3186,11 @@ class WebLib {
                 }
             })
             .then(resource => {
-                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.fetch(%s): %d bytes\n", sURL, resource.length);
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource(%s): fetched %d bytes\n", sURL, resource.length);
                 if (done) done(sURL, resource, nErrorCode);
             })
             .catch(error => {
-                Component.printf(MESSAGE.LOG, "getResource.fetch(%s) error: %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.LOG, "getResource(%s) fetch error: %d\n", sURL, nErrorCode);
                 if (done) done(sURL, resource, nErrorCode);
             });
             return response;
@@ -3229,18 +3229,18 @@ class WebLib {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                Component.printf(MESSAGE.LOG, "getResource.done(%s) exception: %s\n", sURL, err.message);
+                Component.printf(MESSAGE.LOG, "getResource(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && WebLib.getHostProtocol() == "file:")) {
-                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.done(%s): %d bytes\n", sURL, resource.length);
+                Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Component.printf(MESSAGE.DEBUG, "getResource.done(%s) error: %d\n", sURL, nErrorCode);
+                Component.printf(MESSAGE.DEBUG, "getResource(%s) error: %d\n", sURL, nErrorCode);
                 if (!request.status && !WebLib.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
@@ -3268,12 +3268,12 @@ class WebLib {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.post(%s): %d bytes\n", sURL, sPost.length);
+            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource(%s): posted %d bytes\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.get(%s)\n", sURL);
+            // Component.printf(MESSAGE.DEBUG + MESSAGE.LOG, "getResource.get(%s)\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -6492,6 +6492,8 @@ const X86 = {
         ENTER:      0xC8,       // opENTER()    (80186 and up)
         LEAVE:      0xC9,       // opLEAVE()    (80186 and up)
         CALLF:      0x9A,       // opCALLF()
+        PUSHF:      0x9C,       // opPUSHF()
+        POPF:       0x9D,       // opPOPF()
         MOVSB:      0xA4,       // opMOVSb()
         MOVSW:      0xA5,       // opMOVSw()
         CMPSB:      0xA6,       // opCMPSb()
@@ -6517,10 +6519,18 @@ const X86 = {
         LOOPNZ:     0xE0,       // opLOOPNZ()
         LOOPZ:      0xE1,       // opLOOPZ()
         LOOP:       0xE2,       // opLOOP()
+        INB:        0xE4,       // opINb()
+        INW:        0xE5,       // opINw()
+        OUTB:       0xE6,       // opOUTb()
+        OUTW:       0xE7,       // opOUTw()
         CALL:       0xE8,       // opCALL()
         JMP:        0xE9,       // opJMP()      (2-byte displacement)
         JMPF:       0xEA,       // opJMPF()
         JMPS:       0xEB,       // opJMPs()     (1-byte displacement)
+        INDXB:      0xEC,       // opINDXb()
+        INDXW:      0xED,       // opINDXw()
+        OUTDXB:     0xEE,       // opOUTDXb()
+        OUTDXW:     0xEF,       // opOUTDXw()
         LOCK:       0xF0,       // opLOCK()
         INT1:       0xF1,       // opINT1()
         REPNZ:      0xF2,       // opREPNZ()
@@ -6619,7 +6629,7 @@ const X86 = {
 
                             Condition Code (CC) values following a Remainder
 
-            Q1 0  Q0 Q2     Complete reduction (he three low bits of the quotient stored in C0, C3, and C1)
+            Q1 0  Q0 Q2     Complete reduction (three low bits of quotient stored in C0, C3, and C1)
             ?  1  ?  ?      Incomplete reduction
          */
     },
@@ -29317,10 +29327,18 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
      * of 0x5F).  Windows doesn't really care if its IDT is too small, because it has to simulate all software
      * interrupts in V86-mode regardless (they generate a GP_FAULT if IOPL < 3, and even when IOPL == 3, only
      * the protected-mode IDT handler gets to run).
+     *
+     * Ditto for I/O instructions, which may generate a GP_FAULT depending on the IOPL and/or the IOPM.
      */
     if (this.regPS & X86.PS.VM) {
         if (nFault == X86.EXCEPTION.UD_FAULT && bOpcode == X86.OPCODE.ARPL ||
-            nFault == X86.EXCEPTION.GP_FAULT && bOpcode == X86.OPCODE.INTN) {
+            nFault == X86.EXCEPTION.GP_FAULT && (
+                bOpcode == X86.OPCODE.PUSHF || bOpcode == X86.OPCODE.POPF ||
+                bOpcode == X86.OPCODE.INTN || bOpcode == X86.OPCODE.IRET ||
+                bOpcode >= X86.OPCODE.INB && bOpcode <= X86.OPCODE.OUTW ||
+                bOpcode >= X86.OPCODE.INDXB && bOpcode <= X86.OPCODE.OUTDXW ||
+                bOpcode == X86.OPCODE.CLI || bOpcode == X86.OPCODE.STI
+            )) {
             fHalt = false;
         }
     }
@@ -75621,7 +75639,7 @@ class DebuggerX86 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (Component.testBits(this.bitsMessage, MESSAGE.HALT)) {
+        if (bitsMessage && Component.testBits(this.bitsMessage, MESSAGE.HALT)) {
             sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -75629,13 +75647,13 @@ class DebuggerX86 extends DbgLib {
         this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
         /*
-            * We have no idea what the frequency of print() calls might be; all we know is that they easily
-            * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
-            * message, to effectively end the current burst and start fresh.
-            *
-            * TODO: See CPU.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
-            * we display the message.
-            */
+         * We have no idea what the frequency of print() calls might be; all we know is that they easily
+         * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
+         * message, to effectively end the current burst and start fresh.
+         *
+         * TODO: See CPU.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
+         * we display the message.
+         */
         if (this.cpu) this.cpu.yieldCPU();
     }
 
@@ -78686,12 +78704,14 @@ class DebuggerX86 extends DbgLib {
         let m;
         let fCriteria = null;
         let sCategory = asArgs[1];
+        let bitsMessage = this.bitsMessage;
+
         if (sCategory == '?') sCategory = undefined;
 
         if (sCategory !== undefined) {
-            let bitsMessage = 0;
+            let bits = 0;
             if (sCategory == "all") {
-                bitsMessage = MESSAGE.ALL - MESSAGE.HALT - MESSAGE.BUFFER;
+                bits = MESSAGE.ALL - MESSAGE.HALT - MESSAGE.BUFFER;
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -78702,25 +78722,25 @@ class DebuggerX86 extends DbgLib {
             } else {
                 for (m in MESSAGE.NAMES) {
                     if (sCategory == m) {
-                        bitsMessage = MESSAGE.NAMES[m];
-                        fCriteria = Component.testBits(this.bitsMessage, bitsMessage);
+                        bits = MESSAGE.NAMES[m];
+                        fCriteria = Component.testBits(bitsMessage, bits);
                         break;
                     }
                 }
-                if (!bitsMessage) {
+                if (!bits) {
                     this.printf("unknown message category: %s\n", sCategory);
                     return;
                 }
             }
-            if (bitsMessage) {
+            if (bits) {
                 if (asArgs[2] == "on") {
-                    this.bitsMessage = Component.setBits(this.bitsMessage, bitsMessage);
+                    bitsMessage = Component.setBits(bitsMessage, bits);
                     fCriteria = true;
                 }
                 else if (asArgs[2] == "off") {
-                    this.bitsMessage = Component.clearBits(this.bitsMessage, bitsMessage);
+                    bitsMessage = Component.clearBits(bitsMessage, bits);
                     fCriteria = false;
-                    if (bitsMessage == MESSAGE.BUFFER) {
+                    if (bits == MESSAGE.BUFFER) {
                         this.printf("%s\n", this.aMessageBuffer.join(""));
                         this.aMessageBuffer = [];
                     }
@@ -78735,8 +78755,8 @@ class DebuggerX86 extends DbgLib {
         let sCategories = "";
         for (m in MESSAGE.NAMES) {
             if (!sCategory || sCategory == m) {
-                let bitsMessage = MESSAGE.NAMES[m];
-                let fEnabled = Component.testBits(this.bitsMessage, bitsMessage);
+                let bits = MESSAGE.NAMES[m];
+                let fEnabled = Component.testBits(bitsMessage, bits);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
                 if (!(++n % 10)) sCategories += "\n\t";
@@ -78749,6 +78769,8 @@ class DebuggerX86 extends DbgLib {
         }
 
         this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
+
+        this.bitsMessage = bitsMessage;
 
         this.historyInit();     // call this just in case MESSAGE.INT was turned on
     }

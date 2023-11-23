@@ -2486,7 +2486,7 @@ export default class DebuggerX86 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (Component.testBits(this.bitsMessage, MESSAGE.HALT)) {
+        if (bitsMessage && Component.testBits(this.bitsMessage, MESSAGE.HALT)) {
             sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
         }
@@ -2494,13 +2494,13 @@ export default class DebuggerX86 extends DbgLib {
         this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
         /*
-            * We have no idea what the frequency of print() calls might be; all we know is that they easily
-            * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
-            * message, to effectively end the current burst and start fresh.
-            *
-            * TODO: See CPU.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
-            * we display the message.
-            */
+         * We have no idea what the frequency of print() calls might be; all we know is that they easily
+         * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
+         * message, to effectively end the current burst and start fresh.
+         *
+         * TODO: See CPU.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
+         * we display the message.
+         */
         if (this.cpu) this.cpu.yieldCPU();
     }
 
@@ -5551,12 +5551,14 @@ export default class DebuggerX86 extends DbgLib {
         let m;
         let fCriteria = null;
         let sCategory = asArgs[1];
+        let bitsMessage = this.bitsMessage;
+
         if (sCategory == '?') sCategory = undefined;
 
         if (sCategory !== undefined) {
-            let bitsMessage = 0;
+            let bits = 0;
             if (sCategory == "all") {
-                bitsMessage = MESSAGE.ALL - MESSAGE.HALT - MESSAGE.BUFFER;
+                bits = MESSAGE.ALL - MESSAGE.HALT - MESSAGE.BUFFER;
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -5567,25 +5569,25 @@ export default class DebuggerX86 extends DbgLib {
             } else {
                 for (m in MESSAGE.NAMES) {
                     if (sCategory == m) {
-                        bitsMessage = MESSAGE.NAMES[m];
-                        fCriteria = Component.testBits(this.bitsMessage, bitsMessage);
+                        bits = MESSAGE.NAMES[m];
+                        fCriteria = Component.testBits(bitsMessage, bits);
                         break;
                     }
                 }
-                if (!bitsMessage) {
+                if (!bits) {
                     this.printf("unknown message category: %s\n", sCategory);
                     return;
                 }
             }
-            if (bitsMessage) {
+            if (bits) {
                 if (asArgs[2] == "on") {
-                    this.bitsMessage = Component.setBits(this.bitsMessage, bitsMessage);
+                    bitsMessage = Component.setBits(bitsMessage, bits);
                     fCriteria = true;
                 }
                 else if (asArgs[2] == "off") {
-                    this.bitsMessage = Component.clearBits(this.bitsMessage, bitsMessage);
+                    bitsMessage = Component.clearBits(bitsMessage, bits);
                     fCriteria = false;
-                    if (bitsMessage == MESSAGE.BUFFER) {
+                    if (bits == MESSAGE.BUFFER) {
                         this.printf("%s\n", this.aMessageBuffer.join(""));
                         this.aMessageBuffer = [];
                     }
@@ -5600,8 +5602,8 @@ export default class DebuggerX86 extends DbgLib {
         let sCategories = "";
         for (m in MESSAGE.NAMES) {
             if (!sCategory || sCategory == m) {
-                let bitsMessage = MESSAGE.NAMES[m];
-                let fEnabled = Component.testBits(this.bitsMessage, bitsMessage);
+                let bits = MESSAGE.NAMES[m];
+                let fEnabled = Component.testBits(bitsMessage, bits);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
                 if (!(++n % 10)) sCategories += "\n\t";
@@ -5614,6 +5616,8 @@ export default class DebuggerX86 extends DbgLib {
         }
 
         this.printf("%s%s\n", (fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t"), (sCategories || "none"));
+
+        this.bitsMessage = bitsMessage;
 
         this.historyInit();     // call this just in case MESSAGE.INT was turned on
     }
