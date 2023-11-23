@@ -1580,6 +1580,54 @@
       }
     },
     {
+      "name": "Microsoft Windows SDK 3.10 (Standard Mode)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sdk/windows/3.10/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
+      "name": "Microsoft Windows SDK 3.10 (Standard Mode) [Debugger*]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sdk/windows/3.10/?debugger=true",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
+      "name": "Microsoft Windows SDK 3.10 (Enhanced Mode)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sdk/windows/3.10/enhanced/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
+      "name": "Microsoft Windows SDK 3.10 (Enhanced Mode) [Debugger*]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sdk/windows/3.10/enhanced/?debugger=true",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
       "name": "MINIX 1.1",
       "type": "chrome",
       "request": "launch",

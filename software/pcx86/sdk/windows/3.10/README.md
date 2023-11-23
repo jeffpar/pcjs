@@ -1,17 +1,21 @@
 ---
 layout: page
-title: Microsoft Windows SDK 3.10
+title: Microsoft Windows SDK 3.10 (Standard Mode)
 permalink: /software/pcx86/sdk/windows/3.10/
 preview: https://diskettes.pcjs.org/pcx86/sdk/windows/3.10/WIN31SDK-DISK01.jpg
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    autoGen: true
+    config: /machines/pcx86/ibm/5170/vga/4096kb/machine.xml
+    debugger: available
+    commands: m fault off
+    drives: '[{name:"30Mb Hard Disk",type:3,path:"/harddisks/pcx86/30mb/MSDOS500-WIN310-VGA.json"}]'
     autoMount:
+      A: None
       B: "Windows SDK 3.10 (Disk 01)"
-    autoType: $date\r$time\rB:\rDIR\r
 ---
+
+NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 in Standard Mode.  There is also an [Enhanced Mode](enhanced/) configuration that uses a Compaq Deskpro 386 (16Mhz).
 
 {% include machine.html id="ibm5170" %}
 

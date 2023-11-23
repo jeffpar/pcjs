@@ -6,8 +6,8 @@ preview: https://diskettes.pcjs.org/pcx86/sdk/windows/3.00/WIN30SDK-1200K-DEVTOO
 machines:
   - id: ibm5170
     type: pcx86
-    debugger: available
     config: /machines/pcx86/ibm/5170/vga/2048kb/machine.xml
+    debugger: available
     drives: '[{name:"30Mb Hard Disk",type:3,path:"/harddisks/pcx86/30mb/MSDOS500-WIN300-VGA.json"}]'
     autoMount:
       A: None
