@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Microsoft Windows SDK 3.00 (Enhanced Mode)"
+title: Microsoft Windows SDK 3.00 (Enhanced Mode)
 permalink: /software/pcx86/sdk/windows/3.00/enhanced/
 preview: https://diskettes.pcjs.org/pcx86/sdk/windows/3.00/WIN30SDK-1200K-DEVTOOLS.jpg
 machines:
@@ -11,7 +11,8 @@ machines:
     drives: '[{name:"30Mb Hard Disk",type:3,path:"/harddisks/pcx86/30mb/MSDOS500-WIN300-VGA.json"}]'
     autoMount:
       A: None
-      B: "Windows SDK 3.00 (1200K Disk 1)"
+      B: Windows SDK 3.00 (1200K Disk 1)
+    autoType: MODE COM2:9600,N,8,1\rWDEB386 /C:2 C:\\WINDOWS\\WIN.COM\r
 ---
 
 {% include machine.html id="deskpro386" %}
