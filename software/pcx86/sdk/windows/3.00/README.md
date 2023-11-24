@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Microsoft Windows SDK 3.00 (Standard Mode)"
+title: Microsoft Windows SDK 3.00 (Standard Mode)
 permalink: /software/pcx86/sdk/windows/3.00/
 preview: https://diskettes.pcjs.org/pcx86/sdk/windows/3.00/WIN30SDK-1200K-DEVTOOLS.jpg
 machines:
@@ -11,7 +11,8 @@ machines:
     drives: '[{name:"30Mb Hard Disk",type:3,path:"/harddisks/pcx86/30mb/MSDOS500-WIN300-VGA.json"}]'
     autoMount:
       A: None
-      B: "Windows SDK 3.00 (1200K Disk 1)"
+      B: Windows SDK 3.00 (1200K Disk 1)
+    autoType: MODE COM2:9600,N,8,1\rWDEB386 /C:2 C:\\WINDOWS\\WIN.COM\r
 ---
 
 NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 in Standard Mode.  There is also an [Enhanced Mode](enhanced/) configuration that uses a Compaq Deskpro 386 (16Mhz), but there are some issues with that configuration that need to be resolved before it is usable.
