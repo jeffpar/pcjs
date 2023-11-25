@@ -11,7 +11,7 @@
 	<video ref="/machines/pcx86/ibm/video/vga/1986-10-27/ibm-vga-autolockfs.xml"/>
 	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A:"COMPAQ MS-DOS 3.31D (720K Disk 2)", B:"COMPAQ MS-DOS 3.31D (720K Disk 3)"}'/>
 	<hdc ref="/machines/pcx86/ibm/hdc/47mb/unformatted-at5.xml"/>
-	<keyboard ref="/machines/pcx86/ibm/keyboard/us84-softkeys.xml"/>
+	<keyboard ref="/machines/pcx86/ibm/keyboard/us84-softkeys-debugger.xml"/>
 	<debugger id="debugger" messages="" commands=''/>
 	<panel ref="/machines/pcx86/panel/wide386.xml"/>
 	<chipset id="chipset" model="deskpro386" floppies="[1440,1440]" monitor="vga"/>
