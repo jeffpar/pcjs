@@ -41,7 +41,7 @@ function processFile(sInputFile, sOutputFile)
             if (!sOutputFile) {
                 console.log(sNewLine);
             } else {
-                sNew += '\t' + sNewLine + '\n';
+                sNew += sNewLine + '\n';
             }
         }
         if (sOutputFile) {
