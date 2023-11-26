@@ -46,11 +46,11 @@ The following reference collections, including a large number of [KB Articles](k
       - [MS-DOS 4.0 Programmer's Reference](msdos/dosref40/)
       - [The MS-DOS Encyclopedia](msdos/encyclopedia/)
       - [The New Peter Norton Programmer's Guide](msdos/norton/)
-  - MS Systems Journal
+  - [MS Systems Journal](msj/)
   - Network References
   - OS/2 References
   - Pascal References
-  - Windows References
+  - [Windows References](win/)
 
 {% comment %}
 
