@@ -3671,7 +3671,7 @@ export default class CPUx86 extends CPULib {
     getSOByte(seg, off)
     {
        return this.getByte(seg.checkRead(off, 1));
-   }
+    }
 
     /**
      * getSOWord(seg, off)

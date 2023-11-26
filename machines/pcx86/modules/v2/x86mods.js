@@ -923,6 +923,7 @@ X86.modRegShort16 = function(fn)
     }
 
     let w = fn.call(this, dst, src);
+    this.assert(!(w & ~0xffff), "modRegShort16(): result out of range: " + StrLib.toHexLong(w));
 
     switch(reg) {
     case 0x0:
@@ -1168,6 +1169,7 @@ X86.modMemShort16 = function(fn)
     }
 
     let w = fn.call(this, dst, src);
+    this.assert(!(w & ~0xffff), "modMemShort16(): result out of range: " + StrLib.toHexLong(w));
 
     switch(bModRM) {
     case 0x00:
@@ -1406,8 +1408,8 @@ X86.modGrpShort16 = function(afnGrp, fnSrc)
     }
 
     let reg = (this.bModRM >> 3) & 0x7;
-
     let w = afnGrp[reg].call(this, dst, fnSrc.call(this));
+    this.assert(!(w & ~0xffff), "modGrpShort16(): result out of range: " + StrLib.toHexLong(w));
 
     switch(bModRM) {
     case 0x00:
@@ -2991,6 +2993,7 @@ X86.modRegShort32 = function(fn)
     }
 
     let w = fn.call(this, dst, src);
+    this.assert(!(w & ~0xffff), "modRegShort32(): result out of range: " + StrLib.toHexLong(w));
 
     switch(reg) {
     case 0x0:
@@ -3236,6 +3239,7 @@ X86.modMemShort32 = function(fn)
     }
 
     let w = fn.call(this, dst, src);
+    this.assert(!(w & ~0xffff), "modMemShort32(): result out of range: " + StrLib.toHexLong(w));
 
     switch(bModRM) {
     case 0xC0:
@@ -3431,6 +3435,7 @@ X86.modGrpShort32 = function(afnGrp, fnSrc)
     let reg = (this.bModRM >> 3) & 0x7;
 
     let w = afnGrp[reg].call(this, dst, fnSrc.call(this));
+    this.assert(!(w & ~0xffff), "modGrpShort32(): result out of range: " + StrLib.toHexLong(w));
 
     switch(bModRM) {
     case 0xC0:

@@ -5,7 +5,7 @@
 /**
  * @define {string}
  */
-const APPVERSION = "2.22";              // this @define is overridden by the Closure Compiler with the version in machines.json
+const APPVERSION = "2.XX";              // this @define is overridden by the Closure Compiler with the version in machines.json
 
 /**
  * COMPILED is false by default; overridden with true in the Closure Compiler release.
@@ -19048,7 +19048,7 @@ class CPUx86 extends CPULib {
     getSOByte(seg, off)
     {
        return this.getByte(seg.checkRead(off, 1));
-   }
+    }
 
     /**
      * getSOWord(seg, off)
@@ -27951,9 +27951,9 @@ X86.fnSLDT = function(dst, src)
  * fnSMSW(dst, src)
  *
  * TODO: I've seen a claim that SMSW can be used with an operand size override to obtain the entire CR0.
- * I don't dispute that, and since I don't mask the return value, that should be possible here; however, it
- * should still be confirmed on real hardware at some point.  Note that this differs from LMSW, which is
- * REQUIRED to mask the source operand.
+ * I don't dispute that, so I allow it (ie, if an override is present, then maskData will be 0xffffffff),
+ * but it should still be confirmed on real hardware at some point.  Note that this differs from LMSW,
+ * which is REQUIRED to mask the source operand.
  *
  * op=0x0F,0x01,reg=0x4 (GRP7:SMSW)
  *
@@ -27965,7 +27965,7 @@ X86.fnSLDT = function(dst, src)
 X86.fnSMSW = function(dst, src)
 {
     this.nStepCycles -= (2 + (this.regEA === X86.ADDR_INVALID? 0 : 1));
-    return this.regCR0;
+    return this.regCR0 & this.maskData;
 };
 
 /**
@@ -30344,6 +30344,7 @@ X86.modRegShort16 = function(fn)
 
     let w = fn.call(this, dst, src);
 
+
     switch(reg) {
     case 0x0:
         this.regEAX = (this.regEAX & ~0xffff) | w;
@@ -30589,6 +30590,7 @@ X86.modMemShort16 = function(fn)
 
     let w = fn.call(this, dst, src);
 
+
     switch(bModRM) {
     case 0x00:
     case 0x03:
@@ -30826,8 +30828,8 @@ X86.modGrpShort16 = function(afnGrp, fnSrc)
     }
 
     let reg = (this.bModRM >> 3) & 0x7;
-
     let w = afnGrp[reg].call(this, dst, fnSrc.call(this));
+
 
     switch(bModRM) {
     case 0x00:
@@ -32412,6 +32414,7 @@ X86.modRegShort32 = function(fn)
 
     let w = fn.call(this, dst, src);
 
+
     switch(reg) {
     case 0x0:
         this.regEAX = (this.regEAX & ~0xffff) | w;
@@ -32657,6 +32660,7 @@ X86.modMemShort32 = function(fn)
 
     let w = fn.call(this, dst, src);
 
+
     switch(bModRM) {
     case 0xC0:
         this.regEAX = (this.regEAX & ~0xffff) | w;
@@ -32851,6 +32855,7 @@ X86.modGrpShort32 = function(afnGrp, fnSrc)
     let reg = (this.bModRM >> 3) & 0x7;
 
     let w = afnGrp[reg].call(this, dst, fnSrc.call(this));
+
 
     switch(bModRM) {
     case 0xC0:

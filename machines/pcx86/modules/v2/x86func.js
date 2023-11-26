@@ -2945,9 +2945,9 @@ X86.fnSLDT = function(dst, src)
  * fnSMSW(dst, src)
  *
  * TODO: I've seen a claim that SMSW can be used with an operand size override to obtain the entire CR0.
- * I don't dispute that, and since I don't mask the return value, that should be possible here; however, it
- * should still be confirmed on real hardware at some point.  Note that this differs from LMSW, which is
- * REQUIRED to mask the source operand.
+ * I don't dispute that, so I allow it (ie, if an override is present, then maskData will be 0xffffffff),
+ * but it should still be confirmed on real hardware at some point.  Note that this differs from LMSW,
+ * which is REQUIRED to mask the source operand.
  *
  * op=0x0F,0x01,reg=0x4 (GRP7:SMSW)
  *
@@ -2959,7 +2959,7 @@ X86.fnSLDT = function(dst, src)
 X86.fnSMSW = function(dst, src)
 {
     this.nStepCycles -= (2 + (this.regEA === X86.ADDR_INVALID? 0 : 1));
-    return this.regCR0;
+    return this.regCR0 & this.maskData;
 };
 
 /**
