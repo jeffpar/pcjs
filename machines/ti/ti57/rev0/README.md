@@ -13,7 +13,7 @@ machines:
 ---
 
 The TI-57 emulator below is one of the most faithful TI-57 emulations currently available.  It should run at
-roughly the same speed as an original device.  That includes calculation speed, display speed, and pause delays.
+the same speed as an original device.  That includes calculation speed, display speed, and pause delays.
 
 It is also using an exact copy of an original [TI-57 ROM](/machines/ti/ti57/rom/); no instructions have been patched.
 A configuration using a [Revised ROM](../rev1/) is also available.
