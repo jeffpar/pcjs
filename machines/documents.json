@@ -1818,5 +1818,29 @@
         ]
       }
     }
+  },
+  "specs": {
+    "@title": "Specifications",
+    "@instances": {
+      "dpmi": {
+        "@title": "DOS Protected Mode Interface",
+        "@documents": [
+          {
+            "@title": "DPMI 0.9 (April 1990)",
+            "@link": "https://docs.pcjs.org/specs/dpmi/1990_04_23-DPMI_Spec_v09.pdf",
+            "@cover": "/documents/specs/dpmi/covers/1990_04_23-DPMI_Spec_v09.jpg",
+            "@source": "PCjs",
+            "@tags": "dpmi"
+          },
+          {
+            "@title": "DPMI 1.0 (March 1991)",
+            "@link": "https://docs.pcjs.org/specs/dpmi/1991_03_12-DPMI_Spec_v10.pdf",
+            "@cover": "/documents/specs/dpmi/covers/1991_03_12-DPMI_Spec_v10.jpg",
+            "@source": "",
+            "@tags": "dpmi"
+          }
+        ]
+      }
+    }
   }
 }
