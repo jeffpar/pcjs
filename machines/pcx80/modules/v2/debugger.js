@@ -1930,13 +1930,13 @@ export default class DebuggerX80 extends DbgLib {
             } while (dbgAddrIns.addr != dbgAddr.addr);
         }
 
-        sLine += StrLib.pad(sBytes, 10);
+        sLine += StrLib.pad(sBytes, -10);
         sLine += (type & DebuggerX80.TYPE_UNDOC)? '*' : ' ';
-        sLine += StrLib.pad(sOpcode, 7);
+        sLine += StrLib.pad(sOpcode, -7);
         if (sOperands) sLine += ' ' + sOperands;
 
         if (sComment) {
-            sLine = StrLib.pad(sLine, 40) + ';' + sComment;
+            sLine = StrLib.pad(sLine, -40) + ';' + sComment;
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
@@ -2352,7 +2352,7 @@ export default class DebuggerX80 extends DbgLib {
     {
         let s = "commands:";
         for (let sCommand in DebuggerX80.COMMANDS) {
-            s += '\n' + StrLib.pad(sCommand, 9) + DebuggerX80.COMMANDS[sCommand];
+            s += '\n' + StrLib.pad(sCommand, -9) + DebuggerX80.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -3432,7 +3432,7 @@ export default class DebuggerX80 extends DbgLib {
                 let a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = StrLib.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, -50) + "  ;" + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;

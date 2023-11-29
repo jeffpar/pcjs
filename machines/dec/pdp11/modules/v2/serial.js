@@ -695,7 +695,7 @@ export default class SerialPortPDP11 extends Component {
                 if (b == 0x09) {
                     var tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
-                    if (this.tabSize) s = StrLib.pad("", nChars);
+                    if (this.tabSize) s = StrLib.pad("", -nChars);
                 }
                 if (this.charBOL && !this.iLogicalCol && nChars) s = String.fromCharCode(this.charBOL) + s;
                 this.controlBuffer.value += s;

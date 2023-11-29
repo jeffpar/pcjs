@@ -2004,26 +2004,24 @@ class StrLib {
             k = k.replace(/([\\[\]*{}().+?|$])/g, "\\$1");
             sMatch += (sMatch? '|' : '') + k;
         }
-        return s.replace(new RegExp('(' + sMatch + ')', "g"), function(m)
-        {
+        return s.replace(new RegExp('(' + sMatch + ')', "g"), function(m) {
             return a[m];
         });
     }
 
     /**
-     * pad(s, cch, fPadLeft)
+     * pad(s, cch)
      *
-     * NOTE: the maximum amount of padding currently supported is 40 spaces.
+     * Use a negative cch to pad on the right (ie, left-align), similar to sprintf("%-Ns", s).
+     * This also truncates the string if it's longer than abs(cch), similar to sprintf("%.Ns", s).
      *
      * @param {string} s is a string
      * @param {number} cch is desired length
-     * @param {boolean} [fPadLeft] (default is padding on the right)
      * @returns {string} the original string (s) with spaces padding it to the specified length
      */
-    static pad(s, cch, fPadLeft)
+    static pad(s, cch)
     {
-        let sPadding = "                                        ";
-        return fPadLeft? (sPadding + s).slice(-cch) : (s + sPadding).slice(0, cch);
+        return StrLib.sprintf('%' + cch + '.' + Math.abs(cch) + 's', s);
     }
 
     /**
@@ -2083,7 +2081,7 @@ class StrLib {
     {
         let cch = s.length;
         s = s.replace(/^0+([0-9A-F]+)$/i, "$1");
-        if (fPad) s = StrLib.pad(s, cch, true);
+        if (fPad) s = StrLib.pad(s, cch);
         return s;
     }
 
@@ -17746,7 +17744,7 @@ class SerialPortX80 extends Component {
                 if (b == 0x09) {
                     let tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
-                    if (this.tabSize) s = StrLib.pad("", nChars);
+                    if (this.tabSize) s = StrLib.pad("", -nChars);
                 }
                 else if (b == 0x0D) {
                     this.iLogicalCol = nChars = 0;
@@ -21664,13 +21662,13 @@ class DebuggerX80 extends DbgLib {
             } while (dbgAddrIns.addr != dbgAddr.addr);
         }
 
-        sLine += StrLib.pad(sBytes, 10);
+        sLine += StrLib.pad(sBytes, -10);
         sLine += (type & DebuggerX80.TYPE_UNDOC)? '*' : ' ';
-        sLine += StrLib.pad(sOpcode, 7);
+        sLine += StrLib.pad(sOpcode, -7);
         if (sOperands) sLine += ' ' + sOperands;
 
         if (sComment) {
-            sLine = StrLib.pad(sLine, 40) + ';' + sComment;
+            sLine = StrLib.pad(sLine, -40) + ';' + sComment;
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
@@ -22086,7 +22084,7 @@ class DebuggerX80 extends DbgLib {
     {
         let s = "commands:";
         for (let sCommand in DebuggerX80.COMMANDS) {
-            s += '\n' + StrLib.pad(sCommand, 9) + DebuggerX80.COMMANDS[sCommand];
+            s += '\n' + StrLib.pad(sCommand, -9) + DebuggerX80.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -23166,7 +23164,7 @@ class DebuggerX80 extends DbgLib {
                 let a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = StrLib.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, -50) + "  ;" + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;

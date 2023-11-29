@@ -76,7 +76,7 @@ function dumpFile(offset, length, size = 1, comment = "")
             cb--;
         }
         if (sDump) sDump += '\n';
-        sDump += sAddr + "  " + sData + strlib.pad(sChars, sChars.length + i * 3 + 1, true) + comment;
+        sDump += sAddr + "  " + sData + strlib.pad(sChars, sChars.length + i * 3 + 1) + comment;
     }
     if (sDump) printf("%s\n", sDump);
     offsetPrev = offset;

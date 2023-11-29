@@ -2604,26 +2604,24 @@ class StrLib {
             k = k.replace(/([\\[\]*{}().+?|$])/g, "\\$1");
             sMatch += (sMatch? '|' : '') + k;
         }
-        return s.replace(new RegExp('(' + sMatch + ')', "g"), function(m)
-        {
+        return s.replace(new RegExp('(' + sMatch + ')', "g"), function(m) {
             return a[m];
         });
     }
 
     /**
-     * pad(s, cch, fPadLeft)
+     * pad(s, cch)
      *
-     * NOTE: the maximum amount of padding currently supported is 40 spaces.
+     * Use a negative cch to pad on the right (ie, left-align), similar to sprintf("%-Ns", s).
+     * This also truncates the string if it's longer than abs(cch), similar to sprintf("%.Ns", s).
      *
      * @param {string} s is a string
      * @param {number} cch is desired length
-     * @param {boolean} [fPadLeft] (default is padding on the right)
      * @returns {string} the original string (s) with spaces padding it to the specified length
      */
-    static pad(s, cch, fPadLeft)
+    static pad(s, cch)
     {
-        let sPadding = "                                        ";
-        return fPadLeft? (sPadding + s).slice(-cch) : (s + sPadding).slice(0, cch);
+        return StrLib.sprintf('%' + cch + '.' + Math.abs(cch) + 's', s);
     }
 
     /**
@@ -2683,7 +2681,7 @@ class StrLib {
     {
         let cch = s.length;
         s = s.replace(/^0+([0-9A-F]+)$/i, "$1");
-        if (fPad) s = StrLib.pad(s, cch, true);
+        if (fPad) s = StrLib.pad(s, cch);
         return s;
     }
 
@@ -60752,7 +60750,7 @@ class SerialPort extends Component {
                 if (b == 0x09) {
                     let tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
-                    if (this.tabSize) s = StrLib.pad("", nChars);
+                    if (this.tabSize) s = StrLib.pad("", -nChars);
                 }
                 if (!this.iLogicalCol && nChars) {
                     /*
@@ -73201,7 +73199,7 @@ DbgLib.EVENTS = {
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
  */
 
-/** @typedef {{ off: (number|undefined), sel: (number|undefined), addr: (number|undefined), type: (number|undefined), fData32: (boolean|undefined), fAddr32: (boolean|undefined), fData32Orig: (boolean|undefined), fAddr32Orig: (boolean|undefined), fComplete: (boolean|undefined), fTempBreak: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined), nCPUCycles: (number|undefined), nDebugCycles: (number|undefined), nDebugState: (number|undefined) }} */
+/** @typedef {{ off: (number|undefined), sel: (number|undefined), addr: (number|undefined), type: (number|undefined), fData32: (boolean|undefined), fAddr32: (boolean|undefined), fData32Orig: (boolean|undefined), fAddr32Orig: (boolean|undefined), fTempBreak: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined), nCPUCycles: (number|undefined), nDebugCycles: (number|undefined), nDebugState: (number|undefined) }} */
 let DbgAddrX86;
 
 /*
@@ -74456,7 +74454,7 @@ class DebuggerX86 extends DbgLib {
      */
     packAddr(dbgAddr)
     {
-        return [dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.fTempBreak, dbgAddr.fData32, dbgAddr.fAddr32, 0, dbgAddr.fComplete];
+        return [dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.fTempBreak, dbgAddr.fData32, dbgAddr.fAddr32, 0];
     }
 
     /**
@@ -74470,7 +74468,7 @@ class DebuggerX86 extends DbgLib {
      */
     unpackAddr(aAddr)
     {
-        return {off: aAddr[0], sel: aAddr[1], addr: aAddr[2], fTempBreak: aAddr[3], fData32: aAddr[4], fAddr32: aAddr[5], fComplete: aAddr[7]};
+        return {off: aAddr[0], sel: aAddr[1], addr: aAddr[2], fTempBreak: aAddr[3], fData32: aAddr[4], fAddr32: aAddr[5]};
     }
 
     /**
@@ -75241,7 +75239,7 @@ class DebuggerX86 extends DbgLib {
                 v |= this.cpu.probeAddr(addr + 2, 2) << 16;
             }
             if (sDump) sDump += '\n';
-            sDump += StrLib.toHexWord(off) + ' ' + StrLib.pad(sField + ':', 11) + StrLib.toHex(v, cch);
+            sDump += StrLib.toHexWord(off) + ' ' + StrLib.pad(sField + ':', -11) + StrLib.toHex(v, cch);
         }
         if (type == X86.DESC.ACC.TYPE.TSS386) {
             let iPort = 0;
@@ -76874,8 +76872,6 @@ class DebuggerX86 extends DbgLib {
         }
 
         let typeCPU = -1;
-        let fComplete = true;
-
         for (let iOperand = 1; iOperand <= cOperands; iOperand++) {
 
             let disp, off, cch;
@@ -76902,10 +76898,6 @@ class DebuggerX86 extends DbgLib {
 
             let typeSize = type & DebuggerX86.TYPE_SIZE;
             if (typeSize == DebuggerX86.TYPE_NONE) {
-                continue;
-            }
-            if (typeSize == DebuggerX86.TYPE_PREFIX) {
-                fComplete = false;
                 continue;
             }
             let typeMode = type & DebuggerX86.TYPE_MODE;
@@ -77001,7 +76993,7 @@ class DebuggerX86 extends DbgLib {
             } while (dbgAddrIns.addr != dbgAddr.addr);
         }
 
-        sLine += StrLib.pad(sBytes, dbgAddrIns.fAddr32? 21 : 17);
+        sLine += StrLib.pad(sBytes, dbgAddrIns.fAddr32? -20 : -16) + ' ';
 
         if (sPrefix.indexOf("REP") == 0) {
             /*
@@ -77021,15 +77013,15 @@ class DebuggerX86 extends DbgLib {
             sOpcode = sPrefix;
         }
 
-        sLine += StrLib.pad(sOpcode, 8);
+        sLine += StrLib.pad(sOpcode, -8);
         if (sOperands) sLine += ' ' + sOperands;
 
         if (this.cpu.model < DebuggerX86.CPUS[typeCPU]) {
             sComment = DebuggerX86.CPUS[typeCPU] + " CPU only";
         }
 
-        if (sComment && fComplete) {
-            sLine = StrLib.pad(sLine, dbgAddrIns.fAddr32? 74 : 62) + ';' + sComment;
+        if (sComment) {
+            sLine = StrLib.pad(sLine, dbgAddrIns.fAddr32? -74 : -62) + ';' + sComment;
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence >= 0? '=' + nSequence.toString() : "");
             } else {
@@ -77038,7 +77030,7 @@ class DebuggerX86 extends DbgLib {
             }
         }
 
-        this.initAddrSize(dbgAddr, fComplete);
+        this.initAddrSize(dbgAddr);
         return sLine;
     }
 
@@ -77847,7 +77839,7 @@ class DebuggerX86 extends DbgLib {
     {
         let s = "debugger commands:";
         for (let sCommand in DebuggerX86.COMMANDS) {
-            s += '\n  ' + StrLib.pad(sCommand, 7) + DebuggerX86.COMMANDS[sCommand];
+            s += '\n  ' + StrLib.pad(sCommand, -7) + DebuggerX86.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -78249,7 +78241,7 @@ class DebuggerX86 extends DbgLib {
             if (fASCII) {
                 sDump += sChars;
             } else {
-                sDump += sAddr + "  " + sData + StrLib.pad(sChars, sChars.length + i * 3 + 1, true);
+                sDump += sAddr + "  " + sData + StrLib.pad(sChars, sChars.length + i * 3 + 1);
             }
         }
         if (sDump) this.print(sDump.replace(/\s*$/, "") + "\n");
@@ -79203,7 +79195,7 @@ class DebuggerX86 extends DbgLib {
         for (let i = 0; i < 8; i++) {
             let a = fpu.readFPUStack(i);
             if (!a) break;
-            let sValue = StrLib.pad(a[2].toFixed(15), 24, true);
+            let sValue = StrLib.pad(a[2].toFixed(15), 24);
             this.printf("ST%d: %s  %x,%x  [%d:%s]\n", i, sValue, a[4], a[3], a[0], DebuggerX86.FPU_TAGS[a[1]]);
             // this.printf("  REG%d %s%s%s\n", a[0], StrLib.toBin(a[7], 16), StrLib.toBin(a[6]), StrLib.toBin(a[5]));
         }
@@ -79490,7 +79482,7 @@ class DebuggerX86 extends DbgLib {
                 let a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = StrLib.pad(sCall, dbgAddrCall.fAddr32? 74 : 62) + ';' + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, dbgAddrCall.fAddr32? -74 : -62) + ';' + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;
@@ -79546,19 +79538,13 @@ class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * initAddrSize(dbgAddr, fComplete)
+     * initAddrSize(dbgAddr)
      *
      * @this {DebuggerX86}
      * @param {DbgAddrX86} dbgAddr
-     * @param {boolean} fComplete
      */
-    initAddrSize(dbgAddr, fComplete)
+    initAddrSize(dbgAddr)
     {
-        /*
-         * We use dbgAddr.fComplete to record whether or not the caller (ie, getInstruction())
-         * processed a complete instruction.
-         */
-        dbgAddr.fComplete = fComplete;
         /*
          * For proper disassembly of instructions preceded by an OPERAND (0x66) size prefix, we set
          * dbgAddr.fData32 to true whenever the operand size is 32-bit; similarly, for an ADDRESS (0x67)
@@ -79567,12 +79553,10 @@ class DebuggerX86 extends DbgLib {
          * Initially (and every time we've processed a complete instruction), both fields must be
          * set to their original value.
          */
-        if (fComplete) {
-            if (dbgAddr.fData32Orig != null) dbgAddr.fData32 = dbgAddr.fData32Orig;
-            if (dbgAddr.fAddr32Orig != null) dbgAddr.fAddr32 = dbgAddr.fAddr32Orig;
-            dbgAddr.fData32Orig = dbgAddr.fData32;
-            dbgAddr.fAddr32Orig = dbgAddr.fAddr32;
-        }
+        if (dbgAddr.fData32Orig != null) dbgAddr.fData32 = dbgAddr.fData32Orig;
+        if (dbgAddr.fAddr32Orig != null) dbgAddr.fAddr32 = dbgAddr.fAddr32Orig;
+        dbgAddr.fData32Orig = dbgAddr.fData32;
+        dbgAddr.fAddr32Orig = dbgAddr.fAddr32;
     }
 
     /**
@@ -79622,7 +79606,7 @@ class DebuggerX86 extends DbgLib {
 
         let cLines = 0;
         let sInstruction;
-        this.initAddrSize(dbgAddr, true);
+        this.initAddrSize(dbgAddr);
 
         while (cb > 0 && n--) {
 
@@ -79646,13 +79630,6 @@ class DebuggerX86 extends DbgLib {
             }
 
             sInstruction = this.getInstruction(dbgAddr, sComment, nSequence);
-
-            /*
-             * If getInstruction() reported that it did not process a complete instruction (via dbgAddr.fComplete),
-             * then bump the instruction count by one, so that we display one more line (and hopefully the complete
-             * instruction).
-             */
-            if (!dbgAddr.fComplete && !n) n++;
 
             this.printf("%s\n", sInstruction);
             this.dbgAddrNextCode = dbgAddr;

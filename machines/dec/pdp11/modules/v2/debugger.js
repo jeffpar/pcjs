@@ -2000,12 +2000,12 @@ export default class DebuggerPDP11 extends DbgLib {
             } while (dbgAddrOp.addr != dbgAddr.addr);
         }
 
-        sLine += StrLib.pad(sOpCodes, 24);
-        sLine += StrLib.pad(sOpName, 5);
+        sLine += StrLib.pad(sOpCodes, -24);
+        sLine += StrLib.pad(sOpName, -5);
         if (sOperands) sLine += ' ' + sOperands;
 
         if (sComment || sTarget) {
-            sLine = StrLib.pad(sLine, 60) + ';' + (sComment || "");
+            sLine = StrLib.pad(sLine, -60) + ';' + (sComment || "");
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
@@ -2564,7 +2564,7 @@ export default class DebuggerPDP11 extends DbgLib {
     {
         var s = "commands:";
         for (var sCommand in DebuggerPDP11.COMMANDS) {
-            s += '\n' + StrLib.pad(sCommand, 9) + DebuggerPDP11.COMMANDS[sCommand];
+            s += '\n' + StrLib.pad(sCommand, -9) + DebuggerPDP11.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -2843,7 +2843,7 @@ export default class DebuggerPDP11 extends DbgLib {
              */
             var fPhysical = (dbgAddr.fPhysical || dbgAddr.addr > 0xffff);
             var a = this.cpu.getAddrInfo(dbgAddr.addr || 0, fPhysical);
-            this.printf("%s%s  %08o\n", StrLib.pad("", fPhysical? 12: 19), StrLib.toBin(dbgAddr.addr, fPhysical? 22 : 17, 3), dbgAddr.addr);
+            this.printf("%s%s  %08o\n", StrLib.pad("", fPhysical? -12: -19), StrLib.toBin(dbgAddr.addr, fPhysical? 22 : 17, 3), dbgAddr.addr);
             if (a.length < 6) {
                 if (a.length > 2) {
                     this.printf("    OFFSET:             %s  %08o\n", StrLib.toBin(a[3], 13, 3), a[3]);
@@ -3616,7 +3616,7 @@ export default class DebuggerPDP11 extends DbgLib {
                 var a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = StrLib.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, -50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;

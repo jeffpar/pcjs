@@ -1562,7 +1562,7 @@ export default class DebuggerPDP10 extends DbgLib {
             if (!opNum) sOperation = "";
         } else {
             if (!opNum) {
-                sOperation = StrLib.pad(sOperation, 8) + this.toStrWord(opCode);
+                sOperation = StrLib.pad(sOperation, -8) + this.toStrWord(opCode);
             } else {
                 var n, sOperand;
                 if (opMask == PDP10.OPCODE.OPIO) {
@@ -1582,7 +1582,7 @@ export default class DebuggerPDP10 extends DbgLib {
                         }
                     }
                 }
-                sOperation = StrLib.pad(sOperation, 8) + (sOperand? sOperand + ',' : "");
+                sOperation = StrLib.pad(sOperation, -8) + (sOperand? sOperand + ',' : "");
                 if (opCode & PDP10.OPCODE.I_FIELD) sOperation += '@';
                 sOperation += this.toStrBase(opCode & PDP10.OPCODE.Y_MASK, -1);
                 var i = (opCode >> PDP10.OPCODE.X_SHIFT) & PDP10.OPCODE.X_MASK;
@@ -1619,10 +1619,10 @@ export default class DebuggerPDP10 extends DbgLib {
             } while (dbgAddrOp.addr != dbgAddr.addr);
         }
 
-        sLine += StrLib.pad(sOpcodes, 16) + sOperation;
+        sLine += StrLib.pad(sOpcodes, -16) + sOperation;
 
         if (sComment) {
-            sLine = StrLib.pad(sLine, 48) + ';' + (sComment || "");
+            sLine = StrLib.pad(sLine, -48) + ';' + (sComment || "");
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
@@ -2608,7 +2608,7 @@ export default class DebuggerPDP10 extends DbgLib {
     {
         var s = "commands:";
         for (var sCommand in DebuggerPDP10.COMMANDS) {
-            s += '\n' + StrLib.pad(sCommand, 9) + DebuggerPDP10.COMMANDS[sCommand];
+            s += '\n' + StrLib.pad(sCommand, -9) + DebuggerPDP10.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -3554,7 +3554,7 @@ export default class DebuggerPDP10 extends DbgLib {
                 var a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = StrLib.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, -50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;
@@ -3974,7 +3974,7 @@ export default class DebuggerPDP10 extends DbgLib {
             }
             for (sOperation in ops) {
                 op = ops[sOperation];
-                this.printf("%s%s\n", StrLib.pad(sOperation + ":", 8), this.toStrWord(op * Math.pow(2, 21)));
+                this.printf("%s%s\n", StrLib.pad(sOperation + ":", -8), this.toStrWord(op * Math.pow(2, 21)));
                 //
                 // The following code leveraged the disassembler to generate opcode handlers.
                 //
@@ -3996,7 +3996,7 @@ export default class DebuggerPDP10 extends DbgLib {
             // for (opXXX = 0o000; opXXX <= 0o777; opXXX++) {
             //     sOperation = aOpXXX[opXXX];
             //     sOperation = sOperation? ("    PDP10.op" + sOperation + ",") : "    PDP10.opUndefined,";
-            //     sOperation = StrLib.pad(sOperation, 32);
+            //     sOperation = StrLib.pad(sOperation, -32);
             //     sOperation += "// " + StrLib.toOct(opXXX, 3, true) + "xxx";
             //     this.printf("%s\n", sOperation);
             // }
