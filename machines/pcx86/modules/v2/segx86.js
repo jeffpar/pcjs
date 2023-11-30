@@ -247,6 +247,13 @@ export default class SegX86 {
          * there's no way to issue an interrupt with a vector > 0xff.  Just something to be aware of.
          */
         cpu.assert(nIDT >= 0 && nIDT < 256 && !cpu.addrIDT && cpu.addrIDTLimit >= 0x3ff);
+
+        if (DEBUGGER && this.dbg) {
+            if (this.dbg.checkVectorBP(nIDT, false)) {
+                return X86.ADDR_INVALID;
+            }
+        }
+
         /*
          * Intel documentation for INT/INTO under "REAL ADDRESS MODE EXCEPTIONS" says:
          *
@@ -272,15 +279,23 @@ export default class SegX86 {
         let cpu = this.cpu;
         cpu.assert(nIDT >= 0 && nIDT < 256);
 
-        nIDT <<= 3;
-        let addrDesc = (cpu.addrIDT + nIDT)|0;
+        if (DEBUGGER && this.dbg) {
+            if (this.dbg.checkVectorBP(nIDT, true)) {
+                return X86.ADDR_INVALID;
+            }
+        }
+
+        let offIDT = nIDT << 3;
+        let addrDesc = (cpu.addrIDT + offIDT)|0;
         if (((cpu.addrIDTLimit - addrDesc)|0) >= 7) {
             this.fCall = true;
-            let addr = this.loadDesc8(addrDesc, nIDT);
-            if (addr !== X86.ADDR_INVALID) addr += this.offIP;
+            let addr = this.loadDesc8(addrDesc, offIDT);
+            if (addr !== X86.ADDR_INVALID) {
+                addr += this.offIP;
+            }
             return addr;
         }
-        X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, nIDT | X86.ERRCODE.IDT);
+        X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, offIDT | X86.ERRCODE.IDT);
         return X86.ADDR_INVALID;
     }
 

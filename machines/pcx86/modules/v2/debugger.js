@@ -39,6 +39,13 @@ import { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BYTEARRAYS, COMPILED, DEBUG, 
  * @property {number}   [nDebugState]   (added to DbgAddrX86 objects stored in history buffer)
  */
 
+/**
+ * @typedef {Object}    VectorBP
+ * @property {number}   [vector]
+ * @property {number}   [type]
+ * @property {DbgAddrX86} [dbgAddr]
+ */
+
 /*
  * Debugger Breakpoint Tips
  *
@@ -160,6 +167,15 @@ export default class DebuggerX86 extends DbgLib {
              * "bn 0" disables any outstanding count.
              */
             this.nBreakIns = 0;
+
+            /*
+             * A new breakpoint command, "bv", allows you to monitor an interrupt vector.  Vector breakpoints
+             * don't simply monitor "INT" instructions; they also snapshot the vector address when the "bv"
+             * command is issued and monitor execution of that address.  The array is filled with VectorBP objects,
+             * which contain vector and dbgAddr properties.
+             */
+            this.aVectorBP = [];
+            this.runCS = this.runIP = 0;
 
             /*
              * Execution history is allocated by historyInit() whenever checksEnabled() conditions change.
@@ -1869,7 +1885,7 @@ export default class DebuggerX86 extends DbgLib {
         }
 
         let seg = this.getSegment(sel, DebuggerX86.ADDRTYPE.PROT);
-        this.printf("dumpSel(%#06x): %%0*x\n", seg? seg.sel : sel, this.cchAddr, seg? seg.addrDesc : null);
+        this.printf("dumpSel(%#06x): %%%0*x\n", seg? seg.sel : sel, this.cchAddr, seg? seg.addrDesc : null);
         if (!seg) return;
 
         let sType;
@@ -2813,6 +2829,8 @@ export default class DebuggerX86 extends DbgLib {
             if (!fQuiet) this.printf("cpu busy or unavailable, command ignored\n");
             return false;
         }
+        this.runCS = this.cpu.getCS();
+        this.runIP = this.cpu.getIP();
         return !this.cpu.isError();
     }
 
@@ -3055,7 +3073,7 @@ export default class DebuggerX86 extends DbgLib {
      */
     checksEnabled(fRelease)
     {
-        return ((MAXDEBUG && !fRelease)? true : (this.aBreakExec.length > 1 || !!this.nBreakIns || this.messageEnabled(MESSAGE.INT) /* || this.aBreakRead.length > 1 || this.aBreakWrite.length > 1 */));
+        return ((MAXDEBUG && !fRelease)? true : (this.aBreakExec.length > 1 || this.aVectorBP.length > 0 || !!this.nBreakIns || this.messageEnabled(MESSAGE.INT) /* || this.aBreakRead.length > 1 || this.aBreakWrite.length > 1 */));
     }
 
     /**
@@ -3074,6 +3092,7 @@ export default class DebuggerX86 extends DbgLib {
         let cpu = this.cpu;
 
         if (nState > 0) {
+            this.cOpcodes++;
             if (this.nBreakIns && !--this.nBreakIns) {
                 return true;
             }
@@ -3096,7 +3115,6 @@ export default class DebuggerX86 extends DbgLib {
          * well, OK, and a few other things now, like enabling MESSAGE.INT messages.
          */
         if (nState >= 0 && this.aaOpcodeCounts.length) {
-            this.cOpcodes++;
             let bOpcode = cpu.probeAddr(addr);
             if (bOpcode != null) {
                 this.aaOpcodeCounts[bOpcode][1]++;
@@ -3527,6 +3545,10 @@ export default class DebuggerX86 extends DbgLib {
                 }
             }
 
+            if (!fBreak && this.checkVectorAddr(addr)) {
+                fBreak = true;
+            }
+
             for (let i = 1; !fBreak && i < aBreak.length; i++) {
 
                 let dbgAddrBreak = aBreak[i];
@@ -3605,6 +3627,133 @@ export default class DebuggerX86 extends DbgLib {
         }
         this.nSuppressBreaks--;
         return fBreak;
+    }
+
+    /**
+     * addVectorBP(vector, chType)
+     *
+     * @this {DebuggerX86}
+     * @param {number} vector
+     * @param {string} chType
+     * @returns {boolean} true if breakpoint added, false if error
+     */
+    addVectorBP(vector, chType)
+    {
+        let i = this.findVectorBP(vector);
+        if (i < 0) {
+            let dbgAddr;
+            let type = (chType == '#' || !chType && this.getCPUMode())? DebuggerX86.ADDRTYPE.PROT : DebuggerX86.ADDRTYPE.REAL;
+            if (type != DebuggerX86.ADDRTYPE.PROT) {
+                let addr = this.cpu.getLong(vector << 2);
+                let off = addr & 0xffff;
+                let sel = (addr >> 16) & 0xffff;
+                addr = (sel << 4) + off;
+                dbgAddr = this.newAddr(off, sel, addr, type);
+            }
+            this.aVectorBP.push({vector, type, dbgAddr});
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * checkVectorBP(vector, fProt)
+     *
+     * @this {DebuggerX86}
+     * @param {number} vector
+     * @param {boolean} fProt (true if protected-mode interrupt)
+     * @returns {boolean}
+     */
+    checkVectorBP(vector, fProt)
+    {
+        let i = this.findVectorBP(vector);
+        if (i >= 0) {
+            let vbp = this.aVectorBP[i];
+            if (fProt == (vbp.type == DebuggerX86.ADDRTYPE.PROT)) {
+                if (this.runCS != this.cpu.getCS() || this.runIP != this.cpu.getIP() - 2) {
+                    this.cpu.setIP(this.cpu.getIP() - 2);
+                    this.stopCPU();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * checkVectorAddr(addr)
+     *
+     * @this {DebuggerX86}
+     * @param {number} addr
+     * @returns {boolean}
+     */
+    checkVectorAddr(addr)
+    {
+        for (let i = 0; i < this.aVectorBP.length; i++) {
+            let dbgAddr = this.aVectorBP[i].dbgAddr;
+            if (dbgAddr && dbgAddr.addr == addr) {
+                if (this.runCS != this.cpu.getCS() || this.runIP != this.cpu.getIP()) {
+                    return true;
+                }
+                this.runCS = this.runIP = 0;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * findVectorBP(vector)
+     *
+     * @this {DebuggerX86}
+     * @param {number} vector
+     * @returns {number}
+     */
+    findVectorBP(vector)
+    {
+        for (let i = 0; i < this.aVectorBP.length; i++) {
+            if (this.aVectorBP[i].vector == vector) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * listVectorBP()
+     *
+     * @this {DebuggerX86}
+     */
+    listVectorBP()
+    {
+        let i;
+        for (i = 0; i < this.aVectorBP.length; i++) {
+            let vbp = this.aVectorBP[i];
+            if (vbp.type == DebuggerX86.ADDRTYPE.PROT) {
+                this.printf("vector #%#04x\n", vbp.vector);
+            } else {
+                this.printf("vector &%#04x: %04x:%04x\n", vbp.vector, vbp.dbgAddr.sel, vbp.dbgAddr.off);
+            }
+        }
+        if (!i) {
+            this.printf("no vector breakpoints\n");
+        }
+    }
+
+    /**
+     * removeVectorBP(vector)
+     *
+     * @this {DebuggerX86}
+     * @param {number} vector
+     * @returns {boolean} true if breakpoint removed, false if error
+     */
+    removeVectorBP(vector)
+    {
+        let i = this.findVectorBP(vector);
+        if (i >= 0) {
+            this.aVectorBP.splice(i, 1);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -4779,6 +4928,7 @@ export default class DebuggerX86 extends DbgLib {
             this.printf("\tbc [a]\tclear breakpoint at addr [a]\n");
             this.printf("\tbl\tlist all breakpoints\n");
             this.printf("\tbn [n]\tbreak after [n] instruction(s)\n");
+            this.printf("\tbv [n]\ttoggle break on interrupt vector [n]\n");
             return;
         }
         let sParm = sCmd.charAt(1);
@@ -4793,6 +4943,31 @@ export default class DebuggerX86 extends DbgLib {
         if (sParm == 'n') {
             this.nBreakIns = this.parseValue(sAddr);
             this.printf("break after %d instruction(s)\n", this.nBreakIns);
+            return;
+        }
+        if (sParm == 'v') {
+            if (!sAddr) {
+                this.listVectorBP();
+                return;
+            }
+            let chType = sAddr[0];
+            if (chType == '&' || chType == '#') {
+                sAddr = sAddr.slice(1);
+            } else {
+                chType = '';
+            }
+            let vector = this.parseValue(sAddr);
+            if (vector != undefined) {
+                if (this.removeVectorBP(vector)) {
+                    this.printf("removed break on interrupt vector %s\n", sAddr);
+                    return;
+                }
+                if (this.addVectorBP(vector, chType)) {
+                    this.printf("added break on interrupt vector %s\n", sAddr);
+                    return;
+                }
+            }
+            this.printf("invalid interrupt vector %s\n", sAddr);
             return;
         }
         if (sAddr === undefined) {
