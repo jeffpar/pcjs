@@ -75852,7 +75852,7 @@ class DebuggerX86 extends DbgLib {
         let i;
         if (!this.checksEnabled()) {
             if (this.aOpcodeHistory && this.aOpcodeHistory.length && !fQuiet) {
-                this.printf("instruction history buffer freed\n");
+                this.printf("history buffer freed\n");
             }
             this.iOpcodeHistory = 0;
             this.aOpcodeHistory = [];
@@ -75870,7 +75870,7 @@ class DebuggerX86 extends DbgLib {
             }
             this.iOpcodeHistory = 0;
             if (!fQuiet) {
-                this.printf("instruction history buffer allocated\n");
+                this.printf("history buffer allocated\n");
             }
         }
         if (!this.aaOpcodeCounts || !this.aaOpcodeCounts.length) {
@@ -76294,9 +76294,10 @@ class DebuggerX86 extends DbgLib {
                 if (bOpcode != null) {
                     this.aaOpcodeCounts[bOpcode][1]++;
                     /*
-                     * If any vector breakpoints are set, then vectors are all we want to trace (for now).
+                     * If any vector breakpoints are set but vector trapping is not, then vector tracing is
+                     * assumed, and for now, that's ALL we want to trace.
                      */
-                    if (this.aVectorBP.length && !this.vectorTrace) {
+                    if (this.aVectorBP.length && !this.vectorTrap) {
                         return false;
                     }
                     let dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];

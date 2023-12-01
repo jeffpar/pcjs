@@ -13,7 +13,7 @@ machines:
     autoMount:
       A: None
       B: Windows SDK 3.10 (Disk 01)
-    autoType: MODE COM2:9600,N,8,1\rWDEB386 /C:2 C:\\WINDOWS\\WIN.COM\r
+    autoType: MODE COM2:9600,N,8,1\rWDEB386 /C:2 /F:C:\\WINDEV\\ENHANCED.WRF C:\\WINDOWS\\WIN.COM\r
 ---
 
 {% include machine.html id="deskpro386" %}

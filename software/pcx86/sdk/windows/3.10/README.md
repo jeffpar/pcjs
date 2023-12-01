@@ -13,7 +13,7 @@ machines:
     autoMount:
       A: None
       B: Windows SDK 3.10 (Disk 01)
-    autoType: MODE COM2:9600,N,8,1\rWDEB386 /C:2 C:\\WINDOWS\\WIN.COM\r
+    autoType: MODE COM2:9600,N,8,1\rWDEB386 /C:2 /F:C:\\WINDEV\\STANDARD.WRF C:\\WINDOWS\\WIN.COM\r
 ---
 
 NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 in Standard Mode.  There is also an [Enhanced Mode](enhanced/) configuration that uses a Compaq Deskpro 386 (16Mhz).
