@@ -8,9 +8,9 @@
  */
 
 import Interrupts from "./interrupts.js";
-import MemoryX86 from "./memory.js";
+import Memoryx86 from "./memory.js";
 import MESSAGE from "./message.js";
-import SegX86 from "./segx86.js";
+import Segx86 from "./segx86.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
 import DbgLib from "../../../modules/v2/dbglib.js";
@@ -22,7 +22,7 @@ import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BYTEARRAYS, COMPILED, DEBUG, DEBUGGER, I386, MAXDEBUG, PREFETCH, SYMBOLS, TYPEDARRAYS, globals } from "./defines.js";
 
 /**
- * @typedef {Object}    DbgAddrX86
+ * @typedef {Object}    DbgAddrx86
  * @property {number}   [off]
  * @property {number}   [sel]
  * @property {number}   [addr]
@@ -34,16 +34,16 @@ import { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BYTEARRAYS, COMPILED, DEBUG, 
  * @property {boolean}  [fTempBreak]
  * @property {string}   [sCmd]
  * @property {Array.<string>} [aCmds]
- * @property {number}   [nCPUCycles]    (added to DbgAddrX86 objects stored in history buffer)
- * @property {number}   [nDebugCycles]  (added to DbgAddrX86 objects stored in history buffer)
- * @property {number}   [nDebugState]   (added to DbgAddrX86 objects stored in history buffer)
+ * @property {number}   [nCPUCycles]    (added to DbgAddrx86 objects stored in history buffer)
+ * @property {number}   [nDebugCycles]  (added to DbgAddrx86 objects stored in history buffer)
+ * @property {number}   [nDebugState]   (added to DbgAddrx86 objects stored in history buffer)
  */
 
 /**
  * @typedef {Object}    VectorBP
  * @property {number}   [vector]
  * @property {number}   [type]
- * @property {DbgAddrX86} [dbgAddr]
+ * @property {DbgAddrx86} [dbgAddr]
  */
 
 /*
@@ -78,17 +78,17 @@ import { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BYTEARRAYS, COMPILED, DEBUG, 
  */
 
 /**
- * @class DebuggerX86
+ * @class Debuggerx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-export default class DebuggerX86 extends DbgLib {
+export default class Debuggerx86 extends DbgLib {
     /**
-     * DebuggerX86(parmsDbg)
+     * Debuggerx86(parmsDbg)
      *
-     * The DebuggerX86 component is an optional component that implements a variety of user commands
+     * The Debuggerx86 component is an optional component that implements a variety of user commands
      * for controlling the CPU, dumping and editing memory, etc.
      *
-     * DebuggerX86 extends the shared Debugger component and supports the following optional (parmsDbg)
+     * Debuggerx86 extends the shared Debugger component and supports the following optional (parmsDbg)
      * properties:
      *
      *      commands: string containing zero or more commands, separated by ';'
@@ -96,7 +96,7 @@ export default class DebuggerX86 extends DbgLib {
      *      messages: string containing zero or more message categories to enable;
      *      multiple categories must be separated by ',' or ';'.  Parsed by messageInit().
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Object} parmsDbg
      */
     constructor(parmsDbg)
@@ -214,11 +214,11 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * initBus(bus, cpu, dbg)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -253,12 +253,12 @@ export default class DebuggerX86 extends DbgLib {
         /*
          * Allocate a special segment "register", for use whenever a requested selector is not currently loaded
          */
-        this.segDebugger = new SegX86(this.cpu, SegX86.ID.DBG, "DBG");
+        this.segDebugger = new Segx86(this.cpu, Segx86.ID.DBG, "DBG");
 
-        this.aaOpDescs = DebuggerX86.aaOpDescs;
+        this.aaOpDescs = Debuggerx86.aaOpDescs;
         if (this.cpu.model >= X86.MODEL_80186) {
-            this.aaOpDescs = DebuggerX86.aaOpDescs.slice();
-            this.aaOpDescs[0x0F] = DebuggerX86.aOpDescUndefined;
+            this.aaOpDescs = Debuggerx86.aaOpDescs.slice();
+            this.aaOpDescs[0x0F] = Debuggerx86.aOpDescUndefined;
             if (this.cpu.model >= X86.MODEL_80286) {
                 /*
                  * TODO: Consider whether the aOpDesc0F table should be split in two: one for 80286-only instructions,
@@ -269,7 +269,7 @@ export default class DebuggerX86 extends DbgLib {
                  * Obviously I'm not being entirely consistent, since I don't disassemble *any* 0x0F opcodes for any
                  * pre-80286 CPUs.  But at least I'm being up front about it.
                  */
-                this.aaOpDescs[0x0F] = DebuggerX86.aOpDesc0F;
+                this.aaOpDescs[0x0F] = Debuggerx86.aOpDesc0F;
                 if (I386 && this.cpu.model >= X86.MODEL_80386) this.cchReg = 8;
             }
         }
@@ -300,8 +300,8 @@ export default class DebuggerX86 extends DbgLib {
      *
      * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr (address of module name)
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr (address of module name)
      * @param {number} nSegment (logical segment number)
      * @param {number} sel (current selector)
      * @param {boolean} fCode (true if code segment, false if data segment)
@@ -325,7 +325,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} sel
      * @param {boolean} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
      */
@@ -355,8 +355,8 @@ export default class DebuggerX86 extends DbgLib {
      *      DD_sym_name     df  ?   ; 16:32 ptr to null terminated parent name (eg, "DOS386")
      *      DD_alias_sel    dw  ?   ; alias selector value (0 = none)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr (address of D386_Device_Params)
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr (address of D386_Device_Params)
      * @param {boolean} fCode (true if code section, false if data section)
      * @param {boolean} [fPrint] (false means we're merely monitoring, so let WDEB386 print its own notifications)
      */
@@ -397,9 +397,9 @@ export default class DebuggerX86 extends DbgLib {
      *
      * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} nSegment (logical segment number)
-     * @param {DbgAddrX86} dbgAddr (address of module)
+     * @param {DbgAddrx86} dbgAddr (address of module)
      * @param {boolean} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
      */
     removeSectionInfo(nSegment, dbgAddr, fPrint)
@@ -441,7 +441,7 @@ export default class DebuggerX86 extends DbgLib {
      * loaded (to load it, you must either run WDEB386.EXE or install the VxD via SYSTEM.INI).  Regrettably,
      * Windows 95 assumes that if WDEB386 support is present, then a DEBUG VxD must be present as well.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @returns {boolean} true to proceed with the INT 0x30 software interrupt
      */
@@ -487,7 +487,7 @@ export default class DebuggerX86 extends DbgLib {
      * for all INT 0x41 requests, so that all requests are consumed, since there's no guarantee
      * that a valid INT 0x41 handler will exist inside the machine.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @returns {boolean} true to proceed with the INT 0x41 software interrupt, false to skip
      */
@@ -675,7 +675,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * This intercepts calls to the Windows Debugger real-mode interface (INT 0x68).
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @returns {boolean} true to proceed with the INT 0x68 software interrupt, false to skip
      */
@@ -859,7 +859,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      *          7 - enable memory context functions
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @returns {boolean} (must always return false to skip the call, because the call is using a CALLBREAK address)
      */
     callWindowsDebuggerPMInit()
@@ -877,7 +877,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * setBinding(sHTMLType, sBinding, control, sValue)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea", "canvas")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "debugInput")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
@@ -968,7 +968,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * updateFocus()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     updateFocus()
     {
@@ -978,7 +978,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getCPUMode()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @returns {boolean} (true if protected mode, false if not)
      */
     getCPUMode()
@@ -989,12 +989,12 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getAddressType()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @returns {number}
      */
     getAddressType()
     {
-        return this.getCPUMode()? DebuggerX86.ADDRTYPE.PROT : DebuggerX86.ADDRTYPE.REAL;
+        return this.getCPUMode()? Debuggerx86.ADDRTYPE.PROT : Debuggerx86.ADDRTYPE.REAL;
     }
 
     /**
@@ -1006,10 +1006,10 @@ export default class DebuggerX86 extends DbgLib {
      * switched the processor from real to protected mode.  Actually loading the selector from the GDT/LDT
      * should be done only as a last resort.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number|undefined} sel
      * @param {number} [type] (defaults to getAddressType())
-     * @returns {SegX86|null} seg
+     * @returns {Segx86|null} seg
      */
     getSegment(sel, type)
     {
@@ -1030,10 +1030,10 @@ export default class DebuggerX86 extends DbgLib {
              * Even if nSuppressBreaks is set, we'll allow the call in real-mode,
              * because a loadReal() request using segDebugger should generally be safe.
              */
-            if (this.nSuppressBreaks && type == DebuggerX86.ADDRTYPE.PROT || !this.segDebugger) return null;
+            if (this.nSuppressBreaks && type == Debuggerx86.ADDRTYPE.PROT || !this.segDebugger) return null;
         }
         let seg = this.segDebugger;
-        if (type != DebuggerX86.ADDRTYPE.PROT) {
+        if (type != Debuggerx86.ADDRTYPE.PROT) {
             seg.loadReal(sel);
             seg.limit = 0xffff;         // although an ACTUAL real-mode segment load would not modify the limit,
             seg.offMax = 0x10000;       // proper segDebugger operation requires that we update the limit ourselves
@@ -1046,8 +1046,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getAddr(dbgAddr, fWrite, nb)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86|undefined} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86|undefined} dbgAddr
      * @param {boolean} [fWrite]
      * @param {number} [nb] number of bytes to check (1, 2 or 4); default is 1
      * @returns {number} is the corresponding linear address, or X86.ADDR_INVALID
@@ -1086,8 +1086,8 @@ export default class DebuggerX86 extends DbgLib {
      *
      * We must route all our memory requests through the CPU now, in case paging is enabled.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [inc]
      * @returns {number}
      */
@@ -1099,7 +1099,7 @@ export default class DebuggerX86 extends DbgLib {
             /*
              * TODO: Determine what we should do about the fact that we're masking any error from probeAddr()
              */
-            b = this.cpu.probeAddr(addr, 1, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL) | 0;
+            b = this.cpu.probeAddr(addr, 1, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL) | 0;
             if (inc) this.incAddr(dbgAddr, inc);
         }
         return b;
@@ -1108,8 +1108,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getWord(dbgAddr, fAdvance)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fAdvance]
      * @returns {number}
      */
@@ -1121,8 +1121,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getShort(dbgAddr, inc)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [inc]
      * @returns {number}
      */
@@ -1134,7 +1134,7 @@ export default class DebuggerX86 extends DbgLib {
             /*
              * TODO: Determine what we should do about the fact that we're masking any error from probeAddr()
              */
-            w = this.cpu.probeAddr(addr, 2, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL) | 0;
+            w = this.cpu.probeAddr(addr, 2, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL) | 0;
             if (inc) this.incAddr(dbgAddr, inc);
         }
         return w;
@@ -1143,8 +1143,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getLong(dbgAddr, inc)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [inc]
      * @returns {number}
      */
@@ -1156,7 +1156,7 @@ export default class DebuggerX86 extends DbgLib {
             /*
              * TODO: Determine what we should do about the fact that we're masking any error from probeAddr()
              */
-            l = this.cpu.probeAddr(addr, 4, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL) | 0;
+            l = this.cpu.probeAddr(addr, 4, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL) | 0;
             if (inc) this.incAddr(dbgAddr, inc);
         }
         return l;
@@ -1170,8 +1170,8 @@ export default class DebuggerX86 extends DbgLib {
      * WARNING: Be careful with the editing commands that use function, because we don't have a safe
      * counterpart to cpu.probeAddr().
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} b
      * @param {number} [inc]
      * @param {boolean} [fNoUpdate] (when doing a large number of setByte() calls, set this to true and call cpu.updateCPU() when you're done)
@@ -1180,7 +1180,7 @@ export default class DebuggerX86 extends DbgLib {
     {
         let addr = this.getAddr(dbgAddr, true, 1);
         if (addr !== X86.ADDR_INVALID) {
-            if (dbgAddr.type != DebuggerX86.ADDRTYPE.PHYSICAL) {
+            if (dbgAddr.type != Debuggerx86.ADDRTYPE.PHYSICAL) {
                 this.cpu.setByte(addr, b);
             } else {
                 this.bus.setByteDirect(addr, b);
@@ -1198,8 +1198,8 @@ export default class DebuggerX86 extends DbgLib {
      * WARNING: Be careful with the editing commands that use function, because we don't have a safe
      * counterpart to cpu.probeAddr().
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} w
      * @param {number} [inc]
      * @param {boolean} [fFast]
@@ -1208,7 +1208,7 @@ export default class DebuggerX86 extends DbgLib {
     {
         let addr = this.getAddr(dbgAddr, true, 2);
         if (addr !== X86.ADDR_INVALID) {
-            if (dbgAddr.type != DebuggerX86.ADDRTYPE.PHYSICAL) {
+            if (dbgAddr.type != Debuggerx86.ADDRTYPE.PHYSICAL) {
                 this.cpu.setShort(addr, w);
             } else {
                 this.bus.setShortDirect(addr, w);
@@ -1221,16 +1221,16 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * newAddr(off, sel, addr, type, fData32, fAddr32)
      *
-     * Returns a NEW DbgAddrX86 object, initialized with specified values and/or defaults.
+     * Returns a NEW DbgAddrx86 object, initialized with specified values and/or defaults.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} [off] (default is zero)
      * @param {number} [sel] (default is undefined)
      * @param {number} [addr] (default is undefined)
      * @param {number} [type] (default is based on current CPU mode)
      * @param {boolean} [fData32] (default is the current CPU operand size)
      * @param {boolean} [fAddr32] (default is the current CPU address size)
-     * @returns {DbgAddrX86}
+     * @returns {DbgAddrx86}
      */
     newAddr(off, sel, addr, type, fData32, fAddr32)
     {
@@ -1240,8 +1240,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getAddrPrefix(dbgAddr)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @returns {string}
      */
     getAddrPrefix(dbgAddr)
@@ -1249,17 +1249,17 @@ export default class DebuggerX86 extends DbgLib {
         let ch;
 
         switch (dbgAddr.type) {
-        case DebuggerX86.ADDRTYPE.REAL:
-        case DebuggerX86.ADDRTYPE.V86:
+        case Debuggerx86.ADDRTYPE.REAL:
+        case Debuggerx86.ADDRTYPE.V86:
             ch = '&';
             break;
-        case DebuggerX86.ADDRTYPE.PROT:
+        case Debuggerx86.ADDRTYPE.PROT:
             ch = '#';
             break;
-        case DebuggerX86.ADDRTYPE.LINEAR:
+        case Debuggerx86.ADDRTYPE.LINEAR:
             ch = '%';
             break;
-        case DebuggerX86.ADDRTYPE.PHYSICAL:
+        case Debuggerx86.ADDRTYPE.PHYSICAL:
             ch = '%%';
             break;
         default:
@@ -1272,17 +1272,17 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * setAddr(dbgAddr, off, sel, addr, type, fData32, fAddr32)
      *
-     * Updates an EXISTING DbgAddrX86 object, initialized with specified values and/or defaults.
+     * Updates an EXISTING DbgAddrx86 object, initialized with specified values and/or defaults.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [off] (default is zero)
      * @param {number} [sel] (default is undefined)
      * @param {number} [addr] (default is undefined)
      * @param {number} [type] (default is based on current CPU mode)
      * @param {boolean} [fData32] (default is the current CPU operand size)
      * @param {boolean} [fAddr32] (default is the current CPU address size)
-     * @returns {DbgAddrX86}
+     * @returns {DbgAddrx86}
      */
     setAddr(dbgAddr, off, sel, addr, type, fData32, fAddr32)
     {
@@ -1299,12 +1299,12 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * packAddr(dbgAddr)
      *
-     * Packs a DbgAddrX86 object into an Array suitable for saving in a machine state object.
+     * Packs a DbgAddrx86 object into an Array suitable for saving in a machine state object.
      *
      * NOTE: Element 6 was previously used to maintain an override count; that's no longer needed, hence the 0.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @returns {Array}
      */
     packAddr(dbgAddr)
@@ -1315,11 +1315,11 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * unpackAddr(aAddr)
      *
-     * Unpacks a DbgAddrX86 object from an Array created by packAddr() and restored from a saved machine state.
+     * Unpacks a DbgAddrx86 object from an Array created by packAddr() and restored from a saved machine state.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aAddr
-     * @returns {DbgAddrX86}
+     * @returns {DbgAddrx86}
      */
     unpackAddr(aAddr)
     {
@@ -1331,8 +1331,8 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Used by incAddr() and parseAddr() to ensure that the (updated) dbgAddr offset is within segment bounds.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fUpdate] (true to update segment info)
      * @returns {boolean}
      */
@@ -1383,19 +1383,19 @@ export default class DebuggerX86 extends DbgLib {
      * Bus.nBusLimit; in the case of X86.ADDR_INVALID, that will generally refer to the top of the physical
      * address space.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sAddr
      * @param {boolean} [fCode] (true if target is code, false if target is data)
      * @param {boolean} [fNoChecks] (true when setting breakpoints that may not be valid now, but will be later)
      * @param {boolean} [fQuiet]
-     * @returns {DbgAddrX86|undefined}
+     * @returns {DbgAddrx86|undefined}
      */
     parseAddr(sAddr, fCode, fNoChecks, fQuiet)
     {
         let dbgAddr;
         let dbgAddrNext = (fCode? this.dbgAddrNextCode : this.dbgAddrNextData);
 
-        let type = fNoChecks? DebuggerX86.ADDRTYPE.NONE : dbgAddrNext.type;
+        let type = fNoChecks? Debuggerx86.ADDRTYPE.NONE : dbgAddrNext.type;
         let off = dbgAddrNext.off, sel = dbgAddrNext.sel, addr = dbgAddrNext.addr;
 
         if (sAddr !== undefined) {
@@ -1407,23 +1407,23 @@ export default class DebuggerX86 extends DbgLib {
 
             switch(ch) {
             case '&':
-                type = DebuggerX86.ADDRTYPE.REAL;
+                type = Debuggerx86.ADDRTYPE.REAL;
                 break;
             case '#':
-                type = DebuggerX86.ADDRTYPE.PROT;
+                type = Debuggerx86.ADDRTYPE.PROT;
                 break;
             case '%':
-                type = DebuggerX86.ADDRTYPE.LINEAR;
+                type = Debuggerx86.ADDRTYPE.LINEAR;
                 ch = sAddr.charAt(1);
                 if (ch == '%') {
-                    type = DebuggerX86.ADDRTYPE.PHYSICAL;
+                    type = Debuggerx86.ADDRTYPE.PHYSICAL;
                     ch += ch;
                 }
                 off = addr = 0;
                 sel = undefined;        // we still have code that relies on this crutch, instead of the type field
                 break;
             default:
-                if (iColon >= 0) type = DebuggerX86.ADDRTYPE.NONE;
+                if (iColon >= 0) type = Debuggerx86.ADDRTYPE.NONE;
                 ch = '';
                 break;
             }
@@ -1465,8 +1465,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * parseAddrOptions(dbgAddr, sOptions)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {string} [sOptions]
      */
     parseAddrOptions(dbgAddr, sOptions)
@@ -1484,7 +1484,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Returns the given string with the given address references replaced with the contents of the address.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} s
      * @param {string} sAddr
      * @returns {string}
@@ -1498,8 +1498,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * incAddr(dbgAddr, inc)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [inc] contains value to increment dbgAddr by (default is 1)
      */
     incAddr(dbgAddr, inc)
@@ -1520,7 +1520,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * toHexOffset(off, sel, fAddr32)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number|undefined} [off]
      * @param {number|undefined} [sel]
      * @param {boolean} [fAddr32] is true for 32-bit ADDRESS size
@@ -1537,8 +1537,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * toHexAddr(dbgAddr)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @returns {string} the hex representation of the address
      */
     toHexAddr(dbgAddr)
@@ -1547,7 +1547,7 @@ export default class DebuggerX86 extends DbgLib {
         /*
          * TODO: Revisit the decision to check sel == undefined; I would rather see these decisions based on type.
          */
-        return (dbgAddr.type >= DebuggerX86.ADDRTYPE.LINEAR || dbgAddr.sel == undefined)? (ch + StrLib.toHex(dbgAddr.addr)) : (ch + this.toHexOffset(dbgAddr.off, dbgAddr.sel, dbgAddr.fAddr32));
+        return (dbgAddr.type >= Debuggerx86.ADDRTYPE.LINEAR || dbgAddr.sel == undefined)? (ch + StrLib.toHex(dbgAddr.addr)) : (ch + this.toHexOffset(dbgAddr.off, dbgAddr.sel, dbgAddr.fAddr32));
     }
 
     /**
@@ -1557,8 +1557,8 @@ export default class DebuggerX86 extends DbgLib {
      * a '$'-terminated string -- mainly because I'm lazy and didn't feel like writing a separate get() function.
      * Yes, a zero-terminated string containing a '$' will be prematurely terminated -- not a big deal.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [cchMax] (default is 256)
      * @returns {string} (and dbgAddr advanced past the terminating zero)
      */
@@ -1577,7 +1577,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * dumpBackTrack(asArgs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpBackTrack(asArgs)
@@ -1588,11 +1588,11 @@ export default class DebuggerX86 extends DbgLib {
             let dbgAddr = this.parseAddr(sAddr, true, true, true);
             if (dbgAddr) {
                 let addr = this.getAddr(dbgAddr);
-                if (dbgAddr.type != DebuggerX86.ADDRTYPE.PHYSICAL) {
+                if (dbgAddr.type != Debuggerx86.ADDRTYPE.PHYSICAL) {
                     let pageInfo = this.getPageInfo(addr);
                     if (pageInfo) {
                         dbgAddr.addr = pageInfo.addrPhys;
-                        dbgAddr.type = DebuggerX86.ADDRTYPE.PHYSICAL;
+                        dbgAddr.type = Debuggerx86.ADDRTYPE.PHYSICAL;
                     }
                 }
                 sInfo = this.toHexAddr(dbgAddr) + ": " + (this.bus.getSymbol(addr, true) || sInfo);
@@ -1618,7 +1618,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * dumpBlocks(aBlocks, sAddr, fLinear)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBlocks
      * @param {string} [sAddr] (optional block address)
      * @param {boolean} [fLinear] (true if linear, physical otherwise)
@@ -1654,23 +1654,23 @@ export default class DebuggerX86 extends DbgLib {
              * "validated" when a CPU operation touches the corresponding page, and they should be only
              * be "invalidated" when the CPU wants to flush the TLB (ie, whenever CR3 is updated).
              */
-            if (block && block.type == MemoryX86.TYPE.UNPAGED) {
+            if (block && block.type == Memoryx86.TYPE.UNPAGED) {
                 block = this.cpu.mapPageBlock(addr, false, true);
             }
             if (block.type == typePrev) {
                 if (!cPrev++) this.printf("...\n");
             } else {
                 typePrev = block.type;
-                let sType = MemoryX86.TYPE.NAMES[typePrev];
-                if (typePrev == MemoryX86.TYPE.PAGED) {
+                let sType = Memoryx86.TYPE.NAMES[typePrev];
+                if (typePrev == Memoryx86.TYPE.PAGED) {
                     block = block.blockPhys;
                     this.assert(block);
-                    sType += " -> " + MemoryX86.TYPE.NAMES[block.type];
+                    sType += " -> " + Memoryx86.TYPE.NAMES[block.type];
                 }
                 if (block) {
                     this.printf("%08x  %%%08x  %%%%%08x  %#06x  %#06x  %s\n", block.id, i << this.cpu.nBlockShift, block.addr, block.used, block.size, sType);
                 }
-                if (typePrev != MemoryX86.TYPE.NONE && typePrev != MemoryX86.TYPE.UNPAGED) typePrev = -1;
+                if (typePrev != Memoryx86.TYPE.NONE && typePrev != Memoryx86.TYPE.UNPAGED) typePrev = -1;
                 cPrev = 0;
             }
             addr += this.cpu.nBlockSize;
@@ -1683,7 +1683,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Dumps Bus allocations.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs (asArgs[0] is an optional block address)
      */
     dumpBus(asArgs)
@@ -1698,7 +1698,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * TODO: Add some code to detect the current version of DOS (if any) and locate the first MCB automatically.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpDOS(asArgs)
@@ -1729,7 +1729,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Dumps an IDT vector entry.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpIDT(asArgs)
@@ -1768,7 +1768,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Dumps page allocations.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs (asArgs[0] is an optional block address)
      */
     dumpMem(asArgs)
@@ -1779,7 +1779,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getPageEntry(addrPE, lPE, fPTE)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addrPE
      * @param {number} lPE
      * @param {boolean} [fPTE] (true if the entry is a PTE, false if it's a PDE)
@@ -1799,7 +1799,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getPageInfo(addr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @returns {Object|null}
      */
@@ -1831,7 +1831,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Dumps page table information about the given linear address.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpPage(asArgs)
@@ -1868,7 +1868,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Dumps a descriptor for the given selector.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpSel(asArgs)
@@ -1886,7 +1886,7 @@ export default class DebuggerX86 extends DbgLib {
             return;
         }
 
-        let seg = this.getSegment(sel, DebuggerX86.ADDRTYPE.PROT);
+        let seg = this.getSegment(sel, Debuggerx86.ADDRTYPE.PROT);
         this.printf("dumpSel(%#06x): %%%0*x\n", seg? seg.sel : sel, this.cchAddr, seg? seg.addrDesc : null);
         if (!seg) return;
 
@@ -1906,7 +1906,7 @@ export default class DebuggerX86 extends DbgLib {
             if (seg.type & X86.DESC.ACC.TYPE.ACCESSED) sType += ",accessed";
         }
         else {
-            let sysDesc = DebuggerX86.SYSDESCS[seg.type];
+            let sysDesc = Debuggerx86.SYSDESCS[seg.type];
             if (sysDesc) {
                 sType = sysDesc[0];
                 fGate = sysDesc[1];
@@ -1936,7 +1936,7 @@ export default class DebuggerX86 extends DbgLib {
      * supported filter is "call", which filters the history buffer for all CALL and RET instructions
      * from the specified previous point forward.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sPrev] is a (decimal) number of instructions to rewind to (default is 10)
      * @param {string} [sLines] is a (decimal) number of instructions to print (default is, again, 10)
      * @param {string} [sComment] (should be either "history" or "cycles"; default is "history")
@@ -2059,7 +2059,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * This dumps a TSS using the given selector.  If none is specified, the current TR is used.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpTSS(asArgs)
@@ -2075,7 +2075,7 @@ export default class DebuggerX86 extends DbgLib {
                 this.printf("invalid task selector: %s\n", sSel);
                 return;
             }
-            seg = this.getSegment(sel, DebuggerX86.ADDRTYPE.PROT);
+            seg = this.getSegment(sel, Debuggerx86.ADDRTYPE.PROT);
         }
 
         this.printf("dumpTSS(%#06x): %%0*x\n", seg? seg.sel : sel, this.cchAddr, seg? seg.base : null);
@@ -2084,7 +2084,7 @@ export default class DebuggerX86 extends DbgLib {
         let sDump = "";
         let type = seg.type & ~X86.DESC.ACC.TYPE.TSS_BUSY;
         let cch = (type == X86.DESC.ACC.TYPE.TSS286? 4 : 8);
-        let aTSSFields = (type == X86.DESC.ACC.TYPE.TSS286? DebuggerX86.TSS286 : DebuggerX86.TSS386);
+        let aTSSFields = (type == X86.DESC.ACC.TYPE.TSS286? Debuggerx86.TSS286 : Debuggerx86.TSS386);
         let off, addr, v;
         for (let sField in aTSSFields) {
             off = aTSSFields[sField];
@@ -2118,7 +2118,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Since we're not sure what Disk the module was loaded from, we have to check all of them.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sModule
      * @param {number} nSegment
      * @returns {Object}
@@ -2140,7 +2140,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * messageInit(sEnable)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sEnable contains zero or more message categories to enable, separated by ','
      */
     messageInit(sEnable)
@@ -2165,7 +2165,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * messageDump(bitMessage, fnDumper)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} bitMessage is one Messages category flag
      * @param {function(Array.<string>)} fnDumper is a function the Debugger can use to dump data for that category
      * @returns {boolean} true if successfully registered, false if not
@@ -2184,7 +2184,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getRegIndex(sReg, off)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
      * @returns {number} register index, or -1 if not found
@@ -2194,10 +2194,10 @@ export default class DebuggerX86 extends DbgLib {
         let i;
         sReg = sReg.toUpperCase();
         if (off == null) {
-            i = UsrLib.indexOf(DebuggerX86.REGS, sReg);
+            i = UsrLib.indexOf(Debuggerx86.REGS, sReg);
         } else {
-            i = UsrLib.indexOf(DebuggerX86.REGS, sReg.substr(off, 3));
-            if (i < 0) i = UsrLib.indexOf(DebuggerX86.REGS, sReg.substr(off, 2));
+            i = UsrLib.indexOf(Debuggerx86.REGS, sReg.substr(off, 3));
+            if (i < 0) i = UsrLib.indexOf(Debuggerx86.REGS, sReg.substr(off, 2));
         }
         return i;
     }
@@ -2205,7 +2205,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getRegString(iReg)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} iReg
      * @returns {string}
      */
@@ -2215,49 +2215,49 @@ export default class DebuggerX86 extends DbgLib {
         let n = this.getRegValue(iReg);
         if (n != null) {
             switch(iReg) {
-            case DebuggerX86.REG_AL:
-            case DebuggerX86.REG_CL:
-            case DebuggerX86.REG_DL:
-            case DebuggerX86.REG_BL:
-            case DebuggerX86.REG_AH:
-            case DebuggerX86.REG_CH:
-            case DebuggerX86.REG_DH:
-            case DebuggerX86.REG_BH:
+            case Debuggerx86.REG_AL:
+            case Debuggerx86.REG_CL:
+            case Debuggerx86.REG_DL:
+            case Debuggerx86.REG_BL:
+            case Debuggerx86.REG_AH:
+            case Debuggerx86.REG_CH:
+            case Debuggerx86.REG_DH:
+            case Debuggerx86.REG_BH:
                 cch = 2;
                 break;
-            case DebuggerX86.REG_AX:
-            case DebuggerX86.REG_CX:
-            case DebuggerX86.REG_DX:
-            case DebuggerX86.REG_BX:
-            case DebuggerX86.REG_SP:
-            case DebuggerX86.REG_BP:
-            case DebuggerX86.REG_SI:
-            case DebuggerX86.REG_DI:
-            case DebuggerX86.REG_IP:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_ES:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_CS:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_SS:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_DS:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_FS:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_GS:
+            case Debuggerx86.REG_AX:
+            case Debuggerx86.REG_CX:
+            case Debuggerx86.REG_DX:
+            case Debuggerx86.REG_BX:
+            case Debuggerx86.REG_SP:
+            case Debuggerx86.REG_BP:
+            case Debuggerx86.REG_SI:
+            case Debuggerx86.REG_DI:
+            case Debuggerx86.REG_IP:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_ES:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_CS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_SS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_DS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_FS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_GS:
                 cch = 4;
                 break;
-            case DebuggerX86.REG_EAX:
-            case DebuggerX86.REG_ECX:
-            case DebuggerX86.REG_EDX:
-            case DebuggerX86.REG_EBX:
-            case DebuggerX86.REG_ESP:
-            case DebuggerX86.REG_EBP:
-            case DebuggerX86.REG_ESI:
-            case DebuggerX86.REG_EDI:
-            case DebuggerX86.REG_CR0:
-            case DebuggerX86.REG_CR1:
-            case DebuggerX86.REG_CR2:
-            case DebuggerX86.REG_CR3:
-            case DebuggerX86.REG_EIP:
+            case Debuggerx86.REG_EAX:
+            case Debuggerx86.REG_ECX:
+            case Debuggerx86.REG_EDX:
+            case Debuggerx86.REG_EBX:
+            case Debuggerx86.REG_ESP:
+            case Debuggerx86.REG_EBP:
+            case Debuggerx86.REG_ESI:
+            case Debuggerx86.REG_EDI:
+            case Debuggerx86.REG_CR0:
+            case Debuggerx86.REG_CR1:
+            case Debuggerx86.REG_CR2:
+            case Debuggerx86.REG_CR3:
+            case Debuggerx86.REG_EIP:
                 cch = 8;
                 break;
-            case DebuggerX86.REG_PS:
+            case Debuggerx86.REG_PS:
                 cch = this.cchReg;
                 break;
             }
@@ -2268,7 +2268,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getRegValue(iReg)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} iReg
      * @returns {number|undefined}
      */
@@ -2278,123 +2278,123 @@ export default class DebuggerX86 extends DbgLib {
         if (iReg >= 0) {
             let cpu = this.cpu;
             switch(iReg) {
-            case DebuggerX86.REG_AL:
+            case Debuggerx86.REG_AL:
                 n = cpu.regEAX & 0xff;
                 break;
-            case DebuggerX86.REG_CL:
+            case Debuggerx86.REG_CL:
                 n = cpu.regECX & 0xff;
                 break;
-            case DebuggerX86.REG_DL:
+            case Debuggerx86.REG_DL:
                 n = cpu.regEDX & 0xff;
                 break;
-            case DebuggerX86.REG_BL:
+            case Debuggerx86.REG_BL:
                 n = cpu.regEBX & 0xff;
                 break;
-            case DebuggerX86.REG_AH:
+            case Debuggerx86.REG_AH:
                 n = (cpu.regEAX >> 8) & 0xff;
                 break;
-            case DebuggerX86.REG_CH:
+            case Debuggerx86.REG_CH:
                 n = (cpu.regECX >> 8) & 0xff;
                 break;
-            case DebuggerX86.REG_DH:
+            case Debuggerx86.REG_DH:
                 n = (cpu.regEDX >> 8) & 0xff;
                 break;
-            case DebuggerX86.REG_BH:
+            case Debuggerx86.REG_BH:
                 n = (cpu.regEBX >> 8) & 0xff;
                 break;
-            case DebuggerX86.REG_AX:
+            case Debuggerx86.REG_AX:
                 n = cpu.regEAX & 0xffff;
                 break;
-            case DebuggerX86.REG_CX:
+            case Debuggerx86.REG_CX:
                 n = cpu.regECX & 0xffff;
                 break;
-            case DebuggerX86.REG_DX:
+            case Debuggerx86.REG_DX:
                 n = cpu.regEDX & 0xffff;
                 break;
-            case DebuggerX86.REG_BX:
+            case Debuggerx86.REG_BX:
                 n = cpu.regEBX & 0xffff;
                 break;
-            case DebuggerX86.REG_SP:
+            case Debuggerx86.REG_SP:
                 n = cpu.getSP() & 0xffff;
                 break;
-            case DebuggerX86.REG_BP:
+            case Debuggerx86.REG_BP:
                 n = cpu.regEBP & 0xffff;
                 break;
-            case DebuggerX86.REG_SI:
+            case Debuggerx86.REG_SI:
                 n = cpu.regESI & 0xffff;
                 break;
-            case DebuggerX86.REG_DI:
+            case Debuggerx86.REG_DI:
                 n = cpu.regEDI & 0xffff;
                 break;
-            case DebuggerX86.REG_IP:
+            case Debuggerx86.REG_IP:
                 n = cpu.getIP() & 0xffff;
                 break;
-            case DebuggerX86.REG_PS:
+            case Debuggerx86.REG_PS:
                 n = cpu.getPS();
                 break;
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_ES:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_ES:
                 n = cpu.getES();
                 break;
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_CS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_CS:
                 n = cpu.getCS();
                 break;
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_SS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_SS:
                 n = cpu.getSS();
                 break;
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_DS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_DS:
                 n = cpu.getDS();
                 break;
             default:
                 if (this.cpu.model == X86.MODEL_80286) {
-                    if (iReg == DebuggerX86.REG_CR0) {
+                    if (iReg == Debuggerx86.REG_CR0) {
                         n = cpu.regCR0;
                     }
                 }
                 else if (I386 && this.cpu.model >= X86.MODEL_80386) {
                     switch(iReg) {
-                    case DebuggerX86.REG_EAX:
+                    case Debuggerx86.REG_EAX:
                         n = cpu.regEAX;
                         break;
-                    case DebuggerX86.REG_ECX:
+                    case Debuggerx86.REG_ECX:
                         n = cpu.regECX;
                         break;
-                    case DebuggerX86.REG_EDX:
+                    case Debuggerx86.REG_EDX:
                         n = cpu.regEDX;
                         break;
-                    case DebuggerX86.REG_EBX:
+                    case Debuggerx86.REG_EBX:
                         n = cpu.regEBX;
                         break;
-                    case DebuggerX86.REG_ESP:
+                    case Debuggerx86.REG_ESP:
                         n = cpu.getSP();
                         break;
-                    case DebuggerX86.REG_EBP:
+                    case Debuggerx86.REG_EBP:
                         n = cpu.regEBP;
                         break;
-                    case DebuggerX86.REG_ESI:
+                    case Debuggerx86.REG_ESI:
                         n = cpu.regESI;
                         break;
-                    case DebuggerX86.REG_EDI:
+                    case Debuggerx86.REG_EDI:
                         n = cpu.regEDI;
                         break;
-                    case DebuggerX86.REG_CR0:
+                    case Debuggerx86.REG_CR0:
                         n = cpu.regCR0;
                         break;
-                    case DebuggerX86.REG_CR1:
+                    case Debuggerx86.REG_CR1:
                         n = cpu.regCR1;
                         break;
-                    case DebuggerX86.REG_CR2:
+                    case Debuggerx86.REG_CR2:
                         n = cpu.regCR2;
                         break;
-                    case DebuggerX86.REG_CR3:
+                    case Debuggerx86.REG_CR3:
                         n = cpu.regCR3;
                         break;
-                    case DebuggerX86.REG_SEG + DebuggerX86.REG_FS:
+                    case Debuggerx86.REG_SEG + Debuggerx86.REG_FS:
                         n = cpu.getFS();
                         break;
-                    case DebuggerX86.REG_SEG + DebuggerX86.REG_GS:
+                    case Debuggerx86.REG_SEG + Debuggerx86.REG_GS:
                         n = cpu.getGS();
                         break;
-                    case DebuggerX86.REG_EIP:
+                    case Debuggerx86.REG_EIP:
                         n = cpu.getIP();
                         break;
                     }
@@ -2408,7 +2408,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * replaceRegs(s)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} s
      * @returns {string}
      */
@@ -2428,7 +2428,7 @@ export default class DebuggerX86 extends DbgLib {
         while ((i = s.indexOf('@', i)) >= 0) {
             let iReg = this.getRegIndex(s, i + 1);
             if (iReg >= 0) {
-                s = s.substr(0, i) + this.getRegString(iReg) + s.substr(i + 1 + DebuggerX86.REGS[iReg].length);
+                s = s.substr(0, i) + this.getRegString(iReg) + s.substr(i + 1 + Debuggerx86.REGS[iReg].length);
             }
             i++;
         }
@@ -2484,7 +2484,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * message(sMessage, bitsMessage)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sMessage
      * @param {number} [bitsMessage]
      */
@@ -2524,7 +2524,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * messageInt(nInt, addr, fForce)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} nInt
      * @param {number} addr (LIP after the "INT n" instruction has been fetched but not dispatched)
      * @param {boolean} [fForce] (true if the message should be forced)
@@ -2548,12 +2548,12 @@ export default class DebuggerX86 extends DbgLib {
              * Display all software interrupts if CPU messages are enabled (and it's not an "annoying" interrupt);
              * note that in some cases, even "annoying" interrupts can be turned with an extra message category.
              */
-            fMessage = this.messageEnabled(MESSAGE.CPU) && DebuggerX86.INT_ANNOYING.indexOf(nInt) < 0;
+            fMessage = this.messageEnabled(MESSAGE.CPU) && Debuggerx86.INT_ANNOYING.indexOf(nInt) < 0;
             if (!fMessage) {
                 /*
                  * Alternatively, display this software interrupt if its corresponding message category is enabled.
                  */
-                nCategory = DebuggerX86.INT_MESSAGES[nInt];
+                nCategory = Debuggerx86.INT_MESSAGES[nInt];
                 if (nCategory) {
                     if (this.messageEnabled(nCategory)) {
                         fMessage = true;
@@ -2595,7 +2595,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * messageIntReturn(nInt, nLevel, nCycles)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} nInt
      * @param {number} nLevel
      * @param {number} nCycles
@@ -2609,7 +2609,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * messageIO(component, port, bOut, addrFrom, name, bIn, bitsMessage)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Component} component
      * @param {number} port
      * @param {number} [bOut] if an output operation
@@ -2647,7 +2647,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * init()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     init()
     {
@@ -2670,7 +2670,7 @@ export default class DebuggerX86 extends DbgLib {
      * That is, if the history arrays need to be allocated and haven't already been allocated, then allocate them,
      * and if the arrays are no longer needed, then deallocate them.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fQuiet]
      */
     historyInit(fQuiet)
@@ -2686,7 +2686,7 @@ export default class DebuggerX86 extends DbgLib {
             return;
         }
         if (!this.aOpcodeHistory || !this.aOpcodeHistory.length) {
-            this.aOpcodeHistory = new Array(DebuggerX86.HISTORY_LIMIT);
+            this.aOpcodeHistory = new Array(Debuggerx86.HISTORY_LIMIT);
             for (i = 0; i < this.aOpcodeHistory.length; i++) {
                 /*
                  * Preallocate dummy Addr (Array) objects in every history slot, so that
@@ -2710,7 +2710,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * startCPU(fUpdateFocus, fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fUpdateFocus]
      * @param {boolean} [fQuiet]
      * @returns {boolean} true if run request successful, false if not
@@ -2726,7 +2726,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * stepCPU(nCycles, fRegs, fUpdateCPU)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} nCycles (0 for one instruction without checking breakpoints)
      * @param {boolean} [fRegs] is true to display registers after step (default is false)
      * @param {boolean} [fUpdateCPU] is false to disable calls to updateCPU() (default is true)
@@ -2784,7 +2784,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * stopCPU()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fComplete]
      * @returns {boolean}
      */
@@ -2796,7 +2796,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * updateStatus(fRegs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fRegs] (default is true)
      */
     updateStatus(fRegs)
@@ -2821,7 +2821,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Make sure the CPU is ready (finished initializing), not busy (already running), and not in an error state.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fQuiet]
      * @returns {boolean}
      */
@@ -2837,7 +2837,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @returns {boolean} true if successful, false if failure
@@ -2866,7 +2866,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * powerDown(fSave, fShutdown)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @returns {Object|boolean}
@@ -2882,7 +2882,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * This is a notification handler, called by the Computer, to inform us of a reset.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} fQuiet (true only when called from our own powerUp handler)
      */
     reset(fQuiet)
@@ -2901,7 +2901,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * This implements (very rudimentary) save support for the Debugger component.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @returns {Object}
      */
     save()
@@ -2921,7 +2921,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * This implements (very rudimentary) restore support for the Debugger component.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Object} data
      * @returns {boolean} true if successful, false if failure
      */
@@ -2966,7 +2966,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * This is a notification handler, called by the Computer, to inform us the CPU has started.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} ms
      * @param {number} nCycles
      */
@@ -2986,7 +2986,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * This is a notification handler, called by the Computer, to inform us the CPU has now stopped.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} ms
      * @param {number} nCycles
      */
@@ -3067,7 +3067,7 @@ export default class DebuggerX86 extends DbgLib {
      * "checked" Memory access functions to deal with those breakpoints in the corresponding Memory blocks.  So I've
      * simplified the test below.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fRelease] is true for release criteria only; default is false (any criteria)
      * @returns {boolean} true if every instruction needs to pass through checkInstruction(), false if not
      */
@@ -3082,7 +3082,7 @@ export default class DebuggerX86 extends DbgLib {
      * This "check" function is called by the CPU to inform us about the next instruction to be executed,
      * giving us an opportunity to look for "exec" breakpoints and update opcode frequencies and instruction history.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} nState is < 0 if stepping, 0 if starting, or > 0 if running
      * @returns {boolean} true if breakpoint hit, false if not
@@ -3183,7 +3183,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * If we return true, we "trump" the machine's Debug register(s); false allows normal Debug register processing.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
      * @returns {boolean} true if breakpoint hit, false if not
@@ -3208,7 +3208,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * If we return true, we "trump" the machine's Debug register(s); false allows normal Debug register processing.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
      * @returns {boolean} true if breakpoint hit, false if not
@@ -3227,7 +3227,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * This "check" function is called by the Bus component to inform us that port input occurred.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} port
      * @param {number} size
      * @param {number} data
@@ -3248,7 +3248,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * This "check" function is called by the Bus component to inform us that port output occurred.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} port
      * @param {number} size
      * @param {number} data
@@ -3267,7 +3267,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * clearBreakpoints()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     clearBreakpoints()
     {
@@ -3276,14 +3276,14 @@ export default class DebuggerX86 extends DbgLib {
         if (this.aBreakRead !== undefined) {
             for (i = 1; i < this.aBreakRead.length; i++) {
                 dbgAddr = this.aBreakRead[i];
-                this.cpu.removeMemBreak(this.getAddr(dbgAddr), false, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL);
+                this.cpu.removeMemBreak(this.getAddr(dbgAddr), false, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL);
             }
         }
         this.aBreakRead = ["br"];
         if (this.aBreakWrite !== undefined) {
             for (i = 1; i < this.aBreakWrite.length; i++) {
                 dbgAddr = this.aBreakWrite[i];
-                this.cpu.removeMemBreak(this.getAddr(dbgAddr), true, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL);
+                this.cpu.removeMemBreak(this.getAddr(dbgAddr), true, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL);
             }
         }
         this.aBreakWrite = ["bw"];
@@ -3316,9 +3316,9 @@ export default class DebuggerX86 extends DbgLib {
      * also consider a more WDEB386-like syntax, where "br" is used to set a variety of access-specific
      * breakpoints, using modifiers like "r1", "r2", "w1", "w2, etc.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBreak
-     * @param {DbgAddrX86} dbgAddr
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fTempBreak]
      * @param {boolean} [fQuiet]
      * @returns {boolean} true if breakpoint added, false if already exists
@@ -3343,7 +3343,7 @@ export default class DebuggerX86 extends DbgLib {
 
         if (aBreak != this.aBreakExec) {
             let addr = this.getAddr(dbgAddr);
-            if (addr === X86.ADDR_INVALID || !this.cpu.addMemBreak(addr, aBreak == this.aBreakWrite, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL)) {
+            if (addr === X86.ADDR_INVALID || !this.cpu.addMemBreak(addr, aBreak == this.aBreakWrite, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL)) {
                 this.printf("invalid address: %s\n", this.toHexAddr(dbgAddr));
                 fSuccess = false;
             }
@@ -3376,9 +3376,9 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * findBreakpoint(aBreak, dbgAddr, fRemove, fTempBreak, fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBreak
-     * @param {DbgAddrX86} dbgAddr
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fRemove]
      * @param {boolean} [fTempBreak]
      * @param {boolean} [fQuiet]
@@ -3400,7 +3400,7 @@ export default class DebuggerX86 extends DbgLib {
                         }
                         aBreak.splice(i, 1);
                         if (aBreak != this.aBreakExec) {
-                            this.cpu.removeMemBreak(addr, aBreak == this.aBreakWrite, dbgAddrBreak.type == DebuggerX86.ADDRTYPE.PHYSICAL);
+                            this.cpu.removeMemBreak(addr, aBreak == this.aBreakWrite, dbgAddrBreak.type == Debuggerx86.ADDRTYPE.PHYSICAL);
                         }
                         /*
                          * We'll mirror the logic in addBreakpoint() and leave the history buffer alone if this
@@ -3422,7 +3422,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * listBreakpoints(aBreak)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBreak
      * @returns {number} of breakpoints listed, 0 if none
      */
@@ -3439,7 +3439,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * TODO: We may need to start printing linear addresses also (if any), because segmented address can be ambiguous.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBreak
      * @param {number} i
      * @param {string} [sAction]
@@ -3453,7 +3453,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * restoreBreakpoints(aBreak, aDbgAddr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBreak
      * @param {Array} aDbgAddr
      */
@@ -3469,8 +3469,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * setTempBreakpoint(dbgAddr)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr of new temp breakpoint
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr of new temp breakpoint
      */
     setTempBreakpoint(dbgAddr)
     {
@@ -3480,7 +3480,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * clearTempBreakpoint(addr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number|undefined} [addr] clear all temp breakpoints if no address specified
      */
     clearTempBreakpoint(addr)
@@ -3502,7 +3502,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * mapBreakpoint(addr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @returns {number}
      */
@@ -3526,7 +3526,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * checkBreakpoint(addr, nb, aBreak, fTempBreak)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} nb (# of bytes)
      * @param {Array} aBreak
@@ -3643,7 +3643,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * addVectorBP(vector, chType)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} vector
      * @param {string} chType
      * @returns {boolean} true if breakpoint added, false if error
@@ -3653,8 +3653,8 @@ export default class DebuggerX86 extends DbgLib {
         let i = this.findVectorBP(vector);
         if (i < 0) {
             let dbgAddr;
-            let type = (chType == '#' || !chType && this.getCPUMode())? DebuggerX86.ADDRTYPE.PROT : DebuggerX86.ADDRTYPE.REAL;
-            if (type != DebuggerX86.ADDRTYPE.PROT) {
+            let type = (chType == '#' || !chType && this.getCPUMode())? Debuggerx86.ADDRTYPE.PROT : Debuggerx86.ADDRTYPE.REAL;
+            if (type != Debuggerx86.ADDRTYPE.PROT) {
                 let addr = this.cpu.getLong(vector << 2);
                 let off = addr & 0xffff;
                 let sel = (addr >> 16) & 0xffff;
@@ -3671,7 +3671,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * checkVectorBP(vector, fProt)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} vector
      * @param {boolean} fProt (true if protected-mode interrupt)
      * @returns {boolean}
@@ -3684,7 +3684,7 @@ export default class DebuggerX86 extends DbgLib {
                 let i = this.findVectorBP(vector);
                 if (i >= 0) {
                     let vbp = this.aVectorBP[i];
-                    if (fProt == (vbp.type == DebuggerX86.ADDRTYPE.PROT)) {
+                    if (fProt == (vbp.type == Debuggerx86.ADDRTYPE.PROT)) {
                         this.cpu.setIP(this.cpu.getIP() - 2);
                         this.stopCPU();
                         return true;
@@ -3698,7 +3698,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * checkVectorAddr(addr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @returns {boolean}
      */
@@ -3719,7 +3719,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * findVectorBP(vector)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} vector
      * @returns {number}
      */
@@ -3736,14 +3736,14 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * listVectorBP()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     listVectorBP()
     {
         let i;
         for (i = 0; i < this.aVectorBP.length; i++) {
             let vbp = this.aVectorBP[i];
-            if (vbp.type == DebuggerX86.ADDRTYPE.PROT) {
+            if (vbp.type == Debuggerx86.ADDRTYPE.PROT) {
                 this.printf("vector #%#04x\n", vbp.vector);
             } else {
                 this.printf("vector &%#04x: %04x:%04x\n", vbp.vector, vbp.dbgAddr.sel, vbp.dbgAddr.off);
@@ -3757,7 +3757,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * removeVectorBP(vector)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} vector
      * @returns {boolean} true if breakpoint removed, false if error
      */
@@ -3775,8 +3775,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getInstruction(dbgAddr, sComment, nSequence)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {string} [sComment] is an associated comment
      * @param {number} [nSequence] is an associated sequence number, -1 or undefined if none
      * @returns {string} (and dbgAddr is updated to the next instruction)
@@ -3784,7 +3784,7 @@ export default class DebuggerX86 extends DbgLib {
     getInstruction(dbgAddr, sComment, nSequence)
     {
         let bModRM = -1;
-        let asOpcodes = DebuggerX86.INS_NAMES;
+        let asOpcodes = Debuggerx86.INS_NAMES;
         let dbgAddrIns = this.newAddr(dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.type);
 
         /*
@@ -3802,14 +3802,14 @@ export default class DebuggerX86 extends DbgLib {
             aOpDesc = this.aaOpDescs[bOpcode];
             iIns = aOpDesc[0];
             let type = aOpDesc[1];
-            if (type == DebuggerX86.TYPE_PREFIX) {
+            if (type == Debuggerx86.TYPE_PREFIX) {
                 if (bOpcode >= X86.OPCODE.LOCK) {
                     sPrefix = asOpcodes[iIns];
                 } else {
                     sSegment = asOpcodes[iIns]; // eg, ES:, CS:, SS:, DS:
                 }
             }
-            else if (type == (DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386)) {
+            else if (type == (Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386)) {
                 if (this.cpu.model < X86.MODEL_80386) break;
                 if (bOpcode == X86.OPCODE.OS) {
                     if (!fDataPrefix) {
@@ -3829,18 +3829,18 @@ export default class DebuggerX86 extends DbgLib {
             }
         } while (cMaxOverrides--);
 
-        if (iIns == DebuggerX86.INS.OP0F) {
+        if (iIns == Debuggerx86.INS.OP0F) {
             let b = this.getByte(dbgAddr, 1);
-            aOpDesc = DebuggerX86.aaOp0FDescs[b] || DebuggerX86.aOpDescUndefined;
+            aOpDesc = Debuggerx86.aaOp0FDescs[b] || Debuggerx86.aOpDescUndefined;
             bOpcode |= (b << 8);
             iIns = aOpDesc[0];
         }
 
-        if (iIns == DebuggerX86.INS.ESC) {
+        if (iIns == Debuggerx86.INS.ESC) {
             bModRM = this.getByte(dbgAddr, 1);
             let aOpFPUDesc = this.getFPUInstruction(bOpcode, bModRM);
             if (aOpFPUDesc) {
-                asOpcodes = DebuggerX86.FINS_NAMES;
+                asOpcodes = Debuggerx86.FINS_NAMES;
                 aOpDesc = aOpFPUDesc;
                 iIns = aOpDesc[0];
             }
@@ -3848,7 +3848,7 @@ export default class DebuggerX86 extends DbgLib {
 
         if (iIns >= asOpcodes.length) {
             bModRM = this.getByte(dbgAddr, 1);
-            aOpDesc = DebuggerX86.aaGrpDescs[iIns - asOpcodes.length][(bModRM >> 3) & 0x7];
+            aOpDesc = Debuggerx86.aaGrpDescs[iIns - asOpcodes.length][(bModRM >> 3) & 0x7];
             iIns = aOpDesc[0];
         }
 
@@ -3857,13 +3857,13 @@ export default class DebuggerX86 extends DbgLib {
         let sOperands = "";
 
         if (dbgAddr.fData32) {
-            if (iIns == DebuggerX86.INS.CBW) {
+            if (iIns == Debuggerx86.INS.CBW) {
                 sOpcode = "CWDE";       // sign-extend AX into EAX, instead of AL into AX
             }
-            else if (iIns == DebuggerX86.INS.CWD) {
+            else if (iIns == Debuggerx86.INS.CWD) {
                 sOpcode = "CDQ";        // sign-extend EAX into EDX:EAX, instead of AX into DX:AX
             }
-            else if (iIns >= DebuggerX86.INS.POPA && iIns <= DebuggerX86.INS.PUSHA) {
+            else if (iIns >= Debuggerx86.INS.POPA && iIns <= Debuggerx86.INS.PUSHA) {
                 sOpcode += 'D';         // transform POPA/POPF/PUSHF/PUSHA to POPAD/POPFD/PUSHFD/PUSHAD as appropriate
             }
         }
@@ -3881,12 +3881,12 @@ export default class DebuggerX86 extends DbgLib {
             let type = aOpDesc[iOperand];
             if (type === undefined) continue;
 
-            if (typeCPU < 0) typeCPU = type >> DebuggerX86.TYPE_CPU_SHIFT;
+            if (typeCPU < 0) typeCPU = type >> Debuggerx86.TYPE_CPU_SHIFT;
 
-            if (iIns == DebuggerX86.INS.LOADALL) {
-                if (typeCPU == DebuggerX86.CPU_80286) {
+            if (iIns == Debuggerx86.INS.LOADALL) {
+                if (typeCPU == Debuggerx86.CPU_80286) {
                     sOperands = "[%800]";
-                } else if (typeCPU == DebuggerX86.CPU_80386) {
+                } else if (typeCPU == Debuggerx86.CPU_80386) {
                     /*
                      * NOTE: The 80386 LOADALL documentation, such as it is, doesn't suggest that segment
                      * overrides are allowed, but then again, it doesn't say they're not; we'll disassemble
@@ -3898,16 +3898,16 @@ export default class DebuggerX86 extends DbgLib {
                 }
             }
 
-            let typeSize = type & DebuggerX86.TYPE_SIZE;
-            if (typeSize == DebuggerX86.TYPE_NONE) {
+            let typeSize = type & Debuggerx86.TYPE_SIZE;
+            if (typeSize == Debuggerx86.TYPE_NONE) {
                 continue;
             }
-            let typeMode = type & DebuggerX86.TYPE_MODE;
-            if (typeMode >= DebuggerX86.TYPE_MODRM) {
+            let typeMode = type & Debuggerx86.TYPE_MODE;
+            if (typeMode >= Debuggerx86.TYPE_MODRM) {
                 if (bModRM < 0) {
                     bModRM = this.getByte(dbgAddr, 1);
                 }
-                if (typeMode < DebuggerX86.TYPE_MODREG) {
+                if (typeMode < Debuggerx86.TYPE_MODREG) {
                     /*
                      * This test also encompasses TYPE_MODMEM, which is basically the inverse of the case
                      * below (ie, only Mod values *other* than 11 are allowed); however, I believe that in
@@ -3917,7 +3917,7 @@ export default class DebuggerX86 extends DbgLib {
                      */
                     sOperand = this.getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr);
                 }
-                else if (typeMode == DebuggerX86.TYPE_MODREG) {
+                else if (typeMode == Debuggerx86.TYPE_MODREG) {
                     /*
                      * TYPE_MODREG instructions assume that Mod is 11 (only certain early 80486 steppings
                      * actually *required* that Mod contain 11) and always treat RM as a register (which we
@@ -3932,13 +3932,13 @@ export default class DebuggerX86 extends DbgLib {
                     sOperand = this.getRegOperand((bModRM >> 3) & 0x7, type, dbgAddr);
                 }
             }
-            else if (typeMode == DebuggerX86.TYPE_ONE) {
+            else if (typeMode == Debuggerx86.TYPE_ONE) {
                 sOperand = '1';
             }
-            else if (typeMode == DebuggerX86.TYPE_IMM) {
+            else if (typeMode == Debuggerx86.TYPE_IMM) {
                 sOperand = this.getImmOperand(type, dbgAddr);
             }
-            else if (typeMode == DebuggerX86.TYPE_IMMOFF) {
+            else if (typeMode == Debuggerx86.TYPE_IMMOFF) {
                 if (!dbgAddr.fAddr32) {
                     cch = 4;
                     off = this.getShort(dbgAddr, 2);
@@ -3948,8 +3948,8 @@ export default class DebuggerX86 extends DbgLib {
                 }
                 sOperand = sSegment + '[' + StrLib.toHex(off, cch) + ']';
             }
-            else if (typeMode == DebuggerX86.TYPE_IMMREL) {
-                if (typeSize == DebuggerX86.TYPE_BYTE) {
+            else if (typeMode == Debuggerx86.TYPE_IMMREL) {
+                if (typeSize == Debuggerx86.TYPE_BYTE) {
                     disp = ((this.getByte(dbgAddr, 1) << 24) >> 24);
                 }
                 else {
@@ -3960,22 +3960,22 @@ export default class DebuggerX86 extends DbgLib {
                 let aSymbol = this.findSymbol(this.newAddr(off, dbgAddr.sel));
                 if (aSymbol[0]) sOperand += " (" + aSymbol[0] + ")";
             }
-            else if (typeMode == DebuggerX86.TYPE_IMPREG) {
-                if (typeSize == DebuggerX86.TYPE_ST) {
+            else if (typeMode == Debuggerx86.TYPE_IMPREG) {
+                if (typeSize == Debuggerx86.TYPE_ST) {
                     sOperand = "ST";
-                } else if (typeSize == DebuggerX86.TYPE_STREG) {
+                } else if (typeSize == Debuggerx86.TYPE_STREG) {
                     sOperand = "ST(" + (bModRM & 0x7) + ")";
                 } else {
-                    sOperand = this.getRegOperand((type & DebuggerX86.TYPE_IREG) >> 8, type, dbgAddr);
+                    sOperand = this.getRegOperand((type & Debuggerx86.TYPE_IREG) >> 8, type, dbgAddr);
                 }
             }
-            else if (typeMode == DebuggerX86.TYPE_IMPSEG) {
-                sOperand = this.getRegOperand((type & DebuggerX86.TYPE_IREG) >> 8, DebuggerX86.TYPE_SEGREG, dbgAddr);
+            else if (typeMode == Debuggerx86.TYPE_IMPSEG) {
+                sOperand = this.getRegOperand((type & Debuggerx86.TYPE_IREG) >> 8, Debuggerx86.TYPE_SEGREG, dbgAddr);
             }
-            else if (typeMode == DebuggerX86.TYPE_DSSI) {
+            else if (typeMode == Debuggerx86.TYPE_DSSI) {
                 sOperand = (sSegment || "DS:") + "[SI]";
             }
-            else if (typeMode == DebuggerX86.TYPE_ESDI) {
+            else if (typeMode == Debuggerx86.TYPE_ESDI) {
                 sOperand = (sSegment || "ES:") + "[DI]";
             }
             if (!sOperand || !sOperand.length) {
@@ -4018,8 +4018,8 @@ export default class DebuggerX86 extends DbgLib {
         sLine += StrLib.pad(sOpcode, -8);
         if (sOperands) sLine += ' ' + sOperands;
 
-        if (this.cpu.model < DebuggerX86.CPUS[typeCPU]) {
-            sComment = DebuggerX86.CPUS[typeCPU] + " CPU only";
+        if (this.cpu.model < Debuggerx86.CPUS[typeCPU]) {
+            sComment = Debuggerx86.CPUS[typeCPU] + " CPU only";
         }
 
         if (sComment) {
@@ -4039,7 +4039,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getFPUInstruction(bOpcode, bModRM)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} bOpcode
      * @param {number} bModRM
      * @returns {Array|null} (FPU instruction group, or null if none)
@@ -4067,7 +4067,7 @@ export default class DebuggerX86 extends DbgLib {
             modReg = (reg << 4) | r_m;
         }
 
-        let aaOpDesc = DebuggerX86.aaaOpFPUDescs[bOpcode];
+        let aaOpDesc = Debuggerx86.aaaOpFPUDescs[bOpcode];
         if (aaOpDesc) aOpDesc = aaOpDesc[modReg];
 
         return aOpDesc;
@@ -4076,41 +4076,41 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getImmOperand(type, dbgAddr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} type
-     * @param {DbgAddrX86} dbgAddr
+     * @param {DbgAddrx86} dbgAddr
      * @returns {string} operand
      */
     getImmOperand(type, dbgAddr)
     {
         let aSymbol;
         let sOperand = ' ';
-        let typeSize = type & DebuggerX86.TYPE_SIZE;
+        let typeSize = type & Debuggerx86.TYPE_SIZE;
 
         switch (typeSize) {
-        case DebuggerX86.TYPE_BYTE:
+        case Debuggerx86.TYPE_BYTE:
             /*
              * There's the occasional immediate byte we don't need to display (eg, the 0x0A
              * following an AAM or AAD instruction), so we suppress the byte if it lacks a TYPE_IN
              * or TYPE_OUT designation (and TYPE_BOTH, as the name implies, includes both).
              */
-            if (type & DebuggerX86.TYPE_BOTH) {
+            if (type & Debuggerx86.TYPE_BOTH) {
                 sOperand = StrLib.toHex(this.getByte(dbgAddr, 1), 2);
             }
             break;
-        case DebuggerX86.TYPE_SBYTE:
+        case Debuggerx86.TYPE_SBYTE:
             sOperand = StrLib.toHex((this.getByte(dbgAddr, 1) << 24) >> 24, dbgAddr.fData32? 8: 4);
             break;
-        case DebuggerX86.TYPE_WORD:
+        case Debuggerx86.TYPE_WORD:
             if (dbgAddr.fData32) {
                 sOperand = StrLib.toHex(this.getLong(dbgAddr, 4));
                 break;
             }
             /* falls through */
-        case DebuggerX86.TYPE_SHORT:
+        case Debuggerx86.TYPE_SHORT:
             sOperand = StrLib.toHex(this.getShort(dbgAddr, 2), 4);
             break;
-        case DebuggerX86.TYPE_FARP:
+        case Debuggerx86.TYPE_FARP:
             dbgAddr = this.newAddr(this.getWord(dbgAddr, true), this.getShort(dbgAddr, 2), undefined, dbgAddr.type, dbgAddr.fData32, dbgAddr.fAddr32);
             sOperand = this.toHexAddr(dbgAddr);
             aSymbol = this.findSymbol(dbgAddr);
@@ -4126,49 +4126,49 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getRegOperand(bReg, type, dbgAddr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} bReg
      * @param {number} type
-     * @param {DbgAddrX86} dbgAddr
+     * @param {DbgAddrx86} dbgAddr
      * @returns {string} operand
      */
     getRegOperand(bReg, type, dbgAddr)
     {
-        let typeMode = type & DebuggerX86.TYPE_MODE;
-        if (typeMode == DebuggerX86.TYPE_SEGREG) {
-            if (bReg > DebuggerX86.REG_GS ||
-                bReg >= DebuggerX86.REG_FS && this.cpu.model < X86.MODEL_80386) return "??";
-            bReg += DebuggerX86.REG_SEG;
+        let typeMode = type & Debuggerx86.TYPE_MODE;
+        if (typeMode == Debuggerx86.TYPE_SEGREG) {
+            if (bReg > Debuggerx86.REG_GS ||
+                bReg >= Debuggerx86.REG_FS && this.cpu.model < X86.MODEL_80386) return "??";
+            bReg += Debuggerx86.REG_SEG;
         }
-        else if (typeMode == DebuggerX86.TYPE_CTLREG) {
-            bReg += DebuggerX86.REG_CR0;
+        else if (typeMode == Debuggerx86.TYPE_CTLREG) {
+            bReg += Debuggerx86.REG_CR0;
         }
-        else if (typeMode == DebuggerX86.TYPE_DBGREG) {
-            bReg += DebuggerX86.REG_DR0;
+        else if (typeMode == Debuggerx86.TYPE_DBGREG) {
+            bReg += Debuggerx86.REG_DR0;
         }
-        else if (typeMode == DebuggerX86.TYPE_TSTREG) {
-            bReg += DebuggerX86.REG_TR0;
+        else if (typeMode == Debuggerx86.TYPE_TSTREG) {
+            bReg += Debuggerx86.REG_TR0;
         }
         else {
-            let typeSize = type & DebuggerX86.TYPE_SIZE;
-            if (typeSize >= DebuggerX86.TYPE_SHORT) {
-                if (bReg < DebuggerX86.REG_AX) {
-                    bReg += DebuggerX86.REG_AX - DebuggerX86.REG_AL;
+            let typeSize = type & Debuggerx86.TYPE_SIZE;
+            if (typeSize >= Debuggerx86.TYPE_SHORT) {
+                if (bReg < Debuggerx86.REG_AX) {
+                    bReg += Debuggerx86.REG_AX - Debuggerx86.REG_AL;
                 }
-                if (typeSize == DebuggerX86.TYPE_LONG || typeSize == DebuggerX86.TYPE_WORD && dbgAddr.fData32) {
-                    bReg += DebuggerX86.REG_EAX - DebuggerX86.REG_AX;
+                if (typeSize == Debuggerx86.TYPE_LONG || typeSize == Debuggerx86.TYPE_WORD && dbgAddr.fData32) {
+                    bReg += Debuggerx86.REG_EAX - Debuggerx86.REG_AX;
                 }
             }
         }
-        return DebuggerX86.REGS[bReg];
+        return Debuggerx86.REGS[bReg];
     }
 
     /**
      * getSIBOperand(bMod, dbgAddr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} bMod
-     * @param {DbgAddrX86} dbgAddr
+     * @param {DbgAddrx86} dbgAddr
      * @returns {string} operand
      */
     getSIBOperand(bMod, dbgAddr)
@@ -4182,11 +4182,11 @@ export default class DebuggerX86 extends DbgLib {
          * Unless bMod is zero AND bBase is 5, there's always a base register.
          */
         if (bMod || bBase != 5) {
-            sOperand = DebuggerX86.RMS[bBase + 8];
+            sOperand = Debuggerx86.RMS[bBase + 8];
         }
         if (bIndex != 4) {
             if (sOperand) sOperand += '+';
-            sOperand += DebuggerX86.RMS[bIndex + 8];
+            sOperand += Debuggerx86.RMS[bIndex + 8];
             if (bScale) sOperand += '*' + (0x1 << bScale);
         }
         /*
@@ -4202,13 +4202,13 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sOpcode
      * @param {string} sSegment
      * @param {number} bModRM
      * @param {number} type
      * @param {number} cOperands (if 1, memory operands are prefixed with the size; otherwise, size can be inferred)
-     * @param {DbgAddrX86} dbgAddr
+     * @param {DbgAddrx86} dbgAddr
      * @returns {string} operand
      */
     getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr)
@@ -4229,7 +4229,7 @@ export default class DebuggerX86 extends DbgLib {
                         sOperand = this.getSIBOperand(bMod, dbgAddr);
                     }
                 }
-                if (!sOperand) sOperand = DebuggerX86.RMS[bRM];
+                if (!sOperand) sOperand = Debuggerx86.RMS[bRM];
             }
             if (bMod == 1) {
                 disp = this.getByte(dbgAddr, 1);
@@ -4254,18 +4254,18 @@ export default class DebuggerX86 extends DbgLib {
             sOperand = sSegment + '[' + sOperand + ']';
             if (cOperands == 1) {
                 let sType = "";
-                type &= DebuggerX86.TYPE_SIZE;
-                if (type == DebuggerX86.TYPE_WORD) {
-                    type = (dbgAddr.fData32? DebuggerX86.TYPE_LONG : DebuggerX86.TYPE_SHORT);
+                type &= Debuggerx86.TYPE_SIZE;
+                if (type == Debuggerx86.TYPE_WORD) {
+                    type = (dbgAddr.fData32? Debuggerx86.TYPE_LONG : Debuggerx86.TYPE_SHORT);
                 }
                 switch(type) {
-                case DebuggerX86.TYPE_FARP:
+                case Debuggerx86.TYPE_FARP:
                     sType = "FAR";
                     break;
-                case DebuggerX86.TYPE_BYTE:
+                case Debuggerx86.TYPE_BYTE:
                     sType = "BYTE";
                     break;
-                case DebuggerX86.TYPE_SHORT:
+                case Debuggerx86.TYPE_SHORT:
                     if (fInteger) {
                         sType = "INT16";
                         break;
@@ -4273,31 +4273,31 @@ export default class DebuggerX86 extends DbgLib {
                     /* falls through */
                     sType = "WORD";
                     break;
-                case DebuggerX86.TYPE_LONG:
+                case Debuggerx86.TYPE_LONG:
                     sType = "DWORD";
                     break;
-                case DebuggerX86.TYPE_SINT:
+                case Debuggerx86.TYPE_SINT:
                     if (fInteger) {
                         sType = "INT32";
                         break;
                     }
                     /* falls through */
-                case DebuggerX86.TYPE_SREAL:
+                case Debuggerx86.TYPE_SREAL:
                     sType = "REAL32";
                     break;
-                case DebuggerX86.TYPE_LINT:
+                case Debuggerx86.TYPE_LINT:
                     if (fInteger) {
                         sType = "INT64";
                         break;
                     }
                     /* falls through */
-                case DebuggerX86.TYPE_LREAL:
+                case Debuggerx86.TYPE_LREAL:
                     sType = "REAL64";
                     break;
-                case DebuggerX86.TYPE_TREAL:
+                case Debuggerx86.TYPE_TREAL:
                     sType = "REAL80";
                     break;
-                case DebuggerX86.TYPE_BCD80:
+                case Debuggerx86.TYPE_BCD80:
                     sType = "BCD80";
                     break;
                 }
@@ -4315,10 +4315,10 @@ export default class DebuggerX86 extends DbgLib {
      *
      * TODO: Unimplemented.  See parseInstruction() in /machines/osi/c1p/modules/v2/debugger.js for a working implementation.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sOp
      * @param {string|undefined} sOperand
-     * @param {DbgAddrX86} dbgAddr of memory where this instruction is being assembled
+     * @param {DbgAddrx86} dbgAddr of memory where this instruction is being assembled
      * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
      */
     parseInstruction(sOp, sOperand, dbgAddr)
@@ -4331,7 +4331,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getFlagOutput(sFlag)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sFlag
      * @returns {string} value of flag
      */
@@ -4376,7 +4376,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getLimitString(l)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} l
      * @returns {string}
      */
@@ -4388,23 +4388,23 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getRegOutput(iReg)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} iReg
      * @returns {string}
      */
     getRegOutput(iReg)
     {
-        if (iReg >= DebuggerX86.REG_AX && iReg <= DebuggerX86.REG_DI && this.cchReg > 4) iReg += DebuggerX86.REG_EAX - DebuggerX86.REG_AX;
-        let sReg = DebuggerX86.REGS[iReg];
-        if (iReg == DebuggerX86.REG_CR0 && this.cpu.model == X86.MODEL_80286) sReg = "MS";
+        if (iReg >= Debuggerx86.REG_AX && iReg <= Debuggerx86.REG_DI && this.cchReg > 4) iReg += Debuggerx86.REG_EAX - Debuggerx86.REG_AX;
+        let sReg = Debuggerx86.REGS[iReg];
+        if (iReg == Debuggerx86.REG_CR0 && this.cpu.model == X86.MODEL_80286) sReg = "MS";
         return sReg + '=' + this.getRegString(iReg) + ' ';
     }
 
     /**
      * getSegOutput(seg, fProt)
      *
-     * @this {DebuggerX86}
-     * @param {SegX86} seg
+     * @this {Debuggerx86}
+     * @param {Segx86} seg
      * @param {boolean} [fProt]
      * @returns {string}
      */
@@ -4416,7 +4416,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * getDTROutput(sName, sel, addr, addrLimit)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sName
      * @param {number|null|*} sel
      * @param {number} addr
@@ -4468,7 +4468,7 @@ export default class DebuggerX86 extends DbgLib {
      * Note that even when the processor is in real mode, you can always use the "rp" command to force a protected-mode
      * dump, in case you need to verify any selector base or limit values, since those also affect real-mode operation.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fProt]
      * @returns {string}
      */
@@ -4477,14 +4477,14 @@ export default class DebuggerX86 extends DbgLib {
         let s;
         if (fProt === undefined) fProt = this.getCPUMode();
 
-        s = this.getRegOutput(DebuggerX86.REG_AX) +
-            this.getRegOutput(DebuggerX86.REG_BX) +
-            this.getRegOutput(DebuggerX86.REG_CX) +
-            this.getRegOutput(DebuggerX86.REG_DX) + (this.cchReg > 4? '\n' : '') +
-            this.getRegOutput(DebuggerX86.REG_SP) +
-            this.getRegOutput(DebuggerX86.REG_BP) +
-            this.getRegOutput(DebuggerX86.REG_SI) +
-            this.getRegOutput(DebuggerX86.REG_DI) + '\n' +
+        s = this.getRegOutput(Debuggerx86.REG_AX) +
+            this.getRegOutput(Debuggerx86.REG_BX) +
+            this.getRegOutput(Debuggerx86.REG_CX) +
+            this.getRegOutput(Debuggerx86.REG_DX) + (this.cchReg > 4? '\n' : '') +
+            this.getRegOutput(Debuggerx86.REG_SP) +
+            this.getRegOutput(Debuggerx86.REG_BP) +
+            this.getRegOutput(Debuggerx86.REG_SI) +
+            this.getRegOutput(Debuggerx86.REG_DI) + '\n' +
             this.getSegOutput(this.cpu.segSS, fProt) + ' ' +
             this.getSegOutput(this.cpu.segDS, fProt) + ' ' +
             this.getSegOutput(this.cpu.segES, fProt) + ' ';
@@ -4506,9 +4506,9 @@ export default class DebuggerX86 extends DbgLib {
                  this.getDTROutput("GD", null, this.cpu.addrGDT, this.cpu.addrGDTLimit) + ' ' +
                  this.getDTROutput("ID", null, this.cpu.addrIDT, this.cpu.addrIDTLimit) + ' ';
             s += sTR + ' ' + sA20;
-            s += this.getRegOutput(DebuggerX86.REG_CR0);
+            s += this.getRegOutput(Debuggerx86.REG_CR0);
             if (I386 && this.cpu.model >= X86.MODEL_80386) {
-                s += this.getRegOutput(DebuggerX86.REG_CR2) + this.getRegOutput(DebuggerX86.REG_CR3);
+                s += this.getRegOutput(Debuggerx86.REG_CR2) + this.getRegOutput(Debuggerx86.REG_CR3);
             }
         } else {
             if (I386 && this.cpu.model >= X86.MODEL_80386) {
@@ -4517,7 +4517,7 @@ export default class DebuggerX86 extends DbgLib {
             }
         }
 
-        s += this.getRegOutput(DebuggerX86.REG_PS) +
+        s += this.getRegOutput(Debuggerx86.REG_PS) +
              this.getFlagOutput('V') + this.getFlagOutput('D') + this.getFlagOutput('I') + this.getFlagOutput('T') +
              this.getFlagOutput('S') + this.getFlagOutput('Z') + this.getFlagOutput('A') + this.getFlagOutput('P') + this.getFlagOutput('C');
 
@@ -4527,7 +4527,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * comparePairs(p1, p2)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number|string|Array|Object} p1
      * @param {number|string|Array|Object} p2
      * @returns {number}
@@ -4608,7 +4608,7 @@ export default class DebuggerX86 extends DbgLib {
      * hand-edited files, we can't assume that, and we need to ensure that findSymbol()'s binarySearch() operates
      * properly.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|null} sModule
      * @param {number} nSegment (zero if undefined)
      * @param {number} sel (the default segment/selector for all symbols in this group)
@@ -4668,7 +4668,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * removeSymbols(sModule, nSegment)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|null|*} sModule
      * @param {number} [nSegment] (segment # if sModule set, selector if sModule clear)
      * @returns {string|null} name of the module removed, or null if no module was found
@@ -4694,7 +4694,7 @@ export default class DebuggerX86 extends DbgLib {
      * TODO: Add "numerical" and "alphabetical" dump options. This is simply dumping them in whatever
      * order they appeared in the original MAP file.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     dumpSymbols()
     {
@@ -4722,8 +4722,8 @@ export default class DebuggerX86 extends DbgLib {
      * If fNearest is true, and no exact match was found, then the Array returned will contain TWO sets of
      * entries: [0]-[3] will refer to closest preceding symbol, and [4]-[7] will refer to the closest subsequent symbol.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fNearest]
      * @returns {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
      */
@@ -4768,9 +4768,9 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Search aSymbolTable for sSymbol, and if found, return a dbgAddr (same as parseAddr())
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sSymbol
-     * @returns {DbgAddrX86|undefined}
+     * @returns {DbgAddrx86|undefined}
      */
     findSymbolAddr(sSymbol)
     {
@@ -4835,13 +4835,13 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doHelp()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     doHelp()
     {
         let s = "debugger commands:";
-        for (let sCommand in DebuggerX86.COMMANDS) {
-            s += '\n  ' + StrLib.pad(sCommand, -7) + DebuggerX86.COMMANDS[sCommand];
+        for (let sCommand in Debuggerx86.COMMANDS) {
+            s += '\n  ' + StrLib.pad(sCommand, -7) + Debuggerx86.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -4874,7 +4874,7 @@ export default class DebuggerX86 extends DbgLib {
      * NOTE: As the previous example implies, you can even assemble new instructions into ROM address space;
      * as our setByte() function explains, the ROM write-notification handlers only refuse writes from the CPU.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs is the complete argument array, beginning with the "a" command in asArgs[0]
      */
     doAssemble(asArgs)
@@ -4927,7 +4927,7 @@ export default class DebuggerX86 extends DbgLib {
      * clear them.  Because "bi" and "bo" commands are piggy-backing on Bus functions, those breakpoints
      * are currently outside the realm of what the "bl" and "bc" commands are aware of.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {string|undefined} [sAddr]
      * @param {string} [sOptions] (the rest of the breakpoint command-line)
@@ -5043,7 +5043,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doClear(sCmd)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sCmd] (eg, "cls" or "clear")
      */
     doClear(sCmd)
@@ -5057,7 +5057,7 @@ export default class DebuggerX86 extends DbgLib {
      * For memory dumps, the second parameter (sLen) is interpreted as a length (by default, in hex)
      * only if it contains an 'l' prefix; otherwise it's interpreted as an ending address (inclusive).
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs (formerly sCmd, [sAddr], [sLen] and [sBytes])
      */
     doDump(asArgs)
@@ -5213,7 +5213,7 @@ export default class DebuggerX86 extends DbgLib {
                 /*
                  * To be more DEBUG-like, when an ending address is used instead of a length, we treat it inclusively, hence the "+ 1".
                  */
-                if (dbgAddr.type != DebuggerX86.ADDRTYPE.LINEAR) {
+                if (dbgAddr.type != Debuggerx86.ADDRTYPE.LINEAR) {
                     len = dbgAddrEnd.off - dbgAddr.off + 1;
                 } else {
                     len = dbgAddrEnd.addr - dbgAddr.addr + 1;
@@ -5279,7 +5279,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doEdit(asArgs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     doEdit(asArgs)
@@ -5367,7 +5367,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doFreqs(sParm)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sParm
      */
     doFreqs(sParm)
@@ -5400,7 +5400,7 @@ export default class DebuggerX86 extends DbgLib {
                     let bOpcode = aaSortedOpcodeCounts[i][0];
                     let cFreq = aaSortedOpcodeCounts[i][1];
                     if (cFreq) {
-                        this.printf("%s (%#04x): %d times\n", (DebuggerX86.INS_NAMES[this.aaOpDescs[bOpcode][0]] + "  ").substr(0, 5), bOpcode, cFreq);
+                        this.printf("%s (%#04x): %d times\n", (Debuggerx86.INS_NAMES[this.aaOpDescs[bOpcode][0]] + "  ").substr(0, 5), bOpcode, cFreq);
                         cData++;
                     }
                 }
@@ -5414,7 +5414,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doHalt(fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fQuiet]
      */
     doHalt(fQuiet)
@@ -5435,7 +5435,7 @@ export default class DebuggerX86 extends DbgLib {
      * Also, if no variable named "a" exists, "a" will evaluate to 0x0A, so the expression "a==10" becomes
      * "0x0A==0x10" (false), whereas the expression "a==10." becomes "0x0A==0x0A" (true).
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
      * @returns {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
@@ -5454,7 +5454,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doInfo(asArgs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      * @returns {boolean} true only if the instruction info command ("n") is supported
      */
@@ -5473,7 +5473,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Simulate a 1-byte port input operation.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sPort
      */
     doInput(sPort)
@@ -5507,7 +5507,7 @@ export default class DebuggerX86 extends DbgLib {
      * These messages also reset the system variable $ops (by updating cOpcodesStart), to make it easier to see
      * how many opcodes were executed since these interrupts "started".
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sInt
      * @returns {boolean} true if successful, false if not
      */
@@ -5537,7 +5537,7 @@ export default class DebuggerX86 extends DbgLib {
      * Other supported shorthand: "var" with no parameters prints the values of all variables, and "let {variable}"
      * prints the value of the specified variable.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
      * @returns {boolean} true if valid "var" assignment, false if not
      */
@@ -5570,7 +5570,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doList(sAddr, fPrint)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sAddr
      * @param {boolean} [fPrint]
      * @returns {string|null}
@@ -5631,7 +5631,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      *      d disk [drive #]
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     doLoad(asArgs)
@@ -5727,7 +5727,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doMessages(asArgs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     doMessages(asArgs)
@@ -5811,7 +5811,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * When using the "click" action, specify 0 for Mouse.BUTTON.LEFT or 2 for Mouse.BUTTON.RIGHT.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sAction
      * @param {string} sDelta
      */
@@ -5851,7 +5851,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doExecOptions(asArgs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     doExecOptions(asArgs)
@@ -5907,7 +5907,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Simulate a 1-byte port output operation.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sPort
      * @param {string|undefined} sByte (string representation of 1 byte)
      */
@@ -5938,7 +5938,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doRegisters(asArgs, fInstruction)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} [asArgs]
      * @param {boolean} [fInstruction] (true to include the current instruction; default is true)
      */
@@ -6212,7 +6212,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * NOTE: If we're called, the existence of an FPU has already been verified.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} [asArgs]
      */
     doFPURegisters(asArgs)
@@ -6224,7 +6224,7 @@ export default class DebuggerX86 extends DbgLib {
             let a = fpu.readFPUStack(i);
             if (!a) break;
             let sValue = StrLib.pad(a[2].toFixed(15), 24);
-            this.printf("ST%d: %s  %x,%x  [%d:%s]\n", i, sValue, a[4], a[3], a[0], DebuggerX86.FPU_TAGS[a[1]]);
+            this.printf("ST%d: %s  %x,%x  [%d:%s]\n", i, sValue, a[4], a[3], a[0], Debuggerx86.FPU_TAGS[a[1]]);
             // this.printf("  REG%d %s%s%s\n", a[0], StrLib.toBin(a[7], 16), StrLib.toBin(a[6]), StrLib.toBin(a[5]));
         }
         this.printf("    B3SSS210ESPUOZDI               xxxIRRPPIxPUOZDI\n");
@@ -6234,7 +6234,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doRun(sCmd, sAddr, sOptions, fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {string|undefined} [sAddr]
      * @param {string} [sOptions] (the rest of the breakpoint command-line)
@@ -6260,7 +6260,7 @@ export default class DebuggerX86 extends DbgLib {
      * NOTE: If the string to print is a quoted string, then we run it through replaceRegs(), so that
      * you can take advantage of all the special replacement options used for software interrupt logging.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
      */
     doPrint(sCmd)
@@ -6277,7 +6277,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doStep(sCmd)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sCmd] "p" or "pr"
      */
     doStep(sCmd)
@@ -6414,8 +6414,8 @@ export default class DebuggerX86 extends DbgLib {
      * Given a possible return address (typically from the stack), look for a matching CALL (or INT) that
      * immediately precedes that address.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fFar]
      * @returns {string|null} CALL instruction at or near dbgAddr, or null if none
      */
@@ -6455,7 +6455,7 @@ export default class DebuggerX86 extends DbgLib {
      *
      * Use "k" for a normal stack trace and "ks" for a stack trace with symbolic info.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sCmd]
      * @param {string} [sAddr] (not used yet)
      */
@@ -6534,7 +6534,7 @@ export default class DebuggerX86 extends DbgLib {
      * However, generally a more useful command is "bn", which allows you to break after some
      * number of instructions have been executed (as opposed to some number of cycles).
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sCmd] ("t", "tc", or "tr")
      * @param {string} [sCount] # of instructions to step
      */
@@ -6568,8 +6568,8 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * initAddrSize(dbgAddr)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      */
     initAddrSize(dbgAddr)
     {
@@ -6590,7 +6590,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * isStringIns(bOpcode)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} bOpcode
      * @returns {boolean} true if string instruction, false if not
      */
@@ -6602,7 +6602,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doUnassemble(sAddr, sAddrEnd, n)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sAddr]
      * @param {string} [sAddrEnd]
      * @param {number} [n]
@@ -6669,7 +6669,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * parseCommand(sCmd, fSave, chSep)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sCmd
      * @param {boolean} [fSave] is true to save the command, false if not
      * @param {string} [chSep] is the command separator character (default is ';')
@@ -6763,7 +6763,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doCommand(sCmd, fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
      * @returns {boolean} true if command processed, false if unrecognized
@@ -6943,7 +6943,7 @@ export default class DebuggerX86 extends DbgLib {
     /**
      * doCommands(sCommands, fSave, fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCommands
      * @param {boolean} [fSave]
      * @param {boolean} [fQuiet]
@@ -6959,7 +6959,7 @@ export default class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * DebuggerX86.init()
+     * Debuggerx86.init()
      *
      * This function operates on every HTML element of class "debugger", extracting the
      * JSON-encoded parameters for the Debugger constructor from the element's "data-value"
@@ -6972,7 +6972,7 @@ export default class DebuggerX86 extends DbgLib {
         for (let iDbg = 0; iDbg < aeDbg.length; iDbg++) {
             let eDbg = aeDbg[iDbg];
             let parmsDbg = Component.getComponentParms(eDbg);
-            let dbg = new DebuggerX86(parmsDbg);
+            let dbg = new Debuggerx86(parmsDbg);
             Component.bindComponentControls(dbg, eDbg, APPCLASS);
         }
     }
@@ -6996,7 +6996,7 @@ if (DEBUGGER) {
     /*
      * Information regarding interrupts of interest (used by messageInt() and others)
      */
-    DebuggerX86.INT_MESSAGES = {
+    Debuggerx86.INT_MESSAGES = {
         0x10:       MESSAGE.VIDEO,
         0x13:       MESSAGE.FDC,
         0x15:       MESSAGE.CHIPSET,
@@ -7012,9 +7012,9 @@ if (DEBUGGER) {
      * note that some of these can still be enabled if you really want them (eg, RTC can be turned on
      * with RTC messages, ALT_TIMER with TIMER messages, etc).
      */
-    DebuggerX86.INT_ANNOYING = [Interrupts.TIMER, Interrupts.TMR_BREAK, Interrupts.DOS_IDLE, Interrupts.DOS_NETBIOS, Interrupts.VIDEO_VGA];
+    Debuggerx86.INT_ANNOYING = [Interrupts.TIMER, Interrupts.TMR_BREAK, Interrupts.DOS_IDLE, Interrupts.DOS_NETBIOS, Interrupts.VIDEO_VGA];
 
-    DebuggerX86.COMMANDS = {
+    Debuggerx86.COMMANDS = {
         '?':     "help/print",
         'a [#]': "assemble",            // TODO: Implement this command someday
         'b [#]': "breakpoint",          // multiple variations (use b? to list them)
@@ -7044,14 +7044,14 @@ if (DEBUGGER) {
     };
 
     /*
-     * Supported address types; the type field in a DbgAddrX86 object may be one of:
+     * Supported address types; the type field in a DbgAddrx86 object may be one of:
      *
      *      NONE, REAL, PROT, V86, LINEAR or PHYSICAL
      *
      * REAL and V86 addresses are specified with a '&' prefix, PROT addresses with a '#' prefix,
      * LINEAR addresses with '%', and PHYSICAL addresses with '%%'.
      */
-    DebuggerX86.ADDRTYPE = {
+    Debuggerx86.ADDRTYPE = {
         NONE:       0x00,
         REAL:       0x01,
         PROT:       0x02,
@@ -7069,7 +7069,7 @@ if (DEBUGGER) {
      * NOTE: While this list started alphabetical, there are a few wrinkles; eg, POPA/POPF/PUSHF/PUSHA are
      * sequential to make it easier to detect instructions that require a D suffix when the operand size is 32 bits.
      */
-    DebuggerX86.INS = {
+    Debuggerx86.INS = {
         NONE:   0,   AAA:    1,   AAD:    2,   AAM:    3,   AAS:    4,   ADC:    5,   ADD:    6,   AND:    7,
         ARPL:   8,   AS:     9,   BOUND:  10,  BSF:    11,  BSR:    12,  BT:     13,  BTC:    14,  BTR:    15,
         BTS:    16,  CALL:   17,  CBW:    18,  CLC:    19,  CLD:    20,  CLI:    21,  CLTS:   22,  CMC:    23,
@@ -7098,7 +7098,7 @@ if (DEBUGGER) {
     /*
      * CPU instruction names (mnemonics), indexed by CPU instruction ordinal (above)
      */
-    DebuggerX86.INS_NAMES = [
+    Debuggerx86.INS_NAMES = [
         "INVALID","AAA",    "AAD",    "AAM",    "AAS",    "ADC",    "ADD",    "AND",
         "ARPL",   "AS:",    "BOUND",  "BSF",    "BSR",    "BT",     "BTC",    "BTR",
         "BTS",    "CALL",   "CBW",    "CLC",    "CLD",    "CLI",    "CLTS",   "CMC",
@@ -7145,7 +7145,7 @@ if (DEBUGGER) {
      * Also, unlike the CPU instructions, there is no NONE ("INVALID") instruction; if an ESC instruction
      * can't be decoded as a valid FPU instruction, then it should remain an ESC instruction.
      */
-    DebuggerX86.FINS = {
+    Debuggerx86.FINS = {
         FLD:    0,   FST:    1,   FSTP:   2,   FXCH:   3,   FILD:   4,   FIST:   5,   FISTP:  6,   FBLD:   7,
         FBSTP:  8,   FADD:   9,   FADDP:  10,  FIADD:  11,  FSUB:   12,  FSUBP:  13,  FISUB:  14,  FSUBR:  15,
         FSUBRP: 16,  FISUBR: 17,  FMUL:   18,  FMULP:  19,  FIMUL:  20,  FDIV:   21,  FDIVP:  22,  FIDIV:  23,
@@ -7162,7 +7162,7 @@ if (DEBUGGER) {
     /*
      * FPU instruction names (mnemonics), indexed by FPU instruction ordinal (above)
      */
-    DebuggerX86.FINS_NAMES = [
+    Debuggerx86.FINS_NAMES = [
         "FLD",    "FST",    "FSTP",   "FXCH",   "FILD",   "FIST",   "FISTP",  "FBLD",
         "FBSTP",  "FADD",   "FADDP",  "FIADD",  "FSUB",   "FSUBP",  "FISUB",  "FSUBR",
         "FSUBRP", "FISUBR", "FMUL",   "FMULP",  "FIMUL",  "FDIV",   "FDIVP",  "FIDIV",
@@ -7176,60 +7176,60 @@ if (DEBUGGER) {
         "FSTSWAX"
     ];
 
-    DebuggerX86.FPU_TAGS = ["VALID", "ZERO ", "SPEC ", "EMPTY"];
+    Debuggerx86.FPU_TAGS = ["VALID", "ZERO ", "SPEC ", "EMPTY"];
 
-    DebuggerX86.CPU_8086  = 0;
-    DebuggerX86.CPU_80186 = 1;
-    DebuggerX86.CPU_80286 = 2;
-    DebuggerX86.CPU_80386 = 3;
-    DebuggerX86.CPUS = [8086, 80186, 80286, 80386];
+    Debuggerx86.CPU_8086  = 0;
+    Debuggerx86.CPU_80186 = 1;
+    Debuggerx86.CPU_80286 = 2;
+    Debuggerx86.CPU_80386 = 3;
+    Debuggerx86.CPUS = [8086, 80186, 80286, 80386];
 
     /*
      * ModRM masks and definitions
      */
-    DebuggerX86.REG_AL         = 0x00;          // bits 0-2 are standard Reg encodings
-    DebuggerX86.REG_CL         = 0x01;
-    DebuggerX86.REG_DL         = 0x02;
-    DebuggerX86.REG_BL         = 0x03;
-    DebuggerX86.REG_AH         = 0x04;
-    DebuggerX86.REG_CH         = 0x05;
-    DebuggerX86.REG_DH         = 0x06;
-    DebuggerX86.REG_BH         = 0x07;
-    DebuggerX86.REG_AX         = 0x08;
-    DebuggerX86.REG_CX         = 0x09;
-    DebuggerX86.REG_DX         = 0x0A;
-    DebuggerX86.REG_BX         = 0x0B;
-    DebuggerX86.REG_SP         = 0x0C;
-    DebuggerX86.REG_BP         = 0x0D;
-    DebuggerX86.REG_SI         = 0x0E;
-    DebuggerX86.REG_DI         = 0x0F;
-    DebuggerX86.REG_SEG        = 0x10;
-    DebuggerX86.REG_IP         = 0x16;
-    DebuggerX86.REG_PS         = 0x17;
-    DebuggerX86.REG_EAX        = 0x18;
-    DebuggerX86.REG_ECX        = 0x19;
-    DebuggerX86.REG_EDX        = 0x1A;
-    DebuggerX86.REG_EBX        = 0x1B;
-    DebuggerX86.REG_ESP        = 0x1C;
-    DebuggerX86.REG_EBP        = 0x1D;
-    DebuggerX86.REG_ESI        = 0x1E;
-    DebuggerX86.REG_EDI        = 0x1F;
-    DebuggerX86.REG_CR0        = 0x20;
-    DebuggerX86.REG_CR1        = 0x21;
-    DebuggerX86.REG_CR2        = 0x22;
-    DebuggerX86.REG_CR3        = 0x23;
-    DebuggerX86.REG_DR0        = 0x28;
-    DebuggerX86.REG_DR1        = 0x29;
-    DebuggerX86.REG_DR2        = 0x2A;
-    DebuggerX86.REG_DR3        = 0x2B;
-    DebuggerX86.REG_DR6        = 0x2E;
-    DebuggerX86.REG_DR7        = 0x2F;
-    DebuggerX86.REG_TR0        = 0x30;
-    DebuggerX86.REG_TR6        = 0x36;
-    DebuggerX86.REG_TR7        = 0x37;
-    DebuggerX86.REG_EIP        = 0x38;
+    Debuggerx86.REG_AL         = 0x00;          // bits 0-2 are standard Reg encodings
+    Debuggerx86.REG_CL         = 0x01;
+    Debuggerx86.REG_DL         = 0x02;
+    Debuggerx86.REG_BL         = 0x03;
+    Debuggerx86.REG_AH         = 0x04;
+    Debuggerx86.REG_CH         = 0x05;
+    Debuggerx86.REG_DH         = 0x06;
+    Debuggerx86.REG_BH         = 0x07;
+    Debuggerx86.REG_AX         = 0x08;
+    Debuggerx86.REG_CX         = 0x09;
+    Debuggerx86.REG_DX         = 0x0A;
+    Debuggerx86.REG_BX         = 0x0B;
+    Debuggerx86.REG_SP         = 0x0C;
+    Debuggerx86.REG_BP         = 0x0D;
+    Debuggerx86.REG_SI         = 0x0E;
+    Debuggerx86.REG_DI         = 0x0F;
+    Debuggerx86.REG_SEG        = 0x10;
+    Debuggerx86.REG_IP         = 0x16;
+    Debuggerx86.REG_PS         = 0x17;
+    Debuggerx86.REG_EAX        = 0x18;
+    Debuggerx86.REG_ECX        = 0x19;
+    Debuggerx86.REG_EDX        = 0x1A;
+    Debuggerx86.REG_EBX        = 0x1B;
+    Debuggerx86.REG_ESP        = 0x1C;
+    Debuggerx86.REG_EBP        = 0x1D;
+    Debuggerx86.REG_ESI        = 0x1E;
+    Debuggerx86.REG_EDI        = 0x1F;
+    Debuggerx86.REG_CR0        = 0x20;
+    Debuggerx86.REG_CR1        = 0x21;
+    Debuggerx86.REG_CR2        = 0x22;
+    Debuggerx86.REG_CR3        = 0x23;
+    Debuggerx86.REG_DR0        = 0x28;
+    Debuggerx86.REG_DR1        = 0x29;
+    Debuggerx86.REG_DR2        = 0x2A;
+    Debuggerx86.REG_DR3        = 0x2B;
+    Debuggerx86.REG_DR6        = 0x2E;
+    Debuggerx86.REG_DR7        = 0x2F;
+    Debuggerx86.REG_TR0        = 0x30;
+    Debuggerx86.REG_TR6        = 0x36;
+    Debuggerx86.REG_TR7        = 0x37;
+    Debuggerx86.REG_EIP        = 0x38;
 
-    DebuggerX86.REGS = [
+    Debuggerx86.REGS = [
         "AL",  "CL",  "DL",  "BL",  "AH",  "CH",  "DH",  "BH",
         "AX",  "CX",  "DX",  "BX",  "SP",  "BP",  "SI",  "DI",
         "ES",  "CS",  "SS",  "DS",  "FS",  "GS",  "IP",  "PS",
@@ -7240,30 +7240,30 @@ if (DEBUGGER) {
         "EIP"
     ];
 
-    DebuggerX86.REG_ES         = 0x00;          // bits 0-1 are standard SegReg encodings
-    DebuggerX86.REG_CS         = 0x01;
-    DebuggerX86.REG_SS         = 0x02;
-    DebuggerX86.REG_DS         = 0x03;
-    DebuggerX86.REG_FS         = 0x04;
-    DebuggerX86.REG_GS         = 0x05;
-    DebuggerX86.REG_UNKNOWN    = 0x00;
+    Debuggerx86.REG_ES         = 0x00;          // bits 0-1 are standard SegReg encodings
+    Debuggerx86.REG_CS         = 0x01;
+    Debuggerx86.REG_SS         = 0x02;
+    Debuggerx86.REG_DS         = 0x03;
+    Debuggerx86.REG_FS         = 0x04;
+    Debuggerx86.REG_GS         = 0x05;
+    Debuggerx86.REG_UNKNOWN    = 0x00;
 
-    DebuggerX86.MOD_NODISP     = 0x00;          // use RM below, no displacement
-    DebuggerX86.MOD_DISP8      = 0x01;          // use RM below + 8-bit displacement
-    DebuggerX86.MOD_DISP16     = 0x02;          // use RM below + 16-bit displacement
-    DebuggerX86.MOD_REGISTER   = 0x03;          // use REG above
+    Debuggerx86.MOD_NODISP     = 0x00;          // use RM below, no displacement
+    Debuggerx86.MOD_DISP8      = 0x01;          // use RM below + 8-bit displacement
+    Debuggerx86.MOD_DISP16     = 0x02;          // use RM below + 16-bit displacement
+    Debuggerx86.MOD_REGISTER   = 0x03;          // use REG above
 
-    DebuggerX86.RM_BXSI        = 0x00;
-    DebuggerX86.RM_BXDI        = 0x01;
-    DebuggerX86.RM_BPSI        = 0x02;
-    DebuggerX86.RM_BPDI        = 0x03;
-    DebuggerX86.RM_SI          = 0x04;
-    DebuggerX86.RM_DI          = 0x05;
-    DebuggerX86.RM_BP          = 0x06;
-    DebuggerX86.RM_IMMOFF      = DebuggerX86.RM_BP;       // only if MOD_NODISP
-    DebuggerX86.RM_BX          = 0x07;
+    Debuggerx86.RM_BXSI        = 0x00;
+    Debuggerx86.RM_BXDI        = 0x01;
+    Debuggerx86.RM_BPSI        = 0x02;
+    Debuggerx86.RM_BPDI        = 0x03;
+    Debuggerx86.RM_SI          = 0x04;
+    Debuggerx86.RM_DI          = 0x05;
+    Debuggerx86.RM_BP          = 0x06;
+    Debuggerx86.RM_IMMOFF      = Debuggerx86.RM_BP;       // only if MOD_NODISP
+    Debuggerx86.RM_BX          = 0x07;
 
-    DebuggerX86.RMS = [
+    Debuggerx86.RMS = [
         "BX+SI", "BX+DI", "BP+SI", "BP+DI", "SI",    "DI",    "BP",    "BX",
         "EAX",   "ECX",   "EDX",   "EBX",   "ESP",   "EBP",   "ESI",   "EDI"
     ];
@@ -7274,24 +7274,24 @@ if (DEBUGGER) {
      * Note that the letters in () in the comments refer to Intel's
      * nomenclature used in Appendix A of the 80386 Programmers Reference Manual.
      */
-    DebuggerX86.TYPE_SIZE      = 0x000F;        // size field
-    DebuggerX86.TYPE_MODE      = 0x00F0;        // mode field
-    DebuggerX86.TYPE_IREG      = 0x0F00;        // implied register field
-    DebuggerX86.TYPE_OTHER     = 0xF000;        // "other" field
+    Debuggerx86.TYPE_SIZE      = 0x000F;        // size field
+    Debuggerx86.TYPE_MODE      = 0x00F0;        // mode field
+    Debuggerx86.TYPE_IREG      = 0x0F00;        // implied register field
+    Debuggerx86.TYPE_OTHER     = 0xF000;        // "other" field
 
     /*
      * TYPE_SIZE values.  Some definitions use duplicate values when the operands are the
      * same size and the Debugger doesn't need to make a distinction.
      */
-    DebuggerX86.TYPE_NONE      = 0x0000;        //     (all other TYPE fields ignored)
-    DebuggerX86.TYPE_BYTE      = 0x0001;        // (b) byte, regardless of operand size
-    DebuggerX86.TYPE_SBYTE     = 0x0002;        //     byte sign-extended to word
-    DebuggerX86.TYPE_SHORT     = 0x0003;        // (w) 16-bit value
-    DebuggerX86.TYPE_WORD      = 0x0004;        // (v) 16-bit or 32-bit value
-    DebuggerX86.TYPE_LONG      = 0x0005;        // (d) 32-bit value
-    DebuggerX86.TYPE_SEGP      = 0x0006;        // (p) 32-bit or 48-bit pointer
-    DebuggerX86.TYPE_FARP      = 0x0007;        // (p) 32-bit or 48-bit pointer for JMP/CALL
-    DebuggerX86.TYPE_PREFIX    = 0x0008;        //     (treat similarly to TYPE_NONE)
+    Debuggerx86.TYPE_NONE      = 0x0000;        //     (all other TYPE fields ignored)
+    Debuggerx86.TYPE_BYTE      = 0x0001;        // (b) byte, regardless of operand size
+    Debuggerx86.TYPE_SBYTE     = 0x0002;        //     byte sign-extended to word
+    Debuggerx86.TYPE_SHORT     = 0x0003;        // (w) 16-bit value
+    Debuggerx86.TYPE_WORD      = 0x0004;        // (v) 16-bit or 32-bit value
+    Debuggerx86.TYPE_LONG      = 0x0005;        // (d) 32-bit value
+    Debuggerx86.TYPE_SEGP      = 0x0006;        // (p) 32-bit or 48-bit pointer
+    Debuggerx86.TYPE_FARP      = 0x0007;        // (p) 32-bit or 48-bit pointer for JMP/CALL
+    Debuggerx86.TYPE_PREFIX    = 0x0008;        //     (treat similarly to TYPE_NONE)
     /*
      * The remaining TYPE_SIZE values are for the FPU.  Note that there are not enough values
      * within this nibble for every type to have a unique value, so to differentiate between two
@@ -7300,81 +7300,81 @@ if (DEBUGGER) {
      * so-called "word-integer"); since a word-integer is always 16 bits, we specify TYPE_SHORT,
      * which the Debugger should display as "INT16" for FI* instructions.
      */
-    DebuggerX86.TYPE_ST        = 0x0009;        //     FPU ST (implicit stack top)
-    DebuggerX86.TYPE_STREG     = 0x000A;        //     FPU ST (explicit stack register, relative to top)
-    DebuggerX86.TYPE_SINT      = 0x000B;        //     FPU SI (short-integer; 32-bit); displayed as "INT32"
-    DebuggerX86.TYPE_SREAL     = 0x000B;        //     FPU SR (short-real; 32-bit); displayed as "REAL32"
-    DebuggerX86.TYPE_LINT      = 0x000C;        //     FPU LI (long-integer; 64-bit); displayed as "INT64"
-    DebuggerX86.TYPE_LREAL     = 0x000C;        //     FPU LR (long-real; 64-bit); displayed as "REAL64"
-    DebuggerX86.TYPE_TREAL     = 0x000D;        //     FPU TR (temp-real; 80-bit); displayed as "REAL80"
-    DebuggerX86.TYPE_BCD80     = 0x000E;        //     FPU PD (packed-decimal; 18 BCD digits in 80 bits, bits 72-78 unused, sign in bit 79); displayed as "BCD80"
-    DebuggerX86.TYPE_ENV       = 0x000F;        //     FPU ENV (environment; 14 bytes in real-mode, 28 bytes in protected-mode)
-    DebuggerX86.TYPE_FPU       = 0x000F;        //     FPU SAVE (save/restore; 94 bytes in real-mode, 108 bytes in protected-mode)
+    Debuggerx86.TYPE_ST        = 0x0009;        //     FPU ST (implicit stack top)
+    Debuggerx86.TYPE_STREG     = 0x000A;        //     FPU ST (explicit stack register, relative to top)
+    Debuggerx86.TYPE_SINT      = 0x000B;        //     FPU SI (short-integer; 32-bit); displayed as "INT32"
+    Debuggerx86.TYPE_SREAL     = 0x000B;        //     FPU SR (short-real; 32-bit); displayed as "REAL32"
+    Debuggerx86.TYPE_LINT      = 0x000C;        //     FPU LI (long-integer; 64-bit); displayed as "INT64"
+    Debuggerx86.TYPE_LREAL     = 0x000C;        //     FPU LR (long-real; 64-bit); displayed as "REAL64"
+    Debuggerx86.TYPE_TREAL     = 0x000D;        //     FPU TR (temp-real; 80-bit); displayed as "REAL80"
+    Debuggerx86.TYPE_BCD80     = 0x000E;        //     FPU PD (packed-decimal; 18 BCD digits in 80 bits, bits 72-78 unused, sign in bit 79); displayed as "BCD80"
+    Debuggerx86.TYPE_ENV       = 0x000F;        //     FPU ENV (environment; 14 bytes in real-mode, 28 bytes in protected-mode)
+    Debuggerx86.TYPE_FPU       = 0x000F;        //     FPU SAVE (save/restore; 94 bytes in real-mode, 108 bytes in protected-mode)
 
     /*
      * TYPE_MODE values.  Order is somewhat important, as all values implying the presence
      * of a ModRM byte are assumed to be >= TYPE_MODRM.
      */
-    DebuggerX86.TYPE_IMM       = 0x0000;        // (I) immediate data
-    DebuggerX86.TYPE_ONE       = 0x0010;        //     implicit 1 (eg, shifts/rotates)
-    DebuggerX86.TYPE_IMMOFF    = 0x0020;        // (A) immediate offset
-    DebuggerX86.TYPE_IMMREL    = 0x0030;        // (J) immediate relative
-    DebuggerX86.TYPE_DSSI      = 0x0040;        // (X) memory addressed by DS:SI
-    DebuggerX86.TYPE_ESDI      = 0x0050;        // (Y) memory addressed by ES:DI
-    DebuggerX86.TYPE_IMPREG    = 0x0060;        //     implicit register in TYPE_IREG
-    DebuggerX86.TYPE_IMPSEG    = 0x0070;        //     implicit segment reg in TYPE_IREG
-    DebuggerX86.TYPE_MODRM     = 0x0080;        // (E) standard ModRM decoding
-    DebuggerX86.TYPE_MODMEM    = 0x0090;        // (M) ModRM refers to memory only
-    DebuggerX86.TYPE_MODREG    = 0x00A0;        // (R) ModRM refers to register only
-    DebuggerX86.TYPE_REG       = 0x00B0;        // (G) standard Reg decoding
-    DebuggerX86.TYPE_SEGREG    = 0x00C0;        // (S) Reg selects segment register
-    DebuggerX86.TYPE_CTLREG    = 0x00D0;        // (C) Reg selects control register
-    DebuggerX86.TYPE_DBGREG    = 0x00E0;        // (D) Reg selects debug register
-    DebuggerX86.TYPE_TSTREG    = 0x00F0;        // (T) Reg selects test register
+    Debuggerx86.TYPE_IMM       = 0x0000;        // (I) immediate data
+    Debuggerx86.TYPE_ONE       = 0x0010;        //     implicit 1 (eg, shifts/rotates)
+    Debuggerx86.TYPE_IMMOFF    = 0x0020;        // (A) immediate offset
+    Debuggerx86.TYPE_IMMREL    = 0x0030;        // (J) immediate relative
+    Debuggerx86.TYPE_DSSI      = 0x0040;        // (X) memory addressed by DS:SI
+    Debuggerx86.TYPE_ESDI      = 0x0050;        // (Y) memory addressed by ES:DI
+    Debuggerx86.TYPE_IMPREG    = 0x0060;        //     implicit register in TYPE_IREG
+    Debuggerx86.TYPE_IMPSEG    = 0x0070;        //     implicit segment reg in TYPE_IREG
+    Debuggerx86.TYPE_MODRM     = 0x0080;        // (E) standard ModRM decoding
+    Debuggerx86.TYPE_MODMEM    = 0x0090;        // (M) ModRM refers to memory only
+    Debuggerx86.TYPE_MODREG    = 0x00A0;        // (R) ModRM refers to register only
+    Debuggerx86.TYPE_REG       = 0x00B0;        // (G) standard Reg decoding
+    Debuggerx86.TYPE_SEGREG    = 0x00C0;        // (S) Reg selects segment register
+    Debuggerx86.TYPE_CTLREG    = 0x00D0;        // (C) Reg selects control register
+    Debuggerx86.TYPE_DBGREG    = 0x00E0;        // (D) Reg selects debug register
+    Debuggerx86.TYPE_TSTREG    = 0x00F0;        // (T) Reg selects test register
 
     /*
      * TYPE_IREG values, based on the REG_* constants.
      * For convenience, they include TYPE_IMPREG or TYPE_IMPSEG as appropriate.
      */
-    DebuggerX86.TYPE_AL = (DebuggerX86.REG_AL << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_CL = (DebuggerX86.REG_CL << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_DL = (DebuggerX86.REG_DL << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_BL = (DebuggerX86.REG_BL << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_AH = (DebuggerX86.REG_AH << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_CH = (DebuggerX86.REG_CH << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_DH = (DebuggerX86.REG_DH << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_BH = (DebuggerX86.REG_BH << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_AX = (DebuggerX86.REG_AX << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_CX = (DebuggerX86.REG_CX << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_DX = (DebuggerX86.REG_DX << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_BX = (DebuggerX86.REG_BX << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_SP = (DebuggerX86.REG_SP << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_BP = (DebuggerX86.REG_BP << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_SI = (DebuggerX86.REG_SI << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_DI = (DebuggerX86.REG_DI << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_ES = (DebuggerX86.REG_ES << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
-    DebuggerX86.TYPE_CS = (DebuggerX86.REG_CS << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
-    DebuggerX86.TYPE_SS = (DebuggerX86.REG_SS << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
-    DebuggerX86.TYPE_DS = (DebuggerX86.REG_DS << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
-    DebuggerX86.TYPE_FS = (DebuggerX86.REG_FS << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
-    DebuggerX86.TYPE_GS = (DebuggerX86.REG_GS << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
+    Debuggerx86.TYPE_AL = (Debuggerx86.REG_AL << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_CL = (Debuggerx86.REG_CL << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_DL = (Debuggerx86.REG_DL << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_BL = (Debuggerx86.REG_BL << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_AH = (Debuggerx86.REG_AH << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_CH = (Debuggerx86.REG_CH << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_DH = (Debuggerx86.REG_DH << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_BH = (Debuggerx86.REG_BH << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_AX = (Debuggerx86.REG_AX << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_CX = (Debuggerx86.REG_CX << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_DX = (Debuggerx86.REG_DX << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_BX = (Debuggerx86.REG_BX << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_SP = (Debuggerx86.REG_SP << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_BP = (Debuggerx86.REG_BP << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_SI = (Debuggerx86.REG_SI << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_DI = (Debuggerx86.REG_DI << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_ES = (Debuggerx86.REG_ES << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
+    Debuggerx86.TYPE_CS = (Debuggerx86.REG_CS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
+    Debuggerx86.TYPE_SS = (Debuggerx86.REG_SS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
+    Debuggerx86.TYPE_DS = (Debuggerx86.REG_DS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
+    Debuggerx86.TYPE_FS = (Debuggerx86.REG_FS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
+    Debuggerx86.TYPE_GS = (Debuggerx86.REG_GS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
 
     /*
      * TYPE_OTHER bit definitions
      */
-    DebuggerX86.TYPE_IN    = 0x1000;            // operand is input
-    DebuggerX86.TYPE_OUT   = 0x2000;            // operand is output
-    DebuggerX86.TYPE_BOTH  = (DebuggerX86.TYPE_IN | DebuggerX86.TYPE_OUT);
-    DebuggerX86.TYPE_8086  = (DebuggerX86.CPU_8086 << 14);
-    DebuggerX86.TYPE_8087  = DebuggerX86.TYPE_8086;
-    DebuggerX86.TYPE_80186 = (DebuggerX86.CPU_80186 << 14);
-    DebuggerX86.TYPE_80286 = (DebuggerX86.CPU_80286 << 14);
-    DebuggerX86.TYPE_80287 = DebuggerX86.TYPE_80286;
-    DebuggerX86.TYPE_80386 = (DebuggerX86.CPU_80386 << 14);
-    DebuggerX86.TYPE_80387 = DebuggerX86.TYPE_80386;
-    DebuggerX86.TYPE_CPU_SHIFT = 14;
+    Debuggerx86.TYPE_IN    = 0x1000;            // operand is input
+    Debuggerx86.TYPE_OUT   = 0x2000;            // operand is output
+    Debuggerx86.TYPE_BOTH  = (Debuggerx86.TYPE_IN | Debuggerx86.TYPE_OUT);
+    Debuggerx86.TYPE_8086  = (Debuggerx86.CPU_8086 << 14);
+    Debuggerx86.TYPE_8087  = Debuggerx86.TYPE_8086;
+    Debuggerx86.TYPE_80186 = (Debuggerx86.CPU_80186 << 14);
+    Debuggerx86.TYPE_80286 = (Debuggerx86.CPU_80286 << 14);
+    Debuggerx86.TYPE_80287 = Debuggerx86.TYPE_80286;
+    Debuggerx86.TYPE_80386 = (Debuggerx86.CPU_80386 << 14);
+    Debuggerx86.TYPE_80387 = Debuggerx86.TYPE_80386;
+    Debuggerx86.TYPE_CPU_SHIFT = 14;
 
-    DebuggerX86.HISTORY_LIMIT = DEBUG? 100000 : 1000;
+    Debuggerx86.HISTORY_LIMIT = DEBUG? 100000 : 1000;
 
     /*
      * Opcode 0x0F has a distinguished history:
@@ -7387,13 +7387,13 @@ if (DEBUGGER) {
      * opcode appropriately, by setting the opcode's entry in aaOpDescs accordingly.  0x0F in aaOpDescs points
      * to the 8086 table: aOpDescPopCS.
      *
-     * Note that we must NOT modify aaOpDescs directly.  this.aaOpDescs will point to DebuggerX86.aaOpDescs
+     * Note that we must NOT modify aaOpDescs directly.  this.aaOpDescs will point to Debuggerx86.aaOpDescs
      * if the processor is an 8086, because that's the processor that the hard-coded contents of the table
      * represent; for all other processors, this.aaOpDescs will contain a copy of the table that we can modify.
      */
-    DebuggerX86.aOpDescPopCS     = [DebuggerX86.INS.POP,  DebuggerX86.TYPE_CS   | DebuggerX86.TYPE_OUT];
-    DebuggerX86.aOpDescUndefined = [DebuggerX86.INS.NONE, DebuggerX86.TYPE_NONE];
-    DebuggerX86.aOpDesc0F        = [DebuggerX86.INS.OP0F, DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_BOTH];
+    Debuggerx86.aOpDescPopCS     = [Debuggerx86.INS.POP,  Debuggerx86.TYPE_CS   | Debuggerx86.TYPE_OUT];
+    Debuggerx86.aOpDescUndefined = [Debuggerx86.INS.NONE, Debuggerx86.TYPE_NONE];
+    Debuggerx86.aOpDesc0F        = [Debuggerx86.INS.OP0F, Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_BOTH];
 
     /*
      * The aaOpDescs array is indexed by opcode, and each element is a sub-array (aOpDesc) that describes
@@ -7408,698 +7408,698 @@ if (DEBUGGER) {
      * present (or contains zero), the opcode has no (or only implied) operands; if [2] is not present, the
      * opcode has only a single operand.  And so on.
      */
-    DebuggerX86.aaOpDescs = [
-    /* 0x00 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x01 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x02 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x03 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x04 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x05 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x06 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_ES     | DebuggerX86.TYPE_IN],
-    /* 0x07 */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_ES     | DebuggerX86.TYPE_OUT],
+    Debuggerx86.aaOpDescs = [
+    /* 0x00 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x01 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x02 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x03 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x04 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x05 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x06 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_ES     | Debuggerx86.TYPE_IN],
+    /* 0x07 */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_ES     | Debuggerx86.TYPE_OUT],
 
-    /* 0x08 */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x09 */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x0A */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x0B */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x0C */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x0D */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x0E */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_CS     | DebuggerX86.TYPE_IN],
-    /* 0x0F */ DebuggerX86.aOpDescPopCS,
+    /* 0x08 */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x09 */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x0A */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x0B */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x0C */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x0D */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x0E */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_CS     | Debuggerx86.TYPE_IN],
+    /* 0x0F */ Debuggerx86.aOpDescPopCS,
 
-    /* 0x10 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x11 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x12 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x13 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x14 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x15 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x16 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_SS     | DebuggerX86.TYPE_IN],
-    /* 0x17 */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_SS     | DebuggerX86.TYPE_OUT],
+    /* 0x10 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x11 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x12 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x13 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x14 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x15 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x16 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_SS     | Debuggerx86.TYPE_IN],
+    /* 0x17 */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_SS     | Debuggerx86.TYPE_OUT],
 
-    /* 0x18 */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x19 */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x1A */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x1B */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x1C */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x1D */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x1E */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_DS     | DebuggerX86.TYPE_IN],
-    /* 0x1F */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_DS     | DebuggerX86.TYPE_OUT],
+    /* 0x18 */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x19 */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x1A */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x1B */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x1C */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x1D */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x1E */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_DS     | Debuggerx86.TYPE_IN],
+    /* 0x1F */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_DS     | Debuggerx86.TYPE_OUT],
 
-    /* 0x20 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x21 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x22 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x23 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x24 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x25 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x26 */ [DebuggerX86.INS.ES,    DebuggerX86.TYPE_PREFIX],
-    /* 0x27 */ [DebuggerX86.INS.DAA],
+    /* 0x20 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x21 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x22 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x23 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x24 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x25 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x26 */ [Debuggerx86.INS.ES,    Debuggerx86.TYPE_PREFIX],
+    /* 0x27 */ [Debuggerx86.INS.DAA],
 
-    /* 0x28 */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x29 */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x2A */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x2B */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x2C */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x2D */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x2E */ [DebuggerX86.INS.CS,    DebuggerX86.TYPE_PREFIX],
-    /* 0x2F */ [DebuggerX86.INS.DAS],
+    /* 0x28 */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x29 */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x2A */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x2B */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x2C */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x2D */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x2E */ [Debuggerx86.INS.CS,    Debuggerx86.TYPE_PREFIX],
+    /* 0x2F */ [Debuggerx86.INS.DAS],
 
-    /* 0x30 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x31 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x32 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x33 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x34 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x35 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x36 */ [DebuggerX86.INS.SS,    DebuggerX86.TYPE_PREFIX],
-    /* 0x37 */ [DebuggerX86.INS.AAA],
+    /* 0x30 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x31 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x32 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x33 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x34 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x35 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x36 */ [Debuggerx86.INS.SS,    Debuggerx86.TYPE_PREFIX],
+    /* 0x37 */ [Debuggerx86.INS.AAA],
 
-    /* 0x38 */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x39 */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x3A */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x3B */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x3C */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x3D */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x3E */ [DebuggerX86.INS.DS,    DebuggerX86.TYPE_PREFIX],
-    /* 0x3F */ [DebuggerX86.INS.AAS],
+    /* 0x38 */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x39 */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x3A */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x3B */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x3C */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x3D */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x3E */ [Debuggerx86.INS.DS,    Debuggerx86.TYPE_PREFIX],
+    /* 0x3F */ [Debuggerx86.INS.AAS],
 
-    /* 0x40 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH],
-    /* 0x41 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_CX     | DebuggerX86.TYPE_BOTH],
-    /* 0x42 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_BOTH],
-    /* 0x43 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_BX     | DebuggerX86.TYPE_BOTH],
-    /* 0x44 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_SP     | DebuggerX86.TYPE_BOTH],
-    /* 0x45 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_BP     | DebuggerX86.TYPE_BOTH],
-    /* 0x46 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_SI     | DebuggerX86.TYPE_BOTH],
-    /* 0x47 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_DI     | DebuggerX86.TYPE_BOTH],
+    /* 0x40 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH],
+    /* 0x41 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_CX     | Debuggerx86.TYPE_BOTH],
+    /* 0x42 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_BOTH],
+    /* 0x43 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_BX     | Debuggerx86.TYPE_BOTH],
+    /* 0x44 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_SP     | Debuggerx86.TYPE_BOTH],
+    /* 0x45 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_BP     | Debuggerx86.TYPE_BOTH],
+    /* 0x46 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_SI     | Debuggerx86.TYPE_BOTH],
+    /* 0x47 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_DI     | Debuggerx86.TYPE_BOTH],
 
-    /* 0x48 */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH],
-    /* 0x49 */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_CX     | DebuggerX86.TYPE_BOTH],
-    /* 0x4A */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_BOTH],
-    /* 0x4B */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_BX     | DebuggerX86.TYPE_BOTH],
-    /* 0x4C */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_SP     | DebuggerX86.TYPE_BOTH],
-    /* 0x4D */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_BP     | DebuggerX86.TYPE_BOTH],
-    /* 0x4E */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_SI     | DebuggerX86.TYPE_BOTH],
-    /* 0x4F */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_DI     | DebuggerX86.TYPE_BOTH],
+    /* 0x48 */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH],
+    /* 0x49 */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_CX     | Debuggerx86.TYPE_BOTH],
+    /* 0x4A */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_BOTH],
+    /* 0x4B */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_BX     | Debuggerx86.TYPE_BOTH],
+    /* 0x4C */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_SP     | Debuggerx86.TYPE_BOTH],
+    /* 0x4D */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_BP     | Debuggerx86.TYPE_BOTH],
+    /* 0x4E */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_SI     | Debuggerx86.TYPE_BOTH],
+    /* 0x4F */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_DI     | Debuggerx86.TYPE_BOTH],
 
-    /* 0x50 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_IN],
-    /* 0x51 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_CX     | DebuggerX86.TYPE_IN],
-    /* 0x52 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_IN],
-    /* 0x53 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_BX     | DebuggerX86.TYPE_IN],
-    /* 0x54 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_SP     | DebuggerX86.TYPE_IN],
-    /* 0x55 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_BP     | DebuggerX86.TYPE_IN],
-    /* 0x56 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_SI     | DebuggerX86.TYPE_IN],
-    /* 0x57 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_DI     | DebuggerX86.TYPE_IN],
+    /* 0x50 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_IN],
+    /* 0x51 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_CX     | Debuggerx86.TYPE_IN],
+    /* 0x52 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_IN],
+    /* 0x53 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_BX     | Debuggerx86.TYPE_IN],
+    /* 0x54 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_SP     | Debuggerx86.TYPE_IN],
+    /* 0x55 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_BP     | Debuggerx86.TYPE_IN],
+    /* 0x56 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_SI     | Debuggerx86.TYPE_IN],
+    /* 0x57 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_DI     | Debuggerx86.TYPE_IN],
 
-    /* 0x58 */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT],
-    /* 0x59 */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_CX     | DebuggerX86.TYPE_OUT],
-    /* 0x5A */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_OUT],
-    /* 0x5B */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_BX     | DebuggerX86.TYPE_OUT],
-    /* 0x5C */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_SP     | DebuggerX86.TYPE_OUT],
-    /* 0x5D */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_BP     | DebuggerX86.TYPE_OUT],
-    /* 0x5E */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_SI     | DebuggerX86.TYPE_OUT],
-    /* 0x5F */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_DI     | DebuggerX86.TYPE_OUT],
+    /* 0x58 */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT],
+    /* 0x59 */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_CX     | Debuggerx86.TYPE_OUT],
+    /* 0x5A */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_OUT],
+    /* 0x5B */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_BX     | Debuggerx86.TYPE_OUT],
+    /* 0x5C */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_SP     | Debuggerx86.TYPE_OUT],
+    /* 0x5D */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_BP     | Debuggerx86.TYPE_OUT],
+    /* 0x5E */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_SI     | Debuggerx86.TYPE_OUT],
+    /* 0x5F */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_DI     | Debuggerx86.TYPE_OUT],
 
-    /* 0x60 */ [DebuggerX86.INS.PUSHA, DebuggerX86.TYPE_NONE   | DebuggerX86.TYPE_80186],
-    /* 0x61 */ [DebuggerX86.INS.POPA,  DebuggerX86.TYPE_NONE   | DebuggerX86.TYPE_80186],
-    /* 0x62 */ [DebuggerX86.INS.BOUND, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x63 */ [DebuggerX86.INS.ARPL,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0x64 */ [DebuggerX86.INS.FS,    DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386],
-    /* 0x65 */ [DebuggerX86.INS.GS,    DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386],
-    /* 0x66 */ [DebuggerX86.INS.OS,    DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386],
-    /* 0x67 */ [DebuggerX86.INS.AS,    DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386],
+    /* 0x60 */ [Debuggerx86.INS.PUSHA, Debuggerx86.TYPE_NONE   | Debuggerx86.TYPE_80186],
+    /* 0x61 */ [Debuggerx86.INS.POPA,  Debuggerx86.TYPE_NONE   | Debuggerx86.TYPE_80186],
+    /* 0x62 */ [Debuggerx86.INS.BOUND, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x63 */ [Debuggerx86.INS.ARPL,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0x64 */ [Debuggerx86.INS.FS,    Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386],
+    /* 0x65 */ [Debuggerx86.INS.GS,    Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386],
+    /* 0x66 */ [Debuggerx86.INS.OS,    Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386],
+    /* 0x67 */ [Debuggerx86.INS.AS,    Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386],
 
-    /* 0x68 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80186],
-    /* 0x69 */ [DebuggerX86.INS.IMUL,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x6A */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80186],
-    /* 0x6B */ [DebuggerX86.INS.IMUL,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x6C */ [DebuggerX86.INS.INS,   DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_DX    | DebuggerX86.TYPE_IN],
-    /* 0x6D */ [DebuggerX86.INS.INS,   DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_DX    | DebuggerX86.TYPE_IN],
-    /* 0x6E */ [DebuggerX86.INS.OUTS,  DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_IN    | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_DSSI | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x6F */ [DebuggerX86.INS.OUTS,  DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_IN    | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_DSSI | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0x68 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80186],
+    /* 0x69 */ [Debuggerx86.INS.IMUL,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x6A */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80186],
+    /* 0x6B */ [Debuggerx86.INS.IMUL,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x6C */ [Debuggerx86.INS.INS,   Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DX    | Debuggerx86.TYPE_IN],
+    /* 0x6D */ [Debuggerx86.INS.INS,   Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DX    | Debuggerx86.TYPE_IN],
+    /* 0x6E */ [Debuggerx86.INS.OUTS,  Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_IN    | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DSSI | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x6F */ [Debuggerx86.INS.OUTS,  Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_IN    | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DSSI | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0x70 */ [DebuggerX86.INS.JO,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x71 */ [DebuggerX86.INS.JNO,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x72 */ [DebuggerX86.INS.JC,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x73 */ [DebuggerX86.INS.JNC,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x74 */ [DebuggerX86.INS.JZ,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x75 */ [DebuggerX86.INS.JNZ,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x76 */ [DebuggerX86.INS.JBE,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x77 */ [DebuggerX86.INS.JA,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
+    /* 0x70 */ [Debuggerx86.INS.JO,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x71 */ [Debuggerx86.INS.JNO,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x72 */ [Debuggerx86.INS.JC,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x73 */ [Debuggerx86.INS.JNC,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x74 */ [Debuggerx86.INS.JZ,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x75 */ [Debuggerx86.INS.JNZ,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x76 */ [Debuggerx86.INS.JBE,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x77 */ [Debuggerx86.INS.JA,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
 
-    /* 0x78 */ [DebuggerX86.INS.JS,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x79 */ [DebuggerX86.INS.JNS,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7A */ [DebuggerX86.INS.JP,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7B */ [DebuggerX86.INS.JNP,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7C */ [DebuggerX86.INS.JL,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7D */ [DebuggerX86.INS.JGE,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7E */ [DebuggerX86.INS.JLE,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7F */ [DebuggerX86.INS.JG,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
+    /* 0x78 */ [Debuggerx86.INS.JS,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x79 */ [Debuggerx86.INS.JNS,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7A */ [Debuggerx86.INS.JP,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7B */ [Debuggerx86.INS.JNP,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7C */ [Debuggerx86.INS.JL,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7D */ [Debuggerx86.INS.JGE,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7E */ [Debuggerx86.INS.JLE,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7F */ [Debuggerx86.INS.JG,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
 
-    /* 0x80 */ [DebuggerX86.INS.GRP1B, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x81 */ [DebuggerX86.INS.GRP1W, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x82 */ [DebuggerX86.INS.GRP1B, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x83 */ [DebuggerX86.INS.GRP1SW,DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x84 */ [DebuggerX86.INS.TEST,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x85 */ [DebuggerX86.INS.TEST,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x86 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-    /* 0x87 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
+    /* 0x80 */ [Debuggerx86.INS.GRP1B, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x81 */ [Debuggerx86.INS.GRP1W, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x82 */ [Debuggerx86.INS.GRP1B, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x83 */ [Debuggerx86.INS.GRP1SW,Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x84 */ [Debuggerx86.INS.TEST,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x85 */ [Debuggerx86.INS.TEST,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x86 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+    /* 0x87 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
 
-    /* 0x88 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x89 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x8A */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x8B */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x8C */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_SEGREG | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0x8D */ [DebuggerX86.INS.LEA,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_WORD ],
-    /* 0x8E */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_SEGREG | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x8F */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT],
+    /* 0x88 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x89 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x8A */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x8B */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x8C */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_SEGREG | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0x8D */ [Debuggerx86.INS.LEA,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_WORD ],
+    /* 0x8E */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_SEGREG | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x8F */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT],
 
-    /* 0x90 */ [DebuggerX86.INS.NOP],
-    /* 0x91 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_CX  | DebuggerX86.TYPE_BOTH],
-    /* 0x92 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_DX  | DebuggerX86.TYPE_BOTH],
-    /* 0x93 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_BX  | DebuggerX86.TYPE_BOTH],
-    /* 0x94 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_SP  | DebuggerX86.TYPE_BOTH],
-    /* 0x95 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_BP  | DebuggerX86.TYPE_BOTH],
-    /* 0x96 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_SI  | DebuggerX86.TYPE_BOTH],
-    /* 0x97 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_DI  | DebuggerX86.TYPE_BOTH],
+    /* 0x90 */ [Debuggerx86.INS.NOP],
+    /* 0x91 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_CX  | Debuggerx86.TYPE_BOTH],
+    /* 0x92 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_DX  | Debuggerx86.TYPE_BOTH],
+    /* 0x93 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_BX  | Debuggerx86.TYPE_BOTH],
+    /* 0x94 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_SP  | Debuggerx86.TYPE_BOTH],
+    /* 0x95 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_BP  | Debuggerx86.TYPE_BOTH],
+    /* 0x96 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_SI  | Debuggerx86.TYPE_BOTH],
+    /* 0x97 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_DI  | Debuggerx86.TYPE_BOTH],
 
-    /* 0x98 */ [DebuggerX86.INS.CBW],
-    /* 0x99 */ [DebuggerX86.INS.CWD],
-    /* 0x9A */ [DebuggerX86.INS.CALL,  DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_FARP |  DebuggerX86.TYPE_IN],
-    /* 0x9B */ [DebuggerX86.INS.WAIT],
-    /* 0x9C */ [DebuggerX86.INS.PUSHF],
-    /* 0x9D */ [DebuggerX86.INS.POPF],
-    /* 0x9E */ [DebuggerX86.INS.SAHF],
-    /* 0x9F */ [DebuggerX86.INS.LAHF],
+    /* 0x98 */ [Debuggerx86.INS.CBW],
+    /* 0x99 */ [Debuggerx86.INS.CWD],
+    /* 0x9A */ [Debuggerx86.INS.CALL,  Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_FARP |  Debuggerx86.TYPE_IN],
+    /* 0x9B */ [Debuggerx86.INS.WAIT],
+    /* 0x9C */ [Debuggerx86.INS.PUSHF],
+    /* 0x9D */ [Debuggerx86.INS.POPF],
+    /* 0x9E */ [Debuggerx86.INS.SAHF],
+    /* 0x9F */ [Debuggerx86.INS.LAHF],
 
-    /* 0xA0 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMMOFF | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xA1 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMMOFF | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xA2 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_IMMOFF | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,     DebuggerX86.TYPE_AL    | DebuggerX86.TYPE_IN],
-    /* 0xA3 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_IMMOFF | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,     DebuggerX86.TYPE_AX    | DebuggerX86.TYPE_IN],
-    /* 0xA4 */ [DebuggerX86.INS.MOVSB, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,     DebuggerX86.TYPE_DSSI  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xA5 */ [DebuggerX86.INS.MOVSW, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,     DebuggerX86.TYPE_DSSI  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xA6 */ [DebuggerX86.INS.CMPSB, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,      DebuggerX86.TYPE_DSSI  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xA7 */ [DebuggerX86.INS.CMPSW, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,      DebuggerX86.TYPE_DSSI  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0xA0 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMMOFF | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xA1 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMMOFF | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xA2 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_IMMOFF | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,     Debuggerx86.TYPE_AL    | Debuggerx86.TYPE_IN],
+    /* 0xA3 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_IMMOFF | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,     Debuggerx86.TYPE_AX    | Debuggerx86.TYPE_IN],
+    /* 0xA4 */ [Debuggerx86.INS.MOVSB, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,     Debuggerx86.TYPE_DSSI  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xA5 */ [Debuggerx86.INS.MOVSW, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,     Debuggerx86.TYPE_DSSI  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xA6 */ [Debuggerx86.INS.CMPSB, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,      Debuggerx86.TYPE_DSSI  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xA7 */ [Debuggerx86.INS.CMPSW, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,      Debuggerx86.TYPE_DSSI  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0xA8 */ [DebuggerX86.INS.TEST,  DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xA9 */ [DebuggerX86.INS.TEST,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xAA */ [DebuggerX86.INS.STOSB, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_AL    | DebuggerX86.TYPE_IN],
-    /* 0xAB */ [DebuggerX86.INS.STOSW, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_AX    | DebuggerX86.TYPE_IN],
-    /* 0xAC */ [DebuggerX86.INS.LODSB, DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_DSSI | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xAD */ [DebuggerX86.INS.LODSW, DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_DSSI | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xAE */ [DebuggerX86.INS.SCASB, DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_ESDI | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xAF */ [DebuggerX86.INS.SCASW, DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_ESDI | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0xA8 */ [Debuggerx86.INS.TEST,  Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xA9 */ [Debuggerx86.INS.TEST,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xAA */ [Debuggerx86.INS.STOSB, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_AL    | Debuggerx86.TYPE_IN],
+    /* 0xAB */ [Debuggerx86.INS.STOSW, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_AX    | Debuggerx86.TYPE_IN],
+    /* 0xAC */ [Debuggerx86.INS.LODSB, Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_DSSI | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xAD */ [Debuggerx86.INS.LODSW, Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_DSSI | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xAE */ [Debuggerx86.INS.SCASB, Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_ESDI | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xAF */ [Debuggerx86.INS.SCASW, Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_ESDI | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0xB0 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB1 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_CL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB2 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_DL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB3 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_BL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB4 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_AH     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB5 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_CH     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB6 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_DH     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB7 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_BH     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
+    /* 0xB0 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB1 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_CL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB2 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_DL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB3 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_BL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB4 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_AH     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB5 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_CH     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB6 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_DH     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB7 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_BH     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
 
-    /* 0xB8 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xB9 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_CX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBA */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBB */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_BX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBC */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_SP     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBD */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_BP     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBE */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_SI     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBF */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_DI     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0xB8 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xB9 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_CX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBA */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBB */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_BX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBC */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_SP     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBD */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_BP     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBE */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_SI     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBF */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_DI     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0xC0 */ [DebuggerX86.INS.GRP2B, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80186,  DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xC1 */ [DebuggerX86.INS.GRP2W, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80186,  DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xC2 */ [DebuggerX86.INS.RET,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0xC3 */ [DebuggerX86.INS.RET],
-    /* 0xC4 */ [DebuggerX86.INS.LES,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_MODMEM  | DebuggerX86.TYPE_SEGP  | DebuggerX86.TYPE_IN],
-    /* 0xC5 */ [DebuggerX86.INS.LDS,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_MODMEM  | DebuggerX86.TYPE_SEGP  | DebuggerX86.TYPE_IN],
-    /* 0xC6 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_IMM     | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xC7 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_IMM     | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0xC0 */ [Debuggerx86.INS.GRP2B, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80186,  Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xC1 */ [Debuggerx86.INS.GRP2W, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80186,  Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xC2 */ [Debuggerx86.INS.RET,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0xC3 */ [Debuggerx86.INS.RET],
+    /* 0xC4 */ [Debuggerx86.INS.LES,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_MODMEM  | Debuggerx86.TYPE_SEGP  | Debuggerx86.TYPE_IN],
+    /* 0xC5 */ [Debuggerx86.INS.LDS,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_MODMEM  | Debuggerx86.TYPE_SEGP  | Debuggerx86.TYPE_IN],
+    /* 0xC6 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_IMM     | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xC7 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_IMM     | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0xC8 */ [DebuggerX86.INS.ENTER, DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80186,    DebuggerX86.TYPE_IMM   | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xC9 */ [DebuggerX86.INS.LEAVE, DebuggerX86.TYPE_NONE   | DebuggerX86.TYPE_80186],
-    /* 0xCA */ [DebuggerX86.INS.RETF,  DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0xCB */ [DebuggerX86.INS.RETF],
-    /* 0xCC */ [DebuggerX86.INS.INT3],
-    /* 0xCD */ [DebuggerX86.INS.INT,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xCE */ [DebuggerX86.INS.INTO],
-    /* 0xCF */ [DebuggerX86.INS.IRET],
+    /* 0xC8 */ [Debuggerx86.INS.ENTER, Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80186,    Debuggerx86.TYPE_IMM   | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xC9 */ [Debuggerx86.INS.LEAVE, Debuggerx86.TYPE_NONE   | Debuggerx86.TYPE_80186],
+    /* 0xCA */ [Debuggerx86.INS.RETF,  Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0xCB */ [Debuggerx86.INS.RETF],
+    /* 0xCC */ [Debuggerx86.INS.INT3],
+    /* 0xCD */ [Debuggerx86.INS.INT,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xCE */ [Debuggerx86.INS.INTO],
+    /* 0xCF */ [Debuggerx86.INS.IRET],
 
-    /* 0xD0 */ [DebuggerX86.INS.GRP2B1,DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH,  DebuggerX86.TYPE_ONE    | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xD1 */ [DebuggerX86.INS.GRP2W1,DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH,  DebuggerX86.TYPE_ONE    | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xD2 */ [DebuggerX86.INS.GRP2BC,DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH,  DebuggerX86.TYPE_CL     | DebuggerX86.TYPE_IN],
-    /* 0xD3 */ [DebuggerX86.INS.GRP2WC,DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH,  DebuggerX86.TYPE_CL     | DebuggerX86.TYPE_IN],
-    /* 0xD4 */ [DebuggerX86.INS.AAM,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE],
-    /* 0xD5 */ [DebuggerX86.INS.AAD,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE],
-    /* 0xD6 */ [DebuggerX86.INS.SALC],
-    /* 0xD7 */ [DebuggerX86.INS.XLAT],
+    /* 0xD0 */ [Debuggerx86.INS.GRP2B1,Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH,  Debuggerx86.TYPE_ONE    | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xD1 */ [Debuggerx86.INS.GRP2W1,Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH,  Debuggerx86.TYPE_ONE    | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xD2 */ [Debuggerx86.INS.GRP2BC,Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH,  Debuggerx86.TYPE_CL     | Debuggerx86.TYPE_IN],
+    /* 0xD3 */ [Debuggerx86.INS.GRP2WC,Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH,  Debuggerx86.TYPE_CL     | Debuggerx86.TYPE_IN],
+    /* 0xD4 */ [Debuggerx86.INS.AAM,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE],
+    /* 0xD5 */ [Debuggerx86.INS.AAD,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE],
+    /* 0xD6 */ [Debuggerx86.INS.SALC],
+    /* 0xD7 */ [Debuggerx86.INS.XLAT],
 
-    /* 0xD8 */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xD9 */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDA */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDB */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDC */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDD */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDE */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDF */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0xD8 */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xD9 */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDA */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDB */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDC */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDD */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDE */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDF */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0xE0 */ [DebuggerX86.INS.LOOPNZ,DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xE1 */ [DebuggerX86.INS.LOOPZ, DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xE2 */ [DebuggerX86.INS.LOOP,  DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xE3 */ [DebuggerX86.INS.JCXZ,  DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xE4 */ [DebuggerX86.INS.IN,    DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xE5 */ [DebuggerX86.INS.IN,    DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xE6 */ [DebuggerX86.INS.OUT,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,    DebuggerX86.TYPE_AL   | DebuggerX86.TYPE_IN],
-    /* 0xE7 */ [DebuggerX86.INS.OUT,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,    DebuggerX86.TYPE_AX   | DebuggerX86.TYPE_IN],
+    /* 0xE0 */ [Debuggerx86.INS.LOOPNZ,Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xE1 */ [Debuggerx86.INS.LOOPZ, Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xE2 */ [Debuggerx86.INS.LOOP,  Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xE3 */ [Debuggerx86.INS.JCXZ,  Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xE4 */ [Debuggerx86.INS.IN,    Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xE5 */ [Debuggerx86.INS.IN,    Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xE6 */ [Debuggerx86.INS.OUT,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,    Debuggerx86.TYPE_AL   | Debuggerx86.TYPE_IN],
+    /* 0xE7 */ [Debuggerx86.INS.OUT,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,    Debuggerx86.TYPE_AX   | Debuggerx86.TYPE_IN],
 
-    /* 0xE8 */ [DebuggerX86.INS.CALL,  DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xE9 */ [DebuggerX86.INS.JMP,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xEA */ [DebuggerX86.INS.JMP,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_FARP  | DebuggerX86.TYPE_IN],
-    /* 0xEB */ [DebuggerX86.INS.JMP,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xEC */ [DebuggerX86.INS.IN,    DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_DX   | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0xED */ [DebuggerX86.INS.IN,    DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_DX   | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0xEE */ [DebuggerX86.INS.OUT,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN,    DebuggerX86.TYPE_AL    | DebuggerX86.TYPE_IN],
-    /* 0xEF */ [DebuggerX86.INS.OUT,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN,    DebuggerX86.TYPE_AX    | DebuggerX86.TYPE_IN],
+    /* 0xE8 */ [Debuggerx86.INS.CALL,  Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xE9 */ [Debuggerx86.INS.JMP,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xEA */ [Debuggerx86.INS.JMP,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_FARP  | Debuggerx86.TYPE_IN],
+    /* 0xEB */ [Debuggerx86.INS.JMP,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xEC */ [Debuggerx86.INS.IN,    Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_DX   | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0xED */ [Debuggerx86.INS.IN,    Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_DX   | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0xEE */ [Debuggerx86.INS.OUT,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN,    Debuggerx86.TYPE_AL    | Debuggerx86.TYPE_IN],
+    /* 0xEF */ [Debuggerx86.INS.OUT,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN,    Debuggerx86.TYPE_AX    | Debuggerx86.TYPE_IN],
 
-    /* 0xF0 */ [DebuggerX86.INS.LOCK,  DebuggerX86.TYPE_PREFIX],
-    /* 0xF1 */ [DebuggerX86.INS.INT1,  DebuggerX86.TYPE_NONE   | DebuggerX86.TYPE_80386],
-    /* 0xF2 */ [DebuggerX86.INS.REPNZ, DebuggerX86.TYPE_PREFIX],
-    /* 0xF3 */ [DebuggerX86.INS.REPZ,  DebuggerX86.TYPE_PREFIX],
-    /* 0xF4 */ [DebuggerX86.INS.HLT],
-    /* 0xF5 */ [DebuggerX86.INS.CMC],
-    /* 0xF6 */ [DebuggerX86.INS.GRP3B, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-    /* 0xF7 */ [DebuggerX86.INS.GRP3W, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
+    /* 0xF0 */ [Debuggerx86.INS.LOCK,  Debuggerx86.TYPE_PREFIX],
+    /* 0xF1 */ [Debuggerx86.INS.INT1,  Debuggerx86.TYPE_NONE   | Debuggerx86.TYPE_80386],
+    /* 0xF2 */ [Debuggerx86.INS.REPNZ, Debuggerx86.TYPE_PREFIX],
+    /* 0xF3 */ [Debuggerx86.INS.REPZ,  Debuggerx86.TYPE_PREFIX],
+    /* 0xF4 */ [Debuggerx86.INS.HLT],
+    /* 0xF5 */ [Debuggerx86.INS.CMC],
+    /* 0xF6 */ [Debuggerx86.INS.GRP3B, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+    /* 0xF7 */ [Debuggerx86.INS.GRP3W, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
 
-    /* 0xF8 */ [DebuggerX86.INS.CLC],
-    /* 0xF9 */ [DebuggerX86.INS.STC],
-    /* 0xFA */ [DebuggerX86.INS.CLI],
-    /* 0xFB */ [DebuggerX86.INS.STI],
-    /* 0xFC */ [DebuggerX86.INS.CLD],
-    /* 0xFD */ [DebuggerX86.INS.STD],
-    /* 0xFE */ [DebuggerX86.INS.GRP4B, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-    /* 0xFF */ [DebuggerX86.INS.GRP4W, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH]
+    /* 0xF8 */ [Debuggerx86.INS.CLC],
+    /* 0xF9 */ [Debuggerx86.INS.STC],
+    /* 0xFA */ [Debuggerx86.INS.CLI],
+    /* 0xFB */ [Debuggerx86.INS.STI],
+    /* 0xFC */ [Debuggerx86.INS.CLD],
+    /* 0xFD */ [Debuggerx86.INS.STD],
+    /* 0xFE */ [Debuggerx86.INS.GRP4B, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+    /* 0xFF */ [Debuggerx86.INS.GRP4W, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH]
     ];
 
-    DebuggerX86.aaOp0FDescs = {
-        0x00: [DebuggerX86.INS.GRP6,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_BOTH],
-        0x01: [DebuggerX86.INS.GRP7,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_BOTH],
-        0x02: [DebuggerX86.INS.LAR,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN],
-        0x03: [DebuggerX86.INS.LSL,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN],
-        0x05: [DebuggerX86.INS.LOADALL,DebuggerX86.TYPE_80286],
-        0x06: [DebuggerX86.INS.CLTS,   DebuggerX86.TYPE_80286],
-        0x07: [DebuggerX86.INS.LOADALL,DebuggerX86.TYPE_80386],   // TODO: implied operand is ES:[(E)DI]
-        0x20: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_CTLREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x21: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_DBGREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x22: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_CTLREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x23: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_DBGREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x24: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_TSTREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x26: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_TSTREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x80: [DebuggerX86.INS.JO,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x81: [DebuggerX86.INS.JNO,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x82: [DebuggerX86.INS.JC,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x83: [DebuggerX86.INS.JNC,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x84: [DebuggerX86.INS.JZ,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x85: [DebuggerX86.INS.JNZ,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x86: [DebuggerX86.INS.JBE,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x87: [DebuggerX86.INS.JA,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x88: [DebuggerX86.INS.JS,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x89: [DebuggerX86.INS.JNS,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8A: [DebuggerX86.INS.JP,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8B: [DebuggerX86.INS.JNP,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8C: [DebuggerX86.INS.JL,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8D: [DebuggerX86.INS.JGE,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8E: [DebuggerX86.INS.JLE,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8F: [DebuggerX86.INS.JG,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x90: [DebuggerX86.INS.SETO,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x91: [DebuggerX86.INS.SETNO,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x92: [DebuggerX86.INS.SETC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x93: [DebuggerX86.INS.SETNC,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x94: [DebuggerX86.INS.SETZ,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x95: [DebuggerX86.INS.SETNZ,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x96: [DebuggerX86.INS.SETBE,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x97: [DebuggerX86.INS.SETNBE, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x98: [DebuggerX86.INS.SETS,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x99: [DebuggerX86.INS.SETNS,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9A: [DebuggerX86.INS.SETP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9B: [DebuggerX86.INS.SETNP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9C: [DebuggerX86.INS.SETL,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9D: [DebuggerX86.INS.SETGE,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9E: [DebuggerX86.INS.SETLE,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9F: [DebuggerX86.INS.SETG,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0xA0: [DebuggerX86.INS.PUSH,   DebuggerX86.TYPE_FS     | DebuggerX86.TYPE_IN    | DebuggerX86.TYPE_80386],
-        0xA1: [DebuggerX86.INS.POP,    DebuggerX86.TYPE_FS     | DebuggerX86.TYPE_OUT   | DebuggerX86.TYPE_80386],
-        0xA3: [DebuggerX86.INS.BT,     DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xA4: [DebuggerX86.INS.SHLD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        0xA5: [DebuggerX86.INS.SHLD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_CL  | DebuggerX86.TYPE_IN],
-        0xA6: [DebuggerX86.INS.XBTS,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_AX  | DebuggerX86.TYPE_IN,  DebuggerX86.TYPE_CL    | DebuggerX86.TYPE_IN],
-        0xA7: [DebuggerX86.INS.IBTS,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_CL  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xA8: [DebuggerX86.INS.PUSH,   DebuggerX86.TYPE_GS     | DebuggerX86.TYPE_IN    | DebuggerX86.TYPE_80386],
-        0xA9: [DebuggerX86.INS.POP,    DebuggerX86.TYPE_GS     | DebuggerX86.TYPE_OUT   | DebuggerX86.TYPE_80386],
-        0xAB: [DebuggerX86.INS.BTS,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xAC: [DebuggerX86.INS.SHRD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        0xAD: [DebuggerX86.INS.SHRD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_CL  | DebuggerX86.TYPE_IN],
-        0xAF: [DebuggerX86.INS.IMUL,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xB2: [DebuggerX86.INS.LSS,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,                           DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_SEGP  | DebuggerX86.TYPE_IN],
-        0xB3: [DebuggerX86.INS.BTR,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xB4: [DebuggerX86.INS.LFS,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,                           DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_SEGP  | DebuggerX86.TYPE_IN],
-        0xB5: [DebuggerX86.INS.LGS,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,                           DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_SEGP  | DebuggerX86.TYPE_IN],
-        0xB6: [DebuggerX86.INS.MOVZX,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-        0xB7: [DebuggerX86.INS.MOVZX,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-        0xBA: [DebuggerX86.INS.GRP8,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-        0xBB: [DebuggerX86.INS.BTC,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xBC: [DebuggerX86.INS.BSF,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xBD: [DebuggerX86.INS.BSR,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xBE: [DebuggerX86.INS.MOVSX,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-        0xBF: [DebuggerX86.INS.MOVSX,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN]
+    Debuggerx86.aaOp0FDescs = {
+        0x00: [Debuggerx86.INS.GRP6,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_BOTH],
+        0x01: [Debuggerx86.INS.GRP7,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_BOTH],
+        0x02: [Debuggerx86.INS.LAR,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN],
+        0x03: [Debuggerx86.INS.LSL,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN],
+        0x05: [Debuggerx86.INS.LOADALL,Debuggerx86.TYPE_80286],
+        0x06: [Debuggerx86.INS.CLTS,   Debuggerx86.TYPE_80286],
+        0x07: [Debuggerx86.INS.LOADALL,Debuggerx86.TYPE_80386],   // TODO: implied operand is ES:[(E)DI]
+        0x20: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_CTLREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x21: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_DBGREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x22: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_CTLREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x23: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_DBGREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x24: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_TSTREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x26: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_TSTREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x80: [Debuggerx86.INS.JO,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x81: [Debuggerx86.INS.JNO,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x82: [Debuggerx86.INS.JC,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x83: [Debuggerx86.INS.JNC,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x84: [Debuggerx86.INS.JZ,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x85: [Debuggerx86.INS.JNZ,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x86: [Debuggerx86.INS.JBE,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x87: [Debuggerx86.INS.JA,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x88: [Debuggerx86.INS.JS,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x89: [Debuggerx86.INS.JNS,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8A: [Debuggerx86.INS.JP,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8B: [Debuggerx86.INS.JNP,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8C: [Debuggerx86.INS.JL,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8D: [Debuggerx86.INS.JGE,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8E: [Debuggerx86.INS.JLE,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8F: [Debuggerx86.INS.JG,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x90: [Debuggerx86.INS.SETO,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x91: [Debuggerx86.INS.SETNO,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x92: [Debuggerx86.INS.SETC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x93: [Debuggerx86.INS.SETNC,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x94: [Debuggerx86.INS.SETZ,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x95: [Debuggerx86.INS.SETNZ,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x96: [Debuggerx86.INS.SETBE,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x97: [Debuggerx86.INS.SETNBE, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x98: [Debuggerx86.INS.SETS,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x99: [Debuggerx86.INS.SETNS,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9A: [Debuggerx86.INS.SETP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9B: [Debuggerx86.INS.SETNP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9C: [Debuggerx86.INS.SETL,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9D: [Debuggerx86.INS.SETGE,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9E: [Debuggerx86.INS.SETLE,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9F: [Debuggerx86.INS.SETG,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0xA0: [Debuggerx86.INS.PUSH,   Debuggerx86.TYPE_FS     | Debuggerx86.TYPE_IN    | Debuggerx86.TYPE_80386],
+        0xA1: [Debuggerx86.INS.POP,    Debuggerx86.TYPE_FS     | Debuggerx86.TYPE_OUT   | Debuggerx86.TYPE_80386],
+        0xA3: [Debuggerx86.INS.BT,     Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xA4: [Debuggerx86.INS.SHLD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        0xA5: [Debuggerx86.INS.SHLD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_CL  | Debuggerx86.TYPE_IN],
+        0xA6: [Debuggerx86.INS.XBTS,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_AX  | Debuggerx86.TYPE_IN,  Debuggerx86.TYPE_CL    | Debuggerx86.TYPE_IN],
+        0xA7: [Debuggerx86.INS.IBTS,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_CL  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xA8: [Debuggerx86.INS.PUSH,   Debuggerx86.TYPE_GS     | Debuggerx86.TYPE_IN    | Debuggerx86.TYPE_80386],
+        0xA9: [Debuggerx86.INS.POP,    Debuggerx86.TYPE_GS     | Debuggerx86.TYPE_OUT   | Debuggerx86.TYPE_80386],
+        0xAB: [Debuggerx86.INS.BTS,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xAC: [Debuggerx86.INS.SHRD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        0xAD: [Debuggerx86.INS.SHRD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_CL  | Debuggerx86.TYPE_IN],
+        0xAF: [Debuggerx86.INS.IMUL,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xB2: [Debuggerx86.INS.LSS,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,                           Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_SEGP  | Debuggerx86.TYPE_IN],
+        0xB3: [Debuggerx86.INS.BTR,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xB4: [Debuggerx86.INS.LFS,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,                           Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_SEGP  | Debuggerx86.TYPE_IN],
+        0xB5: [Debuggerx86.INS.LGS,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,                           Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_SEGP  | Debuggerx86.TYPE_IN],
+        0xB6: [Debuggerx86.INS.MOVZX,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+        0xB7: [Debuggerx86.INS.MOVZX,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+        0xBA: [Debuggerx86.INS.GRP8,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+        0xBB: [Debuggerx86.INS.BTC,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xBC: [Debuggerx86.INS.BSF,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xBD: [Debuggerx86.INS.BSR,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xBE: [Debuggerx86.INS.MOVSX,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+        0xBF: [Debuggerx86.INS.MOVSX,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN]
     };
 
     /*
      * Be sure to keep the following table in sync with FPUx86.aaOps
      */
-    DebuggerX86.aaaOpFPUDescs = {
+    Debuggerx86.aaaOpFPUDescs = {
         0xD8: {
-            0x00: [DebuggerX86.FINS.FADD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x01: [DebuggerX86.FINS.FMUL,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FCOM,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x03: [DebuggerX86.FINS.FCOMP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x04: [DebuggerX86.FINS.FSUB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FSUBR,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FDIV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x07: [DebuggerX86.FINS.FDIVR,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x30: [DebuggerX86.FINS.FADD,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x31: [DebuggerX86.FINS.FMUL,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x32: [DebuggerX86.FINS.FCOM,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x33: [DebuggerX86.FINS.FCOMP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x34: [DebuggerX86.FINS.FSUB,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x35: [DebuggerX86.FINS.FSUBR,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x36: [DebuggerX86.FINS.FDIV,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x37: [DebuggerX86.FINS.FDIVR,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN]
+            0x00: [Debuggerx86.FINS.FADD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x01: [Debuggerx86.FINS.FMUL,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FCOM,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x03: [Debuggerx86.FINS.FCOMP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x04: [Debuggerx86.FINS.FSUB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FSUBR,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FDIV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x07: [Debuggerx86.FINS.FDIVR,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x30: [Debuggerx86.FINS.FADD,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x31: [Debuggerx86.FINS.FMUL,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x32: [Debuggerx86.FINS.FCOM,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x33: [Debuggerx86.FINS.FCOMP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x34: [Debuggerx86.FINS.FSUB,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x35: [Debuggerx86.FINS.FSUBR,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x36: [Debuggerx86.FINS.FDIV,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x37: [Debuggerx86.FINS.FDIVR,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN]
         },
         0xD9: {
-            0x00: [DebuggerX86.FINS.FLD,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FST,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_OUT],
-            0x03: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_OUT],
-            0x04: [DebuggerX86.FINS.FLDENV, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_ENV   | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FLDCW,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FSTENV, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_ENV   | DebuggerX86.TYPE_OUT],
-            0x07: [DebuggerX86.FINS.FSTCW,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT],
-            0x30: [DebuggerX86.FINS.FLD,    DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT],
-            0x31: [DebuggerX86.FINS.FXCH,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT],
-            0x32: [DebuggerX86.FINS.FNOP],
-            0x33: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT],   // Obsolete encoding
-            0x40: [DebuggerX86.FINS.FCHS],
-            0x41: [DebuggerX86.FINS.FABS],
-            0x44: [DebuggerX86.FINS.FTST],
-            0x45: [DebuggerX86.FINS.FXAM],
-            0x50: [DebuggerX86.FINS.FLD1],
-            0x51: [DebuggerX86.FINS.FLDL2T],
-            0x52: [DebuggerX86.FINS.FLDL2E],
-            0x53: [DebuggerX86.FINS.FLDPI],
-            0x54: [DebuggerX86.FINS.FLDLG2],
-            0x55: [DebuggerX86.FINS.FLDLN2],
-            0x56: [DebuggerX86.FINS.FLDZ],
-            0x60: [DebuggerX86.FINS.F2XM1],
-            0x61: [DebuggerX86.FINS.FYL2X],
-            0x62: [DebuggerX86.FINS.FPTAN],
-            0x63: [DebuggerX86.FINS.FPATAN],
-            0x64: [DebuggerX86.FINS.FXTRACT],
-            0x66: [DebuggerX86.FINS.FDECSTP],
-            0x67: [DebuggerX86.FINS.FINCSTP],
-            0x70: [DebuggerX86.FINS.FPREM],
-            0x71: [DebuggerX86.FINS.FYL2XP1],
-            0x72: [DebuggerX86.FINS.FSQRT],
-            0x74: [DebuggerX86.FINS.FRNDINT],
-            0x75: [DebuggerX86.FINS.FSCALE]
+            0x00: [Debuggerx86.FINS.FLD,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FST,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_OUT],
+            0x03: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_OUT],
+            0x04: [Debuggerx86.FINS.FLDENV, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_ENV   | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FLDCW,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FSTENV, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_ENV   | Debuggerx86.TYPE_OUT],
+            0x07: [Debuggerx86.FINS.FSTCW,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT],
+            0x30: [Debuggerx86.FINS.FLD,    Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT],
+            0x31: [Debuggerx86.FINS.FXCH,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT],
+            0x32: [Debuggerx86.FINS.FNOP],
+            0x33: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT],   // Obsolete encoding
+            0x40: [Debuggerx86.FINS.FCHS],
+            0x41: [Debuggerx86.FINS.FABS],
+            0x44: [Debuggerx86.FINS.FTST],
+            0x45: [Debuggerx86.FINS.FXAM],
+            0x50: [Debuggerx86.FINS.FLD1],
+            0x51: [Debuggerx86.FINS.FLDL2T],
+            0x52: [Debuggerx86.FINS.FLDL2E],
+            0x53: [Debuggerx86.FINS.FLDPI],
+            0x54: [Debuggerx86.FINS.FLDLG2],
+            0x55: [Debuggerx86.FINS.FLDLN2],
+            0x56: [Debuggerx86.FINS.FLDZ],
+            0x60: [Debuggerx86.FINS.F2XM1],
+            0x61: [Debuggerx86.FINS.FYL2X],
+            0x62: [Debuggerx86.FINS.FPTAN],
+            0x63: [Debuggerx86.FINS.FPATAN],
+            0x64: [Debuggerx86.FINS.FXTRACT],
+            0x66: [Debuggerx86.FINS.FDECSTP],
+            0x67: [Debuggerx86.FINS.FINCSTP],
+            0x70: [Debuggerx86.FINS.FPREM],
+            0x71: [Debuggerx86.FINS.FYL2XP1],
+            0x72: [Debuggerx86.FINS.FSQRT],
+            0x74: [Debuggerx86.FINS.FRNDINT],
+            0x75: [Debuggerx86.FINS.FSCALE]
         },
         0xDA: {
-            0x00: [DebuggerX86.FINS.FIADD,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x01: [DebuggerX86.FINS.FIMUL,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FICOM,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x03: [DebuggerX86.FINS.FICOMP, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x04: [DebuggerX86.FINS.FISUB,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FISUBR, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FIDIV,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x07: [DebuggerX86.FINS.FIDIVR, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN]
+            0x00: [Debuggerx86.FINS.FIADD,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x01: [Debuggerx86.FINS.FIMUL,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FICOM,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x03: [Debuggerx86.FINS.FICOMP, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x04: [Debuggerx86.FINS.FISUB,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FISUBR, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FIDIV,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x07: [Debuggerx86.FINS.FIDIVR, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN]
         },
         0xDB: {
-            0x00: [DebuggerX86.FINS.FILD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT  | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FIST,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT  | DebuggerX86.TYPE_OUT],
-            0x03: [DebuggerX86.FINS.FISTP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT  | DebuggerX86.TYPE_OUT],
-            0x05: [DebuggerX86.FINS.FLD,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_TREAL | DebuggerX86.TYPE_IN],
-            0x07: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_TREAL | DebuggerX86.TYPE_OUT],
-            0x40: [DebuggerX86.FINS.FENI],
-            0x41: [DebuggerX86.FINS.FDISI],
-            0x42: [DebuggerX86.FINS.FCLEX],
-            0x43: [DebuggerX86.FINS.FINIT],
-            0x44: [DebuggerX86.FINS.FSETPM,  DebuggerX86.TYPE_80287],
-            0x73: [DebuggerX86.FINS.FSINCOS, DebuggerX86.TYPE_80387]
+            0x00: [Debuggerx86.FINS.FILD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT  | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FIST,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT  | Debuggerx86.TYPE_OUT],
+            0x03: [Debuggerx86.FINS.FISTP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT  | Debuggerx86.TYPE_OUT],
+            0x05: [Debuggerx86.FINS.FLD,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_TREAL | Debuggerx86.TYPE_IN],
+            0x07: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_TREAL | Debuggerx86.TYPE_OUT],
+            0x40: [Debuggerx86.FINS.FENI],
+            0x41: [Debuggerx86.FINS.FDISI],
+            0x42: [Debuggerx86.FINS.FCLEX],
+            0x43: [Debuggerx86.FINS.FINIT],
+            0x44: [Debuggerx86.FINS.FSETPM,  Debuggerx86.TYPE_80287],
+            0x73: [Debuggerx86.FINS.FSINCOS, Debuggerx86.TYPE_80387]
         },
         0xDC: {
-            0x00: [DebuggerX86.FINS.FADD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x01: [DebuggerX86.FINS.FMUL,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FCOM,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x03: [DebuggerX86.FINS.FCOMP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x04: [DebuggerX86.FINS.FSUB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FSUBR,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FDIV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x07: [DebuggerX86.FINS.FDIVR,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x30: [DebuggerX86.FINS.FADD,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x31: [DebuggerX86.FINS.FMUL,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x32: [DebuggerX86.FINS.FCOM,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x33: [DebuggerX86.FINS.FCOMP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x34: [DebuggerX86.FINS.FSUBR,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x35: [DebuggerX86.FINS.FSUB,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x36: [DebuggerX86.FINS.FDIVR,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x37: [DebuggerX86.FINS.FDIV,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN]
+            0x00: [Debuggerx86.FINS.FADD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x01: [Debuggerx86.FINS.FMUL,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FCOM,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x03: [Debuggerx86.FINS.FCOMP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x04: [Debuggerx86.FINS.FSUB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FSUBR,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FDIV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x07: [Debuggerx86.FINS.FDIVR,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x30: [Debuggerx86.FINS.FADD,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x31: [Debuggerx86.FINS.FMUL,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x32: [Debuggerx86.FINS.FCOM,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x33: [Debuggerx86.FINS.FCOMP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x34: [Debuggerx86.FINS.FSUBR,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x35: [Debuggerx86.FINS.FSUB,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x36: [Debuggerx86.FINS.FDIVR,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x37: [Debuggerx86.FINS.FDIV,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN]
         },
         0xDD: {
-            0x00: [DebuggerX86.FINS.FLD,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FST,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_OUT],
-            0x03: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_OUT],
-            0x04: [DebuggerX86.FINS.FRSTOR, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_FPU   | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FSAVE,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_FPU   | DebuggerX86.TYPE_OUT],
-            0x07: [DebuggerX86.FINS.FSTSW,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT],
-            0x30: [DebuggerX86.FINS.FFREE,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x31: [DebuggerX86.FINS.FXCH,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT],   // Obsolete encoding
-            0x32: [DebuggerX86.FINS.FST,    DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x33: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN]
+            0x00: [Debuggerx86.FINS.FLD,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FST,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_OUT],
+            0x03: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_OUT],
+            0x04: [Debuggerx86.FINS.FRSTOR, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_FPU   | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FSAVE,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_FPU   | Debuggerx86.TYPE_OUT],
+            0x07: [Debuggerx86.FINS.FSTSW,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT],
+            0x30: [Debuggerx86.FINS.FFREE,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x31: [Debuggerx86.FINS.FXCH,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT],   // Obsolete encoding
+            0x32: [Debuggerx86.FINS.FST,    Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x33: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN]
         },
         0xDE: {
-            0x00: [DebuggerX86.FINS.FIADD,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x01: [DebuggerX86.FINS.FIMUL,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FICOM,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x03: [DebuggerX86.FINS.FICOMP, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x04: [DebuggerX86.FINS.FISUB,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FISUBR, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FIDIV,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x07: [DebuggerX86.FINS.FIDIVR, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x30: [DebuggerX86.FINS.FADDP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x31: [DebuggerX86.FINS.FMULP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x32: [DebuggerX86.FINS.FCOMP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x33: [DebuggerX86.FINS.FCOMPP, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x34: [DebuggerX86.FINS.FSUBRP, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x35: [DebuggerX86.FINS.FSUBP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x36: [DebuggerX86.FINS.FDIVRP, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x37: [DebuggerX86.FINS.FDIVP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN]
+            0x00: [Debuggerx86.FINS.FIADD,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x01: [Debuggerx86.FINS.FIMUL,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FICOM,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x03: [Debuggerx86.FINS.FICOMP, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x04: [Debuggerx86.FINS.FISUB,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FISUBR, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FIDIV,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x07: [Debuggerx86.FINS.FIDIVR, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x30: [Debuggerx86.FINS.FADDP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x31: [Debuggerx86.FINS.FMULP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x32: [Debuggerx86.FINS.FCOMP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x33: [Debuggerx86.FINS.FCOMPP, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x34: [Debuggerx86.FINS.FSUBRP, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x35: [Debuggerx86.FINS.FSUBP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x36: [Debuggerx86.FINS.FDIVRP, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x37: [Debuggerx86.FINS.FDIVP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN]
         },
         0xDF: {
-            0x00: [DebuggerX86.FINS.FILD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FIST,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT],
-            0x03: [DebuggerX86.FINS.FISTP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT],
-            0x04: [DebuggerX86.FINS.FBLD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BCD80 | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FILD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LINT  | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FBSTP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BCD80 | DebuggerX86.TYPE_OUT],
-            0x07: [DebuggerX86.FINS.FISTP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LINT  | DebuggerX86.TYPE_OUT],
-            0x30: [DebuggerX86.FINS.FFREEP, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x31: [DebuggerX86.FINS.FXCH,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT],   // Obsolete encoding
-            0x32: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x33: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x34: [DebuggerX86.FINS.FSTSWAX, DebuggerX86.TYPE_80287]
+            0x00: [Debuggerx86.FINS.FILD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FIST,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT],
+            0x03: [Debuggerx86.FINS.FISTP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT],
+            0x04: [Debuggerx86.FINS.FBLD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BCD80 | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FILD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LINT  | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FBSTP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BCD80 | Debuggerx86.TYPE_OUT],
+            0x07: [Debuggerx86.FINS.FISTP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LINT  | Debuggerx86.TYPE_OUT],
+            0x30: [Debuggerx86.FINS.FFREEP, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x31: [Debuggerx86.FINS.FXCH,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT],   // Obsolete encoding
+            0x32: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x33: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x34: [Debuggerx86.FINS.FSTSWAX, Debuggerx86.TYPE_80287]
         }
     };
 
-    DebuggerX86.aaGrpDescs = [
+    Debuggerx86.aaGrpDescs = [
       [
         /* GRP1B */
-        [DebuggerX86.INS.ADD,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.OR,   DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ADC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SBB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.AND,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SUB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.XOR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.CMP,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ADD,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.OR,   Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ADC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SBB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.AND,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SUB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.XOR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.CMP,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP1W */
-        [DebuggerX86.INS.ADD,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.OR,   DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ADC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SBB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.AND,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SUB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.XOR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.CMP,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ADD,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.OR,   Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ADC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SBB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.AND,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SUB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.XOR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.CMP,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP1SW */
-        [DebuggerX86.INS.ADD,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.OR,   DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ADC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SBB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.AND,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SUB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.XOR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.CMP,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ADD,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.OR,   Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ADC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SBB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.AND,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SUB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.XOR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.CMP,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2B */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2W */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2B1 */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2W1 */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2BC */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2WC */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP3B */
-        [DebuggerX86.INS.TEST, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.NOT,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.NEG,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.MUL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.IMUL, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.DIV,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.IDIV, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH]
+        [Debuggerx86.INS.TEST, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.NOT,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.NEG,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.MUL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.IMUL, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.DIV,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.IDIV, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH]
       ],
       [
         /* GRP3W */
-        [DebuggerX86.INS.TEST, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.NOT,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.NEG,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.MUL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.IMUL, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.DIV,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.IDIV, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH]
+        [Debuggerx86.INS.TEST, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.NOT,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.NEG,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.MUL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.IMUL, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.DIV,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.IDIV, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH]
       ],
       [
         /* GRP4B */
-        [DebuggerX86.INS.INC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.DEC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined
+        [Debuggerx86.INS.INC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.DEC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined
       ],
       [
         /* GRP4W */
-        [DebuggerX86.INS.INC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.DEC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.CALL, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.CALL, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_FARP  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.JMP,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.JMP,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_FARP  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.PUSH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined
+        [Debuggerx86.INS.INC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.DEC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.CALL, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.CALL, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_FARP  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.JMP,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.JMP,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_FARP  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.PUSH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined
       ],
       [ /* OP0F */ ],
       [
         /* GRP6 */
-        [DebuggerX86.INS.SLDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.STR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.LLDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.LTR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.VERR, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.VERW, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined
+        [Debuggerx86.INS.SLDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.STR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.LLDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.LTR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.VERR, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.VERW, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined
       ],
       [
         /* GRP7 */
-        [DebuggerX86.INS.SGDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.SIDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.LGDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.LIDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.SMSW, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80286],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.LMSW, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-         DebuggerX86.aOpDescUndefined
+        [Debuggerx86.INS.SGDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.SIDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.LGDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.LIDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.SMSW, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80286],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.LMSW, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+         Debuggerx86.aOpDescUndefined
       ],
       [
         /* GRP8 */
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.BT,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.BTS, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.BTR, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.BTC, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.BT,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.BTS, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.BTR, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.BTC, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ]
     ];
 
     /*
      * Table of system (non-segment) descriptors, including indicators of which ones are gates.
      */
-    DebuggerX86.SYSDESCS = {
+    Debuggerx86.SYSDESCS = {
         0x0100: ["tss286",       false],
         0x0200: ["ldt",          false],
         0x0300: ["busy tss286",  false],
@@ -8117,7 +8117,7 @@ if (DEBUGGER) {
     /*
      * TSS field names and offsets used by dumpTSS()
      */
-    DebuggerX86.TSS286 = {
+    Debuggerx86.TSS286 = {
         "PREV_TSS":     0x00,
         "CPL0_SP":      0x02,
         "CPL0_SS":      0x04,
@@ -8141,7 +8141,7 @@ if (DEBUGGER) {
         "TASK_DS":      0x28,
         "TASK_LDT":     0x2a
     };
-    DebuggerX86.TSS386 = {
+    Debuggerx86.TSS386 = {
         "PREV_TSS":     0x00,
         "CPL0_ESP":     0x04,
         "CPL0_SS":      0x08,
@@ -8173,6 +8173,6 @@ if (DEBUGGER) {
     /*
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
-    WebLib.onInit(DebuggerX86.init);
+    WebLib.onInit(Debuggerx86.init);
 
 }   // endif DEBUGGER

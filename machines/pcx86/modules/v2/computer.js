@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import BusX86 from "./bus.js";
+import Busx86 from "./bus.js";
 import FPUx86 from "./fpux86.js";
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
@@ -135,7 +135,7 @@ export default class Computer extends Component {
         this.fpu = /** @type {FPUx86} */ (Component.getComponentByType("FPU", this.id));
         if (!this.fpu) new FPUx86({'id': this.idMachine + ".fpu"});
 
-        this.dbg = /** @type {DebuggerX86} */ (Component.getComponentByType("Debugger", this.id));
+        this.dbg = /** @type {Debuggerx86} */ (Component.getComponentByType("Debugger", this.id));
 
         /*
          * Enumerate all the Video components for diagnostic displays, focus changes, and updateStatus() calls.
@@ -148,7 +148,7 @@ export default class Computer extends Component {
         /*
          * Initialize the Bus component
          */
-        this.bus = new BusX86({'id': this.idMachine + '.bus', 'busWidth': this.nBusWidth}, this.cpu, this.dbg);
+        this.bus = new Busx86({'id': this.idMachine + '.bus', 'busWidth': this.nBusWidth}, this.cpu, this.dbg);
 
         /*
          * Iterate through all the components and override their notice() and print() methods

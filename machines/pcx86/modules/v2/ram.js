@@ -9,7 +9,7 @@
 
 import ChipSet from "./chipset.js";
 import { Controller } from "./bus.js";
-import MemoryX86 from "./memory.js";
+import Memoryx86 from "./memory.js";
 import MESSAGE from "./message.js";
 import ROMx86 from "./rom.js";
 import Component from "../../../modules/v2/component.js";
@@ -118,9 +118,9 @@ export default class RAMx86 extends Component {
      *
      * @this {RAMx86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -224,7 +224,7 @@ export default class RAMx86 extends Component {
         this.displayRAMSetting();
 
         if (!this.fAllocated && this.sizeRAM) {
-            if (this.bus.addMemory(this.addrRAM, this.sizeRAM, MemoryX86.TYPE.RAM)) {
+            if (this.bus.addMemory(this.addrRAM, this.sizeRAM, Memoryx86.TYPE.RAM)) {
                 this.fAllocated = true;
 
                 /*
@@ -258,7 +258,7 @@ export default class RAMx86 extends Component {
                 if (DESKPRO386) {
                     if (this.idComponent == "ramCPQ") {
                         this.controller = new CompaqController(this);
-                        this.bus.addMemory(CompaqController.ADDR, 4, MemoryX86.TYPE.CTRL, this.controller);
+                        this.bus.addMemory(CompaqController.ADDR, 4, Memoryx86.TYPE.CTRL, this.controller);
                     }
                 }
             }
@@ -466,7 +466,7 @@ class CompaqController extends Controller {
                      * current read-write state, but this is an infrequent operation, so there's no point.
                      */
                     let aBlocks = bus.getMemoryBlocks(CompaqController.MAP_SRC, CompaqController.MAP_SIZE);
-                    let type = (b & CompaqController.MAPPINGS.READWRITE)? MemoryX86.TYPE.RAM : MemoryX86.TYPE.ROM;
+                    let type = (b & CompaqController.MAPPINGS.READWRITE)? Memoryx86.TYPE.RAM : Memoryx86.TYPE.ROM;
                     bus.setMemoryBlocks(CompaqController.MAP_DST, CompaqController.MAP_SIZE, aBlocks, type);
                 }
                 else {
@@ -518,7 +518,7 @@ class CompaqController extends Controller {
      *
      * So we must allow for requests outside that 4-byte range.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off (relative to 0x80C00000)
      * @param {number} [addr]
      * @returns {number}
@@ -541,7 +541,7 @@ class CompaqController extends Controller {
      *
      * So we must allow for requests outside that 4-byte range.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off (relative to 0x80C00000)
      * @param {number} b
      * @param {number} [addr]

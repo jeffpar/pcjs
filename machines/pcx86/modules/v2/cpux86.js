@@ -7,10 +7,10 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import CPULib from "./cpu.js";
-import MemoryX86 from "./memory.js";
+import CPU from "./cpu.js";
+import Memoryx86 from "./memory.js";
 import MESSAGE from "./message.js";
-import SegX86 from "./segx86.js";
+import Segx86 from "./segx86.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
@@ -22,7 +22,7 @@ import { APPCLASS, BACKTRACK, BUGS_8086, DEBUG, DEBUGGER, I386, MAXDEBUG, PAGEBL
  * @class CPUx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-export default class CPUx86 extends CPULib {
+export default class CPUx86 extends CPU {
     /**
      * CPUx86(parmsCPU)
      *
@@ -150,7 +150,7 @@ export default class CPUx86 extends CPULib {
         }
 
         /*
-         * This initial resetRegs() call is important to create all the registers (eg, the SegX86 registers),
+         * This initial resetRegs() call is important to create all the registers (eg, the Segx86 registers),
          * so that if/when we call restore(), it will have something to fill in.
          */
         this.resetRegs();
@@ -374,7 +374,7 @@ export default class CPUx86 extends CPULib {
              * registers, then enables paging, do all the previous Debug register addresses automatically
              * become linear addresses?  I'm guessing they do.
              */
-            this.blockUnpaged = new MemoryX86(undefined, 0, 0, MemoryX86.TYPE.UNPAGED, null, this);
+            this.blockUnpaged = new Memoryx86(undefined, 0, 0, Memoryx86.TYPE.UNPAGED, null, this);
             this.blockUnpaged.copyBreakpoints(this.dbg);
             for (iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
                 this.aMemBlocks[iBlock] = this.blockUnpaged;
@@ -385,7 +385,7 @@ export default class CPUx86 extends CPULib {
              * an invalid block will trigger a fault, so memEmpty will never actually be returned, but
              * if the Debugger is suppressing faults or calling probeAddr(), returning memEmpty is helpful.
              */
-            this.memEmpty = new MemoryX86();
+            this.memEmpty = new Memoryx86();
 
             /*
              * Initialize our PAGEBLOCKS cache (see acquirePageBlock() and releasePageBlock()).
@@ -429,7 +429,7 @@ export default class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} addr
-     * @returns {MemoryX86}
+     * @returns {Memoryx86}
      */
     acquirePageBlock(addr)
     {
@@ -444,7 +444,7 @@ export default class CPUx86 extends CPULib {
              */
             block.init(addr);
         } else {
-            block = new MemoryX86(addr, 0, 0, MemoryX86.TYPE.PAGED);
+            block = new Memoryx86(addr, 0, 0, Memoryx86.TYPE.PAGED);
         }
         return block;
     }
@@ -456,11 +456,11 @@ export default class CPUx86 extends CPULib {
      * number (CPUx86.PAGEBLOCKS_CACHE) in aCacheBlocks, with iCacheBlocks pointing to the next free element.
      *
      * @this {CPUx86}
-     * @param {MemoryX86} block
+     * @param {Memoryx86} block
      */
     releasePageBlock(block)
     {
-        this.assert(!!(block && block.type === MemoryX86.TYPE.PAGED));
+        this.assert(!!(block && block.type === Memoryx86.TYPE.PAGED));
         if (this.iCacheBlocks < CPUx86.PAGEBLOCKS_CACHE) {
             this.aCacheBlocks[this.iCacheBlocks++] = block;
         }
@@ -496,7 +496,7 @@ export default class CPUx86 extends CPULib {
      * @param {number} addr is a linear address
      * @param {boolean} fWrite (true if called for a write, false if for a read)
      * @param {boolean} [fSuppress] (true if any faults, remapping, etc should be suppressed)
-     * @returns {MemoryX86}
+     * @returns {Memoryx86}
      */
     mapPageBlock(addr, fWrite, fSuppress)
     {
@@ -1125,12 +1125,12 @@ export default class CPUx86 extends CPULib {
 
         /*
          * Segment registers used to be defined as separate selector and base variables (eg, regCS and regCS0),
-         * but now they are defined as SegX86 objects.
+         * but now they are defined as Segx86 objects.
          */
-        this.segCS     = new SegX86(this, SegX86.ID.CODE,  "CS");
-        this.segDS     = new SegX86(this, SegX86.ID.DATA,  "DS");
-        this.segES     = new SegX86(this, SegX86.ID.DATA,  "ES");
-        this.segSS     = new SegX86(this, SegX86.ID.STACK, "SS");
+        this.segCS     = new Segx86(this, Segx86.ID.CODE,  "CS");
+        this.segDS     = new Segx86(this, Segx86.ID.DATA,  "DS");
+        this.segES     = new Segx86(this, Segx86.ID.DATA,  "ES");
+        this.segSS     = new Segx86(this, Segx86.ID.STACK, "SS");
         this.setSP(0);
         this.setSS(0);
 
@@ -1165,15 +1165,15 @@ export default class CPUx86 extends CPULib {
             this.regCR3 = 0;                // page directory base register (PDBR)
             this.regDR  = [0,0,0,0,null,null,0,0];              // Debug Registers DR0-DR7 (DR4-DR5 are undefined)
             this.regTR  = [null,null,null,null,null,null,0,0];  // Test Registers TR0-TR7 (TR0-TR5 are undefined)
-            this.segFS = new SegX86(this, SegX86.ID.DATA,  "FS");
-            this.segGS = new SegX86(this, SegX86.ID.DATA,  "GS");
+            this.segFS = new Segx86(this, Segx86.ID.DATA,  "FS");
+            this.segGS = new Segx86(this, Segx86.ID.DATA,  "GS");
             /*
              * Synchronize the fact that paging is initially disabled with our PAGEBLOCKS functions
              */
             this.disablePageBlocks();
         }
 
-        this.segNULL = new SegX86(this, SegX86.ID.NULL,  "NULL");
+        this.segNULL = new Segx86(this, Segx86.ID.NULL,  "NULL");
 
         /*
          * The next few initializations mirror what we must do prior to each instruction (ie, inside the stepCPU() function);
@@ -1257,9 +1257,9 @@ export default class CPUx86 extends CPULib {
              * TODO: Verify what the 80286 actually sets addrGDT and addrGDTLimit to on reset (or if it leaves them alone).
              */
             this.addrGDT = 0; this.addrGDTLimit = 0xffff;                   // GDTR
-            this.segLDT = new SegX86(this, SegX86.ID.LDT, "LDT", true);     // LDTR
-            this.segTSS = new SegX86(this, SegX86.ID.TSS, "TSS", true);     // TR
-            this.segVER = new SegX86(this, SegX86.ID.VER, "VER", true);     // a scratch segment register for VERR and VERW instructions
+            this.segLDT = new Segx86(this, Segx86.ID.LDT, "LDT", true);     // LDTR
+            this.segTSS = new Segx86(this, Segx86.ID.TSS, "TSS", true);     // TR
+            this.segVER = new Segx86(this, Segx86.ID.VER, "VER", true);     // a scratch segment register for VERR and VERW instructions
             this.setCSIP(0xfff0, 0xf000);                   // on an 80286 or 80386, the default CS:IP is 0xF000:0xFFF0 instead of 0xFFFF:0x0000
             this.setCSBase(0xffff0000|0);                   // on an 80286 or 80386, all CS base address bits above bit 15 must be set
         }
@@ -1959,7 +1959,7 @@ export default class CPUx86 extends CPULib {
      * getSeg(sName)
      *
      * @param {string} sName
-     * @returns {SegX86|Array}
+     * @returns {Segx86|Array}
      */
     getSeg(sName)
     {
@@ -3127,7 +3127,7 @@ export default class CPUx86 extends CPULib {
     {
         let aBlocks = (fPhysical? this.aBusBlocks : this.aMemBlocks);
         let block = aBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
-        if (block && block.type == MemoryX86.TYPE.UNPAGED) block = this.mapPageBlock(addr, false, true);
+        if (block && block.type == Memoryx86.TYPE.UNPAGED) block = this.mapPageBlock(addr, false, true);
 
         if (block) {
             let off = addr & this.nBlockLimit;
@@ -3354,7 +3354,7 @@ export default class CPUx86 extends CPULib {
      * getEAByte(seg, off)
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @returns {number} byte (8-bit) value at that address
      */
@@ -3397,7 +3397,7 @@ export default class CPUx86 extends CPULib {
      * getEAWord(seg, off)
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @returns {number} word (16-bit or 32-bit) value at that address
      */
@@ -3664,7 +3664,7 @@ export default class CPUx86 extends CPULib {
      * This is like getEAByte(), but it does NOT update regEA.
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @returns {number} byte (8-bit) value at that address
      */
@@ -3679,7 +3679,7 @@ export default class CPUx86 extends CPULib {
      * This is like getEAWord(), but it does NOT update regEA.
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @returns {number} word (16-bit) value at that address
      */
@@ -3707,7 +3707,7 @@ export default class CPUx86 extends CPULib {
      * This is like setEAByte(), but it does NOT update regEAWrite.
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @param {number} b is the byte (8-bit) value to write
      */
@@ -3722,7 +3722,7 @@ export default class CPUx86 extends CPULib {
      * This is like setEAWord(), but it does NOT update regEAWrite.
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @param {number} w is the word (16-bit) value to write
      */
@@ -3838,7 +3838,7 @@ export default class CPUx86 extends CPULib {
         let aBlocks = this.aMemBlocks;
         let regLIP = this.regLIP & ~0x3;
         let block = aBlocks[(regLIP & this.nMemMask) >>> this.nBlockShift];
-        if (block && block.type == MemoryX86.TYPE.UNPAGED) {
+        if (block && block.type == Memoryx86.TYPE.UNPAGED) {
             block = this.mapPageBlock(regLIP, false, true);
             if (block === this.memEmpty) block = null;
         }

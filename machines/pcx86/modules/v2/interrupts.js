@@ -166,7 +166,7 @@ Interrupts.BIOS_DATA = {
 };
 
 /*
-    * See DebuggerX86.prototype.replaceRegs() for the rules governing how register contents are replaced in the strings below.
+    * See Debuggerx86.prototype.replaceRegs() for the rules governing how register contents are replaced in the strings below.
     *
     * Replacements occur in the following order:
     *

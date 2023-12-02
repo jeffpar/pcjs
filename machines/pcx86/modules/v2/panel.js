@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import BusX86 from "./bus.js";
-import MemoryX86 from "./memory.js";
+import Busx86 from "./bus.js";
+import Memoryx86 from "./memory.js";
 import MESSAGE from "./message.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
@@ -23,7 +23,7 @@ import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
  * @typedef {Object} Region
  * @property {number} iBlock    (starting block number)
  * @property {number} cBlocks   (number of blocks spanned by region)
- * @property {number} type      (type of all blocks in the region (see MemoryX86.TYPE.*))
+ * @property {number} type      (type of all blocks in the region (see Memoryx86.TYPE.*))
  */
 
 /**
@@ -258,9 +258,9 @@ export default class Panel extends Component {
      *
      * @this {Panel}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -546,7 +546,7 @@ export default class Panel extends Component {
                     x -= rect.x;
                     y -= rect.y;
                     let region = this.busInfo.aRegions[i];
-                    let iBlock = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), this.busInfo.aBlocks[region.iBlock]);
+                    let iBlock = UsrLib.getBitField(/** @type {BitField} */ (Busx86.BlockInfo.num), this.busInfo.aBlocks[region.iBlock]);
                     let addr = iBlock * this.bus.nBlockSize;
                     let addrLimit = (iBlock + region.cBlocks) * this.bus.nBlockSize - 1;
 
@@ -561,7 +561,7 @@ export default class Panel extends Component {
 
                     addr |= 0;
                     if (addr > addrLimit) addr = addrLimit;
-                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "Panel.findAddress(%d,%d) found type %s, address %#010x\n", x, y, MemoryX86.TYPE.NAMES[region.type], addr);
+                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "Panel.findAddress(%d,%d) found type %s, address %#010x\n", x, y, Memoryx86.TYPE.NAMES[region.type], addr);
                     return addr;
                 }
             }
@@ -631,9 +631,9 @@ export default class Panel extends Component {
                     for (i = 0; i < this.busInfo.aRects.length; i++) {
                         let region = this.busInfo.aRegions[i];
                         rect = this.busInfo.aRects[i];
-                        rect.drawWith(this.contextLiveMem, MemoryX86.TYPE.COLORS[region.type]);
+                        rect.drawWith(this.contextLiveMem, Memoryx86.TYPE.COLORS[region.type]);
                         this.centerPen(rect);
-                        this.centerText(MemoryX86.TYPE.NAMES[region.type] + " (" + (((region.cBlocks * this.bus.nBlockSize) / 1024) | 0) + "Kb)");
+                        this.centerText(Memoryx86.TYPE.NAMES[region.type] + " (" + (((region.cBlocks * this.bus.nBlockSize) / 1024) | 0) + "Kb)");
                     }
                 }
                 if (DEBUG) this.printf(MESSAGE.LOG, "end scanMemory(): %d total bytes, %d total blocks, %d total regions\n", this.busInfo.cbTotal, this.busInfo.cBlocks, this.busInfo.cRegions);
@@ -689,8 +689,8 @@ export default class Panel extends Component {
 
         for (; iBlock < this.busInfo.cBlocks; iBlock++) {
             let blockInfo = this.busInfo.aBlocks[iBlock];
-            let typeBlock = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.type), blockInfo);
-            let nBlockCurr = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), blockInfo);
+            let typeBlock = UsrLib.getBitField(/** @type {BitField} */ (Busx86.BlockInfo.type), blockInfo);
+            let nBlockCurr = UsrLib.getBitField(/** @type {BitField} */ (Busx86.BlockInfo.num), blockInfo);
             if (typeBlock != typeRegion || nBlockCurr != nBlockPrev + 1) {
                 let cBlocks = iBlock - iBlockRegion;
                 if (cBlocks) {
@@ -722,9 +722,9 @@ export default class Panel extends Component {
      */
     addRegion(addr, iBlock, cBlocks, type)
     {
-        if (DEBUG) this.printf(MESSAGE.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, MemoryX86.TYPE.NAMES[type], cBlocks);
+        if (DEBUG) this.printf(MESSAGE.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, Memoryx86.TYPE.NAMES[type], cBlocks);
         this.busInfo.aRegions[this.busInfo.cRegions++] = {iBlock: iBlock, cBlocks: cBlocks, type: type};
-        return UsrLib.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, cBlocks, 0, type);
+        return UsrLib.initBitFields(/** @type {BitFields} */ (Busx86.BlockInfo), iBlock, cBlocks, 0, type);
     }
 
     /**

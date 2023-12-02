@@ -9,8 +9,8 @@
 
 import ChipSet from "./chipset.js";
 import { Controller } from "./bus.js";
-import KbdX86 from "./keyboard.js";
-import MemoryX86 from "./memory.js";
+import Keyboardx86 from "./keyboard.js";
+import Memoryx86 from "./memory.js";
 import MESSAGE from "./message.js";
 import Mouse from "./mouse.js";
 import CharSet from "./charset.js";
@@ -157,7 +157,7 @@ import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
  *
  * VGA support further piggy-backs on the existing EGA support, by adding the extra registers, I/O port
  * handlers, etc, that the VGA requires; any differences in registers common to both EGA and VGA are handled on
- * a case-by-case basis, usually according to the VideoX86.CARD value stored in nCard.
+ * a case-by-case basis, usually according to the Videox86.CARD value stored in nCard.
  *
  * More will be said here about PCjs VGA support later.  But first, a word from IBM: "Video Graphics Array [VGA]
  * Programming Considerations":
@@ -333,7 +333,7 @@ import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 
 /**
  * @class Card
- * @property {DebuggerX86} dbg
+ * @property {Debuggerx86} dbg
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export class Card extends Controller {
@@ -348,8 +348,8 @@ export class Card extends Controller {
      * of Component, such as Component.assert(), or methods of the parent (video) object.
      *
      * @this {Card}
-     * @param {VideoX86} [video]
-     * @param {number} [nCard] (see VideoX86.CARD.*)
+     * @param {Videox86} [video]
+     * @param {number} [nCard] (see Videox86.CARD.*)
      * @param {Array|null} [data]
      * @param {number} [cbMemory] is specified if the card must allocate its own memory buffer
      */
@@ -365,11 +365,11 @@ export class Card extends Controller {
 
             this.video = video;
 
-            let specs = VideoX86.cardSpecs[nCard];
+            let specs = Videox86.cardSpecs[nCard];
             let nMonitorType = video.nMonitorType || specs[5];
 
             if (!data || data.length < 6) {
-                data = [false, 0, null, null, 0, new Array(nCard < VideoX86.CARD.EGA? Card.CRTC.TOTAL_REGS : Card.CRTC.EGA.TOTAL_REGS)];
+                data = [false, 0, null, null, 0, new Array(nCard < Videox86.CARD.EGA? Card.CRTC.TOTAL_REGS : Card.CRTC.EGA.TOTAL_REGS)];
             }
 
             /*
@@ -419,7 +419,7 @@ export class Card extends Controller {
             this.rowStart   = 0;            // initialize to zero and let the first latchStartAddress() call update it
             this.addrMaskHigh = 0x3F;       // card-specific mask for the high (bits 8 and up) of CRTC address registers
 
-            if (nCard < VideoX86.CARD.EGA) {
+            if (nCard < Videox86.CARD.EGA) {
                 this.initMemory(data[6], data[8]);
                 this.setMemoryAccess(Card.ACCESS.READ.PAIRS | Card.ACCESS.WRITE.PAIRS);
             } else {
@@ -429,7 +429,7 @@ export class Card extends Controller {
                 this.initEGA(data[6], nMonitorType);
             }
 
-            let monitorSpecs = VideoX86.monitorSpecs[nMonitorType] || VideoX86.monitorSpecs[ChipSet.MONITOR.MONO];
+            let monitorSpecs = Videox86.monitorSpecs[nMonitorType] || Videox86.monitorSpecs[ChipSet.MONITOR.MONO];
 
             /*
              * nCyclesVertPeriod determines how frequently startVerticalRetrace() is called.  That function
@@ -592,7 +592,7 @@ export class Card extends Controller {
         this.nColorDontCare = data[24];
         this.offStart       = data[25];     // this is the last CRTC start address latched from CRTC.STARTHI,CRTC.STARTLO
 
-        if (this.nCard == VideoX86.CARD.VGA) {
+        if (this.nCard == Videox86.CARD.VGA) {
             this.regVGAEnable   = data[26];
             this.regDACMask     = data[27];
             this.regDACAddr     = data[28];
@@ -647,7 +647,7 @@ export class Card extends Controller {
         if (!length) {
             let adwOld = this.adwMemory;
             let adwNew = new Array(this.adwMemory.length * 2);
-            this.video.assert(this.nCard == VideoX86.CARD.MDA && adwOld.length == 1024 || this.nCard == VideoX86.CARD.CGA && adwOld.length == 4096);
+            this.video.assert(this.nCard == Videox86.CARD.MDA && adwOld.length == 1024 || this.nCard == Videox86.CARD.CGA && adwOld.length == 4096);
             for (let i = 0, j = 0; i < this.adwMemory.length; i++, j += 2) {
                 adwNew[j] = adwOld[i] & 0xffff;
                 adwNew[j+1] = (adwOld[i] >> 16) & 0xffff;
@@ -674,7 +674,7 @@ export class Card extends Controller {
             data[3] = this.regStatus;
             data[4] = this.regCRTIndx | (this.regCRTPrev << 8);
             data[5] = this.regCRTData;
-            data[6] = (this.nCard < VideoX86.CARD.EGA? State.compressEvenOdd(this.adwMemory) : this.saveEGA());
+            data[6] = (this.nCard < Videox86.CARD.EGA? State.compressEvenOdd(this.adwMemory) : this.saveEGA());
             data[7] = this.nCyclesVertRetrace;
             data[8] = this.adwMemory.length;
         }
@@ -717,7 +717,7 @@ export class Card extends Controller {
         data[24] = this.nColorDontCare;
         data[25] = this.offStart;
 
-        if (this.nCard == VideoX86.CARD.VGA) {
+        if (this.nCard == Videox86.CARD.VGA) {
             data[26] = this.regVGAEnable;
             data[27] = this.regDACMask;
             data[28] = this.regDACAddr;
@@ -775,7 +775,7 @@ export class Card extends Controller {
              */
             this.dumpRegs("CRTC", this.regCRTIndx, this.regCRTData, this.asCRTCRegs);
 
-            if (this.nCard >= VideoX86.CARD.EGA) {
+            if (this.nCard >= Videox86.CARD.EGA) {
                 this.dumpRegs(" GRC", this.regGRCIndx, this.regGRCData, this.asGRCRegs);
                 this.dumpRegs(" SEQ", this.regSEQIndx, this.regSEQData, this.asSEQRegs);
                 this.dumpRegs(" ATC", this.regATCIndx, this.regATCData, this.asATCRegs);
@@ -787,7 +787,7 @@ export class Card extends Controller {
                 /*
                  * There are few more EGA regs we could dump, like GRCPos1, GRCPos2, but does anyone care?
                  */
-                if (this.nCard == VideoX86.CARD.VGA) {
+                if (this.nCard == Videox86.CARD.VGA) {
                     this.dumpRegs(" DAC", this.regDACAddr, this.regDACData);
                 }
             }
@@ -798,15 +798,15 @@ export class Card extends Controller {
              */
             this.dumpRegs(" STATUS1", this.regStatus);
 
-            if (this.nCard == VideoX86.CARD.MDA || this.nCard == VideoX86.CARD.CGA) {
+            if (this.nCard == Videox86.CARD.MDA || this.nCard == Videox86.CARD.CGA) {
                 this.dumpRegs(" MODEREG", this.regMode);
             }
 
-            if (this.nCard == VideoX86.CARD.CGA) {
+            if (this.nCard == Videox86.CARD.CGA) {
                 this.dumpRegs("   COLOR", this.regColor);
             }
 
-            if (this.nCard >= VideoX86.CARD.EGA) {
+            if (this.nCard >= Videox86.CARD.EGA) {
                 this.dbg.printf(" LATCHES: %0X\n", this.latches);
                 this.dbg.printf("  ACCESS: %04X\n",  this.nAccess);
                 this.dbg.printf("  PLANE2: %02X\n", this.bitsDirtyBanks);
@@ -1038,31 +1038,31 @@ export class Card extends Controller {
     getCRTCReg(iReg)
     {
         let reg = this.regCRTData[iReg];
-        if (reg != null && this.nCard >= VideoX86.CARD.EGA) {
+        if (reg != null && this.nCard >= Videox86.CARD.EGA) {
             let bOverflowBit8 = 0, bOverflowBit9 = 0, bMaxScanBit9 = 0;
             switch(iReg) {
             case Card.CRTC.EGA.VTOTAL:              // 0x06
                 bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.VTOTAL_BIT8;         // 0x01
-                if (this.nCard == VideoX86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VTOTAL_BIT9;
+                if (this.nCard == Videox86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VTOTAL_BIT9;
                 break;
             case Card.CRTC.EGA.CURSCAN:             // 0x0A
-                if (this.nCard == VideoX86.CARD.EGA) bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.CURSCAN_BIT8;
+                if (this.nCard == Videox86.CARD.EGA) bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.CURSCAN_BIT8;
                 break;
             case Card.CRTC.EGA.VRSTART:             // 0x10
                 bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.VRSTART_BIT8;        // 0x04
-                if (this.nCard == VideoX86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VRSTART_BIT9;
+                if (this.nCard == Videox86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VRSTART_BIT9;
                 break;
             case Card.CRTC.EGA.VDEND:               // 0x12
                 bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.VDEND_BIT8;          // 0x02
-                if (this.nCard == VideoX86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VDEND_BIT9;
+                if (this.nCard == Videox86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VDEND_BIT9;
                 break;
             case Card.CRTC.EGA.VBSTART:             // 0x15
                 bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.VBSTART_BIT8;        // 0x08
-                if (this.nCard == VideoX86.CARD.VGA) bMaxScanBit9 = Card.CRTC.EGA.MAXSCAN.VBSTART_BIT9;
+                if (this.nCard == Videox86.CARD.VGA) bMaxScanBit9 = Card.CRTC.EGA.MAXSCAN.VBSTART_BIT9;
                 break;
             case Card.CRTC.EGA.LINECOMP:            // 0x18
                 bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.LINECOMP_BIT8;       // 0x10
-                if (this.nCard == VideoX86.CARD.VGA) bMaxScanBit9 = Card.CRTC.EGA.MAXSCAN.LINECOMP_BIT9;
+                if (this.nCard == Videox86.CARD.VGA) bMaxScanBit9 = Card.CRTC.EGA.MAXSCAN.LINECOMP_BIT9;
                 break;
             }
             if (bOverflowBit8) {
@@ -1751,7 +1751,7 @@ Card.ACCESS.V1[0xE000] = Card.ACCESS.WRITE.MODE2 | Card.ACCESS.WRITE.XOR;
  * character/attribute text modes, while internally, it looks similar to an EvenOdd arrangement, except that odd
  * dwords not skipped (ie, wasted).  This similarity makes life simpler for updateScreenText().
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} [addr]
  * @returns {number}
@@ -1765,7 +1765,7 @@ Card.ACCESS.readBytePairs = function readByte(off, addr)
 /**
  * readByteMode0(off, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} [addr]
  * @returns {number}
@@ -1782,7 +1782,7 @@ Card.ACCESS.readByteMode0 = function readByteMode0(off, addr)
  *
  * See writeByteMode0Chain4 for a description of how writes are distributed across planes.
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} [addr]
  * @returns {number}
@@ -1797,7 +1797,7 @@ Card.ACCESS.readByteMode0Chain4 = function readByteMode0Chain4(off, addr)
 /**
  * readByteMode0EvenOdd(off, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} [addr]
  * @returns {number}
@@ -1829,7 +1829,7 @@ Card.ACCESS.readByteMode0EvenOdd = function readByteMode0EvenOdd(off, addr)
  * Also note that, while not well-documented, this mode also affects the internal latches, so we make sure those
  * are updated as well.
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} [addr]
  * @returns {number}
@@ -1861,7 +1861,7 @@ Card.ACCESS.readByteMode1 = function readByteMode1(off, addr)
  * character/attribute text modes, while internally, it looks similar to an EvenOdd arrangement, except that odd
  * dwords not skipped (ie, wasted).  This similarity makes life simpler for updateScreenText().
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -1874,7 +1874,7 @@ Card.ACCESS.writeBytePairs = function writeByte(off, b, addr)
     let dw = (this.adw[idw] & ~(0xff << nShift)) | (b << nShift);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 };
 
@@ -1894,7 +1894,7 @@ Card.ACCESS.writeBytePairs = function writeByte(off, b, addr)
  * but by maintaining nSetMapBits equal to (nSetMapData & ~nSetMapMask), we are able to make the
  * writes slightly more efficient.
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -1910,7 +1910,7 @@ Card.ACCESS.writeByteMode0 = function writeByteMode0(off, b, addr)
     let delta = (this.adw[idw] ^ dw);
     if (delta) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
         // card.bitsDirtyPlanes |= delta;       // we no longer track dirty planes, just dirty font banks
         if (delta & 0x00ff0000) {               // if any plane 2 bits were modified, mark the appropriate font bank dirty
             let bitDirtyBank = (1 << ((idw >> 13) & 7));
@@ -1953,7 +1953,7 @@ Card.ACCESS.writeByteMode0 = function writeByteMode0(off, b, addr)
  * addresses in exactly the same manner; we'd only get into trouble with software that "unchained" or otherwise
  * reconfigured the planes and then made assumptions about existing data in the video buffer.
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -1970,7 +1970,7 @@ Card.ACCESS.writeByteMode0Chain4 = function writeByteMode0Chain4(off, b, addr)
     let dw = ((b << shift) & card.nSeqMapMask) | (this.adw[idw] & ~((0xff << shift) & card.nSeqMapMask));
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Chain4(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -1978,7 +1978,7 @@ Card.ACCESS.writeByteMode0Chain4 = function writeByteMode0Chain4(off, b, addr)
 /**
  * writeByteMode0EvenOdd(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -1997,7 +1997,7 @@ Card.ACCESS.writeByteMode0EvenOdd = function writeByteMode0EvenOdd(off, b, addr)
     dw = (dw & maskMaps) | (this.adw[idw] & ~maskMaps);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0EvenOdd(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -2005,7 +2005,7 @@ Card.ACCESS.writeByteMode0EvenOdd = function writeByteMode0EvenOdd(off, b, addr)
 /**
  * writeByteMode0Rot(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -2021,7 +2021,7 @@ Card.ACCESS.writeByteMode0Rot = function writeByteMode0Rot(off, b, addr)
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Rot(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -2029,7 +2029,7 @@ Card.ACCESS.writeByteMode0Rot = function writeByteMode0Rot(off, b, addr)
 /**
  * writeByteMode0And(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -2046,7 +2046,7 @@ Card.ACCESS.writeByteMode0And = function writeByteMode0And(off, b, addr)
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0And(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -2054,7 +2054,7 @@ Card.ACCESS.writeByteMode0And = function writeByteMode0And(off, b, addr)
 /**
  * writeByteMode0Or(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -2071,7 +2071,7 @@ Card.ACCESS.writeByteMode0Or = function writeByteMode0Or(off, b, addr)
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -2079,7 +2079,7 @@ Card.ACCESS.writeByteMode0Or = function writeByteMode0Or(off, b, addr)
 /**
  * writeByteMode0Xor(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -2096,7 +2096,7 @@ Card.ACCESS.writeByteMode0Xor = function writeByteMode0Xor(off, b, addr)
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -2104,7 +2104,7 @@ Card.ACCESS.writeByteMode0Xor = function writeByteMode0Xor(off, b, addr)
 /**
  * writeByteMode1(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (ignored; the EGA latches provide the source data)
  * @param {number} [addr]
@@ -2116,7 +2116,7 @@ Card.ACCESS.writeByteMode1 = function writeByteMode1(off, b, addr)
     let dw = (this.adw[idw] & ~card.nSeqMapMask) | (card.latches & card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1(%#010X): %#010X\n", addr, dw);
 };
@@ -2124,7 +2124,7 @@ Card.ACCESS.writeByteMode1 = function writeByteMode1(off, b, addr)
 /**
  * writeByteMode1EvenOdd(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (ignored; the EGA latches provide the source data)
  * @param {number} [addr]
@@ -2144,7 +2144,7 @@ Card.ACCESS.writeByteMode1EvenOdd = function writeByteMode1EvenOdd(off, b, addr)
     let dw = (this.adw[idw] & ~maskMaps) | (card.latches & maskMaps);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1EvenOdd(%#010X): %#010X\n", addr, dw);
 };
@@ -2152,7 +2152,7 @@ Card.ACCESS.writeByteMode1EvenOdd = function writeByteMode1EvenOdd(off, b, addr)
 /**
  * writeByteMode2(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -2161,12 +2161,12 @@ Card.ACCESS.writeByteMode2 = function writeByteMode2(off, b, addr)
 {
     let card = this.controller;
     let idw = off + this.offset;
-    let dw = VideoX86.aEGAByteToDW[b & 0xf];
+    let dw = Videox86.aEGAByteToDW[b & 0xf];
     dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -2174,7 +2174,7 @@ Card.ACCESS.writeByteMode2 = function writeByteMode2(off, b, addr)
 /**
  * writeByteMode2And(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -2183,13 +2183,13 @@ Card.ACCESS.writeByteMode2And = function writeByteMode2And(off, b, addr)
 {
     let card = this.controller;
     let idw = off + this.offset;
-    let dw = VideoX86.aEGAByteToDW[b & 0xf];
+    let dw = Videox86.aEGAByteToDW[b & 0xf];
     dw &= card.latches;
     dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2And(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -2197,7 +2197,7 @@ Card.ACCESS.writeByteMode2And = function writeByteMode2And(off, b, addr)
 /**
  * writeByteMode2Or(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -2206,13 +2206,13 @@ Card.ACCESS.writeByteMode2Or = function writeByteMode2Or(off, b, addr)
 {
     let card = this.controller;
     let idw = off + this.offset;
-    let dw = VideoX86.aEGAByteToDW[b & 0xf];
+    let dw = Videox86.aEGAByteToDW[b & 0xf];
     dw |= card.latches;
     dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -2220,7 +2220,7 @@ Card.ACCESS.writeByteMode2Or = function writeByteMode2Or(off, b, addr)
 /**
  * writeByteMode2Xor(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -2229,13 +2229,13 @@ Card.ACCESS.writeByteMode2Xor = function writeByteMode2Xor(off, b, addr)
 {
     let card = this.controller;
     let idw = off + this.offset;
-    let dw = VideoX86.aEGAByteToDW[b & 0xf];
+    let dw = Videox86.aEGAByteToDW[b & 0xf];
     dw ^= card.latches;
     dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -2249,7 +2249,7 @@ Card.ACCESS.writeByteMode2Xor = function writeByteMode2Xor(off, b, addr)
  * Unlike MODE0, we currently have no non-rotate function for MODE3.  If performance dictates, we can add one;
  * ditto for other features like the Sequencer's MAPMASK register (nSeqMapMask).
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -2265,7 +2265,7 @@ Card.ACCESS.writeByteMode3 = function writeByteMode3(off, b, addr)
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode3(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -2298,18 +2298,18 @@ Card.ACCESS.afn[Card.ACCESS.WRITE.MODE3] = Card.ACCESS.writeByteMode3;
 Card.ACCESS.afn[Card.ACCESS.WRITE.PAIRS] = Card.ACCESS.writeBytePairs;
 
 /**
- * @class VideoX86
+ * @class Videox86
  * @property {CPUx86} cpu
- * @property {DebuggerX86} dbg
+ * @property {Debuggerx86} dbg
  * @property {number} cUpdates
  * @property {number} msUpdatePrev
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-export default class VideoX86 extends Component {
+export default class Videox86 extends Component {
     /**
-     * VideoX86(parmsVideo, canvas, context, textarea, container, aDiagElements)
+     * Videox86(parmsVideo, canvas, context, textarea, container, aDiagElements)
      *
-     * The VideoX86 component can be configured with the following (parmsVideo) properties:
+     * The Videox86 component can be configured with the following (parmsVideo) properties:
      *
      *      model: model (eg, "mda" for Monochrome Display Adapter)
      *      mode: initial video mode (default is null, which selects a mode based on model)
@@ -2329,7 +2329,7 @@ export default class VideoX86 extends Component {
      * An EGA/VGA may specify the following additional properties:
      *
      *      switches: string representing EGA switches (see "SW1-SW4" documentation below)
-     *      memory: the size of the EGA's on-board memory (overrides EGA's VideoX86.cardSpecs)
+     *      memory: the size of the EGA's on-board memory (overrides EGA's Videox86.cardSpecs)
      *
      * This calls the Bus to allocate a video buffer at the appropriate memory location whenever
      * a reset() or setMode() occurs; setMode() is called whenever a mode change is detected at
@@ -2353,7 +2353,7 @@ export default class VideoX86 extends Component {
      * that's no problem, as we redraw only the one cell containing the cursor (assuming the buffer
      * is otherwise clean).
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} parmsVideo
      * @param {HTMLCanvasElement} [canvas]
      * @param {CanvasRenderingContext2D} [context]
@@ -2375,12 +2375,12 @@ export default class VideoX86 extends Component {
          * switches (since those motherboard switches tell us only the type of monitor, not the type of card).
          */
         this.model = parmsVideo['model'];
-        let aModelDefaults = VideoX86.MODEL[this.model] || VideoX86.MODEL['mda'];
+        let aModelDefaults = Videox86.MODEL[this.model] || Videox86.MODEL['mda'];
 
         this.nCard = aModelDefaults[0];
         let irq = parmsVideo['irq'];
         if (irq == undefined) irq = ChipSet.IRQ.VID;
-        this.nIRQ = (this.nCard >= VideoX86.CARD.EGA && irq >= 0 && irq <= 15)? irq : undefined;
+        this.nIRQ = (this.nCard >= Videox86.CARD.EGA && irq >= 0 && irq <= 15)? irq : undefined;
 
         this.nCardFont = 0;
         this.nActiveFont = this.nAlternateFont = 0;
@@ -2394,7 +2394,7 @@ export default class VideoX86 extends Component {
          * powerUp() uses the default mode ONLY if ChipSet doesn't give us a default.
          */
         this.nModeDefault = parmsVideo['mode'];
-        if (this.nModeDefault == null || VideoX86.aModeParms[this.nModeDefault] == null) {
+        if (this.nModeDefault == null || Videox86.aModeParms[this.nModeDefault] == null) {
             this.nModeDefault = aModelDefaults[1];
         }
 
@@ -2404,8 +2404,8 @@ export default class VideoX86 extends Component {
         this.nColsDefault = parmsVideo['charCols'];
         this.nRowsDefault = parmsVideo['charRows'];
         if (this.nColsDefault === undefined || this.nRowsDefault === undefined) {
-            this.nColsDefault = VideoX86.aModeParms[this.nModeDefault][0];
-            this.nRowsDefault = VideoX86.aModeParms[this.nModeDefault][1];
+            this.nColsDefault = Videox86.aModeParms[this.nModeDefault][0];
+            this.nRowsDefault = Videox86.aModeParms[this.nModeDefault][1];
         }
 
         /*
@@ -2478,7 +2478,7 @@ export default class VideoX86 extends Component {
          * initBus() will determine touch-screen support; for now, just record values and set defaults.
          */
         this.sTouchScreen = parmsVideo['touchScreen'];
-        this.nTouchConfig = VideoX86.TOUCH.NONE;
+        this.nTouchConfig = Videox86.TOUCH.NONE;
 
         /*
          * If a Mouse exists, we'll be notified when it requests our canvas, and we make a note of it
@@ -2520,7 +2520,7 @@ export default class VideoX86 extends Component {
          * EGA-compatible mode), only the first 16 entries get used (derived from the ATC); only when a VGA
          * is operating in an 8bpp mode are 256 entries used (derived from the DAC rather than the ATC).
          */
-        this.aRGB = new Array(this.nCard == VideoX86.CARD.VGA? 256 : 16);
+        this.aRGB = new Array(this.nCard == Videox86.CARD.VGA? 256 : 16);
         this.fRGBValid = false;     // whenever this is false, it signals getCardColors() to rebuild aRGB
 
         this.aCellCache = [];
@@ -2625,11 +2625,11 @@ export default class VideoX86 extends Component {
      * This is a notification issued by the Computer component, after all the other components (notably the CPU)
      * have had a chance to initialize.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -2662,22 +2662,22 @@ export default class VideoX86 extends Component {
         /*
          * nCard will be undefined if no model was explicitly set (whereas this.nCard is ALWAYS defined).
          */
-        let aModel = VideoX86.MODEL[this.model], nCard = aModel && aModel[0];
+        let aModel = Videox86.MODEL[this.model], nCard = aModel && aModel[0];
 
         /*
          * The only time we do NOT want to trap MDA ports is when the model has been explicitly set to CGA.
          */
-        if (nCard !== VideoX86.CARD.CGA) {
-            bus.addPortInputTable(this, VideoX86.aMDAPortInput);
-            bus.addPortOutputTable(this, VideoX86.aMDAPortOutput);
+        if (nCard !== Videox86.CARD.CGA) {
+            bus.addPortInputTable(this, Videox86.aMDAPortInput);
+            bus.addPortOutputTable(this, Videox86.aMDAPortOutput);
         }
 
         /*
          * Similarly, the only time we do NOT want to trap CGA ports is when the model is explicitly set to MDA.
          */
-        if (nCard !== VideoX86.CARD.MDA) {
-            bus.addPortInputTable(this, VideoX86.aCGAPortInput);
-            bus.addPortOutputTable(this, VideoX86.aCGAPortOutput);
+        if (nCard !== Videox86.CARD.MDA) {
+            bus.addPortInputTable(this, Videox86.aCGAPortInput);
+            bus.addPortOutputTable(this, Videox86.aCGAPortOutput);
         }
 
         /*
@@ -2690,14 +2690,14 @@ export default class VideoX86 extends Component {
          * components should be initialized in the order they appear in the machine configuration file.  Any attempt
          * by another component to trap the same ports should be ignored.
          */
-        if (this.nCard >= VideoX86.CARD.EGA) {
-            bus.addPortInputTable(this, VideoX86.aEGAPortInput);
-            bus.addPortOutputTable(this, VideoX86.aEGAPortOutput);
+        if (this.nCard >= Videox86.CARD.EGA) {
+            bus.addPortInputTable(this, Videox86.aEGAPortInput);
+            bus.addPortOutputTable(this, Videox86.aEGAPortOutput);
         }
 
-        if (this.nCard == VideoX86.CARD.VGA) {
-            bus.addPortInputTable(this, VideoX86.aVGAPortInput);
-            bus.addPortOutputTable(this, VideoX86.aVGAPortOutput);
+        if (this.nCard == Videox86.CARD.VGA) {
+            bus.addPortInputTable(this, Videox86.aVGAPortInput);
+            bus.addPortOutputTable(this, Videox86.aVGAPortOutput);
         }
 
         if (DEBUGGER && dbg) {
@@ -2725,7 +2725,7 @@ export default class VideoX86 extends Component {
         this.bEGASwitches = 0x09;   // our default "switches" setting (see aEGAMonitorSwitches)
         this.chipset = cmp.getMachineComponent("ChipSet");
         if (this.chipset && this.sSwitches) {
-            if (this.nCard == VideoX86.CARD.EGA) {
+            if (this.nCard == Videox86.CARD.EGA) {
                 this.bEGASwitches = this.chipset.parseDIPSwitches(this.sSwitches, this.bEGASwitches);
             }
         }
@@ -2737,10 +2737,10 @@ export default class VideoX86 extends Component {
          */
         if (this.sTouchScreen == "mouse") {
             this.mouse = cmp.getMachineComponent("Mouse", false);
-            if (this.mouse) this.captureTouch(VideoX86.TOUCH.MOUSE);
+            if (this.mouse) this.captureTouch(Videox86.TOUCH.MOUSE);
         }
         else if (this.sTouchScreen == "keygrid") {
-            if (this.kbd) this.captureTouch(VideoX86.TOUCH.KEYGRID);
+            if (this.kbd) this.captureTouch(Videox86.TOUCH.KEYGRID);
         }
 
         /*
@@ -2749,7 +2749,7 @@ export default class VideoX86 extends Component {
          * to a user action on iOS devices.
          */
         if (!this.nTouchConfig) {
-            this.captureTouch(VideoX86.TOUCH.DEFAULT);
+            this.captureTouch(Videox86.TOUCH.DEFAULT);
         }
 
         if (this.sFileURL) {
@@ -2779,7 +2779,7 @@ export default class VideoX86 extends Component {
     /**
      * setBinding(sHTMLType, sBinding, control, sValue)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea", "canvas")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "refresh")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
@@ -2846,7 +2846,7 @@ export default class VideoX86 extends Component {
     /**
      * setFocus(fScroll)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fScroll]
      */
     setFocus(fScroll)
@@ -2865,7 +2865,7 @@ export default class VideoX86 extends Component {
      *
      * This is an interface used by the Mouse component, so that it can capture mouse events from the screen.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Mouse} [mouse]
      * @returns {Object|undefined}
      */
@@ -2880,7 +2880,7 @@ export default class VideoX86 extends Component {
      *
      * This is an interface used by the Computer component, so that it can display resource status messages.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {HTMLTextAreaElement|undefined}
      */
     getTextArea()
@@ -2899,7 +2899,7 @@ export default class VideoX86 extends Component {
      * last screen refresh.  The only caveat is that the cell cache may be over-buffering by one entire column and row,
      * but that's easily accounted for (eg, every row must step through nColsBuffer -- not merely nCols -- of cell data).
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {string}
      */
     getTextData()
@@ -2924,7 +2924,7 @@ export default class VideoX86 extends Component {
     /**
      * goFullScreen()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {boolean} true if request successful, false if not (eg, failed OR not supported)
      */
     goFullScreen()
@@ -2996,7 +2996,7 @@ export default class VideoX86 extends Component {
     /**
      * notifyFullScreen(fFullScreen)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fFullScreen] (undefined if there was a full-screen error)
      */
     notifyFullScreen(fFullScreen)
@@ -3015,7 +3015,7 @@ export default class VideoX86 extends Component {
     /**
      * lockPointer()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} fLock
      * @returns {boolean} true if request successful, false if not (eg, failed OR not supported)
      */
@@ -3044,7 +3044,7 @@ export default class VideoX86 extends Component {
     /**
      * notifyPointerActive(fActive)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} fActive
      * @returns {boolean} true if autolock enabled AND pointer lock supported, false if not
      */
@@ -3059,7 +3059,7 @@ export default class VideoX86 extends Component {
     /**
      * notifyPointerLocked(fLocked)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} fLocked
      */
     notifyPointerLocked(fLocked)
@@ -3075,8 +3075,8 @@ export default class VideoX86 extends Component {
     /**
      * captureTouch(nTouchConfig)
      *
-     * @this {VideoX86}
-     * @param {number} nTouchConfig (must be one of the supported VideoX86.TOUCH values)
+     * @this {Videox86}
+     * @param {number} nTouchConfig (must be one of the supported Videox86.TOUCH values)
      */
     captureTouch(nTouchConfig)
     {
@@ -3088,7 +3088,7 @@ export default class VideoX86 extends Component {
                 this.nTouchConfig = nTouchConfig;
 
                 let addPassive = false;
-                if (nTouchConfig != VideoX86.TOUCH.MOUSE) {
+                if (nTouchConfig != Videox86.TOUCH.MOUSE) {
                     /*
                      * If we're not capturing touch events for mouse event simulation, then we won't be calling
                      * preventDefault(), which means we should tell Chrome and any other browser that supports
@@ -3117,7 +3117,7 @@ export default class VideoX86 extends Component {
                     addPassive? {passive: true} : false
                 );
 
-                if (nTouchConfig == VideoX86.TOUCH.DEFAULT) {
+                if (nTouchConfig == Videox86.TOUCH.DEFAULT) {
                     return;
                 }
 
@@ -3193,7 +3193,7 @@ export default class VideoX86 extends Component {
     /**
      * onFocusChange(fFocus)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} fFocus is true if gaining focus, false if losing it
      */
     onFocusChange(fFocus)
@@ -3218,21 +3218,21 @@ export default class VideoX86 extends Component {
     /**
      * onTouchStart(event)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Event} event object from a 'touch' event
      */
     onTouchStart(event)
     {
         if (DEBUG) this.printf("onTouchStart()\n");
         this.chipset.startAudio(event);
-        if (this.nTouchConfig == VideoX86.TOUCH.DEFAULT) return;
+        if (this.nTouchConfig == Videox86.TOUCH.DEFAULT) return;
         this.processTouchEvent(event, true);
     }
 
     /**
      * onTouchMove(event)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Event} event object from a 'touch' event
      */
     onTouchMove(event)
@@ -3244,7 +3244,7 @@ export default class VideoX86 extends Component {
     /**
      * onTouchEnd(event)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Event} event object from a 'touch' event
      */
     onTouchEnd(event)
@@ -3260,12 +3260,12 @@ export default class VideoX86 extends Component {
      *
      * What we do with those events here depends on the value of nTouchConfig.  Originally, the only supported
      * configuration was the experimental conversion of touch events into arrow keys, based on an invisible grid
-     * that divided the screen into thirds; that configuration is now identified as VideoX86.TOUCH.KEYGRID.
+     * that divided the screen into thirds; that configuration is now identified as Videox86.TOUCH.KEYGRID.
      *
-     * The new preferred configuration is VideoX86.TOUCH.MOUSE, which does little more than allow you to "push" the
-     * simulated mouse around.  If VideoX86.TOUCH.MOUSE is enabled, it's already been confirmed the machine has a mouse.
+     * The new preferred configuration is Videox86.TOUCH.MOUSE, which does little more than allow you to "push" the
+     * simulated mouse around.  If Videox86.TOUCH.MOUSE is enabled, it's already been confirmed the machine has a mouse.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Event|MouseEvent|TouchEvent} event object from a 'touch' event
      * @param {boolean} [fStart] (true if 'touchstart', false if 'touchend', undefined if 'touchmove')
      */
@@ -3320,7 +3320,7 @@ export default class VideoX86 extends Component {
         xTouch = ((xTouch - xTouchOffset) * xScale);
         yTouch = ((yTouch - yTouchOffset) * yScale);
 
-        if (this.nTouchConfig == VideoX86.TOUCH.KEYGRID) {
+        if (this.nTouchConfig == Videox86.TOUCH.KEYGRID) {
 
             /*
              * We don't want to simulate a key on EVERY touch event; preferably, only touchstart or touchend.  And
@@ -3338,7 +3338,7 @@ export default class VideoX86 extends Component {
                  * At this point, xThird and yThird should both be one of 0, 1 or 2, indicating which horizontal and
                  * vertical third of the virtual screen the touch event occurred.
                  */
-                this.kbd.addActiveKey(VideoX86.KEYGRID[yThird][xThird], true);
+                this.kbd.addActiveKey(Videox86.KEYGRID[yThird][xThird], true);
             }
         } else {
 
@@ -3411,7 +3411,7 @@ export default class VideoX86 extends Component {
     /**
      * startLongTouch()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     startLongTouch()
     {
@@ -3422,7 +3422,7 @@ export default class VideoX86 extends Component {
     /**
      * endLongTouch()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {boolean} true if long touch was active, false if not
      */
     endLongTouch()
@@ -3438,7 +3438,7 @@ export default class VideoX86 extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @returns {boolean} true if successful, false if failure
@@ -3462,7 +3462,7 @@ export default class VideoX86 extends Component {
                  * until at least msUpdateInterval has passed.  msUpdateInterval is initialized to msUpdateNormal, but
                  * can be increased if the updates are taking too long (eg, too many on-screen changes).
                  */
-                this.msUpdateNormal = (1000 / VideoX86.UPDATES_PER_SECOND)|0;
+                this.msUpdateNormal = (1000 / Videox86.UPDATES_PER_SECOND)|0;
                 this.msUpdateInterval = this.msUpdateNormal;
                 this.msUpdatePrev = this.cmsUpdate = 0;
 
@@ -3483,7 +3483,7 @@ export default class VideoX86 extends Component {
                      * machine resets.  TODO: Figure out why the VGA diagnostic takes more time on real hardware.
                      */
                     card.nCountVertRetrace++;
-                    if (card.nCard === VideoX86.CARD.VGA) {
+                    if (card.nCard === Videox86.CARD.VGA) {
                         if (card.regSEQData[Card.SEQ.CLKMODE.INDX] & Card.SEQ.CLKMODE.SCREEN_OFF) {
                             if (card.nCountVertRetrace & 1) {
                                 return;
@@ -3553,7 +3553,7 @@ export default class VideoX86 extends Component {
      * This is where we might add some method of blanking the display, without the disturbing the video
      * buffer contents, and blocking all further updates to the display.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -3566,7 +3566,7 @@ export default class VideoX86 extends Component {
     /**
      * reset()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     reset()
     {
@@ -3586,20 +3586,20 @@ export default class VideoX86 extends Component {
          * switch settings.  Conversely, when no model is specified, the nCard setting is considered provisional,
          * so the monitor switch settings, if any, are allowed to determine the card type.
          */
-        if (!VideoX86.MODEL[this.model]) {
-            this.nCard = (nMonitorType == ChipSet.MONITOR.MONO? VideoX86.CARD.MDA : VideoX86.CARD.CGA);
+        if (!Videox86.MODEL[this.model]) {
+            this.nCard = (nMonitorType == ChipSet.MONITOR.MONO? Videox86.CARD.MDA : Videox86.CARD.CGA);
         }
 
         let aMonitors;
-        this.nModeDefault = VideoX86.MODE.CGA_80X25;
+        this.nModeDefault = Videox86.MODE.CGA_80X25;
 
         switch (this.nCard) {
-        case VideoX86.CARD.VGA:
+        case Videox86.CARD.VGA:
             nMonitorType = ChipSet.MONITOR.VGACOLOR;
             break;
 
-        case VideoX86.CARD.EGA:
-            aMonitors = VideoX86.aEGAMonitorSwitches[this.bEGASwitches];
+        case Videox86.CARD.EGA:
+            aMonitors = Videox86.aEGAMonitorSwitches[this.bEGASwitches];
             /*
              * TODO: Figure out how to deal with aMonitors[2], the boolean which indicates
              * whether the EGA is driving the primary monitor (true) or the secondary monitor (false).
@@ -3612,12 +3612,12 @@ export default class VideoX86 extends Component {
             if (nMonitorType != ChipSet.MONITOR.MONO) break;
             /* falls through */
 
-        case VideoX86.CARD.MDA:
+        case Videox86.CARD.MDA:
             nMonitorType = ChipSet.MONITOR.MONO;
-            this.nModeDefault = VideoX86.MODE.MDA_80X25;
+            this.nModeDefault = Videox86.MODE.MDA_80X25;
             break;
 
-        case VideoX86.CARD.CGA:
+        case Videox86.CARD.CGA:
             /* falls through */
 
         default:
@@ -3630,10 +3630,10 @@ export default class VideoX86 extends Component {
         }
 
         this.cardActive = null;
-        this.cardMono = this.cardMDA = new Card(this, VideoX86.CARD.MDA);
-        this.cardColor = this.cardCGA = new Card(this, VideoX86.CARD.CGA);
+        this.cardMono = this.cardMDA = new Card(this, Videox86.CARD.MDA);
+        this.cardColor = this.cardCGA = new Card(this, Videox86.CARD.CGA);
 
-        if (this.nCard < VideoX86.CARD.EGA) {
+        if (this.nCard < Videox86.CARD.EGA) {
             this.cardEGA = new Card();      // define a dummy (uninitialized) EGA card for now
         }
         else {
@@ -3669,15 +3669,15 @@ export default class VideoX86 extends Component {
                      * For the EGA, we choose sequential characters; for random characters, copy the MDA/CGA code below.
                      */
                     bChar = (addrScreen >> 1) & 0xff;
-                    bAttr = (dataRandom >> 8) & ~VideoX86.ATTRS.BGND_BLINK;    // TODO: turn blink attributes off unless we can ensure blinking is initially disabled
+                    bAttr = (dataRandom >> 8) & ~Videox86.ATTRS.BGND_BLINK;    // TODO: turn blink attributes off unless we can ensure blinking is initially disabled
                     if ((bAttr >> 4) == (bAttr & 0xf)) {
                         bAttr ^= 0x0f;      // if background matches foreground, invert foreground to ensure character visibility
                     }
                 } else {
                     bChar = dataRandom & 0xff;
                     bAttr = ((dataRandom & 0x100)?
-                        (VideoX86.ATTRS.FGND_WHITE | VideoX86.ATTRS.BGND_BLACK) :
-                        (VideoX86.ATTRS.FGND_BLACK | VideoX86.ATTRS.BGND_WHITE)) | ((VideoX86.ATTRS.FGND_BRIGHT /* | VideoX86.ATTRS.BGND_BLINK */) & (dataRandom >> 8));
+                        (Videox86.ATTRS.FGND_WHITE | Videox86.ATTRS.BGND_BLACK) :
+                        (Videox86.ATTRS.FGND_BLACK | Videox86.ATTRS.BGND_WHITE)) | ((Videox86.ATTRS.FGND_BRIGHT /* | Videox86.ATTRS.BGND_BLINK */) & (dataRandom >> 8));
                 }
                 this.bus.setShortDirect(addrScreen, bChar | (bAttr << 8));
             }
@@ -3690,7 +3690,7 @@ export default class VideoX86 extends Component {
      *
      * Redirect cardMono or cardColor to cardEGA as appropriate.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     enableEGA()
     {
@@ -3708,7 +3708,7 @@ export default class VideoX86 extends Component {
      *
      * This implements save support for the Video component.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {Object}
      */
     save()
@@ -3726,7 +3726,7 @@ export default class VideoX86 extends Component {
      *
      * This implements restore support for the Video component.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} data
      * @returns {boolean} true if successful, false if failure
      */
@@ -3738,8 +3738,8 @@ export default class VideoX86 extends Component {
         this.nMode = a[2];
 
         this.cardActive = null;
-        this.cardMono = this.cardMDA = new Card(this, VideoX86.CARD.MDA, data[0]);
-        this.cardColor = this.cardCGA = new Card(this, VideoX86.CARD.CGA, data[1]);
+        this.cardMono = this.cardMDA = new Card(this, Videox86.CARD.MDA, data[0]);
+        this.cardColor = this.cardCGA = new Card(this, Videox86.CARD.CGA, data[1]);
 
         /*
          * If no EGA was originally initialized, then cardEGA will remain uninitialized.
@@ -3770,7 +3770,7 @@ export default class VideoX86 extends Component {
     /**
      * doneLoad(sURL, sFontData, nErrorCode)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {string} sURL
      * @param {string} sFontData
      * @param {number} nErrorCode (response from server if anything other than 200)
@@ -3907,13 +3907,13 @@ export default class VideoX86 extends Component {
      * Called by the ROM's copyROM() function whenever a ROM component with a 'notify' attribute containing
      * our component ID has been loaded.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Array.<number>} abROM
      * @param {Array.<number>} [aParms]
      */
     onROMLoad(abROM, aParms)
     {
-        if (this.nCard == VideoX86.CARD.EGA) {
+        if (this.nCard == Videox86.CARD.EGA) {
             /*
              * TODO: Unlike the MDA/CGA font data, we may want to hang onto this data, so that we can
              * regenerate the color font(s) whenever the foreground and/or background colors have changed.
@@ -3939,7 +3939,7 @@ export default class VideoX86 extends Component {
              */
             this.setFontData(abROM, aParms || [0x3160, 0x2230], 8);
         }
-        else if (this.nCard == VideoX86.CARD.VGA) {
+        else if (this.nCard == Videox86.CARD.VGA) {
             if (DEBUG) this.printf("onROMLoad(): VGA fonts loaded\n");
             /*
              * For VGA cards, in the absence of any parameters, we assume that we're receiving the original
@@ -3967,7 +3967,7 @@ export default class VideoX86 extends Component {
      * Also, for the MDA/CGA, we should be discarding the font data after the first buildFont() call, because we
      * should never need to rebuild the fonts for those cards (both their font patterns and colors were hard-coded).
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Array.<number>} abFontData is the raw font data, from the ROM font file
      * @param {Array.<number>} aFontOffsets contains offsets into abFontData: [0] for CGA, [1] for MDA/EGA, and [2] for VGA
      * @param {number} [cxFontChar] is a fixed character width to use for all fonts; undefined to use MDA/CGA defaults
@@ -3982,7 +3982,7 @@ export default class VideoX86 extends Component {
     /**
      * getCardColors(nBitsPerPixel)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} [nBitsPerPixel]
      * @returns {Array}
      */
@@ -3992,8 +3992,8 @@ export default class VideoX86 extends Component {
             /*
              * Only 2 total colors.
              */
-            this.aRGB[0] = VideoX86.aCGAColors[VideoX86.ATTRS.FGND_BLACK];
-            this.aRGB[1] = this.getFontColor(VideoX86.aCGAColors, VideoX86.ATTRS.FGND_WHITE);
+            this.aRGB[0] = Videox86.aCGAColors[Videox86.ATTRS.FGND_BLACK];
+            this.aRGB[1] = this.getFontColor(Videox86.aCGAColors, Videox86.ATTRS.FGND_WHITE);
             return this.aRGB;
         }
 
@@ -4019,17 +4019,17 @@ export default class VideoX86 extends Component {
                 if (bBackground & Card.ATC.PALETTE.BRIGHT) regColor |= Card.CGA.COLOR.BRIGHT;
                 if ((this.cardEGA.regATCData[1] & 0x0f) == 0x03) regColor |= Card.CGA.COLOR.COLORSET1;
             }
-            this.aRGB[0] = this.getFontColor(VideoX86.aCGAColors, regColor & (Card.CGA.COLOR.BORDER | Card.CGA.COLOR.BRIGHT));
-            let aColorSet = (regColor & Card.CGA.COLOR.COLORSET1)? VideoX86.aCGAColorSet1 : VideoX86.aCGAColorSet0;
+            this.aRGB[0] = this.getFontColor(Videox86.aCGAColors, regColor & (Card.CGA.COLOR.BORDER | Card.CGA.COLOR.BRIGHT));
+            let aColorSet = (regColor & Card.CGA.COLOR.COLORSET1)? Videox86.aCGAColorSet1 : Videox86.aCGAColorSet0;
             for (let iColor = 0; iColor < aColorSet.length; iColor++) {
-                this.aRGB[iColor + 1] = this.getFontColor(VideoX86.aCGAColors, aColorSet[iColor]);
+                this.aRGB[iColor + 1] = this.getFontColor(Videox86.aCGAColors, aColorSet[iColor]);
             }
             return this.aRGB;
         }
 
         if (this.cardColor === this.cardCGA) {
-            for (let iColor = 0; iColor < VideoX86.aCGAColors.length; iColor++) {
-                this.aRGB[iColor] = this.getFontColor(VideoX86.aCGAColors, iColor);
+            for (let iColor = 0; iColor < Videox86.aCGAColors.length; iColor++) {
+                this.aRGB[iColor] = this.getFontColor(Videox86.aCGAColors, iColor);
             }
             return this.aRGB;
         }
@@ -4068,7 +4068,7 @@ export default class VideoX86 extends Component {
                  * (ie, this is actually a VGA) and it appears to be initialized (ie, the VGA BIOS has been run).
                  */
                 let fDAC = (aDAC && aDAC[255] != null);
-                aRegs = (card.regATCData[15] != null? card.regATCData : VideoX86.aEGAPalDef);
+                aRegs = (card.regATCData[15] != null? card.regATCData : Videox86.aEGAPalDef);
                 for (i = 0; i < 16; i++) {
                     b = aRegs[i] & Card.ATC.PALETTE.MASK;
                     /*
@@ -4119,7 +4119,7 @@ export default class VideoX86 extends Component {
      * values in unison, changing the intensity of the color without changing the hue.  We then calculate an RGB
      * value corresponding to iColor.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Array} aColors
      * @param {number} iColor
      * @returns {Array}
@@ -4162,7 +4162,7 @@ export default class VideoX86 extends Component {
      *
      * Determine the maximum amount we can adjust all RGB entries by without overflowing, and return a new RGB array.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Array} rgb
      * @returns {Array}
      */
@@ -4184,13 +4184,13 @@ export default class VideoX86 extends Component {
     /**
      * getSelectedFonts()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {number} (low byte is "SELB" font number, used when attribute bit 3 is 0; high byte is "SELA" font number)
      */
     getSelectedFonts()
     {
         let bSelect = this.cardEGA.regSEQData[Card.SEQ.CHARMAP.INDX];
-        if (this.nCard < VideoX86.CARD.VGA) {
+        if (this.nCard < Videox86.CARD.VGA) {
             bSelect &= (Card.SEQ.CHARMAP.SELA | Card.SEQ.CHARMAP.SELB);
         }
         if (!(this.cardEGA.regSEQData[Card.SEQ.MEMMODE.INDX] & Card.SEQ.MEMMODE.EXT)) {
@@ -4219,7 +4219,7 @@ export default class VideoX86 extends Component {
      *  2) the font colors have changed (only affected colors are rebuilt, if there are no other changes)
      *  3) the font data has changed (EGA and VGA only, based on plane 2 changes recorded in bitsDirtyBanks)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fRebuild] (true if this is a rebuild; default is false)
      * @returns {boolean}
      */
@@ -4243,19 +4243,19 @@ export default class VideoX86 extends Component {
             let abFontData = this.abFontData;
 
             let aRGBColors, aColorMap;
-            if (this.nCardFont == VideoX86.CARD.MDA || this.nMonitorType == ChipSet.MONITOR.MONO) {
+            if (this.nCardFont == Videox86.CARD.MDA || this.nMonitorType == ChipSet.MONITOR.MONO) {
                 if (!this.colorFont) {
-                    aRGBColors = VideoX86.aMDAColors;
+                    aRGBColors = Videox86.aMDAColors;
                 } else {
                     /*
                      * When overriding MDA colors, we take rgbFont to be the "normal" color (aMDAColors indices 1 and 2), and
                      * then calculate the MDA's corresponding "intense" color (aMDAColors indices 3 and 4) using getIntenseColor().
                      */
-                    aRGBColors = VideoX86.aMDAColors.slice();              // start with a copy of aMDAColors
+                    aRGBColors = Videox86.aMDAColors.slice();              // start with a copy of aMDAColors
                     aRGBColors[1] = aRGBColors[2] = this.rgbFont;
                     aRGBColors[3] = aRGBColors[4] = this.getIntenseColor(this.rgbFont);
                 }
-                aColorMap = VideoX86.aMDAColorMap;
+                aColorMap = Videox86.aMDAColorMap;
             } else {
                 aRGBColors = this.getCardColors();
             }
@@ -4263,7 +4263,7 @@ export default class VideoX86 extends Component {
             let cxChar, cyChar, offData, bitsBanks, cx, cy;
 
             switch (this.nCardFont) {
-            case VideoX86.CARD.MDA:
+            case Videox86.CARD.MDA:
                 if (this.aFontOffsets[1] != null) {
                     if (this.createFont(this.nCardFont, this.cxFontChar || 9, 14, this.aFontOffsets[1], this.cxFontChar? 0 : 0x0800, abFontData, false, aRGBColors, aColorMap)) {
                         fChanges = true;
@@ -4271,7 +4271,7 @@ export default class VideoX86 extends Component {
                 }
                 break;
 
-            case VideoX86.CARD.CGA:
+            case Videox86.CARD.CGA:
                 if (this.aFontOffsets[0] != null) {
                     if (this.createFont(this.nCardFont, this.cxFontChar || 8, 8, this.aFontOffsets[0], 0x0000, abFontData, false, aRGBColors, aColorMap)) {
                         fChanges = true;
@@ -4279,11 +4279,11 @@ export default class VideoX86 extends Component {
                 }
                 break;
 
-            case VideoX86.CARD.VGA:
+            case Videox86.CARD.VGA:
                 nFonts += 4;
                 /* falls through */
 
-            case VideoX86.CARD.EGA:
+            case Videox86.CARD.EGA:
                 nFonts += 4;
                 cxChar = this.cxFontChar || 8;
                 cyChar = 14;
@@ -4359,7 +4359,7 @@ export default class VideoX86 extends Component {
      * (ie, before the character grids).  But now createFont() also creates an aCSSColors array that is saved alongside
      * the font canvas, and updateChar() uses that array in conjunction with fillRect() to draw character backgrounds.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} nFont
      * @param {number} cxChar is the width of the font characters
      * @param {number} cyChar is the height of the font characters
@@ -4423,7 +4423,7 @@ export default class VideoX86 extends Component {
                 }
                 if (DEBUG) {
                     if (!fChanges) {
-                        this.printf("createFont(%d): creating %s font (%d,%d)\n", nFont, VideoX86.cardSpecs[this.nCardFont][0], cxChar, cyChar);
+                        this.printf("createFont(%d): creating %s font (%d,%d)\n", nFont, Videox86.cardSpecs[this.nCardFont][0], cxChar, cyChar);
                     }
                     this.printf("createFontColor(%d): [%s]\n", iColor, rgbColor);
                 }
@@ -4488,7 +4488,7 @@ export default class VideoX86 extends Component {
      * This also yields better performance, since drawImage() is much faster than putImageData().
      * We still have to use putImageData() to build the font canvas, but that's a one-time operation.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Font} font
      * @param {number} iColor
      * @param {Array} rgbColor contains the RGB values for iColor
@@ -4627,7 +4627,7 @@ export default class VideoX86 extends Component {
      * So for a given logical font number (0-3 for the EGA or 0-7 for the VGA), the starting index of
      * "differable" fonts is n * (n - 1) / 2.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} iFont
      * @param {number} iFontPrev
      * @param {number} cyChar (height of every character in both fonts)
@@ -4660,7 +4660,7 @@ export default class VideoX86 extends Component {
      * Unlike createFontDiff(), where iFontPrev is guaranteed to be less than iFont, that may not be true
      * for getFontDiff(), so we must swap them if iFont < iFontPrev.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} iFont
      * @param {number} iFontPrev
      * @returns {Array.<number>}
@@ -4707,7 +4707,7 @@ export default class VideoX86 extends Component {
      * affecting the attribute blink rate (which is currently hard-coded at half the cursor blink rate), and we should look into
      * supporting "half rate" blinking, too.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {boolean} true if there are things to blink, false if not
      */
     checkBlink()
@@ -4717,7 +4717,7 @@ export default class VideoX86 extends Component {
                 this.cBlinks = 0;
                 /*
                  * At this point, we can either fire up our own timer (doBlink), or rely on updateScreen() being
-                 * called by the CPU at regular bursts (eg, VideoX86.UPDATES_PER_SECOND = 60) and advance cBlinks at
+                 * called by the CPU at regular bursts (eg, Videox86.UPDATES_PER_SECOND = 60) and advance cBlinks at
                  * the start of updateScreen() accordingly.
                  *
                  * doBlink() wants to increment cBlinks every 266ms.  On the other hand, if updateScreen() is being
@@ -4762,7 +4762,7 @@ export default class VideoX86 extends Component {
      * drawing wraps around to zero and does not stop until we reach CURSCAN again.  However, this happens only when
      * CURSCAN is <= MAXSCAN; if CURSCAN > MAXSCAN, then nothing is drawn, regardless of CURSCANB.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {boolean} true if the cursor is visible, false if not
      */
     checkCursor()
@@ -4798,7 +4798,7 @@ export default class VideoX86 extends Component {
 
         let bCursorWrap = 0;
 
-        if (this.nCard != VideoX86.CARD.EGA) {
+        if (this.nCard != Videox86.CARD.EGA) {
             /*
              * Live and learn: I originally thought that the EGA introduced funky split cursors, but it turns
              * out that older cards did it, too (well, I've confirmed it on an actual MDA anyway; haven't tried
@@ -4811,7 +4811,7 @@ export default class VideoX86 extends Component {
                  * The VGA didn't support funky split (aka wrap-around) cursors, so as above, we pretend that the
                  * cursor has simply been disabled.
                  */
-                if (this.nCard == VideoX86.CARD.VGA) {
+                if (this.nCard == Videox86.CARD.VGA) {
                     bCursorFlags |= Card.CRTC.CURSCAN_BLINKOFF;
                     bCursorWrap = 0;
                 }
@@ -4829,7 +4829,7 @@ export default class VideoX86 extends Component {
              * but in retrospect, that doesn't seem very faithful.  Better to fix things like this 1) only if
              * the user asks, and 2) preferably with a BIOS patch rather than monkeying with the hardware registers.
              *
-             *      if (this.nCard == VideoX86.CARD.EGA) {
+             *      if (this.nCard == Videox86.CARD.EGA) {
              *          if (bCursorMax == 7 && bCursorStart == 4 && !bCursorEnd) bCursorEnd = 7;
              *      }
              *
@@ -4947,13 +4947,13 @@ export default class VideoX86 extends Component {
     /**
      * removeCursor()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     removeCursor()
     {
         if (this.iCellCursor >= 0) {
             if (this.aCellCache !== undefined && this.iCellCursor < this.aCellCache.length) {
-                let drawCursor = (VideoX86.ATTRS.DRAW_CURSOR << 8);
+                let drawCursor = (Videox86.ATTRS.DRAW_CURSOR << 8);
                 let data = this.aCellCache[this.iCellCursor];
                 if (data & drawCursor) {
                     data &= ~drawCursor;
@@ -4985,7 +4985,7 @@ export default class VideoX86 extends Component {
     /**
      * getCardAccess()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {number} current memory access setting
      */
     getCardAccess()
@@ -4993,7 +4993,7 @@ export default class VideoX86 extends Component {
         let card = this.cardActive;
         let nAccess = Card.ACCESS.READ.PAIRS | Card.ACCESS.WRITE.PAIRS;
 
-        if (card.nCard >= VideoX86.CARD.EGA) {
+        if (card.nCard >= Videox86.CARD.EGA) {
             this.fColor256 = false;
             let regGRCMode = card.regGRCData[Card.GRC.MODE.INDX];
             if (regGRCMode != null) {
@@ -5041,7 +5041,7 @@ export default class VideoX86 extends Component {
                     }
                     break;
                 case Card.GRC.MODE.WRITE.MODE3:
-                    if (this.nCard == VideoX86.CARD.VGA) {
+                    if (this.nCard == Videox86.CARD.VGA) {
                         nWriteAccess = Card.ACCESS.WRITE.MODE3;
                         card.nDataRotate = regDataRotate & Card.GRC.DATAROT.COUNT;
                     }
@@ -5102,7 +5102,7 @@ export default class VideoX86 extends Component {
     /**
      * setCardAccess(nAccess)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} nAccess (one of the Card.ACCESS.* constants)
      * @returns {boolean} true if access may have changed, false if not
      */
@@ -5133,20 +5133,20 @@ export default class VideoX86 extends Component {
      *
      * This is the workhorse of setMode()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     setDimensions()
     {
         this.nCardFont = this.nActiveFont = this.nAlternateFont = 0;
         this.nCols = this.nColsDefault;
         this.nRows = this.nRowsDefault;
-        this.nPointsPerCell = VideoX86.aModeParms[VideoX86.MODE.MDA_80X25][2];
-        this.nPointsPerByte = VideoX86.aModeParms[VideoX86.MODE.MDA_80X25][3];
+        this.nPointsPerCell = Videox86.aModeParms[Videox86.MODE.MDA_80X25][2];
+        this.nPointsPerByte = Videox86.aModeParms[Videox86.MODE.MDA_80X25][3];
         this.cxScreenCell = this.cyScreenCell = 1;
         this.fOverBuffer = false;
 
         let cbPadding = 0, cxCell = 1, cyCell = 1;
-        let modeParms = VideoX86.aModeParms[this.nMode];
+        let modeParms = Videox86.aModeParms[this.nMode];
         if (modeParms) {
 
             this.nCols = modeParms[0];
@@ -5163,7 +5163,7 @@ export default class VideoX86 extends Component {
                  * to match the card.
                  */
                 if (this.model == "vdu") {
-                    this.nCardFont = VideoX86.CARD.MDA;
+                    this.nCardFont = Videox86.CARD.MDA;
                 }
                 else if (this.nCard > this.nCardFont) {
                     this.nCardFont = this.nCard;
@@ -5173,7 +5173,7 @@ export default class VideoX86 extends Component {
                 if (font) {
                     cxCell = font.cxCell;
                     cyCell = font.cyCell;
-                    if (this.nCard >= VideoX86.CARD.EGA) {
+                    if (this.nCard >= Videox86.CARD.EGA) {
                         /*
                          * Since these cards have programmable font height (font.cyChar), we need to divide that
                          * into the screen height (cyScreen) to determine the effective (ie, visible) number of rows.
@@ -5273,7 +5273,7 @@ export default class VideoX86 extends Component {
      * Called whenever the MDA/CGA's mode register (eg, Card.MDA.MODE.PORT, Card.CGA.MODE.PORT) is updated,
      * or whenever the EGA/VGA's GRC.MISC register is updated, or when we've just finished a restore().
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fForce] is used to force a mode update, if we recognize the current mode
      * @returns {boolean} true if successful, false if not
      */
@@ -5293,10 +5293,10 @@ export default class VideoX86 extends Component {
             if (nMode == null) nMode = this.nModeDefault;
         }
         else {
-            if (card.nCard == VideoX86.CARD.MDA) {
-                nMode = VideoX86.MODE.MDA_80X25;
+            if (card.nCard == Videox86.CARD.MDA) {
+                nMode = Videox86.MODE.MDA_80X25;
             }
-            else if (card.nCard >= VideoX86.CARD.EGA) {
+            else if (card.nCard >= Videox86.CARD.EGA) {
                 /*
                  * The sizeBuffer we choose reflects the amount of physical address space that all 4 planes
                  * of EGA memory normally span, NOT the total amount of EGA memory.  So for a 64Kb EGA card,
@@ -5319,7 +5319,7 @@ export default class VideoX86 extends Component {
                         card.addrBuffer = 0xA0000;
                         card.sizeBuffer = cbBuffer;     // 0x20000
                         if ((nCRTCMaxScan & Card.CRTC.EGA.MAXSCAN.SLMASK) <= 1) {
-                            nMode = VideoX86.MODE.UNKNOWN;     // no BIOS mode uses this mapping, but we don't want to leave nMode null if we've come this far
+                            nMode = Videox86.MODE.UNKNOWN;     // no BIOS mode uses this mapping, but we don't want to leave nMode null if we've come this far
                         } else {
                             /*
                              * This mapping is used by Fantasy Land.
@@ -5328,23 +5328,23 @@ export default class VideoX86 extends Component {
                              * For example, can we assume that as long as (MAXSCAN & SLMASK) > 1, we're always in text mode?
                              * And to what extent can we rely on the GRC.MISC.GRAPHICS bit?
                              */
-                            nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? VideoX86.MODE.CGA_80X25_BW : VideoX86.MODE.CGA_80X25);
+                            nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? Videox86.MODE.CGA_80X25_BW : Videox86.MODE.CGA_80X25);
                         }
                         break;
                     case Card.GRC.MISC.MAPA064:
                         card.addrBuffer = 0xA0000;
                         card.sizeBuffer = cbBuffer;     // 0x10000
-                        nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? VideoX86.MODE.EGA_640X350_MONO : VideoX86.MODE.EGA_640X350);
+                        nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? Videox86.MODE.EGA_640X350_MONO : Videox86.MODE.EGA_640X350);
                         break;
                     case Card.GRC.MISC.MAPB032:
                         card.addrBuffer = 0xB0000;
                         card.sizeBuffer = cbBufferText;
-                        nMode = VideoX86.MODE.MDA_80X25;
+                        nMode = Videox86.MODE.MDA_80X25;
                         break;
                     case Card.GRC.MISC.MAPB832:
                         card.addrBuffer = 0xB8000;
                         card.sizeBuffer = cbBufferText;
-                        nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? VideoX86.MODE.CGA_80X25_BW : VideoX86.MODE.CGA_80X25);
+                        nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? Videox86.MODE.CGA_80X25_BW : Videox86.MODE.CGA_80X25);
                         break;
                     default:
                         break;
@@ -5385,7 +5385,7 @@ export default class VideoX86 extends Component {
                     let nCRTCModeCtrl = card.regCRTData[Card.CRTC.EGA.MODECTRL.INDX];
                     let fSEQDotClock = (card.regSEQData[Card.SEQ.CLKMODE.INDX] & Card.SEQ.CLKMODE.DOTCLOCK);
 
-                    if (nMode != VideoX86.MODE.UNKNOWN) {
+                    if (nMode != Videox86.MODE.UNKNOWN) {
                         if (!(regGRCMisc & Card.GRC.MISC.GRAPHICS)) {
                             /*
                              * Here's where we handle text modes; since nMode will have been assigned a default
@@ -5405,7 +5405,7 @@ export default class VideoX86 extends Component {
                              * (NOT logical) card reprogramming during windowed VM creation; the latter seems like a VDD bug,
                              * because only the Windows display driver should be *physically* reprogramming the card then.
                              */
-                            nMode = fSEQDotClock? (7 - nMode) : VideoX86.MODE.CGA_640X200;
+                            nMode = fSEQDotClock? (7 - nMode) : Videox86.MODE.CGA_640X200;
                         } else {
                             /*
                              * Here's where we handle EGA/VGA graphics modes, discriminating among modes 0x0D and up;
@@ -5422,22 +5422,22 @@ export default class VideoX86 extends Component {
                                      */
                                     if (card.regCRTData[Card.CRTC.EGA.VDEND] <= 0x8F) {
                                         if (card.regSEQData[Card.SEQ.MEMMODE.INDX] & Card.SEQ.MEMMODE.CHAIN4) {
-                                            nMode = VideoX86.MODE.VGA_320X200;
+                                            nMode = Videox86.MODE.VGA_320X200;
                                         } else {
-                                            nMode = VideoX86.MODE.VGA_320X200P;
+                                            nMode = Videox86.MODE.VGA_320X200P;
                                         }
                                     }
                                     else { /* (card.regCRTData[Card.CRTC.EGA.VDEND] == 0xDF) */
-                                        nMode = VideoX86.MODE.VGA_320X240P;
+                                        nMode = Videox86.MODE.VGA_320X240P;
                                     }
                                 } else {
-                                    nMode = VideoX86.MODE.VGA_320X400P;
+                                    nMode = Videox86.MODE.VGA_320X400P;
                                 }
                             }
                             else if ((nCRTCMaxScan & Card.CRTC.EGA.MAXSCAN.CONVERT400) || nCRTCVertTotal < 350) {
-                                nMode = (fSEQDotClock? VideoX86.MODE.EGA_320X200 : VideoX86.MODE.EGA_640X200);
+                                nMode = (fSEQDotClock? Videox86.MODE.EGA_320X200 : Videox86.MODE.EGA_640X200);
                             } else if (nCRTCVertTotal >= 480) {
-                                nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? VideoX86.MODE.VGA_640X480_MONO : VideoX86.MODE.VGA_640X480);
+                                nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? Videox86.MODE.VGA_640X480_MONO : Videox86.MODE.VGA_640X480);
                             }
                             if (DEBUG) this.printf("checkMode(%#04X): nCRTCVertTotal=%d\n", nMode, nCRTCVertTotal);
                         }
@@ -5451,12 +5451,12 @@ export default class VideoX86 extends Component {
                  * off, using a hard-coded mode value (0x25) that does NOT necessarily match the the CGA video mode currently in effect.
                  */
                 if (!(card.regMode & Card.CGA.MODE.GRAPHIC_SEL)) {
-                    nMode = ((card.regMode & Card.CGA.MODE._80X25)? VideoX86.MODE.CGA_80X25 : VideoX86.MODE.CGA_40X25);
+                    nMode = ((card.regMode & Card.CGA.MODE._80X25)? Videox86.MODE.CGA_80X25 : Videox86.MODE.CGA_40X25);
                     if (card.regMode & Card.CGA.MODE.BW_SEL) {
                         nMode -= 1;
                     }
                 } else {
-                    nMode = ((card.regMode & Card.CGA.MODE.HIRES_BW)? VideoX86.MODE.CGA_640X200 : VideoX86.MODE.CGA_320X200_BW);
+                    nMode = ((card.regMode & Card.CGA.MODE.HIRES_BW)? Videox86.MODE.CGA_640X200 : Videox86.MODE.CGA_320X200_BW);
                     if (!(card.regMode & Card.CGA.MODE.BW_SEL)) {
                         nMode -= 1;
                     }
@@ -5510,7 +5510,7 @@ export default class VideoX86 extends Component {
      * Set fForce to true to update the mode regardless of previous mode, or false to perform a normal update
      * that bypasses updateScreen() but still calls initCellCache().
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number|null} nMode
      * @param {boolean} [fForce] is set when checkMode() wants to force a mode update
      * @param {boolean} [fRemap] is set when checkMode() detects a change in the buffer mapping
@@ -5538,7 +5538,7 @@ export default class VideoX86 extends Component {
              * (MDA or CGA) never reallocates its memory buffer, it's still a good idea to always force this operation
              * (eg, in case a switch setting changed the active video card).
              */
-            let card = this.cardActive || (nMode == VideoX86.MODE.MDA_80X25? this.cardMono : this.cardColor);
+            let card = this.cardActive || (nMode == Videox86.MODE.MDA_80X25? this.cardMono : this.cardColor);
 
             if (card != this.cardActive || card.addrBuffer != this.addrBuffer || card.sizeBuffer != this.sizeBuffer) {
 
@@ -5565,7 +5565,7 @@ export default class VideoX86 extends Component {
 
                 if (DEBUG) this.printf("setMode(%#04X): adding %#010X bytes to %#010X\n", nMode, this.sizeBuffer, this.addrBuffer);
 
-                if (!this.bus.addMemory(card.addrBuffer, card.sizeBuffer, MemoryX86.TYPE.VIDEO, card)) {
+                if (!this.bus.addMemory(card.addrBuffer, card.sizeBuffer, Memoryx86.TYPE.VIDEO, card)) {
                     /*
                      * TODO: Force this failure case and see how well the Video component deals with it.
                      */
@@ -5591,7 +5591,7 @@ export default class VideoX86 extends Component {
                  * scroll rather than a text scroll to clear the screen, but once again, the coordinates are reversed,
                  * so much of the memory it zeroes is above the first 16K.
                  */
-                if (card.nCard < VideoX86.CARD.EGA) {
+                if (card.nCard < Videox86.CARD.EGA) {
                     let addrBuffer = this.addrBuffer;
                     let aBlocks = this.bus.getMemoryBlocks(addrBuffer, this.sizeBuffer);
                     while ((addrBuffer += this.sizeBuffer) < card.addrBuffer + 0x8000) {
@@ -5613,7 +5613,7 @@ export default class VideoX86 extends Component {
      *
      * Worker function used by createFontColor() and updateScreen() (graphics modes only).
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} imageData
      * @param {number} x
      * @param {number} y
@@ -5637,7 +5637,7 @@ export default class VideoX86 extends Component {
      * we don't have to update the entire screen.  This would also allow invalidateCellCache() to honor the fColors
      * flag and bypass initCellCache() when it's set.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {number}
      */
     initCellCache()
@@ -5658,7 +5658,7 @@ export default class VideoX86 extends Component {
      * data in the video buffer has not changed (eg, when the screen is being panned, the page is being flipped,
      * the palette is being cycled, the font is being changed, etc).
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fColors] (true if color(s) *may* have changed)
      * @param {number} [nFontSelect] (set along with nFontPrev if font(s) *may* have changed)
      * @param {number} [nFontPrev]
@@ -5732,7 +5732,7 @@ export default class VideoX86 extends Component {
      * To make the cursor blink, we must alternately draw its entire cell with ATTRS.DRAW_CURSOR set, and then
      * draw it again with ATTRS.DRAW_CURSOR clear.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} col
      * @param {number} row
      * @param {number} data (if text mode, character code in low byte, attribute code in high byte)
@@ -5794,7 +5794,7 @@ export default class VideoX86 extends Component {
 
         if (MAXDEBUG) this.printf(MESSAGE.VIDEO + MESSAGE.BUFFER, "updateCharBgnd(%d,%d,%d): filled %d,%d\n", col, row, bChar, xDst, yDst);
 
-        if (bAttr & VideoX86.ATTRS.DRAW_FGND) {
+        if (bAttr & Videox86.ATTRS.DRAW_FGND) {
             /*
              * (bChar & 0xf) is the equivalent of (bChar % 16), and (bChar >> 4) is the equivalent of Math.floor(bChar / 16)
              */
@@ -5810,7 +5810,7 @@ export default class VideoX86 extends Component {
             }
         }
 
-        if (bAttr & VideoX86.ATTRS.DRAW_CURSOR) {
+        if (bAttr & Videox86.ATTRS.DRAW_CURSOR) {
             if (this.cyCursorWrap) {
                 this.drawCursor(0, this.cyCursorWrap, xDst, yDst, iFgnd, font, context);
             }
@@ -5824,7 +5824,7 @@ export default class VideoX86 extends Component {
      * We have factored the cursor-drawing code out of updateChar() so that we can call this function multiple times,
      * in case we have to draw a "split cursor".
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} yCursor
      * @param {number} cyCursor
      * @param {number} xDst
@@ -5874,7 +5874,7 @@ export default class VideoX86 extends Component {
     /**
      * latchStartAddress()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     latchStartAddress()
     {
@@ -5904,7 +5904,7 @@ export default class VideoX86 extends Component {
      * are generally internal updates triggered by an I/O operation or other state change, while non-forced updates
      * are the periodic updates coming from the CPU.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fForce] is used by setMode() to reset the cell cache and force a redraw
      * @returns {boolean}
      */
@@ -5952,7 +5952,7 @@ export default class VideoX86 extends Component {
          * If this is a hardware update (as opposed to, say, a debugger-triggered update, where fForce is set),
          * and cBlinks is "enabled" (ie, >= 0), then advance cBlinks once every 10 updateScreen() calls.
          *
-         * Assuming an updateScreen() frequency of roughly 60 times per second (VideoX86.UPDATES_PER_SECOND), performing
+         * Assuming an updateScreen() frequency of roughly 60 times per second (Videox86.UPDATES_PER_SECOND), performing
          * a "blink update" every 10 times is reasonably close to the hardware blink rate.  However, the effective blink
          * rate will also depend on other factors as well, such as the monitorSpecs for the video hardware being simulated.
          */
@@ -5985,7 +5985,7 @@ export default class VideoX86 extends Component {
          * which will draw from our video buffer (adwMemory) directly; these addresses are only used for bounds
          * checking.
          */
-        if (this.nMode >= VideoX86.MODE.VGA_320X200) {
+        if (this.nMode >= Videox86.MODE.VGA_320X200) {
             addrBuffer = addrScreen = 0xA0000;
             addrScreenLimit = addrScreen + 0x10000;
         }
@@ -5993,7 +5993,7 @@ export default class VideoX86 extends Component {
         let cbScreen = this.cbScreen;
         this.nColsLogical = this.nCols;
 
-        if (this.nCard < VideoX86.CARD.EGA) {
+        if (this.nCard < Videox86.CARD.EGA) {
             /*
              * Any screen (aka "page") offset must be doubled for text modes, due to the attribute bytes.
              */
@@ -6058,7 +6058,7 @@ export default class VideoX86 extends Component {
                 cbScreenWrap -= cbScreen;
             }
         }
-        else if (this.nCard >= VideoX86.CARD.EGA) {
+        else if (this.nCard >= Videox86.CARD.EGA) {
             /*
              * We can leverage our screen wrap support to handle split-screen views as well; we must calculate
              * the number of WHOLE + PARTIAL rows we can draw (which may reduce cbScreen).  TODO: We must also pass
@@ -6104,7 +6104,7 @@ export default class VideoX86 extends Component {
     /**
      * updateScreenCells(addrBuffer, addrScreen, cbScreen, iCell, nCells, fForce, fBlinkUpdate)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} addrBuffer
      * @param {number} addrScreen
      * @param {number} cbScreen
@@ -6192,7 +6192,7 @@ export default class VideoX86 extends Component {
     /**
      * updateScreenText(addrBuffer, addrScreen, addrScreenLimit, iCell, nCells)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} addrBuffer
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
@@ -6218,7 +6218,7 @@ export default class VideoX86 extends Component {
         let card = this.cardActive;
         let cCells = 0, cUpdated = 0;
         let dataBlink = 0;
-        let dataDraw = (VideoX86.ATTRS.DRAW_FGND << 8);
+        let dataDraw = (Videox86.ATTRS.DRAW_FGND << 8);
         let dataMask = 0xfffff;
         let adwMemory = card.adwMemory;
 
@@ -6231,12 +6231,12 @@ export default class VideoX86 extends Component {
         let nShift = (card.nAccess & Card.ACCESS.WRITE.PAIRS)? 1 : 0;
 
         let fBlinkEnable = (card.regMode & Card.MDA.MODE.BLINK_ENABLE);
-        if (this.nCard >= VideoX86.CARD.EGA) {
+        if (this.nCard >= Videox86.CARD.EGA) {
             fBlinkEnable = (card.regATCData[Card.ATC.MODE.INDX] & Card.ATC.MODE.BLINK_ENABLE);
         }
 
         if (fBlinkEnable) {
-            dataBlink = (VideoX86.ATTRS.BGND_BLINK << 8);
+            dataBlink = (Videox86.ATTRS.BGND_BLINK << 8);
             dataMask &= ~dataBlink;
             if (!(this.cBlinks & 0x2)) dataMask &= ~dataDraw;
         }
@@ -6259,7 +6259,7 @@ export default class VideoX86 extends Component {
                 data &= dataMask;
             }
             if (iCell == this.iCellCursor) {
-                data |= ((this.cBlinks & 0x1)? (VideoX86.ATTRS.DRAW_CURSOR << 8) : 0);
+                data |= ((this.cBlinks & 0x1)? (Videox86.ATTRS.DRAW_CURSOR << 8) : 0);
             }
 
             this.assert(iCell < this.aCellCache.length);
@@ -6306,7 +6306,7 @@ export default class VideoX86 extends Component {
     /**
      * updateScreenGraphicsCGA(addrScreen, addrScreenLimit)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
      * @returns {number} (number of cells processed)
@@ -6392,7 +6392,7 @@ export default class VideoX86 extends Component {
      *
      * TODO: Add support for blinking graphics (ATC.MODE.BLINK_ENABLE)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} addrBuffer
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
@@ -6463,7 +6463,7 @@ export default class VideoX86 extends Component {
                      * that the result will be a 32-bit value, so it doesn't matter.
                      */
                     let dwPixel = data & 0x80808080;
-                    this.assert(VideoX86.aEGADWToByte[dwPixel] !== undefined);
+                    this.assert(Videox86.aEGADWToByte[dwPixel] !== undefined);
                     /*
                      * We now ensure that bPixel will default to 0 if an undefined value ever slips through again.
                      *
@@ -6472,7 +6472,7 @@ export default class VideoX86 extends Component {
                      * former is a POSITIVE index that is outside the 32-bit integer range, whereas the latter is a NEGATIVE
                      * index, which is what this code requires.
                      */
-                    let bPixel = VideoX86.aEGADWToByte[dwPixel] || 0;
+                    let bPixel = Videox86.aEGADWToByte[dwPixel] || 0;
                     this.setPixel(this.imageBuffer, x++, y, aPixelColors[bPixel]);
                     data <<= 1;
                 }
@@ -6515,7 +6515,7 @@ export default class VideoX86 extends Component {
      *
      * TODO: Add support for blinking graphics (ATC.MODE.BLINK_ENABLE)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} addrBuffer
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
@@ -6606,7 +6606,7 @@ export default class VideoX86 extends Component {
      *
      * This returns a byte value with two bits set or clear as appropriate: RETRACE and VRETRACE.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @returns {number}
      */
@@ -6629,7 +6629,7 @@ export default class VideoX86 extends Component {
          * bit to trigger this work-around, which involves cutting the number of elapsed cycles in half,
          * as well as skipping every other (odd) vertical retrace in startVerticalRetrace().
          */
-        if (card.nCard === VideoX86.CARD.VGA) {
+        if (card.nCard === Videox86.CARD.VGA) {
             if (card.regSEQData[Card.SEQ.CLKMODE.INDX] & Card.SEQ.CLKMODE.SCREEN_OFF) {
                 nCyclesElapsed >>>= 1;
             }
@@ -6653,7 +6653,7 @@ export default class VideoX86 extends Component {
     /**
      * inMDAIndx(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B4)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number|undefined}
@@ -6666,7 +6666,7 @@ export default class VideoX86 extends Component {
     /**
      * outMDAIndx(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B4)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -6679,7 +6679,7 @@ export default class VideoX86 extends Component {
     /**
      * inMDAData(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B5)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number|undefined}
@@ -6692,7 +6692,7 @@ export default class VideoX86 extends Component {
     /**
      * outMDAData(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B5)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -6705,7 +6705,7 @@ export default class VideoX86 extends Component {
     /**
      * inMDAMode(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B8)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -6718,7 +6718,7 @@ export default class VideoX86 extends Component {
     /**
      * outMDAMode(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B8)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -6731,7 +6731,7 @@ export default class VideoX86 extends Component {
     /**
      * inMDAStatus(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3BA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -6744,7 +6744,7 @@ export default class VideoX86 extends Component {
     /**
      * outFeat(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3BA or 0x3DA)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -6764,7 +6764,7 @@ export default class VideoX86 extends Component {
      * primarily for debugging purposes.  Moreover, ATC port reads do NOT toggle the ATC address/data
      * flip-flop; only writes have that effect.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C0)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -6785,7 +6785,7 @@ export default class VideoX86 extends Component {
      * primarily for debugging purposes.  Moreover, ATC port reads do NOT toggle the ATC address/data
      * flip-flop; only writes have that effect.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C1)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -6802,7 +6802,7 @@ export default class VideoX86 extends Component {
     /**
      * outATC(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C0)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -6855,7 +6855,7 @@ export default class VideoX86 extends Component {
             let iReg = card.regATCIndx & Card.ATC.INDX_MASK;
             if (iReg >= Card.ATC.PALETTE_REGS || !fPalEnabled) {
                 let fModified = (card.regATCData[iReg] !== bOut);
-                if (VideoX86.TRAPALL || fModified) {
+                if (Videox86.TRAPALL || fModified) {
                     if (!addrFrom || this.messageEnabled()) {
                         this.printIO(port, bOut, addrFrom, "ATC." + card.asATCRegs[iReg], undefined, true);
                     }
@@ -6883,7 +6883,7 @@ export default class VideoX86 extends Component {
     /**
      * inStatus0(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C2)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -6891,7 +6891,7 @@ export default class VideoX86 extends Component {
     inStatus0(port, addrFrom)
     {
         let bSWBit = 0;
-        if (this.nCard == VideoX86.CARD.EGA) {
+        if (this.nCard == Videox86.CARD.EGA) {
             let iBit = 3 - ((this.cardEGA.regMisc & Card.MISC.CLOCK_SELECT) >> 2);    // this is the desired SW # (0-3)
             bSWBit = (this.bEGASwitches & (1 << iBit)) << (Card.STATUS0.SWSENSE_SHIFT - iBit);
         } else {
@@ -6943,7 +6943,7 @@ export default class VideoX86 extends Component {
     }
 
     /**
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C2)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -6958,7 +6958,7 @@ export default class VideoX86 extends Component {
     /**
      * inVGAEnable(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C3)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -6973,7 +6973,7 @@ export default class VideoX86 extends Component {
     /**
      * outVGAEnable(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C3)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -6987,7 +6987,7 @@ export default class VideoX86 extends Component {
     /**
      * inSEQIndx(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C4)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7002,7 +7002,7 @@ export default class VideoX86 extends Component {
     /**
      * outSEQIndx(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C4)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7016,7 +7016,7 @@ export default class VideoX86 extends Component {
     /**
      * inSEQData(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C5)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7033,14 +7033,14 @@ export default class VideoX86 extends Component {
     /**
      * outSEQData(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C5)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      */
     outSEQData(port, bOut, addrFrom)
     {
-        if (VideoX86.TRAPALL || this.cardEGA.regSEQData[this.cardEGA.regSEQIndx] !== bOut) {
+        if (Videox86.TRAPALL || this.cardEGA.regSEQData[this.cardEGA.regSEQIndx] !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
                 this.printIO(Card.SEQ.DATA.PORT, bOut, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], undefined, true);
             }
@@ -7052,7 +7052,7 @@ export default class VideoX86 extends Component {
         switch(this.cardEGA.regSEQIndx) {
 
         case Card.SEQ.MAPMASK.INDX:
-            this.cardEGA.nSeqMapMask = VideoX86.aEGAByteToDW[bOut & Card.SEQ.MAPMASK.MAPS];
+            this.cardEGA.nSeqMapMask = Videox86.aEGAByteToDW[bOut & Card.SEQ.MAPMASK.MAPS];
             break;
 
         case Card.SEQ.CHARMAP.INDX:
@@ -7113,7 +7113,7 @@ export default class VideoX86 extends Component {
     /**
      * inDACMask(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C6)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7130,14 +7130,14 @@ export default class VideoX86 extends Component {
     /**
      * outDACMask(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C6)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      */
     outDACMask(port, bOut, addrFrom)
     {
-        if (VideoX86.TRAPALL || this.cardEGA.regDACMask !== bOut) {
+        if (Videox86.TRAPALL || this.cardEGA.regDACMask !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
                 this.printIO(Card.DAC.MASK.PORT, bOut, addrFrom, "DAC.MASK", undefined, true);
             }
@@ -7148,7 +7148,7 @@ export default class VideoX86 extends Component {
     /**
      * inDACState(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C7)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7165,7 +7165,7 @@ export default class VideoX86 extends Component {
     /**
      * outDACRead(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C7)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7183,7 +7183,7 @@ export default class VideoX86 extends Component {
     /**
      * outDACWrite(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C8)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7201,7 +7201,7 @@ export default class VideoX86 extends Component {
     /**
      * inDACData(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C9)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7223,7 +7223,7 @@ export default class VideoX86 extends Component {
     /**
      * outDACData(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C9)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7249,7 +7249,7 @@ export default class VideoX86 extends Component {
     /**
      * inVGAFeat(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7269,7 +7269,7 @@ export default class VideoX86 extends Component {
      *
      * "A one should be loaded into this location to map host data bus bits 2 and 3 to display planes 2 and 3, respectively."
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CA)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7283,7 +7283,7 @@ export default class VideoX86 extends Component {
     /**
      * inVGAMisc(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CC)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7306,7 +7306,7 @@ export default class VideoX86 extends Component {
      *
      * Note that this register was not readable on the EGA, and when the VGA came along, reads of this port read the Misc reg.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CC)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7320,7 +7320,7 @@ export default class VideoX86 extends Component {
     /**
      * inGRCIndx(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CE)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7335,7 +7335,7 @@ export default class VideoX86 extends Component {
     /**
      * outGRCIndx(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CE)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7349,7 +7349,7 @@ export default class VideoX86 extends Component {
     /**
      * inGRCData(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CF)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7366,14 +7366,14 @@ export default class VideoX86 extends Component {
     /**
      * outGRCData(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CF)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      */
     outGRCData(port, bOut, addrFrom)
     {
-        if (VideoX86.TRAPALL || this.cardEGA.regGRCData[this.cardEGA.regGRCIndx] !== bOut) {
+        if (Videox86.TRAPALL || this.cardEGA.regGRCData[this.cardEGA.regGRCIndx] !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
                 this.printIO(Card.GRC.DATA.PORT, bOut, addrFrom, "GRC." + this.cardEGA.asGRCRegs[this.cardEGA.regGRCIndx]);
             }
@@ -7381,15 +7381,15 @@ export default class VideoX86 extends Component {
         }
         switch(this.cardEGA.regGRCIndx) {
         case Card.GRC.SRESET.INDX:
-            this.cardEGA.nSetMapData = VideoX86.aEGAByteToDW[bOut & 0xf];
+            this.cardEGA.nSetMapData = Videox86.aEGAByteToDW[bOut & 0xf];
             this.cardEGA.nSetMapBits = this.cardEGA.nSetMapData & ~this.cardEGA.nSetMapMask;
             break;
         case Card.GRC.ESRESET.INDX:
-            this.cardEGA.nSetMapMask = ~VideoX86.aEGAByteToDW[bOut & 0xf];
+            this.cardEGA.nSetMapMask = ~Videox86.aEGAByteToDW[bOut & 0xf];
             this.cardEGA.nSetMapBits = this.cardEGA.nSetMapData & ~this.cardEGA.nSetMapMask;
             break;
         case Card.GRC.COLORCOMP.INDX:
-            this.cardEGA.nColorCompare = VideoX86.aEGAByteToDW[bOut & 0xf] & (0x80808080|0);
+            this.cardEGA.nColorCompare = Videox86.aEGAByteToDW[bOut & 0xf] & (0x80808080|0);
             break;
         case Card.GRC.DATAROT.INDX:
         case Card.GRC.MODE.INDX:
@@ -7402,7 +7402,7 @@ export default class VideoX86 extends Component {
             this.checkMode();
             break;
         case Card.GRC.COLORDC.INDX:
-            this.cardEGA.nColorDontCare = VideoX86.aEGAByteToDW[bOut & 0xf] & (0x80808080|0);
+            this.cardEGA.nColorDontCare = Videox86.aEGAByteToDW[bOut & 0xf] & (0x80808080|0);
             break;
         case Card.GRC.BITMASK.INDX:
             this.cardEGA.nBitMapMask = bOut | (bOut << 8) | (bOut << 16) | (bOut << 24);
@@ -7415,7 +7415,7 @@ export default class VideoX86 extends Component {
     /**
      * inCGAIndx(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D4)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number|undefined}
@@ -7428,7 +7428,7 @@ export default class VideoX86 extends Component {
     /**
      * outCGAIndx(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D4)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7441,7 +7441,7 @@ export default class VideoX86 extends Component {
     /**
      * inCGAData(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D5)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number|undefined}
@@ -7454,7 +7454,7 @@ export default class VideoX86 extends Component {
     /**
      * outCGAData(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D5)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7467,7 +7467,7 @@ export default class VideoX86 extends Component {
     /**
      * inCGAMode(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D8)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7480,7 +7480,7 @@ export default class VideoX86 extends Component {
     /**
      * outCGAMode(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D8)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7493,7 +7493,7 @@ export default class VideoX86 extends Component {
     /**
      * inCGAColor(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D9)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7510,7 +7510,7 @@ export default class VideoX86 extends Component {
     /**
      * outCGAColor(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D9)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7529,7 +7529,7 @@ export default class VideoX86 extends Component {
     /**
      * inCGAStatus(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3DA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7542,7 +7542,7 @@ export default class VideoX86 extends Component {
     /**
      * inCRTCIndx(card, port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} port
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7569,7 +7569,7 @@ export default class VideoX86 extends Component {
     /**
      * outCRTCIndx(card, port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} port
      * @param {number} bOut
@@ -7585,7 +7585,7 @@ export default class VideoX86 extends Component {
     /**
      * inCRTCData(card, port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} port
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7620,7 +7620,7 @@ export default class VideoX86 extends Component {
     /**
      * outCRTCData(card, port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} port
      * @param {number} bOut
@@ -7649,7 +7649,7 @@ export default class VideoX86 extends Component {
             }
 
             let fModified = (card.regCRTData[card.regCRTIndx] !== bOut);
-            if (fModified || VideoX86.TRAPALL) {
+            if (fModified || Videox86.TRAPALL) {
                 if (!addrFrom || this.messageEnabled()) {
                     this.printIO(port /* card.port + 1 */, bOut, addrFrom, "CRTC." + card.asCRTCRegs[card.regCRTIndx]);
                 }
@@ -7710,7 +7710,7 @@ export default class VideoX86 extends Component {
     /**
      * inCardMode(card, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7725,7 +7725,7 @@ export default class VideoX86 extends Component {
     /**
      * outCardMode(card, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -7748,7 +7748,7 @@ export default class VideoX86 extends Component {
      * ATC address/data flip-flop to "address" mode, which we emulate by setting cardEGA.fATCData to false, indicating
      * that the ATC is not in "data" mode.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -7832,7 +7832,7 @@ export default class VideoX86 extends Component {
     /**
      * dumpVideo(asArgs)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Array.<string>} asArgs
      */
     dumpVideo(asArgs)
@@ -7860,7 +7860,7 @@ export default class VideoX86 extends Component {
      * and checkCursor() call.  updateScreen() is driven by CPU bursts, so piggy-backing on that to drive
      * blink updates seems preferable to having another active timer in the system.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fStart]
      *
      doBlink(fStart)
@@ -7880,7 +7880,7 @@ export default class VideoX86 extends Component {
      */
 
     /**
-     * VideoX86.init()
+     * Videox86.init()
      *
      * This function operates on every HTML element of class "video", extracting the
      * JSON-encoded parameters for the Video constructor from the element's "data-value"
@@ -8064,7 +8064,7 @@ export default class VideoX86 extends Component {
              */
             let container;
             if (element.style) container = element;
-            let video = new VideoX86(parmsVideo, canvas, context, textarea /* || input */, container, aDiagElements);
+            let video = new Videox86(parmsVideo, canvas, context, textarea /* || input */, container, aDiagElements);
 
             /*
              * Bind any video-specific controls (eg, the Refresh button). There are no essential controls, however;
@@ -8075,7 +8075,7 @@ export default class VideoX86 extends Component {
     }
 }
 
-VideoX86.TRAPALL = true;           // monitor all I/O by default (not just deltas)
+Videox86.TRAPALL = true;           // monitor all I/O by default (not just deltas)
 
 /*
  * Supported Cards (and associated fonts)
@@ -8099,7 +8099,7 @@ VideoX86.TRAPALL = true;           // monitor all I/O by default (not just delta
  *      dot patterns for 256 different characters. The character sets are identical to those provided by the
  *      IBM Monochrome Display Adapter and the IBM Color/Graphics Monitor Adapter.
  */
-VideoX86.CARD = {
+Videox86.CARD = {
     MDA:    1,          // uses 9x14 monochrome font
     CGA:    2,          // uses 8x8 color font
     EGA:    4,          // uses 8x14 color font (by default)
@@ -8123,7 +8123,7 @@ VideoX86.CARD = {
  * situations as best they can (and when they don't, it should be considered a bug if some application is
  * broken as a result), but realistically, our hardware emulation is never likely to be 100% accurate.
  */
-VideoX86.MODE = {
+Videox86.MODE = {
     CGA_40X25_BW:       0,
     CGA_40X25:          1,
     CGA_80X25_BW:       2,
@@ -8155,18 +8155,18 @@ VideoX86.MODE = {
     UNKNOWN:            0xFF
 };
 
-VideoX86.UPDATES_PER_SECOND = 60;
+Videox86.UPDATES_PER_SECOND = 60;
 
 /*
  * Supported Models
  *
  * Each model refers to an array where [0] is the card ID, and [1] is the default mode.
  */
-VideoX86.MODEL = {
-    "mda": [VideoX86.CARD.MDA, VideoX86.MODE.MDA_80X25],
-    "cga": [VideoX86.CARD.CGA, VideoX86.MODE.CGA_80X25],
-    "ega": [VideoX86.CARD.EGA, VideoX86.MODE.CGA_80X25],
-    "vga": [VideoX86.CARD.VGA, VideoX86.MODE.CGA_80X25]
+Videox86.MODEL = {
+    "mda": [Videox86.CARD.MDA, Videox86.MODE.MDA_80X25],
+    "cga": [Videox86.CARD.CGA, Videox86.MODE.CGA_80X25],
+    "ega": [Videox86.CARD.EGA, Videox86.MODE.CGA_80X25],
+    "vga": [Videox86.CARD.VGA, Videox86.MODE.CGA_80X25]
 };
 
 /*
@@ -8216,14 +8216,14 @@ VideoX86.MODEL = {
 /**
  * @type {Object}
  */
-VideoX86.monitorSpecs = {};
+Videox86.monitorSpecs = {};
 
 /**
  * NOTE: The number of horizontal periods per frame (200) is dictated by the EGA ROM BIOS at C000:03D0.
  *
  * @type {MonitorSpecs}
  */
-VideoX86.monitorSpecs[ChipSet.MONITOR.COLOR] = {
+Videox86.monitorSpecs[ChipSet.MONITOR.COLOR] = {
     nHorzPeriodsPerSec: 15700,
     nHorzPeriodsPerFrame: 200,
     percentHorzActive: 75,
@@ -8235,7 +8235,7 @@ VideoX86.monitorSpecs[ChipSet.MONITOR.COLOR] = {
  *
  * @type {MonitorSpecs}
  */
-VideoX86.monitorSpecs[ChipSet.MONITOR.MONO] = {
+Videox86.monitorSpecs[ChipSet.MONITOR.MONO] = {
     nHorzPeriodsPerSec: 18432,
     nHorzPeriodsPerFrame: 350,
     percentHorzActive: 75,
@@ -8247,7 +8247,7 @@ VideoX86.monitorSpecs[ChipSet.MONITOR.MONO] = {
  *
  * @type {MonitorSpecs}
  */
-VideoX86.monitorSpecs[ChipSet.MONITOR.EGACOLOR] = {
+Videox86.monitorSpecs[ChipSet.MONITOR.EGACOLOR] = {
     nHorzPeriodsPerSec: 21850,
     nHorzPeriodsPerFrame: 350,
     percentHorzActive: 75,
@@ -8259,7 +8259,7 @@ VideoX86.monitorSpecs[ChipSet.MONITOR.EGACOLOR] = {
  *
  * @type {MonitorSpecs}
  */
-VideoX86.monitorSpecs[ChipSet.MONITOR.VGACOLOR] = {
+Videox86.monitorSpecs[ChipSet.MONITOR.VGACOLOR] = {
     nHorzPeriodsPerSec: 31500,
     nHorzPeriodsPerFrame: 400,
     percentHorzActive: 85,
@@ -8288,7 +8288,7 @@ VideoX86.monitorSpecs[ChipSet.MONITOR.VGACOLOR] = {
  * there is an array that defines the corresponding monitor type(s) for the EGA adapter and any secondary
  * adapter.  The third value is a boolean indicating whether the EGA is the primary adapter.
  */
-VideoX86.aEGAMonitorSwitches = {
+Videox86.aEGAMonitorSwitches = {
     0x06: [ChipSet.MONITOR.TV,           ChipSet.MONITOR.MONO,  true],  // "1001"
     0x07: [ChipSet.MONITOR.COLOR,        ChipSet.MONITOR.MONO,  true],  // "0001" [used by 5153 monitor configs]
     0x08: [ChipSet.MONITOR.EGAEMULATION, ChipSet.MONITOR.MONO,  true],  // "1110"
@@ -8335,25 +8335,25 @@ VideoX86.aEGAMonitorSwitches = {
  * However, for EGA and VGA graphics modes, a "word" of memory is a single element in the video buffer
  * containing 32 bits of pixel data.
  */
-VideoX86.aModeParms = [];                                                                              // Mode
-VideoX86.aModeParms[VideoX86.MODE.CGA_40X25]          = [ 40,  25,  1, 0.5,   0, VideoX86.CARD.CGA];         // 0x01
-VideoX86.aModeParms[VideoX86.MODE.CGA_80X25]          = [ 80,  25,  1, 0.5,   0, VideoX86.CARD.CGA];         // 0x03
-VideoX86.aModeParms[VideoX86.MODE.CGA_320X200]        = [320, 200,  8,   4, 192];                         // 0x04
-VideoX86.aModeParms[VideoX86.MODE.CGA_640X200]        = [640, 200, 16,   8, 192];                         // 0x06
-VideoX86.aModeParms[VideoX86.MODE.MDA_80X25]          = [ 80,  25,  1, 0.5,   0, VideoX86.CARD.MDA];         // 0x07
-VideoX86.aModeParms[VideoX86.MODE.EGA_320X200]        = [320, 200,  8,   8];                              // 0x0D
-VideoX86.aModeParms[VideoX86.MODE.EGA_640X200]        = [640, 200,  8,   8];                              // 0x0E
-VideoX86.aModeParms[VideoX86.MODE.EGA_640X350_MONO]   = [640, 350,  8,   8];                              // 0x0F
-VideoX86.aModeParms[VideoX86.MODE.EGA_640X350]        = [640, 350,  8,   8];                              // 0x10
-VideoX86.aModeParms[VideoX86.MODE.VGA_640X480_MONO]   = [640, 480,  8,   8];                              // 0x11
-VideoX86.aModeParms[VideoX86.MODE.VGA_640X480]        = [640, 480,  8,   8];                              // 0x12
-VideoX86.aModeParms[VideoX86.MODE.VGA_320X200]        = [320, 200,  4,   1];                              // 0x13
-VideoX86.aModeParms[VideoX86.MODE.VGA_320X200P]       = [320, 200,  4,   4];                              // 0x14
-VideoX86.aModeParms[VideoX86.MODE.VGA_320X240P]       = [320, 240,  4,   4];                              // 0x15
-VideoX86.aModeParms[VideoX86.MODE.VGA_320X400P]       = [320, 400,  4,   4];                              // 0x16
-VideoX86.aModeParms[VideoX86.MODE.CGA_40X25_BW]       = VideoX86.aModeParms[VideoX86.MODE.CGA_40X25];           // 0x00
-VideoX86.aModeParms[VideoX86.MODE.CGA_80X25_BW]       = VideoX86.aModeParms[VideoX86.MODE.CGA_80X25];           // 0x02
-VideoX86.aModeParms[VideoX86.MODE.CGA_320X200_BW]     = VideoX86.aModeParms[VideoX86.MODE.CGA_320X200];         // 0x05
+Videox86.aModeParms = [];                                                                              // Mode
+Videox86.aModeParms[Videox86.MODE.CGA_40X25]          = [ 40,  25,  1, 0.5,   0, Videox86.CARD.CGA];         // 0x01
+Videox86.aModeParms[Videox86.MODE.CGA_80X25]          = [ 80,  25,  1, 0.5,   0, Videox86.CARD.CGA];         // 0x03
+Videox86.aModeParms[Videox86.MODE.CGA_320X200]        = [320, 200,  8,   4, 192];                         // 0x04
+Videox86.aModeParms[Videox86.MODE.CGA_640X200]        = [640, 200, 16,   8, 192];                         // 0x06
+Videox86.aModeParms[Videox86.MODE.MDA_80X25]          = [ 80,  25,  1, 0.5,   0, Videox86.CARD.MDA];         // 0x07
+Videox86.aModeParms[Videox86.MODE.EGA_320X200]        = [320, 200,  8,   8];                              // 0x0D
+Videox86.aModeParms[Videox86.MODE.EGA_640X200]        = [640, 200,  8,   8];                              // 0x0E
+Videox86.aModeParms[Videox86.MODE.EGA_640X350_MONO]   = [640, 350,  8,   8];                              // 0x0F
+Videox86.aModeParms[Videox86.MODE.EGA_640X350]        = [640, 350,  8,   8];                              // 0x10
+Videox86.aModeParms[Videox86.MODE.VGA_640X480_MONO]   = [640, 480,  8,   8];                              // 0x11
+Videox86.aModeParms[Videox86.MODE.VGA_640X480]        = [640, 480,  8,   8];                              // 0x12
+Videox86.aModeParms[Videox86.MODE.VGA_320X200]        = [320, 200,  4,   1];                              // 0x13
+Videox86.aModeParms[Videox86.MODE.VGA_320X200P]       = [320, 200,  4,   4];                              // 0x14
+Videox86.aModeParms[Videox86.MODE.VGA_320X240P]       = [320, 240,  4,   4];                              // 0x15
+Videox86.aModeParms[Videox86.MODE.VGA_320X400P]       = [320, 400,  4,   4];                              // 0x16
+Videox86.aModeParms[Videox86.MODE.CGA_40X25_BW]       = Videox86.aModeParms[Videox86.MODE.CGA_40X25];           // 0x00
+Videox86.aModeParms[Videox86.MODE.CGA_80X25_BW]       = Videox86.aModeParms[Videox86.MODE.CGA_80X25];           // 0x02
+Videox86.aModeParms[Videox86.MODE.CGA_320X200_BW]     = Videox86.aModeParms[Videox86.MODE.CGA_320X200];         // 0x05
 
 /*
  * MDA attribute byte definitions
@@ -8369,17 +8369,17 @@ VideoX86.aModeParms[VideoX86.MODE.CGA_320X200_BW]     = VideoX86.aModeParms[Vide
  * characters.  updateScreen() maintains a global count (cBlinkVisible) of blinking characters, to simplify the
  * decision of when to redraw the screen.
  */
-VideoX86.ATTRS = {};
-VideoX86.ATTRS.FGND_BLACK  = 0x00;
-VideoX86.ATTRS.FGND_ULINE  = 0x01;
-VideoX86.ATTRS.FGND_WHITE  = 0x07;
-VideoX86.ATTRS.FGND_BRIGHT = 0x08;
-VideoX86.ATTRS.BGND_BLACK  = 0x00;
-VideoX86.ATTRS.BGND_WHITE  = 0x70;
-VideoX86.ATTRS.BGND_BLINK  = 0x80;
-VideoX86.ATTRS.BGND_BRIGHT = 0x80;
-VideoX86.ATTRS.DRAW_FGND   = 0x100;        // this is an internal attribute bit, indicating the foreground should be drawn
-VideoX86.ATTRS.DRAW_CURSOR = 0x200;        // this is an internal attribute bit, indicating when the cursor should be drawn
+Videox86.ATTRS = {};
+Videox86.ATTRS.FGND_BLACK  = 0x00;
+Videox86.ATTRS.FGND_ULINE  = 0x01;
+Videox86.ATTRS.FGND_WHITE  = 0x07;
+Videox86.ATTRS.FGND_BRIGHT = 0x08;
+Videox86.ATTRS.BGND_BLACK  = 0x00;
+Videox86.ATTRS.BGND_WHITE  = 0x70;
+Videox86.ATTRS.BGND_BLINK  = 0x80;
+Videox86.ATTRS.BGND_BRIGHT = 0x80;
+Videox86.ATTRS.DRAW_FGND   = 0x100;        // this is an internal attribute bit, indicating the foreground should be drawn
+Videox86.ATTRS.DRAW_CURSOR = 0x200;        // this is an internal attribute bit, indicating when the cursor should be drawn
 
 /*
  * Here's a "cheat sheet" for attribute byte combinations that the IBM MDA could have supported.  The original (Aug 1981)
@@ -8428,19 +8428,19 @@ VideoX86.ATTRS.DRAW_CURSOR = 0x200;        // this is an internal attribute bit,
  * CGA attribute byte definitions; these simply extend the set of MDA attributes, with the exception of ATTR_FNGD_ULINE,
  * which the CGA can treat only as ATTR_FGND_BLUE.
  */
-VideoX86.ATTRS.FGND_BLUE       = 0x01;
-VideoX86.ATTRS.FGND_GREEN      = 0x02;
-VideoX86.ATTRS.FGND_CYAN       = 0x03;
-VideoX86.ATTRS.FGND_RED        = 0x04;
-VideoX86.ATTRS.FGND_MAGENTA    = 0x05;
-VideoX86.ATTRS.FGND_BROWN      = 0x06;
+Videox86.ATTRS.FGND_BLUE       = 0x01;
+Videox86.ATTRS.FGND_GREEN      = 0x02;
+Videox86.ATTRS.FGND_CYAN       = 0x03;
+Videox86.ATTRS.FGND_RED        = 0x04;
+Videox86.ATTRS.FGND_MAGENTA    = 0x05;
+Videox86.ATTRS.FGND_BROWN      = 0x06;
 
-VideoX86.ATTRS.BGND_BLUE       = 0x10;
-VideoX86.ATTRS.BGND_GREEN      = 0x20;
-VideoX86.ATTRS.BGND_CYAN       = 0x30;
-VideoX86.ATTRS.BGND_RED        = 0x40;
-VideoX86.ATTRS.BGND_MAGENTA    = 0x50;
-VideoX86.ATTRS.BGND_BROWN      = 0x60;
+Videox86.ATTRS.BGND_BLUE       = 0x10;
+Videox86.ATTRS.BGND_GREEN      = 0x20;
+Videox86.ATTRS.BGND_CYAN       = 0x30;
+Videox86.ATTRS.BGND_RED        = 0x40;
+Videox86.ATTRS.BGND_MAGENTA    = 0x50;
+Videox86.ATTRS.BGND_BROWN      = 0x60;
 
 /*
  * For the MDA, there are currently three distinct "colors": off, normal, and intense.  There are
@@ -8454,7 +8454,7 @@ VideoX86.ATTRS.BGND_BROWN      = 0x60;
  * (model 5151), then I may need to support another "color": dark.  For now, the attributes that may
  * require dark (ie, 0x78 and 0xF8) have their foreground attribute (0x8) mapped to 0x0 (off) instead.
  */
-VideoX86.aMDAColors = [
+Videox86.aMDAColors = [
     [0x00, 0x00, 0x00, 0xff],       // 0: off
     [0x09, 0xcc, 0x50, 0xff],       // 1: normal (with underlining)
     [0x09, 0xcc, 0x50, 0xff],       // 2: normal
@@ -8472,9 +8472,9 @@ VideoX86.aMDAColors = [
  *
  * MDA attributes form an index into aMDAColorMap, which in turn provides an index into aMDAColors.
  */
-VideoX86.aMDAColorMap = [0x0, 0x1, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x0, 0x3, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4];
+Videox86.aMDAColorMap = [0x0, 0x1, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x0, 0x3, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4];
 
-VideoX86.aCGAColors = [
+Videox86.aCGAColors = [
     [0x00, 0x00, 0x00, 0xff],   // 0x00: ATTR_FGND_BLACK
     [0x00, 0x00, 0xaa, 0xff],   // 0x01: ATTR_FGND_BLUE
     [0x00, 0xaa, 0x00, 0xff],   // 0x02: ATTR_FGND_GREEN
@@ -8493,39 +8493,39 @@ VideoX86.aCGAColors = [
     [0xff, 0xff, 0xff, 0xff]    // 0x0F: ATTR_FGND_WHITE   | ATTR_FGND_BRIGHT (aka white)
 ];
 
-VideoX86.aCGAColorSet0 = [VideoX86.ATTRS.FGND_GREEN, VideoX86.ATTRS.FGND_RED,     VideoX86.ATTRS.FGND_BROWN];
-VideoX86.aCGAColorSet1 = [VideoX86.ATTRS.FGND_CYAN,  VideoX86.ATTRS.FGND_MAGENTA, VideoX86.ATTRS.FGND_WHITE];
+Videox86.aCGAColorSet0 = [Videox86.ATTRS.FGND_GREEN, Videox86.ATTRS.FGND_RED,     Videox86.ATTRS.FGND_BROWN];
+Videox86.aCGAColorSet1 = [Videox86.ATTRS.FGND_CYAN,  Videox86.ATTRS.FGND_MAGENTA, Videox86.ATTRS.FGND_WHITE];
 
 /*
  * Here is the EGA BIOS default ATC palette register set for color text modes, from which getCardColors()
  * builds a default RGB array, similar to aCGAColors above.
  */
-VideoX86.aEGAPalDef = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x14, 0x07, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F];
+Videox86.aEGAPalDef = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x14, 0x07, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F];
 
-VideoX86.aEGAByteToDW = [
+Videox86.aEGAByteToDW = [
     0x00000000,   0x000000ff,   0x0000ff00,   0x0000ffff,
     0x00ff0000,   0x00ff00ff,   0x00ffff00,   0x00ffffff,
     0xff000000|0, 0xff0000ff|0, 0xff00ff00|0, 0xff00ffff|0,
     0xffff0000|0, 0xffff00ff|0, 0xffffff00|0, 0xffffffff|0
 ];
 
-VideoX86.aEGADWToByte = [];
-VideoX86.aEGADWToByte[0x00000000]   = 0x0;
-VideoX86.aEGADWToByte[0x00000080]   = 0x1;
-VideoX86.aEGADWToByte[0x00008000]   = 0x2;
-VideoX86.aEGADWToByte[0x00008080]   = 0x3;
-VideoX86.aEGADWToByte[0x00800000]   = 0x4;
-VideoX86.aEGADWToByte[0x00800080]   = 0x5;
-VideoX86.aEGADWToByte[0x00808000]   = 0x6;
-VideoX86.aEGADWToByte[0x00808080]   = 0x7;
-VideoX86.aEGADWToByte[0x80000000|0] = 0x8;
-VideoX86.aEGADWToByte[0x80000080|0] = 0x9;
-VideoX86.aEGADWToByte[0x80008000|0] = 0xa;
-VideoX86.aEGADWToByte[0x80008080|0] = 0xb;
-VideoX86.aEGADWToByte[0x80800000|0] = 0xc;
-VideoX86.aEGADWToByte[0x80800080|0] = 0xd;
-VideoX86.aEGADWToByte[0x80808000|0] = 0xe;
-VideoX86.aEGADWToByte[0x80808080|0] = 0xf;
+Videox86.aEGADWToByte = [];
+Videox86.aEGADWToByte[0x00000000]   = 0x0;
+Videox86.aEGADWToByte[0x00000080]   = 0x1;
+Videox86.aEGADWToByte[0x00008000]   = 0x2;
+Videox86.aEGADWToByte[0x00008080]   = 0x3;
+Videox86.aEGADWToByte[0x00800000]   = 0x4;
+Videox86.aEGADWToByte[0x00800080]   = 0x5;
+Videox86.aEGADWToByte[0x00808000]   = 0x6;
+Videox86.aEGADWToByte[0x00808080]   = 0x7;
+Videox86.aEGADWToByte[0x80000000|0] = 0x8;
+Videox86.aEGADWToByte[0x80000080|0] = 0x9;
+Videox86.aEGADWToByte[0x80008000|0] = 0xa;
+Videox86.aEGADWToByte[0x80008080|0] = 0xb;
+Videox86.aEGADWToByte[0x80800000|0] = 0xc;
+Videox86.aEGADWToByte[0x80800080|0] = 0xd;
+Videox86.aEGADWToByte[0x80808000|0] = 0xe;
+Videox86.aEGADWToByte[0x80808080|0] = 0xf;
 
 /*
  * Card Specifications
@@ -8549,16 +8549,16 @@ VideoX86.aEGADWToByte[0x80808080|0] = 0xf;
  * to map it to the video buffer address.  The latter approach gives us total control over the buffer;
  * refer to getMemoryAccess().
  */
-VideoX86.cardSpecs = [];
-VideoX86.cardSpecs[VideoX86.CARD.MDA] = ["MDA", Card.MDA.CRTC.INDX.PORT, 0xB0000, 0x01000, 0x01000, ChipSet.MONITOR.MONO];
-VideoX86.cardSpecs[VideoX86.CARD.CGA] = ["CGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x04000, ChipSet.MONITOR.COLOR];
-VideoX86.cardSpecs[VideoX86.CARD.EGA] = ["EGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x10000, ChipSet.MONITOR.EGACOLOR];
-VideoX86.cardSpecs[VideoX86.CARD.VGA] = ["VGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x40000, ChipSet.MONITOR.VGACOLOR];
+Videox86.cardSpecs = [];
+Videox86.cardSpecs[Videox86.CARD.MDA] = ["MDA", Card.MDA.CRTC.INDX.PORT, 0xB0000, 0x01000, 0x01000, ChipSet.MONITOR.MONO];
+Videox86.cardSpecs[Videox86.CARD.CGA] = ["CGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x04000, ChipSet.MONITOR.COLOR];
+Videox86.cardSpecs[Videox86.CARD.EGA] = ["EGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x10000, ChipSet.MONITOR.EGACOLOR];
+Videox86.cardSpecs[Videox86.CARD.VGA] = ["VGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x40000, ChipSet.MONITOR.VGACOLOR];
 
 /*
  * Values for nTouchConfig; a value will be selected based on the sTouchScreen configuration parameter.
  */
-VideoX86.TOUCH = {
+Videox86.TOUCH = {
     NONE:       0,
     DEFAULT:    1,
     KEYGRID:    2,
@@ -8571,63 +8571,63 @@ VideoX86.TOUCH = {
  * even called KEYGRID support) was to make the 1985 game "Rogue" (pcjs.org/apps/pcx86/1985/rogue)
  * more fun to play on an iPad (the space-bar is a commonly required key).
  */
-VideoX86.KEYGRID = [
-    [KbdX86.SIMCODE.HOME, KbdX86.SIMCODE.UP,    KbdX86.SIMCODE.PGUP],
-    [KbdX86.SIMCODE.LEFT, KbdX86.SIMCODE.SPACE, KbdX86.SIMCODE.RIGHT],
-    [KbdX86.SIMCODE.END,  KbdX86.SIMCODE.DOWN,  KbdX86.SIMCODE.PGDN],
+Videox86.KEYGRID = [
+    [Keyboardx86.SIMCODE.HOME, Keyboardx86.SIMCODE.UP,    Keyboardx86.SIMCODE.PGUP],
+    [Keyboardx86.SIMCODE.LEFT, Keyboardx86.SIMCODE.SPACE, Keyboardx86.SIMCODE.RIGHT],
+    [Keyboardx86.SIMCODE.END,  Keyboardx86.SIMCODE.DOWN,  Keyboardx86.SIMCODE.PGDN],
 ];
 
 /*
  * Port input/output notification tables
  */
-VideoX86.aMDAPortInput = {
-    0x3B0: VideoX86.prototype.inMDAIndx,           // duplicate of 0x3B4
-    0x3B1: VideoX86.prototype.inMDAData,           // duplicate of 0x3B5
-    0x3B2: VideoX86.prototype.inMDAIndx,           // duplicate of 0x3B4
-    0x3B3: VideoX86.prototype.inMDAData,           // duplicate of 0x3B5
-    0x3B4: VideoX86.prototype.inMDAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3B5: VideoX86.prototype.inMDAData,           // technically, the only CRTC Data registers that are readable are R14-R17
-    0x3B6: VideoX86.prototype.inMDAIndx,           // duplicate of 0x3B4
-    0x3B7: VideoX86.prototype.inMDAData,           // duplicate of 0x3B5
-    0x3B8: VideoX86.prototype.inMDAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3BA: VideoX86.prototype.inMDAStatus
+Videox86.aMDAPortInput = {
+    0x3B0: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
+    0x3B1: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
+    0x3B2: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
+    0x3B3: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
+    0x3B4: Videox86.prototype.inMDAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
+    0x3B5: Videox86.prototype.inMDAData,           // technically, the only CRTC Data registers that are readable are R14-R17
+    0x3B6: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
+    0x3B7: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
+    0x3B8: Videox86.prototype.inMDAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
+    0x3BA: Videox86.prototype.inMDAStatus
 };
 
-VideoX86.aMDAPortOutput = {
-    0x3B0: VideoX86.prototype.outMDAIndx,          // duplicate of 0x3B4
-    0x3B1: VideoX86.prototype.outMDAData,          // duplicate of 0x3B5
-    0x3B2: VideoX86.prototype.outMDAIndx,          // duplicate of 0x3B4
-    0x3B3: VideoX86.prototype.outMDAData,          // duplicate of 0x3B5
-    0x3B4: VideoX86.prototype.outMDAIndx,
-    0x3B5: VideoX86.prototype.outMDAData,
-    0x3B6: VideoX86.prototype.outMDAIndx,          // duplicate of 0x3B4
-    0x3B7: VideoX86.prototype.outMDAData,          // duplicate of 0x3B5
-    0x3B8: VideoX86.prototype.outMDAMode
+Videox86.aMDAPortOutput = {
+    0x3B0: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
+    0x3B1: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
+    0x3B2: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
+    0x3B3: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
+    0x3B4: Videox86.prototype.outMDAIndx,
+    0x3B5: Videox86.prototype.outMDAData,
+    0x3B6: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
+    0x3B7: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
+    0x3B8: Videox86.prototype.outMDAMode
 };
 
-VideoX86.aCGAPortInput = {
-    0x3D4: VideoX86.prototype.inCGAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3D5: VideoX86.prototype.inCGAData,           // technically, the only CRTC Data registers that are readable are R14-R17
-    0x3D8: VideoX86.prototype.inCGAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3D9: VideoX86.prototype.inCGAColor,          // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3DA: VideoX86.prototype.inCGAStatus
+Videox86.aCGAPortInput = {
+    0x3D4: Videox86.prototype.inCGAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
+    0x3D5: Videox86.prototype.inCGAData,           // technically, the only CRTC Data registers that are readable are R14-R17
+    0x3D8: Videox86.prototype.inCGAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
+    0x3D9: Videox86.prototype.inCGAColor,          // technically, not actually readable, but I want the Debugger to be able to read this
+    0x3DA: Videox86.prototype.inCGAStatus
 };
 
-VideoX86.aCGAPortOutput = {
-    0x3D4: VideoX86.prototype.outCGAIndx,
-    0x3D5: VideoX86.prototype.outCGAData,
-    0x3D8: VideoX86.prototype.outCGAMode,
-    0x3D9: VideoX86.prototype.outCGAColor
+Videox86.aCGAPortOutput = {
+    0x3D4: Videox86.prototype.outCGAIndx,
+    0x3D5: Videox86.prototype.outCGAData,
+    0x3D8: Videox86.prototype.outCGAMode,
+    0x3D9: Videox86.prototype.outCGAColor
 };
 
-VideoX86.aEGAPortInput = {
-    0x3C0: VideoX86.prototype.inATCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3C1: VideoX86.prototype.inATCData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3C2: VideoX86.prototype.inStatus0,
-    0x3C4: VideoX86.prototype.inSEQIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3C5: VideoX86.prototype.inSEQData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3CE: VideoX86.prototype.inGRCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3CF: VideoX86.prototype.inGRCData            // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+Videox86.aEGAPortInput = {
+    0x3C0: Videox86.prototype.inATCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    0x3C1: Videox86.prototype.inATCData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    0x3C2: Videox86.prototype.inStatus0,
+    0x3C4: Videox86.prototype.inSEQIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    0x3C5: Videox86.prototype.inSEQData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    0x3CE: Videox86.prototype.inGRCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    0x3CF: Videox86.prototype.inGRCData            // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
 };
 
 /*
@@ -8635,38 +8635,38 @@ VideoX86.aEGAPortInput = {
  * ability in place, treating the VGA as a superset of the EGA as much as possible; will any code break because word
  * OUTs to port 0x3C0 (and/or byte OUTs to port 0x3C1) actually work?  Possibly, but highly unlikely.
  */
-VideoX86.aEGAPortOutput = {
-    0x3BA: VideoX86.prototype.outFeat,
-    0x3C0: VideoX86.prototype.outATC,
-    0x3C1: VideoX86.prototype.outATC,              // the EGA BIOS writes to this port (see C000:0416), implying that 0x3C0 and 0x3C1 both decode the same register
-    0x3C2: VideoX86.prototype.outMisc,             // FYI, since this overlaps with STATUS0.PORT, there's currently no way for the Debugger to read the Misc register
-    0x3C4: VideoX86.prototype.outSEQIndx,
-    0x3C5: VideoX86.prototype.outSEQData,
-    0x3CA: VideoX86.prototype.outGRCPos2,
-    0x3CC: VideoX86.prototype.outGRCPos1,
-    0x3CE: VideoX86.prototype.outGRCIndx,
-    0x3CF: VideoX86.prototype.outGRCData,
-    0x3DA: VideoX86.prototype.outFeat
+Videox86.aEGAPortOutput = {
+    0x3BA: Videox86.prototype.outFeat,
+    0x3C0: Videox86.prototype.outATC,
+    0x3C1: Videox86.prototype.outATC,              // the EGA BIOS writes to this port (see C000:0416), implying that 0x3C0 and 0x3C1 both decode the same register
+    0x3C2: Videox86.prototype.outMisc,             // FYI, since this overlaps with STATUS0.PORT, there's currently no way for the Debugger to read the Misc register
+    0x3C4: Videox86.prototype.outSEQIndx,
+    0x3C5: Videox86.prototype.outSEQData,
+    0x3CA: Videox86.prototype.outGRCPos2,
+    0x3CC: Videox86.prototype.outGRCPos1,
+    0x3CE: Videox86.prototype.outGRCIndx,
+    0x3CF: Videox86.prototype.outGRCData,
+    0x3DA: Videox86.prototype.outFeat
 };
 
-VideoX86.aVGAPortInput = {
-    0x3C3: VideoX86.prototype.inVGAEnable,
-    0x3C6: VideoX86.prototype.inDACMask,
-    0x3C7: VideoX86.prototype.inDACState,
-    0x3C9: VideoX86.prototype.inDACData,
-    0x3CA: VideoX86.prototype.inVGAFeat,
-    0x3CC: VideoX86.prototype.inVGAMisc
+Videox86.aVGAPortInput = {
+    0x3C3: Videox86.prototype.inVGAEnable,
+    0x3C6: Videox86.prototype.inDACMask,
+    0x3C7: Videox86.prototype.inDACState,
+    0x3C9: Videox86.prototype.inDACData,
+    0x3CA: Videox86.prototype.inVGAFeat,
+    0x3CC: Videox86.prototype.inVGAMisc
 };
 
-VideoX86.aVGAPortOutput = {
-    0x3C3: VideoX86.prototype.outVGAEnable,
-    0x3C6: VideoX86.prototype.outDACMask,
-    0x3C7: VideoX86.prototype.outDACRead,
-    0x3C8: VideoX86.prototype.outDACWrite,
-    0x3C9: VideoX86.prototype.outDACData
+Videox86.aVGAPortOutput = {
+    0x3C3: Videox86.prototype.outVGAEnable,
+    0x3C6: Videox86.prototype.outDACMask,
+    0x3C7: Videox86.prototype.outDACRead,
+    0x3C8: Videox86.prototype.outDACWrite,
+    0x3C9: Videox86.prototype.outDACData
 };
 
 /*
  * Initialize every Video module on the page.
  */
-WebLib.onInit(VideoX86.init);
+WebLib.onInit(Videox86.init);

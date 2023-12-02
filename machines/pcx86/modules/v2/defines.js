@@ -106,7 +106,7 @@ var SYMBOLS = DEBUGGER;
 
 /**
  * TYPEDARRAYS enables use of typed arrays for Memory blocks.  This used to be a compile-time-only option, but I've
- * added Memory access functions for typed arrays (see MemoryX86.afnTypedArray), so support can be enabled dynamically now.
+ * added Memory access functions for typed arrays (see Memoryx86.afnTypedArray), so support can be enabled dynamically now.
  *
  * See the Memory component for details.
  *

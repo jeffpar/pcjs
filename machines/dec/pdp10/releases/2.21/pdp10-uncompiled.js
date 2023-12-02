@@ -5101,7 +5101,7 @@ class DbgLib extends Component {
      *      base: the base to use for most numeric input/output (default is 16)
      *
      * The DbgLib component is a shared component containing a subset of functionality used by
-     * the other CPU-specific Debuggers (eg, DebuggerX86).  Over time, the goal is to factor out as
+     * the other CPU-specific Debuggers (eg, Debuggerx86).  Over time, the goal is to factor out as
      * much common debugging support as possible from those components into this one.
      *
      * @this {DbgLib}
