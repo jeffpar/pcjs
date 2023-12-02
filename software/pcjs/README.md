@@ -36,8 +36,9 @@ Some disks from this collection include:
   - [The Norton Utilities 3.00 (1984-12-07)](/software/pcx86/util/norton/3.00/)
   - [The Norton Utilities 4.00 (Standard Edition)](/software/pcx86/util/norton/4.00/)
   - [The Norton Utilities 4.00 (Advanced Edition)](/software/pcx86/util/norton/4.00/advanced/)
-  - [Early OS/2 Prototypes](/software/pcx86/sys/os2/misc/) (eg, CP-DOS and FOOTBALL)
-  - [Early WOW Development Files/Notes](#early-wow-development-filesnotes)
+  - [OS/2 Prototypes](/software/pcx86/sys/os2/misc/) (eg, CP-DOS and FOOTBALL)
+  - [WOW Development Files/Notes](#early-wow-development-filesnotes)
+  - [X86 Emulator Source Code (1990-1996)](#x86-emulator-source-code-1990-1996)
 
 You can probably find most or all of these disks on other software sites now, just as software from many other sites has found its way here, thanks to the continuous motion of bits on the Internet.
 
@@ -294,6 +295,10 @@ configured as the activation key sequence. *--[Jeff]({{ site.author_url }})*
     Total files listed:
            22 file(s)    2370328 bytes
                           496640 bytes free
+
+## X86 Emulator Source Code (1990-1996)
+
+This x86 emulator was created in my "spare time" at Microsoft.  It was never incorporated into any products, but it was used, briefly, to test early Windows NT WOW (Win16 on Win32) functionality on MIPS hardware (see [WOW Development Files/Notes](#early-wow-development-filesnotes)).
 
 ### Directory of X86 Emulator Source Code (1990-1996)
 
