@@ -462,7 +462,7 @@ X86.helpCALLF = function(off, sel)
 };
 
 /**
- * helpINT(nIDT, nError, nCycles)
+ * helpINT(nIDT, nError, nBytes, nCycles)
  *
  * NOTE: We no longer use setCSIP(), because it always loads the new CS using segCS.load(), which only knows
  * how to load GDT and LDT descriptors, whereas interrupts must use setCS.loadIDT(), which deals exclusively
@@ -471,14 +471,15 @@ X86.helpCALLF = function(off, sel)
  * @this {CPUx86}
  * @param {number} nIDT
  * @param {number|null} [nError]
+ * @param {number} [nBytes] (size of opcode, if any)
  * @param {number} [nCycles] (in addition to the default of nOpCyclesInt)
  */
-X86.helpINT = function(nIDT, nError, nCycles)
+X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
 {
     /*
      * TODO: We assess the cycle cost up front, because otherwise, if loadIDT() fails, no cost may be assessed.
      */
-    this.nStepCycles -= this.cycleCounts.nOpCyclesInt + (nCycles || 0);
+    this.nStepCycles -= this.cycleCounts.nOpCyclesInt + nCycles;
     let oldPS = this.getPS();
     let oldCS = this.getCS();
     let oldIP = this.getIP();
@@ -528,7 +529,7 @@ X86.helpINT = function(nIDT, nError, nCycles)
             this.setShort(0x52D, 0x4442);       // on 8088 boot up, set a special "BD" boot indicator in low memory
         }
     }
-    let addr = this.segCS.loadIDT(nIDT);
+    let addr = this.segCS.loadIDT(nIDT, nBytes);
     if (addr !== X86.ADDR_INVALID) {
         /*
          * TODO: Determine if we should use pushData() instead of pushWord() for oldCS and nError, to deal with
@@ -702,7 +703,7 @@ X86.helpDIVOverflow = function()
      * TODO: Determine the proper cycle cost.
      */
     if (this.model <= X86.MODEL_8088) {
-        X86.helpTrap.call(this, X86.EXCEPTION.DE_EXC, 2);
+        X86.helpTrap.call(this, X86.EXCEPTION.DE_EXC, 0, 2);
     } else {
         X86.helpFault.call(this, X86.EXCEPTION.DE_EXC, null, 2);
     }
@@ -718,26 +719,26 @@ X86.helpDIVOverflow = function()
  * @param {number} nIDT
  * @param {number} [nCycles] (number of cycles in addition to the default of nOpCyclesInt)
  */
-X86.helpInterrupt = function(nIDT, nCycles)
+X86.helpInterrupt = function(nIDT, nCycles = 11)
 {
     this.nFault = nIDT;
-    if (nCycles === undefined) nCycles = 11;
-    X86.helpINT.call(this, nIDT, null, nCycles);
+    X86.helpINT.call(this, nIDT, null, 0, nCycles);
 };
 
 /**
- * helpTrap(nIDT, nCycles)
+ * helpTrap(nIDT, nBytes, nCycles)
  *
  * Helper to dispatch traps (ie, exceptions that occur AFTER the instruction, with NO error code)
  *
  * @this {CPUx86}
  * @param {number} nIDT
+ * @param {number} [nBytes] (size of opcode, of any)
  * @param {number} [nCycles] (number of cycles in addition to the default of nOpCyclesInt)
  */
-X86.helpTrap = function(nIDT, nCycles)
+X86.helpTrap = function(nIDT, nBytes, nCycles)
 {
     this.nFault = -1;
-    X86.helpINT.call(this, nIDT, null, nCycles);
+    X86.helpINT.call(this, nIDT, null, nBytes, nCycles);
 };
 
 /**
@@ -844,7 +845,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
     if (fDispatch) {
 
         this.nFault = nFault;
-        X86.helpINT.call(this, nFault, nError, nCycles);
+        X86.helpINT.call(this, nFault, nError, 0, nCycles);
 
         /*
          * REPeated instructions that rewind regLIP to opLIP used to screw up this dispatch,
@@ -1044,7 +1045,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
  * Helper to zero a segment register whenever transitioning to a less privileged (numerically higher) level.
  *
  * @this {CPUx86}
- * @param {Segx86} seg
+ * @param {SegX86} seg
  */
 X86.zeroSeg = function(seg)
 {

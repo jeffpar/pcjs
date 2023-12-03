@@ -175,9 +175,9 @@ export default class Debuggerx86 extends DbgLib {
              * which contain vector and dbgAddr properties.
              */
             this.aVectorBP = [];
-            this.vectorSkip = false;
-            this.vectorTrap = true;             // true to trap vector breakpoints
-            this.vectorTrace = false;           // true whenever a vector has been traced
+            this.vectorHalt = false;            // true to halt on vector breakpoints
+            this.vectorSkip = -1;
+            this.vectorTrace = -1;              // >= 0 whenever a vector has been traced
 
             /*
              * Execution history is allocated by historyInit() whenever checksEnabled() conditions change.
@@ -2025,8 +2025,12 @@ export default class Debuggerx86 extends DbgLib {
 
                 let sInstruction = this.getInstruction(dbgAddrNew, sComment, nSequence);
 
-                if (dbgAddr.nDebugCycles != null) {
-                    sInstruction += " (" + dbgAddr.nDebugCycles + "," + StrLib.toHexByte(dbgAddr.nDebugState) + ")";
+                if (dbgAddr.nDebugState != null) {
+                    if (dbgAddr.nDebugCycles != null) {
+                        sInstruction += " (" + dbgAddr.nDebugCycles + "," + StrLib.toHexByte(dbgAddr.nDebugState) + ")";
+                    } else {
+                        sInstruction += " (" + StrLib.toHexByte(dbgAddr.nDebugState >> 16) + ",AX=" + StrLib.toHexWord(dbgAddr.nDebugState & 0xffff) + ")";
+                    }
                 }
 
                 if (!aFilters.length || sInstruction.indexOf(aFilters[0]) >= 0) {
@@ -3120,54 +3124,68 @@ export default class Debuggerx86 extends DbgLib {
                 if (bOpcode != null) {
                     this.aaOpcodeCounts[bOpcode][1]++;
                     /*
-                     * If any vector breakpoints are set but vector trapping is not, then vector tracing is
-                     * assumed, and for now, that's ALL we want to trace.
+                     * If any vector breakpoints are set AND we're not halting on vector breakpoints AND we
+                     * did not just encounter an interrupt vector, then do NOT log the instruction.  Otherwise, log it.
                      */
-                    if (this.aVectorBP.length && !this.vectorTrap) {
-                        return false;
-                    }
-                    let dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];
-                    this.setAddr(dbgAddr, cpu.getIP(), cpu.getCS());
+                    let fLog = (!this.aVectorBP.length || this.vectorHalt || this.vectorTrace >= 0);
 
-                    /*
-                     * This was added to collapse repeated instructions into a single entry in the history buffer.
-                     */
-                    let iPrevHistory = this.iOpcodeHistory? this.iOpcodeHistory - 1 : this.aOpcodeHistory.length - 1;
-                    let dbgPrev = this.aOpcodeHistory[iPrevHistory];
-                    if (dbgPrev.off == dbgAddr.off && dbgPrev.sel == dbgAddr.sel) {
-                        this.iOpcodeHistory = iPrevHistory;
-                        dbgAddr = dbgPrev;
-                    }
+                    // if (cpu.getIP() == 0x3C0F && cpu.getCS() == 0x048F) fLog = true;
 
-                    dbgAddr.nCPUCycles = cpu.getCycles();
-                    /*
-                     * For debugging timer issues, we can snap cycles remaining in the current burst, and the state of
-                     * TIMER0.
-                     */
-                    if (this.chipset) {
-                        let timer = this.chipset.aTimers[0];
-                        dbgAddr.nDebugCycles = cpu.nStepCycles;
-                        dbgAddr.nDebugState = timer.countCurrent[0] | (timer.countCurrent[1] << 8);
-                    }
-                    /*
-                     * For debugging video timing (eg, retrace) issues, it's helpful to record the state of the Video
-                     * component's countdown timer.  timerVideo will be set to null if there's no Video component or the
-                     * timer doesn't exist, so findTimer() should be called at most once.
-                     */
-                    else if (this.video) {
-                        if (this.timerVideo === undefined) {
-                            this.timerVideo = cpu.findTimer(this.video.id);
+                    if (fLog) {
+
+                        let dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];
+                        this.setAddr(dbgAddr, cpu.getIP(), cpu.getCS());
+
+                        /*
+                         * This was added to collapse repeated instructions into a single entry in the history buffer.
+                         */
+                        let iPrevHistory = this.iOpcodeHistory? this.iOpcodeHistory - 1 : this.aOpcodeHistory.length - 1;
+                        let dbgPrev = this.aOpcodeHistory[iPrevHistory];
+                        if (dbgPrev.off == dbgAddr.off && dbgPrev.sel == dbgAddr.sel) {
+                            this.iOpcodeHistory = iPrevHistory;
+                            dbgAddr = dbgPrev;
                         }
-                        if (this.timerVideo) {
-                            dbgAddr.nDebugCycles = this.timerVideo[1];
-                            dbgAddr.nDebugState = this.video.getRetraceBits(this.video.cardActive);
+
+                        dbgAddr.nCPUCycles = cpu.getCycles();
+
+                        /*
+                         * If vector tracing is enabled and we just encountered a vector, record some additional info.
+                         */
+                        if (this.aVectorBP.length && !this.vectorHalt && this.vectorTrace >= 0) {
+                            dbgAddr.nDebugState = (cpu.regEAX & 0xffff) | (this.vectorTrace << 16);
                         }
+                        /*
+                         * For debugging timer issues, snap cycles remaining in the current burst and the state of TIMER0.
+                         */
+                        else if (this.chipset) {
+                            let timer = this.chipset.aTimers[0];
+                            dbgAddr.nDebugCycles = cpu.nStepCycles;
+                            dbgAddr.nDebugState = timer.countCurrent[0] | (timer.countCurrent[1] << 8);
+                        }
+                        /*
+                         * For debugging video timing (eg, retrace) issues, it's helpful to record the state of the Video
+                         * component's countdown timer.  timerVideo will be set to null if there's no Video component or the
+                         * timer doesn't exist, so findTimer() should be called at most once.
+                         */
+                        else if (this.video) {
+                            if (this.timerVideo === undefined) {
+                                this.timerVideo = cpu.findTimer(this.video.id);
+                            }
+                            if (this.timerVideo) {
+                                dbgAddr.nDebugCycles = this.timerVideo[1];
+                                dbgAddr.nDebugState = this.video.getRetraceBits(this.video.cardActive);
+                            }
+                        }
+                        else {
+                            delete dbgAddr.nDebugCycles;
+                            delete dbgAddr.nDebugState;
+                        }
+                        if (++this.iOpcodeHistory == this.aOpcodeHistory.length) this.iOpcodeHistory = 0;
                     }
-                    if (++this.iOpcodeHistory == this.aOpcodeHistory.length) this.iOpcodeHistory = 0;
                 }
             }
             this.vectorSkip = this.vectorTrace;
-            this.vectorTrace = false;
+            this.vectorTrace = -1;
         }
         return false;
     }
@@ -3669,25 +3687,28 @@ export default class Debuggerx86 extends DbgLib {
     }
 
     /**
-     * checkVectorBP(vector, fProt)
+     * checkVectorBP(vector, nBytes, fProt)
      *
      * @this {Debuggerx86}
      * @param {number} vector
+     * @param {number} nBytes
      * @param {boolean} fProt (true if protected-mode interrupt)
      * @returns {boolean}
      */
-    checkVectorBP(vector, fProt)
+    checkVectorBP(vector, nBytes, fProt)
     {
-        if (!this.vectorSkip) {
-            this.vectorTrace = true;
-            if (this.vectorTrap) {
+        if (this.vectorSkip < 0) {
+            this.vectorTrace = vector;
+            if (this.vectorHalt) {
                 let i = this.findVectorBP(vector);
                 if (i >= 0) {
                     let vbp = this.aVectorBP[i];
                     if (fProt == (vbp.type == Debuggerx86.ADDRTYPE.PROT)) {
-                        this.cpu.setIP(this.cpu.getIP() - 2);
                         this.stopCPU();
-                        return true;
+                        if (nBytes) {
+                            this.cpu.setIP(this.cpu.getIP() - nBytes);
+                            return true;
+                        }
                     }
                 }
             }
@@ -3704,12 +3725,12 @@ export default class Debuggerx86 extends DbgLib {
      */
     checkVectorAddr(addr)
     {
-        if (!this.vectorSkip) {
+        if (this.vectorSkip < 0) {
             for (let i = 0; i < this.aVectorBP.length; i++) {
                 let dbgAddr = this.aVectorBP[i].dbgAddr;
                 if (dbgAddr && dbgAddr.addr == addr) {
-                    this.vectorTrace = true;
-                    return this.vectorTrap;
+                    this.vectorTrace = this.aVectorBP[i].vector;
+                    return this.vectorHalt;
                 }
             }
         }
@@ -5858,6 +5879,7 @@ export default class Debuggerx86 extends DbgLib {
     {
         if (!asArgs[1] || asArgs[1] == '?') {
             this.printf("execution options:\n");
+            this.printf("\tbv [halt|trace]\n");
             this.printf("\tcs int #\tset checksum cycle interval to #\n");
             this.printf("\tcs start #\tset checksum cycle start count to #\n");
             this.printf("\tcs stop #\tset checksum cycle stop count to #\n");
@@ -5867,21 +5889,37 @@ export default class Debuggerx86 extends DbgLib {
 
         let nCycles;
         switch (asArgs[1]) {
+        case "bv":
+            switch (asArgs[2]) {
+            case "halt":
+                this.vectorHalt = true;
+                break;
+            case "trace":
+                this.vectorHalt = false;
+                break;
+            default:
+                if (asArgs[2]) {
+                    this.printf("unknown vector option: %s\n", asArgs[2]);
+                    return;
+                }
+            }
+            this.printf("vector breakpoints: %s\n", (this.vectorHalt? "halt" : "trace"));
+            break;
         case "cs":
             if (asArgs[3] !== undefined) nCycles = +asArgs[3];          // warning: decimal instead of hex conversion
             switch (asArgs[2]) {
-                case "int":
-                    this.cpu.nCyclesChecksumInterval = nCycles;
-                    break;
-                case "start":
-                    this.cpu.nCyclesChecksumStart = nCycles;
-                    break;
-                case "stop":
-                    this.cpu.nCyclesChecksumStop = nCycles;
-                    break;
-                default:
-                    this.printf("unknown cs option\n");
-                    return;
+            case "int":
+                this.cpu.nCyclesChecksumInterval = nCycles;
+                break;
+            case "start":
+                this.cpu.nCyclesChecksumStart = nCycles;
+                break;
+            case "stop":
+                this.cpu.nCyclesChecksumStop = nCycles;
+                break;
+            default:
+                this.printf("unknown cs option\n");
+                return;
             }
             if (nCycles !== undefined) {
                 this.cpu.resetChecksum();

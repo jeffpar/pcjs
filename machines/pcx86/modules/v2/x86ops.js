@@ -3496,7 +3496,7 @@ X86.opINT3 = function()
      * so I've changed the Debugger's checkBreakpoint() function to stop execution on INT3 whenever both the
      * INT and HALT message bits are set; a simple "g" command allows you to continue.
      */
-    X86.helpTrap.call(this, X86.EXCEPTION.BP_TRAP, this.cycleCounts.nOpCyclesInt3D);
+    X86.helpTrap.call(this, X86.EXCEPTION.BP_TRAP, 1, this.cycleCounts.nOpCyclesInt3D);
 };
 
 /**
@@ -3520,7 +3520,7 @@ X86.opINTn = function()
      * and returns false ONLY if a notification handler returned false (ie, requesting the interrupt be skipped).
      */
     if (this.checkIntNotify(nInt)) {
-        X86.helpTrap.call(this, nInt, 0);
+        X86.helpTrap.call(this, nInt, 2);
         return;
     }
     this.nStepCycles--;     // we don't need to assess the full cost of nOpCyclesInt, but we need to assess something...
@@ -3542,7 +3542,7 @@ X86.opINTO = function()
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return;
         }
-        X86.helpTrap.call(this, X86.EXCEPTION.OF_TRAP, this.cycleCounts.nOpCyclesIntOD);
+        X86.helpTrap.call(this, X86.EXCEPTION.OF_TRAP, 1, this.cycleCounts.nOpCyclesIntOD);
         return;
     }
     this.nStepCycles -= this.cycleCounts.nOpCyclesIntOFall;
@@ -4133,7 +4133,7 @@ X86.opINT1 = function()
     /*
      * TODO: Verify this instruction's behavior.
      */
-    X86.helpTrap.call(this, X86.EXCEPTION.DB_EXC, this.cycleCounts.nOpCyclesInt3D);
+    X86.helpTrap.call(this, X86.EXCEPTION.DB_EXC, 1, this.cycleCounts.nOpCyclesInt3D);
 };
 
 /**

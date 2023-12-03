@@ -232,13 +232,14 @@ export default class Segx86 {
     }
 
     /**
-     * loadIDTReal(nIDT)
+     * loadIDTReal(nIDT, nBytes)
      *
      * @this {Segx86}
      * @param {number} nIDT
+     * @param {number} [nBytes]
      * @returns {number} address from selected vector
      */
-    loadIDTReal(nIDT)
+    loadIDTReal(nIDT, nBytes = 0)
     {
         let cpu = this.cpu;
         /*
@@ -249,7 +250,7 @@ export default class Segx86 {
         cpu.assert(nIDT >= 0 && nIDT < 256 && !cpu.addrIDT && cpu.addrIDTLimit >= 0x3ff);
 
         if (DEBUGGER && this.dbg) {
-            if (this.dbg.checkVectorBP(nIDT, false)) {
+            if (this.dbg.checkVectorBP(nIDT, nBytes, false)) {
                 return X86.ADDR_INVALID;
             }
         }
@@ -268,19 +269,20 @@ export default class Segx86 {
     }
 
     /**
-     * loadIDTProt(nIDT)
+     * loadIDTProt(nIDT, nBytes)
      *
      * @this {Segx86}
      * @param {number} nIDT
+     * @param {number} [nBytes]
      * @returns {number} address from selected vector, or X86.ADDR_INVALID if error
      */
-    loadIDTProt(nIDT)
+    loadIDTProt(nIDT, nBytes = 0)
     {
         let cpu = this.cpu;
         cpu.assert(nIDT >= 0 && nIDT < 256);
 
         if (DEBUGGER && this.dbg) {
-            if (this.dbg.checkVectorBP(nIDT, true)) {
+            if (this.dbg.checkVectorBP(nIDT, nBytes, true)) {
                 return X86.ADDR_INVALID;
             }
         }
