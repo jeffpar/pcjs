@@ -1045,7 +1045,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
  * Helper to zero a segment register whenever transitioning to a less privileged (numerically higher) level.
  *
  * @this {CPUx86}
- * @param {SegX86} seg
+ * @param {Segx86} seg
  */
 X86.zeroSeg = function(seg)
 {

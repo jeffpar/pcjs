@@ -175,7 +175,7 @@ export default class Debuggerx86 extends DbgLib {
              * which contain vector and dbgAddr properties.
              */
             this.aVectorBP = [];
-            this.vectorHalt = false;            // true to halt on vector breakpoints
+            this.vectorHalt = true;             // true to halt on vector breakpoints
             this.vectorSkip = -1;
             this.vectorTrace = -1;              // >= 0 whenever a vector has been traced
 
@@ -898,29 +898,29 @@ export default class Debuggerx86 extends DbgLib {
              *      controlInput.focus();
              */
             control.onkeydown = function onKeyDownDebugInput(event) {
-                let sCmd;
+                let sLine;
                 if (event.keyCode == Keys.KEYCODE.CR) {
-                    sCmd = dbg.controlDebug.value;
+                    sLine = dbg.controlDebug.value;
                     dbg.controlDebug.value = "";
-                    dbg.doCommands(sCmd, true);
+                    dbg.doCommands(sLine, true);
                 }
                 else if (event.keyCode == Keys.KEYCODE.ESC) {
-                    dbg.controlDebug.value = sCmd = "";
+                    dbg.controlDebug.value = sLine = "";
                 }
                 else {
                     if (event.keyCode == Keys.KEYCODE.UP) {
-                        sCmd = dbg.getPrevCommand();
+                        sLine = dbg.getPrevCommand();
                     }
                     else if (event.keyCode == Keys.KEYCODE.DOWN) {
-                        sCmd = dbg.getNextCommand();
+                        sLine = dbg.getNextCommand();
                     }
-                    if (sCmd != null) {
-                        let cch = sCmd.length;
-                        dbg.controlDebug.value = sCmd;
+                    if (sLine != null) {
+                        let cch = sLine.length;
+                        dbg.controlDebug.value = sLine;
                         dbg.controlDebug.setSelectionRange(cch, cch);
                     }
                 }
-                if (sCmd != null && event.preventDefault) event.preventDefault();
+                if (sLine != null && event.preventDefault) event.preventDefault();
             };
             return true;
 
@@ -1463,18 +1463,18 @@ export default class Debuggerx86 extends DbgLib {
     }
 
     /**
-     * parseAddrOptions(dbgAddr, sOptions)
+     * parseAddrOptions(dbgAddr, sLine)
      *
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr
-     * @param {string} [sOptions]
+     * @param {string} [sLine]
      */
-    parseAddrOptions(dbgAddr, sOptions)
+    parseAddrOptions(dbgAddr, sLine)
     {
-        if (sOptions) {
-            let a = sOptions.match(/(['"])(.*?)\1/);
+        if (sLine) {
+            let a = sLine.match(/(['"])(.*?)\1/);
             if (a) {
-                dbgAddr.aCmds = this.parseCommand(dbgAddr.sCmd = a[2]);
+                dbgAddr.aCmds = this.parseCommand(dbgAddr.sLine = a[2]);
             }
         }
     }
@@ -3680,6 +3680,7 @@ export default class Debuggerx86 extends DbgLib {
                 dbgAddr = this.newAddr(off, sel, addr, type);
             }
             this.aVectorBP.push({vector, type, dbgAddr});
+            this.listVectorBP(vector, true);
             this.historyInit();
             return true;
         }
@@ -3704,6 +3705,7 @@ export default class Debuggerx86 extends DbgLib {
                 if (i >= 0) {
                     let vbp = this.aVectorBP[i];
                     if (fProt == (vbp.type == Debuggerx86.ADDRTYPE.PROT)) {
+                        this.printf("break on vector %02X\n", vector);
                         this.stopCPU();
                         if (nBytes) {
                             this.cpu.setIP(this.cpu.getIP() - nBytes);
@@ -3730,7 +3732,10 @@ export default class Debuggerx86 extends DbgLib {
                 let dbgAddr = this.aVectorBP[i].dbgAddr;
                 if (dbgAddr && dbgAddr.addr == addr) {
                     this.vectorTrace = this.aVectorBP[i].vector;
-                    return this.vectorHalt;
+                    if (this.vectorHalt) {
+                        this.printf("break on vector %02X\n", this.vectorTrace);
+                        return true;
+                    }
                 }
             }
         }
@@ -3755,19 +3760,24 @@ export default class Debuggerx86 extends DbgLib {
     }
 
     /**
-     * listVectorBP()
+     * listVectorBP(vector, enabled)
      *
      * @this {Debuggerx86}
+     * @param {number} [vector]
+     * @param {boolean} [enabled]
      */
-    listVectorBP()
+    listVectorBP(vector, enabled = true)
     {
         let i;
         for (i = 0; i < this.aVectorBP.length; i++) {
             let vbp = this.aVectorBP[i];
-            if (vbp.type == Debuggerx86.ADDRTYPE.PROT) {
-                this.printf("vector #%#04x\n", vbp.vector);
-            } else {
-                this.printf("vector &%#04x: %04x:%04x\n", vbp.vector, vbp.dbgAddr.sel, vbp.dbgAddr.off);
+            if (vector == undefined || vbp.vector == vector) {
+                let s = (enabled? "enabled" : "disabled");
+                if (vbp.type == Debuggerx86.ADDRTYPE.PROT) {
+                    this.printf("vector #%02X %s\n", vbp.vector, s);
+                } else {
+                    this.printf("vector &%02X %s (%04X:%04X)\n", vbp.vector, s, vbp.dbgAddr.sel, vbp.dbgAddr.off);
+                }
             }
         }
         if (!i) {
@@ -3786,6 +3796,7 @@ export default class Debuggerx86 extends DbgLib {
     {
         let i = this.findVectorBP(vector);
         if (i >= 0) {
+            this.listVectorBP(vector, false);
             this.aVectorBP.splice(i, 1);
             this.historyInit();
             return true;
@@ -4924,7 +4935,7 @@ export default class Debuggerx86 extends DbgLib {
     }
 
     /**
-     * doBreak(sCmd, sAddr, sOptions)
+     * doBreak(asArgs, sLine)
      *
      * As the "help" output below indicates, the following breakpoint commands are supported:
      *
@@ -4949,12 +4960,13 @@ export default class Debuggerx86 extends DbgLib {
      * are currently outside the realm of what the "bl" and "bc" commands are aware of.
      *
      * @this {Debuggerx86}
-     * @param {string} sCmd
-     * @param {string|undefined} [sAddr]
-     * @param {string} [sOptions] (the rest of the breakpoint command-line)
+     * @param {Array.<string>} asArgs
+     * @param {string} [sLine] (the complete command-line)
      */
-    doBreak(sCmd, sAddr, sOptions)
+    doBreak(asArgs, sLine)
     {
+        let sCmd = asArgs.shift();
+        let sAddr = asArgs.shift();
         if (sAddr == '?') {
             this.printf("breakpoint commands:\n");
             this.printf("\tbi [p]\ttoggle break on input port [p]\n");
@@ -4987,24 +4999,25 @@ export default class Debuggerx86 extends DbgLib {
                 this.listVectorBP();
                 return;
             }
-            let chType = sAddr[0];
-            if (chType == '&' || chType == '#') {
-                sAddr = sAddr.slice(1);
-            } else {
-                chType = '';
-            }
-            let vector = this.parseValue(sAddr);
-            if (vector != undefined) {
-                if (this.removeVectorBP(vector)) {
-                    this.printf("removed break on interrupt vector %s\n", sAddr);
-                    return;
+            do {
+                let chType = sAddr[0];
+                if (chType == '&' || chType == '#') {
+                    sAddr = sAddr.slice(1);
+                } else {
+                    chType = '';
                 }
-                if (this.addVectorBP(vector, chType)) {
-                    this.printf("added break on interrupt vector %s\n", sAddr);
-                    return;
+                let vector = this.parseValue(sAddr);
+                if (vector != undefined) {
+                    if (this.removeVectorBP(vector)) {
+                        continue;
+                    }
+                    if (this.addVectorBP(vector, chType)) {
+                        continue;
+                    }
                 }
-            }
-            this.printf("invalid interrupt vector %s\n", sAddr);
+                this.printf("vector %s invalid\n", sAddr);
+                break;
+            } while ((sAddr = asArgs.shift()));
             return;
         }
         if (sAddr === undefined) {
@@ -5044,7 +5057,7 @@ export default class Debuggerx86 extends DbgLib {
 
         if (dbgAddr.off == null) return;
 
-        this.parseAddrOptions(dbgAddr, sOptions);
+        this.parseAddrOptions(dbgAddr, sLine);
 
         if (sParm == 'p') {
             this.addBreakpoint(this.aBreakExec, dbgAddr);
@@ -5877,6 +5890,10 @@ export default class Debuggerx86 extends DbgLib {
      */
     doExecOptions(asArgs)
     {
+        if (asArgs[0].length > 1) {
+            asArgs.splice(1, 0, asArgs[0].slice(1));
+            asArgs[0] = asArgs[0].charAt(0);
+        }
         if (!asArgs[1] || asArgs[1] == '?') {
             this.printf("execution options:\n");
             this.printf("\tbv [halt|trace]\n");
@@ -5886,7 +5903,6 @@ export default class Debuggerx86 extends DbgLib {
             this.printf("\tsp #\t\tset speed multiplier to #\n");
             return;
         }
-
         let nCycles;
         switch (asArgs[1]) {
         case "bv":
@@ -6270,15 +6286,15 @@ export default class Debuggerx86 extends DbgLib {
     }
 
     /**
-     * doRun(sCmd, sAddr, sOptions, fQuiet)
+     * doRun(sCmd, sAddr, sLine, fQuiet)
      *
      * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {string|undefined} [sAddr]
-     * @param {string} [sOptions] (the rest of the breakpoint command-line)
+     * @param {string} [sLine] (the complete command-line)
      * @param {boolean} [fQuiet]
      */
-    doRun(sCmd, sAddr, sOptions, fQuiet)
+    doRun(sCmd, sAddr, sLine, fQuiet)
     {
         if (sCmd == "gt") {
             this.fIgnoreNextCheckFault = true;
@@ -6286,7 +6302,7 @@ export default class Debuggerx86 extends DbgLib {
         if (sAddr !== undefined) {
             let dbgAddr = this.parseAddr(sAddr, true);
             if (!dbgAddr) return;
-            this.parseAddrOptions(dbgAddr, sOptions);
+            this.parseAddrOptions(dbgAddr, sLine);
             this.setTempBreakpoint(dbgAddr);
         }
         this.startCPU(true, fQuiet);
@@ -6856,7 +6872,7 @@ export default class Debuggerx86 extends DbgLib {
                     this.doAssemble(asArgs);
                     break;
                 case 'b':
-                    this.doBreak(asArgs[0], asArgs[1], sCmd);
+                    this.doBreak(asArgs, sCmd);
                     break;
                 case 'c':
                     this.doClear(asArgs[0]);
