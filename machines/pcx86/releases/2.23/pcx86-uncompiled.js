@@ -7315,7 +7315,7 @@ const Errors = {
  */
 
 const Interrupts = {
-    /*
+    /**
      * The original ROM BIOS defined vectors 0x08-0x1F with a table at F000:FEF3 (VECTOR_TABLE).
      */
     VIDEO:      0x10,
@@ -7333,7 +7333,7 @@ const Interrupts = {
     TMR_BREAK:  0x1C,               // invoked by the BIOS timer interrupt handler (normally vector 0x08)
     VID_PARMS:  0x1D,
     DSK_PARMS:  0x1E,               // vector for Diskette Parameter Table (DPT)
-    /*
+    /**
      * For characters 0x00-0x7F, the original ROM BIOS used a built-in table at F000:FA6E (CRT_CHAR_GEN),
      * since the MDA/CGA font ROM was not CPU-addressable, but presumably there wasn't enough room in the
      * ROM BIOS for all 256 characters, so if software wanted to draw any characters 0x80-0xFF in graphics
@@ -7363,11 +7363,22 @@ const Interrupts = {
         VECTOR:     0x30            // Windows PM call-back interface (aka Transfer Space Fault)
     },
     WINDBG: {                       // Windows Debugger protected-mode interface
-        VECTOR:     0x41,           // (AX==command)
+        VECTOR:     0x41,           // (AX is one of the following DS commands)
+        OUTCHAR:    0x0000,         // DS_Out_Char (display the char in DL)
+        INCHAR:     0x0001,         // DS_In_Char (read a char into AL)
+        OUTSTR:     0x0002,         // DS_Out_Str (display a NUL terminated string pointed to by DS:ESI)
+        ISCHAR:     0x0003,         // DS_Is_Char (non-blocking In_Chr)
+        OUTSTR16:   0x0012,         // DS_Out_Str16 (display a NUL terminated string pointed to by DS:SI; same as DS_Out_Str but for 16-bit callers)
+        FORCEDGO16: 0x0040,         // DS_ForcedGO16 (enter the debugger and perform the equivalent of a GO command to force a stop at the specified CS:IP; CX is the desired CS and BX is the desired IP)
+        LINKMAP:    0x0045,         // DS_LinkMap (DX:(E)DI = ptr to paragraph in front of map)
+        UNLINKMAP:  0x0046,         // DS_UnlinkMap (DX:(E)DI = ptr to paragraph in front of map)
+        CHECKMAP:   0x0047,         // DS_CheckMap (DX:(E)DI = pointer to module name; returns AX != 0 if map found or AX == 0 if map not found)
+        AUTOLOAD:   0x0048,         // DS_IsAutoLoadSym (returns AX != 0, auto load symbols; AX == 0, don't auto load symbols)
         IS_LOADED:  0x004F,         // DS_DebLoaded
-        LOADED:     0xF386,         // DS_DebPresent (returned in AX if Windows Debugger loaded)
-        LOADSEG:    0x0050,         // DS_LoadSeg (SI==0 if code, 1 if data; BX==segnum-1; CX==selector; ES:[E]DI->module name)
-        FREESEG:    0x0052,         // DS_FreeSeg (BX==segment)
+        LOADED:     0xF386,         // DS_DebPresent (returned in AX in response to DS_DebLoaded if Windows Debugger loaded)
+        LOADSEG:    0x0050,         // DS_LoadSeg (SI is 0 if code sel, 1 if data sel, 0x80 if code seg, 0x81 if data seg; BX is segnum-1; CX is sel or seg; DX is data instance; ES:[E]DI -> module name)
+        LOADSEG32:  0x0150,         // DS_LoadSeg_32 (SI is 0 0 if code, 1 if data; DX:EBX -> D386_Device_Params)
+        FREESEG:    0x0052,         // DS_FreeSeg (BX == segment)
         KRNLVARS:   0x005A,         // DS_Kernel_Vars
         RELSEG:     0x005C,         // DS_ReleaseSeg (same as DS_FreeSeg but "restores any breakpoints first")
         LOADHIGH:   0x005D,         // D386_LoadCodeDataHigh
@@ -7377,7 +7388,7 @@ const Interrupts = {
         UNKNOWN66:  0x0066,         // Unknown (but I suspect it isn't good)
         UNKNOWN67:  0x0067,         // Unknown (but I suspect it isn't good)
         REGDOTCMD:  0x0070,         // DS_RegisterDotCommand
-        CHECKFAULT: 0x007F,         // DS_CheckFault (BX==fault #, CX==FAULTTYPE bits; return AX=0 to handle fault normally, 1 to issue TRAPFAULT)
+        CHECKFAULT: 0x007F,         // DS_CheckFault (BX == fault #, CX == FAULTTYPE bits; return AX=0 to handle fault normally, 1 to issue TRAPFAULT)
         FAULTTYPE: {
             V86:    0x0001,
             PM:     0x0002,
@@ -7385,22 +7396,24 @@ const Interrupts = {
             FIRST:  0x0008,
             LAST:   0x0010
         },
-        TRAPFAULT:  0x0083,         // DS_TrapFault (BX==fault #, CX==faulting CS, EDX==faulting EIP, ESI==fault error, EDI==fault flags)
-        GETSYMBOL:  0x008D,         // DS_GetSymbol (DS:ESI->symbol; return AX=0 if success, 1 if not found, 2 if memory not loaded yet)
-        LOADSEG32:  0x0150,         // DS_LoadSeg_32 (SI==0 if code, 1 if data; DX:EBX->D386_Device_Params)
-        FREESEG32:  0x0152,         // DS_FreeSeg_32 (BX==segment, DX:EDI->module name)
+        TRAPFAULT:  0x0083,         // DS_TrapFault (BX == fault #, CX == faulting CS, EDX == faulting EIP, ESI == fault error, EDI == fault flags)
+        GETSYMBOL:  0x008D,         // DS_GetSymbol (DS:ESI -> symbol; return AX == 0 if success, 1 if not found, 2 if memory not loaded yet)
+        FREESEG32:  0x0152,         // DS_FreeSeg_32 (BX == segment, DX:EDI -> module name)
         CONDBP:     0xF001,         // DS_CondBP (break here if WDEB386 was run with /B; ESI -> string to display)
-        ENABLED:    false           // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
+        FORCEDBP:   0xF002,         // DS_ForcedBP
+        FORCEDGO:   0xF003,         // DS_ForcedGO (enter the debugger and perform the equivalent of a GO command to force a stop at the specified CS:EIP; CX is the desired CS, EBX is the desired EIP)
+        HARDINT1:   0xF004,         // DS_HardINT1 (check to see if INT 1 hooked for all rings;  ENTER: nothing, EXIT: AX = 0, if no, 1, if yes)
+        ENABLED:    true            // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
     },
     WINDBGRM: {                     // Windows Debugger real-mode interface
-        VECTOR:     0x68,           // (AH==command)
+        VECTOR:     0x68,           // (AH is one of the following D386 commands)
         IS_LOADED:  0x43,           // D386_Identify
         LOADED:     0xF386,         // D386_Id (returned in AX if Windows Debugger loaded)
         PREP_PMODE: 0x44,           // D386_Prepare_PMode (must return a 16:32 address in ES:EDI to a "PMinit" handler)
-        FREESEG:    0x48,           // D386_Free_Segment (BX==real-mode segment)
+        FREESEG:    0x48,           // D386_Free_Segment (BX == real-mode segment)
         REMOVESEGS: 0x4F,           // D386_Remove_Segs (remove any undefined segments from the named module at ES:DI)
-        LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI->D386_Device_Params)
-        ENABLED:    false           // support for WINDBGRM interrupts can be disabled
+        LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI -> D386_Device_Params)
+        ENABLED:    true            // support for WINDBGRM interrupts can be disabled
     },
     VIDEO_VGA:  0x6D,               // VGA ROM entry point (the default VGA INT 10h handler invokes this interrupt and IRETs)
     FUNCS: {}                       // filled in only if DEBUGGER is true
@@ -7472,18 +7485,18 @@ Interrupts.BIOS_DATA = {
     0x4A8:  ["SAVE_PTR",4]          // POINTER TO EGA PARAMETER CONTROL BLOCK
 };
 
-/*
-    * See Debuggerx86.prototype.replaceRegs() for the rules governing how register contents are replaced in the strings below.
-    *
-    * Replacements occur in the following order:
-    *
-    *      Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
-    *      Replace every #XX, where XX is a hex byte value, with the corresponding ASCII character (if printable).
-    *      Replace every $XXXX:XXXX, where XXXX:XXXX is a segmented address, with the zero-terminated string at that address.
-    *      Replace every ^XXXX:XXXX, where XXXX:XXXX is a segmented address, with the FCB filename stored at that address.
-    *
-    * The last replacement is obviously DOS-specific, since FCBs are DOS constructs.
-    */
+/**
+ * See Debuggerx86.prototype.replaceRegs() for the rules governing how register contents are replaced in the strings below.
+ *
+ * Replacements occur in the following order:
+ *
+ *      Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
+ *      Replace every #XX, where XX is a hex byte value, with the corresponding ASCII character (if printable).
+ *      Replace every $XXXX:XXXX, where XXXX:XXXX is a segmented address, with the zero-terminated string at that address.
+ *      Replace every ^XXXX:XXXX, where XXXX:XXXX is a segmented address, with the FCB filename stored at that address.
+ *
+ * The last replacement is obviously DOS-specific, since FCBs are DOS constructs.
+ */
 Interrupts.FUNCS[Interrupts.VIDEO] = {
     0x00: "set mode (@AL)",
     0x01: "set cursor type (start=@CH,end=@CL)",
@@ -7514,33 +7527,33 @@ Interrupts.FUNCS[Interrupts.DISK] = {
     0x16: "get drive @DL change line status",
     0x17: "set drive @DL DASD type",
     0x18: "set drive @DL media type"
-    /*
-        * Here's an additional function reference, previously in the HDC component, but moved here
-        * because our components are hardware emulations, not BIOS emulations, so this information is
-        * really only of interest to the Debugger (or the casual observer).
-        *
-        *      RESET:          0x00,
-        *      GET_STATUS:     0x01,
-        *      READ_SECTORS:   0x02,
-        *      WRITE_SECTORS:  0x03,
-        *      VERIFY_SECTORS: 0x04,
-        *      FORMAT_TRK:     0x05,
-        *      FORMAT_BAD:     0x06,
-        *      FORMAT_DRIVE:   0x07,
-        *      GET_DRIVEPARMS: 0x08,
-        *      SET_DRIVEPARMS: 0x09,
-        *      READ_LONG:      0x0A,
-        *      WRITE_LONG:     0x0B,
-        *      SEEK:           0x0C,
-        *      ALT_RESET:      0x0D,
-        *      READ_BUFFER:    0x0E,
-        *      WRITE_BUFFER:   0x0F,
-        *      TEST_READY:     0x10,
-        *      RECALIBRATE:    0x11,
-        *      RAM_DIAGNOSTIC: 0x12,
-        *      DRV_DIAGNOSTIC: 0x13,
-        *      CTL_DIAGNOSTIC: 0x14
-        */
+    /**
+     * Here's an additional function reference, previously in the HDC component, but moved here
+     * because our components are hardware emulations, not BIOS emulations, so this information is
+     * really only of interest to the Debugger (or the casual observer).
+     *
+     *      RESET:          0x00,
+     *      GET_STATUS:     0x01,
+     *      READ_SECTORS:   0x02,
+     *      WRITE_SECTORS:  0x03,
+     *      VERIFY_SECTORS: 0x04,
+     *      FORMAT_TRK:     0x05,
+     *      FORMAT_BAD:     0x06,
+     *      FORMAT_DRIVE:   0x07,
+     *      GET_DRIVEPARMS: 0x08,
+     *      SET_DRIVEPARMS: 0x09,
+     *      READ_LONG:      0x0A,
+     *      WRITE_LONG:     0x0B,
+     *      SEEK:           0x0C,
+     *      ALT_RESET:      0x0D,
+     *      READ_BUFFER:    0x0E,
+     *      WRITE_BUFFER:   0x0F,
+     *      TEST_READY:     0x10,
+     *      RECALIBRATE:    0x11,
+     *      RAM_DIAGNOSTIC: 0x12,
+     *      DRV_DIAGNOSTIC: 0x13,
+     *      CTL_DIAGNOSTIC: 0x14
+     */
 };
 
 Interrupts.FUNCS[Interrupts.CASSETTE] = {
@@ -7658,7 +7671,7 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
     0x004F: "check debugger loaded"         // WINDBG.IS_LOADED returns WINDBG.LOADED (0xF386) if debugger loaded
 };
 
-/*
+/**
  * DOS function reference (from https://pcdosretro.github.io/dosfunc.txt)
  *
  *      INT 20 Program terminate (1.0+)
@@ -9415,6 +9428,22 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
  *            points to the EXEPACK header, this is followed by the unpack code
  *            and a relocation table containing a word count and relocation
  *            entries for 16 segments.
+ */
+
+/**
+ * Other miscellaneous definitions for historical reference.
+ *
+ * From DEBUGSYS.INC:
+ *
+ * D386_Device_Params STRUC
+ *      DD_logical_seg  dw  ?   ; logical segment # from map
+ *      DD_actual_sel   dw  ?   ; actual selector value
+ *      DD_base         dd  ?   ; linear address offset for start of segment
+ *      DD_length       dd  ?   ; actual length of segment
+ *      DD_name         df  ?   ; 16:32 ptr to null terminated device name
+ *      DD_sym_name     df  ?   ; 16:32 ptr to null terminated symbolic module name  (i.e. Win386)
+ *      DD_alias_sel    dw  ?   ; alias selector value (0 = none)
+ *  D386_Device_Params ENDS
  */
 
 
@@ -73223,7 +73252,7 @@ let DbgAddrx86;
 /** @typedef {{ vector: (number|undefined), type: (number|undefined), dbgAddr: (DbgAddrx86|undefined) }} */
 let VectorBP;
 
-/*
+/**
  * Debugger Breakpoint Tips
  *
  * Here's an example of our powerful new breakpoint command capabilities:
@@ -73282,7 +73311,7 @@ class Debuggerx86 extends DbgLib {
 
         if (DEBUGGER) {
 
-            /*
+            /**
              * Default number of hex chars in a register and a linear address (ie, for real-mode);
              * updated by initBus().
              */
@@ -73290,7 +73319,7 @@ class Debuggerx86 extends DbgLib {
             this.cchAddr = 5;
             this.maskAddr = 0xfffff;
 
-            /*
+            /**
              * Most commands that require an address call parseAddr(), which defaults to dbgAddrNextCode
              * or dbgAddrNextData when no address has been given.  doDump() and doUnassemble(), in turn,
              * update dbgAddrNextData and dbgAddrNextCode, respectively, when they're done.
@@ -73308,7 +73337,7 @@ class Debuggerx86 extends DbgLib {
             this.dbgAddrNextData = this.newAddr(0, 0);
             this.dbgAddrAssemble = this.newAddr(0, 0);
 
-            /*
+            /**
              * aSymbolTable is an array of SymbolTable objects, one per ROM or other chunk of address space,
              * where each object contains the following properties:
              *
@@ -73325,7 +73354,7 @@ class Debuggerx86 extends DbgLib {
              */
             this.aSymbolTable = [];
 
-            /*
+            /**
              * clearBreakpoints() initializes the breakpoints lists: aBreakExec is a list of addresses
              * to halt on whenever attempting to execute an instruction at the corresponding address,
              * and aBreakRead and aBreakWrite are lists of addresses to halt on whenever a read or write,
@@ -73339,13 +73368,13 @@ class Debuggerx86 extends DbgLib {
             this.aBreakExec = this.aBreakRead = this.aBreakWrite = [];
             this.clearBreakpoints();
 
-            /*
+            /**
              * The new "bn" command allows you to specify a number of instructions to execute and then stop;
              * "bn 0" disables any outstanding count.
              */
             this.nBreakIns = 0;
 
-            /*
+            /**
              * A new breakpoint command, "bv", allows you to monitor an interrupt vector.  Vector breakpoints
              * don't simply monitor "INT" instructions; they also snapshot the vector address when the "bv"
              * command is issued and monitor execution of that address.  The array is filled with VectorBP objects,
@@ -73356,7 +73385,7 @@ class Debuggerx86 extends DbgLib {
             this.vectorSkip = -1;
             this.vectorTrace = -1;              // >= 0 whenever a vector has been traced
 
-            /*
+            /**
              * Execution history is allocated by historyInit() whenever checksEnabled() conditions change.
              * Execution history is updated whenever the CPU calls checkInstruction(), which will happen
              * only when checksEnabled() returns true (eg, whenever one or more breakpoints have been set).
@@ -73364,14 +73393,14 @@ class Debuggerx86 extends DbgLib {
              */
             this.historyInit();
 
-            /*
+            /**
              * Initialize Debugger message and command support
              */
             this.afnDumpers = {};
             this.messageInit(parmsDbg['messages']);
             this.sCommandsInit = parmsDbg['commands'];
 
-            /*
+            /**
              * Make it easier to access Debugger commands from an external REPL, like the WebStorm "live" console
              * window; eg:
              *
@@ -73406,16 +73435,16 @@ class Debuggerx86 extends DbgLib {
         this.hdc = cmp.getMachineComponent("HDC", false);
         this.mouse = cmp.getMachineComponent("Mouse", false);
 
-        /*
+        /**
          * Re-initialize Debugger message and command support as needed
          */
         let sMessages = cmp.getMachineParm('messages');
         if (sMessages) this.messageInit(sMessages);
         this.sCommandsInit = cmp.getMachineParm('commands') || this.sCommandsInit;
 
-        /*
-         * If CHIPSET or VIDEO messages are enabled at startup, we enable ChipSet or Video diagnostic info in the
-         * instruction history buffer as appropriate.
+        /**
+         * If CHIPSET or VIDEO messages are enabled at startup, we enable ChipSet or Video diagnostic info in
+         * the instruction history buffer as appropriate.
          */
         if (this.messageEnabled(MESSAGE.CHIPSET)) {
             this.chipset = cmp.getMachineComponent("ChipSet");
@@ -73427,7 +73456,7 @@ class Debuggerx86 extends DbgLib {
         this.cchAddr = bus.getWidth() >> 2;
         this.maskAddr = bus.nBusLimit;
 
-        /*
+        /**
          * Allocate a special segment "register", for use whenever a requested selector is not currently loaded
          */
         this.segDebugger = new Segx86(this.cpu, Segx86.ID.DBG, "DBG");
@@ -73437,7 +73466,7 @@ class Debuggerx86 extends DbgLib {
             this.aaOpDescs = Debuggerx86.aaOpDescs.slice();
             this.aaOpDescs[0x0F] = Debuggerx86.aOpDescUndefined;
             if (this.cpu.model >= X86.MODEL_80286) {
-                /*
+                /**
                  * TODO: Consider whether the aOpDesc0F table should be split in two: one for 80286-only instructions,
                  * and one for both 80286 and 80386.  For now, the Debugger is not as strict as the CPUx86 is about
                  * the instructions it supports for each type of CPU, in part because an 80286 machine could still be
@@ -73490,7 +73519,8 @@ class Debuggerx86 extends DbgLib {
         let seg = this.getSegment(sel);
         let len = seg? seg.limit + 1 : 0;
         let sSection = (fCode? "_CODE" : "_DATA") + StrLib.toHex(nSegment, 2);
-        if (fPrint) this.printf(MESSAGE.MEM, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
+        let flags = fPrint? MESSAGE.DEBUG : MESSAGE.WARNING;
+        this.printf(flags, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
         let off = 0;
         let aSymbols = this.findModuleInfo(sModule, nSegment);
         aSymbols[sModule + sSection] = off;
@@ -73509,12 +73539,11 @@ class Debuggerx86 extends DbgLib {
     removeSegmentInfo(sel, fPrint)
     {
         let sModuleRemoved = this.removeSymbols(null, sel);
-        if (fPrint) {
-            if (sModuleRemoved) {
-                this.printf(MESSAGE.MEM, "%s #%04X removed\n", sModuleRemoved, sel);
-            } else {
-                this.printf(MESSAGE.MEM, "unable to remove module for segment #%04X\n", sel);
-            }
+        let flags = fPrint? MESSAGE.DEBUG : MESSAGE.WARNING;
+        if (sModuleRemoved) {
+            this.printf(flags, "%s #%04X removed\n", sModuleRemoved, sel);
+        } else {
+            this.printf(flags, "unable to remove module for segment #%04X\n", sel);
         }
     }
 
@@ -73554,13 +73583,12 @@ class Debuggerx86 extends DbgLib {
             sParent += '!';
         }
         let sSection = (fCode? "_CODE" : "_DATA") + StrLib.toHex(nSegment, 2);
-        if (fPrint) {
-            /*
-             * Mimics WDEB386 output, except that WDEB386 only displays a linear address, omitting the selector.
-             */
-            this.printf(MESSAGE.MEM, "%s%s %s(%04X)=%04X:%0X len %0X\n", sParent, sModule, (fCode? "code" : "data"), nSegment, sel, off, len);
-        }
-        /*
+        let flags = fPrint? MESSAGE.DEBUG : MESSAGE.WARNING;
+        /**
+         * Mimics WDEB386 output, except that WDEB386 only displays a linear address, omitting the selector.
+         */
+        this.printf(flags, "%s%s %s(%04X)=%04X:%0X len %0X\n", sParent, sModule, (fCode? "code" : "data"), nSegment, sel, off, len);
+        /**
          * TODO: Add support for 32-bit symbols; findModuleInfo() relies on Disk.getModuleInfo(),
          * and the Disk component doesn't yet know how to parse 32-bit executables.
          */
@@ -73583,12 +73611,11 @@ class Debuggerx86 extends DbgLib {
     {
         let sModule = this.getSZ(dbgAddr).toUpperCase();
         let sModuleRemoved = this.removeSymbols(sModule, nSegment);
-        if (fPrint) {
-            if (sModuleRemoved) {
-                this.printf(MESSAGE.MEM, "%s %04X removed\n", sModule, nSegment);
-            } else {
-                this.printf(MESSAGE.MEM, "unable to remove %s for section %04X\n", sModule, nSegment);
-            }
+        let flags = fPrint? MESSAGE.DEBUG : MESSAGE.WARNING;
+        if (sModuleRemoved) {
+            this.printf(flags, "%s %04X removed\n", sModule, nSegment);
+        } else {
+            this.printf(flags, "unable to remove %s for section %04X\n", sModule, nSegment);
         }
     }
 
@@ -73635,7 +73662,7 @@ class Debuggerx86 extends DbgLib {
 
             switch(EAX) {
             case Interrupts.WINDBG.LOADSEG32:
-                /*
+                /**
                  *  SI == segment type:
                  *      0x0     code selector
                  *      0x1     data selector
@@ -73666,7 +73693,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {number} addr
-     * @returns {boolean} true to proceed with the INT 0x41 software interrupt, false to skip
+     * @returns {boolean} (true to proceed with the INT 0x41 software interrupt, false to skip)
      */
     intWindowsDebugger(addr)
     {
@@ -73682,7 +73709,7 @@ class Debuggerx86 extends DbgLib {
 
         if (this.fWinDbg == null) {
             if (AX == Interrupts.WINDBG.IS_LOADED) {
-                /*
+                /**
                  * We're only going to respond to this function if no one else did, in which case,
                  * we'll set fWinDbg to true and handle additional notifications.
                  */
@@ -73690,13 +73717,13 @@ class Debuggerx86 extends DbgLib {
                     return function onInt41Return(nLevel) {
                         if ((cpu.regEAX & 0xffff) != Interrupts.WINDBG.LOADED) {
                             cpu.regEAX = (cpu.regEAX & ~0xffff) | Interrupts.WINDBG.LOADED;
-                            /*
+                            /**
                              * TODO: We need a DEBUGGER message category; using the MEM category for now.
                              */
-                            dbg.printf(MESSAGE.MEM, "INT 0x41 handling enabled\n");
+                            dbg.printf(MESSAGE.DEBUG, "INT 41 handling enabled\n");
                             dbg.fWinDbg = true;
                         } else {
-                            dbg.printf(MESSAGE.MEM, "INT 0x41 monitoring enabled\n");
+                            dbg.printf(MESSAGE.DEBUG, "INT 41 monitoring enabled\n");
                             dbg.fWinDbg = false;
                         }
                     };
@@ -73705,15 +73732,25 @@ class Debuggerx86 extends DbgLib {
             return true;
         }
 
-        /*
+        /**
          * NOTE: If this.fWinDbg is true, then all cases should return false, because we're taking full
          * responsibility for all requests (don't assume there's valid interrupt handler inside the machine).
          */
         switch(AX) {
+        case Interrupts.WINDBG.ISCHAR:              // 0x0003 (called regularly by Win31)
+            break;
+
+        case Interrupts.WINDBG.FORCEDGO16:          // 0x0040 (called regularly by Win31)
+            /**
+             * 2023 Update: It's been a while since I've tried doing a clean install of Windows 95, and this was
+             * firing incessantly.  TODO: Investigate who/what is triggering this later.
+             */
+            break;
+
         case Interrupts.WINDBG.IS_LOADED:           // 0x004F
             if (this.fWinDbg) {
                 cpu.regEAX = (cpu.regEAX & ~0xffff) | Interrupts.WINDBG.LOADED;
-                this.printf(MESSAGE.MEM, "INT 0x41 handling enabled\n");
+                this.printf(MESSAGE.DEBUG, "INT 41 handling enabled\n");
             }
             break;
 
@@ -73726,7 +73763,7 @@ class Debuggerx86 extends DbgLib {
             break;
 
         case Interrupts.WINDBG.KRNLVARS:            // 0x005A
-            /*
+            /**
              *  BX = version number of this data (0x3A0)
              *  DX:CX points to:
              *      WORD    hGlobalHeap     ****
@@ -73751,7 +73788,7 @@ class Debuggerx86 extends DbgLib {
         case Interrupts.WINDBG.DELMODULE:           // 0x0065
         case Interrupts.WINDBG.UNKNOWN66:           // 0x0066
         case Interrupts.WINDBG.UNKNOWN67:           // 0x0067
-            /*
+            /**
              * TODO: Figure out what to do with these notifications, if anything
              */
             break;
@@ -73763,16 +73800,16 @@ class Debuggerx86 extends DbgLib {
 
         case Interrupts.WINDBG.CHECKFAULT:          // 0x007F
             if (this.fWinDbg) {
-                /*
+                /**
                  * AX == 0 means handle fault normally, 1 means issue TRAPFAULT
                  */
                 cpu.regEAX = (cpu.regEAX & ~0xffff) | (this.fIgnoreNextCheckFault? 0 : 1);
-                if (DEBUG) this.printf("INT 0x41 CHECKFAULT: fault=%#04x type=%#04x trap=%b\n", BX, CX, !this.fIgnoreNextCheckFault);
+                this.printf(MESSAGE.DEBUG, "INT 41 CHECKFAULT: fault=%04X type=%04X trap=%b\n", BX, CX, !this.fIgnoreNextCheckFault);
             }
             break;
 
         case Interrupts.WINDBG.TRAPFAULT:           // 0x0083
-            /*
+            /**
              * If we responded with AX == 1 to a preceding CHECKFAULT notification, then we should receive the
              * following TRAPFAULT notification; additionally, a TRAPFAULT notification may be issued without
              * any CHECKFAULT warning if the user was presented with a fault dialog containing a "Debug" button,
@@ -73784,7 +73821,7 @@ class Debuggerx86 extends DbgLib {
             if (this.fWinDbg) {
                 dbgAddr = this.newAddr(cpu.regEDX, CX);
                 if (!this.cTrapFaults++) {
-                    this.printf("INT 0x41 TRAPFAULT: fault=%#04x error=%#08x addr=%s\n", BX, cpu.regESI, this.toHexAddr(dbgAddr));
+                    this.printf("INT 41 TRAPFAULT: fault=%04X error=%08X addr=%s\n", BX, cpu.regESI, this.toHexAddr(dbgAddr));
                     this.addBreakpoint(this.aBreakExec, dbgAddr, true);
                     this.historyInit(true);         // temporary breakpoints don't normally trigger history, but in this case, we want it to
                 } else {
@@ -73801,7 +73838,7 @@ class Debuggerx86 extends DbgLib {
             break;
 
         case Interrupts.WINDBG.LOADSEG32:           // 0x0150
-            /*
+            /**
              *  SI == segment type:
              *      0x0     code selector
              *      0x1     data selector
@@ -73811,33 +73848,24 @@ class Debuggerx86 extends DbgLib {
             break;
 
         case Interrupts.WINDBG.FREESEG32:           // 0x0152
-            /*
+            /**
              *  BX == segment number
              *  DX:EDI -> module name
              */
             this.removeSectionInfo(BX, this.newAddr(cpu.regEDI, DX));
             break;
 
+        case Interrupts.WINDBG.FORCEDBP:            // 0xF002
+            break;
+
         default:
-            /*
-             * 2023 Update: It's been a while since I've tried doing a clean install of Windows 95,
-             * and this printf() was firing incessantly ("INT 0x41: 0x0040"); I looked up 0x0040 and found this:
-             *
-             *      DS_ForcedGO16	equ    40h	; enter the debugger and perform the equivalent
-			 *                                  ; of a GO command to force a stop at the
-			 *                                  ; specified CS:IP
-			 *                                  ; CX is the desired CS
-		     *                                  ; BX is the desired IP
-             *
-             * I've changed this code from DEBUG to MAXDEBUG for now. TODO: Investigate who/what is triggering this later.
-             */
-            if (MAXDEBUG && this.fWinDbg) {
-                this.printf("INT 0x41: %#04x\n", AX);
+            if (this.fWinDbg) {
+                this.printf(MESSAGE.DEBUG, "INT 41: AX=%04X (unhandled)\n", AX);
             }
             break;
         }
 
-        /*
+        /**
          * Let's try to limit the scope of any "gt" command by resetting this flag after any INT 0x41
          */
         this.fIgnoreNextCheckFault = false;
@@ -73869,24 +73897,27 @@ class Debuggerx86 extends DbgLib {
 
         if (this.fWinDbgRM == null) {
             if (AH == Interrupts.WINDBGRM.IS_LOADED) {
-                /*
+                /**
                  * It looks like IFSHLP.SYS issues a preliminary INT 0x68 before Windows 95 gets rolling,
                  * and the Windows Debugger will not have had a chance to load yet, so we need to ignore
                  * that call.  We detect IFSHLP.SYS by looking for "IFS$" in the caller's code segment,
                  * where the IFSHLP device driver header is located.
                  */
                 if (cpu.getLong((cpu.segCS.sel << 4) + 0x0A) == 0x24534649) {
-                    if (DEBUG) this.printf("Ignoring INT 0x68 from IFSHLP.SYS\n");
+                    this.printf(MESSAGE.DEBUG, "ignoring INT 68 from IFSHLP.SYS\n");
                     return true;
                 }
-                /*
+                /**
                  * Ditto for WDEB386 itself, which presumably wants to avoid loading on top of itself.
+                 * The offset of the "WDEB" signature is at 0x82 in the Windows 3.1 version (3.10.46 1/16/92),
+                 * and at 0x5F in the Windows 95 version.
                  */
-                if (cpu.getLong((cpu.segCS.sel << 4) + 0x5F) == 0x42454457) {
-                    if (DEBUG) this.printf("Ignoring INT 0x68 from WDEB386.EXE\n");
+                if (cpu.getLong((cpu.segCS.sel << 4) + 0x82) == 0x42454457 ||
+                    cpu.getLong((cpu.segCS.sel << 4) + 0x5F) == 0x42454457) {
+                    this.printf(MESSAGE.DEBUG, "ignoring INT 68 from WDEB386.EXE\n");
                     return true;
                 }
-                /*
+                /**
                  * We're only going to respond to this function if no one else did, in which case, we'll set
                  * fWinDbgRM to true and handle additional notifications.
                  */
@@ -73894,14 +73925,14 @@ class Debuggerx86 extends DbgLib {
                     return function onInt68Return(nLevel) {
                         if ((cpu.regEAX & 0xffff) != Interrupts.WINDBGRM.LOADED) {
                             cpu.regEAX = (cpu.regEAX & ~0xffff) | Interrupts.WINDBGRM.LOADED;
-                            dbg.printf(MESSAGE.MEM, "INT 0x68 handling enabled\n");
-                            /*
+                            dbg.printf(MESSAGE.DEBUG, "INT 68 handling enabled\n");
+                            /**
                              * If we turn on INT 0x68 handling, we must also turn on INT 0x41 handling,
                              * because Windows assumes that the latter handler exists whenever the former does.
                              */
                             dbg.fWinDbg = dbg.fWinDbgRM = true;
                         } else {
-                            dbg.printf(MESSAGE.MEM, "INT 0x68 monitoring enabled\n");
+                            dbg.printf(MESSAGE.DEBUG, "INT 68 monitoring enabled\n");
                             dbg.fWinDbgRM = false;
                         }
                     };
@@ -73910,7 +73941,7 @@ class Debuggerx86 extends DbgLib {
             return true;
         }
 
-        /*
+        /**
          * NOTE: If this.fWinDbgRM is true, then all cases should return false, because we're taking full
          * responsibility for all requests (don't assume there's valid interrupt handler inside the machine).
          */
@@ -73923,7 +73954,7 @@ class Debuggerx86 extends DbgLib {
 
         case Interrupts.WINDBGRM.PREP_PMODE:        // 0x44
             if (this.fWinDbgRM) {
-                /*
+                /**
                  * Use our fancy new "call break" mechanism to obtain a special address that will
                  * trap all calls, routing control to the specified function (callWindowsDebuggerPMInit).
                  */
@@ -73940,7 +73971,7 @@ class Debuggerx86 extends DbgLib {
             break;
 
         case Interrupts.WINDBGRM.REMOVESEGS:        // 0x4F
-            /*
+            /**
              * TODO: This probably just signals the end of module loading; nothing is required, but we should
              * clean up whatever we can....
              */
@@ -73948,7 +73979,7 @@ class Debuggerx86 extends DbgLib {
 
         case Interrupts.WINDBGRM.LOADSEG:           // 0x50
             if (AL == 0x20) {
-                /*
+                /**
                  *  Real-mode EXE
                  *  CX == paragraph
                  *  ES:DI -> module name
@@ -73956,7 +73987,7 @@ class Debuggerx86 extends DbgLib {
                 this.addSegmentInfo(this.newAddr(DI, ES), 0, CX, true, !!this.fWinDbgRM);
             }
             else if (AL < 0x80) {
-                /*
+                /**
                  *  AL == segment type:
                  *      0x00    code selector
                  *      0x01    data selector
@@ -73972,7 +74003,7 @@ class Debuggerx86 extends DbgLib {
                 this.addSegmentInfo(this.newAddr(DI, ES), BX+1, (AL & 0x40)? DX : CX, !(AL & 0x1), !!this.fWinDbgRM);
             }
             else {
-                /*
+                /**
                  *  AL == segment type:
                  *      0x80    device driver code seg
                  *      0x81    device driver data seg
@@ -73986,8 +74017,8 @@ class Debuggerx86 extends DbgLib {
             break;
 
         default:
-            if (DEBUG && this.fWinDbgRM) {
-                this.printf("INT 0x68: %#02x\n", AH);
+            if (this.fWinDbgRM) {
+                this.printf(MESSAGE.DEBUG, "INT 68: AH=%02X (unhandled)\n", AH);
             }
             break;
         }
@@ -74043,7 +74074,7 @@ class Debuggerx86 extends DbgLib {
     {
         let cpu = this.cpu;
         let AL = cpu.regEAX & 0xff;
-        if (MAXDEBUG) this.printf("INT 0x68 callback: %#02x\n", AL);
+        if (MAXDEBUG) this.printf("INT 68 callback: AL=%02X\n", AL);
         if (AL == 5) {
             cpu.regECX = cpu.regESI = 0;                // our in-machine debugger footprint is zero
             cpu.regEAX = (cpu.regEAX & ~0xff) | 0x01;   // TODO: Returning a "don't call" response sounds good, but what does it REALLY mean?
@@ -74069,7 +74100,7 @@ class Debuggerx86 extends DbgLib {
         case "debugInput":
             this.bindings[sBinding] = control;
             this.controlDebug = /** @type {HTMLInputElement} */ (control);
-            /*
+            /**
              * For halted machines, this is fine, but for auto-start machines, it can be annoying.
              *
              *      controlInput.focus();
@@ -74203,7 +74234,7 @@ class Debuggerx86 extends DbgLib {
                 if (sel === this.cpu.getFS()) return this.cpu.segFS;
                 if (sel === this.cpu.getGS()) return this.cpu.segGS;
             }
-            /*
+            /**
              * Even if nSuppressBreaks is set, we'll allow the call in real-mode,
              * because a loadReal() request using segDebugger should generally be safe.
              */
@@ -74231,7 +74262,7 @@ class Debuggerx86 extends DbgLib {
      */
     getAddr(dbgAddr, fWrite, nb)
     {
-        /*
+        /**
          * Some addresses (eg, breakpoint addresses) save their original linear address in dbgAddr.addr,
          * so we want to use that if it's there, but otherwise, dbgAddr is assumed to be a segmented address
          * whose linear address must always be (re)calculated based on current machine state (mode, active
@@ -74241,7 +74272,7 @@ class Debuggerx86 extends DbgLib {
         if (addr == undefined) {
             addr = X86.ADDR_INVALID;
             if (dbgAddr) {
-                /*
+                /**
                  * TODO: We should try to cache the seg inside dbgAddr, to avoid unnecessary calls to getSegment().
                  */
                 let seg = this.getSegment(dbgAddr.sel, dbgAddr.type);
@@ -74273,7 +74304,7 @@ class Debuggerx86 extends DbgLib {
         let b = 0xff;
         let addr = this.getAddr(dbgAddr, false, 1);
         if (addr !== X86.ADDR_INVALID) {
-            /*
+            /**
              * TODO: Determine what we should do about the fact that we're masking any error from probeAddr()
              */
             b = this.cpu.probeAddr(addr, 1, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL) | 0;
@@ -74308,7 +74339,7 @@ class Debuggerx86 extends DbgLib {
         let w = 0xffff;
         let addr = this.getAddr(dbgAddr, false, 2);
         if (addr !== X86.ADDR_INVALID) {
-            /*
+            /**
              * TODO: Determine what we should do about the fact that we're masking any error from probeAddr()
              */
             w = this.cpu.probeAddr(addr, 2, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL) | 0;
@@ -74330,7 +74361,7 @@ class Debuggerx86 extends DbgLib {
         let l = -1;
         let addr = this.getAddr(dbgAddr, false, 4);
         if (addr !== X86.ADDR_INVALID) {
-            /*
+            /**
              * TODO: Determine what we should do about the fact that we're masking any error from probeAddr()
              */
             l = this.cpu.probeAddr(addr, 4, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL) | 0;
@@ -74721,7 +74752,7 @@ class Debuggerx86 extends DbgLib {
     toHexAddr(dbgAddr)
     {
         let ch = this.getAddrPrefix(dbgAddr);
-        /*
+        /**
          * TODO: Revisit the decision to check sel == undefined; I would rather see these decisions based on type.
          */
         return (dbgAddr.type >= Debuggerx86.ADDRTYPE.LINEAR || dbgAddr.sel == undefined)? (ch + StrLib.toHex(dbgAddr.addr)) : (ch + this.toHexOffset(dbgAddr.off, dbgAddr.sel, dbgAddr.fAddr32));
@@ -74820,7 +74851,7 @@ class Debuggerx86 extends DbgLib {
         let typePrev = -1, cPrev = 0;
         while (n--) {
             let block = aBlocks[i];
-            /*
+            /**
              * We need to replicate a portion of what probeAddr() does, which is to "peek" at the
              * underlying physical block of any UNPAGED block.  An UNPAGED block doesn't imply
              * that the page is invalid, but merely that the CPU has not yet been asked to perform
@@ -74985,7 +75016,7 @@ class Debuggerx86 extends DbgLib {
         let pageInfo = null;
         if (I386 && this.cpu.model >= X86.MODEL_80386) {
             let bus = this.bus;
-            /*
+            /**
              * Here begins code remarkably similar to mapPageBlock() (with fSuppress set).
              */
             pageInfo = {};
@@ -75098,7 +75129,7 @@ class Debuggerx86 extends DbgLib {
         } else {
             sDump = "base=" + StrLib.toHex(seg.base, this.cchAddr) + " limit=" + this.getLimitString(seg.limit);
         }
-        /*
+        /**
          * When we dump the EXT word, we mask off the LIMIT1619 and BASE2431 bits, because those have already
          * been incorporated into the limit and base properties of the segment register; all we care about here
          * are whether EXT contains any of the AVAIL (0x10), BIG (0x40) or LIMITPAGES (0x80) bits.
@@ -75143,7 +75174,7 @@ class Debuggerx86 extends DbgLib {
 
             iHistory -= nPrev;
             if (iHistory < 0) {
-                /*
+                /**
                  * If the dbgAddr of the last aHistory element contains a valid selector, wrap around.
                  */
                 if (aHistory[aHistory.length - 1].sel == null) {
@@ -75168,7 +75199,7 @@ class Debuggerx86 extends DbgLib {
             let nCyclesPrev = 0;
             let fDumpCycles = (sComment == "cycles");
 
-            /*
+            /**
              * TODO: The following is necessary to prevent dumpHistory() from causing additional (or worse, recursive)
              * faults due to segmented addresses that are no longer valid, but the only alternative is to dramatically
              * increase the amount of memory used to store instruction history (eg, storing copies of all the instruction
@@ -75185,7 +75216,7 @@ class Debuggerx86 extends DbgLib {
                 let dbgAddr = aHistory[iHistory++];
                 if (dbgAddr.sel == null) break;
 
-                /*
+                /**
                  * We must create a new dbgAddr from the address in aHistory, because dbgAddr was
                  * a reference, not a copy, and we don't want getInstruction() modifying the original.
                  */
@@ -75222,7 +75253,7 @@ class Debuggerx86 extends DbgLib {
 
             if (sBuffer) this.printf("%s\n", sBuffer);
 
-            /*
+            /**
              * See comments above.
              *
              *      this.nSuppressBreaks--;
@@ -75280,7 +75311,7 @@ class Debuggerx86 extends DbgLib {
         if (type == X86.DESC.ACC.TYPE.TSS386) {
             let iPort = 0;
             off = (v >>> 16);
-            /*
+            /**
              * We arbitrarily cut the IOPM dump off at port 0x3FF; we're not currently interested in anything above that.
              */
             while (off < seg.offMax && iPort < 0x3ff) {
@@ -75595,13 +75626,13 @@ class Debuggerx86 extends DbgLib {
      */
     replaceRegs(s)
     {
-        /*
+        /**
          * Replace any references first; this means that register references inside the reference
          * do NOT need to be prefixed with '@'.
          */
         s = this.parseReference(s) || s;
 
-        /*
+        /**
          * Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
          */
         let i = 0;
@@ -75613,7 +75644,7 @@ class Debuggerx86 extends DbgLib {
             }
             i++;
         }
-        /*
+        /**
          * Replace every #XX, where XX is a hex byte value, with the corresponding ASCII character (if printable).
          */
         i = 0;
@@ -75628,7 +75659,7 @@ class Debuggerx86 extends DbgLib {
             }
             i++;
         }
-        /*
+        /**
          * Replace every $XXXX:XXXX, where XXXX:XXXX is a segmented address, with the zero-terminated string at that address.
          */
         i = 0;
@@ -75643,7 +75674,7 @@ class Debuggerx86 extends DbgLib {
             }
             i++;
         }
-        /*
+        /**
          * Replace every ^XXXX:XXXX, where XXXX:XXXX is a segmented address, with the FCB filename stored at that address.
          */
         i = 0;
@@ -75691,7 +75722,7 @@ class Debuggerx86 extends DbgLib {
 
         this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
-        /*
+        /**
          * We have no idea what the frequency of print() calls might be; all we know is that they easily
          * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
          * message, to effectively end the current burst and start fresh.
@@ -75717,7 +75748,7 @@ class Debuggerx86 extends DbgLib {
         let fMessage = fForce;
         let nCategory;
 
-        /*
+        /**
          * We currently arrive here only because the CPU has already determined that INT messages are enabled,
          * or because the ChipSet's RTC interrupt handler has already determined that INT messages are enabled.
          *
@@ -75725,13 +75756,13 @@ class Debuggerx86 extends DbgLib {
          * unless the caller has set fForce, we check those additional categories now.
          */
         if (!fMessage) {
-            /*
+            /**
              * Display all software interrupts if CPU messages are enabled (and it's not an "annoying" interrupt);
              * note that in some cases, even "annoying" interrupts can be turned with an extra message category.
              */
             fMessage = this.messageEnabled(MESSAGE.CPU) && Debuggerx86.INT_ANNOYING.indexOf(nInt) < 0;
             if (!fMessage) {
-                /*
+                /**
                  * Alternatively, display this software interrupt if its corresponding message category is enabled.
                  */
                 nCategory = Debuggerx86.INT_MESSAGES[nInt];
@@ -75739,7 +75770,7 @@ class Debuggerx86 extends DbgLib {
                     if (this.messageEnabled(nCategory)) {
                         fMessage = true;
                     } else {
-                        /*
+                        /**
                          * Alternatively, display this FDC interrupt if HDC messages are enabled (since they share
                          * a common software interrupt).  Normally, an HDC BIOS will copy the original DISK (0x13)
                          * vector to the ALT_DISK (0x40) vector, but it's a nuisance having to check different
@@ -75762,7 +75793,7 @@ class Debuggerx86 extends DbgLib {
             let aFuncs = Interrupts.FUNCS[nInt];
             let sFunc = (aFuncs && aFuncs[AH]) || "";
             if (sFunc) sFunc = this.replaceRegs(sFunc);
-            /*
+            /**
              * For display purposes only, rewind addr to the address of the responsible "INT n" instruction;
              * we know it's the two-byte "INT n" instruction because that's the only opcode handler that calls
              * checkIntNotify() at the moment.
@@ -75801,11 +75832,11 @@ class Debuggerx86 extends DbgLib {
      */
     messageIO(component, port, bOut, addrFrom, name, bIn, bitsMessage)
     {
-        /*
+        /**
          * Add MESSAGE.PORT to the set of required message flags.
          */
         bitsMessage = Component.setBits(bitsMessage || 0, MESSAGE.PORT);
-        /*
+        /**
          * We don't want to see "unknown" I/O messages unless WARNING is enabled.
          */
         if (!name) bitsMessage = Component.setBits(bitsMessage, MESSAGE.WARNING);
@@ -75869,7 +75900,7 @@ class Debuggerx86 extends DbgLib {
         if (!this.aOpcodeHistory || !this.aOpcodeHistory.length) {
             this.aOpcodeHistory = new Array(Debuggerx86.HISTORY_LIMIT);
             for (i = 0; i < this.aOpcodeHistory.length; i++) {
-                /*
+                /**
                  * Preallocate dummy Addr (Array) objects in every history slot, so that
                  * checkInstruction() doesn't need to call newAddr() on every slot update.
                  */
@@ -75921,7 +75952,7 @@ class Debuggerx86 extends DbgLib {
         let fCheck = !nCycles;
         do {
             if (fCheck) {
-                /*
+                /**
                  * When single-stepping, the CPU won't call checkInstruction(), which is good for
                  * avoiding breakpoints, but bad for instruction data collection if checks are enabled.
                  * So we call checkInstruction() ourselves.
@@ -75929,7 +75960,7 @@ class Debuggerx86 extends DbgLib {
                 if (this.checksEnabled()) this.checkInstruction(this.cpu.regLIP, 0);
                 fCheck = false;     // only check once per instruction
             }
-            /*
+            /**
              * For our typically tiny bursts (usually single instructions), mimic what runCPU() does.
              */
             try {
@@ -75951,7 +75982,7 @@ class Debuggerx86 extends DbgLib {
             }
         } while (this.cpu.opFlags & X86.OPFLAG_PREFIXES);
 
-        /*
+        /**
          * Because we called cpu.stepCPU() and not cpu.startCPU(), we must nudge the cpu's update code,
          * and then update our own state.  Normally, the only time fUpdateCPU will be false is when doTrace()
          * is calling us in a loop, in which case it will perform its own updateCPU() when it's done.
@@ -75985,7 +76016,7 @@ class Debuggerx86 extends DbgLib {
         if (fRegs === undefined) fRegs = true;
 
         this.dbgAddrNextCode = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
-        /*
+        /**
          * this.nStep used to be a simple boolean, but now it's 0 (or undefined)
          * if inactive, 1 if stepping over an instruction without a register dump, or 2
          * if stepping over an instruction with a register dump.
@@ -76026,7 +76057,7 @@ class Debuggerx86 extends DbgLib {
     powerUp(data, fRepower)
     {
         if (!fRepower) {
-            /*
+            /**
              * Because Debugger save/restore support is somewhat limited (and didn't always exist),
              * we deviate from the typical save/restore design pattern: instead of reset OR restore,
              * we always reset and then perform a (potentially limited) restore.
@@ -76110,7 +76141,7 @@ class Debuggerx86 extends DbgLib {
     {
         let i = 0;
         if (data[i]) this.dbgAddrNextCode = this.unpackAddr(data[i++]);
-        /*
+        /**
          * dbgAddrNextData wasn't saved until there were at least 6 elements, hence the check for data[5] instead of data[i]
          */
         if (data[5]) this.dbgAddrNextData = this.unpackAddr(data[i++]);
@@ -76120,7 +76151,7 @@ class Debuggerx86 extends DbgLib {
             if (typeof this.aPrevCmds == "string") this.aPrevCmds = [this.aPrevCmds];
             this.fAssemble = data[i][1];
             let bitsMessage = data[i][2];
-            /*
+            /**
              * We ensure that we're restoring updated Messages flags, by verifying that MESSAGE.BUFFER was set by the save()
              * function; if so, we clear MESSAGE.BUFFER before restoring it (and yes, this means we'll never restore the BUFFER
              * setting, which is fine, and we'll also never restore any old Messages flags, which I doubt anyone will miss).
@@ -76186,7 +76217,7 @@ class Debuggerx86 extends DbgLib {
                     sStopped += " (";
                     if (this.checksEnabled()) {
                         sStopped += this.cOpcodes + " opcodes, ";
-                        /*
+                        /**
                          * $ops displays progress by calculating cOpcodes - cOpcodesStart, so before
                          * zeroing cOpcodes, we should subtract cOpcodes from cOpcodesStart (since we're
                          * effectively subtracting cOpcodes from cOpcodes as well).
@@ -76221,7 +76252,7 @@ class Debuggerx86 extends DbgLib {
                     }
                 } else {
                     if (this.messageEnabled(MESSAGE.HALT)) {
-                        /*
+                        /**
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
                          * message (another helpful tip would be to simply turn off the "halt" message category).
@@ -76279,7 +76310,7 @@ class Debuggerx86 extends DbgLib {
             if (this.checkBreakpoint(addr, 1, this.aBreakExec)) {
                 return true;
             }
-            /*
+            /**
              * Halt if running with interrupts disabled and IOPL < CPL, because that's likely an error.
              */
             if (MAXDEBUG && !(cpu.regPS & X86.PS.IF) && cpu.nIOPL < cpu.nCPL) {
@@ -76288,7 +76319,7 @@ class Debuggerx86 extends DbgLib {
             }
         }
 
-        /*
+        /**
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
@@ -76300,7 +76331,7 @@ class Debuggerx86 extends DbgLib {
                 let bOpcode = cpu.probeAddr(addr);
                 if (bOpcode != null) {
                     this.aaOpcodeCounts[bOpcode][1]++;
-                    /*
+                    /**
                      * If any vector breakpoints are set AND we're not halting on vector breakpoints AND we
                      * did not just encounter an interrupt vector, then do NOT log the instruction.  Otherwise, log it.
                      */
@@ -76313,7 +76344,7 @@ class Debuggerx86 extends DbgLib {
                         let dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];
                         this.setAddr(dbgAddr, cpu.getIP(), cpu.getCS());
 
-                        /*
+                        /**
                          * This was added to collapse repeated instructions into a single entry in the history buffer.
                          */
                         let iPrevHistory = this.iOpcodeHistory? this.iOpcodeHistory - 1 : this.aOpcodeHistory.length - 1;
@@ -76325,13 +76356,13 @@ class Debuggerx86 extends DbgLib {
 
                         dbgAddr.nCPUCycles = cpu.getCycles();
 
-                        /*
+                        /**
                          * If vector tracing is enabled and we just encountered a vector, record some additional info.
                          */
                         if (this.aVectorBP.length && !this.vectorHalt && this.vectorTrace >= 0) {
                             dbgAddr.nDebugState = (cpu.regEAX & 0xffff) | (this.vectorTrace << 16);
                         }
-                        /*
+                        /**
                          * For debugging timer issues, snap cycles remaining in the current burst and the state of TIMER0.
                          */
                         else if (this.chipset) {
@@ -76339,7 +76370,7 @@ class Debuggerx86 extends DbgLib {
                             dbgAddr.nDebugCycles = cpu.nStepCycles;
                             dbgAddr.nDebugState = timer.countCurrent[0] | (timer.countCurrent[1] << 8);
                         }
-                        /*
+                        /**
                          * For debugging video timing (eg, retrace) issues, it's helpful to record the state of the Video
                          * component's countdown timer.  timerVideo will be set to null if there's no Video component or the
                          * timer doesn't exist, so findTimer() should be called at most once.
@@ -76430,7 +76461,7 @@ class Debuggerx86 extends DbgLib {
      */
     checkPortInput(port, size, data)
     {
-        /*
+        /**
          * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally
          */
         this.printf("break on input from port %#06x: %x\n", port, data);
@@ -76451,7 +76482,7 @@ class Debuggerx86 extends DbgLib {
      */
     checkPortOutput(port, size, data)
     {
-        /*
+        /**
          * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally
          */
         this.printf("break on output to port %#06x: %x\n", port, data);
@@ -76482,7 +76513,7 @@ class Debuggerx86 extends DbgLib {
             }
         }
         this.aBreakWrite = ["bw"];
-        /*
+        /**
          * nSuppressBreaks ensures we can't get into an infinite loop where a breakpoint lookup requires
          * reading a segment descriptor via getSegment(), and that triggers more memory reads, which triggers
          * more breakpoint checks.
@@ -76524,7 +76555,7 @@ class Debuggerx86 extends DbgLib {
 
         // this.nSuppressBreaks++;
 
-        /*
+        /**
          * Instead of complaining that a breakpoint already exists (as we used to do), we now
          * allow breakpoints to be re-set; this makes it easier to update any commands that may
          * be associated with the breakpoint.
@@ -76547,7 +76578,7 @@ class Debuggerx86 extends DbgLib {
         if (fSuccess) {
             aBreak.push(dbgAddr);
             if (fTempBreak) {
-                /*
+                /**
                  * Force temporary breakpoints to use their linear address, if one is available, by zapping
                  * the selector; this allows us to step over calls or interrupts that change the processor mode.
                  *
@@ -76597,7 +76628,7 @@ class Debuggerx86 extends DbgLib {
                         if (aBreak != this.aBreakExec) {
                             this.cpu.removeMemBreak(addr, aBreak == this.aBreakWrite, dbgAddrBreak.type == Debuggerx86.ADDRTYPE.PHYSICAL);
                         }
-                        /*
+                        /**
                          * We'll mirror the logic in addBreakpoint() and leave the history buffer alone if this
                          * was a temporary breakpoint.
                          */
@@ -76703,7 +76734,7 @@ class Debuggerx86 extends DbgLib {
      */
     mapBreakpoint(addr)
     {
-        /*
+        /**
          * Map addresses in the top 64Kb at the top of the address space (assuming either a 16Mb or 4Gb
          * address space) to the top of the 1Mb range.
          *
@@ -76730,7 +76761,7 @@ class Debuggerx86 extends DbgLib {
      */
     checkBreakpoint(addr, nb, aBreak, fTempBreak)
     {
-        /*
+        /**
          * Time to check for execution breakpoints; note that this should be done BEFORE updating frequency
          * or history data (see checkInstruction), since we might not actually execute the current instruction.
          */
@@ -76740,7 +76771,7 @@ class Debuggerx86 extends DbgLib {
 
             addr = this.mapBreakpoint(addr);
 
-            /*
+            /**
              * As discussed in opINT3(), I decided to check for INT3 instructions here: we'll tell the CPU to
              * stop on INT3 whenever both the INT and HALT message bits are set; a simple "g" command allows you
              * to continue.
@@ -76761,14 +76792,14 @@ class Debuggerx86 extends DbgLib {
 
                 if (fTempBreak && !dbgAddrBreak.fTempBreak) continue;
 
-                /*
+                /**
                  * We need to zap the linear address field of the breakpoint address before
                  * calling getAddr(), to force it to recalculate the linear address every time,
                  * unless this is a breakpoint on a linear address (as indicated by a null sel).
                  */
                 if (dbgAddrBreak.sel != null) dbgAddrBreak.addr = undefined;
 
-                /*
+                /**
                  * We used to calculate the linear address of the breakpoint at the time the
                  * breakpoint was added, so that a breakpoint set in one mode (eg, in real-mode)
                  * would still work as intended if the mode changed later (eg, to protected-mode).
@@ -76789,7 +76820,7 @@ class Debuggerx86 extends DbgLib {
                             fTempBreak = true;
                         }
                         if ((a = dbgAddrBreak.aCmds)) {
-                            /*
+                            /**
                              * When one or more commands are attached to a breakpoint, we don't halt by default.
                              * Instead, we set fBreak to true only if, at the completion of all the commands, the
                              * CPU is halted; in other words, you should include "h" as one of the breakpoint commands
@@ -76815,7 +76846,7 @@ class Debuggerx86 extends DbgLib {
                                         fBreak = true;
                                         break;
                                     }
-                                    /*
+                                    /**
                                      * If we're still here, we'll execute the "else" command (which is just a no-op),
                                      * followed by any remaining commands.
                                      */
@@ -76996,7 +77027,7 @@ class Debuggerx86 extends DbgLib {
         let asOpcodes = Debuggerx86.INS_NAMES;
         let dbgAddrIns = this.newAddr(dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.type);
 
-        /*
+        /**
          * Incorporate segment, operand size, and address size overrides into the current instruction.
          *
          * Note that redundant prefixes must be ignored;  see opOS() and opAS() for details.  We limit the
@@ -77096,7 +77127,7 @@ class Debuggerx86 extends DbgLib {
                 if (typeCPU == Debuggerx86.CPU_80286) {
                     sOperands = "[%800]";
                 } else if (typeCPU == Debuggerx86.CPU_80386) {
-                    /*
+                    /**
                      * NOTE: The 80386 LOADALL documentation, such as it is, doesn't suggest that segment
                      * overrides are allowed, but then again, it doesn't say they're not; we'll disassemble
                      * it as is, because chances are all legitimate uses of LOADALL in the known universe
@@ -77117,7 +77148,7 @@ class Debuggerx86 extends DbgLib {
                     bModRM = this.getByte(dbgAddr, 1);
                 }
                 if (typeMode < Debuggerx86.TYPE_MODREG) {
-                    /*
+                    /**
                      * This test also encompasses TYPE_MODMEM, which is basically the inverse of the case
                      * below (ie, only Mod values *other* than 11 are allowed); however, I believe that in
                      * some cases that's merely a convention, and that if you try to execute an instruction
@@ -77127,7 +77158,7 @@ class Debuggerx86 extends DbgLib {
                     sOperand = this.getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr);
                 }
                 else if (typeMode == Debuggerx86.TYPE_MODREG) {
-                    /*
+                    /**
                      * TYPE_MODREG instructions assume that Mod is 11 (only certain early 80486 steppings
                      * actually *required* that Mod contain 11) and always treat RM as a register (which we
                      * could also simulate by setting Mod to 11 and letting getModRMOperand() do its thing).
@@ -77135,7 +77166,7 @@ class Debuggerx86 extends DbgLib {
                     sOperand = this.getRegOperand(bModRM & 0x7, type, dbgAddr);
                 }
                 else {
-                    /*
+                    /**
                      * All remaining cases are register-based (eg, TYPE_REG); getRegOperand() will figure out which.
                      */
                     sOperand = this.getRegOperand((bModRM >> 3) & 0x7, type, dbgAddr);
@@ -77207,7 +77238,7 @@ class Debuggerx86 extends DbgLib {
         sLine += StrLib.pad(sBytes, dbgAddrIns.fAddr32? -20 : -16) + ' ';
 
         if (sPrefix.indexOf("REP") == 0) {
-            /*
+            /**
              * For MOVS, STOS, OUTS, INS (and perhaps also LODS, although that doesn't seem useful), REPZ (0xF3) becomes
              * REP, because the Z flag is ignored.  And apparently, the same is true for REPNZ (0xF2); ie, either prefix can
              * be used.  I considered leaving REPNZ alone, to highlight the uncommon use of that prefix with those instructions,
@@ -77261,14 +77292,14 @@ class Debuggerx86 extends DbgLib {
         let reg = (bModRM >> 3) & 0x7;
         let r_m = (bModRM & 0x7);
 
-        /*
+        /**
          * Similar to how opFPU() decodes FPU instructions, we combine mod and reg into one
          * decodable value: put mod in the high nibble and reg in the low nibble, after first
          * collapsing all mod values < 3 to zero.
          */
         let modReg = (mod < 3? 0 : 0x30) + reg;
 
-        /*
+        /**
          * All values >= 0x34 imply mod == 3 and reg >= 4, so now we shift reg into the high
          * nibble and r_m into the low, yielding values >= 0x40.
          */
@@ -77298,7 +77329,7 @@ class Debuggerx86 extends DbgLib {
 
         switch (typeSize) {
         case Debuggerx86.TYPE_BYTE:
-            /*
+            /**
              * There's the occasional immediate byte we don't need to display (eg, the 0x0A
              * following an AAM or AAD instruction), so we suppress the byte if it lacks a TYPE_IN
              * or TYPE_OUT designation (and TYPE_BOTH, as the name implies, includes both).
@@ -77387,7 +77418,7 @@ class Debuggerx86 extends DbgLib {
         let bIndex = (bSIB >> 3) & 0x7;
         let bBase = bSIB & 0x7;
         let sOperand = "";
-        /*
+        /**
          * Unless bMod is zero AND bBase is 5, there's always a base register.
          */
         if (bMod || bBase != 5) {
@@ -77398,7 +77429,7 @@ class Debuggerx86 extends DbgLib {
             sOperand += Debuggerx86.RMS[bIndex + 8];
             if (bScale) sOperand += '*' + (0x1 << bScale);
         }
-        /*
+        /**
          * If bMod is zero AND bBase is 5, there's a 32-bit displacement instead of a base register.
          */
         if (!bMod && bBase == 5) {
@@ -77749,9 +77780,9 @@ class Debuggerx86 extends DbgLib {
     /**
      * addSymbols(sModule, nSegment, sel, off, addr, len, aSymbols)
      *
-     * As fileimage.js (formerly filedump.js, which was formerly convrom.php) explains, aSymbols is a JSON-encoded object
-     * whose properties consist of all the symbols (in upper-case), and the values of those properties are objects containing
-     * any or all of the following properties:
+     * As fileimage.js (formerly filedump.js, which was formerly convrom.php) explains, aSymbols is a
+     * JSON-encoded object whose properties consist of all the symbols (in upper-case), and the values of
+     * those properties are objects containing any or all of the following properties:
      *
      *      'v': the value of an absolute (unsized) value
      *      'b': either 1, 2, 4 or undefined if an unsized value
@@ -77843,11 +77874,11 @@ class Debuggerx86 extends DbgLib {
                     dbgAddr.off = offSymbol;
                     dbgAddr.sel = selSymbol;
                     dbgAddr.addr = undefined;
-                    /*
+                    /**
                      * getAddr() computes the corresponding physical address and saves it in dbgAddr.addr.
                      */
                     this.getAddr(dbgAddr);
-                    /*
+                    /**
                      * The physical address for any symbol located in the top 64Kb of the machine's address space
                      * should be relocated to the top 64Kb of the first 1Mb, so that we're immune from any changes
                      * to the A20 line.
@@ -77992,7 +78023,7 @@ class Debuggerx86 extends DbgLib {
                 if (symbol !== undefined) {
                     let offSymbol = symbol['o'];
                     if (offSymbol !== undefined) {
-                        /*
+                        /**
                          * We assume that every ROM is ORG'ed at 0x0000, and therefore unless the symbol has an
                          * explicitly-defined segment, we return the segment associated with the entire group; for
                          * a ROM, that segment is normally "addrROM >>> 4".  Down the road, we may want/need to
@@ -78002,7 +78033,7 @@ class Debuggerx86 extends DbgLib {
                         if (selSymbol === undefined) selSymbol = symbolTable.sel;
                         dbgAddr = this.newAddr(offSymbol, selSymbol, symbol['p']);
                     }
-                    /*
+                    /**
                      * The symbol matched, but it wasn't for an address (no 'o' offset), and there's no point
                      * looking any farther, since each symbol appears only once, so we indicate it's an unknown symbol.
                      */
@@ -78104,7 +78135,7 @@ class Debuggerx86 extends DbgLib {
             for (let i = 0; i < aOpBytes.length; i++) {
                 this.setByte(dbgAddr, aOpBytes[i], 1);
             }
-            /*
+            /**
              * Since getInstruction() also updates the specified address, dbgAddrAssemble is automatically advanced.
              */
             this.printf("%s\n", this.getInstruction(this.dbgAddrAssemble));
@@ -78310,7 +78341,7 @@ class Debuggerx86 extends DbgLib {
                 this.printf("powerOff() error\n");
             }
             else if (sLen == "console") {
-                /*
+                /**
                  * Console buffers are notoriously small, and even the following code, which breaks the
                  * data into parts (eg, "d state console 1", "d state console 2", etc) just isn't that helpful.
                  *
@@ -78335,7 +78366,7 @@ class Debuggerx86 extends DbgLib {
             return;
         }
 
-        /*
+        /**
          * Transform a "ds" command into a "d desc" command (simply as shorthand); ditto for "dg" and "dl",
          * only because that's the syntax that WDEB386 used.  I'm uncertain what WDEB386 would do with an LDT
          * selector passed to "dg" or a GDT selector passed to "dl" (because I'm too lazy to check right now),
@@ -78346,7 +78377,7 @@ class Debuggerx86 extends DbgLib {
             asArgs = [sCmd, "desc", sAddr];
         }
 
-        /*
+        /**
          * Handle the "dp" (aka "d page") commands here.
          */
         if (sCmd == "d" && sAddr == "page") {
@@ -78360,7 +78391,7 @@ class Debuggerx86 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            /*
+            /**
              * Transform a "d disk" command into a "l json" command (TODO: Register a dumper for "disk" instead?)
              */
             if (sAddr == "disk") {
@@ -78421,7 +78452,7 @@ class Debuggerx86 extends DbgLib {
             } else {
                 let dbgAddrEnd = this.parseAddr(sLen);
                 if (!dbgAddrEnd) return;
-                /*
+                /**
                  * To be more DEBUG-like, when an ending address is used instead of a length, we treat it inclusively, hence the "+ 1".
                  */
                 if (dbgAddr.type != Debuggerx86.ADDRTYPE.LINEAR) {
@@ -78439,7 +78470,7 @@ class Debuggerx86 extends DbgLib {
         let cLines = ((cb + 15) >> 4) || 1;
         let cbLine = (size == 4? 16 : this.nBase);  // the base also happens to be a reasonable number of bytes/line
 
-        /*
+        /**
          * The "da" variation uses a line size of 160 bytes, because that's the number of characters
          * per line in a text frame buffer; if no ending address or length is specified, the number of
          * lines defaults to 25 (the typical number of visible lines in a frame buffer).
@@ -78505,7 +78536,7 @@ class Debuggerx86 extends DbgLib {
         let dbgAddr = this.parseAddr(sAddr);
         if (!dbgAddr) return;
 
-        /*
+        /**
          * Use "ev b000:0000" to fill MDA video memory with test data (and "ev b800:0000" to fill CGA video memory).
          */
         if (asArgs[0] == "ev") {
@@ -78534,7 +78565,7 @@ class Debuggerx86 extends DbgLib {
         let fASCII = false;
         for (let i = 2; i < asArgs.length; i++) {
             let sArg = asArgs[i];
-            /*
+            /**
              * Now that all debugger commands go through parseCommand(), we can accept interesting commands like this:
              *
              *      ew b800:0 "Happy Birthday"
@@ -78692,7 +78723,7 @@ class Debuggerx86 extends DbgLib {
         if (!sPort || sPort == '?') {
             this.printf("input commands:\n");
             this.printf("\ti [p]\tread port [p]\n");
-            /*
+            /**
              * TODO: Regarding this warning, consider adding an "unchecked" version of
              * bus.checkPortInputNotify(), since all Debugger memory accesses are unchecked, too.
              *
@@ -78868,7 +78899,7 @@ class Debuggerx86 extends DbgLib {
             if (nSectors === undefined) nSectors = 1;
         }
 
-        /*
+        /**
          * We choose the disk controller very simplistically: FDC for drives 0 or 1, and HDC for drives 2
          * and up, unless no HDC is present, in which case we assume FDC for all drive numbers.
          *
@@ -78890,7 +78921,7 @@ class Debuggerx86 extends DbgLib {
             if (drive) {
                 if (drive.disk) {
                     if (fJSON) {
-                        /*
+                        /**
                          * This is an interim solution to dumping disk images in JSON.  It has many problems, the
                          * "biggest" being that the large disk images really need to be compressed first, because they
                          * get "inflated" with use.  See the dump() method in the Disk component for more details.
@@ -78916,7 +78947,7 @@ class Debuggerx86 extends DbgLib {
                                 });
                             }(this, dbgAddr));
                         }
-                        /*
+                        /**
                          * Call updateCPU() now, since we forced setByte() to defer all updates
                          */
                         this.cpu.updateCPU(true);
@@ -78990,7 +79021,7 @@ class Debuggerx86 extends DbgLib {
             }
         }
 
-        /*
+        /**
          * Display those message categories that match the current criteria (on or off)
          */
         let n = 0;
@@ -79147,7 +79178,7 @@ class Debuggerx86 extends DbgLib {
         if (!sPort || sPort == '?') {
             this.printf("output commands:\n");
             this.printf("\to [p] [b]\twrite byte [b] to port [p]\n");
-            /*
+            /**
              * TODO: Regarding this warning, consider adding an "unchecked" version of
              * bus.checkPortOutputNotify(), since all Debugger memory accesses are unchecked, too.
              *
@@ -79269,7 +79300,7 @@ class Debuggerx86 extends DbgLib {
                 case "DI":
                     this.cpu.regEDI = (this.cpu.regEDI & ~0xffff) | (w & 0xffff);
                     break;
-                /*
+                /**
                  * DANGER: For any of the segment loads below, by going through the normal CPU
                  * segment load procedure, you run the risk of generating a fault in the machine
                  * if you're not careful.  So, um, be careful.
@@ -79294,7 +79325,7 @@ class Debuggerx86 extends DbgLib {
                     this.cpu.setIP(w);
                     this.dbgAddrNextCode = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
                     break;
-                /*
+                /**
                  * I used to alias "PC" (Program Counter) to "IP" (Instruction Pointer), because in PC-DOS 1.00
                  * through 2.10, DEBUG.COM did the same thing.  Then I discovered that, starting with PC-DOS 3.00,
                  * DEBUG.COM changed "PC" to refer to the 16-bit flags register (Program or Processor Control?)
@@ -79341,7 +79372,7 @@ class Debuggerx86 extends DbgLib {
                             this.cpu.setMSW(w);
                             break;
                         case "TR":
-                            /*
+                            /**
                              * DANGER: Like any of the segment loads above, by going through the normal CPU
                              * segment load procedure, you run the risk of generating a fault in the machine
                              * if you're not careful.  So, um, be careful.
@@ -79350,7 +79381,7 @@ class Debuggerx86 extends DbgLib {
                                 fValid = false;
                             }
                             break;
-                        /*
+                        /**
                          * TODO: Add support for GDTR (addr and limit), IDTR (addr and limit), and perhaps
                          * even the ability to edit descriptor information associated with each segment register.
                          */
@@ -79383,7 +79414,7 @@ class Debuggerx86 extends DbgLib {
                                 case "EDI":
                                     this.cpu.regEDI = w;
                                     break;
-                                /*
+                                /**
                                  * DANGER: For any of the segment loads below, by going through the normal CPU
                                  * segment load procedure, you run the risk of generating a fault in the machine
                                  * if you're not careful.  So, um, be careful.
@@ -79405,7 +79436,7 @@ class Debuggerx86 extends DbgLib {
                                     this.cpu.regCR3 = w;
                                     X86.helpLoadCR3.call(this.cpu, w);
                                     break;
-                                /*
+                                /**
                                  * TODO: Add support for DR0-DR7 and TR6-TR7.
                                  */
                                 default:
@@ -79515,7 +79546,7 @@ class Debuggerx86 extends DbgLib {
     {
         let fCallStep = true;
         let nRegs = (sCmd == "pr"? 1 : 0);
-        /*
+        /**
          * Set up the value for this.nStep (ie, 1 or 2) depending on whether the user wants
          * a subsequent register dump ("pr") or not ("p").
          */
@@ -79550,7 +79581,7 @@ class Debuggerx86 extends DbgLib {
                     this.incAddr(dbgAddr, 1);
                     bOp2 = this.getByte(dbgAddr);
                     this.incAddr(dbgAddr, 1);
-                    /*
+                    /**
                      * Look for INT 0x32 functions 4-6 and skip over the null-terminated string following the interrupt.
                      */
                     if (bOp2 == 0x32) {
@@ -79626,7 +79657,7 @@ class Debuggerx86 extends DbgLib {
                     if (this.cmp) this.cmp.updateFocus();
                     this.nStep = 0;
                 }
-                /*
+                /**
                  * A successful run will ultimately call stop(), which will in turn call clearTempBreakpoint(),
                  * which will clear nStep, so there's your assurance that nStep will be reset.  Now we may have
                  * stopped for reasons unrelated to the temporary breakpoint, but that's OK.
@@ -79661,7 +79692,7 @@ class Debuggerx86 extends DbgLib {
                 dbgAddr.addr = undefined;
                 let s = this.getInstruction(dbgAddr);
                 if (s.indexOf("CALL") >= 0 || fFar && s.indexOf("INT") >= 0) {
-                    /*
+                    /**
                      * Verify that the length of this CALL (or INT), when added to the address of the CALL (or INT),
                      * matches the original return address.  We do this by getting the string index of the opcode bytes,
                      * subtracting that from the string index of the next space, and dividing that difference by two,
@@ -79709,7 +79740,7 @@ class Debuggerx86 extends DbgLib {
             let sCall = null, sCallPrev = null, cTests = 256;
             while ((dbgAddrStack.off >>> 0) < this.cpu.regLSPLimit) {
                 dbgAddrCall.off = this.getWord(dbgAddrStack, true);
-                /*
+                /**
                  * Because we're using the auto-increment feature of getWord(), and because that will automatically
                  * wrap the offset around the end of the segment, we must also check the addr property to detect the wrap.
                  */
@@ -79721,7 +79752,7 @@ class Debuggerx86 extends DbgLib {
                 sCall = this.getCall(dbgAddrCall, true);
                 if (sCall) {
                     selCode = this.getWord(dbgAddrStack, true);
-                    /*
+                    /**
                      * It's not strictly necessary that we skip over the flags word that's pushed as part of any INT
                      * instruction, but it reduces the risk of misinterpreting it as a return address on the next iteration.
                      */
@@ -79729,7 +79760,7 @@ class Debuggerx86 extends DbgLib {
                     break;
                 }
             }
-            /*
+            /**
              * The sCallPrev check eliminates duplicate sequential calls, which are usually (but not always)
              * indicative of a false positive, in which case the previous call is probably bogus as well, but
              * at least we won't duplicate that mistake.  Of course, there are always exceptions, recursion
@@ -79785,7 +79816,7 @@ class Debuggerx86 extends DbgLib {
                 return dbg.setBusy(true) && dbg.stepCPU(nCycles, fRegs, false);
             },
             function onCountStepComplete() {
-                /*
+                /**
                  * We explicitly called stepCPU() with fUpdateCPU === false, because repeatedly
                  * calling updateCPU() can be very slow, especially when fDisplayLiveRegs is true,
                  * so once the repeat count has been exhausted, we must perform a final updateCPU().
@@ -79804,7 +79835,7 @@ class Debuggerx86 extends DbgLib {
      */
     initAddrSize(dbgAddr)
     {
-        /*
+        /**
          * For proper disassembly of instructions preceded by an OPERAND (0x66) size prefix, we set
          * dbgAddr.fData32 to true whenever the operand size is 32-bit; similarly, for an ADDRESS (0x67)
          * size prefix, we set dbgAddr.fAddr32 to true whenever the address size is 32-bit.
@@ -79851,12 +79882,12 @@ class Debuggerx86 extends DbgLib {
             let dbgAddrEnd = this.parseAddr(sAddrEnd, true);
             if (!dbgAddrEnd || dbgAddrEnd.off < dbgAddr.off) return;
 
-            /*
+            /**
              * We now +1 the count to make the ending address inclusive (just like the dump command).
              */
             cb = dbgAddrEnd.off - dbgAddr.off + 1;
             if (cb < 0) cb = 1;
-            /*
+            /**
              * Limiting the amount of disassembled code to 4K helps prevent the user from wedging the browser.
              */
             if (cb > 0x1000) cb = 0x1000;
@@ -79924,7 +79955,7 @@ class Debuggerx86 extends DbgLib {
         }
         let asArgs = [];
         if (sCmd) {
-            /*
+            /**
              * With the introduction of breakpoint commands (ie, quoted command sequences
              * associated with a breakpoint), we can no longer perform simplistic splitting.
              *
@@ -79940,7 +79971,7 @@ class Debuggerx86 extends DbgLib {
 
             let iPrev = 0;
             let chQuote = null;
-            /*
+            /**
              * NOTE: Processing charAt() up to and INCLUDING length is not a typo; we're taking
              * advantage of the fact that charAt() with an invalid index returns an empty string,
              * allowing us to use the same substring() call to capture the final portion of sCmd.
@@ -79959,7 +79990,7 @@ class Debuggerx86 extends DbgLib {
                     }
                 }
                 else if (ch == chSep && !chQuote && ch != chPrev || !ch) {
-                    /*
+                    /**
                      * Recall that substring() accepts starting (inclusive) and ending (exclusive)
                      * indexes, whereas substr() accepts a starting index and a length.  We need the former.
                      */
@@ -79972,7 +80003,7 @@ class Debuggerx86 extends DbgLib {
                 chPrev = ch;
             }
             if (chSep == ' ' && asArgs.length) {
-                /*
+                /**
                  * I've folded in the old shiftArgs() code here: deal with any command (eg, "r") that allows but
                  * doesn't require whitespace between the command and first argument, and break them apart anyway.
                  */
@@ -80028,12 +80059,12 @@ class Debuggerx86 extends DbgLib {
             let ch = sCmd.charAt(0);
             if (ch == '"' || ch == "'") return true;
 
-            /*
+            /**
              * Zap the previous message buffer to ensure the new command's output is not tossed out as a repeat.
              */
             this.sMessagePrev = null;
 
-            /*
+            /**
              * I've relaxed the !isBusy() requirement, to maximize our ability to issue Debugger commands externally.
              */
             if (this.isReady() /* && !this.isBusy(true) */ && sCmd.length > 0) {
@@ -80211,7 +80242,7 @@ class Debuggerx86 extends DbgLib {
 
 if (DEBUGGER) {
 
-    /*
+    /**
      * NOTE: The Debugger properties below are considered "class constants"; most of them use our "all-caps"
      * convention (and all of them SHOULD, but that wouldn't help us catch any bugs).
      *
@@ -80224,7 +80255,7 @@ if (DEBUGGER) {
      * caught at compile-time.
      */
 
-    /*
+    /**
      * Information regarding interrupts of interest (used by messageInt() and others)
      */
     Debuggerx86.INT_MESSAGES = {
@@ -80238,7 +80269,7 @@ if (DEBUGGER) {
         0x33:       MESSAGE.MOUSE
     };
 
-    /*
+    /**
      * Information regarding "annoying" interrupts (which aren't annoying so much as too frequent);
      * note that some of these can still be enabled if you really want them (eg, RTC can be turned on
      * with RTC messages, ALT_TIMER with TIMER messages, etc).
@@ -80274,7 +80305,7 @@ if (DEBUGGER) {
         'var':   "assign variable"
     };
 
-    /*
+    /**
      * Supported address types; the type field in a DbgAddrx86 object may be one of:
      *
      *      NONE, REAL, PROT, V86, LINEAR or PHYSICAL
@@ -80291,7 +80322,7 @@ if (DEBUGGER) {
         PHYSICAL:   0x05
     };
 
-    /*
+    /**
      * CPU instruction ordinals
      *
      * Note that individual instructions end with ordinal 163 and instruction groups begin with ordinal 164;
@@ -80326,7 +80357,7 @@ if (DEBUGGER) {
         GRP4W:  176, OP0F:   177, GRP6:   178, GRP7:   179, GRP8:   180
     };
 
-    /*
+    /**
      * CPU instruction names (mnemonics), indexed by CPU instruction ordinal (above)
      */
     Debuggerx86.INS_NAMES = [
@@ -80353,7 +80384,7 @@ if (DEBUGGER) {
         "XBTS",   "XCHG",   "XLAT",   "XOR"
     ];
 
-    /*
+    /**
      * FPU instruction ordinals
      *
      * Unlike CPU instruction ordinals, these are not organized alphabetically (which I did only for the
@@ -80390,7 +80421,7 @@ if (DEBUGGER) {
         FSTSWAX:80
     };
 
-    /*
+    /**
      * FPU instruction names (mnemonics), indexed by FPU instruction ordinal (above)
      */
     Debuggerx86.FINS_NAMES = [
@@ -80415,7 +80446,7 @@ if (DEBUGGER) {
     Debuggerx86.CPU_80386 = 3;
     Debuggerx86.CPUS = [8086, 80186, 80286, 80386];
 
-    /*
+    /**
      * ModRM masks and definitions
      */
     Debuggerx86.REG_AL         = 0x00;          // bits 0-2 are standard Reg encodings
@@ -80499,7 +80530,7 @@ if (DEBUGGER) {
         "EAX",   "ECX",   "EDX",   "EBX",   "ESP",   "EBP",   "ESI",   "EDI"
     ];
 
-    /*
+    /**
      * Operand type descriptor masks and definitions
      *
      * Note that the letters in () in the comments refer to Intel's
@@ -80510,7 +80541,7 @@ if (DEBUGGER) {
     Debuggerx86.TYPE_IREG      = 0x0F00;        // implied register field
     Debuggerx86.TYPE_OTHER     = 0xF000;        // "other" field
 
-    /*
+    /**
      * TYPE_SIZE values.  Some definitions use duplicate values when the operands are the
      * same size and the Debugger doesn't need to make a distinction.
      */
@@ -80523,7 +80554,7 @@ if (DEBUGGER) {
     Debuggerx86.TYPE_SEGP      = 0x0006;        // (p) 32-bit or 48-bit pointer
     Debuggerx86.TYPE_FARP      = 0x0007;        // (p) 32-bit or 48-bit pointer for JMP/CALL
     Debuggerx86.TYPE_PREFIX    = 0x0008;        //     (treat similarly to TYPE_NONE)
-    /*
+    /**
      * The remaining TYPE_SIZE values are for the FPU.  Note that there are not enough values
      * within this nibble for every type to have a unique value, so to differentiate between two
      * types of the same size (eg, SINT and SREAL), we can inspect the opcode string, because only
@@ -80542,7 +80573,7 @@ if (DEBUGGER) {
     Debuggerx86.TYPE_ENV       = 0x000F;        //     FPU ENV (environment; 14 bytes in real-mode, 28 bytes in protected-mode)
     Debuggerx86.TYPE_FPU       = 0x000F;        //     FPU SAVE (save/restore; 94 bytes in real-mode, 108 bytes in protected-mode)
 
-    /*
+    /**
      * TYPE_MODE values.  Order is somewhat important, as all values implying the presence
      * of a ModRM byte are assumed to be >= TYPE_MODRM.
      */
@@ -80563,7 +80594,7 @@ if (DEBUGGER) {
     Debuggerx86.TYPE_DBGREG    = 0x00E0;        // (D) Reg selects debug register
     Debuggerx86.TYPE_TSTREG    = 0x00F0;        // (T) Reg selects test register
 
-    /*
+    /**
      * TYPE_IREG values, based on the REG_* constants.
      * For convenience, they include TYPE_IMPREG or TYPE_IMPSEG as appropriate.
      */
@@ -80590,7 +80621,7 @@ if (DEBUGGER) {
     Debuggerx86.TYPE_FS = (Debuggerx86.REG_FS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
     Debuggerx86.TYPE_GS = (Debuggerx86.REG_GS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
 
-    /*
+    /**
      * TYPE_OTHER bit definitions
      */
     Debuggerx86.TYPE_IN    = 0x1000;            // operand is input
@@ -80607,7 +80638,7 @@ if (DEBUGGER) {
 
     Debuggerx86.HISTORY_LIMIT = DEBUG? 100000 : 1000;
 
-    /*
+    /**
      * Opcode 0x0F has a distinguished history:
      *
      *      On the 8086, it functioned as POP CS
@@ -80626,7 +80657,7 @@ if (DEBUGGER) {
     Debuggerx86.aOpDescUndefined = [Debuggerx86.INS.NONE, Debuggerx86.TYPE_NONE];
     Debuggerx86.aOpDesc0F        = [Debuggerx86.INS.OP0F, Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_BOTH];
 
-    /*
+    /**
      * The aaOpDescs array is indexed by opcode, and each element is a sub-array (aOpDesc) that describes
      * the corresponding opcode. The sub-elements are as follows:
      *
@@ -81002,7 +81033,7 @@ if (DEBUGGER) {
         0xBF: [Debuggerx86.INS.MOVSX,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN]
     };
 
-    /*
+    /**
      * Be sure to keep the following table in sync with FPUx86.aaOps
      */
     Debuggerx86.aaaOpFPUDescs = {
@@ -81327,7 +81358,7 @@ if (DEBUGGER) {
       ]
     ];
 
-    /*
+    /**
      * Table of system (non-segment) descriptors, including indicators of which ones are gates.
      */
     Debuggerx86.SYSDESCS = {
@@ -81345,7 +81376,7 @@ if (DEBUGGER) {
         0x0F00: ["trap gate386", true]
     };
 
-    /*
+    /**
      * TSS field names and offsets used by dumpTSS()
      */
     Debuggerx86.TSS286 = {
@@ -81401,7 +81432,7 @@ if (DEBUGGER) {
         "TASK_IOPM":    0x64
     };
 
-    /*
+    /**
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
     WebLib.onInit(Debuggerx86.init);

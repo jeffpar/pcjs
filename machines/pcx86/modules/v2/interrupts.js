@@ -8,7 +8,7 @@
  */
 
 const Interrupts = {
-    /*
+    /**
      * The original ROM BIOS defined vectors 0x08-0x1F with a table at F000:FEF3 (VECTOR_TABLE).
      */
     VIDEO:      0x10,
@@ -26,7 +26,7 @@ const Interrupts = {
     TMR_BREAK:  0x1C,               // invoked by the BIOS timer interrupt handler (normally vector 0x08)
     VID_PARMS:  0x1D,
     DSK_PARMS:  0x1E,               // vector for Diskette Parameter Table (DPT)
-    /*
+    /**
      * For characters 0x00-0x7F, the original ROM BIOS used a built-in table at F000:FA6E (CRT_CHAR_GEN),
      * since the MDA/CGA font ROM was not CPU-addressable, but presumably there wasn't enough room in the
      * ROM BIOS for all 256 characters, so if software wanted to draw any characters 0x80-0xFF in graphics
@@ -56,11 +56,22 @@ const Interrupts = {
         VECTOR:     0x30            // Windows PM call-back interface (aka Transfer Space Fault)
     },
     WINDBG: {                       // Windows Debugger protected-mode interface
-        VECTOR:     0x41,           // (AX==command)
+        VECTOR:     0x41,           // (AX is one of the following DS commands)
+        OUTCHAR:    0x0000,         // DS_Out_Char (display the char in DL)
+        INCHAR:     0x0001,         // DS_In_Char (read a char into AL)
+        OUTSTR:     0x0002,         // DS_Out_Str (display a NUL terminated string pointed to by DS:ESI)
+        ISCHAR:     0x0003,         // DS_Is_Char (non-blocking In_Chr)
+        OUTSTR16:   0x0012,         // DS_Out_Str16 (display a NUL terminated string pointed to by DS:SI; same as DS_Out_Str but for 16-bit callers)
+        FORCEDGO16: 0x0040,         // DS_ForcedGO16 (enter the debugger and perform the equivalent of a GO command to force a stop at the specified CS:IP; CX is the desired CS and BX is the desired IP)
+        LINKMAP:    0x0045,         // DS_LinkMap (DX:(E)DI = ptr to paragraph in front of map)
+        UNLINKMAP:  0x0046,         // DS_UnlinkMap (DX:(E)DI = ptr to paragraph in front of map)
+        CHECKMAP:   0x0047,         // DS_CheckMap (DX:(E)DI = pointer to module name; returns AX != 0 if map found or AX == 0 if map not found)
+        AUTOLOAD:   0x0048,         // DS_IsAutoLoadSym (returns AX != 0, auto load symbols; AX == 0, don't auto load symbols)
         IS_LOADED:  0x004F,         // DS_DebLoaded
-        LOADED:     0xF386,         // DS_DebPresent (returned in AX if Windows Debugger loaded)
-        LOADSEG:    0x0050,         // DS_LoadSeg (SI==0 if code, 1 if data; BX==segnum-1; CX==selector; ES:[E]DI->module name)
-        FREESEG:    0x0052,         // DS_FreeSeg (BX==segment)
+        LOADED:     0xF386,         // DS_DebPresent (returned in AX in response to DS_DebLoaded if Windows Debugger loaded)
+        LOADSEG:    0x0050,         // DS_LoadSeg (SI is 0 if code sel, 1 if data sel, 0x80 if code seg, 0x81 if data seg; BX is segnum-1; CX is sel or seg; DX is data instance; ES:[E]DI -> module name)
+        LOADSEG32:  0x0150,         // DS_LoadSeg_32 (SI is 0 0 if code, 1 if data; DX:EBX -> D386_Device_Params)
+        FREESEG:    0x0052,         // DS_FreeSeg (BX == segment)
         KRNLVARS:   0x005A,         // DS_Kernel_Vars
         RELSEG:     0x005C,         // DS_ReleaseSeg (same as DS_FreeSeg but "restores any breakpoints first")
         LOADHIGH:   0x005D,         // D386_LoadCodeDataHigh
@@ -70,7 +81,7 @@ const Interrupts = {
         UNKNOWN66:  0x0066,         // Unknown (but I suspect it isn't good)
         UNKNOWN67:  0x0067,         // Unknown (but I suspect it isn't good)
         REGDOTCMD:  0x0070,         // DS_RegisterDotCommand
-        CHECKFAULT: 0x007F,         // DS_CheckFault (BX==fault #, CX==FAULTTYPE bits; return AX=0 to handle fault normally, 1 to issue TRAPFAULT)
+        CHECKFAULT: 0x007F,         // DS_CheckFault (BX == fault #, CX == FAULTTYPE bits; return AX=0 to handle fault normally, 1 to issue TRAPFAULT)
         FAULTTYPE: {
             V86:    0x0001,
             PM:     0x0002,
@@ -78,22 +89,24 @@ const Interrupts = {
             FIRST:  0x0008,
             LAST:   0x0010
         },
-        TRAPFAULT:  0x0083,         // DS_TrapFault (BX==fault #, CX==faulting CS, EDX==faulting EIP, ESI==fault error, EDI==fault flags)
-        GETSYMBOL:  0x008D,         // DS_GetSymbol (DS:ESI->symbol; return AX=0 if success, 1 if not found, 2 if memory not loaded yet)
-        LOADSEG32:  0x0150,         // DS_LoadSeg_32 (SI==0 if code, 1 if data; DX:EBX->D386_Device_Params)
-        FREESEG32:  0x0152,         // DS_FreeSeg_32 (BX==segment, DX:EDI->module name)
+        TRAPFAULT:  0x0083,         // DS_TrapFault (BX == fault #, CX == faulting CS, EDX == faulting EIP, ESI == fault error, EDI == fault flags)
+        GETSYMBOL:  0x008D,         // DS_GetSymbol (DS:ESI -> symbol; return AX == 0 if success, 1 if not found, 2 if memory not loaded yet)
+        FREESEG32:  0x0152,         // DS_FreeSeg_32 (BX == segment, DX:EDI -> module name)
         CONDBP:     0xF001,         // DS_CondBP (break here if WDEB386 was run with /B; ESI -> string to display)
-        ENABLED:    false           // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
+        FORCEDBP:   0xF002,         // DS_ForcedBP
+        FORCEDGO:   0xF003,         // DS_ForcedGO (enter the debugger and perform the equivalent of a GO command to force a stop at the specified CS:EIP; CX is the desired CS, EBX is the desired EIP)
+        HARDINT1:   0xF004,         // DS_HardINT1 (check to see if INT 1 hooked for all rings;  ENTER: nothing, EXIT: AX = 0, if no, 1, if yes)
+        ENABLED:    true            // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
     },
     WINDBGRM: {                     // Windows Debugger real-mode interface
-        VECTOR:     0x68,           // (AH==command)
+        VECTOR:     0x68,           // (AH is one of the following D386 commands)
         IS_LOADED:  0x43,           // D386_Identify
         LOADED:     0xF386,         // D386_Id (returned in AX if Windows Debugger loaded)
         PREP_PMODE: 0x44,           // D386_Prepare_PMode (must return a 16:32 address in ES:EDI to a "PMinit" handler)
-        FREESEG:    0x48,           // D386_Free_Segment (BX==real-mode segment)
+        FREESEG:    0x48,           // D386_Free_Segment (BX == real-mode segment)
         REMOVESEGS: 0x4F,           // D386_Remove_Segs (remove any undefined segments from the named module at ES:DI)
-        LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI->D386_Device_Params)
-        ENABLED:    false           // support for WINDBGRM interrupts can be disabled
+        LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI -> D386_Device_Params)
+        ENABLED:    true            // support for WINDBGRM interrupts can be disabled
     },
     VIDEO_VGA:  0x6D,               // VGA ROM entry point (the default VGA INT 10h handler invokes this interrupt and IRETs)
     FUNCS: {}                       // filled in only if DEBUGGER is true
@@ -165,18 +178,18 @@ Interrupts.BIOS_DATA = {
     0x4A8:  ["SAVE_PTR",4]          // POINTER TO EGA PARAMETER CONTROL BLOCK
 };
 
-/*
-    * See Debuggerx86.prototype.replaceRegs() for the rules governing how register contents are replaced in the strings below.
-    *
-    * Replacements occur in the following order:
-    *
-    *      Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
-    *      Replace every #XX, where XX is a hex byte value, with the corresponding ASCII character (if printable).
-    *      Replace every $XXXX:XXXX, where XXXX:XXXX is a segmented address, with the zero-terminated string at that address.
-    *      Replace every ^XXXX:XXXX, where XXXX:XXXX is a segmented address, with the FCB filename stored at that address.
-    *
-    * The last replacement is obviously DOS-specific, since FCBs are DOS constructs.
-    */
+/**
+ * See Debuggerx86.prototype.replaceRegs() for the rules governing how register contents are replaced in the strings below.
+ *
+ * Replacements occur in the following order:
+ *
+ *      Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
+ *      Replace every #XX, where XX is a hex byte value, with the corresponding ASCII character (if printable).
+ *      Replace every $XXXX:XXXX, where XXXX:XXXX is a segmented address, with the zero-terminated string at that address.
+ *      Replace every ^XXXX:XXXX, where XXXX:XXXX is a segmented address, with the FCB filename stored at that address.
+ *
+ * The last replacement is obviously DOS-specific, since FCBs are DOS constructs.
+ */
 Interrupts.FUNCS[Interrupts.VIDEO] = {
     0x00: "set mode (@AL)",
     0x01: "set cursor type (start=@CH,end=@CL)",
@@ -207,33 +220,33 @@ Interrupts.FUNCS[Interrupts.DISK] = {
     0x16: "get drive @DL change line status",
     0x17: "set drive @DL DASD type",
     0x18: "set drive @DL media type"
-    /*
-        * Here's an additional function reference, previously in the HDC component, but moved here
-        * because our components are hardware emulations, not BIOS emulations, so this information is
-        * really only of interest to the Debugger (or the casual observer).
-        *
-        *      RESET:          0x00,
-        *      GET_STATUS:     0x01,
-        *      READ_SECTORS:   0x02,
-        *      WRITE_SECTORS:  0x03,
-        *      VERIFY_SECTORS: 0x04,
-        *      FORMAT_TRK:     0x05,
-        *      FORMAT_BAD:     0x06,
-        *      FORMAT_DRIVE:   0x07,
-        *      GET_DRIVEPARMS: 0x08,
-        *      SET_DRIVEPARMS: 0x09,
-        *      READ_LONG:      0x0A,
-        *      WRITE_LONG:     0x0B,
-        *      SEEK:           0x0C,
-        *      ALT_RESET:      0x0D,
-        *      READ_BUFFER:    0x0E,
-        *      WRITE_BUFFER:   0x0F,
-        *      TEST_READY:     0x10,
-        *      RECALIBRATE:    0x11,
-        *      RAM_DIAGNOSTIC: 0x12,
-        *      DRV_DIAGNOSTIC: 0x13,
-        *      CTL_DIAGNOSTIC: 0x14
-        */
+    /**
+     * Here's an additional function reference, previously in the HDC component, but moved here
+     * because our components are hardware emulations, not BIOS emulations, so this information is
+     * really only of interest to the Debugger (or the casual observer).
+     *
+     *      RESET:          0x00,
+     *      GET_STATUS:     0x01,
+     *      READ_SECTORS:   0x02,
+     *      WRITE_SECTORS:  0x03,
+     *      VERIFY_SECTORS: 0x04,
+     *      FORMAT_TRK:     0x05,
+     *      FORMAT_BAD:     0x06,
+     *      FORMAT_DRIVE:   0x07,
+     *      GET_DRIVEPARMS: 0x08,
+     *      SET_DRIVEPARMS: 0x09,
+     *      READ_LONG:      0x0A,
+     *      WRITE_LONG:     0x0B,
+     *      SEEK:           0x0C,
+     *      ALT_RESET:      0x0D,
+     *      READ_BUFFER:    0x0E,
+     *      WRITE_BUFFER:   0x0F,
+     *      TEST_READY:     0x10,
+     *      RECALIBRATE:    0x11,
+     *      RAM_DIAGNOSTIC: 0x12,
+     *      DRV_DIAGNOSTIC: 0x13,
+     *      CTL_DIAGNOSTIC: 0x14
+     */
 };
 
 Interrupts.FUNCS[Interrupts.CASSETTE] = {
@@ -351,7 +364,7 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
     0x004F: "check debugger loaded"         // WINDBG.IS_LOADED returns WINDBG.LOADED (0xF386) if debugger loaded
 };
 
-/*
+/**
  * DOS function reference (from https://pcdosretro.github.io/dosfunc.txt)
  *
  *      INT 20 Program terminate (1.0+)
@@ -2108,6 +2121,22 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
  *            points to the EXEPACK header, this is followed by the unpack code
  *            and a relocation table containing a word count and relocation
  *            entries for 16 segments.
+ */
+
+/**
+ * Other miscellaneous definitions for historical reference.
+ *
+ * From DEBUGSYS.INC:
+ *
+ * D386_Device_Params STRUC
+ *      DD_logical_seg  dw  ?   ; logical segment # from map
+ *      DD_actual_sel   dw  ?   ; actual selector value
+ *      DD_base         dd  ?   ; linear address offset for start of segment
+ *      DD_length       dd  ?   ; actual length of segment
+ *      DD_name         df  ?   ; 16:32 ptr to null terminated device name
+ *      DD_sym_name     df  ?   ; 16:32 ptr to null terminated symbolic module name  (i.e. Win386)
+ *      DD_alias_sel    dw  ?   ; alias selector value (0 = none)
+ *  D386_Device_Params ENDS
  */
 
 export default Interrupts;
