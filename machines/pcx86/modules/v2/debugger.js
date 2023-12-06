@@ -553,7 +553,7 @@ export default class Debuggerx86 extends DbgLib {
             break;
 
         case Interrupts.WINDBG.FREESEG:             // 0x0052
-            this.removeSegmentInfo(BX);
+            this.removeSegmentInfo(BX, !!this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.KRNLVARS:            // 0x005A
@@ -646,7 +646,7 @@ export default class Debuggerx86 extends DbgLib {
              *  BX == segment number
              *  DX:EDI -> module name
              */
-            this.removeSectionInfo(BX, this.newAddr(cpu.regEDI, DX));
+            this.removeSectionInfo(BX, this.newAddr(cpu.regEDI, DX), !!this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.FORCEDBP:            // 0xF002
@@ -761,7 +761,7 @@ export default class Debuggerx86 extends DbgLib {
             break;
 
         case Interrupts.WINDBGRM.FREESEG:           // 0x48
-            this.removeSegmentInfo(BX);
+            this.removeSegmentInfo(BX, !!this.fWinDbg);
             break;
 
         case Interrupts.WINDBGRM.REMOVESEGS:        // 0x4F
@@ -2131,12 +2131,15 @@ export default class Debuggerx86 extends DbgLib {
      */
     findModuleInfo(sModule, nSegment)
     {
-        let aSymbols = [];
+        let aSymbols = {};
         if (SYMBOLS) {
             let component, componentPrev = null;
             while ((component = this.cmp.getMachineComponent("Disk", componentPrev))) {
-                aSymbols = component.getModuleInfo(sModule, nSegment);
-                if (aSymbols.length) break;
+                let a = component.getModuleInfo(sModule, nSegment);
+                if (a) {
+                    aSymbols = a;
+                    break;
+                }
                 componentPrev = component;
             }
         }
@@ -4696,7 +4699,11 @@ export default class Debuggerx86 extends DbgLib {
             aSymbols: aSymbols,
             aOffsets: aOffsets
         };
-        this.aSymbolTable.push(symbolTable);
+        let i = this.aSymbolTable.findIndex(function(symbolTable) {
+            return symbolTable.sModule == sModule && symbolTable.nSegment == nSegment;
+        });
+        if (i < 0) i = this.aSymbolTable.length;
+        this.aSymbolTable[i] = symbolTable;
     }
 
     /**

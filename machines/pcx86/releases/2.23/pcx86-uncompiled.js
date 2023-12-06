@@ -62746,132 +62746,6 @@ WebLib.onInit(Mouse.init);
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
- *  The Disk component provides methods for:
- *
- *      1) creating an empty disk: create()
- *      2) loading a disk image: load()
- *      3) getting disk information: info()
- *      4) seeking a disk sector: seek()
- *      5) reading data from a sector: read()
- *      6) writing data to a sector: write()
- *      7) save disk deltas: save()
- *      8) restore disk deltas: restore()
- *      9) converting disk contents: convertToJSON()
- *
- *  More functionality may be factored out of the FDC and HDC components later and moved here, to
- *  further reduce some of the duplication between them, but the above functionality is a good start.
- */
-
-/*
- * Client/Server Disk I/O
- *
- * To support large disks without consuming large amounts of client-side memory, and to push
- * client-side disk changes back the server, we need a DiskIO API that can be used in place of
- * the DiskDump API.
- *
- * Use of the DiskIO API and any associated disk images must be tightly coupled to per-user
- * storage and specific machine configurations, to prevent the disk images from being corrupted
- * by inconsistent I/O operations.  Our basic User API (userapi.js) already provides some
- * per-user storage that we can use to get the design rolling.
- *
- * The DiskIO API must also provide the ability to create new (empty) hard disk images in per-user
- * storage and automatically associate them with the machine configurations that requested them.
- */
-
-/*
- * Principles
- *
- * Originally, when the Disk class was given a disk image to load and mount, it would request the
- * ENTIRE disk image from the DiskDump module.  That works well for small (floppy) disk images, but
- * for larger disks -- let's just say anything stored on the server as an "img" file -- we'd prefer
- * to interact with that disk using "On-Demand I/O".  Any "img" file on the same server as the PCjs
- * application should be a candidate for on-demand access.
- *
- * On-Demand I/O means that nothing is initially transferred from the server.  As sectors are
- * requested by the PCx86 machine, PCx86 requests them from the server, and maintains an MRU cache
- * of sectors, periodically discarding the least-used clean sectors above a certain memory limit.
- * Dirty sectors (ie, those that the PCx86 machine has written to) must be periodically sent
- * back to the server and then marked as clean, so that they can be discarded like any other
- * sector.
- *
- * We also support "local" init-only disk images, which means that dirty sectors are never sent
- * back to the server and are instead retained by the client for the lifetime of the app; such
- * images are "read-only" as far as the server is concerned, but "read-write" as far as the client
- * is concerned.  Reloading/restarting an app with an "local" disk will return the disk to its
- * initial state.
- *
- * Practice
- *
- * Let's first look at what we *already* do for the HDC component:
- *
- *  1) Creating new (empty) disk images
- *  2) Pre-loading pre-built JSON-encoded disk images (converting them to JSON on the fly as needed)
- *
- * An example of #1 is in /devices/pc/machine/5160/cga/256kb/demo/machine.xml:
- *
- *      <hdc id="hdcXT" drives='[{name:"10Mb Hard Drive",type:3}]'/>
- *
- * and an example of #2 is in /disks/pc/fixed/win101.xml:
- *
- *      <hdc id="hdcXT" drives='[{name:"10Mb Hard Drive",path:"/disks/pc/fixed/win101/10mb.json",type:3}]'/>
- *
- * The HDC component expects an array of drive entries.  Array position determines drive numbering
- * (the first entry is drive 0, the second is drive 1, etc), and each entry contains the following
- * properties:
- *
- *      'name': user-friendly name for the disk, if any
- *      'path': URL of the disk image, if any
- *      'type': a drive type
- *
- * Of those properties, only 'type' is required, which provides an index into an HDC "Drive Type"
- * table that determines disk geometry and therefore disk size.  As we add support for larger disks and
- * newer disk controllers, the 'type' parameter will be superseded by either a user-defined 'geometry'
- * parameter that will define number of heads, cylinders, tracks, sectors per track, and (max) bytes per
- * sector, or perhaps a generic 'size' parameter that leaves geometry choices to the HDC component,
- * which will then pass those decisions on to the Disk component.
- *
- * We will enable on-demand I/O for a disk image with a new 'mode' parameter that looks like:
- *
- *      'mode': one of "local", "preload", "demandrw", "demandro"
- *
- * "preload" means the disk image will be completely preloaded, exactly as before; "demandrw" enables
- * full on-demand I/O support; and "demandro" enables on-demand I/O for reads only (all writes are retained
- * and never written back to the server).
- *
- * "ro" will be the fallback for "rw" unless TWO other important criteria are met: 1) the user has a
- * private user key, and therefore per-user storage; and 2) the disk image 'path' contains an asterisk (*)
- * that the server can internally remap to a directory in the user's storage; eg:
- *
- *      'path': <asterisk>/10mb.img (path components following the asterisk are optional)
- *
- * If the disk image does not already exist, it will be created (but not formatted).
- *
- * This preserves the promise that EVERYTHING a user does within a PCx86 machine is private (ie, not
- * visible to any other PCjs users).  I don't want to be in the business of saving any user machine
- * states or disk changes, but at least those operations are limited to users who have asked for (and
- * received) a private user key.
- *
- * Another important consideration at this stage is dealing with multiple machines writing to the same
- * disk image; even though we're limiting the "demandrw" mode to per-user images, a single user may still
- * inadvertently start up multiple machines that refer to the same disk image.
- *
- * So, every PCx86 machine needs to generate a unique token and include that token with every Disk I/O API
- * operation, so that the server can revoke a previous machine's "rw" access to a disk image when a new
- * machine requests "rw" access to the same disk image.
- *
- * From the client's perspective, revocation can be quietly dealt with by reverting to "demandro" mode;
- * that client becomes stuck with all their dirty sectors until they can reclaim "rw" access, which should
- * only happen if no intervening writes to the disk image on the server have occurred (if I bother allowing
- * reclamation at all).
- *
- * The real challenge here is avoiding revocation of a machine that still has critical changes to commit,
- * but since we can't even solve the problem of a user closing their browser at an inopportune time
- * and potentially leaving a disk image in an inconsistent state, premature revocation is the least of
- * our problems.  Since a real hard drive could suffer the same fate if the machine's power was turned off
- * at the wrong time, you could say that we're simply providing a faithful simulation of reality.
- */
-
 /** @typedef {{ c: number, h: number, s: number, l: number, d: Array.<number>, f: number, o: number, iCylinder: number, iHead: number, sector: number, length: number, data: Array.<number>, pattern: (number|null), file: FileInfo, offFile: number, dataCRC: number, dataError: boolean, dataMark: number, headCRC: number, headError: boolean, iModify: number, cModify: number, fDirty: boolean }} */
 let Sector;
 
@@ -62919,7 +62793,7 @@ class Disk extends Component {
 
         this.controller = controller;
 
-        /*
+        /**
          * Route all printing through this.controller (eg, controller.print()), because
          * the Computer component is unaware of any Disk objects and therefore will not set
          * up the usual overrides when a Control Panel is installed.
@@ -62930,19 +62804,19 @@ class Disk extends Component {
         this.dbg = controller.dbg;
         this.drive = drive;
 
-        /*
+        /**
          * We pull out a number of drive properties that we may or may not need as defaults
          */
         this.sDiskName = drive.name;
         this.fRemovable = drive.fRemovable;
         this.fOnDemand = this.fRemote = false;
 
-        /*
+        /**
          * Initialize the disk contents
          */
         this.create(mode, drive.nCylinders, drive.nHeads, drive.nSectors, drive.cbSector);
 
-        /*
+        /**
          * The following dirty sector and timer properties are used only with fOnDemand disks,
          * assuming fRemote was successfully set.
          */
@@ -62951,6 +62825,12 @@ class Disk extends Component {
         this.timerWrite = null;             // REMOTE_WRITE_DELAY timer in effect, if any
         this.msTimerWrite = 0;              // the time that the write timer, if any, is set to fire
         this.fWriteInProgress = false;
+
+        /**
+         * To make getModuleInfo() more reliable, we use aModules to cache any modules we see as
+         * sectors are read.
+         */
+        this.aModules = [];
 
         this.setReady();
     }
@@ -62981,7 +62861,7 @@ class Disk extends Component {
      */
     isRemote()
     {
-        /*
+        /**
          * Ironically, we can't rely on fRemote, because that is cleared and set across disconnect and
          * reconnect operations.  fOnDemand is the next best thing.
          */
@@ -63050,7 +62930,7 @@ class Disk extends Component {
      */
     powerDown(fSave, fShutdown)
     {
-        /*
+        /**
          * If we're connected to a remote disk, take this opportunity to flush any remaining unwritten
          * changes and then close the connection.
          */
@@ -63058,7 +62938,7 @@ class Disk extends Component {
             let response;
             let nErrorCode = 0;
             if (this.fWriteInProgress) {
-                /*
+                /**
                  * TODO: Verify that the Computer's powerOff() handler will actually honor a false return value.
                  */
                 if (!Component.confirmUser("Disk writes are still in progress, shut down anyway?")) {
@@ -63074,7 +62954,7 @@ class Disk extends Component {
             if (fShutdown) {
                 this.disconnectRemoteDisk();
             }
-            /*
+            /**
              * I only report that changes to the disk have been "saved" if fSave is true, to avoid confusing
              * users who might not understand the difference between discarding local changes (which should restore
              * all diskettes to their original state) and discarding remote changes (which could leave the remote disk
@@ -63105,7 +62985,7 @@ class Disk extends Component {
         this.nSectors = nSectors;
         this.cbSector = cbSector;
         this.diskData = [];
-        /*
+        /**
          * If the drive is using PRELOAD mode, then it will use the load()/mount() process to initialize the disk contents;
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
          */
@@ -63119,7 +62999,7 @@ class Disk extends Component {
                 for (let iHead = 0; iHead < aHeads.length; iHead++) {
                     let aSectors = new Array(this.nSectors);
                     for (let iSector = 1; iSector <= aSectors.length; iSector++) {
-                        /*
+                        /**
                          * Now that our read() and write() functions can deal with unallocated data
                          * arrays, and can read/write the specified pattern on-the-fly, we no longer need
                          * to pre-allocate and pre-initialize the DATA array.
@@ -63205,12 +63085,12 @@ class Disk extends Component {
             return true;
         }
 
-        /*
+        /**
          * If there's an occurrence of API_ENDPOINT anywhere in the path, we assume we can use it as-is;
          * ie, that the user has already formed a URL of the type we use ourselves for unconverted disk images.
          */
         if (sDiskPath.indexOf(DumpAPI.ENDPOINT) < 0) {
-            /*
+            /**
              * If the selected disk image has a "json" extension, then we assume it's a pre-converted
              * JSON-encoded disk image, so we load it as-is; otherwise, we ask our server-side disk image
              * converter to return the corresponding JSON-encoded data.
@@ -63250,7 +63130,7 @@ class Disk extends Component {
             cbDiskData = buffer.byteLength;
             dv = new DataView(buffer, 0, cbDiskData);
         }
-        /*
+        /**
          * Hard drive images using the PCJS MBR will have a special signature, and if that MBR also contains
          * a non-zero DiskInfo.MBR.DRIVE0PARMS.CYLS value, then we'll use the geometry stored in the MBR.
          */
@@ -63267,7 +63147,7 @@ class Disk extends Component {
         else {
             let diskFormat = DiskAPI.GEOMETRIES[cbDiskData];
             if (diskFormat) {
-                /*
+                /**
                  * This geometry lookup is primarily intended for diskette images, because there are a wide variety
                  * of diskette formats that can work within a drive's parameters.  So, I used to assert the number
                  * of cylinders match, but the assertion has been relaxed (we require only that the image have no
@@ -63348,7 +63228,7 @@ class Disk extends Component {
             }
         }
         else if (nErrorCode) {
-            /*
+            /**
              * This can happen for innocuous reasons, such as the user switching away too quickly, forcing
              * the request to be cancelled.  And unfortunately, the browser cancels XMLHttpRequest requests
              * BEFORE it notifies any page event handlers, so if the Computer's being powered down, we won't know
@@ -63359,7 +63239,7 @@ class Disk extends Component {
         } else {
             this.printf(MESSAGE.DISK, "doneLoad(\"%s\")\n", this.sDiskPath);
 
-            /*
+            /**
              * If we received binary data instead of JSON, we can use the same buildDisk() function that
              * our FileReader code uses.
              */
@@ -63369,7 +63249,7 @@ class Disk extends Component {
             }
 
             try {
-                /*
+                /**
                  * The following code was a hack to turn on write-protection for a disk image if there was
                  * an initial comment line containing the string "write-protected".  However, since comments
                  * are technically not allowed in JSON, I needed an alternative solution.  So, if the basename
@@ -63390,12 +63270,12 @@ class Disk extends Component {
                         }
                     }
                 }
-                /*
+                /**
                  * The most likely source of any exception will be here, where we're parsing the disk data.
                  */
                 let diskData, fileTable, imageInfo;
                 if (imageData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
-                    /*
+                    /**
                      * Early server configs reported an error (via the nErrorCode parameter) if a disk URL was invalid,
                      * but more recent server configs now display a somewhat friendlier HTML error page.  The downside,
                      * however, is that the original error has been buried, and we've received "data" that isn't actually
@@ -63406,7 +63286,7 @@ class Disk extends Component {
                      */
                     diskData = ["Missing disk image: " + this.sDiskName];
                 } else {
-                    /*
+                    /**
                      * TODO: IE9 is rather unfriendly and restrictive with regard to how much data it's willing to
                      * eval().  In particular, the 10Mb disk image we use for the Windows 1.01 demo config fails in
                      * IE9 with an "Out of memory" exception.  One work-around would be to chop the data into chunks
@@ -63443,7 +63323,7 @@ class Disk extends Component {
                 else if (diskData.length == 1) {
                     Component.error(diskData[0]);
                 }
-                /*
+                /**
                  * diskData is an array of cylinders, each of which is an array of heads, each of which
                  * is an array of sector objects.  The format does not impose any limitations on number of
                  * cylinders, number of heads, or number of bytes in any of the sector object byte-arrays.
@@ -63470,7 +63350,7 @@ class Disk extends Component {
                         let sSectorsPerTrack = nSectorsPerTrack + " sector" + (nSectorsPerTrack > 1 ? "s" : "") + "/track";
                         this.printf("%s, %s, %s\n", sCylinders, sHeads, sSectorsPerTrack);
                     }
-                    /*
+                    /**
                      * Before the image is usable, we must "normalize" all the sectors.  In the past, this meant
                      * "inflating" them all.  However, that's no longer strictly necessary.  Mainly, it just means
                      * setting LENGTH and DATA properties, so that all the sectors are well-defined.
@@ -63490,7 +63370,7 @@ class Disk extends Component {
                             for (let iSector = 0; iSector < this.nSectors; iSector++) {
                                 sector = diskData[iCylinder][iHead][iSector];
                                 if (!sector) continue;          // non-standard (eg, XDF) disk images may have "unused" (null) sectors
-                                /*
+                                /**
                                  * "Upgrade" all sector object properties.
                                  */
                                 let idSector = sector[Disk.SECTOR.ID];
@@ -63521,7 +63401,7 @@ class Disk extends Component {
                                     else {
                                         let ab = sector['bytes'];
                                         if (ab === undefined || !ab.length) {
-                                            /*
+                                            /**
                                              * If there is neither a 'bytes' nor 'data' array, then our job is simple:
                                              * create an empty 'data' array; it will be filled in with the dword pattern
                                              * as needed later.
@@ -63537,7 +63417,7 @@ class Disk extends Component {
                                             }
                                         }
                                         else {
-                                            /*
+                                            /**
                                              * To keep the conversion code simple, we'll do any necessary pattern-filling first,
                                              * to fully "inflate" the sector, eliminating the possibility of partial dwords and
                                              * saving any code downstream from dealing with byte-size patterns.
@@ -63553,7 +63433,7 @@ class Disk extends Component {
                                 }
                                 else {
                                     if (adw.length < (length >> 2)) {
-                                        /*
+                                        /**
                                          * To minimize breakage and changes, I opted to convert new data arrays to the old format,
                                          * where the data array is just the non-repeating data and dwPattern is the repeating value,
                                          * like so:
@@ -63570,7 +63450,7 @@ class Disk extends Component {
 
                                 this.initSector(sector, iCylinder, iHead, idSector, this.cbSector, dwPattern);
 
-                                /*
+                                /**
                                  * For the disk as a whole, we maintain a checksum of the original unmodified data:
                                  *
                                  *      dwChecksum: summation of all dwords in all non-empty sectors
@@ -63675,37 +63555,55 @@ class Disk extends Component {
     }
 
     /**
+     * addModuleInfo(sector)
+     *
+     * @this {Disk}
+     * @param {Sector} sector
+     */
+    addModuleInfo(sector)
+    {
+        if (SYMBOLS && sector.file) {
+            let module = sector.file.module;
+            if (module) {
+                this.aModules[module.name] = module;
+            }
+        }
+    }
+
+    /**
      * getModuleInfo(sModule, nSegment)
      *
      * If the given module and segment number is found, we return an Array of symbol offsets, indexed by symbol name.
      *
+     * NOTE: Originally, this function simply iterated over the disk's file table, looking for a file with a matching
+     * module name, but not only was that inefficient (since most files on a disk are not modules), it could actually
+     * match the wrong file, since module names are not unique (eg, KRNL286.EXE and KRNL386.EXE are both named "KERNEL").
+     *
+     * By restricting the search to the most recent module that has actually been read from the disk, we should have much
+     * more accurate results.
+     *
      * @this {Disk}
      * @param {string} sModule
      * @param {number} nSegment
-     * @returns {Object}
+     * @returns {Object|null}
      */
     getModuleInfo(sModule, nSegment)
     {
-        let aSymbols = {};
-        if (SYMBOLS && this.aFileTable) {
-            for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
-                let file = this.aFileTable[iFile];
-                /*
-                 * NOTE: Given how we now build the file table based on file indexes in the sector
-                 * data, there could well be "holes" in the file table (ie, entries that were used to
-                 * describe a volume label or some other directory entry that has no associated sectors).
-                 */
-                if (!file || !file.module || file.module['name'] != sModule) continue;
-                let segment = file.module['segments'] && file.module['segments'][nSegment];
-                if (!segment) continue;
-                for (let ord in segment['ordinals']) {
-                    let entry = segment['ordinals'][ord];
-                    /*
-                     * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
-                     */
-                    aSymbols[entry['s']] = entry['o'];
+        let aSymbols = null;
+        if (SYMBOLS) {
+            let module = this.aModules[sModule];
+            if (module) {
+                let segment = module['segments'] && module['segments'][nSegment];
+                if (segment) {
+                    aSymbols = {};
+                    for (let ord in segment['ordinals']) {
+                        let entry = segment['ordinals'][ord];
+                        /**
+                         * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
+                         */
+                        aSymbols[entry['s']] = entry['o'];
+                    }
                 }
-                break;
             }
         }
         return aSymbols;
@@ -63731,7 +63629,7 @@ class Disk extends Component {
             let sSymbolUpper = sSymbol.toUpperCase();
             for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
                 let file = this.aFileTable[iFile];
-                /*
+                /**
                  * NOTE: Given how we now build the file table based on file indexes in the sector
                  * data, there could well be "holes" in the file table (ie, entries that were used to
                  * describe a volume label or some other directory entry that has no associated sectors).
@@ -63765,7 +63663,7 @@ class Disk extends Component {
         if (iCylinder < this.nCylinders) {
             let nSectorsRemaining = (lba % nSectorsPerCylinder);
             let iHead = (nSectorsRemaining / this.nSectors) | 0;
-            /*
+            /**
              * LBAs are 0-based, but the sector numbers in CHS addressing are 1-based, so add one to iSector
              */
             let iSector = (nSectorsRemaining % this.nSectors) + 1;
@@ -63929,7 +63827,7 @@ class Disk extends Component {
             let abData = JSON.parse(sURLData);
             let offData = 0;
             while (nSectors--) {
-                /*
+                /**
                  * We call seek with fWrite == true to prevent seek() from triggering another call
                  * to readRemoteSectors() and endlessly recursing.  That also forces seek() to:
                  *
@@ -63945,7 +63843,7 @@ class Disk extends Component {
                 }
                 this.fill(sector, abData, offData);
                 offData += sector[Disk.SECTOR.LENGTH];
-                /*
+                /**
                  * We happen to know that when seek() calls readRemoteSectors(), it limits the number of sectors
                  * to the current track, so the only variable we need to advance is iSector.
                  */
@@ -64216,7 +64114,7 @@ class Disk extends Component {
         if (cylinder) {
             let i;
             let track = cylinder[iHead];
-            /*
+            /**
              * The following code allows a single-sided diskette image to be reformatted (ie, "expanded")
              * as a double-sided image, provided the drive has more than one head (see drive.nHeads).
              *
@@ -64229,7 +64127,7 @@ class Disk extends Component {
                 for (i = 0; i < track.length; i++) {
                     track[i] = this.initSector(null, iCylinder, iHead, i + 1, drive.nBytes, 0);
                 }
-                /*
+                /**
                  * TODO: This is more dodginess, because we can't be certain that every cylinder on the disk
                  * will receive the same "expanded" treatment, but functions like getSector() rely on instance
                  * properties (eg, this.nHeads), on the assumption that the disk's geometry is homogeneous.
@@ -64243,7 +64141,7 @@ class Disk extends Component {
                 for (i = 0; i < track.length; i++) {
                     if (track[i] && track[i][Disk.SECTOR.ID] == iSector) {
                         sector = track[i];
-                        /*
+                        /**
                          * When confronted with a series of sectors with the same sector ID (as found, for example, on
                          * the 1984 King's Quest copy-protected diskette), we're supposed to advance to another sector in
                          * the series.  So if the current sector matches the previous sector, we'll peek at the next sector
@@ -64262,20 +64160,20 @@ class Disk extends Component {
                                 }
                             }
                         }
-                        /*
+                        /**
                          * If the sector's pattern is null, then this sector's true contents have not yet
                          * been fetched from the server.
                          */
                         if (sector[Disk.SECTOR.PATTERN] === null) {
                             if (fWrite) {
-                                /*
+                                /**
                                  * Optimization: if the caller has explicitly told us that they're about to WRITE to the
                                  * sector, then we shouldn't need to read it from the server; assume a zero pattern and return.
                                  */
                                 sector[Disk.SECTOR.PATTERN] = 0;
                             } else {
                                 let nSectors = 1;
-                                /*
+                                /**
                                  * We know we need to read at least 1 sector, but let's count the number of trailing sectors
                                  * on the same track that may also be required.
                                  */
@@ -64294,12 +64192,12 @@ class Disk extends Component {
                         break;
                     }
                 }
-                /*
+                /**
                  * The following code allows an 8-sector track to be reformatted (ie, "expanded") as a 9-sector track.
                  */
                 if (!sector && drive.bFormatting && drive.bSector == 9) {
                     sector = track[i] = this.initSector(null, iCylinder, iHead, drive.bSector, drive.nBytes, 0);
-                    /*
+                    /**
                      * TODO: This is more dodginess, because we can't be certain that every track on the disk
                      * will receive the same "expanded" treatment, but functions like getSector() rely on instance
                      * properties (eg, this.nSectors), on the assumption that the disk's geometry is homogeneous.
@@ -64309,6 +64207,7 @@ class Disk extends Component {
             }
         }
         if (done) done(sector, false);
+        this.addModuleInfo(sector);
         return sector;
     }
 
@@ -64329,7 +64228,7 @@ class Disk extends Component {
             off += 4;
         }
         sector[Disk.SECTOR.DATA] = adw;
-        /*
+        /**
          * TODO: Consider taking this opportunity to shrink DATA down by the number of dwords at the end of the buffer that
          * contain the same pattern, and setting dwPattern accordingly.
          */
@@ -64412,7 +64311,7 @@ class Disk extends Component {
                 let idw = iByte >> 2;
                 let nShift = (iByte & 0x3) << 3;
 
-                /*
+                /**
                  * Ensure every byte up to the specified byte is properly initialized.
                  */
                 for (let i = adw.length; i <= idw; i++) adw[i] = dwPattern;
@@ -64443,7 +64342,7 @@ class Disk extends Component {
      */
     encodeAsBase64()
     {
-        /*
+        /**
          * Gross, but simple; more importantly, it works -- at least for disks of typical floppy magnitude.
          */
         let s = "", lba = 0, sector;
@@ -64533,13 +64432,13 @@ class Disk extends Component {
      */
     restore(deltas)
     {
-        /*
+        /**
          * If deltas is undefined, that's not necessarily an error;  the controller may simply be (re)initializing
          * itself (although neither controller should be calling restore() under those conditions anymore).
          */
         let nChanges = 0;
         let sReason = "unsupported restore format";
-        /*
+        /**
          * I originally added a check for diskData here on the assumption that if there was an error loading
          * a disk image, we will have already notified the user, so any additional errors about differing checksums,
          * failure to restore the disk state, etc, would just be annoying.  HOWEVER, HDC will create an empty disk
@@ -64553,14 +64452,14 @@ class Disk extends Component {
             let aDiskInfo = deltas[i++];
 
             if (aDiskInfo && aDiskInfo.length >= 2) {
-                /*
+                /**
                  * Before getting to the checksum, we have to deal with a new situation: restoring an uninitialized
                  * disk image from a complete set of deltas.  And that is only possible if the disk was saved with the
                  * original disk geometry.
                  */
                 if (!this.diskData.length && aDiskInfo.length >= 6) {
                     this.create(DiskAPI.MODE.LOCAL, aDiskInfo[2], aDiskInfo[3], aDiskInfo[4], aDiskInfo[5]);
-                    /*
+                    /**
                      * TODO: Consider setting a flag here that we can check at the end of the restore() function
                      * that indicates we should recalculate dwChecksum, because we currently have an inconsistency
                      * between local disks that are mounted via buildDisk() and the same disks that are "remounted"
@@ -64569,7 +64468,7 @@ class Disk extends Component {
                      * As you can see below, we currently deal with this by simply ignoring null checksums....
                      */
                 }
-                /*
+                /**
                  * v1.01 failed to indicate an error if either one of these failure conditions occurred.  Although maybe
                  * that's just as well, since v1.01 also failed to properly deal with situations where the user mounted
                  * different diskette(s) prior to exiting (hopefully fixed in v1.02).
@@ -64582,7 +64481,7 @@ class Disk extends Component {
                         sReason = "original checksum (" + aDiskInfo[1] + ") differs from current checksum (" + this.dwChecksum + ")";
                         nChanges = -2;
                     }
-                    /*
+                    /**
                      * Checksum is more important than disk path, and for now, I want the flexibility to move disk images.
                      *
                      *  else if (aDiskInfo[0] != this.sDiskPath) {
@@ -64601,7 +64500,7 @@ class Disk extends Component {
                 let iCylinder = mod[m++];
                 let iHead = mod[m++];
                 let iSector = mod[m++];
-                /*
+                /**
                  * Note the buried test for write-protection.  Yes, an invariant condition should be tested
                  * outside the loop, not inside, but (a) it's a trivial test, (b) the test should never fail
                  * because save() should never generate any mods for a write-protected disk, and (c) it
@@ -64622,7 +64521,7 @@ class Disk extends Component {
                 let iModifyLimit = iModify + mods.length;
                 let sector = this.diskData[iCylinder][iHead][iSector];
                 if (!sector) continue;
-                /*
+                /**
                  * Since write() now deals with empty/partial sectors, we no longer need to completely "inflate"
                  * the sector prior to applying modifications.  So let's just make sure that the sector is "inflated"
                  * up to iModify.
@@ -64642,7 +64541,7 @@ class Disk extends Component {
         }
 
         if (nChanges < 0) {
-            /*
+            /**
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
@@ -64650,7 +64549,7 @@ class Disk extends Component {
             }
         } else {
             this.printf(MESSAGE.DEBUG, "restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
-            /*
+            /**
              * Last but not least, rebuild the disk's file table if BACKTRACK or SYMBOLS support is enabled.
              */
             if (BACKTRACK || SYMBOLS) this.buildFileTable();
@@ -64682,7 +64581,7 @@ class Disk extends Component {
         }
 
         s = JSON.stringify(this.diskData, function(key, value) {
-            /*
+            /**
              * If BACKTRACK support is enabled, we have to filter out any 'file' properties that may
              * be attached to the sector objects, lest we risk blowing the stack due to circular references.
              */
@@ -64692,12 +64591,12 @@ class Disk extends Component {
             return value;
         });
 
-        /*
+        /**
          * Eliminate old default properties (eg, 'length' values of 512, empty 'data' arrays, etc).
          */
         s = s.replace(/,"length":512/g, "").replace(/,"data":\[]/g, "");
 
-        /*
+        /**
          * I don't really want to strip quotes from disk image property names, since I would have to put them
          * back again during mount() -- or whenever JSON.parse() is used instead of eval().  But I still remove
          * them temporarily, so that any remaining property names (eg, "iModify", "cModify", "fDirty") can
@@ -64706,14 +64605,14 @@ class Disk extends Component {
          */
         s = s.replace(/"(c|h|s|l|d|sector|length|data|pattern)":/g, "$1:");
 
-        /*
+        /**
          * The next line will remove any other numeric or boolean properties that were added at runtime, although
          * they may have completely different ("minified") names if the code has been compiled.
          */
         s = s.replace(/,"[^"]*":([0-9]+|true|false)/g, "");
         s = s.replace(/(c|h|s|l|d|sector|length|data|pattern):/g, "\"$1\":");
 
-        /*
+        /**
          * Last but not least, insert line breaks after every object definition, to improve human readability
          * (but only if the caller asks for it).
          */
@@ -64786,7 +64685,7 @@ class Disk extends Component {
     }
 }
 
-/*
+/**
  * Sector object "public" properties.
  */
 Disk.SECTOR = {
@@ -64798,7 +64697,7 @@ Disk.SECTOR = {
     FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
     FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
     PATTERN:    'pattern',          // deprecated (no longer used in external images, still used internally)
-    /*
+    /**
      * The following properties occur very infrequently (and usually only in copy-protected or damaged disk images),
      * hence the longer, more meaningful IDs.
      */
@@ -64816,7 +64715,7 @@ Disk.SECTOR = {
  */
 Disk.REMOTE_WRITE_DELAY = 2000;     // 2-second delay
 
-/*
+/**
  * A global disk count, used to form unique Disk component IDs (totally optional; for debugging purposes only)
  */
 Disk.nDisks = 0;
@@ -64863,11 +64762,11 @@ class FileInfo {
             for (let seg in segments) {
                 let segment = segments[seg];
                 if (off >= segment['offStart'] && off <= segment['offEnd']) {
-                    /*
+                    /**
                      * This is the one and only segment we need to check, so we can make off segment-relative now.
                      */
                     off -= segment['offStart'];
-                    /*
+                    /**
                      * To support fNearest, save the entry where (off - entry[0]) yields the smallest positive result.
                      */
                     let cbNearest = off, entryNearest;
@@ -73759,7 +73658,7 @@ class Debuggerx86 extends DbgLib {
             break;
 
         case Interrupts.WINDBG.FREESEG:             // 0x0052
-            this.removeSegmentInfo(BX);
+            this.removeSegmentInfo(BX, !!this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.KRNLVARS:            // 0x005A
@@ -73852,7 +73751,7 @@ class Debuggerx86 extends DbgLib {
              *  BX == segment number
              *  DX:EDI -> module name
              */
-            this.removeSectionInfo(BX, this.newAddr(cpu.regEDI, DX));
+            this.removeSectionInfo(BX, this.newAddr(cpu.regEDI, DX), !!this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.FORCEDBP:            // 0xF002
@@ -73967,7 +73866,7 @@ class Debuggerx86 extends DbgLib {
             break;
 
         case Interrupts.WINDBGRM.FREESEG:           // 0x48
-            this.removeSegmentInfo(BX);
+            this.removeSegmentInfo(BX, !!this.fWinDbg);
             break;
 
         case Interrupts.WINDBGRM.REMOVESEGS:        // 0x4F
@@ -75337,12 +75236,15 @@ class Debuggerx86 extends DbgLib {
      */
     findModuleInfo(sModule, nSegment)
     {
-        let aSymbols = [];
+        let aSymbols = {};
         if (SYMBOLS) {
             let component, componentPrev = null;
             while ((component = this.cmp.getMachineComponent("Disk", componentPrev))) {
-                aSymbols = component.getModuleInfo(sModule, nSegment);
-                if (aSymbols.length) break;
+                let a = component.getModuleInfo(sModule, nSegment);
+                if (a) {
+                    aSymbols = a;
+                    break;
+                }
                 componentPrev = component;
             }
         }
@@ -77902,7 +77804,11 @@ class Debuggerx86 extends DbgLib {
             aSymbols: aSymbols,
             aOffsets: aOffsets
         };
-        this.aSymbolTable.push(symbolTable);
+        let i = this.aSymbolTable.findIndex(function(symbolTable) {
+            return symbolTable.sModule == sModule && symbolTable.nSegment == nSegment;
+        });
+        if (i < 0) i = this.aSymbolTable.length;
+        this.aSymbolTable[i] = symbolTable;
     }
 
     /**
