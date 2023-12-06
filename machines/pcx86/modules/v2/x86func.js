@@ -1247,7 +1247,15 @@ X86.fnLEA = function(dst, src)
     }
     */
     this.nStepCycles -= this.cycleCounts.nOpCyclesLEA;
-    return this.regEA;
+    /*
+     * To properly deal with instructions such as:
+     *
+     *      #0467:10F8 678D0480         LEA      AX,[EAX+EAX*4]
+     *      #0467:10FC 678D0441         LEA      AX,[ECX+EAX*2]
+     *
+     * which may calculate values that exceed 16 bits, we must mask the result to the appropriate size.
+     */
+    return this.regEA & this.maskData;
 };
 
 /**
