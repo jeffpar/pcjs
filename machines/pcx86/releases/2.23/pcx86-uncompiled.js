@@ -9446,6 +9446,624 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
  *  D386_Device_Params ENDS
  */
 
+Interrupts.VxD = {
+    VECTOR: 0x20,
+    VMM: {
+        id: 0x0001,
+        fn: [
+            "Get_VMM_Version",
+            "Get_Cur_VM_Handle",
+            "Test_Cur_VM_Handle",
+            "Get_Sys_VM_Handle",
+            "Test_Sys_VM_Handle",
+            "Validate_VM_Handle",
+            "Get_VMM_Reenter_Count",
+            "Begin_Reentrant_Execution",
+            "End_Reentrant_Execution",
+            "Install_V86_Break_Point",
+            "Remove_V86_Break_Point",
+            "Allocate_V86_Call_Back",
+            "Allocate_PM_Call_Back",
+            "Call_When_VM_Returns",
+            "Schedule_Global_Event",
+            "Schedule_VM_Event",
+            "Call_Global_Event",
+            "Call_VM_Event",
+            "Cancel_Global_Event",
+            "Cancel_VM_Event",
+            "Call_Priority_VM_Event",
+            "Cancel_Priority_VM_Event",
+            "Get_NMI_Handler_Addr",
+            "Set_NMI_Handler_Addr",
+            "Hook_NMI_Event",
+            "Call_When_VM_Ints_Enabled",
+            "Enable_VM_Ints",
+            "Disable_VM_Ints",
+            "Map_Flat",
+            "Map_Lin_To_VM_Addr",
+            "Adjust_Exec_Priority",
+            "Begin_Critical_Section",
+            "End_Critical_Section",
+            "End_Crit_And_Suspend",
+            "Claim_Critical_Section",
+            "Release_Critical_Section",
+            "Call_When_Not_Critical",
+            "Create_Semaphore",
+            "Destroy_Semaphore",
+            "Wait_Semaphore",
+            "Signal_Semaphore",
+            "Get_Crit_Section_Status",
+            "Call_When_Task_Switched",
+            "Suspend_VM",
+            "Resume_VM",
+            "No_Fail_Resume_VM",
+            "Nuke_VM",
+            "Crash_Cur_VM",
+            "Get_Execution_Focus",
+            "Set_Execution_Focus",
+            "Get_Time_Slice_Priority",
+            "Set_Time_Slice_Priority",
+            "Get_Time_Slice_Granularity",
+            "Set_Time_Slice_Granularity",
+            "Get_Time_Slice_Info",
+            "Adjust_Execution_Time",
+            "Release_Time_Slice",
+            "Wake_Up_VM",
+            "Call_When_Idle",
+            "Get_Next_VM_Handle",
+            "Set_Global_Time_Out",
+            "Set_VM_Time_Out",
+            "Cancel_Time_Out",
+            "Get_System_Time",
+            "Get_VM_Exec_Time",
+            "Hook_V86_Int_Chain",
+            "Get_V86_Int_Vector",
+            "Set_V86_Int_Vector",
+            "Get_PM_Int_Vector",
+            "Set_PM_Int_Vector",
+            "Simulate_Int",
+            "Simulate_Iret",
+            "Simulate_Far_Call",
+            "Simulate_Far_Jmp",
+            "Simulate_Far_Ret",
+            "Simulate_Far_Ret_N",
+            "Build_Int_Stack_Frame",
+            "Simulate_Push",
+            "Simulate_Pop",
+            "_HeapAllocate",
+            "_HeapReAllocate",
+            "_HeapFree",
+            "_HeapGetSize",
+            "_PageAllocate",
+            "_PageReAllocate",
+            "_PageFree",
+            "_PageLock",
+            "_PageUnLock",
+            "_PageGetSizeAddr",
+            "_PageGetAllocInfo",
+            "_GetFreePageCount",
+            "_GetSysPageCount",
+            "_GetVMPgCount",
+            "_MapIntoV86",
+            "_PhysIntoV86",
+            "_TestGlobalV86Mem",
+            "_ModifyPageBits",
+            "_CopyPageTable",
+            "_LinMapIntoV86",
+            "_LinPageLock",
+            "_LinPageUnLock",
+            "_SetResetV86Pageable",
+            "_GetV86PageableArray",
+            "_PageCheckLinRange",
+            "_PageOutDirtyPages",
+            "_PageDiscardPages",
+            "_GetNulPageHandle",
+            "_GetFirstV86Page",
+            "_MapPhysToLinear",
+            "_GetAppFlatDSAlias",
+            "_SelectorMapFlat",
+            "_GetDemandPageInfo",
+            "_GetSetPageOutCount",
+            "Hook_V86_Page",
+            "_Assign_Device_V86_Pages",
+            "_DeAssign_Device_V86_Pages",
+            "_Get_Device_V86_Pages_Array",
+            "MMGR_SetNULPageAddr",
+            "_Allocate_GDT_Selector",
+            "_Free_GDT_Selector",
+            "_Allocate_LDT_Selector",
+            "_Free_LDT_Selector",
+            "_BuildDescriptorDWORDs",
+            "_GetDescriptor",
+            "_SetDescriptor",
+            "_MMGR_Toggle_HMA",
+            "Get_Fault_Hook_Addrs",
+            "Hook_V86_Fault",
+            "Hook_PM_Fault",
+            "Hook_VMM_Fault",
+            "Begin_Nest_V86_Exec",
+            "Begin_Nest_Exec",
+            "Exec_Int",
+            "Resume_Exec",
+            "End_Nest_Exec",
+            "Allocate_PM_App_CB_Area",
+            "Get_Cur_PM_App_CB",
+            "Set_V86_Exec_Mode",
+            "Set_PM_Exec_Mode",
+            "Begin_Use_Locked_PM_Stack",
+            "End_Use_Locked_PM_Stack",
+            "Save_Client_State",
+            "Restore_Client_State",
+            "Exec_VxD_Int",
+            "Hook_Device_Service",
+            "Hook_Device_V86_API",
+            "Hook_Device_PM_API",
+            "System_Control",
+            "Simulate_IO",
+            "Install_Mult_IO_Handlers",
+            "Install_IO_Handler",
+            "Enable_Global_Trapping",
+            "Enable_Local_Trapping",
+            "Disable_Global_Trapping",
+            "Disable_Local_Trapping",
+            "List_Create",
+            "List_Destroy",
+            "List_Allocate",
+            "List_Attach",
+            "List_Attach_Tail",
+            "List_Insert",
+            "List_Remove",
+            "List_Deallocate",
+            "List_Get_First",
+            "List_Get_Next",
+            "List_Remove_First",
+            "_AddInstanceItem",
+            "_Allocate_Device_CB_Area",
+            "_Allocate_Global_V86_Data_Area",
+            "_Allocate_Temp_V86_Data_Area",
+            "_Free_Temp_V86_Data_Area",
+            "Get_Profile_Decimal_Int",
+            "Convert_Decimal_String",
+            "Get_Profile_Fixed_Point",
+            "Convert_Fixed_Point_String",
+            "Get_Profile_Hex_Int",
+            "Convert_Hex_String",
+            "Get_Profile_Boolean",
+            "Convert_Boolean_String",
+            "Get_Profile_String",
+            "Get_Next_Profile_String",
+            "Get_Environment_String",
+            "Get_Exec_Path",
+            "Get_Config_Directory",
+            "OpenFile",
+            "Get_PSP_Segment",
+            "GetDOSVectors",
+            "Get_Machine_Info",
+            "GetSet_HMA_Info",
+            "Set_System_Exit_Code",
+            "Fatal_Error_Handler",
+            "Fatal_Memory_Error",
+            "Update_System_Clock",
+            "Test_Debug_Installed",
+            "Out_Debug_String",
+            "Out_Debug_Chr",
+            "In_Debug_Chr",
+            "Debug_Convert_Hex_Binary",
+            "Debug_Convert_Hex_Decimal",
+            "Debug_Test_Valid_Handle",
+            "Validate_Client_Ptr",
+            "Test_Reenter",
+            "Queue_Debug_String",
+            "Log_Proc_Call",
+            "Debug_Test_Cur_VM",
+            "Get_PM_Int_Type",
+            "Set_PM_Int_Type",
+            "Get_Last_Updated_System_Time",
+            "Get_Last_Updated_VM_Exec_Time",
+            "Test_DBCS_Lead_Byte",
+            "_AddFreePhysPage",
+            "_PageResetHandlePAddr",
+            "_SetLastV86Page",
+            "_GetLastV86Page",
+            "_MapFreePhysReg",
+            "_UnmapFreePhysReg",
+            "_XchgFreePhysReg",
+            "_SetFreePhysRegCalBk",
+            "Get_Next_Arena",
+            "Get_Name_Of_Ugly_TSR",
+            "Get_Debug_Options",
+            "Set_Physical_HMA_Alias",
+            "_GetGlblRng0V86IntBase",
+            "_Add_Global_V86_Data_Area",
+            "GetSetDetailedVMError",
+            "Is_Debug_Chr",
+            "Clear_Mono_Screen",
+            "Out_Mono_Chr",
+            "Out_Mono_String",
+            "Set_Mono_Cur_Pos",
+            "Get_Mono_Cur_Pos",
+            "Get_Mono_Chr",
+            "Locate_Byte_In_ROM",
+            "Hook_Invalid_Page_Fault",
+            "Unhook_Invalid_Page_Fault",
+            "Set_Delete_On_Exit_File",
+            "Close_VM",
+            "Enable_Touch_1st_Meg",
+            "Disable_Touch_1st_Meg",
+            "Install_Exception_Handler",
+            "Remove_Exception_Handler",
+            "Get_Crit_Status_No_Block",
+            "_GetLastUpdatedThreadExecTime",
+            "_Trace_Out_Service",
+            "_Debug_Out_Service",
+            "_Debug_Flags_Service",
+            "VMMAddImportModuleName",
+            "VMM_Add_DDB",
+            "VMM_Remove_DDB",
+            "Test_VM_Ints_Enabled",
+            "_BlockOnID",
+            "Schedule_Thread_Event",
+            "Cancel_Thread_Event",
+            "Set_Thread_Time_Out",
+            "Set_Async_Time_Out",
+            "_AllocateThreadDataSlot",
+            "_FreeThreadDataSlot",
+            "_CreateMutex",
+            "_DestroyMutex",
+            "_GetMutexOwner",
+            "Call_When_Thread_Switched",
+            "VMMCreateThread",
+            "_GetThreadExecTime",
+            "VMMTerminateThread",
+            "Get_Cur_Thread_Handle",
+            "Test_Cur_Thread_Handle",
+            "Get_Sys_Thread_Handle",
+            "Test_Sys_Thread_Handle",
+            "Validate_Thread_Handle",
+            "Get_Initial_Thread_Handle",
+            "Test_Initial_Thread_Handle",
+            "Debug_Test_Valid_Thread_Handle",
+            "Debug_Test_Cur_Thread",
+            "VMM_GetSystemInitState",
+            "Cancel_Call_When_Thread_Switched",
+            "Get_Next_Thread_Handle",
+            "Adjust_Thread_Exec_Priority",
+            "_Deallocate_Device_CB_Area",
+            "Remove_IO_Handler",
+            "Remove_Mult_IO_Handlers",
+            "Unhook_V86_Int_Chain",
+            "Unhook_V86_Fault",
+            "Unhook_PM_Fault",
+            "Unhook_VMM_Fault",
+            "Unhook_Device_Service",
+            "_PageReserve",
+            "_PageCommit",
+            "_PageDecommit",
+            "_PagerRegister",
+            "_PagerQuery",
+            "_PagerDeregister",
+            "_ContextCreate",
+            "_ContextDestroy",
+            "_PageAttach",
+            "_PageFlush",
+            "_SignalID",
+            "_PageCommitPhys",
+            "_Register_Win32_Services",
+            "Cancel_Call_When_Not_Critical",
+            "Cancel_Call_When_Idle",
+            "Cancel_Call_When_Task_Switched",
+            "_Debug_Printf_Service",
+            "_EnterMutex",
+            "_LeaveMutex",
+            "Simulate_VM_IO",
+            "Signal_Semaphore_No_Switch",
+            "_ContextSwitch",
+            "_PageModifyPermissions",
+            "_PageQuery",
+            "_EnterMustComplete",
+            "_LeaveMustComplete",
+            "_ResumeExecMustComplete",
+            "_GetThreadTerminationStatus",
+            "_GetInstanceInfo",
+            "_ExecIntMustComplete",
+            "_ExecVxDIntMustComplete",
+            "Begin_V86_Serialization",
+            "Unhook_V86_Page",
+            "VMM_GetVxDLocationList",
+            "VMM_GetDDBList",
+            "Unhook_NMI_Event",
+            "Get_Instanced_V86_Int_Vector",
+            "Get_Set_Real_DOS_PSP",
+            "Call_Priority_Thread_Event",
+            "Get_System_Time_Address",
+            "Get_Crit_Status_Thread",
+            "Get_DDB",
+            "Directed_Sys_Control",
+            "_RegOpenKey",
+            "_RegCloseKey",
+            "_RegCreateKey",
+            "_RegDeleteKey",
+            "_RegEnumKey",
+            "_RegQueryValue",
+            "_RegSetValue",
+            "_RegDeleteValue",
+            "_RegEnumValue",
+            "_RegQueryValueEx",
+            "_RegSetValueEx",
+            "_CallRing3",
+            "Exec_PM_Int",
+            "_RegFlushKey",
+            "_PageCommitContig",
+            "_GetCurrentContext",
+            "_LocalizeSprintf",
+            "_LocalizeStackSprintf",
+            "Call_Restricted_Event",
+            "Cancel_Restricted_Event",
+            "Register_PEF_Provider",
+            "_GetPhysPageInfo",
+            "_RegQueryInfoKey",
+            "MemArb_Reserve_Pages",
+            "Time_Slice_Sys_VM_Idle",
+            "Time_Slice_Sleep",
+            "Boost_With_Decay",
+            "Set_Inversion_Pri",
+            "Reset_Inversion_Pri",
+            "Release_Inversion_Pri",
+            "Get_Thread_Win32_Pri",
+            "Set_Thread_Win32_Pri",
+            "Set_Thread_Static_Boost",
+            "Set_VM_Static_Boost",
+            "Release_Inversion_Pri_ID",
+            "Attach_Thread_To_Group",
+            "Detach_Thread_From_Group",
+            "Set_Group_Static_Boost",
+            "_GetRegistryPath",
+            "_GetRegistryKey",
+            "Cleanup_Thread_State",
+            "_RegRemapPreDefKey",
+            "End_V86_Serialization",
+            "_Assert_Range",
+            "_Sprintf",
+            "_PageChangePager",
+            "_RegCreateDynKey",
+            "_RegQueryMultipleValues",
+            "Boost_Thread_With_VM",
+            "Get_Boot_Flags",
+            "Set_Boot_Flags",
+            "_lstrcpyn",
+            "_lstrlen",
+            "_lmemcpy",
+            "_GetVxDName",
+            "Force_Mutexes_Free",
+            "Restore_Forced_Mutexes",
+            "_AddReclaimableItem",
+            "_SetReclaimableItem",
+            "_EnumReclaimableItem",
+            "Time_Slice_Wake_Sys_VM",
+            "VMM_Replace_Global_Environment",
+            "Begin_Non_Serial_Nest_V86_Exec",
+            "Get_Nest_Exec_Status",
+            "Open_Boot_Log",
+            "Write_Boot_Log",
+            "Close_Boot_Log",
+            "EnableDisable_Boot_Log",
+            "_Call_On_My_Stack",
+            "Get_Inst_V86_Int_Vec_Base",
+            "_lstrcmpi",
+            "_strupr",
+            "Log_Fault_Call_Out",
+            "_AtEventTime"
+        ]
+    },
+    DEBUG: {
+        id: 0x0002
+    },
+    VPICD: {
+        id: 0x0003
+    },
+    VDMAD: {
+        id: 0x0004
+    },
+    VTD: {
+        id: 0x0005
+    },
+    V86MMGR: {
+        id: 0x0006
+    },
+    PAGESWAP: {
+        id: 0x0007
+    },
+    PARITY: {
+        id: 0x0008
+    },
+    REBOOT: {
+        id: 0x0009
+    },
+    VDD: {
+        id: 0x000A
+    },
+    VSD: {
+        id: 0x000B
+    },
+    VMD: {
+        id: 0x000C
+    },
+    VKD: {
+        id: 0x000D
+    },
+    VCD: {
+        id: 0x000E
+    },
+    VPD: {
+        id: 0x000F
+    },
+    BLOCKDEV: {
+        id: 0x0010
+    },
+    VMCPD: {
+        id: 0x0011
+    },
+    EBIOS: {
+        id: 0x0012
+    },
+    BIOSXLAT: {
+        id: 0x0013
+    },
+    VNETBIOS: {
+        id: 0x0014
+    },
+    DOSMGR: {
+        id: 0x0015
+    },
+    WINLOAD: {
+        id: 0x0016
+    },
+    SHELL: {
+        id: 0x0017
+    },
+    VMPOLL: {
+        id: 0x0018
+    },
+    VPROD: {
+        id: 0x0019
+    },
+    DOSNET: {
+        id: 0x001A
+    },
+    VFD: {
+        id: 0x001B
+    },
+    VDD2: {
+        id: 0x001C
+    },
+    WINDEBUG: {
+        id: 0x001D
+    },
+    TSRLOAD: {
+        id: 0x001E
+    },
+    BIOSHOOK: {
+        id: 0x001F
+    },
+    INT13: {
+        id: 0x0020
+    },
+    PAGEFILE: {
+        id: 0x0021
+    },
+    SCSI: {
+        id: 0x0022
+    },
+    MCA_POS: {
+        id: 0x0023
+    },
+    SCSIFD: {
+        id: 0x0024
+    },
+    VPEND: {
+        id: 0x0025
+    },
+    APM: {
+        id: 0x0026
+    },
+    VXDLDR: {
+        id: 0x0027
+    },
+    NDIS: {
+        id: 0x0028
+    },
+    BIOS_EXT: {
+        id: 0x0029
+    },
+    VWIN32: {
+        id: 0x002A
+    },
+    VCOMM: {
+        id: 0x002B
+    },
+    SPOOLER: {
+        id: 0x002C
+    },
+    WIN32S: {
+        id: 0x002D
+    },
+    DEBUGCMD: {
+        id: 0x002E
+    },
+    CONFIGMG: {
+        id: 0x0033
+    },
+    DWCFGMG: {
+        id: 0x0034
+    },
+    SCSIPORT: {
+        id: 0x0035
+    },
+    VFBACKUP: {
+        id: 0x0036
+    },
+    ENABLE: {
+        id: 0x0037
+    },
+    VCOND: {
+        id: 0x0038
+    },
+    ISAPNP: {
+        id: 0x003C
+    },
+    BIOS: {
+        id: 0x003D
+    },
+    IFSMgr: {
+        id: 0x0040
+    },
+    VCDFSD: {
+        id: 0x0041
+    },
+    MRCI2: {
+        id: 0x0042
+    },
+    PCI: {
+        id: 0x0043
+    },
+    PELOADER: {
+        id: 0x0044
+    },
+    EISA: {
+        id: 0x0045
+    },
+    DRAGCLI: {
+        id: 0x0046
+    },
+    DRAGSRV: {
+        id: 0x0047
+    },
+    PERF: {
+        id: 0x0048
+    },
+    AWREDIR: {
+        id: 0x0049
+    },
+    ETEN: {
+        id: 0x0060
+    },
+    CHBIOS: {
+        id: 0x0061
+    },
+    VMSGD: {
+        id: 0x0062
+    },
+    VPPID: {
+        id: 0x0063
+    },
+    VIME: {
+        id: 0x0064
+    },
+    VHBIOSD: {
+        id: 0x0065
+    }
+};
+
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
@@ -62838,7 +63456,7 @@ class Disk extends Component {
          * To make getModuleInfo() more reliable, we use aModules to cache any modules we see as
          * sectors are read.
          */
-        this.aModules = [];
+        this.aModules = {};
 
         this.setReady();
     }
@@ -63278,10 +63896,10 @@ class Disk extends Component {
                         }
                     }
                 }
+                let diskData, fileTable, imageInfo;
                 /**
                  * The most likely source of any exception will be here, where we're parsing the disk data.
                  */
-                let diskData, fileTable, imageInfo;
                 if (imageData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
                     /**
                      * Early server configs reported an error (via the nErrorCode parameter) if a disk URL was invalid,
@@ -64350,10 +64968,10 @@ class Disk extends Component {
      */
     encodeAsBase64()
     {
+        let s = "", lba = 0, sector;
         /**
          * Gross, but simple; more importantly, it works -- at least for disks of typical floppy magnitude.
          */
-        let s = "", lba = 0, sector;
         while ((sector = this.getSector(lba++))) {
             for (let off = 0, len = sector[Disk.SECTOR.LENGTH]; off < len; off++) {
                 s += String.fromCharCode(this.getSectorData(sector, off, 1));
@@ -64774,10 +65392,10 @@ class FileInfo {
                      * This is the one and only segment we need to check, so we can make off segment-relative now.
                      */
                     off -= segment['offStart'];
+                    let cbNearest = off, entryNearest;
                     /**
                      * To support fNearest, save the entry where (off - entry[0]) yields the smallest positive result.
                      */
-                    let cbNearest = off, entryNearest;
                     for (let ord in segment['ordinals']) {
                         let entry = segment['ordinals'][ord];
                         let cb = off - entry['o'];
@@ -73411,8 +74029,6 @@ class Debuggerx86 extends DbgLib {
     /**
      * addSegmentInfo(dbgAddr, nSegment, sel, fCode, fPrint)
      *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr (address of module name)
      * @param {number} nSegment (logical segment number)
@@ -73437,8 +74053,6 @@ class Debuggerx86 extends DbgLib {
     /**
      * removeSegmentInfo(sel, fPrint)
      *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
      * @this {Debuggerx86}
      * @param {number} sel
      * @param {boolean} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
@@ -73456,17 +74070,6 @@ class Debuggerx86 extends DbgLib {
 
     /**
      * addSectionInfo(dbgAddr, fCode, fPrint)
-     *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
-     *  dbgAddr -> D386_Device_Params structure:
-     *      DD_logical_seg  dw  ?   ; logical segment # from map
-     *      DD_actual_sel   dw  ?   ; actual selector value
-     *      DD_base         dd  ?   ; linear address offset for start of segment
-     *      DD_length       dd  ?   ; actual length of segment
-     *      DD_name         df  ?   ; 16:32 ptr to null terminated module name
-     *      DD_sym_name     df  ?   ; 16:32 ptr to null terminated parent name (eg, "DOS386")
-     *      DD_alias_sel    dw  ?   ; alias selector value (0 = none)
      *
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr (address of D386_Device_Params)
@@ -73507,8 +74110,6 @@ class Debuggerx86 extends DbgLib {
     /**
      * removeSectionInfo(nSegment, dbgAddr, fPrint)
      *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
      * @this {Debuggerx86}
      * @param {number} nSegment (logical segment number)
      * @param {DbgAddrx86} dbgAddr (address of module)
@@ -73528,8 +74129,6 @@ class Debuggerx86 extends DbgLib {
 
     /**
      * intWindowsCallBack()
-     *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
      *
      * This intercepts calls to Windows callback addresses, which use INT 0x30 (aka Transfer Space Faults).
      *
@@ -73554,7 +74153,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {number} addr
-     * @returns {boolean} true to proceed with the INT 0x30 software interrupt
+     * @returns {boolean} (true to proceed with the INT 0x30 software interrupt)
      */
     intWindowsCallBack(addr)
     {
@@ -73584,8 +74183,6 @@ class Debuggerx86 extends DbgLib {
 
     /**
      * intWindowsDebugger()
-     *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
      *
      * This intercepts calls to the Windows Debugger protected-mode interface (INT 0x41).
      *
@@ -73783,13 +74380,11 @@ class Debuggerx86 extends DbgLib {
     /**
      * intWindowsDebuggerRM()
      *
-     * CONDITIONAL: if (Interrupts.WINDBGRM.ENABLED)
-     *
      * This intercepts calls to the Windows Debugger real-mode interface (INT 0x68).
      *
      * @this {Debuggerx86}
      * @param {number} addr
-     * @returns {boolean} true to proceed with the INT 0x68 software interrupt, false to skip
+     * @returns {boolean} (true to proceed with the INT 0x68 software interrupt, false to skip)
      */
     intWindowsDebuggerRM(addr)
     {
@@ -73936,8 +74531,6 @@ class Debuggerx86 extends DbgLib {
     /**
      * callWindowsDebuggerPMInit()
      *
-     * CONDITIONAL: if (Interrupts.WINDBGRM.ENABLED)
-     *
      * This intercepts calls to the Windows Debugger "PMInit" interface; eg:
      *
      *      AL = function code
@@ -73997,7 +74590,7 @@ class Debuggerx86 extends DbgLib {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "debugInput")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @returns {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} (true if binding was successful, false if unrecognized binding request)
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -74124,7 +74717,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number|undefined} sel
      * @param {number} [type] (defaults to getAddressType())
-     * @returns {Segx86|null} seg
+     * @returns {Segx86|null} (seg)
      */
     getSegment(sel, type)
     {
@@ -74165,7 +74758,7 @@ class Debuggerx86 extends DbgLib {
      * @param {DbgAddrx86|undefined} dbgAddr
      * @param {boolean} [fWrite]
      * @param {number} [nb] number of bytes to check (1, 2 or 4); default is 1
-     * @returns {number} is the corresponding linear address, or X86.ADDR_INVALID
+     * @returns {number} (is the corresponding linear address, or X86.ADDR_INVALID)
      */
     getAddr(dbgAddr, fWrite, nb)
     {
@@ -74639,7 +75232,7 @@ class Debuggerx86 extends DbgLib {
      * @param {number|undefined} [off]
      * @param {number|undefined} [sel]
      * @param {boolean} [fAddr32] is true for 32-bit ADDRESS size
-     * @returns {string} the hex representation of off (or sel:off)
+     * @returns {string} (the hex representation of off (or sel:off))
      */
     toHexOffset(off, sel, fAddr32)
     {
@@ -74654,7 +75247,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr
-     * @returns {string} the hex representation of the address
+     * @returns {string} (the hex representation of the address)
      */
     toHexAddr(dbgAddr)
     {
@@ -75290,7 +75883,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} bitMessage is one Messages category flag
      * @param {function(Array.<string>)} fnDumper is a function the Debugger can use to dump data for that category
-     * @returns {boolean} true if successfully registered, false if not
+     * @returns {boolean} (true if successfully registered, false if not)
      */
     messageDump(bitMessage, fnDumper)
     {
@@ -75309,7 +75902,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @returns {number} register index, or -1 if not found
+     * @returns {number} (register index, or -1 if not found)
      */
     getRegIndex(sReg, off)
     {
@@ -75650,7 +76243,7 @@ class Debuggerx86 extends DbgLib {
      * @param {number} nInt
      * @param {number} addr (LIP after the "INT n" instruction has been fetched but not dispatched)
      * @param {boolean} [fForce] (true if the message should be forced)
-     * @returns {boolean} true if message generated (which in turn triggers addIntReturn() inside checkIntNotify()), false if not
+     * @returns {boolean} (true if message generated (which in turn triggers addIntReturn() inside checkIntNotify()), false if not)
      */
     messageInt(nInt, addr, fForce)
     {
@@ -75835,7 +76428,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {boolean} [fUpdateFocus]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if run request successful, false if not
+     * @returns {boolean} (true if run request successful, false if not)
      */
     startCPU(fUpdateFocus, fQuiet)
     {
@@ -75962,7 +76555,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @returns {boolean} true if successful, false if failure
+     * @returns {boolean} (true if successful, false if failure)
      */
     powerUp(data, fRepower)
     {
@@ -76045,7 +76638,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {Object} data
-     * @returns {boolean} true if successful, false if failure
+     * @returns {boolean} (true if successful, false if failure)
      */
     restore(data)
     {
@@ -76191,7 +76784,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {boolean} [fRelease] is true for release criteria only; default is false (any criteria)
-     * @returns {boolean} true if every instruction needs to pass through checkInstruction(), false if not
+     * @returns {boolean} (true if every instruction needs to pass through checkInstruction(), false if not)
      */
     checksEnabled(fRelease)
     {
@@ -76207,7 +76800,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} nState is < 0 if stepping, 0 if starting, or > 0 if running
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkInstruction(addr, nState)
     {
@@ -76322,7 +76915,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkMemoryRead(addr, nb)
     {
@@ -76347,7 +76940,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkMemoryWrite(addr, nb)
     {
@@ -76367,12 +76960,12 @@ class Debuggerx86 extends DbgLib {
      * @param {number} port
      * @param {number} size
      * @param {number} data
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkPortInput(port, size, data)
     {
         /**
-         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally
+         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally.
          */
         this.printf("break on input from port %#06x: %x\n", port, data);
         this.stopCPU(true);
@@ -76388,12 +76981,12 @@ class Debuggerx86 extends DbgLib {
      * @param {number} port
      * @param {number} size
      * @param {number} data
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkPortOutput(port, size, data)
     {
         /**
-         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally
+         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally.
          */
         this.printf("break on output to port %#06x: %x\n", port, data);
         this.stopCPU(true);
@@ -76457,7 +77050,7 @@ class Debuggerx86 extends DbgLib {
      * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fTempBreak]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if breakpoint added, false if already exists
+     * @returns {boolean} (true if breakpoint added, false if already exists)
      */
     addBreakpoint(aBreak, dbgAddr, fTempBreak, fQuiet)
     {
@@ -76518,7 +77111,7 @@ class Debuggerx86 extends DbgLib {
      * @param {boolean} [fRemove]
      * @param {boolean} [fTempBreak]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if found, false if not
+     * @returns {boolean} (true if found, false if not)
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTempBreak, fQuiet)
     {
@@ -76560,7 +77153,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {Array} aBreak
-     * @returns {number} of breakpoints listed, 0 if none
+     * @returns {number} (of breakpoints listed, 0 if none)
      */
     listBreakpoints(aBreak)
     {
@@ -76667,7 +77260,7 @@ class Debuggerx86 extends DbgLib {
      * @param {number} nb (# of bytes)
      * @param {Array} aBreak
      * @param {boolean} [fTempBreak]
-     * @returns {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} (true if breakpoint has been hit, false if not)
      */
     checkBreakpoint(addr, nb, aBreak, fTempBreak)
     {
@@ -76727,6 +77320,14 @@ class Debuggerx86 extends DbgLib {
                         fBreak = true;
                         if (dbgAddrBreak.fTempBreak) {
                             this.findBreakpoint(aBreak, dbgAddrBreak, true, true);
+                            /**
+                             * If nDebugState is set, then we're dealing with a VxD service breakpoint.
+                             */
+                            if (dbgAddrBreak.nDebugState) {
+                                this.incAddr(dbgAddrBreak, 2);
+                                this.addVxDSymbol(dbgAddrBreak.nDebugState, this.getLong(dbgAddrBreak));
+                                fBreak = false;
+                            }
                             fTempBreak = true;
                         }
                         if ((a = dbgAddrBreak.aCmds)) {
@@ -76782,7 +77383,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} vector
      * @param {string} chType
-     * @returns {boolean} true if breakpoint added, false if error
+     * @returns {boolean} (true if breakpoint added, false if error)
      */
     addVectorBP(vector, chType)
     {
@@ -76818,7 +77419,20 @@ class Debuggerx86 extends DbgLib {
     {
         if (this.vectorSkip < 0) {
             this.vectorTrace = vector;
-            if (this.vectorHalt) {
+            if (vector == Interrupts.VxD.VECTOR && fProt) {
+                let dbgAddr = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
+                /**
+                 * Since nDebugState is normally only used by addresses stored in the history buffer
+                 * (ie, not for breakpoint addresses), we are now going to make an exception to that rule
+                 * and store the VxD service ID in nDebugState.  checkBreakpoint() will detect this and
+                 * call addVxDSymbol() accordingly, since the service call should be "fixed up" when the
+                 * the breakpoint is hit (ie, when the service call is re-executed).
+                 */
+                dbgAddr.nDebugState = this.getLong(dbgAddr);
+                this.incAddr(dbgAddr, -2);
+                this.setTempBreakpoint(dbgAddr);
+            }
+            else if (this.vectorHalt) {
                 let i = this.findVectorBP(vector);
                 if (i >= 0) {
                     let vbp = this.aVectorBP[i];
@@ -76908,7 +77522,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {number} vector
-     * @returns {boolean} true if breakpoint removed, false if error
+     * @returns {boolean} (true if breakpoint removed, false if error)
      */
     removeVectorBP(vector)
     {
@@ -77229,7 +77843,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} type
      * @param {DbgAddrx86} dbgAddr
-     * @returns {string} operand
+     * @returns {string} (operand)
      */
     getImmOperand(type, dbgAddr)
     {
@@ -77280,7 +77894,7 @@ class Debuggerx86 extends DbgLib {
      * @param {number} bReg
      * @param {number} type
      * @param {DbgAddrx86} dbgAddr
-     * @returns {string} operand
+     * @returns {string} (operand)
      */
     getRegOperand(bReg, type, dbgAddr)
     {
@@ -77319,7 +77933,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} bMod
      * @param {DbgAddrx86} dbgAddr
-     * @returns {string} operand
+     * @returns {string} (operand)
      */
     getSIBOperand(bMod, dbgAddr)
     {
@@ -77359,7 +77973,7 @@ class Debuggerx86 extends DbgLib {
      * @param {number} type
      * @param {number} cOperands (if 1, memory operands are prefixed with the size; otherwise, size can be inferred)
      * @param {DbgAddrx86} dbgAddr
-     * @returns {string} operand
+     * @returns {string} (operand)
      */
     getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr)
     {
@@ -77469,7 +78083,7 @@ class Debuggerx86 extends DbgLib {
      * @param {string} sOp
      * @param {string|undefined} sOperand
      * @param {DbgAddrx86} dbgAddr of memory where this instruction is being assembled
-     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @returns {Array.<number>} (of opcode bytes; if the instruction can't be parsed, the array will be empty)
      */
     parseInstruction(sOp, sOperand, dbgAddr)
     {
@@ -77483,7 +78097,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {string} sFlag
-     * @returns {string} value of flag
+     * @returns {string} (value of flag)
      */
     getFlagOutput(sFlag)
     {
@@ -77812,11 +78426,41 @@ class Debuggerx86 extends DbgLib {
             aSymbols: aSymbols,
             aOffsets: aOffsets
         };
-        let i = this.aSymbolTable.findIndex(function(symbolTable) {
+        let iTable = this.aSymbolTable.findIndex(function(symbolTable) {
             return symbolTable.sModule == sModule && symbolTable.nSegment == nSegment;
         });
-        if (i < 0) i = this.aSymbolTable.length;
-        this.aSymbolTable[i] = symbolTable;
+        if (iTable < 0) iTable = this.aSymbolTable.length;
+        this.aSymbolTable[iTable] = symbolTable;
+    }
+
+    /**
+     * addVxDSymbol(id, addr)
+     *
+     * @this {Debuggerx86}
+     * @param {number} id
+     * @param {number} addr
+     */
+    addVxDSymbol(id, addr)
+    {
+        let idSrv = id & 0xffff;
+        let idVxD = (id >> 16) & 0xffff;
+        let aVxDs = Object.keys(Interrupts.VxD);
+        for (let sVxD of aVxDs) {
+            if (idVxD == Interrupts.VxD[sVxD].id && Interrupts.VxD[sVxD].fn) {
+                let sSymbol = Interrupts.VxD[sVxD].fn[idSrv];
+                if (sSymbol) {
+                    let iTable = this.aSymbolTable.findIndex(function(symbolTable) {
+                        return symbolTable.sModule == sVxD;
+                    });
+                    this.printf(MESSAGE.WARNING, "VxD %d service %d: %s.%s => %x (%d)\n", idVxD, idSrv, sVxD, sSymbol, addr, iTable);
+                    return true;
+                }
+                this.printf(MESSAGE.WARNING, "VxD %d service %d: unrecognized\n", idVxD, idSrv);
+                return false;
+            }
+        }
+        this.printf(MESSAGE.WARNING, "VxD %d: unrecognized\n", idVxD);
+        return false;
     }
 
     /**
@@ -77825,7 +78469,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {string|null|*} sModule
      * @param {number} [nSegment] (segment # if sModule set, selector if sModule clear)
-     * @returns {string|null} name of the module removed, or null if no module was found
+     * @returns {string|null} (name of the module removed, or null if no module was found)
      */
     removeSymbols(sModule, nSegment)
     {
@@ -77879,7 +78523,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fNearest]
-     * @returns {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
+     * @returns {Array} (where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment)
      */
     findSymbol(dbgAddr, fNearest)
     {
@@ -78594,7 +79238,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
+     * @returns {boolean} (true if expression is non-zero, false if zero (or undefined due to a parse error))
      */
     doIf(sCmd, fQuiet)
     {
@@ -78612,7 +79256,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
-     * @returns {boolean} true only if the instruction info command ("n") is supported
+     * @returns {boolean} (true only if the instruction info command ("n") is supported)
      */
     doInfo(asArgs)
     {
@@ -78665,7 +79309,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {string|undefined} sInt
-     * @returns {boolean} true if successful, false if not
+     * @returns {boolean} (true if successful, false if not)
      */
     doInt(sInt)
     {
@@ -78695,7 +79339,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {string} sCmd
-     * @returns {boolean} true if valid "var" assignment, false if not
+     * @returns {boolean} (true if valid "var" assignment, false if not)
      */
     doVar(sCmd)
     {
@@ -79593,7 +80237,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fFar]
-     * @returns {string|null} CALL instruction at or near dbgAddr, or null if none
+     * @returns {string|null} (CALL instruction at or near dbgAddr, or null if none)
      */
     getCall(dbgAddr, fFar)
     {
@@ -79768,7 +80412,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {number} bOpcode
-     * @returns {boolean} true if string instruction, false if not
+     * @returns {boolean} (true if string instruction, false if not)
      */
     isStringIns(bOpcode)
     {
@@ -79942,7 +80586,7 @@ class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if command processed, false if unrecognized
+     * @returns {boolean} (true if command processed, false if unrecognized)
      */
     doCommand(sCmd, fQuiet)
     {
@@ -80123,7 +80767,7 @@ class Debuggerx86 extends DbgLib {
      * @param {string} sCommands
      * @param {boolean} [fSave]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if all commands processed, false if not
+     * @returns {boolean} (true if all commands processed, false if not)
      */
     doCommands(sCommands, fSave = false, fQuiet = false)
     {

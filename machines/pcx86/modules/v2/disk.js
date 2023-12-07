@@ -296,7 +296,7 @@ export default class Disk extends Component {
          * To make getModuleInfo() more reliable, we use aModules to cache any modules we see as
          * sectors are read.
          */
-        this.aModules = [];
+        this.aModules = {};
 
         this.setReady();
     }
@@ -736,10 +736,10 @@ export default class Disk extends Component {
                         }
                     }
                 }
+                let diskData, fileTable, imageInfo;
                 /**
                  * The most likely source of any exception will be here, where we're parsing the disk data.
                  */
-                let diskData, fileTable, imageInfo;
                 if (imageData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
                     /**
                      * Early server configs reported an error (via the nErrorCode parameter) if a disk URL was invalid,
@@ -1808,10 +1808,10 @@ export default class Disk extends Component {
      */
     encodeAsBase64()
     {
+        let s = "", lba = 0, sector;
         /**
          * Gross, but simple; more importantly, it works -- at least for disks of typical floppy magnitude.
          */
-        let s = "", lba = 0, sector;
         while ((sector = this.getSector(lba++))) {
             for (let off = 0, len = sector[Disk.SECTOR.LENGTH]; off < len; off++) {
                 s += String.fromCharCode(this.getSectorData(sector, off, 1));
@@ -2232,10 +2232,10 @@ class FileInfo {
                      * This is the one and only segment we need to check, so we can make off segment-relative now.
                      */
                     off -= segment['offStart'];
+                    let cbNearest = off, entryNearest;
                     /**
                      * To support fNearest, save the entry where (off - entry[0]) yields the smallest positive result.
                      */
-                    let cbNearest = off, entryNearest;
                     for (let ord in segment['ordinals']) {
                         let entry = segment['ordinals'][ord];
                         let cb = off - entry['o'];

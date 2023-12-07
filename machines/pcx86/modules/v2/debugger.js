@@ -298,8 +298,6 @@ export default class Debuggerx86 extends DbgLib {
     /**
      * addSegmentInfo(dbgAddr, nSegment, sel, fCode, fPrint)
      *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr (address of module name)
      * @param {number} nSegment (logical segment number)
@@ -324,8 +322,6 @@ export default class Debuggerx86 extends DbgLib {
     /**
      * removeSegmentInfo(sel, fPrint)
      *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
      * @this {Debuggerx86}
      * @param {number} sel
      * @param {boolean} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
@@ -343,17 +339,6 @@ export default class Debuggerx86 extends DbgLib {
 
     /**
      * addSectionInfo(dbgAddr, fCode, fPrint)
-     *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
-     *  dbgAddr -> D386_Device_Params structure:
-     *      DD_logical_seg  dw  ?   ; logical segment # from map
-     *      DD_actual_sel   dw  ?   ; actual selector value
-     *      DD_base         dd  ?   ; linear address offset for start of segment
-     *      DD_length       dd  ?   ; actual length of segment
-     *      DD_name         df  ?   ; 16:32 ptr to null terminated module name
-     *      DD_sym_name     df  ?   ; 16:32 ptr to null terminated parent name (eg, "DOS386")
-     *      DD_alias_sel    dw  ?   ; alias selector value (0 = none)
      *
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr (address of D386_Device_Params)
@@ -394,8 +379,6 @@ export default class Debuggerx86 extends DbgLib {
     /**
      * removeSectionInfo(nSegment, dbgAddr, fPrint)
      *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
      * @this {Debuggerx86}
      * @param {number} nSegment (logical segment number)
      * @param {DbgAddrx86} dbgAddr (address of module)
@@ -415,8 +398,6 @@ export default class Debuggerx86 extends DbgLib {
 
     /**
      * intWindowsCallBack()
-     *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
      *
      * This intercepts calls to Windows callback addresses, which use INT 0x30 (aka Transfer Space Faults).
      *
@@ -441,7 +422,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {number} addr
-     * @returns {boolean} true to proceed with the INT 0x30 software interrupt
+     * @returns {boolean} (true to proceed with the INT 0x30 software interrupt)
      */
     intWindowsCallBack(addr)
     {
@@ -471,8 +452,6 @@ export default class Debuggerx86 extends DbgLib {
 
     /**
      * intWindowsDebugger()
-     *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
      *
      * This intercepts calls to the Windows Debugger protected-mode interface (INT 0x41).
      *
@@ -670,13 +649,11 @@ export default class Debuggerx86 extends DbgLib {
     /**
      * intWindowsDebuggerRM()
      *
-     * CONDITIONAL: if (Interrupts.WINDBGRM.ENABLED)
-     *
      * This intercepts calls to the Windows Debugger real-mode interface (INT 0x68).
      *
      * @this {Debuggerx86}
      * @param {number} addr
-     * @returns {boolean} true to proceed with the INT 0x68 software interrupt, false to skip
+     * @returns {boolean} (true to proceed with the INT 0x68 software interrupt, false to skip)
      */
     intWindowsDebuggerRM(addr)
     {
@@ -823,8 +800,6 @@ export default class Debuggerx86 extends DbgLib {
     /**
      * callWindowsDebuggerPMInit()
      *
-     * CONDITIONAL: if (Interrupts.WINDBGRM.ENABLED)
-     *
      * This intercepts calls to the Windows Debugger "PMInit" interface; eg:
      *
      *      AL = function code
@@ -884,7 +859,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "debugInput")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @returns {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} (true if binding was successful, false if unrecognized binding request)
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -1011,7 +986,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number|undefined} sel
      * @param {number} [type] (defaults to getAddressType())
-     * @returns {Segx86|null} seg
+     * @returns {Segx86|null} (seg)
      */
     getSegment(sel, type)
     {
@@ -1052,7 +1027,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {DbgAddrx86|undefined} dbgAddr
      * @param {boolean} [fWrite]
      * @param {number} [nb] number of bytes to check (1, 2 or 4); default is 1
-     * @returns {number} is the corresponding linear address, or X86.ADDR_INVALID
+     * @returns {number} (is the corresponding linear address, or X86.ADDR_INVALID)
      */
     getAddr(dbgAddr, fWrite, nb)
     {
@@ -1526,7 +1501,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {number|undefined} [off]
      * @param {number|undefined} [sel]
      * @param {boolean} [fAddr32] is true for 32-bit ADDRESS size
-     * @returns {string} the hex representation of off (or sel:off)
+     * @returns {string} (the hex representation of off (or sel:off))
      */
     toHexOffset(off, sel, fAddr32)
     {
@@ -1541,7 +1516,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr
-     * @returns {string} the hex representation of the address
+     * @returns {string} (the hex representation of the address)
      */
     toHexAddr(dbgAddr)
     {
@@ -2177,7 +2152,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} bitMessage is one Messages category flag
      * @param {function(Array.<string>)} fnDumper is a function the Debugger can use to dump data for that category
-     * @returns {boolean} true if successfully registered, false if not
+     * @returns {boolean} (true if successfully registered, false if not)
      */
     messageDump(bitMessage, fnDumper)
     {
@@ -2196,7 +2171,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @returns {number} register index, or -1 if not found
+     * @returns {number} (register index, or -1 if not found)
      */
     getRegIndex(sReg, off)
     {
@@ -2537,7 +2512,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {number} nInt
      * @param {number} addr (LIP after the "INT n" instruction has been fetched but not dispatched)
      * @param {boolean} [fForce] (true if the message should be forced)
-     * @returns {boolean} true if message generated (which in turn triggers addIntReturn() inside checkIntNotify()), false if not
+     * @returns {boolean} (true if message generated (which in turn triggers addIntReturn() inside checkIntNotify()), false if not)
      */
     messageInt(nInt, addr, fForce)
     {
@@ -2722,7 +2697,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {boolean} [fUpdateFocus]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if run request successful, false if not
+     * @returns {boolean} (true if run request successful, false if not)
      */
     startCPU(fUpdateFocus, fQuiet)
     {
@@ -2849,7 +2824,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @returns {boolean} true if successful, false if failure
+     * @returns {boolean} (true if successful, false if failure)
      */
     powerUp(data, fRepower)
     {
@@ -2932,7 +2907,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {Object} data
-     * @returns {boolean} true if successful, false if failure
+     * @returns {boolean} (true if successful, false if failure)
      */
     restore(data)
     {
@@ -3078,7 +3053,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {boolean} [fRelease] is true for release criteria only; default is false (any criteria)
-     * @returns {boolean} true if every instruction needs to pass through checkInstruction(), false if not
+     * @returns {boolean} (true if every instruction needs to pass through checkInstruction(), false if not)
      */
     checksEnabled(fRelease)
     {
@@ -3094,7 +3069,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} nState is < 0 if stepping, 0 if starting, or > 0 if running
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkInstruction(addr, nState)
     {
@@ -3209,7 +3184,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkMemoryRead(addr, nb)
     {
@@ -3234,7 +3209,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkMemoryWrite(addr, nb)
     {
@@ -3254,12 +3229,12 @@ export default class Debuggerx86 extends DbgLib {
      * @param {number} port
      * @param {number} size
      * @param {number} data
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkPortInput(port, size, data)
     {
         /**
-         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally
+         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally.
          */
         this.printf("break on input from port %#06x: %x\n", port, data);
         this.stopCPU(true);
@@ -3275,12 +3250,12 @@ export default class Debuggerx86 extends DbgLib {
      * @param {number} port
      * @param {number} size
      * @param {number} data
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkPortOutput(port, size, data)
     {
         /**
-         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally
+         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally.
          */
         this.printf("break on output to port %#06x: %x\n", port, data);
         this.stopCPU(true);
@@ -3344,7 +3319,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fTempBreak]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if breakpoint added, false if already exists
+     * @returns {boolean} (true if breakpoint added, false if already exists)
      */
     addBreakpoint(aBreak, dbgAddr, fTempBreak, fQuiet)
     {
@@ -3405,7 +3380,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {boolean} [fRemove]
      * @param {boolean} [fTempBreak]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if found, false if not
+     * @returns {boolean} (true if found, false if not)
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTempBreak, fQuiet)
     {
@@ -3447,7 +3422,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {Array} aBreak
-     * @returns {number} of breakpoints listed, 0 if none
+     * @returns {number} (of breakpoints listed, 0 if none)
      */
     listBreakpoints(aBreak)
     {
@@ -3554,7 +3529,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {number} nb (# of bytes)
      * @param {Array} aBreak
      * @param {boolean} [fTempBreak]
-     * @returns {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} (true if breakpoint has been hit, false if not)
      */
     checkBreakpoint(addr, nb, aBreak, fTempBreak)
     {
@@ -3614,6 +3589,14 @@ export default class Debuggerx86 extends DbgLib {
                         fBreak = true;
                         if (dbgAddrBreak.fTempBreak) {
                             this.findBreakpoint(aBreak, dbgAddrBreak, true, true);
+                            /**
+                             * If nDebugState is set, then we're dealing with a VxD service breakpoint.
+                             */
+                            if (dbgAddrBreak.nDebugState) {
+                                this.incAddr(dbgAddrBreak, 2);
+                                this.addVxDSymbol(dbgAddrBreak.nDebugState, this.getLong(dbgAddrBreak));
+                                fBreak = false;
+                            }
                             fTempBreak = true;
                         }
                         if ((a = dbgAddrBreak.aCmds)) {
@@ -3669,7 +3652,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} vector
      * @param {string} chType
-     * @returns {boolean} true if breakpoint added, false if error
+     * @returns {boolean} (true if breakpoint added, false if error)
      */
     addVectorBP(vector, chType)
     {
@@ -3705,7 +3688,20 @@ export default class Debuggerx86 extends DbgLib {
     {
         if (this.vectorSkip < 0) {
             this.vectorTrace = vector;
-            if (this.vectorHalt) {
+            if (vector == Interrupts.VxD.VECTOR && fProt) {
+                let dbgAddr = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
+                /**
+                 * Since nDebugState is normally only used by addresses stored in the history buffer
+                 * (ie, not for breakpoint addresses), we are now going to make an exception to that rule
+                 * and store the VxD service ID in nDebugState.  checkBreakpoint() will detect this and
+                 * call addVxDSymbol() accordingly, since the service call should be "fixed up" when the
+                 * the breakpoint is hit (ie, when the service call is re-executed).
+                 */
+                dbgAddr.nDebugState = this.getLong(dbgAddr);
+                this.incAddr(dbgAddr, -2);
+                this.setTempBreakpoint(dbgAddr);
+            }
+            else if (this.vectorHalt) {
                 let i = this.findVectorBP(vector);
                 if (i >= 0) {
                     let vbp = this.aVectorBP[i];
@@ -3795,7 +3791,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {number} vector
-     * @returns {boolean} true if breakpoint removed, false if error
+     * @returns {boolean} (true if breakpoint removed, false if error)
      */
     removeVectorBP(vector)
     {
@@ -4116,7 +4112,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} type
      * @param {DbgAddrx86} dbgAddr
-     * @returns {string} operand
+     * @returns {string} (operand)
      */
     getImmOperand(type, dbgAddr)
     {
@@ -4167,7 +4163,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {number} bReg
      * @param {number} type
      * @param {DbgAddrx86} dbgAddr
-     * @returns {string} operand
+     * @returns {string} (operand)
      */
     getRegOperand(bReg, type, dbgAddr)
     {
@@ -4206,7 +4202,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} bMod
      * @param {DbgAddrx86} dbgAddr
-     * @returns {string} operand
+     * @returns {string} (operand)
      */
     getSIBOperand(bMod, dbgAddr)
     {
@@ -4246,7 +4242,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {number} type
      * @param {number} cOperands (if 1, memory operands are prefixed with the size; otherwise, size can be inferred)
      * @param {DbgAddrx86} dbgAddr
-     * @returns {string} operand
+     * @returns {string} (operand)
      */
     getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr)
     {
@@ -4356,7 +4352,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {string} sOp
      * @param {string|undefined} sOperand
      * @param {DbgAddrx86} dbgAddr of memory where this instruction is being assembled
-     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @returns {Array.<number>} (of opcode bytes; if the instruction can't be parsed, the array will be empty)
      */
     parseInstruction(sOp, sOperand, dbgAddr)
     {
@@ -4370,7 +4366,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {string} sFlag
-     * @returns {string} value of flag
+     * @returns {string} (value of flag)
      */
     getFlagOutput(sFlag)
     {
@@ -4699,11 +4695,41 @@ export default class Debuggerx86 extends DbgLib {
             aSymbols: aSymbols,
             aOffsets: aOffsets
         };
-        let i = this.aSymbolTable.findIndex(function(symbolTable) {
+        let iTable = this.aSymbolTable.findIndex(function(symbolTable) {
             return symbolTable.sModule == sModule && symbolTable.nSegment == nSegment;
         });
-        if (i < 0) i = this.aSymbolTable.length;
-        this.aSymbolTable[i] = symbolTable;
+        if (iTable < 0) iTable = this.aSymbolTable.length;
+        this.aSymbolTable[iTable] = symbolTable;
+    }
+
+    /**
+     * addVxDSymbol(id, addr)
+     *
+     * @this {Debuggerx86}
+     * @param {number} id
+     * @param {number} addr
+     */
+    addVxDSymbol(id, addr)
+    {
+        let idSrv = id & 0xffff;
+        let idVxD = (id >> 16) & 0xffff;
+        let aVxDs = Object.keys(Interrupts.VxD);
+        for (let sVxD of aVxDs) {
+            if (idVxD == Interrupts.VxD[sVxD].id && Interrupts.VxD[sVxD].fn) {
+                let sSymbol = Interrupts.VxD[sVxD].fn[idSrv];
+                if (sSymbol) {
+                    let iTable = this.aSymbolTable.findIndex(function(symbolTable) {
+                        return symbolTable.sModule == sVxD;
+                    });
+                    this.printf(MESSAGE.WARNING, "VxD %d service %d: %s.%s => %x (%d)\n", idVxD, idSrv, sVxD, sSymbol, addr, iTable);
+                    return true;
+                }
+                this.printf(MESSAGE.WARNING, "VxD %d service %d: unrecognized\n", idVxD, idSrv);
+                return false;
+            }
+        }
+        this.printf(MESSAGE.WARNING, "VxD %d: unrecognized\n", idVxD);
+        return false;
     }
 
     /**
@@ -4712,7 +4738,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {string|null|*} sModule
      * @param {number} [nSegment] (segment # if sModule set, selector if sModule clear)
-     * @returns {string|null} name of the module removed, or null if no module was found
+     * @returns {string|null} (name of the module removed, or null if no module was found)
      */
     removeSymbols(sModule, nSegment)
     {
@@ -4766,7 +4792,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fNearest]
-     * @returns {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
+     * @returns {Array} (where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment)
      */
     findSymbol(dbgAddr, fNearest)
     {
@@ -5481,7 +5507,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
+     * @returns {boolean} (true if expression is non-zero, false if zero (or undefined due to a parse error))
      */
     doIf(sCmd, fQuiet)
     {
@@ -5499,7 +5525,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
-     * @returns {boolean} true only if the instruction info command ("n") is supported
+     * @returns {boolean} (true only if the instruction info command ("n") is supported)
      */
     doInfo(asArgs)
     {
@@ -5552,7 +5578,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {string|undefined} sInt
-     * @returns {boolean} true if successful, false if not
+     * @returns {boolean} (true if successful, false if not)
      */
     doInt(sInt)
     {
@@ -5582,7 +5608,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {string} sCmd
-     * @returns {boolean} true if valid "var" assignment, false if not
+     * @returns {boolean} (true if valid "var" assignment, false if not)
      */
     doVar(sCmd)
     {
@@ -6480,7 +6506,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fFar]
-     * @returns {string|null} CALL instruction at or near dbgAddr, or null if none
+     * @returns {string|null} (CALL instruction at or near dbgAddr, or null if none)
      */
     getCall(dbgAddr, fFar)
     {
@@ -6655,7 +6681,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {number} bOpcode
-     * @returns {boolean} true if string instruction, false if not
+     * @returns {boolean} (true if string instruction, false if not)
      */
     isStringIns(bOpcode)
     {
@@ -6829,7 +6855,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if command processed, false if unrecognized
+     * @returns {boolean} (true if command processed, false if unrecognized)
      */
     doCommand(sCmd, fQuiet)
     {
@@ -7010,7 +7036,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {string} sCommands
      * @param {boolean} [fSave]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if all commands processed, false if not
+     * @returns {boolean} (true if all commands processed, false if not)
      */
     doCommands(sCommands, fSave = false, fQuiet = false)
     {
