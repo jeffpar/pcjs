@@ -311,8 +311,9 @@ export default class Debuggerx86 extends DbgLib {
         let seg = this.getSegment(sel);
         let len = seg? seg.limit + 1 : 0;
         let sSection = (fCode? "_CODE" : "_DATA") + StrLib.toHex(nSegment, 2);
-        let flags = fPrint? MESSAGE.DEBUG : MESSAGE.WARNING;
-        this.printf(flags, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
+        if (fPrint) {
+            this.printf(MESSAGE.DEBUG, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
+        }
         let off = 0;
         let aSymbols = this.findModuleInfo(sModule, nSegment);
         aSymbols[sModule + sSection] = off;
@@ -329,11 +330,12 @@ export default class Debuggerx86 extends DbgLib {
     removeSegmentInfo(sel, fPrint)
     {
         let sModuleRemoved = this.removeSymbols(null, sel);
-        let flags = fPrint? MESSAGE.DEBUG : MESSAGE.WARNING;
-        if (sModuleRemoved) {
-            this.printf(flags, "%s #%04X removed\n", sModuleRemoved, sel);
-        } else {
-            this.printf(flags, "unable to remove module for segment #%04X\n", sel);
+        if (fPrint) {
+            if (sModuleRemoved) {
+                this.printf(MESSAGE.DEBUG, "%s #%04X removed\n", sModuleRemoved, sel);
+            } else {
+                this.printf(MESSAGE.DEBUG, "unable to remove module for segment #%04X\n", sel);
+            }
         }
     }
 
@@ -362,11 +364,12 @@ export default class Debuggerx86 extends DbgLib {
             sParent += '!';
         }
         let sSection = (fCode? "_CODE" : "_DATA") + StrLib.toHex(nSegment, 2);
-        let flags = fPrint? MESSAGE.DEBUG : MESSAGE.WARNING;
         /**
          * Mimics WDEB386 output, except that WDEB386 only displays a linear address, omitting the selector.
          */
-        this.printf(flags, "%s%s %s(%04X)=%04X:%0X len %0X\n", sParent, sModule, (fCode? "code" : "data"), nSegment, sel, off, len);
+        if (fPrint) {
+            this.printf(MESSAGE.DEBUG, "%s%s %s(%04X)=%04X:%0X len %0X\n", sParent, sModule, (fCode? "code" : "data"), nSegment, sel, off, len);
+        }
         /**
          * TODO: Add support for 32-bit symbols; findModuleInfo() relies on Disk.getModuleInfo(),
          * and the Disk component doesn't yet know how to parse 32-bit executables.
@@ -388,11 +391,12 @@ export default class Debuggerx86 extends DbgLib {
     {
         let sModule = this.getSZ(dbgAddr).toUpperCase();
         let sModuleRemoved = this.removeSymbols(sModule, nSegment);
-        let flags = fPrint? MESSAGE.DEBUG : MESSAGE.WARNING;
-        if (sModuleRemoved) {
-            this.printf(flags, "%s %04X removed\n", sModule, nSegment);
-        } else {
-            this.printf(flags, "unable to remove %s for section %04X\n", sModule, nSegment);
+        if (fPrint) {
+            if (sModuleRemoved) {
+                this.printf(MESSAGE.DEBUG, "%s %04X removed\n", sModule, nSegment);
+            } else {
+                this.printf(MESSAGE.DEBUG, "unable to remove %s for section %04X\n", sModule, nSegment);
+            }
         }
     }
 
@@ -4734,7 +4738,7 @@ export default class Debuggerx86 extends DbgLib {
                                 if (symbol['o'] == offSymbol && symbol['s'] == symbolTable.sel) {
                                     return true;
                                 }
-                                dbg.printf(MESSAGE.ERROR, "%s.%s (%x) does not match previous value (%x)\n", sVxD, sSymbol, offSymbol, symbol['o']);
+                                dbg.printf(MESSAGE.DEBUG + MESSAGE.ERROR, "%s.%s (%x) does not match previous value (%x)\n", sVxD, sSymbol, offSymbol, symbol['o']);
                                 return false;
                             }
                             let pair = [offSymbol, keySymbol];
@@ -4747,10 +4751,10 @@ export default class Debuggerx86 extends DbgLib {
                                 }
                                 return true;
                             }
-                            dbg.printf(MESSAGE.WARNING, "%s.%s (%x) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
+                            dbg.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s.%s (%x) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
                             return false;
                         }
-                        dbg.printf(MESSAGE.ERROR, "%s.%s (%x) out of range\n", sVxD, sSymbol, offSymbol);
+                        dbg.printf(MESSAGE.DEBUG + MESSAGE.ERROR, "%s.%s (%x) out of range\n", sVxD, sSymbol, offSymbol);
                         return false;
                     };
                     /**
@@ -4765,11 +4769,11 @@ export default class Debuggerx86 extends DbgLib {
                     }
                     return false;
                 }
-                this.printf(MESSAGE.WARNING, "%s service %d: unrecognized\n", sVxD, idSrv);
+                this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s service %d: unrecognized\n", sVxD, idSrv);
                 return false;
             }
         }
-        this.printf(MESSAGE.WARNING, "VxD %d: unrecognized\n", idVxD);
+        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "VxD %d: unrecognized\n", idVxD);
         return false;
     }
 

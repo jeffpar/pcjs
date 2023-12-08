@@ -9,7 +9,6 @@
 
 import MESSAGE from "./message.js";
 import X86 from "./x86.js";
-import StrLib from "../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, I386 } from "./defines.js";
 
 /*
@@ -43,10 +42,6 @@ export default class Segx86 {
     constructor(cpu, id, sName, fProt)
     {
         this.cpu = cpu;
-        /**
-         * @type {Debuggerx86}
-         */
-        this.dbg = cpu.dbg;
         this.id = id;
         this.sName = sName || "";
         this.sel = 0;
@@ -249,8 +244,8 @@ export default class Segx86 {
          */
         cpu.assert(nIDT >= 0 && nIDT < 256 && !cpu.addrIDT && cpu.addrIDTLimit >= 0x3ff);
 
-        if (DEBUGGER && this.dbg) {
-            if (this.dbg.checkVectorBP(nIDT, nBytes, false)) {
+        if (DEBUGGER && cpu.dbg) {
+            if (cpu.dbg.checkVectorBP(nIDT, nBytes, false)) {
                 return X86.ADDR_INVALID;
             }
         }
@@ -281,8 +276,8 @@ export default class Segx86 {
         let cpu = this.cpu;
         cpu.assert(nIDT >= 0 && nIDT < 256);
 
-        if (DEBUGGER && this.dbg) {
-            if (this.dbg.checkVectorBP(nIDT, nBytes, true)) {
+        if (DEBUGGER && cpu.dbg) {
+            if (cpu.dbg.checkVectorBP(nIDT, nBytes, true)) {
                 return X86.ADDR_INVALID;
             }
         }
@@ -1182,8 +1177,8 @@ export default class Segx86 {
         }
 
         let addrNew = cpu.segTSS.base;
-        if (DEBUG && DEBUGGER && this.dbg) {
-            this.dbg.printf(MESSAGE.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
+        if (DEBUG && DEBUGGER && cpu.dbg) {
+            cpu.dbg.printf(MESSAGE.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
         }
 
         if (fNest !== false) {
@@ -1569,11 +1564,12 @@ export default class Segx86 {
     messageSeg(sel, base, limit, type, ext)
     {
         if (DEBUG) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MESSAGE.SEG)) {
+            let dbg = this.cpu.dbg;
+            if (DEBUGGER && dbg && dbg.messageEnabled(MESSAGE.SEG)) {
                 let ch = (this.sName.length < 3? " " : "");
                 let sDPL = " dpl=" + this.dpl;
                 if (this.id == Segx86.ID.CODE) sDPL += " cpl=" + this.cpl;
-                this.dbg.printf(MESSAGE.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
+                dbg.printf(MESSAGE.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
             }
             /*
              * Unless I've got a bug that's causing descriptor corruption, it appears that Windows 3.0 may be setting the
