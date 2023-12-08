@@ -9448,7 +9448,7 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
 
 Interrupts.VxD = {
     VECTOR: 0x20,
-    VMM: {
+    "VMM": {
         id: 0x0001,
         fn: [
             "Get_VMM_Version",
@@ -9855,211 +9855,211 @@ Interrupts.VxD = {
             "_AtEventTime"
         ]
     },
-    DEBUG: {
+    "DEBUG": {
         id: 0x0002
     },
-    VPICD: {
+    "VPICD": {
         id: 0x0003
     },
-    VDMAD: {
+    "VDMAD": {
         id: 0x0004
     },
-    VTD: {
+    "VTD": {
         id: 0x0005
     },
-    V86MMGR: {
+    "V86MMGR": {
         id: 0x0006
     },
-    PAGESWAP: {
+    "PAGESWAP": {
         id: 0x0007
     },
-    PARITY: {
+    "PARITY": {
         id: 0x0008
     },
-    REBOOT: {
+    "REBOOT": {
         id: 0x0009
     },
-    VDD: {
+    "VDD": {
         id: 0x000A
     },
-    VSD: {
+    "VSD": {
         id: 0x000B
     },
-    VMD: {
+    "VMD": {
         id: 0x000C
     },
-    VKD: {
+    "VKD": {
         id: 0x000D
     },
-    VCD: {
+    "VCD": {
         id: 0x000E
     },
-    VPD: {
+    "VPD": {
         id: 0x000F
     },
-    BLOCKDEV: {
+    "BLOCKDEV": {
         id: 0x0010
     },
-    VMCPD: {
+    "VMCPD": {
         id: 0x0011
     },
-    EBIOS: {
+    "EBIOS": {
         id: 0x0012
     },
-    BIOSXLAT: {
+    "BIOSXLAT": {
         id: 0x0013
     },
-    VNETBIOS: {
+    "VNETBIOS": {
         id: 0x0014
     },
-    DOSMGR: {
+    "DOSMGR": {
         id: 0x0015
     },
-    WINLOAD: {
+    "WINLOAD": {
         id: 0x0016
     },
-    SHELL: {
+    "SHELL": {
         id: 0x0017
     },
-    VMPOLL: {
+    "VMPOLL": {
         id: 0x0018
     },
-    VPROD: {
+    "VPROD": {
         id: 0x0019
     },
-    DOSNET: {
+    "DOSNET": {
         id: 0x001A
     },
-    VFD: {
+    "VFD": {
         id: 0x001B
     },
-    VDD2: {
+    "VDD2": {
         id: 0x001C
     },
-    WINDEBUG: {
+    "WINDEBUG": {
         id: 0x001D
     },
-    TSRLOAD: {
+    "TSRLOAD": {
         id: 0x001E
     },
-    BIOSHOOK: {
+    "BIOSHOOK": {
         id: 0x001F
     },
-    INT13: {
+    "INT13": {
         id: 0x0020
     },
-    PAGEFILE: {
+    "PAGEFILE": {
         id: 0x0021
     },
-    SCSI: {
+    "SCSI": {
         id: 0x0022
     },
-    MCA_POS: {
+    "MCA_POS": {
         id: 0x0023
     },
-    SCSIFD: {
+    "SCSIFD": {
         id: 0x0024
     },
-    VPEND: {
+    "VPEND": {
         id: 0x0025
     },
-    APM: {
+    "APM": {
         id: 0x0026
     },
-    VXDLDR: {
+    "VXDLDR": {
         id: 0x0027
     },
-    NDIS: {
+    "NDIS": {
         id: 0x0028
     },
-    BIOS_EXT: {
+    "BIOS_EXT": {
         id: 0x0029
     },
-    VWIN32: {
+    "VWIN32": {
         id: 0x002A
     },
-    VCOMM: {
+    "VCOMM": {
         id: 0x002B
     },
-    SPOOLER: {
+    "SPOOLER": {
         id: 0x002C
     },
-    WIN32S: {
+    "WIN32S": {
         id: 0x002D
     },
-    DEBUGCMD: {
+    "DEBUGCMD": {
         id: 0x002E
     },
-    CONFIGMG: {
+    "CONFIGMG": {
         id: 0x0033
     },
-    DWCFGMG: {
+    "DWCFGMG": {
         id: 0x0034
     },
-    SCSIPORT: {
+    "SCSIPORT": {
         id: 0x0035
     },
-    VFBACKUP: {
+    "VFBACKUP": {
         id: 0x0036
     },
-    ENABLE: {
+    "ENABLE": {
         id: 0x0037
     },
-    VCOND: {
+    "VCOND": {
         id: 0x0038
     },
-    ISAPNP: {
+    "ISAPNP": {
         id: 0x003C
     },
-    BIOS: {
+    "BIOS": {
         id: 0x003D
     },
-    IFSMgr: {
+    "IFSMgr": {
         id: 0x0040
     },
-    VCDFSD: {
+    "VCDFSD": {
         id: 0x0041
     },
-    MRCI2: {
+    "MRCI2": {
         id: 0x0042
     },
-    PCI: {
+    "PCI": {
         id: 0x0043
     },
-    PELOADER: {
+    "PELOADER": {
         id: 0x0044
     },
-    EISA: {
+    "EISA": {
         id: 0x0045
     },
-    DRAGCLI: {
+    "DRAGCLI": {
         id: 0x0046
     },
-    DRAGSRV: {
+    "DRAGSRV": {
         id: 0x0047
     },
-    PERF: {
+    "PERF": {
         id: 0x0048
     },
-    AWREDIR: {
+    "AWREDIR": {
         id: 0x0049
     },
-    ETEN: {
+    "ETEN": {
         id: 0x0060
     },
-    CHBIOS: {
+    "CHBIOS": {
         id: 0x0061
     },
-    VMSGD: {
+    "VMSGD": {
         id: 0x0062
     },
-    VPPID: {
+    "VPPID": {
         id: 0x0063
     },
-    VIME: {
+    "VIME": {
         id: 0x0064
     },
-    VHBIOSD: {
+    "VHBIOSD": {
         id: 0x0065
     }
 };
@@ -72960,7 +72960,7 @@ class DbgLib extends Component {
             case ',,':
                 valNew = this.truncate(val1, 18, true) * Math.pow(2, 18) + this.truncate(val2, 18, true);
                 break;
-            case '_':
+         // case '_':
             case '^_':
                 valNew = val1;
                 /*
@@ -73278,6 +73278,8 @@ class DbgLib extends Component {
              * added '!' as an alias for '|' (bitwise inclusive-or), '^-' as an alias for '~' (one's complement operator),
              * and '_' as a shift operator (+/- values specify a left/right shift, and the count is not limited to 32).
              *
+             * 2023 Update: I've removed '_' as a shift operator, because it interferes with symbols that use underscores.
+             *
              * And to avoid conflicts with MACRO-10 syntax, I've replaced the original mod operator ('%') with '^/'.
              *
              * The MACRO-10 binary shifting suffix ('B') is a bit more problematic, since a capital B can also appear
@@ -73298,7 +73300,7 @@ class DbgLib extends Component {
              * to remove spaces entirely, because if an operator-less expression like "A B" was passed in, we would want
              * that to generate an error; if we converted it to "AB", evaluation might inadvertently succeed.
              */
-            let regExp = /({|}|\|\||&&|\||\^!|\^B|\^O|\^D|\^L|\^-|~|\^_|_|&|!=|!|==|>=|>>>|>>|>|<=|<<|<|-|\+|\^\/|\/|\*|,,| )/;
+            let regExp = /({|}|\|\||&&|\||\^!|\^B|\^O|\^D|\^L|\^-|~|\^_|&|!=|!|==|>=|>>>|>>|>|<=|<<|<|-|\+|\^\/|\/|\*|,,| )/;
             if (this.nBase != 16) {
                 sExp = sExp.replace(/(^|[^A-Z0-9$%.])([0-9]+)B/, "$1$2^_").replace(/\s+/g, ' ');
             }
@@ -73721,7 +73723,7 @@ if (DEBUGGER) {
         '^/':   14,     // remainder
         '/':    14,     // division
         '*':    14,     // multiplication
-        '_':    19,     // MACRO-10 shift operator
+    //  '_':    19,     // MACRO-10 shift operator
         '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
         '{':    20,     // open grouped expression (converted from achGroup[0])
         '}':    20      // close grouped expression (converted from achGroup[1])
@@ -73748,7 +73750,7 @@ if (DEBUGGER) {
         '|':    15,     // bitwise OR
         '^!':   15,     // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
         '&':    15,     // bitwise AND
-        '_':    19,     // MACRO-10 shift operator
+    //  '_':    19,     // MACRO-10 shift operator
         '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
         '{':    20,     // open grouped expression (converted from achGroup[0])
         '}':    20      // close grouped expression (converted from achGroup[1])
@@ -77325,7 +77327,7 @@ class Debuggerx86 extends DbgLib {
                              */
                             if (dbgAddrBreak.nDebugState) {
                                 this.incAddr(dbgAddrBreak, 2);
-                                this.addVxDSymbol(dbgAddrBreak.nDebugState, this.getLong(dbgAddrBreak));
+                                this.addVxDSymbol(dbgAddrBreak.nDebugState, dbgAddrBreak);
                                 fBreak = false;
                             }
                             fTempBreak = true;
@@ -78434,28 +78436,69 @@ class Debuggerx86 extends DbgLib {
     }
 
     /**
-     * addVxDSymbol(id, addr)
+     * addVxDSymbol(id, dbgAddr)
      *
      * @this {Debuggerx86}
      * @param {number} id
-     * @param {number} addr
+     * @param {DbgAddrx86} dbgAddr
+     * @returns {boolean} (true if symbol added OR matching symbol already exists, false if not)
      */
-    addVxDSymbol(id, addr)
+    addVxDSymbol(id, dbgAddr)
     {
         let idSrv = id & 0xffff;
         let idVxD = (id >> 16) & 0xffff;
         let aVxDs = Object.keys(Interrupts.VxD);
         for (let sVxD of aVxDs) {
-            if (idVxD == Interrupts.VxD[sVxD].id && Interrupts.VxD[sVxD].fn) {
-                let sSymbol = Interrupts.VxD[sVxD].fn[idSrv];
-                if (sSymbol) {
-                    let iTable = this.aSymbolTable.findIndex(function(symbolTable) {
-                        return symbolTable.sModule == sVxD;
-                    });
-                    this.printf(MESSAGE.WARNING, "VxD %d service %d: %s.%s => %x (%d)\n", idVxD, idSrv, sVxD, sSymbol, addr, iTable);
-                    return true;
+            if (idVxD == Interrupts.VxD[sVxD].id) {
+                let sService = Interrupts.VxD[sVxD].fn && Interrupts.VxD[sVxD].fn[idSrv];
+                if (sService) {
+                    let dbg = this;
+                    let addSymbol = function(sSymbol, addr) {
+                        let offSymbol = addr >>> 0;
+                        let iTable = dbg.aSymbolTable.findIndex(function(symbolTable) {
+                            return /* symbolTable.sModule == sVxD */ symbolTable.sel == 0x28 &&
+                                    offSymbol >= (symbolTable.off >>> 0) && offSymbol < ((symbolTable.off + symbolTable.len) >>> 0);
+                        });
+                        if (iTable >= 0) {
+                            let keySymbol = sSymbol.toUpperCase();
+                            let symbolTable = dbg.aSymbolTable[iTable];
+                            let symbol = symbolTable.aSymbols[keySymbol];
+                            if (symbol) {
+                                if (symbol['o'] == offSymbol && symbol['s'] == symbolTable.sel) {
+                                    return true;
+                                }
+                                dbg.printf(MESSAGE.ERROR, "%s.%s (%x) does not match previous value (%x)\n", sVxD, sSymbol, offSymbol, symbol['o']);
+                                return false;
+                            }
+                            let pair = [offSymbol, keySymbol];
+                            let result = UsrLib.binarySearch(symbolTable.aOffsets, pair, dbg.comparePairs);
+                            if (result < 0) {
+                                symbolTable.aOffsets.splice(-(result + 1), 0, pair);
+                                symbolTable.aSymbols[keySymbol] = {'o': offSymbol, 's': symbolTable.sel};
+                                if (sSymbol[0] != '$') {
+                                    dbg.printf(MESSAGE.DEBUG, "%s.%s: %x\n", sVxD, sSymbol, offSymbol);
+                                }
+                                return true;
+                            }
+                            dbg.printf(MESSAGE.WARNING, "%s.%s (%x) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
+                            return false;
+                        }
+                        dbg.printf(MESSAGE.ERROR, "%s.%s (%x) out of range\n", sVxD, sSymbol, offSymbol);
+                        return false;
+                    };
+                    /**
+                     * We actually need to add TWO symbols for every VxD service: one with an underscore prefix that
+                     * represents the jump table entry for the service, and one without the prefix that represents the
+                     * initial entry value in the jump table.
+                     */
+                    let addr = dbg.getLong(dbgAddr);
+                    if (addSymbol('$' + sService, addr)) {
+                        dbgAddr.addr = addr;
+                        return addSymbol(sService, dbg.getLong(dbgAddr));
+                    }
+                    return false;
                 }
-                this.printf(MESSAGE.WARNING, "VxD %d service %d: unrecognized\n", idVxD, idSrv);
+                this.printf(MESSAGE.WARNING, "%s service %d: unrecognized\n", sVxD, idSrv);
                 return false;
             }
         }
@@ -78609,7 +78652,7 @@ class Debuggerx86 extends DbgLib {
      *
      * @param {number} iTable
      * @param {number} iOffset
-     * @param {Array} aSymbol is updated with the specified symbol, if it exists
+     * @param {Array} aSymbol (updated with the specified symbol, if it exists)
      */
     returnSymbol(iTable, iOffset, aSymbol)
     {

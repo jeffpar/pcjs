@@ -3594,7 +3594,7 @@ export default class Debuggerx86 extends DbgLib {
                              */
                             if (dbgAddrBreak.nDebugState) {
                                 this.incAddr(dbgAddrBreak, 2);
-                                this.addVxDSymbol(dbgAddrBreak.nDebugState, this.getLong(dbgAddrBreak));
+                                this.addVxDSymbol(dbgAddrBreak.nDebugState, dbgAddrBreak);
                                 fBreak = false;
                             }
                             fTempBreak = true;
@@ -4703,28 +4703,69 @@ export default class Debuggerx86 extends DbgLib {
     }
 
     /**
-     * addVxDSymbol(id, addr)
+     * addVxDSymbol(id, dbgAddr)
      *
      * @this {Debuggerx86}
      * @param {number} id
-     * @param {number} addr
+     * @param {DbgAddrx86} dbgAddr
+     * @returns {boolean} (true if symbol added OR matching symbol already exists, false if not)
      */
-    addVxDSymbol(id, addr)
+    addVxDSymbol(id, dbgAddr)
     {
         let idSrv = id & 0xffff;
         let idVxD = (id >> 16) & 0xffff;
         let aVxDs = Object.keys(Interrupts.VxD);
         for (let sVxD of aVxDs) {
-            if (idVxD == Interrupts.VxD[sVxD].id && Interrupts.VxD[sVxD].fn) {
-                let sSymbol = Interrupts.VxD[sVxD].fn[idSrv];
-                if (sSymbol) {
-                    let iTable = this.aSymbolTable.findIndex(function(symbolTable) {
-                        return symbolTable.sModule == sVxD;
-                    });
-                    this.printf(MESSAGE.WARNING, "VxD %d service %d: %s.%s => %x (%d)\n", idVxD, idSrv, sVxD, sSymbol, addr, iTable);
-                    return true;
+            if (idVxD == Interrupts.VxD[sVxD].id) {
+                let sService = Interrupts.VxD[sVxD].fn && Interrupts.VxD[sVxD].fn[idSrv];
+                if (sService) {
+                    let dbg = this;
+                    let addSymbol = function(sSymbol, addr) {
+                        let offSymbol = addr >>> 0;
+                        let iTable = dbg.aSymbolTable.findIndex(function(symbolTable) {
+                            return /* symbolTable.sModule == sVxD */ symbolTable.sel == 0x28 &&
+                                    offSymbol >= (symbolTable.off >>> 0) && offSymbol < ((symbolTable.off + symbolTable.len) >>> 0);
+                        });
+                        if (iTable >= 0) {
+                            let keySymbol = sSymbol.toUpperCase();
+                            let symbolTable = dbg.aSymbolTable[iTable];
+                            let symbol = symbolTable.aSymbols[keySymbol];
+                            if (symbol) {
+                                if (symbol['o'] == offSymbol && symbol['s'] == symbolTable.sel) {
+                                    return true;
+                                }
+                                dbg.printf(MESSAGE.ERROR, "%s.%s (%x) does not match previous value (%x)\n", sVxD, sSymbol, offSymbol, symbol['o']);
+                                return false;
+                            }
+                            let pair = [offSymbol, keySymbol];
+                            let result = UsrLib.binarySearch(symbolTable.aOffsets, pair, dbg.comparePairs);
+                            if (result < 0) {
+                                symbolTable.aOffsets.splice(-(result + 1), 0, pair);
+                                symbolTable.aSymbols[keySymbol] = {'o': offSymbol, 's': symbolTable.sel};
+                                if (sSymbol[0] != '$') {
+                                    dbg.printf(MESSAGE.DEBUG, "%s.%s: %x\n", sVxD, sSymbol, offSymbol);
+                                }
+                                return true;
+                            }
+                            dbg.printf(MESSAGE.WARNING, "%s.%s (%x) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
+                            return false;
+                        }
+                        dbg.printf(MESSAGE.ERROR, "%s.%s (%x) out of range\n", sVxD, sSymbol, offSymbol);
+                        return false;
+                    };
+                    /**
+                     * We actually need to add TWO symbols for every VxD service: one with an underscore prefix that
+                     * represents the jump table entry for the service, and one without the prefix that represents the
+                     * initial entry value in the jump table.
+                     */
+                    let addr = dbg.getLong(dbgAddr);
+                    if (addSymbol('$' + sService, addr)) {
+                        dbgAddr.addr = addr;
+                        return addSymbol(sService, dbg.getLong(dbgAddr));
+                    }
+                    return false;
                 }
-                this.printf(MESSAGE.WARNING, "VxD %d service %d: unrecognized\n", idVxD, idSrv);
+                this.printf(MESSAGE.WARNING, "%s service %d: unrecognized\n", sVxD, idSrv);
                 return false;
             }
         }
@@ -4878,7 +4919,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @param {number} iTable
      * @param {number} iOffset
-     * @param {Array} aSymbol is updated with the specified symbol, if it exists
+     * @param {Array} aSymbol (updated with the specified symbol, if it exists)
      */
     returnSymbol(iTable, iOffset, aSymbol)
     {

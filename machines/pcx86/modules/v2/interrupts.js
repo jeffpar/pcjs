@@ -2141,7 +2141,7 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
 
 Interrupts.VxD = {
     VECTOR: 0x20,
-    VMM: {
+    "VMM": {
         id: 0x0001,
         fn: [
             "Get_VMM_Version",
@@ -2548,211 +2548,211 @@ Interrupts.VxD = {
             "_AtEventTime"
         ]
     },
-    DEBUG: {
+    "DEBUG": {
         id: 0x0002
     },
-    VPICD: {
+    "VPICD": {
         id: 0x0003
     },
-    VDMAD: {
+    "VDMAD": {
         id: 0x0004
     },
-    VTD: {
+    "VTD": {
         id: 0x0005
     },
-    V86MMGR: {
+    "V86MMGR": {
         id: 0x0006
     },
-    PAGESWAP: {
+    "PAGESWAP": {
         id: 0x0007
     },
-    PARITY: {
+    "PARITY": {
         id: 0x0008
     },
-    REBOOT: {
+    "REBOOT": {
         id: 0x0009
     },
-    VDD: {
+    "VDD": {
         id: 0x000A
     },
-    VSD: {
+    "VSD": {
         id: 0x000B
     },
-    VMD: {
+    "VMD": {
         id: 0x000C
     },
-    VKD: {
+    "VKD": {
         id: 0x000D
     },
-    VCD: {
+    "VCD": {
         id: 0x000E
     },
-    VPD: {
+    "VPD": {
         id: 0x000F
     },
-    BLOCKDEV: {
+    "BLOCKDEV": {
         id: 0x0010
     },
-    VMCPD: {
+    "VMCPD": {
         id: 0x0011
     },
-    EBIOS: {
+    "EBIOS": {
         id: 0x0012
     },
-    BIOSXLAT: {
+    "BIOSXLAT": {
         id: 0x0013
     },
-    VNETBIOS: {
+    "VNETBIOS": {
         id: 0x0014
     },
-    DOSMGR: {
+    "DOSMGR": {
         id: 0x0015
     },
-    WINLOAD: {
+    "WINLOAD": {
         id: 0x0016
     },
-    SHELL: {
+    "SHELL": {
         id: 0x0017
     },
-    VMPOLL: {
+    "VMPOLL": {
         id: 0x0018
     },
-    VPROD: {
+    "VPROD": {
         id: 0x0019
     },
-    DOSNET: {
+    "DOSNET": {
         id: 0x001A
     },
-    VFD: {
+    "VFD": {
         id: 0x001B
     },
-    VDD2: {
+    "VDD2": {
         id: 0x001C
     },
-    WINDEBUG: {
+    "WINDEBUG": {
         id: 0x001D
     },
-    TSRLOAD: {
+    "TSRLOAD": {
         id: 0x001E
     },
-    BIOSHOOK: {
+    "BIOSHOOK": {
         id: 0x001F
     },
-    INT13: {
+    "INT13": {
         id: 0x0020
     },
-    PAGEFILE: {
+    "PAGEFILE": {
         id: 0x0021
     },
-    SCSI: {
+    "SCSI": {
         id: 0x0022
     },
-    MCA_POS: {
+    "MCA_POS": {
         id: 0x0023
     },
-    SCSIFD: {
+    "SCSIFD": {
         id: 0x0024
     },
-    VPEND: {
+    "VPEND": {
         id: 0x0025
     },
-    APM: {
+    "APM": {
         id: 0x0026
     },
-    VXDLDR: {
+    "VXDLDR": {
         id: 0x0027
     },
-    NDIS: {
+    "NDIS": {
         id: 0x0028
     },
-    BIOS_EXT: {
+    "BIOS_EXT": {
         id: 0x0029
     },
-    VWIN32: {
+    "VWIN32": {
         id: 0x002A
     },
-    VCOMM: {
+    "VCOMM": {
         id: 0x002B
     },
-    SPOOLER: {
+    "SPOOLER": {
         id: 0x002C
     },
-    WIN32S: {
+    "WIN32S": {
         id: 0x002D
     },
-    DEBUGCMD: {
+    "DEBUGCMD": {
         id: 0x002E
     },
-    CONFIGMG: {
+    "CONFIGMG": {
         id: 0x0033
     },
-    DWCFGMG: {
+    "DWCFGMG": {
         id: 0x0034
     },
-    SCSIPORT: {
+    "SCSIPORT": {
         id: 0x0035
     },
-    VFBACKUP: {
+    "VFBACKUP": {
         id: 0x0036
     },
-    ENABLE: {
+    "ENABLE": {
         id: 0x0037
     },
-    VCOND: {
+    "VCOND": {
         id: 0x0038
     },
-    ISAPNP: {
+    "ISAPNP": {
         id: 0x003C
     },
-    BIOS: {
+    "BIOS": {
         id: 0x003D
     },
-    IFSMgr: {
+    "IFSMgr": {
         id: 0x0040
     },
-    VCDFSD: {
+    "VCDFSD": {
         id: 0x0041
     },
-    MRCI2: {
+    "MRCI2": {
         id: 0x0042
     },
-    PCI: {
+    "PCI": {
         id: 0x0043
     },
-    PELOADER: {
+    "PELOADER": {
         id: 0x0044
     },
-    EISA: {
+    "EISA": {
         id: 0x0045
     },
-    DRAGCLI: {
+    "DRAGCLI": {
         id: 0x0046
     },
-    DRAGSRV: {
+    "DRAGSRV": {
         id: 0x0047
     },
-    PERF: {
+    "PERF": {
         id: 0x0048
     },
-    AWREDIR: {
+    "AWREDIR": {
         id: 0x0049
     },
-    ETEN: {
+    "ETEN": {
         id: 0x0060
     },
-    CHBIOS: {
+    "CHBIOS": {
         id: 0x0061
     },
-    VMSGD: {
+    "VMSGD": {
         id: 0x0062
     },
-    VPPID: {
+    "VPPID": {
         id: 0x0063
     },
-    VIME: {
+    "VIME": {
         id: 0x0064
     },
-    VHBIOSD: {
+    "VHBIOSD": {
         id: 0x0065
     }
 };
