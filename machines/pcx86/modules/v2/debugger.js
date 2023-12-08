@@ -280,18 +280,21 @@ export default class Debuggerx86 extends DbgLib {
         this.messageDump(MESSAGE.MEM,  function onDumpMem(asArgs) { dbg.dumpMem(asArgs); });
         this.messageDump(MESSAGE.TSS,  function onDumpTSS(asArgs) { dbg.dumpTSS(asArgs); });
 
-        if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED) {
-            this.fWinDbg = null;
-            this.cTrapFaults = 0;
-            this.fIgnoreNextCheckFault = false;
-            this.cpu.addIntNotify(Interrupts.WINCB.VECTOR, this.intWindowsCallBack.bind(this));
-            this.cpu.addIntNotify(Interrupts.WINDBG.VECTOR, this.intWindowsDebugger.bind(this));
+        if (!DEBUG && !cmp.getMachineParm('symbols')) {
+            this.fWinDbg = this.fWinDbgRM = false;
+        } else {
+            if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED) {
+                this.fWinDbg = null;
+                this.cTrapFaults = 0;
+                this.fIgnoreNextCheckFault = false;
+                this.cpu.addIntNotify(Interrupts.WINCB.VECTOR, this.intWindowsCallBack.bind(this));
+                this.cpu.addIntNotify(Interrupts.WINDBG.VECTOR, this.intWindowsDebugger.bind(this));
+            }
+            if (Interrupts.WINDBGRM.ENABLED) {
+                this.fWinDbgRM = null;
+                this.cpu.addIntNotify(Interrupts.WINDBGRM.VECTOR, this.intWindowsDebuggerRM.bind(this));
+            }
         }
-        if (Interrupts.WINDBGRM.ENABLED) {
-            this.fWinDbgRM = null;
-            this.cpu.addIntNotify(Interrupts.WINDBGRM.VECTOR, this.intWindowsDebuggerRM.bind(this));
-        }
-
         this.setReady();
     }
 
@@ -4810,6 +4813,7 @@ export default class Debuggerx86 extends DbgLib {
      */
     dumpSymbols()
     {
+        let cSymbols = 0;
         for (let iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
             let symbolTable = this.aSymbolTable[iTable];
             for (let sSymbol in symbolTable.aSymbols) {
@@ -4822,8 +4826,10 @@ export default class Debuggerx86 extends DbgLib {
                 let sSymbolOrig = symbolTable.aSymbols[sSymbol]['l'];
                 if (sSymbolOrig) sSymbol = sSymbolOrig;
                 this.printf("%s %s\n", this.toHexOffset(offSymbol, selSymbol), sSymbol);
+                cSymbols++;
             }
         }
+        if (!cSymbols) this.printf("no symbols\n");
     }
 
     /**
