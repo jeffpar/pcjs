@@ -280,9 +280,8 @@ export default class Debuggerx86 extends DbgLib {
         this.messageDump(MESSAGE.MEM,  function onDumpMem(asArgs) { dbg.dumpMem(asArgs); });
         this.messageDump(MESSAGE.TSS,  function onDumpTSS(asArgs) { dbg.dumpTSS(asArgs); });
 
-        if (!DEBUG && !cmp.getMachineParm('symbols')) {
-            this.fWinDbg = this.fWinDbgRM = false;
-        } else {
+        let fSymbols = cmp.getMachineBoolean('symbols');
+        if (DEBUG && fSymbols !== false || fSymbols) {
             if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED) {
                 this.fWinDbg = null;
                 this.cTrapFaults = 0;
@@ -306,7 +305,7 @@ export default class Debuggerx86 extends DbgLib {
      * @param {number} nSegment (logical segment number)
      * @param {number} sel (current selector)
      * @param {boolean} fCode (true if code segment, false if data segment)
-     * @param {boolean} [fPrint] (false means we're merely monitoring, so let WDEB386 print its own notifications)
+     * @param {boolean|null} [fPrint] (false means we're merely monitoring, so let WDEB386 print its own notifications)
      */
     addSegmentInfo(dbgAddr, nSegment, sel, fCode, fPrint)
     {
@@ -328,7 +327,7 @@ export default class Debuggerx86 extends DbgLib {
      *
      * @this {Debuggerx86}
      * @param {number} sel
-     * @param {boolean} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
+     * @param {boolean|null} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
      */
     removeSegmentInfo(sel, fPrint)
     {
@@ -348,7 +347,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {DbgAddrx86} dbgAddr (address of D386_Device_Params)
      * @param {boolean} fCode (true if code section, false if data section)
-     * @param {boolean} [fPrint] (false means we're merely monitoring, so let WDEB386 print its own notifications)
+     * @param {boolean|null} [fPrint] (false means we're merely monitoring, so let WDEB386 print its own notifications)
      */
     addSectionInfo(dbgAddr, fCode, fPrint)
     {
@@ -388,7 +387,7 @@ export default class Debuggerx86 extends DbgLib {
      * @this {Debuggerx86}
      * @param {number} nSegment (logical segment number)
      * @param {DbgAddrx86} dbgAddr (address of module)
-     * @param {boolean} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
+     * @param {boolean|null} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
      */
     removeSectionInfo(nSegment, dbgAddr, fPrint)
     {
@@ -450,7 +449,7 @@ export default class Debuggerx86 extends DbgLib {
                  *      0x1     data selector
                  *  DX:EBX -> D386_Device_Params structure (see addSectionInfo() for details)
                  */
-                this.addSectionInfo(this.newAddr(cpu.regEBX, DX), !SI, !!this.fWinDbg);
+                this.addSectionInfo(this.newAddr(cpu.regEBX, DX), !SI, this.fWinDbg);
                 break;
             }
         }
@@ -535,11 +534,11 @@ export default class Debuggerx86 extends DbgLib {
             break;
 
         case Interrupts.WINDBG.LOADSEG:             // 0x0050
-            this.addSegmentInfo(this.newAddr(DI, ES), BX+1, CX, !(SI & 0x1), !!this.fWinDbg);
+            this.addSegmentInfo(this.newAddr(DI, ES), BX+1, CX, !(SI & 0x1), this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.FREESEG:             // 0x0052
-            this.removeSegmentInfo(BX, !!this.fWinDbg);
+            this.removeSegmentInfo(BX, this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.KRNLVARS:            // 0x005A
@@ -624,7 +623,7 @@ export default class Debuggerx86 extends DbgLib {
              *      0x1     data selector
              *  DX:EBX -> D386_Device_Params structure (see addSectionInfo() for details)
              */
-            this.addSectionInfo(this.newAddr(cpu.regEBX, DX), !SI, !!this.fWinDbg);
+            this.addSectionInfo(this.newAddr(cpu.regEBX, DX), !SI, this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.FREESEG32:           // 0x0152
@@ -632,7 +631,7 @@ export default class Debuggerx86 extends DbgLib {
              *  BX == segment number
              *  DX:EDI -> module name
              */
-            this.removeSectionInfo(BX, this.newAddr(cpu.regEDI, DX), !!this.fWinDbg);
+            this.removeSectionInfo(BX, this.newAddr(cpu.regEDI, DX), this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.FORCEDBP:            // 0xF002
@@ -745,7 +744,7 @@ export default class Debuggerx86 extends DbgLib {
             break;
 
         case Interrupts.WINDBGRM.FREESEG:           // 0x48
-            this.removeSegmentInfo(BX, !!this.fWinDbg);
+            this.removeSegmentInfo(BX, this.fWinDbg);
             break;
 
         case Interrupts.WINDBGRM.REMOVESEGS:        // 0x4F
@@ -762,7 +761,7 @@ export default class Debuggerx86 extends DbgLib {
                  *  CX == paragraph
                  *  ES:DI -> module name
                  */
-                this.addSegmentInfo(this.newAddr(DI, ES), 0, CX, true, !!this.fWinDbgRM);
+                this.addSegmentInfo(this.newAddr(DI, ES), 0, CX, true, this.fWinDbgRM);
             }
             else if (AL < 0x80) {
                 /**
@@ -778,7 +777,7 @@ export default class Debuggerx86 extends DbgLib {
                  *  DX == actual selector (if 0x40 or 0x41)
                  *  ES:DI -> module name
                  */
-                this.addSegmentInfo(this.newAddr(DI, ES), BX+1, (AL & 0x40)? DX : CX, !(AL & 0x1), !!this.fWinDbgRM);
+                this.addSegmentInfo(this.newAddr(DI, ES), BX+1, (AL & 0x40)? DX : CX, !(AL & 0x1), this.fWinDbgRM);
             }
             else {
                 /**
@@ -787,7 +786,7 @@ export default class Debuggerx86 extends DbgLib {
                  *      0x81    device driver data seg
                  *  ES:DI -> D386_Device_Params structure (see addSectionInfo() for details)
                  */
-                this.addSectionInfo(this.newAddr(DI, ES), !(AL & 0x1), !!this.fWinDbgRM);
+                this.addSectionInfo(this.newAddr(DI, ES), !(AL & 0x1), this.fWinDbgRM);
             }
             if (this.fWinDbgRM) {
                 cpu.regEAX = (cpu.regEAX & ~0xff) | 0x01;
@@ -2137,12 +2136,12 @@ export default class Debuggerx86 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = MESSAGE.WARNING;
+        this.bitsMessage = MESSAGE.WARNING + (DEBUG? MESSAGE.DEBUG : 0);
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         let aEnable = this.parseCommand(sEnable, false, ',');
         if (aEnable.length) {
-            this.bitsMessage = MESSAGE.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
+            this.bitsMessage -= MESSAGE.WARNING;    // when specific messages are being enabled, WARNING must be explicitly set
             for (let m in MESSAGE.NAMES) {
                 if (UsrLib.indexOf(aEnable, m) >= 0) {
                     this.bitsMessage += MESSAGE.NAMES[m];
@@ -2150,7 +2149,7 @@ export default class Debuggerx86 extends DbgLib {
                 }
             }
         }
-        this.historyInit();                     // call this just in case MESSAGE.INT was turned on
+        this.historyInit();                         // call this just in case MESSAGE.INT was turned on
     }
 
     /**
@@ -3601,7 +3600,7 @@ export default class Debuggerx86 extends DbgLib {
                              */
                             if (dbgAddrBreak.nDebugState) {
                                 this.incAddr(dbgAddrBreak, 2);
-                                this.addVxDSymbol(dbgAddrBreak.nDebugState, dbgAddrBreak);
+                                this.addVxDSymbol(dbgAddrBreak.nDebugState, dbgAddrBreak, this.fWinDbg);
                                 fBreak = false;
                             }
                             fTempBreak = true;
@@ -3695,7 +3694,7 @@ export default class Debuggerx86 extends DbgLib {
     {
         if (this.vectorSkip < 0) {
             this.vectorTrace = vector;
-            if (vector == Interrupts.VxD.VECTOR && fProt) {
+            if (vector == Interrupts.VxD.VECTOR && fProt && this.fWinDbg !== undefined) {
                 let dbgAddr = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
                 /**
                  * Since nDebugState is normally only used by addresses stored in the history buffer
@@ -3708,7 +3707,7 @@ export default class Debuggerx86 extends DbgLib {
                 this.incAddr(dbgAddr, -2);
                 this.setTempBreakpoint(dbgAddr);
             }
-            else if (this.vectorHalt) {
+            if (this.vectorHalt) {
                 let i = this.findVectorBP(vector);
                 if (i >= 0) {
                     let vbp = this.aVectorBP[i];
@@ -4710,14 +4709,15 @@ export default class Debuggerx86 extends DbgLib {
     }
 
     /**
-     * addVxDSymbol(id, dbgAddr)
+     * addVxDSymbol(id, dbgAddr, fPrint)
      *
      * @this {Debuggerx86}
      * @param {number} id
      * @param {DbgAddrx86} dbgAddr
-     * @returns {boolean} (true if symbol added OR matching symbol already exists, false if not)
+     * @param {boolean} [fPrint]
+     * @returns {boolean|null} (true if symbol added OR matching symbol already exists, false if not)
      */
-    addVxDSymbol(id, dbgAddr)
+    addVxDSymbol(id, dbgAddr, fPrint)
     {
         let idSrv = id & 0xffff;
         let idVxD = (id >> 16) & 0xffff;
@@ -4749,7 +4749,7 @@ export default class Debuggerx86 extends DbgLib {
                             if (result < 0) {
                                 symbolTable.aOffsets.splice(-(result + 1), 0, pair);
                                 symbolTable.aSymbols[keySymbol] = {'o': offSymbol, 's': symbolTable.sel};
-                                if (sSymbol[0] != '$') {
+                                if (fPrint && sSymbol[0] != '$') {
                                     dbg.printf(MESSAGE.DEBUG, "%s.%s: %x\n", sVxD, sSymbol, offSymbol);
                                 }
                                 return true;
