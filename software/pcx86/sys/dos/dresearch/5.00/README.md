@@ -2,6 +2,7 @@
 layout: page
 title: Digital Research DR DOS 5.00
 permalink: /software/pcx86/sys/dos/dresearch/5.00/
+preview: https://diskettes.pcjs.org/pcx86/sys/dos/dresearch/5.00/DRDOS500-1991-02-DISK1.png
 redirect_from: /disks/pcx86/dos/dresearch/5.00/
 machines:
   - id: ibm5170-drdos500
@@ -154,6 +155,8 @@ machines:
            28 file(s)     313179 bytes
                            34816 bytes free
 
+![DR DOS 5.00 (1991-02 Disk 1)]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/5.00/DRDOS500-1991-02-DISK1.png)
+
 ### Directory of DR DOS 5.00 (1991-02 Disk 2)
 
      Volume in drive A has no label
@@ -172,6 +175,8 @@ machines:
     MEM      EXE      9377   2-01-91   5:00a
            11 file(s)     195328 bytes
                           161792 bytes free
+
+![DR DOS 5.00 (1991-02 Disk 2)]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/5.00/DRDOS500-1991-02-DISK2.png)
 
 ### Directory of DR DOS 5.00 (1991-02 Disk 3)
 
@@ -203,6 +208,8 @@ machines:
            22 file(s)     331137 bytes
                            20480 bytes free
 
+![DR DOS 5.00 (1991-02 Disk 3)]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/5.00/DRDOS500-1991-02-DISK3.png)
+
 ### Directory of DR DOS 5.00 (1991-02 Disk 4)
 
      Volume in drive A has no label
@@ -222,3 +229,5 @@ machines:
     UDUNI9   VGA     53248   2-01-91   5:00a
            12 file(s)     356367 bytes
                             2048 bytes free
+
+![DR DOS 5.00 (1991-02 Disk 4)]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/5.00/DRDOS500-1991-02-DISK4.png)

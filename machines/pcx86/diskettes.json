@@ -1638,21 +1638,25 @@
 							{
 								"@title": "DR DOS 5.00 (1991-02 Disk 1)",
 								"@diskette": "DRDOS500-1991-02-DISK1.json",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							},
 							{
 								"@title": "DR DOS 5.00 (1991-02 Disk 2)",
 								"@diskette": "DRDOS500-1991-02-DISK2.json",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							},
 							{
 								"@title": "DR DOS 5.00 (1991-02 Disk 3)",
 								"@diskette": "DRDOS500-1991-02-DISK3.json",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							},
 							{
 								"@title": "DR DOS 5.00 (1991-02 Disk 4)",
 								"@diskette": "DRDOS500-1991-02-DISK4.json",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							}
 						]
