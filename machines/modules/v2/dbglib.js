@@ -58,7 +58,7 @@ export default class DbgLib extends Component {
      *      base: the base to use for most numeric input/output (default is 16)
      *
      * The DbgLib component is a shared component containing a subset of functionality used by
-     * the other CPU-specific Debuggers (eg, DebuggerX86).  Over time, the goal is to factor out as
+     * the other CPU-specific Debuggers (eg, Debuggerx86).  Over time, the goal is to factor out as
      * much common debugging support as possible from those components into this one.
      *
      * @this {DbgLib}
@@ -563,7 +563,7 @@ export default class DbgLib extends Component {
             case ',,':
                 valNew = this.truncate(val1, 18, true) * Math.pow(2, 18) + this.truncate(val2, 18, true);
                 break;
-            case '_':
+         // case '_':
             case '^_':
                 valNew = val1;
                 /*
@@ -881,6 +881,8 @@ export default class DbgLib extends Component {
              * added '!' as an alias for '|' (bitwise inclusive-or), '^-' as an alias for '~' (one's complement operator),
              * and '_' as a shift operator (+/- values specify a left/right shift, and the count is not limited to 32).
              *
+             * 2023 Update: I've removed '_' as a shift operator, because it interferes with symbols that use underscores.
+             *
              * And to avoid conflicts with MACRO-10 syntax, I've replaced the original mod operator ('%') with '^/'.
              *
              * The MACRO-10 binary shifting suffix ('B') is a bit more problematic, since a capital B can also appear
@@ -901,7 +903,7 @@ export default class DbgLib extends Component {
              * to remove spaces entirely, because if an operator-less expression like "A B" was passed in, we would want
              * that to generate an error; if we converted it to "AB", evaluation might inadvertently succeed.
              */
-            let regExp = /({|}|\|\||&&|\||\^!|\^B|\^O|\^D|\^L|\^-|~|\^_|_|&|!=|!|==|>=|>>>|>>|>|<=|<<|<|-|\+|\^\/|\/|\*|,,| )/;
+            let regExp = /({|}|\|\||&&|\||\^!|\^B|\^O|\^D|\^L|\^-|~|\^_|&|!=|!|==|>=|>>>|>>|>|<=|<<|<|-|\+|\^\/|\/|\*|,,| )/;
             if (this.nBase != 16) {
                 sExp = sExp.replace(/(^|[^A-Z0-9$%.])([0-9]+)B/, "$1$2^_").replace(/\s+/g, ' ');
             }
@@ -1324,7 +1326,7 @@ if (DEBUGGER) {
         '^/':   14,     // remainder
         '/':    14,     // division
         '*':    14,     // multiplication
-        '_':    19,     // MACRO-10 shift operator
+    //  '_':    19,     // MACRO-10 shift operator
         '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
         '{':    20,     // open grouped expression (converted from achGroup[0])
         '}':    20      // close grouped expression (converted from achGroup[1])
@@ -1351,7 +1353,7 @@ if (DEBUGGER) {
         '|':    15,     // bitwise OR
         '^!':   15,     // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
         '&':    15,     // bitwise AND
-        '_':    19,     // MACRO-10 shift operator
+    //  '_':    19,     // MACRO-10 shift operator
         '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
         '{':    20,     // open grouped expression (converted from achGroup[0])
         '}':    20      // close grouped expression (converted from achGroup[1])

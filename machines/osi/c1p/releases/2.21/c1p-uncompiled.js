@@ -1645,26 +1645,24 @@ class StrLib {
             k = k.replace(/([\\[\]*{}().+?|$])/g, "\\$1");
             sMatch += (sMatch? '|' : '') + k;
         }
-        return s.replace(new RegExp('(' + sMatch + ')', "g"), function(m)
-        {
+        return s.replace(new RegExp('(' + sMatch + ')', "g"), function(m) {
             return a[m];
         });
     }
 
     /**
-     * pad(s, cch, fPadLeft)
+     * pad(s, cch)
      *
-     * NOTE: the maximum amount of padding currently supported is 40 spaces.
+     * Use a negative cch to pad on the right (ie, left-align), similar to sprintf("%-Ns", s).
+     * This also truncates the string if it's longer than abs(cch), similar to sprintf("%.Ns", s).
      *
      * @param {string} s is a string
      * @param {number} cch is desired length
-     * @param {boolean} [fPadLeft] (default is padding on the right)
      * @returns {string} the original string (s) with spaces padding it to the specified length
      */
-    static pad(s, cch, fPadLeft)
+    static pad(s, cch)
     {
-        let sPadding = "                                        ";
-        return fPadLeft? (sPadding + s).slice(-cch) : (s + sPadding).slice(0, cch);
+        return StrLib.sprintf('%' + cch + '.' + Math.abs(cch) + 's', s);
     }
 
     /**
@@ -1724,7 +1722,7 @@ class StrLib {
     {
         let cch = s.length;
         s = s.replace(/^0+([0-9A-F]+)$/i, "$1");
-        if (fPad) s = StrLib.pad(s, cch, true);
+        if (fPad) s = StrLib.pad(s, cch);
         return s;
     }
 

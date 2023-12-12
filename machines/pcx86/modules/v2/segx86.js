@@ -9,7 +9,6 @@
 
 import MESSAGE from "./message.js";
 import X86 from "./x86.js";
-import StrLib from "../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, I386 } from "./defines.js";
 
 /*
@@ -27,14 +26,14 @@ import { DEBUG, DEBUGGER, I386 } from "./defines.js";
  */
 
 /**
- * @class SegX86
+ * @class Segx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-export default class SegX86 {
+export default class Segx86 {
     /**
-     * SegX86(cpu, sName)
+     * Segx86(cpu, sName)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {CPUx86} cpu
      * @param {number} id
      * @param {string} [sName] segment register name
@@ -43,10 +42,6 @@ export default class SegX86 {
     constructor(cpu, id, sName, fProt)
     {
         this.cpu = cpu;
-        /**
-         * @type {DebuggerX86}
-         */
-        this.dbg = cpu.dbg;
         this.id = id;
         this.sName = sName || "";
         this.sel = 0;
@@ -87,7 +82,7 @@ export default class SegX86 {
          *
          * loadIDT() sets fCall to true unconditionally in protected-mode (fCall has no meaning in real-mode).
          */
-        if (this.id == 1 /* SegX86.ID.CODE */) {        // don't use SegX86.ID.CODE until it's defined, or the Closure Compiler won't inline it
+        if (this.id == 1 /* Segx86.ID.CODE */) {        // don't use Segx86.ID.CODE until it's defined, or the Closure Compiler won't inline it
             this.offIP = 0;
             this.fCall = null;
             this.fStackSwitch = false;
@@ -97,7 +92,7 @@ export default class SegX86 {
 
         this.updateMode(true, fProt);
 
-        if (this.id == 0 /* SegX86.ID.NULL */) {
+        if (this.id == 0 /* Segx86.ID.NULL */) {
             this.checkRead = this.checkReadWriteNone;
             this.checkWrite = this.checkReadWriteNone;
         }
@@ -112,14 +107,14 @@ export default class SegX86 {
      * "call break" address.  Which is probably a bad idea, so your function should probably always
      * return false.  Just sayin'.  TODO: Should probably just force all "call break" calls to be skipped.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {function()} fn
      * @returns {Array.<number>} containing offset and selector of call-break address
      */
     addCallBreak(fn)
     {
         this.aCallBreaks.push(fn);
-        return [this.aCallBreaks.length, SegX86.CALLBREAK_SEL];
+        return [this.aCallBreaks.length, Segx86.CALLBREAK_SEL];
     }
 
     /**
@@ -127,7 +122,7 @@ export default class SegX86 {
      *
      * A simple wrapper function that encapsulates setting offIP and fCall for segCS loads.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off
      * @param {number} sel
      * @param {boolean|undefined} fCall is true if CALLF in progress, false if RETF/IRET in progress, undefined otherwise
@@ -145,7 +140,7 @@ export default class SegX86 {
      *
      * The default segment load() function for real-mode.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} sel
      * @param {boolean} [fProbe] (here only to make the function signatures of loadReal() and loadProt() match)
      * @returns {number} base address of selected segment
@@ -181,7 +176,7 @@ export default class SegX86 {
      *
      * IDT descriptor entries are handled separately by loadIDT(), which is mapped to loadIDTReal() or loadIDTProt().
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} sel
      * @param {boolean} [fProbe]
      * @returns {number} base address of selected segment, or X86.ADDR_INVALID if error
@@ -224,21 +219,22 @@ export default class SegX86 {
                 cpu.nStepCycles -= 15;
                 return this.loadDesc8(addrDesc, sel, fProbe);
             }
-            if (this.id < SegX86.ID.VER) {
-                X86.helpFault.call(cpu, fProbe && this.id == SegX86.ID.STACK? X86.EXCEPTION.TS_FAULT : X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
+            if (this.id < Segx86.ID.VER) {
+                X86.helpFault.call(cpu, fProbe && this.id == Segx86.ID.STACK? X86.EXCEPTION.TS_FAULT : X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
             }
         }
         return X86.ADDR_INVALID;
     }
 
     /**
-     * loadIDTReal(nIDT)
+     * loadIDTReal(nIDT, nBytes)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} nIDT
+     * @param {number} [nBytes]
      * @returns {number} address from selected vector
      */
-    loadIDTReal(nIDT)
+    loadIDTReal(nIDT, nBytes = 0)
     {
         let cpu = this.cpu;
         /*
@@ -247,6 +243,13 @@ export default class SegX86 {
          * there's no way to issue an interrupt with a vector > 0xff.  Just something to be aware of.
          */
         cpu.assert(nIDT >= 0 && nIDT < 256 && !cpu.addrIDT && cpu.addrIDTLimit >= 0x3ff);
+
+        if (DEBUGGER && cpu.dbg) {
+            if (cpu.dbg.checkVectorBP(nIDT, nBytes, false)) {
+                return X86.ADDR_INVALID;
+            }
+        }
+
         /*
          * Intel documentation for INT/INTO under "REAL ADDRESS MODE EXCEPTIONS" says:
          *
@@ -261,33 +264,42 @@ export default class SegX86 {
     }
 
     /**
-     * loadIDTProt(nIDT)
+     * loadIDTProt(nIDT, nBytes)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} nIDT
+     * @param {number} [nBytes]
      * @returns {number} address from selected vector, or X86.ADDR_INVALID if error
      */
-    loadIDTProt(nIDT)
+    loadIDTProt(nIDT, nBytes = 0)
     {
         let cpu = this.cpu;
         cpu.assert(nIDT >= 0 && nIDT < 256);
 
-        nIDT <<= 3;
-        let addrDesc = (cpu.addrIDT + nIDT)|0;
+        if (DEBUGGER && cpu.dbg) {
+            if (cpu.dbg.checkVectorBP(nIDT, nBytes, true)) {
+                return X86.ADDR_INVALID;
+            }
+        }
+
+        let offIDT = nIDT << 3;
+        let addrDesc = (cpu.addrIDT + offIDT)|0;
         if (((cpu.addrIDTLimit - addrDesc)|0) >= 7) {
             this.fCall = true;
-            let addr = this.loadDesc8(addrDesc, nIDT);
-            if (addr !== X86.ADDR_INVALID) addr += this.offIP;
+            let addr = this.loadDesc8(addrDesc, offIDT);
+            if (addr !== X86.ADDR_INVALID) {
+                addr += this.offIP;
+            }
             return addr;
         }
-        X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, nIDT | X86.ERRCODE.IDT);
+        X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, offIDT | X86.ERRCODE.IDT);
         return X86.ADDR_INVALID;
     }
 
     /**
      * checkReadWriteNone(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address
@@ -300,7 +312,7 @@ export default class SegX86 {
     /**
      * checkReadWriteReal(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address
@@ -324,7 +336,7 @@ export default class SegX86 {
     /**
      * checkReadProt(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, or X86.ADDR_INVALID if not
@@ -344,7 +356,7 @@ export default class SegX86 {
     /**
      * checkReadProtDown(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
@@ -364,7 +376,7 @@ export default class SegX86 {
     /**
      * checkReadProtDisallowed(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
@@ -378,7 +390,7 @@ export default class SegX86 {
     /**
      * checkWriteProt(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
@@ -398,7 +410,7 @@ export default class SegX86 {
     /**
      * checkWriteProtDown(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
@@ -418,7 +430,7 @@ export default class SegX86 {
     /**
      * checkWriteProtDisallowed(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
@@ -432,7 +444,7 @@ export default class SegX86 {
     /**
      * checkReadDebugger(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, or X86.ADDR_INVALID if error
@@ -458,7 +470,7 @@ export default class SegX86 {
     /**
      * checkWriteDebugger(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, or X86.ADDR_INVALID if error
@@ -486,7 +498,7 @@ export default class SegX86 {
      *
      * Used to manually load a segment register from the data provided (see LOADALL386).
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} sel
      * @param {number} acc
      * @param {number} base
@@ -510,7 +522,7 @@ export default class SegX86 {
          * in particular, we must not allow a real-mode LOADALL to modify their mode, because the rest of PCx86
          * assumes that their mode will never change (they were allocated with fProt set to true).
          */
-        if (this.id < SegX86.ID.TSS) this.updateMode(true);
+        if (this.id < Segx86.ID.TSS) this.updateMode(true);
 
         if (DEBUG) this.messageSeg(sel, base, limit, this.type);
     }
@@ -524,7 +536,7 @@ export default class SegX86 {
      *      word 1: base address high (0-7), segment type (8-11), descriptor type (12), DPL (13-14), present bit (15)
      *      word 2: segment limit (0-15)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} addrDesc is the descriptor address
      * @param {number} sel is the associated selector
      * @returns {number} base address of selected segment
@@ -550,7 +562,7 @@ export default class SegX86 {
          * in particular, we must not allow a real-mode LOADALL to modify their mode, because the rest of PCx86
          * assumes that their mode will never change (they were allocated with fProt set to true).
          */
-        if (this.id < SegX86.ID.TSS) this.updateMode(true);
+        if (this.id < Segx86.ID.TSS) this.updateMode(true);
 
         if (DEBUG) this.messageSeg(sel, base, limit, this.type);
 
@@ -569,19 +581,19 @@ export default class SegX86 {
      *
      * See X86.DESC for offset and bit definitions.
      *
-     * When fProbe is set, we do NOT modify the public properties of the SegX86 object (see class SegX86 above).
+     * When fProbe is set, we do NOT modify the public properties of the Segx86 object (see class Segx86 above).
      * We will generate a fault if any of the usual error conditions are detected (and return X86.ADDR_INVALID), but
-     * otherwise, we merely stash all the descriptor values it reads in the SegX86's private "probe" object.
+     * otherwise, we merely stash all the descriptor values it reads in the Segx86's private "probe" object.
      *
      * Probed loads allow us to deal with complex segment load operations (ie, those involving an implied stack-switch
      * or task-switch), by allowing us to probe all the new selectors and generate the necessary faults before modifying
      * any segment registers; if all the probes succeed, then the original load can proceed.
      *
-     * The next non-probed load of a probed selector will move those probed descriptor values into the SegX86 object,
+     * The next non-probed load of a probed selector will move those probed descriptor values into the Segx86 object,
      * saving us from having to reload and reparse the descriptor.  However, if a different selector is loaded between
      * the probed and non-probed loads, the probed data is tossed.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} addrDesc is the descriptor address
      * @param {number} sel is the associated selector, or nIDT*8 if IDT descriptor
      * @param {boolean} [fProbe] (true if this is a probe)
@@ -637,10 +649,10 @@ export default class SegX86 {
 
         switch (this.id) {
 
-        case SegX86.ID.CODE:
+        case Segx86.ID.CODE:
 
             /*
-             * NOTE: Since we are SegX86.ID.CODE, we can use this.cpl instead of the more convoluted
+             * NOTE: Since we are Segx86.ID.CODE, we can use this.cpl instead of the more convoluted
              * this.cpu.segCS.cpl.
              */
             fCall = this.fCall;
@@ -665,7 +677,7 @@ export default class SegX86 {
              * a reasonable solution, and it's likely the best we can do without injecting code into the
              * machine that we could address -- and even then, it would not be a mode-independent address.
              */
-            if (fCall && sel == SegX86.CALLBREAK_SEL && this.aCallBreaks.length) {
+            if (fCall && sel == Segx86.CALLBREAK_SEL && this.aCallBreaks.length) {
                 let iBreak = this.offIP - 1;
                 let fnCallBreak = this.aCallBreaks[iBreak];
                 cpu.assert(fnCallBreak);
@@ -893,7 +905,7 @@ export default class SegX86 {
 
                     /*
                      * TODO: Consider whether we can skip this loadProt() call if this.sel already contains selCode
-                     * (and the previous mode matches, which might require we cache the mode in the SegX86 object, too).
+                     * (and the previous mode matches, which might require we cache the mode in the Segx86 object, too).
                      */
                     if (this.loadProt(selCode, false) === X86.ADDR_INVALID) {
                         return X86.ADDR_INVALID;
@@ -972,7 +984,7 @@ export default class SegX86 {
             }
             break;
 
-        case SegX86.ID.DATA:
+        case Segx86.ID.DATA:
             if (selMasked) {
                 /*
                  * OS/2 1.0 faults on segments with "empty descriptors" multiple times during boot; for example:
@@ -1023,7 +1035,7 @@ export default class SegX86 {
             }
             break;
 
-        case SegX86.ID.STACK:
+        case Segx86.ID.STACK:
             if (!selMasked || type < X86.DESC.ACC.TYPE.SEG || (type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.WRITABLE)) != X86.DESC.ACC.TYPE.WRITABLE) {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
                 return X86.ADDR_INVALID;
@@ -1034,7 +1046,7 @@ export default class SegX86 {
             }
             break;
 
-        case SegX86.ID.TSS:
+        case Segx86.ID.TSS:
             typeTSS = type & ~X86.DESC.ACC.TYPE.TSS_BUSY;
             if (!selMasked || typeTSS != X86.DESC.ACC.TYPE.TSS286 && typeTSS != X86.DESC.ACC.TYPE.TSS386) {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
@@ -1050,7 +1062,7 @@ export default class SegX86 {
             }
             break;
 
-        case SegX86.ID.VER:
+        case Segx86.ID.VER:
             /*
              * For LSL, we must support any descriptor marked X86.DESC.ACC.TYPE.SEG, as well as TSS and LDT descriptors.
              */
@@ -1063,7 +1075,7 @@ export default class SegX86 {
             /*
              * The only other cases are:
               *
-              *     SegX86.ID.NULL, SegX86.ID.LDT, and SegX86.ID.DBG
+              *     Segx86.ID.NULL, Segx86.ID.LDT, and Segx86.ID.DBG
               *
               * which correspond to segNULL, segLDT and segDebugger; however, segLDT is the only one that might require further validation (TODO: Investigate).
              */
@@ -1132,7 +1144,7 @@ export default class SegX86 {
      * TODO: Add TSS validity checks and appropriate generation of TS_FAULT exceptions; the only rudimentary checks
      * we currently perform are of the GP_FAULT variety.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} selNew
      * @param {boolean|null} [fNest] is true if nesting, false if un-nesting, null if neither
      * @returns {boolean} true if successful, false if error
@@ -1165,8 +1177,8 @@ export default class SegX86 {
         }
 
         let addrNew = cpu.segTSS.base;
-        if (DEBUG && DEBUGGER && this.dbg) {
-            this.dbg.printf(MESSAGE.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
+        if (DEBUG && DEBUGGER && cpu.dbg) {
+            cpu.dbg.printf(MESSAGE.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
         }
 
         if (fNest !== false) {
@@ -1312,7 +1324,7 @@ export default class SegX86 {
      * WARNING: Since the CPU must maintain regLIP as the sum of the CS base and the current IP, all calls
      * to segCS.setBase() need to go through cpu.setCSBase().
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} addr
      * @returns {number} addr, truncated as needed
      */
@@ -1326,10 +1338,10 @@ export default class SegX86 {
      * save()
      *
      * Early versions of PCx86 saved only segment selectors, since that's all that mattered in real-mode;
-     * newer versions need to save/restore all the "core" properties of the SegX86 object (ie, properties other
+     * newer versions need to save/restore all the "core" properties of the Segx86 object (ie, properties other
      * than those that updateMode() will take care of restoring later).
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @returns {Array}
      */
     save()
@@ -1357,10 +1369,10 @@ export default class SegX86 {
      * restore(a)
      *
      * Early versions of PCx86 saved only segment selectors, since that's all that mattered in real-mode;
-     * newer versions need to save/restore all the "core" properties of the SegX86 object (ie, properties other
+     * newer versions need to save/restore all the "core" properties of the Segx86 object (ie, properties other
      * than those that updateMode() will take care of restoring later).
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {Array|number} a
      */
     restore(a)
@@ -1392,7 +1404,7 @@ export default class SegX86 {
      * Ensures that the segment register's access (ie, load and check methods) matches the specified (or current)
      * operating mode (real or protected).
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {boolean} [fLoad] true if the segment was just (re)loaded, false if not
      * @param {boolean} [fProt] true for protected-mode access, false for real-mode access, undefined for current mode
      * @param {boolean} [fV86] true for V86-mode access, false for protected-mode access, undefined for current mode
@@ -1471,7 +1483,7 @@ export default class SegX86 {
                     if (this.checkWrite == this.checkWriteProt) this.checkWrite = this.checkWriteProtDown;
                     this.fExpDown = true;
                 }
-                if (fLoad && this.id < SegX86.ID.VER) {
+                if (fLoad && this.id < Segx86.ID.VER) {
                     /*
                      * We must update the descriptor's ACCESSED bit whenever the segment is "accessed" (ie,
                      * loaded); unlike the ACCESSED and DIRTY bits in PTEs, a descriptor ACCESSED bit is only
@@ -1542,7 +1554,7 @@ export default class SegX86 {
     /**
      * messageSeg(sel, base, limit, type, ext)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} sel
      * @param {number} base
      * @param {number} limit
@@ -1552,11 +1564,12 @@ export default class SegX86 {
     messageSeg(sel, base, limit, type, ext)
     {
         if (DEBUG) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MESSAGE.SEG)) {
+            let dbg = this.cpu.dbg;
+            if (DEBUGGER && dbg && dbg.messageEnabled(MESSAGE.SEG)) {
                 let ch = (this.sName.length < 3? " " : "");
                 let sDPL = " dpl=" + this.dpl;
-                if (this.id == SegX86.ID.CODE) sDPL += " cpl=" + this.cpl;
-                this.dbg.printf(MESSAGE.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
+                if (this.id == Segx86.ID.CODE) sDPL += " cpl=" + this.cpl;
+                dbg.printf(MESSAGE.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
             }
             /*
              * Unless I've got a bug that's causing descriptor corruption, it appears that Windows 3.0 may be setting the
@@ -1578,7 +1591,7 @@ export default class SegX86 {
      *
      * This is a neutered version of loadProt() designed for the Debugger.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} sel
      * @returns {number} base address of selected segment, or X86.ADDR_INVALID if error
      */
@@ -1636,7 +1649,7 @@ export default class SegX86 {
     /**
      * loadAcc(sel, fGDT)
      *
-     * this {SegX86}
+     * this {Segx86}
      * param {number} sel (protected-mode only)
      * param {boolean} [fGDT] is true if sel must be in the GDT
      * return {number} ACC field from descriptor, or X86.DESC.ACC.INVALID if error
@@ -1666,7 +1679,7 @@ export default class SegX86 {
      */
 }
 
-SegX86.ID = {
+Segx86.ID = {
     NULL:   0,          // "NULL"
     CODE:   1,          // "CS"
     DATA:   2,          // "DS", "ES", "FS", "GS"
@@ -1677,4 +1690,4 @@ SegX86.ID = {
     DBG:    7           // "DBG"
 };
 
-SegX86.CALLBREAK_SEL = 0x0001;
+Segx86.CALLBREAK_SEL = 0x0001;

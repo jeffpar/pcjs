@@ -2604,26 +2604,24 @@ class StrLib {
             k = k.replace(/([\\[\]*{}().+?|$])/g, "\\$1");
             sMatch += (sMatch? '|' : '') + k;
         }
-        return s.replace(new RegExp('(' + sMatch + ')', "g"), function(m)
-        {
+        return s.replace(new RegExp('(' + sMatch + ')', "g"), function(m) {
             return a[m];
         });
     }
 
     /**
-     * pad(s, cch, fPadLeft)
+     * pad(s, cch)
      *
-     * NOTE: the maximum amount of padding currently supported is 40 spaces.
+     * Use a negative cch to pad on the right (ie, left-align), similar to sprintf("%-Ns", s).
+     * This also truncates the string if it's longer than abs(cch), similar to sprintf("%.Ns", s).
      *
      * @param {string} s is a string
      * @param {number} cch is desired length
-     * @param {boolean} [fPadLeft] (default is padding on the right)
      * @returns {string} the original string (s) with spaces padding it to the specified length
      */
-    static pad(s, cch, fPadLeft)
+    static pad(s, cch)
     {
-        let sPadding = "                                        ";
-        return fPadLeft? (sPadding + s).slice(-cch) : (s + sPadding).slice(0, cch);
+        return StrLib.sprintf('%' + cch + '.' + Math.abs(cch) + 's', s);
     }
 
     /**
@@ -2683,7 +2681,7 @@ class StrLib {
     {
         let cch = s.length;
         s = s.replace(/^0+([0-9A-F]+)$/i, "$1");
-        if (fPad) s = StrLib.pad(s, cch, true);
+        if (fPad) s = StrLib.pad(s, cch);
         return s;
     }
 
@@ -5930,7 +5928,7 @@ var SYMBOLS = DEBUGGER;
 
 /**
  * TYPEDARRAYS enables use of typed arrays for Memory blocks.  This used to be a compile-time-only option, but I've
- * added Memory access functions for typed arrays (see MemoryX86.afnTypedArray), so support can be enabled dynamically now.
+ * added Memory access functions for typed arrays (see Memoryx86.afnTypedArray), so support can be enabled dynamically now.
  *
  * See the Memory component for details.
  *
@@ -7317,7 +7315,7 @@ const Errors = {
  */
 
 const Interrupts = {
-    /*
+    /**
      * The original ROM BIOS defined vectors 0x08-0x1F with a table at F000:FEF3 (VECTOR_TABLE).
      */
     VIDEO:      0x10,
@@ -7335,7 +7333,7 @@ const Interrupts = {
     TMR_BREAK:  0x1C,               // invoked by the BIOS timer interrupt handler (normally vector 0x08)
     VID_PARMS:  0x1D,
     DSK_PARMS:  0x1E,               // vector for Diskette Parameter Table (DPT)
-    /*
+    /**
      * For characters 0x00-0x7F, the original ROM BIOS used a built-in table at F000:FA6E (CRT_CHAR_GEN),
      * since the MDA/CGA font ROM was not CPU-addressable, but presumably there wasn't enough room in the
      * ROM BIOS for all 256 characters, so if software wanted to draw any characters 0x80-0xFF in graphics
@@ -7365,11 +7363,22 @@ const Interrupts = {
         VECTOR:     0x30            // Windows PM call-back interface (aka Transfer Space Fault)
     },
     WINDBG: {                       // Windows Debugger protected-mode interface
-        VECTOR:     0x41,           // (AX==command)
+        VECTOR:     0x41,           // (AX is one of the following DS commands)
+        OUTCHAR:    0x0000,         // DS_Out_Char (display the char in DL)
+        INCHAR:     0x0001,         // DS_In_Char (read a char into AL)
+        OUTSTR:     0x0002,         // DS_Out_Str (display a NUL terminated string pointed to by DS:ESI)
+        ISCHAR:     0x0003,         // DS_Is_Char (non-blocking In_Chr)
+        OUTSTR16:   0x0012,         // DS_Out_Str16 (display a NUL terminated string pointed to by DS:SI; same as DS_Out_Str but for 16-bit callers)
+        FORCEDGO16: 0x0040,         // DS_ForcedGO16 (enter the debugger and perform the equivalent of a GO command to force a stop at the specified CS:IP; CX is the desired CS and BX is the desired IP)
+        LINKMAP:    0x0045,         // DS_LinkMap (DX:(E)DI = ptr to paragraph in front of map)
+        UNLINKMAP:  0x0046,         // DS_UnlinkMap (DX:(E)DI = ptr to paragraph in front of map)
+        CHECKMAP:   0x0047,         // DS_CheckMap (DX:(E)DI = pointer to module name; returns AX != 0 if map found or AX == 0 if map not found)
+        AUTOLOAD:   0x0048,         // DS_IsAutoLoadSym (returns AX != 0, auto load symbols; AX == 0, don't auto load symbols)
         IS_LOADED:  0x004F,         // DS_DebLoaded
-        LOADED:     0xF386,         // DS_DebPresent (returned in AX if Windows Debugger loaded)
-        LOADSEG:    0x0050,         // DS_LoadSeg (SI==0 if code, 1 if data; BX==segnum-1; CX==selector; ES:[E]DI->module name)
-        FREESEG:    0x0052,         // DS_FreeSeg (BX==segment)
+        LOADED:     0xF386,         // DS_DebPresent (returned in AX in response to DS_DebLoaded if Windows Debugger loaded)
+        LOADSEG:    0x0050,         // DS_LoadSeg (SI is 0 if code sel, 1 if data sel, 0x80 if code seg, 0x81 if data seg; BX is segnum-1; CX is sel or seg; DX is data instance; ES:[E]DI -> module name)
+        LOADSEG32:  0x0150,         // DS_LoadSeg_32 (SI is 0 0 if code, 1 if data; DX:EBX -> D386_Device_Params)
+        FREESEG:    0x0052,         // DS_FreeSeg (BX == segment)
         KRNLVARS:   0x005A,         // DS_Kernel_Vars
         RELSEG:     0x005C,         // DS_ReleaseSeg (same as DS_FreeSeg but "restores any breakpoints first")
         LOADHIGH:   0x005D,         // D386_LoadCodeDataHigh
@@ -7379,7 +7388,7 @@ const Interrupts = {
         UNKNOWN66:  0x0066,         // Unknown (but I suspect it isn't good)
         UNKNOWN67:  0x0067,         // Unknown (but I suspect it isn't good)
         REGDOTCMD:  0x0070,         // DS_RegisterDotCommand
-        CHECKFAULT: 0x007F,         // DS_CheckFault (BX==fault #, CX==FAULTTYPE bits; return AX=0 to handle fault normally, 1 to issue TRAPFAULT)
+        CHECKFAULT: 0x007F,         // DS_CheckFault (BX == fault #, CX == FAULTTYPE bits; return AX=0 to handle fault normally, 1 to issue TRAPFAULT)
         FAULTTYPE: {
             V86:    0x0001,
             PM:     0x0002,
@@ -7387,22 +7396,24 @@ const Interrupts = {
             FIRST:  0x0008,
             LAST:   0x0010
         },
-        TRAPFAULT:  0x0083,         // DS_TrapFault (BX==fault #, CX==faulting CS, EDX==faulting EIP, ESI==fault error, EDI==fault flags)
-        GETSYMBOL:  0x008D,         // DS_GetSymbol (DS:ESI->symbol; return AX=0 if success, 1 if not found, 2 if memory not loaded yet)
-        LOADSEG32:  0x0150,         // DS_LoadSeg_32 (SI==0 if code, 1 if data; DX:EBX->D386_Device_Params)
-        FREESEG32:  0x0152,         // DS_FreeSeg_32 (BX==segment, DX:EDI->module name)
+        TRAPFAULT:  0x0083,         // DS_TrapFault (BX == fault #, CX == faulting CS, EDX == faulting EIP, ESI == fault error, EDI == fault flags)
+        GETSYMBOL:  0x008D,         // DS_GetSymbol (DS:ESI -> symbol; return AX == 0 if success, 1 if not found, 2 if memory not loaded yet)
+        FREESEG32:  0x0152,         // DS_FreeSeg_32 (BX == segment, DX:EDI -> module name)
         CONDBP:     0xF001,         // DS_CondBP (break here if WDEB386 was run with /B; ESI -> string to display)
-        ENABLED:    false           // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
+        FORCEDBP:   0xF002,         // DS_ForcedBP
+        FORCEDGO:   0xF003,         // DS_ForcedGO (enter the debugger and perform the equivalent of a GO command to force a stop at the specified CS:EIP; CX is the desired CS, EBX is the desired EIP)
+        HARDINT1:   0xF004,         // DS_HardINT1 (check to see if INT 1 hooked for all rings;  ENTER: nothing, EXIT: AX = 0, if no, 1, if yes)
+        ENABLED:    true            // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
     },
     WINDBGRM: {                     // Windows Debugger real-mode interface
-        VECTOR:     0x68,           // (AH==command)
+        VECTOR:     0x68,           // (AH is one of the following D386 commands)
         IS_LOADED:  0x43,           // D386_Identify
         LOADED:     0xF386,         // D386_Id (returned in AX if Windows Debugger loaded)
         PREP_PMODE: 0x44,           // D386_Prepare_PMode (must return a 16:32 address in ES:EDI to a "PMinit" handler)
-        FREESEG:    0x48,           // D386_Free_Segment (BX==real-mode segment)
+        FREESEG:    0x48,           // D386_Free_Segment (BX == real-mode segment)
         REMOVESEGS: 0x4F,           // D386_Remove_Segs (remove any undefined segments from the named module at ES:DI)
-        LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI->D386_Device_Params)
-        ENABLED:    false           // support for WINDBGRM interrupts can be disabled
+        LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI -> D386_Device_Params)
+        ENABLED:    true            // support for WINDBGRM interrupts can be disabled
     },
     VIDEO_VGA:  0x6D,               // VGA ROM entry point (the default VGA INT 10h handler invokes this interrupt and IRETs)
     FUNCS: {}                       // filled in only if DEBUGGER is true
@@ -7474,18 +7485,18 @@ Interrupts.BIOS_DATA = {
     0x4A8:  ["SAVE_PTR",4]          // POINTER TO EGA PARAMETER CONTROL BLOCK
 };
 
-/*
-    * See DebuggerX86.prototype.replaceRegs() for the rules governing how register contents are replaced in the strings below.
-    *
-    * Replacements occur in the following order:
-    *
-    *      Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
-    *      Replace every #XX, where XX is a hex byte value, with the corresponding ASCII character (if printable).
-    *      Replace every $XXXX:XXXX, where XXXX:XXXX is a segmented address, with the zero-terminated string at that address.
-    *      Replace every ^XXXX:XXXX, where XXXX:XXXX is a segmented address, with the FCB filename stored at that address.
-    *
-    * The last replacement is obviously DOS-specific, since FCBs are DOS constructs.
-    */
+/**
+ * See Debuggerx86.prototype.replaceRegs() for the rules governing how register contents are replaced in the strings below.
+ *
+ * Replacements occur in the following order:
+ *
+ *      Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
+ *      Replace every #XX, where XX is a hex byte value, with the corresponding ASCII character (if printable).
+ *      Replace every $XXXX:XXXX, where XXXX:XXXX is a segmented address, with the zero-terminated string at that address.
+ *      Replace every ^XXXX:XXXX, where XXXX:XXXX is a segmented address, with the FCB filename stored at that address.
+ *
+ * The last replacement is obviously DOS-specific, since FCBs are DOS constructs.
+ */
 Interrupts.FUNCS[Interrupts.VIDEO] = {
     0x00: "set mode (@AL)",
     0x01: "set cursor type (start=@CH,end=@CL)",
@@ -7516,33 +7527,33 @@ Interrupts.FUNCS[Interrupts.DISK] = {
     0x16: "get drive @DL change line status",
     0x17: "set drive @DL DASD type",
     0x18: "set drive @DL media type"
-    /*
-        * Here's an additional function reference, previously in the HDC component, but moved here
-        * because our components are hardware emulations, not BIOS emulations, so this information is
-        * really only of interest to the Debugger (or the casual observer).
-        *
-        *      RESET:          0x00,
-        *      GET_STATUS:     0x01,
-        *      READ_SECTORS:   0x02,
-        *      WRITE_SECTORS:  0x03,
-        *      VERIFY_SECTORS: 0x04,
-        *      FORMAT_TRK:     0x05,
-        *      FORMAT_BAD:     0x06,
-        *      FORMAT_DRIVE:   0x07,
-        *      GET_DRIVEPARMS: 0x08,
-        *      SET_DRIVEPARMS: 0x09,
-        *      READ_LONG:      0x0A,
-        *      WRITE_LONG:     0x0B,
-        *      SEEK:           0x0C,
-        *      ALT_RESET:      0x0D,
-        *      READ_BUFFER:    0x0E,
-        *      WRITE_BUFFER:   0x0F,
-        *      TEST_READY:     0x10,
-        *      RECALIBRATE:    0x11,
-        *      RAM_DIAGNOSTIC: 0x12,
-        *      DRV_DIAGNOSTIC: 0x13,
-        *      CTL_DIAGNOSTIC: 0x14
-        */
+    /**
+     * Here's an additional function reference, previously in the HDC component, but moved here
+     * because our components are hardware emulations, not BIOS emulations, so this information is
+     * really only of interest to the Debugger (or the casual observer).
+     *
+     *      RESET:          0x00,
+     *      GET_STATUS:     0x01,
+     *      READ_SECTORS:   0x02,
+     *      WRITE_SECTORS:  0x03,
+     *      VERIFY_SECTORS: 0x04,
+     *      FORMAT_TRK:     0x05,
+     *      FORMAT_BAD:     0x06,
+     *      FORMAT_DRIVE:   0x07,
+     *      GET_DRIVEPARMS: 0x08,
+     *      SET_DRIVEPARMS: 0x09,
+     *      READ_LONG:      0x0A,
+     *      WRITE_LONG:     0x0B,
+     *      SEEK:           0x0C,
+     *      ALT_RESET:      0x0D,
+     *      READ_BUFFER:    0x0E,
+     *      WRITE_BUFFER:   0x0F,
+     *      TEST_READY:     0x10,
+     *      RECALIBRATE:    0x11,
+     *      RAM_DIAGNOSTIC: 0x12,
+     *      DRV_DIAGNOSTIC: 0x13,
+     *      CTL_DIAGNOSTIC: 0x14
+     */
 };
 
 Interrupts.FUNCS[Interrupts.CASSETTE] = {
@@ -7660,7 +7671,7 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
     0x004F: "check debugger loaded"         // WINDBG.IS_LOADED returns WINDBG.LOADED (0xF386) if debugger loaded
 };
 
-/*
+/**
  * DOS function reference (from https://pcdosretro.github.io/dosfunc.txt)
  *
  *      INT 20 Program terminate (1.0+)
@@ -9419,6 +9430,640 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
  *            entries for 16 segments.
  */
 
+/**
+ * Other miscellaneous definitions for historical reference.
+ *
+ * From DEBUGSYS.INC:
+ *
+ * D386_Device_Params STRUC
+ *      DD_logical_seg  dw  ?   ; logical segment # from map
+ *      DD_actual_sel   dw  ?   ; actual selector value
+ *      DD_base         dd  ?   ; linear address offset for start of segment
+ *      DD_length       dd  ?   ; actual length of segment
+ *      DD_name         df  ?   ; 16:32 ptr to null terminated device name
+ *      DD_sym_name     df  ?   ; 16:32 ptr to null terminated symbolic module name  (i.e. Win386)
+ *      DD_alias_sel    dw  ?   ; alias selector value (0 = none)
+ *  D386_Device_Params ENDS
+ */
+
+Interrupts.VxD = {
+    VECTOR: 0x20,
+    "VMM": {
+        id: 0x0001,
+        fn: [
+            "Get_VMM_Version",
+            "Get_Cur_VM_Handle",
+            "Test_Cur_VM_Handle",
+            "Get_Sys_VM_Handle",
+            "Test_Sys_VM_Handle",
+            "Validate_VM_Handle",
+            "Get_VMM_Reenter_Count",
+            "Begin_Reentrant_Execution",
+            "End_Reentrant_Execution",
+            "Install_V86_Break_Point",
+            "Remove_V86_Break_Point",
+            "Allocate_V86_Call_Back",
+            "Allocate_PM_Call_Back",
+            "Call_When_VM_Returns",
+            "Schedule_Global_Event",
+            "Schedule_VM_Event",
+            "Call_Global_Event",
+            "Call_VM_Event",
+            "Cancel_Global_Event",
+            "Cancel_VM_Event",
+            "Call_Priority_VM_Event",
+            "Cancel_Priority_VM_Event",
+            "Get_NMI_Handler_Addr",
+            "Set_NMI_Handler_Addr",
+            "Hook_NMI_Event",
+            "Call_When_VM_Ints_Enabled",
+            "Enable_VM_Ints",
+            "Disable_VM_Ints",
+            "Map_Flat",
+            "Map_Lin_To_VM_Addr",
+            "Adjust_Exec_Priority",
+            "Begin_Critical_Section",
+            "End_Critical_Section",
+            "End_Crit_And_Suspend",
+            "Claim_Critical_Section",
+            "Release_Critical_Section",
+            "Call_When_Not_Critical",
+            "Create_Semaphore",
+            "Destroy_Semaphore",
+            "Wait_Semaphore",
+            "Signal_Semaphore",
+            "Get_Crit_Section_Status",
+            "Call_When_Task_Switched",
+            "Suspend_VM",
+            "Resume_VM",
+            "No_Fail_Resume_VM",
+            "Nuke_VM",
+            "Crash_Cur_VM",
+            "Get_Execution_Focus",
+            "Set_Execution_Focus",
+            "Get_Time_Slice_Priority",
+            "Set_Time_Slice_Priority",
+            "Get_Time_Slice_Granularity",
+            "Set_Time_Slice_Granularity",
+            "Get_Time_Slice_Info",
+            "Adjust_Execution_Time",
+            "Release_Time_Slice",
+            "Wake_Up_VM",
+            "Call_When_Idle",
+            "Get_Next_VM_Handle",
+            "Set_Global_Time_Out",
+            "Set_VM_Time_Out",
+            "Cancel_Time_Out",
+            "Get_System_Time",
+            "Get_VM_Exec_Time",
+            "Hook_V86_Int_Chain",
+            "Get_V86_Int_Vector",
+            "Set_V86_Int_Vector",
+            "Get_PM_Int_Vector",
+            "Set_PM_Int_Vector",
+            "Simulate_Int",
+            "Simulate_Iret",
+            "Simulate_Far_Call",
+            "Simulate_Far_Jmp",
+            "Simulate_Far_Ret",
+            "Simulate_Far_Ret_N",
+            "Build_Int_Stack_Frame",
+            "Simulate_Push",
+            "Simulate_Pop",
+            "_HeapAllocate",
+            "_HeapReAllocate",
+            "_HeapFree",
+            "_HeapGetSize",
+            "_PageAllocate",
+            "_PageReAllocate",
+            "_PageFree",
+            "_PageLock",
+            "_PageUnLock",
+            "_PageGetSizeAddr",
+            "_PageGetAllocInfo",
+            "_GetFreePageCount",
+            "_GetSysPageCount",
+            "_GetVMPgCount",
+            "_MapIntoV86",
+            "_PhysIntoV86",
+            "_TestGlobalV86Mem",
+            "_ModifyPageBits",
+            "_CopyPageTable",
+            "_LinMapIntoV86",
+            "_LinPageLock",
+            "_LinPageUnLock",
+            "_SetResetV86Pageable",
+            "_GetV86PageableArray",
+            "_PageCheckLinRange",
+            "_PageOutDirtyPages",
+            "_PageDiscardPages",
+            "_GetNulPageHandle",
+            "_GetFirstV86Page",
+            "_MapPhysToLinear",
+            "_GetAppFlatDSAlias",
+            "_SelectorMapFlat",
+            "_GetDemandPageInfo",
+            "_GetSetPageOutCount",
+            "Hook_V86_Page",
+            "_Assign_Device_V86_Pages",
+            "_DeAssign_Device_V86_Pages",
+            "_Get_Device_V86_Pages_Array",
+            "MMGR_SetNULPageAddr",
+            "_Allocate_GDT_Selector",
+            "_Free_GDT_Selector",
+            "_Allocate_LDT_Selector",
+            "_Free_LDT_Selector",
+            "_BuildDescriptorDWORDs",
+            "_GetDescriptor",
+            "_SetDescriptor",
+            "_MMGR_Toggle_HMA",
+            "Get_Fault_Hook_Addrs",
+            "Hook_V86_Fault",
+            "Hook_PM_Fault",
+            "Hook_VMM_Fault",
+            "Begin_Nest_V86_Exec",
+            "Begin_Nest_Exec",
+            "Exec_Int",
+            "Resume_Exec",
+            "End_Nest_Exec",
+            "Allocate_PM_App_CB_Area",
+            "Get_Cur_PM_App_CB",
+            "Set_V86_Exec_Mode",
+            "Set_PM_Exec_Mode",
+            "Begin_Use_Locked_PM_Stack",
+            "End_Use_Locked_PM_Stack",
+            "Save_Client_State",
+            "Restore_Client_State",
+            "Exec_VxD_Int",
+            "Hook_Device_Service",
+            "Hook_Device_V86_API",
+            "Hook_Device_PM_API",
+            "System_Control",
+            "Simulate_IO",
+            "Install_Mult_IO_Handlers",
+            "Install_IO_Handler",
+            "Enable_Global_Trapping",
+            "Enable_Local_Trapping",
+            "Disable_Global_Trapping",
+            "Disable_Local_Trapping",
+            "List_Create",
+            "List_Destroy",
+            "List_Allocate",
+            "List_Attach",
+            "List_Attach_Tail",
+            "List_Insert",
+            "List_Remove",
+            "List_Deallocate",
+            "List_Get_First",
+            "List_Get_Next",
+            "List_Remove_First",
+            "_AddInstanceItem",
+            "_Allocate_Device_CB_Area",
+            "_Allocate_Global_V86_Data_Area",
+            "_Allocate_Temp_V86_Data_Area",
+            "_Free_Temp_V86_Data_Area",
+            "Get_Profile_Decimal_Int",
+            "Convert_Decimal_String",
+            "Get_Profile_Fixed_Point",
+            "Convert_Fixed_Point_String",
+            "Get_Profile_Hex_Int",
+            "Convert_Hex_String",
+            "Get_Profile_Boolean",
+            "Convert_Boolean_String",
+            "Get_Profile_String",
+            "Get_Next_Profile_String",
+            "Get_Environment_String",
+            "Get_Exec_Path",
+            "Get_Config_Directory",
+            "OpenFile",
+            "Get_PSP_Segment",
+            "GetDOSVectors",
+            "Get_Machine_Info",
+            "GetSet_HMA_Info",
+            "Set_System_Exit_Code",
+            "Fatal_Error_Handler",
+            "Fatal_Memory_Error",
+            "Update_System_Clock",
+            "Test_Debug_Installed",
+            "Out_Debug_String",
+            "Out_Debug_Chr",
+            "In_Debug_Chr",
+            "Debug_Convert_Hex_Binary",
+            "Debug_Convert_Hex_Decimal",
+            "Debug_Test_Valid_Handle",
+            "Validate_Client_Ptr",
+            "Test_Reenter",
+            "Queue_Debug_String",
+            "Log_Proc_Call",
+            "Debug_Test_Cur_VM",
+            "Get_PM_Int_Type",
+            "Set_PM_Int_Type",
+            "Get_Last_Updated_System_Time",
+            "Get_Last_Updated_VM_Exec_Time",
+            "Test_DBCS_Lead_Byte",
+            "_AddFreePhysPage",
+            "_PageResetHandlePAddr",
+            "_SetLastV86Page",
+            "_GetLastV86Page",
+            "_MapFreePhysReg",
+            "_UnmapFreePhysReg",
+            "_XchgFreePhysReg",
+            "_SetFreePhysRegCalBk",
+            "Get_Next_Arena",
+            "Get_Name_Of_Ugly_TSR",
+            "Get_Debug_Options",
+            "Set_Physical_HMA_Alias",
+            "_GetGlblRng0V86IntBase",
+            "_Add_Global_V86_Data_Area",
+            "GetSetDetailedVMError",
+            "Is_Debug_Chr",
+            "Clear_Mono_Screen",
+            "Out_Mono_Chr",
+            "Out_Mono_String",
+            "Set_Mono_Cur_Pos",
+            "Get_Mono_Cur_Pos",
+            "Get_Mono_Chr",
+            "Locate_Byte_In_ROM",
+            "Hook_Invalid_Page_Fault",
+            "Unhook_Invalid_Page_Fault",
+            "Set_Delete_On_Exit_File",
+            "Close_VM",
+            "Enable_Touch_1st_Meg",
+            "Disable_Touch_1st_Meg",
+            "Install_Exception_Handler",
+            "Remove_Exception_Handler",
+            "Get_Crit_Status_No_Block",
+            "_GetLastUpdatedThreadExecTime",
+            "_Trace_Out_Service",
+            "_Debug_Out_Service",
+            "_Debug_Flags_Service",
+            "VMMAddImportModuleName",
+            "VMM_Add_DDB",
+            "VMM_Remove_DDB",
+            "Test_VM_Ints_Enabled",
+            "_BlockOnID",
+            "Schedule_Thread_Event",
+            "Cancel_Thread_Event",
+            "Set_Thread_Time_Out",
+            "Set_Async_Time_Out",
+            "_AllocateThreadDataSlot",
+            "_FreeThreadDataSlot",
+            "_CreateMutex",
+            "_DestroyMutex",
+            "_GetMutexOwner",
+            "Call_When_Thread_Switched",
+            "VMMCreateThread",
+            "_GetThreadExecTime",
+            "VMMTerminateThread",
+            "Get_Cur_Thread_Handle",
+            "Test_Cur_Thread_Handle",
+            "Get_Sys_Thread_Handle",
+            "Test_Sys_Thread_Handle",
+            "Validate_Thread_Handle",
+            "Get_Initial_Thread_Handle",
+            "Test_Initial_Thread_Handle",
+            "Debug_Test_Valid_Thread_Handle",
+            "Debug_Test_Cur_Thread",
+            "VMM_GetSystemInitState",
+            "Cancel_Call_When_Thread_Switched",
+            "Get_Next_Thread_Handle",
+            "Adjust_Thread_Exec_Priority",
+            "_Deallocate_Device_CB_Area",
+            "Remove_IO_Handler",
+            "Remove_Mult_IO_Handlers",
+            "Unhook_V86_Int_Chain",
+            "Unhook_V86_Fault",
+            "Unhook_PM_Fault",
+            "Unhook_VMM_Fault",
+            "Unhook_Device_Service",
+            "_PageReserve",
+            "_PageCommit",
+            "_PageDecommit",
+            "_PagerRegister",
+            "_PagerQuery",
+            "_PagerDeregister",
+            "_ContextCreate",
+            "_ContextDestroy",
+            "_PageAttach",
+            "_PageFlush",
+            "_SignalID",
+            "_PageCommitPhys",
+            "_Register_Win32_Services",
+            "Cancel_Call_When_Not_Critical",
+            "Cancel_Call_When_Idle",
+            "Cancel_Call_When_Task_Switched",
+            "_Debug_Printf_Service",
+            "_EnterMutex",
+            "_LeaveMutex",
+            "Simulate_VM_IO",
+            "Signal_Semaphore_No_Switch",
+            "_ContextSwitch",
+            "_PageModifyPermissions",
+            "_PageQuery",
+            "_EnterMustComplete",
+            "_LeaveMustComplete",
+            "_ResumeExecMustComplete",
+            "_GetThreadTerminationStatus",
+            "_GetInstanceInfo",
+            "_ExecIntMustComplete",
+            "_ExecVxDIntMustComplete",
+            "Begin_V86_Serialization",
+            "Unhook_V86_Page",
+            "VMM_GetVxDLocationList",
+            "VMM_GetDDBList",
+            "Unhook_NMI_Event",
+            "Get_Instanced_V86_Int_Vector",
+            "Get_Set_Real_DOS_PSP",
+            "Call_Priority_Thread_Event",
+            "Get_System_Time_Address",
+            "Get_Crit_Status_Thread",
+            "Get_DDB",
+            "Directed_Sys_Control",
+            "_RegOpenKey",
+            "_RegCloseKey",
+            "_RegCreateKey",
+            "_RegDeleteKey",
+            "_RegEnumKey",
+            "_RegQueryValue",
+            "_RegSetValue",
+            "_RegDeleteValue",
+            "_RegEnumValue",
+            "_RegQueryValueEx",
+            "_RegSetValueEx",
+            "_CallRing3",
+            "Exec_PM_Int",
+            "_RegFlushKey",
+            "_PageCommitContig",
+            "_GetCurrentContext",
+            "_LocalizeSprintf",
+            "_LocalizeStackSprintf",
+            "Call_Restricted_Event",
+            "Cancel_Restricted_Event",
+            "Register_PEF_Provider",
+            "_GetPhysPageInfo",
+            "_RegQueryInfoKey",
+            "MemArb_Reserve_Pages",
+            "Time_Slice_Sys_VM_Idle",
+            "Time_Slice_Sleep",
+            "Boost_With_Decay",
+            "Set_Inversion_Pri",
+            "Reset_Inversion_Pri",
+            "Release_Inversion_Pri",
+            "Get_Thread_Win32_Pri",
+            "Set_Thread_Win32_Pri",
+            "Set_Thread_Static_Boost",
+            "Set_VM_Static_Boost",
+            "Release_Inversion_Pri_ID",
+            "Attach_Thread_To_Group",
+            "Detach_Thread_From_Group",
+            "Set_Group_Static_Boost",
+            "_GetRegistryPath",
+            "_GetRegistryKey",
+            "Cleanup_Thread_State",
+            "_RegRemapPreDefKey",
+            "End_V86_Serialization",
+            "_Assert_Range",
+            "_Sprintf",
+            "_PageChangePager",
+            "_RegCreateDynKey",
+            "_RegQueryMultipleValues",
+            "Boost_Thread_With_VM",
+            "Get_Boot_Flags",
+            "Set_Boot_Flags",
+            "_lstrcpyn",
+            "_lstrlen",
+            "_lmemcpy",
+            "_GetVxDName",
+            "Force_Mutexes_Free",
+            "Restore_Forced_Mutexes",
+            "_AddReclaimableItem",
+            "_SetReclaimableItem",
+            "_EnumReclaimableItem",
+            "Time_Slice_Wake_Sys_VM",
+            "VMM_Replace_Global_Environment",
+            "Begin_Non_Serial_Nest_V86_Exec",
+            "Get_Nest_Exec_Status",
+            "Open_Boot_Log",
+            "Write_Boot_Log",
+            "Close_Boot_Log",
+            "EnableDisable_Boot_Log",
+            "_Call_On_My_Stack",
+            "Get_Inst_V86_Int_Vec_Base",
+            "_lstrcmpi",
+            "_strupr",
+            "Log_Fault_Call_Out",
+            "_AtEventTime"
+        ]
+    },
+    "DEBUG": {
+        id: 0x0002
+    },
+    "VPICD": {
+        id: 0x0003
+    },
+    "VDMAD": {
+        id: 0x0004
+    },
+    "VTD": {
+        id: 0x0005
+    },
+    "V86MMGR": {
+        id: 0x0006
+    },
+    "PAGESWAP": {
+        id: 0x0007
+    },
+    "PARITY": {
+        id: 0x0008
+    },
+    "REBOOT": {
+        id: 0x0009
+    },
+    "VDD": {
+        id: 0x000A
+    },
+    "VSD": {
+        id: 0x000B
+    },
+    "VMD": {
+        id: 0x000C
+    },
+    "VKD": {
+        id: 0x000D
+    },
+    "VCD": {
+        id: 0x000E
+    },
+    "VPD": {
+        id: 0x000F
+    },
+    "BLOCKDEV": {
+        id: 0x0010
+    },
+    "VMCPD": {
+        id: 0x0011
+    },
+    "EBIOS": {
+        id: 0x0012
+    },
+    "BIOSXLAT": {
+        id: 0x0013
+    },
+    "VNETBIOS": {
+        id: 0x0014
+    },
+    "DOSMGR": {
+        id: 0x0015
+    },
+    "WINLOAD": {
+        id: 0x0016
+    },
+    "SHELL": {
+        id: 0x0017
+    },
+    "VMPOLL": {
+        id: 0x0018
+    },
+    "VPROD": {
+        id: 0x0019
+    },
+    "DOSNET": {
+        id: 0x001A
+    },
+    "VFD": {
+        id: 0x001B
+    },
+    "VDD2": {
+        id: 0x001C
+    },
+    "WINDEBUG": {
+        id: 0x001D
+    },
+    "TSRLOAD": {
+        id: 0x001E
+    },
+    "BIOSHOOK": {
+        id: 0x001F
+    },
+    "INT13": {
+        id: 0x0020
+    },
+    "PAGEFILE": {
+        id: 0x0021
+    },
+    "SCSI": {
+        id: 0x0022
+    },
+    "MCA_POS": {
+        id: 0x0023
+    },
+    "SCSIFD": {
+        id: 0x0024
+    },
+    "VPEND": {
+        id: 0x0025
+    },
+    "APM": {
+        id: 0x0026
+    },
+    "VXDLDR": {
+        id: 0x0027
+    },
+    "NDIS": {
+        id: 0x0028
+    },
+    "BIOS_EXT": {
+        id: 0x0029
+    },
+    "VWIN32": {
+        id: 0x002A
+    },
+    "VCOMM": {
+        id: 0x002B
+    },
+    "SPOOLER": {
+        id: 0x002C
+    },
+    "WIN32S": {
+        id: 0x002D
+    },
+    "DEBUGCMD": {
+        id: 0x002E
+    },
+    "CONFIGMG": {
+        id: 0x0033
+    },
+    "DWCFGMG": {
+        id: 0x0034
+    },
+    "SCSIPORT": {
+        id: 0x0035
+    },
+    "VFBACKUP": {
+        id: 0x0036
+    },
+    "ENABLE": {
+        id: 0x0037
+    },
+    "VCOND": {
+        id: 0x0038
+    },
+    "ISAPNP": {
+        id: 0x003C
+    },
+    "BIOS": {
+        id: 0x003D
+    },
+    "IFSMgr": {
+        id: 0x0040
+    },
+    "VCDFSD": {
+        id: 0x0041
+    },
+    "MRCI2": {
+        id: 0x0042
+    },
+    "PCI": {
+        id: 0x0043
+    },
+    "PELOADER": {
+        id: 0x0044
+    },
+    "EISA": {
+        id: 0x0045
+    },
+    "DRAGCLI": {
+        id: 0x0046
+    },
+    "DRAGSRV": {
+        id: 0x0047
+    },
+    "PERF": {
+        id: 0x0048
+    },
+    "AWREDIR": {
+        id: 0x0049
+    },
+    "ETEN": {
+        id: 0x0060
+    },
+    "CHBIOS": {
+        id: 0x0061
+    },
+    "VMSGD": {
+        id: 0x0062
+    },
+    "VPPID": {
+        id: 0x0063
+    },
+    "VIME": {
+        id: 0x0064
+    },
+    "VHBIOSD": {
+        id: 0x0065
+    }
+};
+
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
@@ -9659,9 +10304,9 @@ class Panel extends Component {
      *
      * @this {Panel}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -9947,7 +10592,7 @@ class Panel extends Component {
                     x -= rect.x;
                     y -= rect.y;
                     let region = this.busInfo.aRegions[i];
-                    let iBlock = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), this.busInfo.aBlocks[region.iBlock]);
+                    let iBlock = UsrLib.getBitField(/** @type {BitField} */ (Busx86.BlockInfo.num), this.busInfo.aBlocks[region.iBlock]);
                     let addr = iBlock * this.bus.nBlockSize;
                     let addrLimit = (iBlock + region.cBlocks) * this.bus.nBlockSize - 1;
 
@@ -9962,7 +10607,7 @@ class Panel extends Component {
 
                     addr |= 0;
                     if (addr > addrLimit) addr = addrLimit;
-                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "Panel.findAddress(%d,%d) found type %s, address %#010x\n", x, y, MemoryX86.TYPE.NAMES[region.type], addr);
+                    if (MAXDEBUG) this.printf(MESSAGE.LOG, "Panel.findAddress(%d,%d) found type %s, address %#010x\n", x, y, Memoryx86.TYPE.NAMES[region.type], addr);
                     return addr;
                 }
             }
@@ -10032,9 +10677,9 @@ class Panel extends Component {
                     for (i = 0; i < this.busInfo.aRects.length; i++) {
                         let region = this.busInfo.aRegions[i];
                         rect = this.busInfo.aRects[i];
-                        rect.drawWith(this.contextLiveMem, MemoryX86.TYPE.COLORS[region.type]);
+                        rect.drawWith(this.contextLiveMem, Memoryx86.TYPE.COLORS[region.type]);
                         this.centerPen(rect);
-                        this.centerText(MemoryX86.TYPE.NAMES[region.type] + " (" + (((region.cBlocks * this.bus.nBlockSize) / 1024) | 0) + "Kb)");
+                        this.centerText(Memoryx86.TYPE.NAMES[region.type] + " (" + (((region.cBlocks * this.bus.nBlockSize) / 1024) | 0) + "Kb)");
                     }
                 }
                 if (DEBUG) this.printf(MESSAGE.LOG, "end scanMemory(): %d total bytes, %d total blocks, %d total regions\n", this.busInfo.cbTotal, this.busInfo.cBlocks, this.busInfo.cRegions);
@@ -10090,8 +10735,8 @@ class Panel extends Component {
 
         for (; iBlock < this.busInfo.cBlocks; iBlock++) {
             let blockInfo = this.busInfo.aBlocks[iBlock];
-            let typeBlock = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.type), blockInfo);
-            let nBlockCurr = UsrLib.getBitField(/** @type {BitField} */ (BusX86.BlockInfo.num), blockInfo);
+            let typeBlock = UsrLib.getBitField(/** @type {BitField} */ (Busx86.BlockInfo.type), blockInfo);
+            let nBlockCurr = UsrLib.getBitField(/** @type {BitField} */ (Busx86.BlockInfo.num), blockInfo);
             if (typeBlock != typeRegion || nBlockCurr != nBlockPrev + 1) {
                 let cBlocks = iBlock - iBlockRegion;
                 if (cBlocks) {
@@ -10123,9 +10768,9 @@ class Panel extends Component {
      */
     addRegion(addr, iBlock, cBlocks, type)
     {
-        if (DEBUG) this.printf(MESSAGE.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, MemoryX86.TYPE.NAMES[type], cBlocks);
+        if (DEBUG) this.printf(MESSAGE.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, Memoryx86.TYPE.NAMES[type], cBlocks);
         this.busInfo.aRegions[this.busInfo.cRegions++] = {iBlock: iBlock, cBlocks: cBlocks, type: type};
-        return UsrLib.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, cBlocks, 0, type);
+        return UsrLib.initBitFields(/** @type {BitFields} */ (Busx86.BlockInfo), iBlock, cBlocks, 0, type);
     }
 
     /**
@@ -10564,7 +11209,7 @@ class Controller {
  * @class Bus
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class BusX86 extends Component {
+class Busx86 extends Component {
     /*
      * BackTrack indexes are 31-bit values, where bits 0-8 store an object offset (0-511) and bits 16-30 store
      * an object number (1-32767).  Object number 0 is reserved for dynamic data (ie, data created independent
@@ -10629,11 +11274,11 @@ class BusX86 extends Component {
     static BlockInfo = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
 
     /**
-     * BusX86(cpu, dbg)
+     * Busx86(cpu, dbg)
      *
-     * The BusX86 component manages physical memory and I/O address spaces.
+     * The Busx86 component manages physical memory and I/O address spaces.
      *
-     * The BusX86 component has no UI elements, so it does not require an init() handler,
+     * The Busx86 component has no UI elements, so it does not require an init() handler,
      * but it still inherits from the Component class and must be allocated like any
      * other device component.  It's currently allocated by the Computer's init() handler,
      * which then calls the initBus() method of all the other components.
@@ -10643,7 +11288,7 @@ class BusX86 extends Component {
      * (essential, for example, when the CPU enables paging).
      *
      * For memory beyond the simple needs of the ROM and RAM components (ie, memory-mapped
-     * devices), the address space must still be allocated through the BusX86 component via
+     * devices), the address space must still be allocated through the Busx86 component via
      * addMemory().  If the component needs something more than simple read/write storage,
      * it must provide a controller with getMemoryBuffer() and getMemoryAccess() methods.
      *
@@ -10652,14 +11297,14 @@ class BusX86 extends Component {
      * only default I/O behavior we provide is ignoring writes to any unregistered output
      * ports and returning 0xff from any unregistered input ports.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {Object} parmsBus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     constructor(parmsBus, cpu, dbg)
     {
-        super("BusX86", parmsBus);
+        super("Busx86", parmsBus);
 
         this.cpu = cpu;
         this.dbg = dbg;
@@ -10774,11 +11419,11 @@ class BusX86 extends Component {
      *
      * Allocate enough (empty) Memory blocks to span the entire physical address space.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      */
     initMemory()
     {
-        let block = new MemoryX86();
+        let block = new Memoryx86();
         block.copyBreakpoints(this.dbg);
         this.aMemBlocks = new Array(this.nBlockTotal);
         for (let iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
@@ -10791,7 +11436,7 @@ class BusX86 extends Component {
     /**
      * reset()
      *
-     * @this {BusX86}
+     * @this {Busx86}
      */
     reset()
     {
@@ -10811,7 +11456,7 @@ class BusX86 extends Component {
      * TODO: Perhaps Computer should be smarter: if there's no powerUp() handler, then fallback to the reset() handler.
      * In that case, however, we'd either need to remove the powerUp() stub in Component, or detect the existence of the stub.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {Object|null} data (always null because we supply no powerDown() handler)
      * @param {boolean} [fRepower]
      * @returns {boolean} true if successful, false if failure
@@ -10846,10 +11491,10 @@ class BusX86 extends Component {
      * space.  However, any holes that might have existed between the original allocation and an
      * extension are subsumed by the extension.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is the starting physical address of the request
      * @param {number} size of the request, in bytes
-     * @param {number} type is one of the MemoryX86.TYPE constants
+     * @param {number} type is one of the Memoryx86.TYPE constants
      * @param {Controller} [controller] is an optional memory controller component
      * @returns {boolean} true if successful, false if not
      */
@@ -10889,10 +11534,10 @@ class BusX86 extends Component {
                         continue;
                     }
                 }
-                return this.reportError(BusX86.ERROR.ADD_MEM_INUSE, addrNext, sizeLeft);
+                return this.reportError(Busx86.ERROR.ADD_MEM_INUSE, addrNext, sizeLeft);
             }
 
-            let blockNew = new MemoryX86(addrNext, sizeBlock, this.nBlockSize, type, controller);
+            let blockNew = new Memoryx86(addrNext, sizeBlock, this.nBlockSize, type, controller);
             blockNew.copyBreakpoints(this.dbg, block);
             this.aMemBlocks[iBlock++] = blockNew;
 
@@ -10913,17 +11558,17 @@ class BusX86 extends Component {
             if (!this.cpu.isRunning()) {        // allocation messages at "run time" are bit too much
                 let kb = (size / 1024)|0;
                 let sb = kb? (kb + "Kb") : (size + " bytes");
-                this.printf(MESSAGE.STATUS, "%s %s at 0x%X\n", sb, MemoryX86.TYPE.NAMES[type], addr);
+                this.printf(MESSAGE.STATUS, "%s %s at 0x%X\n", sb, Memoryx86.TYPE.NAMES[type], addr);
             }
             return true;
         }
-        return this.reportError(BusX86.ERROR.ADD_MEM_BADRANGE, addr, size);
+        return this.reportError(Busx86.ERROR.ADD_MEM_BADRANGE, addr, size);
     }
 
     /**
      * cleanMemory(addr, size, fScrub)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr
      * @param {number} size
      * @param {boolean} [fScrub] (true to "scrub" blocks as well)
@@ -10950,7 +11595,7 @@ class BusX86 extends Component {
      *
      * Returns a BusInfo object for the specified address range.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {Object} [info] previous BusInfo, if any
      * @param {number} [addr] starting address of range (0 if none provided)
      * @param {number} [size] size of range, in bytes (up to end of address space if none provided)
@@ -10972,7 +11617,7 @@ class BusX86 extends Component {
             info.cbTotal += block.size;
             if (block.size) {
                 let btmod = (BACKTRACK && block.modBackTrack(false)? 1 : 0);
-                info.aBlocks.push(UsrLib.initBitFields(/** @type {BitFields} */ (BusX86.BlockInfo), iBlock, 0, btmod, block.type));
+                info.aBlocks.push(UsrLib.initBitFields(/** @type {BitFields} */ (Busx86.BlockInfo), iBlock, 0, btmod, block.type));
                 info.cBlocks++;
             }
             iBlock++;
@@ -10983,7 +11628,7 @@ class BusX86 extends Component {
     /**
      * getA20()
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @returns {boolean} true if enabled, false if disabled
      */
     getA20()
@@ -11006,7 +11651,7 @@ class BusX86 extends Component {
      * confirm that DeskPro 386 machines mapped the ENTIRE 1st Mb to the 2nd, and not simply the first 64Kb,
      * which is technically all that 8086 address wrap-around compatibility would require.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {boolean} fEnable is true to enable A20 (default), false to disable
      */
     setA20(fEnable)
@@ -11036,7 +11681,7 @@ class BusX86 extends Component {
     /**
      * getWidth()
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @returns {number}
      */
     getWidth()
@@ -11051,7 +11696,7 @@ class BusX86 extends Component {
      * that should be dynamically modifying the memory access functions are those that use addMemory() with a custom
      * memory controller, we require that the block(s) being updated do in fact have a controller.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr
      * @param {number} size
      * @param {Array.<function()>} [afn]
@@ -11065,7 +11710,7 @@ class BusX86 extends Component {
             while (size > 0) {
                 let block = this.aMemBlocks[iBlock];
                 if (!block.controller) {
-                    return this.reportError(BusX86.ERROR.SET_MEM_NOCTRL, addr, size, fQuiet);
+                    return this.reportError(Busx86.ERROR.SET_MEM_NOCTRL, addr, size, fQuiet);
                 }
                 block.setAccess(afn, true);
                 size -= this.nBlockSize;
@@ -11073,7 +11718,7 @@ class BusX86 extends Component {
             }
             return true;
         }
-        return this.reportError(BusX86.ERROR.SET_MEM_BADRANGE, addr, size);
+        return this.reportError(Busx86.ERROR.SET_MEM_BADRANGE, addr, size);
     }
 
     /**
@@ -11083,7 +11728,7 @@ class BusX86 extends Component {
      *
      * TODO: Update the removeMemory() interface to reflect the relaxed requirements of the addMemory() interface.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr
      * @param {number} size
      * @returns {boolean} true if successful, false if not
@@ -11094,7 +11739,7 @@ class BusX86 extends Component {
             let iBlock = addr >>> this.nBlockShift;
             while (size > 0) {
                 let blockOld = this.aMemBlocks[iBlock];
-                let blockNew = new MemoryX86(addr);
+                let blockNew = new Memoryx86(addr);
                 blockNew.copyBreakpoints(this.dbg, blockOld);
                 this.aMemBlocks[iBlock++] = blockNew;
                 addr = iBlock * this.nBlockSize;
@@ -11112,13 +11757,13 @@ class BusX86 extends Component {
             this.cpu.flushPageBlocks();
             return true;
         }
-        return this.reportError(BusX86.ERROR.REM_MEM_BADRANGE, addr, size);
+        return this.reportError(Busx86.ERROR.REM_MEM_BADRANGE, addr, size);
     }
 
     /**
      * getMemoryBlocks(addr, size)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is the starting physical address
      * @param {number} size of the request, in bytes
      * @returns {Array} of Memory blocks
@@ -11143,11 +11788,11 @@ class BusX86 extends Component {
      * Otherwise, new blocks are allocated with the specified type; the underlying memory from the
      * provided blocks is still used, but the new blocks may have different access to that memory.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is the starting physical address
      * @param {number} size of the request, in bytes
      * @param {Array} aBlocks as returned by getMemoryBlocks()
-     * @param {number} [type] is one of the MemoryX86.TYPE constants
+     * @param {number} [type] is one of the Memoryx86.TYPE constants
      */
     setMemoryBlocks(addr, size, aBlocks, type)
     {
@@ -11158,7 +11803,7 @@ class BusX86 extends Component {
 
             if (!block) break;
             if (type !== undefined) {
-                let blockNew = new MemoryX86(addr);
+                let blockNew = new Memoryx86(addr);
                 blockNew.clone(block, type, this.dbg);
                 block = blockNew;
             }
@@ -11172,7 +11817,7 @@ class BusX86 extends Component {
      *
      * For physical addresses only; for linear addresses, use cpu.getByte().
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @returns {number} byte (8-bit) value at that address
      */
@@ -11186,7 +11831,7 @@ class BusX86 extends Component {
      *
      * This is useful for the Debugger and other components that want to bypass getByte() breakpoint detection.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @returns {number} byte (8-bit) value at that address
      */
@@ -11200,7 +11845,7 @@ class BusX86 extends Component {
      *
      * For physical addresses only; for linear addresses, use cpu.getShort().
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @returns {number} word (16-bit) value at that address
      */
@@ -11219,7 +11864,7 @@ class BusX86 extends Component {
      *
      * This is useful for the Debugger and other components that want to bypass getShort() breakpoint detection.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @returns {number} word (16-bit) value at that address
      */
@@ -11238,7 +11883,7 @@ class BusX86 extends Component {
      *
      * For physical addresses only; for linear addresses, use cpu.getLong().
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @returns {number} long (32-bit) value at that address
      */
@@ -11274,7 +11919,7 @@ class BusX86 extends Component {
      *
      * For physical addresses only; for linear addresses, use cpu.setByte().
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @param {number} b is the byte (8-bit) value to write (we truncate it to 8 bits to be safe)
      */
@@ -11289,7 +11934,7 @@ class BusX86 extends Component {
      * This is useful for the Debugger and other components that want to bypass breakpoint detection AND read-only
      * memory protection (for example, this is an interface the ROM component could use to initialize ROM contents).
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @param {number} b is the byte (8-bit) value to write (we truncate it to 8 bits to be safe)
      */
@@ -11303,7 +11948,7 @@ class BusX86 extends Component {
      *
      * For physical addresses only; for linear addresses, use cpu.setShort().
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @param {number} w is the word (16-bit) value to write (we truncate it to 16 bits to be safe)
      */
@@ -11325,7 +11970,7 @@ class BusX86 extends Component {
      * This is useful for the Debugger and other components that want to bypass breakpoint detection AND read-only
      * memory protection (for example, this is an interface the ROM component could use to initialize ROM contents).
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @param {number} w is the word (16-bit) value to write (we truncate it to 16 bits to be safe)
      */
@@ -11346,7 +11991,7 @@ class BusX86 extends Component {
      *
      * For physical addresses only; for linear addresses, use cpu.setLong().
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @param {number} l is the long (32-bit) value to write
      */
@@ -11384,7 +12029,7 @@ class BusX86 extends Component {
      * If bto is NOT null, then we verify that off is within the given bto's range; if not,
      * then we must create a new bto and return that instead.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {Object} obj
      * @param {BackTrack|null} bto
      * @param {number} off (the offset within obj that this wrapper object is relative to)
@@ -11400,7 +12045,7 @@ class BusX86 extends Component {
                  */
                 if (this.ibtLastAlloc >= 0) bto = this.abtObjects[this.ibtLastAlloc];
             }
-            if (!bto || bto.obj != obj || off < bto.off || off >= bto.off + BusX86.BTINFO.OFF_MAX) {
+            if (!bto || bto.obj != obj || off < bto.off || off >= bto.off + Busx86.BTINFO.OFF_MAX) {
 
                 bto = {obj: obj, off: off, slot: 0, refs: 0};
 
@@ -11410,7 +12055,7 @@ class BusX86 extends Component {
                 } else {
                     for (slot = this.ibtLastDelete; slot < cbtObjects; slot++) {
                         let btoTest = this.abtObjects[slot];
-                        if (!btoTest || !btoTest.refs && !this.isBackTrackWeak(slot << BusX86.BTINFO.SLOT_SHIFT)) {
+                        if (!btoTest || !btoTest.refs && !this.isBackTrackWeak(slot << Busx86.BTINFO.SLOT_SHIFT)) {
                             this.ibtLastDelete = slot + 1;
                             this.cbtDeletions--;
                             break;
@@ -11428,13 +12073,13 @@ class BusX86 extends Component {
                  *  I hit the following error after running in a machine with lots of disk activity:
                  *
                  *      Error: assertion failure in deskpro386.bus
-                 *      at BusX86.Component.assert (http://localhost:8088/machines/modules/v2/component.js:732:31)
-                 *      at BusX86.addBackTrackObject (http://localhost:8088/machines/pcx86/modules/v2/bus.js:980:18)
+                 *      at Busx86.Component.assert (http://localhost:8088/machines/modules/v2/component.js:732:31)
+                 *      at Busx86.addBackTrackObject (http://localhost:8088/machines/pcx86/modules/v2/bus.js:980:18)
                  *      at onATCReadData (http://localhost:8088/machines/pcx86/modules/v2/hdc.js:1410:35)
                  *      at HDC.readData (http://localhost:8088/machines/pcx86/modules/v2/hdc.js:2573:23)
                  *      at HDC.inATCByte (http://localhost:8088/machines/pcx86/modules/v2/hdc.js:1398:20)
                  *      at HDC.inATCData (http://localhost:8088/machines/pcx86/modules/v2/hdc.js:1487:17)
-                 *      at BusX86.checkPortInputNotify (http://localhost:8088/machines/pcx86/modules/v2/bus.js:1457:38)
+                 *      at Busx86.checkPortInputNotify (http://localhost:8088/machines/pcx86/modules/v2/bus.js:1457:38)
                  *      at CPUx86.INSw (http://localhost:8088/machines/pcx86/modules/v2/x86ops.js:1640:26)
                  *      at CPUx86.stepCPU (http://localhost:8088/machines/pcx86/modules/v2/cpux86.js:4637:37)
                  *      at CPUx86.CPU.runCPU (http://localhost:8088/machines/pcx86/modules/v2/cpu.js:1014:22)
@@ -11458,7 +12103,7 @@ class BusX86 extends Component {
     /**
      * getBackTrackIndex(bto, off)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {BackTrack|null} bto
      * @param {number} off
      * @returns {number}
@@ -11467,7 +12112,7 @@ class BusX86 extends Component {
     {
         let bti = 0;
         if (BACKTRACK && bto) {
-            bti = (bto.slot << BusX86.BTINFO.SLOT_SHIFT) | BusX86.BTINFO.TYPE_DATA | (off - bto.off);
+            bti = (bto.slot << Busx86.BTINFO.SLOT_SHIFT) | Busx86.BTINFO.TYPE_DATA | (off - bto.off);
         }
         return bti;
     }
@@ -11475,7 +12120,7 @@ class BusX86 extends Component {
     /**
      * writeBackTrackObject(addr, bto, off)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @param {BackTrack|null} bto
      * @param {number} off
@@ -11484,7 +12129,7 @@ class BusX86 extends Component {
     {
         if (BACKTRACK && bto) {
 
-            let bti = (bto.slot << BusX86.BTINFO.SLOT_SHIFT) | BusX86.BTINFO.TYPE_DATA | (off - bto.off);
+            let bti = (bto.slot << Busx86.BTINFO.SLOT_SHIFT) | Busx86.BTINFO.TYPE_DATA | (off - bto.off);
             this.writeBackTrack(addr, bti);
         }
     }
@@ -11492,7 +12137,7 @@ class BusX86 extends Component {
     /**
      * readBackTrack(addr)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @returns {number}
      */
@@ -11507,17 +12152,17 @@ class BusX86 extends Component {
     /**
      * writeBackTrack(addr, bti)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @param {number} bti
      */
     writeBackTrack(addr, bti)
     {
         if (BACKTRACK) {
-            let slot = bti >>> BusX86.BTINFO.SLOT_SHIFT;
+            let slot = bti >>> Busx86.BTINFO.SLOT_SHIFT;
             let iBlock = (addr & this.nBusMask) >>> this.nBlockShift;
             let btiPrev = this.aMemBlocks[iBlock].writeBackTrack(addr & this.nBlockLimit, bti);
-            let slotPrev = btiPrev >>> BusX86.BTINFO.SLOT_SHIFT;
+            let slotPrev = btiPrev >>> Busx86.BTINFO.SLOT_SHIFT;
             if (slot != slotPrev) {
                 this.aMemBlocks[iBlock].modBackTrack(true);
                 if (btiPrev && slotPrev) {
@@ -11577,38 +12222,38 @@ class BusX86 extends Component {
     isBackTrackWeak(bti)
     {
         let bt = this.cpu.backTrack;
-        let slot = bti >> BusX86.BTINFO.SLOT_SHIFT;
-        return (bt.btiAL   >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiAH   >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiBL   >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiBH   >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiCL   >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiCH   >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiDL   >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiDH   >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiBPLo >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiBPHi >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiSILo >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiSIHi >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiDILo >> BusX86.BTINFO.SLOT_SHIFT == slot ||
-                bt.btiDIHi >> BusX86.BTINFO.SLOT_SHIFT == slot
+        let slot = bti >> Busx86.BTINFO.SLOT_SHIFT;
+        return (bt.btiAL   >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiAH   >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiBL   >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiBH   >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiCL   >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiCH   >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiDL   >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiDH   >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiBPLo >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiBPHi >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiSILo >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiSIHi >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiDILo >> Busx86.BTINFO.SLOT_SHIFT == slot ||
+                bt.btiDIHi >> Busx86.BTINFO.SLOT_SHIFT == slot
         );
     }
 
     /**
      * updateBackTrackCode(addr, bti)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @param {number} bti
      */
     updateBackTrackCode(addr, bti)
     {
         if (BACKTRACK) {
-            if (bti & BusX86.BTINFO.TYPE_DATA) {
-                bti = (bti & ~BusX86.BTINFO.TYPE_MASK) | BusX86.BTINFO.TYPE_COUNT_INC;
-            } else if ((bti & BusX86.BTINFO.TYPE_MASK) < BusX86.BTINFO.TYPE_COUNT_MAX) {
-                bti += BusX86.BTINFO.TYPE_COUNT_INC;
+            if (bti & Busx86.BTINFO.TYPE_DATA) {
+                bti = (bti & ~Busx86.BTINFO.TYPE_MASK) | Busx86.BTINFO.TYPE_COUNT_INC;
+            } else if ((bti & Busx86.BTINFO.TYPE_MASK) < Busx86.BTINFO.TYPE_COUNT_MAX) {
+                bti += Busx86.BTINFO.TYPE_COUNT_INC;
             } else {
                 return;
             }
@@ -11619,14 +12264,14 @@ class BusX86 extends Component {
     /**
      * getBackTrackObject(bti)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} bti
      * @returns {Object|null}
      */
     getBackTrackObject(bti)
     {
         if (BACKTRACK) {
-            let slot = bti >>> BusX86.BTINFO.SLOT_SHIFT;
+            let slot = bti >>> Busx86.BTINFO.SLOT_SHIFT;
             if (slot) return this.abtObjects[slot-1];
         }
         return null;
@@ -11635,7 +12280,7 @@ class BusX86 extends Component {
     /**
      * getBackTrackInfo(bti, fSymbol, fNearest)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} bti
      * @param {boolean} [fSymbol] (true to return only symbol)
      * @param {boolean} [fNearest] (true to return nearest symbol)
@@ -11646,7 +12291,7 @@ class BusX86 extends Component {
         if (BACKTRACK) {
             let bto = this.getBackTrackObject(bti);
             if (bto) {
-                let off = bti & BusX86.BTINFO.OFF_MASK;
+                let off = bti & Busx86.BTINFO.OFF_MASK;
                 let file = bto.obj.file;
                 if (file) {
 
@@ -11665,7 +12310,7 @@ class BusX86 extends Component {
     /**
      * getSymbol(addr, fNearest)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr
      * @param {boolean} [fNearest] (true to return nearest symbol)
      * @returns {string|null}
@@ -11695,7 +12340,7 @@ class BusX86 extends Component {
      * that it's compressed, since we'll only store them in compressed form if they actually shrank, and we'll use State
      * helper methods compress() and decompress() to create and expand the compressed data arrays.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {boolean} [fAll] (true to save all non-ROM memory blocks, regardless of their modified() state)
      * @returns {Array} a
      */
@@ -11712,7 +12357,7 @@ class BusX86 extends Component {
         for (let iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
             let block = this.aMemBlocks[iBlock];
             if (block.size) {
-                if (fAll && block.type != MemoryX86.TYPE.ROM || block.modified()) {
+                if (fAll && block.type != Memoryx86.TYPE.ROM || block.modified()) {
                     let adw = block.save();
                     if (adw) {
                         a[i++] = iBlock;
@@ -11739,7 +12384,7 @@ class BusX86 extends Component {
      *
      * See saveMemory() for more information on how the memory block contents are saved.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {Array} a
      * @returns {boolean} true if successful, false if not
      */
@@ -11792,7 +12437,7 @@ class BusX86 extends Component {
     /**
      * addPortInputBreak(port)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number|null} [port]
      * @returns {boolean} true if break on port input enabled, false if disabled
      */
@@ -11814,7 +12459,7 @@ class BusX86 extends Component {
      *
      * Add a port input-notification handler to the list of such handlers.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} start port address
      * @param {number} end port address
      * @param {function(number,number)} fn is called with the port and LIP values at the time of the input
@@ -11838,7 +12483,7 @@ class BusX86 extends Component {
      *
      * Add port input-notification handlers from the specified table (a batch version of addPortInputNotify)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {Component} component
      * @param {Object} table
      * @param {number} [offset] is an optional port offset
@@ -11856,7 +12501,7 @@ class BusX86 extends Component {
      *
      * By default, all input ports are 1 byte wide; ports that are wider must call this function.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} port
      * @param {number} size (1, 2 or 4)
      */
@@ -11868,7 +12513,7 @@ class BusX86 extends Component {
     /**
      * checkPortInputNotify(port, size, addrLIP)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} port
      * @param {number} size (1, 2 or 4)
      * @param {number} [addrLIP] is the LIP value at the time of the input
@@ -11934,7 +12579,7 @@ class BusX86 extends Component {
     /**
      * addPortOutputBreak(port)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number|null} [port]
      * @returns {boolean} true if break on port output enabled, false if disabled
      */
@@ -11956,7 +12601,7 @@ class BusX86 extends Component {
      *
      * Add a port output-notification handler to the list of such handlers.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} start port address
      * @param {number} end port address
      * @param {function(number,number)} fn is called with the port and LIP values at the time of the output
@@ -11980,7 +12625,7 @@ class BusX86 extends Component {
      *
      * Add port output-notification handlers from the specified table (a batch version of addPortOutputNotify)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {Component} component
      * @param {Object} table
      * @param {number} [offset] is an optional port offset
@@ -11998,7 +12643,7 @@ class BusX86 extends Component {
      *
      * By default, all output ports are 1 byte wide; ports that are wider must call this function.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} port
      * @param {number} size (1, 2 or 4)
      */
@@ -12010,7 +12655,7 @@ class BusX86 extends Component {
     /**
      * checkPortOutputNotify(port, size, data, addrLIP)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} port
      * @param {number} size
      * @param {number} data
@@ -12061,7 +12706,7 @@ class BusX86 extends Component {
     /**
      * reportError(op, addr, size, fQuiet)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} op
      * @param {number} addr
      * @param {number} size
@@ -12079,7 +12724,7 @@ class BusX86 extends Component {
      *
      * This is useful for the Debugger and other components that want to bypass getLong() breakpoint detection.
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @returns {number} long (32-bit) value at that address
      *
@@ -12117,7 +12762,7 @@ class BusX86 extends Component {
      * This is useful for the Debugger and other components that want to bypass breakpoint detection AND read-only
      * memory protection (for example, this is an interface the ROM component could use to initialize ROM contents).
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr is a physical address
      * @param {number} l is the long (32-bit) value to write
      *
@@ -12151,7 +12796,7 @@ class BusX86 extends Component {
     /**
      * getBackTrackObjectFromAddr(addr)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr
      * @returns {Object|null}
      *
@@ -12164,7 +12809,7 @@ class BusX86 extends Component {
     /**
      * getBackTrackInfoFromAddr(addr)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} addr
      * @returns {string|null}
      *
@@ -12179,7 +12824,7 @@ class BusX86 extends Component {
      *
      * Remove port input-notification handler(s) (to be ENABLED later if needed)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} start address
      * @param {number} end address
      *
@@ -12198,7 +12843,7 @@ class BusX86 extends Component {
      *
      * Remove port output-notification handler(s) (to be ENABLED later if needed)
      *
-     * @this {BusX86}
+     * @this {Busx86}
      * @param {number} start address
      * @param {number} end address
      *
@@ -12234,10 +12879,10 @@ var littleEndian = (TYPEDARRAYS? (function() {
 })() : false);
 
 /**
- * @class MemoryX86
+ * @class Memoryx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class MemoryX86 {
+class Memoryx86 {
     /**
      * Memory(addr, used, size, type, controller)
      *
@@ -12271,25 +12916,25 @@ class MemoryX86 {
      * such as Component.assert(), use the corresponding Debugger methods instead (assuming a debugger
      * is available).
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} [addr] of lowest used address in block
      * @param {number} [used] portion of block in bytes (0 for none); must be a multiple of 4
      * @param {number} [size] of block's buffer in bytes (0 for none); must be a multiple of 4
-     * @param {number} [type] is one of the MemoryX86.TYPE constants (default is MemoryX86.TYPE.NONE)
+     * @param {number} [type] is one of the Memoryx86.TYPE constants (default is Memoryx86.TYPE.NONE)
      * @param {Controller} [controller] is an optional memory controller component
      * @param {CPUx86} [cpu] is required for UNPAGED memory blocks, so that the CPU can map it to a PAGED block
      */
     constructor(addr, used, size, type, controller, cpu)
     {
         let i;
-        this.id = (MemoryX86.idBlock += 2);
+        this.id = (Memoryx86.idBlock += 2);
         this.adw = null;
         this.offset = 0;
         this.addr = addr;
         this.used = used;
         this.size = size || 0;
-        this.type = type || MemoryX86.TYPE.NONE;
-        this.fReadOnly = (type == MemoryX86.TYPE.ROM);
+        this.type = type || Memoryx86.TYPE.NONE;
+        this.fReadOnly = (type == Memoryx86.TYPE.ROM);
         this.controller = null;
         this.cpu = cpu;             // if a CPU reference is provided, then this must be an UNPAGED Memory block allocation
         this.copyBreakpoints();     // initialize the block's Debugger info (eg, breakpoint totals); the caller will reinitialize
@@ -12302,7 +12947,7 @@ class MemoryX86 {
          * which performs its own dirty block tracking, so general-purpose memory blocks no longer need to pay this
          * penalty.
          */
-        this.flags = MemoryX86.FLAGS.CLEAN;
+        this.flags = Memoryx86.FLAGS.CLEAN;
 
         if (BACKTRACK) {
             if (!size || controller) {
@@ -12361,7 +13006,7 @@ class MemoryX86 {
             this.ab = new Uint8Array(this.buffer, 0, size);
             this.aw = new Uint16Array(this.buffer, 0, size >> 1);
             this.adw = new Int32Array(this.buffer, 0, size >> 2);
-            this.setAccess(littleEndian? MemoryX86.afnArrayLE : MemoryX86.afnArrayBE);
+            this.setAccess(littleEndian? Memoryx86.afnArrayLE : Memoryx86.afnArrayBE);
         } else {
             if (BYTEARRAYS) {
                 this.ab = new Array(size);
@@ -12375,7 +13020,7 @@ class MemoryX86 {
                 this.adw = new Array(size >> 2);
                 for (i = 0; i < this.adw.length; i++) this.adw[i] = 0;
             }
-            this.setAccess(MemoryX86.afnMemory);
+            this.setAccess(Memoryx86.afnMemory);
         }
     }
 
@@ -12384,7 +13029,7 @@ class MemoryX86 {
      *
      * Quick reinitializer when reusing a Memory block.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} addr
      */
     init(addr)
@@ -12395,15 +13040,15 @@ class MemoryX86 {
     /**
      * clean(fScrub)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {boolean} [fScrub]
      * @returns {boolean} (true if block is not dirty, false otherwise)
      */
     clean(fScrub)
     {
-        if (this.flags & MemoryX86.FLAGS.DIRTY) {
+        if (this.flags & Memoryx86.FLAGS.DIRTY) {
             if (fScrub) {
-                this.flags = (this.flags & ~MemoryX86.FLAGS.DIRTY) | MemoryX86.FLAGS.MODIFIED;
+                this.flags = (this.flags & ~Memoryx86.FLAGS.DIRTY) | Memoryx86.FLAGS.MODIFIED;
             }
             return false;
         }
@@ -12413,12 +13058,12 @@ class MemoryX86 {
     /**
      * modified()
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @returns {boolean} (true if block is dirty and/or modified, false otherwise)
      */
     modified()
     {
-        return (this.flags & (MemoryX86.FLAGS.DIRTY | MemoryX86.FLAGS.MODIFIED)) != 0;
+        return (this.flags & (Memoryx86.FLAGS.DIRTY | Memoryx86.FLAGS.MODIFIED)) != 0;
     }
 
     /**
@@ -12427,10 +13072,10 @@ class MemoryX86 {
      * Converts the current Memory block (this) into a clone of the given Memory block (mem),
      * and optionally overrides the current block's type with the specified type.
      *
-     * @this {MemoryX86}
-     * @param {MemoryX86} mem
+     * @this {Memoryx86}
+     * @param {Memoryx86} mem
      * @param {number} [type]
-     * @param {DebuggerX86} [dbg]
+     * @param {Debuggerx86} [dbg]
      */
     clone(mem, type, dbg)
     {
@@ -12444,7 +13089,7 @@ class MemoryX86 {
         this.size = mem.size;
         if (type) {
             this.type = type;
-            this.fReadOnly = (type == MemoryX86.TYPE.ROM);
+            this.fReadOnly = (type == Memoryx86.TYPE.ROM);
         }
         if (TYPEDARRAYS) {
             this.buffer = mem.buffer;
@@ -12452,14 +13097,14 @@ class MemoryX86 {
             this.ab = mem.ab;
             this.aw = mem.aw;
             this.adw = mem.adw;
-            this.setAccess(littleEndian? MemoryX86.afnArrayLE : MemoryX86.afnArrayBE);
+            this.setAccess(littleEndian? Memoryx86.afnArrayLE : Memoryx86.afnArrayBE);
         } else {
             if (BYTEARRAYS) {
                 this.ab = mem.ab;
             } else {
                 this.adw = mem.adw;
             }
-            this.setAccess(MemoryX86.afnMemory);
+            this.setAccess(Memoryx86.afnMemory);
         }
         this.copyBreakpoints(dbg, mem);
     }
@@ -12473,7 +13118,7 @@ class MemoryX86 {
      * Memory blocks with custom memory controllers do NOT save their contents; that's the responsibility
      * of the controller component.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @returns {Array|Int32Array|null}
      */
     save()
@@ -12519,7 +13164,7 @@ class MemoryX86 {
      * Bus.restoreMemory(), which is called by CPUx86.restore(), after all other components have been
      * restored and thus all Memory blocks have been allocated by their respective components.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {Array} adw
      * @returns {boolean} true if successful, false if block size mismatch
      */
@@ -12554,7 +13199,7 @@ class MemoryX86 {
                         this.adw[off++] = adw[i];
                     }
                 }
-                this.flags |= MemoryX86.FLAGS.DIRTY;
+                this.flags |= Memoryx86.FLAGS.DIRTY;
             }
             return true;
         }
@@ -12575,7 +13220,7 @@ class MemoryX86 {
             } else {
                 this.adw = adw;
             }
-            this.flags |= MemoryX86.FLAGS.DIRTY;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
             return true;
         }
         return false;
@@ -12598,21 +13243,21 @@ class MemoryX86 {
      * Examples of checks are read/write breakpoints, but it's really up to the Debugger to decide
      * what the check consists of.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {Array.<function()>} [afn] function table
      * @param {boolean} [fDirect] (true to update direct access functions as well; default is true)
      */
     setAccess(afn, fDirect)
     {
         if (!afn) {
-            if (this.type == MemoryX86.TYPE.UNPAGED) {
-                afn = MemoryX86.afnUnpaged;
+            if (this.type == Memoryx86.TYPE.UNPAGED) {
+                afn = Memoryx86.afnUnpaged;
             }
-            else if (this.type == MemoryX86.TYPE.PAGED) {
-                afn = MemoryX86.afnPaged;
+            else if (this.type == Memoryx86.TYPE.PAGED) {
+                afn = Memoryx86.afnPaged;
             } else {
 
-                afn = MemoryX86.afnNone;
+                afn = Memoryx86.afnNone;
             }
         }
         this.setReadAccess(afn, fDirect);
@@ -12622,7 +13267,7 @@ class MemoryX86 {
     /**
      * setReadAccess(afn, fDirect)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {Array.<function()>} afn
      * @param {boolean} [fDirect]
      */
@@ -12643,7 +13288,7 @@ class MemoryX86 {
     /**
      * setWriteAccess(afn, fDirect)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {Array.<function()>} afn
      * @param {boolean} [fDirect]
      */
@@ -12664,7 +13309,7 @@ class MemoryX86 {
     /**
      * resetReadAccess()
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      */
     resetReadAccess()
     {
@@ -12676,7 +13321,7 @@ class MemoryX86 {
     /**
      * resetWriteAccess()
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      */
     resetWriteAccess()
     {
@@ -12690,10 +13335,10 @@ class MemoryX86 {
      *
      * Called for UNPAGED Memory blocks only.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} addr
      * @param {boolean} fWrite (true if called for a write, false if for a read)
-     * @returns {MemoryX86}
+     * @returns {Memoryx86}
      */
     getPageBlock(addr, fWrite)
     {
@@ -12707,11 +13352,11 @@ class MemoryX86 {
     /**
      * setPhysBlock(blockPhys, blockPDE, offPDE, blockPTE, offPTE)
      *
-     * @this {MemoryX86}
-     * @param {MemoryX86} blockPhys
-     * @param {MemoryX86} blockPDE
+     * @this {Memoryx86}
+     * @param {Memoryx86} blockPhys
+     * @param {Memoryx86} blockPDE
      * @param {number} offPDE
-     * @param {MemoryX86} blockPTE
+     * @param {Memoryx86} blockPTE
      * @param {number} offPTE
      */
     setPhysBlock(blockPhys, blockPDE, offPDE, blockPTE, offPTE)
@@ -12730,18 +13375,18 @@ class MemoryX86 {
             this.ab = blockPhys.ab;
             this.aw = blockPhys.aw;
             this.adw = blockPhys.adw;
-            this.setAccess(MemoryX86.afnPagedLE);
+            this.setAccess(Memoryx86.afnPagedLE);
         } else {
-            this.bitPTEAccessed = blockPhys? MemoryX86.adjustEndian(X86.PTE.ACCESSED) : 0;
-            this.bitPTEDirty = blockPhys? MemoryX86.adjustEndian(X86.PTE.ACCESSED | X86.PTE.DIRTY) : 0;
-            this.setAccess(MemoryX86.afnPaged);
+            this.bitPTEAccessed = blockPhys? Memoryx86.adjustEndian(X86.PTE.ACCESSED) : 0;
+            this.bitPTEDirty = blockPhys? Memoryx86.adjustEndian(X86.PTE.ACCESSED | X86.PTE.DIRTY) : 0;
+            this.setAccess(Memoryx86.afnPaged);
         }
     }
 
     /**
      * printAddr(sMessage)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {string} sMessage
      */
     printAddr(sMessage)
@@ -12758,7 +13403,7 @@ class MemoryX86 {
      * while others require access only if the CPU has set a read or write breakpoint in one of its Debug registers; the latter
      * case is handled here by virtue of the CPU parameter.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {boolean} fWrite
      * @param {CPUx86} [cpu] (required for breakpoints set by the CPU, as opposed to the Debugger)
@@ -12768,14 +13413,14 @@ class MemoryX86 {
         if (!fWrite) {
             if (this.cReadBreakpoints++ === 0) {
                 if (cpu) this.cpu = cpu;
-                this.setReadAccess(MemoryX86.afnChecked, false);
+                this.setReadAccess(Memoryx86.afnChecked, false);
             }
             if (DEBUG) this.printAddr("read breakpoint added to memory block");
         }
         else {
             if (this.cWriteBreakpoints++ === 0) {
                 if (cpu) this.cpu = cpu;
-                this.setWriteAccess(MemoryX86.afnChecked, false);
+                this.setWriteAccess(Memoryx86.afnChecked, false);
             }
             if (DEBUG) this.printAddr("write breakpoint added to memory block");
         }
@@ -12793,7 +13438,7 @@ class MemoryX86 {
      * the former goes to zero, we can unconditionally remove the CPU reference; UNPAGED blocks would automatically
      * increment that reference count, so their CPU reference would never go away.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {boolean} fWrite
      */
@@ -12818,9 +13463,9 @@ class MemoryX86 {
     /**
      * copyBreakpoints(dbg, mem)
      *
-     * @this {MemoryX86}
-     * @param {DebuggerX86} [dbg]
-     * @param {MemoryX86} [mem] (outgoing Memory block to copy breakpoints from, if any)
+     * @this {Memoryx86}
+     * @param {Debuggerx86} [dbg]
+     * @param {Memoryx86} [mem] (outgoing Memory block to copy breakpoints from, if any)
      */
     copyBreakpoints(dbg, mem)
     {
@@ -12829,10 +13474,10 @@ class MemoryX86 {
         if (mem) {
             if (mem.cpu) this.cpu = mem.cpu;
             if ((this.cReadBreakpoints = mem.cReadBreakpoints)) {
-                this.setReadAccess(MemoryX86.afnChecked, false);
+                this.setReadAccess(Memoryx86.afnChecked, false);
             }
             if ((this.cWriteBreakpoints = mem.cWriteBreakpoints)) {
-                this.setWriteAccess(MemoryX86.afnChecked, false);
+                this.setWriteAccess(Memoryx86.afnChecked, false);
             }
         }
     }
@@ -12852,7 +13497,7 @@ class MemoryX86 {
      * Also, I'm reluctant to address that potential issue by simply returning -1, because to date, the above
      * Memory interfaces have always returned values that are properly masked to 8, 16 or 32 bits, respectively.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -12868,7 +13513,7 @@ class MemoryX86 {
     /**
      * writeNone(off, v, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} v (could be either a byte or word value, since we use the same handler for both kinds of accesses)
      * @param {number} addr
@@ -12883,7 +13528,7 @@ class MemoryX86 {
     /**
      * readShortDefault(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -12896,7 +13541,7 @@ class MemoryX86 {
     /**
      * readLongDefault(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -12909,7 +13554,7 @@ class MemoryX86 {
     /**
      * writeShortDefault(off, w, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} w
      * @param {number} addr
@@ -12923,7 +13568,7 @@ class MemoryX86 {
     /**
      * writeLongDefault(off, w, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} w
      * @param {number} addr
@@ -12939,7 +13584,7 @@ class MemoryX86 {
     /**
      * readByteMemory(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -12955,7 +13600,7 @@ class MemoryX86 {
     /**
      * readShortMemory(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -12980,7 +13625,7 @@ class MemoryX86 {
     /**
      * readLongMemory(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13003,7 +13648,7 @@ class MemoryX86 {
     /**
      * writeByteMemory(off, b, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} b
      * @param {number} addr
@@ -13017,13 +13662,13 @@ class MemoryX86 {
             let nShift = (off & 0x3) << 3;
             this.adw[idw] = (this.adw[idw] & ~(0xff << nShift)) | (b << nShift);
         }
-        // this.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * writeShortMemory(off, w, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} w
      * @param {number} addr
@@ -13044,13 +13689,13 @@ class MemoryX86 {
                 this.adw[idw] = (this.adw[idw] & (0xffffff00|0)) | (w >> 8);
             }
         }
-        // this.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * writeLongMemory(off, l, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} l
      * @param {number} addr
@@ -13074,7 +13719,7 @@ class MemoryX86 {
                 this.adw[idw] = (this.adw[idw] & mask) | (l >>> (32 - nShift));
             }
         }
-        // this.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
@@ -13084,7 +13729,7 @@ class MemoryX86 {
      * the checkMemory functions need "this.addr + off" rather than "addr", because the former will be the physical
      * address rather than the linear address.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13100,7 +13745,7 @@ class MemoryX86 {
     /**
      * readShortChecked(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13116,7 +13761,7 @@ class MemoryX86 {
     /**
      * readLongChecked(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13132,7 +13777,7 @@ class MemoryX86 {
     /**
      * writeByteChecked(off, b, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @param {number} b
@@ -13148,7 +13793,7 @@ class MemoryX86 {
     /**
      * writeShortChecked(off, w, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @param {number} w
@@ -13164,7 +13809,7 @@ class MemoryX86 {
     /**
      * writeLongChecked(off, l, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} l
      * @param {number} addr
@@ -13180,7 +13825,7 @@ class MemoryX86 {
     /**
      * readBytePaged(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13195,7 +13840,7 @@ class MemoryX86 {
     /**
      * readShortPaged(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13210,7 +13855,7 @@ class MemoryX86 {
     /**
      * readLongPaged(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13225,7 +13870,7 @@ class MemoryX86 {
     /**
      * writeBytePaged(off, b, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} b
      * @param {number} addr
@@ -13240,7 +13885,7 @@ class MemoryX86 {
     /**
      * writeShortPaged(off, w, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} w
      * @param {number} addr
@@ -13255,7 +13900,7 @@ class MemoryX86 {
     /**
      * writeLongPaged(off, l, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} l
      * @param {number} addr
@@ -13270,7 +13915,7 @@ class MemoryX86 {
     /**
      * readByteUnpaged(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13283,7 +13928,7 @@ class MemoryX86 {
     /**
      * readShortUnpaged(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13296,7 +13941,7 @@ class MemoryX86 {
     /**
      * readLongUnpaged(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13309,7 +13954,7 @@ class MemoryX86 {
     /**
      * writeByteUnpaged(off, b, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} b
      * @param {number} addr
@@ -13322,7 +13967,7 @@ class MemoryX86 {
     /**
      * writeShortUnpaged(off, w, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} w
      * @param {number} addr
@@ -13335,7 +13980,7 @@ class MemoryX86 {
     /**
      * writeLongUnpaged(off, l, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} l
      * @param {number} addr
@@ -13348,7 +13993,7 @@ class MemoryX86 {
     /**
      * readByteBE(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13361,7 +14006,7 @@ class MemoryX86 {
     /**
      * readByteLE(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13374,7 +14019,7 @@ class MemoryX86 {
     /**
      * readBytePLE(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13399,7 +14044,7 @@ class MemoryX86 {
     /**
      * readShortBE(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13412,7 +14057,7 @@ class MemoryX86 {
     /**
      * readShortLE(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13429,7 +14074,7 @@ class MemoryX86 {
     /**
      * readShortPLE(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13458,7 +14103,7 @@ class MemoryX86 {
     /**
      * readLongBE(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13471,7 +14116,7 @@ class MemoryX86 {
     /**
      * readLongLE(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13488,7 +14133,7 @@ class MemoryX86 {
     /**
      * readLongPLE(off, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @returns {number}
@@ -13516,7 +14161,7 @@ class MemoryX86 {
     /**
      * writeByteBE(off, b, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} b
      * @param {number} addr
@@ -13524,13 +14169,13 @@ class MemoryX86 {
     writeByteBE(off, b, addr)
     {
         this.ab[off] = b;
-        // this.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * writeByteLE(off, b, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @param {number} b
@@ -13538,13 +14183,13 @@ class MemoryX86 {
     writeByteLE(off, b, addr)
     {
         this.ab[off] = b;
-        // this.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * writeBytePLE(off, b, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @param {number} b
@@ -13570,13 +14215,13 @@ class MemoryX86 {
          * saveMemory(), but the CPU now asks that function to save all physical memory blocks whenever paging is enabled,
          * so no worries there either.
          */
-        // this.blockPhys.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.blockPhys.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * writeShortBE(off, w, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @param {number} w
@@ -13584,13 +14229,13 @@ class MemoryX86 {
     writeShortBE(off, w, addr)
     {
         this.dv.setUint16(off, w, true);
-        // this.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * writeShortLE(off, w, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @param {number} w
@@ -13607,13 +14252,13 @@ class MemoryX86 {
         } else {
             this.aw[off >> 1] = w;
         }
-        // this.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * writeShortPLE(off, w, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} addr
      * @param {number} w
@@ -13649,13 +14294,13 @@ class MemoryX86 {
          * worries there.  Second, we have saveMemory(), but the CPU now asks that function to save all physical
          * memory blocks whenever paging is enabled, so no worries there either.
          */
-        // this.blockPhys.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.blockPhys.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * writeLongBE(off, l, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} l
      * @param {number} addr
@@ -13663,13 +14308,13 @@ class MemoryX86 {
     writeLongBE(off, l, addr)
     {
         this.dv.setInt32(off, l, true);
-        // this.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * writeLongLE(off, l, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} l
      * @param {number} addr
@@ -13688,13 +14333,13 @@ class MemoryX86 {
         } else {
             this.adw[off >> 2] = l;
         }
-        // this.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * writeLongPLE(off, l, addr)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} l
      * @param {number} addr
@@ -13732,13 +14377,13 @@ class MemoryX86 {
          * worries there.  Second, we have saveMemory(), but the CPU now asks that function to save all physical
          * memory blocks whenever paging is enabled, so no worries there either.
          */
-        // this.blockPhys.flags |= MemoryX86.FLAGS.DIRTY;
+        // this.blockPhys.flags |= Memoryx86.FLAGS.DIRTY;
     }
 
     /**
      * readBackTrackNone(off)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @returns {number}
      */
@@ -13750,7 +14395,7 @@ class MemoryX86 {
     /**
      * writeBackTrackNone(off, bti)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} bti
      */
@@ -13761,7 +14406,7 @@ class MemoryX86 {
     /**
      * modBackTrackNone(fMod)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {boolean} fMod
      */
     modBackTrackNone(fMod)
@@ -13772,7 +14417,7 @@ class MemoryX86 {
     /**
      * readBackTrackIndex(off)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @returns {number}
      */
@@ -13784,7 +14429,7 @@ class MemoryX86 {
     /**
      * writeBackTrackIndex(off, bti)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off
      * @param {number} bti
      * @returns {number} previous bti (0 if none)
@@ -13800,7 +14445,7 @@ class MemoryX86 {
     /**
      * modBackTrackIndex(fMod)
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {boolean} fMod
      * @returns {boolean} previous value
      */
@@ -13850,7 +14495,7 @@ class MemoryX86 {
  * Originally, the Debugger always went through the Bus interfaces, and could therefore modify ROMs as well,
  * but with the introduction of protected mode memory segmentation (and later paging), where logical and
  * physical addresses were no longer the same, that is no longer true.  For coherency, all Debugger memory
- * accesses now go through SegX86 and CPUx86 memory interfaces, so that the user sees the same segment
+ * accesses now go through Segx86 and CPUx86 memory interfaces, so that the user sees the same segment
  * and page translation that the CPU sees.  However, the Debugger uses a special probeAddr() interface to
  * read memory, along with a special "fSuppress" flag to mapPageBlock(), to prevent its memory accesses
  * from triggering segment and/or page faults when invalid or not-present segments or pages are accessed.
@@ -13862,7 +14507,7 @@ class MemoryX86 {
  * read-only memory), but the larger purpose of these types is to help document the caller's intent and to
  * provide the Control Panel with the ability to highlight memory regions accordingly.
  */
-MemoryX86.TYPE = {
+Memoryx86.TYPE = {
     NONE:       0,
     RAM:        1,
     ROM:        2,
@@ -13874,7 +14519,7 @@ MemoryX86.TYPE = {
     NAMES:      ["NONE",  "RAM",  "ROM",   "VIDEO", "H/W", "UNPAGED", "PAGED"]
 };
 
-MemoryX86.FLAGS = {
+Memoryx86.FLAGS = {
     CLEAN:      0x0,
     DIRTY:      0x1,
     MODIFIED:   0x2
@@ -13883,88 +14528,88 @@ MemoryX86.FLAGS = {
 /*
  * Last used block ID (used for debugging only)
  */
-MemoryX86.idBlock = 0;
+Memoryx86.idBlock = 0;
 
 
 /*
  * This is the effective definition of afnNone, but we need not fully define it, because setAccess() uses these
  * defaults when any of the 6 handlers (ie, 2 byte handlers, 2 short handlers, and 2 long handlers) are undefined.
  *
-MemoryX86.afnNone = [
-    MemoryX86.prototype.readNone,
-    MemoryX86.prototype.writeNone,
-    MemoryX86.prototype.readShortDefault,
-    MemoryX86.prototype.writeShortDefault,
-    MemoryX86.prototype.readLongDefault,
-    MemoryX86.prototype.writeLongDefault
+Memoryx86.afnNone = [
+    Memoryx86.prototype.readNone,
+    Memoryx86.prototype.writeNone,
+    Memoryx86.prototype.readShortDefault,
+    Memoryx86.prototype.writeShortDefault,
+    Memoryx86.prototype.readLongDefault,
+    Memoryx86.prototype.writeLongDefault
 ];
  */
-MemoryX86.afnNone = [];
+Memoryx86.afnNone = [];
 
-MemoryX86.afnMemory = [
-    MemoryX86.prototype.readByteMemory,
-    MemoryX86.prototype.writeByteMemory,
-    MemoryX86.prototype.readShortMemory,
-    MemoryX86.prototype.writeShortMemory,
-    MemoryX86.prototype.readLongMemory,
-    MemoryX86.prototype.writeLongMemory
+Memoryx86.afnMemory = [
+    Memoryx86.prototype.readByteMemory,
+    Memoryx86.prototype.writeByteMemory,
+    Memoryx86.prototype.readShortMemory,
+    Memoryx86.prototype.writeShortMemory,
+    Memoryx86.prototype.readLongMemory,
+    Memoryx86.prototype.writeLongMemory
 ];
 
-MemoryX86.afnChecked = [
-    MemoryX86.prototype.readByteChecked,
-    MemoryX86.prototype.writeByteChecked,
-    MemoryX86.prototype.readShortChecked,
-    MemoryX86.prototype.writeShortChecked,
-    MemoryX86.prototype.readLongChecked,
-    MemoryX86.prototype.writeLongChecked
+Memoryx86.afnChecked = [
+    Memoryx86.prototype.readByteChecked,
+    Memoryx86.prototype.writeByteChecked,
+    Memoryx86.prototype.readShortChecked,
+    Memoryx86.prototype.writeShortChecked,
+    Memoryx86.prototype.readLongChecked,
+    Memoryx86.prototype.writeLongChecked
 ];
 
 if (PAGEBLOCKS) {
-    MemoryX86.afnPaged = [
-        MemoryX86.prototype.readBytePaged,
-        MemoryX86.prototype.writeBytePaged,
-        MemoryX86.prototype.readShortPaged,
-        MemoryX86.prototype.writeShortPaged,
-        MemoryX86.prototype.readLongPaged,
-        MemoryX86.prototype.writeLongPaged
+    Memoryx86.afnPaged = [
+        Memoryx86.prototype.readBytePaged,
+        Memoryx86.prototype.writeBytePaged,
+        Memoryx86.prototype.readShortPaged,
+        Memoryx86.prototype.writeShortPaged,
+        Memoryx86.prototype.readLongPaged,
+        Memoryx86.prototype.writeLongPaged
     ];
 
-    MemoryX86.afnUnpaged = [
-        MemoryX86.prototype.readByteUnpaged,
-        MemoryX86.prototype.writeByteUnpaged,
-        MemoryX86.prototype.readShortUnpaged,
-        MemoryX86.prototype.writeShortUnpaged,
-        MemoryX86.prototype.readLongUnpaged,
-        MemoryX86.prototype.writeLongUnpaged
+    Memoryx86.afnUnpaged = [
+        Memoryx86.prototype.readByteUnpaged,
+        Memoryx86.prototype.writeByteUnpaged,
+        Memoryx86.prototype.readShortUnpaged,
+        Memoryx86.prototype.writeShortUnpaged,
+        Memoryx86.prototype.readLongUnpaged,
+        Memoryx86.prototype.writeLongUnpaged
     ];
 }
 
 if (TYPEDARRAYS) {
-    MemoryX86.afnArrayBE = [
-        MemoryX86.prototype.readByteBE,
-        MemoryX86.prototype.writeByteBE,
-        MemoryX86.prototype.readShortBE,
-        MemoryX86.prototype.writeShortBE,
-        MemoryX86.prototype.readLongBE,
-        MemoryX86.prototype.writeLongBE
+    Memoryx86.afnArrayBE = [
+        Memoryx86.prototype.readByteBE,
+        Memoryx86.prototype.writeByteBE,
+        Memoryx86.prototype.readShortBE,
+        Memoryx86.prototype.writeShortBE,
+        Memoryx86.prototype.readLongBE,
+        Memoryx86.prototype.writeLongBE
     ];
 
-    MemoryX86.afnArrayLE = [
-        MemoryX86.prototype.readByteLE,
-        MemoryX86.prototype.writeByteLE,
-        MemoryX86.prototype.readShortLE,
-        MemoryX86.prototype.writeShortLE,
-        MemoryX86.prototype.readLongLE,
-        MemoryX86.prototype.writeLongLE
+    Memoryx86.afnArrayLE = [
+        Memoryx86.prototype.readByteLE,
+        Memoryx86.prototype.writeByteLE,
+        Memoryx86.prototype.readShortLE,
+        Memoryx86.prototype.writeShortLE,
+        Memoryx86.prototype.readLongLE,
+        Memoryx86.prototype.writeLongLE
     ];
 
-    MemoryX86.afnPagedLE = [
-        MemoryX86.prototype.readBytePLE,
-        MemoryX86.prototype.writeBytePLE,
-        MemoryX86.prototype.readShortPLE,
-        MemoryX86.prototype.writeShortPLE,
-        MemoryX86.prototype.readLongPLE,
-        MemoryX86.prototype.writeLongPLE
+    Memoryx86.afnPagedLE = [
+        Memoryx86.prototype.readBytePLE,
+        Memoryx86.prototype.writeBytePLE,
+        Memoryx86.prototype.readShortPLE,
+        Memoryx86.prototype.writeShortPLE,
+        Memoryx86.prototype.readLongPLE,
+        Memoryx86.prototype.writeLongPLE
     ];
 }
 
@@ -13976,14 +14621,14 @@ if (TYPEDARRAYS) {
 let TimeLog;
 
 /**
- * @class CPULib
+ * @class CPU
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class CPULib extends Component {
+class CPU extends Component {
     /**
-     * CPULib(parmsCPU, nCyclesDefault)
+     * CPU(parmsCPU, nCyclesDefault)
      *
-     * The CPULib class supports the following (parmsCPU) properties:
+     * The CPU class supports the following (parmsCPU) properties:
      *
      *      cycles: the machine's base cycles per second; the CPUx86 constructor will provide us with a default
      *      (based on the CPU model) to use as a fallback.
@@ -14006,7 +14651,7 @@ class CPULib extends Component {
      *
      * It is extended by the CPUx86 component, where all the x86-specific logic resides.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {Object} parmsCPU
      * @param {number} nCyclesDefault
      */
@@ -14020,7 +14665,7 @@ class CPULib extends Component {
 
         if (DEBUG) this.aTimeLogs = [null, null];
         this.nBaseCyclesPerSecond = nCycles;
-        this.msPerYield = Math.round(1000 / CPULib.YIELDS_PER_SECOND);
+        this.msPerYield = Math.round(1000 / CPU.YIELDS_PER_SECOND);
 
         /*
          * nTargetMultiplier replaces the old "speed" variable (0, 1, 2) and eliminates the need for
@@ -14072,7 +14717,7 @@ class CPULib extends Component {
     /**
      * addTimeLog(nCycles, nCyclesTotal, msBegin, msDuration)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} nCycles
      * @param {number} nCyclesTotal
      * @param {number} msBegin
@@ -14112,11 +14757,11 @@ class CPULib extends Component {
     /**
      * initBus(cmp, bus, cpu, dbg)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {Computer} cmp
-     * @param {BusX86} bus
-     * @param {CPULib} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Busx86} bus
+     * @param {CPU} cpu
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -14124,9 +14769,9 @@ class CPULib extends Component {
         this.bus = bus;
         this.dbg = dbg;
 
-        for (let i = 0; i < CPULib.BUTTONS.length; i++) {
-            let control = this.bindings[CPULib.BUTTONS[i]];
-            if (control) this.cmp.setBinding("", CPULib.BUTTONS[i], control);
+        for (let i = 0; i < CPU.BUTTONS.length; i++) {
+            let control = this.bindings[CPU.BUTTONS[i]];
+            if (control) this.cmp.setBinding("", CPU.BUTTONS[i], control);
         }
 
         this.fpuActive = null;
@@ -14160,7 +14805,7 @@ class CPULib extends Component {
      *
      * This is a placeholder for reset (overridden by the CPUx86 component).
      *
-     * @this {CPULib}
+     * @this {CPU}
      */
     reset()
     {
@@ -14171,7 +14816,7 @@ class CPULib extends Component {
      *
      * This is a placeholder for save support (overridden by the CPUx86 component).
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {boolean} [fRunning]
      * @returns {Object|null}
      */
@@ -14185,7 +14830,7 @@ class CPULib extends Component {
      *
      * This is a placeholder for restore support (overridden by the CPUx86 component).
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {Object} data
      * @returns {boolean} true if restore successful, false if not
      */
@@ -14197,7 +14842,7 @@ class CPULib extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @returns {boolean} true if successful, false if failure
@@ -14234,7 +14879,7 @@ class CPULib extends Component {
     /**
      * powerDown(fSave, fShutdown)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -14255,7 +14900,7 @@ class CPULib extends Component {
     /**
      * autoStart()
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {boolean} true if started, false if not
      */
     autoStart()
@@ -14275,7 +14920,7 @@ class CPULib extends Component {
     /**
      * isPowered()
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {boolean}
      */
     isPowered()
@@ -14290,7 +14935,7 @@ class CPULib extends Component {
     /**
      * isRunning()
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {boolean}
      */
     isRunning()
@@ -14303,7 +14948,7 @@ class CPULib extends Component {
      *
      * This will be implemented by the CPUx86 component.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
@@ -14318,7 +14963,7 @@ class CPULib extends Component {
      * cycle counter that will trigger the next displayChecksum(); called by resetCycles(), which is called whenever
      * the CPU is reset or restored.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {boolean} true if checksum generation enabled, false if not
      */
     resetChecksum()
@@ -14347,7 +14992,7 @@ class CPULib extends Component {
      * the exact number cycles that were actually executed.  This should give us instruction-granular checksums
      * at precise intervals that are 100% repeatable.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} nCycles
      */
     updateChecksum(nCycles)
@@ -14382,7 +15027,7 @@ class CPULib extends Component {
      * checksums generated at the specified cycle intervals, as specified by the "csStart" and "csInterval" parmsCPU
      * properties).
      *
-     * @this {CPULib}
+     * @this {CPU}
      */
     displayChecksum()
     {
@@ -14395,7 +15040,7 @@ class CPULib extends Component {
      * This is principally for displaying register values, but in reality, it can be used to display any
      * numeric (hex) value bound to the given label.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {string} sLabel
      * @param {number} nValue
      * @param {number} cch
@@ -14426,7 +15071,7 @@ class CPULib extends Component {
     /**
      * setBinding(sHTMLType, sBinding, control, sValue)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea", "canvas")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
@@ -14496,7 +15141,7 @@ class CPULib extends Component {
      *
      * This function is used by the ChipSet component whenever (for example) a very low timer count is set.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} nCycles (the target number of cycles to drop the current burst)
      * @returns {boolean}
      */
@@ -14522,7 +15167,7 @@ class CPULib extends Component {
     /**
      * addCycles(nCycles, fEndStep)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} nCycles
      * @param {boolean} [fEndStep]
      */
@@ -14539,7 +15184,7 @@ class CPULib extends Component {
      *
      * Calculate the maximum number of cycles we should attempt to process before the next yield.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {boolean} (true if there was a change to the multiplier, false if not)
      */
     calcCycles()
@@ -14550,7 +15195,7 @@ class CPULib extends Component {
         } else if (nMultiplier < 1) {
             nMultiplier = 1;
         }
-        this.nCyclesPerYield = Math.floor(this.nBaseCyclesPerSecond / CPULib.YIELDS_PER_SECOND * nMultiplier);
+        this.nCyclesPerYield = Math.floor(this.nBaseCyclesPerSecond / CPU.YIELDS_PER_SECOND * nMultiplier);
         if (this.nCurrentMultiplier !== nMultiplier) {
             this.nCurrentMultiplier = nMultiplier;
             return true;
@@ -14571,7 +15216,7 @@ class CPULib extends Component {
      * nTotalCycles eventually get reset by calcSpeed(), to avoid overflow, so components that rely on
      * getCycles() returning steadily increasing values should also be prepared for a reset at any time.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {boolean} [fScaled] is true if the caller wants a cycle count relative to a multiplier of 1
      * @returns {number}
      */
@@ -14607,7 +15252,7 @@ class CPULib extends Component {
      *
      * This returns the CPU's base speed (ie, the original cycles per second defined for the machine)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {number}
      */
     getBaseCyclesPerSecond()
@@ -14620,7 +15265,7 @@ class CPULib extends Component {
      *
      * This returns the CPU's current speed (ie, the actual cycles per second, according the current multiplier)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {number}
      */
     getCurrentCyclesPerSecond()
@@ -14635,7 +15280,7 @@ class CPULib extends Component {
      * It's important that this be called BEFORE the actual restore() call, because restore() may want to call setSpeed(),
      * which in turn assumes that all the cycle counts have been initialized to sensible values.
      *
-     * @this {CPULib}
+     * @this {CPU}
      */
     resetCycles()
     {
@@ -14647,7 +15292,7 @@ class CPULib extends Component {
     /**
      * getSpeed()
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {number} the current speed multiplier
      */
     getSpeed()
@@ -14658,7 +15303,7 @@ class CPULib extends Component {
     /**
      * getSpeedCurrent()
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {string} the current speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedCurrent()
@@ -14669,7 +15314,7 @@ class CPULib extends Component {
     /**
      * getSpeedTarget()
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {string} the target speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedTarget()
@@ -14680,7 +15325,7 @@ class CPULib extends Component {
     /**
      * setSpeed(nMultiplier, fUpdateFocus)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} [nMultiplier] is the new proposed multiplier (reverts to default if target was too high)
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
      * @returns {boolean} true if successful, false if not
@@ -14724,7 +15369,7 @@ class CPULib extends Component {
     /**
      * calcSpeed(nCycles, msElapsed)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} nCycles
      * @param {number} msElapsed
      */
@@ -14743,7 +15388,7 @@ class CPULib extends Component {
     /**
      * calcStartTime()
      *
-     * @this {CPULib}
+     * @this {CPU}
      */
     calcStartTime()
     {
@@ -14801,7 +15446,7 @@ class CPULib extends Component {
     /**
      * calcRemainingTime()
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {number}
      */
     calcRemainingTime()
@@ -14905,7 +15550,7 @@ class CPULib extends Component {
      *
      * Why not use JavaScript's setTimeout() instead?  Good question.  For a good answer, see setTimer() below.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {string} id
      * @param {function()} callBack
      * @param {number} [ms] (setTimer value: milliseconds if positive, cycles if negative, zero if not used)
@@ -14924,7 +15569,7 @@ class CPULib extends Component {
      *
      * Using the timer index from a previous addTimer() call, this clears that timer.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} iTimer
      * @returns {boolean}
      */
@@ -14940,7 +15585,7 @@ class CPULib extends Component {
     /**
      * findTimer(id)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {string} id
      * @returns {Array|null}
      */
@@ -14956,7 +15601,7 @@ class CPULib extends Component {
     /**
      * isTimerSet(iTimer)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} iTimer
      * @returns {boolean}
      */
@@ -14975,7 +15620,7 @@ class CPULib extends Component {
      * have a fixed millisecond period and re-arm them, because the timers are using cycle counts that were based
      * on a previous multiplier.
      *
-     * @this {CPULib}
+     * @this {CPU}
      */
     resetTimers()
     {
@@ -14988,7 +15633,7 @@ class CPULib extends Component {
     /**
      * restoreTimers(aTimerStates)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {Array} aTimerStates
      */
     restoreTimers(aTimerStates)
@@ -15011,7 +15656,7 @@ class CPULib extends Component {
     /**
      * saveTimers()
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {Array}
      */
     saveTimers()
@@ -15044,7 +15689,7 @@ class CPULib extends Component {
      * use setTimer(); however, due to legacy code (ie, code that predates these functions and/or laziness),
      * that may not be the case.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} iTimer
      * @param {number} ms (number of milliseconds if positive, cycles otherwise)
      * @param {boolean} [fReset] (true if the timer should be reset even if already armed)
@@ -15079,7 +15724,7 @@ class CPULib extends Component {
      * this is the function that actually "fires" any timer(s) whose countdown has reached (or dropped below)
      * zero, invoking their callback function.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} nCycles (number of cycles actually executed)
      */
     updateTimers(nCycles)
@@ -15108,7 +15753,7 @@ class CPULib extends Component {
     /**
      * getMSCycles(ms)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} ms
      * @returns {number} number of corresponding cycles
      */
@@ -15120,7 +15765,7 @@ class CPULib extends Component {
     /**
      * getBurstCycles(nCycles)
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} nCycles (maximum number of cycles to execute)
      * @returns {number}
      */
@@ -15140,7 +15785,7 @@ class CPULib extends Component {
     /**
      * endBurst()
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @returns {number} (number of cycles executed in the most recent burst)
      */
     endBurst()
@@ -15155,7 +15800,7 @@ class CPULib extends Component {
     /**
      * runCPU()
      *
-     * @this {CPULib}
+     * @this {CPU}
      */
     runCPU()
     {
@@ -15286,7 +15931,7 @@ class CPULib extends Component {
      *
      * This will be implemented by the CPUx86 component.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
      * @returns {number} of cycles executed; 0 indicates that the last instruction was not executed
      */
@@ -15300,7 +15945,7 @@ class CPULib extends Component {
      *
      * For use by any component that wants to stop the CPU.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {boolean} [fComplete]
      * @returns {boolean} true if the CPU was stopped, false if it was already stopped
      */
@@ -15336,7 +15981,7 @@ class CPULib extends Component {
      * Use this function to perform any work outside the scope of the CPU (eg, DOM updates),
      * to prevent that work from disrupting our speed calculations.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {function()} fn (should return true only if the function actually performed any work)
      * @returns {boolean}
      */
@@ -15359,7 +16004,7 @@ class CPULib extends Component {
      * other callers of stepCPU(), such as the Debugger, the combination of stepCPU() + updateCPU()
      * provides the old behavior.
      *
-     * @this {CPULib}
+     * @this {CPU}
      * @param {boolean} [fForce] (true to force a Computer update; used by the Debugger)
      */
     updateCPU(fForce)
@@ -15373,7 +16018,7 @@ class CPULib extends Component {
      * Similar to stopCPU() with regard to how it resets various cycle countdown values, but the CPU
      * remains in a "running" state.
      *
-     * @this {CPULib}
+     * @this {CPU}
      */
     yieldCPU()
     {
@@ -15387,9 +16032,9 @@ class CPULib extends Component {
     }
 }
 
-CPULib.YIELDS_PER_SECOND = 60;
+CPU.YIELDS_PER_SECOND = 60;
 
-CPULib.BUTTONS = ["power", "reset"];
+CPU.BUTTONS = ["power", "reset"];
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/cpux86.js (C) 2012-2023 Jeff Parsons
@@ -15399,7 +16044,7 @@ CPULib.BUTTONS = ["power", "reset"];
  * @class CPUx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class CPUx86 extends CPULib {
+class CPUx86 extends CPU {
     /**
      * CPUx86(parmsCPU)
      *
@@ -15527,7 +16172,7 @@ class CPUx86 extends CPULib {
         }
 
         /*
-         * This initial resetRegs() call is important to create all the registers (eg, the SegX86 registers),
+         * This initial resetRegs() call is important to create all the registers (eg, the Segx86 registers),
          * so that if/when we call restore(), it will have something to fill in.
          */
         this.resetRegs();
@@ -15751,7 +16396,7 @@ class CPUx86 extends CPULib {
              * registers, then enables paging, do all the previous Debug register addresses automatically
              * become linear addresses?  I'm guessing they do.
              */
-            this.blockUnpaged = new MemoryX86(undefined, 0, 0, MemoryX86.TYPE.UNPAGED, null, this);
+            this.blockUnpaged = new Memoryx86(undefined, 0, 0, Memoryx86.TYPE.UNPAGED, null, this);
             this.blockUnpaged.copyBreakpoints(this.dbg);
             for (iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
                 this.aMemBlocks[iBlock] = this.blockUnpaged;
@@ -15762,7 +16407,7 @@ class CPUx86 extends CPULib {
              * an invalid block will trigger a fault, so memEmpty will never actually be returned, but
              * if the Debugger is suppressing faults or calling probeAddr(), returning memEmpty is helpful.
              */
-            this.memEmpty = new MemoryX86();
+            this.memEmpty = new Memoryx86();
 
             /*
              * Initialize our PAGEBLOCKS cache (see acquirePageBlock() and releasePageBlock()).
@@ -15806,7 +16451,7 @@ class CPUx86 extends CPULib {
      *
      * @this {CPUx86}
      * @param {number} addr
-     * @returns {MemoryX86}
+     * @returns {Memoryx86}
      */
     acquirePageBlock(addr)
     {
@@ -15821,7 +16466,7 @@ class CPUx86 extends CPULib {
              */
             block.init(addr);
         } else {
-            block = new MemoryX86(addr, 0, 0, MemoryX86.TYPE.PAGED);
+            block = new Memoryx86(addr, 0, 0, Memoryx86.TYPE.PAGED);
         }
         return block;
     }
@@ -15833,7 +16478,7 @@ class CPUx86 extends CPULib {
      * number (CPUx86.PAGEBLOCKS_CACHE) in aCacheBlocks, with iCacheBlocks pointing to the next free element.
      *
      * @this {CPUx86}
-     * @param {MemoryX86} block
+     * @param {Memoryx86} block
      */
     releasePageBlock(block)
     {
@@ -15873,7 +16518,7 @@ class CPUx86 extends CPULib {
      * @param {number} addr is a linear address
      * @param {boolean} fWrite (true if called for a write, false if for a read)
      * @param {boolean} [fSuppress] (true if any faults, remapping, etc should be suppressed)
-     * @returns {MemoryX86}
+     * @returns {Memoryx86}
      */
     mapPageBlock(addr, fWrite, fSuppress)
     {
@@ -16502,12 +17147,12 @@ class CPUx86 extends CPULib {
 
         /*
          * Segment registers used to be defined as separate selector and base variables (eg, regCS and regCS0),
-         * but now they are defined as SegX86 objects.
+         * but now they are defined as Segx86 objects.
          */
-        this.segCS     = new SegX86(this, SegX86.ID.CODE,  "CS");
-        this.segDS     = new SegX86(this, SegX86.ID.DATA,  "DS");
-        this.segES     = new SegX86(this, SegX86.ID.DATA,  "ES");
-        this.segSS     = new SegX86(this, SegX86.ID.STACK, "SS");
+        this.segCS     = new Segx86(this, Segx86.ID.CODE,  "CS");
+        this.segDS     = new Segx86(this, Segx86.ID.DATA,  "DS");
+        this.segES     = new Segx86(this, Segx86.ID.DATA,  "ES");
+        this.segSS     = new Segx86(this, Segx86.ID.STACK, "SS");
         this.setSP(0);
         this.setSS(0);
 
@@ -16542,15 +17187,15 @@ class CPUx86 extends CPULib {
             this.regCR3 = 0;                // page directory base register (PDBR)
             this.regDR  = [0,0,0,0,null,null,0,0];              // Debug Registers DR0-DR7 (DR4-DR5 are undefined)
             this.regTR  = [null,null,null,null,null,null,0,0];  // Test Registers TR0-TR7 (TR0-TR5 are undefined)
-            this.segFS = new SegX86(this, SegX86.ID.DATA,  "FS");
-            this.segGS = new SegX86(this, SegX86.ID.DATA,  "GS");
+            this.segFS = new Segx86(this, Segx86.ID.DATA,  "FS");
+            this.segGS = new Segx86(this, Segx86.ID.DATA,  "GS");
             /*
              * Synchronize the fact that paging is initially disabled with our PAGEBLOCKS functions
              */
             this.disablePageBlocks();
         }
 
-        this.segNULL = new SegX86(this, SegX86.ID.NULL,  "NULL");
+        this.segNULL = new Segx86(this, Segx86.ID.NULL,  "NULL");
 
         /*
          * The next few initializations mirror what we must do prior to each instruction (ie, inside the stepCPU() function);
@@ -16634,9 +17279,9 @@ class CPUx86 extends CPULib {
              * TODO: Verify what the 80286 actually sets addrGDT and addrGDTLimit to on reset (or if it leaves them alone).
              */
             this.addrGDT = 0; this.addrGDTLimit = 0xffff;                   // GDTR
-            this.segLDT = new SegX86(this, SegX86.ID.LDT, "LDT", true);     // LDTR
-            this.segTSS = new SegX86(this, SegX86.ID.TSS, "TSS", true);     // TR
-            this.segVER = new SegX86(this, SegX86.ID.VER, "VER", true);     // a scratch segment register for VERR and VERW instructions
+            this.segLDT = new Segx86(this, Segx86.ID.LDT, "LDT", true);     // LDTR
+            this.segTSS = new Segx86(this, Segx86.ID.TSS, "TSS", true);     // TR
+            this.segVER = new Segx86(this, Segx86.ID.VER, "VER", true);     // a scratch segment register for VERR and VERW instructions
             this.setCSIP(0xfff0, 0xf000);                   // on an 80286 or 80386, the default CS:IP is 0xF000:0xFFF0 instead of 0xFFFF:0x0000
             this.setCSBase(0xffff0000|0);                   // on an 80286 or 80386, all CS base address bits above bit 15 must be set
         }
@@ -17336,7 +17981,7 @@ class CPUx86 extends CPULib {
      * getSeg(sName)
      *
      * @param {string} sName
-     * @returns {SegX86|Array}
+     * @returns {Segx86|Array}
      */
     getSeg(sName)
     {
@@ -18504,7 +19149,7 @@ class CPUx86 extends CPULib {
     {
         let aBlocks = (fPhysical? this.aBusBlocks : this.aMemBlocks);
         let block = aBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
-        if (block && block.type == MemoryX86.TYPE.UNPAGED) block = this.mapPageBlock(addr, false, true);
+        if (block && block.type == Memoryx86.TYPE.UNPAGED) block = this.mapPageBlock(addr, false, true);
 
         if (block) {
             let off = addr & this.nBlockLimit;
@@ -18731,7 +19376,7 @@ class CPUx86 extends CPULib {
      * getEAByte(seg, off)
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @returns {number} byte (8-bit) value at that address
      */
@@ -18774,7 +19419,7 @@ class CPUx86 extends CPULib {
      * getEAWord(seg, off)
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @returns {number} word (16-bit or 32-bit) value at that address
      */
@@ -19041,7 +19686,7 @@ class CPUx86 extends CPULib {
      * This is like getEAByte(), but it does NOT update regEA.
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @returns {number} byte (8-bit) value at that address
      */
@@ -19056,7 +19701,7 @@ class CPUx86 extends CPULib {
      * This is like getEAWord(), but it does NOT update regEA.
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @returns {number} word (16-bit) value at that address
      */
@@ -19084,7 +19729,7 @@ class CPUx86 extends CPULib {
      * This is like setEAByte(), but it does NOT update regEAWrite.
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @param {number} b is the byte (8-bit) value to write
      */
@@ -19099,7 +19744,7 @@ class CPUx86 extends CPULib {
      * This is like setEAWord(), but it does NOT update regEAWrite.
      *
      * @this {CPUx86}
-     * @param {SegX86} seg register (eg, segDS)
+     * @param {Segx86} seg register (eg, segDS)
      * @param {number} off is a segment-relative offset
      * @param {number} w is the word (16-bit) value to write
      */
@@ -19215,7 +19860,7 @@ class CPUx86 extends CPULib {
         let aBlocks = this.aMemBlocks;
         let regLIP = this.regLIP & ~0x3;
         let block = aBlocks[(regLIP & this.nMemMask) >>> this.nBlockShift];
-        if (block && block.type == MemoryX86.TYPE.UNPAGED) {
+        if (block && block.type == Memoryx86.TYPE.UNPAGED) {
             block = this.mapPageBlock(regLIP, false, true);
             if (block === this.memEmpty) block = null;
         }
@@ -20143,9 +20788,9 @@ class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -23360,14 +24005,14 @@ WebLib.onInit(FPUx86.init);
  */
 
 /**
- * @class SegX86
+ * @class Segx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class SegX86 {
+class Segx86 {
     /**
-     * SegX86(cpu, sName)
+     * Segx86(cpu, sName)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {CPUx86} cpu
      * @param {number} id
      * @param {string} [sName] segment register name
@@ -23376,10 +24021,6 @@ class SegX86 {
     constructor(cpu, id, sName, fProt)
     {
         this.cpu = cpu;
-        /**
-         * @type {DebuggerX86}
-         */
-        this.dbg = cpu.dbg;
         this.id = id;
         this.sName = sName || "";
         this.sel = 0;
@@ -23420,7 +24061,7 @@ class SegX86 {
          *
          * loadIDT() sets fCall to true unconditionally in protected-mode (fCall has no meaning in real-mode).
          */
-        if (this.id == 1 /* SegX86.ID.CODE */) {        // don't use SegX86.ID.CODE until it's defined, or the Closure Compiler won't inline it
+        if (this.id == 1 /* Segx86.ID.CODE */) {        // don't use Segx86.ID.CODE until it's defined, or the Closure Compiler won't inline it
             this.offIP = 0;
             this.fCall = null;
             this.fStackSwitch = false;
@@ -23430,7 +24071,7 @@ class SegX86 {
 
         this.updateMode(true, fProt);
 
-        if (this.id == 0 /* SegX86.ID.NULL */) {
+        if (this.id == 0 /* Segx86.ID.NULL */) {
             this.checkRead = this.checkReadWriteNone;
             this.checkWrite = this.checkReadWriteNone;
         }
@@ -23445,14 +24086,14 @@ class SegX86 {
      * "call break" address.  Which is probably a bad idea, so your function should probably always
      * return false.  Just sayin'.  TODO: Should probably just force all "call break" calls to be skipped.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {function()} fn
      * @returns {Array.<number>} containing offset and selector of call-break address
      */
     addCallBreak(fn)
     {
         this.aCallBreaks.push(fn);
-        return [this.aCallBreaks.length, SegX86.CALLBREAK_SEL];
+        return [this.aCallBreaks.length, Segx86.CALLBREAK_SEL];
     }
 
     /**
@@ -23460,7 +24101,7 @@ class SegX86 {
      *
      * A simple wrapper function that encapsulates setting offIP and fCall for segCS loads.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off
      * @param {number} sel
      * @param {boolean|undefined} fCall is true if CALLF in progress, false if RETF/IRET in progress, undefined otherwise
@@ -23478,7 +24119,7 @@ class SegX86 {
      *
      * The default segment load() function for real-mode.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} sel
      * @param {boolean} [fProbe] (here only to make the function signatures of loadReal() and loadProt() match)
      * @returns {number} base address of selected segment
@@ -23514,7 +24155,7 @@ class SegX86 {
      *
      * IDT descriptor entries are handled separately by loadIDT(), which is mapped to loadIDTReal() or loadIDTProt().
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} sel
      * @param {boolean} [fProbe]
      * @returns {number} base address of selected segment, or X86.ADDR_INVALID if error
@@ -23557,21 +24198,22 @@ class SegX86 {
                 cpu.nStepCycles -= 15;
                 return this.loadDesc8(addrDesc, sel, fProbe);
             }
-            if (this.id < SegX86.ID.VER) {
-                X86.helpFault.call(cpu, fProbe && this.id == SegX86.ID.STACK? X86.EXCEPTION.TS_FAULT : X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
+            if (this.id < Segx86.ID.VER) {
+                X86.helpFault.call(cpu, fProbe && this.id == Segx86.ID.STACK? X86.EXCEPTION.TS_FAULT : X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
             }
         }
         return X86.ADDR_INVALID;
     }
 
     /**
-     * loadIDTReal(nIDT)
+     * loadIDTReal(nIDT, nBytes)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} nIDT
+     * @param {number} [nBytes]
      * @returns {number} address from selected vector
      */
-    loadIDTReal(nIDT)
+    loadIDTReal(nIDT, nBytes = 0)
     {
         let cpu = this.cpu;
         /*
@@ -23579,6 +24221,13 @@ class SegX86 {
          * of the normal 0x3ff.  A limit higher than 0x3ff is OK, since all real-mode IDT entries are 4 bytes, and
          * there's no way to issue an interrupt with a vector > 0xff.  Just something to be aware of.
          */
+
+
+        if (DEBUGGER && cpu.dbg) {
+            if (cpu.dbg.checkVectorBP(nIDT, nBytes, false)) {
+                return X86.ADDR_INVALID;
+            }
+        }
 
         /*
          * Intel documentation for INT/INTO under "REAL ADDRESS MODE EXCEPTIONS" says:
@@ -23594,33 +24243,42 @@ class SegX86 {
     }
 
     /**
-     * loadIDTProt(nIDT)
+     * loadIDTProt(nIDT, nBytes)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} nIDT
+     * @param {number} [nBytes]
      * @returns {number} address from selected vector, or X86.ADDR_INVALID if error
      */
-    loadIDTProt(nIDT)
+    loadIDTProt(nIDT, nBytes = 0)
     {
         let cpu = this.cpu;
 
 
-        nIDT <<= 3;
-        let addrDesc = (cpu.addrIDT + nIDT)|0;
+        if (DEBUGGER && cpu.dbg) {
+            if (cpu.dbg.checkVectorBP(nIDT, nBytes, true)) {
+                return X86.ADDR_INVALID;
+            }
+        }
+
+        let offIDT = nIDT << 3;
+        let addrDesc = (cpu.addrIDT + offIDT)|0;
         if (((cpu.addrIDTLimit - addrDesc)|0) >= 7) {
             this.fCall = true;
-            let addr = this.loadDesc8(addrDesc, nIDT);
-            if (addr !== X86.ADDR_INVALID) addr += this.offIP;
+            let addr = this.loadDesc8(addrDesc, offIDT);
+            if (addr !== X86.ADDR_INVALID) {
+                addr += this.offIP;
+            }
             return addr;
         }
-        X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, nIDT | X86.ERRCODE.IDT);
+        X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, offIDT | X86.ERRCODE.IDT);
         return X86.ADDR_INVALID;
     }
 
     /**
      * checkReadWriteNone(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address
@@ -23633,7 +24291,7 @@ class SegX86 {
     /**
      * checkReadWriteReal(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address
@@ -23657,7 +24315,7 @@ class SegX86 {
     /**
      * checkReadProt(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, or X86.ADDR_INVALID if not
@@ -23677,7 +24335,7 @@ class SegX86 {
     /**
      * checkReadProtDown(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
@@ -23697,7 +24355,7 @@ class SegX86 {
     /**
      * checkReadProtDisallowed(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
@@ -23711,7 +24369,7 @@ class SegX86 {
     /**
      * checkWriteProt(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
@@ -23731,7 +24389,7 @@ class SegX86 {
     /**
      * checkWriteProtDown(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
@@ -23751,7 +24409,7 @@ class SegX86 {
     /**
      * checkWriteProtDisallowed(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
@@ -23765,7 +24423,7 @@ class SegX86 {
     /**
      * checkReadDebugger(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, or X86.ADDR_INVALID if error
@@ -23791,7 +24449,7 @@ class SegX86 {
     /**
      * checkWriteDebugger(off, cb)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, or X86.ADDR_INVALID if error
@@ -23819,7 +24477,7 @@ class SegX86 {
      *
      * Used to manually load a segment register from the data provided (see LOADALL386).
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} sel
      * @param {number} acc
      * @param {number} base
@@ -23843,7 +24501,7 @@ class SegX86 {
          * in particular, we must not allow a real-mode LOADALL to modify their mode, because the rest of PCx86
          * assumes that their mode will never change (they were allocated with fProt set to true).
          */
-        if (this.id < SegX86.ID.TSS) this.updateMode(true);
+        if (this.id < Segx86.ID.TSS) this.updateMode(true);
 
         if (DEBUG) this.messageSeg(sel, base, limit, this.type);
     }
@@ -23857,7 +24515,7 @@ class SegX86 {
      *      word 1: base address high (0-7), segment type (8-11), descriptor type (12), DPL (13-14), present bit (15)
      *      word 2: segment limit (0-15)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} addrDesc is the descriptor address
      * @param {number} sel is the associated selector
      * @returns {number} base address of selected segment
@@ -23883,7 +24541,7 @@ class SegX86 {
          * in particular, we must not allow a real-mode LOADALL to modify their mode, because the rest of PCx86
          * assumes that their mode will never change (they were allocated with fProt set to true).
          */
-        if (this.id < SegX86.ID.TSS) this.updateMode(true);
+        if (this.id < Segx86.ID.TSS) this.updateMode(true);
 
         if (DEBUG) this.messageSeg(sel, base, limit, this.type);
 
@@ -23902,19 +24560,19 @@ class SegX86 {
      *
      * See X86.DESC for offset and bit definitions.
      *
-     * When fProbe is set, we do NOT modify the public properties of the SegX86 object (see class SegX86 above).
+     * When fProbe is set, we do NOT modify the public properties of the Segx86 object (see class Segx86 above).
      * We will generate a fault if any of the usual error conditions are detected (and return X86.ADDR_INVALID), but
-     * otherwise, we merely stash all the descriptor values it reads in the SegX86's private "probe" object.
+     * otherwise, we merely stash all the descriptor values it reads in the Segx86's private "probe" object.
      *
      * Probed loads allow us to deal with complex segment load operations (ie, those involving an implied stack-switch
      * or task-switch), by allowing us to probe all the new selectors and generate the necessary faults before modifying
      * any segment registers; if all the probes succeed, then the original load can proceed.
      *
-     * The next non-probed load of a probed selector will move those probed descriptor values into the SegX86 object,
+     * The next non-probed load of a probed selector will move those probed descriptor values into the Segx86 object,
      * saving us from having to reload and reparse the descriptor.  However, if a different selector is loaded between
      * the probed and non-probed loads, the probed data is tossed.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} addrDesc is the descriptor address
      * @param {number} sel is the associated selector, or nIDT*8 if IDT descriptor
      * @param {boolean} [fProbe] (true if this is a probe)
@@ -23970,10 +24628,10 @@ class SegX86 {
 
         switch (this.id) {
 
-        case SegX86.ID.CODE:
+        case Segx86.ID.CODE:
 
             /*
-             * NOTE: Since we are SegX86.ID.CODE, we can use this.cpl instead of the more convoluted
+             * NOTE: Since we are Segx86.ID.CODE, we can use this.cpl instead of the more convoluted
              * this.cpu.segCS.cpl.
              */
             fCall = this.fCall;
@@ -23998,7 +24656,7 @@ class SegX86 {
              * a reasonable solution, and it's likely the best we can do without injecting code into the
              * machine that we could address -- and even then, it would not be a mode-independent address.
              */
-            if (fCall && sel == SegX86.CALLBREAK_SEL && this.aCallBreaks.length) {
+            if (fCall && sel == Segx86.CALLBREAK_SEL && this.aCallBreaks.length) {
                 let iBreak = this.offIP - 1;
                 let fnCallBreak = this.aCallBreaks[iBreak];
 
@@ -24226,7 +24884,7 @@ class SegX86 {
 
                     /*
                      * TODO: Consider whether we can skip this loadProt() call if this.sel already contains selCode
-                     * (and the previous mode matches, which might require we cache the mode in the SegX86 object, too).
+                     * (and the previous mode matches, which might require we cache the mode in the Segx86 object, too).
                      */
                     if (this.loadProt(selCode, false) === X86.ADDR_INVALID) {
                         return X86.ADDR_INVALID;
@@ -24305,7 +24963,7 @@ class SegX86 {
             }
             break;
 
-        case SegX86.ID.DATA:
+        case Segx86.ID.DATA:
             if (selMasked) {
                 /*
                  * OS/2 1.0 faults on segments with "empty descriptors" multiple times during boot; for example:
@@ -24356,7 +25014,7 @@ class SegX86 {
             }
             break;
 
-        case SegX86.ID.STACK:
+        case Segx86.ID.STACK:
             if (!selMasked || type < X86.DESC.ACC.TYPE.SEG || (type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.WRITABLE)) != X86.DESC.ACC.TYPE.WRITABLE) {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
                 return X86.ADDR_INVALID;
@@ -24367,7 +25025,7 @@ class SegX86 {
             }
             break;
 
-        case SegX86.ID.TSS:
+        case Segx86.ID.TSS:
             typeTSS = type & ~X86.DESC.ACC.TYPE.TSS_BUSY;
             if (!selMasked || typeTSS != X86.DESC.ACC.TYPE.TSS286 && typeTSS != X86.DESC.ACC.TYPE.TSS386) {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
@@ -24383,7 +25041,7 @@ class SegX86 {
             }
             break;
 
-        case SegX86.ID.VER:
+        case Segx86.ID.VER:
             /*
              * For LSL, we must support any descriptor marked X86.DESC.ACC.TYPE.SEG, as well as TSS and LDT descriptors.
              */
@@ -24396,7 +25054,7 @@ class SegX86 {
             /*
              * The only other cases are:
               *
-              *     SegX86.ID.NULL, SegX86.ID.LDT, and SegX86.ID.DBG
+              *     Segx86.ID.NULL, Segx86.ID.LDT, and Segx86.ID.DBG
               *
               * which correspond to segNULL, segLDT and segDebugger; however, segLDT is the only one that might require further validation (TODO: Investigate).
              */
@@ -24465,7 +25123,7 @@ class SegX86 {
      * TODO: Add TSS validity checks and appropriate generation of TS_FAULT exceptions; the only rudimentary checks
      * we currently perform are of the GP_FAULT variety.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} selNew
      * @param {boolean|null} [fNest] is true if nesting, false if un-nesting, null if neither
      * @returns {boolean} true if successful, false if error
@@ -24498,8 +25156,8 @@ class SegX86 {
         }
 
         let addrNew = cpu.segTSS.base;
-        if (DEBUG && DEBUGGER && this.dbg) {
-            this.dbg.printf(MESSAGE.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
+        if (DEBUG && DEBUGGER && cpu.dbg) {
+            cpu.dbg.printf(MESSAGE.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
         }
 
         if (fNest !== false) {
@@ -24645,7 +25303,7 @@ class SegX86 {
      * WARNING: Since the CPU must maintain regLIP as the sum of the CS base and the current IP, all calls
      * to segCS.setBase() need to go through cpu.setCSBase().
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} addr
      * @returns {number} addr, truncated as needed
      */
@@ -24659,10 +25317,10 @@ class SegX86 {
      * save()
      *
      * Early versions of PCx86 saved only segment selectors, since that's all that mattered in real-mode;
-     * newer versions need to save/restore all the "core" properties of the SegX86 object (ie, properties other
+     * newer versions need to save/restore all the "core" properties of the Segx86 object (ie, properties other
      * than those that updateMode() will take care of restoring later).
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @returns {Array}
      */
     save()
@@ -24690,10 +25348,10 @@ class SegX86 {
      * restore(a)
      *
      * Early versions of PCx86 saved only segment selectors, since that's all that mattered in real-mode;
-     * newer versions need to save/restore all the "core" properties of the SegX86 object (ie, properties other
+     * newer versions need to save/restore all the "core" properties of the Segx86 object (ie, properties other
      * than those that updateMode() will take care of restoring later).
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {Array|number} a
      */
     restore(a)
@@ -24725,7 +25383,7 @@ class SegX86 {
      * Ensures that the segment register's access (ie, load and check methods) matches the specified (or current)
      * operating mode (real or protected).
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {boolean} [fLoad] true if the segment was just (re)loaded, false if not
      * @param {boolean} [fProt] true for protected-mode access, false for real-mode access, undefined for current mode
      * @param {boolean} [fV86] true for V86-mode access, false for protected-mode access, undefined for current mode
@@ -24804,7 +25462,7 @@ class SegX86 {
                     if (this.checkWrite == this.checkWriteProt) this.checkWrite = this.checkWriteProtDown;
                     this.fExpDown = true;
                 }
-                if (fLoad && this.id < SegX86.ID.VER) {
+                if (fLoad && this.id < Segx86.ID.VER) {
                     /*
                      * We must update the descriptor's ACCESSED bit whenever the segment is "accessed" (ie,
                      * loaded); unlike the ACCESSED and DIRTY bits in PTEs, a descriptor ACCESSED bit is only
@@ -24875,7 +25533,7 @@ class SegX86 {
     /**
      * messageSeg(sel, base, limit, type, ext)
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} sel
      * @param {number} base
      * @param {number} limit
@@ -24885,11 +25543,12 @@ class SegX86 {
     messageSeg(sel, base, limit, type, ext)
     {
         if (DEBUG) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MESSAGE.SEG)) {
+            let dbg = this.cpu.dbg;
+            if (DEBUGGER && dbg && dbg.messageEnabled(MESSAGE.SEG)) {
                 let ch = (this.sName.length < 3? " " : "");
                 let sDPL = " dpl=" + this.dpl;
-                if (this.id == SegX86.ID.CODE) sDPL += " cpl=" + this.cpl;
-                this.dbg.printf(MESSAGE.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
+                if (this.id == Segx86.ID.CODE) sDPL += " cpl=" + this.cpl;
+                dbg.printf(MESSAGE.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
             }
             /*
              * Unless I've got a bug that's causing descriptor corruption, it appears that Windows 3.0 may be setting the
@@ -24911,7 +25570,7 @@ class SegX86 {
      *
      * This is a neutered version of loadProt() designed for the Debugger.
      *
-     * @this {SegX86}
+     * @this {Segx86}
      * @param {number} sel
      * @returns {number} base address of selected segment, or X86.ADDR_INVALID if error
      */
@@ -24969,7 +25628,7 @@ class SegX86 {
     /**
      * loadAcc(sel, fGDT)
      *
-     * this {SegX86}
+     * this {Segx86}
      * param {number} sel (protected-mode only)
      * param {boolean} [fGDT] is true if sel must be in the GDT
      * return {number} ACC field from descriptor, or X86.DESC.ACC.INVALID if error
@@ -24999,7 +25658,7 @@ class SegX86 {
      */
 }
 
-SegX86.ID = {
+Segx86.ID = {
     NULL:   0,          // "NULL"
     CODE:   1,          // "CS"
     DATA:   2,          // "DS", "ES", "FS", "GS"
@@ -25010,7 +25669,7 @@ SegX86.ID = {
     DBG:    7           // "DBG"
 };
 
-SegX86.CALLBREAK_SEL = 0x0001;
+Segx86.CALLBREAK_SEL = 0x0001;
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86func.js (C) 2012-2023 Jeff Parsons
@@ -26253,7 +26912,15 @@ X86.fnLEA = function(dst, src)
     }
     */
     this.nStepCycles -= this.cycleCounts.nOpCyclesLEA;
-    return this.regEA;
+    /*
+     * To properly deal with instructions such as:
+     *
+     *      #0467:10F8 678D0480         LEA      AX,[EAX+EAX*4]
+     *      #0467:10FC 678D0441         LEA      AX,[ECX+EAX*2]
+     *
+     * which may calculate values that exceed 16 bits, we must mask the result to the appropriate size.
+     */
+    return this.regEA & this.maskData;
 };
 
 /**
@@ -28831,7 +29498,7 @@ X86.helpCALLF = function(off, sel)
 };
 
 /**
- * helpINT(nIDT, nError, nCycles)
+ * helpINT(nIDT, nError, nBytes, nCycles)
  *
  * NOTE: We no longer use setCSIP(), because it always loads the new CS using segCS.load(), which only knows
  * how to load GDT and LDT descriptors, whereas interrupts must use setCS.loadIDT(), which deals exclusively
@@ -28840,14 +29507,15 @@ X86.helpCALLF = function(off, sel)
  * @this {CPUx86}
  * @param {number} nIDT
  * @param {number|null} [nError]
+ * @param {number} [nBytes] (size of opcode, if any)
  * @param {number} [nCycles] (in addition to the default of nOpCyclesInt)
  */
-X86.helpINT = function(nIDT, nError, nCycles)
+X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
 {
     /*
      * TODO: We assess the cycle cost up front, because otherwise, if loadIDT() fails, no cost may be assessed.
      */
-    this.nStepCycles -= this.cycleCounts.nOpCyclesInt + (nCycles || 0);
+    this.nStepCycles -= this.cycleCounts.nOpCyclesInt + nCycles;
     let oldPS = this.getPS();
     let oldCS = this.getCS();
     let oldIP = this.getIP();
@@ -28897,7 +29565,7 @@ X86.helpINT = function(nIDT, nError, nCycles)
             this.setShort(0x52D, 0x4442);       // on 8088 boot up, set a special "BD" boot indicator in low memory
         }
     }
-    let addr = this.segCS.loadIDT(nIDT);
+    let addr = this.segCS.loadIDT(nIDT, nBytes);
     if (addr !== X86.ADDR_INVALID) {
         /*
          * TODO: Determine if we should use pushData() instead of pushWord() for oldCS and nError, to deal with
@@ -29071,7 +29739,7 @@ X86.helpDIVOverflow = function()
      * TODO: Determine the proper cycle cost.
      */
     if (this.model <= X86.MODEL_8088) {
-        X86.helpTrap.call(this, X86.EXCEPTION.DE_EXC, 2);
+        X86.helpTrap.call(this, X86.EXCEPTION.DE_EXC, 0, 2);
     } else {
         X86.helpFault.call(this, X86.EXCEPTION.DE_EXC, null, 2);
     }
@@ -29087,26 +29755,26 @@ X86.helpDIVOverflow = function()
  * @param {number} nIDT
  * @param {number} [nCycles] (number of cycles in addition to the default of nOpCyclesInt)
  */
-X86.helpInterrupt = function(nIDT, nCycles)
+X86.helpInterrupt = function(nIDT, nCycles = 11)
 {
     this.nFault = nIDT;
-    if (nCycles === undefined) nCycles = 11;
-    X86.helpINT.call(this, nIDT, null, nCycles);
+    X86.helpINT.call(this, nIDT, null, 0, nCycles);
 };
 
 /**
- * helpTrap(nIDT, nCycles)
+ * helpTrap(nIDT, nBytes, nCycles)
  *
  * Helper to dispatch traps (ie, exceptions that occur AFTER the instruction, with NO error code)
  *
  * @this {CPUx86}
  * @param {number} nIDT
+ * @param {number} [nBytes] (size of opcode, of any)
  * @param {number} [nCycles] (number of cycles in addition to the default of nOpCyclesInt)
  */
-X86.helpTrap = function(nIDT, nCycles)
+X86.helpTrap = function(nIDT, nBytes, nCycles)
 {
     this.nFault = -1;
-    X86.helpINT.call(this, nIDT, null, nCycles);
+    X86.helpINT.call(this, nIDT, null, nBytes, nCycles);
 };
 
 /**
@@ -29213,7 +29881,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
     if (fDispatch) {
 
         this.nFault = nFault;
-        X86.helpINT.call(this, nFault, nError, nCycles);
+        X86.helpINT.call(this, nFault, nError, 0, nCycles);
 
         /*
          * REPeated instructions that rewind regLIP to opLIP used to screw up this dispatch,
@@ -29413,7 +30081,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
  * Helper to zero a segment register whenever transitioning to a less privileged (numerically higher) level.
  *
  * @this {CPUx86}
- * @param {SegX86} seg
+ * @param {Segx86} seg
  */
 X86.zeroSeg = function(seg)
 {
@@ -36949,7 +37617,7 @@ X86.opINT3 = function()
      * so I've changed the Debugger's checkBreakpoint() function to stop execution on INT3 whenever both the
      * INT and HALT message bits are set; a simple "g" command allows you to continue.
      */
-    X86.helpTrap.call(this, X86.EXCEPTION.BP_TRAP, this.cycleCounts.nOpCyclesInt3D);
+    X86.helpTrap.call(this, X86.EXCEPTION.BP_TRAP, 1, this.cycleCounts.nOpCyclesInt3D);
 };
 
 /**
@@ -36973,7 +37641,7 @@ X86.opINTn = function()
      * and returns false ONLY if a notification handler returned false (ie, requesting the interrupt be skipped).
      */
     if (this.checkIntNotify(nInt)) {
-        X86.helpTrap.call(this, nInt, 0);
+        X86.helpTrap.call(this, nInt, 2);
         return;
     }
     this.nStepCycles--;     // we don't need to assess the full cost of nOpCyclesInt, but we need to assess something...
@@ -36995,7 +37663,7 @@ X86.opINTO = function()
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return;
         }
-        X86.helpTrap.call(this, X86.EXCEPTION.OF_TRAP, this.cycleCounts.nOpCyclesIntOD);
+        X86.helpTrap.call(this, X86.EXCEPTION.OF_TRAP, 1, this.cycleCounts.nOpCyclesIntOD);
         return;
     }
     this.nStepCycles -= this.cycleCounts.nOpCyclesIntOFall;
@@ -37586,7 +38254,7 @@ X86.opINT1 = function()
     /*
      * TODO: Verify this instruction's behavior.
      */
-    X86.helpTrap.call(this, X86.EXCEPTION.DB_EXC, this.cycleCounts.nOpCyclesInt3D);
+    X86.helpTrap.call(this, X86.EXCEPTION.DB_EXC, 1, this.cycleCounts.nOpCyclesInt3D);
 };
 
 /**
@@ -39962,9 +40630,9 @@ class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -46208,9 +46876,9 @@ class ROMx86 extends Component {
      *
      * @this {ROMx86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -46458,7 +47126,7 @@ class ROMx86 extends Component {
      */
     addROM(addr)
     {
-        if (this.bus.addMemory(addr, this.sizeROM, MemoryX86.TYPE.ROM)) {
+        if (this.bus.addMemory(addr, this.sizeROM, Memoryx86.TYPE.ROM)) {
             if (MAXDEBUG) this.printf(MESSAGE.LOG, "addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
             let bto = null;
             for (let off = 0; off < this.abROM.length; off++) {
@@ -46882,9 +47550,9 @@ class RAMx86 extends Component {
      *
      * @this {RAMx86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -46988,7 +47656,7 @@ class RAMx86 extends Component {
         this.displayRAMSetting();
 
         if (!this.fAllocated && this.sizeRAM) {
-            if (this.bus.addMemory(this.addrRAM, this.sizeRAM, MemoryX86.TYPE.RAM)) {
+            if (this.bus.addMemory(this.addrRAM, this.sizeRAM, Memoryx86.TYPE.RAM)) {
                 this.fAllocated = true;
 
                 /*
@@ -47022,7 +47690,7 @@ class RAMx86 extends Component {
                 if (DESKPRO386) {
                     if (this.idComponent == "ramCPQ") {
                         this.controller = new CompaqController(this);
-                        this.bus.addMemory(CompaqController.ADDR, 4, MemoryX86.TYPE.CTRL, this.controller);
+                        this.bus.addMemory(CompaqController.ADDR, 4, Memoryx86.TYPE.CTRL, this.controller);
                     }
                 }
             }
@@ -47230,7 +47898,7 @@ class CompaqController extends Controller {
                      * current read-write state, but this is an infrequent operation, so there's no point.
                      */
                     let aBlocks = bus.getMemoryBlocks(CompaqController.MAP_SRC, CompaqController.MAP_SIZE);
-                    let type = (b & CompaqController.MAPPINGS.READWRITE)? MemoryX86.TYPE.RAM : MemoryX86.TYPE.ROM;
+                    let type = (b & CompaqController.MAPPINGS.READWRITE)? Memoryx86.TYPE.RAM : Memoryx86.TYPE.ROM;
                     bus.setMemoryBlocks(CompaqController.MAP_DST, CompaqController.MAP_SIZE, aBlocks, type);
                 }
                 else {
@@ -47282,7 +47950,7 @@ class CompaqController extends Controller {
      *
      * So we must allow for requests outside that 4-byte range.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off (relative to 0x80C00000)
      * @param {number} [addr]
      * @returns {number}
@@ -47305,7 +47973,7 @@ class CompaqController extends Controller {
      *
      * So we must allow for requests outside that 4-byte range.
      *
-     * @this {MemoryX86}
+     * @this {Memoryx86}
      * @param {number} off (relative to 0x80C00000)
      * @param {number} b
      * @param {number} [addr]
@@ -47428,16 +48096,16 @@ WebLib.onInit(RAMx86.init);
  */
 
 /**
- * @class KbdX86
+ * @class Keyboardx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class KbdX86 extends Component {
+class Keyboardx86 extends Component {
     /**
-     * KbdX86(parmsKbd)
+     * Keyboardx86(parmsKbd)
      *
      * The Keyboard component can be configured with the following (parmsKbd) properties:
      *
-     *      model: keyboard model string, which must match one of the values listed in KbdX86.MODELS:
+     *      model: keyboard model string, which must match one of the values listed in Keyboardx86.MODELS:
      *
      *          "US83" (default)
      *          "US84"
@@ -47456,7 +48124,7 @@ class KbdX86 extends Component {
      * scan code sets, which the 8042 controller would then convert to PC-compatible scan codes.  That's probably
      * more important to implement, because that feature was introduced with the 84-key keyboard on the PC AT.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} parmsKbd
      */
     constructor(parmsKbd)
@@ -47563,7 +48231,7 @@ class KbdX86 extends Component {
         this.msInjectDelay   = 0;           // set by the initial injectKeys() call
         this.msDoubleClick   = 250;         // used by mousedown/mouseup handlers to soft-lock modifier keys
         this.cKeysPressed    = 0;           // count of keys pressed since the last time it was reset
-        this.softCodeKeys    = Object.keys(KbdX86.SOFTCODES);
+        this.softCodeKeys    = Object.keys(Keyboardx86.SOFTCODES);
 
         /*
          * Remove all single-character SOFTCODE keys from the softCodeKeys array, because those SOFTCODES
@@ -47583,7 +48251,7 @@ class KbdX86 extends Component {
         this.autoType = parmsKbd['autoType'];
         this.fDOSReady = false;
         this.fnDOSReady = this.fnInjectReady = null;
-        this.nInjection = KbdX86.INJECTION.ON_INPUT;
+        this.nInjection = Keyboardx86.INJECTION.ON_INPUT;
 
         /*
          * HACK: We set fAllDown to false to ignore all down/up events for keys not explicitly marked as ONDOWN;
@@ -47605,7 +48273,7 @@ class KbdX86 extends Component {
     /**
      * setBinding(sHTMLType, sBinding, control, sValue)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea", "canvas")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
@@ -47742,7 +48410,7 @@ class KbdX86 extends Component {
                  * Maintain support for older button codes; eg, map button code "ctrl-c" to CLICKCODE "CTRL_C"
                  */
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
-                if (KbdX86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
+                if (Keyboardx86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
                     this.bindings[id] = controlText;
                     if (MAXDEBUG) this.printf(MESSAGE.LOG, "binding click-code '%s'\n", sCode);
                     controlText.onclick = function(kbd, sKey, simCode) {
@@ -47753,10 +48421,10 @@ class KbdX86 extends Component {
                             kbd.updateShiftState(simCode, true);    // future-proofing if/when any LOCK keys are added to CLICKCODES
                             kbd.addActiveKey(simCode, true);
                         };
-                    }(this, sCode, KbdX86.CLICKCODES[sCode]);
+                    }(this, sCode, Keyboardx86.CLICKCODES[sCode]);
                     return true;
                 }
-                else if (KbdX86.SOFTCODES[sBinding] !== undefined) {
+                else if (Keyboardx86.SOFTCODES[sBinding] !== undefined) {
                     /*
                      * TODO: Fix this rather fragile code, which depends on the current structure of the given xxxx-softkeys.xml
                      */
@@ -47768,7 +48436,7 @@ class KbdX86 extends Component {
                     this.bindings[id] = controlText;
                     if (MAXDEBUG) this.printf(MESSAGE.LOG, "binding soft-code '%s'\n", sBinding);
                     let msLastEvent = 0, nClickState = 0;
-                    let fStateKey = (KbdX86.KEYSTATES[KbdX86.SOFTCODES[sBinding]] <= KbdX86.STATE.ALL_MODIFIERS);
+                    let fStateKey = (Keyboardx86.KEYSTATES[Keyboardx86.SOFTCODES[sBinding]] <= Keyboardx86.STATE.ALL_MODIFIERS);
                     let fnDown = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingDown(event) {
                             let msDelta = event.timeStamp - msLastEvent;
@@ -47778,7 +48446,7 @@ class KbdX86 extends Component {
                             kbd.sInjectBuffer = "";                 // key events should stop any injection currently in progress
                             kbd.addActiveKey(simCode);
                         };
-                    }(this, sBinding, KbdX86.SOFTCODES[sBinding]);
+                    }(this, sBinding, Keyboardx86.SOFTCODES[sBinding]);
                     let fnUp = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingUp(event) {
                             if (nClickState) {
@@ -47793,7 +48461,7 @@ class KbdX86 extends Component {
                                 }
                             }
                         };
-                    }(this, sBinding, KbdX86.SOFTCODES[sBinding]);
+                    }(this, sBinding, Keyboardx86.SOFTCODES[sBinding]);
                     if ('ontouchstart' in window) {
                         controlText.ontouchstart = fnDown;
                         controlText.ontouchend = fnUp;
@@ -47827,7 +48495,7 @@ class KbdX86 extends Component {
      *
      * Keyboard control event focus helper.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      */
     updateFocus(event)
@@ -47850,7 +48518,7 @@ class KbdX86 extends Component {
      * would contain MORE entries than the SOFTCODES table, because there are multiple simCodes that correspond
      * to a given soft key (eg, '1' and '!' both map to the same soft key).
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} simCode
      * @param {string} sType is the type of control (eg, "button" or "key")
      * @param {boolean} [fDown] is true if the key is going down, false if up, or undefined if unchanged
@@ -47872,29 +48540,29 @@ class KbdX86 extends Component {
              * TODO: Create a table that maps these SIMCODEs to the corresponding entries in the SOFTCODES table;
              * these SIMCODEs can be generated by CLICKCODEs or by the special key remapping HACKs in onKeyActive().
              */
-            if (simCode == KbdX86.SIMCODE.CTRL_PAUSE) {
-                simCode = KbdX86.SIMCODE.NUM_LOCK;
+            if (simCode == Keyboardx86.SIMCODE.CTRL_PAUSE) {
+                simCode = Keyboardx86.SIMCODE.NUM_LOCK;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_BREAK) {
-                simCode = KbdX86.SIMCODE.SCROLL_LOCK;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_BREAK) {
+                simCode = Keyboardx86.SIMCODE.SCROLL_LOCK;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_ALT_DEL) {
-                simCode = KbdX86.SIMCODE.DEL;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_ALT_DEL) {
+                simCode = Keyboardx86.SIMCODE.DEL;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_ALT_INS) {
-                simCode = KbdX86.SIMCODE.INS;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_ALT_INS) {
+                simCode = Keyboardx86.SIMCODE.INS;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_ALT_ADD) {
-                simCode = KbdX86.SIMCODE.NUM_ADD;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_ALT_ADD) {
+                simCode = Keyboardx86.SIMCODE.NUM_ADD;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_ALT_SUB) {
-                simCode = KbdX86.SIMCODE.NUM_SUB;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_ALT_SUB) {
+                simCode = Keyboardx86.SIMCODE.NUM_SUB;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_ALT_SYS_REQ) {
-                simCode = KbdX86.SIMCODE.SYS_REQ;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ) {
+                simCode = Keyboardx86.SIMCODE.SYS_REQ;
             }
-            for (let sBinding in KbdX86.SOFTCODES) {
-                if (KbdX86.SOFTCODES[sBinding] == simCode || KbdX86.SOFTCODES[sBinding] == this.toUpperKey(simCode)) {
+            for (let sBinding in Keyboardx86.SOFTCODES) {
+                if (Keyboardx86.SOFTCODES[sBinding] == simCode || Keyboardx86.SOFTCODES[sBinding] == this.toUpperKey(simCode)) {
                     let id = sType + '-' + sBinding;
                     control = this.bindings[id];
                     if (control && fDown !== undefined) {
@@ -47910,11 +48578,11 @@ class KbdX86 extends Component {
     /**
      * initBus(cmp, bus, cpu, dbg)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -47960,7 +48628,7 @@ class KbdX86 extends Component {
      * at least for the first time you right-clicked.  And that wouldn't have helped with paste events triggered by
      * keyboard shortcut (eg, Cmd+V), or with machines where mouse events were being captured as well.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     start()
     {
@@ -47969,7 +48637,7 @@ class KbdX86 extends Component {
             this.controlTextKeyboard.focus();
             this.controlTextKeyboard.select();
         }
-        this.injectInit(KbdX86.INJECTION.ON_START);
+        this.injectInit(Keyboardx86.INJECTION.ON_START);
     }
 
     /**
@@ -47977,7 +48645,7 @@ class KbdX86 extends Component {
      *
      * Monitors selected DOS interrupts for signals to initialize 'autoType' injection.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} addr
      * @returns {boolean} true to proceed with the INT 0x21 software interrupt, false to skip
      */
@@ -47991,7 +48659,7 @@ class KbdX86 extends Component {
                 this.fnDOSReady();
                 this.fnDOSReady = null;
             } else {
-                this.injectInit(KbdX86.INJECTION.ON_INPUT);
+                this.injectInit(Keyboardx86.INJECTION.ON_INPUT);
             }
         }
         return true;
@@ -48002,7 +48670,7 @@ class KbdX86 extends Component {
      *
      * When ESC is used by the browser to disable pointer lock, this gives us the option of mapping a different key to ESC.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} fDisabled
      * @param {boolean} [fAllDown] (an experimental option to re-enable processing of all onkeydown/onkeyup events)
      */
@@ -48015,7 +48683,7 @@ class KbdX86 extends Component {
     /**
      * resetDevice()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     resetDevice()
     {
@@ -48024,16 +48692,16 @@ class KbdX86 extends Component {
          */
         this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard reset\n");
         this.abBuffer = [];
-        this.setResponse(KbdX86.CMDRES.BAT_OK);
+        this.setResponse(Keyboardx86.CMDRES.BAT_OK);
     }
 
     /**
      * setModel(sModel)
      *
      * This breaks a model string (eg, "US83") into two parts: modelCountry (eg, "US") and modelKeys (eg, 83).
-     * If the model string isn't recognized, we use KbdX86.MODELS[0] (ie, the first entry in the model array).
+     * If the model string isn't recognized, we use Keyboardx86.MODELS[0] (ie, the first entry in the model array).
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {string|undefined} sModel
      */
     setModel(sModel)
@@ -48042,10 +48710,10 @@ class KbdX86 extends Component {
         this.model = null;
         if (typeof sModel == "string") {
             this.model = sModel.toUpperCase();
-            iModel = KbdX86.MODELS.indexOf(this.model);
+            iModel = Keyboardx86.MODELS.indexOf(this.model);
             if (iModel < 0) iModel = 0;
         }
-        sModel = KbdX86.MODELS[iModel];
+        sModel = Keyboardx86.MODELS[iModel];
         if (sModel) {
             this.modelCountry = sModel.substr(0, 2);
             this.modelKeys = parseInt(sModel.substr(2), 10);
@@ -48057,7 +48725,7 @@ class KbdX86 extends Component {
      *
      * This is the ChipSet's interface to let us know it's ready.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} [b] (set to the data, if any, that the ChipSet just delivered)
      */
     checkBuffer(b)
@@ -48069,7 +48737,7 @@ class KbdX86 extends Component {
              * to report BAT_OK immediately after the ACK from a RESET command.  The BAT_OK response should already
              * be in the keyboard's buffer; we just need to give it a little nudge.
              */
-            if (b == KbdX86.CMDRES.ACK) {
+            if (b == Keyboardx86.CMDRES.ACK) {
                 fReady = true;
             }
             if (this.cpu) {
@@ -48084,7 +48752,7 @@ class KbdX86 extends Component {
      *
      * This is the ChipSet's interface to flush any buffered keyboard data.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     flushBuffer()
     {
@@ -48098,9 +48766,9 @@ class KbdX86 extends Component {
      * This is the ChipSet's interface for controlling "Model M" keyboards (ie, those used with MODEL_5170
      * machines).  Commands are delivered through the ChipSet's 8042 Keyboard Controller.
      *
-     * @this {KbdX86}
-     * @param {number} bCmd should be one of the KbdX86.CMD.* command codes (Model M keyboards only)
-     * @returns {number} response should be one of the KbdX86.CMDRES.* response codes, or -1 if unrecognized
+     * @this {Keyboardx86}
+     * @param {number} bCmd should be one of the Keyboardx86.CMD.* command codes (Model M keyboards only)
+     * @returns {number} response should be one of the Keyboardx86.CMDRES.* response codes, or -1 if unrecognized
      */
     receiveCmd(bCmd)
     {
@@ -48110,26 +48778,26 @@ class KbdX86 extends Component {
 
         switch(this.bCmdPending || bCmd) {
 
-        case KbdX86.CMD.RESET:              // 0xFF
-            b = KbdX86.CMDRES.ACK;
+        case Keyboardx86.CMD.RESET:              // 0xFF
+            b = Keyboardx86.CMDRES.ACK;
             this.resetDevice();
             break;
 
-        case KbdX86.CMD.SET_RATE:           // 0xF3
+        case Keyboardx86.CMD.SET_RATE:           // 0xF3
             if (this.bCmdPending) {
                 this.setRate(bCmd);
                 bCmd = 0;
             }
-            this.setResponse(KbdX86.CMDRES.ACK);
+            this.setResponse(Keyboardx86.CMDRES.ACK);
             this.bCmdPending = bCmd;
             break;
 
-        case KbdX86.CMD.SET_LEDS:           // 0xED
+        case Keyboardx86.CMD.SET_LEDS:           // 0xED
             if (this.bCmdPending) {
                 this.setLEDs(bCmd);
                 bCmd = 0;
             }
-            this.setResponse(KbdX86.CMDRES.ACK);
+            this.setResponse(Keyboardx86.CMDRES.ACK);
             this.bCmdPending = bCmd;
             break;
 
@@ -48150,7 +48818,7 @@ class KbdX86 extends Component {
      * output handler.  For MODEL_5170 machines, this function is called when selected CMD
      * "data bytes" have been written.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} fData is true if the keyboard simulated data line should be enabled
      * @param {boolean} fClock is true if the keyboard's simulated clock line should be enabled
      * @returns {boolean} true if keyboard was re-enabled, false if not (or no change)
@@ -48186,7 +48854,7 @@ class KbdX86 extends Component {
      *
      * This processes the option byte received after a SET_LEDS command byte.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} b
      */
     setLEDs(b)
@@ -48199,7 +48867,7 @@ class KbdX86 extends Component {
      *
      * This processes the rate parameter byte received after a SET_RATE command byte.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} b
      */
     setRate(b)
@@ -48210,7 +48878,7 @@ class KbdX86 extends Component {
     /**
      * setResponse(b)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} b
      */
     setResponse(b)
@@ -48227,7 +48895,7 @@ class KbdX86 extends Component {
      *
      * This manages communication with the ChipSet's receiveKbdData() interface.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} [fReady]
      */
     transmitData(fReady)
@@ -48254,7 +48922,7 @@ class KbdX86 extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @returns {boolean} true if successful, false if failure
@@ -48283,7 +48951,7 @@ class KbdX86 extends Component {
     /**
      * powerDown(fSave, fShutdown)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -48296,7 +48964,7 @@ class KbdX86 extends Component {
     /**
      * reset()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     reset()
     {
@@ -48308,11 +48976,11 @@ class KbdX86 extends Component {
             switch(this.chipset.model) {
             case ChipSet.MODEL_5150:
             case ChipSet.MODEL_5160:
-                this.setModel(KbdX86.MODELS[0]);
+                this.setModel(Keyboardx86.MODELS[0]);
                 break;
             case ChipSet.MODEL_5170:
             default:
-                this.setModel(KbdX86.MODELS[1]);
+                this.setModel(Keyboardx86.MODELS[1]);
                 break;
             }
         }
@@ -48324,7 +48992,7 @@ class KbdX86 extends Component {
      *
      * This implements save support for the Keyboard component.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @returns {Object}
      */
     save()
@@ -48339,7 +49007,7 @@ class KbdX86 extends Component {
      *
      * This implements restore support for the Keyboard component.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} data
      * @returns {boolean} true if successful, false if failure
      */
@@ -48351,21 +49019,21 @@ class KbdX86 extends Component {
     /**
      * initState(data)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Array} [data]
      * @returns {boolean} true if successful, false if failure
      */
     initState(data)
     {
         if (!data) {
-            data = [false, false, KbdX86.INJECTION.ON_INPUT];
+            data = [false, false, Keyboardx86.INJECTION.ON_INPUT];
         } else {
             /*
              * If there is a predefined state for this machine, then the assumption is that any injection
              * sequence can be injected as soon as the machine starts.  Any other kind of state must disable
              * injection, because injection depends on the machine being in a known state.
              */
-            data[2] = this.cmp.sStatePath? KbdX86.INJECTION.ON_START : (data[2] || KbdX86.INJECTION.NONE);
+            data[2] = this.cmp.sStatePath? Keyboardx86.INJECTION.ON_START : (data[2] || Keyboardx86.INJECTION.NONE);
         }
 
         let i = 0;
@@ -48396,7 +49064,7 @@ class KbdX86 extends Component {
     /**
      * saveState()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @returns {Array}
      */
     saveState()
@@ -48416,7 +49084,7 @@ class KbdX86 extends Component {
      * In addition to enabling or disabling our own soft keyboard (if any), this also attempts to disable or enable
      * (as appropriate) the textarea control (if any) that machines use to trigger a touch device's built-in keyboard.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} fEnable
      */
     enableSoftKeyboard(fEnable)
@@ -48440,7 +49108,7 @@ class KbdX86 extends Component {
     /**
      * setSoftKeyState(control, f)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {HTMLElement} control is an HTML control DOM object
      * @param {boolean} f is true if the key represented by e should be "on", false if "off"
      */
@@ -48453,7 +49121,7 @@ class KbdX86 extends Component {
     /**
      * addScanCode(bScan)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} bScan
      */
     addScanCode(bScan)
@@ -48466,7 +49134,7 @@ class KbdX86 extends Component {
          * as a result of calls from any of the key event handlers established by setBinding().
          */
         if (this.abBuffer) {
-            if (this.abBuffer.length < KbdX86.LIMIT.MAX_SCANCODES) {
+            if (this.abBuffer.length < Keyboardx86.LIMIT.MAX_SCANCODES) {
                 if (DESKPRO386) {
                     if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) {
                         /*
@@ -48492,8 +49160,8 @@ class KbdX86 extends Component {
                 this.transmitData();
                 return;
             }
-            if (this.abBuffer.length == KbdX86.LIMIT.MAX_SCANCODES) {
-                this.abBuffer.push(KbdX86.CMDRES.BUFF_FULL);
+            if (this.abBuffer.length == Keyboardx86.LIMIT.MAX_SCANCODES) {
+                this.abBuffer.push(Keyboardx86.CMDRES.BUFF_FULL);
             }
             this.printf("keyboard buffer overflow\n");
         }
@@ -48502,13 +49170,13 @@ class KbdX86 extends Component {
     /**
      * injectInit(nCondition)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} nCondition
      */
     injectInit(nCondition)
     {
         if (this.nInjection == nCondition) {
-            this.nInjection = KbdX86.INJECTION.NONE;
+            this.nInjection = Keyboardx86.INJECTION.NONE;
             if (this.autoType) this.injectKeys(this.autoType);
         }
     }
@@ -48516,7 +49184,7 @@ class KbdX86 extends Component {
     /**
      * injectKeys(sKeys, msDelay)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {string} [sKeys] (keys listed in SOFTCODES must be prefixed with '$')
      * @param {number} [msDelay] is an optional injection delay (default is msInjectDefault)
      * @returns {boolean}
@@ -48526,7 +49194,7 @@ class KbdX86 extends Component {
         if (sKeys) {
             let sInjectBuffer = this.parseKeys(sKeys);
             if (sInjectBuffer) {
-                this.nInjection = KbdX86.INJECTION.NONE;
+                this.nInjection = Keyboardx86.INJECTION.NONE;
                 this.sInjectBuffer = sInjectBuffer;
                 if (DEBUG) this.printf("injectKeys(\"%s\")\n", this.sInjectBuffer.split("\n").join("\\n"));
                 this.msInjectDelay = msDelay || 0;
@@ -48567,13 +49235,13 @@ class KbdX86 extends Component {
                 for (let i = 0; i < this.softCodeKeys.length; i++) {
                     let name = this.softCodeKeys[i];
                     if (this.sInjectBuffer.indexOf(name) == 1) {
-                        simCode = KbdX86.SOFTCODES[name];
+                        simCode = Keyboardx86.SOFTCODES[name];
                         this.sInjectBuffer = this.sInjectBuffer.substr(name.length + 1);
                         break;
                     }
                     let shortName = (name.indexOf('num-') == 0? name.substr(4) : "");
                     if (shortName && this.sInjectBuffer.indexOf(shortName) == 1) {
-                        simCode = KbdX86.SOFTCODES[name];
+                        simCode = Keyboardx86.SOFTCODES[name];
                         this.sInjectBuffer = this.sInjectBuffer.substr(shortName.length + 1);
                         break;
                     }
@@ -48618,7 +49286,7 @@ class KbdX86 extends Component {
         }
 
         if (simCode) {
-            let fPress = (KbdX86.MODIFIERS[simCode] === undefined);
+            let fPress = (Keyboardx86.MODIFIERS[simCode] === undefined);
             this.addActiveKey(simCode, fPress);
             if (fPress) this.clearActiveKeys(true);
         }
@@ -48678,7 +49346,7 @@ class KbdX86 extends Component {
      * Unfortunately, this is something that will be extremely difficult to prevent from breaking down the road.
      * So, heads up to future me....
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {string|undefined} sKeys
      * @returns {string|undefined}
      */
@@ -48713,7 +49381,7 @@ class KbdX86 extends Component {
     /**
      * waitReady(fnCallReady, sOption)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {function()|null} fnCallReady
      * @param {string} [sOption]
      * @returns {boolean} false if wait required, true otherwise
@@ -48745,7 +49413,7 @@ class KbdX86 extends Component {
     /**
      * setLED(control, f)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {HTMLElement} control is an HTML control DOM object
      * @param {boolean} f is true if the LED represented by control should be "on", false if "off"
      */
@@ -48762,15 +49430,15 @@ class KbdX86 extends Component {
      *
      * Updates any and all shift-related LEDs with the corresponding state in bitsStateSim.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} [bitState] is the bit in bitsStateSim that may have changed, if known; undefined if not
      */
     updateLEDs(bitState)
     {
         let control;
-        for (let sBinding in KbdX86.LEDSTATES) {
+        for (let sBinding in Keyboardx86.LEDSTATES) {
             let id = "led-" + sBinding;
-            let bitLED = KbdX86.LEDSTATES[sBinding];
+            let bitLED = Keyboardx86.LEDSTATES[sBinding];
             if ((!bitState || bitState == bitLED) && (control = this.bindings[id])) {
                 this.setLED(control, !!(this.bitsStateSim & bitLED));
             }
@@ -48780,31 +49448,31 @@ class KbdX86 extends Component {
     /**
      * toggleCapsLock()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     toggleCapsLock()
     {
-        this.addActiveKey(KbdX86.SIMCODE.CAPS_LOCK, true);
+        this.addActiveKey(Keyboardx86.SIMCODE.CAPS_LOCK, true);
     }
 
     /**
      * toggleNumLock()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     toggleNumLock()
     {
-        this.addActiveKey(KbdX86.SIMCODE.NUM_LOCK, true);
+        this.addActiveKey(Keyboardx86.SIMCODE.NUM_LOCK, true);
     }
 
     /**
      * toggleScrollLock()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     toggleScrollLock()
     {
-        this.addActiveKey(KbdX86.SIMCODE.SCROLL_LOCK, true);
+        this.addActiveKey(Keyboardx86.SIMCODE.SCROLL_LOCK, true);
     }
 
     /**
@@ -48814,7 +49482,7 @@ class KbdX86 extends Component {
      * is set, and when fDown is false, it's cleared.  However, for LOCK keys, fDown true means toggle, and fDown false
      * means no change.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} simCode (includes any ONDOWN and/or ONRIGHT modifiers)
      * @param {boolean} [fSim] is true to update simulated state only
      * @param {boolean|null} [fDown] is true for down, false for up, undefined for toggle
@@ -48823,14 +49491,14 @@ class KbdX86 extends Component {
     updateShiftState(simCode, fSim, fDown)
     {
         let result = 0;
-        if (KbdX86.SIMCODES[simCode]) {
+        if (Keyboardx86.SIMCODES[simCode]) {
             let fRight = (Math.floor(simCode / 1000) & 2);
-            let bitState = KbdX86.KEYSTATES[simCode] || 0;
+            let bitState = Keyboardx86.KEYSTATES[simCode] || 0;
             if (bitState) {
-                if (fRight && !(bitState & KbdX86.STATE.ALL_RIGHT)) {
+                if (fRight && !(bitState & Keyboardx86.STATE.ALL_RIGHT)) {
                     bitState >>= 1;
                 }
-                if (bitState & KbdX86.STATE.ALL_LOCKS) {
+                if (bitState & Keyboardx86.STATE.ALL_LOCKS) {
                     if (fDown === false) return -1;
                     fDown = null;
                 }
@@ -48854,7 +49522,7 @@ class KbdX86 extends Component {
                      * and simulate the "up".  That's more work than I think the problem merits.  The user just needs to tap
                      * a single shift key to get out that mode.
                      */
-                    if (bitState & KbdX86.STATE.ALL_MODIFIERS) bitState = KbdX86.STATE.ALL_MODIFIERS;
+                    if (bitState & Keyboardx86.STATE.ALL_MODIFIERS) bitState = Keyboardx86.STATE.ALL_MODIFIERS;
                 }
                 if (!fSim) {
                     this.bitsState &= ~bitState;
@@ -48866,7 +49534,7 @@ class KbdX86 extends Component {
                      * (Pause) that isn't supposed to alter the NUM-LOCK state; similarly, CTRL-SCROLL-LOCK (aka Ctrl-Break)
                      * isn't supposed to alter the SCROLL-LOCK state.
                      */
-                    if (!(this.bitsStateSim & KbdX86.STATE.ALL_MODIFIERS) || !(bitState & KbdX86.STATE.ALL_LOCKS)) {
+                    if (!(this.bitsStateSim & Keyboardx86.STATE.ALL_MODIFIERS) || !(bitState & Keyboardx86.STATE.ALL_LOCKS)) {
                         this.bitsStateSim &= ~bitState;
                         if (fDown) this.bitsStateSim |= bitState;
                         this.updateLEDs(bitState);
@@ -48881,14 +49549,14 @@ class KbdX86 extends Component {
     /**
      * addActiveKey(simCode, fPress)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} simCode
      * @param {boolean} [fPress]
      * @returns {boolean} true if added, false if not (eg, not recognized, already added, etc)
      */
     addActiveKey(simCode, fPress)
     {
-        let wCode = KbdX86.SIMCODES[simCode] || KbdX86.SIMCODES[simCode += Keys.KEYCODE.ONDOWN];
+        let wCode = Keyboardx86.SIMCODES[simCode] || Keyboardx86.SIMCODES[simCode += Keys.KEYCODE.ONDOWN];
 
         if (!wCode) {
             if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "addActiveKey(%d,%s): unrecognized\n", simCode, (fPress? "press" : "down"));
@@ -48903,7 +49571,7 @@ class KbdX86 extends Component {
         /*
          * If this simCode is in the KEYSTATE table, then stop all repeating.
          */
-        if (KbdX86.KEYSTATES[simCode] && this.aKeysActive.length) {
+        if (Keyboardx86.KEYSTATES[simCode] && this.aKeysActive.length) {
             if (this.aKeysActive[0].nRepeat > 0) this.aKeysActive[0].nRepeat = 0;
         }
 
@@ -48943,7 +49611,7 @@ class KbdX86 extends Component {
         }
 
         key.fDown = true;
-        key.nRepeat = (fPress? -1: (KbdX86.KEYSTATES[simCode]? 0 : 1));
+        key.nRepeat = (fPress? -1: (Keyboardx86.KEYSTATES[simCode]? 0 : 1));
 
         this.updateActiveKey(key);
         return true;
@@ -48952,7 +49620,7 @@ class KbdX86 extends Component {
     /**
      * checkActiveKey()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @returns {number} simCode of active key, 0 if none
      */
     checkActiveKey()
@@ -48963,7 +49631,7 @@ class KbdX86 extends Component {
     /**
      * isAlphaKey(code)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} code
      * @returns {boolean} true if alpha key, false if not
      */
@@ -48975,7 +49643,7 @@ class KbdX86 extends Component {
     /**
      * toUpperKey(code)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} code
      * @returns {number}
      */
@@ -48992,14 +49660,14 @@ class KbdX86 extends Component {
      *
      * Force all active keys to "deactivate" (or, optionally, just any modifiers)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} [fModifiers] (true to clear modifier keys only; default is ALL keys)
      */
     clearActiveKeys(fModifiers)
     {
         for (let i = 0; i < this.aKeysActive.length; i++) {
             let key = this.aKeysActive[i];
-            if (fModifiers && !KbdX86.MODIFIERS[key.simCode]) continue;
+            if (fModifiers && !Keyboardx86.MODIFIERS[key.simCode]) continue;
             if (this.removeActiveKey(key.simCode)) i--;
         }
     }
@@ -49013,7 +49681,7 @@ class KbdX86 extends Component {
      */
     removeActiveKey(simCode, fFlush)
     {
-        if (!KbdX86.SIMCODES[simCode]) {
+        if (!Keyboardx86.SIMCODES[simCode]) {
             if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "removeActiveKey(%d): unrecognized\n", simCode);
             return false;
         }
@@ -49042,7 +49710,7 @@ class KbdX86 extends Component {
 
         if (!this.aKeysActive.length && this.fToggleCapsLock) {
             if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "removeActiveKey(): inverting caps-lock now\n");
-            this.updateShiftState(KbdX86.SIMCODE.CAPS_LOCK);
+            this.updateShiftState(Keyboardx86.SIMCODE.CAPS_LOCK);
             this.fToggleCapsLock = false;
         }
         return fRemoved;
@@ -49110,7 +49778,7 @@ class KbdX86 extends Component {
     /**
      * getSimCode(keyCode)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} keyCode
      * @param {boolean} fShifted
      * @returns {number} simCode
@@ -49121,16 +49789,16 @@ class KbdX86 extends Component {
         let simCode = keyCode;
 
         if (keyCode >= Keys.ASCII.A && keyCode <= Keys.ASCII.Z) {
-            if (!(this.bitsState & (KbdX86.STATE.SHIFT | KbdX86.STATE.RSHIFT | KbdX86.STATE.CAPS_LOCK)) == fShifted) {
+            if (!(this.bitsState & (Keyboardx86.STATE.SHIFT | Keyboardx86.STATE.RSHIFT | Keyboardx86.STATE.CAPS_LOCK)) == fShifted) {
                 simCode = keyCode + (Keys.ASCII.a - Keys.ASCII.A);
             }
         }
         else if (keyCode >= Keys.ASCII.a && keyCode <= Keys.ASCII.z) {
-            if (!!(this.bitsState & (KbdX86.STATE.SHIFT | KbdX86.STATE.RSHIFT | KbdX86.STATE.CAPS_LOCK)) == fShifted) {
+            if (!!(this.bitsState & (Keyboardx86.STATE.SHIFT | Keyboardx86.STATE.RSHIFT | Keyboardx86.STATE.CAPS_LOCK)) == fShifted) {
                 simCode = keyCode - (Keys.ASCII.a - Keys.ASCII.A);
             }
         }
-        else if (!!(this.bitsState & (KbdX86.STATE.SHIFT | KbdX86.STATE.RSHIFT)) == fShifted) {
+        else if (!!(this.bitsState & (Keyboardx86.STATE.SHIFT | Keyboardx86.STATE.RSHIFT)) == fShifted) {
             if ((code = Keys.SHIFTED_KEYCODES[keyCode])) {
                 simCode = code;
             }
@@ -49146,7 +49814,7 @@ class KbdX86 extends Component {
     /**
      * onFocusChange(fFocus)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} fFocus is true if gaining focus, false if losing it
      */
     onFocusChange(fFocus)
@@ -49159,7 +49827,7 @@ class KbdX86 extends Component {
          * Since we can't be sure of any shift states after losing focus, we clear them all.
          */
         if (!fFocus) {
-            this.bitsState &= ~KbdX86.STATE.ALL_MODIFIERS;
+            this.bitsState &= ~Keyboardx86.STATE.ALL_MODIFIERS;
             this.clearActiveKeys();
         }
     }
@@ -49167,7 +49835,7 @@ class KbdX86 extends Component {
     /**
      * onKeyActive(event, fDown)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      * @param {boolean} fDown is true for a keyDown event, false for a keyUp event
      * @returns {boolean} true to pass the event along, false to consume it
@@ -49186,7 +49854,7 @@ class KbdX86 extends Component {
          * NOTE: isUserAgent struggles to detect iPadOS because Apple insists on pretending that it be indistinguishable
          * from desktop systems, so be aware that this hack may stop working at some undefined point.
          */
-        if (WebLib.isUserAgent("iOS") && (this.bitsState & KbdX86.STATE.CTRL)) {
+        if (WebLib.isUserAgent("iOS") && (this.bitsState & Keyboardx86.STATE.CTRL)) {
             if (keyCode == Keys.KEYCODE.CR) {
                 keyCode = Keys.ASCII.C;
             }
@@ -49229,7 +49897,7 @@ class KbdX86 extends Component {
             /*
              * Unless the key happens to be ESC, ANY user input at all now cancels injection.
              */
-            if (keyCode != 27) this.nInjection = KbdX86.INJECTION.NONE;
+            if (keyCode != 27) this.nInjection = Keyboardx86.INJECTION.NONE;
         }
 
         Component.processScript(this.idMachine);        // and any script, too
@@ -49248,7 +49916,7 @@ class KbdX86 extends Component {
             keyCode = simCode = Keys.KEYCODE.ESC;
         }
 
-        if (KbdX86.SIMCODES[keyCode + Keys.KEYCODE.ONDOWN]) {
+        if (Keyboardx86.SIMCODES[keyCode + Keys.KEYCODE.ONDOWN]) {
 
             simCode += Keys.KEYCODE.ONDOWN;
             if (event.location == Keys.LOCATION.RIGHT) {
@@ -49297,7 +49965,7 @@ class KbdX86 extends Component {
                          * we'll still simulate ALT immediately, for those users who press CTRL and then ALT to pop up
                          * Sidekick (as opposed to pressing ALT and then CTRL, which should also work, regardless).
                          */
-                        if (!(this.bitsState & KbdX86.STATE.CTRL)) fIgnore = true;
+                        if (!(this.bitsState & Keyboardx86.STATE.CTRL)) fIgnore = true;
                         /*
                          * Reset cKeysPressed so that we can detect the mere "tapping" of the ALT key, which some PCjs
                          * demos depend on (eg, Multi-tasking MS-DOS 4.0).
@@ -49311,7 +49979,7 @@ class KbdX86 extends Component {
                              * was just tapped, so as long the ALT key was not already "soft-locked" (based on bitsStateSim),
                              * we will transform this "up" event into a "fake press" event.
                              */
-                            if (!(this.bitsStateSim & (KbdX86.STATE.ALT | KbdX86.STATE.RALT))) {
+                            if (!(this.bitsStateSim & (Keyboardx86.STATE.ALT | Keyboardx86.STATE.RALT))) {
                                 fDown = fPress = true;
                             }
                         }
@@ -49349,11 +50017,11 @@ class KbdX86 extends Component {
                 /*
                  * HACKs for mapping CTRL-BACKSPACE and CTRL-ALT-BACKSPACE to CTRL-BREAK and CTRL-ALT-DEL, respectively.
                  */
-                if (keyCode == Keys.KEYCODE.BS && (this.bitsState & (KbdX86.STATE.CTRL|KbdX86.STATE.ALT)) == KbdX86.STATE.CTRL) {
-                    simCode = KbdX86.SIMCODE.CTRL_BREAK;
+                if (keyCode == Keys.KEYCODE.BS && (this.bitsState & (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) == Keyboardx86.STATE.CTRL) {
+                    simCode = Keyboardx86.SIMCODE.CTRL_BREAK;
                 }
-                if (keyCode == Keys.KEYCODE.BS && (this.bitsState & (KbdX86.STATE.CTRL|KbdX86.STATE.ALT)) == (KbdX86.STATE.CTRL|KbdX86.STATE.ALT)) {
-                    simCode = KbdX86.SIMCODE.CTRL_ALT_DEL;
+                if (keyCode == Keys.KEYCODE.BS && (this.bitsState & (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) == (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) {
+                    simCode = Keyboardx86.SIMCODE.CTRL_ALT_DEL;
                 }
 
                 /*
@@ -49368,15 +50036,15 @@ class KbdX86 extends Component {
             /*
              * HACKs for mapping assorted CTRL-ALT sequences involving "normal" keys (eg, PERIOD, EQUALS, and DASH).
              */
-            if ((this.bitsState & (KbdX86.STATE.CTRL|KbdX86.STATE.ALT)) == (KbdX86.STATE.CTRL|KbdX86.STATE.ALT)) {
+            if ((this.bitsState & (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) == (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) {
                 if (keyCode == Keys.KEYCODE.PERIOD) {
-                    simCode = KbdX86.SIMCODE.CTRL_ALT_DEL;    // in case your operating system won't let you type CTRL-ALT-BACKSPACE either
+                    simCode = Keyboardx86.SIMCODE.CTRL_ALT_DEL;    // in case your operating system won't let you type CTRL-ALT-BACKSPACE either
                 }
                 if (keyCode == Keys.KEYCODE.EQUALS) {
-                    simCode = KbdX86.SIMCODE.CTRL_ALT_ADD;    // in case your keyboard doesn't have a numeric keypad '+'
+                    simCode = Keyboardx86.SIMCODE.CTRL_ALT_ADD;    // in case your keyboard doesn't have a numeric keypad '+'
                 }
                 else if (keyCode == Keys.KEYCODE.DASH) {
-                    simCode = KbdX86.SIMCODE.CTRL_ALT_SUB;    // in case your keyboard doesn't have a numeric keypad '-'
+                    simCode = Keyboardx86.SIMCODE.CTRL_ALT_SUB;    // in case your keyboard doesn't have a numeric keypad '-'
                 }
             }
 
@@ -49388,14 +50056,14 @@ class KbdX86 extends Component {
              * Also, we don't want to set fIgnore in such cases, because the browser may not give us a press event for
              * these CTRL-key sequences, so we can't risk ignoring them.
              */
-            if (KbdX86.SIMCODES[simCode] && (this.bitsState & (KbdX86.STATE.CTRLS | KbdX86.STATE.ALTS))) {
+            if (Keyboardx86.SIMCODES[simCode] && (this.bitsState & (Keyboardx86.STATE.CTRLS | Keyboardx86.STATE.ALTS))) {
                 fPass = false;
             }
 
             /*
              * Don't simulate any key not explicitly marked ONDOWN, as well as any key sequence with the CMD key held.
              */
-            if (!this.fAllDown && fPass && fDown || (this.bitsState & KbdX86.STATE.CMDS)) {
+            if (!this.fAllDown && fPass && fDown || (this.bitsState & Keyboardx86.STATE.CMDS)) {
                 fIgnore = true;
             }
         }
@@ -49419,8 +50087,8 @@ class KbdX86 extends Component {
                  * for ALT keys: if we're about to activate another key and we believe that an ALT key is still down,
                  * we fake an ALT activation first.
                  */
-                if (this.fDelayALT && (this.bitsState & KbdX86.STATE.ALTS)) {
-                    let simCodeAlt = KbdX86.SIMCODE.ALT;
+                if (this.fDelayALT && (this.bitsState & Keyboardx86.STATE.ALTS)) {
+                    let simCodeAlt = Keyboardx86.SIMCODE.ALT;
                     this.printf(MESSAGE.EVENT, "onKeyActive(%d): simulating ALT down\n", simCodeAlt);
                     this.addActiveKey(simCodeAlt);
                 }
@@ -49439,7 +50107,7 @@ class KbdX86 extends Component {
     /**
      * onKeyPress(event)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      * @returns {boolean} true to pass the event along, false to consume it
      */
@@ -49464,7 +50132,7 @@ class KbdX86 extends Component {
             }
         }
 
-        let fPass = !KbdX86.SIMCODES[keyCode] || !!(this.bitsState & KbdX86.STATE.CMD);
+        let fPass = !Keyboardx86.SIMCODES[keyCode] || !!(this.bitsState & Keyboardx86.STATE.CMD);
 
         this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyPress(%d): %b\n", keyCode, fPass);
 
@@ -49474,8 +50142,8 @@ class KbdX86 extends Component {
              * for ALT keys: if we're about to activate another key and we believe that an ALT key is still down,
              * we fake an ALT activation first.
              */
-            if (this.fDelayALT && (this.bitsState & KbdX86.STATE.ALTS)) {
-                let simCodeAlt = KbdX86.SIMCODE.ALT;
+            if (this.fDelayALT && (this.bitsState & Keyboardx86.STATE.ALTS)) {
+                let simCodeAlt = Keyboardx86.SIMCODE.ALT;
                 this.printf(MESSAGE.EVENT, "onKeyPress(%d): simulating ALT down\n", simCodeAlt);
                 this.addActiveKey(simCodeAlt);
             }
@@ -49494,7 +50162,7 @@ class KbdX86 extends Component {
      * is currently displayed on screen.  Hence this handler's job is to override the default "copy" behavior, and
      * instead call the Video component's getTextData() function for the text to be deposited on the clipboard.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      */
     onCopy(event)
@@ -49522,7 +50190,7 @@ class KbdX86 extends Component {
      * in "this.controlTextKeyboard.value".  I could deliver the same exact text that onCopy() delivers, but where's
      * the fun in that?
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      */
     onCut(event)
@@ -49538,7 +50206,7 @@ class KbdX86 extends Component {
     /**
      * onPaste(event)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      */
     onPaste(event)
@@ -49579,7 +50247,7 @@ class KbdX86 extends Component {
     /**
      * simulateKey(simCode, fDown)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} simCode
      * @param {boolean} fDown
      * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
@@ -49590,7 +50258,7 @@ class KbdX86 extends Component {
 
         this.updateShiftState(simCode, true, fDown);
 
-        let wCode = KbdX86.SIMCODES[simCode] || KbdX86.SIMCODES[simCode + Keys.KEYCODE.ONDOWN];
+        let wCode = Keyboardx86.SIMCODES[simCode] || Keyboardx86.SIMCODES[simCode + Keys.KEYCODE.ONDOWN];
 
         if (wCode !== undefined) {
 
@@ -49604,7 +50272,7 @@ class KbdX86 extends Component {
                 return false;
             }
 
-            abScanCodes.push(bCode | (fDown? 0 : KbdX86.SCANCODE.BREAK));
+            abScanCodes.push(bCode | (fDown? 0 : Keyboardx86.SCANCODE.BREAK));
 
             let fAlpha = (simCode >= Keys.ASCII.A && simCode <= Keys.ASCII.Z || simCode >= Keys.ASCII.a && simCode <= Keys.ASCII.z);
 
@@ -49615,30 +50283,30 @@ class KbdX86 extends Component {
                  * moreover, if any of them need to perform any shift-state modifications, those modifications
                  * may need to be encoded differently.
                  */
-                if (bCode == KbdX86.SCANCODE.EXTEND1 || bCode == KbdX86.SCANCODE.EXTEND2) {
-                    abScanCodes.push(bCode | (fDown? 0 : KbdX86.SCANCODE.BREAK));
+                if (bCode == Keyboardx86.SCANCODE.EXTEND1 || bCode == Keyboardx86.SCANCODE.EXTEND2) {
+                    abScanCodes.push(bCode | (fDown? 0 : Keyboardx86.SCANCODE.BREAK));
                     continue;
                 }
                 let bitsFake = 0;
-                if (bScan == KbdX86.SCANCODE.SHIFT) {
-                    if (!(this.bitsStateSim & (KbdX86.STATE.SHIFT | KbdX86.STATE.RSHIFT))) {
-                        if (!(this.bitsStateSim & KbdX86.STATE.CAPS_LOCK) || !fAlpha) {
-                            bitsFake |= KbdX86.STATE.SHIFT;
+                if (bScan == Keyboardx86.SCANCODE.SHIFT) {
+                    if (!(this.bitsStateSim & (Keyboardx86.STATE.SHIFT | Keyboardx86.STATE.RSHIFT))) {
+                        if (!(this.bitsStateSim & Keyboardx86.STATE.CAPS_LOCK) || !fAlpha) {
+                            bitsFake |= Keyboardx86.STATE.SHIFT;
                         }
                     }
                 }
-                else if (bScan == KbdX86.SCANCODE.CTRL) {
-                    if (!(this.bitsStateSim & (KbdX86.STATE.CTRL | KbdX86.STATE.RCTRL))) {
-                        bitsFake |= KbdX86.STATE.CTRL;
+                else if (bScan == Keyboardx86.SCANCODE.CTRL) {
+                    if (!(this.bitsStateSim & (Keyboardx86.STATE.CTRL | Keyboardx86.STATE.RCTRL))) {
+                        bitsFake |= Keyboardx86.STATE.CTRL;
                     }
                 }
-                else if (bScan == KbdX86.SCANCODE.ALT) {
-                    if (!(this.bitsStateSim & (KbdX86.STATE.ALT | KbdX86.STATE.RALT))) {
-                        bitsFake |= KbdX86.STATE.ALT;
+                else if (bScan == Keyboardx86.SCANCODE.ALT) {
+                    if (!(this.bitsStateSim & (Keyboardx86.STATE.ALT | Keyboardx86.STATE.RALT))) {
+                        bitsFake |= Keyboardx86.STATE.ALT;
                     }
                 }
                 else {
-                    abScanCodes.push(bCode | (fDown? 0 : KbdX86.SCANCODE.BREAK));
+                    abScanCodes.push(bCode | (fDown? 0 : Keyboardx86.SCANCODE.BREAK));
                 }
                 /*
                  * If we have to fake a modifier key (eg, because some caller wants to simulate a modified key
@@ -49664,7 +50332,7 @@ class KbdX86 extends Component {
                     if (fDown) {
                         abScanCodes.unshift(bScan);
                     } else {
-                        abScanCodes.push(bScan | KbdX86.SCANCODE.BREAK);
+                        abScanCodes.push(bScan | Keyboardx86.SCANCODE.BREAK);
                     }
                 }
             }
@@ -49684,7 +50352,7 @@ class KbdX86 extends Component {
     /**
      * checkActiveKeyShift()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @returns {number|null} bitsState for active key, null if none
      *
      checkActiveKeyShift()
@@ -49694,7 +50362,7 @@ class KbdX86 extends Component {
      */
 
     /**
-     * KbdX86.init()
+     * Keyboardx86.init()
      *
      * This function operates on every HTML element of class "keyboard", extracting the
      * JSON-encoded parameters for the Keyboard constructor from the element's "data-value"
@@ -49707,7 +50375,7 @@ class KbdX86 extends Component {
         for (let iKbd = 0; iKbd < aeKbd.length; iKbd++) {
             let eKbd = aeKbd[iKbd];
             let parmsKbd = Component.getComponentParms(eKbd);
-            let kbd = new KbdX86(parmsKbd);
+            let kbd = new Keyboardx86(parmsKbd);
             Component.bindComponentControls(kbd, eKbd, APPCLASS);
         }
     }
@@ -49716,9 +50384,9 @@ class KbdX86 extends Component {
 /*
  * Supported keyboard models (the first entry is the default if the specified model isn't recognized)
  */
-KbdX86.MODELS = ["US83", "US84", "US101"];
+Keyboardx86.MODELS = ["US83", "US84", "US101"];
 
-KbdX86.SIMCODE = {
+Keyboardx86.SIMCODE = {
     BS:               Keys.KEYCODE.BS          + Keys.KEYCODE.ONDOWN,
     TAB:              Keys.KEYCODE.TAB         + Keys.KEYCODE.ONDOWN,
     SHIFT:            Keys.KEYCODE.SHIFT       + Keys.KEYCODE.ONDOWN,
@@ -49821,7 +50489,7 @@ KbdX86.SIMCODE = {
 /*
  * Scan code constants
  */
-KbdX86.SCANCODE = {
+Keyboardx86.SCANCODE = {
     /* 0x01 */ ESC:         1,
     /* 0x02 */ ONE:         2,
     /* 0x03 */ TWO:         3,
@@ -49936,7 +50604,7 @@ KbdX86.SCANCODE = {
  *
  * @enum {number}
  */
-KbdX86.STATE = {
+Keyboardx86.STATE = {
     RSHIFT:         0x0001,
     SHIFT:          0x0002,
     SHIFTS:         0x0003,
@@ -49961,32 +50629,32 @@ KbdX86.STATE = {
 /*
  * Maps KEYCODES of modifier keys to their corresponding (default) STATES bit above.
  */
-KbdX86.MODIFIERS = {
-    [KbdX86.SIMCODE.RSHIFT]:      KbdX86.STATE.RSHIFT,
-    [KbdX86.SIMCODE.SHIFT]:       KbdX86.STATE.SHIFT,
-    [KbdX86.SIMCODE.CTRL]:        KbdX86.STATE.CTRL,
-    [KbdX86.SIMCODE.ALT]:         KbdX86.STATE.ALT,
-    [KbdX86.SIMCODE.RALT]:        KbdX86.STATE.ALT,
-    [KbdX86.SIMCODE.CMD]:         KbdX86.STATE.CMD,
-    [KbdX86.SIMCODE.RCMD]:        KbdX86.STATE.RCMD,
-    [KbdX86.SIMCODE.FF_CMD]:      KbdX86.STATE.CMD
+Keyboardx86.MODIFIERS = {
+    [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.STATE.RSHIFT,
+    [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.STATE.SHIFT,
+    [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.STATE.CTRL,
+    [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.STATE.ALT,
+    [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.STATE.ALT,
+    [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.STATE.CMD,
+    [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.STATE.RCMD,
+    [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.STATE.CMD
 };
 
 /*
  * Maps KEYCODES of all modifier and lock keys to their corresponding (default) STATES bit above.
  */
-KbdX86.KEYSTATES = {
-    [KbdX86.SIMCODE.RSHIFT]:      KbdX86.STATE.RSHIFT,
-    [KbdX86.SIMCODE.SHIFT]:       KbdX86.STATE.SHIFT,
-    [KbdX86.SIMCODE.CTRL]:        KbdX86.STATE.CTRL,
-    [KbdX86.SIMCODE.ALT]:         KbdX86.STATE.ALT,
-    [KbdX86.SIMCODE.RALT]:        KbdX86.STATE.ALT,
-    [KbdX86.SIMCODE.CMD]:         KbdX86.STATE.CMD,
-    [KbdX86.SIMCODE.RCMD]:        KbdX86.STATE.RCMD,
-    [KbdX86.SIMCODE.FF_CMD]:      KbdX86.STATE.CMD,
-    [KbdX86.SIMCODE.CAPS_LOCK]:   KbdX86.STATE.CAPS_LOCK,
-    [KbdX86.SIMCODE.NUM_LOCK]:    KbdX86.STATE.NUM_LOCK,
-    [KbdX86.SIMCODE.SCROLL_LOCK]: KbdX86.STATE.SCROLL_LOCK
+Keyboardx86.KEYSTATES = {
+    [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.STATE.RSHIFT,
+    [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.STATE.SHIFT,
+    [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.STATE.CTRL,
+    [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.STATE.ALT,
+    [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.STATE.ALT,
+    [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.STATE.CMD,
+    [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.STATE.RCMD,
+    [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.STATE.CMD,
+    [Keyboardx86.SIMCODE.CAPS_LOCK]:   Keyboardx86.STATE.CAPS_LOCK,
+    [Keyboardx86.SIMCODE.NUM_LOCK]:    Keyboardx86.STATE.NUM_LOCK,
+    [Keyboardx86.SIMCODE.SCROLL_LOCK]: Keyboardx86.STATE.SCROLL_LOCK
 };
 
 /*
@@ -49997,42 +50665,42 @@ KbdX86.KEYSTATES = {
  * our convention for constants.  setBinding() will automatically convert any incoming CLICKCODE bindings
  * that use lower-case and dashes to upper-case and underscores before performing property lookup.
  */
-KbdX86.CLICKCODES = {
-    'TAB':              KbdX86.SIMCODE.TAB,
-    'ESC':              KbdX86.SIMCODE.ESC,
-    'F1':               KbdX86.SIMCODE.F1,
-    'F2':               KbdX86.SIMCODE.F2,
-    'F3':               KbdX86.SIMCODE.F3,
-    'F4':               KbdX86.SIMCODE.F4,
-    'F5':               KbdX86.SIMCODE.F5,
-    'F6':               KbdX86.SIMCODE.F6,
-    'F7':               KbdX86.SIMCODE.F7,
-    'F8':               KbdX86.SIMCODE.F8,
-    'F9':               KbdX86.SIMCODE.F9,
-    'F10':              KbdX86.SIMCODE.F10,
-    'LEFT':             KbdX86.SIMCODE.LEFT,
-    'UP':               KbdX86.SIMCODE.UP,
-    'RIGHT':            KbdX86.SIMCODE.RIGHT,
-    'DOWN':             KbdX86.SIMCODE.DOWN,
-    'NUM_HOME':         KbdX86.SIMCODE.HOME,
-    'NUM_END':          KbdX86.SIMCODE.END,
-    'NUM_PGUP':         KbdX86.SIMCODE.PGUP,
-    'NUM_PGDN':         KbdX86.SIMCODE.PGDN,
-    'ALT':              KbdX86.SIMCODE.ALT,
-    'SYS_REQ':          KbdX86.SIMCODE.SYS_REQ,
+Keyboardx86.CLICKCODES = {
+    'TAB':              Keyboardx86.SIMCODE.TAB,
+    'ESC':              Keyboardx86.SIMCODE.ESC,
+    'F1':               Keyboardx86.SIMCODE.F1,
+    'F2':               Keyboardx86.SIMCODE.F2,
+    'F3':               Keyboardx86.SIMCODE.F3,
+    'F4':               Keyboardx86.SIMCODE.F4,
+    'F5':               Keyboardx86.SIMCODE.F5,
+    'F6':               Keyboardx86.SIMCODE.F6,
+    'F7':               Keyboardx86.SIMCODE.F7,
+    'F8':               Keyboardx86.SIMCODE.F8,
+    'F9':               Keyboardx86.SIMCODE.F9,
+    'F10':              Keyboardx86.SIMCODE.F10,
+    'LEFT':             Keyboardx86.SIMCODE.LEFT,
+    'UP':               Keyboardx86.SIMCODE.UP,
+    'RIGHT':            Keyboardx86.SIMCODE.RIGHT,
+    'DOWN':             Keyboardx86.SIMCODE.DOWN,
+    'NUM_HOME':         Keyboardx86.SIMCODE.HOME,
+    'NUM_END':          Keyboardx86.SIMCODE.END,
+    'NUM_PGUP':         Keyboardx86.SIMCODE.PGUP,
+    'NUM_PGDN':         Keyboardx86.SIMCODE.PGDN,
+    'ALT':              Keyboardx86.SIMCODE.ALT,
+    'SYS_REQ':          Keyboardx86.SIMCODE.SYS_REQ,
     /*
      * These bindings are for convenience (common key combinations that can be bound to a single control)
      */
-    'CTRL_C':           KbdX86.SIMCODE.CTRL_C,
-    'CTRL_PAUSE':       KbdX86.SIMCODE.CTRL_PAUSE,
-    'CTRL_BREAK':       KbdX86.SIMCODE.CTRL_BREAK,
-    'CTRL_ALT_DEL':     KbdX86.SIMCODE.CTRL_ALT_DEL,
-    'CTRL_ALT_INS':     KbdX86.SIMCODE.CTRL_ALT_INS,
-    'CTRL_ALT_ADD':     KbdX86.SIMCODE.CTRL_ALT_ADD,
-    'CTRL_ALT_SUB':     KbdX86.SIMCODE.CTRL_ALT_SUB,
-    'CTRL_ALT_ENTER':   KbdX86.SIMCODE.CTRL_ALT_ENTER,
-    'CTRL_ALT_SYS_REQ': KbdX86.SIMCODE.CTRL_ALT_SYS_REQ,
-    'SHIFT_TAB':        KbdX86.SIMCODE.SHIFT_TAB
+    'CTRL_C':           Keyboardx86.SIMCODE.CTRL_C,
+    'CTRL_PAUSE':       Keyboardx86.SIMCODE.CTRL_PAUSE,
+    'CTRL_BREAK':       Keyboardx86.SIMCODE.CTRL_BREAK,
+    'CTRL_ALT_DEL':     Keyboardx86.SIMCODE.CTRL_ALT_DEL,
+    'CTRL_ALT_INS':     Keyboardx86.SIMCODE.CTRL_ALT_INS,
+    'CTRL_ALT_ADD':     Keyboardx86.SIMCODE.CTRL_ALT_ADD,
+    'CTRL_ALT_SUB':     Keyboardx86.SIMCODE.CTRL_ALT_SUB,
+    'CTRL_ALT_ENTER':   Keyboardx86.SIMCODE.CTRL_ALT_ENTER,
+    'CTRL_ALT_SYS_REQ': Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ,
+    'SHIFT_TAB':        Keyboardx86.SIMCODE.SHIFT_TAB
 };
 
 /*
@@ -50083,8 +50751,8 @@ KbdX86.CLICKCODES = {
  * to convert browser key codes directly into PC scan codes, which is what our 8042 controller implementation
  * assumes we're doing.
  */
-KbdX86.SOFTCODES = {
-    /*  1 */    'esc':          KbdX86.SIMCODE.ESC,
+Keyboardx86.SOFTCODES = {
+    /*  1 */    'esc':          Keyboardx86.SIMCODE.ESC,
     /*  2 */    '1':            Keys.ASCII['1'],
     /*  3 */    '2':            Keys.ASCII['2'],
     /*  4 */    '3':            Keys.ASCII['3'],
@@ -50098,8 +50766,8 @@ KbdX86.SOFTCODES = {
     /* 12 */    '-':            Keys.ASCII['-'],
     /* 13 */    '=':            Keys.ASCII['='],
     /* 43 */    'bslash':       Keys.ASCII['\\'],               // listed before 'bs' so that injectKeys() doesn't mismatch
-    /* 14 */    'bs':           KbdX86.SIMCODE.BS,
-    /* 15 */    'tab':          KbdX86.SIMCODE.TAB,
+    /* 14 */    'bs':           Keyboardx86.SIMCODE.BS,
+    /* 15 */    'tab':          Keyboardx86.SIMCODE.TAB,
     /* 16 */    'q':            Keys.ASCII.q,
     /* 17 */    'w':            Keys.ASCII.w,
     /* 18 */    'e':            Keys.ASCII.e,
@@ -50113,7 +50781,7 @@ KbdX86.SOFTCODES = {
     /* 26 */    '[':            Keys.ASCII['['],
     /* 27 */    ']':            Keys.ASCII[']'],
     /* 28 */    'enter':        Keys.KEYCODE.CR,
-    /* 29 */    'ctrl':         KbdX86.SIMCODE.CTRL,
+    /* 29 */    'ctrl':         Keyboardx86.SIMCODE.CTRL,
     /* 30 */    'a':            Keys.ASCII.a,
     /* 31 */    's':            Keys.ASCII.s,
     /* 32 */    'd':            Keys.ASCII.d,
@@ -50126,7 +50794,7 @@ KbdX86.SOFTCODES = {
     /* 39 */    ';':            Keys.ASCII[';'],
     /* 40 */    'quote':        Keys.ASCII["'"],                // formerly "squote"
     /* 41 */    '`':            Keys.ASCII['`'],                // formerly "bquote"
-    /* 42 */    'shift':        KbdX86.SIMCODE.SHIFT,           // formerly "lshift"
+    /* 42 */    'shift':        Keyboardx86.SIMCODE.SHIFT,           // formerly "lshift"
     /* 43 */    '\\':           Keys.ASCII['\\'],               // formerly "bslash"
     /* 44 */    'z':            Keys.ASCII.z,
     /* 45 */    'x':            Keys.ASCII.x,
@@ -50138,23 +50806,23 @@ KbdX86.SOFTCODES = {
     /* 51 */    ',':            Keys.ASCII[','],
     /* 52 */    '.':            Keys.ASCII['.'],
     /* 53 */    '/':            Keys.ASCII['/'],
-    /* 54 */    'right-shift':  KbdX86.SIMCODE.RSHIFT,        // formerly "rshift"
-    /* 55 */    'prtsc':        KbdX86.SIMCODE.PRTSC,         // unshifted '*'; becomes dedicated 'Print Screen' key on 101-key keyboards
-    /* 56 */    'alt':          KbdX86.SIMCODE.ALT,
-    /* 57 */    'space':        KbdX86.SIMCODE.SPACE,
-    /* 58 */    'caps-lock':    KbdX86.SIMCODE.CAPS_LOCK,
-    /* 68 */    'f10':          KbdX86.SIMCODE.F10,           // listed before 'f1' so that injectKeys() doesn't mismatch
-    /* 59 */    'f1':           KbdX86.SIMCODE.F1,
-    /* 60 */    'f2':           KbdX86.SIMCODE.F2,
-    /* 61 */    'f3':           KbdX86.SIMCODE.F3,
-    /* 62 */    'f4':           KbdX86.SIMCODE.F4,
-    /* 63 */    'f5':           KbdX86.SIMCODE.F5,
-    /* 64 */    'f6':           KbdX86.SIMCODE.F6,
-    /* 65 */    'f7':           KbdX86.SIMCODE.F7,
-    /* 66 */    'f8':           KbdX86.SIMCODE.F8,
-    /* 67 */    'f9':           KbdX86.SIMCODE.F9,
-    /* 69 */    'num-lock':     KbdX86.SIMCODE.NUM_LOCK,
-    /* 70 */    'scroll-lock':  KbdX86.SIMCODE.SCROLL_LOCK,   // TODO: 0xe046 on 101-key keyboards?
+    /* 54 */    'right-shift':  Keyboardx86.SIMCODE.RSHIFT,        // formerly "rshift"
+    /* 55 */    'prtsc':        Keyboardx86.SIMCODE.PRTSC,         // unshifted '*'; becomes dedicated 'Print Screen' key on 101-key keyboards
+    /* 56 */    'alt':          Keyboardx86.SIMCODE.ALT,
+    /* 57 */    'space':        Keyboardx86.SIMCODE.SPACE,
+    /* 58 */    'caps-lock':    Keyboardx86.SIMCODE.CAPS_LOCK,
+    /* 68 */    'f10':          Keyboardx86.SIMCODE.F10,           // listed before 'f1' so that injectKeys() doesn't mismatch
+    /* 59 */    'f1':           Keyboardx86.SIMCODE.F1,
+    /* 60 */    'f2':           Keyboardx86.SIMCODE.F2,
+    /* 61 */    'f3':           Keyboardx86.SIMCODE.F3,
+    /* 62 */    'f4':           Keyboardx86.SIMCODE.F4,
+    /* 63 */    'f5':           Keyboardx86.SIMCODE.F5,
+    /* 64 */    'f6':           Keyboardx86.SIMCODE.F6,
+    /* 65 */    'f7':           Keyboardx86.SIMCODE.F7,
+    /* 66 */    'f8':           Keyboardx86.SIMCODE.F8,
+    /* 67 */    'f9':           Keyboardx86.SIMCODE.F9,
+    /* 69 */    'num-lock':     Keyboardx86.SIMCODE.NUM_LOCK,
+    /* 70 */    'scroll-lock':  Keyboardx86.SIMCODE.SCROLL_LOCK,   // TODO: 0xe046 on 101-key keyboards?
 
     /*
      * Yes, distinguishing keys 71 through 83 with the 'num-' prefix seems like overkill, but it was
@@ -50167,20 +50835,20 @@ KbdX86.SOFTCODES = {
      * on the theory that key injection users won't really care precisely which version of the key is used.
      */
 
-    /* 71 */    'num-home':     KbdX86.SIMCODE.HOME,          // formerly "home"
-    /* 72 */    'num-up':       KbdX86.SIMCODE.UP,            // formerly "up-arrow"
-    /* 73 */    'num-pgup':     KbdX86.SIMCODE.PGUP,          // formerly "page-up"
-    /* 74 */    'num-sub':      KbdX86.SIMCODE.NUM_SUB,       // formerly "num-minus"
-    /* 75 */    'num-left':     KbdX86.SIMCODE.LEFT,          // formerly "left-arrow"
-    /* 76 */    'num-center':   KbdX86.SIMCODE.NUM_CENTER,    // formerly "center"
-    /* 77 */    'num-right':    KbdX86.SIMCODE.RIGHT,         // formerly "right-arrow"
-    /* 78 */    'num-add':      KbdX86.SIMCODE.NUM_ADD,       // formerly "num-plus"
-    /* 79 */    'num-end':      KbdX86.SIMCODE.END,           // formerly "end"
-    /* 80 */    'num-down':     KbdX86.SIMCODE.DOWN,          // formerly "down-arrow"
-    /* 81 */    'num-pgdn':     KbdX86.SIMCODE.PGDN,          // formerly "page-down"
-    /* 82 */    'num-ins':      KbdX86.SIMCODE.INS,           // formerly "ins"
-    /* 83 */    'num-del':      KbdX86.SIMCODE.DEL,           // formerly "del"
-    /* 84 */    'sys-req':      KbdX86.SIMCODE.SYS_REQ        // 84-key keyboard only (simulated with 'alt'+'prtsc' on 101-key keyboards)
+    /* 71 */    'num-home':     Keyboardx86.SIMCODE.HOME,          // formerly "home"
+    /* 72 */    'num-up':       Keyboardx86.SIMCODE.UP,            // formerly "up-arrow"
+    /* 73 */    'num-pgup':     Keyboardx86.SIMCODE.PGUP,          // formerly "page-up"
+    /* 74 */    'num-sub':      Keyboardx86.SIMCODE.NUM_SUB,       // formerly "num-minus"
+    /* 75 */    'num-left':     Keyboardx86.SIMCODE.LEFT,          // formerly "left-arrow"
+    /* 76 */    'num-center':   Keyboardx86.SIMCODE.NUM_CENTER,    // formerly "center"
+    /* 77 */    'num-right':    Keyboardx86.SIMCODE.RIGHT,         // formerly "right-arrow"
+    /* 78 */    'num-add':      Keyboardx86.SIMCODE.NUM_ADD,       // formerly "num-plus"
+    /* 79 */    'num-end':      Keyboardx86.SIMCODE.END,           // formerly "end"
+    /* 80 */    'num-down':     Keyboardx86.SIMCODE.DOWN,          // formerly "down-arrow"
+    /* 81 */    'num-pgdn':     Keyboardx86.SIMCODE.PGDN,          // formerly "page-down"
+    /* 82 */    'num-ins':      Keyboardx86.SIMCODE.INS,           // formerly "ins"
+    /* 83 */    'num-del':      Keyboardx86.SIMCODE.DEL,           // formerly "del"
+    /* 84 */    'sys-req':      Keyboardx86.SIMCODE.SYS_REQ        // 84-key keyboard only (simulated with 'alt'+'prtsc' on 101-key keyboards)
 
     /*
      * If I ever add 101-key keyboard support (and it's not clear that I will), then the following entries
@@ -50189,37 +50857,37 @@ KbdX86.SOFTCODES = {
      * mapped directly to SCANCODES.
      */
 
-//  /* 84 */    'pause':        KbdX86.SCANCODE.PAUSE,        // 101-key keyboard only
-//  /* 85 */    'f11':          KbdX86.SCANCODE.F11,
-//  /* 86 */    'f12':          KbdX86.SCANCODE.F12,
-//  /* 87 */    'num-enter':    KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.ENTER << 8),
-//  /* 88 */    'right-ctrl':   KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.CTRL << 8),
-//  /* 89 */    'num-div':      KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.SLASH << 8),
-//  /* 90 */    'num-mul':      KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.PRTSC << 8),
-//  /* 91 */    'right-alt':    KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.ALT << 8),
-//  /* 92 */    'home':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_HOME << 8),
-//  /* 93 */    'up':           KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_UP << 8),
-//  /* 94 */    'pgup':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_PGUP << 8),
-//  /* 95 */    'left':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_LEFT << 8),
-//  /* 96 */    'right':        KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_RIGHT << 8),
-//  /* 97 */    'end':          KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_END << 8),
-//  /* 98 */    'down':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_DOWN << 8),
-//  /* 99 */    'pgdn':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_PGDN << 8),
-//  /*100 */    'ins':          KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_INS << 8),
-//  /*101 */    'del':          KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_DEL << 8),
+//  /* 84 */    'pause':        Keyboardx86.SCANCODE.PAUSE,        // 101-key keyboard only
+//  /* 85 */    'f11':          Keyboardx86.SCANCODE.F11,
+//  /* 86 */    'f12':          Keyboardx86.SCANCODE.F12,
+//  /* 87 */    'num-enter':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.ENTER << 8),
+//  /* 88 */    'right-ctrl':   Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.CTRL << 8),
+//  /* 89 */    'num-div':      Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.SLASH << 8),
+//  /* 90 */    'num-mul':      Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.PRTSC << 8),
+//  /* 91 */    'right-alt':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.ALT << 8),
+//  /* 92 */    'home':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_HOME << 8),
+//  /* 93 */    'up':           Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_UP << 8),
+//  /* 94 */    'pgup':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_PGUP << 8),
+//  /* 95 */    'left':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_LEFT << 8),
+//  /* 96 */    'right':        Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_RIGHT << 8),
+//  /* 97 */    'end':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_END << 8),
+//  /* 98 */    'down':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_DOWN << 8),
+//  /* 99 */    'pgdn':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_PGDN << 8),
+//  /*100 */    'ins':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_INS << 8),
+//  /*101 */    'del':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_DEL << 8),
 
-//  /*102 */    'win':          KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.WIN << 8),
-//  /*103 */    'right-win':    KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.RWIN << 8),
-//  /*104 */    'menu':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.MENU << 8)
+//  /*102 */    'win':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.WIN << 8),
+//  /*103 */    'right-win':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.RWIN << 8),
+//  /*104 */    'menu':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.MENU << 8)
 };
 
 /*
  * Maps "soft-key" definitions (above) of shift/modifier keys to their corresponding (default) STATES bit.
  */
-KbdX86.LEDSTATES = {
-    'caps-lock':    KbdX86.STATE.CAPS_LOCK,
-    'num-lock':     KbdX86.STATE.NUM_LOCK,
-    'scroll-lock':  KbdX86.STATE.SCROLL_LOCK
+Keyboardx86.LEDSTATES = {
+    'caps-lock':    Keyboardx86.STATE.CAPS_LOCK,
+    'num-lock':     Keyboardx86.STATE.NUM_LOCK,
+    'scroll-lock':  Keyboardx86.STATE.SCROLL_LOCK
 };
 
 /*
@@ -50239,148 +50907,148 @@ KbdX86.LEDSTATES = {
  * we've inherited the same solution: simulateKey() has the ability to "undo" any states in bitsState
  * that conflict with the state(s) required for the character in question.
  */
-KbdX86.SIMCODES = {
-    [KbdX86.SIMCODE.ESC]:         KbdX86.SCANCODE.ESC,
-    [Keys.ASCII['1']]:            KbdX86.SCANCODE.ONE,
-    [Keys.ASCII['!']]:            KbdX86.SCANCODE.ONE    | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['2']]:            KbdX86.SCANCODE.TWO,
-    [Keys.ASCII['@']]:            KbdX86.SCANCODE.TWO    | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['3']]:            KbdX86.SCANCODE.THREE,
-    [Keys.ASCII['#']]:            KbdX86.SCANCODE.THREE  | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['4']]:            KbdX86.SCANCODE.FOUR,
-    [Keys.ASCII['$']]:            KbdX86.SCANCODE.FOUR   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['5']]:            KbdX86.SCANCODE.FIVE,
-    [Keys.ASCII['%']]:            KbdX86.SCANCODE.FIVE   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['6']]:            KbdX86.SCANCODE.SIX,
-    [Keys.ASCII['^']]:            KbdX86.SCANCODE.SIX    | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['7']]:            KbdX86.SCANCODE.SEVEN,
-    [Keys.ASCII['&']]:            KbdX86.SCANCODE.SEVEN  | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['8']]:            KbdX86.SCANCODE.EIGHT,
-    [Keys.ASCII['*']]:            KbdX86.SCANCODE.EIGHT  | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['9']]:            KbdX86.SCANCODE.NINE,
-    [Keys.ASCII['(']]:            KbdX86.SCANCODE.NINE   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['0']]:            KbdX86.SCANCODE.ZERO,
-    [Keys.ASCII[')']]:            KbdX86.SCANCODE.ZERO   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['-']]:            KbdX86.SCANCODE.DASH,
-    [Keys.ASCII['_']]:            KbdX86.SCANCODE.DASH   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['=']]:            KbdX86.SCANCODE.EQUALS,
-    [Keys.ASCII['+']]:            KbdX86.SCANCODE.EQUALS | (KbdX86.SCANCODE.SHIFT << 8),
-    [KbdX86.SIMCODE.BS]:          KbdX86.SCANCODE.BS,
-    [KbdX86.SIMCODE.TAB]:         KbdX86.SCANCODE.TAB,
-    [Keys.ASCII.q]:               KbdX86.SCANCODE.Q,
-    [Keys.ASCII.Q]:               KbdX86.SCANCODE.Q      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.w]:               KbdX86.SCANCODE.W,
-    [Keys.ASCII.W]:               KbdX86.SCANCODE.W      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.e]:               KbdX86.SCANCODE.E,
-    [Keys.ASCII.E]:               KbdX86.SCANCODE.E      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.r]:               KbdX86.SCANCODE.R,
-    [Keys.ASCII.R]:               KbdX86.SCANCODE.R      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.t]:               KbdX86.SCANCODE.T,
-    [Keys.ASCII.T]:               KbdX86.SCANCODE.T      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.y]:               KbdX86.SCANCODE.Y,
-    [Keys.ASCII.Y]:               KbdX86.SCANCODE.Y      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.u]:               KbdX86.SCANCODE.U,
-    [Keys.ASCII.U]:               KbdX86.SCANCODE.U      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.i]:               KbdX86.SCANCODE.I,
-    [Keys.ASCII.I]:               KbdX86.SCANCODE.I      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.o]:               KbdX86.SCANCODE.O,
-    [Keys.ASCII.O]:               KbdX86.SCANCODE.O      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.p]:               KbdX86.SCANCODE.P,
-    [Keys.ASCII.P]:               KbdX86.SCANCODE.P      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['[']]:            KbdX86.SCANCODE.LBRACK,
-    [Keys.ASCII['{']]:            KbdX86.SCANCODE.LBRACK | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[']']]:            KbdX86.SCANCODE.RBRACK,
-    [Keys.ASCII['}']]:            KbdX86.SCANCODE.RBRACK | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.KEYCODE.CR]:            KbdX86.SCANCODE.ENTER,
-    [KbdX86.SIMCODE.CTRL]:        KbdX86.SCANCODE.CTRL,
-    [Keys.ASCII.a]:               KbdX86.SCANCODE.A,
-    [Keys.ASCII.A]:               KbdX86.SCANCODE.A      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.s]:               KbdX86.SCANCODE.S,
-    [Keys.ASCII.S]:               KbdX86.SCANCODE.S      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.d]:               KbdX86.SCANCODE.D,
-    [Keys.ASCII.D]:               KbdX86.SCANCODE.D      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.f]:               KbdX86.SCANCODE.F,
-    [Keys.ASCII.F]:               KbdX86.SCANCODE.F      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.g]:               KbdX86.SCANCODE.G,
-    [Keys.ASCII.G]:               KbdX86.SCANCODE.G      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.h]:               KbdX86.SCANCODE.H,
-    [Keys.ASCII.H]:               KbdX86.SCANCODE.H      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.j]:               KbdX86.SCANCODE.J,
-    [Keys.ASCII.J]:               KbdX86.SCANCODE.J      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.k]:               KbdX86.SCANCODE.K,
-    [Keys.ASCII.K]:               KbdX86.SCANCODE.K      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.l]:               KbdX86.SCANCODE.L,
-    [Keys.ASCII.L]:               KbdX86.SCANCODE.L      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[';']]:            KbdX86.SCANCODE.SEMI,
-    [Keys.ASCII[':']]:            KbdX86.SCANCODE.SEMI   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII["'"]]:            KbdX86.SCANCODE.QUOTE,
-    [Keys.ASCII['"']]:            KbdX86.SCANCODE.QUOTE  | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['`']]:            KbdX86.SCANCODE.BQUOTE,
-    [Keys.ASCII['~']]:            KbdX86.SCANCODE.BQUOTE | (KbdX86.SCANCODE.SHIFT << 8),
-    [KbdX86.SIMCODE.SHIFT]:       KbdX86.SCANCODE.SHIFT,
-    [Keys.ASCII['\\']]:           KbdX86.SCANCODE.BSLASH,
-    [Keys.ASCII['|']]:            KbdX86.SCANCODE.BSLASH | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.z]:               KbdX86.SCANCODE.Z,
-    [Keys.ASCII.Z]:               KbdX86.SCANCODE.Z      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.x]:               KbdX86.SCANCODE.X,
-    [Keys.ASCII.X]:               KbdX86.SCANCODE.X      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.c]:               KbdX86.SCANCODE.C,
-    [Keys.ASCII.C]:               KbdX86.SCANCODE.C      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.v]:               KbdX86.SCANCODE.V,
-    [Keys.ASCII.V]:               KbdX86.SCANCODE.V      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.b]:               KbdX86.SCANCODE.B,
-    [Keys.ASCII.B]:               KbdX86.SCANCODE.B      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.n]:               KbdX86.SCANCODE.N,
-    [Keys.ASCII.N]:               KbdX86.SCANCODE.N      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.m]:               KbdX86.SCANCODE.M,
-    [Keys.ASCII.M]:               KbdX86.SCANCODE.M      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[',']]:            KbdX86.SCANCODE.COMMA,
-    [Keys.ASCII['<']]:            KbdX86.SCANCODE.COMMA  | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['.']]:            KbdX86.SCANCODE.PERIOD,
-    [Keys.ASCII['>']]:            KbdX86.SCANCODE.PERIOD | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['/']]:            KbdX86.SCANCODE.SLASH,
-    [Keys.ASCII['?']]:            KbdX86.SCANCODE.SLASH  | (KbdX86.SCANCODE.SHIFT << 8),
-    [KbdX86.SIMCODE.RSHIFT]:      KbdX86.SCANCODE.RSHIFT,
-    [KbdX86.SIMCODE.PRTSC]:       KbdX86.SCANCODE.PRTSC,
-    [KbdX86.SIMCODE.ALT]:         KbdX86.SCANCODE.ALT,
-    [KbdX86.SIMCODE.RALT]:        KbdX86.SCANCODE.ALT,
-    [KbdX86.SIMCODE.SPACE]:       KbdX86.SCANCODE.SPACE,
-    [KbdX86.SIMCODE.CAPS_LOCK]:   KbdX86.SCANCODE.CAPS_LOCK,
-    [KbdX86.SIMCODE.F1]:          KbdX86.SCANCODE.F1,
-    [KbdX86.SIMCODE.F2]:          KbdX86.SCANCODE.F2,
-    [KbdX86.SIMCODE.F3]:          KbdX86.SCANCODE.F3,
-    [KbdX86.SIMCODE.F4]:          KbdX86.SCANCODE.F4,
-    [KbdX86.SIMCODE.F5]:          KbdX86.SCANCODE.F5,
-    [KbdX86.SIMCODE.F6]:          KbdX86.SCANCODE.F6,
-    [KbdX86.SIMCODE.F7]:          KbdX86.SCANCODE.F7,
-    [KbdX86.SIMCODE.F8]:          KbdX86.SCANCODE.F8,
-    [KbdX86.SIMCODE.F9]:          KbdX86.SCANCODE.F9,
-    [KbdX86.SIMCODE.F10]:         KbdX86.SCANCODE.F10,
-    [KbdX86.SIMCODE.NUM_LOCK]:    KbdX86.SCANCODE.NUM_LOCK,
-    [KbdX86.SIMCODE.SCROLL_LOCK]: KbdX86.SCANCODE.SCROLL_LOCK,
-    [KbdX86.SIMCODE.HOME]:        KbdX86.SCANCODE.NUM_HOME,
-    [KbdX86.SIMCODE.NUM_HOME]:    KbdX86.SCANCODE.NUM_HOME,
-    [KbdX86.SIMCODE.UP]:          KbdX86.SCANCODE.NUM_UP,
-    [KbdX86.SIMCODE.NUM_UP]:      KbdX86.SCANCODE.NUM_UP,
-    [KbdX86.SIMCODE.PGUP]:        KbdX86.SCANCODE.NUM_PGUP,
-    [KbdX86.SIMCODE.NUM_PGUP]:    KbdX86.SCANCODE.NUM_PGUP,
-    [KbdX86.SIMCODE.LEFT]:        KbdX86.SCANCODE.NUM_LEFT,
-    [KbdX86.SIMCODE.NUM_LEFT]:    KbdX86.SCANCODE.NUM_LEFT,
-    [KbdX86.SIMCODE.NUM_CENTER]:  KbdX86.SCANCODE.NUM_CENTER,
-    [KbdX86.SIMCODE.RIGHT]:       KbdX86.SCANCODE.NUM_RIGHT,
-    [KbdX86.SIMCODE.NUM_RIGHT]:   KbdX86.SCANCODE.NUM_RIGHT,
-    [KbdX86.SIMCODE.END]:         KbdX86.SCANCODE.NUM_END,
-    [KbdX86.SIMCODE.NUM_END]:     KbdX86.SCANCODE.NUM_END,
-    [KbdX86.SIMCODE.DOWN]:        KbdX86.SCANCODE.NUM_DOWN,
-    [KbdX86.SIMCODE.NUM_DOWN]:    KbdX86.SCANCODE.NUM_DOWN,
-    [KbdX86.SIMCODE.PGDN]:        KbdX86.SCANCODE.NUM_PGDN,
-    [KbdX86.SIMCODE.NUM_PGDN]:    KbdX86.SCANCODE.NUM_PGDN,
-    [KbdX86.SIMCODE.INS]:         KbdX86.SCANCODE.NUM_INS,
-    [KbdX86.SIMCODE.NUM_INS]:     KbdX86.SCANCODE.NUM_INS,
-    [KbdX86.SIMCODE.NUM_ADD]:     KbdX86.SCANCODE.NUM_ADD,
-    [KbdX86.SIMCODE.NUM_SUB]:     KbdX86.SCANCODE.NUM_SUB,
-    [KbdX86.SIMCODE.DEL]:         KbdX86.SCANCODE.NUM_DEL,
-    [KbdX86.SIMCODE.NUM_DEL]:     KbdX86.SCANCODE.NUM_DEL,
+Keyboardx86.SIMCODES = {
+    [Keyboardx86.SIMCODE.ESC]:         Keyboardx86.SCANCODE.ESC,
+    [Keys.ASCII['1']]:            Keyboardx86.SCANCODE.ONE,
+    [Keys.ASCII['!']]:            Keyboardx86.SCANCODE.ONE    | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['2']]:            Keyboardx86.SCANCODE.TWO,
+    [Keys.ASCII['@']]:            Keyboardx86.SCANCODE.TWO    | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['3']]:            Keyboardx86.SCANCODE.THREE,
+    [Keys.ASCII['#']]:            Keyboardx86.SCANCODE.THREE  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['4']]:            Keyboardx86.SCANCODE.FOUR,
+    [Keys.ASCII['$']]:            Keyboardx86.SCANCODE.FOUR   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['5']]:            Keyboardx86.SCANCODE.FIVE,
+    [Keys.ASCII['%']]:            Keyboardx86.SCANCODE.FIVE   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['6']]:            Keyboardx86.SCANCODE.SIX,
+    [Keys.ASCII['^']]:            Keyboardx86.SCANCODE.SIX    | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['7']]:            Keyboardx86.SCANCODE.SEVEN,
+    [Keys.ASCII['&']]:            Keyboardx86.SCANCODE.SEVEN  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['8']]:            Keyboardx86.SCANCODE.EIGHT,
+    [Keys.ASCII['*']]:            Keyboardx86.SCANCODE.EIGHT  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['9']]:            Keyboardx86.SCANCODE.NINE,
+    [Keys.ASCII['(']]:            Keyboardx86.SCANCODE.NINE   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['0']]:            Keyboardx86.SCANCODE.ZERO,
+    [Keys.ASCII[')']]:            Keyboardx86.SCANCODE.ZERO   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['-']]:            Keyboardx86.SCANCODE.DASH,
+    [Keys.ASCII['_']]:            Keyboardx86.SCANCODE.DASH   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['=']]:            Keyboardx86.SCANCODE.EQUALS,
+    [Keys.ASCII['+']]:            Keyboardx86.SCANCODE.EQUALS | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keyboardx86.SIMCODE.BS]:          Keyboardx86.SCANCODE.BS,
+    [Keyboardx86.SIMCODE.TAB]:         Keyboardx86.SCANCODE.TAB,
+    [Keys.ASCII.q]:               Keyboardx86.SCANCODE.Q,
+    [Keys.ASCII.Q]:               Keyboardx86.SCANCODE.Q      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.w]:               Keyboardx86.SCANCODE.W,
+    [Keys.ASCII.W]:               Keyboardx86.SCANCODE.W      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.e]:               Keyboardx86.SCANCODE.E,
+    [Keys.ASCII.E]:               Keyboardx86.SCANCODE.E      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.r]:               Keyboardx86.SCANCODE.R,
+    [Keys.ASCII.R]:               Keyboardx86.SCANCODE.R      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.t]:               Keyboardx86.SCANCODE.T,
+    [Keys.ASCII.T]:               Keyboardx86.SCANCODE.T      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.y]:               Keyboardx86.SCANCODE.Y,
+    [Keys.ASCII.Y]:               Keyboardx86.SCANCODE.Y      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.u]:               Keyboardx86.SCANCODE.U,
+    [Keys.ASCII.U]:               Keyboardx86.SCANCODE.U      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.i]:               Keyboardx86.SCANCODE.I,
+    [Keys.ASCII.I]:               Keyboardx86.SCANCODE.I      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.o]:               Keyboardx86.SCANCODE.O,
+    [Keys.ASCII.O]:               Keyboardx86.SCANCODE.O      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.p]:               Keyboardx86.SCANCODE.P,
+    [Keys.ASCII.P]:               Keyboardx86.SCANCODE.P      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['[']]:            Keyboardx86.SCANCODE.LBRACK,
+    [Keys.ASCII['{']]:            Keyboardx86.SCANCODE.LBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII[']']]:            Keyboardx86.SCANCODE.RBRACK,
+    [Keys.ASCII['}']]:            Keyboardx86.SCANCODE.RBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.KEYCODE.CR]:            Keyboardx86.SCANCODE.ENTER,
+    [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.SCANCODE.CTRL,
+    [Keys.ASCII.a]:               Keyboardx86.SCANCODE.A,
+    [Keys.ASCII.A]:               Keyboardx86.SCANCODE.A      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.s]:               Keyboardx86.SCANCODE.S,
+    [Keys.ASCII.S]:               Keyboardx86.SCANCODE.S      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.d]:               Keyboardx86.SCANCODE.D,
+    [Keys.ASCII.D]:               Keyboardx86.SCANCODE.D      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.f]:               Keyboardx86.SCANCODE.F,
+    [Keys.ASCII.F]:               Keyboardx86.SCANCODE.F      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.g]:               Keyboardx86.SCANCODE.G,
+    [Keys.ASCII.G]:               Keyboardx86.SCANCODE.G      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.h]:               Keyboardx86.SCANCODE.H,
+    [Keys.ASCII.H]:               Keyboardx86.SCANCODE.H      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.j]:               Keyboardx86.SCANCODE.J,
+    [Keys.ASCII.J]:               Keyboardx86.SCANCODE.J      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.k]:               Keyboardx86.SCANCODE.K,
+    [Keys.ASCII.K]:               Keyboardx86.SCANCODE.K      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.l]:               Keyboardx86.SCANCODE.L,
+    [Keys.ASCII.L]:               Keyboardx86.SCANCODE.L      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII[';']]:            Keyboardx86.SCANCODE.SEMI,
+    [Keys.ASCII[':']]:            Keyboardx86.SCANCODE.SEMI   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII["'"]]:            Keyboardx86.SCANCODE.QUOTE,
+    [Keys.ASCII['"']]:            Keyboardx86.SCANCODE.QUOTE  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['`']]:            Keyboardx86.SCANCODE.BQUOTE,
+    [Keys.ASCII['~']]:            Keyboardx86.SCANCODE.BQUOTE | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.SCANCODE.SHIFT,
+    [Keys.ASCII['\\']]:           Keyboardx86.SCANCODE.BSLASH,
+    [Keys.ASCII['|']]:            Keyboardx86.SCANCODE.BSLASH | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.z]:               Keyboardx86.SCANCODE.Z,
+    [Keys.ASCII.Z]:               Keyboardx86.SCANCODE.Z      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.x]:               Keyboardx86.SCANCODE.X,
+    [Keys.ASCII.X]:               Keyboardx86.SCANCODE.X      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.c]:               Keyboardx86.SCANCODE.C,
+    [Keys.ASCII.C]:               Keyboardx86.SCANCODE.C      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.v]:               Keyboardx86.SCANCODE.V,
+    [Keys.ASCII.V]:               Keyboardx86.SCANCODE.V      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.b]:               Keyboardx86.SCANCODE.B,
+    [Keys.ASCII.B]:               Keyboardx86.SCANCODE.B      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.n]:               Keyboardx86.SCANCODE.N,
+    [Keys.ASCII.N]:               Keyboardx86.SCANCODE.N      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.m]:               Keyboardx86.SCANCODE.M,
+    [Keys.ASCII.M]:               Keyboardx86.SCANCODE.M      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII[',']]:            Keyboardx86.SCANCODE.COMMA,
+    [Keys.ASCII['<']]:            Keyboardx86.SCANCODE.COMMA  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['.']]:            Keyboardx86.SCANCODE.PERIOD,
+    [Keys.ASCII['>']]:            Keyboardx86.SCANCODE.PERIOD | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['/']]:            Keyboardx86.SCANCODE.SLASH,
+    [Keys.ASCII['?']]:            Keyboardx86.SCANCODE.SLASH  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.SCANCODE.RSHIFT,
+    [Keyboardx86.SIMCODE.PRTSC]:       Keyboardx86.SCANCODE.PRTSC,
+    [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.SCANCODE.ALT,
+    [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.SCANCODE.ALT,
+    [Keyboardx86.SIMCODE.SPACE]:       Keyboardx86.SCANCODE.SPACE,
+    [Keyboardx86.SIMCODE.CAPS_LOCK]:   Keyboardx86.SCANCODE.CAPS_LOCK,
+    [Keyboardx86.SIMCODE.F1]:          Keyboardx86.SCANCODE.F1,
+    [Keyboardx86.SIMCODE.F2]:          Keyboardx86.SCANCODE.F2,
+    [Keyboardx86.SIMCODE.F3]:          Keyboardx86.SCANCODE.F3,
+    [Keyboardx86.SIMCODE.F4]:          Keyboardx86.SCANCODE.F4,
+    [Keyboardx86.SIMCODE.F5]:          Keyboardx86.SCANCODE.F5,
+    [Keyboardx86.SIMCODE.F6]:          Keyboardx86.SCANCODE.F6,
+    [Keyboardx86.SIMCODE.F7]:          Keyboardx86.SCANCODE.F7,
+    [Keyboardx86.SIMCODE.F8]:          Keyboardx86.SCANCODE.F8,
+    [Keyboardx86.SIMCODE.F9]:          Keyboardx86.SCANCODE.F9,
+    [Keyboardx86.SIMCODE.F10]:         Keyboardx86.SCANCODE.F10,
+    [Keyboardx86.SIMCODE.NUM_LOCK]:    Keyboardx86.SCANCODE.NUM_LOCK,
+    [Keyboardx86.SIMCODE.SCROLL_LOCK]: Keyboardx86.SCANCODE.SCROLL_LOCK,
+    [Keyboardx86.SIMCODE.HOME]:        Keyboardx86.SCANCODE.NUM_HOME,
+    [Keyboardx86.SIMCODE.NUM_HOME]:    Keyboardx86.SCANCODE.NUM_HOME,
+    [Keyboardx86.SIMCODE.UP]:          Keyboardx86.SCANCODE.NUM_UP,
+    [Keyboardx86.SIMCODE.NUM_UP]:      Keyboardx86.SCANCODE.NUM_UP,
+    [Keyboardx86.SIMCODE.PGUP]:        Keyboardx86.SCANCODE.NUM_PGUP,
+    [Keyboardx86.SIMCODE.NUM_PGUP]:    Keyboardx86.SCANCODE.NUM_PGUP,
+    [Keyboardx86.SIMCODE.LEFT]:        Keyboardx86.SCANCODE.NUM_LEFT,
+    [Keyboardx86.SIMCODE.NUM_LEFT]:    Keyboardx86.SCANCODE.NUM_LEFT,
+    [Keyboardx86.SIMCODE.NUM_CENTER]:  Keyboardx86.SCANCODE.NUM_CENTER,
+    [Keyboardx86.SIMCODE.RIGHT]:       Keyboardx86.SCANCODE.NUM_RIGHT,
+    [Keyboardx86.SIMCODE.NUM_RIGHT]:   Keyboardx86.SCANCODE.NUM_RIGHT,
+    [Keyboardx86.SIMCODE.END]:         Keyboardx86.SCANCODE.NUM_END,
+    [Keyboardx86.SIMCODE.NUM_END]:     Keyboardx86.SCANCODE.NUM_END,
+    [Keyboardx86.SIMCODE.DOWN]:        Keyboardx86.SCANCODE.NUM_DOWN,
+    [Keyboardx86.SIMCODE.NUM_DOWN]:    Keyboardx86.SCANCODE.NUM_DOWN,
+    [Keyboardx86.SIMCODE.PGDN]:        Keyboardx86.SCANCODE.NUM_PGDN,
+    [Keyboardx86.SIMCODE.NUM_PGDN]:    Keyboardx86.SCANCODE.NUM_PGDN,
+    [Keyboardx86.SIMCODE.INS]:         Keyboardx86.SCANCODE.NUM_INS,
+    [Keyboardx86.SIMCODE.NUM_INS]:     Keyboardx86.SCANCODE.NUM_INS,
+    [Keyboardx86.SIMCODE.NUM_ADD]:     Keyboardx86.SCANCODE.NUM_ADD,
+    [Keyboardx86.SIMCODE.NUM_SUB]:     Keyboardx86.SCANCODE.NUM_SUB,
+    [Keyboardx86.SIMCODE.DEL]:         Keyboardx86.SCANCODE.NUM_DEL,
+    [Keyboardx86.SIMCODE.NUM_DEL]:     Keyboardx86.SCANCODE.NUM_DEL,
 
     /*
      * The next 6 entries are for keys that existed only on 101-key keyboards (well, except for SYS_REQ,
@@ -50398,49 +51066,49 @@ KbdX86.SIMCODES = {
      * TODO: Add entries for 'num-mul', 'num-div', 'num-enter', the stand-alone arrow keys, etc, AND at the same time,
      * make sure that keys with multi-byte sequences (eg, 0xe0 0x1c) work properly.
      */
-    [KbdX86.SIMCODE.SYS_REQ]:     KbdX86.SCANCODE.SYS_REQ,
-    [KbdX86.SIMCODE.F11]:         KbdX86.SCANCODE.F11,
-    [KbdX86.SIMCODE.F12]:         KbdX86.SCANCODE.F12,
-    [KbdX86.SIMCODE.CMD]:         KbdX86.SCANCODE.WIN,
-    [KbdX86.SIMCODE.RCMD]:        KbdX86.SCANCODE.MENU,
-    [KbdX86.SIMCODE.FF_CMD]:      KbdX86.SCANCODE.WIN,
+    [Keyboardx86.SIMCODE.SYS_REQ]:     Keyboardx86.SCANCODE.SYS_REQ,
+    [Keyboardx86.SIMCODE.F11]:         Keyboardx86.SCANCODE.F11,
+    [Keyboardx86.SIMCODE.F12]:         Keyboardx86.SCANCODE.F12,
+    [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.SCANCODE.WIN,
+    [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.SCANCODE.MENU,
+    [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.SCANCODE.WIN,
 
-    [KbdX86.SIMCODE.CTRL_A]:      KbdX86.SCANCODE.A           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_B]:      KbdX86.SCANCODE.B           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_C]:      KbdX86.SCANCODE.C           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_D]:      KbdX86.SCANCODE.D           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_E]:      KbdX86.SCANCODE.E           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_F]:      KbdX86.SCANCODE.F           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_G]:      KbdX86.SCANCODE.G           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_H]:      KbdX86.SCANCODE.H           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_I]:      KbdX86.SCANCODE.I           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_J]:      KbdX86.SCANCODE.J           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_K]:      KbdX86.SCANCODE.K           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_L]:      KbdX86.SCANCODE.L           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_M]:      KbdX86.SCANCODE.M           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_N]:      KbdX86.SCANCODE.N           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_O]:      KbdX86.SCANCODE.O           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_P]:      KbdX86.SCANCODE.P           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_Q]:      KbdX86.SCANCODE.Q           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_R]:      KbdX86.SCANCODE.R           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_S]:      KbdX86.SCANCODE.S           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_T]:      KbdX86.SCANCODE.T           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_U]:      KbdX86.SCANCODE.U           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_V]:      KbdX86.SCANCODE.V           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_W]:      KbdX86.SCANCODE.W           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_X]:      KbdX86.SCANCODE.X           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_Y]:      KbdX86.SCANCODE.Y           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_Z]:      KbdX86.SCANCODE.Z           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_BREAK]:  KbdX86.SCANCODE.SCROLL_LOCK | (KbdX86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_A]:      Keyboardx86.SCANCODE.A           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_B]:      Keyboardx86.SCANCODE.B           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_C]:      Keyboardx86.SCANCODE.C           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_D]:      Keyboardx86.SCANCODE.D           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_E]:      Keyboardx86.SCANCODE.E           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_F]:      Keyboardx86.SCANCODE.F           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_G]:      Keyboardx86.SCANCODE.G           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_H]:      Keyboardx86.SCANCODE.H           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_I]:      Keyboardx86.SCANCODE.I           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_J]:      Keyboardx86.SCANCODE.J           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_K]:      Keyboardx86.SCANCODE.K           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_L]:      Keyboardx86.SCANCODE.L           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_M]:      Keyboardx86.SCANCODE.M           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_N]:      Keyboardx86.SCANCODE.N           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_O]:      Keyboardx86.SCANCODE.O           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_P]:      Keyboardx86.SCANCODE.P           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_Q]:      Keyboardx86.SCANCODE.Q           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_R]:      Keyboardx86.SCANCODE.R           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_S]:      Keyboardx86.SCANCODE.S           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_T]:      Keyboardx86.SCANCODE.T           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_U]:      Keyboardx86.SCANCODE.U           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_V]:      Keyboardx86.SCANCODE.V           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_W]:      Keyboardx86.SCANCODE.W           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_X]:      Keyboardx86.SCANCODE.X           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_Y]:      Keyboardx86.SCANCODE.Y           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_Z]:      Keyboardx86.SCANCODE.Z           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_BREAK]:  Keyboardx86.SCANCODE.SCROLL_LOCK | (Keyboardx86.SCANCODE.CTRL << 8),
 
-    [KbdX86.SIMCODE.CTRL_ALT_DEL]:    KbdX86.SCANCODE.NUM_DEL | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
-    [KbdX86.SIMCODE.CTRL_ALT_INS]:    KbdX86.SCANCODE.NUM_INS | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
-    [KbdX86.SIMCODE.CTRL_ALT_ADD]:    KbdX86.SCANCODE.NUM_ADD | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
-    [KbdX86.SIMCODE.CTRL_ALT_SUB]:    KbdX86.SCANCODE.NUM_SUB | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
-    [KbdX86.SIMCODE.CTRL_ALT_ENTER]:  KbdX86.SCANCODE.ENTER   | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
-    [KbdX86.SIMCODE.CTRL_ALT_SYS_REQ]:KbdX86.SCANCODE.SYS_REQ | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_DEL]:    Keyboardx86.SCANCODE.NUM_DEL | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_INS]:    Keyboardx86.SCANCODE.NUM_INS | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_ADD]:    Keyboardx86.SCANCODE.NUM_ADD | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_SUB]:    Keyboardx86.SCANCODE.NUM_SUB | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_ENTER]:  Keyboardx86.SCANCODE.ENTER   | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ]:Keyboardx86.SCANCODE.SYS_REQ | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
 
-    [KbdX86.SIMCODE.SHIFT_TAB]:   KbdX86.SCANCODE.TAB         | (KbdX86.SCANCODE.SHIFT << 8)
+    [Keyboardx86.SIMCODE.SHIFT_TAB]:   Keyboardx86.SCANCODE.TAB         | (Keyboardx86.SCANCODE.SHIFT << 8)
 };
 
 /**
@@ -50457,7 +51125,7 @@ KbdX86.SIMCODES = {
  *
  * @enum {number}
  */
-KbdX86.CMD = {
+Keyboardx86.CMD = {
     /*
      * RESET (0xFF)
      *
@@ -50564,7 +51232,7 @@ KbdX86.CMD = {
  *
  * @enum {number}
  */
-KbdX86.CMDRES = {
+Keyboardx86.CMDRES = {
     /*
      * OVERRUN (0x00)
      *
@@ -50631,11 +51299,11 @@ KbdX86.CMDRES = {
     BUFF_FULL:  0xFF    // TODO: Verify this response code (is this just for older 83-key keyboards?)
 };
 
-KbdX86.LIMIT = {
+Keyboardx86.LIMIT = {
     MAX_SCANCODES: 20   // TODO: Verify this limit for newer keyboards (84-key and up)
 };
 
-KbdX86.INJECTION = {
+Keyboardx86.INJECTION = {
     NONE:       0,
     ON_START:   1,
     ON_INPUT:   2
@@ -50644,7 +51312,7 @@ KbdX86.INJECTION = {
 /*
  * Initialize every Keyboard module on the page.
  */
-WebLib.onInit(KbdX86.init);
+WebLib.onInit(Keyboardx86.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/video.js (C) 2012-2023 Jeff Parsons
@@ -50786,7 +51454,7 @@ WebLib.onInit(KbdX86.init);
  *
  * VGA support further piggy-backs on the existing EGA support, by adding the extra registers, I/O port
  * handlers, etc, that the VGA requires; any differences in registers common to both EGA and VGA are handled on
- * a case-by-case basis, usually according to the VideoX86.CARD value stored in nCard.
+ * a case-by-case basis, usually according to the Videox86.CARD value stored in nCard.
  *
  * More will be said here about PCjs VGA support later.  But first, a word from IBM: "Video Graphics Array [VGA]
  * Programming Considerations":
@@ -50962,7 +51630,7 @@ WebLib.onInit(KbdX86.init);
 
 /**
  * @class Card
- * @property {DebuggerX86} dbg
+ * @property {Debuggerx86} dbg
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Card extends Controller {
@@ -50977,8 +51645,8 @@ class Card extends Controller {
      * of Component, such as Component.assert(), or methods of the parent (video) object.
      *
      * @this {Card}
-     * @param {VideoX86} [video]
-     * @param {number} [nCard] (see VideoX86.CARD.*)
+     * @param {Videox86} [video]
+     * @param {number} [nCard] (see Videox86.CARD.*)
      * @param {Array|null} [data]
      * @param {number} [cbMemory] is specified if the card must allocate its own memory buffer
      */
@@ -50994,11 +51662,11 @@ class Card extends Controller {
 
             this.video = video;
 
-            let specs = VideoX86.cardSpecs[nCard];
+            let specs = Videox86.cardSpecs[nCard];
             let nMonitorType = video.nMonitorType || specs[5];
 
             if (!data || data.length < 6) {
-                data = [false, 0, null, null, 0, new Array(nCard < VideoX86.CARD.EGA? Card.CRTC.TOTAL_REGS : Card.CRTC.EGA.TOTAL_REGS)];
+                data = [false, 0, null, null, 0, new Array(nCard < Videox86.CARD.EGA? Card.CRTC.TOTAL_REGS : Card.CRTC.EGA.TOTAL_REGS)];
             }
 
             /*
@@ -51048,7 +51716,7 @@ class Card extends Controller {
             this.rowStart   = 0;            // initialize to zero and let the first latchStartAddress() call update it
             this.addrMaskHigh = 0x3F;       // card-specific mask for the high (bits 8 and up) of CRTC address registers
 
-            if (nCard < VideoX86.CARD.EGA) {
+            if (nCard < Videox86.CARD.EGA) {
                 this.initMemory(data[6], data[8]);
                 this.setMemoryAccess(Card.ACCESS.READ.PAIRS | Card.ACCESS.WRITE.PAIRS);
             } else {
@@ -51058,7 +51726,7 @@ class Card extends Controller {
                 this.initEGA(data[6], nMonitorType);
             }
 
-            let monitorSpecs = VideoX86.monitorSpecs[nMonitorType] || VideoX86.monitorSpecs[ChipSet.MONITOR.MONO];
+            let monitorSpecs = Videox86.monitorSpecs[nMonitorType] || Videox86.monitorSpecs[ChipSet.MONITOR.MONO];
 
             /*
              * nCyclesVertPeriod determines how frequently startVerticalRetrace() is called.  That function
@@ -51221,7 +51889,7 @@ class Card extends Controller {
         this.nColorDontCare = data[24];
         this.offStart       = data[25];     // this is the last CRTC start address latched from CRTC.STARTHI,CRTC.STARTLO
 
-        if (this.nCard == VideoX86.CARD.VGA) {
+        if (this.nCard == Videox86.CARD.VGA) {
             this.regVGAEnable   = data[26];
             this.regDACMask     = data[27];
             this.regDACAddr     = data[28];
@@ -51303,7 +51971,7 @@ class Card extends Controller {
             data[3] = this.regStatus;
             data[4] = this.regCRTIndx | (this.regCRTPrev << 8);
             data[5] = this.regCRTData;
-            data[6] = (this.nCard < VideoX86.CARD.EGA? State.compressEvenOdd(this.adwMemory) : this.saveEGA());
+            data[6] = (this.nCard < Videox86.CARD.EGA? State.compressEvenOdd(this.adwMemory) : this.saveEGA());
             data[7] = this.nCyclesVertRetrace;
             data[8] = this.adwMemory.length;
         }
@@ -51346,7 +52014,7 @@ class Card extends Controller {
         data[24] = this.nColorDontCare;
         data[25] = this.offStart;
 
-        if (this.nCard == VideoX86.CARD.VGA) {
+        if (this.nCard == Videox86.CARD.VGA) {
             data[26] = this.regVGAEnable;
             data[27] = this.regDACMask;
             data[28] = this.regDACAddr;
@@ -51404,7 +52072,7 @@ class Card extends Controller {
              */
             this.dumpRegs("CRTC", this.regCRTIndx, this.regCRTData, this.asCRTCRegs);
 
-            if (this.nCard >= VideoX86.CARD.EGA) {
+            if (this.nCard >= Videox86.CARD.EGA) {
                 this.dumpRegs(" GRC", this.regGRCIndx, this.regGRCData, this.asGRCRegs);
                 this.dumpRegs(" SEQ", this.regSEQIndx, this.regSEQData, this.asSEQRegs);
                 this.dumpRegs(" ATC", this.regATCIndx, this.regATCData, this.asATCRegs);
@@ -51416,7 +52084,7 @@ class Card extends Controller {
                 /*
                  * There are few more EGA regs we could dump, like GRCPos1, GRCPos2, but does anyone care?
                  */
-                if (this.nCard == VideoX86.CARD.VGA) {
+                if (this.nCard == Videox86.CARD.VGA) {
                     this.dumpRegs(" DAC", this.regDACAddr, this.regDACData);
                 }
             }
@@ -51427,15 +52095,15 @@ class Card extends Controller {
              */
             this.dumpRegs(" STATUS1", this.regStatus);
 
-            if (this.nCard == VideoX86.CARD.MDA || this.nCard == VideoX86.CARD.CGA) {
+            if (this.nCard == Videox86.CARD.MDA || this.nCard == Videox86.CARD.CGA) {
                 this.dumpRegs(" MODEREG", this.regMode);
             }
 
-            if (this.nCard == VideoX86.CARD.CGA) {
+            if (this.nCard == Videox86.CARD.CGA) {
                 this.dumpRegs("   COLOR", this.regColor);
             }
 
-            if (this.nCard >= VideoX86.CARD.EGA) {
+            if (this.nCard >= Videox86.CARD.EGA) {
                 this.dbg.printf(" LATCHES: %0X\n", this.latches);
                 this.dbg.printf("  ACCESS: %04X\n",  this.nAccess);
                 this.dbg.printf("  PLANE2: %02X\n", this.bitsDirtyBanks);
@@ -51667,31 +52335,31 @@ class Card extends Controller {
     getCRTCReg(iReg)
     {
         let reg = this.regCRTData[iReg];
-        if (reg != null && this.nCard >= VideoX86.CARD.EGA) {
+        if (reg != null && this.nCard >= Videox86.CARD.EGA) {
             let bOverflowBit8 = 0, bOverflowBit9 = 0, bMaxScanBit9 = 0;
             switch(iReg) {
             case Card.CRTC.EGA.VTOTAL:              // 0x06
                 bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.VTOTAL_BIT8;         // 0x01
-                if (this.nCard == VideoX86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VTOTAL_BIT9;
+                if (this.nCard == Videox86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VTOTAL_BIT9;
                 break;
             case Card.CRTC.EGA.CURSCAN:             // 0x0A
-                if (this.nCard == VideoX86.CARD.EGA) bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.CURSCAN_BIT8;
+                if (this.nCard == Videox86.CARD.EGA) bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.CURSCAN_BIT8;
                 break;
             case Card.CRTC.EGA.VRSTART:             // 0x10
                 bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.VRSTART_BIT8;        // 0x04
-                if (this.nCard == VideoX86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VRSTART_BIT9;
+                if (this.nCard == Videox86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VRSTART_BIT9;
                 break;
             case Card.CRTC.EGA.VDEND:               // 0x12
                 bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.VDEND_BIT8;          // 0x02
-                if (this.nCard == VideoX86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VDEND_BIT9;
+                if (this.nCard == Videox86.CARD.VGA) bOverflowBit9 = Card.CRTC.EGA.OVERFLOW.VDEND_BIT9;
                 break;
             case Card.CRTC.EGA.VBSTART:             // 0x15
                 bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.VBSTART_BIT8;        // 0x08
-                if (this.nCard == VideoX86.CARD.VGA) bMaxScanBit9 = Card.CRTC.EGA.MAXSCAN.VBSTART_BIT9;
+                if (this.nCard == Videox86.CARD.VGA) bMaxScanBit9 = Card.CRTC.EGA.MAXSCAN.VBSTART_BIT9;
                 break;
             case Card.CRTC.EGA.LINECOMP:            // 0x18
                 bOverflowBit8 = Card.CRTC.EGA.OVERFLOW.LINECOMP_BIT8;       // 0x10
-                if (this.nCard == VideoX86.CARD.VGA) bMaxScanBit9 = Card.CRTC.EGA.MAXSCAN.LINECOMP_BIT9;
+                if (this.nCard == Videox86.CARD.VGA) bMaxScanBit9 = Card.CRTC.EGA.MAXSCAN.LINECOMP_BIT9;
                 break;
             }
             if (bOverflowBit8) {
@@ -52380,7 +53048,7 @@ Card.ACCESS.V1[0xE000] = Card.ACCESS.WRITE.MODE2 | Card.ACCESS.WRITE.XOR;
  * character/attribute text modes, while internally, it looks similar to an EvenOdd arrangement, except that odd
  * dwords not skipped (ie, wasted).  This similarity makes life simpler for updateScreenText().
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} [addr]
  * @returns {number}
@@ -52394,7 +53062,7 @@ Card.ACCESS.readBytePairs = function readByte(off, addr)
 /**
  * readByteMode0(off, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} [addr]
  * @returns {number}
@@ -52411,7 +53079,7 @@ Card.ACCESS.readByteMode0 = function readByteMode0(off, addr)
  *
  * See writeByteMode0Chain4 for a description of how writes are distributed across planes.
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} [addr]
  * @returns {number}
@@ -52426,7 +53094,7 @@ Card.ACCESS.readByteMode0Chain4 = function readByteMode0Chain4(off, addr)
 /**
  * readByteMode0EvenOdd(off, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} [addr]
  * @returns {number}
@@ -52458,7 +53126,7 @@ Card.ACCESS.readByteMode0EvenOdd = function readByteMode0EvenOdd(off, addr)
  * Also note that, while not well-documented, this mode also affects the internal latches, so we make sure those
  * are updated as well.
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} [addr]
  * @returns {number}
@@ -52490,7 +53158,7 @@ Card.ACCESS.readByteMode1 = function readByteMode1(off, addr)
  * character/attribute text modes, while internally, it looks similar to an EvenOdd arrangement, except that odd
  * dwords not skipped (ie, wasted).  This similarity makes life simpler for updateScreenText().
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52503,7 +53171,7 @@ Card.ACCESS.writeBytePairs = function writeByte(off, b, addr)
     let dw = (this.adw[idw] & ~(0xff << nShift)) | (b << nShift);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
 };
 
@@ -52523,7 +53191,7 @@ Card.ACCESS.writeBytePairs = function writeByte(off, b, addr)
  * but by maintaining nSetMapBits equal to (nSetMapData & ~nSetMapMask), we are able to make the
  * writes slightly more efficient.
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52539,7 +53207,7 @@ Card.ACCESS.writeByteMode0 = function writeByteMode0(off, b, addr)
     let delta = (this.adw[idw] ^ dw);
     if (delta) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
         // card.bitsDirtyPlanes |= delta;       // we no longer track dirty planes, just dirty font banks
         if (delta & 0x00ff0000) {               // if any plane 2 bits were modified, mark the appropriate font bank dirty
             let bitDirtyBank = (1 << ((idw >> 13) & 7));
@@ -52582,7 +53250,7 @@ Card.ACCESS.writeByteMode0 = function writeByteMode0(off, b, addr)
  * addresses in exactly the same manner; we'd only get into trouble with software that "unchained" or otherwise
  * reconfigured the planes and then made assumptions about existing data in the video buffer.
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52599,7 +53267,7 @@ Card.ACCESS.writeByteMode0Chain4 = function writeByteMode0Chain4(off, b, addr)
     let dw = ((b << shift) & card.nSeqMapMask) | (this.adw[idw] & ~((0xff << shift) & card.nSeqMapMask));
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Chain4(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52607,7 +53275,7 @@ Card.ACCESS.writeByteMode0Chain4 = function writeByteMode0Chain4(off, b, addr)
 /**
  * writeByteMode0EvenOdd(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52626,7 +53294,7 @@ Card.ACCESS.writeByteMode0EvenOdd = function writeByteMode0EvenOdd(off, b, addr)
     dw = (dw & maskMaps) | (this.adw[idw] & ~maskMaps);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0EvenOdd(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52634,7 +53302,7 @@ Card.ACCESS.writeByteMode0EvenOdd = function writeByteMode0EvenOdd(off, b, addr)
 /**
  * writeByteMode0Rot(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52650,7 +53318,7 @@ Card.ACCESS.writeByteMode0Rot = function writeByteMode0Rot(off, b, addr)
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Rot(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52658,7 +53326,7 @@ Card.ACCESS.writeByteMode0Rot = function writeByteMode0Rot(off, b, addr)
 /**
  * writeByteMode0And(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52675,7 +53343,7 @@ Card.ACCESS.writeByteMode0And = function writeByteMode0And(off, b, addr)
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0And(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52683,7 +53351,7 @@ Card.ACCESS.writeByteMode0And = function writeByteMode0And(off, b, addr)
 /**
  * writeByteMode0Or(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52700,7 +53368,7 @@ Card.ACCESS.writeByteMode0Or = function writeByteMode0Or(off, b, addr)
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52708,7 +53376,7 @@ Card.ACCESS.writeByteMode0Or = function writeByteMode0Or(off, b, addr)
 /**
  * writeByteMode0Xor(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52725,7 +53393,7 @@ Card.ACCESS.writeByteMode0Xor = function writeByteMode0Xor(off, b, addr)
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52733,7 +53401,7 @@ Card.ACCESS.writeByteMode0Xor = function writeByteMode0Xor(off, b, addr)
 /**
  * writeByteMode1(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (ignored; the EGA latches provide the source data)
  * @param {number} [addr]
@@ -52745,7 +53413,7 @@ Card.ACCESS.writeByteMode1 = function writeByteMode1(off, b, addr)
     let dw = (this.adw[idw] & ~card.nSeqMapMask) | (card.latches & card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1(%#010X): %#010X\n", addr, dw);
 };
@@ -52753,7 +53421,7 @@ Card.ACCESS.writeByteMode1 = function writeByteMode1(off, b, addr)
 /**
  * writeByteMode1EvenOdd(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (ignored; the EGA latches provide the source data)
  * @param {number} [addr]
@@ -52773,7 +53441,7 @@ Card.ACCESS.writeByteMode1EvenOdd = function writeByteMode1EvenOdd(off, b, addr)
     let dw = (this.adw[idw] & ~maskMaps) | (card.latches & maskMaps);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1EvenOdd(%#010X): %#010X\n", addr, dw);
 };
@@ -52781,7 +53449,7 @@ Card.ACCESS.writeByteMode1EvenOdd = function writeByteMode1EvenOdd(off, b, addr)
 /**
  * writeByteMode2(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52790,12 +53458,12 @@ Card.ACCESS.writeByteMode2 = function writeByteMode2(off, b, addr)
 {
     let card = this.controller;
     let idw = off + this.offset;
-    let dw = VideoX86.aEGAByteToDW[b & 0xf];
+    let dw = Videox86.aEGAByteToDW[b & 0xf];
     dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52803,7 +53471,7 @@ Card.ACCESS.writeByteMode2 = function writeByteMode2(off, b, addr)
 /**
  * writeByteMode2And(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52812,13 +53480,13 @@ Card.ACCESS.writeByteMode2And = function writeByteMode2And(off, b, addr)
 {
     let card = this.controller;
     let idw = off + this.offset;
-    let dw = VideoX86.aEGAByteToDW[b & 0xf];
+    let dw = Videox86.aEGAByteToDW[b & 0xf];
     dw &= card.latches;
     dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2And(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52826,7 +53494,7 @@ Card.ACCESS.writeByteMode2And = function writeByteMode2And(off, b, addr)
 /**
  * writeByteMode2Or(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52835,13 +53503,13 @@ Card.ACCESS.writeByteMode2Or = function writeByteMode2Or(off, b, addr)
 {
     let card = this.controller;
     let idw = off + this.offset;
-    let dw = VideoX86.aEGAByteToDW[b & 0xf];
+    let dw = Videox86.aEGAByteToDW[b & 0xf];
     dw |= card.latches;
     dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52849,7 +53517,7 @@ Card.ACCESS.writeByteMode2Or = function writeByteMode2Or(off, b, addr)
 /**
  * writeByteMode2Xor(off, b, addr)
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52858,13 +53526,13 @@ Card.ACCESS.writeByteMode2Xor = function writeByteMode2Xor(off, b, addr)
 {
     let card = this.controller;
     let idw = off + this.offset;
-    let dw = VideoX86.aEGAByteToDW[b & 0xf];
+    let dw = Videox86.aEGAByteToDW[b & 0xf];
     dw ^= card.latches;
     dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52878,7 +53546,7 @@ Card.ACCESS.writeByteMode2Xor = function writeByteMode2Xor(off, b, addr)
  * Unlike MODE0, we currently have no non-rotate function for MODE3.  If performance dictates, we can add one;
  * ditto for other features like the Sequencer's MAPMASK register (nSeqMapMask).
  *
- * @this {MemoryX86}
+ * @this {Memoryx86}
  * @param {number} off
  * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
  * @param {number} [addr]
@@ -52894,7 +53562,7 @@ Card.ACCESS.writeByteMode3 = function writeByteMode3(off, b, addr)
     dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
     if (this.adw[idw] != dw) {
         this.adw[idw] = dw;
-        this.flags |= MemoryX86.FLAGS.DIRTY;
+        this.flags |= Memoryx86.FLAGS.DIRTY;
     }
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode3(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
@@ -52927,18 +53595,18 @@ Card.ACCESS.afn[Card.ACCESS.WRITE.MODE3] = Card.ACCESS.writeByteMode3;
 Card.ACCESS.afn[Card.ACCESS.WRITE.PAIRS] = Card.ACCESS.writeBytePairs;
 
 /**
- * @class VideoX86
+ * @class Videox86
  * @property {CPUx86} cpu
- * @property {DebuggerX86} dbg
+ * @property {Debuggerx86} dbg
  * @property {number} cUpdates
  * @property {number} msUpdatePrev
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class VideoX86 extends Component {
+class Videox86 extends Component {
     /**
-     * VideoX86(parmsVideo, canvas, context, textarea, container, aDiagElements)
+     * Videox86(parmsVideo, canvas, context, textarea, container, aDiagElements)
      *
-     * The VideoX86 component can be configured with the following (parmsVideo) properties:
+     * The Videox86 component can be configured with the following (parmsVideo) properties:
      *
      *      model: model (eg, "mda" for Monochrome Display Adapter)
      *      mode: initial video mode (default is null, which selects a mode based on model)
@@ -52958,7 +53626,7 @@ class VideoX86 extends Component {
      * An EGA/VGA may specify the following additional properties:
      *
      *      switches: string representing EGA switches (see "SW1-SW4" documentation below)
-     *      memory: the size of the EGA's on-board memory (overrides EGA's VideoX86.cardSpecs)
+     *      memory: the size of the EGA's on-board memory (overrides EGA's Videox86.cardSpecs)
      *
      * This calls the Bus to allocate a video buffer at the appropriate memory location whenever
      * a reset() or setMode() occurs; setMode() is called whenever a mode change is detected at
@@ -52982,7 +53650,7 @@ class VideoX86 extends Component {
      * that's no problem, as we redraw only the one cell containing the cursor (assuming the buffer
      * is otherwise clean).
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} parmsVideo
      * @param {HTMLCanvasElement} [canvas]
      * @param {CanvasRenderingContext2D} [context]
@@ -53004,12 +53672,12 @@ class VideoX86 extends Component {
          * switches (since those motherboard switches tell us only the type of monitor, not the type of card).
          */
         this.model = parmsVideo['model'];
-        let aModelDefaults = VideoX86.MODEL[this.model] || VideoX86.MODEL['mda'];
+        let aModelDefaults = Videox86.MODEL[this.model] || Videox86.MODEL['mda'];
 
         this.nCard = aModelDefaults[0];
         let irq = parmsVideo['irq'];
         if (irq == undefined) irq = ChipSet.IRQ.VID;
-        this.nIRQ = (this.nCard >= VideoX86.CARD.EGA && irq >= 0 && irq <= 15)? irq : undefined;
+        this.nIRQ = (this.nCard >= Videox86.CARD.EGA && irq >= 0 && irq <= 15)? irq : undefined;
 
         this.nCardFont = 0;
         this.nActiveFont = this.nAlternateFont = 0;
@@ -53023,7 +53691,7 @@ class VideoX86 extends Component {
          * powerUp() uses the default mode ONLY if ChipSet doesn't give us a default.
          */
         this.nModeDefault = parmsVideo['mode'];
-        if (this.nModeDefault == null || VideoX86.aModeParms[this.nModeDefault] == null) {
+        if (this.nModeDefault == null || Videox86.aModeParms[this.nModeDefault] == null) {
             this.nModeDefault = aModelDefaults[1];
         }
 
@@ -53033,8 +53701,8 @@ class VideoX86 extends Component {
         this.nColsDefault = parmsVideo['charCols'];
         this.nRowsDefault = parmsVideo['charRows'];
         if (this.nColsDefault === undefined || this.nRowsDefault === undefined) {
-            this.nColsDefault = VideoX86.aModeParms[this.nModeDefault][0];
-            this.nRowsDefault = VideoX86.aModeParms[this.nModeDefault][1];
+            this.nColsDefault = Videox86.aModeParms[this.nModeDefault][0];
+            this.nRowsDefault = Videox86.aModeParms[this.nModeDefault][1];
         }
 
         /*
@@ -53107,7 +53775,7 @@ class VideoX86 extends Component {
          * initBus() will determine touch-screen support; for now, just record values and set defaults.
          */
         this.sTouchScreen = parmsVideo['touchScreen'];
-        this.nTouchConfig = VideoX86.TOUCH.NONE;
+        this.nTouchConfig = Videox86.TOUCH.NONE;
 
         /*
          * If a Mouse exists, we'll be notified when it requests our canvas, and we make a note of it
@@ -53149,7 +53817,7 @@ class VideoX86 extends Component {
          * EGA-compatible mode), only the first 16 entries get used (derived from the ATC); only when a VGA
          * is operating in an 8bpp mode are 256 entries used (derived from the DAC rather than the ATC).
          */
-        this.aRGB = new Array(this.nCard == VideoX86.CARD.VGA? 256 : 16);
+        this.aRGB = new Array(this.nCard == Videox86.CARD.VGA? 256 : 16);
         this.fRGBValid = false;     // whenever this is false, it signals getCardColors() to rebuild aRGB
 
         this.aCellCache = [];
@@ -53254,11 +53922,11 @@ class VideoX86 extends Component {
      * This is a notification issued by the Computer component, after all the other components (notably the CPU)
      * have had a chance to initialize.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -53291,22 +53959,22 @@ class VideoX86 extends Component {
         /*
          * nCard will be undefined if no model was explicitly set (whereas this.nCard is ALWAYS defined).
          */
-        let aModel = VideoX86.MODEL[this.model], nCard = aModel && aModel[0];
+        let aModel = Videox86.MODEL[this.model], nCard = aModel && aModel[0];
 
         /*
          * The only time we do NOT want to trap MDA ports is when the model has been explicitly set to CGA.
          */
-        if (nCard !== VideoX86.CARD.CGA) {
-            bus.addPortInputTable(this, VideoX86.aMDAPortInput);
-            bus.addPortOutputTable(this, VideoX86.aMDAPortOutput);
+        if (nCard !== Videox86.CARD.CGA) {
+            bus.addPortInputTable(this, Videox86.aMDAPortInput);
+            bus.addPortOutputTable(this, Videox86.aMDAPortOutput);
         }
 
         /*
          * Similarly, the only time we do NOT want to trap CGA ports is when the model is explicitly set to MDA.
          */
-        if (nCard !== VideoX86.CARD.MDA) {
-            bus.addPortInputTable(this, VideoX86.aCGAPortInput);
-            bus.addPortOutputTable(this, VideoX86.aCGAPortOutput);
+        if (nCard !== Videox86.CARD.MDA) {
+            bus.addPortInputTable(this, Videox86.aCGAPortInput);
+            bus.addPortOutputTable(this, Videox86.aCGAPortOutput);
         }
 
         /*
@@ -53319,14 +53987,14 @@ class VideoX86 extends Component {
          * components should be initialized in the order they appear in the machine configuration file.  Any attempt
          * by another component to trap the same ports should be ignored.
          */
-        if (this.nCard >= VideoX86.CARD.EGA) {
-            bus.addPortInputTable(this, VideoX86.aEGAPortInput);
-            bus.addPortOutputTable(this, VideoX86.aEGAPortOutput);
+        if (this.nCard >= Videox86.CARD.EGA) {
+            bus.addPortInputTable(this, Videox86.aEGAPortInput);
+            bus.addPortOutputTable(this, Videox86.aEGAPortOutput);
         }
 
-        if (this.nCard == VideoX86.CARD.VGA) {
-            bus.addPortInputTable(this, VideoX86.aVGAPortInput);
-            bus.addPortOutputTable(this, VideoX86.aVGAPortOutput);
+        if (this.nCard == Videox86.CARD.VGA) {
+            bus.addPortInputTable(this, Videox86.aVGAPortInput);
+            bus.addPortOutputTable(this, Videox86.aVGAPortOutput);
         }
 
         if (DEBUGGER && dbg) {
@@ -53354,7 +54022,7 @@ class VideoX86 extends Component {
         this.bEGASwitches = 0x09;   // our default "switches" setting (see aEGAMonitorSwitches)
         this.chipset = cmp.getMachineComponent("ChipSet");
         if (this.chipset && this.sSwitches) {
-            if (this.nCard == VideoX86.CARD.EGA) {
+            if (this.nCard == Videox86.CARD.EGA) {
                 this.bEGASwitches = this.chipset.parseDIPSwitches(this.sSwitches, this.bEGASwitches);
             }
         }
@@ -53366,10 +54034,10 @@ class VideoX86 extends Component {
          */
         if (this.sTouchScreen == "mouse") {
             this.mouse = cmp.getMachineComponent("Mouse", false);
-            if (this.mouse) this.captureTouch(VideoX86.TOUCH.MOUSE);
+            if (this.mouse) this.captureTouch(Videox86.TOUCH.MOUSE);
         }
         else if (this.sTouchScreen == "keygrid") {
-            if (this.kbd) this.captureTouch(VideoX86.TOUCH.KEYGRID);
+            if (this.kbd) this.captureTouch(Videox86.TOUCH.KEYGRID);
         }
 
         /*
@@ -53378,7 +54046,7 @@ class VideoX86 extends Component {
          * to a user action on iOS devices.
          */
         if (!this.nTouchConfig) {
-            this.captureTouch(VideoX86.TOUCH.DEFAULT);
+            this.captureTouch(Videox86.TOUCH.DEFAULT);
         }
 
         if (this.sFileURL) {
@@ -53408,7 +54076,7 @@ class VideoX86 extends Component {
     /**
      * setBinding(sHTMLType, sBinding, control, sValue)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea", "canvas")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "refresh")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
@@ -53475,7 +54143,7 @@ class VideoX86 extends Component {
     /**
      * setFocus(fScroll)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fScroll]
      */
     setFocus(fScroll)
@@ -53494,7 +54162,7 @@ class VideoX86 extends Component {
      *
      * This is an interface used by the Mouse component, so that it can capture mouse events from the screen.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Mouse} [mouse]
      * @returns {Object|undefined}
      */
@@ -53509,7 +54177,7 @@ class VideoX86 extends Component {
      *
      * This is an interface used by the Computer component, so that it can display resource status messages.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {HTMLTextAreaElement|undefined}
      */
     getTextArea()
@@ -53528,7 +54196,7 @@ class VideoX86 extends Component {
      * last screen refresh.  The only caveat is that the cell cache may be over-buffering by one entire column and row,
      * but that's easily accounted for (eg, every row must step through nColsBuffer -- not merely nCols -- of cell data).
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {string}
      */
     getTextData()
@@ -53553,7 +54221,7 @@ class VideoX86 extends Component {
     /**
      * goFullScreen()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {boolean} true if request successful, false if not (eg, failed OR not supported)
      */
     goFullScreen()
@@ -53625,7 +54293,7 @@ class VideoX86 extends Component {
     /**
      * notifyFullScreen(fFullScreen)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fFullScreen] (undefined if there was a full-screen error)
      */
     notifyFullScreen(fFullScreen)
@@ -53644,7 +54312,7 @@ class VideoX86 extends Component {
     /**
      * lockPointer()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} fLock
      * @returns {boolean} true if request successful, false if not (eg, failed OR not supported)
      */
@@ -53673,7 +54341,7 @@ class VideoX86 extends Component {
     /**
      * notifyPointerActive(fActive)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} fActive
      * @returns {boolean} true if autolock enabled AND pointer lock supported, false if not
      */
@@ -53688,7 +54356,7 @@ class VideoX86 extends Component {
     /**
      * notifyPointerLocked(fLocked)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} fLocked
      */
     notifyPointerLocked(fLocked)
@@ -53704,8 +54372,8 @@ class VideoX86 extends Component {
     /**
      * captureTouch(nTouchConfig)
      *
-     * @this {VideoX86}
-     * @param {number} nTouchConfig (must be one of the supported VideoX86.TOUCH values)
+     * @this {Videox86}
+     * @param {number} nTouchConfig (must be one of the supported Videox86.TOUCH values)
      */
     captureTouch(nTouchConfig)
     {
@@ -53717,7 +54385,7 @@ class VideoX86 extends Component {
                 this.nTouchConfig = nTouchConfig;
 
                 let addPassive = false;
-                if (nTouchConfig != VideoX86.TOUCH.MOUSE) {
+                if (nTouchConfig != Videox86.TOUCH.MOUSE) {
                     /*
                      * If we're not capturing touch events for mouse event simulation, then we won't be calling
                      * preventDefault(), which means we should tell Chrome and any other browser that supports
@@ -53746,7 +54414,7 @@ class VideoX86 extends Component {
                     addPassive? {passive: true} : false
                 );
 
-                if (nTouchConfig == VideoX86.TOUCH.DEFAULT) {
+                if (nTouchConfig == Videox86.TOUCH.DEFAULT) {
                     return;
                 }
 
@@ -53822,7 +54490,7 @@ class VideoX86 extends Component {
     /**
      * onFocusChange(fFocus)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} fFocus is true if gaining focus, false if losing it
      */
     onFocusChange(fFocus)
@@ -53847,21 +54515,21 @@ class VideoX86 extends Component {
     /**
      * onTouchStart(event)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Event} event object from a 'touch' event
      */
     onTouchStart(event)
     {
         if (DEBUG) this.printf("onTouchStart()\n");
         this.chipset.startAudio(event);
-        if (this.nTouchConfig == VideoX86.TOUCH.DEFAULT) return;
+        if (this.nTouchConfig == Videox86.TOUCH.DEFAULT) return;
         this.processTouchEvent(event, true);
     }
 
     /**
      * onTouchMove(event)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Event} event object from a 'touch' event
      */
     onTouchMove(event)
@@ -53873,7 +54541,7 @@ class VideoX86 extends Component {
     /**
      * onTouchEnd(event)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Event} event object from a 'touch' event
      */
     onTouchEnd(event)
@@ -53889,12 +54557,12 @@ class VideoX86 extends Component {
      *
      * What we do with those events here depends on the value of nTouchConfig.  Originally, the only supported
      * configuration was the experimental conversion of touch events into arrow keys, based on an invisible grid
-     * that divided the screen into thirds; that configuration is now identified as VideoX86.TOUCH.KEYGRID.
+     * that divided the screen into thirds; that configuration is now identified as Videox86.TOUCH.KEYGRID.
      *
-     * The new preferred configuration is VideoX86.TOUCH.MOUSE, which does little more than allow you to "push" the
-     * simulated mouse around.  If VideoX86.TOUCH.MOUSE is enabled, it's already been confirmed the machine has a mouse.
+     * The new preferred configuration is Videox86.TOUCH.MOUSE, which does little more than allow you to "push" the
+     * simulated mouse around.  If Videox86.TOUCH.MOUSE is enabled, it's already been confirmed the machine has a mouse.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Event|MouseEvent|TouchEvent} event object from a 'touch' event
      * @param {boolean} [fStart] (true if 'touchstart', false if 'touchend', undefined if 'touchmove')
      */
@@ -53949,7 +54617,7 @@ class VideoX86 extends Component {
         xTouch = ((xTouch - xTouchOffset) * xScale);
         yTouch = ((yTouch - yTouchOffset) * yScale);
 
-        if (this.nTouchConfig == VideoX86.TOUCH.KEYGRID) {
+        if (this.nTouchConfig == Videox86.TOUCH.KEYGRID) {
 
             /*
              * We don't want to simulate a key on EVERY touch event; preferably, only touchstart or touchend.  And
@@ -53967,7 +54635,7 @@ class VideoX86 extends Component {
                  * At this point, xThird and yThird should both be one of 0, 1 or 2, indicating which horizontal and
                  * vertical third of the virtual screen the touch event occurred.
                  */
-                this.kbd.addActiveKey(VideoX86.KEYGRID[yThird][xThird], true);
+                this.kbd.addActiveKey(Videox86.KEYGRID[yThird][xThird], true);
             }
         } else {
 
@@ -54040,7 +54708,7 @@ class VideoX86 extends Component {
     /**
      * startLongTouch()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     startLongTouch()
     {
@@ -54051,7 +54719,7 @@ class VideoX86 extends Component {
     /**
      * endLongTouch()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {boolean} true if long touch was active, false if not
      */
     endLongTouch()
@@ -54067,7 +54735,7 @@ class VideoX86 extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @returns {boolean} true if successful, false if failure
@@ -54091,7 +54759,7 @@ class VideoX86 extends Component {
                  * until at least msUpdateInterval has passed.  msUpdateInterval is initialized to msUpdateNormal, but
                  * can be increased if the updates are taking too long (eg, too many on-screen changes).
                  */
-                this.msUpdateNormal = (1000 / VideoX86.UPDATES_PER_SECOND)|0;
+                this.msUpdateNormal = (1000 / Videox86.UPDATES_PER_SECOND)|0;
                 this.msUpdateInterval = this.msUpdateNormal;
                 this.msUpdatePrev = this.cmsUpdate = 0;
 
@@ -54112,7 +54780,7 @@ class VideoX86 extends Component {
                      * machine resets.  TODO: Figure out why the VGA diagnostic takes more time on real hardware.
                      */
                     card.nCountVertRetrace++;
-                    if (card.nCard === VideoX86.CARD.VGA) {
+                    if (card.nCard === Videox86.CARD.VGA) {
                         if (card.regSEQData[Card.SEQ.CLKMODE.INDX] & Card.SEQ.CLKMODE.SCREEN_OFF) {
                             if (card.nCountVertRetrace & 1) {
                                 return;
@@ -54182,7 +54850,7 @@ class VideoX86 extends Component {
      * This is where we might add some method of blanking the display, without the disturbing the video
      * buffer contents, and blocking all further updates to the display.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -54195,7 +54863,7 @@ class VideoX86 extends Component {
     /**
      * reset()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     reset()
     {
@@ -54215,20 +54883,20 @@ class VideoX86 extends Component {
          * switch settings.  Conversely, when no model is specified, the nCard setting is considered provisional,
          * so the monitor switch settings, if any, are allowed to determine the card type.
          */
-        if (!VideoX86.MODEL[this.model]) {
-            this.nCard = (nMonitorType == ChipSet.MONITOR.MONO? VideoX86.CARD.MDA : VideoX86.CARD.CGA);
+        if (!Videox86.MODEL[this.model]) {
+            this.nCard = (nMonitorType == ChipSet.MONITOR.MONO? Videox86.CARD.MDA : Videox86.CARD.CGA);
         }
 
         let aMonitors;
-        this.nModeDefault = VideoX86.MODE.CGA_80X25;
+        this.nModeDefault = Videox86.MODE.CGA_80X25;
 
         switch (this.nCard) {
-        case VideoX86.CARD.VGA:
+        case Videox86.CARD.VGA:
             nMonitorType = ChipSet.MONITOR.VGACOLOR;
             break;
 
-        case VideoX86.CARD.EGA:
-            aMonitors = VideoX86.aEGAMonitorSwitches[this.bEGASwitches];
+        case Videox86.CARD.EGA:
+            aMonitors = Videox86.aEGAMonitorSwitches[this.bEGASwitches];
             /*
              * TODO: Figure out how to deal with aMonitors[2], the boolean which indicates
              * whether the EGA is driving the primary monitor (true) or the secondary monitor (false).
@@ -54241,12 +54909,12 @@ class VideoX86 extends Component {
             if (nMonitorType != ChipSet.MONITOR.MONO) break;
             /* falls through */
 
-        case VideoX86.CARD.MDA:
+        case Videox86.CARD.MDA:
             nMonitorType = ChipSet.MONITOR.MONO;
-            this.nModeDefault = VideoX86.MODE.MDA_80X25;
+            this.nModeDefault = Videox86.MODE.MDA_80X25;
             break;
 
-        case VideoX86.CARD.CGA:
+        case Videox86.CARD.CGA:
             /* falls through */
 
         default:
@@ -54259,10 +54927,10 @@ class VideoX86 extends Component {
         }
 
         this.cardActive = null;
-        this.cardMono = this.cardMDA = new Card(this, VideoX86.CARD.MDA);
-        this.cardColor = this.cardCGA = new Card(this, VideoX86.CARD.CGA);
+        this.cardMono = this.cardMDA = new Card(this, Videox86.CARD.MDA);
+        this.cardColor = this.cardCGA = new Card(this, Videox86.CARD.CGA);
 
-        if (this.nCard < VideoX86.CARD.EGA) {
+        if (this.nCard < Videox86.CARD.EGA) {
             this.cardEGA = new Card();      // define a dummy (uninitialized) EGA card for now
         }
         else {
@@ -54298,15 +54966,15 @@ class VideoX86 extends Component {
                      * For the EGA, we choose sequential characters; for random characters, copy the MDA/CGA code below.
                      */
                     bChar = (addrScreen >> 1) & 0xff;
-                    bAttr = (dataRandom >> 8) & ~VideoX86.ATTRS.BGND_BLINK;    // TODO: turn blink attributes off unless we can ensure blinking is initially disabled
+                    bAttr = (dataRandom >> 8) & ~Videox86.ATTRS.BGND_BLINK;    // TODO: turn blink attributes off unless we can ensure blinking is initially disabled
                     if ((bAttr >> 4) == (bAttr & 0xf)) {
                         bAttr ^= 0x0f;      // if background matches foreground, invert foreground to ensure character visibility
                     }
                 } else {
                     bChar = dataRandom & 0xff;
                     bAttr = ((dataRandom & 0x100)?
-                        (VideoX86.ATTRS.FGND_WHITE | VideoX86.ATTRS.BGND_BLACK) :
-                        (VideoX86.ATTRS.FGND_BLACK | VideoX86.ATTRS.BGND_WHITE)) | ((VideoX86.ATTRS.FGND_BRIGHT /* | VideoX86.ATTRS.BGND_BLINK */) & (dataRandom >> 8));
+                        (Videox86.ATTRS.FGND_WHITE | Videox86.ATTRS.BGND_BLACK) :
+                        (Videox86.ATTRS.FGND_BLACK | Videox86.ATTRS.BGND_WHITE)) | ((Videox86.ATTRS.FGND_BRIGHT /* | Videox86.ATTRS.BGND_BLINK */) & (dataRandom >> 8));
                 }
                 this.bus.setShortDirect(addrScreen, bChar | (bAttr << 8));
             }
@@ -54319,7 +54987,7 @@ class VideoX86 extends Component {
      *
      * Redirect cardMono or cardColor to cardEGA as appropriate.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     enableEGA()
     {
@@ -54337,7 +55005,7 @@ class VideoX86 extends Component {
      *
      * This implements save support for the Video component.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {Object}
      */
     save()
@@ -54355,7 +55023,7 @@ class VideoX86 extends Component {
      *
      * This implements restore support for the Video component.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} data
      * @returns {boolean} true if successful, false if failure
      */
@@ -54367,8 +55035,8 @@ class VideoX86 extends Component {
         this.nMode = a[2];
 
         this.cardActive = null;
-        this.cardMono = this.cardMDA = new Card(this, VideoX86.CARD.MDA, data[0]);
-        this.cardColor = this.cardCGA = new Card(this, VideoX86.CARD.CGA, data[1]);
+        this.cardMono = this.cardMDA = new Card(this, Videox86.CARD.MDA, data[0]);
+        this.cardColor = this.cardCGA = new Card(this, Videox86.CARD.CGA, data[1]);
 
         /*
          * If no EGA was originally initialized, then cardEGA will remain uninitialized.
@@ -54399,7 +55067,7 @@ class VideoX86 extends Component {
     /**
      * doneLoad(sURL, sFontData, nErrorCode)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {string} sURL
      * @param {string} sFontData
      * @param {number} nErrorCode (response from server if anything other than 200)
@@ -54536,13 +55204,13 @@ class VideoX86 extends Component {
      * Called by the ROM's copyROM() function whenever a ROM component with a 'notify' attribute containing
      * our component ID has been loaded.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Array.<number>} abROM
      * @param {Array.<number>} [aParms]
      */
     onROMLoad(abROM, aParms)
     {
-        if (this.nCard == VideoX86.CARD.EGA) {
+        if (this.nCard == Videox86.CARD.EGA) {
             /*
              * TODO: Unlike the MDA/CGA font data, we may want to hang onto this data, so that we can
              * regenerate the color font(s) whenever the foreground and/or background colors have changed.
@@ -54568,7 +55236,7 @@ class VideoX86 extends Component {
              */
             this.setFontData(abROM, aParms || [0x3160, 0x2230], 8);
         }
-        else if (this.nCard == VideoX86.CARD.VGA) {
+        else if (this.nCard == Videox86.CARD.VGA) {
             if (DEBUG) this.printf("onROMLoad(): VGA fonts loaded\n");
             /*
              * For VGA cards, in the absence of any parameters, we assume that we're receiving the original
@@ -54596,7 +55264,7 @@ class VideoX86 extends Component {
      * Also, for the MDA/CGA, we should be discarding the font data after the first buildFont() call, because we
      * should never need to rebuild the fonts for those cards (both their font patterns and colors were hard-coded).
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Array.<number>} abFontData is the raw font data, from the ROM font file
      * @param {Array.<number>} aFontOffsets contains offsets into abFontData: [0] for CGA, [1] for MDA/EGA, and [2] for VGA
      * @param {number} [cxFontChar] is a fixed character width to use for all fonts; undefined to use MDA/CGA defaults
@@ -54611,7 +55279,7 @@ class VideoX86 extends Component {
     /**
      * getCardColors(nBitsPerPixel)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} [nBitsPerPixel]
      * @returns {Array}
      */
@@ -54621,8 +55289,8 @@ class VideoX86 extends Component {
             /*
              * Only 2 total colors.
              */
-            this.aRGB[0] = VideoX86.aCGAColors[VideoX86.ATTRS.FGND_BLACK];
-            this.aRGB[1] = this.getFontColor(VideoX86.aCGAColors, VideoX86.ATTRS.FGND_WHITE);
+            this.aRGB[0] = Videox86.aCGAColors[Videox86.ATTRS.FGND_BLACK];
+            this.aRGB[1] = this.getFontColor(Videox86.aCGAColors, Videox86.ATTRS.FGND_WHITE);
             return this.aRGB;
         }
 
@@ -54648,17 +55316,17 @@ class VideoX86 extends Component {
                 if (bBackground & Card.ATC.PALETTE.BRIGHT) regColor |= Card.CGA.COLOR.BRIGHT;
                 if ((this.cardEGA.regATCData[1] & 0x0f) == 0x03) regColor |= Card.CGA.COLOR.COLORSET1;
             }
-            this.aRGB[0] = this.getFontColor(VideoX86.aCGAColors, regColor & (Card.CGA.COLOR.BORDER | Card.CGA.COLOR.BRIGHT));
-            let aColorSet = (regColor & Card.CGA.COLOR.COLORSET1)? VideoX86.aCGAColorSet1 : VideoX86.aCGAColorSet0;
+            this.aRGB[0] = this.getFontColor(Videox86.aCGAColors, regColor & (Card.CGA.COLOR.BORDER | Card.CGA.COLOR.BRIGHT));
+            let aColorSet = (regColor & Card.CGA.COLOR.COLORSET1)? Videox86.aCGAColorSet1 : Videox86.aCGAColorSet0;
             for (let iColor = 0; iColor < aColorSet.length; iColor++) {
-                this.aRGB[iColor + 1] = this.getFontColor(VideoX86.aCGAColors, aColorSet[iColor]);
+                this.aRGB[iColor + 1] = this.getFontColor(Videox86.aCGAColors, aColorSet[iColor]);
             }
             return this.aRGB;
         }
 
         if (this.cardColor === this.cardCGA) {
-            for (let iColor = 0; iColor < VideoX86.aCGAColors.length; iColor++) {
-                this.aRGB[iColor] = this.getFontColor(VideoX86.aCGAColors, iColor);
+            for (let iColor = 0; iColor < Videox86.aCGAColors.length; iColor++) {
+                this.aRGB[iColor] = this.getFontColor(Videox86.aCGAColors, iColor);
             }
             return this.aRGB;
         }
@@ -54697,7 +55365,7 @@ class VideoX86 extends Component {
                  * (ie, this is actually a VGA) and it appears to be initialized (ie, the VGA BIOS has been run).
                  */
                 let fDAC = (aDAC && aDAC[255] != null);
-                aRegs = (card.regATCData[15] != null? card.regATCData : VideoX86.aEGAPalDef);
+                aRegs = (card.regATCData[15] != null? card.regATCData : Videox86.aEGAPalDef);
                 for (i = 0; i < 16; i++) {
                     b = aRegs[i] & Card.ATC.PALETTE.MASK;
                     /*
@@ -54748,7 +55416,7 @@ class VideoX86 extends Component {
      * values in unison, changing the intensity of the color without changing the hue.  We then calculate an RGB
      * value corresponding to iColor.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Array} aColors
      * @param {number} iColor
      * @returns {Array}
@@ -54791,7 +55459,7 @@ class VideoX86 extends Component {
      *
      * Determine the maximum amount we can adjust all RGB entries by without overflowing, and return a new RGB array.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Array} rgb
      * @returns {Array}
      */
@@ -54813,13 +55481,13 @@ class VideoX86 extends Component {
     /**
      * getSelectedFonts()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {number} (low byte is "SELB" font number, used when attribute bit 3 is 0; high byte is "SELA" font number)
      */
     getSelectedFonts()
     {
         let bSelect = this.cardEGA.regSEQData[Card.SEQ.CHARMAP.INDX];
-        if (this.nCard < VideoX86.CARD.VGA) {
+        if (this.nCard < Videox86.CARD.VGA) {
             bSelect &= (Card.SEQ.CHARMAP.SELA | Card.SEQ.CHARMAP.SELB);
         }
         if (!(this.cardEGA.regSEQData[Card.SEQ.MEMMODE.INDX] & Card.SEQ.MEMMODE.EXT)) {
@@ -54848,7 +55516,7 @@ class VideoX86 extends Component {
      *  2) the font colors have changed (only affected colors are rebuilt, if there are no other changes)
      *  3) the font data has changed (EGA and VGA only, based on plane 2 changes recorded in bitsDirtyBanks)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fRebuild] (true if this is a rebuild; default is false)
      * @returns {boolean}
      */
@@ -54872,19 +55540,19 @@ class VideoX86 extends Component {
             let abFontData = this.abFontData;
 
             let aRGBColors, aColorMap;
-            if (this.nCardFont == VideoX86.CARD.MDA || this.nMonitorType == ChipSet.MONITOR.MONO) {
+            if (this.nCardFont == Videox86.CARD.MDA || this.nMonitorType == ChipSet.MONITOR.MONO) {
                 if (!this.colorFont) {
-                    aRGBColors = VideoX86.aMDAColors;
+                    aRGBColors = Videox86.aMDAColors;
                 } else {
                     /*
                      * When overriding MDA colors, we take rgbFont to be the "normal" color (aMDAColors indices 1 and 2), and
                      * then calculate the MDA's corresponding "intense" color (aMDAColors indices 3 and 4) using getIntenseColor().
                      */
-                    aRGBColors = VideoX86.aMDAColors.slice();              // start with a copy of aMDAColors
+                    aRGBColors = Videox86.aMDAColors.slice();              // start with a copy of aMDAColors
                     aRGBColors[1] = aRGBColors[2] = this.rgbFont;
                     aRGBColors[3] = aRGBColors[4] = this.getIntenseColor(this.rgbFont);
                 }
-                aColorMap = VideoX86.aMDAColorMap;
+                aColorMap = Videox86.aMDAColorMap;
             } else {
                 aRGBColors = this.getCardColors();
             }
@@ -54892,7 +55560,7 @@ class VideoX86 extends Component {
             let cxChar, cyChar, offData, bitsBanks, cx, cy;
 
             switch (this.nCardFont) {
-            case VideoX86.CARD.MDA:
+            case Videox86.CARD.MDA:
                 if (this.aFontOffsets[1] != null) {
                     if (this.createFont(this.nCardFont, this.cxFontChar || 9, 14, this.aFontOffsets[1], this.cxFontChar? 0 : 0x0800, abFontData, false, aRGBColors, aColorMap)) {
                         fChanges = true;
@@ -54900,7 +55568,7 @@ class VideoX86 extends Component {
                 }
                 break;
 
-            case VideoX86.CARD.CGA:
+            case Videox86.CARD.CGA:
                 if (this.aFontOffsets[0] != null) {
                     if (this.createFont(this.nCardFont, this.cxFontChar || 8, 8, this.aFontOffsets[0], 0x0000, abFontData, false, aRGBColors, aColorMap)) {
                         fChanges = true;
@@ -54908,11 +55576,11 @@ class VideoX86 extends Component {
                 }
                 break;
 
-            case VideoX86.CARD.VGA:
+            case Videox86.CARD.VGA:
                 nFonts += 4;
                 /* falls through */
 
-            case VideoX86.CARD.EGA:
+            case Videox86.CARD.EGA:
                 nFonts += 4;
                 cxChar = this.cxFontChar || 8;
                 cyChar = 14;
@@ -54988,7 +55656,7 @@ class VideoX86 extends Component {
      * (ie, before the character grids).  But now createFont() also creates an aCSSColors array that is saved alongside
      * the font canvas, and updateChar() uses that array in conjunction with fillRect() to draw character backgrounds.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} nFont
      * @param {number} cxChar is the width of the font characters
      * @param {number} cyChar is the height of the font characters
@@ -55052,7 +55720,7 @@ class VideoX86 extends Component {
                 }
                 if (DEBUG) {
                     if (!fChanges) {
-                        this.printf("createFont(%d): creating %s font (%d,%d)\n", nFont, VideoX86.cardSpecs[this.nCardFont][0], cxChar, cyChar);
+                        this.printf("createFont(%d): creating %s font (%d,%d)\n", nFont, Videox86.cardSpecs[this.nCardFont][0], cxChar, cyChar);
                     }
                     this.printf("createFontColor(%d): [%s]\n", iColor, rgbColor);
                 }
@@ -55117,7 +55785,7 @@ class VideoX86 extends Component {
      * This also yields better performance, since drawImage() is much faster than putImageData().
      * We still have to use putImageData() to build the font canvas, but that's a one-time operation.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Font} font
      * @param {number} iColor
      * @param {Array} rgbColor contains the RGB values for iColor
@@ -55256,7 +55924,7 @@ class VideoX86 extends Component {
      * So for a given logical font number (0-3 for the EGA or 0-7 for the VGA), the starting index of
      * "differable" fonts is n * (n - 1) / 2.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} iFont
      * @param {number} iFontPrev
      * @param {number} cyChar (height of every character in both fonts)
@@ -55289,7 +55957,7 @@ class VideoX86 extends Component {
      * Unlike createFontDiff(), where iFontPrev is guaranteed to be less than iFont, that may not be true
      * for getFontDiff(), so we must swap them if iFont < iFontPrev.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} iFont
      * @param {number} iFontPrev
      * @returns {Array.<number>}
@@ -55336,7 +56004,7 @@ class VideoX86 extends Component {
      * affecting the attribute blink rate (which is currently hard-coded at half the cursor blink rate), and we should look into
      * supporting "half rate" blinking, too.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {boolean} true if there are things to blink, false if not
      */
     checkBlink()
@@ -55346,7 +56014,7 @@ class VideoX86 extends Component {
                 this.cBlinks = 0;
                 /*
                  * At this point, we can either fire up our own timer (doBlink), or rely on updateScreen() being
-                 * called by the CPU at regular bursts (eg, VideoX86.UPDATES_PER_SECOND = 60) and advance cBlinks at
+                 * called by the CPU at regular bursts (eg, Videox86.UPDATES_PER_SECOND = 60) and advance cBlinks at
                  * the start of updateScreen() accordingly.
                  *
                  * doBlink() wants to increment cBlinks every 266ms.  On the other hand, if updateScreen() is being
@@ -55391,7 +56059,7 @@ class VideoX86 extends Component {
      * drawing wraps around to zero and does not stop until we reach CURSCAN again.  However, this happens only when
      * CURSCAN is <= MAXSCAN; if CURSCAN > MAXSCAN, then nothing is drawn, regardless of CURSCANB.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {boolean} true if the cursor is visible, false if not
      */
     checkCursor()
@@ -55427,7 +56095,7 @@ class VideoX86 extends Component {
 
         let bCursorWrap = 0;
 
-        if (this.nCard != VideoX86.CARD.EGA) {
+        if (this.nCard != Videox86.CARD.EGA) {
             /*
              * Live and learn: I originally thought that the EGA introduced funky split cursors, but it turns
              * out that older cards did it, too (well, I've confirmed it on an actual MDA anyway; haven't tried
@@ -55440,7 +56108,7 @@ class VideoX86 extends Component {
                  * The VGA didn't support funky split (aka wrap-around) cursors, so as above, we pretend that the
                  * cursor has simply been disabled.
                  */
-                if (this.nCard == VideoX86.CARD.VGA) {
+                if (this.nCard == Videox86.CARD.VGA) {
                     bCursorFlags |= Card.CRTC.CURSCAN_BLINKOFF;
                     bCursorWrap = 0;
                 }
@@ -55458,7 +56126,7 @@ class VideoX86 extends Component {
              * but in retrospect, that doesn't seem very faithful.  Better to fix things like this 1) only if
              * the user asks, and 2) preferably with a BIOS patch rather than monkeying with the hardware registers.
              *
-             *      if (this.nCard == VideoX86.CARD.EGA) {
+             *      if (this.nCard == Videox86.CARD.EGA) {
              *          if (bCursorMax == 7 && bCursorStart == 4 && !bCursorEnd) bCursorEnd = 7;
              *      }
              *
@@ -55576,13 +56244,13 @@ class VideoX86 extends Component {
     /**
      * removeCursor()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     removeCursor()
     {
         if (this.iCellCursor >= 0) {
             if (this.aCellCache !== undefined && this.iCellCursor < this.aCellCache.length) {
-                let drawCursor = (VideoX86.ATTRS.DRAW_CURSOR << 8);
+                let drawCursor = (Videox86.ATTRS.DRAW_CURSOR << 8);
                 let data = this.aCellCache[this.iCellCursor];
                 if (data & drawCursor) {
                     data &= ~drawCursor;
@@ -55614,7 +56282,7 @@ class VideoX86 extends Component {
     /**
      * getCardAccess()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {number} current memory access setting
      */
     getCardAccess()
@@ -55622,7 +56290,7 @@ class VideoX86 extends Component {
         let card = this.cardActive;
         let nAccess = Card.ACCESS.READ.PAIRS | Card.ACCESS.WRITE.PAIRS;
 
-        if (card.nCard >= VideoX86.CARD.EGA) {
+        if (card.nCard >= Videox86.CARD.EGA) {
             this.fColor256 = false;
             let regGRCMode = card.regGRCData[Card.GRC.MODE.INDX];
             if (regGRCMode != null) {
@@ -55670,7 +56338,7 @@ class VideoX86 extends Component {
                     }
                     break;
                 case Card.GRC.MODE.WRITE.MODE3:
-                    if (this.nCard == VideoX86.CARD.VGA) {
+                    if (this.nCard == Videox86.CARD.VGA) {
                         nWriteAccess = Card.ACCESS.WRITE.MODE3;
                         card.nDataRotate = regDataRotate & Card.GRC.DATAROT.COUNT;
                     }
@@ -55731,7 +56399,7 @@ class VideoX86 extends Component {
     /**
      * setCardAccess(nAccess)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} nAccess (one of the Card.ACCESS.* constants)
      * @returns {boolean} true if access may have changed, false if not
      */
@@ -55762,20 +56430,20 @@ class VideoX86 extends Component {
      *
      * This is the workhorse of setMode()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     setDimensions()
     {
         this.nCardFont = this.nActiveFont = this.nAlternateFont = 0;
         this.nCols = this.nColsDefault;
         this.nRows = this.nRowsDefault;
-        this.nPointsPerCell = VideoX86.aModeParms[VideoX86.MODE.MDA_80X25][2];
-        this.nPointsPerByte = VideoX86.aModeParms[VideoX86.MODE.MDA_80X25][3];
+        this.nPointsPerCell = Videox86.aModeParms[Videox86.MODE.MDA_80X25][2];
+        this.nPointsPerByte = Videox86.aModeParms[Videox86.MODE.MDA_80X25][3];
         this.cxScreenCell = this.cyScreenCell = 1;
         this.fOverBuffer = false;
 
         let cbPadding = 0, cxCell = 1, cyCell = 1;
-        let modeParms = VideoX86.aModeParms[this.nMode];
+        let modeParms = Videox86.aModeParms[this.nMode];
         if (modeParms) {
 
             this.nCols = modeParms[0];
@@ -55792,7 +56460,7 @@ class VideoX86 extends Component {
                  * to match the card.
                  */
                 if (this.model == "vdu") {
-                    this.nCardFont = VideoX86.CARD.MDA;
+                    this.nCardFont = Videox86.CARD.MDA;
                 }
                 else if (this.nCard > this.nCardFont) {
                     this.nCardFont = this.nCard;
@@ -55802,7 +56470,7 @@ class VideoX86 extends Component {
                 if (font) {
                     cxCell = font.cxCell;
                     cyCell = font.cyCell;
-                    if (this.nCard >= VideoX86.CARD.EGA) {
+                    if (this.nCard >= Videox86.CARD.EGA) {
                         /*
                          * Since these cards have programmable font height (font.cyChar), we need to divide that
                          * into the screen height (cyScreen) to determine the effective (ie, visible) number of rows.
@@ -55902,7 +56570,7 @@ class VideoX86 extends Component {
      * Called whenever the MDA/CGA's mode register (eg, Card.MDA.MODE.PORT, Card.CGA.MODE.PORT) is updated,
      * or whenever the EGA/VGA's GRC.MISC register is updated, or when we've just finished a restore().
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fForce] is used to force a mode update, if we recognize the current mode
      * @returns {boolean} true if successful, false if not
      */
@@ -55922,10 +56590,10 @@ class VideoX86 extends Component {
             if (nMode == null) nMode = this.nModeDefault;
         }
         else {
-            if (card.nCard == VideoX86.CARD.MDA) {
-                nMode = VideoX86.MODE.MDA_80X25;
+            if (card.nCard == Videox86.CARD.MDA) {
+                nMode = Videox86.MODE.MDA_80X25;
             }
-            else if (card.nCard >= VideoX86.CARD.EGA) {
+            else if (card.nCard >= Videox86.CARD.EGA) {
                 /*
                  * The sizeBuffer we choose reflects the amount of physical address space that all 4 planes
                  * of EGA memory normally span, NOT the total amount of EGA memory.  So for a 64Kb EGA card,
@@ -55948,7 +56616,7 @@ class VideoX86 extends Component {
                         card.addrBuffer = 0xA0000;
                         card.sizeBuffer = cbBuffer;     // 0x20000
                         if ((nCRTCMaxScan & Card.CRTC.EGA.MAXSCAN.SLMASK) <= 1) {
-                            nMode = VideoX86.MODE.UNKNOWN;     // no BIOS mode uses this mapping, but we don't want to leave nMode null if we've come this far
+                            nMode = Videox86.MODE.UNKNOWN;     // no BIOS mode uses this mapping, but we don't want to leave nMode null if we've come this far
                         } else {
                             /*
                              * This mapping is used by Fantasy Land.
@@ -55957,23 +56625,23 @@ class VideoX86 extends Component {
                              * For example, can we assume that as long as (MAXSCAN & SLMASK) > 1, we're always in text mode?
                              * And to what extent can we rely on the GRC.MISC.GRAPHICS bit?
                              */
-                            nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? VideoX86.MODE.CGA_80X25_BW : VideoX86.MODE.CGA_80X25);
+                            nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? Videox86.MODE.CGA_80X25_BW : Videox86.MODE.CGA_80X25);
                         }
                         break;
                     case Card.GRC.MISC.MAPA064:
                         card.addrBuffer = 0xA0000;
                         card.sizeBuffer = cbBuffer;     // 0x10000
-                        nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? VideoX86.MODE.EGA_640X350_MONO : VideoX86.MODE.EGA_640X350);
+                        nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? Videox86.MODE.EGA_640X350_MONO : Videox86.MODE.EGA_640X350);
                         break;
                     case Card.GRC.MISC.MAPB032:
                         card.addrBuffer = 0xB0000;
                         card.sizeBuffer = cbBufferText;
-                        nMode = VideoX86.MODE.MDA_80X25;
+                        nMode = Videox86.MODE.MDA_80X25;
                         break;
                     case Card.GRC.MISC.MAPB832:
                         card.addrBuffer = 0xB8000;
                         card.sizeBuffer = cbBufferText;
-                        nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? VideoX86.MODE.CGA_80X25_BW : VideoX86.MODE.CGA_80X25);
+                        nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? Videox86.MODE.CGA_80X25_BW : Videox86.MODE.CGA_80X25);
                         break;
                     default:
                         break;
@@ -56014,7 +56682,7 @@ class VideoX86 extends Component {
                     let nCRTCModeCtrl = card.regCRTData[Card.CRTC.EGA.MODECTRL.INDX];
                     let fSEQDotClock = (card.regSEQData[Card.SEQ.CLKMODE.INDX] & Card.SEQ.CLKMODE.DOTCLOCK);
 
-                    if (nMode != VideoX86.MODE.UNKNOWN) {
+                    if (nMode != Videox86.MODE.UNKNOWN) {
                         if (!(regGRCMisc & Card.GRC.MISC.GRAPHICS)) {
                             /*
                              * Here's where we handle text modes; since nMode will have been assigned a default
@@ -56034,7 +56702,7 @@ class VideoX86 extends Component {
                              * (NOT logical) card reprogramming during windowed VM creation; the latter seems like a VDD bug,
                              * because only the Windows display driver should be *physically* reprogramming the card then.
                              */
-                            nMode = fSEQDotClock? (7 - nMode) : VideoX86.MODE.CGA_640X200;
+                            nMode = fSEQDotClock? (7 - nMode) : Videox86.MODE.CGA_640X200;
                         } else {
                             /*
                              * Here's where we handle EGA/VGA graphics modes, discriminating among modes 0x0D and up;
@@ -56051,22 +56719,22 @@ class VideoX86 extends Component {
                                      */
                                     if (card.regCRTData[Card.CRTC.EGA.VDEND] <= 0x8F) {
                                         if (card.regSEQData[Card.SEQ.MEMMODE.INDX] & Card.SEQ.MEMMODE.CHAIN4) {
-                                            nMode = VideoX86.MODE.VGA_320X200;
+                                            nMode = Videox86.MODE.VGA_320X200;
                                         } else {
-                                            nMode = VideoX86.MODE.VGA_320X200P;
+                                            nMode = Videox86.MODE.VGA_320X200P;
                                         }
                                     }
                                     else { /* (card.regCRTData[Card.CRTC.EGA.VDEND] == 0xDF) */
-                                        nMode = VideoX86.MODE.VGA_320X240P;
+                                        nMode = Videox86.MODE.VGA_320X240P;
                                     }
                                 } else {
-                                    nMode = VideoX86.MODE.VGA_320X400P;
+                                    nMode = Videox86.MODE.VGA_320X400P;
                                 }
                             }
                             else if ((nCRTCMaxScan & Card.CRTC.EGA.MAXSCAN.CONVERT400) || nCRTCVertTotal < 350) {
-                                nMode = (fSEQDotClock? VideoX86.MODE.EGA_320X200 : VideoX86.MODE.EGA_640X200);
+                                nMode = (fSEQDotClock? Videox86.MODE.EGA_320X200 : Videox86.MODE.EGA_640X200);
                             } else if (nCRTCVertTotal >= 480) {
-                                nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? VideoX86.MODE.VGA_640X480_MONO : VideoX86.MODE.VGA_640X480);
+                                nMode = (this.nMonitorType == ChipSet.MONITOR.MONO? Videox86.MODE.VGA_640X480_MONO : Videox86.MODE.VGA_640X480);
                             }
                             if (DEBUG) this.printf("checkMode(%#04X): nCRTCVertTotal=%d\n", nMode, nCRTCVertTotal);
                         }
@@ -56080,12 +56748,12 @@ class VideoX86 extends Component {
                  * off, using a hard-coded mode value (0x25) that does NOT necessarily match the the CGA video mode currently in effect.
                  */
                 if (!(card.regMode & Card.CGA.MODE.GRAPHIC_SEL)) {
-                    nMode = ((card.regMode & Card.CGA.MODE._80X25)? VideoX86.MODE.CGA_80X25 : VideoX86.MODE.CGA_40X25);
+                    nMode = ((card.regMode & Card.CGA.MODE._80X25)? Videox86.MODE.CGA_80X25 : Videox86.MODE.CGA_40X25);
                     if (card.regMode & Card.CGA.MODE.BW_SEL) {
                         nMode -= 1;
                     }
                 } else {
-                    nMode = ((card.regMode & Card.CGA.MODE.HIRES_BW)? VideoX86.MODE.CGA_640X200 : VideoX86.MODE.CGA_320X200_BW);
+                    nMode = ((card.regMode & Card.CGA.MODE.HIRES_BW)? Videox86.MODE.CGA_640X200 : Videox86.MODE.CGA_320X200_BW);
                     if (!(card.regMode & Card.CGA.MODE.BW_SEL)) {
                         nMode -= 1;
                     }
@@ -56139,7 +56807,7 @@ class VideoX86 extends Component {
      * Set fForce to true to update the mode regardless of previous mode, or false to perform a normal update
      * that bypasses updateScreen() but still calls initCellCache().
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number|null} nMode
      * @param {boolean} [fForce] is set when checkMode() wants to force a mode update
      * @param {boolean} [fRemap] is set when checkMode() detects a change in the buffer mapping
@@ -56167,7 +56835,7 @@ class VideoX86 extends Component {
              * (MDA or CGA) never reallocates its memory buffer, it's still a good idea to always force this operation
              * (eg, in case a switch setting changed the active video card).
              */
-            let card = this.cardActive || (nMode == VideoX86.MODE.MDA_80X25? this.cardMono : this.cardColor);
+            let card = this.cardActive || (nMode == Videox86.MODE.MDA_80X25? this.cardMono : this.cardColor);
 
             if (card != this.cardActive || card.addrBuffer != this.addrBuffer || card.sizeBuffer != this.sizeBuffer) {
 
@@ -56194,7 +56862,7 @@ class VideoX86 extends Component {
 
                 if (DEBUG) this.printf("setMode(%#04X): adding %#010X bytes to %#010X\n", nMode, this.sizeBuffer, this.addrBuffer);
 
-                if (!this.bus.addMemory(card.addrBuffer, card.sizeBuffer, MemoryX86.TYPE.VIDEO, card)) {
+                if (!this.bus.addMemory(card.addrBuffer, card.sizeBuffer, Memoryx86.TYPE.VIDEO, card)) {
                     /*
                      * TODO: Force this failure case and see how well the Video component deals with it.
                      */
@@ -56220,7 +56888,7 @@ class VideoX86 extends Component {
                  * scroll rather than a text scroll to clear the screen, but once again, the coordinates are reversed,
                  * so much of the memory it zeroes is above the first 16K.
                  */
-                if (card.nCard < VideoX86.CARD.EGA) {
+                if (card.nCard < Videox86.CARD.EGA) {
                     let addrBuffer = this.addrBuffer;
                     let aBlocks = this.bus.getMemoryBlocks(addrBuffer, this.sizeBuffer);
                     while ((addrBuffer += this.sizeBuffer) < card.addrBuffer + 0x8000) {
@@ -56242,7 +56910,7 @@ class VideoX86 extends Component {
      *
      * Worker function used by createFontColor() and updateScreen() (graphics modes only).
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} imageData
      * @param {number} x
      * @param {number} y
@@ -56266,7 +56934,7 @@ class VideoX86 extends Component {
      * we don't have to update the entire screen.  This would also allow invalidateCellCache() to honor the fColors
      * flag and bypass initCellCache() when it's set.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @returns {number}
      */
     initCellCache()
@@ -56287,7 +56955,7 @@ class VideoX86 extends Component {
      * data in the video buffer has not changed (eg, when the screen is being panned, the page is being flipped,
      * the palette is being cycled, the font is being changed, etc).
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fColors] (true if color(s) *may* have changed)
      * @param {number} [nFontSelect] (set along with nFontPrev if font(s) *may* have changed)
      * @param {number} [nFontPrev]
@@ -56361,7 +57029,7 @@ class VideoX86 extends Component {
      * To make the cursor blink, we must alternately draw its entire cell with ATTRS.DRAW_CURSOR set, and then
      * draw it again with ATTRS.DRAW_CURSOR clear.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} col
      * @param {number} row
      * @param {number} data (if text mode, character code in low byte, attribute code in high byte)
@@ -56423,7 +57091,7 @@ class VideoX86 extends Component {
 
         if (MAXDEBUG) this.printf(MESSAGE.VIDEO + MESSAGE.BUFFER, "updateCharBgnd(%d,%d,%d): filled %d,%d\n", col, row, bChar, xDst, yDst);
 
-        if (bAttr & VideoX86.ATTRS.DRAW_FGND) {
+        if (bAttr & Videox86.ATTRS.DRAW_FGND) {
             /*
              * (bChar & 0xf) is the equivalent of (bChar % 16), and (bChar >> 4) is the equivalent of Math.floor(bChar / 16)
              */
@@ -56439,7 +57107,7 @@ class VideoX86 extends Component {
             }
         }
 
-        if (bAttr & VideoX86.ATTRS.DRAW_CURSOR) {
+        if (bAttr & Videox86.ATTRS.DRAW_CURSOR) {
             if (this.cyCursorWrap) {
                 this.drawCursor(0, this.cyCursorWrap, xDst, yDst, iFgnd, font, context);
             }
@@ -56453,7 +57121,7 @@ class VideoX86 extends Component {
      * We have factored the cursor-drawing code out of updateChar() so that we can call this function multiple times,
      * in case we have to draw a "split cursor".
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} yCursor
      * @param {number} cyCursor
      * @param {number} xDst
@@ -56503,7 +57171,7 @@ class VideoX86 extends Component {
     /**
      * latchStartAddress()
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      */
     latchStartAddress()
     {
@@ -56533,7 +57201,7 @@ class VideoX86 extends Component {
      * are generally internal updates triggered by an I/O operation or other state change, while non-forced updates
      * are the periodic updates coming from the CPU.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fForce] is used by setMode() to reset the cell cache and force a redraw
      * @returns {boolean}
      */
@@ -56581,7 +57249,7 @@ class VideoX86 extends Component {
          * If this is a hardware update (as opposed to, say, a debugger-triggered update, where fForce is set),
          * and cBlinks is "enabled" (ie, >= 0), then advance cBlinks once every 10 updateScreen() calls.
          *
-         * Assuming an updateScreen() frequency of roughly 60 times per second (VideoX86.UPDATES_PER_SECOND), performing
+         * Assuming an updateScreen() frequency of roughly 60 times per second (Videox86.UPDATES_PER_SECOND), performing
          * a "blink update" every 10 times is reasonably close to the hardware blink rate.  However, the effective blink
          * rate will also depend on other factors as well, such as the monitorSpecs for the video hardware being simulated.
          */
@@ -56614,7 +57282,7 @@ class VideoX86 extends Component {
          * which will draw from our video buffer (adwMemory) directly; these addresses are only used for bounds
          * checking.
          */
-        if (this.nMode >= VideoX86.MODE.VGA_320X200) {
+        if (this.nMode >= Videox86.MODE.VGA_320X200) {
             addrBuffer = addrScreen = 0xA0000;
             addrScreenLimit = addrScreen + 0x10000;
         }
@@ -56622,7 +57290,7 @@ class VideoX86 extends Component {
         let cbScreen = this.cbScreen;
         this.nColsLogical = this.nCols;
 
-        if (this.nCard < VideoX86.CARD.EGA) {
+        if (this.nCard < Videox86.CARD.EGA) {
             /*
              * Any screen (aka "page") offset must be doubled for text modes, due to the attribute bytes.
              */
@@ -56687,7 +57355,7 @@ class VideoX86 extends Component {
                 cbScreenWrap -= cbScreen;
             }
         }
-        else if (this.nCard >= VideoX86.CARD.EGA) {
+        else if (this.nCard >= Videox86.CARD.EGA) {
             /*
              * We can leverage our screen wrap support to handle split-screen views as well; we must calculate
              * the number of WHOLE + PARTIAL rows we can draw (which may reduce cbScreen).  TODO: We must also pass
@@ -56733,7 +57401,7 @@ class VideoX86 extends Component {
     /**
      * updateScreenCells(addrBuffer, addrScreen, cbScreen, iCell, nCells, fForce, fBlinkUpdate)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} addrBuffer
      * @param {number} addrScreen
      * @param {number} cbScreen
@@ -56821,7 +57489,7 @@ class VideoX86 extends Component {
     /**
      * updateScreenText(addrBuffer, addrScreen, addrScreenLimit, iCell, nCells)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} addrBuffer
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
@@ -56847,7 +57515,7 @@ class VideoX86 extends Component {
         let card = this.cardActive;
         let cCells = 0, cUpdated = 0;
         let dataBlink = 0;
-        let dataDraw = (VideoX86.ATTRS.DRAW_FGND << 8);
+        let dataDraw = (Videox86.ATTRS.DRAW_FGND << 8);
         let dataMask = 0xfffff;
         let adwMemory = card.adwMemory;
 
@@ -56860,12 +57528,12 @@ class VideoX86 extends Component {
         let nShift = (card.nAccess & Card.ACCESS.WRITE.PAIRS)? 1 : 0;
 
         let fBlinkEnable = (card.regMode & Card.MDA.MODE.BLINK_ENABLE);
-        if (this.nCard >= VideoX86.CARD.EGA) {
+        if (this.nCard >= Videox86.CARD.EGA) {
             fBlinkEnable = (card.regATCData[Card.ATC.MODE.INDX] & Card.ATC.MODE.BLINK_ENABLE);
         }
 
         if (fBlinkEnable) {
-            dataBlink = (VideoX86.ATTRS.BGND_BLINK << 8);
+            dataBlink = (Videox86.ATTRS.BGND_BLINK << 8);
             dataMask &= ~dataBlink;
             if (!(this.cBlinks & 0x2)) dataMask &= ~dataDraw;
         }
@@ -56888,7 +57556,7 @@ class VideoX86 extends Component {
                 data &= dataMask;
             }
             if (iCell == this.iCellCursor) {
-                data |= ((this.cBlinks & 0x1)? (VideoX86.ATTRS.DRAW_CURSOR << 8) : 0);
+                data |= ((this.cBlinks & 0x1)? (Videox86.ATTRS.DRAW_CURSOR << 8) : 0);
             }
 
 
@@ -56935,7 +57603,7 @@ class VideoX86 extends Component {
     /**
      * updateScreenGraphicsCGA(addrScreen, addrScreenLimit)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
      * @returns {number} (number of cells processed)
@@ -57021,7 +57689,7 @@ class VideoX86 extends Component {
      *
      * TODO: Add support for blinking graphics (ATC.MODE.BLINK_ENABLE)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} addrBuffer
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
@@ -57101,7 +57769,7 @@ class VideoX86 extends Component {
                      * former is a POSITIVE index that is outside the 32-bit integer range, whereas the latter is a NEGATIVE
                      * index, which is what this code requires.
                      */
-                    let bPixel = VideoX86.aEGADWToByte[dwPixel] || 0;
+                    let bPixel = Videox86.aEGADWToByte[dwPixel] || 0;
                     this.setPixel(this.imageBuffer, x++, y, aPixelColors[bPixel]);
                     data <<= 1;
                 }
@@ -57144,7 +57812,7 @@ class VideoX86 extends Component {
      *
      * TODO: Add support for blinking graphics (ATC.MODE.BLINK_ENABLE)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} addrBuffer
      * @param {number} addrScreen
      * @param {number} addrScreenLimit
@@ -57235,7 +57903,7 @@ class VideoX86 extends Component {
      *
      * This returns a byte value with two bits set or clear as appropriate: RETRACE and VRETRACE.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @returns {number}
      */
@@ -57258,7 +57926,7 @@ class VideoX86 extends Component {
          * bit to trigger this work-around, which involves cutting the number of elapsed cycles in half,
          * as well as skipping every other (odd) vertical retrace in startVerticalRetrace().
          */
-        if (card.nCard === VideoX86.CARD.VGA) {
+        if (card.nCard === Videox86.CARD.VGA) {
             if (card.regSEQData[Card.SEQ.CLKMODE.INDX] & Card.SEQ.CLKMODE.SCREEN_OFF) {
                 nCyclesElapsed >>>= 1;
             }
@@ -57282,7 +57950,7 @@ class VideoX86 extends Component {
     /**
      * inMDAIndx(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B4)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number|undefined}
@@ -57295,7 +57963,7 @@ class VideoX86 extends Component {
     /**
      * outMDAIndx(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B4)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57308,7 +57976,7 @@ class VideoX86 extends Component {
     /**
      * inMDAData(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B5)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number|undefined}
@@ -57321,7 +57989,7 @@ class VideoX86 extends Component {
     /**
      * outMDAData(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B5)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57334,7 +58002,7 @@ class VideoX86 extends Component {
     /**
      * inMDAMode(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B8)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57347,7 +58015,7 @@ class VideoX86 extends Component {
     /**
      * outMDAMode(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3B8)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57360,7 +58028,7 @@ class VideoX86 extends Component {
     /**
      * inMDAStatus(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3BA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57373,7 +58041,7 @@ class VideoX86 extends Component {
     /**
      * outFeat(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3BA or 0x3DA)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57393,7 +58061,7 @@ class VideoX86 extends Component {
      * primarily for debugging purposes.  Moreover, ATC port reads do NOT toggle the ATC address/data
      * flip-flop; only writes have that effect.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C0)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57414,7 +58082,7 @@ class VideoX86 extends Component {
      * primarily for debugging purposes.  Moreover, ATC port reads do NOT toggle the ATC address/data
      * flip-flop; only writes have that effect.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C1)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57431,7 +58099,7 @@ class VideoX86 extends Component {
     /**
      * outATC(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C0)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57484,7 +58152,7 @@ class VideoX86 extends Component {
             let iReg = card.regATCIndx & Card.ATC.INDX_MASK;
             if (iReg >= Card.ATC.PALETTE_REGS || !fPalEnabled) {
                 let fModified = (card.regATCData[iReg] !== bOut);
-                if (VideoX86.TRAPALL || fModified) {
+                if (Videox86.TRAPALL || fModified) {
                     if (!addrFrom || this.messageEnabled()) {
                         this.printIO(port, bOut, addrFrom, "ATC." + card.asATCRegs[iReg], undefined, true);
                     }
@@ -57512,7 +58180,7 @@ class VideoX86 extends Component {
     /**
      * inStatus0(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C2)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57520,7 +58188,7 @@ class VideoX86 extends Component {
     inStatus0(port, addrFrom)
     {
         let bSWBit = 0;
-        if (this.nCard == VideoX86.CARD.EGA) {
+        if (this.nCard == Videox86.CARD.EGA) {
             let iBit = 3 - ((this.cardEGA.regMisc & Card.MISC.CLOCK_SELECT) >> 2);    // this is the desired SW # (0-3)
             bSWBit = (this.bEGASwitches & (1 << iBit)) << (Card.STATUS0.SWSENSE_SHIFT - iBit);
         } else {
@@ -57572,7 +58240,7 @@ class VideoX86 extends Component {
     }
 
     /**
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C2)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57587,7 +58255,7 @@ class VideoX86 extends Component {
     /**
      * inVGAEnable(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C3)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57602,7 +58270,7 @@ class VideoX86 extends Component {
     /**
      * outVGAEnable(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C3)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57616,7 +58284,7 @@ class VideoX86 extends Component {
     /**
      * inSEQIndx(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C4)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57631,7 +58299,7 @@ class VideoX86 extends Component {
     /**
      * outSEQIndx(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C4)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57645,7 +58313,7 @@ class VideoX86 extends Component {
     /**
      * inSEQData(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C5)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57662,14 +58330,14 @@ class VideoX86 extends Component {
     /**
      * outSEQData(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C5)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      */
     outSEQData(port, bOut, addrFrom)
     {
-        if (VideoX86.TRAPALL || this.cardEGA.regSEQData[this.cardEGA.regSEQIndx] !== bOut) {
+        if (Videox86.TRAPALL || this.cardEGA.regSEQData[this.cardEGA.regSEQIndx] !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
                 this.printIO(Card.SEQ.DATA.PORT, bOut, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], undefined, true);
             }
@@ -57681,7 +58349,7 @@ class VideoX86 extends Component {
         switch(this.cardEGA.regSEQIndx) {
 
         case Card.SEQ.MAPMASK.INDX:
-            this.cardEGA.nSeqMapMask = VideoX86.aEGAByteToDW[bOut & Card.SEQ.MAPMASK.MAPS];
+            this.cardEGA.nSeqMapMask = Videox86.aEGAByteToDW[bOut & Card.SEQ.MAPMASK.MAPS];
             break;
 
         case Card.SEQ.CHARMAP.INDX:
@@ -57742,7 +58410,7 @@ class VideoX86 extends Component {
     /**
      * inDACMask(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C6)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57759,14 +58427,14 @@ class VideoX86 extends Component {
     /**
      * outDACMask(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C6)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      */
     outDACMask(port, bOut, addrFrom)
     {
-        if (VideoX86.TRAPALL || this.cardEGA.regDACMask !== bOut) {
+        if (Videox86.TRAPALL || this.cardEGA.regDACMask !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
                 this.printIO(Card.DAC.MASK.PORT, bOut, addrFrom, "DAC.MASK", undefined, true);
             }
@@ -57777,7 +58445,7 @@ class VideoX86 extends Component {
     /**
      * inDACState(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C7)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57794,7 +58462,7 @@ class VideoX86 extends Component {
     /**
      * outDACRead(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C7)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57812,7 +58480,7 @@ class VideoX86 extends Component {
     /**
      * outDACWrite(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C8)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57830,7 +58498,7 @@ class VideoX86 extends Component {
     /**
      * inDACData(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C9)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57852,7 +58520,7 @@ class VideoX86 extends Component {
     /**
      * outDACData(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3C9)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57878,7 +58546,7 @@ class VideoX86 extends Component {
     /**
      * inVGAFeat(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57898,7 +58566,7 @@ class VideoX86 extends Component {
      *
      * "A one should be loaded into this location to map host data bus bits 2 and 3 to display planes 2 and 3, respectively."
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CA)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57912,7 +58580,7 @@ class VideoX86 extends Component {
     /**
      * inVGAMisc(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CC)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57935,7 +58603,7 @@ class VideoX86 extends Component {
      *
      * Note that this register was not readable on the EGA, and when the VGA came along, reads of this port read the Misc reg.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CC)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57949,7 +58617,7 @@ class VideoX86 extends Component {
     /**
      * inGRCIndx(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CE)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57964,7 +58632,7 @@ class VideoX86 extends Component {
     /**
      * outGRCIndx(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CE)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -57978,7 +58646,7 @@ class VideoX86 extends Component {
     /**
      * inGRCData(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CF)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -57995,14 +58663,14 @@ class VideoX86 extends Component {
     /**
      * outGRCData(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3CF)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      */
     outGRCData(port, bOut, addrFrom)
     {
-        if (VideoX86.TRAPALL || this.cardEGA.regGRCData[this.cardEGA.regGRCIndx] !== bOut) {
+        if (Videox86.TRAPALL || this.cardEGA.regGRCData[this.cardEGA.regGRCIndx] !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
                 this.printIO(Card.GRC.DATA.PORT, bOut, addrFrom, "GRC." + this.cardEGA.asGRCRegs[this.cardEGA.regGRCIndx]);
             }
@@ -58010,15 +58678,15 @@ class VideoX86 extends Component {
         }
         switch(this.cardEGA.regGRCIndx) {
         case Card.GRC.SRESET.INDX:
-            this.cardEGA.nSetMapData = VideoX86.aEGAByteToDW[bOut & 0xf];
+            this.cardEGA.nSetMapData = Videox86.aEGAByteToDW[bOut & 0xf];
             this.cardEGA.nSetMapBits = this.cardEGA.nSetMapData & ~this.cardEGA.nSetMapMask;
             break;
         case Card.GRC.ESRESET.INDX:
-            this.cardEGA.nSetMapMask = ~VideoX86.aEGAByteToDW[bOut & 0xf];
+            this.cardEGA.nSetMapMask = ~Videox86.aEGAByteToDW[bOut & 0xf];
             this.cardEGA.nSetMapBits = this.cardEGA.nSetMapData & ~this.cardEGA.nSetMapMask;
             break;
         case Card.GRC.COLORCOMP.INDX:
-            this.cardEGA.nColorCompare = VideoX86.aEGAByteToDW[bOut & 0xf] & (0x80808080|0);
+            this.cardEGA.nColorCompare = Videox86.aEGAByteToDW[bOut & 0xf] & (0x80808080|0);
             break;
         case Card.GRC.DATAROT.INDX:
         case Card.GRC.MODE.INDX:
@@ -58031,7 +58699,7 @@ class VideoX86 extends Component {
             this.checkMode();
             break;
         case Card.GRC.COLORDC.INDX:
-            this.cardEGA.nColorDontCare = VideoX86.aEGAByteToDW[bOut & 0xf] & (0x80808080|0);
+            this.cardEGA.nColorDontCare = Videox86.aEGAByteToDW[bOut & 0xf] & (0x80808080|0);
             break;
         case Card.GRC.BITMASK.INDX:
             this.cardEGA.nBitMapMask = bOut | (bOut << 8) | (bOut << 16) | (bOut << 24);
@@ -58044,7 +58712,7 @@ class VideoX86 extends Component {
     /**
      * inCGAIndx(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D4)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number|undefined}
@@ -58057,7 +58725,7 @@ class VideoX86 extends Component {
     /**
      * outCGAIndx(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D4)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -58070,7 +58738,7 @@ class VideoX86 extends Component {
     /**
      * inCGAData(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D5)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number|undefined}
@@ -58083,7 +58751,7 @@ class VideoX86 extends Component {
     /**
      * outCGAData(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D5)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -58096,7 +58764,7 @@ class VideoX86 extends Component {
     /**
      * inCGAMode(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D8)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -58109,7 +58777,7 @@ class VideoX86 extends Component {
     /**
      * outCGAMode(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D8)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -58122,7 +58790,7 @@ class VideoX86 extends Component {
     /**
      * inCGAColor(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D9)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -58139,7 +58807,7 @@ class VideoX86 extends Component {
     /**
      * outCGAColor(port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3D9)
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -58158,7 +58826,7 @@ class VideoX86 extends Component {
     /**
      * inCGAStatus(port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {number} port (0x3DA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -58171,7 +58839,7 @@ class VideoX86 extends Component {
     /**
      * inCRTCIndx(card, port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} port
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -58198,7 +58866,7 @@ class VideoX86 extends Component {
     /**
      * outCRTCIndx(card, port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} port
      * @param {number} bOut
@@ -58214,7 +58882,7 @@ class VideoX86 extends Component {
     /**
      * inCRTCData(card, port, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} port
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -58249,7 +58917,7 @@ class VideoX86 extends Component {
     /**
      * outCRTCData(card, port, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} port
      * @param {number} bOut
@@ -58278,7 +58946,7 @@ class VideoX86 extends Component {
             }
 
             let fModified = (card.regCRTData[card.regCRTIndx] !== bOut);
-            if (fModified || VideoX86.TRAPALL) {
+            if (fModified || Videox86.TRAPALL) {
                 if (!addrFrom || this.messageEnabled()) {
                     this.printIO(port /* card.port + 1 */, bOut, addrFrom, "CRTC." + card.asCRTCRegs[card.regCRTIndx]);
                 }
@@ -58339,7 +59007,7 @@ class VideoX86 extends Component {
     /**
      * inCardMode(card, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -58354,7 +59022,7 @@ class VideoX86 extends Component {
     /**
      * outCardMode(card, bOut, addrFrom)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} bOut
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
@@ -58377,7 +59045,7 @@ class VideoX86 extends Component {
      * ATC address/data flip-flop to "address" mode, which we emulate by setting cardEGA.fATCData to false, indicating
      * that the ATC is not in "data" mode.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Object} card
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
      * @returns {number}
@@ -58461,7 +59129,7 @@ class VideoX86 extends Component {
     /**
      * dumpVideo(asArgs)
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {Array.<string>} asArgs
      */
     dumpVideo(asArgs)
@@ -58489,7 +59157,7 @@ class VideoX86 extends Component {
      * and checkCursor() call.  updateScreen() is driven by CPU bursts, so piggy-backing on that to drive
      * blink updates seems preferable to having another active timer in the system.
      *
-     * @this {VideoX86}
+     * @this {Videox86}
      * @param {boolean} [fStart]
      *
      doBlink(fStart)
@@ -58509,7 +59177,7 @@ class VideoX86 extends Component {
      */
 
     /**
-     * VideoX86.init()
+     * Videox86.init()
      *
      * This function operates on every HTML element of class "video", extracting the
      * JSON-encoded parameters for the Video constructor from the element's "data-value"
@@ -58693,7 +59361,7 @@ class VideoX86 extends Component {
              */
             let container;
             if (element.style) container = element;
-            let video = new VideoX86(parmsVideo, canvas, context, textarea /* || input */, container, aDiagElements);
+            let video = new Videox86(parmsVideo, canvas, context, textarea /* || input */, container, aDiagElements);
 
             /*
              * Bind any video-specific controls (eg, the Refresh button). There are no essential controls, however;
@@ -58704,7 +59372,7 @@ class VideoX86 extends Component {
     }
 }
 
-VideoX86.TRAPALL = true;           // monitor all I/O by default (not just deltas)
+Videox86.TRAPALL = true;           // monitor all I/O by default (not just deltas)
 
 /*
  * Supported Cards (and associated fonts)
@@ -58728,7 +59396,7 @@ VideoX86.TRAPALL = true;           // monitor all I/O by default (not just delta
  *      dot patterns for 256 different characters. The character sets are identical to those provided by the
  *      IBM Monochrome Display Adapter and the IBM Color/Graphics Monitor Adapter.
  */
-VideoX86.CARD = {
+Videox86.CARD = {
     MDA:    1,          // uses 9x14 monochrome font
     CGA:    2,          // uses 8x8 color font
     EGA:    4,          // uses 8x14 color font (by default)
@@ -58752,7 +59420,7 @@ VideoX86.CARD = {
  * situations as best they can (and when they don't, it should be considered a bug if some application is
  * broken as a result), but realistically, our hardware emulation is never likely to be 100% accurate.
  */
-VideoX86.MODE = {
+Videox86.MODE = {
     CGA_40X25_BW:       0,
     CGA_40X25:          1,
     CGA_80X25_BW:       2,
@@ -58784,18 +59452,18 @@ VideoX86.MODE = {
     UNKNOWN:            0xFF
 };
 
-VideoX86.UPDATES_PER_SECOND = 60;
+Videox86.UPDATES_PER_SECOND = 60;
 
 /*
  * Supported Models
  *
  * Each model refers to an array where [0] is the card ID, and [1] is the default mode.
  */
-VideoX86.MODEL = {
-    "mda": [VideoX86.CARD.MDA, VideoX86.MODE.MDA_80X25],
-    "cga": [VideoX86.CARD.CGA, VideoX86.MODE.CGA_80X25],
-    "ega": [VideoX86.CARD.EGA, VideoX86.MODE.CGA_80X25],
-    "vga": [VideoX86.CARD.VGA, VideoX86.MODE.CGA_80X25]
+Videox86.MODEL = {
+    "mda": [Videox86.CARD.MDA, Videox86.MODE.MDA_80X25],
+    "cga": [Videox86.CARD.CGA, Videox86.MODE.CGA_80X25],
+    "ega": [Videox86.CARD.EGA, Videox86.MODE.CGA_80X25],
+    "vga": [Videox86.CARD.VGA, Videox86.MODE.CGA_80X25]
 };
 
 /*
@@ -58840,14 +59508,14 @@ let MonitorSpecs;
 /**
  * @type {Object}
  */
-VideoX86.monitorSpecs = {};
+Videox86.monitorSpecs = {};
 
 /**
  * NOTE: The number of horizontal periods per frame (200) is dictated by the EGA ROM BIOS at C000:03D0.
  *
  * @type {MonitorSpecs}
  */
-VideoX86.monitorSpecs[ChipSet.MONITOR.COLOR] = {
+Videox86.monitorSpecs[ChipSet.MONITOR.COLOR] = {
     nHorzPeriodsPerSec: 15700,
     nHorzPeriodsPerFrame: 200,
     percentHorzActive: 75,
@@ -58859,7 +59527,7 @@ VideoX86.monitorSpecs[ChipSet.MONITOR.COLOR] = {
  *
  * @type {MonitorSpecs}
  */
-VideoX86.monitorSpecs[ChipSet.MONITOR.MONO] = {
+Videox86.monitorSpecs[ChipSet.MONITOR.MONO] = {
     nHorzPeriodsPerSec: 18432,
     nHorzPeriodsPerFrame: 350,
     percentHorzActive: 75,
@@ -58871,7 +59539,7 @@ VideoX86.monitorSpecs[ChipSet.MONITOR.MONO] = {
  *
  * @type {MonitorSpecs}
  */
-VideoX86.monitorSpecs[ChipSet.MONITOR.EGACOLOR] = {
+Videox86.monitorSpecs[ChipSet.MONITOR.EGACOLOR] = {
     nHorzPeriodsPerSec: 21850,
     nHorzPeriodsPerFrame: 350,
     percentHorzActive: 75,
@@ -58883,7 +59551,7 @@ VideoX86.monitorSpecs[ChipSet.MONITOR.EGACOLOR] = {
  *
  * @type {MonitorSpecs}
  */
-VideoX86.monitorSpecs[ChipSet.MONITOR.VGACOLOR] = {
+Videox86.monitorSpecs[ChipSet.MONITOR.VGACOLOR] = {
     nHorzPeriodsPerSec: 31500,
     nHorzPeriodsPerFrame: 400,
     percentHorzActive: 85,
@@ -58912,7 +59580,7 @@ VideoX86.monitorSpecs[ChipSet.MONITOR.VGACOLOR] = {
  * there is an array that defines the corresponding monitor type(s) for the EGA adapter and any secondary
  * adapter.  The third value is a boolean indicating whether the EGA is the primary adapter.
  */
-VideoX86.aEGAMonitorSwitches = {
+Videox86.aEGAMonitorSwitches = {
     0x06: [ChipSet.MONITOR.TV,           ChipSet.MONITOR.MONO,  true],  // "1001"
     0x07: [ChipSet.MONITOR.COLOR,        ChipSet.MONITOR.MONO,  true],  // "0001" [used by 5153 monitor configs]
     0x08: [ChipSet.MONITOR.EGAEMULATION, ChipSet.MONITOR.MONO,  true],  // "1110"
@@ -58950,25 +59618,25 @@ let Font;
  * However, for EGA and VGA graphics modes, a "word" of memory is a single element in the video buffer
  * containing 32 bits of pixel data.
  */
-VideoX86.aModeParms = [];                                                                              // Mode
-VideoX86.aModeParms[VideoX86.MODE.CGA_40X25]          = [ 40,  25,  1, 0.5,   0, VideoX86.CARD.CGA];         // 0x01
-VideoX86.aModeParms[VideoX86.MODE.CGA_80X25]          = [ 80,  25,  1, 0.5,   0, VideoX86.CARD.CGA];         // 0x03
-VideoX86.aModeParms[VideoX86.MODE.CGA_320X200]        = [320, 200,  8,   4, 192];                         // 0x04
-VideoX86.aModeParms[VideoX86.MODE.CGA_640X200]        = [640, 200, 16,   8, 192];                         // 0x06
-VideoX86.aModeParms[VideoX86.MODE.MDA_80X25]          = [ 80,  25,  1, 0.5,   0, VideoX86.CARD.MDA];         // 0x07
-VideoX86.aModeParms[VideoX86.MODE.EGA_320X200]        = [320, 200,  8,   8];                              // 0x0D
-VideoX86.aModeParms[VideoX86.MODE.EGA_640X200]        = [640, 200,  8,   8];                              // 0x0E
-VideoX86.aModeParms[VideoX86.MODE.EGA_640X350_MONO]   = [640, 350,  8,   8];                              // 0x0F
-VideoX86.aModeParms[VideoX86.MODE.EGA_640X350]        = [640, 350,  8,   8];                              // 0x10
-VideoX86.aModeParms[VideoX86.MODE.VGA_640X480_MONO]   = [640, 480,  8,   8];                              // 0x11
-VideoX86.aModeParms[VideoX86.MODE.VGA_640X480]        = [640, 480,  8,   8];                              // 0x12
-VideoX86.aModeParms[VideoX86.MODE.VGA_320X200]        = [320, 200,  4,   1];                              // 0x13
-VideoX86.aModeParms[VideoX86.MODE.VGA_320X200P]       = [320, 200,  4,   4];                              // 0x14
-VideoX86.aModeParms[VideoX86.MODE.VGA_320X240P]       = [320, 240,  4,   4];                              // 0x15
-VideoX86.aModeParms[VideoX86.MODE.VGA_320X400P]       = [320, 400,  4,   4];                              // 0x16
-VideoX86.aModeParms[VideoX86.MODE.CGA_40X25_BW]       = VideoX86.aModeParms[VideoX86.MODE.CGA_40X25];           // 0x00
-VideoX86.aModeParms[VideoX86.MODE.CGA_80X25_BW]       = VideoX86.aModeParms[VideoX86.MODE.CGA_80X25];           // 0x02
-VideoX86.aModeParms[VideoX86.MODE.CGA_320X200_BW]     = VideoX86.aModeParms[VideoX86.MODE.CGA_320X200];         // 0x05
+Videox86.aModeParms = [];                                                                              // Mode
+Videox86.aModeParms[Videox86.MODE.CGA_40X25]          = [ 40,  25,  1, 0.5,   0, Videox86.CARD.CGA];         // 0x01
+Videox86.aModeParms[Videox86.MODE.CGA_80X25]          = [ 80,  25,  1, 0.5,   0, Videox86.CARD.CGA];         // 0x03
+Videox86.aModeParms[Videox86.MODE.CGA_320X200]        = [320, 200,  8,   4, 192];                         // 0x04
+Videox86.aModeParms[Videox86.MODE.CGA_640X200]        = [640, 200, 16,   8, 192];                         // 0x06
+Videox86.aModeParms[Videox86.MODE.MDA_80X25]          = [ 80,  25,  1, 0.5,   0, Videox86.CARD.MDA];         // 0x07
+Videox86.aModeParms[Videox86.MODE.EGA_320X200]        = [320, 200,  8,   8];                              // 0x0D
+Videox86.aModeParms[Videox86.MODE.EGA_640X200]        = [640, 200,  8,   8];                              // 0x0E
+Videox86.aModeParms[Videox86.MODE.EGA_640X350_MONO]   = [640, 350,  8,   8];                              // 0x0F
+Videox86.aModeParms[Videox86.MODE.EGA_640X350]        = [640, 350,  8,   8];                              // 0x10
+Videox86.aModeParms[Videox86.MODE.VGA_640X480_MONO]   = [640, 480,  8,   8];                              // 0x11
+Videox86.aModeParms[Videox86.MODE.VGA_640X480]        = [640, 480,  8,   8];                              // 0x12
+Videox86.aModeParms[Videox86.MODE.VGA_320X200]        = [320, 200,  4,   1];                              // 0x13
+Videox86.aModeParms[Videox86.MODE.VGA_320X200P]       = [320, 200,  4,   4];                              // 0x14
+Videox86.aModeParms[Videox86.MODE.VGA_320X240P]       = [320, 240,  4,   4];                              // 0x15
+Videox86.aModeParms[Videox86.MODE.VGA_320X400P]       = [320, 400,  4,   4];                              // 0x16
+Videox86.aModeParms[Videox86.MODE.CGA_40X25_BW]       = Videox86.aModeParms[Videox86.MODE.CGA_40X25];           // 0x00
+Videox86.aModeParms[Videox86.MODE.CGA_80X25_BW]       = Videox86.aModeParms[Videox86.MODE.CGA_80X25];           // 0x02
+Videox86.aModeParms[Videox86.MODE.CGA_320X200_BW]     = Videox86.aModeParms[Videox86.MODE.CGA_320X200];         // 0x05
 
 /*
  * MDA attribute byte definitions
@@ -58984,17 +59652,17 @@ VideoX86.aModeParms[VideoX86.MODE.CGA_320X200_BW]     = VideoX86.aModeParms[Vide
  * characters.  updateScreen() maintains a global count (cBlinkVisible) of blinking characters, to simplify the
  * decision of when to redraw the screen.
  */
-VideoX86.ATTRS = {};
-VideoX86.ATTRS.FGND_BLACK  = 0x00;
-VideoX86.ATTRS.FGND_ULINE  = 0x01;
-VideoX86.ATTRS.FGND_WHITE  = 0x07;
-VideoX86.ATTRS.FGND_BRIGHT = 0x08;
-VideoX86.ATTRS.BGND_BLACK  = 0x00;
-VideoX86.ATTRS.BGND_WHITE  = 0x70;
-VideoX86.ATTRS.BGND_BLINK  = 0x80;
-VideoX86.ATTRS.BGND_BRIGHT = 0x80;
-VideoX86.ATTRS.DRAW_FGND   = 0x100;        // this is an internal attribute bit, indicating the foreground should be drawn
-VideoX86.ATTRS.DRAW_CURSOR = 0x200;        // this is an internal attribute bit, indicating when the cursor should be drawn
+Videox86.ATTRS = {};
+Videox86.ATTRS.FGND_BLACK  = 0x00;
+Videox86.ATTRS.FGND_ULINE  = 0x01;
+Videox86.ATTRS.FGND_WHITE  = 0x07;
+Videox86.ATTRS.FGND_BRIGHT = 0x08;
+Videox86.ATTRS.BGND_BLACK  = 0x00;
+Videox86.ATTRS.BGND_WHITE  = 0x70;
+Videox86.ATTRS.BGND_BLINK  = 0x80;
+Videox86.ATTRS.BGND_BRIGHT = 0x80;
+Videox86.ATTRS.DRAW_FGND   = 0x100;        // this is an internal attribute bit, indicating the foreground should be drawn
+Videox86.ATTRS.DRAW_CURSOR = 0x200;        // this is an internal attribute bit, indicating when the cursor should be drawn
 
 /*
  * Here's a "cheat sheet" for attribute byte combinations that the IBM MDA could have supported.  The original (Aug 1981)
@@ -59043,19 +59711,19 @@ VideoX86.ATTRS.DRAW_CURSOR = 0x200;        // this is an internal attribute bit,
  * CGA attribute byte definitions; these simply extend the set of MDA attributes, with the exception of ATTR_FNGD_ULINE,
  * which the CGA can treat only as ATTR_FGND_BLUE.
  */
-VideoX86.ATTRS.FGND_BLUE       = 0x01;
-VideoX86.ATTRS.FGND_GREEN      = 0x02;
-VideoX86.ATTRS.FGND_CYAN       = 0x03;
-VideoX86.ATTRS.FGND_RED        = 0x04;
-VideoX86.ATTRS.FGND_MAGENTA    = 0x05;
-VideoX86.ATTRS.FGND_BROWN      = 0x06;
+Videox86.ATTRS.FGND_BLUE       = 0x01;
+Videox86.ATTRS.FGND_GREEN      = 0x02;
+Videox86.ATTRS.FGND_CYAN       = 0x03;
+Videox86.ATTRS.FGND_RED        = 0x04;
+Videox86.ATTRS.FGND_MAGENTA    = 0x05;
+Videox86.ATTRS.FGND_BROWN      = 0x06;
 
-VideoX86.ATTRS.BGND_BLUE       = 0x10;
-VideoX86.ATTRS.BGND_GREEN      = 0x20;
-VideoX86.ATTRS.BGND_CYAN       = 0x30;
-VideoX86.ATTRS.BGND_RED        = 0x40;
-VideoX86.ATTRS.BGND_MAGENTA    = 0x50;
-VideoX86.ATTRS.BGND_BROWN      = 0x60;
+Videox86.ATTRS.BGND_BLUE       = 0x10;
+Videox86.ATTRS.BGND_GREEN      = 0x20;
+Videox86.ATTRS.BGND_CYAN       = 0x30;
+Videox86.ATTRS.BGND_RED        = 0x40;
+Videox86.ATTRS.BGND_MAGENTA    = 0x50;
+Videox86.ATTRS.BGND_BROWN      = 0x60;
 
 /*
  * For the MDA, there are currently three distinct "colors": off, normal, and intense.  There are
@@ -59069,7 +59737,7 @@ VideoX86.ATTRS.BGND_BROWN      = 0x60;
  * (model 5151), then I may need to support another "color": dark.  For now, the attributes that may
  * require dark (ie, 0x78 and 0xF8) have their foreground attribute (0x8) mapped to 0x0 (off) instead.
  */
-VideoX86.aMDAColors = [
+Videox86.aMDAColors = [
     [0x00, 0x00, 0x00, 0xff],       // 0: off
     [0x09, 0xcc, 0x50, 0xff],       // 1: normal (with underlining)
     [0x09, 0xcc, 0x50, 0xff],       // 2: normal
@@ -59087,9 +59755,9 @@ VideoX86.aMDAColors = [
  *
  * MDA attributes form an index into aMDAColorMap, which in turn provides an index into aMDAColors.
  */
-VideoX86.aMDAColorMap = [0x0, 0x1, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x0, 0x3, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4];
+Videox86.aMDAColorMap = [0x0, 0x1, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x0, 0x3, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4];
 
-VideoX86.aCGAColors = [
+Videox86.aCGAColors = [
     [0x00, 0x00, 0x00, 0xff],   // 0x00: ATTR_FGND_BLACK
     [0x00, 0x00, 0xaa, 0xff],   // 0x01: ATTR_FGND_BLUE
     [0x00, 0xaa, 0x00, 0xff],   // 0x02: ATTR_FGND_GREEN
@@ -59108,39 +59776,39 @@ VideoX86.aCGAColors = [
     [0xff, 0xff, 0xff, 0xff]    // 0x0F: ATTR_FGND_WHITE   | ATTR_FGND_BRIGHT (aka white)
 ];
 
-VideoX86.aCGAColorSet0 = [VideoX86.ATTRS.FGND_GREEN, VideoX86.ATTRS.FGND_RED,     VideoX86.ATTRS.FGND_BROWN];
-VideoX86.aCGAColorSet1 = [VideoX86.ATTRS.FGND_CYAN,  VideoX86.ATTRS.FGND_MAGENTA, VideoX86.ATTRS.FGND_WHITE];
+Videox86.aCGAColorSet0 = [Videox86.ATTRS.FGND_GREEN, Videox86.ATTRS.FGND_RED,     Videox86.ATTRS.FGND_BROWN];
+Videox86.aCGAColorSet1 = [Videox86.ATTRS.FGND_CYAN,  Videox86.ATTRS.FGND_MAGENTA, Videox86.ATTRS.FGND_WHITE];
 
 /*
  * Here is the EGA BIOS default ATC palette register set for color text modes, from which getCardColors()
  * builds a default RGB array, similar to aCGAColors above.
  */
-VideoX86.aEGAPalDef = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x14, 0x07, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F];
+Videox86.aEGAPalDef = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x14, 0x07, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F];
 
-VideoX86.aEGAByteToDW = [
+Videox86.aEGAByteToDW = [
     0x00000000,   0x000000ff,   0x0000ff00,   0x0000ffff,
     0x00ff0000,   0x00ff00ff,   0x00ffff00,   0x00ffffff,
     0xff000000|0, 0xff0000ff|0, 0xff00ff00|0, 0xff00ffff|0,
     0xffff0000|0, 0xffff00ff|0, 0xffffff00|0, 0xffffffff|0
 ];
 
-VideoX86.aEGADWToByte = [];
-VideoX86.aEGADWToByte[0x00000000]   = 0x0;
-VideoX86.aEGADWToByte[0x00000080]   = 0x1;
-VideoX86.aEGADWToByte[0x00008000]   = 0x2;
-VideoX86.aEGADWToByte[0x00008080]   = 0x3;
-VideoX86.aEGADWToByte[0x00800000]   = 0x4;
-VideoX86.aEGADWToByte[0x00800080]   = 0x5;
-VideoX86.aEGADWToByte[0x00808000]   = 0x6;
-VideoX86.aEGADWToByte[0x00808080]   = 0x7;
-VideoX86.aEGADWToByte[0x80000000|0] = 0x8;
-VideoX86.aEGADWToByte[0x80000080|0] = 0x9;
-VideoX86.aEGADWToByte[0x80008000|0] = 0xa;
-VideoX86.aEGADWToByte[0x80008080|0] = 0xb;
-VideoX86.aEGADWToByte[0x80800000|0] = 0xc;
-VideoX86.aEGADWToByte[0x80800080|0] = 0xd;
-VideoX86.aEGADWToByte[0x80808000|0] = 0xe;
-VideoX86.aEGADWToByte[0x80808080|0] = 0xf;
+Videox86.aEGADWToByte = [];
+Videox86.aEGADWToByte[0x00000000]   = 0x0;
+Videox86.aEGADWToByte[0x00000080]   = 0x1;
+Videox86.aEGADWToByte[0x00008000]   = 0x2;
+Videox86.aEGADWToByte[0x00008080]   = 0x3;
+Videox86.aEGADWToByte[0x00800000]   = 0x4;
+Videox86.aEGADWToByte[0x00800080]   = 0x5;
+Videox86.aEGADWToByte[0x00808000]   = 0x6;
+Videox86.aEGADWToByte[0x00808080]   = 0x7;
+Videox86.aEGADWToByte[0x80000000|0] = 0x8;
+Videox86.aEGADWToByte[0x80000080|0] = 0x9;
+Videox86.aEGADWToByte[0x80008000|0] = 0xa;
+Videox86.aEGADWToByte[0x80008080|0] = 0xb;
+Videox86.aEGADWToByte[0x80800000|0] = 0xc;
+Videox86.aEGADWToByte[0x80800080|0] = 0xd;
+Videox86.aEGADWToByte[0x80808000|0] = 0xe;
+Videox86.aEGADWToByte[0x80808080|0] = 0xf;
 
 /*
  * Card Specifications
@@ -59164,16 +59832,16 @@ VideoX86.aEGADWToByte[0x80808080|0] = 0xf;
  * to map it to the video buffer address.  The latter approach gives us total control over the buffer;
  * refer to getMemoryAccess().
  */
-VideoX86.cardSpecs = [];
-VideoX86.cardSpecs[VideoX86.CARD.MDA] = ["MDA", Card.MDA.CRTC.INDX.PORT, 0xB0000, 0x01000, 0x01000, ChipSet.MONITOR.MONO];
-VideoX86.cardSpecs[VideoX86.CARD.CGA] = ["CGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x04000, ChipSet.MONITOR.COLOR];
-VideoX86.cardSpecs[VideoX86.CARD.EGA] = ["EGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x10000, ChipSet.MONITOR.EGACOLOR];
-VideoX86.cardSpecs[VideoX86.CARD.VGA] = ["VGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x40000, ChipSet.MONITOR.VGACOLOR];
+Videox86.cardSpecs = [];
+Videox86.cardSpecs[Videox86.CARD.MDA] = ["MDA", Card.MDA.CRTC.INDX.PORT, 0xB0000, 0x01000, 0x01000, ChipSet.MONITOR.MONO];
+Videox86.cardSpecs[Videox86.CARD.CGA] = ["CGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x04000, ChipSet.MONITOR.COLOR];
+Videox86.cardSpecs[Videox86.CARD.EGA] = ["EGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x10000, ChipSet.MONITOR.EGACOLOR];
+Videox86.cardSpecs[Videox86.CARD.VGA] = ["VGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x40000, ChipSet.MONITOR.VGACOLOR];
 
 /*
  * Values for nTouchConfig; a value will be selected based on the sTouchScreen configuration parameter.
  */
-VideoX86.TOUCH = {
+Videox86.TOUCH = {
     NONE:       0,
     DEFAULT:    1,
     KEYGRID:    2,
@@ -59186,63 +59854,63 @@ VideoX86.TOUCH = {
  * even called KEYGRID support) was to make the 1985 game "Rogue" (pcjs.org/apps/pcx86/1985/rogue)
  * more fun to play on an iPad (the space-bar is a commonly required key).
  */
-VideoX86.KEYGRID = [
-    [KbdX86.SIMCODE.HOME, KbdX86.SIMCODE.UP,    KbdX86.SIMCODE.PGUP],
-    [KbdX86.SIMCODE.LEFT, KbdX86.SIMCODE.SPACE, KbdX86.SIMCODE.RIGHT],
-    [KbdX86.SIMCODE.END,  KbdX86.SIMCODE.DOWN,  KbdX86.SIMCODE.PGDN],
+Videox86.KEYGRID = [
+    [Keyboardx86.SIMCODE.HOME, Keyboardx86.SIMCODE.UP,    Keyboardx86.SIMCODE.PGUP],
+    [Keyboardx86.SIMCODE.LEFT, Keyboardx86.SIMCODE.SPACE, Keyboardx86.SIMCODE.RIGHT],
+    [Keyboardx86.SIMCODE.END,  Keyboardx86.SIMCODE.DOWN,  Keyboardx86.SIMCODE.PGDN],
 ];
 
 /*
  * Port input/output notification tables
  */
-VideoX86.aMDAPortInput = {
-    0x3B0: VideoX86.prototype.inMDAIndx,           // duplicate of 0x3B4
-    0x3B1: VideoX86.prototype.inMDAData,           // duplicate of 0x3B5
-    0x3B2: VideoX86.prototype.inMDAIndx,           // duplicate of 0x3B4
-    0x3B3: VideoX86.prototype.inMDAData,           // duplicate of 0x3B5
-    0x3B4: VideoX86.prototype.inMDAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3B5: VideoX86.prototype.inMDAData,           // technically, the only CRTC Data registers that are readable are R14-R17
-    0x3B6: VideoX86.prototype.inMDAIndx,           // duplicate of 0x3B4
-    0x3B7: VideoX86.prototype.inMDAData,           // duplicate of 0x3B5
-    0x3B8: VideoX86.prototype.inMDAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3BA: VideoX86.prototype.inMDAStatus
+Videox86.aMDAPortInput = {
+    0x3B0: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
+    0x3B1: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
+    0x3B2: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
+    0x3B3: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
+    0x3B4: Videox86.prototype.inMDAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
+    0x3B5: Videox86.prototype.inMDAData,           // technically, the only CRTC Data registers that are readable are R14-R17
+    0x3B6: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
+    0x3B7: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
+    0x3B8: Videox86.prototype.inMDAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
+    0x3BA: Videox86.prototype.inMDAStatus
 };
 
-VideoX86.aMDAPortOutput = {
-    0x3B0: VideoX86.prototype.outMDAIndx,          // duplicate of 0x3B4
-    0x3B1: VideoX86.prototype.outMDAData,          // duplicate of 0x3B5
-    0x3B2: VideoX86.prototype.outMDAIndx,          // duplicate of 0x3B4
-    0x3B3: VideoX86.prototype.outMDAData,          // duplicate of 0x3B5
-    0x3B4: VideoX86.prototype.outMDAIndx,
-    0x3B5: VideoX86.prototype.outMDAData,
-    0x3B6: VideoX86.prototype.outMDAIndx,          // duplicate of 0x3B4
-    0x3B7: VideoX86.prototype.outMDAData,          // duplicate of 0x3B5
-    0x3B8: VideoX86.prototype.outMDAMode
+Videox86.aMDAPortOutput = {
+    0x3B0: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
+    0x3B1: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
+    0x3B2: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
+    0x3B3: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
+    0x3B4: Videox86.prototype.outMDAIndx,
+    0x3B5: Videox86.prototype.outMDAData,
+    0x3B6: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
+    0x3B7: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
+    0x3B8: Videox86.prototype.outMDAMode
 };
 
-VideoX86.aCGAPortInput = {
-    0x3D4: VideoX86.prototype.inCGAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3D5: VideoX86.prototype.inCGAData,           // technically, the only CRTC Data registers that are readable are R14-R17
-    0x3D8: VideoX86.prototype.inCGAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3D9: VideoX86.prototype.inCGAColor,          // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3DA: VideoX86.prototype.inCGAStatus
+Videox86.aCGAPortInput = {
+    0x3D4: Videox86.prototype.inCGAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
+    0x3D5: Videox86.prototype.inCGAData,           // technically, the only CRTC Data registers that are readable are R14-R17
+    0x3D8: Videox86.prototype.inCGAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
+    0x3D9: Videox86.prototype.inCGAColor,          // technically, not actually readable, but I want the Debugger to be able to read this
+    0x3DA: Videox86.prototype.inCGAStatus
 };
 
-VideoX86.aCGAPortOutput = {
-    0x3D4: VideoX86.prototype.outCGAIndx,
-    0x3D5: VideoX86.prototype.outCGAData,
-    0x3D8: VideoX86.prototype.outCGAMode,
-    0x3D9: VideoX86.prototype.outCGAColor
+Videox86.aCGAPortOutput = {
+    0x3D4: Videox86.prototype.outCGAIndx,
+    0x3D5: Videox86.prototype.outCGAData,
+    0x3D8: Videox86.prototype.outCGAMode,
+    0x3D9: Videox86.prototype.outCGAColor
 };
 
-VideoX86.aEGAPortInput = {
-    0x3C0: VideoX86.prototype.inATCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3C1: VideoX86.prototype.inATCData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3C2: VideoX86.prototype.inStatus0,
-    0x3C4: VideoX86.prototype.inSEQIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3C5: VideoX86.prototype.inSEQData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3CE: VideoX86.prototype.inGRCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3CF: VideoX86.prototype.inGRCData            // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+Videox86.aEGAPortInput = {
+    0x3C0: Videox86.prototype.inATCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    0x3C1: Videox86.prototype.inATCData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    0x3C2: Videox86.prototype.inStatus0,
+    0x3C4: Videox86.prototype.inSEQIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    0x3C5: Videox86.prototype.inSEQData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    0x3CE: Videox86.prototype.inGRCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    0x3CF: Videox86.prototype.inGRCData            // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
 };
 
 /*
@@ -59250,41 +59918,41 @@ VideoX86.aEGAPortInput = {
  * ability in place, treating the VGA as a superset of the EGA as much as possible; will any code break because word
  * OUTs to port 0x3C0 (and/or byte OUTs to port 0x3C1) actually work?  Possibly, but highly unlikely.
  */
-VideoX86.aEGAPortOutput = {
-    0x3BA: VideoX86.prototype.outFeat,
-    0x3C0: VideoX86.prototype.outATC,
-    0x3C1: VideoX86.prototype.outATC,              // the EGA BIOS writes to this port (see C000:0416), implying that 0x3C0 and 0x3C1 both decode the same register
-    0x3C2: VideoX86.prototype.outMisc,             // FYI, since this overlaps with STATUS0.PORT, there's currently no way for the Debugger to read the Misc register
-    0x3C4: VideoX86.prototype.outSEQIndx,
-    0x3C5: VideoX86.prototype.outSEQData,
-    0x3CA: VideoX86.prototype.outGRCPos2,
-    0x3CC: VideoX86.prototype.outGRCPos1,
-    0x3CE: VideoX86.prototype.outGRCIndx,
-    0x3CF: VideoX86.prototype.outGRCData,
-    0x3DA: VideoX86.prototype.outFeat
+Videox86.aEGAPortOutput = {
+    0x3BA: Videox86.prototype.outFeat,
+    0x3C0: Videox86.prototype.outATC,
+    0x3C1: Videox86.prototype.outATC,              // the EGA BIOS writes to this port (see C000:0416), implying that 0x3C0 and 0x3C1 both decode the same register
+    0x3C2: Videox86.prototype.outMisc,             // FYI, since this overlaps with STATUS0.PORT, there's currently no way for the Debugger to read the Misc register
+    0x3C4: Videox86.prototype.outSEQIndx,
+    0x3C5: Videox86.prototype.outSEQData,
+    0x3CA: Videox86.prototype.outGRCPos2,
+    0x3CC: Videox86.prototype.outGRCPos1,
+    0x3CE: Videox86.prototype.outGRCIndx,
+    0x3CF: Videox86.prototype.outGRCData,
+    0x3DA: Videox86.prototype.outFeat
 };
 
-VideoX86.aVGAPortInput = {
-    0x3C3: VideoX86.prototype.inVGAEnable,
-    0x3C6: VideoX86.prototype.inDACMask,
-    0x3C7: VideoX86.prototype.inDACState,
-    0x3C9: VideoX86.prototype.inDACData,
-    0x3CA: VideoX86.prototype.inVGAFeat,
-    0x3CC: VideoX86.prototype.inVGAMisc
+Videox86.aVGAPortInput = {
+    0x3C3: Videox86.prototype.inVGAEnable,
+    0x3C6: Videox86.prototype.inDACMask,
+    0x3C7: Videox86.prototype.inDACState,
+    0x3C9: Videox86.prototype.inDACData,
+    0x3CA: Videox86.prototype.inVGAFeat,
+    0x3CC: Videox86.prototype.inVGAMisc
 };
 
-VideoX86.aVGAPortOutput = {
-    0x3C3: VideoX86.prototype.outVGAEnable,
-    0x3C6: VideoX86.prototype.outDACMask,
-    0x3C7: VideoX86.prototype.outDACRead,
-    0x3C8: VideoX86.prototype.outDACWrite,
-    0x3C9: VideoX86.prototype.outDACData
+Videox86.aVGAPortOutput = {
+    0x3C3: Videox86.prototype.outVGAEnable,
+    0x3C6: Videox86.prototype.outDACMask,
+    0x3C7: Videox86.prototype.outDACRead,
+    0x3C8: Videox86.prototype.outDACWrite,
+    0x3C9: Videox86.prototype.outDACData
 };
 
 /*
  * Initialize every Video module on the page.
  */
-WebLib.onInit(VideoX86.init);
+WebLib.onInit(Videox86.init);
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/parallel.js (C) 2012-2023 Jeff Parsons
@@ -59414,9 +60082,9 @@ class ParallelPort extends Component {
      *
      * @this {ParallelPort}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -60111,9 +60779,9 @@ class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -60752,7 +61420,7 @@ class SerialPort extends Component {
                 if (b == 0x09) {
                     let tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
-                    if (this.tabSize) s = StrLib.pad("", nChars);
+                    if (this.tabSize) s = StrLib.pad("", -nChars);
                 }
                 if (!this.iLogicalCol && nChars) {
                     /*
@@ -62002,9 +62670,9 @@ class Mouse extends Component {
      *
      * @this {Mouse}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -62701,132 +63369,6 @@ WebLib.onInit(Mouse.init);
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
- *  The Disk component provides methods for:
- *
- *      1) creating an empty disk: create()
- *      2) loading a disk image: load()
- *      3) getting disk information: info()
- *      4) seeking a disk sector: seek()
- *      5) reading data from a sector: read()
- *      6) writing data to a sector: write()
- *      7) save disk deltas: save()
- *      8) restore disk deltas: restore()
- *      9) converting disk contents: convertToJSON()
- *
- *  More functionality may be factored out of the FDC and HDC components later and moved here, to
- *  further reduce some of the duplication between them, but the above functionality is a good start.
- */
-
-/*
- * Client/Server Disk I/O
- *
- * To support large disks without consuming large amounts of client-side memory, and to push
- * client-side disk changes back the server, we need a DiskIO API that can be used in place of
- * the DiskDump API.
- *
- * Use of the DiskIO API and any associated disk images must be tightly coupled to per-user
- * storage and specific machine configurations, to prevent the disk images from being corrupted
- * by inconsistent I/O operations.  Our basic User API (userapi.js) already provides some
- * per-user storage that we can use to get the design rolling.
- *
- * The DiskIO API must also provide the ability to create new (empty) hard disk images in per-user
- * storage and automatically associate them with the machine configurations that requested them.
- */
-
-/*
- * Principles
- *
- * Originally, when the Disk class was given a disk image to load and mount, it would request the
- * ENTIRE disk image from the DiskDump module.  That works well for small (floppy) disk images, but
- * for larger disks -- let's just say anything stored on the server as an "img" file -- we'd prefer
- * to interact with that disk using "On-Demand I/O".  Any "img" file on the same server as the PCjs
- * application should be a candidate for on-demand access.
- *
- * On-Demand I/O means that nothing is initially transferred from the server.  As sectors are
- * requested by the PCx86 machine, PCx86 requests them from the server, and maintains an MRU cache
- * of sectors, periodically discarding the least-used clean sectors above a certain memory limit.
- * Dirty sectors (ie, those that the PCx86 machine has written to) must be periodically sent
- * back to the server and then marked as clean, so that they can be discarded like any other
- * sector.
- *
- * We also support "local" init-only disk images, which means that dirty sectors are never sent
- * back to the server and are instead retained by the client for the lifetime of the app; such
- * images are "read-only" as far as the server is concerned, but "read-write" as far as the client
- * is concerned.  Reloading/restarting an app with an "local" disk will return the disk to its
- * initial state.
- *
- * Practice
- *
- * Let's first look at what we *already* do for the HDC component:
- *
- *  1) Creating new (empty) disk images
- *  2) Pre-loading pre-built JSON-encoded disk images (converting them to JSON on the fly as needed)
- *
- * An example of #1 is in /devices/pc/machine/5160/cga/256kb/demo/machine.xml:
- *
- *      <hdc id="hdcXT" drives='[{name:"10Mb Hard Drive",type:3}]'/>
- *
- * and an example of #2 is in /disks/pc/fixed/win101.xml:
- *
- *      <hdc id="hdcXT" drives='[{name:"10Mb Hard Drive",path:"/disks/pc/fixed/win101/10mb.json",type:3}]'/>
- *
- * The HDC component expects an array of drive entries.  Array position determines drive numbering
- * (the first entry is drive 0, the second is drive 1, etc), and each entry contains the following
- * properties:
- *
- *      'name': user-friendly name for the disk, if any
- *      'path': URL of the disk image, if any
- *      'type': a drive type
- *
- * Of those properties, only 'type' is required, which provides an index into an HDC "Drive Type"
- * table that determines disk geometry and therefore disk size.  As we add support for larger disks and
- * newer disk controllers, the 'type' parameter will be superseded by either a user-defined 'geometry'
- * parameter that will define number of heads, cylinders, tracks, sectors per track, and (max) bytes per
- * sector, or perhaps a generic 'size' parameter that leaves geometry choices to the HDC component,
- * which will then pass those decisions on to the Disk component.
- *
- * We will enable on-demand I/O for a disk image with a new 'mode' parameter that looks like:
- *
- *      'mode': one of "local", "preload", "demandrw", "demandro"
- *
- * "preload" means the disk image will be completely preloaded, exactly as before; "demandrw" enables
- * full on-demand I/O support; and "demandro" enables on-demand I/O for reads only (all writes are retained
- * and never written back to the server).
- *
- * "ro" will be the fallback for "rw" unless TWO other important criteria are met: 1) the user has a
- * private user key, and therefore per-user storage; and 2) the disk image 'path' contains an asterisk (*)
- * that the server can internally remap to a directory in the user's storage; eg:
- *
- *      'path': <asterisk>/10mb.img (path components following the asterisk are optional)
- *
- * If the disk image does not already exist, it will be created (but not formatted).
- *
- * This preserves the promise that EVERYTHING a user does within a PCx86 machine is private (ie, not
- * visible to any other PCjs users).  I don't want to be in the business of saving any user machine
- * states or disk changes, but at least those operations are limited to users who have asked for (and
- * received) a private user key.
- *
- * Another important consideration at this stage is dealing with multiple machines writing to the same
- * disk image; even though we're limiting the "demandrw" mode to per-user images, a single user may still
- * inadvertently start up multiple machines that refer to the same disk image.
- *
- * So, every PCx86 machine needs to generate a unique token and include that token with every Disk I/O API
- * operation, so that the server can revoke a previous machine's "rw" access to a disk image when a new
- * machine requests "rw" access to the same disk image.
- *
- * From the client's perspective, revocation can be quietly dealt with by reverting to "demandro" mode;
- * that client becomes stuck with all their dirty sectors until they can reclaim "rw" access, which should
- * only happen if no intervening writes to the disk image on the server have occurred (if I bother allowing
- * reclamation at all).
- *
- * The real challenge here is avoiding revocation of a machine that still has critical changes to commit,
- * but since we can't even solve the problem of a user closing their browser at an inopportune time
- * and potentially leaving a disk image in an inconsistent state, premature revocation is the least of
- * our problems.  Since a real hard drive could suffer the same fate if the machine's power was turned off
- * at the wrong time, you could say that we're simply providing a faithful simulation of reality.
- */
-
 /** @typedef {{ c: number, h: number, s: number, l: number, d: Array.<number>, f: number, o: number, iCylinder: number, iHead: number, sector: number, length: number, data: Array.<number>, pattern: (number|null), file: FileInfo, offFile: number, dataCRC: number, dataError: boolean, dataMark: number, headCRC: number, headError: boolean, iModify: number, cModify: number, fDirty: boolean }} */
 let Sector;
 
@@ -62874,7 +63416,7 @@ class Disk extends Component {
 
         this.controller = controller;
 
-        /*
+        /**
          * Route all printing through this.controller (eg, controller.print()), because
          * the Computer component is unaware of any Disk objects and therefore will not set
          * up the usual overrides when a Control Panel is installed.
@@ -62885,19 +63427,19 @@ class Disk extends Component {
         this.dbg = controller.dbg;
         this.drive = drive;
 
-        /*
+        /**
          * We pull out a number of drive properties that we may or may not need as defaults
          */
         this.sDiskName = drive.name;
         this.fRemovable = drive.fRemovable;
         this.fOnDemand = this.fRemote = false;
 
-        /*
+        /**
          * Initialize the disk contents
          */
         this.create(mode, drive.nCylinders, drive.nHeads, drive.nSectors, drive.cbSector);
 
-        /*
+        /**
          * The following dirty sector and timer properties are used only with fOnDemand disks,
          * assuming fRemote was successfully set.
          */
@@ -62906,6 +63448,12 @@ class Disk extends Component {
         this.timerWrite = null;             // REMOTE_WRITE_DELAY timer in effect, if any
         this.msTimerWrite = 0;              // the time that the write timer, if any, is set to fire
         this.fWriteInProgress = false;
+
+        /**
+         * To make getModuleInfo() more reliable, we use aModules to cache any modules we see as
+         * sectors are read.
+         */
+        this.aModules = {};
 
         this.setReady();
     }
@@ -62919,9 +63467,9 @@ class Disk extends Component {
      *
      * @this {Disk}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -62936,7 +63484,7 @@ class Disk extends Component {
      */
     isRemote()
     {
-        /*
+        /**
          * Ironically, we can't rely on fRemote, because that is cleared and set across disconnect and
          * reconnect operations.  fOnDemand is the next best thing.
          */
@@ -63005,7 +63553,7 @@ class Disk extends Component {
      */
     powerDown(fSave, fShutdown)
     {
-        /*
+        /**
          * If we're connected to a remote disk, take this opportunity to flush any remaining unwritten
          * changes and then close the connection.
          */
@@ -63013,7 +63561,7 @@ class Disk extends Component {
             let response;
             let nErrorCode = 0;
             if (this.fWriteInProgress) {
-                /*
+                /**
                  * TODO: Verify that the Computer's powerOff() handler will actually honor a false return value.
                  */
                 if (!Component.confirmUser("Disk writes are still in progress, shut down anyway?")) {
@@ -63029,7 +63577,7 @@ class Disk extends Component {
             if (fShutdown) {
                 this.disconnectRemoteDisk();
             }
-            /*
+            /**
              * I only report that changes to the disk have been "saved" if fSave is true, to avoid confusing
              * users who might not understand the difference between discarding local changes (which should restore
              * all diskettes to their original state) and discarding remote changes (which could leave the remote disk
@@ -63060,7 +63608,7 @@ class Disk extends Component {
         this.nSectors = nSectors;
         this.cbSector = cbSector;
         this.diskData = [];
-        /*
+        /**
          * If the drive is using PRELOAD mode, then it will use the load()/mount() process to initialize the disk contents;
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
          */
@@ -63074,7 +63622,7 @@ class Disk extends Component {
                 for (let iHead = 0; iHead < aHeads.length; iHead++) {
                     let aSectors = new Array(this.nSectors);
                     for (let iSector = 1; iSector <= aSectors.length; iSector++) {
-                        /*
+                        /**
                          * Now that our read() and write() functions can deal with unallocated data
                          * arrays, and can read/write the specified pattern on-the-fly, we no longer need
                          * to pre-allocate and pre-initialize the DATA array.
@@ -63160,12 +63708,12 @@ class Disk extends Component {
             return true;
         }
 
-        /*
+        /**
          * If there's an occurrence of API_ENDPOINT anywhere in the path, we assume we can use it as-is;
          * ie, that the user has already formed a URL of the type we use ourselves for unconverted disk images.
          */
         if (sDiskPath.indexOf(DumpAPI.ENDPOINT) < 0) {
-            /*
+            /**
              * If the selected disk image has a "json" extension, then we assume it's a pre-converted
              * JSON-encoded disk image, so we load it as-is; otherwise, we ask our server-side disk image
              * converter to return the corresponding JSON-encoded data.
@@ -63205,7 +63753,7 @@ class Disk extends Component {
             cbDiskData = buffer.byteLength;
             dv = new DataView(buffer, 0, cbDiskData);
         }
-        /*
+        /**
          * Hard drive images using the PCJS MBR will have a special signature, and if that MBR also contains
          * a non-zero DiskInfo.MBR.DRIVE0PARMS.CYLS value, then we'll use the geometry stored in the MBR.
          */
@@ -63222,7 +63770,7 @@ class Disk extends Component {
         else {
             let diskFormat = DiskAPI.GEOMETRIES[cbDiskData];
             if (diskFormat) {
-                /*
+                /**
                  * This geometry lookup is primarily intended for diskette images, because there are a wide variety
                  * of diskette formats that can work within a drive's parameters.  So, I used to assert the number
                  * of cylinders match, but the assertion has been relaxed (we require only that the image have no
@@ -63303,7 +63851,7 @@ class Disk extends Component {
             }
         }
         else if (nErrorCode) {
-            /*
+            /**
              * This can happen for innocuous reasons, such as the user switching away too quickly, forcing
              * the request to be cancelled.  And unfortunately, the browser cancels XMLHttpRequest requests
              * BEFORE it notifies any page event handlers, so if the Computer's being powered down, we won't know
@@ -63314,7 +63862,7 @@ class Disk extends Component {
         } else {
             this.printf(MESSAGE.DISK, "doneLoad(\"%s\")\n", this.sDiskPath);
 
-            /*
+            /**
              * If we received binary data instead of JSON, we can use the same buildDisk() function that
              * our FileReader code uses.
              */
@@ -63324,7 +63872,7 @@ class Disk extends Component {
             }
 
             try {
-                /*
+                /**
                  * The following code was a hack to turn on write-protection for a disk image if there was
                  * an initial comment line containing the string "write-protected".  However, since comments
                  * are technically not allowed in JSON, I needed an alternative solution.  So, if the basename
@@ -63345,12 +63893,12 @@ class Disk extends Component {
                         }
                     }
                 }
-                /*
+                let diskData, fileTable, imageInfo;
+                /**
                  * The most likely source of any exception will be here, where we're parsing the disk data.
                  */
-                let diskData, fileTable, imageInfo;
                 if (imageData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
-                    /*
+                    /**
                      * Early server configs reported an error (via the nErrorCode parameter) if a disk URL was invalid,
                      * but more recent server configs now display a somewhat friendlier HTML error page.  The downside,
                      * however, is that the original error has been buried, and we've received "data" that isn't actually
@@ -63361,7 +63909,7 @@ class Disk extends Component {
                      */
                     diskData = ["Missing disk image: " + this.sDiskName];
                 } else {
-                    /*
+                    /**
                      * TODO: IE9 is rather unfriendly and restrictive with regard to how much data it's willing to
                      * eval().  In particular, the 10Mb disk image we use for the Windows 1.01 demo config fails in
                      * IE9 with an "Out of memory" exception.  One work-around would be to chop the data into chunks
@@ -63398,7 +63946,7 @@ class Disk extends Component {
                 else if (diskData.length == 1) {
                     Component.error(diskData[0]);
                 }
-                /*
+                /**
                  * diskData is an array of cylinders, each of which is an array of heads, each of which
                  * is an array of sector objects.  The format does not impose any limitations on number of
                  * cylinders, number of heads, or number of bytes in any of the sector object byte-arrays.
@@ -63425,7 +63973,7 @@ class Disk extends Component {
                         let sSectorsPerTrack = nSectorsPerTrack + " sector" + (nSectorsPerTrack > 1 ? "s" : "") + "/track";
                         this.printf("%s, %s, %s\n", sCylinders, sHeads, sSectorsPerTrack);
                     }
-                    /*
+                    /**
                      * Before the image is usable, we must "normalize" all the sectors.  In the past, this meant
                      * "inflating" them all.  However, that's no longer strictly necessary.  Mainly, it just means
                      * setting LENGTH and DATA properties, so that all the sectors are well-defined.
@@ -63445,7 +63993,7 @@ class Disk extends Component {
                             for (let iSector = 0; iSector < this.nSectors; iSector++) {
                                 sector = diskData[iCylinder][iHead][iSector];
                                 if (!sector) continue;          // non-standard (eg, XDF) disk images may have "unused" (null) sectors
-                                /*
+                                /**
                                  * "Upgrade" all sector object properties.
                                  */
                                 let idSector = sector[Disk.SECTOR.ID];
@@ -63476,7 +64024,7 @@ class Disk extends Component {
                                     else {
                                         let ab = sector['bytes'];
                                         if (ab === undefined || !ab.length) {
-                                            /*
+                                            /**
                                              * If there is neither a 'bytes' nor 'data' array, then our job is simple:
                                              * create an empty 'data' array; it will be filled in with the dword pattern
                                              * as needed later.
@@ -63492,7 +64040,7 @@ class Disk extends Component {
                                             }
                                         }
                                         else {
-                                            /*
+                                            /**
                                              * To keep the conversion code simple, we'll do any necessary pattern-filling first,
                                              * to fully "inflate" the sector, eliminating the possibility of partial dwords and
                                              * saving any code downstream from dealing with byte-size patterns.
@@ -63508,7 +64056,7 @@ class Disk extends Component {
                                 }
                                 else {
                                     if (adw.length < (length >> 2)) {
-                                        /*
+                                        /**
                                          * To minimize breakage and changes, I opted to convert new data arrays to the old format,
                                          * where the data array is just the non-repeating data and dwPattern is the repeating value,
                                          * like so:
@@ -63525,7 +64073,7 @@ class Disk extends Component {
 
                                 this.initSector(sector, iCylinder, iHead, idSector, this.cbSector, dwPattern);
 
-                                /*
+                                /**
                                  * For the disk as a whole, we maintain a checksum of the original unmodified data:
                                  *
                                  *      dwChecksum: summation of all dwords in all non-empty sectors
@@ -63630,37 +64178,55 @@ class Disk extends Component {
     }
 
     /**
+     * addModuleInfo(sector)
+     *
+     * @this {Disk}
+     * @param {Sector} sector
+     */
+    addModuleInfo(sector)
+    {
+        if (SYMBOLS && sector.file) {
+            let module = sector.file.module;
+            if (module) {
+                this.aModules[module.name] = module;
+            }
+        }
+    }
+
+    /**
      * getModuleInfo(sModule, nSegment)
      *
      * If the given module and segment number is found, we return an Array of symbol offsets, indexed by symbol name.
      *
+     * NOTE: Originally, this function simply iterated over the disk's file table, looking for a file with a matching
+     * module name, but not only was that inefficient (since most files on a disk are not modules), it could actually
+     * match the wrong file, since module names are not unique (eg, KRNL286.EXE and KRNL386.EXE are both named "KERNEL").
+     *
+     * By restricting the search to the most recent module that has actually been read from the disk, we should have much
+     * more accurate results.
+     *
      * @this {Disk}
      * @param {string} sModule
      * @param {number} nSegment
-     * @returns {Object}
+     * @returns {Object|null}
      */
     getModuleInfo(sModule, nSegment)
     {
-        let aSymbols = {};
-        if (SYMBOLS && this.aFileTable) {
-            for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
-                let file = this.aFileTable[iFile];
-                /*
-                 * NOTE: Given how we now build the file table based on file indexes in the sector
-                 * data, there could well be "holes" in the file table (ie, entries that were used to
-                 * describe a volume label or some other directory entry that has no associated sectors).
-                 */
-                if (!file || !file.module || file.module['name'] != sModule) continue;
-                let segment = file.module['segments'] && file.module['segments'][nSegment];
-                if (!segment) continue;
-                for (let ord in segment['ordinals']) {
-                    let entry = segment['ordinals'][ord];
-                    /*
-                     * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
-                     */
-                    aSymbols[entry['s']] = entry['o'];
+        let aSymbols = null;
+        if (SYMBOLS) {
+            let module = this.aModules[sModule];
+            if (module) {
+                let segment = module['segments'] && module['segments'][nSegment];
+                if (segment) {
+                    aSymbols = {};
+                    for (let ord in segment['ordinals']) {
+                        let entry = segment['ordinals'][ord];
+                        /**
+                         * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
+                         */
+                        aSymbols[entry['s']] = entry['o'];
+                    }
                 }
-                break;
             }
         }
         return aSymbols;
@@ -63686,7 +64252,7 @@ class Disk extends Component {
             let sSymbolUpper = sSymbol.toUpperCase();
             for (let iFile = 0; iFile < this.aFileTable.length; iFile++) {
                 let file = this.aFileTable[iFile];
-                /*
+                /**
                  * NOTE: Given how we now build the file table based on file indexes in the sector
                  * data, there could well be "holes" in the file table (ie, entries that were used to
                  * describe a volume label or some other directory entry that has no associated sectors).
@@ -63720,7 +64286,7 @@ class Disk extends Component {
         if (iCylinder < this.nCylinders) {
             let nSectorsRemaining = (lba % nSectorsPerCylinder);
             let iHead = (nSectorsRemaining / this.nSectors) | 0;
-            /*
+            /**
              * LBAs are 0-based, but the sector numbers in CHS addressing are 1-based, so add one to iSector
              */
             let iSector = (nSectorsRemaining % this.nSectors) + 1;
@@ -63884,7 +64450,7 @@ class Disk extends Component {
             let abData = JSON.parse(sURLData);
             let offData = 0;
             while (nSectors--) {
-                /*
+                /**
                  * We call seek with fWrite == true to prevent seek() from triggering another call
                  * to readRemoteSectors() and endlessly recursing.  That also forces seek() to:
                  *
@@ -63900,7 +64466,7 @@ class Disk extends Component {
                 }
                 this.fill(sector, abData, offData);
                 offData += sector[Disk.SECTOR.LENGTH];
-                /*
+                /**
                  * We happen to know that when seek() calls readRemoteSectors(), it limits the number of sectors
                  * to the current track, so the only variable we need to advance is iSector.
                  */
@@ -64171,7 +64737,7 @@ class Disk extends Component {
         if (cylinder) {
             let i;
             let track = cylinder[iHead];
-            /*
+            /**
              * The following code allows a single-sided diskette image to be reformatted (ie, "expanded")
              * as a double-sided image, provided the drive has more than one head (see drive.nHeads).
              *
@@ -64184,7 +64750,7 @@ class Disk extends Component {
                 for (i = 0; i < track.length; i++) {
                     track[i] = this.initSector(null, iCylinder, iHead, i + 1, drive.nBytes, 0);
                 }
-                /*
+                /**
                  * TODO: This is more dodginess, because we can't be certain that every cylinder on the disk
                  * will receive the same "expanded" treatment, but functions like getSector() rely on instance
                  * properties (eg, this.nHeads), on the assumption that the disk's geometry is homogeneous.
@@ -64198,7 +64764,7 @@ class Disk extends Component {
                 for (i = 0; i < track.length; i++) {
                     if (track[i] && track[i][Disk.SECTOR.ID] == iSector) {
                         sector = track[i];
-                        /*
+                        /**
                          * When confronted with a series of sectors with the same sector ID (as found, for example, on
                          * the 1984 King's Quest copy-protected diskette), we're supposed to advance to another sector in
                          * the series.  So if the current sector matches the previous sector, we'll peek at the next sector
@@ -64217,20 +64783,20 @@ class Disk extends Component {
                                 }
                             }
                         }
-                        /*
+                        /**
                          * If the sector's pattern is null, then this sector's true contents have not yet
                          * been fetched from the server.
                          */
                         if (sector[Disk.SECTOR.PATTERN] === null) {
                             if (fWrite) {
-                                /*
+                                /**
                                  * Optimization: if the caller has explicitly told us that they're about to WRITE to the
                                  * sector, then we shouldn't need to read it from the server; assume a zero pattern and return.
                                  */
                                 sector[Disk.SECTOR.PATTERN] = 0;
                             } else {
                                 let nSectors = 1;
-                                /*
+                                /**
                                  * We know we need to read at least 1 sector, but let's count the number of trailing sectors
                                  * on the same track that may also be required.
                                  */
@@ -64249,12 +64815,12 @@ class Disk extends Component {
                         break;
                     }
                 }
-                /*
+                /**
                  * The following code allows an 8-sector track to be reformatted (ie, "expanded") as a 9-sector track.
                  */
                 if (!sector && drive.bFormatting && drive.bSector == 9) {
                     sector = track[i] = this.initSector(null, iCylinder, iHead, drive.bSector, drive.nBytes, 0);
-                    /*
+                    /**
                      * TODO: This is more dodginess, because we can't be certain that every track on the disk
                      * will receive the same "expanded" treatment, but functions like getSector() rely on instance
                      * properties (eg, this.nSectors), on the assumption that the disk's geometry is homogeneous.
@@ -64264,6 +64830,7 @@ class Disk extends Component {
             }
         }
         if (done) done(sector, false);
+        this.addModuleInfo(sector);
         return sector;
     }
 
@@ -64284,7 +64851,7 @@ class Disk extends Component {
             off += 4;
         }
         sector[Disk.SECTOR.DATA] = adw;
-        /*
+        /**
          * TODO: Consider taking this opportunity to shrink DATA down by the number of dwords at the end of the buffer that
          * contain the same pattern, and setting dwPattern accordingly.
          */
@@ -64367,7 +64934,7 @@ class Disk extends Component {
                 let idw = iByte >> 2;
                 let nShift = (iByte & 0x3) << 3;
 
-                /*
+                /**
                  * Ensure every byte up to the specified byte is properly initialized.
                  */
                 for (let i = adw.length; i <= idw; i++) adw[i] = dwPattern;
@@ -64398,10 +64965,10 @@ class Disk extends Component {
      */
     encodeAsBase64()
     {
-        /*
+        let s = "", lba = 0, sector;
+        /**
          * Gross, but simple; more importantly, it works -- at least for disks of typical floppy magnitude.
          */
-        let s = "", lba = 0, sector;
         while ((sector = this.getSector(lba++))) {
             for (let off = 0, len = sector[Disk.SECTOR.LENGTH]; off < len; off++) {
                 s += String.fromCharCode(this.getSectorData(sector, off, 1));
@@ -64488,13 +65055,13 @@ class Disk extends Component {
      */
     restore(deltas)
     {
-        /*
+        /**
          * If deltas is undefined, that's not necessarily an error;  the controller may simply be (re)initializing
          * itself (although neither controller should be calling restore() under those conditions anymore).
          */
         let nChanges = 0;
         let sReason = "unsupported restore format";
-        /*
+        /**
          * I originally added a check for diskData here on the assumption that if there was an error loading
          * a disk image, we will have already notified the user, so any additional errors about differing checksums,
          * failure to restore the disk state, etc, would just be annoying.  HOWEVER, HDC will create an empty disk
@@ -64508,14 +65075,14 @@ class Disk extends Component {
             let aDiskInfo = deltas[i++];
 
             if (aDiskInfo && aDiskInfo.length >= 2) {
-                /*
+                /**
                  * Before getting to the checksum, we have to deal with a new situation: restoring an uninitialized
                  * disk image from a complete set of deltas.  And that is only possible if the disk was saved with the
                  * original disk geometry.
                  */
                 if (!this.diskData.length && aDiskInfo.length >= 6) {
                     this.create(DiskAPI.MODE.LOCAL, aDiskInfo[2], aDiskInfo[3], aDiskInfo[4], aDiskInfo[5]);
-                    /*
+                    /**
                      * TODO: Consider setting a flag here that we can check at the end of the restore() function
                      * that indicates we should recalculate dwChecksum, because we currently have an inconsistency
                      * between local disks that are mounted via buildDisk() and the same disks that are "remounted"
@@ -64524,7 +65091,7 @@ class Disk extends Component {
                      * As you can see below, we currently deal with this by simply ignoring null checksums....
                      */
                 }
-                /*
+                /**
                  * v1.01 failed to indicate an error if either one of these failure conditions occurred.  Although maybe
                  * that's just as well, since v1.01 also failed to properly deal with situations where the user mounted
                  * different diskette(s) prior to exiting (hopefully fixed in v1.02).
@@ -64537,7 +65104,7 @@ class Disk extends Component {
                         sReason = "original checksum (" + aDiskInfo[1] + ") differs from current checksum (" + this.dwChecksum + ")";
                         nChanges = -2;
                     }
-                    /*
+                    /**
                      * Checksum is more important than disk path, and for now, I want the flexibility to move disk images.
                      *
                      *  else if (aDiskInfo[0] != this.sDiskPath) {
@@ -64556,7 +65123,7 @@ class Disk extends Component {
                 let iCylinder = mod[m++];
                 let iHead = mod[m++];
                 let iSector = mod[m++];
-                /*
+                /**
                  * Note the buried test for write-protection.  Yes, an invariant condition should be tested
                  * outside the loop, not inside, but (a) it's a trivial test, (b) the test should never fail
                  * because save() should never generate any mods for a write-protected disk, and (c) it
@@ -64577,7 +65144,7 @@ class Disk extends Component {
                 let iModifyLimit = iModify + mods.length;
                 let sector = this.diskData[iCylinder][iHead][iSector];
                 if (!sector) continue;
-                /*
+                /**
                  * Since write() now deals with empty/partial sectors, we no longer need to completely "inflate"
                  * the sector prior to applying modifications.  So let's just make sure that the sector is "inflated"
                  * up to iModify.
@@ -64597,7 +65164,7 @@ class Disk extends Component {
         }
 
         if (nChanges < 0) {
-            /*
+            /**
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
@@ -64605,7 +65172,7 @@ class Disk extends Component {
             }
         } else {
             this.printf(MESSAGE.DEBUG, "restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
-            /*
+            /**
              * Last but not least, rebuild the disk's file table if BACKTRACK or SYMBOLS support is enabled.
              */
             if (BACKTRACK || SYMBOLS) this.buildFileTable();
@@ -64637,7 +65204,7 @@ class Disk extends Component {
         }
 
         s = JSON.stringify(this.diskData, function(key, value) {
-            /*
+            /**
              * If BACKTRACK support is enabled, we have to filter out any 'file' properties that may
              * be attached to the sector objects, lest we risk blowing the stack due to circular references.
              */
@@ -64647,12 +65214,12 @@ class Disk extends Component {
             return value;
         });
 
-        /*
+        /**
          * Eliminate old default properties (eg, 'length' values of 512, empty 'data' arrays, etc).
          */
         s = s.replace(/,"length":512/g, "").replace(/,"data":\[]/g, "");
 
-        /*
+        /**
          * I don't really want to strip quotes from disk image property names, since I would have to put them
          * back again during mount() -- or whenever JSON.parse() is used instead of eval().  But I still remove
          * them temporarily, so that any remaining property names (eg, "iModify", "cModify", "fDirty") can
@@ -64661,14 +65228,14 @@ class Disk extends Component {
          */
         s = s.replace(/"(c|h|s|l|d|sector|length|data|pattern)":/g, "$1:");
 
-        /*
+        /**
          * The next line will remove any other numeric or boolean properties that were added at runtime, although
          * they may have completely different ("minified") names if the code has been compiled.
          */
         s = s.replace(/,"[^"]*":([0-9]+|true|false)/g, "");
         s = s.replace(/(c|h|s|l|d|sector|length|data|pattern):/g, "\"$1\":");
 
-        /*
+        /**
          * Last but not least, insert line breaks after every object definition, to improve human readability
          * (but only if the caller asks for it).
          */
@@ -64741,7 +65308,7 @@ class Disk extends Component {
     }
 }
 
-/*
+/**
  * Sector object "public" properties.
  */
 Disk.SECTOR = {
@@ -64753,7 +65320,7 @@ Disk.SECTOR = {
     FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
     FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
     PATTERN:    'pattern',          // deprecated (no longer used in external images, still used internally)
-    /*
+    /**
      * The following properties occur very infrequently (and usually only in copy-protected or damaged disk images),
      * hence the longer, more meaningful IDs.
      */
@@ -64771,7 +65338,7 @@ Disk.SECTOR = {
  */
 Disk.REMOTE_WRITE_DELAY = 2000;     // 2-second delay
 
-/*
+/**
  * A global disk count, used to form unique Disk component IDs (totally optional; for debugging purposes only)
  */
 Disk.nDisks = 0;
@@ -64818,14 +65385,14 @@ class FileInfo {
             for (let seg in segments) {
                 let segment = segments[seg];
                 if (off >= segment['offStart'] && off <= segment['offEnd']) {
-                    /*
+                    /**
                      * This is the one and only segment we need to check, so we can make off segment-relative now.
                      */
                     off -= segment['offStart'];
-                    /*
+                    let cbNearest = off, entryNearest;
+                    /**
                      * To support fNearest, save the entry where (off - entry[0]) yields the smallest positive result.
                      */
-                    let cbNearest = off, entryNearest;
                     for (let ord in segment['ordinals']) {
                         let entry = segment['ordinals'][ord];
                         let cb = off - entry['o'];
@@ -65192,9 +65759,9 @@ class FDC extends Component {
      *
      * @this {FDC}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -68371,9 +68938,9 @@ class HDC extends Component {
      *
      * @this {HDC}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -71885,7 +72452,7 @@ class DbgLib extends Component {
      *      base: the base to use for most numeric input/output (default is 16)
      *
      * The DbgLib component is a shared component containing a subset of functionality used by
-     * the other CPU-specific Debuggers (eg, DebuggerX86).  Over time, the goal is to factor out as
+     * the other CPU-specific Debuggers (eg, Debuggerx86).  Over time, the goal is to factor out as
      * much common debugging support as possible from those components into this one.
      *
      * @this {DbgLib}
@@ -72390,7 +72957,7 @@ class DbgLib extends Component {
             case ',,':
                 valNew = this.truncate(val1, 18, true) * Math.pow(2, 18) + this.truncate(val2, 18, true);
                 break;
-            case '_':
+         // case '_':
             case '^_':
                 valNew = val1;
                 /*
@@ -72708,6 +73275,8 @@ class DbgLib extends Component {
              * added '!' as an alias for '|' (bitwise inclusive-or), '^-' as an alias for '~' (one's complement operator),
              * and '_' as a shift operator (+/- values specify a left/right shift, and the count is not limited to 32).
              *
+             * 2023 Update: I've removed '_' as a shift operator, because it interferes with symbols that use underscores.
+             *
              * And to avoid conflicts with MACRO-10 syntax, I've replaced the original mod operator ('%') with '^/'.
              *
              * The MACRO-10 binary shifting suffix ('B') is a bit more problematic, since a capital B can also appear
@@ -72728,7 +73297,7 @@ class DbgLib extends Component {
              * to remove spaces entirely, because if an operator-less expression like "A B" was passed in, we would want
              * that to generate an error; if we converted it to "AB", evaluation might inadvertently succeed.
              */
-            let regExp = /({|}|\|\||&&|\||\^!|\^B|\^O|\^D|\^L|\^-|~|\^_|_|&|!=|!|==|>=|>>>|>>|>|<=|<<|<|-|\+|\^\/|\/|\*|,,| )/;
+            let regExp = /({|}|\|\||&&|\||\^!|\^B|\^O|\^D|\^L|\^-|~|\^_|&|!=|!|==|>=|>>>|>>|>|<=|<<|<|-|\+|\^\/|\/|\*|,,| )/;
             if (this.nBase != 16) {
                 sExp = sExp.replace(/(^|[^A-Z0-9$%.])([0-9]+)B/, "$1$2^_").replace(/\s+/g, ' ');
             }
@@ -73151,7 +73720,7 @@ if (DEBUGGER) {
         '^/':   14,     // remainder
         '/':    14,     // division
         '*':    14,     // multiplication
-        '_':    19,     // MACRO-10 shift operator
+    //  '_':    19,     // MACRO-10 shift operator
         '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
         '{':    20,     // open grouped expression (converted from achGroup[0])
         '}':    20      // close grouped expression (converted from achGroup[1])
@@ -73178,7 +73747,7 @@ if (DEBUGGER) {
         '|':    15,     // bitwise OR
         '^!':   15,     // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
         '&':    15,     // bitwise AND
-        '_':    19,     // MACRO-10 shift operator
+    //  '_':    19,     // MACRO-10 shift operator
         '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
         '{':    20,     // open grouped expression (converted from achGroup[0])
         '}':    20      // close grouped expression (converted from achGroup[1])
@@ -73201,10 +73770,13 @@ DbgLib.EVENTS = {
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
  */
 
-/** @typedef {{ off: (number|undefined), sel: (number|undefined), addr: (number|undefined), type: (number|undefined), fData32: (boolean|undefined), fAddr32: (boolean|undefined), fData32Orig: (boolean|undefined), fAddr32Orig: (boolean|undefined), fComplete: (boolean|undefined), fTempBreak: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined), nCPUCycles: (number|undefined), nDebugCycles: (number|undefined), nDebugState: (number|undefined) }} */
-let DbgAddrX86;
+/** @typedef {{ off: (number|undefined), sel: (number|undefined), addr: (number|undefined), type: (number|undefined), fData32: (boolean|undefined), fAddr32: (boolean|undefined), fData32Orig: (boolean|undefined), fAddr32Orig: (boolean|undefined), fTempBreak: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined), nCPUCycles: (number|undefined), nDebugCycles: (number|undefined), nDebugState: (number|undefined) }} */
+let DbgAddrx86;
 
-/*
+/** @typedef {{ vector: (number|undefined), type: (number|undefined), dbgAddr: (DbgAddrx86|undefined) }} */
+let VectorBP;
+
+/**
  * Debugger Breakpoint Tips
  *
  * Here's an example of our powerful new breakpoint command capabilities:
@@ -73236,17 +73808,17 @@ let DbgAddrX86;
  */
 
 /**
- * @class DebuggerX86
+ * @class Debuggerx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class DebuggerX86 extends DbgLib {
+class Debuggerx86 extends DbgLib {
     /**
-     * DebuggerX86(parmsDbg)
+     * Debuggerx86(parmsDbg)
      *
-     * The DebuggerX86 component is an optional component that implements a variety of user commands
+     * The Debuggerx86 component is an optional component that implements a variety of user commands
      * for controlling the CPU, dumping and editing memory, etc.
      *
-     * DebuggerX86 extends the shared Debugger component and supports the following optional (parmsDbg)
+     * Debuggerx86 extends the shared Debugger component and supports the following optional (parmsDbg)
      * properties:
      *
      *      commands: string containing zero or more commands, separated by ';'
@@ -73254,7 +73826,7 @@ class DebuggerX86 extends DbgLib {
      *      messages: string containing zero or more message categories to enable;
      *      multiple categories must be separated by ',' or ';'.  Parsed by messageInit().
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Object} parmsDbg
      */
     constructor(parmsDbg)
@@ -73263,7 +73835,7 @@ class DebuggerX86 extends DbgLib {
 
         if (DEBUGGER) {
 
-            /*
+            /**
              * Default number of hex chars in a register and a linear address (ie, for real-mode);
              * updated by initBus().
              */
@@ -73271,7 +73843,7 @@ class DebuggerX86 extends DbgLib {
             this.cchAddr = 5;
             this.maskAddr = 0xfffff;
 
-            /*
+            /**
              * Most commands that require an address call parseAddr(), which defaults to dbgAddrNextCode
              * or dbgAddrNextData when no address has been given.  doDump() and doUnassemble(), in turn,
              * update dbgAddrNextData and dbgAddrNextCode, respectively, when they're done.
@@ -73289,7 +73861,7 @@ class DebuggerX86 extends DbgLib {
             this.dbgAddrNextData = this.newAddr(0, 0);
             this.dbgAddrAssemble = this.newAddr(0, 0);
 
-            /*
+            /**
              * aSymbolTable is an array of SymbolTable objects, one per ROM or other chunk of address space,
              * where each object contains the following properties:
              *
@@ -73306,7 +73878,7 @@ class DebuggerX86 extends DbgLib {
              */
             this.aSymbolTable = [];
 
-            /*
+            /**
              * clearBreakpoints() initializes the breakpoints lists: aBreakExec is a list of addresses
              * to halt on whenever attempting to execute an instruction at the corresponding address,
              * and aBreakRead and aBreakWrite are lists of addresses to halt on whenever a read or write,
@@ -73320,13 +73892,24 @@ class DebuggerX86 extends DbgLib {
             this.aBreakExec = this.aBreakRead = this.aBreakWrite = [];
             this.clearBreakpoints();
 
-            /*
+            /**
              * The new "bn" command allows you to specify a number of instructions to execute and then stop;
              * "bn 0" disables any outstanding count.
              */
             this.nBreakIns = 0;
 
-            /*
+            /**
+             * A new breakpoint command, "bv", allows you to monitor an interrupt vector.  Vector breakpoints
+             * don't simply monitor "INT" instructions; they also snapshot the vector address when the "bv"
+             * command is issued and monitor execution of that address.  The array is filled with VectorBP objects,
+             * which contain vector and dbgAddr properties.
+             */
+            this.aVectorBP = [];
+            this.vectorHalt = true;             // true to halt on vector breakpoints
+            this.vectorSkip = -1;
+            this.vectorTrace = -1;              // >= 0 whenever a vector has been traced
+
+            /**
              * Execution history is allocated by historyInit() whenever checksEnabled() conditions change.
              * Execution history is updated whenever the CPU calls checkInstruction(), which will happen
              * only when checksEnabled() returns true (eg, whenever one or more breakpoints have been set).
@@ -73334,14 +73917,14 @@ class DebuggerX86 extends DbgLib {
              */
             this.historyInit();
 
-            /*
+            /**
              * Initialize Debugger message and command support
              */
             this.afnDumpers = {};
             this.messageInit(parmsDbg['messages']);
             this.sCommandsInit = parmsDbg['commands'];
 
-            /*
+            /**
              * Make it easier to access Debugger commands from an external REPL, like the WebStorm "live" console
              * window; eg:
              *
@@ -73361,11 +73944,11 @@ class DebuggerX86 extends DbgLib {
     /**
      * initBus(bus, cpu, dbg)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -73376,16 +73959,16 @@ class DebuggerX86 extends DbgLib {
         this.hdc = cmp.getMachineComponent("HDC", false);
         this.mouse = cmp.getMachineComponent("Mouse", false);
 
-        /*
+        /**
          * Re-initialize Debugger message and command support as needed
          */
         let sMessages = cmp.getMachineParm('messages');
         if (sMessages) this.messageInit(sMessages);
         this.sCommandsInit = cmp.getMachineParm('commands') || this.sCommandsInit;
 
-        /*
-         * If CHIPSET or VIDEO messages are enabled at startup, we enable ChipSet or Video diagnostic info in the
-         * instruction history buffer as appropriate.
+        /**
+         * If CHIPSET or VIDEO messages are enabled at startup, we enable ChipSet or Video diagnostic info in
+         * the instruction history buffer as appropriate.
          */
         if (this.messageEnabled(MESSAGE.CHIPSET)) {
             this.chipset = cmp.getMachineComponent("ChipSet");
@@ -73397,17 +73980,17 @@ class DebuggerX86 extends DbgLib {
         this.cchAddr = bus.getWidth() >> 2;
         this.maskAddr = bus.nBusLimit;
 
-        /*
+        /**
          * Allocate a special segment "register", for use whenever a requested selector is not currently loaded
          */
-        this.segDebugger = new SegX86(this.cpu, SegX86.ID.DBG, "DBG");
+        this.segDebugger = new Segx86(this.cpu, Segx86.ID.DBG, "DBG");
 
-        this.aaOpDescs = DebuggerX86.aaOpDescs;
+        this.aaOpDescs = Debuggerx86.aaOpDescs;
         if (this.cpu.model >= X86.MODEL_80186) {
-            this.aaOpDescs = DebuggerX86.aaOpDescs.slice();
-            this.aaOpDescs[0x0F] = DebuggerX86.aOpDescUndefined;
+            this.aaOpDescs = Debuggerx86.aaOpDescs.slice();
+            this.aaOpDescs[0x0F] = Debuggerx86.aOpDescUndefined;
             if (this.cpu.model >= X86.MODEL_80286) {
-                /*
+                /**
                  * TODO: Consider whether the aOpDesc0F table should be split in two: one for 80286-only instructions,
                  * and one for both 80286 and 80386.  For now, the Debugger is not as strict as the CPUx86 is about
                  * the instructions it supports for each type of CPU, in part because an 80286 machine could still be
@@ -73416,7 +73999,7 @@ class DebuggerX86 extends DbgLib {
                  * Obviously I'm not being entirely consistent, since I don't disassemble *any* 0x0F opcodes for any
                  * pre-80286 CPUs.  But at least I'm being up front about it.
                  */
-                this.aaOpDescs[0x0F] = DebuggerX86.aOpDesc0F;
+                this.aaOpDescs[0x0F] = Debuggerx86.aOpDesc0F;
                 if (I386 && this.cpu.model >= X86.MODEL_80386) this.cchReg = 8;
             }
         }
@@ -73427,32 +74010,32 @@ class DebuggerX86 extends DbgLib {
         this.messageDump(MESSAGE.MEM,  function onDumpMem(asArgs) { dbg.dumpMem(asArgs); });
         this.messageDump(MESSAGE.TSS,  function onDumpTSS(asArgs) { dbg.dumpTSS(asArgs); });
 
-        if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED) {
-            this.fWinDbg = null;
-            this.cTrapFaults = 0;
-            this.fIgnoreNextCheckFault = false;
-            this.cpu.addIntNotify(Interrupts.WINCB.VECTOR, this.intWindowsCallBack.bind(this));
-            this.cpu.addIntNotify(Interrupts.WINDBG.VECTOR, this.intWindowsDebugger.bind(this));
+        let fSymbols = cmp.getMachineBoolean('symbols', false);
+        if (DEBUG && fSymbols !== false || fSymbols) {
+            if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED) {
+                this.fWinDbg = null;
+                this.cTrapFaults = 0;
+                this.fIgnoreNextCheckFault = false;
+                this.cpu.addIntNotify(Interrupts.WINCB.VECTOR, this.intWindowsCallBack.bind(this));
+                this.cpu.addIntNotify(Interrupts.WINDBG.VECTOR, this.intWindowsDebugger.bind(this));
+            }
+            if (Interrupts.WINDBGRM.ENABLED) {
+                this.fWinDbgRM = null;
+                this.cpu.addIntNotify(Interrupts.WINDBGRM.VECTOR, this.intWindowsDebuggerRM.bind(this));
+            }
         }
-        if (Interrupts.WINDBGRM.ENABLED) {
-            this.fWinDbgRM = null;
-            this.cpu.addIntNotify(Interrupts.WINDBGRM.VECTOR, this.intWindowsDebuggerRM.bind(this));
-        }
-
         this.setReady();
     }
 
     /**
      * addSegmentInfo(dbgAddr, nSegment, sel, fCode, fPrint)
      *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr (address of module name)
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr (address of module name)
      * @param {number} nSegment (logical segment number)
      * @param {number} sel (current selector)
      * @param {boolean} fCode (true if code segment, false if data segment)
-     * @param {boolean} [fPrint] (false means we're merely monitoring, so let WDEB386 print its own notifications)
+     * @param {boolean|null} [fPrint] (false means we're merely monitoring, so let WDEB386 print its own notifications)
      */
     addSegmentInfo(dbgAddr, nSegment, sel, fCode, fPrint)
     {
@@ -73460,7 +74043,9 @@ class DebuggerX86 extends DbgLib {
         let seg = this.getSegment(sel);
         let len = seg? seg.limit + 1 : 0;
         let sSection = (fCode? "_CODE" : "_DATA") + StrLib.toHex(nSegment, 2);
-        if (fPrint) this.printf(MESSAGE.MEM, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
+        if (fPrint) {
+            this.printf(MESSAGE.DEBUG, "%s %s(%04X)=#%04X len %0X\n", sModule, (fCode? "code" : "data"), nSegment, sel, len);
+        }
         let off = 0;
         let aSymbols = this.findModuleInfo(sModule, nSegment);
         aSymbols[sModule + sSection] = off;
@@ -73470,20 +74055,18 @@ class DebuggerX86 extends DbgLib {
     /**
      * removeSegmentInfo(sel, fPrint)
      *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} sel
-     * @param {boolean} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
+     * @param {boolean|null} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
      */
     removeSegmentInfo(sel, fPrint)
     {
         let sModuleRemoved = this.removeSymbols(null, sel);
         if (fPrint) {
             if (sModuleRemoved) {
-                this.printf(MESSAGE.MEM, "%s #%04X removed\n", sModuleRemoved, sel);
+                this.printf(MESSAGE.DEBUG, "%s #%04X removed\n", sModuleRemoved, sel);
             } else {
-                this.printf(MESSAGE.MEM, "unable to remove module for segment #%04X\n", sel);
+                this.printf(MESSAGE.DEBUG, "unable to remove module for segment #%04X\n", sel);
             }
         }
     }
@@ -73491,21 +74074,10 @@ class DebuggerX86 extends DbgLib {
     /**
      * addSectionInfo(dbgAddr, fCode, fPrint)
      *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
-     *  dbgAddr -> D386_Device_Params structure:
-     *      DD_logical_seg  dw  ?   ; logical segment # from map
-     *      DD_actual_sel   dw  ?   ; actual selector value
-     *      DD_base         dd  ?   ; linear address offset for start of segment
-     *      DD_length       dd  ?   ; actual length of segment
-     *      DD_name         df  ?   ; 16:32 ptr to null terminated module name
-     *      DD_sym_name     df  ?   ; 16:32 ptr to null terminated parent name (eg, "DOS386")
-     *      DD_alias_sel    dw  ?   ; alias selector value (0 = none)
-     *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr (address of D386_Device_Params)
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr (address of D386_Device_Params)
      * @param {boolean} fCode (true if code section, false if data section)
-     * @param {boolean} [fPrint] (false means we're merely monitoring, so let WDEB386 print its own notifications)
+     * @param {boolean|null} [fPrint] (false means we're merely monitoring, so let WDEB386 print its own notifications)
      */
     addSectionInfo(dbgAddr, fCode, fPrint)
     {
@@ -73524,13 +74096,13 @@ class DebuggerX86 extends DbgLib {
             sParent += '!';
         }
         let sSection = (fCode? "_CODE" : "_DATA") + StrLib.toHex(nSegment, 2);
+        /**
+         * Mimics WDEB386 output, except that WDEB386 only displays a linear address, omitting the selector.
+         */
         if (fPrint) {
-            /*
-             * Mimics WDEB386 output, except that WDEB386 only displays a linear address, omitting the selector.
-             */
-            this.printf(MESSAGE.MEM, "%s%s %s(%04X)=%04X:%0X len %0X\n", sParent, sModule, (fCode? "code" : "data"), nSegment, sel, off, len);
+            this.printf(MESSAGE.DEBUG, "%s%s %s(%04X)=%04X:%0X len %0X\n", sParent, sModule, (fCode? "code" : "data"), nSegment, sel, off, len);
         }
-        /*
+        /**
          * TODO: Add support for 32-bit symbols; findModuleInfo() relies on Disk.getModuleInfo(),
          * and the Disk component doesn't yet know how to parse 32-bit executables.
          */
@@ -73542,12 +74114,10 @@ class DebuggerX86 extends DbgLib {
     /**
      * removeSectionInfo(nSegment, dbgAddr, fPrint)
      *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
-     *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} nSegment (logical segment number)
-     * @param {DbgAddrX86} dbgAddr (address of module)
-     * @param {boolean} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
+     * @param {DbgAddrx86} dbgAddr (address of module)
+     * @param {boolean|null} [fPrint] (false means we're merely monitoring OR we don't really care about these notifications)
      */
     removeSectionInfo(nSegment, dbgAddr, fPrint)
     {
@@ -73555,17 +74125,15 @@ class DebuggerX86 extends DbgLib {
         let sModuleRemoved = this.removeSymbols(sModule, nSegment);
         if (fPrint) {
             if (sModuleRemoved) {
-                this.printf(MESSAGE.MEM, "%s %04X removed\n", sModule, nSegment);
+                this.printf(MESSAGE.DEBUG, "%s %04X removed\n", sModule, nSegment);
             } else {
-                this.printf(MESSAGE.MEM, "unable to remove %s for section %04X\n", sModule, nSegment);
+                this.printf(MESSAGE.DEBUG, "unable to remove %s for section %04X\n", sModule, nSegment);
             }
         }
     }
 
     /**
      * intWindowsCallBack()
-     *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
      *
      * This intercepts calls to Windows callback addresses, which use INT 0x30 (aka Transfer Space Faults).
      *
@@ -73588,9 +74156,9 @@ class DebuggerX86 extends DbgLib {
      * loaded (to load it, you must either run WDEB386.EXE or install the VxD via SYSTEM.INI).  Regrettably,
      * Windows 95 assumes that if WDEB386 support is present, then a DEBUG VxD must be present as well.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
-     * @returns {boolean} true to proceed with the INT 0x30 software interrupt
+     * @returns {boolean} (true to proceed with the INT 0x30 software interrupt)
      */
     intWindowsCallBack(addr)
     {
@@ -73605,13 +74173,13 @@ class DebuggerX86 extends DbgLib {
 
             switch(EAX) {
             case Interrupts.WINDBG.LOADSEG32:
-                /*
+                /**
                  *  SI == segment type:
                  *      0x0     code selector
                  *      0x1     data selector
                  *  DX:EBX -> D386_Device_Params structure (see addSectionInfo() for details)
                  */
-                this.addSectionInfo(this.newAddr(cpu.regEBX, DX), !SI, !!this.fWinDbg);
+                this.addSectionInfo(this.newAddr(cpu.regEBX, DX), !SI, this.fWinDbg);
                 break;
             }
         }
@@ -73620,8 +74188,6 @@ class DebuggerX86 extends DbgLib {
 
     /**
      * intWindowsDebugger()
-     *
-     * CONDITIONAL: if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED)
      *
      * This intercepts calls to the Windows Debugger protected-mode interface (INT 0x41).
      *
@@ -73634,9 +74200,9 @@ class DebuggerX86 extends DbgLib {
      * for all INT 0x41 requests, so that all requests are consumed, since there's no guarantee
      * that a valid INT 0x41 handler will exist inside the machine.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
-     * @returns {boolean} true to proceed with the INT 0x41 software interrupt, false to skip
+     * @returns {boolean} (true to proceed with the INT 0x41 software interrupt, false to skip)
      */
     intWindowsDebugger(addr)
     {
@@ -73652,7 +74218,7 @@ class DebuggerX86 extends DbgLib {
 
         if (this.fWinDbg == null) {
             if (AX == Interrupts.WINDBG.IS_LOADED) {
-                /*
+                /**
                  * We're only going to respond to this function if no one else did, in which case,
                  * we'll set fWinDbg to true and handle additional notifications.
                  */
@@ -73660,13 +74226,13 @@ class DebuggerX86 extends DbgLib {
                     return function onInt41Return(nLevel) {
                         if ((cpu.regEAX & 0xffff) != Interrupts.WINDBG.LOADED) {
                             cpu.regEAX = (cpu.regEAX & ~0xffff) | Interrupts.WINDBG.LOADED;
-                            /*
+                            /**
                              * TODO: We need a DEBUGGER message category; using the MEM category for now.
                              */
-                            dbg.printf(MESSAGE.MEM, "INT 0x41 handling enabled\n");
+                            dbg.printf(MESSAGE.DEBUG, "INT 41 handling enabled\n");
                             dbg.fWinDbg = true;
                         } else {
-                            dbg.printf(MESSAGE.MEM, "INT 0x41 monitoring enabled\n");
+                            dbg.printf(MESSAGE.DEBUG, "INT 41 monitoring enabled\n");
                             dbg.fWinDbg = false;
                         }
                     };
@@ -73675,28 +74241,38 @@ class DebuggerX86 extends DbgLib {
             return true;
         }
 
-        /*
+        /**
          * NOTE: If this.fWinDbg is true, then all cases should return false, because we're taking full
          * responsibility for all requests (don't assume there's valid interrupt handler inside the machine).
          */
         switch(AX) {
+        case Interrupts.WINDBG.ISCHAR:              // 0x0003 (called regularly by Win31)
+            break;
+
+        case Interrupts.WINDBG.FORCEDGO16:          // 0x0040 (called regularly by Win31)
+            /**
+             * 2023 Update: It's been a while since I've tried doing a clean install of Windows 95, and this was
+             * firing incessantly.  TODO: Investigate who/what is triggering this later.
+             */
+            break;
+
         case Interrupts.WINDBG.IS_LOADED:           // 0x004F
             if (this.fWinDbg) {
                 cpu.regEAX = (cpu.regEAX & ~0xffff) | Interrupts.WINDBG.LOADED;
-                this.printf(MESSAGE.MEM, "INT 0x41 handling enabled\n");
+                this.printf(MESSAGE.DEBUG, "INT 41 handling enabled\n");
             }
             break;
 
         case Interrupts.WINDBG.LOADSEG:             // 0x0050
-            this.addSegmentInfo(this.newAddr(DI, ES), BX+1, CX, !(SI & 0x1), !!this.fWinDbg);
+            this.addSegmentInfo(this.newAddr(DI, ES), BX+1, CX, !(SI & 0x1), this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.FREESEG:             // 0x0052
-            this.removeSegmentInfo(BX);
+            this.removeSegmentInfo(BX, this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.KRNLVARS:            // 0x005A
-            /*
+            /**
              *  BX = version number of this data (0x3A0)
              *  DX:CX points to:
              *      WORD    hGlobalHeap     ****
@@ -73721,7 +74297,7 @@ class DebuggerX86 extends DbgLib {
         case Interrupts.WINDBG.DELMODULE:           // 0x0065
         case Interrupts.WINDBG.UNKNOWN66:           // 0x0066
         case Interrupts.WINDBG.UNKNOWN67:           // 0x0067
-            /*
+            /**
              * TODO: Figure out what to do with these notifications, if anything
              */
             break;
@@ -73733,16 +74309,16 @@ class DebuggerX86 extends DbgLib {
 
         case Interrupts.WINDBG.CHECKFAULT:          // 0x007F
             if (this.fWinDbg) {
-                /*
+                /**
                  * AX == 0 means handle fault normally, 1 means issue TRAPFAULT
                  */
                 cpu.regEAX = (cpu.regEAX & ~0xffff) | (this.fIgnoreNextCheckFault? 0 : 1);
-                if (DEBUG) this.printf("INT 0x41 CHECKFAULT: fault=%#04x type=%#04x trap=%b\n", BX, CX, !this.fIgnoreNextCheckFault);
+                this.printf(MESSAGE.DEBUG, "INT 41 CHECKFAULT: fault=%04X type=%04X trap=%b\n", BX, CX, !this.fIgnoreNextCheckFault);
             }
             break;
 
         case Interrupts.WINDBG.TRAPFAULT:           // 0x0083
-            /*
+            /**
              * If we responded with AX == 1 to a preceding CHECKFAULT notification, then we should receive the
              * following TRAPFAULT notification; additionally, a TRAPFAULT notification may be issued without
              * any CHECKFAULT warning if the user was presented with a fault dialog containing a "Debug" button,
@@ -73754,7 +74330,7 @@ class DebuggerX86 extends DbgLib {
             if (this.fWinDbg) {
                 dbgAddr = this.newAddr(cpu.regEDX, CX);
                 if (!this.cTrapFaults++) {
-                    this.printf("INT 0x41 TRAPFAULT: fault=%#04x error=%#08x addr=%s\n", BX, cpu.regESI, this.toHexAddr(dbgAddr));
+                    this.printf("INT 41 TRAPFAULT: fault=%04X error=%08X addr=%s\n", BX, cpu.regESI, this.toHexAddr(dbgAddr));
                     this.addBreakpoint(this.aBreakExec, dbgAddr, true);
                     this.historyInit(true);         // temporary breakpoints don't normally trigger history, but in this case, we want it to
                 } else {
@@ -73771,43 +74347,34 @@ class DebuggerX86 extends DbgLib {
             break;
 
         case Interrupts.WINDBG.LOADSEG32:           // 0x0150
-            /*
+            /**
              *  SI == segment type:
              *      0x0     code selector
              *      0x1     data selector
              *  DX:EBX -> D386_Device_Params structure (see addSectionInfo() for details)
              */
-            this.addSectionInfo(this.newAddr(cpu.regEBX, DX), !SI, !!this.fWinDbg);
+            this.addSectionInfo(this.newAddr(cpu.regEBX, DX), !SI, this.fWinDbg);
             break;
 
         case Interrupts.WINDBG.FREESEG32:           // 0x0152
-            /*
+            /**
              *  BX == segment number
              *  DX:EDI -> module name
              */
-            this.removeSectionInfo(BX, this.newAddr(cpu.regEDI, DX));
+            this.removeSectionInfo(BX, this.newAddr(cpu.regEDI, DX), this.fWinDbg);
+            break;
+
+        case Interrupts.WINDBG.FORCEDBP:            // 0xF002
             break;
 
         default:
-            /*
-             * 2023 Update: It's been a while since I've tried doing a clean install of Windows 95,
-             * and this printf() was firing incessantly ("INT 0x41: 0x0040"); I looked up 0x0040 and found this:
-             *
-             *      DS_ForcedGO16	equ    40h	; enter the debugger and perform the equivalent
-			 *                                  ; of a GO command to force a stop at the
-			 *                                  ; specified CS:IP
-			 *                                  ; CX is the desired CS
-		     *                                  ; BX is the desired IP
-             *
-             * I've changed this code from DEBUG to MAXDEBUG for now. TODO: Investigate who/what is triggering this later.
-             */
-            if (MAXDEBUG && this.fWinDbg) {
-                this.printf("INT 0x41: %#04x\n", AX);
+            if (this.fWinDbg) {
+                this.printf(MESSAGE.DEBUG, "INT 41: AX=%04X (unhandled)\n", AX);
             }
             break;
         }
 
-        /*
+        /**
          * Let's try to limit the scope of any "gt" command by resetting this flag after any INT 0x41
          */
         this.fIgnoreNextCheckFault = false;
@@ -73818,13 +74385,11 @@ class DebuggerX86 extends DbgLib {
     /**
      * intWindowsDebuggerRM()
      *
-     * CONDITIONAL: if (Interrupts.WINDBGRM.ENABLED)
-     *
      * This intercepts calls to the Windows Debugger real-mode interface (INT 0x68).
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
-     * @returns {boolean} true to proceed with the INT 0x68 software interrupt, false to skip
+     * @returns {boolean} (true to proceed with the INT 0x68 software interrupt, false to skip)
      */
     intWindowsDebuggerRM(addr)
     {
@@ -73839,24 +74404,27 @@ class DebuggerX86 extends DbgLib {
 
         if (this.fWinDbgRM == null) {
             if (AH == Interrupts.WINDBGRM.IS_LOADED) {
-                /*
+                /**
                  * It looks like IFSHLP.SYS issues a preliminary INT 0x68 before Windows 95 gets rolling,
                  * and the Windows Debugger will not have had a chance to load yet, so we need to ignore
                  * that call.  We detect IFSHLP.SYS by looking for "IFS$" in the caller's code segment,
                  * where the IFSHLP device driver header is located.
                  */
                 if (cpu.getLong((cpu.segCS.sel << 4) + 0x0A) == 0x24534649) {
-                    if (DEBUG) this.printf("Ignoring INT 0x68 from IFSHLP.SYS\n");
+                    this.printf(MESSAGE.DEBUG, "ignoring INT 68 from IFSHLP.SYS\n");
                     return true;
                 }
-                /*
+                /**
                  * Ditto for WDEB386 itself, which presumably wants to avoid loading on top of itself.
+                 * The offset of the "WDEB" signature is at 0x82 in the Windows 3.1 version (3.10.46 1/16/92),
+                 * and at 0x5F in the Windows 95 version.
                  */
-                if (cpu.getLong((cpu.segCS.sel << 4) + 0x5F) == 0x42454457) {
-                    if (DEBUG) this.printf("Ignoring INT 0x68 from WDEB386.EXE\n");
+                if (cpu.getLong((cpu.segCS.sel << 4) + 0x82) == 0x42454457 ||
+                    cpu.getLong((cpu.segCS.sel << 4) + 0x5F) == 0x42454457) {
+                    this.printf(MESSAGE.DEBUG, "ignoring INT 68 from WDEB386.EXE\n");
                     return true;
                 }
-                /*
+                /**
                  * We're only going to respond to this function if no one else did, in which case, we'll set
                  * fWinDbgRM to true and handle additional notifications.
                  */
@@ -73864,14 +74432,14 @@ class DebuggerX86 extends DbgLib {
                     return function onInt68Return(nLevel) {
                         if ((cpu.regEAX & 0xffff) != Interrupts.WINDBGRM.LOADED) {
                             cpu.regEAX = (cpu.regEAX & ~0xffff) | Interrupts.WINDBGRM.LOADED;
-                            dbg.printf(MESSAGE.MEM, "INT 0x68 handling enabled\n");
-                            /*
+                            dbg.printf(MESSAGE.DEBUG, "INT 68 handling enabled\n");
+                            /**
                              * If we turn on INT 0x68 handling, we must also turn on INT 0x41 handling,
                              * because Windows assumes that the latter handler exists whenever the former does.
                              */
                             dbg.fWinDbg = dbg.fWinDbgRM = true;
                         } else {
-                            dbg.printf(MESSAGE.MEM, "INT 0x68 monitoring enabled\n");
+                            dbg.printf(MESSAGE.DEBUG, "INT 68 monitoring enabled\n");
                             dbg.fWinDbgRM = false;
                         }
                     };
@@ -73880,7 +74448,7 @@ class DebuggerX86 extends DbgLib {
             return true;
         }
 
-        /*
+        /**
          * NOTE: If this.fWinDbgRM is true, then all cases should return false, because we're taking full
          * responsibility for all requests (don't assume there's valid interrupt handler inside the machine).
          */
@@ -73893,7 +74461,7 @@ class DebuggerX86 extends DbgLib {
 
         case Interrupts.WINDBGRM.PREP_PMODE:        // 0x44
             if (this.fWinDbgRM) {
-                /*
+                /**
                  * Use our fancy new "call break" mechanism to obtain a special address that will
                  * trap all calls, routing control to the specified function (callWindowsDebuggerPMInit).
                  */
@@ -73906,11 +74474,11 @@ class DebuggerX86 extends DbgLib {
             break;
 
         case Interrupts.WINDBGRM.FREESEG:           // 0x48
-            this.removeSegmentInfo(BX);
+            this.removeSegmentInfo(BX, this.fWinDbg);
             break;
 
         case Interrupts.WINDBGRM.REMOVESEGS:        // 0x4F
-            /*
+            /**
              * TODO: This probably just signals the end of module loading; nothing is required, but we should
              * clean up whatever we can....
              */
@@ -73918,15 +74486,15 @@ class DebuggerX86 extends DbgLib {
 
         case Interrupts.WINDBGRM.LOADSEG:           // 0x50
             if (AL == 0x20) {
-                /*
+                /**
                  *  Real-mode EXE
                  *  CX == paragraph
                  *  ES:DI -> module name
                  */
-                this.addSegmentInfo(this.newAddr(DI, ES), 0, CX, true, !!this.fWinDbgRM);
+                this.addSegmentInfo(this.newAddr(DI, ES), 0, CX, true, this.fWinDbgRM);
             }
             else if (AL < 0x80) {
-                /*
+                /**
                  *  AL == segment type:
                  *      0x00    code selector
                  *      0x01    data selector
@@ -73939,16 +74507,16 @@ class DebuggerX86 extends DbgLib {
                  *  DX == actual selector (if 0x40 or 0x41)
                  *  ES:DI -> module name
                  */
-                this.addSegmentInfo(this.newAddr(DI, ES), BX+1, (AL & 0x40)? DX : CX, !(AL & 0x1), !!this.fWinDbgRM);
+                this.addSegmentInfo(this.newAddr(DI, ES), BX+1, (AL & 0x40)? DX : CX, !(AL & 0x1), this.fWinDbgRM);
             }
             else {
-                /*
+                /**
                  *  AL == segment type:
                  *      0x80    device driver code seg
                  *      0x81    device driver data seg
                  *  ES:DI -> D386_Device_Params structure (see addSectionInfo() for details)
                  */
-                this.addSectionInfo(this.newAddr(DI, ES), !(AL & 0x1), !!this.fWinDbgRM);
+                this.addSectionInfo(this.newAddr(DI, ES), !(AL & 0x1), this.fWinDbgRM);
             }
             if (this.fWinDbgRM) {
                 cpu.regEAX = (cpu.regEAX & ~0xff) | 0x01;
@@ -73956,8 +74524,8 @@ class DebuggerX86 extends DbgLib {
             break;
 
         default:
-            if (DEBUG && this.fWinDbgRM) {
-                this.printf("INT 0x68: %#02x\n", AH);
+            if (this.fWinDbgRM) {
+                this.printf(MESSAGE.DEBUG, "INT 68: AH=%02X (unhandled)\n", AH);
             }
             break;
         }
@@ -73967,8 +74535,6 @@ class DebuggerX86 extends DbgLib {
 
     /**
      * callWindowsDebuggerPMInit()
-     *
-     * CONDITIONAL: if (Interrupts.WINDBGRM.ENABLED)
      *
      * This intercepts calls to the Windows Debugger "PMInit" interface; eg:
      *
@@ -74006,14 +74572,14 @@ class DebuggerX86 extends DbgLib {
      *
      *          7 - enable memory context functions
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @returns {boolean} (must always return false to skip the call, because the call is using a CALLBREAK address)
      */
     callWindowsDebuggerPMInit()
     {
         let cpu = this.cpu;
         let AL = cpu.regEAX & 0xff;
-        if (MAXDEBUG) this.printf("INT 0x68 callback: %#02x\n", AL);
+        if (MAXDEBUG) this.printf("INT 68 callback: AL=%02X\n", AL);
         if (AL == 5) {
             cpu.regECX = cpu.regESI = 0;                // our in-machine debugger footprint is zero
             cpu.regEAX = (cpu.regEAX & ~0xff) | 0x01;   // TODO: Returning a "don't call" response sounds good, but what does it REALLY mean?
@@ -74024,12 +74590,12 @@ class DebuggerX86 extends DbgLib {
     /**
      * setBinding(sHTMLType, sBinding, control, sValue)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea", "canvas")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "debugInput")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @returns {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} (true if binding was successful, false if unrecognized binding request)
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -74039,35 +74605,35 @@ class DebuggerX86 extends DbgLib {
         case "debugInput":
             this.bindings[sBinding] = control;
             this.controlDebug = /** @type {HTMLInputElement} */ (control);
-            /*
+            /**
              * For halted machines, this is fine, but for auto-start machines, it can be annoying.
              *
              *      controlInput.focus();
              */
             control.onkeydown = function onKeyDownDebugInput(event) {
-                let sCmd;
+                let sLine;
                 if (event.keyCode == Keys.KEYCODE.CR) {
-                    sCmd = dbg.controlDebug.value;
+                    sLine = dbg.controlDebug.value;
                     dbg.controlDebug.value = "";
-                    dbg.doCommands(sCmd, true);
+                    dbg.doCommands(sLine, true);
                 }
                 else if (event.keyCode == Keys.KEYCODE.ESC) {
-                    dbg.controlDebug.value = sCmd = "";
+                    dbg.controlDebug.value = sLine = "";
                 }
                 else {
                     if (event.keyCode == Keys.KEYCODE.UP) {
-                        sCmd = dbg.getPrevCommand();
+                        sLine = dbg.getPrevCommand();
                     }
                     else if (event.keyCode == Keys.KEYCODE.DOWN) {
-                        sCmd = dbg.getNextCommand();
+                        sLine = dbg.getNextCommand();
                     }
-                    if (sCmd != null) {
-                        let cch = sCmd.length;
-                        dbg.controlDebug.value = sCmd;
+                    if (sLine != null) {
+                        let cch = sLine.length;
+                        dbg.controlDebug.value = sLine;
                         dbg.controlDebug.setSelectionRange(cch, cch);
                     }
                 }
-                if (sCmd != null && event.preventDefault) event.preventDefault();
+                if (sLine != null && event.preventDefault) event.preventDefault();
             };
             return true;
 
@@ -74115,7 +74681,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * updateFocus()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     updateFocus()
     {
@@ -74125,7 +74691,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * getCPUMode()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @returns {boolean} (true if protected mode, false if not)
      */
     getCPUMode()
@@ -74136,12 +74702,12 @@ class DebuggerX86 extends DbgLib {
     /**
      * getAddressType()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @returns {number}
      */
     getAddressType()
     {
-        return this.getCPUMode()? DebuggerX86.ADDRTYPE.PROT : DebuggerX86.ADDRTYPE.REAL;
+        return this.getCPUMode()? Debuggerx86.ADDRTYPE.PROT : Debuggerx86.ADDRTYPE.REAL;
     }
 
     /**
@@ -74153,10 +74719,10 @@ class DebuggerX86 extends DbgLib {
      * switched the processor from real to protected mode.  Actually loading the selector from the GDT/LDT
      * should be done only as a last resort.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number|undefined} sel
      * @param {number} [type] (defaults to getAddressType())
-     * @returns {SegX86|null} seg
+     * @returns {Segx86|null} (seg)
      */
     getSegment(sel, type)
     {
@@ -74173,14 +74739,14 @@ class DebuggerX86 extends DbgLib {
                 if (sel === this.cpu.getFS()) return this.cpu.segFS;
                 if (sel === this.cpu.getGS()) return this.cpu.segGS;
             }
-            /*
+            /**
              * Even if nSuppressBreaks is set, we'll allow the call in real-mode,
              * because a loadReal() request using segDebugger should generally be safe.
              */
-            if (this.nSuppressBreaks && type == DebuggerX86.ADDRTYPE.PROT || !this.segDebugger) return null;
+            if (this.nSuppressBreaks && type == Debuggerx86.ADDRTYPE.PROT || !this.segDebugger) return null;
         }
         let seg = this.segDebugger;
-        if (type != DebuggerX86.ADDRTYPE.PROT) {
+        if (type != Debuggerx86.ADDRTYPE.PROT) {
             seg.loadReal(sel);
             seg.limit = 0xffff;         // although an ACTUAL real-mode segment load would not modify the limit,
             seg.offMax = 0x10000;       // proper segDebugger operation requires that we update the limit ourselves
@@ -74193,15 +74759,15 @@ class DebuggerX86 extends DbgLib {
     /**
      * getAddr(dbgAddr, fWrite, nb)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86|undefined} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86|undefined} dbgAddr
      * @param {boolean} [fWrite]
      * @param {number} [nb] number of bytes to check (1, 2 or 4); default is 1
-     * @returns {number} is the corresponding linear address, or X86.ADDR_INVALID
+     * @returns {number} (is the corresponding linear address, or X86.ADDR_INVALID)
      */
     getAddr(dbgAddr, fWrite, nb)
     {
-        /*
+        /**
          * Some addresses (eg, breakpoint addresses) save their original linear address in dbgAddr.addr,
          * so we want to use that if it's there, but otherwise, dbgAddr is assumed to be a segmented address
          * whose linear address must always be (re)calculated based on current machine state (mode, active
@@ -74211,7 +74777,7 @@ class DebuggerX86 extends DbgLib {
         if (addr == undefined) {
             addr = X86.ADDR_INVALID;
             if (dbgAddr) {
-                /*
+                /**
                  * TODO: We should try to cache the seg inside dbgAddr, to avoid unnecessary calls to getSegment().
                  */
                 let seg = this.getSegment(dbgAddr.sel, dbgAddr.type);
@@ -74233,8 +74799,8 @@ class DebuggerX86 extends DbgLib {
      *
      * We must route all our memory requests through the CPU now, in case paging is enabled.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [inc]
      * @returns {number}
      */
@@ -74243,10 +74809,10 @@ class DebuggerX86 extends DbgLib {
         let b = 0xff;
         let addr = this.getAddr(dbgAddr, false, 1);
         if (addr !== X86.ADDR_INVALID) {
-            /*
+            /**
              * TODO: Determine what we should do about the fact that we're masking any error from probeAddr()
              */
-            b = this.cpu.probeAddr(addr, 1, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL) | 0;
+            b = this.cpu.probeAddr(addr, 1, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL) | 0;
             if (inc) this.incAddr(dbgAddr, inc);
         }
         return b;
@@ -74255,8 +74821,8 @@ class DebuggerX86 extends DbgLib {
     /**
      * getWord(dbgAddr, fAdvance)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fAdvance]
      * @returns {number}
      */
@@ -74268,8 +74834,8 @@ class DebuggerX86 extends DbgLib {
     /**
      * getShort(dbgAddr, inc)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [inc]
      * @returns {number}
      */
@@ -74278,10 +74844,10 @@ class DebuggerX86 extends DbgLib {
         let w = 0xffff;
         let addr = this.getAddr(dbgAddr, false, 2);
         if (addr !== X86.ADDR_INVALID) {
-            /*
+            /**
              * TODO: Determine what we should do about the fact that we're masking any error from probeAddr()
              */
-            w = this.cpu.probeAddr(addr, 2, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL) | 0;
+            w = this.cpu.probeAddr(addr, 2, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL) | 0;
             if (inc) this.incAddr(dbgAddr, inc);
         }
         return w;
@@ -74290,8 +74856,8 @@ class DebuggerX86 extends DbgLib {
     /**
      * getLong(dbgAddr, inc)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [inc]
      * @returns {number}
      */
@@ -74300,10 +74866,10 @@ class DebuggerX86 extends DbgLib {
         let l = -1;
         let addr = this.getAddr(dbgAddr, false, 4);
         if (addr !== X86.ADDR_INVALID) {
-            /*
+            /**
              * TODO: Determine what we should do about the fact that we're masking any error from probeAddr()
              */
-            l = this.cpu.probeAddr(addr, 4, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL) | 0;
+            l = this.cpu.probeAddr(addr, 4, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL) | 0;
             if (inc) this.incAddr(dbgAddr, inc);
         }
         return l;
@@ -74317,8 +74883,8 @@ class DebuggerX86 extends DbgLib {
      * WARNING: Be careful with the editing commands that use function, because we don't have a safe
      * counterpart to cpu.probeAddr().
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} b
      * @param {number} [inc]
      * @param {boolean} [fNoUpdate] (when doing a large number of setByte() calls, set this to true and call cpu.updateCPU() when you're done)
@@ -74327,7 +74893,7 @@ class DebuggerX86 extends DbgLib {
     {
         let addr = this.getAddr(dbgAddr, true, 1);
         if (addr !== X86.ADDR_INVALID) {
-            if (dbgAddr.type != DebuggerX86.ADDRTYPE.PHYSICAL) {
+            if (dbgAddr.type != Debuggerx86.ADDRTYPE.PHYSICAL) {
                 this.cpu.setByte(addr, b);
             } else {
                 this.bus.setByteDirect(addr, b);
@@ -74345,8 +74911,8 @@ class DebuggerX86 extends DbgLib {
      * WARNING: Be careful with the editing commands that use function, because we don't have a safe
      * counterpart to cpu.probeAddr().
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} w
      * @param {number} [inc]
      * @param {boolean} [fFast]
@@ -74355,7 +74921,7 @@ class DebuggerX86 extends DbgLib {
     {
         let addr = this.getAddr(dbgAddr, true, 2);
         if (addr !== X86.ADDR_INVALID) {
-            if (dbgAddr.type != DebuggerX86.ADDRTYPE.PHYSICAL) {
+            if (dbgAddr.type != Debuggerx86.ADDRTYPE.PHYSICAL) {
                 this.cpu.setShort(addr, w);
             } else {
                 this.bus.setShortDirect(addr, w);
@@ -74368,16 +74934,16 @@ class DebuggerX86 extends DbgLib {
     /**
      * newAddr(off, sel, addr, type, fData32, fAddr32)
      *
-     * Returns a NEW DbgAddrX86 object, initialized with specified values and/or defaults.
+     * Returns a NEW DbgAddrx86 object, initialized with specified values and/or defaults.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} [off] (default is zero)
      * @param {number} [sel] (default is undefined)
      * @param {number} [addr] (default is undefined)
      * @param {number} [type] (default is based on current CPU mode)
      * @param {boolean} [fData32] (default is the current CPU operand size)
      * @param {boolean} [fAddr32] (default is the current CPU address size)
-     * @returns {DbgAddrX86}
+     * @returns {DbgAddrx86}
      */
     newAddr(off, sel, addr, type, fData32, fAddr32)
     {
@@ -74387,8 +74953,8 @@ class DebuggerX86 extends DbgLib {
     /**
      * getAddrPrefix(dbgAddr)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @returns {string}
      */
     getAddrPrefix(dbgAddr)
@@ -74396,17 +74962,17 @@ class DebuggerX86 extends DbgLib {
         let ch;
 
         switch (dbgAddr.type) {
-        case DebuggerX86.ADDRTYPE.REAL:
-        case DebuggerX86.ADDRTYPE.V86:
+        case Debuggerx86.ADDRTYPE.REAL:
+        case Debuggerx86.ADDRTYPE.V86:
             ch = '&';
             break;
-        case DebuggerX86.ADDRTYPE.PROT:
+        case Debuggerx86.ADDRTYPE.PROT:
             ch = '#';
             break;
-        case DebuggerX86.ADDRTYPE.LINEAR:
+        case Debuggerx86.ADDRTYPE.LINEAR:
             ch = '%';
             break;
-        case DebuggerX86.ADDRTYPE.PHYSICAL:
+        case Debuggerx86.ADDRTYPE.PHYSICAL:
             ch = '%%';
             break;
         default:
@@ -74419,17 +74985,17 @@ class DebuggerX86 extends DbgLib {
     /**
      * setAddr(dbgAddr, off, sel, addr, type, fData32, fAddr32)
      *
-     * Updates an EXISTING DbgAddrX86 object, initialized with specified values and/or defaults.
+     * Updates an EXISTING DbgAddrx86 object, initialized with specified values and/or defaults.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [off] (default is zero)
      * @param {number} [sel] (default is undefined)
      * @param {number} [addr] (default is undefined)
      * @param {number} [type] (default is based on current CPU mode)
      * @param {boolean} [fData32] (default is the current CPU operand size)
      * @param {boolean} [fAddr32] (default is the current CPU address size)
-     * @returns {DbgAddrX86}
+     * @returns {DbgAddrx86}
      */
     setAddr(dbgAddr, off, sel, addr, type, fData32, fAddr32)
     {
@@ -74446,31 +75012,31 @@ class DebuggerX86 extends DbgLib {
     /**
      * packAddr(dbgAddr)
      *
-     * Packs a DbgAddrX86 object into an Array suitable for saving in a machine state object.
+     * Packs a DbgAddrx86 object into an Array suitable for saving in a machine state object.
      *
      * NOTE: Element 6 was previously used to maintain an override count; that's no longer needed, hence the 0.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @returns {Array}
      */
     packAddr(dbgAddr)
     {
-        return [dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.fTempBreak, dbgAddr.fData32, dbgAddr.fAddr32, 0, dbgAddr.fComplete];
+        return [dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.fTempBreak, dbgAddr.fData32, dbgAddr.fAddr32, 0];
     }
 
     /**
      * unpackAddr(aAddr)
      *
-     * Unpacks a DbgAddrX86 object from an Array created by packAddr() and restored from a saved machine state.
+     * Unpacks a DbgAddrx86 object from an Array created by packAddr() and restored from a saved machine state.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aAddr
-     * @returns {DbgAddrX86}
+     * @returns {DbgAddrx86}
      */
     unpackAddr(aAddr)
     {
-        return {off: aAddr[0], sel: aAddr[1], addr: aAddr[2], fTempBreak: aAddr[3], fData32: aAddr[4], fAddr32: aAddr[5], fComplete: aAddr[7]};
+        return {off: aAddr[0], sel: aAddr[1], addr: aAddr[2], fTempBreak: aAddr[3], fData32: aAddr[4], fAddr32: aAddr[5]};
     }
 
     /**
@@ -74478,8 +75044,8 @@ class DebuggerX86 extends DbgLib {
      *
      * Used by incAddr() and parseAddr() to ensure that the (updated) dbgAddr offset is within segment bounds.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fUpdate] (true to update segment info)
      * @returns {boolean}
      */
@@ -74530,19 +75096,19 @@ class DebuggerX86 extends DbgLib {
      * Bus.nBusLimit; in the case of X86.ADDR_INVALID, that will generally refer to the top of the physical
      * address space.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sAddr
      * @param {boolean} [fCode] (true if target is code, false if target is data)
      * @param {boolean} [fNoChecks] (true when setting breakpoints that may not be valid now, but will be later)
      * @param {boolean} [fQuiet]
-     * @returns {DbgAddrX86|undefined}
+     * @returns {DbgAddrx86|undefined}
      */
     parseAddr(sAddr, fCode, fNoChecks, fQuiet)
     {
         let dbgAddr;
         let dbgAddrNext = (fCode? this.dbgAddrNextCode : this.dbgAddrNextData);
 
-        let type = fNoChecks? DebuggerX86.ADDRTYPE.NONE : dbgAddrNext.type;
+        let type = fNoChecks? Debuggerx86.ADDRTYPE.NONE : dbgAddrNext.type;
         let off = dbgAddrNext.off, sel = dbgAddrNext.sel, addr = dbgAddrNext.addr;
 
         if (sAddr !== undefined) {
@@ -74554,23 +75120,23 @@ class DebuggerX86 extends DbgLib {
 
             switch(ch) {
             case '&':
-                type = DebuggerX86.ADDRTYPE.REAL;
+                type = Debuggerx86.ADDRTYPE.REAL;
                 break;
             case '#':
-                type = DebuggerX86.ADDRTYPE.PROT;
+                type = Debuggerx86.ADDRTYPE.PROT;
                 break;
             case '%':
-                type = DebuggerX86.ADDRTYPE.LINEAR;
+                type = Debuggerx86.ADDRTYPE.LINEAR;
                 ch = sAddr.charAt(1);
                 if (ch == '%') {
-                    type = DebuggerX86.ADDRTYPE.PHYSICAL;
+                    type = Debuggerx86.ADDRTYPE.PHYSICAL;
                     ch += ch;
                 }
                 off = addr = 0;
                 sel = undefined;        // we still have code that relies on this crutch, instead of the type field
                 break;
             default:
-                if (iColon >= 0) type = DebuggerX86.ADDRTYPE.NONE;
+                if (iColon >= 0) type = Debuggerx86.ADDRTYPE.NONE;
                 ch = '';
                 break;
             }
@@ -74610,18 +75176,18 @@ class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * parseAddrOptions(dbgAddr, sOptions)
+     * parseAddrOptions(dbgAddr, sLine)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
-     * @param {string} [sOptions]
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
+     * @param {string} [sLine]
      */
-    parseAddrOptions(dbgAddr, sOptions)
+    parseAddrOptions(dbgAddr, sLine)
     {
-        if (sOptions) {
-            let a = sOptions.match(/(['"])(.*?)\1/);
+        if (sLine) {
+            let a = sLine.match(/(['"])(.*?)\1/);
             if (a) {
-                dbgAddr.aCmds = this.parseCommand(dbgAddr.sCmd = a[2]);
+                dbgAddr.aCmds = this.parseCommand(dbgAddr.sLine = a[2]);
             }
         }
     }
@@ -74631,7 +75197,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Returns the given string with the given address references replaced with the contents of the address.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} s
      * @param {string} sAddr
      * @returns {string}
@@ -74645,8 +75211,8 @@ class DebuggerX86 extends DbgLib {
     /**
      * incAddr(dbgAddr, inc)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [inc] contains value to increment dbgAddr by (default is 1)
      */
     incAddr(dbgAddr, inc)
@@ -74667,11 +75233,11 @@ class DebuggerX86 extends DbgLib {
     /**
      * toHexOffset(off, sel, fAddr32)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number|undefined} [off]
      * @param {number|undefined} [sel]
      * @param {boolean} [fAddr32] is true for 32-bit ADDRESS size
-     * @returns {string} the hex representation of off (or sel:off)
+     * @returns {string} (the hex representation of off (or sel:off))
      */
     toHexOffset(off, sel, fAddr32)
     {
@@ -74684,17 +75250,17 @@ class DebuggerX86 extends DbgLib {
     /**
      * toHexAddr(dbgAddr)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
-     * @returns {string} the hex representation of the address
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
+     * @returns {string} (the hex representation of the address)
      */
     toHexAddr(dbgAddr)
     {
         let ch = this.getAddrPrefix(dbgAddr);
-        /*
+        /**
          * TODO: Revisit the decision to check sel == undefined; I would rather see these decisions based on type.
          */
-        return (dbgAddr.type >= DebuggerX86.ADDRTYPE.LINEAR || dbgAddr.sel == undefined)? (ch + StrLib.toHex(dbgAddr.addr)) : (ch + this.toHexOffset(dbgAddr.off, dbgAddr.sel, dbgAddr.fAddr32));
+        return (dbgAddr.type >= Debuggerx86.ADDRTYPE.LINEAR || dbgAddr.sel == undefined)? (ch + StrLib.toHex(dbgAddr.addr)) : (ch + this.toHexOffset(dbgAddr.off, dbgAddr.sel, dbgAddr.fAddr32));
     }
 
     /**
@@ -74704,8 +75270,8 @@ class DebuggerX86 extends DbgLib {
      * a '$'-terminated string -- mainly because I'm lazy and didn't feel like writing a separate get() function.
      * Yes, a zero-terminated string containing a '$' will be prematurely terminated -- not a big deal.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {number} [cchMax] (default is 256)
      * @returns {string} (and dbgAddr advanced past the terminating zero)
      */
@@ -74724,7 +75290,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * dumpBackTrack(asArgs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpBackTrack(asArgs)
@@ -74735,11 +75301,11 @@ class DebuggerX86 extends DbgLib {
             let dbgAddr = this.parseAddr(sAddr, true, true, true);
             if (dbgAddr) {
                 let addr = this.getAddr(dbgAddr);
-                if (dbgAddr.type != DebuggerX86.ADDRTYPE.PHYSICAL) {
+                if (dbgAddr.type != Debuggerx86.ADDRTYPE.PHYSICAL) {
                     let pageInfo = this.getPageInfo(addr);
                     if (pageInfo) {
                         dbgAddr.addr = pageInfo.addrPhys;
-                        dbgAddr.type = DebuggerX86.ADDRTYPE.PHYSICAL;
+                        dbgAddr.type = Debuggerx86.ADDRTYPE.PHYSICAL;
                     }
                 }
                 sInfo = this.toHexAddr(dbgAddr) + ": " + (this.bus.getSymbol(addr, true) || sInfo);
@@ -74765,7 +75331,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * dumpBlocks(aBlocks, sAddr, fLinear)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBlocks
      * @param {string} [sAddr] (optional block address)
      * @param {boolean} [fLinear] (true if linear, physical otherwise)
@@ -74790,7 +75356,7 @@ class DebuggerX86 extends DbgLib {
         let typePrev = -1, cPrev = 0;
         while (n--) {
             let block = aBlocks[i];
-            /*
+            /**
              * We need to replicate a portion of what probeAddr() does, which is to "peek" at the
              * underlying physical block of any UNPAGED block.  An UNPAGED block doesn't imply
              * that the page is invalid, but merely that the CPU has not yet been asked to perform
@@ -74801,23 +75367,23 @@ class DebuggerX86 extends DbgLib {
              * "validated" when a CPU operation touches the corresponding page, and they should be only
              * be "invalidated" when the CPU wants to flush the TLB (ie, whenever CR3 is updated).
              */
-            if (block && block.type == MemoryX86.TYPE.UNPAGED) {
+            if (block && block.type == Memoryx86.TYPE.UNPAGED) {
                 block = this.cpu.mapPageBlock(addr, false, true);
             }
             if (block.type == typePrev) {
                 if (!cPrev++) this.printf("...\n");
             } else {
                 typePrev = block.type;
-                let sType = MemoryX86.TYPE.NAMES[typePrev];
-                if (typePrev == MemoryX86.TYPE.PAGED) {
+                let sType = Memoryx86.TYPE.NAMES[typePrev];
+                if (typePrev == Memoryx86.TYPE.PAGED) {
                     block = block.blockPhys;
 
-                    sType += " -> " + MemoryX86.TYPE.NAMES[block.type];
+                    sType += " -> " + Memoryx86.TYPE.NAMES[block.type];
                 }
                 if (block) {
                     this.printf("%08x  %%%08x  %%%%%08x  %#06x  %#06x  %s\n", block.id, i << this.cpu.nBlockShift, block.addr, block.used, block.size, sType);
                 }
-                if (typePrev != MemoryX86.TYPE.NONE && typePrev != MemoryX86.TYPE.UNPAGED) typePrev = -1;
+                if (typePrev != Memoryx86.TYPE.NONE && typePrev != Memoryx86.TYPE.UNPAGED) typePrev = -1;
                 cPrev = 0;
             }
             addr += this.cpu.nBlockSize;
@@ -74830,7 +75396,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Dumps Bus allocations.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs (asArgs[0] is an optional block address)
      */
     dumpBus(asArgs)
@@ -74845,7 +75411,7 @@ class DebuggerX86 extends DbgLib {
      *
      * TODO: Add some code to detect the current version of DOS (if any) and locate the first MCB automatically.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpDOS(asArgs)
@@ -74876,7 +75442,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Dumps an IDT vector entry.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpIDT(asArgs)
@@ -74915,7 +75481,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Dumps page allocations.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs (asArgs[0] is an optional block address)
      */
     dumpMem(asArgs)
@@ -74926,7 +75492,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * getPageEntry(addrPE, lPE, fPTE)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addrPE
      * @param {number} lPE
      * @param {boolean} [fPTE] (true if the entry is a PTE, false if it's a PDE)
@@ -74946,7 +75512,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * getPageInfo(addr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @returns {Object|null}
      */
@@ -74955,7 +75521,7 @@ class DebuggerX86 extends DbgLib {
         let pageInfo = null;
         if (I386 && this.cpu.model >= X86.MODEL_80386) {
             let bus = this.bus;
-            /*
+            /**
              * Here begins code remarkably similar to mapPageBlock() (with fSuppress set).
              */
             pageInfo = {};
@@ -74978,7 +75544,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Dumps page table information about the given linear address.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpPage(asArgs)
@@ -75015,7 +75581,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Dumps a descriptor for the given selector.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpSel(asArgs)
@@ -75033,8 +75599,8 @@ class DebuggerX86 extends DbgLib {
             return;
         }
 
-        let seg = this.getSegment(sel, DebuggerX86.ADDRTYPE.PROT);
-        this.printf("dumpSel(%#06x): %%0*x\n", seg? seg.sel : sel, this.cchAddr, seg? seg.addrDesc : null);
+        let seg = this.getSegment(sel, Debuggerx86.ADDRTYPE.PROT);
+        this.printf("dumpSel(%#06x): %%%0*x\n", seg? seg.sel : sel, this.cchAddr, seg? seg.addrDesc : null);
         if (!seg) return;
 
         let sType;
@@ -75053,7 +75619,7 @@ class DebuggerX86 extends DbgLib {
             if (seg.type & X86.DESC.ACC.TYPE.ACCESSED) sType += ",accessed";
         }
         else {
-            let sysDesc = DebuggerX86.SYSDESCS[seg.type];
+            let sysDesc = Debuggerx86.SYSDESCS[seg.type];
             if (sysDesc) {
                 sType = sysDesc[0];
                 fGate = sysDesc[1];
@@ -75068,7 +75634,7 @@ class DebuggerX86 extends DbgLib {
         } else {
             sDump = "base=" + StrLib.toHex(seg.base, this.cchAddr) + " limit=" + this.getLimitString(seg.limit);
         }
-        /*
+        /**
          * When we dump the EXT word, we mask off the LIMIT1619 and BASE2431 bits, because those have already
          * been incorporated into the limit and base properties of the segment register; all we care about here
          * are whether EXT contains any of the AVAIL (0x10), BIG (0x40) or LIMITPAGES (0x80) bits.
@@ -75083,7 +75649,7 @@ class DebuggerX86 extends DbgLib {
      * supported filter is "call", which filters the history buffer for all CALL and RET instructions
      * from the specified previous point forward.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sPrev] is a (decimal) number of instructions to rewind to (default is 10)
      * @param {string} [sLines] is a (decimal) number of instructions to print (default is, again, 10)
      * @param {string} [sComment] (should be either "history" or "cycles"; default is "history")
@@ -75113,7 +75679,7 @@ class DebuggerX86 extends DbgLib {
 
             iHistory -= nPrev;
             if (iHistory < 0) {
-                /*
+                /**
                  * If the dbgAddr of the last aHistory element contains a valid selector, wrap around.
                  */
                 if (aHistory[aHistory.length - 1].sel == null) {
@@ -75138,7 +75704,7 @@ class DebuggerX86 extends DbgLib {
             let nCyclesPrev = 0;
             let fDumpCycles = (sComment == "cycles");
 
-            /*
+            /**
              * TODO: The following is necessary to prevent dumpHistory() from causing additional (or worse, recursive)
              * faults due to segmented addresses that are no longer valid, but the only alternative is to dramatically
              * increase the amount of memory used to store instruction history (eg, storing copies of all the instruction
@@ -75155,7 +75721,7 @@ class DebuggerX86 extends DbgLib {
                 let dbgAddr = aHistory[iHistory++];
                 if (dbgAddr.sel == null) break;
 
-                /*
+                /**
                  * We must create a new dbgAddr from the address in aHistory, because dbgAddr was
                  * a reference, not a copy, and we don't want getInstruction() modifying the original.
                  */
@@ -75172,8 +75738,12 @@ class DebuggerX86 extends DbgLib {
 
                 let sInstruction = this.getInstruction(dbgAddrNew, sComment, nSequence);
 
-                if (dbgAddr.nDebugCycles != null) {
-                    sInstruction += " (" + dbgAddr.nDebugCycles + "," + StrLib.toHexByte(dbgAddr.nDebugState) + ")";
+                if (dbgAddr.nDebugState != null) {
+                    if (dbgAddr.nDebugCycles != null) {
+                        sInstruction += " (" + dbgAddr.nDebugCycles + "," + StrLib.toHexByte(dbgAddr.nDebugState) + ")";
+                    } else {
+                        sInstruction += " (" + StrLib.toHexByte(dbgAddr.nDebugState >> 16) + ",AX=" + StrLib.toHexWord(dbgAddr.nDebugState & 0xffff) + ")";
+                    }
                 }
 
                 if (!aFilters.length || sInstruction.indexOf(aFilters[0]) >= 0) {
@@ -75188,7 +75758,7 @@ class DebuggerX86 extends DbgLib {
 
             if (sBuffer) this.printf("%s\n", sBuffer);
 
-            /*
+            /**
              * See comments above.
              *
              *      this.nSuppressBreaks--;
@@ -75206,7 +75776,7 @@ class DebuggerX86 extends DbgLib {
      *
      * This dumps a TSS using the given selector.  If none is specified, the current TR is used.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpTSS(asArgs)
@@ -75222,7 +75792,7 @@ class DebuggerX86 extends DbgLib {
                 this.printf("invalid task selector: %s\n", sSel);
                 return;
             }
-            seg = this.getSegment(sel, DebuggerX86.ADDRTYPE.PROT);
+            seg = this.getSegment(sel, Debuggerx86.ADDRTYPE.PROT);
         }
 
         this.printf("dumpTSS(%#06x): %%0*x\n", seg? seg.sel : sel, this.cchAddr, seg? seg.base : null);
@@ -75231,7 +75801,7 @@ class DebuggerX86 extends DbgLib {
         let sDump = "";
         let type = seg.type & ~X86.DESC.ACC.TYPE.TSS_BUSY;
         let cch = (type == X86.DESC.ACC.TYPE.TSS286? 4 : 8);
-        let aTSSFields = (type == X86.DESC.ACC.TYPE.TSS286? DebuggerX86.TSS286 : DebuggerX86.TSS386);
+        let aTSSFields = (type == X86.DESC.ACC.TYPE.TSS286? Debuggerx86.TSS286 : Debuggerx86.TSS386);
         let off, addr, v;
         for (let sField in aTSSFields) {
             off = aTSSFields[sField];
@@ -75241,12 +75811,12 @@ class DebuggerX86 extends DbgLib {
                 v |= this.cpu.probeAddr(addr + 2, 2) << 16;
             }
             if (sDump) sDump += '\n';
-            sDump += StrLib.toHexWord(off) + ' ' + StrLib.pad(sField + ':', 11) + StrLib.toHex(v, cch);
+            sDump += StrLib.toHexWord(off) + ' ' + StrLib.pad(sField + ':', -11) + StrLib.toHex(v, cch);
         }
         if (type == X86.DESC.ACC.TYPE.TSS386) {
             let iPort = 0;
             off = (v >>> 16);
-            /*
+            /**
              * We arbitrarily cut the IOPM dump off at port 0x3FF; we're not currently interested in anything above that.
              */
             while (off < seg.offMax && iPort < 0x3ff) {
@@ -75265,19 +75835,22 @@ class DebuggerX86 extends DbgLib {
      *
      * Since we're not sure what Disk the module was loaded from, we have to check all of them.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sModule
      * @param {number} nSegment
      * @returns {Object}
      */
     findModuleInfo(sModule, nSegment)
     {
-        let aSymbols = [];
+        let aSymbols = {};
         if (SYMBOLS) {
             let component, componentPrev = null;
             while ((component = this.cmp.getMachineComponent("Disk", componentPrev))) {
-                aSymbols = component.getModuleInfo(sModule, nSegment);
-                if (aSymbols.length) break;
+                let a = component.getModuleInfo(sModule, nSegment);
+                if (a) {
+                    aSymbols = a;
+                    break;
+                }
                 componentPrev = component;
             }
         }
@@ -75287,18 +75860,18 @@ class DebuggerX86 extends DbgLib {
     /**
      * messageInit(sEnable)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sEnable contains zero or more message categories to enable, separated by ','
      */
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = MESSAGE.WARNING;
+        this.bitsMessage = MESSAGE.WARNING + (DEBUG? MESSAGE.DEBUG : 0);
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         let aEnable = this.parseCommand(sEnable, false, ',');
         if (aEnable.length) {
-            this.bitsMessage = MESSAGE.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
+            this.bitsMessage -= MESSAGE.WARNING;    // when specific messages are being enabled, WARNING must be explicitly set
             for (let m in MESSAGE.NAMES) {
                 if (UsrLib.indexOf(aEnable, m) >= 0) {
                     this.bitsMessage += MESSAGE.NAMES[m];
@@ -75306,16 +75879,16 @@ class DebuggerX86 extends DbgLib {
                 }
             }
         }
-        this.historyInit();                     // call this just in case MESSAGE.INT was turned on
+        this.historyInit();                         // call this just in case MESSAGE.INT was turned on
     }
 
     /**
      * messageDump(bitMessage, fnDumper)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} bitMessage is one Messages category flag
      * @param {function(Array.<string>)} fnDumper is a function the Debugger can use to dump data for that category
-     * @returns {boolean} true if successfully registered, false if not
+     * @returns {boolean} (true if successfully registered, false if not)
      */
     messageDump(bitMessage, fnDumper)
     {
@@ -75331,20 +75904,20 @@ class DebuggerX86 extends DbgLib {
     /**
      * getRegIndex(sReg, off)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @returns {number} register index, or -1 if not found
+     * @returns {number} (register index, or -1 if not found)
      */
     getRegIndex(sReg, off)
     {
         let i;
         sReg = sReg.toUpperCase();
         if (off == null) {
-            i = UsrLib.indexOf(DebuggerX86.REGS, sReg);
+            i = UsrLib.indexOf(Debuggerx86.REGS, sReg);
         } else {
-            i = UsrLib.indexOf(DebuggerX86.REGS, sReg.substr(off, 3));
-            if (i < 0) i = UsrLib.indexOf(DebuggerX86.REGS, sReg.substr(off, 2));
+            i = UsrLib.indexOf(Debuggerx86.REGS, sReg.substr(off, 3));
+            if (i < 0) i = UsrLib.indexOf(Debuggerx86.REGS, sReg.substr(off, 2));
         }
         return i;
     }
@@ -75352,7 +75925,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * getRegString(iReg)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} iReg
      * @returns {string}
      */
@@ -75362,49 +75935,49 @@ class DebuggerX86 extends DbgLib {
         let n = this.getRegValue(iReg);
         if (n != null) {
             switch(iReg) {
-            case DebuggerX86.REG_AL:
-            case DebuggerX86.REG_CL:
-            case DebuggerX86.REG_DL:
-            case DebuggerX86.REG_BL:
-            case DebuggerX86.REG_AH:
-            case DebuggerX86.REG_CH:
-            case DebuggerX86.REG_DH:
-            case DebuggerX86.REG_BH:
+            case Debuggerx86.REG_AL:
+            case Debuggerx86.REG_CL:
+            case Debuggerx86.REG_DL:
+            case Debuggerx86.REG_BL:
+            case Debuggerx86.REG_AH:
+            case Debuggerx86.REG_CH:
+            case Debuggerx86.REG_DH:
+            case Debuggerx86.REG_BH:
                 cch = 2;
                 break;
-            case DebuggerX86.REG_AX:
-            case DebuggerX86.REG_CX:
-            case DebuggerX86.REG_DX:
-            case DebuggerX86.REG_BX:
-            case DebuggerX86.REG_SP:
-            case DebuggerX86.REG_BP:
-            case DebuggerX86.REG_SI:
-            case DebuggerX86.REG_DI:
-            case DebuggerX86.REG_IP:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_ES:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_CS:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_SS:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_DS:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_FS:
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_GS:
+            case Debuggerx86.REG_AX:
+            case Debuggerx86.REG_CX:
+            case Debuggerx86.REG_DX:
+            case Debuggerx86.REG_BX:
+            case Debuggerx86.REG_SP:
+            case Debuggerx86.REG_BP:
+            case Debuggerx86.REG_SI:
+            case Debuggerx86.REG_DI:
+            case Debuggerx86.REG_IP:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_ES:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_CS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_SS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_DS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_FS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_GS:
                 cch = 4;
                 break;
-            case DebuggerX86.REG_EAX:
-            case DebuggerX86.REG_ECX:
-            case DebuggerX86.REG_EDX:
-            case DebuggerX86.REG_EBX:
-            case DebuggerX86.REG_ESP:
-            case DebuggerX86.REG_EBP:
-            case DebuggerX86.REG_ESI:
-            case DebuggerX86.REG_EDI:
-            case DebuggerX86.REG_CR0:
-            case DebuggerX86.REG_CR1:
-            case DebuggerX86.REG_CR2:
-            case DebuggerX86.REG_CR3:
-            case DebuggerX86.REG_EIP:
+            case Debuggerx86.REG_EAX:
+            case Debuggerx86.REG_ECX:
+            case Debuggerx86.REG_EDX:
+            case Debuggerx86.REG_EBX:
+            case Debuggerx86.REG_ESP:
+            case Debuggerx86.REG_EBP:
+            case Debuggerx86.REG_ESI:
+            case Debuggerx86.REG_EDI:
+            case Debuggerx86.REG_CR0:
+            case Debuggerx86.REG_CR1:
+            case Debuggerx86.REG_CR2:
+            case Debuggerx86.REG_CR3:
+            case Debuggerx86.REG_EIP:
                 cch = 8;
                 break;
-            case DebuggerX86.REG_PS:
+            case Debuggerx86.REG_PS:
                 cch = this.cchReg;
                 break;
             }
@@ -75415,7 +75988,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * getRegValue(iReg)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} iReg
      * @returns {number|undefined}
      */
@@ -75425,123 +75998,123 @@ class DebuggerX86 extends DbgLib {
         if (iReg >= 0) {
             let cpu = this.cpu;
             switch(iReg) {
-            case DebuggerX86.REG_AL:
+            case Debuggerx86.REG_AL:
                 n = cpu.regEAX & 0xff;
                 break;
-            case DebuggerX86.REG_CL:
+            case Debuggerx86.REG_CL:
                 n = cpu.regECX & 0xff;
                 break;
-            case DebuggerX86.REG_DL:
+            case Debuggerx86.REG_DL:
                 n = cpu.regEDX & 0xff;
                 break;
-            case DebuggerX86.REG_BL:
+            case Debuggerx86.REG_BL:
                 n = cpu.regEBX & 0xff;
                 break;
-            case DebuggerX86.REG_AH:
+            case Debuggerx86.REG_AH:
                 n = (cpu.regEAX >> 8) & 0xff;
                 break;
-            case DebuggerX86.REG_CH:
+            case Debuggerx86.REG_CH:
                 n = (cpu.regECX >> 8) & 0xff;
                 break;
-            case DebuggerX86.REG_DH:
+            case Debuggerx86.REG_DH:
                 n = (cpu.regEDX >> 8) & 0xff;
                 break;
-            case DebuggerX86.REG_BH:
+            case Debuggerx86.REG_BH:
                 n = (cpu.regEBX >> 8) & 0xff;
                 break;
-            case DebuggerX86.REG_AX:
+            case Debuggerx86.REG_AX:
                 n = cpu.regEAX & 0xffff;
                 break;
-            case DebuggerX86.REG_CX:
+            case Debuggerx86.REG_CX:
                 n = cpu.regECX & 0xffff;
                 break;
-            case DebuggerX86.REG_DX:
+            case Debuggerx86.REG_DX:
                 n = cpu.regEDX & 0xffff;
                 break;
-            case DebuggerX86.REG_BX:
+            case Debuggerx86.REG_BX:
                 n = cpu.regEBX & 0xffff;
                 break;
-            case DebuggerX86.REG_SP:
+            case Debuggerx86.REG_SP:
                 n = cpu.getSP() & 0xffff;
                 break;
-            case DebuggerX86.REG_BP:
+            case Debuggerx86.REG_BP:
                 n = cpu.regEBP & 0xffff;
                 break;
-            case DebuggerX86.REG_SI:
+            case Debuggerx86.REG_SI:
                 n = cpu.regESI & 0xffff;
                 break;
-            case DebuggerX86.REG_DI:
+            case Debuggerx86.REG_DI:
                 n = cpu.regEDI & 0xffff;
                 break;
-            case DebuggerX86.REG_IP:
+            case Debuggerx86.REG_IP:
                 n = cpu.getIP() & 0xffff;
                 break;
-            case DebuggerX86.REG_PS:
+            case Debuggerx86.REG_PS:
                 n = cpu.getPS();
                 break;
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_ES:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_ES:
                 n = cpu.getES();
                 break;
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_CS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_CS:
                 n = cpu.getCS();
                 break;
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_SS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_SS:
                 n = cpu.getSS();
                 break;
-            case DebuggerX86.REG_SEG + DebuggerX86.REG_DS:
+            case Debuggerx86.REG_SEG + Debuggerx86.REG_DS:
                 n = cpu.getDS();
                 break;
             default:
                 if (this.cpu.model == X86.MODEL_80286) {
-                    if (iReg == DebuggerX86.REG_CR0) {
+                    if (iReg == Debuggerx86.REG_CR0) {
                         n = cpu.regCR0;
                     }
                 }
                 else if (I386 && this.cpu.model >= X86.MODEL_80386) {
                     switch(iReg) {
-                    case DebuggerX86.REG_EAX:
+                    case Debuggerx86.REG_EAX:
                         n = cpu.regEAX;
                         break;
-                    case DebuggerX86.REG_ECX:
+                    case Debuggerx86.REG_ECX:
                         n = cpu.regECX;
                         break;
-                    case DebuggerX86.REG_EDX:
+                    case Debuggerx86.REG_EDX:
                         n = cpu.regEDX;
                         break;
-                    case DebuggerX86.REG_EBX:
+                    case Debuggerx86.REG_EBX:
                         n = cpu.regEBX;
                         break;
-                    case DebuggerX86.REG_ESP:
+                    case Debuggerx86.REG_ESP:
                         n = cpu.getSP();
                         break;
-                    case DebuggerX86.REG_EBP:
+                    case Debuggerx86.REG_EBP:
                         n = cpu.regEBP;
                         break;
-                    case DebuggerX86.REG_ESI:
+                    case Debuggerx86.REG_ESI:
                         n = cpu.regESI;
                         break;
-                    case DebuggerX86.REG_EDI:
+                    case Debuggerx86.REG_EDI:
                         n = cpu.regEDI;
                         break;
-                    case DebuggerX86.REG_CR0:
+                    case Debuggerx86.REG_CR0:
                         n = cpu.regCR0;
                         break;
-                    case DebuggerX86.REG_CR1:
+                    case Debuggerx86.REG_CR1:
                         n = cpu.regCR1;
                         break;
-                    case DebuggerX86.REG_CR2:
+                    case Debuggerx86.REG_CR2:
                         n = cpu.regCR2;
                         break;
-                    case DebuggerX86.REG_CR3:
+                    case Debuggerx86.REG_CR3:
                         n = cpu.regCR3;
                         break;
-                    case DebuggerX86.REG_SEG + DebuggerX86.REG_FS:
+                    case Debuggerx86.REG_SEG + Debuggerx86.REG_FS:
                         n = cpu.getFS();
                         break;
-                    case DebuggerX86.REG_SEG + DebuggerX86.REG_GS:
+                    case Debuggerx86.REG_SEG + Debuggerx86.REG_GS:
                         n = cpu.getGS();
                         break;
-                    case DebuggerX86.REG_EIP:
+                    case Debuggerx86.REG_EIP:
                         n = cpu.getIP();
                         break;
                     }
@@ -75555,19 +76128,19 @@ class DebuggerX86 extends DbgLib {
     /**
      * replaceRegs(s)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} s
      * @returns {string}
      */
     replaceRegs(s)
     {
-        /*
+        /**
          * Replace any references first; this means that register references inside the reference
          * do NOT need to be prefixed with '@'.
          */
         s = this.parseReference(s) || s;
 
-        /*
+        /**
          * Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
          */
         let i = 0;
@@ -75575,11 +76148,11 @@ class DebuggerX86 extends DbgLib {
         while ((i = s.indexOf('@', i)) >= 0) {
             let iReg = this.getRegIndex(s, i + 1);
             if (iReg >= 0) {
-                s = s.substr(0, i) + this.getRegString(iReg) + s.substr(i + 1 + DebuggerX86.REGS[iReg].length);
+                s = s.substr(0, i) + this.getRegString(iReg) + s.substr(i + 1 + Debuggerx86.REGS[iReg].length);
             }
             i++;
         }
-        /*
+        /**
          * Replace every #XX, where XX is a hex byte value, with the corresponding ASCII character (if printable).
          */
         i = 0;
@@ -75594,7 +76167,7 @@ class DebuggerX86 extends DbgLib {
             }
             i++;
         }
-        /*
+        /**
          * Replace every $XXXX:XXXX, where XXXX:XXXX is a segmented address, with the zero-terminated string at that address.
          */
         i = 0;
@@ -75609,7 +76182,7 @@ class DebuggerX86 extends DbgLib {
             }
             i++;
         }
-        /*
+        /**
          * Replace every ^XXXX:XXXX, where XXXX:XXXX is a segmented address, with the FCB filename stored at that address.
          */
         i = 0;
@@ -75631,7 +76204,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * message(sMessage, bitsMessage)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sMessage
      * @param {number} [bitsMessage]
      */
@@ -75657,7 +76230,7 @@ class DebuggerX86 extends DbgLib {
 
         this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
-        /*
+        /**
          * We have no idea what the frequency of print() calls might be; all we know is that they easily
          * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
          * message, to effectively end the current burst and start fresh.
@@ -75671,11 +76244,11 @@ class DebuggerX86 extends DbgLib {
     /**
      * messageInt(nInt, addr, fForce)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} nInt
      * @param {number} addr (LIP after the "INT n" instruction has been fetched but not dispatched)
      * @param {boolean} [fForce] (true if the message should be forced)
-     * @returns {boolean} true if message generated (which in turn triggers addIntReturn() inside checkIntNotify()), false if not
+     * @returns {boolean} (true if message generated (which in turn triggers addIntReturn() inside checkIntNotify()), false if not)
      */
     messageInt(nInt, addr, fForce)
     {
@@ -75683,7 +76256,7 @@ class DebuggerX86 extends DbgLib {
         let fMessage = fForce;
         let nCategory;
 
-        /*
+        /**
          * We currently arrive here only because the CPU has already determined that INT messages are enabled,
          * or because the ChipSet's RTC interrupt handler has already determined that INT messages are enabled.
          *
@@ -75691,21 +76264,21 @@ class DebuggerX86 extends DbgLib {
          * unless the caller has set fForce, we check those additional categories now.
          */
         if (!fMessage) {
-            /*
+            /**
              * Display all software interrupts if CPU messages are enabled (and it's not an "annoying" interrupt);
              * note that in some cases, even "annoying" interrupts can be turned with an extra message category.
              */
-            fMessage = this.messageEnabled(MESSAGE.CPU) && DebuggerX86.INT_ANNOYING.indexOf(nInt) < 0;
+            fMessage = this.messageEnabled(MESSAGE.CPU) && Debuggerx86.INT_ANNOYING.indexOf(nInt) < 0;
             if (!fMessage) {
-                /*
+                /**
                  * Alternatively, display this software interrupt if its corresponding message category is enabled.
                  */
-                nCategory = DebuggerX86.INT_MESSAGES[nInt];
+                nCategory = Debuggerx86.INT_MESSAGES[nInt];
                 if (nCategory) {
                     if (this.messageEnabled(nCategory)) {
                         fMessage = true;
                     } else {
-                        /*
+                        /**
                          * Alternatively, display this FDC interrupt if HDC messages are enabled (since they share
                          * a common software interrupt).  Normally, an HDC BIOS will copy the original DISK (0x13)
                          * vector to the ALT_DISK (0x40) vector, but it's a nuisance having to check different
@@ -75728,7 +76301,7 @@ class DebuggerX86 extends DbgLib {
             let aFuncs = Interrupts.FUNCS[nInt];
             let sFunc = (aFuncs && aFuncs[AH]) || "";
             if (sFunc) sFunc = this.replaceRegs(sFunc);
-            /*
+            /**
              * For display purposes only, rewind addr to the address of the responsible "INT n" instruction;
              * we know it's the two-byte "INT n" instruction because that's the only opcode handler that calls
              * checkIntNotify() at the moment.
@@ -75742,7 +76315,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * messageIntReturn(nInt, nLevel, nCycles)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} nInt
      * @param {number} nLevel
      * @param {number} nCycles
@@ -75756,7 +76329,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * messageIO(component, port, bOut, addrFrom, name, bIn, bitsMessage)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Component} component
      * @param {number} port
      * @param {number} [bOut] if an output operation
@@ -75767,11 +76340,11 @@ class DebuggerX86 extends DbgLib {
      */
     messageIO(component, port, bOut, addrFrom, name, bIn, bitsMessage)
     {
-        /*
+        /**
          * Add MESSAGE.PORT to the set of required message flags.
          */
         bitsMessage = Component.setBits(bitsMessage || 0, MESSAGE.PORT);
-        /*
+        /**
          * We don't want to see "unknown" I/O messages unless WARNING is enabled.
          */
         if (!name) bitsMessage = Component.setBits(bitsMessage, MESSAGE.WARNING);
@@ -75794,7 +76367,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * init()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     init()
     {
@@ -75817,7 +76390,7 @@ class DebuggerX86 extends DbgLib {
      * That is, if the history arrays need to be allocated and haven't already been allocated, then allocate them,
      * and if the arrays are no longer needed, then deallocate them.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fQuiet]
      */
     historyInit(fQuiet)
@@ -75825,7 +76398,7 @@ class DebuggerX86 extends DbgLib {
         let i;
         if (!this.checksEnabled()) {
             if (this.aOpcodeHistory && this.aOpcodeHistory.length && !fQuiet) {
-                this.printf("instruction history buffer freed\n");
+                this.printf("history buffer freed\n");
             }
             this.iOpcodeHistory = 0;
             this.aOpcodeHistory = [];
@@ -75833,9 +76406,9 @@ class DebuggerX86 extends DbgLib {
             return;
         }
         if (!this.aOpcodeHistory || !this.aOpcodeHistory.length) {
-            this.aOpcodeHistory = new Array(DebuggerX86.HISTORY_LIMIT);
+            this.aOpcodeHistory = new Array(Debuggerx86.HISTORY_LIMIT);
             for (i = 0; i < this.aOpcodeHistory.length; i++) {
-                /*
+                /**
                  * Preallocate dummy Addr (Array) objects in every history slot, so that
                  * checkInstruction() doesn't need to call newAddr() on every slot update.
                  */
@@ -75843,7 +76416,7 @@ class DebuggerX86 extends DbgLib {
             }
             this.iOpcodeHistory = 0;
             if (!fQuiet) {
-                this.printf("instruction history buffer allocated\n");
+                this.printf("history buffer allocated\n");
             }
         }
         if (!this.aaOpcodeCounts || !this.aaOpcodeCounts.length) {
@@ -75857,10 +76430,10 @@ class DebuggerX86 extends DbgLib {
     /**
      * startCPU(fUpdateFocus, fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fUpdateFocus]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if run request successful, false if not
+     * @returns {boolean} (true if run request successful, false if not)
      */
     startCPU(fUpdateFocus, fQuiet)
     {
@@ -75873,7 +76446,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * stepCPU(nCycles, fRegs, fUpdateCPU)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} nCycles (0 for one instruction without checking breakpoints)
      * @param {boolean} [fRegs] is true to display registers after step (default is false)
      * @param {boolean} [fUpdateCPU] is false to disable calls to updateCPU() (default is true)
@@ -75887,7 +76460,7 @@ class DebuggerX86 extends DbgLib {
         let fCheck = !nCycles;
         do {
             if (fCheck) {
-                /*
+                /**
                  * When single-stepping, the CPU won't call checkInstruction(), which is good for
                  * avoiding breakpoints, but bad for instruction data collection if checks are enabled.
                  * So we call checkInstruction() ourselves.
@@ -75895,7 +76468,7 @@ class DebuggerX86 extends DbgLib {
                 if (this.checksEnabled()) this.checkInstruction(this.cpu.regLIP, 0);
                 fCheck = false;     // only check once per instruction
             }
-            /*
+            /**
              * For our typically tiny bursts (usually single instructions), mimic what runCPU() does.
              */
             try {
@@ -75917,7 +76490,7 @@ class DebuggerX86 extends DbgLib {
             }
         } while (this.cpu.opFlags & X86.OPFLAG_PREFIXES);
 
-        /*
+        /**
          * Because we called cpu.stepCPU() and not cpu.startCPU(), we must nudge the cpu's update code,
          * and then update our own state.  Normally, the only time fUpdateCPU will be false is when doTrace()
          * is calling us in a loop, in which case it will perform its own updateCPU() when it's done.
@@ -75931,7 +76504,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * stopCPU()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fComplete]
      * @returns {boolean}
      */
@@ -75943,7 +76516,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * updateStatus(fRegs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fRegs] (default is true)
      */
     updateStatus(fRegs)
@@ -75951,7 +76524,7 @@ class DebuggerX86 extends DbgLib {
         if (fRegs === undefined) fRegs = true;
 
         this.dbgAddrNextCode = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
-        /*
+        /**
          * this.nStep used to be a simple boolean, but now it's 0 (or undefined)
          * if inactive, 1 if stepping over an instruction without a register dump, or 2
          * if stepping over an instruction with a register dump.
@@ -75968,7 +76541,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Make sure the CPU is ready (finished initializing), not busy (already running), and not in an error state.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fQuiet]
      * @returns {boolean}
      */
@@ -75984,15 +76557,15 @@ class DebuggerX86 extends DbgLib {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @returns {boolean} true if successful, false if failure
+     * @returns {boolean} (true if successful, false if failure)
      */
     powerUp(data, fRepower)
     {
         if (!fRepower) {
-            /*
+            /**
              * Because Debugger save/restore support is somewhat limited (and didn't always exist),
              * we deviate from the typical save/restore design pattern: instead of reset OR restore,
              * we always reset and then perform a (potentially limited) restore.
@@ -76013,7 +76586,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * powerDown(fSave, fShutdown)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @returns {Object|boolean}
@@ -76029,7 +76602,7 @@ class DebuggerX86 extends DbgLib {
      *
      * This is a notification handler, called by the Computer, to inform us of a reset.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} fQuiet (true only when called from our own powerUp handler)
      */
     reset(fQuiet)
@@ -76048,7 +76621,7 @@ class DebuggerX86 extends DbgLib {
      *
      * This implements (very rudimentary) save support for the Debugger component.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @returns {Object}
      */
     save()
@@ -76068,15 +76641,15 @@ class DebuggerX86 extends DbgLib {
      *
      * This implements (very rudimentary) restore support for the Debugger component.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Object} data
-     * @returns {boolean} true if successful, false if failure
+     * @returns {boolean} (true if successful, false if failure)
      */
     restore(data)
     {
         let i = 0;
         if (data[i]) this.dbgAddrNextCode = this.unpackAddr(data[i++]);
-        /*
+        /**
          * dbgAddrNextData wasn't saved until there were at least 6 elements, hence the check for data[5] instead of data[i]
          */
         if (data[5]) this.dbgAddrNextData = this.unpackAddr(data[i++]);
@@ -76086,7 +76659,7 @@ class DebuggerX86 extends DbgLib {
             if (typeof this.aPrevCmds == "string") this.aPrevCmds = [this.aPrevCmds];
             this.fAssemble = data[i][1];
             let bitsMessage = data[i][2];
-            /*
+            /**
              * We ensure that we're restoring updated Messages flags, by verifying that MESSAGE.BUFFER was set by the save()
              * function; if so, we clear MESSAGE.BUFFER before restoring it (and yes, this means we'll never restore the BUFFER
              * setting, which is fine, and we'll also never restore any old Messages flags, which I doubt anyone will miss).
@@ -76113,7 +76686,7 @@ class DebuggerX86 extends DbgLib {
      *
      * This is a notification handler, called by the Computer, to inform us the CPU has started.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} ms
      * @param {number} nCycles
      */
@@ -76133,7 +76706,7 @@ class DebuggerX86 extends DbgLib {
      *
      * This is a notification handler, called by the Computer, to inform us the CPU has now stopped.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} ms
      * @param {number} nCycles
      */
@@ -76152,7 +76725,7 @@ class DebuggerX86 extends DbgLib {
                     sStopped += " (";
                     if (this.checksEnabled()) {
                         sStopped += this.cOpcodes + " opcodes, ";
-                        /*
+                        /**
                          * $ops displays progress by calculating cOpcodes - cOpcodesStart, so before
                          * zeroing cOpcodes, we should subtract cOpcodes from cOpcodesStart (since we're
                          * effectively subtracting cOpcodes from cOpcodes as well).
@@ -76187,7 +76760,7 @@ class DebuggerX86 extends DbgLib {
                     }
                 } else {
                     if (this.messageEnabled(MESSAGE.HALT)) {
-                        /*
+                        /**
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
                          * message (another helpful tip would be to simply turn off the "halt" message category).
@@ -76214,13 +76787,13 @@ class DebuggerX86 extends DbgLib {
      * "checked" Memory access functions to deal with those breakpoints in the corresponding Memory blocks.  So I've
      * simplified the test below.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fRelease] is true for release criteria only; default is false (any criteria)
-     * @returns {boolean} true if every instruction needs to pass through checkInstruction(), false if not
+     * @returns {boolean} (true if every instruction needs to pass through checkInstruction(), false if not)
      */
     checksEnabled(fRelease)
     {
-        return ((MAXDEBUG && !fRelease)? true : (this.aBreakExec.length > 1 || !!this.nBreakIns || this.messageEnabled(MESSAGE.INT) /* || this.aBreakRead.length > 1 || this.aBreakWrite.length > 1 */));
+        return ((MAXDEBUG && !fRelease)? true : (this.aBreakExec.length > 1 || this.aVectorBP.length > 0 || !!this.nBreakIns || this.messageEnabled(MESSAGE.INT) /* || this.aBreakRead.length > 1 || this.aBreakWrite.length > 1 */));
     }
 
     /**
@@ -76229,10 +76802,10 @@ class DebuggerX86 extends DbgLib {
      * This "check" function is called by the CPU to inform us about the next instruction to be executed,
      * giving us an opportunity to look for "exec" breakpoints and update opcode frequencies and instruction history.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} nState is < 0 if stepping, 0 if starting, or > 0 if running
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkInstruction(addr, nState)
     {
@@ -76245,8 +76818,8 @@ class DebuggerX86 extends DbgLib {
             if (this.checkBreakpoint(addr, 1, this.aBreakExec)) {
                 return true;
             }
-            /*
-             * Halt if running with interrupts disabled and IOPL < CPL, because that's likely an error
+            /**
+             * Halt if running with interrupts disabled and IOPL < CPL, because that's likely an error.
              */
             if (MAXDEBUG && !(cpu.regPS & X86.PS.IF) && cpu.nIOPL < cpu.nCPL) {
                 this.printf("interrupts disabled at IOPL %d and CPL %d\n", cpu.nIOPL, cpu.nCPL);
@@ -76254,56 +76827,81 @@ class DebuggerX86 extends DbgLib {
             }
         }
 
-        /*
+        /**
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
          * well, OK, and a few other things now, like enabling MESSAGE.INT messages.
          */
-        if (nState >= 0 && this.aaOpcodeCounts.length) {
+        if (nState >= 0) {
             this.cOpcodes++;
-            let bOpcode = cpu.probeAddr(addr);
-            if (bOpcode != null) {
-                this.aaOpcodeCounts[bOpcode][1]++;
-                let dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];
-                this.setAddr(dbgAddr, cpu.getIP(), cpu.getCS());
+            if (this.aaOpcodeCounts.length) {
+                let bOpcode = cpu.probeAddr(addr);
+                if (bOpcode != null) {
+                    this.aaOpcodeCounts[bOpcode][1]++;
+                    /**
+                     * If any vector breakpoints are set AND we're not halting on vector breakpoints AND we
+                     * did not just encounter an interrupt vector, then do NOT log the instruction.  Otherwise, log it.
+                     */
+                    let fLog = (!this.aVectorBP.length || this.vectorHalt || this.vectorTrace >= 0);
 
-                /*
-                 * This was added to collapse repeated instructions into a single entry in the history buffer.
-                 */
-                let iPrevHistory = this.iOpcodeHistory? this.iOpcodeHistory - 1 : this.aOpcodeHistory.length - 1;
-                let dbgPrev = this.aOpcodeHistory[iPrevHistory];
-                if (dbgPrev.off == dbgAddr.off && dbgPrev.sel == dbgAddr.sel) {
-                    this.iOpcodeHistory = iPrevHistory;
-                    dbgAddr = dbgPrev;
-                }
+                    // if (cpu.getIP() == 0x3C0F && cpu.getCS() == 0x048F) fLog = true;
 
-                dbgAddr.nCPUCycles = cpu.getCycles();
-                /*
-                 * For debugging timer issues, we can snap cycles remaining in the current burst, and the state of
-                 * TIMER0.
-                 */
-                if (this.chipset) {
-                    let timer = this.chipset.aTimers[0];
-                    dbgAddr.nDebugCycles = cpu.nStepCycles;
-                    dbgAddr.nDebugState = timer.countCurrent[0] | (timer.countCurrent[1] << 8);
-                }
-                /*
-                 * For debugging video timing (eg, retrace) issues, it's helpful to record the state of the Video
-                 * component's countdown timer.  timerVideo will be set to null if there's no Video component or the
-                 * timer doesn't exist, so findTimer() should be called at most once.
-                 */
-                else if (this.video) {
-                    if (this.timerVideo === undefined) {
-                        this.timerVideo = cpu.findTimer(this.video.id);
+                    if (fLog) {
+
+                        let dbgAddr = this.aOpcodeHistory[this.iOpcodeHistory];
+                        this.setAddr(dbgAddr, cpu.getIP(), cpu.getCS());
+
+                        /**
+                         * This was added to collapse repeated instructions into a single entry in the history buffer.
+                         */
+                        let iPrevHistory = this.iOpcodeHistory? this.iOpcodeHistory - 1 : this.aOpcodeHistory.length - 1;
+                        let dbgPrev = this.aOpcodeHistory[iPrevHistory];
+                        if (dbgPrev.off == dbgAddr.off && dbgPrev.sel == dbgAddr.sel) {
+                            this.iOpcodeHistory = iPrevHistory;
+                            dbgAddr = dbgPrev;
+                        }
+
+                        dbgAddr.nCPUCycles = cpu.getCycles();
+
+                        /**
+                         * If vector tracing is enabled and we just encountered a vector, record some additional info.
+                         */
+                        if (this.aVectorBP.length && !this.vectorHalt && this.vectorTrace >= 0) {
+                            dbgAddr.nDebugState = (cpu.regEAX & 0xffff) | (this.vectorTrace << 16);
+                        }
+                        /**
+                         * For debugging timer issues, snap cycles remaining in the current burst and the state of TIMER0.
+                         */
+                        else if (this.chipset) {
+                            let timer = this.chipset.aTimers[0];
+                            dbgAddr.nDebugCycles = cpu.nStepCycles;
+                            dbgAddr.nDebugState = timer.countCurrent[0] | (timer.countCurrent[1] << 8);
+                        }
+                        /**
+                         * For debugging video timing (eg, retrace) issues, it's helpful to record the state of the Video
+                         * component's countdown timer.  timerVideo will be set to null if there's no Video component or the
+                         * timer doesn't exist, so findTimer() should be called at most once.
+                         */
+                        else if (this.video) {
+                            if (this.timerVideo === undefined) {
+                                this.timerVideo = cpu.findTimer(this.video.id);
+                            }
+                            if (this.timerVideo) {
+                                dbgAddr.nDebugCycles = this.timerVideo[1];
+                                dbgAddr.nDebugState = this.video.getRetraceBits(this.video.cardActive);
+                            }
+                        }
+                        else {
+                            delete dbgAddr.nDebugCycles;
+                            delete dbgAddr.nDebugState;
+                        }
+                        if (++this.iOpcodeHistory == this.aOpcodeHistory.length) this.iOpcodeHistory = 0;
                     }
-                    if (this.timerVideo) {
-                        dbgAddr.nDebugCycles = this.timerVideo[1];
-                        dbgAddr.nDebugState = this.video.getRetraceBits(this.video.cardActive);
-                    }
                 }
-                if (++this.iOpcodeHistory == this.aOpcodeHistory.length) this.iOpcodeHistory = 0;
             }
+            this.vectorSkip = this.vectorTrace;
+            this.vectorTrace = -1;
         }
         return false;
     }
@@ -76319,10 +76917,10 @@ class DebuggerX86 extends DbgLib {
      *
      * If we return true, we "trump" the machine's Debug register(s); false allows normal Debug register processing.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkMemoryRead(addr, nb)
     {
@@ -76344,10 +76942,10 @@ class DebuggerX86 extends DbgLib {
      *
      * If we return true, we "trump" the machine's Debug register(s); false allows normal Debug register processing.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkMemoryWrite(addr, nb)
     {
@@ -76363,16 +76961,16 @@ class DebuggerX86 extends DbgLib {
      *
      * This "check" function is called by the Bus component to inform us that port input occurred.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} port
      * @param {number} size
      * @param {number} data
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkPortInput(port, size, data)
     {
-        /*
-         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally
+        /**
+         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally.
          */
         this.printf("break on input from port %#06x: %x\n", port, data);
         this.stopCPU(true);
@@ -76384,16 +76982,16 @@ class DebuggerX86 extends DbgLib {
      *
      * This "check" function is called by the Bus component to inform us that port output occurred.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} port
      * @param {number} size
      * @param {number} data
-     * @returns {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} (true if breakpoint hit, false if not)
      */
     checkPortOutput(port, size, data)
     {
-        /*
-         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally
+        /**
+         * We trust that the Bus component won't call us unless we told it to, so we halt unconditionally.
          */
         this.printf("break on output to port %#06x: %x\n", port, data);
         this.stopCPU(true);
@@ -76403,7 +77001,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * clearBreakpoints()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     clearBreakpoints()
     {
@@ -76412,18 +77010,18 @@ class DebuggerX86 extends DbgLib {
         if (this.aBreakRead !== undefined) {
             for (i = 1; i < this.aBreakRead.length; i++) {
                 dbgAddr = this.aBreakRead[i];
-                this.cpu.removeMemBreak(this.getAddr(dbgAddr), false, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL);
+                this.cpu.removeMemBreak(this.getAddr(dbgAddr), false, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL);
             }
         }
         this.aBreakRead = ["br"];
         if (this.aBreakWrite !== undefined) {
             for (i = 1; i < this.aBreakWrite.length; i++) {
                 dbgAddr = this.aBreakWrite[i];
-                this.cpu.removeMemBreak(this.getAddr(dbgAddr), true, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL);
+                this.cpu.removeMemBreak(this.getAddr(dbgAddr), true, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL);
             }
         }
         this.aBreakWrite = ["bw"];
-        /*
+        /**
          * nSuppressBreaks ensures we can't get into an infinite loop where a breakpoint lookup requires
          * reading a segment descriptor via getSegment(), and that triggers more memory reads, which triggers
          * more breakpoint checks.
@@ -76452,12 +77050,12 @@ class DebuggerX86 extends DbgLib {
      * also consider a more WDEB386-like syntax, where "br" is used to set a variety of access-specific
      * breakpoints, using modifiers like "r1", "r2", "w1", "w2, etc.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBreak
-     * @param {DbgAddrX86} dbgAddr
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fTempBreak]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if breakpoint added, false if already exists
+     * @returns {boolean} (true if breakpoint added, false if already exists)
      */
     addBreakpoint(aBreak, dbgAddr, fTempBreak, fQuiet)
     {
@@ -76465,7 +77063,7 @@ class DebuggerX86 extends DbgLib {
 
         // this.nSuppressBreaks++;
 
-        /*
+        /**
          * Instead of complaining that a breakpoint already exists (as we used to do), we now
          * allow breakpoints to be re-set; this makes it easier to update any commands that may
          * be associated with the breakpoint.
@@ -76479,7 +77077,7 @@ class DebuggerX86 extends DbgLib {
 
         if (aBreak != this.aBreakExec) {
             let addr = this.getAddr(dbgAddr);
-            if (addr === X86.ADDR_INVALID || !this.cpu.addMemBreak(addr, aBreak == this.aBreakWrite, dbgAddr.type == DebuggerX86.ADDRTYPE.PHYSICAL)) {
+            if (addr === X86.ADDR_INVALID || !this.cpu.addMemBreak(addr, aBreak == this.aBreakWrite, dbgAddr.type == Debuggerx86.ADDRTYPE.PHYSICAL)) {
                 this.printf("invalid address: %s\n", this.toHexAddr(dbgAddr));
                 fSuccess = false;
             }
@@ -76488,7 +77086,7 @@ class DebuggerX86 extends DbgLib {
         if (fSuccess) {
             aBreak.push(dbgAddr);
             if (fTempBreak) {
-                /*
+                /**
                  * Force temporary breakpoints to use their linear address, if one is available, by zapping
                  * the selector; this allows us to step over calls or interrupts that change the processor mode.
                  *
@@ -76512,13 +77110,13 @@ class DebuggerX86 extends DbgLib {
     /**
      * findBreakpoint(aBreak, dbgAddr, fRemove, fTempBreak, fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBreak
-     * @param {DbgAddrX86} dbgAddr
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fRemove]
      * @param {boolean} [fTempBreak]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if found, false if not
+     * @returns {boolean} (true if found, false if not)
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTempBreak, fQuiet)
     {
@@ -76536,9 +77134,9 @@ class DebuggerX86 extends DbgLib {
                         }
                         aBreak.splice(i, 1);
                         if (aBreak != this.aBreakExec) {
-                            this.cpu.removeMemBreak(addr, aBreak == this.aBreakWrite, dbgAddrBreak.type == DebuggerX86.ADDRTYPE.PHYSICAL);
+                            this.cpu.removeMemBreak(addr, aBreak == this.aBreakWrite, dbgAddrBreak.type == Debuggerx86.ADDRTYPE.PHYSICAL);
                         }
-                        /*
+                        /**
                          * We'll mirror the logic in addBreakpoint() and leave the history buffer alone if this
                          * was a temporary breakpoint.
                          */
@@ -76558,9 +77156,9 @@ class DebuggerX86 extends DbgLib {
     /**
      * listBreakpoints(aBreak)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBreak
-     * @returns {number} of breakpoints listed, 0 if none
+     * @returns {number} (of breakpoints listed, 0 if none)
      */
     listBreakpoints(aBreak)
     {
@@ -76575,7 +77173,7 @@ class DebuggerX86 extends DbgLib {
      *
      * TODO: We may need to start printing linear addresses also (if any), because segmented address can be ambiguous.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBreak
      * @param {number} i
      * @param {string} [sAction]
@@ -76589,7 +77187,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * restoreBreakpoints(aBreak, aDbgAddr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array} aBreak
      * @param {Array} aDbgAddr
      */
@@ -76605,8 +77203,8 @@ class DebuggerX86 extends DbgLib {
     /**
      * setTempBreakpoint(dbgAddr)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr of new temp breakpoint
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr of new temp breakpoint
      */
     setTempBreakpoint(dbgAddr)
     {
@@ -76616,7 +77214,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * clearTempBreakpoint(addr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number|undefined} [addr] clear all temp breakpoints if no address specified
      */
     clearTempBreakpoint(addr)
@@ -76638,13 +77236,13 @@ class DebuggerX86 extends DbgLib {
     /**
      * mapBreakpoint(addr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @returns {number}
      */
     mapBreakpoint(addr)
     {
-        /*
+        /**
          * Map addresses in the top 64Kb at the top of the address space (assuming either a 16Mb or 4Gb
          * address space) to the top of the 1Mb range.
          *
@@ -76662,16 +77260,16 @@ class DebuggerX86 extends DbgLib {
     /**
      * checkBreakpoint(addr, nb, aBreak, fTempBreak)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} addr
      * @param {number} nb (# of bytes)
      * @param {Array} aBreak
      * @param {boolean} [fTempBreak]
-     * @returns {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} (true if breakpoint has been hit, false if not)
      */
     checkBreakpoint(addr, nb, aBreak, fTempBreak)
     {
-        /*
+        /**
          * Time to check for execution breakpoints; note that this should be done BEFORE updating frequency
          * or history data (see checkInstruction), since we might not actually execute the current instruction.
          */
@@ -76681,7 +77279,7 @@ class DebuggerX86 extends DbgLib {
 
             addr = this.mapBreakpoint(addr);
 
-            /*
+            /**
              * As discussed in opINT3(), I decided to check for INT3 instructions here: we'll tell the CPU to
              * stop on INT3 whenever both the INT and HALT message bits are set; a simple "g" command allows you
              * to continue.
@@ -76692,20 +77290,24 @@ class DebuggerX86 extends DbgLib {
                 }
             }
 
+            if (!fBreak && this.checkVectorAddr(addr)) {
+                fBreak = true;
+            }
+
             for (let i = 1; !fBreak && i < aBreak.length; i++) {
 
                 let dbgAddrBreak = aBreak[i];
 
                 if (fTempBreak && !dbgAddrBreak.fTempBreak) continue;
 
-                /*
+                /**
                  * We need to zap the linear address field of the breakpoint address before
                  * calling getAddr(), to force it to recalculate the linear address every time,
                  * unless this is a breakpoint on a linear address (as indicated by a null sel).
                  */
                 if (dbgAddrBreak.sel != null) dbgAddrBreak.addr = undefined;
 
-                /*
+                /**
                  * We used to calculate the linear address of the breakpoint at the time the
                  * breakpoint was added, so that a breakpoint set in one mode (eg, in real-mode)
                  * would still work as intended if the mode changed later (eg, to protected-mode).
@@ -76723,10 +77325,18 @@ class DebuggerX86 extends DbgLib {
                         fBreak = true;
                         if (dbgAddrBreak.fTempBreak) {
                             this.findBreakpoint(aBreak, dbgAddrBreak, true, true);
+                            /**
+                             * If nDebugState is set, then we're dealing with a VxD service breakpoint.
+                             */
+                            if (dbgAddrBreak.nDebugState) {
+                                this.incAddr(dbgAddrBreak, 2);
+                                this.addVxDSymbol(dbgAddrBreak.nDebugState, dbgAddrBreak, this.fWinDbg);
+                                fBreak = false;
+                            }
                             fTempBreak = true;
                         }
                         if ((a = dbgAddrBreak.aCmds)) {
-                            /*
+                            /**
                              * When one or more commands are attached to a breakpoint, we don't halt by default.
                              * Instead, we set fBreak to true only if, at the completion of all the commands, the
                              * CPU is halted; in other words, you should include "h" as one of the breakpoint commands
@@ -76752,7 +77362,7 @@ class DebuggerX86 extends DbgLib {
                                         fBreak = true;
                                         break;
                                     }
-                                    /*
+                                    /**
                                      * If we're still here, we'll execute the "else" command (which is just a no-op),
                                      * followed by any remaining commands.
                                      */
@@ -76773,10 +77383,169 @@ class DebuggerX86 extends DbgLib {
     }
 
     /**
+     * addVectorBP(vector, chType)
+     *
+     * @this {Debuggerx86}
+     * @param {number} vector
+     * @param {string} chType
+     * @returns {boolean} (true if breakpoint added, false if error)
+     */
+    addVectorBP(vector, chType)
+    {
+        let i = this.findVectorBP(vector);
+        if (i < 0) {
+            let dbgAddr;
+            let type = (chType == '#' || !chType && this.getCPUMode())? Debuggerx86.ADDRTYPE.PROT : Debuggerx86.ADDRTYPE.REAL;
+            if (type != Debuggerx86.ADDRTYPE.PROT) {
+                let addr = this.cpu.getLong(vector << 2);
+                let off = addr & 0xffff;
+                let sel = (addr >> 16) & 0xffff;
+                addr = (sel << 4) + off;
+                dbgAddr = this.newAddr(off, sel, addr, type);
+            }
+            this.aVectorBP.push({vector, type, dbgAddr});
+            this.listVectorBP(vector, true);
+            this.historyInit();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * checkVectorBP(vector, nBytes, fProt)
+     *
+     * @this {Debuggerx86}
+     * @param {number} vector
+     * @param {number} nBytes
+     * @param {boolean} fProt (true if protected-mode interrupt)
+     * @returns {boolean}
+     */
+    checkVectorBP(vector, nBytes, fProt)
+    {
+        if (this.vectorSkip < 0) {
+            this.vectorTrace = vector;
+            if (vector == Interrupts.VxD.VECTOR && fProt && this.fWinDbg !== undefined) {
+                let dbgAddr = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
+                /**
+                 * Since nDebugState is normally only used by addresses stored in the history buffer
+                 * (ie, not for breakpoint addresses), we are now going to make an exception to that rule
+                 * and store the VxD service ID in nDebugState.  checkBreakpoint() will detect this and
+                 * call addVxDSymbol() accordingly, since the service call should be "fixed up" when the
+                 * the breakpoint is hit (ie, when the service call is re-executed).
+                 */
+                dbgAddr.nDebugState = this.getLong(dbgAddr);
+                this.incAddr(dbgAddr, -2);
+                this.setTempBreakpoint(dbgAddr);
+            }
+            if (this.vectorHalt) {
+                let i = this.findVectorBP(vector);
+                if (i >= 0) {
+                    let vbp = this.aVectorBP[i];
+                    if (fProt == (vbp.type == Debuggerx86.ADDRTYPE.PROT)) {
+                        this.printf("break on vector %02X\n", vector);
+                        this.stopCPU();
+                        if (nBytes) {
+                            this.cpu.setIP(this.cpu.getIP() - nBytes);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * checkVectorAddr(addr)
+     *
+     * @this {Debuggerx86}
+     * @param {number} addr
+     * @returns {boolean}
+     */
+    checkVectorAddr(addr)
+    {
+        if (this.vectorSkip < 0) {
+            for (let i = 0; i < this.aVectorBP.length; i++) {
+                let dbgAddr = this.aVectorBP[i].dbgAddr;
+                if (dbgAddr && dbgAddr.addr == addr) {
+                    this.vectorTrace = this.aVectorBP[i].vector;
+                    if (this.vectorHalt) {
+                        this.printf("break on vector %02X\n", this.vectorTrace);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * findVectorBP(vector)
+     *
+     * @this {Debuggerx86}
+     * @param {number} vector
+     * @returns {number}
+     */
+    findVectorBP(vector)
+    {
+        for (let i = 0; i < this.aVectorBP.length; i++) {
+            if (this.aVectorBP[i].vector == vector) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * listVectorBP(vector, enabled)
+     *
+     * @this {Debuggerx86}
+     * @param {number} [vector]
+     * @param {boolean} [enabled]
+     */
+    listVectorBP(vector, enabled = true)
+    {
+        let i;
+        for (i = 0; i < this.aVectorBP.length; i++) {
+            let vbp = this.aVectorBP[i];
+            if (vector == undefined || vbp.vector == vector) {
+                let s = (enabled? "enabled" : "disabled");
+                if (vbp.type == Debuggerx86.ADDRTYPE.PROT) {
+                    this.printf("vector #%02X %s\n", vbp.vector, s);
+                } else {
+                    this.printf("vector &%02X %s (%04X:%04X)\n", vbp.vector, s, vbp.dbgAddr.sel, vbp.dbgAddr.off);
+                }
+            }
+        }
+        if (!i) {
+            this.printf("no vector breakpoints\n");
+        }
+    }
+
+    /**
+     * removeVectorBP(vector)
+     *
+     * @this {Debuggerx86}
+     * @param {number} vector
+     * @returns {boolean} (true if breakpoint removed, false if error)
+     */
+    removeVectorBP(vector)
+    {
+        let i = this.findVectorBP(vector);
+        if (i >= 0) {
+            this.listVectorBP(vector, false);
+            this.aVectorBP.splice(i, 1);
+            this.historyInit();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * getInstruction(dbgAddr, sComment, nSequence)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {string} [sComment] is an associated comment
      * @param {number} [nSequence] is an associated sequence number, -1 or undefined if none
      * @returns {string} (and dbgAddr is updated to the next instruction)
@@ -76784,10 +77553,10 @@ class DebuggerX86 extends DbgLib {
     getInstruction(dbgAddr, sComment, nSequence)
     {
         let bModRM = -1;
-        let asOpcodes = DebuggerX86.INS_NAMES;
+        let asOpcodes = Debuggerx86.INS_NAMES;
         let dbgAddrIns = this.newAddr(dbgAddr.off, dbgAddr.sel, dbgAddr.addr, dbgAddr.type);
 
-        /*
+        /**
          * Incorporate segment, operand size, and address size overrides into the current instruction.
          *
          * Note that redundant prefixes must be ignored;  see opOS() and opAS() for details.  We limit the
@@ -76802,14 +77571,14 @@ class DebuggerX86 extends DbgLib {
             aOpDesc = this.aaOpDescs[bOpcode];
             iIns = aOpDesc[0];
             let type = aOpDesc[1];
-            if (type == DebuggerX86.TYPE_PREFIX) {
+            if (type == Debuggerx86.TYPE_PREFIX) {
                 if (bOpcode >= X86.OPCODE.LOCK) {
                     sPrefix = asOpcodes[iIns];
                 } else {
                     sSegment = asOpcodes[iIns]; // eg, ES:, CS:, SS:, DS:
                 }
             }
-            else if (type == (DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386)) {
+            else if (type == (Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386)) {
                 if (this.cpu.model < X86.MODEL_80386) break;
                 if (bOpcode == X86.OPCODE.OS) {
                     if (!fDataPrefix) {
@@ -76829,18 +77598,18 @@ class DebuggerX86 extends DbgLib {
             }
         } while (cMaxOverrides--);
 
-        if (iIns == DebuggerX86.INS.OP0F) {
+        if (iIns == Debuggerx86.INS.OP0F) {
             let b = this.getByte(dbgAddr, 1);
-            aOpDesc = DebuggerX86.aaOp0FDescs[b] || DebuggerX86.aOpDescUndefined;
+            aOpDesc = Debuggerx86.aaOp0FDescs[b] || Debuggerx86.aOpDescUndefined;
             bOpcode |= (b << 8);
             iIns = aOpDesc[0];
         }
 
-        if (iIns == DebuggerX86.INS.ESC) {
+        if (iIns == Debuggerx86.INS.ESC) {
             bModRM = this.getByte(dbgAddr, 1);
             let aOpFPUDesc = this.getFPUInstruction(bOpcode, bModRM);
             if (aOpFPUDesc) {
-                asOpcodes = DebuggerX86.FINS_NAMES;
+                asOpcodes = Debuggerx86.FINS_NAMES;
                 aOpDesc = aOpFPUDesc;
                 iIns = aOpDesc[0];
             }
@@ -76848,7 +77617,7 @@ class DebuggerX86 extends DbgLib {
 
         if (iIns >= asOpcodes.length) {
             bModRM = this.getByte(dbgAddr, 1);
-            aOpDesc = DebuggerX86.aaGrpDescs[iIns - asOpcodes.length][(bModRM >> 3) & 0x7];
+            aOpDesc = Debuggerx86.aaGrpDescs[iIns - asOpcodes.length][(bModRM >> 3) & 0x7];
             iIns = aOpDesc[0];
         }
 
@@ -76857,13 +77626,13 @@ class DebuggerX86 extends DbgLib {
         let sOperands = "";
 
         if (dbgAddr.fData32) {
-            if (iIns == DebuggerX86.INS.CBW) {
+            if (iIns == Debuggerx86.INS.CBW) {
                 sOpcode = "CWDE";       // sign-extend AX into EAX, instead of AL into AX
             }
-            else if (iIns == DebuggerX86.INS.CWD) {
+            else if (iIns == Debuggerx86.INS.CWD) {
                 sOpcode = "CDQ";        // sign-extend EAX into EDX:EAX, instead of AX into DX:AX
             }
-            else if (iIns >= DebuggerX86.INS.POPA && iIns <= DebuggerX86.INS.PUSHA) {
+            else if (iIns >= Debuggerx86.INS.POPA && iIns <= Debuggerx86.INS.PUSHA) {
                 sOpcode += 'D';         // transform POPA/POPF/PUSHF/PUSHA to POPAD/POPFD/PUSHFD/PUSHAD as appropriate
             }
         }
@@ -76874,8 +77643,6 @@ class DebuggerX86 extends DbgLib {
         }
 
         let typeCPU = -1;
-        let fComplete = true;
-
         for (let iOperand = 1; iOperand <= cOperands; iOperand++) {
 
             let disp, off, cch;
@@ -76883,13 +77650,13 @@ class DebuggerX86 extends DbgLib {
             let type = aOpDesc[iOperand];
             if (type === undefined) continue;
 
-            if (typeCPU < 0) typeCPU = type >> DebuggerX86.TYPE_CPU_SHIFT;
+            if (typeCPU < 0) typeCPU = type >> Debuggerx86.TYPE_CPU_SHIFT;
 
-            if (iIns == DebuggerX86.INS.LOADALL) {
-                if (typeCPU == DebuggerX86.CPU_80286) {
+            if (iIns == Debuggerx86.INS.LOADALL) {
+                if (typeCPU == Debuggerx86.CPU_80286) {
                     sOperands = "[%800]";
-                } else if (typeCPU == DebuggerX86.CPU_80386) {
-                    /*
+                } else if (typeCPU == Debuggerx86.CPU_80386) {
+                    /**
                      * NOTE: The 80386 LOADALL documentation, such as it is, doesn't suggest that segment
                      * overrides are allowed, but then again, it doesn't say they're not; we'll disassemble
                      * it as is, because chances are all legitimate uses of LOADALL in the known universe
@@ -76900,21 +77667,17 @@ class DebuggerX86 extends DbgLib {
                 }
             }
 
-            let typeSize = type & DebuggerX86.TYPE_SIZE;
-            if (typeSize == DebuggerX86.TYPE_NONE) {
+            let typeSize = type & Debuggerx86.TYPE_SIZE;
+            if (typeSize == Debuggerx86.TYPE_NONE) {
                 continue;
             }
-            if (typeSize == DebuggerX86.TYPE_PREFIX) {
-                fComplete = false;
-                continue;
-            }
-            let typeMode = type & DebuggerX86.TYPE_MODE;
-            if (typeMode >= DebuggerX86.TYPE_MODRM) {
+            let typeMode = type & Debuggerx86.TYPE_MODE;
+            if (typeMode >= Debuggerx86.TYPE_MODRM) {
                 if (bModRM < 0) {
                     bModRM = this.getByte(dbgAddr, 1);
                 }
-                if (typeMode < DebuggerX86.TYPE_MODREG) {
-                    /*
+                if (typeMode < Debuggerx86.TYPE_MODREG) {
+                    /**
                      * This test also encompasses TYPE_MODMEM, which is basically the inverse of the case
                      * below (ie, only Mod values *other* than 11 are allowed); however, I believe that in
                      * some cases that's merely a convention, and that if you try to execute an instruction
@@ -76923,8 +77686,8 @@ class DebuggerX86 extends DbgLib {
                      */
                     sOperand = this.getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr);
                 }
-                else if (typeMode == DebuggerX86.TYPE_MODREG) {
-                    /*
+                else if (typeMode == Debuggerx86.TYPE_MODREG) {
+                    /**
                      * TYPE_MODREG instructions assume that Mod is 11 (only certain early 80486 steppings
                      * actually *required* that Mod contain 11) and always treat RM as a register (which we
                      * could also simulate by setting Mod to 11 and letting getModRMOperand() do its thing).
@@ -76932,19 +77695,19 @@ class DebuggerX86 extends DbgLib {
                     sOperand = this.getRegOperand(bModRM & 0x7, type, dbgAddr);
                 }
                 else {
-                    /*
+                    /**
                      * All remaining cases are register-based (eg, TYPE_REG); getRegOperand() will figure out which.
                      */
                     sOperand = this.getRegOperand((bModRM >> 3) & 0x7, type, dbgAddr);
                 }
             }
-            else if (typeMode == DebuggerX86.TYPE_ONE) {
+            else if (typeMode == Debuggerx86.TYPE_ONE) {
                 sOperand = '1';
             }
-            else if (typeMode == DebuggerX86.TYPE_IMM) {
+            else if (typeMode == Debuggerx86.TYPE_IMM) {
                 sOperand = this.getImmOperand(type, dbgAddr);
             }
-            else if (typeMode == DebuggerX86.TYPE_IMMOFF) {
+            else if (typeMode == Debuggerx86.TYPE_IMMOFF) {
                 if (!dbgAddr.fAddr32) {
                     cch = 4;
                     off = this.getShort(dbgAddr, 2);
@@ -76954,8 +77717,8 @@ class DebuggerX86 extends DbgLib {
                 }
                 sOperand = sSegment + '[' + StrLib.toHex(off, cch) + ']';
             }
-            else if (typeMode == DebuggerX86.TYPE_IMMREL) {
-                if (typeSize == DebuggerX86.TYPE_BYTE) {
+            else if (typeMode == Debuggerx86.TYPE_IMMREL) {
+                if (typeSize == Debuggerx86.TYPE_BYTE) {
                     disp = ((this.getByte(dbgAddr, 1) << 24) >> 24);
                 }
                 else {
@@ -76966,22 +77729,22 @@ class DebuggerX86 extends DbgLib {
                 let aSymbol = this.findSymbol(this.newAddr(off, dbgAddr.sel));
                 if (aSymbol[0]) sOperand += " (" + aSymbol[0] + ")";
             }
-            else if (typeMode == DebuggerX86.TYPE_IMPREG) {
-                if (typeSize == DebuggerX86.TYPE_ST) {
+            else if (typeMode == Debuggerx86.TYPE_IMPREG) {
+                if (typeSize == Debuggerx86.TYPE_ST) {
                     sOperand = "ST";
-                } else if (typeSize == DebuggerX86.TYPE_STREG) {
+                } else if (typeSize == Debuggerx86.TYPE_STREG) {
                     sOperand = "ST(" + (bModRM & 0x7) + ")";
                 } else {
-                    sOperand = this.getRegOperand((type & DebuggerX86.TYPE_IREG) >> 8, type, dbgAddr);
+                    sOperand = this.getRegOperand((type & Debuggerx86.TYPE_IREG) >> 8, type, dbgAddr);
                 }
             }
-            else if (typeMode == DebuggerX86.TYPE_IMPSEG) {
-                sOperand = this.getRegOperand((type & DebuggerX86.TYPE_IREG) >> 8, DebuggerX86.TYPE_SEGREG, dbgAddr);
+            else if (typeMode == Debuggerx86.TYPE_IMPSEG) {
+                sOperand = this.getRegOperand((type & Debuggerx86.TYPE_IREG) >> 8, Debuggerx86.TYPE_SEGREG, dbgAddr);
             }
-            else if (typeMode == DebuggerX86.TYPE_DSSI) {
+            else if (typeMode == Debuggerx86.TYPE_DSSI) {
                 sOperand = (sSegment || "DS:") + "[SI]";
             }
-            else if (typeMode == DebuggerX86.TYPE_ESDI) {
+            else if (typeMode == Debuggerx86.TYPE_ESDI) {
                 sOperand = (sSegment || "ES:") + "[DI]";
             }
             if (!sOperand || !sOperand.length) {
@@ -77001,10 +77764,10 @@ class DebuggerX86 extends DbgLib {
             } while (dbgAddrIns.addr != dbgAddr.addr);
         }
 
-        sLine += StrLib.pad(sBytes, dbgAddrIns.fAddr32? 21 : 17);
+        sLine += StrLib.pad(sBytes, dbgAddrIns.fAddr32? -20 : -16) + ' ';
 
         if (sPrefix.indexOf("REP") == 0) {
-            /*
+            /**
              * For MOVS, STOS, OUTS, INS (and perhaps also LODS, although that doesn't seem useful), REPZ (0xF3) becomes
              * REP, because the Z flag is ignored.  And apparently, the same is true for REPNZ (0xF2); ie, either prefix can
              * be used.  I considered leaving REPNZ alone, to highlight the uncommon use of that prefix with those instructions,
@@ -77021,15 +77784,15 @@ class DebuggerX86 extends DbgLib {
             sOpcode = sPrefix;
         }
 
-        sLine += StrLib.pad(sOpcode, 8);
+        sLine += StrLib.pad(sOpcode, -8);
         if (sOperands) sLine += ' ' + sOperands;
 
-        if (this.cpu.model < DebuggerX86.CPUS[typeCPU]) {
-            sComment = DebuggerX86.CPUS[typeCPU] + " CPU only";
+        if (this.cpu.model < Debuggerx86.CPUS[typeCPU]) {
+            sComment = Debuggerx86.CPUS[typeCPU] + " CPU only";
         }
 
-        if (sComment && fComplete) {
-            sLine = StrLib.pad(sLine, dbgAddrIns.fAddr32? 74 : 62) + ';' + sComment;
+        if (sComment) {
+            sLine = StrLib.pad(sLine, dbgAddrIns.fAddr32? -74 : -62) + ';' + sComment;
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence >= 0? '=' + nSequence.toString() : "");
             } else {
@@ -77038,14 +77801,14 @@ class DebuggerX86 extends DbgLib {
             }
         }
 
-        this.initAddrSize(dbgAddr, fComplete);
+        this.initAddrSize(dbgAddr);
         return sLine;
     }
 
     /**
      * getFPUInstruction(bOpcode, bModRM)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} bOpcode
      * @param {number} bModRM
      * @returns {Array|null} (FPU instruction group, or null if none)
@@ -77058,14 +77821,14 @@ class DebuggerX86 extends DbgLib {
         let reg = (bModRM >> 3) & 0x7;
         let r_m = (bModRM & 0x7);
 
-        /*
+        /**
          * Similar to how opFPU() decodes FPU instructions, we combine mod and reg into one
          * decodable value: put mod in the high nibble and reg in the low nibble, after first
          * collapsing all mod values < 3 to zero.
          */
         let modReg = (mod < 3? 0 : 0x30) + reg;
 
-        /*
+        /**
          * All values >= 0x34 imply mod == 3 and reg >= 4, so now we shift reg into the high
          * nibble and r_m into the low, yielding values >= 0x40.
          */
@@ -77073,7 +77836,7 @@ class DebuggerX86 extends DbgLib {
             modReg = (reg << 4) | r_m;
         }
 
-        let aaOpDesc = DebuggerX86.aaaOpFPUDescs[bOpcode];
+        let aaOpDesc = Debuggerx86.aaaOpFPUDescs[bOpcode];
         if (aaOpDesc) aOpDesc = aaOpDesc[modReg];
 
         return aOpDesc;
@@ -77082,41 +77845,41 @@ class DebuggerX86 extends DbgLib {
     /**
      * getImmOperand(type, dbgAddr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} type
-     * @param {DbgAddrX86} dbgAddr
-     * @returns {string} operand
+     * @param {DbgAddrx86} dbgAddr
+     * @returns {string} (operand)
      */
     getImmOperand(type, dbgAddr)
     {
         let aSymbol;
         let sOperand = ' ';
-        let typeSize = type & DebuggerX86.TYPE_SIZE;
+        let typeSize = type & Debuggerx86.TYPE_SIZE;
 
         switch (typeSize) {
-        case DebuggerX86.TYPE_BYTE:
-            /*
+        case Debuggerx86.TYPE_BYTE:
+            /**
              * There's the occasional immediate byte we don't need to display (eg, the 0x0A
              * following an AAM or AAD instruction), so we suppress the byte if it lacks a TYPE_IN
              * or TYPE_OUT designation (and TYPE_BOTH, as the name implies, includes both).
              */
-            if (type & DebuggerX86.TYPE_BOTH) {
+            if (type & Debuggerx86.TYPE_BOTH) {
                 sOperand = StrLib.toHex(this.getByte(dbgAddr, 1), 2);
             }
             break;
-        case DebuggerX86.TYPE_SBYTE:
+        case Debuggerx86.TYPE_SBYTE:
             sOperand = StrLib.toHex((this.getByte(dbgAddr, 1) << 24) >> 24, dbgAddr.fData32? 8: 4);
             break;
-        case DebuggerX86.TYPE_WORD:
+        case Debuggerx86.TYPE_WORD:
             if (dbgAddr.fData32) {
                 sOperand = StrLib.toHex(this.getLong(dbgAddr, 4));
                 break;
             }
             /* falls through */
-        case DebuggerX86.TYPE_SHORT:
+        case Debuggerx86.TYPE_SHORT:
             sOperand = StrLib.toHex(this.getShort(dbgAddr, 2), 4);
             break;
-        case DebuggerX86.TYPE_FARP:
+        case Debuggerx86.TYPE_FARP:
             dbgAddr = this.newAddr(this.getWord(dbgAddr, true), this.getShort(dbgAddr, 2), undefined, dbgAddr.type, dbgAddr.fData32, dbgAddr.fAddr32);
             sOperand = this.toHexAddr(dbgAddr);
             aSymbol = this.findSymbol(dbgAddr);
@@ -77132,50 +77895,50 @@ class DebuggerX86 extends DbgLib {
     /**
      * getRegOperand(bReg, type, dbgAddr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} bReg
      * @param {number} type
-     * @param {DbgAddrX86} dbgAddr
-     * @returns {string} operand
+     * @param {DbgAddrx86} dbgAddr
+     * @returns {string} (operand)
      */
     getRegOperand(bReg, type, dbgAddr)
     {
-        let typeMode = type & DebuggerX86.TYPE_MODE;
-        if (typeMode == DebuggerX86.TYPE_SEGREG) {
-            if (bReg > DebuggerX86.REG_GS ||
-                bReg >= DebuggerX86.REG_FS && this.cpu.model < X86.MODEL_80386) return "??";
-            bReg += DebuggerX86.REG_SEG;
+        let typeMode = type & Debuggerx86.TYPE_MODE;
+        if (typeMode == Debuggerx86.TYPE_SEGREG) {
+            if (bReg > Debuggerx86.REG_GS ||
+                bReg >= Debuggerx86.REG_FS && this.cpu.model < X86.MODEL_80386) return "??";
+            bReg += Debuggerx86.REG_SEG;
         }
-        else if (typeMode == DebuggerX86.TYPE_CTLREG) {
-            bReg += DebuggerX86.REG_CR0;
+        else if (typeMode == Debuggerx86.TYPE_CTLREG) {
+            bReg += Debuggerx86.REG_CR0;
         }
-        else if (typeMode == DebuggerX86.TYPE_DBGREG) {
-            bReg += DebuggerX86.REG_DR0;
+        else if (typeMode == Debuggerx86.TYPE_DBGREG) {
+            bReg += Debuggerx86.REG_DR0;
         }
-        else if (typeMode == DebuggerX86.TYPE_TSTREG) {
-            bReg += DebuggerX86.REG_TR0;
+        else if (typeMode == Debuggerx86.TYPE_TSTREG) {
+            bReg += Debuggerx86.REG_TR0;
         }
         else {
-            let typeSize = type & DebuggerX86.TYPE_SIZE;
-            if (typeSize >= DebuggerX86.TYPE_SHORT) {
-                if (bReg < DebuggerX86.REG_AX) {
-                    bReg += DebuggerX86.REG_AX - DebuggerX86.REG_AL;
+            let typeSize = type & Debuggerx86.TYPE_SIZE;
+            if (typeSize >= Debuggerx86.TYPE_SHORT) {
+                if (bReg < Debuggerx86.REG_AX) {
+                    bReg += Debuggerx86.REG_AX - Debuggerx86.REG_AL;
                 }
-                if (typeSize == DebuggerX86.TYPE_LONG || typeSize == DebuggerX86.TYPE_WORD && dbgAddr.fData32) {
-                    bReg += DebuggerX86.REG_EAX - DebuggerX86.REG_AX;
+                if (typeSize == Debuggerx86.TYPE_LONG || typeSize == Debuggerx86.TYPE_WORD && dbgAddr.fData32) {
+                    bReg += Debuggerx86.REG_EAX - Debuggerx86.REG_AX;
                 }
             }
         }
-        return DebuggerX86.REGS[bReg];
+        return Debuggerx86.REGS[bReg];
     }
 
     /**
      * getSIBOperand(bMod, dbgAddr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} bMod
-     * @param {DbgAddrX86} dbgAddr
-     * @returns {string} operand
+     * @param {DbgAddrx86} dbgAddr
+     * @returns {string} (operand)
      */
     getSIBOperand(bMod, dbgAddr)
     {
@@ -77184,18 +77947,18 @@ class DebuggerX86 extends DbgLib {
         let bIndex = (bSIB >> 3) & 0x7;
         let bBase = bSIB & 0x7;
         let sOperand = "";
-        /*
+        /**
          * Unless bMod is zero AND bBase is 5, there's always a base register.
          */
         if (bMod || bBase != 5) {
-            sOperand = DebuggerX86.RMS[bBase + 8];
+            sOperand = Debuggerx86.RMS[bBase + 8];
         }
         if (bIndex != 4) {
             if (sOperand) sOperand += '+';
-            sOperand += DebuggerX86.RMS[bIndex + 8];
+            sOperand += Debuggerx86.RMS[bIndex + 8];
             if (bScale) sOperand += '*' + (0x1 << bScale);
         }
-        /*
+        /**
          * If bMod is zero AND bBase is 5, there's a 32-bit displacement instead of a base register.
          */
         if (!bMod && bBase == 5) {
@@ -77208,14 +77971,14 @@ class DebuggerX86 extends DbgLib {
     /**
      * getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sOpcode
      * @param {string} sSegment
      * @param {number} bModRM
      * @param {number} type
      * @param {number} cOperands (if 1, memory operands are prefixed with the size; otherwise, size can be inferred)
-     * @param {DbgAddrX86} dbgAddr
-     * @returns {string} operand
+     * @param {DbgAddrx86} dbgAddr
+     * @returns {string} (operand)
      */
     getModRMOperand(sOpcode, sSegment, bModRM, type, cOperands, dbgAddr)
     {
@@ -77235,7 +77998,7 @@ class DebuggerX86 extends DbgLib {
                         sOperand = this.getSIBOperand(bMod, dbgAddr);
                     }
                 }
-                if (!sOperand) sOperand = DebuggerX86.RMS[bRM];
+                if (!sOperand) sOperand = Debuggerx86.RMS[bRM];
             }
             if (bMod == 1) {
                 disp = this.getByte(dbgAddr, 1);
@@ -77260,18 +78023,18 @@ class DebuggerX86 extends DbgLib {
             sOperand = sSegment + '[' + sOperand + ']';
             if (cOperands == 1) {
                 let sType = "";
-                type &= DebuggerX86.TYPE_SIZE;
-                if (type == DebuggerX86.TYPE_WORD) {
-                    type = (dbgAddr.fData32? DebuggerX86.TYPE_LONG : DebuggerX86.TYPE_SHORT);
+                type &= Debuggerx86.TYPE_SIZE;
+                if (type == Debuggerx86.TYPE_WORD) {
+                    type = (dbgAddr.fData32? Debuggerx86.TYPE_LONG : Debuggerx86.TYPE_SHORT);
                 }
                 switch(type) {
-                case DebuggerX86.TYPE_FARP:
+                case Debuggerx86.TYPE_FARP:
                     sType = "FAR";
                     break;
-                case DebuggerX86.TYPE_BYTE:
+                case Debuggerx86.TYPE_BYTE:
                     sType = "BYTE";
                     break;
-                case DebuggerX86.TYPE_SHORT:
+                case Debuggerx86.TYPE_SHORT:
                     if (fInteger) {
                         sType = "INT16";
                         break;
@@ -77279,31 +78042,31 @@ class DebuggerX86 extends DbgLib {
                     /* falls through */
                     sType = "WORD";
                     break;
-                case DebuggerX86.TYPE_LONG:
+                case Debuggerx86.TYPE_LONG:
                     sType = "DWORD";
                     break;
-                case DebuggerX86.TYPE_SINT:
+                case Debuggerx86.TYPE_SINT:
                     if (fInteger) {
                         sType = "INT32";
                         break;
                     }
                     /* falls through */
-                case DebuggerX86.TYPE_SREAL:
+                case Debuggerx86.TYPE_SREAL:
                     sType = "REAL32";
                     break;
-                case DebuggerX86.TYPE_LINT:
+                case Debuggerx86.TYPE_LINT:
                     if (fInteger) {
                         sType = "INT64";
                         break;
                     }
                     /* falls through */
-                case DebuggerX86.TYPE_LREAL:
+                case Debuggerx86.TYPE_LREAL:
                     sType = "REAL64";
                     break;
-                case DebuggerX86.TYPE_TREAL:
+                case Debuggerx86.TYPE_TREAL:
                     sType = "REAL80";
                     break;
-                case DebuggerX86.TYPE_BCD80:
+                case Debuggerx86.TYPE_BCD80:
                     sType = "BCD80";
                     break;
                 }
@@ -77321,11 +78084,11 @@ class DebuggerX86 extends DbgLib {
      *
      * TODO: Unimplemented.  See parseInstruction() in /machines/osi/c1p/modules/v2/debugger.js for a working implementation.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sOp
      * @param {string|undefined} sOperand
-     * @param {DbgAddrX86} dbgAddr of memory where this instruction is being assembled
-     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @param {DbgAddrx86} dbgAddr of memory where this instruction is being assembled
+     * @returns {Array.<number>} (of opcode bytes; if the instruction can't be parsed, the array will be empty)
      */
     parseInstruction(sOp, sOperand, dbgAddr)
     {
@@ -77337,9 +78100,9 @@ class DebuggerX86 extends DbgLib {
     /**
      * getFlagOutput(sFlag)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sFlag
-     * @returns {string} value of flag
+     * @returns {string} (value of flag)
      */
     getFlagOutput(sFlag)
     {
@@ -77382,7 +78145,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * getLimitString(l)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} l
      * @returns {string}
      */
@@ -77394,23 +78157,23 @@ class DebuggerX86 extends DbgLib {
     /**
      * getRegOutput(iReg)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} iReg
      * @returns {string}
      */
     getRegOutput(iReg)
     {
-        if (iReg >= DebuggerX86.REG_AX && iReg <= DebuggerX86.REG_DI && this.cchReg > 4) iReg += DebuggerX86.REG_EAX - DebuggerX86.REG_AX;
-        let sReg = DebuggerX86.REGS[iReg];
-        if (iReg == DebuggerX86.REG_CR0 && this.cpu.model == X86.MODEL_80286) sReg = "MS";
+        if (iReg >= Debuggerx86.REG_AX && iReg <= Debuggerx86.REG_DI && this.cchReg > 4) iReg += Debuggerx86.REG_EAX - Debuggerx86.REG_AX;
+        let sReg = Debuggerx86.REGS[iReg];
+        if (iReg == Debuggerx86.REG_CR0 && this.cpu.model == X86.MODEL_80286) sReg = "MS";
         return sReg + '=' + this.getRegString(iReg) + ' ';
     }
 
     /**
      * getSegOutput(seg, fProt)
      *
-     * @this {DebuggerX86}
-     * @param {SegX86} seg
+     * @this {Debuggerx86}
+     * @param {Segx86} seg
      * @param {boolean} [fProt]
      * @returns {string}
      */
@@ -77422,7 +78185,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * getDTROutput(sName, sel, addr, addrLimit)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sName
      * @param {number|null|*} sel
      * @param {number} addr
@@ -77474,7 +78237,7 @@ class DebuggerX86 extends DbgLib {
      * Note that even when the processor is in real mode, you can always use the "rp" command to force a protected-mode
      * dump, in case you need to verify any selector base or limit values, since those also affect real-mode operation.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fProt]
      * @returns {string}
      */
@@ -77483,14 +78246,14 @@ class DebuggerX86 extends DbgLib {
         let s;
         if (fProt === undefined) fProt = this.getCPUMode();
 
-        s = this.getRegOutput(DebuggerX86.REG_AX) +
-            this.getRegOutput(DebuggerX86.REG_BX) +
-            this.getRegOutput(DebuggerX86.REG_CX) +
-            this.getRegOutput(DebuggerX86.REG_DX) + (this.cchReg > 4? '\n' : '') +
-            this.getRegOutput(DebuggerX86.REG_SP) +
-            this.getRegOutput(DebuggerX86.REG_BP) +
-            this.getRegOutput(DebuggerX86.REG_SI) +
-            this.getRegOutput(DebuggerX86.REG_DI) + '\n' +
+        s = this.getRegOutput(Debuggerx86.REG_AX) +
+            this.getRegOutput(Debuggerx86.REG_BX) +
+            this.getRegOutput(Debuggerx86.REG_CX) +
+            this.getRegOutput(Debuggerx86.REG_DX) + (this.cchReg > 4? '\n' : '') +
+            this.getRegOutput(Debuggerx86.REG_SP) +
+            this.getRegOutput(Debuggerx86.REG_BP) +
+            this.getRegOutput(Debuggerx86.REG_SI) +
+            this.getRegOutput(Debuggerx86.REG_DI) + '\n' +
             this.getSegOutput(this.cpu.segSS, fProt) + ' ' +
             this.getSegOutput(this.cpu.segDS, fProt) + ' ' +
             this.getSegOutput(this.cpu.segES, fProt) + ' ';
@@ -77512,9 +78275,9 @@ class DebuggerX86 extends DbgLib {
                  this.getDTROutput("GD", null, this.cpu.addrGDT, this.cpu.addrGDTLimit) + ' ' +
                  this.getDTROutput("ID", null, this.cpu.addrIDT, this.cpu.addrIDTLimit) + ' ';
             s += sTR + ' ' + sA20;
-            s += this.getRegOutput(DebuggerX86.REG_CR0);
+            s += this.getRegOutput(Debuggerx86.REG_CR0);
             if (I386 && this.cpu.model >= X86.MODEL_80386) {
-                s += this.getRegOutput(DebuggerX86.REG_CR2) + this.getRegOutput(DebuggerX86.REG_CR3);
+                s += this.getRegOutput(Debuggerx86.REG_CR2) + this.getRegOutput(Debuggerx86.REG_CR3);
             }
         } else {
             if (I386 && this.cpu.model >= X86.MODEL_80386) {
@@ -77523,7 +78286,7 @@ class DebuggerX86 extends DbgLib {
             }
         }
 
-        s += this.getRegOutput(DebuggerX86.REG_PS) +
+        s += this.getRegOutput(Debuggerx86.REG_PS) +
              this.getFlagOutput('V') + this.getFlagOutput('D') + this.getFlagOutput('I') + this.getFlagOutput('T') +
              this.getFlagOutput('S') + this.getFlagOutput('Z') + this.getFlagOutput('A') + this.getFlagOutput('P') + this.getFlagOutput('C');
 
@@ -77533,7 +78296,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * comparePairs(p1, p2)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number|string|Array|Object} p1
      * @param {number|string|Array|Object} p2
      * @returns {number}
@@ -77546,9 +78309,9 @@ class DebuggerX86 extends DbgLib {
     /**
      * addSymbols(sModule, nSegment, sel, off, addr, len, aSymbols)
      *
-     * As fileimage.js (formerly filedump.js, which was formerly convrom.php) explains, aSymbols is a JSON-encoded object
-     * whose properties consist of all the symbols (in upper-case), and the values of those properties are objects containing
-     * any or all of the following properties:
+     * As fileimage.js (formerly filedump.js, which was formerly convrom.php) explains, aSymbols is a
+     * JSON-encoded object whose properties consist of all the symbols (in upper-case), and the values of
+     * those properties are objects containing any or all of the following properties:
      *
      *      'v': the value of an absolute (unsized) value
      *      'b': either 1, 2, 4 or undefined if an unsized value
@@ -77614,7 +78377,7 @@ class DebuggerX86 extends DbgLib {
      * hand-edited files, we can't assume that, and we need to ensure that findSymbol()'s binarySearch() operates
      * properly.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|null} sModule
      * @param {number} nSegment (zero if undefined)
      * @param {number} sel (the default segment/selector for all symbols in this group)
@@ -77640,11 +78403,11 @@ class DebuggerX86 extends DbgLib {
                     dbgAddr.off = offSymbol;
                     dbgAddr.sel = selSymbol;
                     dbgAddr.addr = undefined;
-                    /*
+                    /**
                      * getAddr() computes the corresponding physical address and saves it in dbgAddr.addr.
                      */
                     this.getAddr(dbgAddr);
-                    /*
+                    /**
                      * The physical address for any symbol located in the top 64Kb of the machine's address space
                      * should be relocated to the top 64Kb of the first 1Mb, so that we're immune from any changes
                      * to the A20 line.
@@ -77668,16 +78431,97 @@ class DebuggerX86 extends DbgLib {
             aSymbols: aSymbols,
             aOffsets: aOffsets
         };
-        this.aSymbolTable.push(symbolTable);
+        let iTable = this.aSymbolTable.findIndex(function(symbolTable) {
+            return symbolTable.sModule == sModule && symbolTable.nSegment == nSegment;
+        });
+        if (iTable < 0) iTable = this.aSymbolTable.length;
+        this.aSymbolTable[iTable] = symbolTable;
+    }
+
+    /**
+     * addVxDSymbol(id, dbgAddr, fPrint)
+     *
+     * @this {Debuggerx86}
+     * @param {number} id
+     * @param {DbgAddrx86} dbgAddr
+     * @param {boolean} [fPrint]
+     * @returns {boolean|null} (true if symbol added OR matching symbol already exists, false if not)
+     */
+    addVxDSymbol(id, dbgAddr, fPrint)
+    {
+        let idSrv = id & 0xffff;
+        let idVxD = (id >> 16) & 0xffff;
+        let aVxDs = Object.keys(Interrupts.VxD);
+        for (let sVxD of aVxDs) {
+            if (idVxD == Interrupts.VxD[sVxD].id) {
+                if (Interrupts.VxD[sVxD].fn) {
+                    let sService = Interrupts.VxD[sVxD].fn[idSrv];
+                    if (sService) {
+                        let dbg = this;
+                        let addSymbol = function(sSymbol, addr) {
+                            let offSymbol = addr >>> 0;
+                            let iTable = dbg.aSymbolTable.findIndex(function(symbolTable) {
+                                return /* symbolTable.sModule == sVxD */ symbolTable.sel == 0x28 &&
+                                        offSymbol >= (symbolTable.off >>> 0) && offSymbol < ((symbolTable.off + symbolTable.len) >>> 0);
+                            });
+                            if (iTable >= 0) {
+                                let keySymbol = sSymbol.toUpperCase();
+                                let symbolTable = dbg.aSymbolTable[iTable];
+                                let symbol = symbolTable.aSymbols[keySymbol];
+                                if (symbol) {
+                                    if (symbol['o'] == offSymbol && symbol['s'] == symbolTable.sel) {
+                                        return true;
+                                    }
+                                    dbg.printf(MESSAGE.DEBUG + MESSAGE.ERROR, "%s.%s (%x) does not match previous value (%x)\n", sVxD, sSymbol, offSymbol, symbol['o']);
+                                    return false;
+                                }
+                                let pair = [offSymbol, keySymbol];
+                                let result = UsrLib.binarySearch(symbolTable.aOffsets, pair, dbg.comparePairs);
+                                if (result < 0) {
+                                    symbolTable.aOffsets.splice(-(result + 1), 0, pair);
+                                    symbolTable.aSymbols[keySymbol] = {'o': offSymbol, 's': symbolTable.sel};
+                                    if (fPrint && sSymbol[0] != '$') {
+                                        dbg.printf(MESSAGE.DEBUG + MESSAGE.LOG, "%s.%s: %x\n", sVxD, sSymbol, offSymbol);
+                                    }
+                                    return true;
+                                }
+                                dbg.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s.%s (%x) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
+                                return false;
+                            }
+                            dbg.printf(MESSAGE.DEBUG + MESSAGE.ERROR, "%s.%s (%x) out of range\n", sVxD, sSymbol, offSymbol);
+                            return false;
+                        };
+                        /**
+                         * We actually need to add TWO symbols for every VxD service: one with a prefix (eg, '$') that
+                         * represents the jump table entry for the service, and one without the prefix that represents the
+                         * initial value in the jump table.
+                         */
+                        let addr = dbg.getLong(dbgAddr);
+                        if (addSymbol('$' + sService, addr)) {
+                            dbgAddr.addr = addr;
+                            return addSymbol(sService, dbg.getLong(dbgAddr));
+                        }
+                        return false;
+                    }
+                    if (idSrv < 32768) {        // TODO: Figure out what the larger service numbers represent
+                        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s service %d: unrecognized\n", sVxD, idSrv);
+                    }
+                    return false;
+                }
+                return false;                   // if our VxD table doesn't have a function list yet, don't bother with a warning
+            }
+        }
+        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "VxD %d: unrecognized\n", idVxD);
+        return false;
     }
 
     /**
      * removeSymbols(sModule, nSegment)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|null|*} sModule
      * @param {number} [nSegment] (segment # if sModule set, selector if sModule clear)
-     * @returns {string|null} name of the module removed, or null if no module was found
+     * @returns {string|null} (name of the module removed, or null if no module was found)
      */
     removeSymbols(sModule, nSegment)
     {
@@ -77700,10 +78544,11 @@ class DebuggerX86 extends DbgLib {
      * TODO: Add "numerical" and "alphabetical" dump options. This is simply dumping them in whatever
      * order they appeared in the original MAP file.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     dumpSymbols()
     {
+        let cSymbols = 0;
         for (let iTable = 0; iTable < this.aSymbolTable.length; iTable++) {
             let symbolTable = this.aSymbolTable[iTable];
             for (let sSymbol in symbolTable.aSymbols) {
@@ -77716,8 +78561,10 @@ class DebuggerX86 extends DbgLib {
                 let sSymbolOrig = symbolTable.aSymbols[sSymbol]['l'];
                 if (sSymbolOrig) sSymbol = sSymbolOrig;
                 this.printf("%s %s\n", this.toHexOffset(offSymbol, selSymbol), sSymbol);
+                cSymbols++;
             }
         }
+        if (!cSymbols) this.printf("no symbols\n");
     }
 
     /**
@@ -77728,10 +78575,10 @@ class DebuggerX86 extends DbgLib {
      * If fNearest is true, and no exact match was found, then the Array returned will contain TWO sets of
      * entries: [0]-[3] will refer to closest preceding symbol, and [4]-[7] will refer to the closest subsequent symbol.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fNearest]
-     * @returns {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
+     * @returns {Array} (where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment)
      */
     findSymbol(dbgAddr, fNearest)
     {
@@ -77774,9 +78621,9 @@ class DebuggerX86 extends DbgLib {
      *
      * Search aSymbolTable for sSymbol, and if found, return a dbgAddr (same as parseAddr())
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sSymbol
-     * @returns {DbgAddrX86|undefined}
+     * @returns {DbgAddrx86|undefined}
      */
     findSymbolAddr(sSymbol)
     {
@@ -77789,7 +78636,7 @@ class DebuggerX86 extends DbgLib {
                 if (symbol !== undefined) {
                     let offSymbol = symbol['o'];
                     if (offSymbol !== undefined) {
-                        /*
+                        /**
                          * We assume that every ROM is ORG'ed at 0x0000, and therefore unless the symbol has an
                          * explicitly-defined segment, we return the segment associated with the entire group; for
                          * a ROM, that segment is normally "addrROM >>> 4".  Down the road, we may want/need to
@@ -77799,7 +78646,7 @@ class DebuggerX86 extends DbgLib {
                         if (selSymbol === undefined) selSymbol = symbolTable.sel;
                         dbgAddr = this.newAddr(offSymbol, selSymbol, symbol['p']);
                     }
-                    /*
+                    /**
                      * The symbol matched, but it wasn't for an address (no 'o' offset), and there's no point
                      * looking any farther, since each symbol appears only once, so we indicate it's an unknown symbol.
                      */
@@ -77817,7 +78664,7 @@ class DebuggerX86 extends DbgLib {
      *
      * @param {number} iTable
      * @param {number} iOffset
-     * @param {Array} aSymbol is updated with the specified symbol, if it exists
+     * @param {Array} aSymbol (updated with the specified symbol, if it exists)
      */
     returnSymbol(iTable, iOffset, aSymbol)
     {
@@ -77841,13 +78688,13 @@ class DebuggerX86 extends DbgLib {
     /**
      * doHelp()
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      */
     doHelp()
     {
         let s = "debugger commands:";
-        for (let sCommand in DebuggerX86.COMMANDS) {
-            s += '\n  ' + StrLib.pad(sCommand, 7) + DebuggerX86.COMMANDS[sCommand];
+        for (let sCommand in Debuggerx86.COMMANDS) {
+            s += '\n  ' + StrLib.pad(sCommand, -7) + Debuggerx86.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: frequency/history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -77880,7 +78727,7 @@ class DebuggerX86 extends DbgLib {
      * NOTE: As the previous example implies, you can even assemble new instructions into ROM address space;
      * as our setByte() function explains, the ROM write-notification handlers only refuse writes from the CPU.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs is the complete argument array, beginning with the "a" command in asArgs[0]
      */
     doAssemble(asArgs)
@@ -77901,7 +78748,7 @@ class DebuggerX86 extends DbgLib {
             for (let i = 0; i < aOpBytes.length; i++) {
                 this.setByte(dbgAddr, aOpBytes[i], 1);
             }
-            /*
+            /**
              * Since getInstruction() also updates the specified address, dbgAddrAssemble is automatically advanced.
              */
             this.printf("%s\n", this.getInstruction(this.dbgAddrAssemble));
@@ -77909,7 +78756,7 @@ class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * doBreak(sCmd, sAddr, sOptions)
+     * doBreak(asArgs, sLine)
      *
      * As the "help" output below indicates, the following breakpoint commands are supported:
      *
@@ -77933,13 +78780,14 @@ class DebuggerX86 extends DbgLib {
      * clear them.  Because "bi" and "bo" commands are piggy-backing on Bus functions, those breakpoints
      * are currently outside the realm of what the "bl" and "bc" commands are aware of.
      *
-     * @this {DebuggerX86}
-     * @param {string} sCmd
-     * @param {string|undefined} [sAddr]
-     * @param {string} [sOptions] (the rest of the breakpoint command-line)
+     * @this {Debuggerx86}
+     * @param {Array.<string>} asArgs
+     * @param {string} [sLine] (the complete command-line)
      */
-    doBreak(sCmd, sAddr, sOptions)
+    doBreak(asArgs, sLine)
     {
+        let sCmd = asArgs.shift();
+        let sAddr = asArgs.shift();
         if (sAddr == '?') {
             this.printf("breakpoint commands:\n");
             this.printf("\tbi [p]\ttoggle break on input port [p]\n");
@@ -77950,6 +78798,7 @@ class DebuggerX86 extends DbgLib {
             this.printf("\tbc [a]\tclear breakpoint at addr [a]\n");
             this.printf("\tbl\tlist all breakpoints\n");
             this.printf("\tbn [n]\tbreak after [n] instruction(s)\n");
+            this.printf("\tbv [n]\ttoggle break on interrupt vector [n]\n");
             return;
         }
         let sParm = sCmd.charAt(1);
@@ -77964,6 +78813,32 @@ class DebuggerX86 extends DbgLib {
         if (sParm == 'n') {
             this.nBreakIns = this.parseValue(sAddr);
             this.printf("break after %d instruction(s)\n", this.nBreakIns);
+            return;
+        }
+        if (sParm == 'v') {
+            if (!sAddr) {
+                this.listVectorBP();
+                return;
+            }
+            do {
+                let chType = sAddr[0];
+                if (chType == '&' || chType == '#') {
+                    sAddr = sAddr.slice(1);
+                } else {
+                    chType = '';
+                }
+                let vector = this.parseValue(sAddr);
+                if (vector != undefined) {
+                    if (this.removeVectorBP(vector)) {
+                        continue;
+                    }
+                    if (this.addVectorBP(vector, chType)) {
+                        continue;
+                    }
+                }
+                this.printf("vector %s invalid\n", sAddr);
+                break;
+            } while ((sAddr = asArgs.shift()));
             return;
         }
         if (sAddr === undefined) {
@@ -78003,7 +78878,7 @@ class DebuggerX86 extends DbgLib {
 
         if (dbgAddr.off == null) return;
 
-        this.parseAddrOptions(dbgAddr, sOptions);
+        this.parseAddrOptions(dbgAddr, sLine);
 
         if (sParm == 'p') {
             this.addBreakpoint(this.aBreakExec, dbgAddr);
@@ -78023,7 +78898,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * doClear(sCmd)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sCmd] (eg, "cls" or "clear")
      */
     doClear(sCmd)
@@ -78037,7 +78912,7 @@ class DebuggerX86 extends DbgLib {
      * For memory dumps, the second parameter (sLen) is interpreted as a length (by default, in hex)
      * only if it contains an 'l' prefix; otherwise it's interpreted as an ending address (inclusive).
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs (formerly sCmd, [sAddr], [sLen] and [sBytes])
      */
     doDump(asArgs)
@@ -78079,7 +78954,7 @@ class DebuggerX86 extends DbgLib {
                 this.printf("powerOff() error\n");
             }
             else if (sLen == "console") {
-                /*
+                /**
                  * Console buffers are notoriously small, and even the following code, which breaks the
                  * data into parts (eg, "d state console 1", "d state console 2", etc) just isn't that helpful.
                  *
@@ -78104,7 +78979,7 @@ class DebuggerX86 extends DbgLib {
             return;
         }
 
-        /*
+        /**
          * Transform a "ds" command into a "d desc" command (simply as shorthand); ditto for "dg" and "dl",
          * only because that's the syntax that WDEB386 used.  I'm uncertain what WDEB386 would do with an LDT
          * selector passed to "dg" or a GDT selector passed to "dl" (because I'm too lazy to check right now),
@@ -78115,7 +78990,7 @@ class DebuggerX86 extends DbgLib {
             asArgs = [sCmd, "desc", sAddr];
         }
 
-        /*
+        /**
          * Handle the "dp" (aka "d page") commands here.
          */
         if (sCmd == "d" && sAddr == "page") {
@@ -78129,7 +79004,7 @@ class DebuggerX86 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            /*
+            /**
              * Transform a "d disk" command into a "l json" command (TODO: Register a dumper for "disk" instead?)
              */
             if (sAddr == "disk") {
@@ -78190,10 +79065,10 @@ class DebuggerX86 extends DbgLib {
             } else {
                 let dbgAddrEnd = this.parseAddr(sLen);
                 if (!dbgAddrEnd) return;
-                /*
+                /**
                  * To be more DEBUG-like, when an ending address is used instead of a length, we treat it inclusively, hence the "+ 1".
                  */
-                if (dbgAddr.type != DebuggerX86.ADDRTYPE.LINEAR) {
+                if (dbgAddr.type != Debuggerx86.ADDRTYPE.LINEAR) {
                     len = dbgAddrEnd.off - dbgAddr.off + 1;
                 } else {
                     len = dbgAddrEnd.addr - dbgAddr.addr + 1;
@@ -78208,7 +79083,7 @@ class DebuggerX86 extends DbgLib {
         let cLines = ((cb + 15) >> 4) || 1;
         let cbLine = (size == 4? 16 : this.nBase);  // the base also happens to be a reasonable number of bytes/line
 
-        /*
+        /**
          * The "da" variation uses a line size of 160 bytes, because that's the number of characters
          * per line in a text frame buffer; if no ending address or length is specified, the number of
          * lines defaults to 25 (the typical number of visible lines in a frame buffer).
@@ -78249,7 +79124,7 @@ class DebuggerX86 extends DbgLib {
             if (fASCII) {
                 sDump += sChars;
             } else {
-                sDump += sAddr + "  " + sData + StrLib.pad(sChars, sChars.length + i * 3 + 1, true);
+                sDump += sAddr + "  " + sData + StrLib.pad(sChars, sChars.length + i * 3 + 1);
             }
         }
         if (sDump) this.print(sDump.replace(/\s*$/, "") + "\n");
@@ -78259,7 +79134,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * doEdit(asArgs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     doEdit(asArgs)
@@ -78274,7 +79149,7 @@ class DebuggerX86 extends DbgLib {
         let dbgAddr = this.parseAddr(sAddr);
         if (!dbgAddr) return;
 
-        /*
+        /**
          * Use "ev b000:0000" to fill MDA video memory with test data (and "ev b800:0000" to fill CGA video memory).
          */
         if (asArgs[0] == "ev") {
@@ -78303,7 +79178,7 @@ class DebuggerX86 extends DbgLib {
         let fASCII = false;
         for (let i = 2; i < asArgs.length; i++) {
             let sArg = asArgs[i];
-            /*
+            /**
              * Now that all debugger commands go through parseCommand(), we can accept interesting commands like this:
              *
              *      ew b800:0 "Happy Birthday"
@@ -78347,7 +79222,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * doFreqs(sParm)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sParm
      */
     doFreqs(sParm)
@@ -78380,7 +79255,7 @@ class DebuggerX86 extends DbgLib {
                     let bOpcode = aaSortedOpcodeCounts[i][0];
                     let cFreq = aaSortedOpcodeCounts[i][1];
                     if (cFreq) {
-                        this.printf("%s (%#04x): %d times\n", (DebuggerX86.INS_NAMES[this.aaOpDescs[bOpcode][0]] + "  ").substr(0, 5), bOpcode, cFreq);
+                        this.printf("%s (%#04x): %d times\n", (Debuggerx86.INS_NAMES[this.aaOpDescs[bOpcode][0]] + "  ").substr(0, 5), bOpcode, cFreq);
                         cData++;
                     }
                 }
@@ -78394,7 +79269,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * doHalt(fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {boolean} [fQuiet]
      */
     doHalt(fQuiet)
@@ -78415,10 +79290,10 @@ class DebuggerX86 extends DbgLib {
      * Also, if no variable named "a" exists, "a" will evaluate to 0x0A, so the expression "a==10" becomes
      * "0x0A==0x10" (false), whereas the expression "a==10." becomes "0x0A==0x0A" (true).
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
+     * @returns {boolean} (true if expression is non-zero, false if zero (or undefined due to a parse error))
      */
     doIf(sCmd, fQuiet)
     {
@@ -78434,9 +79309,9 @@ class DebuggerX86 extends DbgLib {
     /**
      * doInfo(asArgs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
-     * @returns {boolean} true only if the instruction info command ("n") is supported
+     * @returns {boolean} (true only if the instruction info command ("n") is supported)
      */
     doInfo(asArgs)
     {
@@ -78453,7 +79328,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Simulate a 1-byte port input operation.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sPort
      */
     doInput(sPort)
@@ -78461,7 +79336,7 @@ class DebuggerX86 extends DbgLib {
         if (!sPort || sPort == '?') {
             this.printf("input commands:\n");
             this.printf("\ti [p]\tread port [p]\n");
-            /*
+            /**
              * TODO: Regarding this warning, consider adding an "unchecked" version of
              * bus.checkPortInputNotify(), since all Debugger memory accesses are unchecked, too.
              *
@@ -78487,9 +79362,9 @@ class DebuggerX86 extends DbgLib {
      * These messages also reset the system variable $ops (by updating cOpcodesStart), to make it easier to see
      * how many opcodes were executed since these interrupts "started".
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sInt
-     * @returns {boolean} true if successful, false if not
+     * @returns {boolean} (true if successful, false if not)
      */
     doInt(sInt)
     {
@@ -78517,9 +79392,9 @@ class DebuggerX86 extends DbgLib {
      * Other supported shorthand: "var" with no parameters prints the values of all variables, and "let {variable}"
      * prints the value of the specified variable.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
-     * @returns {boolean} true if valid "var" assignment, false if not
+     * @returns {boolean} (true if valid "var" assignment, false if not)
      */
     doVar(sCmd)
     {
@@ -78550,7 +79425,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * doList(sAddr, fPrint)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sAddr
      * @param {boolean} [fPrint]
      * @returns {string|null}
@@ -78611,7 +79486,7 @@ class DebuggerX86 extends DbgLib {
      *
      *      d disk [drive #]
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     doLoad(asArgs)
@@ -78637,7 +79512,7 @@ class DebuggerX86 extends DbgLib {
             if (nSectors === undefined) nSectors = 1;
         }
 
-        /*
+        /**
          * We choose the disk controller very simplistically: FDC for drives 0 or 1, and HDC for drives 2
          * and up, unless no HDC is present, in which case we assume FDC for all drive numbers.
          *
@@ -78659,7 +79534,7 @@ class DebuggerX86 extends DbgLib {
             if (drive) {
                 if (drive.disk) {
                     if (fJSON) {
-                        /*
+                        /**
                          * This is an interim solution to dumping disk images in JSON.  It has many problems, the
                          * "biggest" being that the large disk images really need to be compressed first, because they
                          * get "inflated" with use.  See the dump() method in the Disk component for more details.
@@ -78685,7 +79560,7 @@ class DebuggerX86 extends DbgLib {
                                 });
                             }(this, dbgAddr));
                         }
-                        /*
+                        /**
                          * Call updateCPU() now, since we forced setByte() to defer all updates
                          */
                         this.cpu.updateCPU(true);
@@ -78707,7 +79582,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * doMessages(asArgs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     doMessages(asArgs)
@@ -78759,7 +79634,7 @@ class DebuggerX86 extends DbgLib {
             }
         }
 
-        /*
+        /**
          * Display those message categories that match the current criteria (on or off)
          */
         let n = 0;
@@ -78791,7 +79666,7 @@ class DebuggerX86 extends DbgLib {
      *
      * When using the "click" action, specify 0 for Mouse.BUTTON.LEFT or 2 for Mouse.BUTTON.RIGHT.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sAction
      * @param {string} sDelta
      */
@@ -78831,37 +79706,57 @@ class DebuggerX86 extends DbgLib {
     /**
      * doExecOptions(asArgs)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     doExecOptions(asArgs)
     {
+        if (asArgs[0].length > 1) {
+            asArgs.splice(1, 0, asArgs[0].slice(1));
+            asArgs[0] = asArgs[0].charAt(0);
+        }
         if (!asArgs[1] || asArgs[1] == '?') {
             this.printf("execution options:\n");
+            this.printf("\tbv [halt|trace]\n");
             this.printf("\tcs int #\tset checksum cycle interval to #\n");
             this.printf("\tcs start #\tset checksum cycle start count to #\n");
             this.printf("\tcs stop #\tset checksum cycle stop count to #\n");
             this.printf("\tsp #\t\tset speed multiplier to #\n");
             return;
         }
-
         let nCycles;
         switch (asArgs[1]) {
+        case "bv":
+            switch (asArgs[2]) {
+            case "halt":
+                this.vectorHalt = true;
+                break;
+            case "trace":
+                this.vectorHalt = false;
+                break;
+            default:
+                if (asArgs[2]) {
+                    this.printf("unknown vector option: %s\n", asArgs[2]);
+                    return;
+                }
+            }
+            this.printf("vector breakpoints: %s\n", (this.vectorHalt? "halt" : "trace"));
+            break;
         case "cs":
             if (asArgs[3] !== undefined) nCycles = +asArgs[3];          // warning: decimal instead of hex conversion
             switch (asArgs[2]) {
-                case "int":
-                    this.cpu.nCyclesChecksumInterval = nCycles;
-                    break;
-                case "start":
-                    this.cpu.nCyclesChecksumStart = nCycles;
-                    break;
-                case "stop":
-                    this.cpu.nCyclesChecksumStop = nCycles;
-                    break;
-                default:
-                    this.printf("unknown cs option\n");
-                    return;
+            case "int":
+                this.cpu.nCyclesChecksumInterval = nCycles;
+                break;
+            case "start":
+                this.cpu.nCyclesChecksumStart = nCycles;
+                break;
+            case "stop":
+                this.cpu.nCyclesChecksumStop = nCycles;
+                break;
+            default:
+                this.printf("unknown cs option\n");
+                return;
             }
             if (nCycles !== undefined) {
                 this.cpu.resetChecksum();
@@ -78887,7 +79782,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Simulate a 1-byte port output operation.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sPort
      * @param {string|undefined} sByte (string representation of 1 byte)
      */
@@ -78896,7 +79791,7 @@ class DebuggerX86 extends DbgLib {
         if (!sPort || sPort == '?') {
             this.printf("output commands:\n");
             this.printf("\to [p] [b]\twrite byte [b] to port [p]\n");
-            /*
+            /**
              * TODO: Regarding this warning, consider adding an "unchecked" version of
              * bus.checkPortOutputNotify(), since all Debugger memory accesses are unchecked, too.
              *
@@ -78918,7 +79813,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * doRegisters(asArgs, fInstruction)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} [asArgs]
      * @param {boolean} [fInstruction] (true to include the current instruction; default is true)
      */
@@ -79018,7 +79913,7 @@ class DebuggerX86 extends DbgLib {
                 case "DI":
                     this.cpu.regEDI = (this.cpu.regEDI & ~0xffff) | (w & 0xffff);
                     break;
-                /*
+                /**
                  * DANGER: For any of the segment loads below, by going through the normal CPU
                  * segment load procedure, you run the risk of generating a fault in the machine
                  * if you're not careful.  So, um, be careful.
@@ -79043,7 +79938,7 @@ class DebuggerX86 extends DbgLib {
                     this.cpu.setIP(w);
                     this.dbgAddrNextCode = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
                     break;
-                /*
+                /**
                  * I used to alias "PC" (Program Counter) to "IP" (Instruction Pointer), because in PC-DOS 1.00
                  * through 2.10, DEBUG.COM did the same thing.  Then I discovered that, starting with PC-DOS 3.00,
                  * DEBUG.COM changed "PC" to refer to the 16-bit flags register (Program or Processor Control?)
@@ -79090,7 +79985,7 @@ class DebuggerX86 extends DbgLib {
                             this.cpu.setMSW(w);
                             break;
                         case "TR":
-                            /*
+                            /**
                              * DANGER: Like any of the segment loads above, by going through the normal CPU
                              * segment load procedure, you run the risk of generating a fault in the machine
                              * if you're not careful.  So, um, be careful.
@@ -79099,7 +79994,7 @@ class DebuggerX86 extends DbgLib {
                                 fValid = false;
                             }
                             break;
-                        /*
+                        /**
                          * TODO: Add support for GDTR (addr and limit), IDTR (addr and limit), and perhaps
                          * even the ability to edit descriptor information associated with each segment register.
                          */
@@ -79132,7 +80027,7 @@ class DebuggerX86 extends DbgLib {
                                 case "EDI":
                                     this.cpu.regEDI = w;
                                     break;
-                                /*
+                                /**
                                  * DANGER: For any of the segment loads below, by going through the normal CPU
                                  * segment load procedure, you run the risk of generating a fault in the machine
                                  * if you're not careful.  So, um, be careful.
@@ -79154,7 +80049,7 @@ class DebuggerX86 extends DbgLib {
                                     this.cpu.regCR3 = w;
                                     X86.helpLoadCR3.call(this.cpu, w);
                                     break;
-                                /*
+                                /**
                                  * TODO: Add support for DR0-DR7 and TR6-TR7.
                                  */
                                 default:
@@ -79192,7 +80087,7 @@ class DebuggerX86 extends DbgLib {
      *
      * NOTE: If we're called, the existence of an FPU has already been verified.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {Array.<string>} [asArgs]
      */
     doFPURegisters(asArgs)
@@ -79203,8 +80098,8 @@ class DebuggerX86 extends DbgLib {
         for (let i = 0; i < 8; i++) {
             let a = fpu.readFPUStack(i);
             if (!a) break;
-            let sValue = StrLib.pad(a[2].toFixed(15), 24, true);
-            this.printf("ST%d: %s  %x,%x  [%d:%s]\n", i, sValue, a[4], a[3], a[0], DebuggerX86.FPU_TAGS[a[1]]);
+            let sValue = StrLib.pad(a[2].toFixed(15), 24);
+            this.printf("ST%d: %s  %x,%x  [%d:%s]\n", i, sValue, a[4], a[3], a[0], Debuggerx86.FPU_TAGS[a[1]]);
             // this.printf("  REG%d %s%s%s\n", a[0], StrLib.toBin(a[7], 16), StrLib.toBin(a[6]), StrLib.toBin(a[5]));
         }
         this.printf("    B3SSS210ESPUOZDI               xxxIRRPPIxPUOZDI\n");
@@ -79212,15 +80107,15 @@ class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * doRun(sCmd, sAddr, sOptions, fQuiet)
+     * doRun(sCmd, sAddr, sLine, fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {string|undefined} [sAddr]
-     * @param {string} [sOptions] (the rest of the breakpoint command-line)
+     * @param {string} [sLine] (the complete command-line)
      * @param {boolean} [fQuiet]
      */
-    doRun(sCmd, sAddr, sOptions, fQuiet)
+    doRun(sCmd, sAddr, sLine, fQuiet)
     {
         if (sCmd == "gt") {
             this.fIgnoreNextCheckFault = true;
@@ -79228,7 +80123,7 @@ class DebuggerX86 extends DbgLib {
         if (sAddr !== undefined) {
             let dbgAddr = this.parseAddr(sAddr, true);
             if (!dbgAddr) return;
-            this.parseAddrOptions(dbgAddr, sOptions);
+            this.parseAddrOptions(dbgAddr, sLine);
             this.setTempBreakpoint(dbgAddr);
         }
         this.startCPU(true, fQuiet);
@@ -79240,7 +80135,7 @@ class DebuggerX86 extends DbgLib {
      * NOTE: If the string to print is a quoted string, then we run it through replaceRegs(), so that
      * you can take advantage of all the special replacement options used for software interrupt logging.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
      */
     doPrint(sCmd)
@@ -79257,14 +80152,14 @@ class DebuggerX86 extends DbgLib {
     /**
      * doStep(sCmd)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sCmd] "p" or "pr"
      */
     doStep(sCmd)
     {
         let fCallStep = true;
         let nRegs = (sCmd == "pr"? 1 : 0);
-        /*
+        /**
          * Set up the value for this.nStep (ie, 1 or 2) depending on whether the user wants
          * a subsequent register dump ("pr") or not ("p").
          */
@@ -79299,7 +80194,7 @@ class DebuggerX86 extends DbgLib {
                     this.incAddr(dbgAddr, 1);
                     bOp2 = this.getByte(dbgAddr);
                     this.incAddr(dbgAddr, 1);
-                    /*
+                    /**
                      * Look for INT 0x32 functions 4-6 and skip over the null-terminated string following the interrupt.
                      */
                     if (bOp2 == 0x32) {
@@ -79375,7 +80270,7 @@ class DebuggerX86 extends DbgLib {
                     if (this.cmp) this.cmp.updateFocus();
                     this.nStep = 0;
                 }
-                /*
+                /**
                  * A successful run will ultimately call stop(), which will in turn call clearTempBreakpoint(),
                  * which will clear nStep, so there's your assurance that nStep will be reset.  Now we may have
                  * stopped for reasons unrelated to the temporary breakpoint, but that's OK.
@@ -79394,10 +80289,10 @@ class DebuggerX86 extends DbgLib {
      * Given a possible return address (typically from the stack), look for a matching CALL (or INT) that
      * immediately precedes that address.
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      * @param {boolean} [fFar]
-     * @returns {string|null} CALL instruction at or near dbgAddr, or null if none
+     * @returns {string|null} (CALL instruction at or near dbgAddr, or null if none)
      */
     getCall(dbgAddr, fFar)
     {
@@ -79410,7 +80305,7 @@ class DebuggerX86 extends DbgLib {
                 dbgAddr.addr = undefined;
                 let s = this.getInstruction(dbgAddr);
                 if (s.indexOf("CALL") >= 0 || fFar && s.indexOf("INT") >= 0) {
-                    /*
+                    /**
                      * Verify that the length of this CALL (or INT), when added to the address of the CALL (or INT),
                      * matches the original return address.  We do this by getting the string index of the opcode bytes,
                      * subtracting that from the string index of the next space, and dividing that difference by two,
@@ -79435,7 +80330,7 @@ class DebuggerX86 extends DbgLib {
      *
      * Use "k" for a normal stack trace and "ks" for a stack trace with symbolic info.
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sCmd]
      * @param {string} [sAddr] (not used yet)
      */
@@ -79458,7 +80353,7 @@ class DebuggerX86 extends DbgLib {
             let sCall = null, sCallPrev = null, cTests = 256;
             while ((dbgAddrStack.off >>> 0) < this.cpu.regLSPLimit) {
                 dbgAddrCall.off = this.getWord(dbgAddrStack, true);
-                /*
+                /**
                  * Because we're using the auto-increment feature of getWord(), and because that will automatically
                  * wrap the offset around the end of the segment, we must also check the addr property to detect the wrap.
                  */
@@ -79470,7 +80365,7 @@ class DebuggerX86 extends DbgLib {
                 sCall = this.getCall(dbgAddrCall, true);
                 if (sCall) {
                     selCode = this.getWord(dbgAddrStack, true);
-                    /*
+                    /**
                      * It's not strictly necessary that we skip over the flags word that's pushed as part of any INT
                      * instruction, but it reduces the risk of misinterpreting it as a return address on the next iteration.
                      */
@@ -79478,7 +80373,7 @@ class DebuggerX86 extends DbgLib {
                     break;
                 }
             }
-            /*
+            /**
              * The sCallPrev check eliminates duplicate sequential calls, which are usually (but not always)
              * indicative of a false positive, in which case the previous call is probably bogus as well, but
              * at least we won't duplicate that mistake.  Of course, there are always exceptions, recursion
@@ -79490,7 +80385,7 @@ class DebuggerX86 extends DbgLib {
                 let a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = StrLib.pad(sCall, dbgAddrCall.fAddr32? 74 : 62) + ';' + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, dbgAddrCall.fAddr32? -74 : -62) + ';' + (sSymbol || "stack=" + this.toHexAddr(dbgAddrStack)); // + " return=" + this.toHexAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;
@@ -79514,7 +80409,7 @@ class DebuggerX86 extends DbgLib {
      * However, generally a more useful command is "bn", which allows you to break after some
      * number of instructions have been executed (as opposed to some number of cycles).
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sCmd] ("t", "tc", or "tr")
      * @param {string} [sCount] # of instructions to step
      */
@@ -79534,7 +80429,7 @@ class DebuggerX86 extends DbgLib {
                 return dbg.setBusy(true) && dbg.stepCPU(nCycles, fRegs, false);
             },
             function onCountStepComplete() {
-                /*
+                /**
                  * We explicitly called stepCPU() with fUpdateCPU === false, because repeatedly
                  * calling updateCPU() can be very slow, especially when fDisplayLiveRegs is true,
                  * so once the repeat count has been exhausted, we must perform a final updateCPU().
@@ -79546,20 +80441,14 @@ class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * initAddrSize(dbgAddr, fComplete)
+     * initAddrSize(dbgAddr)
      *
-     * @this {DebuggerX86}
-     * @param {DbgAddrX86} dbgAddr
-     * @param {boolean} fComplete
+     * @this {Debuggerx86}
+     * @param {DbgAddrx86} dbgAddr
      */
-    initAddrSize(dbgAddr, fComplete)
+    initAddrSize(dbgAddr)
     {
-        /*
-         * We use dbgAddr.fComplete to record whether or not the caller (ie, getInstruction())
-         * processed a complete instruction.
-         */
-        dbgAddr.fComplete = fComplete;
-        /*
+        /**
          * For proper disassembly of instructions preceded by an OPERAND (0x66) size prefix, we set
          * dbgAddr.fData32 to true whenever the operand size is 32-bit; similarly, for an ADDRESS (0x67)
          * size prefix, we set dbgAddr.fAddr32 to true whenever the address size is 32-bit.
@@ -79567,20 +80456,18 @@ class DebuggerX86 extends DbgLib {
          * Initially (and every time we've processed a complete instruction), both fields must be
          * set to their original value.
          */
-        if (fComplete) {
-            if (dbgAddr.fData32Orig != null) dbgAddr.fData32 = dbgAddr.fData32Orig;
-            if (dbgAddr.fAddr32Orig != null) dbgAddr.fAddr32 = dbgAddr.fAddr32Orig;
-            dbgAddr.fData32Orig = dbgAddr.fData32;
-            dbgAddr.fAddr32Orig = dbgAddr.fAddr32;
-        }
+        if (dbgAddr.fData32Orig != null) dbgAddr.fData32 = dbgAddr.fData32Orig;
+        if (dbgAddr.fAddr32Orig != null) dbgAddr.fAddr32 = dbgAddr.fAddr32Orig;
+        dbgAddr.fData32Orig = dbgAddr.fData32;
+        dbgAddr.fAddr32Orig = dbgAddr.fAddr32;
     }
 
     /**
      * isStringIns(bOpcode)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {number} bOpcode
-     * @returns {boolean} true if string instruction, false if not
+     * @returns {boolean} (true if string instruction, false if not)
      */
     isStringIns(bOpcode)
     {
@@ -79590,7 +80477,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * doUnassemble(sAddr, sAddrEnd, n)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} [sAddr]
      * @param {string} [sAddrEnd]
      * @param {number} [n]
@@ -79608,12 +80495,12 @@ class DebuggerX86 extends DbgLib {
             let dbgAddrEnd = this.parseAddr(sAddrEnd, true);
             if (!dbgAddrEnd || dbgAddrEnd.off < dbgAddr.off) return;
 
-            /*
+            /**
              * We now +1 the count to make the ending address inclusive (just like the dump command).
              */
             cb = dbgAddrEnd.off - dbgAddr.off + 1;
             if (cb < 0) cb = 1;
-            /*
+            /**
              * Limiting the amount of disassembled code to 4K helps prevent the user from wedging the browser.
              */
             if (cb > 0x1000) cb = 0x1000;
@@ -79622,7 +80509,7 @@ class DebuggerX86 extends DbgLib {
 
         let cLines = 0;
         let sInstruction;
-        this.initAddrSize(dbgAddr, true);
+        this.initAddrSize(dbgAddr);
 
         while (cb > 0 && n--) {
 
@@ -79647,13 +80534,6 @@ class DebuggerX86 extends DbgLib {
 
             sInstruction = this.getInstruction(dbgAddr, sComment, nSequence);
 
-            /*
-             * If getInstruction() reported that it did not process a complete instruction (via dbgAddr.fComplete),
-             * then bump the instruction count by one, so that we display one more line (and hopefully the complete
-             * instruction).
-             */
-            if (!dbgAddr.fComplete && !n) n++;
-
             this.printf("%s\n", sInstruction);
             this.dbgAddrNextCode = dbgAddr;
             cb -= dbgAddr.addr - addr;
@@ -79664,7 +80544,7 @@ class DebuggerX86 extends DbgLib {
     /**
      * parseCommand(sCmd, fSave, chSep)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string|undefined} sCmd
      * @param {boolean} [fSave] is true to save the command, false if not
      * @param {string} [chSep] is the command separator character (default is ';')
@@ -79688,7 +80568,7 @@ class DebuggerX86 extends DbgLib {
         }
         let asArgs = [];
         if (sCmd) {
-            /*
+            /**
              * With the introduction of breakpoint commands (ie, quoted command sequences
              * associated with a breakpoint), we can no longer perform simplistic splitting.
              *
@@ -79704,7 +80584,7 @@ class DebuggerX86 extends DbgLib {
 
             let iPrev = 0;
             let chQuote = null;
-            /*
+            /**
              * NOTE: Processing charAt() up to and INCLUDING length is not a typo; we're taking
              * advantage of the fact that charAt() with an invalid index returns an empty string,
              * allowing us to use the same substring() call to capture the final portion of sCmd.
@@ -79723,7 +80603,7 @@ class DebuggerX86 extends DbgLib {
                     }
                 }
                 else if (ch == chSep && !chQuote && ch != chPrev || !ch) {
-                    /*
+                    /**
                      * Recall that substring() accepts starting (inclusive) and ending (exclusive)
                      * indexes, whereas substr() accepts a starting index and a length.  We need the former.
                      */
@@ -79736,7 +80616,7 @@ class DebuggerX86 extends DbgLib {
                 chPrev = ch;
             }
             if (chSep == ' ' && asArgs.length) {
-                /*
+                /**
                  * I've folded in the old shiftArgs() code here: deal with any command (eg, "r") that allows but
                  * doesn't require whitespace between the command and first argument, and break them apart anyway.
                  */
@@ -79758,10 +80638,10 @@ class DebuggerX86 extends DbgLib {
     /**
      * doCommand(sCmd, fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if command processed, false if unrecognized
+     * @returns {boolean} (true if command processed, false if unrecognized)
      */
     doCommand(sCmd, fQuiet)
     {
@@ -79792,12 +80672,12 @@ class DebuggerX86 extends DbgLib {
             let ch = sCmd.charAt(0);
             if (ch == '"' || ch == "'") return true;
 
-            /*
+            /**
              * Zap the previous message buffer to ensure the new command's output is not tossed out as a repeat.
              */
             this.sMessagePrev = null;
 
-            /*
+            /**
              * I've relaxed the !isBusy() requirement, to maximize our ability to issue Debugger commands externally.
              */
             if (this.isReady() /* && !this.isBusy(true) */ && sCmd.length > 0) {
@@ -79813,7 +80693,7 @@ class DebuggerX86 extends DbgLib {
                     this.doAssemble(asArgs);
                     break;
                 case 'b':
-                    this.doBreak(asArgs[0], asArgs[1], sCmd);
+                    this.doBreak(asArgs, sCmd);
                     break;
                 case 'c':
                     this.doClear(asArgs[0]);
@@ -79938,11 +80818,11 @@ class DebuggerX86 extends DbgLib {
     /**
      * doCommands(sCommands, fSave, fQuiet)
      *
-     * @this {DebuggerX86}
+     * @this {Debuggerx86}
      * @param {string} sCommands
      * @param {boolean} [fSave]
      * @param {boolean} [fQuiet]
-     * @returns {boolean} true if all commands processed, false if not
+     * @returns {boolean} (true if all commands processed, false if not)
      */
     doCommands(sCommands, fSave = false, fQuiet = false)
     {
@@ -79954,7 +80834,7 @@ class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * DebuggerX86.init()
+     * Debuggerx86.init()
      *
      * This function operates on every HTML element of class "debugger", extracting the
      * JSON-encoded parameters for the Debugger constructor from the element's "data-value"
@@ -79967,7 +80847,7 @@ class DebuggerX86 extends DbgLib {
         for (let iDbg = 0; iDbg < aeDbg.length; iDbg++) {
             let eDbg = aeDbg[iDbg];
             let parmsDbg = Component.getComponentParms(eDbg);
-            let dbg = new DebuggerX86(parmsDbg);
+            let dbg = new Debuggerx86(parmsDbg);
             Component.bindComponentControls(dbg, eDbg, APPCLASS);
         }
     }
@@ -79975,7 +80855,7 @@ class DebuggerX86 extends DbgLib {
 
 if (DEBUGGER) {
 
-    /*
+    /**
      * NOTE: The Debugger properties below are considered "class constants"; most of them use our "all-caps"
      * convention (and all of them SHOULD, but that wouldn't help us catch any bugs).
      *
@@ -79988,10 +80868,10 @@ if (DEBUGGER) {
      * caught at compile-time.
      */
 
-    /*
+    /**
      * Information regarding interrupts of interest (used by messageInt() and others)
      */
-    DebuggerX86.INT_MESSAGES = {
+    Debuggerx86.INT_MESSAGES = {
         0x10:       MESSAGE.VIDEO,
         0x13:       MESSAGE.FDC,
         0x15:       MESSAGE.CHIPSET,
@@ -80002,14 +80882,14 @@ if (DEBUGGER) {
         0x33:       MESSAGE.MOUSE
     };
 
-    /*
+    /**
      * Information regarding "annoying" interrupts (which aren't annoying so much as too frequent);
      * note that some of these can still be enabled if you really want them (eg, RTC can be turned on
      * with RTC messages, ALT_TIMER with TIMER messages, etc).
      */
-    DebuggerX86.INT_ANNOYING = [Interrupts.TIMER, Interrupts.TMR_BREAK, Interrupts.DOS_IDLE, Interrupts.DOS_NETBIOS, Interrupts.VIDEO_VGA];
+    Debuggerx86.INT_ANNOYING = [Interrupts.TIMER, Interrupts.TMR_BREAK, Interrupts.DOS_IDLE, Interrupts.DOS_NETBIOS, Interrupts.VIDEO_VGA];
 
-    DebuggerX86.COMMANDS = {
+    Debuggerx86.COMMANDS = {
         '?':     "help/print",
         'a [#]': "assemble",            // TODO: Implement this command someday
         'b [#]': "breakpoint",          // multiple variations (use b? to list them)
@@ -80038,15 +80918,15 @@ if (DEBUGGER) {
         'var':   "assign variable"
     };
 
-    /*
-     * Supported address types; the type field in a DbgAddrX86 object may be one of:
+    /**
+     * Supported address types; the type field in a DbgAddrx86 object may be one of:
      *
      *      NONE, REAL, PROT, V86, LINEAR or PHYSICAL
      *
      * REAL and V86 addresses are specified with a '&' prefix, PROT addresses with a '#' prefix,
      * LINEAR addresses with '%', and PHYSICAL addresses with '%%'.
      */
-    DebuggerX86.ADDRTYPE = {
+    Debuggerx86.ADDRTYPE = {
         NONE:       0x00,
         REAL:       0x01,
         PROT:       0x02,
@@ -80055,7 +80935,7 @@ if (DEBUGGER) {
         PHYSICAL:   0x05
     };
 
-    /*
+    /**
      * CPU instruction ordinals
      *
      * Note that individual instructions end with ordinal 163 and instruction groups begin with ordinal 164;
@@ -80064,7 +80944,7 @@ if (DEBUGGER) {
      * NOTE: While this list started alphabetical, there are a few wrinkles; eg, POPA/POPF/PUSHF/PUSHA are
      * sequential to make it easier to detect instructions that require a D suffix when the operand size is 32 bits.
      */
-    DebuggerX86.INS = {
+    Debuggerx86.INS = {
         NONE:   0,   AAA:    1,   AAD:    2,   AAM:    3,   AAS:    4,   ADC:    5,   ADD:    6,   AND:    7,
         ARPL:   8,   AS:     9,   BOUND:  10,  BSF:    11,  BSR:    12,  BT:     13,  BTC:    14,  BTR:    15,
         BTS:    16,  CALL:   17,  CBW:    18,  CLC:    19,  CLD:    20,  CLI:    21,  CLTS:   22,  CMC:    23,
@@ -80090,10 +80970,10 @@ if (DEBUGGER) {
         GRP4W:  176, OP0F:   177, GRP6:   178, GRP7:   179, GRP8:   180
     };
 
-    /*
+    /**
      * CPU instruction names (mnemonics), indexed by CPU instruction ordinal (above)
      */
-    DebuggerX86.INS_NAMES = [
+    Debuggerx86.INS_NAMES = [
         "INVALID","AAA",    "AAD",    "AAM",    "AAS",    "ADC",    "ADD",    "AND",
         "ARPL",   "AS:",    "BOUND",  "BSF",    "BSR",    "BT",     "BTC",    "BTR",
         "BTS",    "CALL",   "CBW",    "CLC",    "CLD",    "CLI",    "CLTS",   "CMC",
@@ -80117,7 +80997,7 @@ if (DEBUGGER) {
         "XBTS",   "XCHG",   "XLAT",   "XOR"
     ];
 
-    /*
+    /**
      * FPU instruction ordinals
      *
      * Unlike CPU instruction ordinals, these are not organized alphabetically (which I did only for the
@@ -80140,7 +81020,7 @@ if (DEBUGGER) {
      * Also, unlike the CPU instructions, there is no NONE ("INVALID") instruction; if an ESC instruction
      * can't be decoded as a valid FPU instruction, then it should remain an ESC instruction.
      */
-    DebuggerX86.FINS = {
+    Debuggerx86.FINS = {
         FLD:    0,   FST:    1,   FSTP:   2,   FXCH:   3,   FILD:   4,   FIST:   5,   FISTP:  6,   FBLD:   7,
         FBSTP:  8,   FADD:   9,   FADDP:  10,  FIADD:  11,  FSUB:   12,  FSUBP:  13,  FISUB:  14,  FSUBR:  15,
         FSUBRP: 16,  FISUBR: 17,  FMUL:   18,  FMULP:  19,  FIMUL:  20,  FDIV:   21,  FDIVP:  22,  FIDIV:  23,
@@ -80154,10 +81034,10 @@ if (DEBUGGER) {
         FSTSWAX:80
     };
 
-    /*
+    /**
      * FPU instruction names (mnemonics), indexed by FPU instruction ordinal (above)
      */
-    DebuggerX86.FINS_NAMES = [
+    Debuggerx86.FINS_NAMES = [
         "FLD",    "FST",    "FSTP",   "FXCH",   "FILD",   "FIST",   "FISTP",  "FBLD",
         "FBSTP",  "FADD",   "FADDP",  "FIADD",  "FSUB",   "FSUBP",  "FISUB",  "FSUBR",
         "FSUBRP", "FISUBR", "FMUL",   "FMULP",  "FIMUL",  "FDIV",   "FDIVP",  "FIDIV",
@@ -80171,60 +81051,60 @@ if (DEBUGGER) {
         "FSTSWAX"
     ];
 
-    DebuggerX86.FPU_TAGS = ["VALID", "ZERO ", "SPEC ", "EMPTY"];
+    Debuggerx86.FPU_TAGS = ["VALID", "ZERO ", "SPEC ", "EMPTY"];
 
-    DebuggerX86.CPU_8086  = 0;
-    DebuggerX86.CPU_80186 = 1;
-    DebuggerX86.CPU_80286 = 2;
-    DebuggerX86.CPU_80386 = 3;
-    DebuggerX86.CPUS = [8086, 80186, 80286, 80386];
+    Debuggerx86.CPU_8086  = 0;
+    Debuggerx86.CPU_80186 = 1;
+    Debuggerx86.CPU_80286 = 2;
+    Debuggerx86.CPU_80386 = 3;
+    Debuggerx86.CPUS = [8086, 80186, 80286, 80386];
 
-    /*
+    /**
      * ModRM masks and definitions
      */
-    DebuggerX86.REG_AL         = 0x00;          // bits 0-2 are standard Reg encodings
-    DebuggerX86.REG_CL         = 0x01;
-    DebuggerX86.REG_DL         = 0x02;
-    DebuggerX86.REG_BL         = 0x03;
-    DebuggerX86.REG_AH         = 0x04;
-    DebuggerX86.REG_CH         = 0x05;
-    DebuggerX86.REG_DH         = 0x06;
-    DebuggerX86.REG_BH         = 0x07;
-    DebuggerX86.REG_AX         = 0x08;
-    DebuggerX86.REG_CX         = 0x09;
-    DebuggerX86.REG_DX         = 0x0A;
-    DebuggerX86.REG_BX         = 0x0B;
-    DebuggerX86.REG_SP         = 0x0C;
-    DebuggerX86.REG_BP         = 0x0D;
-    DebuggerX86.REG_SI         = 0x0E;
-    DebuggerX86.REG_DI         = 0x0F;
-    DebuggerX86.REG_SEG        = 0x10;
-    DebuggerX86.REG_IP         = 0x16;
-    DebuggerX86.REG_PS         = 0x17;
-    DebuggerX86.REG_EAX        = 0x18;
-    DebuggerX86.REG_ECX        = 0x19;
-    DebuggerX86.REG_EDX        = 0x1A;
-    DebuggerX86.REG_EBX        = 0x1B;
-    DebuggerX86.REG_ESP        = 0x1C;
-    DebuggerX86.REG_EBP        = 0x1D;
-    DebuggerX86.REG_ESI        = 0x1E;
-    DebuggerX86.REG_EDI        = 0x1F;
-    DebuggerX86.REG_CR0        = 0x20;
-    DebuggerX86.REG_CR1        = 0x21;
-    DebuggerX86.REG_CR2        = 0x22;
-    DebuggerX86.REG_CR3        = 0x23;
-    DebuggerX86.REG_DR0        = 0x28;
-    DebuggerX86.REG_DR1        = 0x29;
-    DebuggerX86.REG_DR2        = 0x2A;
-    DebuggerX86.REG_DR3        = 0x2B;
-    DebuggerX86.REG_DR6        = 0x2E;
-    DebuggerX86.REG_DR7        = 0x2F;
-    DebuggerX86.REG_TR0        = 0x30;
-    DebuggerX86.REG_TR6        = 0x36;
-    DebuggerX86.REG_TR7        = 0x37;
-    DebuggerX86.REG_EIP        = 0x38;
+    Debuggerx86.REG_AL         = 0x00;          // bits 0-2 are standard Reg encodings
+    Debuggerx86.REG_CL         = 0x01;
+    Debuggerx86.REG_DL         = 0x02;
+    Debuggerx86.REG_BL         = 0x03;
+    Debuggerx86.REG_AH         = 0x04;
+    Debuggerx86.REG_CH         = 0x05;
+    Debuggerx86.REG_DH         = 0x06;
+    Debuggerx86.REG_BH         = 0x07;
+    Debuggerx86.REG_AX         = 0x08;
+    Debuggerx86.REG_CX         = 0x09;
+    Debuggerx86.REG_DX         = 0x0A;
+    Debuggerx86.REG_BX         = 0x0B;
+    Debuggerx86.REG_SP         = 0x0C;
+    Debuggerx86.REG_BP         = 0x0D;
+    Debuggerx86.REG_SI         = 0x0E;
+    Debuggerx86.REG_DI         = 0x0F;
+    Debuggerx86.REG_SEG        = 0x10;
+    Debuggerx86.REG_IP         = 0x16;
+    Debuggerx86.REG_PS         = 0x17;
+    Debuggerx86.REG_EAX        = 0x18;
+    Debuggerx86.REG_ECX        = 0x19;
+    Debuggerx86.REG_EDX        = 0x1A;
+    Debuggerx86.REG_EBX        = 0x1B;
+    Debuggerx86.REG_ESP        = 0x1C;
+    Debuggerx86.REG_EBP        = 0x1D;
+    Debuggerx86.REG_ESI        = 0x1E;
+    Debuggerx86.REG_EDI        = 0x1F;
+    Debuggerx86.REG_CR0        = 0x20;
+    Debuggerx86.REG_CR1        = 0x21;
+    Debuggerx86.REG_CR2        = 0x22;
+    Debuggerx86.REG_CR3        = 0x23;
+    Debuggerx86.REG_DR0        = 0x28;
+    Debuggerx86.REG_DR1        = 0x29;
+    Debuggerx86.REG_DR2        = 0x2A;
+    Debuggerx86.REG_DR3        = 0x2B;
+    Debuggerx86.REG_DR6        = 0x2E;
+    Debuggerx86.REG_DR7        = 0x2F;
+    Debuggerx86.REG_TR0        = 0x30;
+    Debuggerx86.REG_TR6        = 0x36;
+    Debuggerx86.REG_TR7        = 0x37;
+    Debuggerx86.REG_EIP        = 0x38;
 
-    DebuggerX86.REGS = [
+    Debuggerx86.REGS = [
         "AL",  "CL",  "DL",  "BL",  "AH",  "CH",  "DH",  "BH",
         "AX",  "CX",  "DX",  "BX",  "SP",  "BP",  "SI",  "DI",
         "ES",  "CS",  "SS",  "DS",  "FS",  "GS",  "IP",  "PS",
@@ -80235,59 +81115,59 @@ if (DEBUGGER) {
         "EIP"
     ];
 
-    DebuggerX86.REG_ES         = 0x00;          // bits 0-1 are standard SegReg encodings
-    DebuggerX86.REG_CS         = 0x01;
-    DebuggerX86.REG_SS         = 0x02;
-    DebuggerX86.REG_DS         = 0x03;
-    DebuggerX86.REG_FS         = 0x04;
-    DebuggerX86.REG_GS         = 0x05;
-    DebuggerX86.REG_UNKNOWN    = 0x00;
+    Debuggerx86.REG_ES         = 0x00;          // bits 0-1 are standard SegReg encodings
+    Debuggerx86.REG_CS         = 0x01;
+    Debuggerx86.REG_SS         = 0x02;
+    Debuggerx86.REG_DS         = 0x03;
+    Debuggerx86.REG_FS         = 0x04;
+    Debuggerx86.REG_GS         = 0x05;
+    Debuggerx86.REG_UNKNOWN    = 0x00;
 
-    DebuggerX86.MOD_NODISP     = 0x00;          // use RM below, no displacement
-    DebuggerX86.MOD_DISP8      = 0x01;          // use RM below + 8-bit displacement
-    DebuggerX86.MOD_DISP16     = 0x02;          // use RM below + 16-bit displacement
-    DebuggerX86.MOD_REGISTER   = 0x03;          // use REG above
+    Debuggerx86.MOD_NODISP     = 0x00;          // use RM below, no displacement
+    Debuggerx86.MOD_DISP8      = 0x01;          // use RM below + 8-bit displacement
+    Debuggerx86.MOD_DISP16     = 0x02;          // use RM below + 16-bit displacement
+    Debuggerx86.MOD_REGISTER   = 0x03;          // use REG above
 
-    DebuggerX86.RM_BXSI        = 0x00;
-    DebuggerX86.RM_BXDI        = 0x01;
-    DebuggerX86.RM_BPSI        = 0x02;
-    DebuggerX86.RM_BPDI        = 0x03;
-    DebuggerX86.RM_SI          = 0x04;
-    DebuggerX86.RM_DI          = 0x05;
-    DebuggerX86.RM_BP          = 0x06;
-    DebuggerX86.RM_IMMOFF      = DebuggerX86.RM_BP;       // only if MOD_NODISP
-    DebuggerX86.RM_BX          = 0x07;
+    Debuggerx86.RM_BXSI        = 0x00;
+    Debuggerx86.RM_BXDI        = 0x01;
+    Debuggerx86.RM_BPSI        = 0x02;
+    Debuggerx86.RM_BPDI        = 0x03;
+    Debuggerx86.RM_SI          = 0x04;
+    Debuggerx86.RM_DI          = 0x05;
+    Debuggerx86.RM_BP          = 0x06;
+    Debuggerx86.RM_IMMOFF      = Debuggerx86.RM_BP;       // only if MOD_NODISP
+    Debuggerx86.RM_BX          = 0x07;
 
-    DebuggerX86.RMS = [
+    Debuggerx86.RMS = [
         "BX+SI", "BX+DI", "BP+SI", "BP+DI", "SI",    "DI",    "BP",    "BX",
         "EAX",   "ECX",   "EDX",   "EBX",   "ESP",   "EBP",   "ESI",   "EDI"
     ];
 
-    /*
+    /**
      * Operand type descriptor masks and definitions
      *
      * Note that the letters in () in the comments refer to Intel's
      * nomenclature used in Appendix A of the 80386 Programmers Reference Manual.
      */
-    DebuggerX86.TYPE_SIZE      = 0x000F;        // size field
-    DebuggerX86.TYPE_MODE      = 0x00F0;        // mode field
-    DebuggerX86.TYPE_IREG      = 0x0F00;        // implied register field
-    DebuggerX86.TYPE_OTHER     = 0xF000;        // "other" field
+    Debuggerx86.TYPE_SIZE      = 0x000F;        // size field
+    Debuggerx86.TYPE_MODE      = 0x00F0;        // mode field
+    Debuggerx86.TYPE_IREG      = 0x0F00;        // implied register field
+    Debuggerx86.TYPE_OTHER     = 0xF000;        // "other" field
 
-    /*
+    /**
      * TYPE_SIZE values.  Some definitions use duplicate values when the operands are the
      * same size and the Debugger doesn't need to make a distinction.
      */
-    DebuggerX86.TYPE_NONE      = 0x0000;        //     (all other TYPE fields ignored)
-    DebuggerX86.TYPE_BYTE      = 0x0001;        // (b) byte, regardless of operand size
-    DebuggerX86.TYPE_SBYTE     = 0x0002;        //     byte sign-extended to word
-    DebuggerX86.TYPE_SHORT     = 0x0003;        // (w) 16-bit value
-    DebuggerX86.TYPE_WORD      = 0x0004;        // (v) 16-bit or 32-bit value
-    DebuggerX86.TYPE_LONG      = 0x0005;        // (d) 32-bit value
-    DebuggerX86.TYPE_SEGP      = 0x0006;        // (p) 32-bit or 48-bit pointer
-    DebuggerX86.TYPE_FARP      = 0x0007;        // (p) 32-bit or 48-bit pointer for JMP/CALL
-    DebuggerX86.TYPE_PREFIX    = 0x0008;        //     (treat similarly to TYPE_NONE)
-    /*
+    Debuggerx86.TYPE_NONE      = 0x0000;        //     (all other TYPE fields ignored)
+    Debuggerx86.TYPE_BYTE      = 0x0001;        // (b) byte, regardless of operand size
+    Debuggerx86.TYPE_SBYTE     = 0x0002;        //     byte sign-extended to word
+    Debuggerx86.TYPE_SHORT     = 0x0003;        // (w) 16-bit value
+    Debuggerx86.TYPE_WORD      = 0x0004;        // (v) 16-bit or 32-bit value
+    Debuggerx86.TYPE_LONG      = 0x0005;        // (d) 32-bit value
+    Debuggerx86.TYPE_SEGP      = 0x0006;        // (p) 32-bit or 48-bit pointer
+    Debuggerx86.TYPE_FARP      = 0x0007;        // (p) 32-bit or 48-bit pointer for JMP/CALL
+    Debuggerx86.TYPE_PREFIX    = 0x0008;        //     (treat similarly to TYPE_NONE)
+    /**
      * The remaining TYPE_SIZE values are for the FPU.  Note that there are not enough values
      * within this nibble for every type to have a unique value, so to differentiate between two
      * types of the same size (eg, SINT and SREAL), we can inspect the opcode string, because only
@@ -80295,83 +81175,83 @@ if (DEBUGGER) {
      * so-called "word-integer"); since a word-integer is always 16 bits, we specify TYPE_SHORT,
      * which the Debugger should display as "INT16" for FI* instructions.
      */
-    DebuggerX86.TYPE_ST        = 0x0009;        //     FPU ST (implicit stack top)
-    DebuggerX86.TYPE_STREG     = 0x000A;        //     FPU ST (explicit stack register, relative to top)
-    DebuggerX86.TYPE_SINT      = 0x000B;        //     FPU SI (short-integer; 32-bit); displayed as "INT32"
-    DebuggerX86.TYPE_SREAL     = 0x000B;        //     FPU SR (short-real; 32-bit); displayed as "REAL32"
-    DebuggerX86.TYPE_LINT      = 0x000C;        //     FPU LI (long-integer; 64-bit); displayed as "INT64"
-    DebuggerX86.TYPE_LREAL     = 0x000C;        //     FPU LR (long-real; 64-bit); displayed as "REAL64"
-    DebuggerX86.TYPE_TREAL     = 0x000D;        //     FPU TR (temp-real; 80-bit); displayed as "REAL80"
-    DebuggerX86.TYPE_BCD80     = 0x000E;        //     FPU PD (packed-decimal; 18 BCD digits in 80 bits, bits 72-78 unused, sign in bit 79); displayed as "BCD80"
-    DebuggerX86.TYPE_ENV       = 0x000F;        //     FPU ENV (environment; 14 bytes in real-mode, 28 bytes in protected-mode)
-    DebuggerX86.TYPE_FPU       = 0x000F;        //     FPU SAVE (save/restore; 94 bytes in real-mode, 108 bytes in protected-mode)
+    Debuggerx86.TYPE_ST        = 0x0009;        //     FPU ST (implicit stack top)
+    Debuggerx86.TYPE_STREG     = 0x000A;        //     FPU ST (explicit stack register, relative to top)
+    Debuggerx86.TYPE_SINT      = 0x000B;        //     FPU SI (short-integer; 32-bit); displayed as "INT32"
+    Debuggerx86.TYPE_SREAL     = 0x000B;        //     FPU SR (short-real; 32-bit); displayed as "REAL32"
+    Debuggerx86.TYPE_LINT      = 0x000C;        //     FPU LI (long-integer; 64-bit); displayed as "INT64"
+    Debuggerx86.TYPE_LREAL     = 0x000C;        //     FPU LR (long-real; 64-bit); displayed as "REAL64"
+    Debuggerx86.TYPE_TREAL     = 0x000D;        //     FPU TR (temp-real; 80-bit); displayed as "REAL80"
+    Debuggerx86.TYPE_BCD80     = 0x000E;        //     FPU PD (packed-decimal; 18 BCD digits in 80 bits, bits 72-78 unused, sign in bit 79); displayed as "BCD80"
+    Debuggerx86.TYPE_ENV       = 0x000F;        //     FPU ENV (environment; 14 bytes in real-mode, 28 bytes in protected-mode)
+    Debuggerx86.TYPE_FPU       = 0x000F;        //     FPU SAVE (save/restore; 94 bytes in real-mode, 108 bytes in protected-mode)
 
-    /*
+    /**
      * TYPE_MODE values.  Order is somewhat important, as all values implying the presence
      * of a ModRM byte are assumed to be >= TYPE_MODRM.
      */
-    DebuggerX86.TYPE_IMM       = 0x0000;        // (I) immediate data
-    DebuggerX86.TYPE_ONE       = 0x0010;        //     implicit 1 (eg, shifts/rotates)
-    DebuggerX86.TYPE_IMMOFF    = 0x0020;        // (A) immediate offset
-    DebuggerX86.TYPE_IMMREL    = 0x0030;        // (J) immediate relative
-    DebuggerX86.TYPE_DSSI      = 0x0040;        // (X) memory addressed by DS:SI
-    DebuggerX86.TYPE_ESDI      = 0x0050;        // (Y) memory addressed by ES:DI
-    DebuggerX86.TYPE_IMPREG    = 0x0060;        //     implicit register in TYPE_IREG
-    DebuggerX86.TYPE_IMPSEG    = 0x0070;        //     implicit segment reg in TYPE_IREG
-    DebuggerX86.TYPE_MODRM     = 0x0080;        // (E) standard ModRM decoding
-    DebuggerX86.TYPE_MODMEM    = 0x0090;        // (M) ModRM refers to memory only
-    DebuggerX86.TYPE_MODREG    = 0x00A0;        // (R) ModRM refers to register only
-    DebuggerX86.TYPE_REG       = 0x00B0;        // (G) standard Reg decoding
-    DebuggerX86.TYPE_SEGREG    = 0x00C0;        // (S) Reg selects segment register
-    DebuggerX86.TYPE_CTLREG    = 0x00D0;        // (C) Reg selects control register
-    DebuggerX86.TYPE_DBGREG    = 0x00E0;        // (D) Reg selects debug register
-    DebuggerX86.TYPE_TSTREG    = 0x00F0;        // (T) Reg selects test register
+    Debuggerx86.TYPE_IMM       = 0x0000;        // (I) immediate data
+    Debuggerx86.TYPE_ONE       = 0x0010;        //     implicit 1 (eg, shifts/rotates)
+    Debuggerx86.TYPE_IMMOFF    = 0x0020;        // (A) immediate offset
+    Debuggerx86.TYPE_IMMREL    = 0x0030;        // (J) immediate relative
+    Debuggerx86.TYPE_DSSI      = 0x0040;        // (X) memory addressed by DS:SI
+    Debuggerx86.TYPE_ESDI      = 0x0050;        // (Y) memory addressed by ES:DI
+    Debuggerx86.TYPE_IMPREG    = 0x0060;        //     implicit register in TYPE_IREG
+    Debuggerx86.TYPE_IMPSEG    = 0x0070;        //     implicit segment reg in TYPE_IREG
+    Debuggerx86.TYPE_MODRM     = 0x0080;        // (E) standard ModRM decoding
+    Debuggerx86.TYPE_MODMEM    = 0x0090;        // (M) ModRM refers to memory only
+    Debuggerx86.TYPE_MODREG    = 0x00A0;        // (R) ModRM refers to register only
+    Debuggerx86.TYPE_REG       = 0x00B0;        // (G) standard Reg decoding
+    Debuggerx86.TYPE_SEGREG    = 0x00C0;        // (S) Reg selects segment register
+    Debuggerx86.TYPE_CTLREG    = 0x00D0;        // (C) Reg selects control register
+    Debuggerx86.TYPE_DBGREG    = 0x00E0;        // (D) Reg selects debug register
+    Debuggerx86.TYPE_TSTREG    = 0x00F0;        // (T) Reg selects test register
 
-    /*
+    /**
      * TYPE_IREG values, based on the REG_* constants.
      * For convenience, they include TYPE_IMPREG or TYPE_IMPSEG as appropriate.
      */
-    DebuggerX86.TYPE_AL = (DebuggerX86.REG_AL << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_CL = (DebuggerX86.REG_CL << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_DL = (DebuggerX86.REG_DL << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_BL = (DebuggerX86.REG_BL << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_AH = (DebuggerX86.REG_AH << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_CH = (DebuggerX86.REG_CH << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_DH = (DebuggerX86.REG_DH << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_BH = (DebuggerX86.REG_BH << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_BYTE);
-    DebuggerX86.TYPE_AX = (DebuggerX86.REG_AX << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_CX = (DebuggerX86.REG_CX << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_DX = (DebuggerX86.REG_DX << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_BX = (DebuggerX86.REG_BX << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_SP = (DebuggerX86.REG_SP << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_BP = (DebuggerX86.REG_BP << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_SI = (DebuggerX86.REG_SI << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_DI = (DebuggerX86.REG_DI << 8 | DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_WORD);
-    DebuggerX86.TYPE_ES = (DebuggerX86.REG_ES << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
-    DebuggerX86.TYPE_CS = (DebuggerX86.REG_CS << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
-    DebuggerX86.TYPE_SS = (DebuggerX86.REG_SS << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
-    DebuggerX86.TYPE_DS = (DebuggerX86.REG_DS << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
-    DebuggerX86.TYPE_FS = (DebuggerX86.REG_FS << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
-    DebuggerX86.TYPE_GS = (DebuggerX86.REG_GS << 8 | DebuggerX86.TYPE_IMPSEG | DebuggerX86.TYPE_SHORT);
+    Debuggerx86.TYPE_AL = (Debuggerx86.REG_AL << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_CL = (Debuggerx86.REG_CL << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_DL = (Debuggerx86.REG_DL << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_BL = (Debuggerx86.REG_BL << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_AH = (Debuggerx86.REG_AH << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_CH = (Debuggerx86.REG_CH << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_DH = (Debuggerx86.REG_DH << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_BH = (Debuggerx86.REG_BH << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_BYTE);
+    Debuggerx86.TYPE_AX = (Debuggerx86.REG_AX << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_CX = (Debuggerx86.REG_CX << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_DX = (Debuggerx86.REG_DX << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_BX = (Debuggerx86.REG_BX << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_SP = (Debuggerx86.REG_SP << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_BP = (Debuggerx86.REG_BP << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_SI = (Debuggerx86.REG_SI << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_DI = (Debuggerx86.REG_DI << 8 | Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_WORD);
+    Debuggerx86.TYPE_ES = (Debuggerx86.REG_ES << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
+    Debuggerx86.TYPE_CS = (Debuggerx86.REG_CS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
+    Debuggerx86.TYPE_SS = (Debuggerx86.REG_SS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
+    Debuggerx86.TYPE_DS = (Debuggerx86.REG_DS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
+    Debuggerx86.TYPE_FS = (Debuggerx86.REG_FS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
+    Debuggerx86.TYPE_GS = (Debuggerx86.REG_GS << 8 | Debuggerx86.TYPE_IMPSEG | Debuggerx86.TYPE_SHORT);
 
-    /*
+    /**
      * TYPE_OTHER bit definitions
      */
-    DebuggerX86.TYPE_IN    = 0x1000;            // operand is input
-    DebuggerX86.TYPE_OUT   = 0x2000;            // operand is output
-    DebuggerX86.TYPE_BOTH  = (DebuggerX86.TYPE_IN | DebuggerX86.TYPE_OUT);
-    DebuggerX86.TYPE_8086  = (DebuggerX86.CPU_8086 << 14);
-    DebuggerX86.TYPE_8087  = DebuggerX86.TYPE_8086;
-    DebuggerX86.TYPE_80186 = (DebuggerX86.CPU_80186 << 14);
-    DebuggerX86.TYPE_80286 = (DebuggerX86.CPU_80286 << 14);
-    DebuggerX86.TYPE_80287 = DebuggerX86.TYPE_80286;
-    DebuggerX86.TYPE_80386 = (DebuggerX86.CPU_80386 << 14);
-    DebuggerX86.TYPE_80387 = DebuggerX86.TYPE_80386;
-    DebuggerX86.TYPE_CPU_SHIFT = 14;
+    Debuggerx86.TYPE_IN    = 0x1000;            // operand is input
+    Debuggerx86.TYPE_OUT   = 0x2000;            // operand is output
+    Debuggerx86.TYPE_BOTH  = (Debuggerx86.TYPE_IN | Debuggerx86.TYPE_OUT);
+    Debuggerx86.TYPE_8086  = (Debuggerx86.CPU_8086 << 14);
+    Debuggerx86.TYPE_8087  = Debuggerx86.TYPE_8086;
+    Debuggerx86.TYPE_80186 = (Debuggerx86.CPU_80186 << 14);
+    Debuggerx86.TYPE_80286 = (Debuggerx86.CPU_80286 << 14);
+    Debuggerx86.TYPE_80287 = Debuggerx86.TYPE_80286;
+    Debuggerx86.TYPE_80386 = (Debuggerx86.CPU_80386 << 14);
+    Debuggerx86.TYPE_80387 = Debuggerx86.TYPE_80386;
+    Debuggerx86.TYPE_CPU_SHIFT = 14;
 
-    DebuggerX86.HISTORY_LIMIT = DEBUG? 100000 : 1000;
+    Debuggerx86.HISTORY_LIMIT = DEBUG? 100000 : 1000;
 
-    /*
+    /**
      * Opcode 0x0F has a distinguished history:
      *
      *      On the 8086, it functioned as POP CS
@@ -80382,15 +81262,15 @@ if (DEBUGGER) {
      * opcode appropriately, by setting the opcode's entry in aaOpDescs accordingly.  0x0F in aaOpDescs points
      * to the 8086 table: aOpDescPopCS.
      *
-     * Note that we must NOT modify aaOpDescs directly.  this.aaOpDescs will point to DebuggerX86.aaOpDescs
+     * Note that we must NOT modify aaOpDescs directly.  this.aaOpDescs will point to Debuggerx86.aaOpDescs
      * if the processor is an 8086, because that's the processor that the hard-coded contents of the table
      * represent; for all other processors, this.aaOpDescs will contain a copy of the table that we can modify.
      */
-    DebuggerX86.aOpDescPopCS     = [DebuggerX86.INS.POP,  DebuggerX86.TYPE_CS   | DebuggerX86.TYPE_OUT];
-    DebuggerX86.aOpDescUndefined = [DebuggerX86.INS.NONE, DebuggerX86.TYPE_NONE];
-    DebuggerX86.aOpDesc0F        = [DebuggerX86.INS.OP0F, DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_BOTH];
+    Debuggerx86.aOpDescPopCS     = [Debuggerx86.INS.POP,  Debuggerx86.TYPE_CS   | Debuggerx86.TYPE_OUT];
+    Debuggerx86.aOpDescUndefined = [Debuggerx86.INS.NONE, Debuggerx86.TYPE_NONE];
+    Debuggerx86.aOpDesc0F        = [Debuggerx86.INS.OP0F, Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_BOTH];
 
-    /*
+    /**
      * The aaOpDescs array is indexed by opcode, and each element is a sub-array (aOpDesc) that describes
      * the corresponding opcode. The sub-elements are as follows:
      *
@@ -80403,698 +81283,698 @@ if (DEBUGGER) {
      * present (or contains zero), the opcode has no (or only implied) operands; if [2] is not present, the
      * opcode has only a single operand.  And so on.
      */
-    DebuggerX86.aaOpDescs = [
-    /* 0x00 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x01 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x02 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x03 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x04 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x05 */ [DebuggerX86.INS.ADD,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x06 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_ES     | DebuggerX86.TYPE_IN],
-    /* 0x07 */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_ES     | DebuggerX86.TYPE_OUT],
+    Debuggerx86.aaOpDescs = [
+    /* 0x00 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x01 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x02 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x03 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x04 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x05 */ [Debuggerx86.INS.ADD,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x06 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_ES     | Debuggerx86.TYPE_IN],
+    /* 0x07 */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_ES     | Debuggerx86.TYPE_OUT],
 
-    /* 0x08 */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x09 */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x0A */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x0B */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x0C */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x0D */ [DebuggerX86.INS.OR,    DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x0E */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_CS     | DebuggerX86.TYPE_IN],
-    /* 0x0F */ DebuggerX86.aOpDescPopCS,
+    /* 0x08 */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x09 */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x0A */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x0B */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x0C */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x0D */ [Debuggerx86.INS.OR,    Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x0E */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_CS     | Debuggerx86.TYPE_IN],
+    /* 0x0F */ Debuggerx86.aOpDescPopCS,
 
-    /* 0x10 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x11 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x12 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x13 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x14 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x15 */ [DebuggerX86.INS.ADC,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x16 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_SS     | DebuggerX86.TYPE_IN],
-    /* 0x17 */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_SS     | DebuggerX86.TYPE_OUT],
+    /* 0x10 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x11 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x12 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x13 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x14 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x15 */ [Debuggerx86.INS.ADC,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x16 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_SS     | Debuggerx86.TYPE_IN],
+    /* 0x17 */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_SS     | Debuggerx86.TYPE_OUT],
 
-    /* 0x18 */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x19 */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x1A */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x1B */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x1C */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x1D */ [DebuggerX86.INS.SBB,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x1E */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_DS     | DebuggerX86.TYPE_IN],
-    /* 0x1F */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_DS     | DebuggerX86.TYPE_OUT],
+    /* 0x18 */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x19 */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x1A */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x1B */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x1C */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x1D */ [Debuggerx86.INS.SBB,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x1E */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_DS     | Debuggerx86.TYPE_IN],
+    /* 0x1F */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_DS     | Debuggerx86.TYPE_OUT],
 
-    /* 0x20 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x21 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x22 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x23 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x24 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x25 */ [DebuggerX86.INS.AND,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x26 */ [DebuggerX86.INS.ES,    DebuggerX86.TYPE_PREFIX],
-    /* 0x27 */ [DebuggerX86.INS.DAA],
+    /* 0x20 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x21 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x22 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x23 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x24 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x25 */ [Debuggerx86.INS.AND,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x26 */ [Debuggerx86.INS.ES,    Debuggerx86.TYPE_PREFIX],
+    /* 0x27 */ [Debuggerx86.INS.DAA],
 
-    /* 0x28 */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x29 */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x2A */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x2B */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x2C */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x2D */ [DebuggerX86.INS.SUB,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x2E */ [DebuggerX86.INS.CS,    DebuggerX86.TYPE_PREFIX],
-    /* 0x2F */ [DebuggerX86.INS.DAS],
+    /* 0x28 */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x29 */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x2A */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x2B */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x2C */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x2D */ [Debuggerx86.INS.SUB,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x2E */ [Debuggerx86.INS.CS,    Debuggerx86.TYPE_PREFIX],
+    /* 0x2F */ [Debuggerx86.INS.DAS],
 
-    /* 0x30 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x31 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x32 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x33 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x34 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x35 */ [DebuggerX86.INS.XOR,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x36 */ [DebuggerX86.INS.SS,    DebuggerX86.TYPE_PREFIX],
-    /* 0x37 */ [DebuggerX86.INS.AAA],
+    /* 0x30 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x31 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x32 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x33 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x34 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x35 */ [Debuggerx86.INS.XOR,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x36 */ [Debuggerx86.INS.SS,    Debuggerx86.TYPE_PREFIX],
+    /* 0x37 */ [Debuggerx86.INS.AAA],
 
-    /* 0x38 */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x39 */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x3A */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x3B */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x3C */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x3D */ [DebuggerX86.INS.CMP,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x3E */ [DebuggerX86.INS.DS,    DebuggerX86.TYPE_PREFIX],
-    /* 0x3F */ [DebuggerX86.INS.AAS],
+    /* 0x38 */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x39 */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x3A */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x3B */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x3C */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x3D */ [Debuggerx86.INS.CMP,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x3E */ [Debuggerx86.INS.DS,    Debuggerx86.TYPE_PREFIX],
+    /* 0x3F */ [Debuggerx86.INS.AAS],
 
-    /* 0x40 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH],
-    /* 0x41 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_CX     | DebuggerX86.TYPE_BOTH],
-    /* 0x42 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_BOTH],
-    /* 0x43 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_BX     | DebuggerX86.TYPE_BOTH],
-    /* 0x44 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_SP     | DebuggerX86.TYPE_BOTH],
-    /* 0x45 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_BP     | DebuggerX86.TYPE_BOTH],
-    /* 0x46 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_SI     | DebuggerX86.TYPE_BOTH],
-    /* 0x47 */ [DebuggerX86.INS.INC,   DebuggerX86.TYPE_DI     | DebuggerX86.TYPE_BOTH],
+    /* 0x40 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH],
+    /* 0x41 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_CX     | Debuggerx86.TYPE_BOTH],
+    /* 0x42 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_BOTH],
+    /* 0x43 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_BX     | Debuggerx86.TYPE_BOTH],
+    /* 0x44 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_SP     | Debuggerx86.TYPE_BOTH],
+    /* 0x45 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_BP     | Debuggerx86.TYPE_BOTH],
+    /* 0x46 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_SI     | Debuggerx86.TYPE_BOTH],
+    /* 0x47 */ [Debuggerx86.INS.INC,   Debuggerx86.TYPE_DI     | Debuggerx86.TYPE_BOTH],
 
-    /* 0x48 */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH],
-    /* 0x49 */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_CX     | DebuggerX86.TYPE_BOTH],
-    /* 0x4A */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_BOTH],
-    /* 0x4B */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_BX     | DebuggerX86.TYPE_BOTH],
-    /* 0x4C */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_SP     | DebuggerX86.TYPE_BOTH],
-    /* 0x4D */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_BP     | DebuggerX86.TYPE_BOTH],
-    /* 0x4E */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_SI     | DebuggerX86.TYPE_BOTH],
-    /* 0x4F */ [DebuggerX86.INS.DEC,   DebuggerX86.TYPE_DI     | DebuggerX86.TYPE_BOTH],
+    /* 0x48 */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH],
+    /* 0x49 */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_CX     | Debuggerx86.TYPE_BOTH],
+    /* 0x4A */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_BOTH],
+    /* 0x4B */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_BX     | Debuggerx86.TYPE_BOTH],
+    /* 0x4C */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_SP     | Debuggerx86.TYPE_BOTH],
+    /* 0x4D */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_BP     | Debuggerx86.TYPE_BOTH],
+    /* 0x4E */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_SI     | Debuggerx86.TYPE_BOTH],
+    /* 0x4F */ [Debuggerx86.INS.DEC,   Debuggerx86.TYPE_DI     | Debuggerx86.TYPE_BOTH],
 
-    /* 0x50 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_IN],
-    /* 0x51 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_CX     | DebuggerX86.TYPE_IN],
-    /* 0x52 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_IN],
-    /* 0x53 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_BX     | DebuggerX86.TYPE_IN],
-    /* 0x54 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_SP     | DebuggerX86.TYPE_IN],
-    /* 0x55 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_BP     | DebuggerX86.TYPE_IN],
-    /* 0x56 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_SI     | DebuggerX86.TYPE_IN],
-    /* 0x57 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_DI     | DebuggerX86.TYPE_IN],
+    /* 0x50 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_IN],
+    /* 0x51 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_CX     | Debuggerx86.TYPE_IN],
+    /* 0x52 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_IN],
+    /* 0x53 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_BX     | Debuggerx86.TYPE_IN],
+    /* 0x54 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_SP     | Debuggerx86.TYPE_IN],
+    /* 0x55 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_BP     | Debuggerx86.TYPE_IN],
+    /* 0x56 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_SI     | Debuggerx86.TYPE_IN],
+    /* 0x57 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_DI     | Debuggerx86.TYPE_IN],
 
-    /* 0x58 */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT],
-    /* 0x59 */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_CX     | DebuggerX86.TYPE_OUT],
-    /* 0x5A */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_OUT],
-    /* 0x5B */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_BX     | DebuggerX86.TYPE_OUT],
-    /* 0x5C */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_SP     | DebuggerX86.TYPE_OUT],
-    /* 0x5D */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_BP     | DebuggerX86.TYPE_OUT],
-    /* 0x5E */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_SI     | DebuggerX86.TYPE_OUT],
-    /* 0x5F */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_DI     | DebuggerX86.TYPE_OUT],
+    /* 0x58 */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT],
+    /* 0x59 */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_CX     | Debuggerx86.TYPE_OUT],
+    /* 0x5A */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_OUT],
+    /* 0x5B */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_BX     | Debuggerx86.TYPE_OUT],
+    /* 0x5C */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_SP     | Debuggerx86.TYPE_OUT],
+    /* 0x5D */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_BP     | Debuggerx86.TYPE_OUT],
+    /* 0x5E */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_SI     | Debuggerx86.TYPE_OUT],
+    /* 0x5F */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_DI     | Debuggerx86.TYPE_OUT],
 
-    /* 0x60 */ [DebuggerX86.INS.PUSHA, DebuggerX86.TYPE_NONE   | DebuggerX86.TYPE_80186],
-    /* 0x61 */ [DebuggerX86.INS.POPA,  DebuggerX86.TYPE_NONE   | DebuggerX86.TYPE_80186],
-    /* 0x62 */ [DebuggerX86.INS.BOUND, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x63 */ [DebuggerX86.INS.ARPL,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0x64 */ [DebuggerX86.INS.FS,    DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386],
-    /* 0x65 */ [DebuggerX86.INS.GS,    DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386],
-    /* 0x66 */ [DebuggerX86.INS.OS,    DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386],
-    /* 0x67 */ [DebuggerX86.INS.AS,    DebuggerX86.TYPE_PREFIX | DebuggerX86.TYPE_80386],
+    /* 0x60 */ [Debuggerx86.INS.PUSHA, Debuggerx86.TYPE_NONE   | Debuggerx86.TYPE_80186],
+    /* 0x61 */ [Debuggerx86.INS.POPA,  Debuggerx86.TYPE_NONE   | Debuggerx86.TYPE_80186],
+    /* 0x62 */ [Debuggerx86.INS.BOUND, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x63 */ [Debuggerx86.INS.ARPL,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0x64 */ [Debuggerx86.INS.FS,    Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386],
+    /* 0x65 */ [Debuggerx86.INS.GS,    Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386],
+    /* 0x66 */ [Debuggerx86.INS.OS,    Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386],
+    /* 0x67 */ [Debuggerx86.INS.AS,    Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386],
 
-    /* 0x68 */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80186],
-    /* 0x69 */ [DebuggerX86.INS.IMUL,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x6A */ [DebuggerX86.INS.PUSH,  DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80186],
-    /* 0x6B */ [DebuggerX86.INS.IMUL,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x6C */ [DebuggerX86.INS.INS,   DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_DX    | DebuggerX86.TYPE_IN],
-    /* 0x6D */ [DebuggerX86.INS.INS,   DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_DX    | DebuggerX86.TYPE_IN],
-    /* 0x6E */ [DebuggerX86.INS.OUTS,  DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_IN    | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_DSSI | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x6F */ [DebuggerX86.INS.OUTS,  DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_IN    | DebuggerX86.TYPE_80186, DebuggerX86.TYPE_DSSI | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0x68 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80186],
+    /* 0x69 */ [Debuggerx86.INS.IMUL,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x6A */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80186],
+    /* 0x6B */ [Debuggerx86.INS.IMUL,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x6C */ [Debuggerx86.INS.INS,   Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DX    | Debuggerx86.TYPE_IN],
+    /* 0x6D */ [Debuggerx86.INS.INS,   Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DX    | Debuggerx86.TYPE_IN],
+    /* 0x6E */ [Debuggerx86.INS.OUTS,  Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_IN    | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DSSI | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x6F */ [Debuggerx86.INS.OUTS,  Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_IN    | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DSSI | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0x70 */ [DebuggerX86.INS.JO,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x71 */ [DebuggerX86.INS.JNO,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x72 */ [DebuggerX86.INS.JC,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x73 */ [DebuggerX86.INS.JNC,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x74 */ [DebuggerX86.INS.JZ,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x75 */ [DebuggerX86.INS.JNZ,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x76 */ [DebuggerX86.INS.JBE,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x77 */ [DebuggerX86.INS.JA,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
+    /* 0x70 */ [Debuggerx86.INS.JO,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x71 */ [Debuggerx86.INS.JNO,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x72 */ [Debuggerx86.INS.JC,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x73 */ [Debuggerx86.INS.JNC,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x74 */ [Debuggerx86.INS.JZ,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x75 */ [Debuggerx86.INS.JNZ,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x76 */ [Debuggerx86.INS.JBE,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x77 */ [Debuggerx86.INS.JA,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
 
-    /* 0x78 */ [DebuggerX86.INS.JS,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x79 */ [DebuggerX86.INS.JNS,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7A */ [DebuggerX86.INS.JP,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7B */ [DebuggerX86.INS.JNP,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7C */ [DebuggerX86.INS.JL,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7D */ [DebuggerX86.INS.JGE,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7E */ [DebuggerX86.INS.JLE,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x7F */ [DebuggerX86.INS.JG,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
+    /* 0x78 */ [Debuggerx86.INS.JS,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x79 */ [Debuggerx86.INS.JNS,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7A */ [Debuggerx86.INS.JP,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7B */ [Debuggerx86.INS.JNP,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7C */ [Debuggerx86.INS.JL,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7D */ [Debuggerx86.INS.JGE,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7E */ [Debuggerx86.INS.JLE,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x7F */ [Debuggerx86.INS.JG,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
 
-    /* 0x80 */ [DebuggerX86.INS.GRP1B, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x81 */ [DebuggerX86.INS.GRP1W, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x82 */ [DebuggerX86.INS.GRP1B, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x83 */ [DebuggerX86.INS.GRP1SW,DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x84 */ [DebuggerX86.INS.TEST,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x85 */ [DebuggerX86.INS.TEST,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_REG   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x86 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-    /* 0x87 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
+    /* 0x80 */ [Debuggerx86.INS.GRP1B, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x81 */ [Debuggerx86.INS.GRP1W, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x82 */ [Debuggerx86.INS.GRP1B, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x83 */ [Debuggerx86.INS.GRP1SW,Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x84 */ [Debuggerx86.INS.TEST,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x85 */ [Debuggerx86.INS.TEST,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_REG   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x86 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+    /* 0x87 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
 
-    /* 0x88 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x89 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x8A */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0x8B */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x8C */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_SEGREG | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0x8D */ [DebuggerX86.INS.LEA,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_WORD ],
-    /* 0x8E */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_SEGREG | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0x8F */ [DebuggerX86.INS.POP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT],
+    /* 0x88 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x89 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x8A */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x8B */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x8C */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_SEGREG | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0x8D */ [Debuggerx86.INS.LEA,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_WORD ],
+    /* 0x8E */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_SEGREG | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x8F */ [Debuggerx86.INS.POP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT],
 
-    /* 0x90 */ [DebuggerX86.INS.NOP],
-    /* 0x91 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_CX  | DebuggerX86.TYPE_BOTH],
-    /* 0x92 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_DX  | DebuggerX86.TYPE_BOTH],
-    /* 0x93 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_BX  | DebuggerX86.TYPE_BOTH],
-    /* 0x94 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_SP  | DebuggerX86.TYPE_BOTH],
-    /* 0x95 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_BP  | DebuggerX86.TYPE_BOTH],
-    /* 0x96 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_SI  | DebuggerX86.TYPE_BOTH],
-    /* 0x97 */ [DebuggerX86.INS.XCHG,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_BOTH,   DebuggerX86.TYPE_DI  | DebuggerX86.TYPE_BOTH],
+    /* 0x90 */ [Debuggerx86.INS.NOP],
+    /* 0x91 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_CX  | Debuggerx86.TYPE_BOTH],
+    /* 0x92 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_DX  | Debuggerx86.TYPE_BOTH],
+    /* 0x93 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_BX  | Debuggerx86.TYPE_BOTH],
+    /* 0x94 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_SP  | Debuggerx86.TYPE_BOTH],
+    /* 0x95 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_BP  | Debuggerx86.TYPE_BOTH],
+    /* 0x96 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_SI  | Debuggerx86.TYPE_BOTH],
+    /* 0x97 */ [Debuggerx86.INS.XCHG,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_BOTH,   Debuggerx86.TYPE_DI  | Debuggerx86.TYPE_BOTH],
 
-    /* 0x98 */ [DebuggerX86.INS.CBW],
-    /* 0x99 */ [DebuggerX86.INS.CWD],
-    /* 0x9A */ [DebuggerX86.INS.CALL,  DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_FARP |  DebuggerX86.TYPE_IN],
-    /* 0x9B */ [DebuggerX86.INS.WAIT],
-    /* 0x9C */ [DebuggerX86.INS.PUSHF],
-    /* 0x9D */ [DebuggerX86.INS.POPF],
-    /* 0x9E */ [DebuggerX86.INS.SAHF],
-    /* 0x9F */ [DebuggerX86.INS.LAHF],
+    /* 0x98 */ [Debuggerx86.INS.CBW],
+    /* 0x99 */ [Debuggerx86.INS.CWD],
+    /* 0x9A */ [Debuggerx86.INS.CALL,  Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_FARP |  Debuggerx86.TYPE_IN],
+    /* 0x9B */ [Debuggerx86.INS.WAIT],
+    /* 0x9C */ [Debuggerx86.INS.PUSHF],
+    /* 0x9D */ [Debuggerx86.INS.POPF],
+    /* 0x9E */ [Debuggerx86.INS.SAHF],
+    /* 0x9F */ [Debuggerx86.INS.LAHF],
 
-    /* 0xA0 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMMOFF | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xA1 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMMOFF | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xA2 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_IMMOFF | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,     DebuggerX86.TYPE_AL    | DebuggerX86.TYPE_IN],
-    /* 0xA3 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_IMMOFF | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,     DebuggerX86.TYPE_AX    | DebuggerX86.TYPE_IN],
-    /* 0xA4 */ [DebuggerX86.INS.MOVSB, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,     DebuggerX86.TYPE_DSSI  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xA5 */ [DebuggerX86.INS.MOVSW, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,     DebuggerX86.TYPE_DSSI  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xA6 */ [DebuggerX86.INS.CMPSB, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,      DebuggerX86.TYPE_DSSI  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xA7 */ [DebuggerX86.INS.CMPSW, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,      DebuggerX86.TYPE_DSSI  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0xA0 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMMOFF | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xA1 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMMOFF | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xA2 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_IMMOFF | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,     Debuggerx86.TYPE_AL    | Debuggerx86.TYPE_IN],
+    /* 0xA3 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_IMMOFF | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,     Debuggerx86.TYPE_AX    | Debuggerx86.TYPE_IN],
+    /* 0xA4 */ [Debuggerx86.INS.MOVSB, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,     Debuggerx86.TYPE_DSSI  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xA5 */ [Debuggerx86.INS.MOVSW, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,     Debuggerx86.TYPE_DSSI  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xA6 */ [Debuggerx86.INS.CMPSB, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,      Debuggerx86.TYPE_DSSI  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xA7 */ [Debuggerx86.INS.CMPSW, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,      Debuggerx86.TYPE_DSSI  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0xA8 */ [DebuggerX86.INS.TEST,  DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xA9 */ [DebuggerX86.INS.TEST,  DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xAA */ [DebuggerX86.INS.STOSB, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_AL    | DebuggerX86.TYPE_IN],
-    /* 0xAB */ [DebuggerX86.INS.STOSW, DebuggerX86.TYPE_ESDI   | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_AX    | DebuggerX86.TYPE_IN],
-    /* 0xAC */ [DebuggerX86.INS.LODSB, DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_DSSI | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xAD */ [DebuggerX86.INS.LODSW, DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_DSSI | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xAE */ [DebuggerX86.INS.SCASB, DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_ESDI | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xAF */ [DebuggerX86.INS.SCASW, DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_IN,     DebuggerX86.TYPE_ESDI | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0xA8 */ [Debuggerx86.INS.TEST,  Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xA9 */ [Debuggerx86.INS.TEST,  Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xAA */ [Debuggerx86.INS.STOSB, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_AL    | Debuggerx86.TYPE_IN],
+    /* 0xAB */ [Debuggerx86.INS.STOSW, Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_AX    | Debuggerx86.TYPE_IN],
+    /* 0xAC */ [Debuggerx86.INS.LODSB, Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_DSSI | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xAD */ [Debuggerx86.INS.LODSW, Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_DSSI | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xAE */ [Debuggerx86.INS.SCASB, Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_ESDI | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xAF */ [Debuggerx86.INS.SCASW, Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_IN,     Debuggerx86.TYPE_ESDI | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0xB0 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB1 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_CL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB2 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_DL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB3 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_BL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB4 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_AH     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB5 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_CH     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB6 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_DH     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xB7 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_BH     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
+    /* 0xB0 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB1 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_CL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB2 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_DL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB3 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_BL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB4 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_AH     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB5 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_CH     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB6 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_DH     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xB7 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_BH     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
 
-    /* 0xB8 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xB9 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_CX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBA */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBB */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_BX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBC */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_SP     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBD */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_BP     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBE */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_SI     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xBF */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_DI     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0xB8 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xB9 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_CX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBA */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBB */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_BX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBC */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_SP     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBD */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_BP     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBE */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_SI     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xBF */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_DI     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0xC0 */ [DebuggerX86.INS.GRP2B, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80186,  DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xC1 */ [DebuggerX86.INS.GRP2W, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80186,  DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xC2 */ [DebuggerX86.INS.RET,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0xC3 */ [DebuggerX86.INS.RET],
-    /* 0xC4 */ [DebuggerX86.INS.LES,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_MODMEM  | DebuggerX86.TYPE_SEGP  | DebuggerX86.TYPE_IN],
-    /* 0xC5 */ [DebuggerX86.INS.LDS,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_MODMEM  | DebuggerX86.TYPE_SEGP  | DebuggerX86.TYPE_IN],
-    /* 0xC6 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_IMM     | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xC7 */ [DebuggerX86.INS.MOV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,   DebuggerX86.TYPE_IMM     | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0xC0 */ [Debuggerx86.INS.GRP2B, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80186,  Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xC1 */ [Debuggerx86.INS.GRP2W, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80186,  Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xC2 */ [Debuggerx86.INS.RET,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0xC3 */ [Debuggerx86.INS.RET],
+    /* 0xC4 */ [Debuggerx86.INS.LES,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_MODMEM  | Debuggerx86.TYPE_SEGP  | Debuggerx86.TYPE_IN],
+    /* 0xC5 */ [Debuggerx86.INS.LDS,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_MODMEM  | Debuggerx86.TYPE_SEGP  | Debuggerx86.TYPE_IN],
+    /* 0xC6 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_IMM     | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xC7 */ [Debuggerx86.INS.MOV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,   Debuggerx86.TYPE_IMM     | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0xC8 */ [DebuggerX86.INS.ENTER, DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80186,    DebuggerX86.TYPE_IMM   | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xC9 */ [DebuggerX86.INS.LEAVE, DebuggerX86.TYPE_NONE   | DebuggerX86.TYPE_80186],
-    /* 0xCA */ [DebuggerX86.INS.RETF,  DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0xCB */ [DebuggerX86.INS.RETF],
-    /* 0xCC */ [DebuggerX86.INS.INT3],
-    /* 0xCD */ [DebuggerX86.INS.INT,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xCE */ [DebuggerX86.INS.INTO],
-    /* 0xCF */ [DebuggerX86.INS.IRET],
+    /* 0xC8 */ [Debuggerx86.INS.ENTER, Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80186,    Debuggerx86.TYPE_IMM   | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xC9 */ [Debuggerx86.INS.LEAVE, Debuggerx86.TYPE_NONE   | Debuggerx86.TYPE_80186],
+    /* 0xCA */ [Debuggerx86.INS.RETF,  Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0xCB */ [Debuggerx86.INS.RETF],
+    /* 0xCC */ [Debuggerx86.INS.INT3],
+    /* 0xCD */ [Debuggerx86.INS.INT,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xCE */ [Debuggerx86.INS.INTO],
+    /* 0xCF */ [Debuggerx86.INS.IRET],
 
-    /* 0xD0 */ [DebuggerX86.INS.GRP2B1,DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH,  DebuggerX86.TYPE_ONE    | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xD1 */ [DebuggerX86.INS.GRP2W1,DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH,  DebuggerX86.TYPE_ONE    | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xD2 */ [DebuggerX86.INS.GRP2BC,DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH,  DebuggerX86.TYPE_CL     | DebuggerX86.TYPE_IN],
-    /* 0xD3 */ [DebuggerX86.INS.GRP2WC,DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH,  DebuggerX86.TYPE_CL     | DebuggerX86.TYPE_IN],
-    /* 0xD4 */ [DebuggerX86.INS.AAM,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE],
-    /* 0xD5 */ [DebuggerX86.INS.AAD,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE],
-    /* 0xD6 */ [DebuggerX86.INS.SALC],
-    /* 0xD7 */ [DebuggerX86.INS.XLAT],
+    /* 0xD0 */ [Debuggerx86.INS.GRP2B1,Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH,  Debuggerx86.TYPE_ONE    | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xD1 */ [Debuggerx86.INS.GRP2W1,Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH,  Debuggerx86.TYPE_ONE    | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xD2 */ [Debuggerx86.INS.GRP2BC,Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH,  Debuggerx86.TYPE_CL     | Debuggerx86.TYPE_IN],
+    /* 0xD3 */ [Debuggerx86.INS.GRP2WC,Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH,  Debuggerx86.TYPE_CL     | Debuggerx86.TYPE_IN],
+    /* 0xD4 */ [Debuggerx86.INS.AAM,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE],
+    /* 0xD5 */ [Debuggerx86.INS.AAD,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE],
+    /* 0xD6 */ [Debuggerx86.INS.SALC],
+    /* 0xD7 */ [Debuggerx86.INS.XLAT],
 
-    /* 0xD8 */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xD9 */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDA */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDB */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDC */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDD */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDE */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xDF */ [DebuggerX86.INS.ESC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
+    /* 0xD8 */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xD9 */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDA */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDB */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDC */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDD */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDE */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xDF */ [Debuggerx86.INS.ESC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
 
-    /* 0xE0 */ [DebuggerX86.INS.LOOPNZ,DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xE1 */ [DebuggerX86.INS.LOOPZ, DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xE2 */ [DebuggerX86.INS.LOOP,  DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xE3 */ [DebuggerX86.INS.JCXZ,  DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xE4 */ [DebuggerX86.INS.IN,    DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xE5 */ [DebuggerX86.INS.IN,    DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_IMM  | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-    /* 0xE6 */ [DebuggerX86.INS.OUT,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,    DebuggerX86.TYPE_AL   | DebuggerX86.TYPE_IN],
-    /* 0xE7 */ [DebuggerX86.INS.OUT,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,    DebuggerX86.TYPE_AX   | DebuggerX86.TYPE_IN],
+    /* 0xE0 */ [Debuggerx86.INS.LOOPNZ,Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xE1 */ [Debuggerx86.INS.LOOPZ, Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xE2 */ [Debuggerx86.INS.LOOP,  Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xE3 */ [Debuggerx86.INS.JCXZ,  Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xE4 */ [Debuggerx86.INS.IN,    Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xE5 */ [Debuggerx86.INS.IN,    Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_IMM  | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+    /* 0xE6 */ [Debuggerx86.INS.OUT,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,    Debuggerx86.TYPE_AL   | Debuggerx86.TYPE_IN],
+    /* 0xE7 */ [Debuggerx86.INS.OUT,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,    Debuggerx86.TYPE_AX   | Debuggerx86.TYPE_IN],
 
-    /* 0xE8 */ [DebuggerX86.INS.CALL,  DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xE9 */ [DebuggerX86.INS.JMP,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-    /* 0xEA */ [DebuggerX86.INS.JMP,   DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_FARP  | DebuggerX86.TYPE_IN],
-    /* 0xEB */ [DebuggerX86.INS.JMP,   DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-    /* 0xEC */ [DebuggerX86.INS.IN,    DebuggerX86.TYPE_AL     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_DX   | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0xED */ [DebuggerX86.INS.IN,    DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_OUT,    DebuggerX86.TYPE_DX   | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-    /* 0xEE */ [DebuggerX86.INS.OUT,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN,    DebuggerX86.TYPE_AL    | DebuggerX86.TYPE_IN],
-    /* 0xEF */ [DebuggerX86.INS.OUT,   DebuggerX86.TYPE_DX     | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN,    DebuggerX86.TYPE_AX    | DebuggerX86.TYPE_IN],
+    /* 0xE8 */ [Debuggerx86.INS.CALL,  Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xE9 */ [Debuggerx86.INS.JMP,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0xEA */ [Debuggerx86.INS.JMP,   Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_FARP  | Debuggerx86.TYPE_IN],
+    /* 0xEB */ [Debuggerx86.INS.JMP,   Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0xEC */ [Debuggerx86.INS.IN,    Debuggerx86.TYPE_AL     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_DX   | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0xED */ [Debuggerx86.INS.IN,    Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_OUT,    Debuggerx86.TYPE_DX   | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+    /* 0xEE */ [Debuggerx86.INS.OUT,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN,    Debuggerx86.TYPE_AL    | Debuggerx86.TYPE_IN],
+    /* 0xEF */ [Debuggerx86.INS.OUT,   Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN,    Debuggerx86.TYPE_AX    | Debuggerx86.TYPE_IN],
 
-    /* 0xF0 */ [DebuggerX86.INS.LOCK,  DebuggerX86.TYPE_PREFIX],
-    /* 0xF1 */ [DebuggerX86.INS.INT1,  DebuggerX86.TYPE_NONE   | DebuggerX86.TYPE_80386],
-    /* 0xF2 */ [DebuggerX86.INS.REPNZ, DebuggerX86.TYPE_PREFIX],
-    /* 0xF3 */ [DebuggerX86.INS.REPZ,  DebuggerX86.TYPE_PREFIX],
-    /* 0xF4 */ [DebuggerX86.INS.HLT],
-    /* 0xF5 */ [DebuggerX86.INS.CMC],
-    /* 0xF6 */ [DebuggerX86.INS.GRP3B, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-    /* 0xF7 */ [DebuggerX86.INS.GRP3W, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
+    /* 0xF0 */ [Debuggerx86.INS.LOCK,  Debuggerx86.TYPE_PREFIX],
+    /* 0xF1 */ [Debuggerx86.INS.INT1,  Debuggerx86.TYPE_NONE   | Debuggerx86.TYPE_80386],
+    /* 0xF2 */ [Debuggerx86.INS.REPNZ, Debuggerx86.TYPE_PREFIX],
+    /* 0xF3 */ [Debuggerx86.INS.REPZ,  Debuggerx86.TYPE_PREFIX],
+    /* 0xF4 */ [Debuggerx86.INS.HLT],
+    /* 0xF5 */ [Debuggerx86.INS.CMC],
+    /* 0xF6 */ [Debuggerx86.INS.GRP3B, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+    /* 0xF7 */ [Debuggerx86.INS.GRP3W, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
 
-    /* 0xF8 */ [DebuggerX86.INS.CLC],
-    /* 0xF9 */ [DebuggerX86.INS.STC],
-    /* 0xFA */ [DebuggerX86.INS.CLI],
-    /* 0xFB */ [DebuggerX86.INS.STI],
-    /* 0xFC */ [DebuggerX86.INS.CLD],
-    /* 0xFD */ [DebuggerX86.INS.STD],
-    /* 0xFE */ [DebuggerX86.INS.GRP4B, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-    /* 0xFF */ [DebuggerX86.INS.GRP4W, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH]
+    /* 0xF8 */ [Debuggerx86.INS.CLC],
+    /* 0xF9 */ [Debuggerx86.INS.STC],
+    /* 0xFA */ [Debuggerx86.INS.CLI],
+    /* 0xFB */ [Debuggerx86.INS.STI],
+    /* 0xFC */ [Debuggerx86.INS.CLD],
+    /* 0xFD */ [Debuggerx86.INS.STD],
+    /* 0xFE */ [Debuggerx86.INS.GRP4B, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+    /* 0xFF */ [Debuggerx86.INS.GRP4W, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH]
     ];
 
-    DebuggerX86.aaOp0FDescs = {
-        0x00: [DebuggerX86.INS.GRP6,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_BOTH],
-        0x01: [DebuggerX86.INS.GRP7,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_BOTH],
-        0x02: [DebuggerX86.INS.LAR,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN],
-        0x03: [DebuggerX86.INS.LSL,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN],
-        0x05: [DebuggerX86.INS.LOADALL,DebuggerX86.TYPE_80286],
-        0x06: [DebuggerX86.INS.CLTS,   DebuggerX86.TYPE_80286],
-        0x07: [DebuggerX86.INS.LOADALL,DebuggerX86.TYPE_80386],   // TODO: implied operand is ES:[(E)DI]
-        0x20: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_CTLREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x21: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_DBGREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x22: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_CTLREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x23: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_DBGREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x24: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_TSTREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x26: [DebuggerX86.INS.MOV,    DebuggerX86.TYPE_TSTREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODREG | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_IN],
-        0x80: [DebuggerX86.INS.JO,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x81: [DebuggerX86.INS.JNO,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x82: [DebuggerX86.INS.JC,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x83: [DebuggerX86.INS.JNC,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x84: [DebuggerX86.INS.JZ,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x85: [DebuggerX86.INS.JNZ,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x86: [DebuggerX86.INS.JBE,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x87: [DebuggerX86.INS.JA,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x88: [DebuggerX86.INS.JS,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x89: [DebuggerX86.INS.JNS,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8A: [DebuggerX86.INS.JP,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8B: [DebuggerX86.INS.JNP,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8C: [DebuggerX86.INS.JL,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8D: [DebuggerX86.INS.JGE,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8E: [DebuggerX86.INS.JLE,    DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x8F: [DebuggerX86.INS.JG,     DebuggerX86.TYPE_IMMREL | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386],
-        0x90: [DebuggerX86.INS.SETO,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x91: [DebuggerX86.INS.SETNO,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x92: [DebuggerX86.INS.SETC,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x93: [DebuggerX86.INS.SETNC,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x94: [DebuggerX86.INS.SETZ,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x95: [DebuggerX86.INS.SETNZ,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x96: [DebuggerX86.INS.SETBE,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x97: [DebuggerX86.INS.SETNBE, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x98: [DebuggerX86.INS.SETS,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x99: [DebuggerX86.INS.SETNS,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9A: [DebuggerX86.INS.SETP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9B: [DebuggerX86.INS.SETNP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9C: [DebuggerX86.INS.SETL,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9D: [DebuggerX86.INS.SETGE,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9E: [DebuggerX86.INS.SETLE,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0x9F: [DebuggerX86.INS.SETG,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386],
-        0xA0: [DebuggerX86.INS.PUSH,   DebuggerX86.TYPE_FS     | DebuggerX86.TYPE_IN    | DebuggerX86.TYPE_80386],
-        0xA1: [DebuggerX86.INS.POP,    DebuggerX86.TYPE_FS     | DebuggerX86.TYPE_OUT   | DebuggerX86.TYPE_80386],
-        0xA3: [DebuggerX86.INS.BT,     DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN   | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xA4: [DebuggerX86.INS.SHLD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        0xA5: [DebuggerX86.INS.SHLD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_CL  | DebuggerX86.TYPE_IN],
-        0xA6: [DebuggerX86.INS.XBTS,   DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_AX  | DebuggerX86.TYPE_IN,  DebuggerX86.TYPE_CL    | DebuggerX86.TYPE_IN],
-        0xA7: [DebuggerX86.INS.IBTS,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_AX     | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_CL  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xA8: [DebuggerX86.INS.PUSH,   DebuggerX86.TYPE_GS     | DebuggerX86.TYPE_IN    | DebuggerX86.TYPE_80386],
-        0xA9: [DebuggerX86.INS.POP,    DebuggerX86.TYPE_GS     | DebuggerX86.TYPE_OUT   | DebuggerX86.TYPE_80386],
-        0xAB: [DebuggerX86.INS.BTS,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xAC: [DebuggerX86.INS.SHRD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        0xAD: [DebuggerX86.INS.SHRD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN, DebuggerX86.TYPE_CL  | DebuggerX86.TYPE_IN],
-        0xAF: [DebuggerX86.INS.IMUL,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xB2: [DebuggerX86.INS.LSS,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,                           DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_SEGP  | DebuggerX86.TYPE_IN],
-        0xB3: [DebuggerX86.INS.BTR,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xB4: [DebuggerX86.INS.LFS,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,                           DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_SEGP  | DebuggerX86.TYPE_IN],
-        0xB5: [DebuggerX86.INS.LGS,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT,                           DebuggerX86.TYPE_MODMEM | DebuggerX86.TYPE_SEGP  | DebuggerX86.TYPE_IN],
-        0xB6: [DebuggerX86.INS.MOVZX,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-        0xB7: [DebuggerX86.INS.MOVZX,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-        0xBA: [DebuggerX86.INS.GRP8,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_IMM    | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-        0xBB: [DebuggerX86.INS.BTC,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xBC: [DebuggerX86.INS.BSF,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xBD: [DebuggerX86.INS.BSR,    DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        0xBE: [DebuggerX86.INS.MOVSX,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-        0xBF: [DebuggerX86.INS.MOVSX,  DebuggerX86.TYPE_REG    | DebuggerX86.TYPE_LONG  | DebuggerX86.TYPE_OUT  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN]
+    Debuggerx86.aaOp0FDescs = {
+        0x00: [Debuggerx86.INS.GRP6,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_BOTH],
+        0x01: [Debuggerx86.INS.GRP7,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_BOTH],
+        0x02: [Debuggerx86.INS.LAR,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN],
+        0x03: [Debuggerx86.INS.LSL,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN],
+        0x05: [Debuggerx86.INS.LOADALL,Debuggerx86.TYPE_80286],
+        0x06: [Debuggerx86.INS.CLTS,   Debuggerx86.TYPE_80286],
+        0x07: [Debuggerx86.INS.LOADALL,Debuggerx86.TYPE_80386],   // TODO: implied operand is ES:[(E)DI]
+        0x20: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_CTLREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x21: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_DBGREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x22: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_CTLREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x23: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_DBGREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x24: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_TSTREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x26: [Debuggerx86.INS.MOV,    Debuggerx86.TYPE_TSTREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODREG | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_IN],
+        0x80: [Debuggerx86.INS.JO,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x81: [Debuggerx86.INS.JNO,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x82: [Debuggerx86.INS.JC,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x83: [Debuggerx86.INS.JNC,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x84: [Debuggerx86.INS.JZ,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x85: [Debuggerx86.INS.JNZ,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x86: [Debuggerx86.INS.JBE,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x87: [Debuggerx86.INS.JA,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x88: [Debuggerx86.INS.JS,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x89: [Debuggerx86.INS.JNS,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8A: [Debuggerx86.INS.JP,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8B: [Debuggerx86.INS.JNP,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8C: [Debuggerx86.INS.JL,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8D: [Debuggerx86.INS.JGE,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8E: [Debuggerx86.INS.JLE,    Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x8F: [Debuggerx86.INS.JG,     Debuggerx86.TYPE_IMMREL | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386],
+        0x90: [Debuggerx86.INS.SETO,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x91: [Debuggerx86.INS.SETNO,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x92: [Debuggerx86.INS.SETC,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x93: [Debuggerx86.INS.SETNC,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x94: [Debuggerx86.INS.SETZ,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x95: [Debuggerx86.INS.SETNZ,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x96: [Debuggerx86.INS.SETBE,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x97: [Debuggerx86.INS.SETNBE, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x98: [Debuggerx86.INS.SETS,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x99: [Debuggerx86.INS.SETNS,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9A: [Debuggerx86.INS.SETP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9B: [Debuggerx86.INS.SETNP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9C: [Debuggerx86.INS.SETL,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9D: [Debuggerx86.INS.SETGE,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9E: [Debuggerx86.INS.SETLE,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0x9F: [Debuggerx86.INS.SETG,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386],
+        0xA0: [Debuggerx86.INS.PUSH,   Debuggerx86.TYPE_FS     | Debuggerx86.TYPE_IN    | Debuggerx86.TYPE_80386],
+        0xA1: [Debuggerx86.INS.POP,    Debuggerx86.TYPE_FS     | Debuggerx86.TYPE_OUT   | Debuggerx86.TYPE_80386],
+        0xA3: [Debuggerx86.INS.BT,     Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xA4: [Debuggerx86.INS.SHLD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        0xA5: [Debuggerx86.INS.SHLD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_CL  | Debuggerx86.TYPE_IN],
+        0xA6: [Debuggerx86.INS.XBTS,   Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_AX  | Debuggerx86.TYPE_IN,  Debuggerx86.TYPE_CL    | Debuggerx86.TYPE_IN],
+        0xA7: [Debuggerx86.INS.IBTS,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_AX     | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_CL  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xA8: [Debuggerx86.INS.PUSH,   Debuggerx86.TYPE_GS     | Debuggerx86.TYPE_IN    | Debuggerx86.TYPE_80386],
+        0xA9: [Debuggerx86.INS.POP,    Debuggerx86.TYPE_GS     | Debuggerx86.TYPE_OUT   | Debuggerx86.TYPE_80386],
+        0xAB: [Debuggerx86.INS.BTS,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xAC: [Debuggerx86.INS.SHRD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        0xAD: [Debuggerx86.INS.SHRD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_CL  | Debuggerx86.TYPE_IN],
+        0xAF: [Debuggerx86.INS.IMUL,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xB2: [Debuggerx86.INS.LSS,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,                           Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_SEGP  | Debuggerx86.TYPE_IN],
+        0xB3: [Debuggerx86.INS.BTR,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xB4: [Debuggerx86.INS.LFS,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,                           Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_SEGP  | Debuggerx86.TYPE_IN],
+        0xB5: [Debuggerx86.INS.LGS,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT,                           Debuggerx86.TYPE_MODMEM | Debuggerx86.TYPE_SEGP  | Debuggerx86.TYPE_IN],
+        0xB6: [Debuggerx86.INS.MOVZX,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+        0xB7: [Debuggerx86.INS.MOVZX,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+        0xBA: [Debuggerx86.INS.GRP8,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+        0xBB: [Debuggerx86.INS.BTC,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xBC: [Debuggerx86.INS.BSF,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xBD: [Debuggerx86.INS.BSR,    Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        0xBE: [Debuggerx86.INS.MOVSX,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+        0xBF: [Debuggerx86.INS.MOVSX,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_LONG  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN]
     };
 
-    /*
+    /**
      * Be sure to keep the following table in sync with FPUx86.aaOps
      */
-    DebuggerX86.aaaOpFPUDescs = {
+    Debuggerx86.aaaOpFPUDescs = {
         0xD8: {
-            0x00: [DebuggerX86.FINS.FADD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x01: [DebuggerX86.FINS.FMUL,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FCOM,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x03: [DebuggerX86.FINS.FCOMP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x04: [DebuggerX86.FINS.FSUB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FSUBR,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FDIV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x07: [DebuggerX86.FINS.FDIVR,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x30: [DebuggerX86.FINS.FADD,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x31: [DebuggerX86.FINS.FMUL,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x32: [DebuggerX86.FINS.FCOM,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x33: [DebuggerX86.FINS.FCOMP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x34: [DebuggerX86.FINS.FSUB,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x35: [DebuggerX86.FINS.FSUBR,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x36: [DebuggerX86.FINS.FDIV,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x37: [DebuggerX86.FINS.FDIVR,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST    | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN]
+            0x00: [Debuggerx86.FINS.FADD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x01: [Debuggerx86.FINS.FMUL,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FCOM,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x03: [Debuggerx86.FINS.FCOMP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x04: [Debuggerx86.FINS.FSUB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FSUBR,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FDIV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x07: [Debuggerx86.FINS.FDIVR,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x30: [Debuggerx86.FINS.FADD,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x31: [Debuggerx86.FINS.FMUL,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x32: [Debuggerx86.FINS.FCOM,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x33: [Debuggerx86.FINS.FCOMP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x34: [Debuggerx86.FINS.FSUB,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x35: [Debuggerx86.FINS.FSUBR,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x36: [Debuggerx86.FINS.FDIV,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x37: [Debuggerx86.FINS.FDIVR,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST    | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN]
         },
         0xD9: {
-            0x00: [DebuggerX86.FINS.FLD,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FST,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_OUT],
-            0x03: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SREAL | DebuggerX86.TYPE_OUT],
-            0x04: [DebuggerX86.FINS.FLDENV, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_ENV   | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FLDCW,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FSTENV, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_ENV   | DebuggerX86.TYPE_OUT],
-            0x07: [DebuggerX86.FINS.FSTCW,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT],
-            0x30: [DebuggerX86.FINS.FLD,    DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT],
-            0x31: [DebuggerX86.FINS.FXCH,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT],
-            0x32: [DebuggerX86.FINS.FNOP],
-            0x33: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT],   // Obsolete encoding
-            0x40: [DebuggerX86.FINS.FCHS],
-            0x41: [DebuggerX86.FINS.FABS],
-            0x44: [DebuggerX86.FINS.FTST],
-            0x45: [DebuggerX86.FINS.FXAM],
-            0x50: [DebuggerX86.FINS.FLD1],
-            0x51: [DebuggerX86.FINS.FLDL2T],
-            0x52: [DebuggerX86.FINS.FLDL2E],
-            0x53: [DebuggerX86.FINS.FLDPI],
-            0x54: [DebuggerX86.FINS.FLDLG2],
-            0x55: [DebuggerX86.FINS.FLDLN2],
-            0x56: [DebuggerX86.FINS.FLDZ],
-            0x60: [DebuggerX86.FINS.F2XM1],
-            0x61: [DebuggerX86.FINS.FYL2X],
-            0x62: [DebuggerX86.FINS.FPTAN],
-            0x63: [DebuggerX86.FINS.FPATAN],
-            0x64: [DebuggerX86.FINS.FXTRACT],
-            0x66: [DebuggerX86.FINS.FDECSTP],
-            0x67: [DebuggerX86.FINS.FINCSTP],
-            0x70: [DebuggerX86.FINS.FPREM],
-            0x71: [DebuggerX86.FINS.FYL2XP1],
-            0x72: [DebuggerX86.FINS.FSQRT],
-            0x74: [DebuggerX86.FINS.FRNDINT],
-            0x75: [DebuggerX86.FINS.FSCALE]
+            0x00: [Debuggerx86.FINS.FLD,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FST,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_OUT],
+            0x03: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SREAL | Debuggerx86.TYPE_OUT],
+            0x04: [Debuggerx86.FINS.FLDENV, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_ENV   | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FLDCW,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FSTENV, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_ENV   | Debuggerx86.TYPE_OUT],
+            0x07: [Debuggerx86.FINS.FSTCW,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT],
+            0x30: [Debuggerx86.FINS.FLD,    Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT],
+            0x31: [Debuggerx86.FINS.FXCH,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT],
+            0x32: [Debuggerx86.FINS.FNOP],
+            0x33: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT],   // Obsolete encoding
+            0x40: [Debuggerx86.FINS.FCHS],
+            0x41: [Debuggerx86.FINS.FABS],
+            0x44: [Debuggerx86.FINS.FTST],
+            0x45: [Debuggerx86.FINS.FXAM],
+            0x50: [Debuggerx86.FINS.FLD1],
+            0x51: [Debuggerx86.FINS.FLDL2T],
+            0x52: [Debuggerx86.FINS.FLDL2E],
+            0x53: [Debuggerx86.FINS.FLDPI],
+            0x54: [Debuggerx86.FINS.FLDLG2],
+            0x55: [Debuggerx86.FINS.FLDLN2],
+            0x56: [Debuggerx86.FINS.FLDZ],
+            0x60: [Debuggerx86.FINS.F2XM1],
+            0x61: [Debuggerx86.FINS.FYL2X],
+            0x62: [Debuggerx86.FINS.FPTAN],
+            0x63: [Debuggerx86.FINS.FPATAN],
+            0x64: [Debuggerx86.FINS.FXTRACT],
+            0x66: [Debuggerx86.FINS.FDECSTP],
+            0x67: [Debuggerx86.FINS.FINCSTP],
+            0x70: [Debuggerx86.FINS.FPREM],
+            0x71: [Debuggerx86.FINS.FYL2XP1],
+            0x72: [Debuggerx86.FINS.FSQRT],
+            0x74: [Debuggerx86.FINS.FRNDINT],
+            0x75: [Debuggerx86.FINS.FSCALE]
         },
         0xDA: {
-            0x00: [DebuggerX86.FINS.FIADD,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x01: [DebuggerX86.FINS.FIMUL,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FICOM,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x03: [DebuggerX86.FINS.FICOMP, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x04: [DebuggerX86.FINS.FISUB,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FISUBR, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FIDIV,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN],
-            0x07: [DebuggerX86.FINS.FIDIVR, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT | DebuggerX86.TYPE_IN]
+            0x00: [Debuggerx86.FINS.FIADD,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x01: [Debuggerx86.FINS.FIMUL,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FICOM,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x03: [Debuggerx86.FINS.FICOMP, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x04: [Debuggerx86.FINS.FISUB,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FISUBR, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FIDIV,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN],
+            0x07: [Debuggerx86.FINS.FIDIVR, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT | Debuggerx86.TYPE_IN]
         },
         0xDB: {
-            0x00: [DebuggerX86.FINS.FILD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT  | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FIST,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT  | DebuggerX86.TYPE_OUT],
-            0x03: [DebuggerX86.FINS.FISTP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SINT  | DebuggerX86.TYPE_OUT],
-            0x05: [DebuggerX86.FINS.FLD,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_TREAL | DebuggerX86.TYPE_IN],
-            0x07: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_TREAL | DebuggerX86.TYPE_OUT],
-            0x40: [DebuggerX86.FINS.FENI],
-            0x41: [DebuggerX86.FINS.FDISI],
-            0x42: [DebuggerX86.FINS.FCLEX],
-            0x43: [DebuggerX86.FINS.FINIT],
-            0x44: [DebuggerX86.FINS.FSETPM,  DebuggerX86.TYPE_80287],
-            0x73: [DebuggerX86.FINS.FSINCOS, DebuggerX86.TYPE_80387]
+            0x00: [Debuggerx86.FINS.FILD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT  | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FIST,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT  | Debuggerx86.TYPE_OUT],
+            0x03: [Debuggerx86.FINS.FISTP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SINT  | Debuggerx86.TYPE_OUT],
+            0x05: [Debuggerx86.FINS.FLD,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_TREAL | Debuggerx86.TYPE_IN],
+            0x07: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_TREAL | Debuggerx86.TYPE_OUT],
+            0x40: [Debuggerx86.FINS.FENI],
+            0x41: [Debuggerx86.FINS.FDISI],
+            0x42: [Debuggerx86.FINS.FCLEX],
+            0x43: [Debuggerx86.FINS.FINIT],
+            0x44: [Debuggerx86.FINS.FSETPM,  Debuggerx86.TYPE_80287],
+            0x73: [Debuggerx86.FINS.FSINCOS, Debuggerx86.TYPE_80387]
         },
         0xDC: {
-            0x00: [DebuggerX86.FINS.FADD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x01: [DebuggerX86.FINS.FMUL,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FCOM,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x03: [DebuggerX86.FINS.FCOMP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x04: [DebuggerX86.FINS.FSUB,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FSUBR,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FDIV,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x07: [DebuggerX86.FINS.FDIVR,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x30: [DebuggerX86.FINS.FADD,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x31: [DebuggerX86.FINS.FMUL,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x32: [DebuggerX86.FINS.FCOM,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x33: [DebuggerX86.FINS.FCOMP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x34: [DebuggerX86.FINS.FSUBR,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x35: [DebuggerX86.FINS.FSUB,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x36: [DebuggerX86.FINS.FDIVR,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x37: [DebuggerX86.FINS.FDIV,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN]
+            0x00: [Debuggerx86.FINS.FADD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x01: [Debuggerx86.FINS.FMUL,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FCOM,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x03: [Debuggerx86.FINS.FCOMP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x04: [Debuggerx86.FINS.FSUB,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FSUBR,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FDIV,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x07: [Debuggerx86.FINS.FDIVR,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x30: [Debuggerx86.FINS.FADD,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x31: [Debuggerx86.FINS.FMUL,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x32: [Debuggerx86.FINS.FCOM,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x33: [Debuggerx86.FINS.FCOMP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x34: [Debuggerx86.FINS.FSUBR,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x35: [Debuggerx86.FINS.FSUB,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x36: [Debuggerx86.FINS.FDIVR,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x37: [Debuggerx86.FINS.FDIV,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN]
         },
         0xDD: {
-            0x00: [DebuggerX86.FINS.FLD,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FST,    DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_OUT],
-            0x03: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LREAL | DebuggerX86.TYPE_OUT],
-            0x04: [DebuggerX86.FINS.FRSTOR, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_FPU   | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FSAVE,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_FPU   | DebuggerX86.TYPE_OUT],
-            0x07: [DebuggerX86.FINS.FSTSW,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT],
-            0x30: [DebuggerX86.FINS.FFREE,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x31: [DebuggerX86.FINS.FXCH,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT],   // Obsolete encoding
-            0x32: [DebuggerX86.FINS.FST,    DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x33: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN]
+            0x00: [Debuggerx86.FINS.FLD,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FST,    Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_OUT],
+            0x03: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LREAL | Debuggerx86.TYPE_OUT],
+            0x04: [Debuggerx86.FINS.FRSTOR, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_FPU   | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FSAVE,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_FPU   | Debuggerx86.TYPE_OUT],
+            0x07: [Debuggerx86.FINS.FSTSW,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT],
+            0x30: [Debuggerx86.FINS.FFREE,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x31: [Debuggerx86.FINS.FXCH,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT],   // Obsolete encoding
+            0x32: [Debuggerx86.FINS.FST,    Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x33: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN]
         },
         0xDE: {
-            0x00: [DebuggerX86.FINS.FIADD,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x01: [DebuggerX86.FINS.FIMUL,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FICOM,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x03: [DebuggerX86.FINS.FICOMP, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x04: [DebuggerX86.FINS.FISUB,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FISUBR, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FIDIV,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x07: [DebuggerX86.FINS.FIDIVR, DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x30: [DebuggerX86.FINS.FADDP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x31: [DebuggerX86.FINS.FMULP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x32: [DebuggerX86.FINS.FCOMP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x33: [DebuggerX86.FINS.FCOMPP, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],
-            0x34: [DebuggerX86.FINS.FSUBRP, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x35: [DebuggerX86.FINS.FSUBP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x36: [DebuggerX86.FINS.FDIVRP, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN],
-            0x37: [DebuggerX86.FINS.FDIVP,  DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_ST | DebuggerX86.TYPE_IN]
+            0x00: [Debuggerx86.FINS.FIADD,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x01: [Debuggerx86.FINS.FIMUL,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FICOM,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x03: [Debuggerx86.FINS.FICOMP, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x04: [Debuggerx86.FINS.FISUB,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FISUBR, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FIDIV,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x07: [Debuggerx86.FINS.FIDIVR, Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x30: [Debuggerx86.FINS.FADDP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x31: [Debuggerx86.FINS.FMULP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x32: [Debuggerx86.FINS.FCOMP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x33: [Debuggerx86.FINS.FCOMPP, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],
+            0x34: [Debuggerx86.FINS.FSUBRP, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x35: [Debuggerx86.FINS.FSUBP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x36: [Debuggerx86.FINS.FDIVRP, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN],
+            0x37: [Debuggerx86.FINS.FDIVP,  Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_ST | Debuggerx86.TYPE_IN]
         },
         0xDF: {
-            0x00: [DebuggerX86.FINS.FILD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_IN],
-            0x02: [DebuggerX86.FINS.FIST,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT],
-            0x03: [DebuggerX86.FINS.FISTP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_SHORT | DebuggerX86.TYPE_OUT],
-            0x04: [DebuggerX86.FINS.FBLD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BCD80 | DebuggerX86.TYPE_IN],
-            0x05: [DebuggerX86.FINS.FILD,   DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LINT  | DebuggerX86.TYPE_IN],
-            0x06: [DebuggerX86.FINS.FBSTP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_BCD80 | DebuggerX86.TYPE_OUT],
-            0x07: [DebuggerX86.FINS.FISTP,  DebuggerX86.TYPE_MODRM  | DebuggerX86.TYPE_LINT  | DebuggerX86.TYPE_OUT],
-            0x30: [DebuggerX86.FINS.FFREEP, DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x31: [DebuggerX86.FINS.FXCH,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_OUT],   // Obsolete encoding
-            0x32: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x33: [DebuggerX86.FINS.FSTP,   DebuggerX86.TYPE_IMPREG | DebuggerX86.TYPE_STREG | DebuggerX86.TYPE_IN],    // Obsolete encoding
-            0x34: [DebuggerX86.FINS.FSTSWAX, DebuggerX86.TYPE_80287]
+            0x00: [Debuggerx86.FINS.FILD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_IN],
+            0x02: [Debuggerx86.FINS.FIST,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT],
+            0x03: [Debuggerx86.FINS.FISTP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT],
+            0x04: [Debuggerx86.FINS.FBLD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BCD80 | Debuggerx86.TYPE_IN],
+            0x05: [Debuggerx86.FINS.FILD,   Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LINT  | Debuggerx86.TYPE_IN],
+            0x06: [Debuggerx86.FINS.FBSTP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_BCD80 | Debuggerx86.TYPE_OUT],
+            0x07: [Debuggerx86.FINS.FISTP,  Debuggerx86.TYPE_MODRM  | Debuggerx86.TYPE_LINT  | Debuggerx86.TYPE_OUT],
+            0x30: [Debuggerx86.FINS.FFREEP, Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x31: [Debuggerx86.FINS.FXCH,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_OUT],   // Obsolete encoding
+            0x32: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x33: [Debuggerx86.FINS.FSTP,   Debuggerx86.TYPE_IMPREG | Debuggerx86.TYPE_STREG | Debuggerx86.TYPE_IN],    // Obsolete encoding
+            0x34: [Debuggerx86.FINS.FSTSWAX, Debuggerx86.TYPE_80287]
         }
     };
 
-    DebuggerX86.aaGrpDescs = [
+    Debuggerx86.aaGrpDescs = [
       [
         /* GRP1B */
-        [DebuggerX86.INS.ADD,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.OR,   DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ADC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SBB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.AND,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SUB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.XOR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.CMP,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ADD,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.OR,   Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ADC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SBB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.AND,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SUB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.XOR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.CMP,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP1W */
-        [DebuggerX86.INS.ADD,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.OR,   DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ADC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SBB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.AND,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SUB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.XOR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.CMP,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ADD,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.OR,   Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ADC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SBB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.AND,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SUB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.XOR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.CMP,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP1SW */
-        [DebuggerX86.INS.ADD,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.OR,   DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ADC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SBB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.AND,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SUB,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.XOR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.CMP,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_SBYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ADD,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.OR,   Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ADC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SBB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.AND,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SUB,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.XOR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.CMP,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2B */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2W */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH | DebuggerX86.TYPE_80286, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80286, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2B1 */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2W1 */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_ONE | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_ONE | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2BC */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP2WC */
-        [DebuggerX86.INS.ROL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.ROR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.RCR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.SHR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.SAR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH, DebuggerX86.TYPE_CL | DebuggerX86.TYPE_IN]
+        [Debuggerx86.INS.ROL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.ROR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.RCR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.SHR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.SAR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH, Debuggerx86.TYPE_CL | Debuggerx86.TYPE_IN]
       ],
       [
         /* GRP3B */
-        [DebuggerX86.INS.TEST, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.NOT,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.NEG,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.MUL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.IMUL, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.DIV,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.IDIV, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH]
+        [Debuggerx86.INS.TEST, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.NOT,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.NEG,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.MUL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.IMUL, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.DIV,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.IDIV, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH]
       ],
       [
         /* GRP3W */
-        [DebuggerX86.INS.TEST, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN,   DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.NOT,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.NEG,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.MUL,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.IMUL, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.DIV,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.IDIV, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH]
+        [Debuggerx86.INS.TEST, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN,   Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.NOT,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.NEG,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.MUL,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.IMUL, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.DIV,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.IDIV, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH]
       ],
       [
         /* GRP4B */
-        [DebuggerX86.INS.INC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.DEC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_BYTE  | DebuggerX86.TYPE_BOTH],
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined
+        [Debuggerx86.INS.INC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.DEC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_BOTH],
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined
       ],
       [
         /* GRP4W */
-        [DebuggerX86.INS.INC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.DEC,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_BOTH],
-        [DebuggerX86.INS.CALL, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.CALL, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_FARP  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.JMP,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.JMP,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_FARP  | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.PUSH, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN],
-         DebuggerX86.aOpDescUndefined
+        [Debuggerx86.INS.INC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.DEC,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_BOTH],
+        [Debuggerx86.INS.CALL, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.CALL, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_FARP  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.JMP,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.JMP,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_FARP  | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.PUSH, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+         Debuggerx86.aOpDescUndefined
       ],
       [ /* OP0F */ ],
       [
         /* GRP6 */
-        [DebuggerX86.INS.SLDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.STR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.LLDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.LTR,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.VERR, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.VERW, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined
+        [Debuggerx86.INS.SLDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.STR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.LLDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.LTR,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.VERR, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.VERW, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined
       ],
       [
         /* GRP7 */
-        [DebuggerX86.INS.SGDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.SIDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.LGDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.LIDT, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-        [DebuggerX86.INS.SMSW, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80286],
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.LMSW, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_SHORT| DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80286],
-         DebuggerX86.aOpDescUndefined
+        [Debuggerx86.INS.SGDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.SIDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.LGDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.LIDT, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+        [Debuggerx86.INS.SMSW, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80286],
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.LMSW, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_SHORT| Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80286],
+         Debuggerx86.aOpDescUndefined
       ],
       [
         /* GRP8 */
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-         DebuggerX86.aOpDescUndefined,
-        [DebuggerX86.INS.BT,  DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_IN  | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.BTS, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.BTR, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN],
-        [DebuggerX86.INS.BTC, DebuggerX86.TYPE_MODRM | DebuggerX86.TYPE_WORD  | DebuggerX86.TYPE_OUT | DebuggerX86.TYPE_80386, DebuggerX86.TYPE_IMM | DebuggerX86.TYPE_BYTE | DebuggerX86.TYPE_IN]
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+         Debuggerx86.aOpDescUndefined,
+        [Debuggerx86.INS.BT,  Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN  | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.BTS, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.BTR, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN],
+        [Debuggerx86.INS.BTC, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT | Debuggerx86.TYPE_80386, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE | Debuggerx86.TYPE_IN]
       ]
     ];
 
-    /*
+    /**
      * Table of system (non-segment) descriptors, including indicators of which ones are gates.
      */
-    DebuggerX86.SYSDESCS = {
+    Debuggerx86.SYSDESCS = {
         0x0100: ["tss286",       false],
         0x0200: ["ldt",          false],
         0x0300: ["busy tss286",  false],
@@ -81109,10 +81989,10 @@ if (DEBUGGER) {
         0x0F00: ["trap gate386", true]
     };
 
-    /*
+    /**
      * TSS field names and offsets used by dumpTSS()
      */
-    DebuggerX86.TSS286 = {
+    Debuggerx86.TSS286 = {
         "PREV_TSS":     0x00,
         "CPL0_SP":      0x02,
         "CPL0_SS":      0x04,
@@ -81136,7 +82016,7 @@ if (DEBUGGER) {
         "TASK_DS":      0x28,
         "TASK_LDT":     0x2a
     };
-    DebuggerX86.TSS386 = {
+    Debuggerx86.TSS386 = {
         "PREV_TSS":     0x00,
         "CPL0_ESP":     0x04,
         "CPL0_SS":      0x08,
@@ -81165,10 +82045,10 @@ if (DEBUGGER) {
         "TASK_IOPM":    0x64
     };
 
-    /*
+    /**
      * Initialize every Debugger module on the page (as IF there's ever going to be more than one ;-))
      */
-    WebLib.onInit(DebuggerX86.init);
+    WebLib.onInit(Debuggerx86.init);
 
 }   // endif DEBUGGER
 
@@ -81293,7 +82173,7 @@ class Computer extends Component {
         this.fpu = /** @type {FPUx86} */ (Component.getComponentByType("FPU", this.id));
         if (!this.fpu) new FPUx86({'id': this.idMachine + ".fpu"});
 
-        this.dbg = /** @type {DebuggerX86} */ (Component.getComponentByType("Debugger", this.id));
+        this.dbg = /** @type {Debuggerx86} */ (Component.getComponentByType("Debugger", this.id));
 
         /*
          * Enumerate all the Video components for diagnostic displays, focus changes, and updateStatus() calls.
@@ -81306,7 +82186,7 @@ class Computer extends Component {
         /*
          * Initialize the Bus component
          */
-        this.bus = new BusX86({'id': this.idMachine + '.bus', 'busWidth': this.nBusWidth}, this.cpu, this.dbg);
+        this.bus = new Busx86({'id': this.idMachine + '.bus', 'busWidth': this.nBusWidth}, this.cpu, this.dbg);
 
         /*
          * Iterate through all the components and override their notice() and print() methods
@@ -84209,7 +85089,7 @@ globals.window['sendEvent']    = WebLib.doPageEvent;
 function savePC(idMachine, sPCJSFile, callback)
 {
     let cmp = /** @type {Computer} */ (Component.getComponentByType("Computer", idMachine));
-    let dbg = false; // /** @type {Debugger} */ (Component.getComponentByType("DebuggerX86", idMachine));
+    let dbg = false; // /** @type {Debugger} */ (Component.getComponentByType("Debuggerx86", idMachine));
     if (cmp) {
         let sState = cmp.powerOff(true);
         let sParms = cmp.saveMachineParms();

@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MemoryX86 from "./memory.js";
+import Memoryx86 from "./memory.js";
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
@@ -111,9 +111,9 @@ export default class ROMx86 extends Component {
      *
      * @this {ROMx86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -361,7 +361,7 @@ export default class ROMx86 extends Component {
      */
     addROM(addr)
     {
-        if (this.bus.addMemory(addr, this.sizeROM, MemoryX86.TYPE.ROM)) {
+        if (this.bus.addMemory(addr, this.sizeROM, Memoryx86.TYPE.ROM)) {
             if (MAXDEBUG) this.printf(MESSAGE.LOG, "addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
             let bto = null;
             for (let off = 0; off < this.abROM.length; off++) {

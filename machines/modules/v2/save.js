@@ -23,7 +23,7 @@ import { APPVERSION, DEBUG, globals } from "./defines.js";
 function savePC(idMachine, sPCJSFile, callback)
 {
     let cmp = /** @type {Computer} */ (Component.getComponentByType("Computer", idMachine));
-    let dbg = false; // /** @type {Debugger} */ (Component.getComponentByType("DebuggerX86", idMachine));
+    let dbg = false; // /** @type {Debugger} */ (Component.getComponentByType("Debuggerx86", idMachine));
     if (cmp) {
         let sState = cmp.powerOff(true);
         let sParms = cmp.saveMachineParms();

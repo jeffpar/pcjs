@@ -1616,23 +1616,47 @@
 						"@bootable": true,
 						"@media": [
 							{
-								"@title": "DR DOS 5.00 (Disk 1)",
-								"@diskette": "DRDOS500-DISK1.json",
+								"@title": "DR DOS 5.00 (1990-06 Disk 1)",
+								"@diskette": "DRDOS500-1990-06-DISK1.json",
 								"@format": "PC360K"
 							},
 							{
-								"@title": "DR DOS 5.00 (Disk 2)",
-								"@diskette": "DRDOS500-DISK2.json",
+								"@title": "DR DOS 5.00 (1990-06 Disk 2)",
+								"@diskette": "DRDOS500-1990-06-DISK2.json",
 								"@format": "PC360K"
 							},
 							{
-								"@title": "DR DOS 5.00 (Disk 3)",
-								"@diskette": "DRDOS500-DISK3.json",
+								"@title": "DR DOS 5.00 (1990-06 Disk 3)",
+								"@diskette": "DRDOS500-1990-06-DISK3.json",
 								"@format": "PC360K"
 							},
 							{
-								"@title": "DR DOS 5.00 (Disk 4)",
-								"@diskette": "DRDOS500-DISK4.json",
+								"@title": "DR DOS 5.00 (1990-06 Disk 4)",
+								"@diskette": "DRDOS500-1990-06-DISK4.json",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "DR DOS 5.00 (1991-02 Disk 1)",
+								"@diskette": "DRDOS500-1991-02-DISK1.json",
+								"@photo": "jpg",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "DR DOS 5.00 (1991-02 Disk 2)",
+								"@diskette": "DRDOS500-1991-02-DISK2.json",
+								"@photo": "jpg",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "DR DOS 5.00 (1991-02 Disk 3)",
+								"@diskette": "DRDOS500-1991-02-DISK3.json",
+								"@photo": "jpg",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "DR DOS 5.00 (1991-02 Disk 4)",
+								"@diskette": "DRDOS500-1991-02-DISK4.json",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							}
 						]
@@ -1674,31 +1698,37 @@
 							{
 								"@title": "DR DOS 6.00 (1.2M StartUp)",
 								"@diskette": "DRDOS600-STARTUP.json",
+								"@photo": "jpg",
 								"@format": "PC1200K"
 							},
 							{
 								"@title": "DR DOS 6.00 (1.2M ViewMAX)",
 								"@diskette": "DRDOS600-VIEWMAX.json",
+								"@photo": "jpg",
 								"@format": "PC1200K"
 							},
 							{
 								"@title": "DR DOS 6.00 (1991 Update 1)",
 								"@diskette": "DRDOS600-UPDATE-1991-12-DISK1.json",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							},
 							{
 								"@title": "DR DOS 6.00 (1991 Update 2)",
 								"@diskette": "DRDOS600-UPDATE-1991-12-DISK2.json",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							},
 							{
 								"@title": "DR DOS 6.00 (1992 Update 1)",
 								"@diskette": "DRDOS600-UPDATE-1992-04-DISK1.json",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							},
 							{
 								"@title": "DR DOS 6.00 (1992 Update 2)",
 								"@diskette": "DRDOS600-UPDATE-1992-04-DISK2.json",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							}
 						]

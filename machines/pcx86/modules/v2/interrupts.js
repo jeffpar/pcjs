@@ -8,7 +8,7 @@
  */
 
 const Interrupts = {
-    /*
+    /**
      * The original ROM BIOS defined vectors 0x08-0x1F with a table at F000:FEF3 (VECTOR_TABLE).
      */
     VIDEO:      0x10,
@@ -26,7 +26,7 @@ const Interrupts = {
     TMR_BREAK:  0x1C,               // invoked by the BIOS timer interrupt handler (normally vector 0x08)
     VID_PARMS:  0x1D,
     DSK_PARMS:  0x1E,               // vector for Diskette Parameter Table (DPT)
-    /*
+    /**
      * For characters 0x00-0x7F, the original ROM BIOS used a built-in table at F000:FA6E (CRT_CHAR_GEN),
      * since the MDA/CGA font ROM was not CPU-addressable, but presumably there wasn't enough room in the
      * ROM BIOS for all 256 characters, so if software wanted to draw any characters 0x80-0xFF in graphics
@@ -56,11 +56,22 @@ const Interrupts = {
         VECTOR:     0x30            // Windows PM call-back interface (aka Transfer Space Fault)
     },
     WINDBG: {                       // Windows Debugger protected-mode interface
-        VECTOR:     0x41,           // (AX==command)
+        VECTOR:     0x41,           // (AX is one of the following DS commands)
+        OUTCHAR:    0x0000,         // DS_Out_Char (display the char in DL)
+        INCHAR:     0x0001,         // DS_In_Char (read a char into AL)
+        OUTSTR:     0x0002,         // DS_Out_Str (display a NUL terminated string pointed to by DS:ESI)
+        ISCHAR:     0x0003,         // DS_Is_Char (non-blocking In_Chr)
+        OUTSTR16:   0x0012,         // DS_Out_Str16 (display a NUL terminated string pointed to by DS:SI; same as DS_Out_Str but for 16-bit callers)
+        FORCEDGO16: 0x0040,         // DS_ForcedGO16 (enter the debugger and perform the equivalent of a GO command to force a stop at the specified CS:IP; CX is the desired CS and BX is the desired IP)
+        LINKMAP:    0x0045,         // DS_LinkMap (DX:(E)DI = ptr to paragraph in front of map)
+        UNLINKMAP:  0x0046,         // DS_UnlinkMap (DX:(E)DI = ptr to paragraph in front of map)
+        CHECKMAP:   0x0047,         // DS_CheckMap (DX:(E)DI = pointer to module name; returns AX != 0 if map found or AX == 0 if map not found)
+        AUTOLOAD:   0x0048,         // DS_IsAutoLoadSym (returns AX != 0, auto load symbols; AX == 0, don't auto load symbols)
         IS_LOADED:  0x004F,         // DS_DebLoaded
-        LOADED:     0xF386,         // DS_DebPresent (returned in AX if Windows Debugger loaded)
-        LOADSEG:    0x0050,         // DS_LoadSeg (SI==0 if code, 1 if data; BX==segnum-1; CX==selector; ES:[E]DI->module name)
-        FREESEG:    0x0052,         // DS_FreeSeg (BX==segment)
+        LOADED:     0xF386,         // DS_DebPresent (returned in AX in response to DS_DebLoaded if Windows Debugger loaded)
+        LOADSEG:    0x0050,         // DS_LoadSeg (SI is 0 if code sel, 1 if data sel, 0x80 if code seg, 0x81 if data seg; BX is segnum-1; CX is sel or seg; DX is data instance; ES:[E]DI -> module name)
+        LOADSEG32:  0x0150,         // DS_LoadSeg_32 (SI is 0 0 if code, 1 if data; DX:EBX -> D386_Device_Params)
+        FREESEG:    0x0052,         // DS_FreeSeg (BX == segment)
         KRNLVARS:   0x005A,         // DS_Kernel_Vars
         RELSEG:     0x005C,         // DS_ReleaseSeg (same as DS_FreeSeg but "restores any breakpoints first")
         LOADHIGH:   0x005D,         // D386_LoadCodeDataHigh
@@ -70,7 +81,7 @@ const Interrupts = {
         UNKNOWN66:  0x0066,         // Unknown (but I suspect it isn't good)
         UNKNOWN67:  0x0067,         // Unknown (but I suspect it isn't good)
         REGDOTCMD:  0x0070,         // DS_RegisterDotCommand
-        CHECKFAULT: 0x007F,         // DS_CheckFault (BX==fault #, CX==FAULTTYPE bits; return AX=0 to handle fault normally, 1 to issue TRAPFAULT)
+        CHECKFAULT: 0x007F,         // DS_CheckFault (BX == fault #, CX == FAULTTYPE bits; return AX=0 to handle fault normally, 1 to issue TRAPFAULT)
         FAULTTYPE: {
             V86:    0x0001,
             PM:     0x0002,
@@ -78,22 +89,24 @@ const Interrupts = {
             FIRST:  0x0008,
             LAST:   0x0010
         },
-        TRAPFAULT:  0x0083,         // DS_TrapFault (BX==fault #, CX==faulting CS, EDX==faulting EIP, ESI==fault error, EDI==fault flags)
-        GETSYMBOL:  0x008D,         // DS_GetSymbol (DS:ESI->symbol; return AX=0 if success, 1 if not found, 2 if memory not loaded yet)
-        LOADSEG32:  0x0150,         // DS_LoadSeg_32 (SI==0 if code, 1 if data; DX:EBX->D386_Device_Params)
-        FREESEG32:  0x0152,         // DS_FreeSeg_32 (BX==segment, DX:EDI->module name)
+        TRAPFAULT:  0x0083,         // DS_TrapFault (BX == fault #, CX == faulting CS, EDX == faulting EIP, ESI == fault error, EDI == fault flags)
+        GETSYMBOL:  0x008D,         // DS_GetSymbol (DS:ESI -> symbol; return AX == 0 if success, 1 if not found, 2 if memory not loaded yet)
+        FREESEG32:  0x0152,         // DS_FreeSeg_32 (BX == segment, DX:EDI -> module name)
         CONDBP:     0xF001,         // DS_CondBP (break here if WDEB386 was run with /B; ESI -> string to display)
-        ENABLED:    false           // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
+        FORCEDBP:   0xF002,         // DS_ForcedBP
+        FORCEDGO:   0xF003,         // DS_ForcedGO (enter the debugger and perform the equivalent of a GO command to force a stop at the specified CS:EIP; CX is the desired CS, EBX is the desired EIP)
+        HARDINT1:   0xF004,         // DS_HardINT1 (check to see if INT 1 hooked for all rings;  ENTER: nothing, EXIT: AX = 0, if no, 1, if yes)
+        ENABLED:    true            // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
     },
     WINDBGRM: {                     // Windows Debugger real-mode interface
-        VECTOR:     0x68,           // (AH==command)
+        VECTOR:     0x68,           // (AH is one of the following D386 commands)
         IS_LOADED:  0x43,           // D386_Identify
         LOADED:     0xF386,         // D386_Id (returned in AX if Windows Debugger loaded)
         PREP_PMODE: 0x44,           // D386_Prepare_PMode (must return a 16:32 address in ES:EDI to a "PMinit" handler)
-        FREESEG:    0x48,           // D386_Free_Segment (BX==real-mode segment)
+        FREESEG:    0x48,           // D386_Free_Segment (BX == real-mode segment)
         REMOVESEGS: 0x4F,           // D386_Remove_Segs (remove any undefined segments from the named module at ES:DI)
-        LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI->D386_Device_Params)
-        ENABLED:    false           // support for WINDBGRM interrupts can be disabled
+        LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI -> D386_Device_Params)
+        ENABLED:    true            // support for WINDBGRM interrupts can be disabled
     },
     VIDEO_VGA:  0x6D,               // VGA ROM entry point (the default VGA INT 10h handler invokes this interrupt and IRETs)
     FUNCS: {}                       // filled in only if DEBUGGER is true
@@ -165,18 +178,18 @@ Interrupts.BIOS_DATA = {
     0x4A8:  ["SAVE_PTR",4]          // POINTER TO EGA PARAMETER CONTROL BLOCK
 };
 
-/*
-    * See DebuggerX86.prototype.replaceRegs() for the rules governing how register contents are replaced in the strings below.
-    *
-    * Replacements occur in the following order:
-    *
-    *      Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
-    *      Replace every #XX, where XX is a hex byte value, with the corresponding ASCII character (if printable).
-    *      Replace every $XXXX:XXXX, where XXXX:XXXX is a segmented address, with the zero-terminated string at that address.
-    *      Replace every ^XXXX:XXXX, where XXXX:XXXX is a segmented address, with the FCB filename stored at that address.
-    *
-    * The last replacement is obviously DOS-specific, since FCBs are DOS constructs.
-    */
+/**
+ * See Debuggerx86.prototype.replaceRegs() for the rules governing how register contents are replaced in the strings below.
+ *
+ * Replacements occur in the following order:
+ *
+ *      Replace every @XX (or @XXX), where XX (or XXX) is a register, with the register's value.
+ *      Replace every #XX, where XX is a hex byte value, with the corresponding ASCII character (if printable).
+ *      Replace every $XXXX:XXXX, where XXXX:XXXX is a segmented address, with the zero-terminated string at that address.
+ *      Replace every ^XXXX:XXXX, where XXXX:XXXX is a segmented address, with the FCB filename stored at that address.
+ *
+ * The last replacement is obviously DOS-specific, since FCBs are DOS constructs.
+ */
 Interrupts.FUNCS[Interrupts.VIDEO] = {
     0x00: "set mode (@AL)",
     0x01: "set cursor type (start=@CH,end=@CL)",
@@ -207,33 +220,33 @@ Interrupts.FUNCS[Interrupts.DISK] = {
     0x16: "get drive @DL change line status",
     0x17: "set drive @DL DASD type",
     0x18: "set drive @DL media type"
-    /*
-        * Here's an additional function reference, previously in the HDC component, but moved here
-        * because our components are hardware emulations, not BIOS emulations, so this information is
-        * really only of interest to the Debugger (or the casual observer).
-        *
-        *      RESET:          0x00,
-        *      GET_STATUS:     0x01,
-        *      READ_SECTORS:   0x02,
-        *      WRITE_SECTORS:  0x03,
-        *      VERIFY_SECTORS: 0x04,
-        *      FORMAT_TRK:     0x05,
-        *      FORMAT_BAD:     0x06,
-        *      FORMAT_DRIVE:   0x07,
-        *      GET_DRIVEPARMS: 0x08,
-        *      SET_DRIVEPARMS: 0x09,
-        *      READ_LONG:      0x0A,
-        *      WRITE_LONG:     0x0B,
-        *      SEEK:           0x0C,
-        *      ALT_RESET:      0x0D,
-        *      READ_BUFFER:    0x0E,
-        *      WRITE_BUFFER:   0x0F,
-        *      TEST_READY:     0x10,
-        *      RECALIBRATE:    0x11,
-        *      RAM_DIAGNOSTIC: 0x12,
-        *      DRV_DIAGNOSTIC: 0x13,
-        *      CTL_DIAGNOSTIC: 0x14
-        */
+    /**
+     * Here's an additional function reference, previously in the HDC component, but moved here
+     * because our components are hardware emulations, not BIOS emulations, so this information is
+     * really only of interest to the Debugger (or the casual observer).
+     *
+     *      RESET:          0x00,
+     *      GET_STATUS:     0x01,
+     *      READ_SECTORS:   0x02,
+     *      WRITE_SECTORS:  0x03,
+     *      VERIFY_SECTORS: 0x04,
+     *      FORMAT_TRK:     0x05,
+     *      FORMAT_BAD:     0x06,
+     *      FORMAT_DRIVE:   0x07,
+     *      GET_DRIVEPARMS: 0x08,
+     *      SET_DRIVEPARMS: 0x09,
+     *      READ_LONG:      0x0A,
+     *      WRITE_LONG:     0x0B,
+     *      SEEK:           0x0C,
+     *      ALT_RESET:      0x0D,
+     *      READ_BUFFER:    0x0E,
+     *      WRITE_BUFFER:   0x0F,
+     *      TEST_READY:     0x10,
+     *      RECALIBRATE:    0x11,
+     *      RAM_DIAGNOSTIC: 0x12,
+     *      DRV_DIAGNOSTIC: 0x13,
+     *      CTL_DIAGNOSTIC: 0x14
+     */
 };
 
 Interrupts.FUNCS[Interrupts.CASSETTE] = {
@@ -351,7 +364,7 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
     0x004F: "check debugger loaded"         // WINDBG.IS_LOADED returns WINDBG.LOADED (0xF386) if debugger loaded
 };
 
-/*
+/**
  * DOS function reference (from https://pcdosretro.github.io/dosfunc.txt)
  *
  *      INT 20 Program terminate (1.0+)
@@ -2109,5 +2122,639 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
  *            and a relocation table containing a word count and relocation
  *            entries for 16 segments.
  */
+
+/**
+ * Other miscellaneous definitions for historical reference.
+ *
+ * From DEBUGSYS.INC:
+ *
+ * D386_Device_Params STRUC
+ *      DD_logical_seg  dw  ?   ; logical segment # from map
+ *      DD_actual_sel   dw  ?   ; actual selector value
+ *      DD_base         dd  ?   ; linear address offset for start of segment
+ *      DD_length       dd  ?   ; actual length of segment
+ *      DD_name         df  ?   ; 16:32 ptr to null terminated device name
+ *      DD_sym_name     df  ?   ; 16:32 ptr to null terminated symbolic module name  (i.e. Win386)
+ *      DD_alias_sel    dw  ?   ; alias selector value (0 = none)
+ *  D386_Device_Params ENDS
+ */
+
+Interrupts.VxD = {
+    VECTOR: 0x20,
+    "VMM": {
+        id: 0x0001,
+        fn: [
+            "Get_VMM_Version",
+            "Get_Cur_VM_Handle",
+            "Test_Cur_VM_Handle",
+            "Get_Sys_VM_Handle",
+            "Test_Sys_VM_Handle",
+            "Validate_VM_Handle",
+            "Get_VMM_Reenter_Count",
+            "Begin_Reentrant_Execution",
+            "End_Reentrant_Execution",
+            "Install_V86_Break_Point",
+            "Remove_V86_Break_Point",
+            "Allocate_V86_Call_Back",
+            "Allocate_PM_Call_Back",
+            "Call_When_VM_Returns",
+            "Schedule_Global_Event",
+            "Schedule_VM_Event",
+            "Call_Global_Event",
+            "Call_VM_Event",
+            "Cancel_Global_Event",
+            "Cancel_VM_Event",
+            "Call_Priority_VM_Event",
+            "Cancel_Priority_VM_Event",
+            "Get_NMI_Handler_Addr",
+            "Set_NMI_Handler_Addr",
+            "Hook_NMI_Event",
+            "Call_When_VM_Ints_Enabled",
+            "Enable_VM_Ints",
+            "Disable_VM_Ints",
+            "Map_Flat",
+            "Map_Lin_To_VM_Addr",
+            "Adjust_Exec_Priority",
+            "Begin_Critical_Section",
+            "End_Critical_Section",
+            "End_Crit_And_Suspend",
+            "Claim_Critical_Section",
+            "Release_Critical_Section",
+            "Call_When_Not_Critical",
+            "Create_Semaphore",
+            "Destroy_Semaphore",
+            "Wait_Semaphore",
+            "Signal_Semaphore",
+            "Get_Crit_Section_Status",
+            "Call_When_Task_Switched",
+            "Suspend_VM",
+            "Resume_VM",
+            "No_Fail_Resume_VM",
+            "Nuke_VM",
+            "Crash_Cur_VM",
+            "Get_Execution_Focus",
+            "Set_Execution_Focus",
+            "Get_Time_Slice_Priority",
+            "Set_Time_Slice_Priority",
+            "Get_Time_Slice_Granularity",
+            "Set_Time_Slice_Granularity",
+            "Get_Time_Slice_Info",
+            "Adjust_Execution_Time",
+            "Release_Time_Slice",
+            "Wake_Up_VM",
+            "Call_When_Idle",
+            "Get_Next_VM_Handle",
+            "Set_Global_Time_Out",
+            "Set_VM_Time_Out",
+            "Cancel_Time_Out",
+            "Get_System_Time",
+            "Get_VM_Exec_Time",
+            "Hook_V86_Int_Chain",
+            "Get_V86_Int_Vector",
+            "Set_V86_Int_Vector",
+            "Get_PM_Int_Vector",
+            "Set_PM_Int_Vector",
+            "Simulate_Int",
+            "Simulate_Iret",
+            "Simulate_Far_Call",
+            "Simulate_Far_Jmp",
+            "Simulate_Far_Ret",
+            "Simulate_Far_Ret_N",
+            "Build_Int_Stack_Frame",
+            "Simulate_Push",
+            "Simulate_Pop",
+            "_HeapAllocate",
+            "_HeapReAllocate",
+            "_HeapFree",
+            "_HeapGetSize",
+            "_PageAllocate",
+            "_PageReAllocate",
+            "_PageFree",
+            "_PageLock",
+            "_PageUnLock",
+            "_PageGetSizeAddr",
+            "_PageGetAllocInfo",
+            "_GetFreePageCount",
+            "_GetSysPageCount",
+            "_GetVMPgCount",
+            "_MapIntoV86",
+            "_PhysIntoV86",
+            "_TestGlobalV86Mem",
+            "_ModifyPageBits",
+            "_CopyPageTable",
+            "_LinMapIntoV86",
+            "_LinPageLock",
+            "_LinPageUnLock",
+            "_SetResetV86Pageable",
+            "_GetV86PageableArray",
+            "_PageCheckLinRange",
+            "_PageOutDirtyPages",
+            "_PageDiscardPages",
+            "_GetNulPageHandle",
+            "_GetFirstV86Page",
+            "_MapPhysToLinear",
+            "_GetAppFlatDSAlias",
+            "_SelectorMapFlat",
+            "_GetDemandPageInfo",
+            "_GetSetPageOutCount",
+            "Hook_V86_Page",
+            "_Assign_Device_V86_Pages",
+            "_DeAssign_Device_V86_Pages",
+            "_Get_Device_V86_Pages_Array",
+            "MMGR_SetNULPageAddr",
+            "_Allocate_GDT_Selector",
+            "_Free_GDT_Selector",
+            "_Allocate_LDT_Selector",
+            "_Free_LDT_Selector",
+            "_BuildDescriptorDWORDs",
+            "_GetDescriptor",
+            "_SetDescriptor",
+            "_MMGR_Toggle_HMA",
+            "Get_Fault_Hook_Addrs",
+            "Hook_V86_Fault",
+            "Hook_PM_Fault",
+            "Hook_VMM_Fault",
+            "Begin_Nest_V86_Exec",
+            "Begin_Nest_Exec",
+            "Exec_Int",
+            "Resume_Exec",
+            "End_Nest_Exec",
+            "Allocate_PM_App_CB_Area",
+            "Get_Cur_PM_App_CB",
+            "Set_V86_Exec_Mode",
+            "Set_PM_Exec_Mode",
+            "Begin_Use_Locked_PM_Stack",
+            "End_Use_Locked_PM_Stack",
+            "Save_Client_State",
+            "Restore_Client_State",
+            "Exec_VxD_Int",
+            "Hook_Device_Service",
+            "Hook_Device_V86_API",
+            "Hook_Device_PM_API",
+            "System_Control",
+            "Simulate_IO",
+            "Install_Mult_IO_Handlers",
+            "Install_IO_Handler",
+            "Enable_Global_Trapping",
+            "Enable_Local_Trapping",
+            "Disable_Global_Trapping",
+            "Disable_Local_Trapping",
+            "List_Create",
+            "List_Destroy",
+            "List_Allocate",
+            "List_Attach",
+            "List_Attach_Tail",
+            "List_Insert",
+            "List_Remove",
+            "List_Deallocate",
+            "List_Get_First",
+            "List_Get_Next",
+            "List_Remove_First",
+            "_AddInstanceItem",
+            "_Allocate_Device_CB_Area",
+            "_Allocate_Global_V86_Data_Area",
+            "_Allocate_Temp_V86_Data_Area",
+            "_Free_Temp_V86_Data_Area",
+            "Get_Profile_Decimal_Int",
+            "Convert_Decimal_String",
+            "Get_Profile_Fixed_Point",
+            "Convert_Fixed_Point_String",
+            "Get_Profile_Hex_Int",
+            "Convert_Hex_String",
+            "Get_Profile_Boolean",
+            "Convert_Boolean_String",
+            "Get_Profile_String",
+            "Get_Next_Profile_String",
+            "Get_Environment_String",
+            "Get_Exec_Path",
+            "Get_Config_Directory",
+            "OpenFile",
+            "Get_PSP_Segment",
+            "GetDOSVectors",
+            "Get_Machine_Info",
+            "GetSet_HMA_Info",
+            "Set_System_Exit_Code",
+            "Fatal_Error_Handler",
+            "Fatal_Memory_Error",
+            "Update_System_Clock",
+            "Test_Debug_Installed",
+            "Out_Debug_String",
+            "Out_Debug_Chr",
+            "In_Debug_Chr",
+            "Debug_Convert_Hex_Binary",
+            "Debug_Convert_Hex_Decimal",
+            "Debug_Test_Valid_Handle",
+            "Validate_Client_Ptr",
+            "Test_Reenter",
+            "Queue_Debug_String",
+            "Log_Proc_Call",
+            "Debug_Test_Cur_VM",
+            "Get_PM_Int_Type",
+            "Set_PM_Int_Type",
+            "Get_Last_Updated_System_Time",
+            "Get_Last_Updated_VM_Exec_Time",
+            "Test_DBCS_Lead_Byte",
+            "_AddFreePhysPage",
+            "_PageResetHandlePAddr",
+            "_SetLastV86Page",
+            "_GetLastV86Page",
+            "_MapFreePhysReg",
+            "_UnmapFreePhysReg",
+            "_XchgFreePhysReg",
+            "_SetFreePhysRegCalBk",
+            "Get_Next_Arena",
+            "Get_Name_Of_Ugly_TSR",
+            "Get_Debug_Options",
+            "Set_Physical_HMA_Alias",
+            "_GetGlblRng0V86IntBase",
+            "_Add_Global_V86_Data_Area",
+            "GetSetDetailedVMError",
+            "Is_Debug_Chr",
+            "Clear_Mono_Screen",
+            "Out_Mono_Chr",
+            "Out_Mono_String",
+            "Set_Mono_Cur_Pos",
+            "Get_Mono_Cur_Pos",
+            "Get_Mono_Chr",
+            "Locate_Byte_In_ROM",
+            "Hook_Invalid_Page_Fault",
+            "Unhook_Invalid_Page_Fault",
+            "Set_Delete_On_Exit_File",
+            "Close_VM",
+            "Enable_Touch_1st_Meg",
+            "Disable_Touch_1st_Meg",
+            "Install_Exception_Handler",
+            "Remove_Exception_Handler",
+            "Get_Crit_Status_No_Block",
+            "_GetLastUpdatedThreadExecTime",
+            "_Trace_Out_Service",
+            "_Debug_Out_Service",
+            "_Debug_Flags_Service",
+            "VMMAddImportModuleName",
+            "VMM_Add_DDB",
+            "VMM_Remove_DDB",
+            "Test_VM_Ints_Enabled",
+            "_BlockOnID",
+            "Schedule_Thread_Event",
+            "Cancel_Thread_Event",
+            "Set_Thread_Time_Out",
+            "Set_Async_Time_Out",
+            "_AllocateThreadDataSlot",
+            "_FreeThreadDataSlot",
+            "_CreateMutex",
+            "_DestroyMutex",
+            "_GetMutexOwner",
+            "Call_When_Thread_Switched",
+            "VMMCreateThread",
+            "_GetThreadExecTime",
+            "VMMTerminateThread",
+            "Get_Cur_Thread_Handle",
+            "Test_Cur_Thread_Handle",
+            "Get_Sys_Thread_Handle",
+            "Test_Sys_Thread_Handle",
+            "Validate_Thread_Handle",
+            "Get_Initial_Thread_Handle",
+            "Test_Initial_Thread_Handle",
+            "Debug_Test_Valid_Thread_Handle",
+            "Debug_Test_Cur_Thread",
+            "VMM_GetSystemInitState",
+            "Cancel_Call_When_Thread_Switched",
+            "Get_Next_Thread_Handle",
+            "Adjust_Thread_Exec_Priority",
+            "_Deallocate_Device_CB_Area",
+            "Remove_IO_Handler",
+            "Remove_Mult_IO_Handlers",
+            "Unhook_V86_Int_Chain",
+            "Unhook_V86_Fault",
+            "Unhook_PM_Fault",
+            "Unhook_VMM_Fault",
+            "Unhook_Device_Service",
+            "_PageReserve",
+            "_PageCommit",
+            "_PageDecommit",
+            "_PagerRegister",
+            "_PagerQuery",
+            "_PagerDeregister",
+            "_ContextCreate",
+            "_ContextDestroy",
+            "_PageAttach",
+            "_PageFlush",
+            "_SignalID",
+            "_PageCommitPhys",
+            "_Register_Win32_Services",
+            "Cancel_Call_When_Not_Critical",
+            "Cancel_Call_When_Idle",
+            "Cancel_Call_When_Task_Switched",
+            "_Debug_Printf_Service",
+            "_EnterMutex",
+            "_LeaveMutex",
+            "Simulate_VM_IO",
+            "Signal_Semaphore_No_Switch",
+            "_ContextSwitch",
+            "_PageModifyPermissions",
+            "_PageQuery",
+            "_EnterMustComplete",
+            "_LeaveMustComplete",
+            "_ResumeExecMustComplete",
+            "_GetThreadTerminationStatus",
+            "_GetInstanceInfo",
+            "_ExecIntMustComplete",
+            "_ExecVxDIntMustComplete",
+            "Begin_V86_Serialization",
+            "Unhook_V86_Page",
+            "VMM_GetVxDLocationList",
+            "VMM_GetDDBList",
+            "Unhook_NMI_Event",
+            "Get_Instanced_V86_Int_Vector",
+            "Get_Set_Real_DOS_PSP",
+            "Call_Priority_Thread_Event",
+            "Get_System_Time_Address",
+            "Get_Crit_Status_Thread",
+            "Get_DDB",
+            "Directed_Sys_Control",
+            "_RegOpenKey",
+            "_RegCloseKey",
+            "_RegCreateKey",
+            "_RegDeleteKey",
+            "_RegEnumKey",
+            "_RegQueryValue",
+            "_RegSetValue",
+            "_RegDeleteValue",
+            "_RegEnumValue",
+            "_RegQueryValueEx",
+            "_RegSetValueEx",
+            "_CallRing3",
+            "Exec_PM_Int",
+            "_RegFlushKey",
+            "_PageCommitContig",
+            "_GetCurrentContext",
+            "_LocalizeSprintf",
+            "_LocalizeStackSprintf",
+            "Call_Restricted_Event",
+            "Cancel_Restricted_Event",
+            "Register_PEF_Provider",
+            "_GetPhysPageInfo",
+            "_RegQueryInfoKey",
+            "MemArb_Reserve_Pages",
+            "Time_Slice_Sys_VM_Idle",
+            "Time_Slice_Sleep",
+            "Boost_With_Decay",
+            "Set_Inversion_Pri",
+            "Reset_Inversion_Pri",
+            "Release_Inversion_Pri",
+            "Get_Thread_Win32_Pri",
+            "Set_Thread_Win32_Pri",
+            "Set_Thread_Static_Boost",
+            "Set_VM_Static_Boost",
+            "Release_Inversion_Pri_ID",
+            "Attach_Thread_To_Group",
+            "Detach_Thread_From_Group",
+            "Set_Group_Static_Boost",
+            "_GetRegistryPath",
+            "_GetRegistryKey",
+            "Cleanup_Thread_State",
+            "_RegRemapPreDefKey",
+            "End_V86_Serialization",
+            "_Assert_Range",
+            "_Sprintf",
+            "_PageChangePager",
+            "_RegCreateDynKey",
+            "_RegQueryMultipleValues",
+            "Boost_Thread_With_VM",
+            "Get_Boot_Flags",
+            "Set_Boot_Flags",
+            "_lstrcpyn",
+            "_lstrlen",
+            "_lmemcpy",
+            "_GetVxDName",
+            "Force_Mutexes_Free",
+            "Restore_Forced_Mutexes",
+            "_AddReclaimableItem",
+            "_SetReclaimableItem",
+            "_EnumReclaimableItem",
+            "Time_Slice_Wake_Sys_VM",
+            "VMM_Replace_Global_Environment",
+            "Begin_Non_Serial_Nest_V86_Exec",
+            "Get_Nest_Exec_Status",
+            "Open_Boot_Log",
+            "Write_Boot_Log",
+            "Close_Boot_Log",
+            "EnableDisable_Boot_Log",
+            "_Call_On_My_Stack",
+            "Get_Inst_V86_Int_Vec_Base",
+            "_lstrcmpi",
+            "_strupr",
+            "Log_Fault_Call_Out",
+            "_AtEventTime"
+        ]
+    },
+    "DEBUG": {
+        id: 0x0002
+    },
+    "VPICD": {
+        id: 0x0003
+    },
+    "VDMAD": {
+        id: 0x0004
+    },
+    "VTD": {
+        id: 0x0005
+    },
+    "V86MMGR": {
+        id: 0x0006
+    },
+    "PAGESWAP": {
+        id: 0x0007
+    },
+    "PARITY": {
+        id: 0x0008
+    },
+    "REBOOT": {
+        id: 0x0009
+    },
+    "VDD": {
+        id: 0x000A
+    },
+    "VSD": {
+        id: 0x000B
+    },
+    "VMD": {
+        id: 0x000C
+    },
+    "VKD": {
+        id: 0x000D
+    },
+    "VCD": {
+        id: 0x000E
+    },
+    "VPD": {
+        id: 0x000F
+    },
+    "BLOCKDEV": {
+        id: 0x0010
+    },
+    "VMCPD": {
+        id: 0x0011
+    },
+    "EBIOS": {
+        id: 0x0012
+    },
+    "BIOSXLAT": {
+        id: 0x0013
+    },
+    "VNETBIOS": {
+        id: 0x0014
+    },
+    "DOSMGR": {
+        id: 0x0015
+    },
+    "WINLOAD": {
+        id: 0x0016
+    },
+    "SHELL": {
+        id: 0x0017
+    },
+    "VMPOLL": {
+        id: 0x0018
+    },
+    "VPROD": {
+        id: 0x0019
+    },
+    "DOSNET": {
+        id: 0x001A
+    },
+    "VFD": {
+        id: 0x001B
+    },
+    "VDD2": {
+        id: 0x001C
+    },
+    "WINDEBUG": {
+        id: 0x001D
+    },
+    "TSRLOAD": {
+        id: 0x001E
+    },
+    "BIOSHOOK": {
+        id: 0x001F
+    },
+    "INT13": {
+        id: 0x0020
+    },
+    "PAGEFILE": {
+        id: 0x0021
+    },
+    "SCSI": {
+        id: 0x0022
+    },
+    "MCA_POS": {
+        id: 0x0023
+    },
+    "SCSIFD": {
+        id: 0x0024
+    },
+    "VPEND": {
+        id: 0x0025
+    },
+    "APM": {
+        id: 0x0026
+    },
+    "VXDLDR": {
+        id: 0x0027
+    },
+    "NDIS": {
+        id: 0x0028
+    },
+    "BIOS_EXT": {
+        id: 0x0029
+    },
+    "VWIN32": {
+        id: 0x002A
+    },
+    "VCOMM": {
+        id: 0x002B
+    },
+    "SPOOLER": {
+        id: 0x002C
+    },
+    "WIN32S": {
+        id: 0x002D
+    },
+    "DEBUGCMD": {
+        id: 0x002E
+    },
+    "CONFIGMG": {
+        id: 0x0033
+    },
+    "DWCFGMG": {
+        id: 0x0034
+    },
+    "SCSIPORT": {
+        id: 0x0035
+    },
+    "VFBACKUP": {
+        id: 0x0036
+    },
+    "ENABLE": {
+        id: 0x0037
+    },
+    "VCOND": {
+        id: 0x0038
+    },
+    "ISAPNP": {
+        id: 0x003C
+    },
+    "BIOS": {
+        id: 0x003D
+    },
+    "IFSMgr": {
+        id: 0x0040
+    },
+    "VCDFSD": {
+        id: 0x0041
+    },
+    "MRCI2": {
+        id: 0x0042
+    },
+    "PCI": {
+        id: 0x0043
+    },
+    "PELOADER": {
+        id: 0x0044
+    },
+    "EISA": {
+        id: 0x0045
+    },
+    "DRAGCLI": {
+        id: 0x0046
+    },
+    "DRAGSRV": {
+        id: 0x0047
+    },
+    "PERF": {
+        id: 0x0048
+    },
+    "AWREDIR": {
+        id: 0x0049
+    },
+    "ETEN": {
+        id: 0x0060
+    },
+    "CHBIOS": {
+        id: 0x0061
+    },
+    "VMSGD": {
+        id: 0x0062
+    },
+    "VPPID": {
+        id: 0x0063
+    },
+    "VIME": {
+        id: 0x0064
+    },
+    "VHBIOSD": {
+        id: 0x0065
+    }
+};
 
 export default Interrupts;

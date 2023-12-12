@@ -2243,26 +2243,24 @@ class StrLib {
             k = k.replace(/([\\[\]*{}().+?|$])/g, "\\$1");
             sMatch += (sMatch? '|' : '') + k;
         }
-        return s.replace(new RegExp('(' + sMatch + ')', "g"), function(m)
-        {
+        return s.replace(new RegExp('(' + sMatch + ')', "g"), function(m) {
             return a[m];
         });
     }
 
     /**
-     * pad(s, cch, fPadLeft)
+     * pad(s, cch)
      *
-     * NOTE: the maximum amount of padding currently supported is 40 spaces.
+     * Use a negative cch to pad on the right (ie, left-align), similar to sprintf("%-Ns", s).
+     * This also truncates the string if it's longer than abs(cch), similar to sprintf("%.Ns", s).
      *
      * @param {string} s is a string
      * @param {number} cch is desired length
-     * @param {boolean} [fPadLeft] (default is padding on the right)
      * @returns {string} the original string (s) with spaces padding it to the specified length
      */
-    static pad(s, cch, fPadLeft)
+    static pad(s, cch)
     {
-        let sPadding = "                                        ";
-        return fPadLeft? (sPadding + s).slice(-cch) : (s + sPadding).slice(0, cch);
+        return StrLib.sprintf('%' + cch + '.' + Math.abs(cch) + 's', s);
     }
 
     /**
@@ -2322,7 +2320,7 @@ class StrLib {
     {
         let cch = s.length;
         s = s.replace(/^0+([0-9A-F]+)$/i, "$1");
-        if (fPad) s = StrLib.pad(s, cch, true);
+        if (fPad) s = StrLib.pad(s, cch);
         return s;
     }
 
@@ -19479,7 +19477,7 @@ class SerialPortPDP11 extends Component {
                 if (b == 0x09) {
                     var tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
-                    if (this.tabSize) s = StrLib.pad("", nChars);
+                    if (this.tabSize) s = StrLib.pad("", -nChars);
                 }
                 if (this.charBOL && !this.iLogicalCol && nChars) s = String.fromCharCode(this.charBOL) + s;
                 this.controlBuffer.value += s;
@@ -24916,7 +24914,7 @@ class DbgLib extends Component {
      *      base: the base to use for most numeric input/output (default is 16)
      *
      * The DbgLib component is a shared component containing a subset of functionality used by
-     * the other CPU-specific Debuggers (eg, DebuggerX86).  Over time, the goal is to factor out as
+     * the other CPU-specific Debuggers (eg, Debuggerx86).  Over time, the goal is to factor out as
      * much common debugging support as possible from those components into this one.
      *
      * @this {DbgLib}
@@ -25421,7 +25419,7 @@ class DbgLib extends Component {
             case ',,':
                 valNew = this.truncate(val1, 18, true) * Math.pow(2, 18) + this.truncate(val2, 18, true);
                 break;
-            case '_':
+         // case '_':
             case '^_':
                 valNew = val1;
                 /*
@@ -25739,6 +25737,8 @@ class DbgLib extends Component {
              * added '!' as an alias for '|' (bitwise inclusive-or), '^-' as an alias for '~' (one's complement operator),
              * and '_' as a shift operator (+/- values specify a left/right shift, and the count is not limited to 32).
              *
+             * 2023 Update: I've removed '_' as a shift operator, because it interferes with symbols that use underscores.
+             *
              * And to avoid conflicts with MACRO-10 syntax, I've replaced the original mod operator ('%') with '^/'.
              *
              * The MACRO-10 binary shifting suffix ('B') is a bit more problematic, since a capital B can also appear
@@ -25759,7 +25759,7 @@ class DbgLib extends Component {
              * to remove spaces entirely, because if an operator-less expression like "A B" was passed in, we would want
              * that to generate an error; if we converted it to "AB", evaluation might inadvertently succeed.
              */
-            let regExp = /({|}|\|\||&&|\||\^!|\^B|\^O|\^D|\^L|\^-|~|\^_|_|&|!=|!|==|>=|>>>|>>|>|<=|<<|<|-|\+|\^\/|\/|\*|,,| )/;
+            let regExp = /({|}|\|\||&&|\||\^!|\^B|\^O|\^D|\^L|\^-|~|\^_|&|!=|!|==|>=|>>>|>>|>|<=|<<|<|-|\+|\^\/|\/|\*|,,| )/;
             if (this.nBase != 16) {
                 sExp = sExp.replace(/(^|[^A-Z0-9$%.])([0-9]+)B/, "$1$2^_").replace(/\s+/g, ' ');
             }
@@ -26182,7 +26182,7 @@ if (DEBUGGER) {
         '^/':   14,     // remainder
         '/':    14,     // division
         '*':    14,     // multiplication
-        '_':    19,     // MACRO-10 shift operator
+    //  '_':    19,     // MACRO-10 shift operator
         '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
         '{':    20,     // open grouped expression (converted from achGroup[0])
         '}':    20      // close grouped expression (converted from achGroup[1])
@@ -26209,7 +26209,7 @@ if (DEBUGGER) {
         '|':    15,     // bitwise OR
         '^!':   15,     // bitwise XOR (added by MACRO-10 sometime between the 1972 and 1978 versions)
         '&':    15,     // bitwise AND
-        '_':    19,     // MACRO-10 shift operator
+    //  '_':    19,     // MACRO-10 shift operator
         '^_':   19,     // MACRO-10 internal shift operator (converted from 'B' suffix form that MACRO-10 uses)
         '{':    20,     // open grouped expression (converted from achGroup[0])
         '}':    20      // close grouped expression (converted from achGroup[1])
@@ -28213,12 +28213,12 @@ class DebuggerPDP11 extends DbgLib {
             } while (dbgAddrOp.addr != dbgAddr.addr);
         }
 
-        sLine += StrLib.pad(sOpCodes, 24);
-        sLine += StrLib.pad(sOpName, 5);
+        sLine += StrLib.pad(sOpCodes, -24);
+        sLine += StrLib.pad(sOpName, -5);
         if (sOperands) sLine += ' ' + sOperands;
 
         if (sComment || sTarget) {
-            sLine = StrLib.pad(sLine, 60) + ';' + (sComment || "");
+            sLine = StrLib.pad(sLine, -60) + ';' + (sComment || "");
             if (!this.cpu.flags.checksum) {
                 sLine += (nSequence != null? '=' + nSequence.toString() : "");
             } else {
@@ -28777,7 +28777,7 @@ class DebuggerPDP11 extends DbgLib {
     {
         var s = "commands:";
         for (var sCommand in DebuggerPDP11.COMMANDS) {
-            s += '\n' + StrLib.pad(sCommand, 9) + DebuggerPDP11.COMMANDS[sCommand];
+            s += '\n' + StrLib.pad(sCommand, -9) + DebuggerPDP11.COMMANDS[sCommand];
         }
         if (!this.checksEnabled()) s += "\nnote: history disabled if no exec breakpoints";
         this.printf("%s\n", s);
@@ -29056,7 +29056,7 @@ class DebuggerPDP11 extends DbgLib {
              */
             var fPhysical = (dbgAddr.fPhysical || dbgAddr.addr > 0xffff);
             var a = this.cpu.getAddrInfo(dbgAddr.addr || 0, fPhysical);
-            this.printf("%s%s  %08o\n", StrLib.pad("", fPhysical? 12: 19), StrLib.toBin(dbgAddr.addr, fPhysical? 22 : 17, 3), dbgAddr.addr);
+            this.printf("%s%s  %08o\n", StrLib.pad("", fPhysical? -12: -19), StrLib.toBin(dbgAddr.addr, fPhysical? 22 : 17, 3), dbgAddr.addr);
             if (a.length < 6) {
                 if (a.length > 2) {
                     this.printf("    OFFSET:             %s  %08o\n", StrLib.toBin(a[3], 13, 3), a[3]);
@@ -29829,7 +29829,7 @@ class DebuggerPDP11 extends DbgLib {
                 var a = sCall.match(/[0-9A-F]+$/);
                 if (a) sSymbol = this.doList(a[0]);
             }
-            sCall = StrLib.pad(sCall, 50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
+            sCall = StrLib.pad(sCall, -50) + "  ;" + (sSymbol || "stack=" + this.toStrAddr(dbgAddrStack)); // + " return=" + this.toStrAddr(dbgAddrCall));
             this.printf("%s\n", sCall);
             sCallPrev = sCall;
             cFrames++;

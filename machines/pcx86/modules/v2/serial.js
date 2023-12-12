@@ -317,9 +317,9 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -958,7 +958,7 @@ export default class SerialPort extends Component {
                 if (b == 0x09) {
                     let tabSize = this.tabSize || 8;
                     nChars = tabSize - (this.iLogicalCol % tabSize);
-                    if (this.tabSize) s = StrLib.pad("", nChars);
+                    if (this.tabSize) s = StrLib.pad("", -nChars);
                 }
                 if (!this.iLogicalCol && nChars) {
                     /*

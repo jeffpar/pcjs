@@ -19,16 +19,16 @@ import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, COMPILED, DEBUG, DESKPRO386, MAXDEBUG } from "./defines.js";
 
 /**
- * @class KbdX86
+ * @class Keyboardx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-export default class KbdX86 extends Component {
+export default class Keyboardx86 extends Component {
     /**
-     * KbdX86(parmsKbd)
+     * Keyboardx86(parmsKbd)
      *
      * The Keyboard component can be configured with the following (parmsKbd) properties:
      *
-     *      model: keyboard model string, which must match one of the values listed in KbdX86.MODELS:
+     *      model: keyboard model string, which must match one of the values listed in Keyboardx86.MODELS:
      *
      *          "US83" (default)
      *          "US84"
@@ -47,7 +47,7 @@ export default class KbdX86 extends Component {
      * scan code sets, which the 8042 controller would then convert to PC-compatible scan codes.  That's probably
      * more important to implement, because that feature was introduced with the 84-key keyboard on the PC AT.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} parmsKbd
      */
     constructor(parmsKbd)
@@ -154,7 +154,7 @@ export default class KbdX86 extends Component {
         this.msInjectDelay   = 0;           // set by the initial injectKeys() call
         this.msDoubleClick   = 250;         // used by mousedown/mouseup handlers to soft-lock modifier keys
         this.cKeysPressed    = 0;           // count of keys pressed since the last time it was reset
-        this.softCodeKeys    = Object.keys(KbdX86.SOFTCODES);
+        this.softCodeKeys    = Object.keys(Keyboardx86.SOFTCODES);
 
         /*
          * Remove all single-character SOFTCODE keys from the softCodeKeys array, because those SOFTCODES
@@ -174,7 +174,7 @@ export default class KbdX86 extends Component {
         this.autoType = parmsKbd['autoType'];
         this.fDOSReady = false;
         this.fnDOSReady = this.fnInjectReady = null;
-        this.nInjection = KbdX86.INJECTION.ON_INPUT;
+        this.nInjection = Keyboardx86.INJECTION.ON_INPUT;
 
         /*
          * HACK: We set fAllDown to false to ignore all down/up events for keys not explicitly marked as ONDOWN;
@@ -196,7 +196,7 @@ export default class KbdX86 extends Component {
     /**
      * setBinding(sHTMLType, sBinding, control, sValue)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea", "canvas")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
@@ -333,7 +333,7 @@ export default class KbdX86 extends Component {
                  * Maintain support for older button codes; eg, map button code "ctrl-c" to CLICKCODE "CTRL_C"
                  */
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
-                if (KbdX86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
+                if (Keyboardx86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
                     this.bindings[id] = controlText;
                     if (MAXDEBUG) this.printf(MESSAGE.LOG, "binding click-code '%s'\n", sCode);
                     controlText.onclick = function(kbd, sKey, simCode) {
@@ -344,10 +344,10 @@ export default class KbdX86 extends Component {
                             kbd.updateShiftState(simCode, true);    // future-proofing if/when any LOCK keys are added to CLICKCODES
                             kbd.addActiveKey(simCode, true);
                         };
-                    }(this, sCode, KbdX86.CLICKCODES[sCode]);
+                    }(this, sCode, Keyboardx86.CLICKCODES[sCode]);
                     return true;
                 }
-                else if (KbdX86.SOFTCODES[sBinding] !== undefined) {
+                else if (Keyboardx86.SOFTCODES[sBinding] !== undefined) {
                     /*
                      * TODO: Fix this rather fragile code, which depends on the current structure of the given xxxx-softkeys.xml
                      */
@@ -359,7 +359,7 @@ export default class KbdX86 extends Component {
                     this.bindings[id] = controlText;
                     if (MAXDEBUG) this.printf(MESSAGE.LOG, "binding soft-code '%s'\n", sBinding);
                     let msLastEvent = 0, nClickState = 0;
-                    let fStateKey = (KbdX86.KEYSTATES[KbdX86.SOFTCODES[sBinding]] <= KbdX86.STATE.ALL_MODIFIERS);
+                    let fStateKey = (Keyboardx86.KEYSTATES[Keyboardx86.SOFTCODES[sBinding]] <= Keyboardx86.STATE.ALL_MODIFIERS);
                     let fnDown = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingDown(event) {
                             let msDelta = event.timeStamp - msLastEvent;
@@ -369,7 +369,7 @@ export default class KbdX86 extends Component {
                             kbd.sInjectBuffer = "";                 // key events should stop any injection currently in progress
                             kbd.addActiveKey(simCode);
                         };
-                    }(this, sBinding, KbdX86.SOFTCODES[sBinding]);
+                    }(this, sBinding, Keyboardx86.SOFTCODES[sBinding]);
                     let fnUp = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingUp(event) {
                             if (nClickState) {
@@ -384,7 +384,7 @@ export default class KbdX86 extends Component {
                                 }
                             }
                         };
-                    }(this, sBinding, KbdX86.SOFTCODES[sBinding]);
+                    }(this, sBinding, Keyboardx86.SOFTCODES[sBinding]);
                     if ('ontouchstart' in window) {
                         controlText.ontouchstart = fnDown;
                         controlText.ontouchend = fnUp;
@@ -418,7 +418,7 @@ export default class KbdX86 extends Component {
      *
      * Keyboard control event focus helper.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      */
     updateFocus(event)
@@ -441,7 +441,7 @@ export default class KbdX86 extends Component {
      * would contain MORE entries than the SOFTCODES table, because there are multiple simCodes that correspond
      * to a given soft key (eg, '1' and '!' both map to the same soft key).
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} simCode
      * @param {string} sType is the type of control (eg, "button" or "key")
      * @param {boolean} [fDown] is true if the key is going down, false if up, or undefined if unchanged
@@ -463,29 +463,29 @@ export default class KbdX86 extends Component {
              * TODO: Create a table that maps these SIMCODEs to the corresponding entries in the SOFTCODES table;
              * these SIMCODEs can be generated by CLICKCODEs or by the special key remapping HACKs in onKeyActive().
              */
-            if (simCode == KbdX86.SIMCODE.CTRL_PAUSE) {
-                simCode = KbdX86.SIMCODE.NUM_LOCK;
+            if (simCode == Keyboardx86.SIMCODE.CTRL_PAUSE) {
+                simCode = Keyboardx86.SIMCODE.NUM_LOCK;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_BREAK) {
-                simCode = KbdX86.SIMCODE.SCROLL_LOCK;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_BREAK) {
+                simCode = Keyboardx86.SIMCODE.SCROLL_LOCK;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_ALT_DEL) {
-                simCode = KbdX86.SIMCODE.DEL;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_ALT_DEL) {
+                simCode = Keyboardx86.SIMCODE.DEL;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_ALT_INS) {
-                simCode = KbdX86.SIMCODE.INS;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_ALT_INS) {
+                simCode = Keyboardx86.SIMCODE.INS;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_ALT_ADD) {
-                simCode = KbdX86.SIMCODE.NUM_ADD;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_ALT_ADD) {
+                simCode = Keyboardx86.SIMCODE.NUM_ADD;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_ALT_SUB) {
-                simCode = KbdX86.SIMCODE.NUM_SUB;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_ALT_SUB) {
+                simCode = Keyboardx86.SIMCODE.NUM_SUB;
             }
-            else if (simCode == KbdX86.SIMCODE.CTRL_ALT_SYS_REQ) {
-                simCode = KbdX86.SIMCODE.SYS_REQ;
+            else if (simCode == Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ) {
+                simCode = Keyboardx86.SIMCODE.SYS_REQ;
             }
-            for (let sBinding in KbdX86.SOFTCODES) {
-                if (KbdX86.SOFTCODES[sBinding] == simCode || KbdX86.SOFTCODES[sBinding] == this.toUpperKey(simCode)) {
+            for (let sBinding in Keyboardx86.SOFTCODES) {
+                if (Keyboardx86.SOFTCODES[sBinding] == simCode || Keyboardx86.SOFTCODES[sBinding] == this.toUpperKey(simCode)) {
                     let id = sType + '-' + sBinding;
                     control = this.bindings[id];
                     if (control && fDown !== undefined) {
@@ -501,11 +501,11 @@ export default class KbdX86 extends Component {
     /**
      * initBus(cmp, bus, cpu, dbg)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Computer} cmp
-     * @param {BusX86} bus
+     * @param {Busx86} bus
      * @param {CPUx86} cpu
-     * @param {DebuggerX86} dbg
+     * @param {Debuggerx86} dbg
      */
     initBus(cmp, bus, cpu, dbg)
     {
@@ -551,7 +551,7 @@ export default class KbdX86 extends Component {
      * at least for the first time you right-clicked.  And that wouldn't have helped with paste events triggered by
      * keyboard shortcut (eg, Cmd+V), or with machines where mouse events were being captured as well.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     start()
     {
@@ -560,7 +560,7 @@ export default class KbdX86 extends Component {
             this.controlTextKeyboard.focus();
             this.controlTextKeyboard.select();
         }
-        this.injectInit(KbdX86.INJECTION.ON_START);
+        this.injectInit(Keyboardx86.INJECTION.ON_START);
     }
 
     /**
@@ -568,7 +568,7 @@ export default class KbdX86 extends Component {
      *
      * Monitors selected DOS interrupts for signals to initialize 'autoType' injection.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} addr
      * @returns {boolean} true to proceed with the INT 0x21 software interrupt, false to skip
      */
@@ -582,7 +582,7 @@ export default class KbdX86 extends Component {
                 this.fnDOSReady();
                 this.fnDOSReady = null;
             } else {
-                this.injectInit(KbdX86.INJECTION.ON_INPUT);
+                this.injectInit(Keyboardx86.INJECTION.ON_INPUT);
             }
         }
         return true;
@@ -593,7 +593,7 @@ export default class KbdX86 extends Component {
      *
      * When ESC is used by the browser to disable pointer lock, this gives us the option of mapping a different key to ESC.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} fDisabled
      * @param {boolean} [fAllDown] (an experimental option to re-enable processing of all onkeydown/onkeyup events)
      */
@@ -606,7 +606,7 @@ export default class KbdX86 extends Component {
     /**
      * resetDevice()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     resetDevice()
     {
@@ -615,16 +615,16 @@ export default class KbdX86 extends Component {
          */
         this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard reset\n");
         this.abBuffer = [];
-        this.setResponse(KbdX86.CMDRES.BAT_OK);
+        this.setResponse(Keyboardx86.CMDRES.BAT_OK);
     }
 
     /**
      * setModel(sModel)
      *
      * This breaks a model string (eg, "US83") into two parts: modelCountry (eg, "US") and modelKeys (eg, 83).
-     * If the model string isn't recognized, we use KbdX86.MODELS[0] (ie, the first entry in the model array).
+     * If the model string isn't recognized, we use Keyboardx86.MODELS[0] (ie, the first entry in the model array).
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {string|undefined} sModel
      */
     setModel(sModel)
@@ -633,10 +633,10 @@ export default class KbdX86 extends Component {
         this.model = null;
         if (typeof sModel == "string") {
             this.model = sModel.toUpperCase();
-            iModel = KbdX86.MODELS.indexOf(this.model);
+            iModel = Keyboardx86.MODELS.indexOf(this.model);
             if (iModel < 0) iModel = 0;
         }
-        sModel = KbdX86.MODELS[iModel];
+        sModel = Keyboardx86.MODELS[iModel];
         if (sModel) {
             this.modelCountry = sModel.substr(0, 2);
             this.modelKeys = parseInt(sModel.substr(2), 10);
@@ -648,7 +648,7 @@ export default class KbdX86 extends Component {
      *
      * This is the ChipSet's interface to let us know it's ready.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} [b] (set to the data, if any, that the ChipSet just delivered)
      */
     checkBuffer(b)
@@ -660,7 +660,7 @@ export default class KbdX86 extends Component {
              * to report BAT_OK immediately after the ACK from a RESET command.  The BAT_OK response should already
              * be in the keyboard's buffer; we just need to give it a little nudge.
              */
-            if (b == KbdX86.CMDRES.ACK) {
+            if (b == Keyboardx86.CMDRES.ACK) {
                 fReady = true;
             }
             if (this.cpu) {
@@ -675,7 +675,7 @@ export default class KbdX86 extends Component {
      *
      * This is the ChipSet's interface to flush any buffered keyboard data.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     flushBuffer()
     {
@@ -689,9 +689,9 @@ export default class KbdX86 extends Component {
      * This is the ChipSet's interface for controlling "Model M" keyboards (ie, those used with MODEL_5170
      * machines).  Commands are delivered through the ChipSet's 8042 Keyboard Controller.
      *
-     * @this {KbdX86}
-     * @param {number} bCmd should be one of the KbdX86.CMD.* command codes (Model M keyboards only)
-     * @returns {number} response should be one of the KbdX86.CMDRES.* response codes, or -1 if unrecognized
+     * @this {Keyboardx86}
+     * @param {number} bCmd should be one of the Keyboardx86.CMD.* command codes (Model M keyboards only)
+     * @returns {number} response should be one of the Keyboardx86.CMDRES.* response codes, or -1 if unrecognized
      */
     receiveCmd(bCmd)
     {
@@ -701,26 +701,26 @@ export default class KbdX86 extends Component {
 
         switch(this.bCmdPending || bCmd) {
 
-        case KbdX86.CMD.RESET:              // 0xFF
-            b = KbdX86.CMDRES.ACK;
+        case Keyboardx86.CMD.RESET:              // 0xFF
+            b = Keyboardx86.CMDRES.ACK;
             this.resetDevice();
             break;
 
-        case KbdX86.CMD.SET_RATE:           // 0xF3
+        case Keyboardx86.CMD.SET_RATE:           // 0xF3
             if (this.bCmdPending) {
                 this.setRate(bCmd);
                 bCmd = 0;
             }
-            this.setResponse(KbdX86.CMDRES.ACK);
+            this.setResponse(Keyboardx86.CMDRES.ACK);
             this.bCmdPending = bCmd;
             break;
 
-        case KbdX86.CMD.SET_LEDS:           // 0xED
+        case Keyboardx86.CMD.SET_LEDS:           // 0xED
             if (this.bCmdPending) {
                 this.setLEDs(bCmd);
                 bCmd = 0;
             }
-            this.setResponse(KbdX86.CMDRES.ACK);
+            this.setResponse(Keyboardx86.CMDRES.ACK);
             this.bCmdPending = bCmd;
             break;
 
@@ -741,7 +741,7 @@ export default class KbdX86 extends Component {
      * output handler.  For MODEL_5170 machines, this function is called when selected CMD
      * "data bytes" have been written.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} fData is true if the keyboard simulated data line should be enabled
      * @param {boolean} fClock is true if the keyboard's simulated clock line should be enabled
      * @returns {boolean} true if keyboard was re-enabled, false if not (or no change)
@@ -777,7 +777,7 @@ export default class KbdX86 extends Component {
      *
      * This processes the option byte received after a SET_LEDS command byte.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} b
      */
     setLEDs(b)
@@ -790,7 +790,7 @@ export default class KbdX86 extends Component {
      *
      * This processes the rate parameter byte received after a SET_RATE command byte.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} b
      */
     setRate(b)
@@ -801,7 +801,7 @@ export default class KbdX86 extends Component {
     /**
      * setResponse(b)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} b
      */
     setResponse(b)
@@ -818,7 +818,7 @@ export default class KbdX86 extends Component {
      *
      * This manages communication with the ChipSet's receiveKbdData() interface.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} [fReady]
      */
     transmitData(fReady)
@@ -845,7 +845,7 @@ export default class KbdX86 extends Component {
     /**
      * powerUp(data, fRepower)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
      * @returns {boolean} true if successful, false if failure
@@ -874,7 +874,7 @@ export default class KbdX86 extends Component {
     /**
      * powerDown(fSave, fShutdown)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
      * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
@@ -887,7 +887,7 @@ export default class KbdX86 extends Component {
     /**
      * reset()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     reset()
     {
@@ -899,11 +899,11 @@ export default class KbdX86 extends Component {
             switch(this.chipset.model) {
             case ChipSet.MODEL_5150:
             case ChipSet.MODEL_5160:
-                this.setModel(KbdX86.MODELS[0]);
+                this.setModel(Keyboardx86.MODELS[0]);
                 break;
             case ChipSet.MODEL_5170:
             default:
-                this.setModel(KbdX86.MODELS[1]);
+                this.setModel(Keyboardx86.MODELS[1]);
                 break;
             }
         }
@@ -915,7 +915,7 @@ export default class KbdX86 extends Component {
      *
      * This implements save support for the Keyboard component.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @returns {Object}
      */
     save()
@@ -930,7 +930,7 @@ export default class KbdX86 extends Component {
      *
      * This implements restore support for the Keyboard component.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} data
      * @returns {boolean} true if successful, false if failure
      */
@@ -942,21 +942,21 @@ export default class KbdX86 extends Component {
     /**
      * initState(data)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Array} [data]
      * @returns {boolean} true if successful, false if failure
      */
     initState(data)
     {
         if (!data) {
-            data = [false, false, KbdX86.INJECTION.ON_INPUT];
+            data = [false, false, Keyboardx86.INJECTION.ON_INPUT];
         } else {
             /*
              * If there is a predefined state for this machine, then the assumption is that any injection
              * sequence can be injected as soon as the machine starts.  Any other kind of state must disable
              * injection, because injection depends on the machine being in a known state.
              */
-            data[2] = this.cmp.sStatePath? KbdX86.INJECTION.ON_START : (data[2] || KbdX86.INJECTION.NONE);
+            data[2] = this.cmp.sStatePath? Keyboardx86.INJECTION.ON_START : (data[2] || Keyboardx86.INJECTION.NONE);
         }
 
         let i = 0;
@@ -987,7 +987,7 @@ export default class KbdX86 extends Component {
     /**
      * saveState()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @returns {Array}
      */
     saveState()
@@ -1007,7 +1007,7 @@ export default class KbdX86 extends Component {
      * In addition to enabling or disabling our own soft keyboard (if any), this also attempts to disable or enable
      * (as appropriate) the textarea control (if any) that machines use to trigger a touch device's built-in keyboard.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} fEnable
      */
     enableSoftKeyboard(fEnable)
@@ -1031,7 +1031,7 @@ export default class KbdX86 extends Component {
     /**
      * setSoftKeyState(control, f)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {HTMLElement} control is an HTML control DOM object
      * @param {boolean} f is true if the key represented by e should be "on", false if "off"
      */
@@ -1044,7 +1044,7 @@ export default class KbdX86 extends Component {
     /**
      * addScanCode(bScan)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} bScan
      */
     addScanCode(bScan)
@@ -1057,7 +1057,7 @@ export default class KbdX86 extends Component {
          * as a result of calls from any of the key event handlers established by setBinding().
          */
         if (this.abBuffer) {
-            if (this.abBuffer.length < KbdX86.LIMIT.MAX_SCANCODES) {
+            if (this.abBuffer.length < Keyboardx86.LIMIT.MAX_SCANCODES) {
                 if (DESKPRO386) {
                     if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) {
                         /*
@@ -1083,8 +1083,8 @@ export default class KbdX86 extends Component {
                 this.transmitData();
                 return;
             }
-            if (this.abBuffer.length == KbdX86.LIMIT.MAX_SCANCODES) {
-                this.abBuffer.push(KbdX86.CMDRES.BUFF_FULL);
+            if (this.abBuffer.length == Keyboardx86.LIMIT.MAX_SCANCODES) {
+                this.abBuffer.push(Keyboardx86.CMDRES.BUFF_FULL);
             }
             this.printf("keyboard buffer overflow\n");
         }
@@ -1093,13 +1093,13 @@ export default class KbdX86 extends Component {
     /**
      * injectInit(nCondition)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} nCondition
      */
     injectInit(nCondition)
     {
         if (this.nInjection == nCondition) {
-            this.nInjection = KbdX86.INJECTION.NONE;
+            this.nInjection = Keyboardx86.INJECTION.NONE;
             if (this.autoType) this.injectKeys(this.autoType);
         }
     }
@@ -1107,7 +1107,7 @@ export default class KbdX86 extends Component {
     /**
      * injectKeys(sKeys, msDelay)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {string} [sKeys] (keys listed in SOFTCODES must be prefixed with '$')
      * @param {number} [msDelay] is an optional injection delay (default is msInjectDefault)
      * @returns {boolean}
@@ -1117,7 +1117,7 @@ export default class KbdX86 extends Component {
         if (sKeys) {
             let sInjectBuffer = this.parseKeys(sKeys);
             if (sInjectBuffer) {
-                this.nInjection = KbdX86.INJECTION.NONE;
+                this.nInjection = Keyboardx86.INJECTION.NONE;
                 this.sInjectBuffer = sInjectBuffer;
                 if (DEBUG) this.printf("injectKeys(\"%s\")\n", this.sInjectBuffer.split("\n").join("\\n"));
                 this.msInjectDelay = msDelay || 0;
@@ -1158,13 +1158,13 @@ export default class KbdX86 extends Component {
                 for (let i = 0; i < this.softCodeKeys.length; i++) {
                     let name = this.softCodeKeys[i];
                     if (this.sInjectBuffer.indexOf(name) == 1) {
-                        simCode = KbdX86.SOFTCODES[name];
+                        simCode = Keyboardx86.SOFTCODES[name];
                         this.sInjectBuffer = this.sInjectBuffer.substr(name.length + 1);
                         break;
                     }
                     let shortName = (name.indexOf('num-') == 0? name.substr(4) : "");
                     if (shortName && this.sInjectBuffer.indexOf(shortName) == 1) {
-                        simCode = KbdX86.SOFTCODES[name];
+                        simCode = Keyboardx86.SOFTCODES[name];
                         this.sInjectBuffer = this.sInjectBuffer.substr(shortName.length + 1);
                         break;
                     }
@@ -1209,7 +1209,7 @@ export default class KbdX86 extends Component {
         }
 
         if (simCode) {
-            let fPress = (KbdX86.MODIFIERS[simCode] === undefined);
+            let fPress = (Keyboardx86.MODIFIERS[simCode] === undefined);
             this.addActiveKey(simCode, fPress);
             if (fPress) this.clearActiveKeys(true);
         }
@@ -1269,7 +1269,7 @@ export default class KbdX86 extends Component {
      * Unfortunately, this is something that will be extremely difficult to prevent from breaking down the road.
      * So, heads up to future me....
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {string|undefined} sKeys
      * @returns {string|undefined}
      */
@@ -1304,7 +1304,7 @@ export default class KbdX86 extends Component {
     /**
      * waitReady(fnCallReady, sOption)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {function()|null} fnCallReady
      * @param {string} [sOption]
      * @returns {boolean} false if wait required, true otherwise
@@ -1336,7 +1336,7 @@ export default class KbdX86 extends Component {
     /**
      * setLED(control, f)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {HTMLElement} control is an HTML control DOM object
      * @param {boolean} f is true if the LED represented by control should be "on", false if "off"
      */
@@ -1353,15 +1353,15 @@ export default class KbdX86 extends Component {
      *
      * Updates any and all shift-related LEDs with the corresponding state in bitsStateSim.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} [bitState] is the bit in bitsStateSim that may have changed, if known; undefined if not
      */
     updateLEDs(bitState)
     {
         let control;
-        for (let sBinding in KbdX86.LEDSTATES) {
+        for (let sBinding in Keyboardx86.LEDSTATES) {
             let id = "led-" + sBinding;
-            let bitLED = KbdX86.LEDSTATES[sBinding];
+            let bitLED = Keyboardx86.LEDSTATES[sBinding];
             if ((!bitState || bitState == bitLED) && (control = this.bindings[id])) {
                 this.setLED(control, !!(this.bitsStateSim & bitLED));
             }
@@ -1371,31 +1371,31 @@ export default class KbdX86 extends Component {
     /**
      * toggleCapsLock()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     toggleCapsLock()
     {
-        this.addActiveKey(KbdX86.SIMCODE.CAPS_LOCK, true);
+        this.addActiveKey(Keyboardx86.SIMCODE.CAPS_LOCK, true);
     }
 
     /**
      * toggleNumLock()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     toggleNumLock()
     {
-        this.addActiveKey(KbdX86.SIMCODE.NUM_LOCK, true);
+        this.addActiveKey(Keyboardx86.SIMCODE.NUM_LOCK, true);
     }
 
     /**
      * toggleScrollLock()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      */
     toggleScrollLock()
     {
-        this.addActiveKey(KbdX86.SIMCODE.SCROLL_LOCK, true);
+        this.addActiveKey(Keyboardx86.SIMCODE.SCROLL_LOCK, true);
     }
 
     /**
@@ -1405,7 +1405,7 @@ export default class KbdX86 extends Component {
      * is set, and when fDown is false, it's cleared.  However, for LOCK keys, fDown true means toggle, and fDown false
      * means no change.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} simCode (includes any ONDOWN and/or ONRIGHT modifiers)
      * @param {boolean} [fSim] is true to update simulated state only
      * @param {boolean|null} [fDown] is true for down, false for up, undefined for toggle
@@ -1414,14 +1414,14 @@ export default class KbdX86 extends Component {
     updateShiftState(simCode, fSim, fDown)
     {
         let result = 0;
-        if (KbdX86.SIMCODES[simCode]) {
+        if (Keyboardx86.SIMCODES[simCode]) {
             let fRight = (Math.floor(simCode / 1000) & 2);
-            let bitState = KbdX86.KEYSTATES[simCode] || 0;
+            let bitState = Keyboardx86.KEYSTATES[simCode] || 0;
             if (bitState) {
-                if (fRight && !(bitState & KbdX86.STATE.ALL_RIGHT)) {
+                if (fRight && !(bitState & Keyboardx86.STATE.ALL_RIGHT)) {
                     bitState >>= 1;
                 }
-                if (bitState & KbdX86.STATE.ALL_LOCKS) {
+                if (bitState & Keyboardx86.STATE.ALL_LOCKS) {
                     if (fDown === false) return -1;
                     fDown = null;
                 }
@@ -1445,7 +1445,7 @@ export default class KbdX86 extends Component {
                      * and simulate the "up".  That's more work than I think the problem merits.  The user just needs to tap
                      * a single shift key to get out that mode.
                      */
-                    if (bitState & KbdX86.STATE.ALL_MODIFIERS) bitState = KbdX86.STATE.ALL_MODIFIERS;
+                    if (bitState & Keyboardx86.STATE.ALL_MODIFIERS) bitState = Keyboardx86.STATE.ALL_MODIFIERS;
                 }
                 if (!fSim) {
                     this.bitsState &= ~bitState;
@@ -1457,7 +1457,7 @@ export default class KbdX86 extends Component {
                      * (Pause) that isn't supposed to alter the NUM-LOCK state; similarly, CTRL-SCROLL-LOCK (aka Ctrl-Break)
                      * isn't supposed to alter the SCROLL-LOCK state.
                      */
-                    if (!(this.bitsStateSim & KbdX86.STATE.ALL_MODIFIERS) || !(bitState & KbdX86.STATE.ALL_LOCKS)) {
+                    if (!(this.bitsStateSim & Keyboardx86.STATE.ALL_MODIFIERS) || !(bitState & Keyboardx86.STATE.ALL_LOCKS)) {
                         this.bitsStateSim &= ~bitState;
                         if (fDown) this.bitsStateSim |= bitState;
                         this.updateLEDs(bitState);
@@ -1472,14 +1472,14 @@ export default class KbdX86 extends Component {
     /**
      * addActiveKey(simCode, fPress)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} simCode
      * @param {boolean} [fPress]
      * @returns {boolean} true if added, false if not (eg, not recognized, already added, etc)
      */
     addActiveKey(simCode, fPress)
     {
-        let wCode = KbdX86.SIMCODES[simCode] || KbdX86.SIMCODES[simCode += Keys.KEYCODE.ONDOWN];
+        let wCode = Keyboardx86.SIMCODES[simCode] || Keyboardx86.SIMCODES[simCode += Keys.KEYCODE.ONDOWN];
 
         if (!wCode) {
             if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "addActiveKey(%d,%s): unrecognized\n", simCode, (fPress? "press" : "down"));
@@ -1494,7 +1494,7 @@ export default class KbdX86 extends Component {
         /*
          * If this simCode is in the KEYSTATE table, then stop all repeating.
          */
-        if (KbdX86.KEYSTATES[simCode] && this.aKeysActive.length) {
+        if (Keyboardx86.KEYSTATES[simCode] && this.aKeysActive.length) {
             if (this.aKeysActive[0].nRepeat > 0) this.aKeysActive[0].nRepeat = 0;
         }
 
@@ -1534,7 +1534,7 @@ export default class KbdX86 extends Component {
         }
 
         key.fDown = true;
-        key.nRepeat = (fPress? -1: (KbdX86.KEYSTATES[simCode]? 0 : 1));
+        key.nRepeat = (fPress? -1: (Keyboardx86.KEYSTATES[simCode]? 0 : 1));
 
         this.updateActiveKey(key);
         return true;
@@ -1543,7 +1543,7 @@ export default class KbdX86 extends Component {
     /**
      * checkActiveKey()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @returns {number} simCode of active key, 0 if none
      */
     checkActiveKey()
@@ -1554,7 +1554,7 @@ export default class KbdX86 extends Component {
     /**
      * isAlphaKey(code)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} code
      * @returns {boolean} true if alpha key, false if not
      */
@@ -1566,7 +1566,7 @@ export default class KbdX86 extends Component {
     /**
      * toUpperKey(code)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} code
      * @returns {number}
      */
@@ -1583,14 +1583,14 @@ export default class KbdX86 extends Component {
      *
      * Force all active keys to "deactivate" (or, optionally, just any modifiers)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} [fModifiers] (true to clear modifier keys only; default is ALL keys)
      */
     clearActiveKeys(fModifiers)
     {
         for (let i = 0; i < this.aKeysActive.length; i++) {
             let key = this.aKeysActive[i];
-            if (fModifiers && !KbdX86.MODIFIERS[key.simCode]) continue;
+            if (fModifiers && !Keyboardx86.MODIFIERS[key.simCode]) continue;
             if (this.removeActiveKey(key.simCode)) i--;
         }
     }
@@ -1604,7 +1604,7 @@ export default class KbdX86 extends Component {
      */
     removeActiveKey(simCode, fFlush)
     {
-        if (!KbdX86.SIMCODES[simCode]) {
+        if (!Keyboardx86.SIMCODES[simCode]) {
             if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "removeActiveKey(%d): unrecognized\n", simCode);
             return false;
         }
@@ -1633,7 +1633,7 @@ export default class KbdX86 extends Component {
 
         if (!this.aKeysActive.length && this.fToggleCapsLock) {
             if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.KEY, "removeActiveKey(): inverting caps-lock now\n");
-            this.updateShiftState(KbdX86.SIMCODE.CAPS_LOCK);
+            this.updateShiftState(Keyboardx86.SIMCODE.CAPS_LOCK);
             this.fToggleCapsLock = false;
         }
         return fRemoved;
@@ -1701,7 +1701,7 @@ export default class KbdX86 extends Component {
     /**
      * getSimCode(keyCode)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} keyCode
      * @param {boolean} fShifted
      * @returns {number} simCode
@@ -1712,16 +1712,16 @@ export default class KbdX86 extends Component {
         let simCode = keyCode;
 
         if (keyCode >= Keys.ASCII.A && keyCode <= Keys.ASCII.Z) {
-            if (!(this.bitsState & (KbdX86.STATE.SHIFT | KbdX86.STATE.RSHIFT | KbdX86.STATE.CAPS_LOCK)) == fShifted) {
+            if (!(this.bitsState & (Keyboardx86.STATE.SHIFT | Keyboardx86.STATE.RSHIFT | Keyboardx86.STATE.CAPS_LOCK)) == fShifted) {
                 simCode = keyCode + (Keys.ASCII.a - Keys.ASCII.A);
             }
         }
         else if (keyCode >= Keys.ASCII.a && keyCode <= Keys.ASCII.z) {
-            if (!!(this.bitsState & (KbdX86.STATE.SHIFT | KbdX86.STATE.RSHIFT | KbdX86.STATE.CAPS_LOCK)) == fShifted) {
+            if (!!(this.bitsState & (Keyboardx86.STATE.SHIFT | Keyboardx86.STATE.RSHIFT | Keyboardx86.STATE.CAPS_LOCK)) == fShifted) {
                 simCode = keyCode - (Keys.ASCII.a - Keys.ASCII.A);
             }
         }
-        else if (!!(this.bitsState & (KbdX86.STATE.SHIFT | KbdX86.STATE.RSHIFT)) == fShifted) {
+        else if (!!(this.bitsState & (Keyboardx86.STATE.SHIFT | Keyboardx86.STATE.RSHIFT)) == fShifted) {
             if ((code = Keys.SHIFTED_KEYCODES[keyCode])) {
                 simCode = code;
             }
@@ -1737,7 +1737,7 @@ export default class KbdX86 extends Component {
     /**
      * onFocusChange(fFocus)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {boolean} fFocus is true if gaining focus, false if losing it
      */
     onFocusChange(fFocus)
@@ -1750,7 +1750,7 @@ export default class KbdX86 extends Component {
          * Since we can't be sure of any shift states after losing focus, we clear them all.
          */
         if (!fFocus) {
-            this.bitsState &= ~KbdX86.STATE.ALL_MODIFIERS;
+            this.bitsState &= ~Keyboardx86.STATE.ALL_MODIFIERS;
             this.clearActiveKeys();
         }
     }
@@ -1758,7 +1758,7 @@ export default class KbdX86 extends Component {
     /**
      * onKeyActive(event, fDown)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      * @param {boolean} fDown is true for a keyDown event, false for a keyUp event
      * @returns {boolean} true to pass the event along, false to consume it
@@ -1777,7 +1777,7 @@ export default class KbdX86 extends Component {
          * NOTE: isUserAgent struggles to detect iPadOS because Apple insists on pretending that it be indistinguishable
          * from desktop systems, so be aware that this hack may stop working at some undefined point.
          */
-        if (WebLib.isUserAgent("iOS") && (this.bitsState & KbdX86.STATE.CTRL)) {
+        if (WebLib.isUserAgent("iOS") && (this.bitsState & Keyboardx86.STATE.CTRL)) {
             if (keyCode == Keys.KEYCODE.CR) {
                 keyCode = Keys.ASCII.C;
             }
@@ -1820,7 +1820,7 @@ export default class KbdX86 extends Component {
             /*
              * Unless the key happens to be ESC, ANY user input at all now cancels injection.
              */
-            if (keyCode != 27) this.nInjection = KbdX86.INJECTION.NONE;
+            if (keyCode != 27) this.nInjection = Keyboardx86.INJECTION.NONE;
         }
 
         Component.processScript(this.idMachine);        // and any script, too
@@ -1839,7 +1839,7 @@ export default class KbdX86 extends Component {
             keyCode = simCode = Keys.KEYCODE.ESC;
         }
 
-        if (KbdX86.SIMCODES[keyCode + Keys.KEYCODE.ONDOWN]) {
+        if (Keyboardx86.SIMCODES[keyCode + Keys.KEYCODE.ONDOWN]) {
 
             simCode += Keys.KEYCODE.ONDOWN;
             if (event.location == Keys.LOCATION.RIGHT) {
@@ -1888,7 +1888,7 @@ export default class KbdX86 extends Component {
                          * we'll still simulate ALT immediately, for those users who press CTRL and then ALT to pop up
                          * Sidekick (as opposed to pressing ALT and then CTRL, which should also work, regardless).
                          */
-                        if (!(this.bitsState & KbdX86.STATE.CTRL)) fIgnore = true;
+                        if (!(this.bitsState & Keyboardx86.STATE.CTRL)) fIgnore = true;
                         /*
                          * Reset cKeysPressed so that we can detect the mere "tapping" of the ALT key, which some PCjs
                          * demos depend on (eg, Multi-tasking MS-DOS 4.0).
@@ -1902,7 +1902,7 @@ export default class KbdX86 extends Component {
                              * was just tapped, so as long the ALT key was not already "soft-locked" (based on bitsStateSim),
                              * we will transform this "up" event into a "fake press" event.
                              */
-                            if (!(this.bitsStateSim & (KbdX86.STATE.ALT | KbdX86.STATE.RALT))) {
+                            if (!(this.bitsStateSim & (Keyboardx86.STATE.ALT | Keyboardx86.STATE.RALT))) {
                                 fDown = fPress = true;
                             }
                         }
@@ -1940,11 +1940,11 @@ export default class KbdX86 extends Component {
                 /*
                  * HACKs for mapping CTRL-BACKSPACE and CTRL-ALT-BACKSPACE to CTRL-BREAK and CTRL-ALT-DEL, respectively.
                  */
-                if (keyCode == Keys.KEYCODE.BS && (this.bitsState & (KbdX86.STATE.CTRL|KbdX86.STATE.ALT)) == KbdX86.STATE.CTRL) {
-                    simCode = KbdX86.SIMCODE.CTRL_BREAK;
+                if (keyCode == Keys.KEYCODE.BS && (this.bitsState & (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) == Keyboardx86.STATE.CTRL) {
+                    simCode = Keyboardx86.SIMCODE.CTRL_BREAK;
                 }
-                if (keyCode == Keys.KEYCODE.BS && (this.bitsState & (KbdX86.STATE.CTRL|KbdX86.STATE.ALT)) == (KbdX86.STATE.CTRL|KbdX86.STATE.ALT)) {
-                    simCode = KbdX86.SIMCODE.CTRL_ALT_DEL;
+                if (keyCode == Keys.KEYCODE.BS && (this.bitsState & (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) == (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) {
+                    simCode = Keyboardx86.SIMCODE.CTRL_ALT_DEL;
                 }
 
                 /*
@@ -1959,15 +1959,15 @@ export default class KbdX86 extends Component {
             /*
              * HACKs for mapping assorted CTRL-ALT sequences involving "normal" keys (eg, PERIOD, EQUALS, and DASH).
              */
-            if ((this.bitsState & (KbdX86.STATE.CTRL|KbdX86.STATE.ALT)) == (KbdX86.STATE.CTRL|KbdX86.STATE.ALT)) {
+            if ((this.bitsState & (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) == (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) {
                 if (keyCode == Keys.KEYCODE.PERIOD) {
-                    simCode = KbdX86.SIMCODE.CTRL_ALT_DEL;    // in case your operating system won't let you type CTRL-ALT-BACKSPACE either
+                    simCode = Keyboardx86.SIMCODE.CTRL_ALT_DEL;    // in case your operating system won't let you type CTRL-ALT-BACKSPACE either
                 }
                 if (keyCode == Keys.KEYCODE.EQUALS) {
-                    simCode = KbdX86.SIMCODE.CTRL_ALT_ADD;    // in case your keyboard doesn't have a numeric keypad '+'
+                    simCode = Keyboardx86.SIMCODE.CTRL_ALT_ADD;    // in case your keyboard doesn't have a numeric keypad '+'
                 }
                 else if (keyCode == Keys.KEYCODE.DASH) {
-                    simCode = KbdX86.SIMCODE.CTRL_ALT_SUB;    // in case your keyboard doesn't have a numeric keypad '-'
+                    simCode = Keyboardx86.SIMCODE.CTRL_ALT_SUB;    // in case your keyboard doesn't have a numeric keypad '-'
                 }
             }
 
@@ -1979,14 +1979,14 @@ export default class KbdX86 extends Component {
              * Also, we don't want to set fIgnore in such cases, because the browser may not give us a press event for
              * these CTRL-key sequences, so we can't risk ignoring them.
              */
-            if (KbdX86.SIMCODES[simCode] && (this.bitsState & (KbdX86.STATE.CTRLS | KbdX86.STATE.ALTS))) {
+            if (Keyboardx86.SIMCODES[simCode] && (this.bitsState & (Keyboardx86.STATE.CTRLS | Keyboardx86.STATE.ALTS))) {
                 fPass = false;
             }
 
             /*
              * Don't simulate any key not explicitly marked ONDOWN, as well as any key sequence with the CMD key held.
              */
-            if (!this.fAllDown && fPass && fDown || (this.bitsState & KbdX86.STATE.CMDS)) {
+            if (!this.fAllDown && fPass && fDown || (this.bitsState & Keyboardx86.STATE.CMDS)) {
                 fIgnore = true;
             }
         }
@@ -2010,8 +2010,8 @@ export default class KbdX86 extends Component {
                  * for ALT keys: if we're about to activate another key and we believe that an ALT key is still down,
                  * we fake an ALT activation first.
                  */
-                if (this.fDelayALT && (this.bitsState & KbdX86.STATE.ALTS)) {
-                    let simCodeAlt = KbdX86.SIMCODE.ALT;
+                if (this.fDelayALT && (this.bitsState & Keyboardx86.STATE.ALTS)) {
+                    let simCodeAlt = Keyboardx86.SIMCODE.ALT;
                     this.printf(MESSAGE.EVENT, "onKeyActive(%d): simulating ALT down\n", simCodeAlt);
                     this.addActiveKey(simCodeAlt);
                 }
@@ -2030,7 +2030,7 @@ export default class KbdX86 extends Component {
     /**
      * onKeyPress(event)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      * @returns {boolean} true to pass the event along, false to consume it
      */
@@ -2055,7 +2055,7 @@ export default class KbdX86 extends Component {
             }
         }
 
-        let fPass = !KbdX86.SIMCODES[keyCode] || !!(this.bitsState & KbdX86.STATE.CMD);
+        let fPass = !Keyboardx86.SIMCODES[keyCode] || !!(this.bitsState & Keyboardx86.STATE.CMD);
 
         this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyPress(%d): %b\n", keyCode, fPass);
 
@@ -2065,8 +2065,8 @@ export default class KbdX86 extends Component {
              * for ALT keys: if we're about to activate another key and we believe that an ALT key is still down,
              * we fake an ALT activation first.
              */
-            if (this.fDelayALT && (this.bitsState & KbdX86.STATE.ALTS)) {
-                let simCodeAlt = KbdX86.SIMCODE.ALT;
+            if (this.fDelayALT && (this.bitsState & Keyboardx86.STATE.ALTS)) {
+                let simCodeAlt = Keyboardx86.SIMCODE.ALT;
                 this.printf(MESSAGE.EVENT, "onKeyPress(%d): simulating ALT down\n", simCodeAlt);
                 this.addActiveKey(simCodeAlt);
             }
@@ -2085,7 +2085,7 @@ export default class KbdX86 extends Component {
      * is currently displayed on screen.  Hence this handler's job is to override the default "copy" behavior, and
      * instead call the Video component's getTextData() function for the text to be deposited on the clipboard.
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      */
     onCopy(event)
@@ -2113,7 +2113,7 @@ export default class KbdX86 extends Component {
      * in "this.controlTextKeyboard.value".  I could deliver the same exact text that onCopy() delivers, but where's
      * the fun in that?
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      */
     onCut(event)
@@ -2129,7 +2129,7 @@ export default class KbdX86 extends Component {
     /**
      * onPaste(event)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {Object} event
      */
     onPaste(event)
@@ -2170,7 +2170,7 @@ export default class KbdX86 extends Component {
     /**
      * simulateKey(simCode, fDown)
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @param {number} simCode
      * @param {boolean} fDown
      * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
@@ -2181,7 +2181,7 @@ export default class KbdX86 extends Component {
 
         this.updateShiftState(simCode, true, fDown);
 
-        let wCode = KbdX86.SIMCODES[simCode] || KbdX86.SIMCODES[simCode + Keys.KEYCODE.ONDOWN];
+        let wCode = Keyboardx86.SIMCODES[simCode] || Keyboardx86.SIMCODES[simCode + Keys.KEYCODE.ONDOWN];
 
         if (wCode !== undefined) {
 
@@ -2195,7 +2195,7 @@ export default class KbdX86 extends Component {
                 return false;
             }
 
-            abScanCodes.push(bCode | (fDown? 0 : KbdX86.SCANCODE.BREAK));
+            abScanCodes.push(bCode | (fDown? 0 : Keyboardx86.SCANCODE.BREAK));
 
             let fAlpha = (simCode >= Keys.ASCII.A && simCode <= Keys.ASCII.Z || simCode >= Keys.ASCII.a && simCode <= Keys.ASCII.z);
 
@@ -2206,30 +2206,30 @@ export default class KbdX86 extends Component {
                  * moreover, if any of them need to perform any shift-state modifications, those modifications
                  * may need to be encoded differently.
                  */
-                if (bCode == KbdX86.SCANCODE.EXTEND1 || bCode == KbdX86.SCANCODE.EXTEND2) {
-                    abScanCodes.push(bCode | (fDown? 0 : KbdX86.SCANCODE.BREAK));
+                if (bCode == Keyboardx86.SCANCODE.EXTEND1 || bCode == Keyboardx86.SCANCODE.EXTEND2) {
+                    abScanCodes.push(bCode | (fDown? 0 : Keyboardx86.SCANCODE.BREAK));
                     continue;
                 }
                 let bitsFake = 0;
-                if (bScan == KbdX86.SCANCODE.SHIFT) {
-                    if (!(this.bitsStateSim & (KbdX86.STATE.SHIFT | KbdX86.STATE.RSHIFT))) {
-                        if (!(this.bitsStateSim & KbdX86.STATE.CAPS_LOCK) || !fAlpha) {
-                            bitsFake |= KbdX86.STATE.SHIFT;
+                if (bScan == Keyboardx86.SCANCODE.SHIFT) {
+                    if (!(this.bitsStateSim & (Keyboardx86.STATE.SHIFT | Keyboardx86.STATE.RSHIFT))) {
+                        if (!(this.bitsStateSim & Keyboardx86.STATE.CAPS_LOCK) || !fAlpha) {
+                            bitsFake |= Keyboardx86.STATE.SHIFT;
                         }
                     }
                 }
-                else if (bScan == KbdX86.SCANCODE.CTRL) {
-                    if (!(this.bitsStateSim & (KbdX86.STATE.CTRL | KbdX86.STATE.RCTRL))) {
-                        bitsFake |= KbdX86.STATE.CTRL;
+                else if (bScan == Keyboardx86.SCANCODE.CTRL) {
+                    if (!(this.bitsStateSim & (Keyboardx86.STATE.CTRL | Keyboardx86.STATE.RCTRL))) {
+                        bitsFake |= Keyboardx86.STATE.CTRL;
                     }
                 }
-                else if (bScan == KbdX86.SCANCODE.ALT) {
-                    if (!(this.bitsStateSim & (KbdX86.STATE.ALT | KbdX86.STATE.RALT))) {
-                        bitsFake |= KbdX86.STATE.ALT;
+                else if (bScan == Keyboardx86.SCANCODE.ALT) {
+                    if (!(this.bitsStateSim & (Keyboardx86.STATE.ALT | Keyboardx86.STATE.RALT))) {
+                        bitsFake |= Keyboardx86.STATE.ALT;
                     }
                 }
                 else {
-                    abScanCodes.push(bCode | (fDown? 0 : KbdX86.SCANCODE.BREAK));
+                    abScanCodes.push(bCode | (fDown? 0 : Keyboardx86.SCANCODE.BREAK));
                 }
                 /*
                  * If we have to fake a modifier key (eg, because some caller wants to simulate a modified key
@@ -2255,7 +2255,7 @@ export default class KbdX86 extends Component {
                     if (fDown) {
                         abScanCodes.unshift(bScan);
                     } else {
-                        abScanCodes.push(bScan | KbdX86.SCANCODE.BREAK);
+                        abScanCodes.push(bScan | Keyboardx86.SCANCODE.BREAK);
                     }
                 }
             }
@@ -2275,7 +2275,7 @@ export default class KbdX86 extends Component {
     /**
      * checkActiveKeyShift()
      *
-     * @this {KbdX86}
+     * @this {Keyboardx86}
      * @returns {number|null} bitsState for active key, null if none
      *
      checkActiveKeyShift()
@@ -2285,7 +2285,7 @@ export default class KbdX86 extends Component {
      */
 
     /**
-     * KbdX86.init()
+     * Keyboardx86.init()
      *
      * This function operates on every HTML element of class "keyboard", extracting the
      * JSON-encoded parameters for the Keyboard constructor from the element's "data-value"
@@ -2298,7 +2298,7 @@ export default class KbdX86 extends Component {
         for (let iKbd = 0; iKbd < aeKbd.length; iKbd++) {
             let eKbd = aeKbd[iKbd];
             let parmsKbd = Component.getComponentParms(eKbd);
-            let kbd = new KbdX86(parmsKbd);
+            let kbd = new Keyboardx86(parmsKbd);
             Component.bindComponentControls(kbd, eKbd, APPCLASS);
         }
     }
@@ -2307,9 +2307,9 @@ export default class KbdX86 extends Component {
 /*
  * Supported keyboard models (the first entry is the default if the specified model isn't recognized)
  */
-KbdX86.MODELS = ["US83", "US84", "US101"];
+Keyboardx86.MODELS = ["US83", "US84", "US101"];
 
-KbdX86.SIMCODE = {
+Keyboardx86.SIMCODE = {
     BS:               Keys.KEYCODE.BS          + Keys.KEYCODE.ONDOWN,
     TAB:              Keys.KEYCODE.TAB         + Keys.KEYCODE.ONDOWN,
     SHIFT:            Keys.KEYCODE.SHIFT       + Keys.KEYCODE.ONDOWN,
@@ -2412,7 +2412,7 @@ KbdX86.SIMCODE = {
 /*
  * Scan code constants
  */
-KbdX86.SCANCODE = {
+Keyboardx86.SCANCODE = {
     /* 0x01 */ ESC:         1,
     /* 0x02 */ ONE:         2,
     /* 0x03 */ TWO:         3,
@@ -2527,7 +2527,7 @@ KbdX86.SCANCODE = {
  *
  * @enum {number}
  */
-KbdX86.STATE = {
+Keyboardx86.STATE = {
     RSHIFT:         0x0001,
     SHIFT:          0x0002,
     SHIFTS:         0x0003,
@@ -2552,32 +2552,32 @@ KbdX86.STATE = {
 /*
  * Maps KEYCODES of modifier keys to their corresponding (default) STATES bit above.
  */
-KbdX86.MODIFIERS = {
-    [KbdX86.SIMCODE.RSHIFT]:      KbdX86.STATE.RSHIFT,
-    [KbdX86.SIMCODE.SHIFT]:       KbdX86.STATE.SHIFT,
-    [KbdX86.SIMCODE.CTRL]:        KbdX86.STATE.CTRL,
-    [KbdX86.SIMCODE.ALT]:         KbdX86.STATE.ALT,
-    [KbdX86.SIMCODE.RALT]:        KbdX86.STATE.ALT,
-    [KbdX86.SIMCODE.CMD]:         KbdX86.STATE.CMD,
-    [KbdX86.SIMCODE.RCMD]:        KbdX86.STATE.RCMD,
-    [KbdX86.SIMCODE.FF_CMD]:      KbdX86.STATE.CMD
+Keyboardx86.MODIFIERS = {
+    [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.STATE.RSHIFT,
+    [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.STATE.SHIFT,
+    [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.STATE.CTRL,
+    [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.STATE.ALT,
+    [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.STATE.ALT,
+    [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.STATE.CMD,
+    [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.STATE.RCMD,
+    [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.STATE.CMD
 };
 
 /*
  * Maps KEYCODES of all modifier and lock keys to their corresponding (default) STATES bit above.
  */
-KbdX86.KEYSTATES = {
-    [KbdX86.SIMCODE.RSHIFT]:      KbdX86.STATE.RSHIFT,
-    [KbdX86.SIMCODE.SHIFT]:       KbdX86.STATE.SHIFT,
-    [KbdX86.SIMCODE.CTRL]:        KbdX86.STATE.CTRL,
-    [KbdX86.SIMCODE.ALT]:         KbdX86.STATE.ALT,
-    [KbdX86.SIMCODE.RALT]:        KbdX86.STATE.ALT,
-    [KbdX86.SIMCODE.CMD]:         KbdX86.STATE.CMD,
-    [KbdX86.SIMCODE.RCMD]:        KbdX86.STATE.RCMD,
-    [KbdX86.SIMCODE.FF_CMD]:      KbdX86.STATE.CMD,
-    [KbdX86.SIMCODE.CAPS_LOCK]:   KbdX86.STATE.CAPS_LOCK,
-    [KbdX86.SIMCODE.NUM_LOCK]:    KbdX86.STATE.NUM_LOCK,
-    [KbdX86.SIMCODE.SCROLL_LOCK]: KbdX86.STATE.SCROLL_LOCK
+Keyboardx86.KEYSTATES = {
+    [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.STATE.RSHIFT,
+    [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.STATE.SHIFT,
+    [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.STATE.CTRL,
+    [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.STATE.ALT,
+    [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.STATE.ALT,
+    [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.STATE.CMD,
+    [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.STATE.RCMD,
+    [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.STATE.CMD,
+    [Keyboardx86.SIMCODE.CAPS_LOCK]:   Keyboardx86.STATE.CAPS_LOCK,
+    [Keyboardx86.SIMCODE.NUM_LOCK]:    Keyboardx86.STATE.NUM_LOCK,
+    [Keyboardx86.SIMCODE.SCROLL_LOCK]: Keyboardx86.STATE.SCROLL_LOCK
 };
 
 /*
@@ -2588,42 +2588,42 @@ KbdX86.KEYSTATES = {
  * our convention for constants.  setBinding() will automatically convert any incoming CLICKCODE bindings
  * that use lower-case and dashes to upper-case and underscores before performing property lookup.
  */
-KbdX86.CLICKCODES = {
-    'TAB':              KbdX86.SIMCODE.TAB,
-    'ESC':              KbdX86.SIMCODE.ESC,
-    'F1':               KbdX86.SIMCODE.F1,
-    'F2':               KbdX86.SIMCODE.F2,
-    'F3':               KbdX86.SIMCODE.F3,
-    'F4':               KbdX86.SIMCODE.F4,
-    'F5':               KbdX86.SIMCODE.F5,
-    'F6':               KbdX86.SIMCODE.F6,
-    'F7':               KbdX86.SIMCODE.F7,
-    'F8':               KbdX86.SIMCODE.F8,
-    'F9':               KbdX86.SIMCODE.F9,
-    'F10':              KbdX86.SIMCODE.F10,
-    'LEFT':             KbdX86.SIMCODE.LEFT,
-    'UP':               KbdX86.SIMCODE.UP,
-    'RIGHT':            KbdX86.SIMCODE.RIGHT,
-    'DOWN':             KbdX86.SIMCODE.DOWN,
-    'NUM_HOME':         KbdX86.SIMCODE.HOME,
-    'NUM_END':          KbdX86.SIMCODE.END,
-    'NUM_PGUP':         KbdX86.SIMCODE.PGUP,
-    'NUM_PGDN':         KbdX86.SIMCODE.PGDN,
-    'ALT':              KbdX86.SIMCODE.ALT,
-    'SYS_REQ':          KbdX86.SIMCODE.SYS_REQ,
+Keyboardx86.CLICKCODES = {
+    'TAB':              Keyboardx86.SIMCODE.TAB,
+    'ESC':              Keyboardx86.SIMCODE.ESC,
+    'F1':               Keyboardx86.SIMCODE.F1,
+    'F2':               Keyboardx86.SIMCODE.F2,
+    'F3':               Keyboardx86.SIMCODE.F3,
+    'F4':               Keyboardx86.SIMCODE.F4,
+    'F5':               Keyboardx86.SIMCODE.F5,
+    'F6':               Keyboardx86.SIMCODE.F6,
+    'F7':               Keyboardx86.SIMCODE.F7,
+    'F8':               Keyboardx86.SIMCODE.F8,
+    'F9':               Keyboardx86.SIMCODE.F9,
+    'F10':              Keyboardx86.SIMCODE.F10,
+    'LEFT':             Keyboardx86.SIMCODE.LEFT,
+    'UP':               Keyboardx86.SIMCODE.UP,
+    'RIGHT':            Keyboardx86.SIMCODE.RIGHT,
+    'DOWN':             Keyboardx86.SIMCODE.DOWN,
+    'NUM_HOME':         Keyboardx86.SIMCODE.HOME,
+    'NUM_END':          Keyboardx86.SIMCODE.END,
+    'NUM_PGUP':         Keyboardx86.SIMCODE.PGUP,
+    'NUM_PGDN':         Keyboardx86.SIMCODE.PGDN,
+    'ALT':              Keyboardx86.SIMCODE.ALT,
+    'SYS_REQ':          Keyboardx86.SIMCODE.SYS_REQ,
     /*
      * These bindings are for convenience (common key combinations that can be bound to a single control)
      */
-    'CTRL_C':           KbdX86.SIMCODE.CTRL_C,
-    'CTRL_PAUSE':       KbdX86.SIMCODE.CTRL_PAUSE,
-    'CTRL_BREAK':       KbdX86.SIMCODE.CTRL_BREAK,
-    'CTRL_ALT_DEL':     KbdX86.SIMCODE.CTRL_ALT_DEL,
-    'CTRL_ALT_INS':     KbdX86.SIMCODE.CTRL_ALT_INS,
-    'CTRL_ALT_ADD':     KbdX86.SIMCODE.CTRL_ALT_ADD,
-    'CTRL_ALT_SUB':     KbdX86.SIMCODE.CTRL_ALT_SUB,
-    'CTRL_ALT_ENTER':   KbdX86.SIMCODE.CTRL_ALT_ENTER,
-    'CTRL_ALT_SYS_REQ': KbdX86.SIMCODE.CTRL_ALT_SYS_REQ,
-    'SHIFT_TAB':        KbdX86.SIMCODE.SHIFT_TAB
+    'CTRL_C':           Keyboardx86.SIMCODE.CTRL_C,
+    'CTRL_PAUSE':       Keyboardx86.SIMCODE.CTRL_PAUSE,
+    'CTRL_BREAK':       Keyboardx86.SIMCODE.CTRL_BREAK,
+    'CTRL_ALT_DEL':     Keyboardx86.SIMCODE.CTRL_ALT_DEL,
+    'CTRL_ALT_INS':     Keyboardx86.SIMCODE.CTRL_ALT_INS,
+    'CTRL_ALT_ADD':     Keyboardx86.SIMCODE.CTRL_ALT_ADD,
+    'CTRL_ALT_SUB':     Keyboardx86.SIMCODE.CTRL_ALT_SUB,
+    'CTRL_ALT_ENTER':   Keyboardx86.SIMCODE.CTRL_ALT_ENTER,
+    'CTRL_ALT_SYS_REQ': Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ,
+    'SHIFT_TAB':        Keyboardx86.SIMCODE.SHIFT_TAB
 };
 
 /*
@@ -2674,8 +2674,8 @@ KbdX86.CLICKCODES = {
  * to convert browser key codes directly into PC scan codes, which is what our 8042 controller implementation
  * assumes we're doing.
  */
-KbdX86.SOFTCODES = {
-    /*  1 */    'esc':          KbdX86.SIMCODE.ESC,
+Keyboardx86.SOFTCODES = {
+    /*  1 */    'esc':          Keyboardx86.SIMCODE.ESC,
     /*  2 */    '1':            Keys.ASCII['1'],
     /*  3 */    '2':            Keys.ASCII['2'],
     /*  4 */    '3':            Keys.ASCII['3'],
@@ -2689,8 +2689,8 @@ KbdX86.SOFTCODES = {
     /* 12 */    '-':            Keys.ASCII['-'],
     /* 13 */    '=':            Keys.ASCII['='],
     /* 43 */    'bslash':       Keys.ASCII['\\'],               // listed before 'bs' so that injectKeys() doesn't mismatch
-    /* 14 */    'bs':           KbdX86.SIMCODE.BS,
-    /* 15 */    'tab':          KbdX86.SIMCODE.TAB,
+    /* 14 */    'bs':           Keyboardx86.SIMCODE.BS,
+    /* 15 */    'tab':          Keyboardx86.SIMCODE.TAB,
     /* 16 */    'q':            Keys.ASCII.q,
     /* 17 */    'w':            Keys.ASCII.w,
     /* 18 */    'e':            Keys.ASCII.e,
@@ -2704,7 +2704,7 @@ KbdX86.SOFTCODES = {
     /* 26 */    '[':            Keys.ASCII['['],
     /* 27 */    ']':            Keys.ASCII[']'],
     /* 28 */    'enter':        Keys.KEYCODE.CR,
-    /* 29 */    'ctrl':         KbdX86.SIMCODE.CTRL,
+    /* 29 */    'ctrl':         Keyboardx86.SIMCODE.CTRL,
     /* 30 */    'a':            Keys.ASCII.a,
     /* 31 */    's':            Keys.ASCII.s,
     /* 32 */    'd':            Keys.ASCII.d,
@@ -2717,7 +2717,7 @@ KbdX86.SOFTCODES = {
     /* 39 */    ';':            Keys.ASCII[';'],
     /* 40 */    'quote':        Keys.ASCII["'"],                // formerly "squote"
     /* 41 */    '`':            Keys.ASCII['`'],                // formerly "bquote"
-    /* 42 */    'shift':        KbdX86.SIMCODE.SHIFT,           // formerly "lshift"
+    /* 42 */    'shift':        Keyboardx86.SIMCODE.SHIFT,           // formerly "lshift"
     /* 43 */    '\\':           Keys.ASCII['\\'],               // formerly "bslash"
     /* 44 */    'z':            Keys.ASCII.z,
     /* 45 */    'x':            Keys.ASCII.x,
@@ -2729,23 +2729,23 @@ KbdX86.SOFTCODES = {
     /* 51 */    ',':            Keys.ASCII[','],
     /* 52 */    '.':            Keys.ASCII['.'],
     /* 53 */    '/':            Keys.ASCII['/'],
-    /* 54 */    'right-shift':  KbdX86.SIMCODE.RSHIFT,        // formerly "rshift"
-    /* 55 */    'prtsc':        KbdX86.SIMCODE.PRTSC,         // unshifted '*'; becomes dedicated 'Print Screen' key on 101-key keyboards
-    /* 56 */    'alt':          KbdX86.SIMCODE.ALT,
-    /* 57 */    'space':        KbdX86.SIMCODE.SPACE,
-    /* 58 */    'caps-lock':    KbdX86.SIMCODE.CAPS_LOCK,
-    /* 68 */    'f10':          KbdX86.SIMCODE.F10,           // listed before 'f1' so that injectKeys() doesn't mismatch
-    /* 59 */    'f1':           KbdX86.SIMCODE.F1,
-    /* 60 */    'f2':           KbdX86.SIMCODE.F2,
-    /* 61 */    'f3':           KbdX86.SIMCODE.F3,
-    /* 62 */    'f4':           KbdX86.SIMCODE.F4,
-    /* 63 */    'f5':           KbdX86.SIMCODE.F5,
-    /* 64 */    'f6':           KbdX86.SIMCODE.F6,
-    /* 65 */    'f7':           KbdX86.SIMCODE.F7,
-    /* 66 */    'f8':           KbdX86.SIMCODE.F8,
-    /* 67 */    'f9':           KbdX86.SIMCODE.F9,
-    /* 69 */    'num-lock':     KbdX86.SIMCODE.NUM_LOCK,
-    /* 70 */    'scroll-lock':  KbdX86.SIMCODE.SCROLL_LOCK,   // TODO: 0xe046 on 101-key keyboards?
+    /* 54 */    'right-shift':  Keyboardx86.SIMCODE.RSHIFT,        // formerly "rshift"
+    /* 55 */    'prtsc':        Keyboardx86.SIMCODE.PRTSC,         // unshifted '*'; becomes dedicated 'Print Screen' key on 101-key keyboards
+    /* 56 */    'alt':          Keyboardx86.SIMCODE.ALT,
+    /* 57 */    'space':        Keyboardx86.SIMCODE.SPACE,
+    /* 58 */    'caps-lock':    Keyboardx86.SIMCODE.CAPS_LOCK,
+    /* 68 */    'f10':          Keyboardx86.SIMCODE.F10,           // listed before 'f1' so that injectKeys() doesn't mismatch
+    /* 59 */    'f1':           Keyboardx86.SIMCODE.F1,
+    /* 60 */    'f2':           Keyboardx86.SIMCODE.F2,
+    /* 61 */    'f3':           Keyboardx86.SIMCODE.F3,
+    /* 62 */    'f4':           Keyboardx86.SIMCODE.F4,
+    /* 63 */    'f5':           Keyboardx86.SIMCODE.F5,
+    /* 64 */    'f6':           Keyboardx86.SIMCODE.F6,
+    /* 65 */    'f7':           Keyboardx86.SIMCODE.F7,
+    /* 66 */    'f8':           Keyboardx86.SIMCODE.F8,
+    /* 67 */    'f9':           Keyboardx86.SIMCODE.F9,
+    /* 69 */    'num-lock':     Keyboardx86.SIMCODE.NUM_LOCK,
+    /* 70 */    'scroll-lock':  Keyboardx86.SIMCODE.SCROLL_LOCK,   // TODO: 0xe046 on 101-key keyboards?
 
     /*
      * Yes, distinguishing keys 71 through 83 with the 'num-' prefix seems like overkill, but it was
@@ -2758,20 +2758,20 @@ KbdX86.SOFTCODES = {
      * on the theory that key injection users won't really care precisely which version of the key is used.
      */
 
-    /* 71 */    'num-home':     KbdX86.SIMCODE.HOME,          // formerly "home"
-    /* 72 */    'num-up':       KbdX86.SIMCODE.UP,            // formerly "up-arrow"
-    /* 73 */    'num-pgup':     KbdX86.SIMCODE.PGUP,          // formerly "page-up"
-    /* 74 */    'num-sub':      KbdX86.SIMCODE.NUM_SUB,       // formerly "num-minus"
-    /* 75 */    'num-left':     KbdX86.SIMCODE.LEFT,          // formerly "left-arrow"
-    /* 76 */    'num-center':   KbdX86.SIMCODE.NUM_CENTER,    // formerly "center"
-    /* 77 */    'num-right':    KbdX86.SIMCODE.RIGHT,         // formerly "right-arrow"
-    /* 78 */    'num-add':      KbdX86.SIMCODE.NUM_ADD,       // formerly "num-plus"
-    /* 79 */    'num-end':      KbdX86.SIMCODE.END,           // formerly "end"
-    /* 80 */    'num-down':     KbdX86.SIMCODE.DOWN,          // formerly "down-arrow"
-    /* 81 */    'num-pgdn':     KbdX86.SIMCODE.PGDN,          // formerly "page-down"
-    /* 82 */    'num-ins':      KbdX86.SIMCODE.INS,           // formerly "ins"
-    /* 83 */    'num-del':      KbdX86.SIMCODE.DEL,           // formerly "del"
-    /* 84 */    'sys-req':      KbdX86.SIMCODE.SYS_REQ        // 84-key keyboard only (simulated with 'alt'+'prtsc' on 101-key keyboards)
+    /* 71 */    'num-home':     Keyboardx86.SIMCODE.HOME,          // formerly "home"
+    /* 72 */    'num-up':       Keyboardx86.SIMCODE.UP,            // formerly "up-arrow"
+    /* 73 */    'num-pgup':     Keyboardx86.SIMCODE.PGUP,          // formerly "page-up"
+    /* 74 */    'num-sub':      Keyboardx86.SIMCODE.NUM_SUB,       // formerly "num-minus"
+    /* 75 */    'num-left':     Keyboardx86.SIMCODE.LEFT,          // formerly "left-arrow"
+    /* 76 */    'num-center':   Keyboardx86.SIMCODE.NUM_CENTER,    // formerly "center"
+    /* 77 */    'num-right':    Keyboardx86.SIMCODE.RIGHT,         // formerly "right-arrow"
+    /* 78 */    'num-add':      Keyboardx86.SIMCODE.NUM_ADD,       // formerly "num-plus"
+    /* 79 */    'num-end':      Keyboardx86.SIMCODE.END,           // formerly "end"
+    /* 80 */    'num-down':     Keyboardx86.SIMCODE.DOWN,          // formerly "down-arrow"
+    /* 81 */    'num-pgdn':     Keyboardx86.SIMCODE.PGDN,          // formerly "page-down"
+    /* 82 */    'num-ins':      Keyboardx86.SIMCODE.INS,           // formerly "ins"
+    /* 83 */    'num-del':      Keyboardx86.SIMCODE.DEL,           // formerly "del"
+    /* 84 */    'sys-req':      Keyboardx86.SIMCODE.SYS_REQ        // 84-key keyboard only (simulated with 'alt'+'prtsc' on 101-key keyboards)
 
     /*
      * If I ever add 101-key keyboard support (and it's not clear that I will), then the following entries
@@ -2780,37 +2780,37 @@ KbdX86.SOFTCODES = {
      * mapped directly to SCANCODES.
      */
 
-//  /* 84 */    'pause':        KbdX86.SCANCODE.PAUSE,        // 101-key keyboard only
-//  /* 85 */    'f11':          KbdX86.SCANCODE.F11,
-//  /* 86 */    'f12':          KbdX86.SCANCODE.F12,
-//  /* 87 */    'num-enter':    KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.ENTER << 8),
-//  /* 88 */    'right-ctrl':   KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.CTRL << 8),
-//  /* 89 */    'num-div':      KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.SLASH << 8),
-//  /* 90 */    'num-mul':      KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.PRTSC << 8),
-//  /* 91 */    'right-alt':    KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.ALT << 8),
-//  /* 92 */    'home':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_HOME << 8),
-//  /* 93 */    'up':           KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_UP << 8),
-//  /* 94 */    'pgup':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_PGUP << 8),
-//  /* 95 */    'left':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_LEFT << 8),
-//  /* 96 */    'right':        KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_RIGHT << 8),
-//  /* 97 */    'end':          KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_END << 8),
-//  /* 98 */    'down':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_DOWN << 8),
-//  /* 99 */    'pgdn':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_PGDN << 8),
-//  /*100 */    'ins':          KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_INS << 8),
-//  /*101 */    'del':          KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.NUM_DEL << 8),
+//  /* 84 */    'pause':        Keyboardx86.SCANCODE.PAUSE,        // 101-key keyboard only
+//  /* 85 */    'f11':          Keyboardx86.SCANCODE.F11,
+//  /* 86 */    'f12':          Keyboardx86.SCANCODE.F12,
+//  /* 87 */    'num-enter':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.ENTER << 8),
+//  /* 88 */    'right-ctrl':   Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.CTRL << 8),
+//  /* 89 */    'num-div':      Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.SLASH << 8),
+//  /* 90 */    'num-mul':      Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.PRTSC << 8),
+//  /* 91 */    'right-alt':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.ALT << 8),
+//  /* 92 */    'home':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_HOME << 8),
+//  /* 93 */    'up':           Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_UP << 8),
+//  /* 94 */    'pgup':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_PGUP << 8),
+//  /* 95 */    'left':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_LEFT << 8),
+//  /* 96 */    'right':        Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_RIGHT << 8),
+//  /* 97 */    'end':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_END << 8),
+//  /* 98 */    'down':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_DOWN << 8),
+//  /* 99 */    'pgdn':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_PGDN << 8),
+//  /*100 */    'ins':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_INS << 8),
+//  /*101 */    'del':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_DEL << 8),
 
-//  /*102 */    'win':          KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.WIN << 8),
-//  /*103 */    'right-win':    KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.RWIN << 8),
-//  /*104 */    'menu':         KbdX86.SCANCODE.EXTEND1 | (KbdX86.SCANCODE.MENU << 8)
+//  /*102 */    'win':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.WIN << 8),
+//  /*103 */    'right-win':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.RWIN << 8),
+//  /*104 */    'menu':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.MENU << 8)
 };
 
 /*
  * Maps "soft-key" definitions (above) of shift/modifier keys to their corresponding (default) STATES bit.
  */
-KbdX86.LEDSTATES = {
-    'caps-lock':    KbdX86.STATE.CAPS_LOCK,
-    'num-lock':     KbdX86.STATE.NUM_LOCK,
-    'scroll-lock':  KbdX86.STATE.SCROLL_LOCK
+Keyboardx86.LEDSTATES = {
+    'caps-lock':    Keyboardx86.STATE.CAPS_LOCK,
+    'num-lock':     Keyboardx86.STATE.NUM_LOCK,
+    'scroll-lock':  Keyboardx86.STATE.SCROLL_LOCK
 };
 
 /*
@@ -2830,148 +2830,148 @@ KbdX86.LEDSTATES = {
  * we've inherited the same solution: simulateKey() has the ability to "undo" any states in bitsState
  * that conflict with the state(s) required for the character in question.
  */
-KbdX86.SIMCODES = {
-    [KbdX86.SIMCODE.ESC]:         KbdX86.SCANCODE.ESC,
-    [Keys.ASCII['1']]:            KbdX86.SCANCODE.ONE,
-    [Keys.ASCII['!']]:            KbdX86.SCANCODE.ONE    | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['2']]:            KbdX86.SCANCODE.TWO,
-    [Keys.ASCII['@']]:            KbdX86.SCANCODE.TWO    | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['3']]:            KbdX86.SCANCODE.THREE,
-    [Keys.ASCII['#']]:            KbdX86.SCANCODE.THREE  | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['4']]:            KbdX86.SCANCODE.FOUR,
-    [Keys.ASCII['$']]:            KbdX86.SCANCODE.FOUR   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['5']]:            KbdX86.SCANCODE.FIVE,
-    [Keys.ASCII['%']]:            KbdX86.SCANCODE.FIVE   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['6']]:            KbdX86.SCANCODE.SIX,
-    [Keys.ASCII['^']]:            KbdX86.SCANCODE.SIX    | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['7']]:            KbdX86.SCANCODE.SEVEN,
-    [Keys.ASCII['&']]:            KbdX86.SCANCODE.SEVEN  | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['8']]:            KbdX86.SCANCODE.EIGHT,
-    [Keys.ASCII['*']]:            KbdX86.SCANCODE.EIGHT  | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['9']]:            KbdX86.SCANCODE.NINE,
-    [Keys.ASCII['(']]:            KbdX86.SCANCODE.NINE   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['0']]:            KbdX86.SCANCODE.ZERO,
-    [Keys.ASCII[')']]:            KbdX86.SCANCODE.ZERO   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['-']]:            KbdX86.SCANCODE.DASH,
-    [Keys.ASCII['_']]:            KbdX86.SCANCODE.DASH   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['=']]:            KbdX86.SCANCODE.EQUALS,
-    [Keys.ASCII['+']]:            KbdX86.SCANCODE.EQUALS | (KbdX86.SCANCODE.SHIFT << 8),
-    [KbdX86.SIMCODE.BS]:          KbdX86.SCANCODE.BS,
-    [KbdX86.SIMCODE.TAB]:         KbdX86.SCANCODE.TAB,
-    [Keys.ASCII.q]:               KbdX86.SCANCODE.Q,
-    [Keys.ASCII.Q]:               KbdX86.SCANCODE.Q      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.w]:               KbdX86.SCANCODE.W,
-    [Keys.ASCII.W]:               KbdX86.SCANCODE.W      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.e]:               KbdX86.SCANCODE.E,
-    [Keys.ASCII.E]:               KbdX86.SCANCODE.E      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.r]:               KbdX86.SCANCODE.R,
-    [Keys.ASCII.R]:               KbdX86.SCANCODE.R      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.t]:               KbdX86.SCANCODE.T,
-    [Keys.ASCII.T]:               KbdX86.SCANCODE.T      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.y]:               KbdX86.SCANCODE.Y,
-    [Keys.ASCII.Y]:               KbdX86.SCANCODE.Y      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.u]:               KbdX86.SCANCODE.U,
-    [Keys.ASCII.U]:               KbdX86.SCANCODE.U      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.i]:               KbdX86.SCANCODE.I,
-    [Keys.ASCII.I]:               KbdX86.SCANCODE.I      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.o]:               KbdX86.SCANCODE.O,
-    [Keys.ASCII.O]:               KbdX86.SCANCODE.O      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.p]:               KbdX86.SCANCODE.P,
-    [Keys.ASCII.P]:               KbdX86.SCANCODE.P      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['[']]:            KbdX86.SCANCODE.LBRACK,
-    [Keys.ASCII['{']]:            KbdX86.SCANCODE.LBRACK | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[']']]:            KbdX86.SCANCODE.RBRACK,
-    [Keys.ASCII['}']]:            KbdX86.SCANCODE.RBRACK | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.KEYCODE.CR]:            KbdX86.SCANCODE.ENTER,
-    [KbdX86.SIMCODE.CTRL]:        KbdX86.SCANCODE.CTRL,
-    [Keys.ASCII.a]:               KbdX86.SCANCODE.A,
-    [Keys.ASCII.A]:               KbdX86.SCANCODE.A      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.s]:               KbdX86.SCANCODE.S,
-    [Keys.ASCII.S]:               KbdX86.SCANCODE.S      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.d]:               KbdX86.SCANCODE.D,
-    [Keys.ASCII.D]:               KbdX86.SCANCODE.D      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.f]:               KbdX86.SCANCODE.F,
-    [Keys.ASCII.F]:               KbdX86.SCANCODE.F      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.g]:               KbdX86.SCANCODE.G,
-    [Keys.ASCII.G]:               KbdX86.SCANCODE.G      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.h]:               KbdX86.SCANCODE.H,
-    [Keys.ASCII.H]:               KbdX86.SCANCODE.H      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.j]:               KbdX86.SCANCODE.J,
-    [Keys.ASCII.J]:               KbdX86.SCANCODE.J      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.k]:               KbdX86.SCANCODE.K,
-    [Keys.ASCII.K]:               KbdX86.SCANCODE.K      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.l]:               KbdX86.SCANCODE.L,
-    [Keys.ASCII.L]:               KbdX86.SCANCODE.L      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[';']]:            KbdX86.SCANCODE.SEMI,
-    [Keys.ASCII[':']]:            KbdX86.SCANCODE.SEMI   | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII["'"]]:            KbdX86.SCANCODE.QUOTE,
-    [Keys.ASCII['"']]:            KbdX86.SCANCODE.QUOTE  | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['`']]:            KbdX86.SCANCODE.BQUOTE,
-    [Keys.ASCII['~']]:            KbdX86.SCANCODE.BQUOTE | (KbdX86.SCANCODE.SHIFT << 8),
-    [KbdX86.SIMCODE.SHIFT]:       KbdX86.SCANCODE.SHIFT,
-    [Keys.ASCII['\\']]:           KbdX86.SCANCODE.BSLASH,
-    [Keys.ASCII['|']]:            KbdX86.SCANCODE.BSLASH | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.z]:               KbdX86.SCANCODE.Z,
-    [Keys.ASCII.Z]:               KbdX86.SCANCODE.Z      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.x]:               KbdX86.SCANCODE.X,
-    [Keys.ASCII.X]:               KbdX86.SCANCODE.X      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.c]:               KbdX86.SCANCODE.C,
-    [Keys.ASCII.C]:               KbdX86.SCANCODE.C      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.v]:               KbdX86.SCANCODE.V,
-    [Keys.ASCII.V]:               KbdX86.SCANCODE.V      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.b]:               KbdX86.SCANCODE.B,
-    [Keys.ASCII.B]:               KbdX86.SCANCODE.B      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.n]:               KbdX86.SCANCODE.N,
-    [Keys.ASCII.N]:               KbdX86.SCANCODE.N      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.m]:               KbdX86.SCANCODE.M,
-    [Keys.ASCII.M]:               KbdX86.SCANCODE.M      | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[',']]:            KbdX86.SCANCODE.COMMA,
-    [Keys.ASCII['<']]:            KbdX86.SCANCODE.COMMA  | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['.']]:            KbdX86.SCANCODE.PERIOD,
-    [Keys.ASCII['>']]:            KbdX86.SCANCODE.PERIOD | (KbdX86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['/']]:            KbdX86.SCANCODE.SLASH,
-    [Keys.ASCII['?']]:            KbdX86.SCANCODE.SLASH  | (KbdX86.SCANCODE.SHIFT << 8),
-    [KbdX86.SIMCODE.RSHIFT]:      KbdX86.SCANCODE.RSHIFT,
-    [KbdX86.SIMCODE.PRTSC]:       KbdX86.SCANCODE.PRTSC,
-    [KbdX86.SIMCODE.ALT]:         KbdX86.SCANCODE.ALT,
-    [KbdX86.SIMCODE.RALT]:        KbdX86.SCANCODE.ALT,
-    [KbdX86.SIMCODE.SPACE]:       KbdX86.SCANCODE.SPACE,
-    [KbdX86.SIMCODE.CAPS_LOCK]:   KbdX86.SCANCODE.CAPS_LOCK,
-    [KbdX86.SIMCODE.F1]:          KbdX86.SCANCODE.F1,
-    [KbdX86.SIMCODE.F2]:          KbdX86.SCANCODE.F2,
-    [KbdX86.SIMCODE.F3]:          KbdX86.SCANCODE.F3,
-    [KbdX86.SIMCODE.F4]:          KbdX86.SCANCODE.F4,
-    [KbdX86.SIMCODE.F5]:          KbdX86.SCANCODE.F5,
-    [KbdX86.SIMCODE.F6]:          KbdX86.SCANCODE.F6,
-    [KbdX86.SIMCODE.F7]:          KbdX86.SCANCODE.F7,
-    [KbdX86.SIMCODE.F8]:          KbdX86.SCANCODE.F8,
-    [KbdX86.SIMCODE.F9]:          KbdX86.SCANCODE.F9,
-    [KbdX86.SIMCODE.F10]:         KbdX86.SCANCODE.F10,
-    [KbdX86.SIMCODE.NUM_LOCK]:    KbdX86.SCANCODE.NUM_LOCK,
-    [KbdX86.SIMCODE.SCROLL_LOCK]: KbdX86.SCANCODE.SCROLL_LOCK,
-    [KbdX86.SIMCODE.HOME]:        KbdX86.SCANCODE.NUM_HOME,
-    [KbdX86.SIMCODE.NUM_HOME]:    KbdX86.SCANCODE.NUM_HOME,
-    [KbdX86.SIMCODE.UP]:          KbdX86.SCANCODE.NUM_UP,
-    [KbdX86.SIMCODE.NUM_UP]:      KbdX86.SCANCODE.NUM_UP,
-    [KbdX86.SIMCODE.PGUP]:        KbdX86.SCANCODE.NUM_PGUP,
-    [KbdX86.SIMCODE.NUM_PGUP]:    KbdX86.SCANCODE.NUM_PGUP,
-    [KbdX86.SIMCODE.LEFT]:        KbdX86.SCANCODE.NUM_LEFT,
-    [KbdX86.SIMCODE.NUM_LEFT]:    KbdX86.SCANCODE.NUM_LEFT,
-    [KbdX86.SIMCODE.NUM_CENTER]:  KbdX86.SCANCODE.NUM_CENTER,
-    [KbdX86.SIMCODE.RIGHT]:       KbdX86.SCANCODE.NUM_RIGHT,
-    [KbdX86.SIMCODE.NUM_RIGHT]:   KbdX86.SCANCODE.NUM_RIGHT,
-    [KbdX86.SIMCODE.END]:         KbdX86.SCANCODE.NUM_END,
-    [KbdX86.SIMCODE.NUM_END]:     KbdX86.SCANCODE.NUM_END,
-    [KbdX86.SIMCODE.DOWN]:        KbdX86.SCANCODE.NUM_DOWN,
-    [KbdX86.SIMCODE.NUM_DOWN]:    KbdX86.SCANCODE.NUM_DOWN,
-    [KbdX86.SIMCODE.PGDN]:        KbdX86.SCANCODE.NUM_PGDN,
-    [KbdX86.SIMCODE.NUM_PGDN]:    KbdX86.SCANCODE.NUM_PGDN,
-    [KbdX86.SIMCODE.INS]:         KbdX86.SCANCODE.NUM_INS,
-    [KbdX86.SIMCODE.NUM_INS]:     KbdX86.SCANCODE.NUM_INS,
-    [KbdX86.SIMCODE.NUM_ADD]:     KbdX86.SCANCODE.NUM_ADD,
-    [KbdX86.SIMCODE.NUM_SUB]:     KbdX86.SCANCODE.NUM_SUB,
-    [KbdX86.SIMCODE.DEL]:         KbdX86.SCANCODE.NUM_DEL,
-    [KbdX86.SIMCODE.NUM_DEL]:     KbdX86.SCANCODE.NUM_DEL,
+Keyboardx86.SIMCODES = {
+    [Keyboardx86.SIMCODE.ESC]:         Keyboardx86.SCANCODE.ESC,
+    [Keys.ASCII['1']]:            Keyboardx86.SCANCODE.ONE,
+    [Keys.ASCII['!']]:            Keyboardx86.SCANCODE.ONE    | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['2']]:            Keyboardx86.SCANCODE.TWO,
+    [Keys.ASCII['@']]:            Keyboardx86.SCANCODE.TWO    | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['3']]:            Keyboardx86.SCANCODE.THREE,
+    [Keys.ASCII['#']]:            Keyboardx86.SCANCODE.THREE  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['4']]:            Keyboardx86.SCANCODE.FOUR,
+    [Keys.ASCII['$']]:            Keyboardx86.SCANCODE.FOUR   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['5']]:            Keyboardx86.SCANCODE.FIVE,
+    [Keys.ASCII['%']]:            Keyboardx86.SCANCODE.FIVE   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['6']]:            Keyboardx86.SCANCODE.SIX,
+    [Keys.ASCII['^']]:            Keyboardx86.SCANCODE.SIX    | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['7']]:            Keyboardx86.SCANCODE.SEVEN,
+    [Keys.ASCII['&']]:            Keyboardx86.SCANCODE.SEVEN  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['8']]:            Keyboardx86.SCANCODE.EIGHT,
+    [Keys.ASCII['*']]:            Keyboardx86.SCANCODE.EIGHT  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['9']]:            Keyboardx86.SCANCODE.NINE,
+    [Keys.ASCII['(']]:            Keyboardx86.SCANCODE.NINE   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['0']]:            Keyboardx86.SCANCODE.ZERO,
+    [Keys.ASCII[')']]:            Keyboardx86.SCANCODE.ZERO   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['-']]:            Keyboardx86.SCANCODE.DASH,
+    [Keys.ASCII['_']]:            Keyboardx86.SCANCODE.DASH   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['=']]:            Keyboardx86.SCANCODE.EQUALS,
+    [Keys.ASCII['+']]:            Keyboardx86.SCANCODE.EQUALS | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keyboardx86.SIMCODE.BS]:          Keyboardx86.SCANCODE.BS,
+    [Keyboardx86.SIMCODE.TAB]:         Keyboardx86.SCANCODE.TAB,
+    [Keys.ASCII.q]:               Keyboardx86.SCANCODE.Q,
+    [Keys.ASCII.Q]:               Keyboardx86.SCANCODE.Q      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.w]:               Keyboardx86.SCANCODE.W,
+    [Keys.ASCII.W]:               Keyboardx86.SCANCODE.W      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.e]:               Keyboardx86.SCANCODE.E,
+    [Keys.ASCII.E]:               Keyboardx86.SCANCODE.E      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.r]:               Keyboardx86.SCANCODE.R,
+    [Keys.ASCII.R]:               Keyboardx86.SCANCODE.R      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.t]:               Keyboardx86.SCANCODE.T,
+    [Keys.ASCII.T]:               Keyboardx86.SCANCODE.T      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.y]:               Keyboardx86.SCANCODE.Y,
+    [Keys.ASCII.Y]:               Keyboardx86.SCANCODE.Y      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.u]:               Keyboardx86.SCANCODE.U,
+    [Keys.ASCII.U]:               Keyboardx86.SCANCODE.U      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.i]:               Keyboardx86.SCANCODE.I,
+    [Keys.ASCII.I]:               Keyboardx86.SCANCODE.I      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.o]:               Keyboardx86.SCANCODE.O,
+    [Keys.ASCII.O]:               Keyboardx86.SCANCODE.O      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.p]:               Keyboardx86.SCANCODE.P,
+    [Keys.ASCII.P]:               Keyboardx86.SCANCODE.P      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['[']]:            Keyboardx86.SCANCODE.LBRACK,
+    [Keys.ASCII['{']]:            Keyboardx86.SCANCODE.LBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII[']']]:            Keyboardx86.SCANCODE.RBRACK,
+    [Keys.ASCII['}']]:            Keyboardx86.SCANCODE.RBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.KEYCODE.CR]:            Keyboardx86.SCANCODE.ENTER,
+    [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.SCANCODE.CTRL,
+    [Keys.ASCII.a]:               Keyboardx86.SCANCODE.A,
+    [Keys.ASCII.A]:               Keyboardx86.SCANCODE.A      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.s]:               Keyboardx86.SCANCODE.S,
+    [Keys.ASCII.S]:               Keyboardx86.SCANCODE.S      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.d]:               Keyboardx86.SCANCODE.D,
+    [Keys.ASCII.D]:               Keyboardx86.SCANCODE.D      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.f]:               Keyboardx86.SCANCODE.F,
+    [Keys.ASCII.F]:               Keyboardx86.SCANCODE.F      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.g]:               Keyboardx86.SCANCODE.G,
+    [Keys.ASCII.G]:               Keyboardx86.SCANCODE.G      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.h]:               Keyboardx86.SCANCODE.H,
+    [Keys.ASCII.H]:               Keyboardx86.SCANCODE.H      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.j]:               Keyboardx86.SCANCODE.J,
+    [Keys.ASCII.J]:               Keyboardx86.SCANCODE.J      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.k]:               Keyboardx86.SCANCODE.K,
+    [Keys.ASCII.K]:               Keyboardx86.SCANCODE.K      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.l]:               Keyboardx86.SCANCODE.L,
+    [Keys.ASCII.L]:               Keyboardx86.SCANCODE.L      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII[';']]:            Keyboardx86.SCANCODE.SEMI,
+    [Keys.ASCII[':']]:            Keyboardx86.SCANCODE.SEMI   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII["'"]]:            Keyboardx86.SCANCODE.QUOTE,
+    [Keys.ASCII['"']]:            Keyboardx86.SCANCODE.QUOTE  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['`']]:            Keyboardx86.SCANCODE.BQUOTE,
+    [Keys.ASCII['~']]:            Keyboardx86.SCANCODE.BQUOTE | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.SCANCODE.SHIFT,
+    [Keys.ASCII['\\']]:           Keyboardx86.SCANCODE.BSLASH,
+    [Keys.ASCII['|']]:            Keyboardx86.SCANCODE.BSLASH | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.z]:               Keyboardx86.SCANCODE.Z,
+    [Keys.ASCII.Z]:               Keyboardx86.SCANCODE.Z      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.x]:               Keyboardx86.SCANCODE.X,
+    [Keys.ASCII.X]:               Keyboardx86.SCANCODE.X      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.c]:               Keyboardx86.SCANCODE.C,
+    [Keys.ASCII.C]:               Keyboardx86.SCANCODE.C      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.v]:               Keyboardx86.SCANCODE.V,
+    [Keys.ASCII.V]:               Keyboardx86.SCANCODE.V      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.b]:               Keyboardx86.SCANCODE.B,
+    [Keys.ASCII.B]:               Keyboardx86.SCANCODE.B      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.n]:               Keyboardx86.SCANCODE.N,
+    [Keys.ASCII.N]:               Keyboardx86.SCANCODE.N      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.m]:               Keyboardx86.SCANCODE.M,
+    [Keys.ASCII.M]:               Keyboardx86.SCANCODE.M      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII[',']]:            Keyboardx86.SCANCODE.COMMA,
+    [Keys.ASCII['<']]:            Keyboardx86.SCANCODE.COMMA  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['.']]:            Keyboardx86.SCANCODE.PERIOD,
+    [Keys.ASCII['>']]:            Keyboardx86.SCANCODE.PERIOD | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['/']]:            Keyboardx86.SCANCODE.SLASH,
+    [Keys.ASCII['?']]:            Keyboardx86.SCANCODE.SLASH  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.SCANCODE.RSHIFT,
+    [Keyboardx86.SIMCODE.PRTSC]:       Keyboardx86.SCANCODE.PRTSC,
+    [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.SCANCODE.ALT,
+    [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.SCANCODE.ALT,
+    [Keyboardx86.SIMCODE.SPACE]:       Keyboardx86.SCANCODE.SPACE,
+    [Keyboardx86.SIMCODE.CAPS_LOCK]:   Keyboardx86.SCANCODE.CAPS_LOCK,
+    [Keyboardx86.SIMCODE.F1]:          Keyboardx86.SCANCODE.F1,
+    [Keyboardx86.SIMCODE.F2]:          Keyboardx86.SCANCODE.F2,
+    [Keyboardx86.SIMCODE.F3]:          Keyboardx86.SCANCODE.F3,
+    [Keyboardx86.SIMCODE.F4]:          Keyboardx86.SCANCODE.F4,
+    [Keyboardx86.SIMCODE.F5]:          Keyboardx86.SCANCODE.F5,
+    [Keyboardx86.SIMCODE.F6]:          Keyboardx86.SCANCODE.F6,
+    [Keyboardx86.SIMCODE.F7]:          Keyboardx86.SCANCODE.F7,
+    [Keyboardx86.SIMCODE.F8]:          Keyboardx86.SCANCODE.F8,
+    [Keyboardx86.SIMCODE.F9]:          Keyboardx86.SCANCODE.F9,
+    [Keyboardx86.SIMCODE.F10]:         Keyboardx86.SCANCODE.F10,
+    [Keyboardx86.SIMCODE.NUM_LOCK]:    Keyboardx86.SCANCODE.NUM_LOCK,
+    [Keyboardx86.SIMCODE.SCROLL_LOCK]: Keyboardx86.SCANCODE.SCROLL_LOCK,
+    [Keyboardx86.SIMCODE.HOME]:        Keyboardx86.SCANCODE.NUM_HOME,
+    [Keyboardx86.SIMCODE.NUM_HOME]:    Keyboardx86.SCANCODE.NUM_HOME,
+    [Keyboardx86.SIMCODE.UP]:          Keyboardx86.SCANCODE.NUM_UP,
+    [Keyboardx86.SIMCODE.NUM_UP]:      Keyboardx86.SCANCODE.NUM_UP,
+    [Keyboardx86.SIMCODE.PGUP]:        Keyboardx86.SCANCODE.NUM_PGUP,
+    [Keyboardx86.SIMCODE.NUM_PGUP]:    Keyboardx86.SCANCODE.NUM_PGUP,
+    [Keyboardx86.SIMCODE.LEFT]:        Keyboardx86.SCANCODE.NUM_LEFT,
+    [Keyboardx86.SIMCODE.NUM_LEFT]:    Keyboardx86.SCANCODE.NUM_LEFT,
+    [Keyboardx86.SIMCODE.NUM_CENTER]:  Keyboardx86.SCANCODE.NUM_CENTER,
+    [Keyboardx86.SIMCODE.RIGHT]:       Keyboardx86.SCANCODE.NUM_RIGHT,
+    [Keyboardx86.SIMCODE.NUM_RIGHT]:   Keyboardx86.SCANCODE.NUM_RIGHT,
+    [Keyboardx86.SIMCODE.END]:         Keyboardx86.SCANCODE.NUM_END,
+    [Keyboardx86.SIMCODE.NUM_END]:     Keyboardx86.SCANCODE.NUM_END,
+    [Keyboardx86.SIMCODE.DOWN]:        Keyboardx86.SCANCODE.NUM_DOWN,
+    [Keyboardx86.SIMCODE.NUM_DOWN]:    Keyboardx86.SCANCODE.NUM_DOWN,
+    [Keyboardx86.SIMCODE.PGDN]:        Keyboardx86.SCANCODE.NUM_PGDN,
+    [Keyboardx86.SIMCODE.NUM_PGDN]:    Keyboardx86.SCANCODE.NUM_PGDN,
+    [Keyboardx86.SIMCODE.INS]:         Keyboardx86.SCANCODE.NUM_INS,
+    [Keyboardx86.SIMCODE.NUM_INS]:     Keyboardx86.SCANCODE.NUM_INS,
+    [Keyboardx86.SIMCODE.NUM_ADD]:     Keyboardx86.SCANCODE.NUM_ADD,
+    [Keyboardx86.SIMCODE.NUM_SUB]:     Keyboardx86.SCANCODE.NUM_SUB,
+    [Keyboardx86.SIMCODE.DEL]:         Keyboardx86.SCANCODE.NUM_DEL,
+    [Keyboardx86.SIMCODE.NUM_DEL]:     Keyboardx86.SCANCODE.NUM_DEL,
 
     /*
      * The next 6 entries are for keys that existed only on 101-key keyboards (well, except for SYS_REQ,
@@ -2989,49 +2989,49 @@ KbdX86.SIMCODES = {
      * TODO: Add entries for 'num-mul', 'num-div', 'num-enter', the stand-alone arrow keys, etc, AND at the same time,
      * make sure that keys with multi-byte sequences (eg, 0xe0 0x1c) work properly.
      */
-    [KbdX86.SIMCODE.SYS_REQ]:     KbdX86.SCANCODE.SYS_REQ,
-    [KbdX86.SIMCODE.F11]:         KbdX86.SCANCODE.F11,
-    [KbdX86.SIMCODE.F12]:         KbdX86.SCANCODE.F12,
-    [KbdX86.SIMCODE.CMD]:         KbdX86.SCANCODE.WIN,
-    [KbdX86.SIMCODE.RCMD]:        KbdX86.SCANCODE.MENU,
-    [KbdX86.SIMCODE.FF_CMD]:      KbdX86.SCANCODE.WIN,
+    [Keyboardx86.SIMCODE.SYS_REQ]:     Keyboardx86.SCANCODE.SYS_REQ,
+    [Keyboardx86.SIMCODE.F11]:         Keyboardx86.SCANCODE.F11,
+    [Keyboardx86.SIMCODE.F12]:         Keyboardx86.SCANCODE.F12,
+    [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.SCANCODE.WIN,
+    [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.SCANCODE.MENU,
+    [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.SCANCODE.WIN,
 
-    [KbdX86.SIMCODE.CTRL_A]:      KbdX86.SCANCODE.A           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_B]:      KbdX86.SCANCODE.B           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_C]:      KbdX86.SCANCODE.C           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_D]:      KbdX86.SCANCODE.D           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_E]:      KbdX86.SCANCODE.E           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_F]:      KbdX86.SCANCODE.F           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_G]:      KbdX86.SCANCODE.G           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_H]:      KbdX86.SCANCODE.H           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_I]:      KbdX86.SCANCODE.I           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_J]:      KbdX86.SCANCODE.J           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_K]:      KbdX86.SCANCODE.K           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_L]:      KbdX86.SCANCODE.L           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_M]:      KbdX86.SCANCODE.M           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_N]:      KbdX86.SCANCODE.N           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_O]:      KbdX86.SCANCODE.O           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_P]:      KbdX86.SCANCODE.P           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_Q]:      KbdX86.SCANCODE.Q           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_R]:      KbdX86.SCANCODE.R           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_S]:      KbdX86.SCANCODE.S           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_T]:      KbdX86.SCANCODE.T           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_U]:      KbdX86.SCANCODE.U           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_V]:      KbdX86.SCANCODE.V           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_W]:      KbdX86.SCANCODE.W           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_X]:      KbdX86.SCANCODE.X           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_Y]:      KbdX86.SCANCODE.Y           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_Z]:      KbdX86.SCANCODE.Z           | (KbdX86.SCANCODE.CTRL << 8),
-    [KbdX86.SIMCODE.CTRL_BREAK]:  KbdX86.SCANCODE.SCROLL_LOCK | (KbdX86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_A]:      Keyboardx86.SCANCODE.A           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_B]:      Keyboardx86.SCANCODE.B           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_C]:      Keyboardx86.SCANCODE.C           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_D]:      Keyboardx86.SCANCODE.D           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_E]:      Keyboardx86.SCANCODE.E           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_F]:      Keyboardx86.SCANCODE.F           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_G]:      Keyboardx86.SCANCODE.G           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_H]:      Keyboardx86.SCANCODE.H           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_I]:      Keyboardx86.SCANCODE.I           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_J]:      Keyboardx86.SCANCODE.J           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_K]:      Keyboardx86.SCANCODE.K           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_L]:      Keyboardx86.SCANCODE.L           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_M]:      Keyboardx86.SCANCODE.M           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_N]:      Keyboardx86.SCANCODE.N           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_O]:      Keyboardx86.SCANCODE.O           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_P]:      Keyboardx86.SCANCODE.P           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_Q]:      Keyboardx86.SCANCODE.Q           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_R]:      Keyboardx86.SCANCODE.R           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_S]:      Keyboardx86.SCANCODE.S           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_T]:      Keyboardx86.SCANCODE.T           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_U]:      Keyboardx86.SCANCODE.U           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_V]:      Keyboardx86.SCANCODE.V           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_W]:      Keyboardx86.SCANCODE.W           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_X]:      Keyboardx86.SCANCODE.X           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_Y]:      Keyboardx86.SCANCODE.Y           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_Z]:      Keyboardx86.SCANCODE.Z           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_BREAK]:  Keyboardx86.SCANCODE.SCROLL_LOCK | (Keyboardx86.SCANCODE.CTRL << 8),
 
-    [KbdX86.SIMCODE.CTRL_ALT_DEL]:    KbdX86.SCANCODE.NUM_DEL | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
-    [KbdX86.SIMCODE.CTRL_ALT_INS]:    KbdX86.SCANCODE.NUM_INS | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
-    [KbdX86.SIMCODE.CTRL_ALT_ADD]:    KbdX86.SCANCODE.NUM_ADD | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
-    [KbdX86.SIMCODE.CTRL_ALT_SUB]:    KbdX86.SCANCODE.NUM_SUB | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
-    [KbdX86.SIMCODE.CTRL_ALT_ENTER]:  KbdX86.SCANCODE.ENTER   | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
-    [KbdX86.SIMCODE.CTRL_ALT_SYS_REQ]:KbdX86.SCANCODE.SYS_REQ | (KbdX86.SCANCODE.CTRL << 8) | (KbdX86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_DEL]:    Keyboardx86.SCANCODE.NUM_DEL | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_INS]:    Keyboardx86.SCANCODE.NUM_INS | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_ADD]:    Keyboardx86.SCANCODE.NUM_ADD | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_SUB]:    Keyboardx86.SCANCODE.NUM_SUB | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_ENTER]:  Keyboardx86.SCANCODE.ENTER   | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ]:Keyboardx86.SCANCODE.SYS_REQ | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
 
-    [KbdX86.SIMCODE.SHIFT_TAB]:   KbdX86.SCANCODE.TAB         | (KbdX86.SCANCODE.SHIFT << 8)
+    [Keyboardx86.SIMCODE.SHIFT_TAB]:   Keyboardx86.SCANCODE.TAB         | (Keyboardx86.SCANCODE.SHIFT << 8)
 };
 
 /**
@@ -3048,7 +3048,7 @@ KbdX86.SIMCODES = {
  *
  * @enum {number}
  */
-KbdX86.CMD = {
+Keyboardx86.CMD = {
     /*
      * RESET (0xFF)
      *
@@ -3155,7 +3155,7 @@ KbdX86.CMD = {
  *
  * @enum {number}
  */
-KbdX86.CMDRES = {
+Keyboardx86.CMDRES = {
     /*
      * OVERRUN (0x00)
      *
@@ -3222,11 +3222,11 @@ KbdX86.CMDRES = {
     BUFF_FULL:  0xFF    // TODO: Verify this response code (is this just for older 83-key keyboards?)
 };
 
-KbdX86.LIMIT = {
+Keyboardx86.LIMIT = {
     MAX_SCANCODES: 20   // TODO: Verify this limit for newer keyboards (84-key and up)
 };
 
-KbdX86.INJECTION = {
+Keyboardx86.INJECTION = {
     NONE:       0,
     ON_START:   1,
     ON_INPUT:   2
@@ -3235,4 +3235,4 @@ KbdX86.INJECTION = {
 /*
  * Initialize every Keyboard module on the page.
  */
-WebLib.onInit(KbdX86.init);
+WebLib.onInit(Keyboardx86.init);
