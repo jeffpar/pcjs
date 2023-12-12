@@ -1222,7 +1222,7 @@ foo.c(193) : warning C4090: different 'const/volatile' qualifiers
     these macros, reedeclare the assigned variable as an LPCSTR.
 ```
 
-### Directory of Windows SDK 3.10 (Disk 1)
+### Directory of Windows SDK 3.10 (Disk 01)
 
      Volume in drive A is win31SDKD1
      Directory of A:\
@@ -1346,9 +1346,9 @@ foo.c(193) : warning C4090: different 'const/volatile' qualifiers
            81 file(s)    1386806 bytes
                            52736 bytes free
 
-![Windows SDK 3.10 (Disk 1)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK01.jpg)
+![Windows SDK 3.10 (Disk 01)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK01.jpg)
 
-### Directory of Windows SDK 3.10 (Disk 2)
+### Directory of Windows SDK 3.10 (Disk 02)
 
      Volume in drive A is win31SDKD2
      Directory of A:\
@@ -1408,9 +1408,9 @@ foo.c(193) : warning C4090: different 'const/volatile' qualifiers
            33 file(s)    1247959 bytes
                           201728 bytes free
 
-![Windows SDK 3.10 (Disk 2)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK02.jpg)
+![Windows SDK 3.10 (Disk 02)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK02.jpg)
 
-### Directory of Windows SDK 3.10 (Disk 3)
+### Directory of Windows SDK 3.10 (Disk 03)
 
      Volume in drive A is win31SDKD3
      Directory of A:\
@@ -1557,9 +1557,9 @@ foo.c(193) : warning C4090: different 'const/volatile' qualifiers
           108 file(s)    1389277 bytes
                            41984 bytes free
 
-![Windows SDK 3.10 (Disk 3)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK03.jpg)
+![Windows SDK 3.10 (Disk 03)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK03.jpg)
 
-### Directory of Windows SDK 3.10 (Disk 4)
+### Directory of Windows SDK 3.10 (Disk 04)
 
      Volume in drive A is win31SDKD4
      Directory of A:\
@@ -1906,9 +1906,9 @@ foo.c(193) : warning C4090: different 'const/volatile' qualifiers
           256 file(s)    1301086 bytes
                            93184 bytes free
 
-![Windows SDK 3.10 (Disk 4)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK04.jpg)
+![Windows SDK 3.10 (Disk 04)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK04.jpg)
 
-### Directory of Windows SDK 3.10 (Disk 5)
+### Directory of Windows SDK 3.10 (Disk 05)
 
      Volume in drive A is win31SDKD5
      Directory of A:\
@@ -2845,9 +2845,9 @@ foo.c(193) : warning C4090: different 'const/volatile' qualifiers
           702 file(s)    1028025 bytes
                           256000 bytes free
 
-![Windows SDK 3.10 (Disk 5)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK05.jpg)
+![Windows SDK 3.10 (Disk 05)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK05.jpg)
 
-### Directory of Windows SDK 3.10 (Disk 6)
+### Directory of Windows SDK 3.10 (Disk 06)
 
      Volume in drive A is win31SDKD6
      Directory of A:\
@@ -2957,9 +2957,9 @@ foo.c(193) : warning C4090: different 'const/volatile' qualifiers
            67 file(s)    1411567 bytes
                            32256 bytes free
 
-![Windows SDK 3.10 (Disk 6)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK06.jpg)
+![Windows SDK 3.10 (Disk 06)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK06.jpg)
 
-### Directory of Windows SDK 3.10 (Disk 7)
+### Directory of Windows SDK 3.10 (Disk 07)
 
      Volume in drive A is win31SDKD7
      Directory of A:\
@@ -2980,9 +2980,9 @@ foo.c(193) : warning C4090: different 'const/volatile' qualifiers
             6 file(s)    1305339 bytes
                           151040 bytes free
 
-![Windows SDK 3.10 (Disk 7)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK07.jpg)
+![Windows SDK 3.10 (Disk 07)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK07.jpg)
 
-### Directory of Windows SDK 3.10 (Disk 8)
+### Directory of Windows SDK 3.10 (Disk 08)
 
      Volume in drive A is win31SDKD8
      Directory of A:\
@@ -3009,9 +3009,9 @@ foo.c(193) : warning C4090: different 'const/volatile' qualifiers
             8 file(s)    1347100 bytes
                           109056 bytes free
 
-![Windows SDK 3.10 (Disk 8)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK08.jpg)
+![Windows SDK 3.10 (Disk 08)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK08.jpg)
 
-### Directory of Windows SDK 3.10 (Disk 9)
+### Directory of Windows SDK 3.10 (Disk 09)
 
      Volume in drive A is win31SDKD9
      Directory of A:\
@@ -3039,7 +3039,7 @@ foo.c(193) : warning C4090: different 'const/volatile' qualifiers
             9 file(s)    1326248 bytes
                           130048 bytes free
 
-![Windows SDK 3.10 (Disk 9)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK09.jpg)
+![Windows SDK 3.10 (Disk 09)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.10/WIN31SDK-DISK09.jpg)
 
 ### Directory of Windows SDK 3.10 (Disk 10)
 

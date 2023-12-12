@@ -741,7 +741,7 @@ NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 
 
 ![Windows SDK 3.00 (1200K Disk 6)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-1200K-SAMPLES2.jpg)
 
-### Directory of Windows SDK 3.00 (720K Disk 1)
+### Directory of Windows SDK 3.00 (720K Disk 01)
 
      Volume in drive A is WIN30SDK01
      Directory of A:\
@@ -772,9 +772,9 @@ NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 
            16 file(s)     696260 bytes
                            24576 bytes free
 
-![Windows SDK 3.00 (720K Disk 1)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK01.jpg)
+![Windows SDK 3.00 (720K Disk 01)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK01.jpg)
 
-### Directory of Windows SDK 3.00 (720K Disk 2)
+### Directory of Windows SDK 3.00 (720K Disk 02)
 
      Volume in drive A is WIN30SDK02
      Directory of A:\
@@ -836,9 +836,9 @@ NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 
            35 file(s)     678858 bytes
                            34816 bytes free
 
-![Windows SDK 3.00 (720K Disk 2)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK02.jpg)
+![Windows SDK 3.00 (720K Disk 02)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK02.jpg)
 
-### Directory of Windows SDK 3.00 (720K Disk 3)
+### Directory of Windows SDK 3.00 (720K Disk 03)
 
      Volume in drive A is WIN30SDK03
      Directory of A:\
@@ -867,9 +867,9 @@ NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 
            10 file(s)     709122 bytes
                            15360 bytes free
 
-![Windows SDK 3.00 (720K Disk 3)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK03.jpg)
+![Windows SDK 3.00 (720K Disk 03)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK03.jpg)
 
-### Directory of Windows SDK 3.00 (720K Disk 4)
+### Directory of Windows SDK 3.00 (720K Disk 04)
 
      Volume in drive A is WIN30SDK04
      Directory of A:\
@@ -925,9 +925,9 @@ NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 
            29 file(s)     633189 bytes
                            81920 bytes free
 
-![Windows SDK 3.00 (720K Disk 4)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK04.jpg)
+![Windows SDK 3.00 (720K Disk 04)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK04.jpg)
 
-### Directory of Windows SDK 3.00 (720K Disk 5)
+### Directory of Windows SDK 3.00 (720K Disk 05)
 
      Volume in drive A is WIN30SDK05
      Directory of A:\
@@ -976,9 +976,9 @@ NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 
            30 file(s)     619454 bytes
                            94208 bytes free
 
-![Windows SDK 3.00 (720K Disk 5)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK05.jpg)
+![Windows SDK 3.00 (720K Disk 05)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK05.jpg)
 
-### Directory of Windows SDK 3.00 (720K Disk 6)
+### Directory of Windows SDK 3.00 (720K Disk 06)
 
      Volume in drive A is WIN30SDK06
      Directory of A:\
@@ -1018,9 +1018,9 @@ NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 
            21 file(s)     628045 bytes
                            92160 bytes free
 
-![Windows SDK 3.00 (720K Disk 6)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK06.jpg)
+![Windows SDK 3.00 (720K Disk 06)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK06.jpg)
 
-### Directory of Windows SDK 3.00 (720K Disk 7)
+### Directory of Windows SDK 3.00 (720K Disk 07)
 
      Volume in drive A is WIN30SDK07
      Directory of A:\
@@ -1243,9 +1243,9 @@ NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 
           156 file(s)     606881 bytes
                            49152 bytes free
 
-![Windows SDK 3.00 (720K Disk 7)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK07.jpg)
+![Windows SDK 3.00 (720K Disk 07)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK07.jpg)
 
-### Directory of Windows SDK 3.00 (720K Disk 8)
+### Directory of Windows SDK 3.00 (720K Disk 08)
 
      Volume in drive A is WIN30SDK08
      Directory of A:\
@@ -1501,9 +1501,9 @@ NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 
           185 file(s)     637073 bytes
                             1024 bytes free
 
-![Windows SDK 3.00 (720K Disk 8)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK08.jpg)
+![Windows SDK 3.00 (720K Disk 08)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK08.jpg)
 
-### Directory of Windows SDK 3.00 (720K Disk 9)
+### Directory of Windows SDK 3.00 (720K Disk 09)
 
      Volume in drive A is WIN30SDK09
      Directory of A:\
@@ -1522,7 +1522,7 @@ NOTE: The machine below is an IBM PC AT (8Mhz), which can only run Windows 3.00 
             4 file(s)     688486 bytes
                            39936 bytes free
 
-![Windows SDK 3.00 (720K Disk 9)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK09.jpg)
+![Windows SDK 3.00 (720K Disk 09)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-720K-DISK09.jpg)
 
 ### Directory of Windows SDK 3.00 (720K Disk 10)
 
