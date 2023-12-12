@@ -2,7 +2,7 @@
 layout: page
 title: Digital Research DR DOS 5.00
 permalink: /software/pcx86/sys/dos/dresearch/5.00/
-preview: https://diskettes.pcjs.org/pcx86/sys/dos/dresearch/5.00/DRDOS500-1991-02-DISK1.png
+preview: DR_DOS_5.0_BoxFront.png
 redirect_from: /disks/pcx86/dos/dresearch/5.00/
 machines:
   - id: ibm5170-drdos500
@@ -16,6 +16,10 @@ machines:
 ---
 
 {% include machine.html id="ibm5170-drdos500" %}
+
+<!-- Documentation -->
+
+{% include gallery/documents.html width="200" height="280" %}
 
 ### Directory of DR DOS 5.00 (1990-06 Disk 1)
 
