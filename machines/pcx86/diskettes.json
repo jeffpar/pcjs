@@ -1659,6 +1659,38 @@
 								"@photo": "jpg",
 								"@format": "PC360K"
 							}
+						],
+						"@documents": [
+							{
+								"@title": "DR DOS 5.0 User Guide (1990)",
+								"@link": "https://archive.org/details/dr-dos-5.0-user-guide-1990-05/DR_DOS_5.0_User_Guide-1990-05.pdf",
+								"@cover": "DR_DOS_5.0_User_Guide-1990-05.jpg",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "DR DOS 5.0 ViewMAX User Guide (1990)",
+								"@link": "https://archive.org/details/dr-dos-5.0-user-guide-1990-05/DR_DOS_5.0_ViewMAX_User_Guide-1990-05.pdf",
+								"@cover": "DR_DOS_5.0_ViewMAX_User_Guide-1990-05.jpg",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "DR DOS 5.0 Release Notes (1990)",
+								"@link": "https://archive.org/details/dr-dos-5.0-user-guide-1990-05/DR_DOS_5.0_Release_Notes-1990-08.pdf",
+								"@cover": "DR_DOS_5.0_Release_Notes-1990-08.jpg",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "DR DOS 5.0 Inserts (1991)",
+								"@link": "https://archive.org/details/dr-dos-5.0-user-guide-1990-05/DR_DOS_5.0_Inserts.pdf",
+								"@cover": "DR_DOS_5.0_Inserts.jpg",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "DR DOS 5.0 Quick Reference Card",
+								"@link": "https://archive.org/details/dr-dos-5.0-user-guide-1990-05/DR_DOS_5.0_Quick_Reference_Card-1990-05.pdf",
+								"@cover": "DR_DOS_5.0_Quick_Reference_Card-1990-05.jpg",
+								"@source": "PCjs"
+							}
 						]
 					},
 					"6.00": {
