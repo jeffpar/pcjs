@@ -280,7 +280,7 @@ export default class Debuggerx86 extends DbgLib {
         this.messageDump(MESSAGE.MEM,  function onDumpMem(asArgs) { dbg.dumpMem(asArgs); });
         this.messageDump(MESSAGE.TSS,  function onDumpTSS(asArgs) { dbg.dumpTSS(asArgs); });
 
-        let fSymbols = cmp.getMachineBoolean('symbols');
+        let fSymbols = cmp.getMachineBoolean('symbols', false);
         if (DEBUG && fSymbols !== false || fSymbols) {
             if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED) {
                 this.fWinDbg = null;
