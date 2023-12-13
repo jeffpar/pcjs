@@ -280,7 +280,7 @@ export default class Debuggerx86 extends DbgLib {
         this.messageDump(MESSAGE.MEM,  function onDumpMem(asArgs) { dbg.dumpMem(asArgs); });
         this.messageDump(MESSAGE.TSS,  function onDumpTSS(asArgs) { dbg.dumpTSS(asArgs); });
 
-        let fSymbols = cmp.getMachineBoolean('symbols', false);
+        let fSymbols = cmp.getMachineBoolean('symbols');
         if (DEBUG && fSymbols !== false || fSymbols) {
             if (Interrupts.WINDBG.ENABLED || Interrupts.WINDBGRM.ENABLED) {
                 this.fWinDbg = null;
@@ -4742,7 +4742,7 @@ export default class Debuggerx86 extends DbgLib {
                                     if (symbol['o'] == offSymbol && symbol['s'] == symbolTable.sel) {
                                         return true;
                                     }
-                                    dbg.printf(MESSAGE.DEBUG + MESSAGE.ERROR, "%s.%s (%x) does not match previous value (%x)\n", sVxD, sSymbol, offSymbol, symbol['o']);
+                                    dbg.printf(MESSAGE.DEBUG + MESSAGE.ERROR, "%s.%s (%%%X) does not match previous value (%%%X)\n", sVxD, sSymbol, offSymbol, symbol['o']);
                                     return false;
                                 }
                                 let pair = [offSymbol, keySymbol];
@@ -4751,14 +4751,16 @@ export default class Debuggerx86 extends DbgLib {
                                     symbolTable.aOffsets.splice(-(result + 1), 0, pair);
                                     symbolTable.aSymbols[keySymbol] = {'o': offSymbol, 's': symbolTable.sel};
                                     if (fPrint && sSymbol[0] != '$') {
-                                        dbg.printf(MESSAGE.DEBUG + MESSAGE.LOG, "%s.%s: %x\n", sVxD, sSymbol, offSymbol);
+                                        dbg.printf(MESSAGE.DEBUG + MESSAGE.LOG, "%s.%s: %%%X\n", sVxD, sSymbol, offSymbol);
                                     }
-                                    return true;
+                                } else {
+                                    // dbg.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s.%s (%x) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
+                                    symbolTable.aOffsets[result] = pair;
+                                    symbolTable.aSymbols[keySymbol] = {'o': offSymbol, 's': symbolTable.sel};
                                 }
-                                dbg.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s.%s (%x) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
-                                return false;
+                                return true;
                             }
-                            dbg.printf(MESSAGE.DEBUG + MESSAGE.ERROR, "%s.%s (%x) out of range\n", sVxD, sSymbol, offSymbol);
+                            dbg.printf(MESSAGE.DEBUG + MESSAGE.ERROR, "%s.%s (%%%X) out of range (check %%%X)\n", sVxD, sSymbol, offSymbol, dbgAddr.addr-2);
                             return false;
                         };
                         /**
@@ -4774,14 +4776,14 @@ export default class Debuggerx86 extends DbgLib {
                         return false;
                     }
                     if (idSrv < 32768) {        // TODO: Figure out what the larger service numbers represent
-                        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s service %d: unrecognized\n", sVxD, idSrv);
+                        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s service %d: unrecognized (check %%%X)\n", sVxD, idSrv, dbgAddr.addr-2);
                     }
                     return false;
                 }
                 return false;                   // if our VxD table doesn't have a function list yet, don't bother with a warning
             }
         }
-        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "VxD %d: unrecognized\n", idVxD);
+        this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "VxD %d: unrecognized (check %%%X)\n", idVxD, dbgAddr.addr-2);
         return false;
     }
 

@@ -498,8 +498,8 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {string} sParm
-     * @param {boolean} fDefault
-     * @returns {boolean}
+     * @param {boolean} [fDefault]
+     * @returns {boolean|undefined}
      */
     getMachineBoolean(sParm, fDefault)
     {
