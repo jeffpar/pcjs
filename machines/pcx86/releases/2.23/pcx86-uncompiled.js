@@ -64830,11 +64830,11 @@ class Disk extends Component {
      * addModuleInfo(sector)
      *
      * @this {Disk}
-     * @param {Sector} sector
+     * @param {Sector|null} sector
      */
     addModuleInfo(sector)
     {
-        if (SYMBOLS && sector.file) {
+        if (SYMBOLS && sector && sector.file) {
             let module = sector.file.module;
             if (module) {
                 this.aModules[module.name] = module;
@@ -79133,7 +79133,7 @@ class Debuggerx86 extends DbgLib {
                                         dbg.printf(MESSAGE.DEBUG + MESSAGE.LOG, "%s.%s: %%%X\n", sVxD, sSymbol, offSymbol);
                                     }
                                 } else {
-                                    // dbg.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s.%s (%x) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
+                                    // dbg.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s.%s (%%%X) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
                                     symbolTable.aOffsets[result] = pair;
                                     symbolTable.aSymbols[keySymbol] = {'o': offSymbol, 's': symbolTable.sel};
                                 }

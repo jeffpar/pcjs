@@ -4754,7 +4754,7 @@ export default class Debuggerx86 extends DbgLib {
                                         dbg.printf(MESSAGE.DEBUG + MESSAGE.LOG, "%s.%s: %%%X\n", sVxD, sSymbol, offSymbol);
                                     }
                                 } else {
-                                    // dbg.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s.%s (%x) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
+                                    // dbg.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "%s.%s (%%%X) already has symbol: %s\n", sVxD, sSymbol, offSymbol, symbolTable.aOffsets[result][1]);
                                     symbolTable.aOffsets[result] = pair;
                                     symbolTable.aSymbols[keySymbol] = {'o': offSymbol, 's': symbolTable.sel};
                                 }
