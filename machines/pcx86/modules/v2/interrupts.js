@@ -2549,85 +2549,389 @@ Interrupts.VxD = {
         ]
     },
     "DEBUG": {
-        id: 0x0002
+        id: 0x0002,
+        fn: [
+            "DEBUG_Get_Version",
+            "DEBUG_Fault",
+            "DEBUG_CheckFault",
+            "_DEBUG_LoadSyms"
+        ]
     },
     "VPICD": {
-        id: 0x0003
+        id: 0x0003,
+        fn: [
+            "VPICD_Get_Version",
+            "VPICD_Virtualize_IRQ",
+            "VPICD_Set_Int_Request",
+            "VPICD_Clear_Int_Request",
+            "VPICD_Phys_EOI",
+            "VPICD_Get_Complete_Status",
+            "VPICD_Get_Status",
+            "VPICD_Test_Phys_Request",
+            "VPICD_Physically_Mask",
+            "VPICD_Physically_Unmask",
+            "VPICD_Set_Auto_Masking",
+            "VPICD_Get_IRQ_Complete_Status",
+            "VPICD_Convert_Handle_To_IRQ",
+            "VPICD_Convert_IRQ_To_Int",
+            "VPICD_Convert_Int_To_IRQ",
+            "VPICD_Call_When_Hw_Int",
+            "VPICD_Force_Default_Owner",
+            "VPICD_Force_Default_Behavior",
+            "VPICD_Auto_Mask_At_Inst_Swap",
+            "VPICD_Begin_Inst_Page_Swap",
+            "VPICD_End_Inst_Page_Swap",
+            "VPICD_Virtual_EOI",
+            "VPICD_Get_Virtualization_Count",
+            "VPICD_Post_Sys_Critical_Init",
+            "VPICD_VM_SlavePIC_Mask_Change"
+        ]
     },
     "VDMAD": {
-        id: 0x0004
+        id: 0x0004,
+        fn: [
+            "VDMAD_Get_Version",
+            "VDMAD_Virtualize_Channel",
+            "VDMAD_Get_Region_Info",
+            "VDMAD_Set_Region_Info",
+            "VDMAD_Get_Virt_State",
+            "VDMAD_Set_Virt_State",
+            "VDMAD_Set_Phys_State",
+            "VDMAD_Mask_Channel",
+            "VDMAD_UnMask_Channel",
+            "VDMAD_Lock_DMA_Region",
+            "VDMAD_Unlock_DMA_Region",
+            "VDMAD_Scatter_Lock",
+            "VDMAD_Scatter_Unlock",
+            "VDMAD_Reserve_Buffer_Space",
+            "VDMAD_Request_Buffer",
+            "VDMAD_Release_Buffer",
+            "VDMAD_Copy_To_Buffer",
+            "VDMAD_Copy_From_Buffer",
+            "VDMAD_Default_Handler",
+            "VDMAD_Disable_Translation",
+            "VDMAD_Enable_Translation",
+            "VDMAD_Get_EISA_Adr_Mode",
+            "VDMAD_Set_EISA_Adr_Mode",
+            "VDMAD_Unlock_DMA_Region_No_Dirty",
+            "VDMAD_Phys_Mask_Channel",
+            "VDMAD_Phys_Unmask_Channel",
+            "VDMAD_Unvirtualize_Channel",
+            "VDMAD_Set_IO_Add",
+            "VDMAD_Get_Phys_Count",
+            "VDMAD_Get_Phys_Status",
+            "VDMAD_Get_Max_Phys_Page",
+            "VDMAD_Set_Channel_Callbacks",
+            "VDMAD_Get_Virt_Count",
+            "VDMAD_Set_Virt_Count"
+        ]
     },
     "VTD": {
-        id: 0x0005
+        id: 0x0005,
+        fn: [
+            "VTD_Get_Version",
+            "VTD_Update_System_Clock",
+            "VTD_Get_Interrupt_Period",
+            "VTD_Begin_Min_Int_Period",
+            "VTD_End_Min_Int_Period",
+            "VTD_Disable_Trapping",
+            "VTD_Enable_Trapping",
+            "VTD_Get_Real_Time",
+            "VTD_Get_Date_And_Time",
+            "VTD_Adjust_VM_Count",
+            "VTD_Delay"
+        ]
     },
     "V86MMGR": {
-        id: 0x0006
+        id: 0x0006,
+        fn: [
+            "V86MMGR_Get_Version",
+            "V86MMGR_Allocate_V86_Pages",
+            "V86MMGR_Set_EMS_XMS_Limits",
+            "V86MMGR_Get_EMS_XMS_Limits",
+            "V86MMGR_Set_Mapping_Info",
+            "V86MMGR_Get_Mapping_Info",
+            "V86MMGR_Xlat_API",
+            "V86MMGR_Load_Client_Ptr",
+            "V86MMGR_Allocate_Buffer",
+            "V86MMGR_Free_Buffer",
+            "V86MMGR_Get_Xlat_Buff_State",
+            "V86MMGR_Set_Xlat_Buff_State",
+            "V86MMGR_Get_VM_Flat_Sel",
+            "V86MMGR_Map_Pages",
+            "V86MMGR_Free_Page_Map_Region",
+            "V86MMGR_LocalGlobalReg",
+            "V86MMGR_GetPgStatus",
+            "V86MMGR_SetLocalA20",
+            "V86MMGR_ResetBasePages",
+            "V86MMGR_SetAvailMapPgs",
+            "V86MMGR_NoUMBInitCalls",
+            "V86MMGR_Get_EMS_XMS_Avail",
+            "V86MMGR_Toggle_HMA",
+            "V86MMGR_Dev_Init",
+            "V86MMGR_Alloc_UM_Page"
+        ]
     },
     "PAGESWAP": {
-        id: 0x0007
+        id: 0x0007,
+        fn: [
+            "PageSwap_Get_Version",
+            "PageSwap_Invalid_Service1",
+            "PageSwap_Invalid_Service2",
+            "PageSwap_Invalid_Service3",
+            "PageSwap_Invalid_Service4",
+            "PageSwap_Invalid_Service5",
+            "PageSwap_Test_IO_Valid",
+            "PageSwap_Read_Or_Write",
+            "PageSwap_Grow_File",
+            "PageSwap_Init_File"
+        ]
     },
     "PARITY": {
         id: 0x0008
     },
     "REBOOT": {
-        id: 0x0009
+        id: 0x0009,
+        fn: [
+            "REBOOT_Get_Version",
+            "REBOOT_Enable_Real_Reboot",
+            "REBOOT_Disable_Real_Reboot",
+            "REBOOT_Processor_Now"
+        ]
     },
     "VDD": {
-        id: 0x000A
+        id: 0x000A,
+        fn: [
+            "VDD_Get_Version",
+            "VDD_PIF_State",
+            "VDD_Get_GrabRtn",
+            "VDD_Hide_Cursor",
+            "VDD_Set_VMType",
+            "VDD_Get_ModTime",
+            "VDD_Set_HCurTrk",
+            "VDD_Msg_ClrScrn",
+            "VDD_Msg_ForColor",
+            "VDD_Msg_BakColor",
+            "VDD_Msg_TextOut",
+            "VDD_Msg_SetCursPos",
+            "VDD_Query_Access",
+            "VDD_Check_Update_Soon"
+        ]
     },
     "VSD": {
-        id: 0x000B
+        id: 0x000B,
+        fn: [
+            "VSD_Get_Version",
+            "VSD_Bell",
+            "VSD_SoundOn",
+            "VSD_TakeSoundPort"
+        ]
     },
     "VMD": {
-        id: 0x000C
+        id: 0x000C,
+        alt: "VMOUSE",
+        fn: [
+            "VMD_Get_Version",
+            "VMD_Set_Mouse_Type",
+            "VMD_Get_Mouse_Owner",
+            "VMD_Post_Pointer_Message",
+            "VMD_Set_Cursor_Proc",
+            "VMD_Call_Cursor_Proc",
+            "VMD_Set_Mouse_Data",
+            "VMD_Get_Mouse_Data",
+            "VMD_Manipulate_Pointer_Message",
+            "VMD_Set_Middle_Button",
+            "VMD_Enable_Disable_Mouse_Events",
+            "VMD_Post_Absolute_Pointer_Message",
+        ]
     },
     "VKD": {
-        id: 0x000D
+        id: 0x000D,
+        fn: [
+            "VKD_Get_Version",
+            "VKD_Define_Hot_Key",
+            "VKD_Remove_Hot_Key",
+            "VKD_Local_Enable_Hot_Key",
+            "VKD_Local_Disable_Hot_Key",
+            "VKD_Reflect_Hot_Key",
+            "VKD_Cancel_Hot_Key_State",
+            "VKD_Force_Keys",
+            "VKD_Get_Kbd_Owner",
+            "VKD_Define_Paste_Mode",
+            "VKD_Start_Paste",
+            "VKD_Cancel_Paste",
+            "VKD_Get_Msg_Key",
+            "VKD_Peek_Msg_Key",
+            "VKD_Flush_Msg_Key_Queue",
+            "VKD_Enable_Keyboard",
+            "VKD_Disable_Keyboard",
+            "VKD_Get_Shift_State",
+            "VKD_Filter_Keyboard_Input",
+            "VKD_Put_Byte",
+            "VKD_Set_Shift_State"
+        ]
     },
     "VCD": {
-        id: 0x000E
+        id: 0x000E,
+        fn: [
+            "VCD_Get_Version",
+            "VCD_Set_Port_Global",
+            "VCD_Get_Focus",
+            "VCD_Virtualize_Port",
+            "VCD_Acquire_Port",
+            "VCD_Free_Port",
+            "VCD_Acquire_Port_Windows_Style",
+            "VCD_Free_Port_Windows_Style",
+            "VCD_Steal_Port_Windows_Style",
+            "VCD_Find_COM_Index",
+            "VCD_Set_Port_Global_Special",
+            "VCD_Virtualize_Port_Dynamic",
+            "VCD_Unvirtualize_Port_Dynamic"
+        ]
     },
     "VPD": {
         id: 0x000F
     },
     "BLOCKDEV": {
-        id: 0x0010
+        id: 0x0010,
+        fn: [
+            "BlockDev_Get_Version",
+            "BlockDev_Register_Device",
+            "BlockDev_Find_Int13_Drive",
+            "BlockDev_Get_Device_List",
+            "BlockDev_Send_Command",
+            "BlockDev_Command_Complete",
+            "BlockDev_Synchronous_Command"
+        ]
     },
     "VMCPD": {
-        id: 0x0011
+        id: 0x0011,
+        fn: [
+            "VMCPD_Get_Version",
+            "VMCPD_Get_Virt_State",
+            "VMCPD_Set_Virt_State",
+            "VMCPD_Get_CR0_State",
+            "VMCPD_Set_CR0_State",
+            "VMCPD_Get_Thread_State",
+            "VMCPD_Set_Thread_State",
+            "_VMCPD_Get_FP_Instruction_Size",
+            "VMCPD_Set_Thread_Precision"
+        ]
     },
     "EBIOS": {
-        id: 0x0012
+        id: 0x0012,
+        fn: [
+            "EBIOS_Get_Version",
+            "EBIOS_Get_Unused_Mem"
+        ]
     },
     "BIOSXLAT": {
         id: 0x0013
     },
     "VNETBIOS": {
-        id: 0x0014
+        id: 0x0014,
+        fn: [
+            "VNETBIOS_Get_Version",
+            "VNETBIOS_Register",
+            "VNETBIOS_Submit",
+            "VNETBIOS_Enum",
+            "VNETBIOS_Deregister",
+            "VNETBIOS_Register2",
+            "VNETBIOS_Map",
+            "VNETBIOS_Enum2"
+        ]
     },
     "DOSMGR": {
-        id: 0x0015
+        id: 0x0015,
+        fn: [
+            "DOSMGR_Get_Version",
+            "_DOSMGR_Set_Exec_VM_Data",
+            "DOSMGR_Copy_VM_Drive_State",
+            "_DOSMGR_Exec_VM",
+            "DOSMGR_Get_IndosPtr",
+            "DOSMGR_Add_Device",
+            "DOSMGR_Remove_Device",
+            "DOSMGR_Instance_Device",
+            "DOSMGR_Get_DOS_Crit_Status",
+            "DOSMGR_Enable_Indos_Polling",
+            "DOSMGR_BackFill_Allowed",
+            "DOSMGR_LocalGlobalReg",
+            "DOSMGR_Init_UMB_Area",
+            "DOSMGR_Begin_V86_App",
+            "DOSMGR_End_V86_App",
+            "DOSMGR_Alloc_Local_Sys_VM_Mem",
+            "DOSMGR_Grow_CDSs",
+            "DOSMGR_Translate_Server_DOS_Call",
+            "DOSMGR_MMGR_PSP_Change_Notifier"
+        ]
     },
     "WINLOAD": {
         id: 0x0016
     },
     "SHELL": {
-        id: 0x0017
+        id: 0x0017,
+        fn: [
+            "SHELL_Get_Version",
+            "SHELL_Resolve_Contention",
+            "SHELL_Event",
+            "SHELL_SYSMODAL_Message",
+            "SHELL_Message",
+            "SHELL_GetVMInfo",
+            "_SHELL_PostMessage",
+            "_SHELL_ShellExecute",
+            "_SHELL_PostShellMessage",
+            "SHELL_DispatchRing0AppyEvents",
+            "SHELL_Hook_Properties",
+            "SHELL_Unhook_Properties",
+            "SHELL_Update_User_Activity",
+            "_SHELL_QueryAppyTimeAvailable",
+            "_SHELL_CallAtAppyTime",
+            "_SHELL_CancelAppyTimeEvent",
+            "_SHELL_BroadcastSystemMessage",
+            "_SHELL_HookSystemBroadcast",
+            "_SHELL_UnhookSystemBroadcast",
+            "_SHELL_LocalAllocEx",
+            "_SHELL_LocalFree",
+            "_SHELL_LoadLibrary",
+            "_SHELL_FreeLibrary",
+            "_SHELL_GetProcAddress",
+            "_SHELL_CallDll",
+            "_SHELL_SuggestSingleMSDOSMode",
+            "SHELL_CheckHotkeyAllowed",
+            "_SHELL_GetDOSAppInfo"
+        ]
     },
     "VMPOLL": {
-        id: 0x0018
+        id: 0x0018,
+        fn: [
+            "VMPoll_Get_Version",
+            "VMPoll_Enable_Disable",
+            "VMPoll_Reset_Detection",
+            "VMPoll_Check_Idle"
+        ]
     },
     "VPROD": {
         id: 0x0019
     },
     "DOSNET": {
-        id: 0x001A
+        id: 0x001A,
+        fn: [
+            "DOSNET_Get_Version",
+            "DOSNET_Send_FILESYSCHANGE",
+            "DOSNET_Do_PSP_Adjust"
+        ]
     },
     "VFD": {
-        id: 0x001B
+        id: 0x001B,
+        fn: [
+            "VFD_Get_Version"
+        ]
     },
     "VDD2": {
-        id: 0x001C
+        id: 0x001C,
+        fn: [
+            "VDD2_Get_Version"
+        ]
     },
     "WINDEBUG": {
         id: 0x001D
@@ -2639,10 +2943,29 @@ Interrupts.VxD = {
         id: 0x001F
     },
     "INT13": {
-        id: 0x0020
+        id: 0x0020,
+        fn: [
+            "Int13_Get_Version",
+            "Int13_Device_Registered",
+            "Int13_Translate_VM_Int",
+            "Int13_Hooking_BIOS_Int",
+            "Int13_Unhooking_BIOS_Int"
+        ]
     },
     "PAGEFILE": {
-        id: 0x0021
+        id: 0x0021,
+        fn: [
+            "PageFile_Get_Version",
+            "PageFile_Init_File",
+            "PageFile_Clean_Up",
+            "PageFile_Grow_File",
+            "PageFile_Read_Or_Write",
+            "PageFile_Cancel",
+            "PageFile_Test_IO_Valid",
+            "PageFile_Get_Size_Info",
+            "PageFile_Set_Async_Manager",
+            "PageFile_Call_Async_Manager"
+        ]
     },
     "SCSI": {
         id: 0x0022
@@ -2660,19 +2983,81 @@ Interrupts.VxD = {
         id: 0x0026
     },
     "VXDLDR": {
-        id: 0x0027
+        id: 0x0027,
+        fn: [
+            "VXDLDR_GetVersion",
+            "VXDLDR_LoadDevice",
+            "VXDLDR_UnloadDevice",
+            "VXDLDR_DevInitSucceeded",
+            "VXDLDR_DevInitFailed",
+            "VXDLDR_GetDeviceList",
+            "VXDLDR_UnloadMe",
+            "_PELDR_LoadModule",
+            "_PELDR_GetModuleHandle",
+            "_PELDR_GetModuleUsage",
+            "_PELDR_GetEntryPoint",
+            "_PELDR_GetProcAddress",
+            "_PELDR_AddExportTable",
+            "_PELDR_RemoveExportTable",
+            "_PELDR_FreeModule",
+            "VXDLDR_Notify",
+            "_PELDR_InitCompleted",
+            "_PELDR_LoadModuleEx"
+        ]
     },
     "NDIS": {
         id: 0x0028
     },
     "BIOS_EXT": {
-        id: 0x0029
+        id: 0x0029,
+        fn: [
+            "_BIOSEXTGetVersion",
+            "_BIOSEXTGetHeader",
+            "_BIOSEXTCallBIOS"
+        ]
     },
     "VWIN32": {
         id: 0x002A
     },
     "VCOMM": {
-        id: 0x002B
+        id: 0x002B,
+        fn: [
+            "VCOMM_Get_Version",
+            "_VCOMM_Register_Port_Driver",
+            "_VCOMM_Acquire_Port",
+            "_VCOMM_Release_Port",
+            "_VCOMM_OpenComm",
+            "_VCOMM_SetCommState",
+            "_VCOMM_GetCommState",
+            "_VCOMM_SetupComm",
+            "_VCOMM_TransmitCommChar",
+            "_VCOMM_CloseComm",
+            "_VCOMM_GetCommQueueStatus",
+            "_VCOMM_ClearCommError",
+            "_VCOMM_GetModemStatus",
+            "_VCOMM_GetCommProperties",
+            "_VCOMM_EscapeCommFunction",
+            "_VCOMM_PurgeComm",
+            "_VCOMM_SetCommEventMask",
+            "_VCOMM_GetCommEventMask",
+            "_VCOMM_WriteComm",
+            "_VCOMM_ReadComm",
+            "_VCOMM_EnableCommNotification",
+            "_VCOMM_GetLastError",
+            "_VCOMM_Steal_Port",
+            "_VCOMM_SetReadCallBack",
+            "_VCOMM_SetWriteCallBack",
+            "_VCOMM_Add_Port",
+            "_VCOMM_GetSetCommTimeouts",
+            "_VCOMM_SetWriteRequest",
+            "_VCOMM_SetReadRequest",
+            "_VCOMM_Dequeue_Request",
+            "_VCOMM_Enumerate_DevNodes",
+            "VCOMM_Map_Win32DCB_To_Ring0",
+            "VCOMM_Map_Ring0DCB_To_Win32",
+            "_VCOMM_Get_Contention_Handler",
+            "_VCOMM_Map_Name_To_Resource"
+        ]
     },
     "SPOOLER": {
         id: 0x002C
@@ -2684,7 +3069,100 @@ Interrupts.VxD = {
         id: 0x002E
     },
     "CONFIGMG": {
-        id: 0x0033
+        id: 0x0033,
+        fn: [
+            "_CONFIGMG_Get_Version",
+            "_CONFIGMG_Initialize",
+            "_CONFIGMG_Locate_DevNode",
+            "_CONFIGMG_Get_Parent",
+            "_CONFIGMG_Get_Child",
+            "_CONFIGMG_Get_Sibling",
+            "_CONFIGMG_Get_Device_ID_Size",
+            "_CONFIGMG_Get_Device_ID",
+            "_CONFIGMG_Get_Depth",
+            "_CONFIGMG_Get_Private_DWord",
+            "_CONFIGMG_Set_Private_DWord",
+            "_CONFIGMG_Create_DevNode",
+            "_CONFIGMG_Query_Remove_SubTree",
+            "_CONFIGMG_Remove_SubTree",
+            "_CONFIGMG_Register_Device_Driver",
+            "_CONFIGMG_Register_Enumerator",
+            "_CONFIGMG_Register_Arbitrator",
+            "_CONFIGMG_Deregister_Arbitrator",
+            "_CONFIGMG_Query_Arbitrator_Free_Size",
+            "_CONFIGMG_Query_Arbitrator_Free_Data",
+            "_CONFIGMG_Sort_NodeList",
+            "_CONFIGMG_Yield",
+            "_CONFIGMG_Lock",
+            "_CONFIGMG_Unlock",
+            "_CONFIGMG_Add_Empty_Log_Conf",
+            "_CONFIGMG_Free_Log_Conf",
+            "_CONFIGMG_Get_First_Log_Conf",
+            "_CONFIGMG_Get_Next_Log_Conf",
+            "_CONFIGMG_Add_Res_Des",
+            "_CONFIGMG_Modify_Res_Des",
+            "_CONFIGMG_Free_Res_Des",
+            "_CONFIGMG_Get_Next_Res_Des",
+            "_CONFIGMG_Get_Performance_Info",
+            "_CONFIGMG_Get_Res_Des_Data_Size",
+            "_CONFIGMG_Get_Res_Des_Data",
+            "_CONFIGMG_Process_Events_Now",
+            "_CONFIGMG_Create_Range_List",
+            "_CONFIGMG_Add_Range",
+            "_CONFIGMG_Delete_Range",
+            "_CONFIGMG_Test_Range_Available",
+            "_CONFIGMG_Dup_Range_List",
+            "_CONFIGMG_Free_Range_List",
+            "_CONFIGMG_Invert_Range_List",
+            "_CONFIGMG_Intersect_Range_List",
+            "_CONFIGMG_First_Range",
+            "_CONFIGMG_Next_Range",
+            "_CONFIGMG_Dump_Range_List",
+            "_CONFIGMG_Load_DLVxDs",
+            "_CONFIGMG_Get_DDBs",
+            "_CONFIGMG_Get_CRC_CheckSum",
+            "_CONFIGMG_Register_DevLoader",
+            "_CONFIGMG_Reenumerate_DevNode",
+            "_CONFIGMG_Setup_DevNode",
+            "_CONFIGMG_Reset_Children_Marks",
+            "_CONFIGMG_Get_DevNode_Status",
+            "_CONFIGMG_Remove_Unmarked_Children",
+            "_CONFIGMG_ISAPNP_To_CM",
+            "_CONFIGMG_CallBack_Device_Driver",
+            "_CONFIGMG_CallBack_Enumerator",
+            "_CONFIGMG_Get_Alloc_Log_Conf",
+            "_CONFIGMG_Get_DevNode_Key_Size",
+            "_CONFIGMG_Get_DevNode_Key",
+            "_CONFIGMG_Read_Registry_Value",
+            "_CONFIGMG_Write_Registry_Value",
+            "_CONFIGMG_Disable_DevNode",
+            "_CONFIGMG_Enable_DevNode",
+            "_CONFIGMG_Move_DevNode",
+            "_CONFIGMG_Set_Bus_Info",
+            "_CONFIGMG_Get_Bus_Info",
+            "_CONFIGMG_Set_HW_Prof",
+            "_CONFIGMG_Recompute_HW_Prof",
+            "_CONFIGMG_Query_Change_HW_Prof",
+            "_CONFIGMG_Get_Device_Driver_Private_DWord",
+            "_CONFIGMG_Set_Device_Driver_Private_DWord",
+            "_CONFIGMG_Get_HW_Prof_Flags",
+            "_CONFIGMG_Set_HW_Prof_Flags",
+            "_CONFIGMG_Read_Registry_Log_Confs",
+            "_CONFIGMG_Run_Detection",
+            "_CONFIGMG_Call_At_Appy_Time",
+            "_CONFIGMG_Fail_Change_HW_Prof",
+            "_CONFIGMG_Set_Private_Problem",
+            "_CONFIGMG_Debug_DevNode",
+            "_CONFIGMG_Get_Hardware_Profile_Info",
+            "_CONFIGMG_Register_Enumerator_Function",
+            "_CONFIGMG_Call_Enumerator_Function",
+            "_CONFIGMG_Add_ID",
+            "_CONFIGMG_Find_Range",
+            "_CONFIGMG_Get_Global_State",
+            "_CONFIGMG_Broadcast_Device_Change_Message",
+            "_CONFIGMG_Call_DevNode_Handler",
+            "_CONFIGMG_Remove_Reinsert_All"
+        ]
     },
     "DWCFGMG": {
         id: 0x0034
@@ -2693,28 +3171,188 @@ Interrupts.VxD = {
         id: 0x0035
     },
     "VFBACKUP": {
-        id: 0x0036
+        id: 0x0036,
+        fn: [
+            "VFBACKUP_Get_Version",
+            "VFBACKUP_Lock_NEC",
+            "VFBACKUP_UnLock_NEC",
+            "VFBACKUP_Register_NEC",
+            "VFBACKUP_Register_VFD",
+            "VFBACKUP_Lock_All_Ports"
+        ]
     },
     "ENABLE": {
-        id: 0x0037
+        id: 0x0037,
+        fn: [
+            "VMINI_GetVersion",
+            "VMINI_Update",
+            "VMINI_Status",
+            "VMINI_DisplayError",
+            "VMINI_SetTimeStamp",
+            "VMINI_Siren",
+            "VMINI_RegisterAccess",
+            "VMINI_GetData",
+            "VMINI_ShutDownItem",
+            "VMINI_RegisterSK"
+        ]
     },
     "VCOND": {
-        id: 0x0038
+        id: 0x0038,
+        fn: [
+            "VCOND_Get_Version",
+            "VCOND_Launch_ConApp_Inherited"
+        ]
     },
     "ISAPNP": {
         id: 0x003C
     },
     "BIOS": {
-        id: 0x003D
+        id: 0x003D,
+        fn: [
+            "_BIOSGetVersion",
+            "_BIOSSoftUndock",
+            "_BIOSGetCapabilities",
+            "_BIOSGetAPMTable"
+        ]
     },
-    "IFSMgr": {
-        id: 0x0040
+    "IFSMGR": {
+        id: 0x0040,
+        fn: [
+            "IFSMgr_Get_Version",
+            "IFSMgr_RegisterMount",
+            "IFSMgr_RegisterNet",
+            "IFSMgr_RegisterMailSlot",
+            "IFSMgr_Attach",
+            "IFSMgr_Detach",
+            "IFSMgr_Get_NetTime",
+            "IFSMgr_Get_DOSTime",
+            "IFSMgr_SetupConnection",
+            "IFSMgr_DerefConnection",
+            "IFSMgr_ServerDOSCall",
+            "IFSMgr_CompleteAsync",
+            "IFSMgr_RegisterHeap",
+            "IFSMgr_GetHeap",
+            "IFSMgr_RetHeap",
+            "IFSMgr_CheckHeap",
+            "IFSMgr_CheckHeapItem",
+            "IFSMgr_FillHeapSpare",
+            "IFSMgr_Block",
+            "IFSMgr_Wakeup",
+            "IFSMgr_Yield",
+            "IFSMgr_SchedEvent",
+            "IFSMgr_QueueEvent",
+            "IFSMgr_KillEvent",
+            "IFSMgr_FreeIOReq",
+            "IFSMgr_MakeMailSlot",
+            "IFSMgr_DeleteMailSlot",
+            "IFSMgr_WriteMailSlot",
+            "IFSMgr_PopUp",
+            "IFSMgr_printf",
+            "IFSMgr_AssertFailed",
+            "IFSMgr_LogEntry",
+            "IFSMgr_DebugMenu",
+            "IFSMgr_DebugVars",
+            "IFSMgr_GetDebugString",
+            "IFSMgr_GetDebugHexNum",
+            "IFSMgr_NetFunction",
+            "IFSMgr_DoDelAllUses",
+            "IFSMgr_SetErrString",
+            "IFSMgr_GetErrString",
+            "IFSMgr_SetReqHook",
+            "IFSMgr_SetPathHook",
+            "IFSMgr_UseAdd",
+            "IFSMgr_UseDel",
+            "IFSMgr_InitUseAdd",
+            "IFSMgr_ChangeDir",
+            "IFSMgr_DelAllUses",
+            "IFSMgr_CDROM_Attach",
+            "IFSMgr_CDROM_Detach",
+            "IFSMgr_Win32DupHandle",
+            "IFSMgr_Ring0_FileIO",
+            "IFSMgr_Win32_Get_Ring0_Handle",
+            "IFSMgr_Get_Drive_Info",
+            "IFSMgr_Ring0GetDriveInfo",
+            "IFSMgr_BlockNoEvents",
+            "IFSMgr_NetToDosTime",
+            "IFSMgr_DosToNetTime",
+            "IFSMgr_DosToWin32Time",
+            "IFSMgr_Win32ToDosTime",
+            "IFSMgr_NetToWin32Time",
+            "IFSMgr_Win32ToNetTime",
+            "IFSMgr_MetaMatch",
+            "IFSMgr_TransMatch",
+            "IFSMgr_CallProvider",
+            "UniToBCS",
+            "UniToBCSPath",
+            "BCSToUni",
+            "UniToUpper",
+            "UniCharToOEM",
+            "CreateBasis",
+            "MatchBasisName",
+            "AppendBasisTail",
+            "FcbToShort",
+            "ShortToFcb",
+            "IFSMgr_ParsePath",
+            "Query_PhysLock",
+            "_VolFlush",
+            "NotifyVolumeArrival",
+            "NotifyVolumeRemoval",
+            "QueryVolumeRemoval",
+            "IFSMgr_FSDUnmountCFSD",
+            "IFSMgr_GetConversionTablePtrs",
+            "IFSMgr_CheckAccessConflict",
+            "IFSMgr_LockFile",
+            "IFSMgr_UnlockFile",
+            "IFSMgr_RemoveLocks",
+            "IFSMgr_CheckLocks",
+            "IFSMgr_CountLocks",
+            "IFSMgr_ReassignLockFileInst",
+            "IFSMgr_UnassignLockList",
+            "IFSMgr_MountChildVolume",
+            "IFSMgr_UnmountChildVolume",
+            "IFSMgr_SwapDrives",
+            "IFSMgr_FSDMapFHtoIOREQ",
+            "IFSMgr_FSDParsePath",
+            "IFSMgr_FSDAttachSFT",
+            "IFSMgr_GetTimeZoneBias",
+            "IFSMgr_PNPEvent",
+            "IFSMgr_RegisterCFSD",
+            "IFSMgr_Win32MapExtendedHandleToSFT",
+            "IFSMgr_DbgSetFileHandleLimit",
+            "IFSMgr_Win32MapSFTToExtendedHandle",
+            "IFSMgr_FSDGetCurrentDrive",
+            "IFSMgr_InstallFileSystemApiHook",
+            "IFSMgr_RemoveFileSystemApiHook",
+            "IFSMgr_RunScheduledEvents",
+            "IFSMgr_CheckDelResource",
+            "IFSMgr_Win32GetVMCurdir",
+            "IFSMgr_SetupFailedConnection",
+            "_GetMappedErr",
+            "ShortToLossyFcb",
+            "IFSMgr_GetLockState",
+            "BcsToBcs",
+            "IFSMgr_SetLoopback",
+            "IFSMgr_ClearLoopback",
+            "IFSMgr_ParseOneElement",
+            "BcsToBcsUpper"
+        ]
     },
     "VCDFSD": {
-        id: 0x0041
+        id: 0x0041,
+        fn: [
+            "_VCDFSD_Get_Version",
+            "_VCDFSD_GetCDFSInfo",
+            "_VCDFSD_Hook",
+            "_VCDFSD_Unhook"
+        ]
     },
     "MRCI2": {
-        id: 0x0042
+        id: 0x0042,
+        fn: [
+            "MRCI_Get_Version",
+            "_MRCI_Fast_Compress",
+            "_MRCI_Fast_Decompress"
+        ]
     },
     "PCI": {
         id: 0x0043
@@ -2732,7 +3370,14 @@ Interrupts.VxD = {
         id: 0x0047
     },
     "PERF": {
-        id: 0x0048
+        id: 0x0048,
+        fn: [
+            "PERF_Get_Version",
+            "PERF_Server_Register",
+            "PERF_Server_Deregister",
+            "PERF_Server_Add_Stat",
+            "PERF_Server_Remove_Stat"
+        ]
     },
     "AWREDIR": {
         id: 0x0049
@@ -2750,7 +3395,11 @@ Interrupts.VxD = {
         id: 0x0063
     },
     "VIME": {
-        id: 0x0064
+        id: 0x0064,
+        fn: [
+            "VIME_Register_UI",
+            "VIME_Control_IME"
+        ]
     },
     "VHBIOSD": {
         id: 0x0065

@@ -1024,11 +1024,11 @@ export default class Disk extends Component {
      * addModuleInfo(sector)
      *
      * @this {Disk}
-     * @param {Sector} sector
+     * @param {Sector|null} sector
      */
     addModuleInfo(sector)
     {
-        if (SYMBOLS && sector.file) {
+        if (SYMBOLS && sector && sector.file) {
             let module = sector.file.module;
             if (module) {
                 this.aModules[module.name] = module;
