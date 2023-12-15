@@ -69,9 +69,10 @@ import closureCompiler from "google-closure-compiler";
 import gulpSourceMaps from "gulp-sourcemaps";
 import pcjslib from "./tools/modules/pcjslib.js";
 
-var argv = pcjslib.getArgs()[1];
-var gulpClosureCompiler = closureCompiler.gulp();
-var pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"));
+let argv = pcjslib.getArgs()[1];
+let gulpClosureCompiler = closureCompiler.gulp();
+let pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"));
+let eol = process.platform === "win32"? "\r\n" : "\n";
 
 /**
  * Every machine must necessarily have a unique machine type ID (eg, "ti57").
@@ -96,9 +97,9 @@ var pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"));
 /**
  * @type {Object.<string,Machine>}
  */
-var machines = JSON.parse(fs.readFileSync("./machines/machines.json", "utf8"));
+let machines = JSON.parse(fs.readFileSync("./machines/machines.json", "utf8"));
 if (!machines.shared) machines.shared = {};
-var siteHost = "https://www.pcjs.org";
+let siteHost = "https://www.pcjs.org";
 
 /*
  * This is the set of the disk collections (stored as JSON) that the PCx86 floppy disk component (FDC) typically
@@ -115,21 +116,21 @@ var siteHost = "https://www.pcjs.org";
  * Another advantage of the combined file is the PCx86 FDC can now choose to load the combined file at runtime as well,
  * instead of using the separate files, and speed up machine page loads slightly.
  */
-var aSrcDiskCollections = [
+let aSrcDiskCollections = [
     "./disks/diskettes/pcx86/diskettes.json",
     "./disks/gamedisks/pcx86/diskettes.json",
     "./disks/miscdisks/pcx86/diskettes.json"
 ];
-var sDstDiskCollection = "./machines/pcx86/diskettes.json";
+let sDstDiskCollection = "./machines/pcx86/diskettes.json";
 
 if (pkg.homepage) {
     let match = pkg.homepage.match(/^(https?:\/\/[^/]*)(.*)/);
     if (match) siteHost = match[1];
 }
 
-var aMachines = Object.keys(machines);
-var aConcatTasks = [], aCompileTasks = [];
-var aWatchedFiles = aSrcDiskCollections.slice();
+let aMachines = Object.keys(machines);
+let aConcatTasks = [], aCompileTasks = [];
+let aWatchedFiles = aSrcDiskCollections.slice();
 
 aMachines.forEach(function(machineID)
 {
@@ -234,17 +235,17 @@ aMachines.forEach(function(machineID)
             .pipe(gulpForEach(function(stream, file) {
                 aMachinesOutdated.push(machineID);
                 return stream
-                    .pipe(gulpHeader('/**\n * @copyright ' + file.path.replace(/.*[\\/](machines)[\\/](.*)/, "https://www.pcjs.org/$1/$2").replace(/\\/g,'/') + ' (C) 2012-' + pkg.year + ' Jeff Parsons\n */\n\n'))
-                    .pipe(gulpReplace(/APPVERSION = "0.00"/g, 'APPVERSION = "' + machineVersion + '"'))
-                    .pipe(gulpReplace(/(var\s+VERSION\s*=\s*)"[0-9.]*"/g, '$1"' + machineVersion + '"'))
-                    .pipe(gulpReplace(/(^|\n)[ \t]*(['"])use strict\2;?/g, ""))
-                    .pipe(gulpReplace(/^import[ \t]+[^\n]*\n/gm, ""))
-                    .pipe(gulpReplace(/^export[ \t]+(.*?;\r?\n|default[ \t]+|\{.*?\}|)/gm, ""))
+                    .pipe(gulpHeader('/**' + eol + ' * @copyright ' + file.path.replace(/.*[\\/](machines)[\\/](.*)/, "https://www.pcjs.org/$1/$2").replace(/\\/g,'/') + ' (C) 2012-' + pkg.year + ' Jeff Parsons' + eol + ' */' + eol + eol))
+                    .pipe(gulpReplace(/(\s+APPVERSION\s*=\s*)"(0\.00|[0-9]\.XX)"/g, '$1"' + machineVersion + '"'))
+                    .pipe(gulpReplace(/(\s+VERSION\s*=\s*)"[0-9X.]*"/g, '$1$2"' + machineVersion + '"'))
+                    .pipe(gulpReplace(/(^|\r?\n)[ \t]*(['"])use strict\2;?/gm, ""))
+                    .pipe(gulpReplace(/^import[ \t]+[^\r\n]*\r?\n/gm, ""))
+                    .pipe(gulpReplace(/^export[ \t]+(.*;\r?\n|default[ \t]+|)/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*var\s+\S+\s*=\s*require\((['"]).*?\1\)[^;]*;/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*(if\s+\(NODE\)\s*|)module\.exports\s*=\s*[^;]*;/gm, ""))
-                    .pipe(gulpReplace(/\/\*\*\s*\*\s*@fileoverview[\s\S]*?\*\/\s*/g, ""))
-                    .pipe(gulpReplace(/[ \t]*if\s*\(NODE\)\s*({[^}]*}|[^\n]*)(\n|$)/gm, ""))
-                    .pipe(gulpReplace(/[ \t]*if\s*\(typeof\s+module\s*!==?\s*(['"])undefined\1\)\s*({[^}]*}|[^\n]*)(\n|$)/gm, ""))
+                    .pipe(gulpReplace(/\/\*\*\s*\*\s*@fileoverview[\s\S]*?\*\/\s*/gm, ""))
+                    .pipe(gulpReplace(/[ \t]*if\s*\(NODE\)\s*({[^}]*}|[^\r\n]*)(\r?\n|$)/gm, ""))
+                    .pipe(gulpReplace(/[ \t]*if\s*\(typeof\s+module\s*!==?\s*(['"])undefined\1\)\s*({[^}]*}|[^\r\n]*)(\r?\n|$)/gm, ""))
                     .pipe(gulpReplace(/\/\*\*[^@]*@typedef\s*{([A-Z][A-Za-z0-9_<>.]+)}\s*(\S+)\s*([\s\S]*?)\*\//g, function(match, def, type, props) {
                         let sType = "/** @typedef {", sProps = "";
                         let reProps = /@property\s*{([^}]*)}\s*(\[|)([^\s\]]+)]?/g, matchProps;
@@ -257,13 +258,13 @@ aMachines.forEach(function(machineID)
                         } else {
                             sType += "{ " + sProps + " }";
                         }
-                        sType += "} */\nlet " + type + ";";
+                        sType += "} */" + eol + "let " + type + ";";
                         return sType;
                     }))
-                    .pipe(gulpReplace(/[ \t]*(if *\(DEBUG\) *|if *\(MAXDEBUG\) *|)[A-Za-z_][A-Za-z0-9_.]*(\.assert\(|\.printf\(Messages\.DEBUG|\.printf\(Device\.MESSAGE\.DEBUG)[^\n]*\);[^\n]*/g, ""));
+                    .pipe(gulpReplace(/[ \t]*(if *\(DEBUG\) *|if *\(MAXDEBUG\) *|)[A-Za-z_][A-Za-z0-9_.]*(\.assert\(|\.printf\(Messages\.DEBUG|\.printf\(Device\.MESSAGE\.DEBUG)[^\r\n]*\);[^\r\n]*/g, ""));
                 }))
             .pipe(gulpConcat(machineUncompiledFile))
-        //  .pipe(gulpHeader('"use strict";\n\n'))
+        //  .pipe(gulpHeader('"use strict";' + eol + eol))
             .pipe(gulp.dest(machineReleaseDir));
     });
 
@@ -292,7 +293,7 @@ aMachines.forEach(function(machineID)
     });
 });
 
-var combineTask = true;
+let combineTask = true;
 for (let i = 0; i < aSrcDiskCollections.length; i++) {
     if (!fs.existsSync(aSrcDiskCollections[i])) {
         combineTask = false;
