@@ -5,7 +5,7 @@
 /**
  * @define {string}
  */
-const APPVERSION = "2.XX";              // this @define is overridden by the Closure Compiler with the version in machines.json
+const APPVERSION = "2.23";              // this @define is overridden by the Closure Compiler with the version in machines.json
 
 /**
  * COMPILED is false by default; overridden with true in the Closure Compiler release.

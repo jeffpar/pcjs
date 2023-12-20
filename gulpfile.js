@@ -263,7 +263,7 @@ aMachines.forEach(function(machineID)
                     }))
                     .pipe(gulpReplace(/[ \t]*(if *\(DEBUG\) *|if *\(MAXDEBUG\) *|)[A-Za-z_][A-Za-z0-9_.]*(\.assert\(|\.printf\(Messages\.DEBUG|\.printf\(Device\.MESSAGE\.DEBUG)[^\r\n]*\);[^\r\n]*/g, ""));
                 }))
-            .pipe(gulpConcat(machineUncompiledFile))
+            .pipe(gulpConcat(machineUncompiledFile, {newLine: eol}))
         //  .pipe(gulpHeader('"use strict";' + eol + eol))
             .pipe(gulp.dest(machineReleaseDir));
     });
