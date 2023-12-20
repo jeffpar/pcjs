@@ -287,10 +287,10 @@ aMachines.forEach(function(machineID)
                     create_source_map: true
                   }))                                           // gulp-sourcemaps automatically adds the sourcemap url comment
                   .pipe(gulpSourceMaps.mapSources(function(sourcePath, file) {
+                    // console.log("mapSources: " + sourcePath + " (" + srcFile + ")");
                     if (sourcePath == srcFile.replaceAll('\\', '/')) {
                         sourcePath = path.basename(srcFile);    // for reasons unknown, sourcePath is a full path in Windows, so we apply basename to make macOS and Windows consistent
                     }
-                    console.log("mapSources: " + sourcePath + " (" + srcFile + ")");
                     return sourcePath;
                   }))
                   .pipe(gulpSourceMaps.write('./', {includeContent: false}))
