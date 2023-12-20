@@ -237,7 +237,7 @@ aMachines.forEach(function(machineID)
                 return stream
                     .pipe(gulpHeader('/**' + eol + ' * @copyright ' + file.path.replace(/.*[\\/](machines)[\\/](.*)/, "https://www.pcjs.org/$1/$2").replace(/\\/g,'/') + ' (C) 2012-' + pkg.year + ' Jeff Parsons' + eol + ' */' + eol + eol))
                     .pipe(gulpReplace(/(\s+APPVERSION\s*=\s*)"(0\.00|[0-9]\.XX)"/g, '$1"' + machineVersion + '"'))
-                    .pipe(gulpReplace(/(\s+VERSION\s*=\s*)"[0-9X.]*"/g, '$1$2"' + machineVersion + '"'))
+                    .pipe(gulpReplace(/(\s+VERSION\s*=\s*)"[0-9X.]*"/g, '$1"' + machineVersion + '"'))
                     .pipe(gulpReplace(/(^|\r?\n)[ \t]*(['"])use strict\2;?/gm, ""))
                     .pipe(gulpReplace(/^import[ \t]+[^\r\n]*\r?\n/gm, ""))
                     .pipe(gulpReplace(/^export[ \t]+(.*;\r?\n|default[ \t]+|)/gm, ""))
