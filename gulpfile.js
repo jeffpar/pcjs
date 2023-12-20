@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-/*
+/**
  * Tasks
  *
  *      default (eg: `gulp` or `gulp default`)
@@ -101,7 +101,7 @@ let machines = JSON.parse(fs.readFileSync("./machines/machines.json", "utf8"));
 if (!machines.shared) machines.shared = {};
 let siteHost = "https://www.pcjs.org";
 
-/*
+/**
  * This is the set of the disk collections (stored as JSON) that the PCx86 floppy disk component (FDC) typically
  * loads -- although the exact set can vary, and some machines, like PCSIG08, load several additional collections.
  *
@@ -159,7 +159,7 @@ aMachines.forEach(function(machineID)
     let machineReleaseFile  = machineID + ".js";
     let machineUncompiledFile  = machineID + "-uncompiled.js";
 
-    /*
+    /**
      * The following @defines should always be overridden, even if the Machine didn't list them.
      */
     let alwaysDefine = ["MAXDEBUG", "DEBUG", "COMPILED"];
@@ -204,7 +204,7 @@ aMachines.forEach(function(machineID)
     let machineFiles = Machine.css || machines.shared.css || [];
     machineFiles = machineFiles.concat(Machine.xsl || machines.shared.xsl || []);
 
-    /*
+    /**
      * The gulpNewer() plugin doesn't seem to work properly with the closureCompiler() plugin;
      * if the destination file is newer than the source, the compiler still gets invoked, but
      * with an incomplete stream, resulting in bogus errors.  My work-around is to compare filetimes
@@ -314,11 +314,11 @@ if (combineTask) {
         let mergeOptions = {
             fileName: sDstDiskCollection,
             edit: function(collection, file) {
-                /*
-                * Each parsed collection should have a '@server' property at the top level; the combined file
-                * obviously can't have multiple '@server' properties at the top level, so we propagate it to each
-                * of the top level objects and then remove it.
-                */
+                /**
+                 * Each parsed collection should have a '@server' property at the top level; the combined file
+                 * obviously can't have multiple '@server' properties at the top level, so we propagate it to each
+                 * of the top level objects and then remove it.
+                 */
                 if (collection['@server']) {
                     let keys = Object.keys(collection);
                     for (let k = 0; k < keys.length; k++) {
@@ -366,7 +366,7 @@ gulp.task("version", function() {
 
 gulp.task("copyright", function(done) {
     let baseDir = "./";
-    /*
+    /**
      * TODO: Although I've added the 'skipBinary' option to gulpReplace(), to avoid mucking up files like ATT4425.ttf,
      * it would also be nice if we could avoid rewriting ANY file that contains no matches, because Gulp's default behavior
      * seems to be rewrite EVERYTHING, at least when we're doing these sorts of "in place" operations.
