@@ -286,6 +286,10 @@ aMachines.forEach(function(machineID)
                     js_output_file: machineReleaseFile,         // NOTE: if we go back to doing debugger/non-debugger releases, this must be updated
                     create_source_map: true
                   }))                                           // gulp-sourcemaps automatically adds the sourcemap url comment
+                  .pipe(gulpSourceMaps.mapSources(function(sourcePath, file) {
+                    console.log("mapSources: " + sourcePath);
+                    return sourcePath;
+                  }))
                   .pipe(gulpSourceMaps.write('./', {includeContent: false}))
                   .pipe(gulp.dest(machineReleaseDir));
         }
