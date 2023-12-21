@@ -80124,7 +80124,7 @@ class Debuggerx86 extends DbgLib {
                 let nDelta, sDelta, s;
                 if (aSymbol[0]) {
                     sDelta = "";
-                    nDelta = dbgAddr.off - aSymbol[1];
+                    nDelta = (dbgAddr.off >>> 0) - aSymbol[1];
                     if (nDelta) sDelta = " + " + StrLib.toHex(nDelta, 0, true);
                     s = aSymbol[0] + " (" + this.toHexOffset(aSymbol[1], dbgAddr.sel) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
@@ -80132,7 +80132,7 @@ class Debuggerx86 extends DbgLib {
                 }
                 if (aSymbol.length > 4 && aSymbol[4]) {
                     sDelta = "";
-                    nDelta = aSymbol[5] - dbgAddr.off;
+                    nDelta = aSymbol[5] - (dbgAddr.off >>> 0);
                     if (nDelta) sDelta = " - " + StrLib.toHex(nDelta, 0, true);
                     s = aSymbol[4] + " (" + this.toHexOffset(aSymbol[5], dbgAddr.sel) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
