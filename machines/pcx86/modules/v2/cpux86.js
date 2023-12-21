@@ -4367,6 +4367,26 @@ export default class CPUx86 extends CPU {
     }
 
     /**
+     * setDebugCheck(fCheck)
+     *
+     * This interface has been added for the Debugger, for situations where the Debugger has altered
+     * the debugCheck state but we don't necessarily want to stop the current instruction burst; ordinarily,
+     * we update the X86.INTFLAG.DEBUGGER flag only when we're about to start a new instruction burst.
+     *
+     * @this {CPUx86}
+     * @param {boolean} fCheck
+     */
+    setDebugCheck(fCheck)
+    {
+        this.flags.debugCheck = fCheck;
+        if (fCheck) {
+            this.intFlags |= X86.INTFLAG.DEBUGGER;
+        } else {
+            this.intFlags &= ~X86.INTFLAG.DEBUGGER;
+        }
+    }
+
+    /**
      * stepCPU(nMinCycles)
      *
      * NOTE: Single-stepping should not be confused with the Trap flag; single-stepping is a Debugger
@@ -4404,12 +4424,7 @@ export default class CPUx86 extends CPU {
         /*
          * debugCheck is true if we need to "check" every instruction with the Debugger.
          */
-        this.flags.debugCheck = (DEBUGGER && this.dbg && this.dbg.checksEnabled());
-        if (this.flags.debugCheck) {
-            this.intFlags |= X86.INTFLAG.DEBUGGER;
-        } else {
-            this.intFlags &= ~X86.INTFLAG.DEBUGGER;
-        }
+        this.setDebugCheck(DEBUGGER && this.dbg && this.dbg.checksEnabled());
 
         /*
          * nDebugState is checked only when debugCheck is true, and its sole purpose is to tell the first call

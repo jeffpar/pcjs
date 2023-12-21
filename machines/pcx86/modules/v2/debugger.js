@@ -3706,6 +3706,13 @@ export default class Debuggerx86 extends DbgLib {
                 dbgAddr.nDebugState = this.getLong(dbgAddr);
                 this.incAddr(dbgAddr, -2);
                 this.setTempBreakpoint(dbgAddr);
+                /**
+                 * We also set the CPU's debugCheck flag, to guarantee that the CPU will start calling
+                 * checkInstruction(); note that we don't bother with a corresponding setDebugCheck(false)
+                 * when the last VxD breakpoint is removed, because debugCheck is automatically updated
+                 * at the start of every burst.
+                 */
+                this.cpu.setDebugCheck(true);
             }
             if (this.vectorHalt) {
                 let i = this.findVectorBP(vector);
