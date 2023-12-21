@@ -6041,7 +6041,7 @@ MESSAGE.NAMES['key']        = MESSAGE.KEY;
  */
 
 const X86 = {
-    /*
+    /**
      * CPU model numbers (supported)
      */
     MODEL_8086:     8086,
@@ -6051,7 +6051,7 @@ const X86 = {
     MODEL_80286:    80286,
     MODEL_80386:    80386,
 
-    /*
+    /**
      * 80386 CPU stepping identifiers (supported)
      */
     STEPPING_80386_A0: (80386+0xA0),    // we have very little information about this stepping...
@@ -6064,7 +6064,7 @@ const X86 = {
     STEPPING_80386_D1: (80386+0xD1),
     STEPPING_80386_D2: (80386+0xD2),
 
-    /*
+    /**
      * This constant is used to mark points in the code where the physical address being returned
      * is invalid and should not be used.
      *
@@ -6081,9 +6081,9 @@ const X86 = {
      * certain that this file is included BEFORE the first reference to any of these properties, that
      * automatic inlining will no longer occur.
      */
-    ADDR_INVALID: -1,
+    ADDR_INVALID: 0x100000000,
 
-    /*
+    /**
      * Processor Exception Interrupts
      *
      * Of the following exceptions, all are designed to be restartable, except for 0x08 and 0x09 (and 0x0D
@@ -6125,7 +6125,7 @@ const X86 = {
         PF_FAULT:   0x0E,       // Page Fault                               (#PF: fault, with error code)
         MF_FAULT:   0x10        // Math Fault; see ESC or WAIT              (#MF: fault, no error code)
     },
-    /*
+    /**
      * Processor Status flag definitions (stored in regPS)
      */
     PS: {
@@ -6151,7 +6151,7 @@ const X86 = {
         VM:    0x20000      // bit 17: Virtual 8086 Mode (80386 only)
     },
     CR0: {
-        /*
+        /**
          * Machine Status Word (MSW) bit definitions
          */
         MSW: {
@@ -6216,7 +6216,7 @@ const X86 = {
                 MASK:                       0x1F00,
                 SEG:                        0x1000,
                 NONSEG:                     0x0F00,
-                /*
+                /**
                  * The following bits apply only when SEG is set
                  */
                 CODE:                       0x0800,     // set for CODE, clear for DATA
@@ -6225,12 +6225,12 @@ const X86 = {
                 WRITABLE:                   0x0200,     // DATA: set if writable, clear if read-only
                 CONFORMING:                 0x0400,     // CODE: set if conforming, clear if not
                 EXPDOWN:                    0x0400,     // DATA: set if expand-down, clear if not
-                /*
+                /**
                  * Assorted bits that apply only within NONSEG values
                  */
                 TSS_BUSY:                   0x0200,
                 NONSEG_386:                 0x0800,     // 80386 and up
-                /*
+                /**
                  * The following are all the possible (valid) types (well, except for the variations
                  * of DATA and CODE where the ACCESSED bit (0x0100) may also be set)
                  */
@@ -6267,7 +6267,7 @@ const X86 = {
             OFFSET:     0x6,
             LIMIT1619:                      0x000F,
             AVAIL:                          0x0010,     // NOTE: set in various descriptors in OS/2
-            /*
+            /**
              * The BIG bit is known as the D bit for code segments; when set, all addresses and operands
              * in that code segment are assumed to be 32-bit.
              *
@@ -6359,7 +6359,7 @@ const X86 = {
         SELMASK:    0xFFFC
     },
     RESULT: {
-        /*
+        /**
          * Flags were originally computed using 16-bit result registers:
          *
          *      CF: resultZeroCarry & resultSize (ie, 0x100 or 0x10000)
@@ -6431,7 +6431,7 @@ const X86 = {
         LOGIC:      0x1A,       // all logical flags are cached; see setLogicResult()
         NOTCF:      0x3E        // all result flags EXCEPT carry are cached
     },
-    /*
+    /**
      * Bit values for opFlags, which are all reset to zero prior to each instruction
      */
     OPFLAG: {
@@ -6451,7 +6451,7 @@ const X86 = {
         DBEXC:      0x2000,     // a DB_EXC exception occurred during the current instruction
         IRET:       0x4000      // remembers if we arrived at the current instruction via IRET (used for 8086/8088 "feature" simulation)
     },
-    /*
+    /**
      * Bit values for intFlags
      */
     INTFLAG: {
@@ -6462,7 +6462,7 @@ const X86 = {
         DMA:        0x08,       // async DMA operation in progress
         DEBUGGER:   0x10        // debugger checks enabled
     },
-    /*
+    /**
      * Common opcodes (and/or any opcodes we need to refer to explicitly)
      */
     OPCODE: {
@@ -6543,7 +6543,7 @@ const X86 = {
         CALLMASK:   0x38FF,     // mask 2-byte GRP4W opcodes with this before comparing to CALLW or CALLFDW
         UD2:        0x0B0F      // UD2 (invalid opcode "guaranteed" to generate UD_FAULT on all post-8086 processors)
     },
-    /*
+    /**
      * Floating Point Unit (FPU), aka Numeric Data Processor (NDP), aka Numeric Processor Extension (NPX), aka Coprocessor definitions
      */
     FPU: {
@@ -6598,7 +6598,7 @@ const X86 = {
             EMPTY:  0x3,
             MASK:   0x3
         }
-        /*
+        /**
             C3 C2 C1 C0     Condition Code (CC) values following an Examine
 
             0  0  0  0      Valid, positive unnormalized (+Unnormal)
@@ -6861,7 +6861,7 @@ const X86 = {
         nOpCyclesXchgRM:            5,
         nOpCyclesXLAT:              5
     },
-    /*
+    /**
      * TODO: All 80386 cycle counts are based on 80286 counts until I have time to hand-generate an 80386-specific table;
      * the values below are used by selected 32-bit opcode handlers only.
      */
@@ -6876,7 +6876,7 @@ const X86 = {
     }
 };
 
-/*
+/**
  * BACKTRACK-related definitions (used only if BACKTRACK is defined)
  */
 X86.BTINFO = {
@@ -6884,7 +6884,7 @@ X86.BTINFO = {
     SP_HI:  0
 };
 
-/*
+/**
  * These PS flags are always stored directly in regPS for the 8086/8088, hence the
  * "direct" designation; other processors must adjust these bits accordingly.  The final
  * adjusted value is stored in PS_DIRECT (ie, 80286 and up also include PS.IOPL.MASK and
@@ -6892,25 +6892,25 @@ X86.BTINFO = {
  */
 X86.PS_DIRECT_8086 = (X86.PS.TF | X86.PS.IF | X86.PS.DF);
 
-/*
+/**
  * These are the default "always set" PS bits for the 8086/8088; other processors must
  * adjust these bits accordingly.  The final adjusted value is stored in PS_SET.
  */
 X86.PS_SET_8086 = (X86.PS.BIT1 | X86.PS.IOPL.MASK | X86.PS.NT | X86.PS.BIT15);
 
-/*
+/**
  * These PS arithmetic and logical flags may be "cached" across several result registers;
  * whether or not they're currently cached depends on the RESULT bits in resultType.
  */
 X86.PS_CACHED = (X86.PS.CF | X86.PS.PF | X86.PS.AF | X86.PS.ZF | X86.PS.SF | X86.PS.OF);
 
-/*
+/**
  * PS_SAHF is a subset of the arithmetic flags, and refers only to those flags that the
  * SAHF and LAHF "8080 legacy" opcodes affect.
  */
 X86.PS_SAHF = (X86.PS.CF | X86.PS.PF | X86.PS.AF | X86.PS.ZF | X86.PS.SF);
 
-/*
+/**
  * Before we zero opFlags, we first see if any of the following PREFIX bits were set.  If any were set,
  * they are OR'ed into opPrefixes; otherwise, opPrefixes is zeroed as well.  This gives prefix-conscious
  * instructions like LODS, MOVS, STOS, CMPS, etc, a way of determining which prefixes, if any, immediately
@@ -27541,27 +27541,26 @@ X86.fnLDS = function(dst, src)
  */
 X86.fnLEA = function(dst, src)
 {
-    /*
-     * TODO: Until I bite the bullet and choose a truly invalid value for X86.ADDR_INVALID (eg, null),
-     * this code must be disabled, because otherwise an instruction like "LEA ECX,[EAX-1]" will fail when
-     * EAX is zero.  And we can't have that.
-     *
+    /**
+     * This code was disabled when X86.ADDR_INVALID was -1, because otherwise a perfectly valid instruction
+     * like "LEA ECX,[EAX-1]" would fail when EAX was zero; now that X86.ADDR_INVALID is defined as a number
+     * outside the 32-bit range (ie, 0x100000000), it can be re-enabled.
+     */
     if (this.regEA === X86.ADDR_INVALID) {
-        //
-        // TODO: After reading http://www.os2museum.com/wp/undocumented-8086-opcodes/, it seems that this
-        // form of LEA (eg, "LEA AX,DX") simply returns the last calculated EA.  Since we always reset regEA
-        // at the start of a new instruction, we would need to preserve the previous EA if we want to mimic
-        // that (undocumented) behavior.
-        //
-        // And for completeness, we would have to extend EA tracking beyond the usual ModRM instructions
-        // (eg, XLAT, instructions that modify the stack pointer, and string instructions).  Anything else?
-        //
+        /**
+         * TODO: After reading http://www.os2museum.com/wp/undocumented-8086-opcodes/, it seems that this
+         * form of LEA (eg, "LEA AX,DX") simply returns the last calculated EA.  Since we always reset regEA
+         * at the start of a new instruction, we would need to preserve the previous EA if we want to mimic
+         * that (undocumented) behavior.
+         *
+         * And for completeness, we would have to extend EA tracking beyond the usual ModRM instructions
+         * (eg, XLAT, instructions that modify the stack pointer, and string instructions).  Anything else?
+         */
         X86.opUndefined.call(this);
         return dst;
     }
-    */
     this.nStepCycles -= this.cycleCounts.nOpCyclesLEA;
-    /*
+    /**
      * To properly deal with instructions such as:
      *
      *      #0467:10F8 678D0480         LEA      AX,[EAX+EAX*4]

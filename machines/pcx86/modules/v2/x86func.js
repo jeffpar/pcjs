@@ -1227,27 +1227,26 @@ X86.fnLDS = function(dst, src)
  */
 X86.fnLEA = function(dst, src)
 {
-    /*
-     * TODO: Until I bite the bullet and choose a truly invalid value for X86.ADDR_INVALID (eg, null),
-     * this code must be disabled, because otherwise an instruction like "LEA ECX,[EAX-1]" will fail when
-     * EAX is zero.  And we can't have that.
-     *
+    /**
+     * This code was disabled when X86.ADDR_INVALID was -1, because otherwise a perfectly valid instruction
+     * like "LEA ECX,[EAX-1]" would fail when EAX was zero; now that X86.ADDR_INVALID is defined as a number
+     * outside the 32-bit range (ie, 0x100000000), it can be re-enabled.
+     */
     if (this.regEA === X86.ADDR_INVALID) {
-        //
-        // TODO: After reading http://www.os2museum.com/wp/undocumented-8086-opcodes/, it seems that this
-        // form of LEA (eg, "LEA AX,DX") simply returns the last calculated EA.  Since we always reset regEA
-        // at the start of a new instruction, we would need to preserve the previous EA if we want to mimic
-        // that (undocumented) behavior.
-        //
-        // And for completeness, we would have to extend EA tracking beyond the usual ModRM instructions
-        // (eg, XLAT, instructions that modify the stack pointer, and string instructions).  Anything else?
-        //
+        /**
+         * TODO: After reading http://www.os2museum.com/wp/undocumented-8086-opcodes/, it seems that this
+         * form of LEA (eg, "LEA AX,DX") simply returns the last calculated EA.  Since we always reset regEA
+         * at the start of a new instruction, we would need to preserve the previous EA if we want to mimic
+         * that (undocumented) behavior.
+         *
+         * And for completeness, we would have to extend EA tracking beyond the usual ModRM instructions
+         * (eg, XLAT, instructions that modify the stack pointer, and string instructions).  Anything else?
+         */
         X86.opUndefined.call(this);
         return dst;
     }
-    */
     this.nStepCycles -= this.cycleCounts.nOpCyclesLEA;
-    /*
+    /**
      * To properly deal with instructions such as:
      *
      *      #0467:10F8 678D0480         LEA      AX,[EAX+EAX*4]
