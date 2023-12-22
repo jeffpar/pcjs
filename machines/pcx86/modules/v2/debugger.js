@@ -4145,11 +4145,11 @@ export default class Debuggerx86 extends DbgLib {
             }
             break;
         case Debuggerx86.TYPE_SBYTE:
-            sOperand = StrLib.toHex((this.getByte(dbgAddr, 1) << 24) >> 24, dbgAddr.fData32? 8: 4);
+            sOperand = StrLib.toHex((this.getByte(dbgAddr, 1) << 24) >> 24);
             break;
         case Debuggerx86.TYPE_WORD:
             if (dbgAddr.fData32) {
-                sOperand = StrLib.toHex(this.getLong(dbgAddr, 4));
+                sOperand = StrLib.toHex(this.getLong(dbgAddr, 4), 8);
                 break;
             }
             /* falls through */

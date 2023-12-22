@@ -5,7 +5,7 @@
 /**
  * @define {string}
  */
-const APPVERSION = "2.21";              // this @define is overridden with the version in machines.json
+const APPVERSION = "2.xx";              // this @define is overridden with the version in machines.json
 
 /**
  * COMPILED is false by default; overridden with true in the Closure Compiler release.
@@ -1418,7 +1418,7 @@ class StrLib {
     /**
      * toHex(n, cch, fPrefix)
      *
-     * Converts an integer to hex, with the specified number of digits (default of 4 or 8, max of 9).
+     * Converts an integer to hex, with the specified number of digits (default of 2/4/8, max of 9).
      *
      * You might be tempted to use the built-in n.toString(16) instead, but it doesn't zero-pad and it
      * doesn't properly convert negative values; for example, if n is -2147483647, then n.toString(16)
@@ -1433,7 +1433,7 @@ class StrLib {
      *      s = s.substr(0, cch).toUpperCase();
      *
      * @param {number|*} n (supports integers up to 36 bits now)
-     * @param {number} [cch] is the desired number of hex digits (0 or undefined for default of either 4, 8, or 9)
+     * @param {number} [cch] is the desired number of hex digits (0 or undefined for default of 2/4/8/9)
      * @param {boolean} [fPrefix]
      * @returns {string} the hex representation of n
      */
@@ -1442,7 +1442,9 @@ class StrLib {
         if (!cch) {
             // cch = Math.ceil(Math.log(Math.abs(n) + 1) / Math.log(16)) || 1;
             let v = Math.abs(n);
-            if (v <= 0xffff) {
+            if (v <= 0xff) {
+                cch = 2;
+            } else if (v <= 0xffff) {
                 cch = 4;
             } else if (v <= 0xffffffff) {
                 cch = 8;
